@@ -1,0 +1,311 @@
+format: 1
+kind: device
+name: cmduct2u
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: CMDUCT2U
+description: >-
+  2U horizontal finger duct, StarTech.com CMDUCT2U: a black steel and plastic plate the full
+  width of the rack carrying a duct 71.6 mm deep. A wall of fifteen fingers runs along its top
+  and another along its bottom, and a removable cover latches across their tips. Three
+  rectangular pass-through holes in the plate lead cables through to the other side.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The ears are the
+      flat ends of the plate, and the duct stands out of the other face of it: the drawing's
+      side view puts the plate at one end of the 71.60 and the cover at the other, and the
+      datasheet says "Front Mount (Front Only)". So the plate is the ear plane, nothing stands
+      behind the rail, and `at` is 71.6. This states a placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the whole duct stands in front of the rail, 71.6 mm, so the rear
+      face of its rack units stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING. StarTech.com publishes CMDUCT2U_Diagram.pdf (third
+      angle projection, "DO NOT SCALE", millimetres, uploaded 1/22/2026): a front, a rear and a
+      side view, with the dimensions 482.60, 435.00, 71.60, 88.45, 465.00, 75.95, 13.00, 11.00
+      and "phi 6.50". The datasheet (cmduct2u_datasheet.pdf) lists "Product Length 19.0 in [48.3
+      cm]", "Product Width 2.8 in [71.6 mm]" and "Product Height 3.5 in [88.5 mm]"; the
+      drawing's 88.45 is the same figure to the datasheet's rounding. What the drawing does not
+      dimension - the slot pitch and the pass-through holes - is scaled off it at 2.6 px/mm
+      against its own dimensions, and is estimated.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 482.6 x 88.45 x 71.6, the 1U duct's plate and duct made 2U high. The plate is the
+      whole width of the rack, its two ends the ears, so the face is drawn whole with its four
+      slots (L43 stands down above 480 mm). The datasheet's "Width 2.8 in" is the 71.6 depth and
+      its "Height 3.5 in" the 88.5.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no document states a gauge. 1.0 mm is taken for the plate, the walls and the
+      cover, as on the CMDUCT1UX.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight of Product 34.2 oz [970.0 g]" (cmduct2u_datasheet.pdf).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the duct from its open side: the cover over the duct and the plate behind it,
+      the ear slots at the four corners. The cover ships fitted, as the datasheet and the
+      quick-start guide picture it, and is a part that comes off (`cover-off`).
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate, with the ear slots 465.00 apart and 75.95 apart and three
+      rectangular holes between them with rounded corners, which the datasheet calls
+      "pass-through holes at the back". The holes are not dimensioned: scaled at 2.606 px/mm
+      against the 465.00, three rectangles 100 by 69 mm on a 140 pitch, centred on the plate
+      (estimated). They are rectangles here and ovals on the 1U.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top of the drawing: the plate, the finger wall with
+      fifteen slots and the cover over the front 21.7 mm, as the 1U's. The slots are 11.00 wide;
+      their pitch (27.84) is counted and scaled off the drawing at 2.61 px/mm against the 435.00
+      and is estimated. The drawing shows one wall in plan, the end view shows two, and the
+      quick-start guide says the fingers are "available along the length on both sides": both
+      walls are the same, so the bottom is the top again, the top and the bottom of the one
+      open face.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the end view: the plate at the rear, the two finger walls standing out of it
+      and the cover's face and lips over their tips. The right is the same, turned round.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - the duct is the channel between the two finger walls, run across the rack, the
+      435.00 between the ears and 86.45 clear between the walls; its finger gap is the 11.00
+      the drawing dimensions and its pitch the 27.84 estimated above.
+  cover:
+    confidence: datasheet
+    note: >-
+      datasheet - "a removable top cover that makes it easy to add or remove bundled cables
+      quickly"; the quick-start guide says it "can be removed for installation or upgrades" and
+      latches with four latches. It is drawn fitted in `base` and absent in `cover-off`.
+  passes:
+    confidence: estimated
+    note: >-
+      estimated - the three rectangular holes, 100 by 69 mm, scaled off the drawing's rear
+      view. They lie under the cover, which is a lid, so they are declared where the cover can
+      be taken off.
+  capacity:
+    confidence: estimated
+    note: >-
+      no document states a cable capacity: the datasheet, the drawing and the quick-start guide
+      are silent, so none is stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material (steel and plastic), colour, standard (EIA RS310-D) and what is
+      in the box are the datasheet's; the quick-start guide lists four screws, four cage nuts
+      and four plastic washers.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The drawing is line work, so the shades are this library's
+      render of black, the cover a little lighter than the duct.
+attrs:
+  physical:
+    weight-kg: 0.97
+    material: Steel and Plastic
+    color: Black
+    mounting-hardware: M6x12 screws, M6 cage nuts and M6 plastic washers, four of each
+  features:
+    standards: EIA RS310-D
+chassis:
+  width: 482.6
+  height: 88.45
+  depth: 71.6
+  ru: 2
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 71.6, default: true}
+  shell: sheet
+  thickness: 1.0
+  weight-kg: 0.97
+  color: '#232527'
+gaps:
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the datasheet, the drawing and the quick-start guide state no cable capacity, no fill and
+      no cable count.
+    wanted: a cable capacity table, or a stated fill, for the finger duct
+  - what: cover-latches
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the quick-start guide says each corner has a latch that keeps the cover in place, and the
+      drawing marks a small tab at each end of the cover; no view dimensions a latch, and the
+      format has no latch, so the cover is on or off.
+    wanted: a drawing of a cover latch, fitted and released
+  - what: cover-material
+    scope: [front, top, bottom, left, right]
+    reason: vendor-silent
+    note: >-
+      the datasheet says the duct is "Steel and Plastic" and does not say which part is plastic;
+      the cover is drawn in the same black as the duct and no material is stated for it.
+    wanted: the material of the cover and of the walls
+  - what: cover-section
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the drawing's end view shows the cover's edges notched where they meet the walls; no
+      section is dimensioned and no gauge is stated, so the cover is drawn as a plate with two
+      straight lips 1.0 mm thick (estimated).
+    wanted: a section through the cover and a finger tip
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the plate, its ears and its three pass-through holes
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the two walls of fingers along the top and bottom of the duct
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the removable cover over the finger tips, shipped fitted
+views:
+  front:
+    size: {w: 482.6, h: 88.45}
+    components:
+      placements:
+        - {ref: startech/cmduct2u-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: startech/cmduct-fingers@1, id: fingers-upper, at: [23.8, 0.0], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: startech/cmduct-fingers@1, id: fingers-lower, at: [23.8, 87.45], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: startech/cmduct2u-cover@1, id: cover, at: [23.8, 0.0], group: cover, rel-pos: 1, in: base, lift: 48.9, only-in: [base]}
+    guides:
+      - {id: duct, kind: duct, at: [23.8, 1.0], size: [435.0, 86.45], run: x, finger-pitch: 27.84, finger-gap: 11.0, confidence: estimated, source: 'CMDUCT2U_Diagram.pdf, the side view: the 11.00 slot and the 435.00 duct; the pitch is scaled off it'}
+  rear:
+    size: {w: 482.6, h: 88.45}
+    panel:
+      decor:
+        - {id: back-top, at: [0, 0], size: [482.6, 9.725], rx: 0, fill: '#232527', kind: base}
+        - {id: back-bottom, at: [0, 78.725], size: [482.6, 9.725], rx: 0, fill: '#232527', kind: base}
+        - {id: back-1, at: [0, 9.725], size: [51.3, 69.0], rx: 0, fill: '#232527', kind: base}
+        - {id: back-2, at: [151.3, 9.725], size: [40.0, 69.0], rx: 0, fill: '#232527', kind: base}
+        - {id: back-3, at: [291.3, 9.725], size: [40.0, 69.0], rx: 0, fill: '#232527', kind: base}
+        - {id: back-4, at: [431.3, 9.725], size: [51.3, 69.0], rx: 0, fill: '#232527', kind: base}
+        - {id: ear-slot-1, at: [2.3, 3.0], size: [13.0, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-2, at: [2.3, 78.95], size: [13.0, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-3, at: [467.3, 3.0], size: [13.0, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-4, at: [467.3, 78.95], size: [13.0, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+    passes:
+      - {id: pass-through-1, at: [51.3, 9.725], size: [100.0, 69.0], shape: rect, cover: open}
+      - {id: pass-through-2, at: [191.3, 9.725], size: [100.0, 69.0], shape: rect, cover: open}
+      - {id: pass-through-3, at: [331.3, 9.725], size: [100.0, 69.0], shape: rect, cover: open}
+  top:
+    size: {w: 482.6, h: 71.6}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [482.6, 1.0], rx: 0, fill: '#232527', kind: base}
+    components:
+      placements:
+        - {ref: startech/cmduct-wall-plan@1, id: wall-top, at: [23.8, 1.0], group: fingers, rel-pos: 3}
+        - {ref: startech/cmduct-cover-plan@1, id: cover-top, at: [23.8, 49.9], group: cover, rel-pos: 2}
+  bottom:
+    size: {w: 482.6, h: 71.6}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [482.6, 1.0], rx: 0, fill: '#232527', kind: base}
+    components:
+      placements:
+        - {ref: startech/cmduct-wall-plan@1, id: wall-bottom, at: [23.8, 1.0], group: fingers, rel-pos: 4}
+        - {ref: startech/cmduct-cover-plan@1, id: cover-bottom, at: [23.8, 49.9], group: cover, rel-pos: 3}
+  left:
+    size: {w: 71.6, h: 88.45}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [1.0, 88.45], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [1.0, 0], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: wall-lower, at: [1.0, 87.45], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: cover-face, at: [70.6, 0], size: [1.0, 88.45], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-upper, at: [49.9, 1.0], size: [21.7, 1.0], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-lower, at: [49.9, 86.45], size: [21.7, 1.0], rx: 0, fill: '#303336', kind: cover}
+  right:
+    size: {w: 71.6, h: 88.45}
+    panel:
+      decor:
+        - {id: plate, at: [70.6, 0], size: [1.0, 88.45], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [13.5, 0], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: wall-lower, at: [13.5, 87.45], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: cover-face, at: [0, 0], size: [1.0, 88.45], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-upper, at: [0, 1.0], size: [21.7, 1.0], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-lower, at: [0, 86.45], size: [21.7, 1.0], rx: 0, fill: '#303336', kind: cover}
+  top-open:
+    face: top
+    size: {w: 482.6, h: 71.6}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [482.6, 1.0], rx: 0, fill: '#232527', kind: base}
+    components:
+      placements:
+        - {ref: startech/cmduct-wall-plan@1, id: wall-top-open, at: [23.8, 1.0], group: fingers, rel-pos: 5}
+        - {ref: startech/cmduct-wall-tips@1, id: tips-top-open, at: [23.8, 49.9], group: fingers, rel-pos: 6}
+  bottom-open:
+    face: bottom
+    size: {w: 482.6, h: 71.6}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [482.6, 1.0], rx: 0, fill: '#232527', kind: base}
+    components:
+      placements:
+        - {ref: startech/cmduct-wall-plan@1, id: wall-bottom-open, at: [23.8, 1.0], group: fingers, rel-pos: 7}
+        - {ref: startech/cmduct-wall-tips@1, id: tips-bottom-open, at: [23.8, 49.9], group: fingers, rel-pos: 8}
+  left-open:
+    face: left
+    size: {w: 71.6, h: 88.45}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [1.0, 88.45], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [1.0, 0], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: wall-lower, at: [1.0, 87.45], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+  right-open:
+    face: right
+    size: {w: 71.6, h: 88.45}
+    panel:
+      decor:
+        - {id: plate, at: [70.6, 0], size: [1.0, 88.45], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [13.5, 0], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+        - {id: wall-lower, at: [13.5, 87.45], size: [57.1, 1.0], rx: 0, fill: '#363b41', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as StarTech.com ships CMDUCT2U, cover fitted.'
+  cover-off:
+    kind: example
+    description: >-
+      The same duct with its removable cover taken off, the two finger walls and their slots
+      open to lay a cable in. The cover comes with the duct, so this is an illustration and not
+      a device type.
+    views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+datasheet:
+  title: 'CMDUCT2U data sheet: Horizontal 2U Server Rack Cable Management Finger Duct w/ Cover'
+  url: https://media.startech.com/cms/pdfs/cmduct2u_datasheet.pdf
+  sha256: a0640ca76134eebfe0cb7c293fc43b19c016bc32c6f48f44866521bb7c0bd99d
+references:
+  - title: 'CMDUCT2U_Diagram.pdf: product drawing, third angle projection, uploaded 1/22/2026'
+    url: https://media.startech.com/downloads/image/CMDUCT2U_Diagram.pdf
+    sha256: 3d86eeba0e6fcebf2cb73ec995e84bee1c72cea1dc7625cbc7e9edd40b8b4299
+  - title: 'CMDUCT2U Quick-Start Guide, manual revision February 15, 2023'
+    url: https://media.startech.com/downloads/image/CMDUCT2U_QSG.pdf
+    sha256: 3214a199230247d6535412a173584e7d73a5eb4bcc67effad859e1080e034e21
+  - title: 'CMDUCT2U product page'
+    url: https://www.startech.com/en-us/server-management/cmduct2u

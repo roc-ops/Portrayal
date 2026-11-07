@@ -23,6 +23,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
 from portrayal import components_catalogue as cat
+from portrayal.manifest import load_yaml
 
 
 @pytest.fixture(scope="module")
@@ -58,6 +59,7 @@ def test_out_writes_the_page_build_returns(tmp_path):
     assert "\n1 component majors in " in page
 
 
+@pytest.mark.heavy
 def test_every_component_major_in_the_library_has_a_row(generated):
     """Every major on disk has a row, and the page's own summary line gives
     the real count.
@@ -66,8 +68,11 @@ def test_every_component_major_in_the_library_has_a_row(generated):
     failed to find is short rather than wrong-looking. If the glob ever stops
     matching, this fails rather than passing quietly.
     """
+    # a `kind: kit` (#905) is not a component major: it is counted in the "Rail
+    # kits" table after the namespaces, and test_kit_census.py holds that
     on_disk = {f"`{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}`"
-               for c in LIB.glob("components/*/*/v*/contract.yaml")}
+               for c in LIB.glob("components/*/*/v*/contract.yaml")
+               if (load_yaml(c) or {}).get("kind") != "kit"}
     assert len(on_disk) > 400, f"only {len(on_disk)} contracts found - the walk is broken"
     missing = sorted(ref for ref in on_disk if ref not in generated)
     assert not missing, f"{len(missing)} component(s) have no row, e.g. {missing[:5]}"
@@ -105,6 +110,7 @@ def test_a_superseded_by_pointer_does_not_count_as_a_use(tmp_path):
     assert composed.get("generic/sfp-lc@1", set()) == set(), composed.get("generic/sfp-lc@1")
 
 
+@pytest.mark.heavy
 def test_a_device_that_only_names_a_part_in_prose_does_not_seat_it():
     """#348: the `devices` column counted a ref anywhere in a manifest's text,
     so a device explaining why it does NOT use a part counted as seating it.

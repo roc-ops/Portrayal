@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: rear-drive-2x25-2u-16g
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: server
+description: >-
+  The 2 x 2.5 inch rear drive module of a 16th-generation 2U PowerEdge (R760) - two 2.5 inch drives lying flat, one above the other, in riser 3's place
+attrs:
+  media: sff-2.5
+provenance:
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 12 (rear view with the 2 x 2.5-inch rear drive module, callout 4) at 3.36 px/mm, see dell/riser-1-cage-2u-16g@1/provenance/sources for the scale and tolerance; ISM figures 79 and 80 and table 88 (rear drive bay slot numbers) for what the module is. Facts read, art not traced.
+  size: >-
+    photo-measured - 128.7 x 44.0, riser 3's extent (the module takes riser 3's place: ISM figure 12 shows risers 1, 2 and 4 fitted and this module between the BOSS module and riser 4); the dark frame the drives sit in is 83.7 x 36.0 at module-local x 26.9, y 4.4.
+  drives: >-
+    photo-measured - two carriers lying flat, release ring at the left, 71.4 long and 13 tall in the figure (rear-face x 201.8..273.2, y 8.3..21.4 and 25.3..38.4), centred at module-local x 69.5 and y 13.85 and 30.85. The carrier part is 73.0 x 15.3 (common/drive-carrier-25@2); the figure shows the module's frame overlapping its edges, which is why they read smaller.
+  numbering: >-
+    datasheet, WITH A GAP - ISM table 88 names the rear drives Slot 0 and 1 (with the 12 x 3.5 front, and with the 24 x 2.5 front's NVMe rear drives) or Slot 24 and 25 (24 x 2.5 SAS/SATA with 2 SAS/SATA rear); the table does not say which of the two is on top. The upper is taken as the lower number (estimated), and the bays are named drive-0 and drive-1 for it; the 24 x 2.5 SAS/SATA build's 24 and 25 are not modelled.
+  default-blanks: >-
+    EVERY BAY DEFAULTS TO A BLANK, as the fronts do: Dell publishes no default drive count.
+  power: >-
+    NOT APPLICABLE - sheet metal; the drives carry their own.
+size: {w: 128.7, h: 44.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+bays:
+  drive-0:
+    at: [33.0, 6.2]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+  drive-1:
+    at: [33.0, 23.2]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+skins: [default]

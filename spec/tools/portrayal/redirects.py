@@ -53,7 +53,12 @@ def _cage(c):
 
 
 def _bay(b):
-    return {"accepts": sorted((b or {}).get("accepts") or []), "default": (b or {}).get("default")}
+    # `accepts` is the PUBLISHED list, every ref the bay takes (manifest.offers);
+    # a bay that states an `interface` signs it too, and one that states none
+    # signs exactly what it always did
+    b = b or {}
+    return {"accepts": sorted(b.get("accepts") or []), "default": b.get("default"),
+            **({"interface": b["interface"]} if b.get("interface") else {})}
 
 
 def form(entry):

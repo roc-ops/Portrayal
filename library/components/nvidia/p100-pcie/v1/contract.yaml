@@ -1,0 +1,288 @@
+format: 1
+kind: module
+name: p100-pcie
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA Tesla P100 PCIe GPU Accelerator (16 GB or 12 GB HBM2), a passive
+  dual-slot full-height full-length card. It is on NVIDIA's Form Factor 3.0
+  board, the V100 PCIe's outline. The two memory sizes are one card to NVIDIA's
+  brief, which draws one board for both. The bracket face
+  is a plate with a truss of vent openings and no ports. The far end is open.
+  It has one CPU 8-pin power connector at the east edge and no NVLink connector
+  on a PCIe card. It plugs into one riser slot and covers the one beside it.
+slot-width: 2
+size: {w: 120.02, h: 41.91, d: 266.70}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. The one riser that spans,
+  dell/riser-1a-14g@2's `slot-1`, is the Dell R740xd's, and that server's
+  manual (table 27) names "Nvidia A16, A30, A40, A100, A800" for double-width
+  GPUs and not the P100. A server whose documents list this card, and a riser
+  bay that spans for it, would seat it.
+attrs:
+  model: 'Tesla P100 PCIe'
+  part-numbers: 'NVPN 699-2H400-0201-XXX (16 GB), NVPN 699-2H400-0202-XXX (12 GB)'
+  gpu-sku: 'GP100-892-A1 (16 GB), GP100-893-A1 (12 GB)'
+  role: gpu
+  form-factor: 'Dual-slot, 10.5 in, NVIDIA Form Factor 3.0, full-height bracket'
+  pcie-connector: x16
+  pcie-generation: 3
+  pcie-height: full
+  power-draw-max-w: 250
+  power-input: 'host PCIe slot and one CPU 8-pin auxiliary connector'
+  memory: '16 GB HBM2 (4096-bit, up to 732 GB/s) or 12 GB HBM2 (3072-bit, up to 549 GB/s)'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'none on the PCIe card'
+  weight-kg: 1.177
+  eol: none-announced
+faces:
+  rear: {ref: nvidia/v100-pcie-tail@1}
+  plan:
+    ref: common/pcie-card-plan@1
+provenance:
+  slot-width: >-
+    datasheet - PB-08248 overview: "a dual-slot 10.5 inch PCI Express Gen3
+    card". The card declares `slot-width: 2` as
+    docs/pcie-two-slot-bays-design.md R1 defines it, and its face is one plate
+    36 across (`face-outline`).
+  memory-sizes: >-
+    datasheet - PB-08248 tables 1 and 2 list two columns, the 16 GB card
+    (NVPN 699-2H400-0201, GP100-892-A1, 4096-bit, up to 732 GB/s) and the 12 GB
+    card (NVPN 699-2H400-0202, GP100-893-A1, 3072-bit, up to 549 GB/s); both are
+    250 W, 715 MHz memory clock and 1177 g. A MODULE CONTRACT HAS NO
+    `configurations` KEY (the schema admits it on a kit only), so the two are ONE
+    COMPONENT and `attrs.memory` and `attrs.part-numbers` name both. The brief
+    draws one board and one figure 2 for both; nothing held says the faces
+    differ.
+  sources: >-
+    NVIDIA Tesla P100 PCIe GPU Accelerator Product Brief PB-08248-001_v01,
+    NVIDIA's own copy (https://images.nvidia.com/content/tesla/pdf/NV-tesla-p100-pcie-PB-08248-001-v01.pdf).
+    Tables 1 and 2, figure 1 (the board with the optional I/O bracket, a line
+    drawing seen from the bracket end, with an airflow arrow over it), figure 2
+    (board dimensions), figure 3 (the CPU 8-pin connector, an end view) and the
+    power, extender and form-factor text. NVIDIA's P100 PCIe datasheet carries
+    no card dimension. NVIDIA's brief forbids reproducing its figures, so its
+    facts are transcribed and none of its figures is copied.
+  reference-photos: >-
+    NONE. No photograph of this card was found at NVIDIA or PNY (NVIDIA's P100
+    page redirects to the data-center index). The only pictures are figures 1 and 2 of the brief, a line drawing
+    in perspective and an orthographic line drawing of the broad side. Everything
+    on the bracket face is drawn from those, and every colour is a choice (see
+    `body-colour`).
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2,
+    PCIe CEM 5.0 figure 11-5). h is two slots: the single bracket's 21.59 plus
+    one 20.32 slot pitch, 41.91, as on the A100 and the L40.
+  depth: >-
+    drawing - PB-08248 figure 2, titled "with optional I/O bracket": 266.70
+    from the bracket's outer face to the card's end, 111.15 high. Measured on
+    the 1285 px page the bracket line is at x 151 and the end at 1280.5, so 4.24
+    px/mm along the card, which is the V100's 4.25: THE FIGURE IS THE SAME DRAWING
+    AS nvidia/v100-pcie@1's FIGURE 3, line for line in the board's outline
+    (the lower edge, the key slot, the tab's end and the hook, read on a crop of
+    each at the same places).
+  face-outline: >-
+    borrowed - nvidia/a100-pcie-80gb@1 `face-outline`: the dual-slot bracket's
+    plate, its two retention tabs, its V notch and the flange, drawn with the
+    same path (the envelope of `std/pcie-bracket-fh-2slot@1`, 36 across). PB-08248
+    figure 1 draws the same two feet at the tip and the same keyed flange.
+    Not measured on this card.
+  face-window: >-
+    estimated - as nvidia/v100-pcie@1 `face-window`: figure 1 draws the same plate,
+    a frame round one window filled with a truss, three round bosses down the
+    middle and printed text near the tip. A perspective drawing of an edge
+    cannot measure the window. It is drawn as a window x 22.0 to 108.0 and y
+    7.5 to 36.5, a truss of two bands of struts 1.3 wide at 45 degrees on a 14.5
+    pitch, and one screw of 1.5 radius at x 21.0, y 22.0. All of it is estimated,
+    and the heat sink is not drawn behind it.
+  face-markings: >-
+    estimated - the printed text near the tip is not drawn: its characters
+    cannot be read from the line drawing.
+  thickness: >-
+    estimated - PB-08248 states no thickness. The shroud's far face is put at y
+    40.0, the A100 80GB's (nvidia/a100-pcie-80gb@1 `thickness`, 38.2 from its
+    backplate), so the body stands 35.56 above the board's outer face. THIS CARD
+    DRAWS NO BACKPLATE, because no picture shows one, so its body is 2.67
+    thinner than the A100's.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and
+    the bracket's keyed side, are at the top (small y); the cooler is below the
+    board in this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them) at PB-08248 figure 2's lengths, which are
+    the V100's: the card 111.15 high, the board's lower edge 13.25 above the
+    finger datum W, the key slot 57.15 behind the bracket (CEM's datum; read 57.7)
+    and the finger tab ending at 129.3 (CEM's x16 72.15 past the datum, read
+    129.5). The board's outline has no 3.55 notch: the figure's lower edge is
+    straight from the tab to the end, with a small hook at 139.4 to 145.5 that is
+    not drawn (see `gaps`). The shroud and the cover follow the board's outline.
+  body-colour: >-
+    estimated - figures 1 and 2 are line drawings, so NO COLOUR IS HELD. The
+    shroud is drawn a dark grey and the cover black to mark an unknown, not a
+    finding. The drawings show a cover with a raised rim, "TESLA" up the bracket
+    end and the NVIDIA mark and wordmark on the top edge near the middle.
+  body-top-edge: >-
+    estimated - figure 1 shows the NVIDIA mark and wordmark on the top edge at
+    about the card's middle. The mark is reserved as `logo-zone` and the wordmark
+    is drawn at a place read as a fraction of the length (about 0.40) and a size
+    of the L40's. Not measured.
+  body-power-connector: >-
+    estimated - PB-08248: "a CPU 8-pin power connector on the East edge of the
+    board", and figure 3 draws it in an end view beside the board. THE FIGURE
+    PUTS IT NEARER THE MIDDLE OF THE BOARD'S HEIGHT THAN THE A100'S PHOTOGRAPH
+    DOES (by eye), and its scale is not known, so it was not measured (see
+    `gaps`). The housing is drawn at the A100 80GB's place by the top edge, kept
+    as a placeholder (x 105.6 to 124.0, as
+    nvidia/a100-pcie-80gb@1 `body-power-connector`, photo-measured there on its
+    own card, borrowed here), 18.4 along and 10.85 across, with eight cells in
+    two rows of four on the 4.2 pitch. Its depth and colour are not seen here.
+    THE PORT is `aux-power` on the rear face (`faces.rear`,
+    nvidia/v100-pcie-tail@1, shared): std/eps12v-header@1, which presents
+    `eps12v-8pin` for a CPU 8-pin cable and which the card exports as a power
+    port. PB-08248 table 5 lists one CPU 8-pin cable, or the dongle NVPN
+    030-0571-000 to two PCIe 8-pin cables.
+  body-far-end: >-
+    estimated - as nvidia/v100-pcie@1 `body-far-end`: the far end is open, drawn
+    as a dark opening inside a rim 2.1 thick. THE FINS ARE NOT DRAWN: figure 3's
+    end view is not dimensioned and no photograph exists.
+  extenders: >-
+    datasheet - PB-08248 "Extenders": a long offset extender (NVPN
+    682-00003-5555-002, card plus extender 339 mm, 52 g) and a straight
+    extender (NVPN 682-00003-5555-000, 312 mm, 42 g), figures 5 and 6. NOT
+    MODELLED: the card has no `extender` field, and the mounting bosses are not
+    seen.
+  power: >-
+    datasheet - PB-08248 tables 1 and 5: total board power 250 W. The brief
+    gives it for both memory sizes and no qualifier, so it is filed as the
+    maximum.
+  weight: >-
+    datasheet - PB-08248 table 1: board 1177 g; the bracket with screws is 21 g.
+  memory: >-
+    datasheet - PB-08248 table 2: HBM2, 16 GB on 4096-bit (up to 732 GB/s) or 12
+    GB on 3072-bit (up to 549 GB/s), 715 MHz maximum memory clock.
+  pcie: >-
+    datasheet - PB-08248 table 1: PCI Express 3.0 x16, lane and polarity
+    reversal supported.
+  part-numbers: >-
+    datasheet - PB-08248 table 1 gives NVPN 699-2H400-0201-XXX and
+    699-2H400-0202-XXX. No order code or reseller part number is written in a
+    document held.
+  nvlink: >-
+    datasheet - PB-08248 does not mention NVLink and the card has no bridge
+    connector on its top edge in figures 1 and 2; the SXM2 P100 carries NVLink
+    and is a different part.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on (needs-photo:
+    the truss, its bosses and the printing are estimated from a line drawing);
+    (2) every colour (needs-photo); (3) the far end, its fins and bosses
+    (needs-photo, needs-drawing); (4) the extenders, which the brief draws
+    (needs-drawing); (5) the board's hook at 139.4 to 145.5 behind the bracket
+    (needs-drawing); (6) the thickness, which no source states (vendor-silent);
+    (7) a separate 16 GB and 12 GB module, which a module contract cannot
+    express; (8) the power connector's depth, colour and place along the
+    board's height (needs-photo, needs-drawing: figure 3 puts it lower than
+    the A100's place, which is drawn).
+  lifecycle: >-
+    No end-of-life notice for the P100 PCIe was found. NVIDIA's own P100 page
+    redirects to its data-center index and PNY lists no P100 page, which is
+    retirement shown as a missing page, not an announcement; the attr says
+    `none-announced` because nothing was announced.
+body:
+  depth: 266.70
+  color: '#2f3237'
+  plate: {at: [9.80, 4.10], size: [109.40, 35.90]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 0.90, depth: 265.40,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-08248 fig 2: lower edge W + 13.25, top edge W + 111.15, straight to the 266.70 end less 0.4 (as the A100); CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45.00, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-08248 fig 2: key slot at CEM datum 57.15 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.10, depth: 71.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-08248 fig 2: the finger tab ends 129.5 behind the bracket; CEM 5.0 fig 6-5 x16 DIM B 72.15 past the datum, 129.3'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 45.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 58.35, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: cover, at: [28.41, 6.01], size: [97.90, 8.39], from: 0.90, depth: 265.40,
+     color: '#17191c', confidence: estimated, shows: [right],
+     source: 'the A100''s black band, 8.39 deep; PB-08248 fig 1 draws a raised rim along the top edge; no colour is held'}
+  - {id: shroud, at: [28.41, 14.40], size: [97.90, 25.60], from: 0.90, depth: 225.60,
+     color: '#3a3d42', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded at 38.2 (see provenance thickness); outline as the board; dark grey marks an unknown colour'}
+  # THE OPEN END (provenance body-far-end): a rim round an opening on a dark
+  # floor. The fins are not drawn.
+  - {id: shroud-end-floor, at: [30.51, 14.40], size: [93.70, 23.50], from: 226.50, depth: 0.20,
+     color: '#07080a', confidence: estimated,
+     source: 'the dark floor the open end looks onto; fig 3 shows the gaps between the fins dark'}
+  - {id: shroud-end-skin, at: [28.41, 37.90], size: [97.90, 2.10], from: 226.50, depth: 40.20,
+     color: '#3a3d42', confidence: estimated, shows: [right, left, bottom],
+     source: 'the broad side''s wall round the opening; 2.1 thick is the A100''s, estimated'}
+  - {id: shroud-end-low, at: [28.41, 14.40], size: [2.10, 23.50], from: 226.50, depth: 40.20,
+     color: '#3a3d42', confidence: estimated, shows: [left],
+     source: 'the lower edge''s wall round the opening; 2.1 thick is estimated'}
+  - {id: shroud-end-top, at: [124.21, 14.40], size: [2.10, 23.50], from: 226.50, depth: 40.20,
+     color: '#3a3d42', confidence: estimated, shows: [right],
+     source: 'the top edge''s wall round the opening; 2.1 thick is estimated'}
+  # THE CPU 8-PIN (provenance body-power-connector): a black housing with eight
+  # dark cells, the 3D body of the tail face's `aux-power` port.
+  - {id: power-8pin, at: [105.60, 3.50], size: [18.40, 10.85], from: 248.70, depth: 17.80,
+     color: '#17191c', confidence: estimated,
+     source: 'the A100 80GB''s place (x 105.6 to 124.0, 2.3 from the top edge, top flush with the cover''s), borrowed from nvidia/a100-pcie-80gb@1 as a placeholder; PB-08248 fig 3 draws it lower, unmeasured; ends 0.2 short of the 266.70 end, its cells reaching it'}
+  - {id: power-8pin-cell-1, at: [119.30, 4.80], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated,
+     source: 'two rows of four cells on the 4.2 pitch, as the A100''s'}
+  - {id: power-8pin-cell-2, at: [115.10, 4.80], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-3, at: [110.90, 4.80], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-4, at: [106.70, 4.80], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-5, at: [119.30, 9.00], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-6, at: [115.10, 9.00], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-7, at: [110.90, 9.00], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-8, at: [106.70, 9.00], size: [3.20, 3.20], from: 266.40, depth: 0.30,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  # THE BRACKET'S FOOT below the card (provenance face-outline)
+  - {id: bracket-tab-1, at: [0.00, 7.40], size: [7.27, 9.80], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0.00, 27.90], size: [7.27, 9.70], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the second retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-standoff, at: [20.80, 2.00], size: [7.61, 2.40], from: 1.20, depth: 2.40,
+     color: '#26292c', confidence: estimated,
+     source: 'nvidia/a100-pcie-80gb@1 bracket-standoff: 7.6 below the lower edge, 2.4 along the card, 1.2..3.6 behind the face'}
+elements:
+  grille: {at: [20.00, 6.50], size: [89.00, 31.00], class: bezel}
+  vent: {at: [22.00, 7.50], size: [86.00, 29.00], class: vent}
+  screw-1: {at: [19.50, 20.50], size: [3.00, 3.00], class: screw}
+relief:
+  wall: '#8a9199'
+  features:
+  - node: grille
+    out: 0.8
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the window's rim, raised off the plate as figure 1 draws it. Its 0.8 is
+      nvidia/a100-pcie-80gb@1's, where it is estimated from a shadow line.
+  - node: flange-fold
+    out: 9.4
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on
+      std/pcie-bracket-fh@2. Not measured on this bracket.
+skins: [default]

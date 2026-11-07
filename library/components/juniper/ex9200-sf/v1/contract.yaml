@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: ex9200-sf
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9200-SF Switch Fabric module, the original Switch Fabric of the EX9200 line (from Junos OS Release 12.3R2).
+  It carries the Routing Engine in its own bay. The left end has the OK/FAIL, FABRIC ACTIVE and FABRIC ONLY lamps. The right
+  end has one SFP+ XGE port, the BITS, GPS and UTI lamps and the RJ-45 external clock port. An ejector lever sits at each
+  end. The EX9204, EX9208 and EX9214 studio photographs show this module.
+attrs:
+  model: EX9200-SF
+  power-draw-max-w: 150
+  power-draw-typical-w: 150
+provenance:
+  sources: >-
+    EX9204 Switch Hardware Guide (published 2025-08-12), "Switch Fabric Module in an EX9200 Switch", Figure 24 (an
+    isometric drawing with two circled close-ups) and Table 28; the same text is in the EX9208 and EX9214 guides
+    (published 2025-07-28). The EX9204, EX9208 and EX9214 studio front photographs show this module seated, with its
+    Routing Engine, and print EX9200-SF on its plate.
+  size: >-
+    estimated - the plate is 396.0 x 29.5 mm in the 413.5 envelope (see juniper/ex9200-lc-sf-blank). Table 7 gives every
+    Switch Fabric module 1.25 x 17 x 22 in.
+  re-bay: >-
+    photo-measured - the Routing Engine bay spans card x 51.4 to 323.3, 271.9 mm, read off the EX9208 studio front
+    photograph (see juniper/ex9200-sf2 re-bay). "Each Routing Engine must be installed directly into an SF module" (guide).
+  face: >-
+    photo-measured - EX9208 studio front photograph (1.31 px/mm, enlarged 2.75 times) and the EX9204 photograph (1.65 px/mm).
+    See juniper/ex9200-sf2 face: the two modules draw the same plate. Every place is read at about 0.8 mm resolution and
+    is estimated.
+  leds: >-
+    guide Table 28: FABRIC ACTIVE green (active), FABRIC ONLY green (fabric-only mode), OK/FAIL green (online) or red
+    (failed). The BITS, GPS and UTI lamps are drawn and are not supported (guide).
+  power: >-
+    guide Table 24 (EX9200 Switch Component Power Requirements): EX9200-SF Switch Fabric module 150 W typical and 150 W
+    reserved; the EX9200 datasheet (Aug 2022), Table 3, gives "Switch Fabric" 150 W typical and 150 W maximum.
+states:
+- ok
+- fail
+- absent
+elements:
+  lever-left:
+    at: [0.0, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+  lever-right:
+    at: [384.5, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+bays:
+  re:
+    at: [51.4, 1.0]
+    size: [271.9, 27.5]
+    accepts: [juniper/ex9200-re@1]
+    default: juniper/ex9200-re@1
+groups:
+  xge:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the SFP+ XGE port, which connects to the chassis Ethernet control switch and not to the switching fabric
+  clock:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 external clock (BITS and GPS) interface
+parts:
+- {ref: std/sfp@1, id: xge-0, group: xge, at: [338.5, 9.2], attrs: {function: XGE port}}
+- {ref: std/rj45@2, id: ext-clk, group: clock, at: [365.6, 8.15], attrs: {media: rj45, function: external clock}}
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the card every EX9200 and MX240, MX480 and MX960 slot takes (see
+  juniper/scb-mx size-notes).
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

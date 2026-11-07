@@ -1,0 +1,59 @@
+format: 1
+kind: module
+name: r960-rear-io-board
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The rear I/O board of the PowerEdge R960 - the system ID button, the dedicated iDRAC port, a
+  USB 2.0 and a USB 3.0 port and the VGA connector, on a plate 96 mm wide
+attrs:
+  power-absent: not-published
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: service access at the back of the rack - the ID button, iDRAC, USB and VGA
+    description: the system ID button, the dedicated iDRAC port, USB 2.0 and 3.0 and the VGA
+provenance:
+  identity: >-
+    datasheet - R960 ISM "Removing / Installing the rear I/O board" (figures 206-212): a board
+    that plugs into the system board and is removed on its own. ISM table 5 items 11-15 are its
+    five features; the VGA is "optional for Direct Liquid Cooling configuration" (spec sheet,
+    table 6) and is drawn here because figure 10 and the technical guide's figures 7-9 show it
+    on an air-cooled build.
+  sources: >-
+    R960 ISM figure 10, the rear view, 1565 x 807, read at 3.374 px/mm across the 444 body and
+    3.333 px/mm down the 174.3 height (1.2% apart): the plate 243.7..340.5 across and 153.8..172.6
+    down in rear-face millimetres, the ID button centred (261.2, 161.0), the iDRAC port 268.2..285.7,
+    the USB pair at 290.3..302.0 (upper 155.7..161.4, lower 164.3..169.1) and the VGA shell centred
+    at 320.6. Facts read; no art traced.
+  size: >-
+    photo-measured - 96.4 x 18.8, the plate's visible extent on figure 10. THE R660'S BOARD
+    (dell/rear-io-board-16g@1) IS 85.37 WIDE WITH ITS CONNECTORS 5 TO 12 MM CLOSER, so it is not
+    this part; the ID button, iDRAC and USB pitches differ (22.0, 18.8 and 26.0 here).
+  depth: >-
+    estimated - borrowed from dell/rear-io-board-16g@1's 121.5; no R960 document gives it.
+  connectors: >-
+    photo-measured - positions in this board's own millimetres, from the figure: ID button (17.2,
+    7.2), iDRAC (32.9, 8.7), USB 2.0 over USB 3.0 at x 52.1 and y 4.7 and 12.9, VGA (76.6, 7.8).
+    Which USB is 2.0 and which 3.0 is read from the marks the figure prints: the trident with a
+    plus beside the upper port, SS and the trident beside the lower - and from ISM table 5 (13 is
+    USB 3.0, 14 USB 2.0, in that order down the callouts).
+  power: >-
+    NOT PUBLISHED - no R960 document gives a wattage for the rear I/O board.
+size: {w: 96.4, h: 18.8, d: 121.5}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+plan: {ref: dell/rear-io-board-plan-16g@1}
+body:
+  depth: 121.5
+  color: '#b8bdc2'
+parts:
+  - {ref: dell/system-id-button-14g@1, id: system-id, group: mgmt, at: [13.7, 3.7]}
+  - {ref: common/rj45-ganged-eth@1, id: idrac, group: mgmt, at: [26.55, 3.2], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/usb-a@1, id: usb-1, group: mgmt, at: [46.1, 2.45], skin: usb2, attrs: {usb: '2.0'}}
+  - {ref: std/usb-a@1, id: usb-2, group: mgmt, at: [46.1, 10.65], attrs: {usb: '3.0'}}
+  - {ref: common/vga-receptacle@1, id: video, group: mgmt, at: [61.2, 1.55]}
+skins: [default]

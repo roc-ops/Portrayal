@@ -1,0 +1,124 @@
+format: 1
+kind: module
+name: jpsu-1600-c-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-1600-C-AC-AFO, the 1600 W AC power supply of the EX4400
+  switches, front-to-back airflow (AFO). The guide ships it with the
+  EX4400-48P and EX4400-48MP, and the EX4400-24P and EX4400-24MP take it as
+  an option from Junos OS 22.3R1. Up to two fit in the rear slots 0 and 1.
+  The face has the supply fan with a gold handle across it, an OUT.OK lamp,
+  a C15-type AC inlet and an ejector lever. Do not mix supplies of different
+  ratings, or supplies with different airflow, in one chassis.
+attrs:
+  role: ac-power-supply
+  power-output-w: 1600
+  airflow: front-to-back
+  input-voltage: 100-120 VAC low line, 200-240 VAC high line
+  input-frequency: 50-60 Hz
+  input-current: 12 A at low line, 9 A at high line
+  efficiency: 80 Plus Platinum
+  weight-kg: 0.91
+  hot-swap: 'yes'
+part-numbers:
+  JPSU-1600-C-AC-AFO: {part: JPSU-1600-C-AC-AFO}
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic AC
+    Power Supply in EX4400 Switches. Figure 82 (g022572) draws this unit. Table 53 gives the model
+    number and the inlet, Table 56 the electrical specification, Table 58 the airflow and Table
+    114 the CLI name. Table 20 and the text of the EX4400-48P topic ship the 48P with one 1600 W
+    unit.
+  size: >-
+    datasheet - Table 40, Physical Specifications of the EX4400 PSUs - width 3.27 in (8.3 cm),
+    height 1.59 in (4.04 cm), depth 8.88 in (22.56 cm), one set of figures for the AC and DC
+    units. Carried as 83.06 x 40.39 x 225.55 mm, the same as the 550 W unit. Figures 80 to 83
+    draw the four AC units identically.
+  depth: >-
+    datasheet - Table 40, depth 8.88 in (22.56 cm), carried as 225.55 mm.
+  power-output-w: >-
+    datasheet - Table 56, 1600-W AC power supplies - output power 1600 W. An output figure,
+    because a power supply provides power. The guide gives no draw or loss figure for the unit.
+    The PoE budget tables (Tables 63 to 68 and 90) state what the switch can deliver to powered
+    devices and are kept on the devices, not here.
+  inlet: >-
+    datasheet - Table 53 prints the inlet type of the 1600 W unit as IEC-320-C15, and the cord
+    text says the unit ships with a C15 coupler cord. A C15 cord mates a C16 appliance inlet,
+    which is a C14 inlet with a raised rim. The library has no C16 standard, so the panel part is
+    std/c14-inlet@1, turned portrait as the render shows, and the rim is not drawn. The guide's
+    figures draw the same inlet for this unit as for the 550 W unit. See the device gap
+    inlet-c16.
+  elements: >-
+    estimated - read off the rear render of the EX4400-24T (Figure 9, g022646), the only
+    photograph-grade view of a supply face in the guide, which shows the 550 W unit. The same
+    positions are used because Figures 80 to 83 draw the four units alike. Fan centre 22.5, 20.7.
+    Handle bar 17.9 to 23.3 down and 0.3 to 43.6 across. Corner screws at 5.4 and 37.8 across and
+    4.2 and 37.3 down. Lamp at 45.6, 8.4. Inlet centre 61.8, 17.1. Ejector lever 73.1 to 76.7
+    across.
+  airflow: >-
+    datasheet - Table 58. JPSU-1600-C-AC-AFO is front-to-back. Cold air enters through the vents
+    on the front panel and hot air leaves through the vents on the rear panel.
+  led: >-
+    datasheet - Table 89 and Figure 90. One lamp, OUT.OK. Steady green means the supply receives
+    input and gives proper output. Blinking green means the supply fan failed or its internal
+    communication failed. Unlit means the cord is loose, the input is wrong, the supply is in
+    standby, the ambient is too hot or the supply failed.
+  relief: >-
+    estimated - the handle stands proud of the fan in Figure 82. Its projection is not measured
+    in any source. The value only makes it read as a handle in 3D.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit
+    itself draws.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [47.8, 7.1], rotate: 90}
+elements:
+  led:
+    at: [44.4, 7.2]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  handle:
+    at: [0.3, 17.9]
+    size: [43.3, 5.4]
+    class: handle
+  latch:
+    at: [73.1, 10.4]
+    size: [3.6, 18.1]
+    class: latch
+size:
+  w: 83.06
+  h: 40.39
+  d: 225.55
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 6.0
+    color: '#e8a010'
+    confidence: estimated
+    source: >-
+      The gold handle bar stands proud of the supply fan in Figure 82 (g022572). The
+      projection is not stated or measured.
+  - node: latch
+    out: 1.4
+    color: '#9a9b9d'
+    confidence: estimated
+    source: >-
+      The ejector lever stands proud of the face in Figure 82. The projection is not stated or
+      measured.
+connection-points:
+  power: {at: [61.8, 17.1], direction: rear}
+body:
+  depth: 225.55
+  color: '#b9bec4'
+skins: [default]

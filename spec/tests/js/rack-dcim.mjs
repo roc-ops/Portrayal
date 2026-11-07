@@ -93,6 +93,35 @@ test('a module type is found by its part number, slashes as dashes', () => {
   assert.equal(X.partNumber(null), '');
 });
 
+test('a component with part-numbers is found by its first part number in sorted order', () => {
+  const dir = 'netbox/module-types/Casa Systems/';
+  const w = `${dir}BDM2M-W.yaml`, n = `${dir}BDM2M-N.yaml`, smm = `${dir}SMM-300-GM.yaml`;
+  const one = {name: 'smm-300gm', attrs: {}, 'part-numbers': {'SMM-300-GM': {part: 'SMM-300-GM'}}};
+  const two = {name: 'bdm2m', attrs: {}, 'part-numbers': {'BDM2M-W': {part: 'BDM2M-W'}, 'BDM2M-N': {part: 'BDM2M-N'}}};
+  // one order code: the key is the part number, and the file is named for it
+  assert.deepEqual(X.partNumbers(one), ['SMM-300-GM']);
+  assert.equal(X.partNumber(one), 'SMM-300-GM');
+  assert.equal(X.moduleTypePath([smm], X.partNumber(one), one.name), smm);
+  // two order codes: the bay accepts the component and not a code, so the first
+  // in sorted order stands for it - whatever order the map or the files come in
+  assert.deepEqual(X.partNumbers(two), ['BDM2M-N', 'BDM2M-W']);
+  assert.equal(X.partNumber(two), 'BDM2M-N');
+  assert.equal(X.moduleTypePath([w, n], X.partNumber(two), two.name), n);
+  assert.equal(X.moduleTypePath([n, w], X.partNumbers(two), two.name), n);
+  assert.equal(X.partNumber({...two, 'part-numbers': {'BDM2M-N': {part: 'BDM2M-N'}, 'BDM2M-W': {part: 'BDM2M-W'}}}), 'BDM2M-N');
+  // the first code has no file (an older export): the next is taken
+  assert.equal(X.moduleTypePath([w], X.partNumbers(two), two.name), w);
+  // none has one: the component's name is the last try, as for a component with no code
+  assert.equal(X.moduleTypePath([`${dir}bdm2m.yaml`], X.partNumbers(two), two.name), `${dir}bdm2m.yaml`);
+  assert.equal(X.moduleTypePath([smm], X.partNumbers(two), two.name), null);
+  // a component with attrs.model and no map is read as it always was
+  assert.deepEqual(X.partNumbers({attrs: {model: 'A9K-3KW-AC'}}), ['A9K-3KW-AC']);
+  assert.deepEqual(X.partNumbers({attrs: {}}), []);
+  assert.deepEqual(X.partNumbers(null), []);
+  // an empty map names nothing, so the attrs still answer
+  assert.equal(X.partNumber({attrs: {model: 'M'}, 'part-numbers': {}}), 'M');
+});
+
 test('a repeated label gets the item id, once per duplicate', () => {
   const n = X.uniqueNames(ITEMS);
   assert.deepEqual([...n.values()].map(v => v.name), ['core-1', 'leaf-1', 'demarc-i3', 'demarc-i4']);

@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: bhh-finger-end
+version: 1.0.0
+class: mechanical
+description: >-
+  An end finger of the Belden BHH191UR to BHH194UR horizontal managers, seen end-on from the
+  front. It is the first or last finger of a row. Its root runs half an opening toward the row.
+  Placed turned half a circle at the right end.
+provenance:
+  size: >-
+    estimated - the end finger stands 8.5 wide like the rest, with half an opening (17.0) of root
+    on the side toward the row: 25.5 in all. The 8.25 left between it and the end of the 450.0
+    body is the plate's, drawn by the back plate. Read off the data sheet thumbnails of the BHH192UR
+    and BHH193UR, where the clip block at the end of each row stands inside the manager's end.
+    No Belden document dimensions a finger. The height, 10.0, is `bhh-finger`'s.
+  relief: >-
+    estimated - as `bhh-finger`: 16 of root, 160 of stem and a head from 160 to 168. The head is 3.0
+    wider on the side toward the row only.
+  shading: >-
+    estimated - as `bhh-finger`: a stand-in for the light a render would give, over the fill.
+size: {w: 25.5, h: 10.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [25.5, 10.0], class: bezel}
+  stem: {at: [0.0, 0.0], size: [8.5, 10.0], class: bezel}
+  tip: {at: [0.0, 0.0], size: [11.5, 10.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 16.0
+      color: '#34383c'
+      confidence: estimated
+      source: the opening ends read off the data sheet thumbnail against the 7.22 in overall depth
+    - node: stem
+      out: 160.0
+      color: '#383c41'
+      confidence: estimated
+      source: the finger from the back plate to where its head widens, read off the same thumbnail
+    - node: tip
+      lift: 160.0
+      out: 168.0
+      color: '#454a50'
+      confidence: estimated
+      source: the head under the cover's return, read off the same thumbnail
+skins: [default]

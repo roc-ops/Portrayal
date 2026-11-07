@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: ex6210-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6210-FAN, the fan tray of the EX6210. It holds six fans in three rows of two, behind three round
+  perforated grilles on its face, with a handle at the top and one at the bottom and four captive screws, one in
+  each corner. It installs vertically at the rear of the chassis and cools the chassis from front to back. It is
+  hot-removable and hot-insertable, but must be replaced within two minutes. A single fan cannot be replaced; the
+  whole tray goes.
+attrs:
+  role: fan-tray
+  power-draw-max-w: 300
+  airflow: front-to-back
+  fans: 6
+part-numbers:
+  EX6210-FAN: {part: EX6210-FAN}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): "EX6210 Switch Cooling System", Figure 14 (the fan
+    tray, g021114, a three-quarter view of the face), Figure 2 and Figure 13 (the tray in the rear of the chassis),
+    Figure 15 (airflow), Table 6 (CLI name EX6210-FAN), Table 31 (power) and the fan tray removal and installation
+    sections. EX6200 datasheet 1000390-002-EN (Aug 2011), ordering table: EX6210-FAN, "EX6210 fan tray, spare".
+  size: >-
+    estimated - the guide gives no dimension for the tray. Figure 2, an isometric view of the rear, puts the tray at
+    about 45 percent of the rear width, 198 mm of the 439.4 mm body, and nearly all of the height above the supply
+    exhaust band. Figure 14's face is drawn at an angle: its aspect of 3.2 is not taken. The face is 195.0 x 514.0 mm.
+  face: >-
+    estimated - Figure 14 read as fractions of the face (160 x 515 px) and applied to 195.0 x 514.0 mm: three
+    round perforated grilles 120 mm across, centred 114.6 mm across and 94.8, 227.6 and 357.2 mm down; a top handle bar
+    at 10 mm down and a bottom handle bar at 497 mm down; and a captive screw in each corner. The figure draws a
+    scatter of small screws between the grilles; they are not drawn. Every position is estimated to about 4 mm.
+  handle: >-
+    estimated - the guide gives no colour for the handles; Figure 14 is a line drawing. They are drawn in neutral
+    grey. The guide shows one build only, with airflow from front to back, so no airflow variant is written.
+  power: >-
+    datasheet - guide Tables 31 and 32: the fan tray draws a maximum of 300 W under typical voltage conditions. No
+    typical figure and no ambient is stated. A draw, since a fan tray consumes power.
+states: [absent]
+elements:
+  handle-top:
+    at: [4.0, 7.5]
+    size: [164.0, 5.0]
+    class: latch
+  handle-bottom:
+    at: [4.0, 494.5]
+    size: [164.0, 5.0]
+    class: latch
+size:
+  w: 195.0
+  h: 514.0
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle-top
+    out: 2.0
+    confidence: estimated
+    source: figure - the top handle stands proud of the face in Figure 14; its projection is not measured
+  - node: handle-bottom
+    out: 2.0
+    confidence: estimated
+    source: figure - the bottom handle stands proud of the face in Figure 14; its projection is not measured
+skins: [default]

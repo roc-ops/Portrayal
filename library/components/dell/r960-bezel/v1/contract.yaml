@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: r960-bezel
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: server
+description: >-
+  The optional security bezel of the PowerEdge R960 - a honeycomb of large hexagonal openings between a plain end plate at each
+  side, a keylock at the left and the release button at the right end. Open between the bars, so the drives show through. Unbranded
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - a metal cover with no electronics; the LCD bezel, which has some, is not this part. The ISM and
+    technical guide give no figure for either.
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py and its Draco meshes decoded: `R960_
+    FrontBezel` in the `Main Assembly` node (the un-exploded assembly), whose plate `Body_3_4.003` carries the cells. THE MODEL'S BEZEL IS THE
+    LCD BEZEL: it has the display window, the arrow and tick buttons and their numbers, and Dell's guide shows no other. The ISM says the
+    security bezel's mesh is the same (figure 34); the security bezel itself is not in the model. R960 ISM figure 34 (a 300 ppi perspective
+    drawing of the LCD bezel being lifted off) and the "Removing / Installing the front bezel" procedures (figures 33-35).
+  size: >-
+    measured - r960.glb, the node box 430.8 x 168.5 at front-face x 25.5 (cad x -209.5 to 221.3, +235.0 from the right ear's outer edge)
+    and y 2.7 (cad y 3.1 to 171.6, from the top at 174.3). The first pass had 432.1 x 174.3 at (24.4, 0), the body between the ears
+    as the fronts draw it, estimated.
+  honeycomb: >-
+    measured - r960.glb, `Body_3_4.003`, a plate 377.0 x 167.5 (front-face x 46.5 to 423.5) with 42 through-openings found by
+    decoding its mesh. They are hexagons with points left and right, 42 across the points and 37.5 across the flats, in a staggered
+    grid: columns every 38.5, 44.45 apart down a column, alternate columns offset by 22.2. That is a centre-line hexagon of
+    circumradius 25.63 with bars 6.9 wide, drawn as the pattern. The first pass had 46 x 39.8 cells at a 34.5 column pitch with bars 4.5
+    wide, read from the oblique figure 34. Not reproduced: the model's top-right opening (front-face x 56 to 179, 123 x 36.5) is the LCD
+    window and a security bezel has a cell there; and the plate's edge slots (17 and 18 wide) are the frame behind it.
+  end-plates: >-
+    measured - r960.glb: the frame `FrontBezel_ 1` is the full 430.8 and the plate sits 21.0 in from its left and 32.8 from its right
+    (over the VGA plate), the darker ends figure 34 shows.
+  release: >-
+    measured - r960.glb `FrontBezel_ Button`, 20.8 x 43.9 at the bezel's right end, 62.3 down. ISM "Removing the front bezel": press the
+    release button.
+  lock: >-
+    ISM "Removing the front bezel": unlock it, press the release button, disengage the left end, unhook the right (figure
+    34's callout 1 is the lock). The model's LCD bezel has no lock. Drawn on the left end plate; its exact position is a guess.
+  depth: >-
+    datasheet - R960 ISM table 7: 36 mm from the bezel's outer face to the ear plane with the bezel and 22 without,
+    so the bezel stands 14.0 off the face. The model's bezel front sits 13.5 off its chassis front face (cad z 3.7 against 17.2), 0.5 under,
+    and the datasheet is kept.
+  no-branding: >-
+    DELIBERATELY UNBRANDED. R960 ISM figure 34 shows a Dell wordmark across the honeycomb, low and a little left of the centre; it
+    is not drawn, and `logo-zone` reserves its place with nothing in it. The model's bezel carries no logo, so the zone (50.0 x 22.0
+    at 181.0, 90.0) is ESTIMATED from the oblique figure.
+  lcd-variant: >-
+    NOT MODELLED. The spec sheet offers an "LCD bezel or security bezel"; the LCD bezel's panel (ISM figure 34) is a
+    different part with a display and buttons. The model holds it and could draw it; this pass draws the security bezel.
+size: {w: 430.8, h: 168.5, d: 14.0}
+size-confidence: {w: measured, h: measured, d: datasheet}
+relief:
+  features:
+  - node: plate
+    out: 14.0
+    shape: true
+    color: '#8f8b85'
+    confidence: datasheet
+    source: 36 mm ear-to-front with the bezel against 22 without, R960 ISM table 7
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [430.8, 168.5]
+    class: bezel
+    description: the bezel - end plates and honeycomb bars - over an open ground
+  lock:
+    at: [6.5, 9.3]
+    size: [8.0, 8.0]
+    class: control
+    description: the keylock - unlocked with the bezel key before the bezel comes off
+  release:
+    at: [410.0, 62.3]
+    size: [20.8, 43.9]
+    class: control
+    description: the release button at the right end - pressed after unlocking, to free the bezel's left end
+  logo-zone:
+    at: [181.0, 90.0]
+    size: [50.0, 22.0]
+    class: bezel
+    description: where Dell's wordmark sits; reserved and left empty
+skins: [default]

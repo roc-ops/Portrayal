@@ -1,0 +1,212 @@
+format: 1
+kind: module
+name: ex4600-jpsu-650-dc-afi
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-650W-DC-AFI, a 650 W DC power supply with FRU-to-port airflow (AFI), which the datasheet
+  calls back-to-front. It is a field-replaceable unit, hot-removable and hot-insertable while the
+  second supply runs. The EX4600 hardware guide lists it for the EX4600-40F-DC-AFI. The EX4600 seats
+  two, in slots 0 and 1 at the right of the rear. The same supply is used in the QFX5100 switches. The
+  face has a terminal block with four screw terminals, V-, V-, V+ and V+, on two feeds. It also has
+  the lamps IN, OUT and !, an ESD grounding point, a blue handle and an ejector lever. Never mix it
+  with AFO supplies, AC supplies or AIR OUT fan modules.
+attrs:
+  role: dc-power-supply
+  power-output-w: 650
+  inlet: dc-terminal
+  airflow: back-to-front
+  input: rated -48 to -60 VDC, operating range -40 to -72 VDC, 10 A maximum (guide Table 19)
+part-numbers:
+  JPSU-650W-DC-AFI (EX4600): {part: JPSU-650W-DC-AFI}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): DC Power Supply in an EX4600
+    Switch, Figures 24 and 25 (the supply, and its faceplate drawn flat), Figure 26 and Table 18 (the
+    lamps) and Table 19 (the DC power figures). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep
+    2021), ordering table: JPSU-650W-DC-AFI, DC 650 W PSU, back-to-front airflow. The guide gives no
+    table of the DC supply's handle colour or airflow label. The key of part-numbers carries the
+    suffix (EX4600) so that its DCIM module type does not share a file with the same part number in
+    another line's slice.
+  size: >-
+    drawing - the width is the AC supply's, 54.7 mm, measured on Juniper's EX4600 rear photograph (a
+    DC supply is not photographed): the guide says the supplies fit the same two slots. The height is
+    taken from Figure 25, the faceplate drawn flat: its outline is 395 x 293 px, an aspect of 1.35,
+    which at 54.7 mm wide is 40.5 mm high (7.23 px/mm). The guide draws one DC faceplate for both
+    airflow directions, so this supply takes the same size and art.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide for the supply's dimensions and weight: Figure
+    24 is an isometric drawing with no scale and no table gives a size. No depth is written.
+  face: >-
+    drawing - Figure 25 (g050297), read at 7.23 px/mm after its aspect was checked against the AC
+    supply's width: the handle at the left, the terminal block with four round screw heads 8.3 mm
+    apart, the legends V-, V-, V+ and V+ above them, the three lamps IN, OUT and ! below the block
+    with their legends to the right, six rows of rectangular vent cells, the ESD grounding point at
+    the lower right with its earth symbol, and the ejector lever at the right edge, which overhangs
+    the face by 2.0 mm in the figure; only the part inside the face is drawn. The small screw beside
+    the terminal block has no callout and is drawn as a screw. The colour of the face is not in a
+    line drawing: it is drawn as the dark face of the AC supply in the photograph.
+  handle: >-
+    estimated - the guide gives no handle colour for a DC supply. Table 11 says the supplies of an
+    AIR IN chassis are blue and Table 14 gives the AC pair; the DC supply takes the blue of the AC AFI
+    supply, which is a relative and not a reading. The colour is the field handle-finish.
+  power-output-w: >-
+    datasheet - guide, DC Power Supply in an EX4600 Switch: the DC power supply is 650 W with dual
+    feeds. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, Table 18: In is green when power comes into the supply, Out is green when it
+    sends power out correctly, and Fault is amber on an error; each is unlit otherwise.
+  terminals: >-
+    datasheet - guide, Figure 25 and its caution: four terminals labelled V-, V-, V+ and V+, feed A
+    and feed B. The V+ terminals are shunted together, as are the V- terminals; do not connect the
+    terminals to different sources. The roles are in `poles`.
+  airflow: >-
+    datasheet - the ordering table: JPSU-650W-DC-AFI is back-to-front airflow. The guide's Table 3
+    lists the DC chassis as -DC-AFI with FRU-to-port airflow.
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a screw
+    head 3.4 across (that part's own size is an estimate), standing at the centre of the screw this skin
+    already draws (14.8, 23.1, 31.6 and 39.8 across, 12.1 down). It is lifted 1.2 mm, the estimated
+    projection this contract already gives the four screw heads (the `term-neg-a` to `term-pos-b` relief
+    features). The EX4600 Switch Hardware Guide (published 2025-08-12) asks for ring-lug power cables,
+    "Molex 190700069 or equivalent" (PDF page 97) and gives no screw head, thread or pitch; the screw
+    part claims no thread, so none is written. Each screw is a seat a ring lug lands on
+    (`terminal-stud`, which generic/ring-lug@1 mates).
+  shunts: >-
+    THE SECOND SCREW OF EACH PAIR IS A SEAT OUTSIDE THE PORT. The guide's caution says the V+ terminals
+    are shunted internally together, as are the V- terminals, that the same polarity may be wired twice
+    from the same source and that the terminals must never go to different sources. A feed therefore has
+    two conductors and the supply has one input, however many screws carry them. Each pole of the port
+    is the first screw of its pair, counted from the left: `pole-batt` is the left V- screw and
+    `pole-rtn` the left V+ screw. `shunt-batt` (the second V- screw) and `shunt-rtn` (the second V+
+    screw) are seats a lug lands on, as an earth seat is, and are in no pole (decided 2026-11-03). WHICH
+    SCREW OF A PAIR CARRIES THE POLE IS A CHOICE AND NOT A READING: the guide joins the two inside the
+    supply and ranks neither. A later change that gave the port four poles would be a major.
+  poles: >-
+    EX4600 Switch Hardware Guide (published 2025-08-12), Figure 26 "DC Power Supply Faceplate on an
+    EX4600 Switch" (PDF page 53, printed page 44) prints V-, V-, V+ and V+ from the left over four
+    screws, and the caution beneath it says the V+ terminals are shunted internally together, as are the
+    V- terminals. "Connecting DC Power to an EX4600 Switch" (PDF page 98) puts the positive (+) cable on
+    "the V+ (return) DC power input terminal" and the negative (-) cable on "the V- (input) DC power
+    input terminal", and says the switch takes "a single, non-redundant, feed input" per supply (PDF
+    pages 99 and 100). The roles are the guide's words, not the printed signs: `rtn` for the "(return)"
+    terminal and `batt` for the "(input)" terminal, which the guide pairs with the negative cable
+    (spec/schemas/dc.yaml writes `batt` as negative (battery)). The supply has one DC port, `input`, of
+    two poles, `batt` on the left V- screw and `rtn` on the left V+ screw, in the order the figure
+    prints them from the left. The second screw of each pair is a seat outside the port (see `shunts`).
+  voltage: >-
+    NOT STATED. Table 19 (PDF page 54) prints "Rated operating voltage: -48 VDC to -60 VDC" and an
+    operating range of -40 VDC through -72 VDC: ranges with no nominal. A port states one nominal and no
+    document gives this supply's, so the port states none and a later change can state one once a source
+    says so. `attrs` keeps the range as printed.
+  rating: >-
+    NOT STATED. Table 19 (PDF page 54) gives "DC input current rating: 10 A maximum" for the EX4600
+    switch, a chassis figure, and the same part number is the supply of other chassis whose guides print
+    other figures: 7 A for the EX4550 (PDF page 71), 20 A for the EX4650 (PDF page 61), 20 A at -44 VDC
+    for the EX9251 (PDF page 43), and, for the QFX5100 line, 10 A, 7 A and 8 A in the QFX5100, QFX3500
+    and QFX3600 guides. One figure on the part would be wrong for some of them, so the port states none.
+    `attrs` keeps the EX4600's words as printed.
+  awg: >-
+    EX4600 guide, the list of parts and tools for connecting DC power (PDF page 97): "DC power source
+    cables (14-16 AWG) with ring lug (Molex 190700069 or equivalent) (not provided)": a range of two
+    sizes, so the port states both, 14 and 16. The EX4550 guide's list (PDF page 142) prints the same.
+    The "(not provided)" cables are the site's.
+states:
+- ok
+- fault
+- absent
+elements:
+  term-neg-a:
+    at: [11.3, 8.6]
+    size: [7.0, 7.0]
+    class: screw
+  term-neg-b:
+    at: [19.6, 8.6]
+    size: [7.0, 7.0]
+    class: screw
+  term-pos-a:
+    at: [28.1, 8.6]
+    size: [7.0, 7.0]
+    class: screw
+  term-pos-b:
+    at: [36.3, 8.6]
+    size: [7.0, 7.0]
+    class: screw
+  led-in:
+    at: [13.4, 20.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out:
+    at: [22.5, 20.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [33.7, 20.5]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [2.3, 0.8]
+    size: [7.9, 39.4]
+    class: latch
+  lever:
+    at: [48.2, 11.2]
+    size: [6.5, 20.6]
+    class: latch
+  esd-point:
+    at: [41.7, 32.1]
+    size: [7.0, 7.0]
+    class: screw
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#88bcda'}
+size:
+  w: 54.7
+  h: 40.5
+size-confidence: {w: photo-measured, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    confidence: estimated
+    source: figure - the handle stands proud of the face in the guide's isometric Figure 24; its projection is not measured
+  - node: term-neg-a
+    cyl: 1.2
+    confidence: estimated
+    source: figure - screw heads stand proud of the terminal block; the projection is not measured
+  - node: term-neg-b
+    cyl: 1.2
+    confidence: estimated
+    source: figure - screw heads stand proud of the terminal block; the projection is not measured
+  - node: term-pos-a
+    cyl: 1.2
+    confidence: estimated
+    source: figure - screw heads stand proud of the terminal block; the projection is not measured
+  - node: term-pos-b
+    cyl: 1.2
+    confidence: estimated
+    source: figure - screw heads stand proud of the terminal block; the projection is not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [13.1, 10.4], lift: 1.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-batt, at: [21.4, 10.4], lift: 1.2}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [29.9, 10.4], lift: 1.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-rtn, at: [38.1, 10.4], lift: 1.2}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [14, 16]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, awg: awg}
+skins: [default]

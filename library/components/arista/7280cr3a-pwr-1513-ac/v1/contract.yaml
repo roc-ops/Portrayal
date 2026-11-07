@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: 7280cr3a-pwr-1513-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1500 W AC power supply PWR-1513-AC-RED (forward airflow, red handle) that the 7280R3A data sheet
+  lists for the Arista 7280CR3A-72 beside the PWR-1512-AC. It is a 1RU module, 73.5 mm wide. A round
+  fan guard with a red diagonal handle is at the left. An IEC C14 inlet, a latch and a status lamp are
+  at the right.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1513-AC-RED: {part: PWR-1513-AC-RED}
+attrs:
+  power-output-w: 1500
+  input: ac
+  inlet: c14
+  airflow: front-to-back
+  input-note: '200 - 240 VAC, 8.5 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height: the 7280R3A Series Data Sheet (04-0040-26,
+    April 15th, 2025) lists "PWR-1513-AC-RED  Arista PSU, 1RU, AC/DC, 1500W, FORWARD, 73.5MM" among
+    the 7280CR3A-72 spares. The height is the PWR-1512-AC-RED's (arista/7050x4-pwr-1500-ac).
+  part-number: >-
+    datasheet - ordering information for the 7280CR3A-72: "PWR-1513-AC-RED", and the model comparison's
+    "Power Supplies PWR-1513-AC, PWR-1512-AC or PWR-1511-DC". Guide table 3 and table 4 name neither
+    the 1513 nor the 1512 for this model (table 4 lists PWR-1511-AC); the data sheet's is used.
+  power-output: >-
+    datasheet - the "1500W" of the ordering description and "Output Power 1500 W" in the power
+    supply table (the PWR-1513 AC column). An output.
+  input: >-
+    datasheet - the power supply table, PWR-1513 AC: 200-240 VAC, maximum input current 8.5 A, 50/60
+    Hz, 94 percent Platinum, IEC 60320 C14.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD". The guide's section 2.1 says a red handle is an
+    air exit module. The reverse build is arista/7280cr3a-pwr-1513-ac-rev.
+  inlet: >-
+    datasheet - "Input Connector IEC 60320 C14" for the PWR-1513 AC column.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a PWR-1513 is held. It is drawn as the
+    PWR-1512-AC-RED (arista/7050x4-pwr-1500-ac), the same 73.5 mm 1RU housing in the guide's figure
+    D-3. No document says the 1513 differs from the 1512 in outline.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`.
+  power: >-
+    No supply figure other than the rating is stated; nothing is written for the supply's own loss.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.85, 14.3], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

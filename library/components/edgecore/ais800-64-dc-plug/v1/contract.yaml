@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: ais800-64-dc-plug
+version: 1.0.0
+class: port
+mates: edgecore-ais800-dc-block-6
+profile: power
+description: >-
+  The cable connector of the Edgecore AIS800-64D and AIS800-64O 3000 W DC supply, wired, seen from the wire side as seated. A grey
+  body with one insulated wire entering each of its six ways. It seats in an `edgecore-ais800-dc-block-6` connector at its own mate
+  point. It carries one wire per contact, not one cable.
+size: {w: 26.79, h: 22.19}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, edgecore/ais800-64-dc-header@1, 26.79 by 22.19. No document draws the cable connector and
+  no dimension of it is held.
+attrs: {media: edgecore-ais800-dc, connector: DC cable connector, positions: 6}
+fields:
+  wire-1-color: {label: 'Wire colour (upper left)', type: text, default: '#2b2b2b'}
+  wire-2-color: {label: 'Wire colour (upper centre)', type: text, default: '#2b2b2b'}
+  wire-3-color: {label: 'Wire colour (upper right)', type: text, default: '#2b2b2b'}
+  wire-4-color: {label: 'Wire colour (lower left)', type: text, default: '#2b2b2b'}
+  wire-5-color: {label: 'Wire colour (lower centre)', type: text, default: '#2b2b2b'}
+  wire-6-color: {label: 'Wire colour (lower right)', type: text, default: '#2b2b2b'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    NO DOCUMENT DRAWS THE CABLE CONNECTOR. The Edgecore AIS800-64D Quick Start Guide's package contents list "DC power cord
+    (included with DC PSUs only)" (page 1) and its Connect Power page (page 3, "Use #4 AWG / 21.2 mm2 copper wire") names the wire; its
+    figure (page 2) draws the supply's side only. No maker, series or part number is named for the plug. THE PART IS A STAND-IN FOR THE
+    CABLE CONNECTOR, drawn as the half that seats in the supply's.
+  size: >-
+    estimated - see size-notes.
+  wiring: >-
+    NOT STATED. No document gives a wire colour or says which socket takes which wire; the six defaults are a neutral dark grey and
+    mean nothing.
+  far-end: >-
+    NOT DRAWN. No document describes the far end of the cord.
+  gauge: >-
+    quick start - "Use #4 AWG / 21.2 mm2 copper wire (for a -48 to -60 VDC PSU)" (page 3). Not stated as the gauge of the connector's
+    own wires.
+  depth: >-
+    NOT STATED. No document gives how far the cable connector stands out of the supply, so the part draws a plan outline only and builds
+    no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [13.395, 11.095], direction: front}
+  wire-1: {at: [7.48, 4.00], direction: front}
+  wire-2: {at: [15.55, 4.00], direction: front}
+  wire-3: {at: [23.63, 4.00], direction: front}
+  wire-4: {at: [7.48, 18.13], direction: front}
+  wire-5: {at: [15.55, 18.13], direction: front}
+  wire-6: {at: [23.63, 18.13], direction: front}
+skins: [default]

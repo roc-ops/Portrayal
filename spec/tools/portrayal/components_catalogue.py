@@ -23,7 +23,7 @@ from portrayal import libwalk
 # libyaml, through the shared loader, now that every build runs this: the
 # pure-Python parser made it the slowest walk in the build's index pass
 # (about 16 s against about 3 s, every contract and manifest read once).
-from portrayal.manifest import load_yaml, mates_of
+from portrayal.manifest import load_yaml, mates_of, offers
 
 REF = re.compile(r"\b([a-z0-9-]+)/([a-z0-9-]+)@(\d+)\b")
 
@@ -93,6 +93,7 @@ def seated_by(library):
     has one, is expanded INTO that manifest, so it adds nothing to read.
     """
     users = defaultdict(set)
+    cands = []
 
     def named(v):
         if isinstance(v, str):
@@ -109,7 +110,13 @@ def seated_by(library):
             for item in (comps.get("placements") or []) + (comps.get("bays") or []):
                 for key in ("ref", "default"):
                     refs.update(named(item.get(key)))
-                for a in item.get("accepts") or []:
+                # WHAT THE BAY TAKES (manifest.offers), so a part a bay seats
+                # through its `interface` counts as seated there; the library
+                # is walked for it only when some bay states one
+                if item.get("interface") and not cands:
+                    from portrayal.render import _pluggable_candidates
+                    cands.append(_pluggable_candidates([library]))
+                for a in offers(item, cands[0] if cands else None):
                     refs.update(named(a))
         for cfg in (doc.get("configurations") or {}).values():
             for key in ("bays", "occupants"):

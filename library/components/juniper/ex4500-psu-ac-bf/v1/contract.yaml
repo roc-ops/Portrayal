@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: ex4500-psu-ac-bf
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The AC power supply of the Juniper EX4500 switches with back-to-front airflow. It gives 1000 W at a
+  low line voltage (100 to 120 VAC) and 1200 W at a high line voltage (200 to 240 VAC). It is a
+  field-replaceable unit, hot-removable and hot-insertable. The face has a C19 appliance inlet, a
+  fan, a diagonal handle, a bicolour status lamp and an orange ejector lever. The lever colour shows
+  the airflow. It must match the label visible through the fan tray. The guide gives no part number
+  for it.
+attrs:
+  role: ac-power-supply
+  power-output-w: 1200
+  airflow: back-to-front
+  input: 100 to 120 VAC or 200 to 240 VAC, 50 to 60 Hz; 12 A and 6 A (guide Table 40)
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): AC Power Supply in EX4500 Switches
+    (Figures 21 to 23), Table 40 (the AC figures) and Table 3 (which models ship it). The guide's own
+    copyright and the Juniper EULA govern it; it is read for facts only and nothing of it is copied. The
+    guide prints no Juniper part number for the supply. The CLI calls it "PS 1000W /1200W AC
+    Back-to-front airflow" (Table 4).
+  size: >-
+    drawing - Figure 6, the flat rear panel, which draws the front-to-back supply. The back-to-front
+    unit is not drawn, so it takes the size of that one, since both fit one slot. See
+    juniper/ex4500-psu-ac-fb@1 for the reading: 76.0 x 39.8 mm, estimated to 1 mm.
+  depth: >-
+    estimated - not stated. Searched the guide for the supply's dimensions: the table gives its weight,
+    3 lb (1.3 kg), and no size. No depth is written.
+  face: >-
+    drawing - Figure 6, read as fractions of one front-to-back supply and drawn the same way for this
+    unit: the C19 inlet at the left, a round fan grille with a diagonal handle at the right, four corner
+    screws and a status lamp between them. Positions are estimated.
+  lever: >-
+    datasheet - AC Power Supply in EX4500 Switches: "Green - Front-to-back airflow; Orange -
+    Back-to-front airflow". The lever colour is the field handle-finish.
+  airflow: >-
+    datasheet - Table 3 and Table 15: the supply of EX4500-40F-BF, -BF-C and -VC1-BF is the back-to-front
+    one. Its lever is orange and matches the INTAKE label of the fan tray.
+  power: >-
+    datasheet - Table 40: output 1000 W at the low line and 1200 W at the high line. The higher figure is
+    carried as the output.
+  led: >-
+    datasheet - Table 16: one bicolour lamp on the faceplate. Unlit: no input. Green: working, blinking
+    green or amber means the supply has failed.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [0.5, 8.0], rotate: 270}
+elements:
+  led-status:
+    at: [32.4, 32.7]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  lever:
+    at: [0.4, 12.0]
+    size: [3.6, 16.0]
+    class: latch
+fields:
+  handle-finish: {label: Ejector lever colour, type: text, default: '#f08a24'}
+size:
+  w: 76.0
+  h: 39.8
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: lever
+    out: 1.2
+    confidence: estimated
+    source: figure - the lever stands proud of the face; its projection is not measured
+skins: [default]

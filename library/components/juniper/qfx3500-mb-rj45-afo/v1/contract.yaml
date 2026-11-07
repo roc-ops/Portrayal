@@ -1,0 +1,95 @@
+format: 1
+kind: module
+name: qfx3500-mb-rj45-afo
+version: 1.0.0
+class: control-panel
+behaviour: fills
+profile: networking
+description: >-
+  QFX3500-MB-RJ45-AFO, the RJ-45 management board with port-to-FRU airflow. It is the field-replaceable
+  unit in the middle of the FRU side of a QFX3500, between the two fan trays. Its faceplate carries the
+  LCD that shows the host name and the number of active alarms, the Power, Status and Fan lamps, a USB
+  port, the RJ-45 console port and two 1000BASE-T RJ-45 management ports, C0 and C1. Two fan modules
+  inside the board cool the chassis. Unlike the power supplies and the fan trays, the board is not
+  hot-swappable: the switch must be powered off to replace it. The guide gives it to the
+  QFX3500-48S4Q-AFO. Its FRU-to-port sibling is QFX3500-MB. A board only fits a chassis of its own
+  airflow.
+attrs:
+  model: QFX3500-MB-RJ45-AFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    drawing - the same board as juniper/qfx3500-mb@1 with the airflow turned, so the size is the same:
+    QFX3500 Device Hardware Documentation (modified 2018-07-03), figure 5 (page 27, drawing g050012),
+    scaled to the table's 17.4 x 1.74 in at 1.427 mm/pt across and 1.396 down, 133.4 x 40.6 mm. The
+    guide draws one RJ-45 board and does not say the two airflows differ in outline.
+  depth: >-
+    estimated - not stated. The guide's figures 11 and 14 are isometric drawings with no scale and no
+    table gives a depth, so none is written.
+  face: >-
+    drawing - the arrangement and positions of juniper/qfx3500-mb@1, read from figure 5. The guide's
+    Table 10 gives the two RJ-45 boards under two part numbers and states no difference in appearance,
+    so none is drawn. The Junos mark beside the lamps is a logo and is not drawn.
+  logo-zone: >-
+    estimated - reserved, not drawn. Figure 5 draws the maker's wordmark at the upper left of the board,
+    about 25 x 11 mm. The library reproduces no vendor logo.
+  airflow: >-
+    datasheet - guide, Table 10 (page 34) and Table 13 (page 40): QFX3500-MB-RJ45-AFO is port-to-FRU.
+  power: >-
+    not published. Searched the QFX3500 hardware guide near its management board, Table 5 (weights) and
+    the power tables 25 and 27: only whole-switch figures exist. The module declares power-absent so
+    the missing figure is a statement and not a silence.
+  speed: >-
+    datasheet - guide, Management Board for a QFX3500 Device (page 32): the RJ-45 board provides two
+    1000BASE-T RJ-45 management ports. The lamps follow the guide's Table 11.
+states: [absent]
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the out-of-band cluster of the management board: two RJ-45 management ports, an RJ-45 console
+      port and a USB port. Three kinds, one purpose: reaching and recovering the switch when the data
+      plane cannot.
+parts:
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [16.6, 15.95], skin: usb2, attrs: {media: usb-a, function: USB}}
+- {ref: common/rj45-ganged-eth@1, id: c0, group: mgmt, at: [52.15, 27.1], attrs: {speed: 1g, media: rj45, function: out-of-band management C0}}
+- {ref: common/rj45-ganged-eth@1, id: c1, group: mgmt, at: [68.6, 27.1], attrs: {speed: 1g, media: rj45, function: out-of-band management C1}}
+- {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [104.65, 11.6], attrs: {media: rj45-serial, function: serial console}}
+elements:
+  led-power:
+    at: [92.55, 7.56]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  led-status:
+    at: [92.55, 12.2]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: beacon, color: '#39b54a', behavior: blinking}
+    - {name: error, color: '#f5a623', behavior: blinking}
+    - 'off'
+  led-fan:
+    at: [92.55, 16.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  logo-zone:
+    at: [14.3, 2.3]
+    size: [24.9, 10.9]
+    class: label
+size:
+  w: 133.4
+  h: 40.6
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

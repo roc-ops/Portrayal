@@ -1,0 +1,152 @@
+---
+manufacturer: Juniper
+model: EX4000-24MP
+slug: juniper-ex4000-24mp
+u_height: 1.0
+is_full_depth: true
+weight: 4.1
+weight_unit: kg
+airflow: front-to-rear
+description: 'Juniper EX4000-24MP, a fixed 1U multigigabit access switch with 24 PoE++ ports (60 W per
+  port, 480 W budget): four 100 Mbps/1 Gbps/2.5 Gbps ports (labelled 0 to 3 and bracketed MG) and twenty...'
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: mgmt
+    type: 1000base-t
+    mgmt_only: true
+  - name: port-0
+    type: 2.5gbase-t
+  - name: vcp-0
+    type: 10gbase-x-sfpp
+  - name: port-1
+    type: 2.5gbase-t
+  - name: vcp-1
+    type: 10gbase-x-sfpp
+  - name: port-2
+    type: 2.5gbase-t
+  - name: uplink-2
+    type: 10gbase-x-sfpp
+  - name: port-3
+    type: 2.5gbase-t
+  - name: uplink-3
+    type: 10gbase-x-sfpp
+  - name: port-4
+    type: 1000base-t
+  - name: port-5
+    type: 1000base-t
+  - name: port-6
+    type: 1000base-t
+  - name: port-7
+    type: 1000base-t
+  - name: port-8
+    type: 1000base-t
+  - name: port-9
+    type: 1000base-t
+  - name: port-10
+    type: 1000base-t
+  - name: port-11
+    type: 1000base-t
+  - name: port-12
+    type: 1000base-t
+  - name: port-13
+    type: 1000base-t
+  - name: port-14
+    type: 1000base-t
+  - name: port-15
+    type: 1000base-t
+  - name: port-16
+    type: 1000base-t
+  - name: port-17
+    type: 1000base-t
+  - name: port-18
+    type: 1000base-t
+  - name: port-19
+    type: 1000base-t
+  - name: port-20
+    type: 1000base-t
+  - name: port-21
+    type: 1000base-t
+  - name: port-22
+    type: 1000base-t
+  - name: port-23
+    type: 1000base-t
+power-ports:
+  - name: ac-inlet
+    type: iec-60320-c14
+comments: 'Juniper EX4000-24MP, a fixed 1U multigigabit access switch with 24 PoE++ ports (60 W per port,
+  480 W budget): four 100 Mbps/1 Gbps/2.5 Gbps ports (labelled 0 to 3 and bracketed MG) and twenty 10/100/1000BASE-T
+  ports. The front also has two SFP+ Virtual Chassis ports and two SFP+ uplink ports, a USB 2.0 Type-A
+  port, a reset pinhole and the SYS, MST and CLD status lamps. The rear has an RJ-45 management port,
+  an RJ-45 console port, two exhaust fans, an earthing terminal and the AC inlet. The power supply and
+  the two fans are built into the chassis, so there are no bays. Airflow is front to back.
+
+
+  Configuration `ac`: The switch as shipped: 24 PoE++ multigigabit and gigabit ports, the built-in AC
+  power supply and two built-in front-to-back fans. EX4000-24MP is the only hardware SKU the datasheet
+  lists for the model (Table 1 and the ordering information); there is no DC, back-to-front, -S or -TAA
+  variant.
+
+
+  Rack mounting positions: flush ("front-mount"; ears level with the face; as shipped), recessed ("2-in.
+  recess"; ears 50.8 mm behind the face).
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - compliance.acoustic: 26.8 / 26.9 / 35.2 dBA at 0 / 50 / 100 percent PoE load (guide Table 4); 26.9
+  dBA in the datasheet
+
+  - compliance.seismic: tested for Zone 4 earthquake safety
+
+  - environmental.altitude: 3000 m operating, 4500 m storage
+
+  - environmental.humidity: 5 to 90 percent at 40 C, noncondensing
+
+  - environmental.operating-temp: 0 to 50 C at sea level, 0 to 45 C up to 1500 m, 0 to 40 C up to 3000
+  m
+
+  - features.optics-sfp-plus: the two Virtual Chassis ports and the two uplink ports are 1GE or 10GE SFP+
+  ports (Table 19 and Figure 13 callout 9). Virtual Chassis is supported only with 10GE SFP+, and not
+  with a 10GBASE-T transceiver in a Virtual Chassis port
+
+  - features.uplink-ports: two SFP+ ports take 1 GbE or 10 GbE transceivers
+
+  - features.virtual-chassis: up to 6 EX4000 switches; the two Virtual Chassis ports are SFP+ and VC formation
+  is not supported with a 10GBASE-T transceiver in them
+
+  - lifecycle.eol: none-announced
+
+  - management.console: RJ-45 console on the rear panel, labelled CON
+
+  - management.oob: management Ethernet RJ-45 on the rear panel, with a link activity lamp and a status
+  lamp
+
+  - management.usb: one USB 2.0 Type-A port on the front panel
+
+  - physical.depth-note: 10.16 in (25.80 cm), Table 19
+
+  - physical.weight-note: 9.3 lb (4.1 kg), Table 26; 4.08 kg in the datasheet
+
+  - platform.first-junos-release: 24.4R1 (Table 18)
+
+  - power.poe-budget-w: 480
+
+  - power.poe-standard: PoE++ (IEEE 802.3bt) on all 24 ports, 60 W per port
+
+  - power.power-envelope: bare
+
+  - power.power-input: 100 to 240 VAC at 8.6 A maximum, 50 to 60 Hz (Table 34)
+
+  - power.power-max-w: 57
+
+  - thermal.cooling: two inbuilt fixed fans, front-to-back airflow, 17 CFM (datasheet)
+
+
+  Drawing version 1.0.2. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

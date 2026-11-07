@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: 7280dr3a-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The 2RU high-speed hot-swap fan module of the Arista 7280DR3A-36, spare FAN-7012H-RED
+  (front-to-rear airflow, red). A red-framed module with a honeycomb grille, a grey release
+  rail running down its middle with a slider and a red tab at its top, and a status lamp in
+  its lower right corner. Four of them fill the rear of the 7280DR3A-36 beside the two power
+  supplies; the module is hot-swappable and its release lever is the rail.
+size: {w: 79.6, h: 81.5}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  FAN-7012H-RED: {part: FAN-7012H-RED}
+attrs:
+  airflow: front-to-back
+  role: fan
+provenance:
+  size: >-
+    estimated - read off the rear panel figure D-3 of the Arista 7280R3A Series Quick Start
+    Guide (DOC-07042-01) at 1.193 px/mm (the 525 px between the figure's chassis edges over
+    the 440 mm body, which the datasheet gives as 43.99 cm); the figure is a 565 px raster, so
+    one pixel is 0.84 mm. The four red frames measure 95 px wide on a 102 px pitch, which is
+    79.6 mm on an 85.5 mm pitch, and 96 to 99 px tall, 80 to 83 mm. No document dimensions the
+    module. 81.5 is the middle of the 80 to 83 range the frame's rounded outer edge and its
+    straight inner edge give.
+  part-number: >-
+    datasheet - the 7280R3A Series Data Sheet (04-0040-26, April 15th, 2025), ordering
+    information for the 7280DR3A-36: "FAN-7012H-RED  Spare fan module for Arista 7000 Series
+    2RU High Speed Fan (front-to-rear airflow)", and "Fan Tray FAN-7012H" in the model
+    comparison table. The same part is the spare listed for the 7280DR3A-54, which takes the
+    same four-fan rear (guide figure D-4 or D-3; the guide does not say which).
+  airflow: >-
+    datasheet - "Airflow Direction: Front to Rear" for the 7280DR3A-36, and the only fan the
+    data sheet lists for it is the red (front-to-rear) one. The guide, section 2.1, says a red
+    handle marks an air-exit module and a blue handle an air-inlet one; no blue 2RU fan is
+    listed for this switch, so no back-to-front build is modelled.
+  face: >-
+    estimated - figure D-3: red outer frame about 3.5 mm wide, honeycomb grille, a grey
+    vertical rail at the module's middle with a slider block and a red tab at its top, and a
+    grey socket with a green lamp at the lower right. The guide's Appendix A (figure A-4) names
+    the lamp the "fan module status LED"; table 11 gives its states: off (not detected), green
+    (normal), red (failed). The figure's lamp is drawn green and its states here follow table 11.
+    Positions are fractions of the figure read at 1.19 px/mm, so good to about a millimetre.
+  handle-finish: >-
+    The red of the frame is a field, `handle-finish`, default `#e0332e`, read off the figure
+    (the guide says only "red handle" and "handle or bezel color indicates airflow
+    direction"). It is the one thing a back-to-front fan would change.
+  power: >-
+    NOT STATED. Neither the quick start guide nor the data sheet gives a power draw for
+    FAN-7012H, so none is written and the lint warning for a fan without one stands.
+states: [absent]
+elements:
+  grille: {at: [3.6, 3.8], size: [72.4, 73.7], class: vent}
+  handle: {at: [33.5, 0.4], size: [13.0, 77.1], class: handle}
+  status: {at: [70.9, 76.1], size: [1.8, 1.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#e0332e'}
+relief:
+  wall: '#3a3a36'
+  features:
+    - node: grille
+      vent: 16
+      confidence: estimated
+      source: >-
+        The grille is open and the rotor is not drawn, but no document gives a depth. 16
+        matches what this library gives other 2RU fan modules.
+    - node: handle
+      bar: 3.0
+      confidence: estimated
+      source: >-
+        The release rail stands off the grille along its whole length; how far is not
+        dimensioned anywhere, so 3.0 is the rail's own drawn width.
+skins: [default]
+body:
+  depth: 190
+  color: '#2e2b26'
+  footprint: {at: [0, 0], size: [79.6, 81.5]}

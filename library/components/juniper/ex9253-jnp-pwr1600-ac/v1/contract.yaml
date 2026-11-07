@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: ex9253-jnp-pwr1600-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-PWR1600-AC, the universal AC power supply of the EX9253. It delivers 800 W from a low
+  line (90 to 140 VAC) and 1600 W from a high line (180 to 264 VAC) and has a C14 appliance inlet at
+  the left, a fan behind a diagonal ejector handle at the right, a status lamp and an ejector tab. The
+  EX9253 seats up to six, in slots PSM0 to PSM5; the base order ships three and the redundant order four.
+  Each has its own fan and a dedicated AC feed. They are hot-removable and hot-insertable. Never mix
+  them with DC supplies. The guide shows no back-to-front supply.
+attrs:
+  role: ac-power-supply
+  power-output-w: 1600
+  power-output-low-line-w: 800
+  airflow: front-to-back
+  input: 90 to 140 VAC (800 W) or 180 to 264 VAC (1600 W), 50 to 60 Hz; 10 A at 100 to 240 VAC (guide Table 10)
+part-numbers:
+  JNP-PWR1600-AC (EX9253): {part: JNP-PWR1600-AC}
+provenance:
+  sources: >-
+    datasheet - EX9253 Switch Hardware Guide (published 2022-11-30): AC Power Supply Description,
+    Figures 13 and 14 (the supply, and its face drawn flat, g009806), Tables 9 and 10 (the electrical
+    figures), Table 5 (size and weight) and Tables 3 and 4 (the part number). EX9250 Ethernet Switch
+    Datasheet (1000632-006-EN, Sep 2021): the spare is JNP-PWR1600-AC, "Universal AC power supply,
+    1600 W", and the base and redundant orders ship JNP-PWR1600-AC-BB. The guide's name is carried.
+    The key of part-numbers carries the suffix (EX9253) so that its DCIM module type does not share a
+    file with the same part number in another line's slice.
+  size: >-
+    drawing - Table 5: 3.53 in (8.67 cm) wide and 1.63 in (4.14 cm) high. Figure 14's outline is 820 x
+    360 px, an aspect of 2.28 against 2.09 for the table. The rear panel of Figure 2 (3.03 px/mm) shows
+    the three supplies of a column stacked on a 40.3 mm pitch, 39 to 40 mm high each, so 41.4 mm cannot
+    be the face. The face is 86.7 x 39.6 mm: the table's width and the figure's height. See the gap
+    named psu-height on the device.
+  depth: >-
+    datasheet - Table 5: 9.26 in (23.52 cm). No depth is written, because the component schema has no
+    depth key the explorer reads here; the figure is kept in this note.
+  face: >-
+    drawing - Figure 14 read at 9.46 px/mm on its 820 px width: the C14 inlet (callout 2) at the left, 24.9 mm
+    across, with the ejector tab (callout 1) beside it; the status lamp (callout 3) at 34.5 mm across
+    and 8.7 mm down with a screw below it; and the fan with its diagonal handle (callout 4) at the
+    right, centred 60.5 mm across. Every position is estimated to about 0.7 mm. The guide labels
+    nothing on the supply, so nothing is printed on it.
+  handle: >-
+    estimated - the guide gives no colour for the handle or the tab; Figure 14 is a line drawing. They
+    are drawn in neutral greys.
+  power-output-w: >-
+    datasheet - guide Table 10: the supply outputs 800 W on a low line and 1600 W on a high line; the
+    higher figure is the rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    estimated - the guide's Figure 14 shows one status lamp and no table describes it (searched the AC
+    Power Supply Description, Tables 9 and 10 and the maintenance sections). It is drawn as one lamp with
+    green and off states.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [8.2, 5.8], rotate: 90}
+elements:
+  led-status:
+    at: [33.4, 7.6]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: ok, color: '#22c55e'}
+    - 'off'
+  tab:
+    at: [4.4, 11.4]
+    size: [4.6, 12.4]
+    class: latch
+  handle:
+    at: [46.0, 3.0]
+    size: [30.0, 33.6]
+    class: latch
+size:
+  w: 86.7
+  h: 39.6
+size-confidence: {w: datasheet, h: drawing}
+relief:
+  features:
+  - node: tab
+    out: 1.6
+    confidence: estimated
+    source: figure - the ejector tab stands proud of the face in Figure 13; its projection is not measured
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle bar stands proud of the fan guard in Figure 13; its projection is not measured
+skins: [default]

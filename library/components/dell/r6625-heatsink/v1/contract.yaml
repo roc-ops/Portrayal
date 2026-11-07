@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: r6625-heatsink
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The 1U processor heatsink of the R6625 seen from above: a finned block over each AMD EPYC SP5 socket. A lighter spreader plate sits at its rear. Six captive screws hold it.
+provenance:
+  sources: >-
+    Dell's R6625 Installation and Service Manual, figure 11 (the interior from
+    above, a straight-on render) at 2.189 px/mm, read with a 10 mm grid laid
+    over it; figure 101 shows the sockets under it. Rear at y=0, plan x left to
+    right as the body is seen from above. No CAD model of the R6625 is held.
+  size: >-
+    drawing - 92.7 wide and 144.3 deep: the left heatsink (processor 2, the one
+    over the B memory slots) reads x 70.5 to 163.1 and the right (processor 1)
+    x 271.6 to 364.3 in the body, both y 276.3 to 420.6. The two read the same
+    size to 0.2 mm. Good to about 1 mm, the figure's resolution. It is not the
+    R660's 82.1 x 119.1 retention plate: the AMD SP5 socket is larger than the
+    Intel one, and the heatsink here is a different part.
+  screws: >-
+    drawing - six captive screws, at 20.7 and 72.0 across on the rear and front
+    rows (6.2 and 109.0 from the rear edge) and 3.7 and 89.0 on the middle row
+    (57.1 from the rear edge), read off figure 11; the DLC figures number the
+    six sockets' screws 1 to 6 (ISM figure 12).
+  plate: >-
+    drawing - the lighter plate at the rear, x 13.7 to 79.5 and y 16.6 to 58.1
+    from the heatsink's corner. The darker front third (from y 96.5) is the
+    taller fin field in the figure's lighting, drawn as a darker tone, not
+    measured as a height.
+  height: >-
+    NOT MEASURED. No figure held gives the finned block's height. The relief
+    block borrows dell/heatsink-1u-16g@1's 33.1, itself borrowed from the 14th
+    generation 1U heatsink, because both stand under the same 1U lid; it is an
+    estimate and says so.
+  fins: >-
+    drawn and not measured - the fin pitch is a plausible 2.4 mm.
+size: {w: 92.7, h: 144.3}
+size-confidence: {w: drawing, h: drawing}
+relief:
+  wall: '#6d737a'
+  features:
+  - node: block
+    out: 33.1
+    color: '#8a9096'
+    confidence: estimated
+    source: >-
+      borrowed from dell/heatsink-1u-16g@1 (itself borrowed from the 14th
+      generation 1U heatsink): no figure of the R6625 gives the block's height,
+      and both heatsinks stand under the same 1U lid.
+elements:
+  block: {at: [0.0, 0.0], size: [92.7, 144.3], class: bezel}
+skins: [default]

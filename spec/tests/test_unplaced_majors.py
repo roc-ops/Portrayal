@@ -44,6 +44,7 @@ def run(root):
 
 # --- the live library ---------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_library_has_no_unexplained_majors():
     """The corpus, which is the only run that matters. Every major is reachable
     from a device, or carries the sentence saying what would seat it."""
@@ -258,9 +259,63 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # #887 re-majored the 4-port XFP MIC again for its pic/port ids; @3 stays
     # because juniper/mpc2e-3d@3 still accepts it beside @4.
     kept["juniper/mic-3d-4xge-xfp"] = [2, 3, 4]
+    # DEPRECATED, NOT DELETED (#374): the five ASR 9903 parts re-derived on the
+    # installation guide's 439.9 mm body. A saved rack or a contract may still
+    # name the @1, so it stays, carries `superseded-by` and nothing seats it.
+    for name in ("cisco/a9903-20hg-pec", "cisco/a9903-8hg-pec", "cisco/asr-9903-fan",
+                 "cisco/pwr-1p6kw-ac", "cisco/pwr-1p6kw-dc"):
+        kept[name] = [1, 2]
+    # DEPRECATED, NOT DELETED: the JNP10K-PWR-AC2 drawn 84.0 x 97.0 mm from a photograph at @1, where
+    # every Juniper guide gives 91.4 x 88.9 mm (@2), and the JNP10K-PWR-BLNK cover that took that
+    # size from it. The MX10004, MX10008, MX10016, QFX10008 and QFX10016 seat the @2 of the supply
+    # and the MX ones the @2 of the cover; each @1 stays so a manifest pinning it resolves, carries
+    # `superseded-by` and nothing seats it.
+    kept["juniper/jnp10k-pwr-ac2"] = [1, 2]
+    kept["juniper/jnp10k-pwr-blnk"] = [1, 2]
+    # The six MX10000-line fan trays were drawn 176 mm wide where the guides give 167.6 mm; the @2 of
+    # each is seated and each @1 stays for a saved rack, `superseded-by` the @2.
+    for fan in ("jnp10004-fan2", "jnp10008-fan", "jnp10008-fan2", "jnp10008-fan3", "jnp10016-fan", "jnp10016-fan2"):
+        kept[f"juniper/{fan}"] = [1, 2]
+    # common/led-rect and common/led-rect-sm: v1 stays for the devices that seat it; v2 rests
+    # unlit (lamps whose photographs show them dark).
+    kept["common/led-rect"] = [1, 2]
+    kept["common/led-rect-sm"] = [1, 2]
+    # The Edgecore DCS240/DCS511 DC supply: @2 is its face drawn from the quick start guide's photograph,
+    # seated by both devices' DC configurations; @1, the face borrowed from the AC variant, is retired
+    # (`superseded-by` @2) and stays because the two supply bays still accept it, for a saved rack.
+    kept["edgecore/dcs240-psu-dc"] = [1, 2]
+    # The UfiSpace PSU-151 DC supply redrawn from its guide's figure: the S6301-56ST's DC builds seat
+    # the @2, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["ufispace/psu-151-dc"] = [1, 2]
+    # The Nexus 9500 3 kW DC supply redrawn from its guide's figures: the three chassis seat the @2 in
+    # their DC build, and their supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["cisco/n9k-pdc-3000w-b"] = [1, 2]
+    # The MX304 DC supply redrawn from its guide's figures: the MX304's DC build seats the @2, and its
+    # supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["juniper/mx304-psu-dc"] = [1, 2]
+    # The Juniper EX9200 2400 W DC supply redrawn from its guides' figures: the EX9204 and EX9208 seat the @2 in their DC
+    # configurations, and their supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["juniper/ex9200-pwr-mx480-2400-dc"] = [1, 2]
+    # The EX9214 4100 W DC supply redrawn from its guide's figures: the EX9214 seats the @2 in its DC
+    # configurations, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["juniper/ex9214-pwr-mx960-4100-dc"] = [1, 2]
+    # The UfiSpace PSU-302 and PSU-132 CRPS DC supplies redrawn from their guides' figures: the devices that seat them
+    # take the @2 in their DC builds, and their supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["ufispace/psu-302-dc"] = [1, 2]
+    kept["ufispace/psu-132-crps-dc"] = [1, 2]
+    # The UfiSpace PSU-162 and PSU-202 DC supplies redrawn from their guides' figures: each device's DC builds seat
+    # the @2, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["ufispace/psu-162-dc"] = [1, 2]
+    kept["ufispace/psu-202-dc"] = [1, 2]
+    # The FS keystone clip: the FHD-FAPM6 composes the @3, which presents the keystone interface, and the @2, which
+    # presents none, stays drawn as it was for a saved rack or a manifest that names it.
+    kept["common/keystone-clip"] = [2, 3]
+    # The FS blanking insert: the @2 states that it occupies a keystone opening and mates it, and the stand-in blank
+    # panel still composes the @1, which mates nothing and is drawn as it was.
+    kept["common/keystone-blank"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
-        if name.startswith("juniper/"):
+        if name.startswith(("juniper/", "cisco/")):
             old = LIB / "components" / name / f"v{majors[0]}" / "contract.yaml"
             assert (lint.load_yaml(old) or {}).get("superseded-by") == f"{name}@{majors[1]}", old
     # psu-550w USED TO BE HERE, the one retired major kept on purpose: the

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc4e-3d-2cge-8xge
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -11,7 +11,16 @@ description: >-
 attrs:
   model: MPC4E-3D-2CGE-8XGE
   power-draw-max-w: 610
+  cfp: 2
+  sfp-plus: 8
 provenance:
+  cfp-rate: >-
+    module reference, '2x100GE + 8x10GE MPC4E' (p179): 'Fixed configuration MPC with two 100-Gigabit
+    Ethernet ports and eight 10-Gigabit Ethernet ports', the 100G ports labelled 1/0 and 3/0. The section
+    names CFP optics for them (CFP-100GBASE-LR4 and CFP-100GBASE-ZR in its notes). Nothing new was measured.
+  sfp-plus-rate: >-
+    the same section (p179): 'Fixed configuration MPC with two 100-Gigabit Ethernet ports and eight
+    10-Gigabit Ethernet ports', the 10G ports labelled 0/0 through 0/3 and 2/0 through 2/3.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

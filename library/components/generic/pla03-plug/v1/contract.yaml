@@ -1,0 +1,106 @@
+format: 1
+kind: component
+name: pla03-plug
+version: 1.0.0
+class: port
+mates: positronic-pla03
+profile: power
+description: >-
+  The female three-position cable connector of the Positronic PCS series, PLA03F7000/AA, wired,
+  seen from the wire side as a front elevation sees it seated: the blue insulator, upright, with
+  a short straight stub of insulated wire leaving each of its three contacts, top to bottom as the
+  Edgecore DCS204 quick start guide wires it: DC return, the -36 to -72 VDC feed and ground. Seats
+  in a `positronic-pla03` connector at its own mate point. It carries one wire per contact, not
+  one cable.
+size: {w: 10.36, h: 22.25}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  Positronic Power Connection Systems catalog C-014 Rev. G9, page 22, female insulator dimensions
+  for cable connectors with size 16 removable contacts, code 0 or code 7: PLA03 0.876 +/-0.020
+  [22.25 +/-0.51] long and 0.408 +/-0.015 [10.36 +/-0.38] wide, 0.920 +/-0.020 [23.37 +/-0.51]
+  deep. Drawn upright, the row of contacts top to bottom.
+attrs: {media: pla03, connector: PLA03F7000/AA, positions: 3, pitch-mm: 5.0}
+fields:
+  wire-od: {label: Wire outside diameter, type: number, unit: mm, default: 3.0}
+  wire-1-color: {label: Wire colour (top contact), type: text, default: '#af3728'}
+  wire-2-color: {label: Wire colour (middle contact), type: text, default: '#1c1c1c'}
+  wire-3-color: {label: Wire colour (bottom contact), type: text, default: '#5a9e3c'}
+  body-color: {label: Body colour, type: text, default: '#2366ae'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - the Edgecore DCS204 (AS7726-32X) quick start guide, step 4 "Connect Power", page 2:
+    callout 1, "Positronic PLA03F7000/AA connector", points at the blue connector on the cable, and
+    the package contents (page 1, item 6) list a "DC power connector (included with 48 VDC PSU
+    only)", pictured as this connector without wires. The catalog's ordering code (page 26) reads
+    the number as PLA (one row), 03 (three positions), F (female), 7 (a cable connector; contacts
+    ordered separately, and a 0.165 [4.19] counterbore on the terminating side for large wires),
+    0 (no mounting), 0 (no hood or panel mount), 0 (crimp contacts ordered separately), /AA (RoHS
+    compliant). The DCS203 (AS7326-56X) quick start guide prints the same photograph and number.
+  size: >-
+    drawing - see size-notes.
+  contacts: >-
+    drawing - three size 16 contacts on a 5.00 [0.197] pitch, the middle one at the centre (catalog
+    page 14, the PLA03 hole pattern; page 22 numbers a female's contacts 3, 2, 1 across its face).
+    The wire openings are drawn at the contacts.
+  wiring: >-
+    photograph - the guide's page 2 photograph and its callouts: 2 "DC Return" on the red wire, 3
+    "-36 - -72 VDC" on the black one and 4 "Ground" on the green-and-yellow one, which leave the
+    connector top to bottom as the supply's legend reads (RTN, the range, the earth symbol).
+    The colours are fields: the red is a median of the photograph (#af3728), the black is the
+    library's, and the earth wire's green and yellow stripe is drawn as one green, an estimate.
+    A colour per stripe is not expressible here.
+  seated-depth: >-
+    derived - the catalog's mating dimensions (page 10) give a straight board mount male fully mated
+    with a cable mount female as 1.150 [29.21] over both, and the straight male stands 0.600 [15.24]
+    off its board (page 11), so the cable connector stands 0.550 [13.97] beyond the male's face, the
+    figure page 22 also prints for it. The male on the supply states no relief of its own, so the
+    plug's outer face is drawn 13.97 from the supply's face. AN ESTIMATE: the supply's male connector
+    is not identified (common/pla03-receptacle@1, provenance.part).
+  stub: >-
+    estimated - ONE STUB OF WIRE PER CONTACT, a straight run 30 long from the wire side, the stub rule
+    of docs/connectors-coax-design.md section 5 applied per wire, as on amphenol-ns/p40-plug@1.
+  wire-od: >-
+    estimated - the guides call for #14 AWG wire (DCS204 quick start, page 2 caution); no held
+    document gives its insulated diameter, and 3.0 is a reading. A field.
+  body-colour: >-
+    photograph - the guide's page 2 photograph at 500 dpi, medians #1c74ca on the top face and #3566a8
+    on the front; drawn #2366ae, the same blue as the connector it seats in. A field.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use;
+    common/pla03-receptacle@1 presents at its own face.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+relief:
+  features:
+    - node: body
+      out: 13.97
+      shape: true
+      confidence: estimated
+      source: >-
+        the catalog's mated length less the male's height (provenance.seated-depth)
+    - node: wire-1
+      lift: 13.97
+      cyl: 30
+      confidence: estimated
+      source: >-
+        the stub rule, docs/connectors-coax-design.md section 5, per wire (provenance.stub)
+    - node: wire-2
+      lift: 13.97
+      cyl: 30
+      confidence: estimated
+      source: >-
+        see wire-1
+    - node: wire-3
+      lift: 13.97
+      cyl: 30
+      confidence: estimated
+      source: >-
+        see wire-1
+connection-points:
+  mate: {at: [5.18, 11.125], direction: front}
+  wire-1: {at: [5.18, 6.125], direction: front, 'on': wire-1}
+  wire-2: {at: [5.18, 11.125], direction: front, 'on': wire-2}
+  wire-3: {at: [5.18, 16.125], direction: front, 'on': wire-3}
+skins: [default]

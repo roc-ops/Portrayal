@@ -602,6 +602,7 @@ def test_every_module_port_name_is_bay_scoped():
     assert not bad, "\n".join(bad[:20])
 
 
+@pytest.mark.heavy
 def test_no_device_type_puts_two_bays_at_one_position():
     """The position IS the `{module}` value. The trailing number alone put Fan 1,
     PSU 1 and slot-1 all at `1` on 167 of 205 bayed devices."""
@@ -819,6 +820,11 @@ WITHHELD = {
 # until this rule; its slot-1 was always given, plainly.
 ANCHORED = {
     "Dell/riser-2s-16g": ("riser-2", ["e3s-0", "e3s-1"]),
+    "Dell/r6615-riser-2u": ("riser-2", ["e3s-0", "e3s-1"]),  # the R6615's riser 2U, the same carrier
+    # the Dell R760's three rear drive modules, each with one seat (riser 3's place, riser 1's for the 4 x 2.5 inch one)
+    "Dell/rear-drive-2x25-2u-16g": ("riser-3", ["drive-0", "drive-1"]),
+    "Dell/rear-drive-4e3s-2u-16g": ("riser-3", ["e3s-0", "e3s-1", "e3s-2", "e3s-3"]),
+    "Dell/rear-drive-4x25-2u-16g": ("rear-drives", ["drive-0", "drive-1", "drive-2", "drive-3"]),
     "Fibrain/XCU10": ("drawer", ["slot-1", "slot-2", "slot-3", "slot-4"]),
 }
 
@@ -827,6 +833,10 @@ ANCHORED = {
 # blank position when it names ports, so an MPC in the adapter in `fpc3` names
 # its port `fpc3/x`, as in an MX960's `fpc3` (NetBox: `fpc3/mpc/x`).
 PASS_THROUGH = {
+    # the Dell R760's PSU adapter: its one bay takes the 60 mm supplies the R660 seats directly in a chassis bay
+    "Dell/psu-adapter-60mm-2u-16g": ["psu"],
+    # the Dell R960's 26 mm supply adapter: its `psu` bay takes the 60 mm supplies the R660 also seats directly
+    "Dell/r960-psu-adapter-60mm": ["psu"],
     "Juniper/MX2000-LC-ADAPTER": ["mpc"],
 }
 
@@ -1126,6 +1136,7 @@ def _withheld_paths(ref, chain, seen=()):
     return out
 
 
+@pytest.mark.heavy
 def test_every_nautobot_device_reaches_the_ports_its_netbox_twin_does():
     """#834's sweep, over every device and every module any of its bays accepts:
     the port names Nautobot can install are NetBox's, less those under a

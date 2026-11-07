@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: qfx10000-jnp10k-pwr-dc2
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10K-PWR-DC2 as the QFX10008 and QFX10016 take it - the 5500 W dual-supply DC
+  module with four DC feeds. Two columns of four input lug barrels run down the left, beside a tall
+  grab slot. The fault, OK, 2 and 1 lamps sit by a three-way H/L, IP1 and IP0 DIP switch. The heat
+  warning and the power rocker are at the top right, and the captive screw is at the foot. It is
+  longer than the QFX10000-PWR-DC and protrudes from the bay. Airflow is port-to-FRU
+  (front-to-back). The MX10000 guides list the same part number; no MX chassis models it yet.
+attrs:
+  model: JNP10K-PWR-DC2
+  role: dc-power-supply
+  power-output-w: 5500
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-voltage: -40 to -72 VDC, -48 VDC nominal
+  input-feeds: 4
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11): Table 1,
+    Tables 26 to 28, Figure 12 and Figure 35 (isometrics), Figure 37 (g100590, the flat faceplate
+    with the four lamps numbered) and Table 30. The QFX10016 Switch Hardware Guide (published
+    2025-12-11) carries the same part under Table 2 and Figure 13.
+  size: >-
+    datasheet - Table 28 gives 3.5 in. high by 3.6 in. wide, so 88.9 by 91.4 mm. Table 28 prints the
+    width as "3.6 in. (1.63 cm)"; 3.6 in is 9.14 cm, the centimetre figure is a misprint and the inch
+    figure is used. Figure 37 measures 488 by 470 px at the body, an aspect of 1.038 against the
+    table's 1.029, 0.9 percent out, so the flat figure passes the panel gate and its fractions are
+    taken at 5.34 px per mm across and 5.29 down.
+  depth: >-
+    datasheet - Table 28: 16.05 in. (40.77 cm), 407.7 mm; inches and centimetres agree.
+  power: >-
+    datasheet - Table 27 gives the output as 5500 W for the high (80 A) dual feed, 4400 W for the low
+    (60 A) dual feed, 2750 W and 2200 W for a single feed, set by the DIP switches (Table 26). The
+    highest, 5500 W, is carried as power-output-w, with the chassis on the enhanced power bus; on the
+    standard bus the power management software budgets 3000 W.
+  face: >-
+    drawing - module coordinates read off Figure 37 (g100590): input lug barrels in two columns at x 6.9
+    and 23.2 and rows at y 19.8, 35.9, 52.5 and 69.6; the tall grab slot x 41.6 to 50.9 and y 20.8 to
+    69.9; lamps at x 60.9 and y 22.3, 30.4, 38.4 and 46.3 (fault, OK, 2, 1, top to bottom); the DIP switch
+    box x 54.7 to 67.8 and y 5.1 to 15.1; the rocker bezel x 75.3 to 88.8 and y 5.3 to 23.8; the heat
+    warning at 71.5, 6.6; the captive screw centred at 43.1, 78.8; the nameplate slot x 59.7 to 88.0 and
+    y 78.5 to 82.2.
+  colour: >-
+    borrowed - the guide's line drawings carry no colour and no photograph of this supply was
+    obtained. The dark grey finish of juniper/jnp10k-pwr-ac2@2 is used so the two sit together.
+  lamps: >-
+    datasheet - Table 30: lamps 1 and 2 are green within -40 to -72 VDC and yellow blinking when out of
+    range; OK is green when the output is in range and yellow blinking when out of limits; the fault
+    lamp is red when the supply has failed. The faceplate marks the inputs 1 and 2, which the CLI calls
+    INP0 and INP1.
+states:
+  - ok
+  - fault
+  - absent
+elements:
+  led-fault:
+    at: [59.4, 20.8]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: fault, color: '#ef4444'}]
+  led-ok:
+    at: [59.4, 28.9]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-in-2:
+    at: [59.4, 36.9]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-in-1:
+    at: [59.4, 44.8]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  handle: {at: [41.6, 20.8], size: [9.3, 49.1], class: handle}
+size: {w: 91.4, h: 88.9, d: 407.7}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+skins: [default]

@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: qfx5110-fanafi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5110-FANAFI, a field-replaceable fan module with back-to-front airflow. Cold air comes in at the
+  switch's rear and hot air leaves at the port side. It is marked AIR IN on a Juniper Azure Blue
+  handle. It is hot-removable and hot-insertable, one at a time. The QFX5120 hardware guide says the
+  QFX5120-48T, QFX5120-48Y and QFX5120-48YM take it. They seat five (4+1), in slots 0 to 4 left to
+  right. The front-to-back sibling is QFX5110-FANAFO. The two are never mixed in one chassis, and
+  never with power supplies of the other direction. The status lamp is on the chassis strip beside
+  each slot, not on the module.
+attrs:
+  model: QFX5110-FANAFI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    borrowed - the body is the front-to-back module of the same family, juniper/qfx5110-fanafo@1:
+    the guide gives the two the same figure and the same slot, and differs only in the label and
+    handle colour. No photograph of the back-to-front module was found, so its size is that of its
+    sibling, not a measurement of its own.
+  depth: >-
+    not stated. The guide's module figure is an isometric drawing with no scale, and no table of
+    the module's dimensions exists for this part.
+  face: >-
+    drawing - the guide's figure of the module is the back-to-front one (it prints AIR IN) and shows
+    the same screw, grilles and handle band as the photographed front-to-back unit; the face is
+    drawn as that unit with the label changed.
+  airflow: >-
+    datasheet - guide, Fan Modules for QFX5120 Switches and the airflow table: back-to-front is
+    marked AIR IN on a Juniper Azure Blue handle for the 48T, 48Y and 48YM.
+  handle-colour: >-
+    estimated - the guide names the colour (Juniper Azure Blue) and prints no value; no photograph
+    of the blue module was found, so the shade is chosen to read as blue beside the orange sibling.
+  power: >-
+    not published. Searched the QFX5120 hardware guide for a per-module wattage near its fan
+    sections and its power tables; only whole-switch figures exist.
+states: [absent]
+elements:
+  screw:
+    at: [1.7, 1.9]
+    size: [6.0, 6.0]
+    class: screw
+  handle:
+    at: [1.2, 12.6]
+    size: [38.5, 16.4]
+    class: latch
+size:
+  w: 40.9
+  h: 41.6
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: borrowed from juniper/qfx5110-fanafo@1, the front-to-back module of the same family and slot
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo of the orange sibling - the handle band stands proud of the grilles; not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo of the orange sibling - black captive screw head, projection not measured

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bdm2m
-version: 1.7.0
+version: 1.8.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -13,8 +13,11 @@ description: >-
 size: {w: 30.47, h: 345.5, d: 380.0}
 size-confidence: {d: known-wrong}
 size-notes: 'd 380.0 is IMPOSSIBLE - a front and a rear card mate at a midplane inside a 386.0 chassis and two at 380.0 need 760. See provenance/depth-known-wrong'
+# Two order codes, one card: Open and No Licenses (page 5 of both data sheets).
+part-numbers:
+  BDM2M-W: {part: BDM2M-W}
+  BDM2M-N: {part: BDM2M-N}
 attrs:
-  model: 'BDM2m'
   role: docsis-line-card
   power-draw-max-w: 300
   power-draw-scope: module-with-paired-io
@@ -24,6 +27,12 @@ attrs:
   upstream: up to 204 MHz, 1 OFDMA and 6 ATDMA channels
   pairs-with: casa/io-6p12-io2
 provenance:
+  part-numbers: >-
+    datasheet - C40G_DS_RevA and C100G_DS_RevA (CommScope, 9-2024), Ordering Information, page 5 of
+    each: BDM2M-W "204 MHz-capable Bi-Directional module (BDM2m) - Open" and BDM2M-N "204 MHz-capable
+    Bi-Directional module (BDM2m) - No Licenses". The two differ in the licences sold with the card,
+    which nothing here models, so they share this drawing and its ports. They were named by
+    attrs.model BDM2m before, which neither sheet orders.
   led-states: >-
     datasheet - C100G Hardware Installation Guide (rev 07/08/2022) Table 1-2 and Table 6-1,
     Front-installed module LEDs, and the C40G guide (rev 07/07/2022) Table 1-2, for the SMM, QAM
@@ -74,7 +83,7 @@ provenance:
     outright); a tape on any one rear I/O card; an unclipped side-on photograph of a rear card
     showing where the tongue begins, which would give the midplane position and both halves
     at once.'
-  identity: 'drawing - Table A-11 of the C100G install guide plus the BDM2/BDM2m data sheet (12-2024), which says "BDM2m provides identical capabilities as the BDM2 card but uses a different packet processor". Ordering codes BDM2M-W (Wide Open) and BDM2M-N (No License). This is what casa/bdm@1 used to resolve to, so every bay default and configuration that meant a BDM2m now names this component instead'
+  identity: 'drawing - Table A-11 of the C100G install guide plus the BDM2/BDM2m data sheet (12-2024), which says "BDM2m provides identical capabilities as the BDM2 card but uses a different packet processor". Ordering codes BDM2M-W (Open) and BDM2M-N (No Licenses), as `part-numbers`. This is what casa/bdm@1 used to resolve to, so every bay default and configuration that meant a BDM2m now names this component instead'
   'layout': 'drawing - Figure 1-14 of the Casa C100G Hardware Installation Guide
     (rev 07/08/2022). Three LEDs in a single column with STATUS, ALARM and ACTIVE
     printed to their right, between two mirrored stripe groups. The BDM, BDM2 and

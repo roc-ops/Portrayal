@@ -939,7 +939,8 @@ off the cable as that view's straight segment is.
 | NetBox cables file (#923) | membership first in the cable's `description`: "Bundle 2. uplink. Length measured along its route." The export cuts an over-long description from its end (`cutTo`), so the bundle's name is what survives; a name longer than the whole limit is itself cut. The existing over-limit note, which says "its purpose is N characters", is reworded for the whole description: "Cable c3: its description (bundle, purpose and length note) is N characters and NetBox takes M, so the description is shortened to that." |
 | Nautobot cables file (#923) | no column for it, since the file writes no description; the export notes say membership is in the cable schedule |
 
-The kit's import files have no field for a bundle. Membership goes in
+The kit's import files have no field for a bundle unless the export option
+"NetBox 4.6 or later" is on (decision 9, amended). Membership goes in
 NetBox's cable description, not in tags (decision 9). #923 checks NetBox's and
 Nautobot's own models and records what each one can hold.
 
@@ -1006,7 +1007,21 @@ Decided 2026-10-08, on the questions this note first left open.
 9. **DCIM: NetBox's cable description.** Decided: membership is written in
    NetBox's cable description, not as tags, which would have to be created
    before the import. Nautobot's file has no description, and its export notes
-   say so.
+   say so. Amended, decided 2026-10-18 (#945), for NetBox 4.6 and later, which
+   has bundles of its own (`dcim.CableBundle`; NetBox v4.7.2, 251458b8,
+   `dcim/models/cables.py` and `dcim/forms/bulk_import.py`):
+   - **An export option, "NetBox 4.6 or later", off by default** (`dcim.netbox`).
+     With it off, every file is what it was. With it on, the NetBox export also
+     writes a bundles file, imported before the cables file, and the cables
+     file gains a `bundle` column, by name, for each cable in a bundle.
+   - **Each bundle is named `<site> <rack> <bundle name>`.** A rack's own names
+     ("Bundle 1", "uplinks") repeat across racks, and NetBox's name is unique
+     across the instance. With no site the kit cannot make such a name, so it
+     writes no bundles file and no column, and says so. A name over NetBox's 100
+     characters is left out and said, never cut.
+   - **The description prefix is kept** either way, so a reader of the
+     description, an older NetBox and the Nautobot file still see membership.
+     Nautobot is unchanged: it has no bundle object.
 10. **Strap spacing per bundle only.** Decided: each bundle has its own
     spacing, 12 in when unset. There is no rack-wide default.
 
@@ -1158,7 +1173,8 @@ What the exports settled that section 7 leaves to them:
   a bundle has to exist before a cable can name it, as a tag does, and a
   bundle's name in one rack is not unique across an instance. The kit leaves
   that column out and its notes say so. Writing a bundles file ahead of the
-  cables file is a later change.
+  cables file is the option "NetBox 4.6 or later" (#945, decision 9 as
+  amended).
 - **Nautobot.** Its cable has no description, no comments and no bundle
   (v3.2.6, 3dc554b4, `dcim/models/cables.py`), so the cables file is
   unchanged and its notes list each bundle's cables, by the names the file

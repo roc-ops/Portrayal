@@ -1,0 +1,159 @@
+format: 1
+kind: module
+name: qfx5130-jpsu-1600-dc-afo
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-1600W-1UDCAFO, a 1600 W DC power supply with front-to-back airflow (AIR OUT, port-to-FRU). It is a
+  field-replaceable unit, hot-removable and hot-insertable, installed at the factory. The QFX5130 hardware
+  guide says the QFX5130-32CD, QFX5130-48C and QFX5130-48CM take it; the switch ships with two. It has a
+  single feed, so source redundancy comes from two supplies on feeds A and B. The face carries two screw
+  terminals, V+ at the left and V- beside it, under a clear terminal-block cover that is not drawn; a
+  Juniper gold handle in the form of a rounded slot; three lamps (IN, OUT and !); an unused blanked
+  position at the upper left; and a release latch. The AIR IN sibling is JPSU-1600W-1UDCAFI. AC and DC
+  supplies, and supplies of different airflow direction, are never mixed in one chassis. The datasheet lists
+  the part as the "QFX5220-32CD 1600W 1U DC PSU AFO".
+attrs:
+  model: JPSU-1600W-1UDCAFO
+  role: dc-power-supply
+  inlet: dc-terminal
+  power-output-w: 1600
+  airflow: front-to-back
+  input: rated -48 to -60 VDC, operating -40 to -72 VDC; 35 A maximum (QFX5130-32CD) or 40 A (QFX5130-48C and -48CM), guide Tables 26, 27
+provenance:
+  size: >-
+    drawing - the guide's figure 105 (QFX5130 Faceplate) is a flat elevation of the DC supply face. Its
+    outline is 1197 by 905 px, an aspect of 1.32, against 1.34 for the AC supply's measured 55.0 by 41.1 mm
+    (1 percent out), so the DC face is the same size as the AC supply, which the photographs measure, and
+    the figure is scaled to it. No document gives the supply's size in millimetres.
+  depth: >-
+    not stated. The guide's figure 45 is an isometric with no scale, and neither the guide nor the
+    datasheet gives a depth or weight for the supply. No depth is written.
+  face: >-
+    drawing - guide figure 105 (callouts 1 to 6) at 600 dpi, scaled to 55.0 mm: the blanked "not used"
+    position at x 9.4, y 8.4; the V+ screw at x 9.6 and the V- screw at x 24.1, both at y 26.0 and 4.4 mm
+    in radius; the handle slot 6.2 mm wide at x 32.8; three lamps at x 48.3 and y 5.9, 11.8 and 17.8 with
+    the legends IN, OUT and !; the release latch at x 47.6. The figure prints the legend under the V-
+    terminal as "V-V", which is taken for a drawing artefact: the legend is drawn as a minus sign. No
+    photograph of the DC supply is held, so the colours are those of the AC supply's photograph and the
+    positions are estimated to about 0.5 mm. The figure overdraws the latch 1.1 mm past the face; the
+    latch is drawn to the face edge.
+  power-output-w: >-
+    datasheet - the part number and the guide's text call it a 1600-W supply ("The DC PSMs in QFX5130
+    switches are 1600 watt (W)"). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5130 DC Power Supply LED (Table 28, figure 46): Input OK is green when there is
+    DC output power and amber when only one of the two supplies is powered; Output OK is green when the
+    supply works, blinks green when it is disabled and is unlit at the power limit or over current; Fault
+    is amber on an error and blinks when the supply is disabled.
+  airflow: >-
+    datasheet - guide Tables 24 and 25: JPSU-1600W-1UDCAFO is port-to-FRU with a Juniper gold handle. Table
+    24 prints this row for the 32CD as "Airflow In (port-to-FRU)", a typographical error: port-to-FRU is
+    front-to-back (AIR OUT), as Tables 3, 4 and 25 say.
+  input: >-
+    datasheet - guide Table 26 (QFX5130-32CD) and Table 27 (QFX5130-48C and -48CM): rated operating voltage
+    -48 to -60 VDC, operating range -40 to -72 VDC; 35 A and 40 A maximum.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4 across
+    (that part's own size is an estimate), standing at the centre of the screw this skin already draws (9.6
+    and 24.1 across, 26.0 down). It is not lifted: the guide's Figure 105 shows each screw in a pocket and
+    no document says how deep, and this contract draws no relief for the screws. The guide asks for a ring
+    lug, KST RNYBS8-4 or equivalent (QFX5130 Switch Hardware Guide, PDF page 164), and gives no screw head,
+    thread or pitch; the screw part claims no thread, so none is written.
+  poles: >-
+    QFX5130 Switch Hardware Guide (published 2026-05-19), "Connect DC Power to a QFX5130 Switch" (PDF page
+    164): the positive (+) cable is installed on "the V+ (return) DC power input terminal" and the
+    negative (-) cable on "the V- (input) DC power input terminal". Figure 105 "QFX5130 Faceplate" (PDF
+    page 166) names them callout 6 "V+ terminal", the left screw, and callout 5 "V- terminal", the right
+    screw, and Figure 106 (the same page) shows a ring lug on each. The QFX5220 Switch Hardware Guide
+    (published 2026-04-21), "Connecting DC Power to a QFX5220-32CD" (PDF pages 214 and 216), prints the
+    same words and the same callouts for the same part number. The roles are the guide's words, not the
+    printed signs: `rtn` for the "(return)" terminal and `batt` for the "(input)" terminal, which the guide
+    pairs with the negative cable (spec/schemas/dc.yaml writes `batt` as negative (battery)). Both guides
+    say the switch takes "a single, non-redundant feed input" per supply (PDF pages 166 and 217), so the
+    supply has one DC port, `input`, of two poles, in the order the figures print them from the left.
+  voltage: >-
+    NOT STATED. The QFX5130 guide's Tables 25 and 26 (PDF page 75) and the QFX5220 guide's Table 26 (PDF
+    page 111) print "Rated operating voltage: -48 VDC through -60 VDC" and an operating range of -40 VDC
+    through -72 VDC: a range with no nominal. A port states one nominal and no document gives this
+    supply's, so the port states none and a later change can state one once a source says so. `attrs`
+    keeps the range as printed.
+  rating: >-
+    NOT STATED. The QFX5130 guide's Table 25 (PDF page 75) gives 35 A maximum for the QFX5130-32CD and its
+    Table 26 gives 40 A maximum for the QFX5130-48C and QFX5130-48CM, and the QFX5220 guide's Table 26 (PDF
+    page 111) gives 40 A maximum for the QFX5220-32CD. They are the chassis's input ratings, and the same
+    supply (one part number) serves all of them, so one figure on the part would be wrong for some. The
+    port states none. `attrs` keeps the words as printed.
+  awg: >-
+    QFX5130 Switch Hardware Guide, the list of parts and tools for connecting DC power, "DC power source
+    cables 10-12 AWG (not provided)" (PDF page 164): a range of two sizes, so the port states both, 10 and
+    12. The QFX5220 guide's list for the same step names no wire size. The "(not provided)" cables are the
+    site's.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-input:
+    at: [47.15, 4.75]
+    size: [2.3, 2.3]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-output:
+    at: [47.15, 10.65]
+    size: [2.3, 2.3]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [47.15, 16.65]
+    size: [2.3, 2.3]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  terminal-pos:
+    at: [5.2, 21.6]
+    size: [8.8, 8.8]
+    class: screw
+  terminal-neg:
+    at: [19.7, 21.6]
+    size: [8.8, 8.8]
+    class: screw
+  latch:
+    at: [32.8, 1.6]
+    size: [6.2, 37.2]
+    class: latch
+  release-latch:
+    at: [47.6, 20.9]
+    size: [7.3, 20.2]
+    class: latch
+size:
+  w: 55.0
+  h: 41.1
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: drawing - the handle stands proud of the face; its projection is not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [7.9, 24.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [22.4, 24.3]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      awg: [10, 12]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, awg: awg}

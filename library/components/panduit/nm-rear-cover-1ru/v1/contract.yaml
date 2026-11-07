@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: nm-rear-cover-1ru
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged rear cover of a Panduit NetManager High Capacity 1RU front-and-rear horizontal
+  manager (NM1) seen from behind - a PVC plate across the tips of the rear D-rings with a lip
+  along its top and bottom edge. It ships fitted and opens up or down 110 degrees
+provenance:
+  size: >-
+    drawing - the parts list of the NM1 customer drawing (Panduit 10404-19): "2- 1RU 19" COVERS",
+    "1RU COVER: PVC", one for each channel. 444.83 wide as the body and 44 high, as nm-cover-1ru.
+  relief: >-
+    drawing - the cover is the back 12.6 mm of the rear channel, as the front cover is of the front
+    (see nm-cover-2ru): its plate and lips are 3.5 and 1.5 thick, ESTIMATED, and stand 171.5 to 175
+    and 162.4 to 175 above the rear well's floor. The NM1 drawing does not draw the rear cover, so
+    it is carried over from the front.
+  lid: >-
+    datasheet - the NetManager High Capacity specification sheet (RKSP237): "Patented front and
+    rear dual hinged cover allows cable access without removing cover", opening 110 degrees to the
+    top or bottom. It opens over the rear channel, so it is a lid (`lid: true`). The format has no
+    hinge, so the cover is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: PVC", "The manager is black" on the NM1 product page. The shade
+    is this library's render, a little lighter than the manager so the two read apart.
+size: {w: 444.83, h: 44}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: PVC}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 42.5], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 44], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 162.4
+      out: 175
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NM1 drawing does not draw the rear cover
+    - node: lip-bottom
+      lift: 162.4
+      out: 175
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NM1 drawing does not draw the rear cover
+    - node: plate
+      lift: 171.5
+      out: 175
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NM1 drawing does not draw the rear cover
+skins: [default]

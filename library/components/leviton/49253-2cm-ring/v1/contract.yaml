@@ -1,0 +1,98 @@
+format: 1
+kind: component
+name: 49253-2cm-ring
+version: 1.0.1
+class: mechanical
+description: >-
+  A steel distribution ring of the Leviton 49253-2CM 2RU five-ring manager seen from the
+  front - a flat-bar loop welded to the panel that stands 2 in out of it, 9.5 mm across and
+  3 in high, its front end two overlapping legs that leave a 9.5 mm slit a patch cord is
+  laid in through
+provenance:
+  edge: >-
+    drawing - the front view of the 49253-2CM drawing draws each bar's corners as 1.17 mm
+    [0.046 in] arcs, and the front views of the 49253-LPM and 49253-6MR drawings add a flat
+    face 7.19 mm across and a line across it 5.59 mm [0.22 in] in from each end. The skin
+    draws the radii, the 1.17 mm edge band and the two seam lines over the legs; the seams
+    are read on those two drawings and carried to this ring, whose own front view has the
+    same arcs.
+  face-colour: >-
+    estimated - the face is drawn a lighter value than the panel so the ring reads against it
+    in 2D. Satin black powder coat catches the light the panel does not; no document states
+    a reflectance, so the shade is a render choice and not a measured one.
+  size: >-
+    drawing - the front view of Leviton's 49253-2CM dimensional drawing (DXF): each ring is
+    a band 9.5 mm across and 76.2 mm [3.00 in] high, from 5.95 to 82.15 mm up the 88.1
+    plate, centred on it, at the same five positions across as the other 49253 managers
+    (107.6 mm apart, the middle one on the centre line).
+  relief: >-
+    drawing - the side view of the same drawing: the loop is a bar 3.175 mm [1/8 in] thick
+    bent to a rectangle 50.8 mm out of the plate and 76.2 high. Its back leg stands on the
+    plate; its top bar runs out 38.1 mm to the inner leg, which hangs from it 1.5 in
+    [38.1mm] out, 44.45 mm down (z 34.9 to 38.1); its bottom bar runs the full 50.8 and turns
+    up into the outer leg at the front, 44.45 mm up (z 47.6 to 50.8). The legs overlap over
+    12.7 mm of the height with 9.5 mm between them. Built as plates with square corners
+    where the real bar is bent to a radius. It is the 49253-BCM's loop cut 50.8 mm shorter
+    between the back leg and the front legs, which are the same.
+  slit: >-
+    drawing - the 9.5 mm between the inner leg's outer face and the outer leg's inner face
+    in the side view, over the 12.7 mm where the legs overlap in height. A cord is laid in
+    through it and not routed along it.
+  guide: >-
+    drawing - the clear opening inside the loop on the side view: 69.85 mm [2.75 in] high
+    between the bars and 31.75 mm [1.25 in] deep, from the back leg's inner face to the
+    inner leg's inner face. Leviton's application note (page 10) gives the usable area of
+    the 2 in ring as 2.75 in x 1.75 in, 4.8 sq in, which is 69.85 x 44.45 mm: 12.7 mm
+    deeper than the drawing's clear depth, and the note does not say where the extra is
+    taken (its 4 in rings, 3.25 in, agree with the drawing). The drawing is taken as the
+    opening and the difference is a disagreement between Leviton's two documents. Seen
+    looking along the panel, which is the run: `w` is the height and `h` the depth out of
+    the panel. The slit is not counted as opening.
+  guide-depth: >-
+    drawing - the ring is a band 9.5 mm across along the run, as the front view draws it.
+  material: >-
+    datasheet - "16-gauge steel, black powder coated" on the specification sheet, which
+    also says the rings are "radius-edged"; the plates here have square edges.
+  color: >-
+    datasheet - "black powder-coat finish" on the specification sheet. The drawing is line
+    work, so the shade is this library's render.
+size: {w: 9.5, h: 76.2}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel, finish: black powder coat}
+guide: {kind: ring, aperture: {w: 69.85, h: 31.75}, run: x, depth: 9.5}
+elements:
+  back: {at: [0.0, 0.0], size: [9.5, 76.2], class: bezel}
+  bar-top: {at: [0.0, 0.0], size: [9.5, 3.175], class: bezel}
+  bar-bottom: {at: [0.0, 73.025], size: [9.5, 3.175], class: bezel}
+  leg-inner: {at: [0.0, 0.0], size: [9.5, 44.45], class: bezel}
+  leg-outer: {at: [0.0, 31.75], size: [9.5, 44.45], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 3.175
+      color: '#111315'
+      confidence: drawing
+      source: the side view of the 49253-2CM drawing, the back leg 3.175 mm thick against the plate
+    - node: bar-top
+      out: 38.1
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the top bar running 38.1 mm out of the plate to the inner leg
+    - node: bar-bottom
+      out: 50.8
+      color: '#0d0f10'
+      confidence: drawing
+      source: the same view, the bottom bar running the 2.0 in [50.8mm] to the front
+    - node: leg-inner
+      lift: 34.925
+      out: 38.1
+      color: '#0d0f10'
+      confidence: drawing
+      source: the same view, the inner leg 3.175 thick, 1.5 in [38.1mm] out, hanging 44.45 from the top bar
+    - node: leg-outer
+      lift: 47.625
+      out: 50.8
+      color: '#101214'
+      confidence: drawing
+      source: the same view, the outer leg at the front, 3.175 thick, rising 44.45 from the bottom bar
+skins: [default]

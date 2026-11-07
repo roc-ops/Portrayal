@@ -1,0 +1,292 @@
+format: 1
+kind: device
+name: srcableduct1uhd
+version: 0.1.1
+maturity: modelled
+manufacturer: Eaton
+model: SRCABLEDUCT1UHD
+description: >-
+  Eaton Tripp Lite series SmartRack 1U high capacity horizontal cable manager, a finger duct
+  with a dual-hinge cover. It is a black cold rolled steel channel on a back plate that bolts
+  to the rack rails and stands 118 mm out of them. A wall along its top and one along its
+  bottom each carry nine wide pockets. A cable bundle is laid through a pocket into the
+  channel, and a cover across the front closes it. The cover ships fitted and lifts off.
+profile: passive
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      THE MAKER'S OWN DOCUMENT AND NOTHING ELSE. The SRCABLEDUCT1UHD spec sheet
+      (assets.tripplite.com, 2 pages, © 2026 Eaton): three pictures, a description, features
+      and a specification table. The submittal drawing at the address the SRCABLEDUCT1U's
+      follows returns an XML error page, not a PDF; the Eaton SKU page was tried once (the .html
+      and the skuPage .pdf export both fail at the connection with an HTTP/2 stream error, and a
+      regional copy timed out), and the owner's manual the package includes could not be
+      found by its address. So no dimension is drawn and every figure but the unit size is
+      estimated. Nothing is copied from the pictures.
+  size-conflict:
+    confidence: estimated
+    note: >-
+      THE SPEC SHEET'S INCHES AND CENTIMETRES DISAGREE, AND NO OTHER MAKER DOCUMENT SETTLES IT.
+      "Unit Dimensions (hwd / in.) 2.040 x 19.000 x 4.660" is 51.82 x 482.6 x 118.36 mm;
+      "Unit Dimensions (hwd / cm) 4.45 x 48.26 x 12.26" is 44.5 x 482.6 x 122.6. The width
+      agrees. 4.45 cm is exactly one rack unit (1.75 in) and 2.04 in is 5.18 cm; 12.26 cm is
+      4.83 in and 4.66 in is 11.84 cm. The inch figures are taken, as the sheet prints them
+      first, and the centimetre ones are not used; the owner is asked to accept that. If the
+      centimetre figures are the true ones the height is 44.45 and the depth 122.6.
+  mount:
+    confidence: estimated
+    note: >-
+      estimated - `rack-face`, as the maker's SRCABLEDUCT1U (a drawing) and the FS 1U ducts: it
+      bolts to the rail face at one rack unit and stands out of it, which the spec sheet says
+      as "1U 19-inch horizontal cable manager". No document shows how far the back plate
+      stands behind the ear plane, so `depth` is the overall 118.36 and the whole of it is
+      taken as projecting.
+  ears:
+    confidence: estimated
+    note: >-
+      estimated - a rack-face part is its ears and what hangs off them, so the face is the 482.6
+      mm of the spec sheet's 19.000 in. No document draws the ears; they are the 25.4 mm at
+      each end of the back plate, as the SRCABLEDUCT1U's drawing dimensions its own, with two
+      slots each where an EIA-310 ear has them (8.8 mm in from the end, 32 mm apart; 12 x 6 mm
+      as that drawing gives).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 482.6 x 51.82 x 118.36 (19.000 x 2.040 x 4.660 in), the spec sheet's inch
+      figures. THE HEIGHT IS MORE THAN ONE RACK UNIT (44.45 mm) and the part is stated as 1U:
+      the centimetre figure, 4.45 cm, is a unit exactly. The part states `ru: 1`.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no document states the gauge; 1.1 mm is the SRCABLEDUCT1U's, a drawing of the
+      same maker's 1U steel duct.
+  weight:
+    confidence: datasheet
+    note: datasheet - 1.18 kg (2.6 lb), the spec sheet's Unit Weight.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the cover, fitted: a front plate across the channel, as the SRCABLEDUCT1U's
+      drawing draws its own and the spec sheet's photographs show a deep front plate. The two
+      walls and the channel between them are drawn as the SRCABLEDUCT1U's drawing gives its
+      own, 1.1 mm walls standing 1.1 mm in from the top and bottom, which leaves 47.42 mm clear.
+      The `duct` guide is that channel over the 431.8 mm between the ears.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - NINE POCKETS A WALL, COUNTED ON THE MAKER'S PHOTOGRAPH. The main picture
+      shows the duct from above and in front, a row of wide pockets between ten dividers along
+      its top; the fingers are on the top wall and, as the maker's sister duct draws, the bottom
+      is the top again (no picture of this part shows its underside). Nine pockets 34.0 mm
+      wide on a 46.0 pitch, a 12.0 mm divider, are by eye on a perspective view. The pockets are
+      closed at both ends, as the SRCABLEDUCT1U's slots are drawn, so no divider has a free tip. A
+      cable is laid along the channel and passes between the walls through a pocket.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - the plan, rear at y=0: the back 5.0 mm, the wall, and the cover's lip over the
+      front 12.0 mm; the nine pockets run from 8.0 mm in front of the back to under the lip. The
+      bottom is the same as the top.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - the side: the back plate, the two walls with the channel between them, and the
+      cover's plate and lips over the front. The duct is open at both ends and a cable runs out
+      of it there: nothing is built across the ends. The right is the same, turned round.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back plate with its ears and their slots. No document shows the back of
+      the part, and nothing else is drawn on it.
+  cover:
+    confidence: datasheet
+    note: >-
+      datasheet - the cover ships fitted (the spec sheet's title, highlights and package: "finger
+      duct with dual-hinge cover"). It is drawn fitted in `base` and absent in `cover-off`, as a
+      lid (`lid: true`). THE FORMAT HAS NO HINGE: the cover is one plate that lifts off, and
+      how it swings on its two hinges is a gap.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the spec sheet states no cable capacity, fill or bend radius, though it calls
+      the duct "high capacity". None is recorded and none is estimated; a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - material and colour (cold rolled steel with black finish), the mounting
+      hardware (included) and compliance (RoHS; EIA/ECA-310-E) are the spec sheet's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black" and "cold rolled steel with black finish" are the spec
+      sheet's; the shade is this library's render of black steel, lifted from near-black so the
+      part reads on the explorer's dark stage as well as on a white one.
+attrs:
+  physical:
+    weight-kg: 1.18
+    material: Cold rolled steel
+    color: Black
+    mounting-hardware: included
+  compliance:
+    product-compliance: RoHS; EIA/ECA-310-E
+chassis:
+  width: 482.6
+  height: 51.82
+  depth: 118.36
+  ru: 1
+  mount: rack-face
+  shell: sheet
+  thickness: 1.1
+  weight-kg: 1.18
+  color: '#3a3d41'
+gaps:
+  - what: dimensions
+    scope: [front, top, left, rear]
+    reason: sources-disagree
+    note: >-
+      the spec sheet gives the unit size twice and the two disagree on height and depth: 2.040 x
+      19.000 x 4.660 in (51.82 x 482.6 x 118.36 mm) and 4.45 x 48.26 x 12.26 cm (44.5 x 482.6 x
+      122.6). The inch figures are used. No drawing or manual settled it.
+    wanted: the submittal drawing or the owner's manual, with the unit dimensioned
+  - what: drawing
+    scope: [front, top, left, rear]
+    reason: needs-drawing
+    note: >-
+      no dimensioned drawing was found: the submittal drawing's address returns an error page.
+      The walls, the pockets, the cover's reach and the ears are estimated.
+    wanted: the submittal drawing of the part
+  - what: cover-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the maker calls the cover dual-hinge; the format has no hinge, so it is drawn as one
+      fitted plate that lifts off, and how it swings is not stated.
+    wanted: a format that can say a hinged cover, and a close picture of the hinges
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the spec sheet states no cable capacity, fill or bend radius, though it names the duct
+      "high capacity".
+    wanted: a cable capacity and its basis from the owner's manual or the SKU page
+groups:
+  body:
+    term: Duct
+    role: furniture
+    index-origin: 1
+    description: the steel back plate with its ears
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the wall of pockets along the top and the one along the bottom
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the cover across the front of the channel, shipped fitted
+views:
+  front:
+    size: {w: 482.6, h: 51.82}
+    components:
+      placements:
+        - {ref: eaton/tripplite-duct-1uhd-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: eaton/tripplite-duct-1uhd-fingers@1, id: fingers-upper, at: [25.4, 1.1], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: eaton/tripplite-duct-1uhd-fingers@1, id: fingers-lower, at: [25.4, 49.62], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: eaton/tripplite-duct-1uhd-cover@1, id: cover, at: [25.4, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+    guides:
+      - {id: duct, kind: duct, at: [25.4, 2.2], size: [431.8, 47.42], run: x, finger-pitch: 46.0, finger-gap: 34.0, confidence: estimated, source: 'SRCABLEDUCT1UHD photograph: nine pockets counted; walls as the SRCABLEDUCT1U drawing; no dimension in the spec sheet'}
+  rear:
+    size: {w: 482.6, h: 51.82}
+    panel:
+      decor:
+        - {id: plate-back, at: [0, 0], size: [482.6, 51.82], rx: 3, fill: '#3a3d41', kind: base}
+        - {id: ear-slot-1, at: [2.8, 6.91], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-2, at: [2.8, 38.91], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-3, at: [467.8, 6.91], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-4, at: [467.8, 38.91], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
+  top:
+    size: {w: 482.6, h: 118.36}
+    panel:
+      decor:
+        - {id: back, at: [25.4, 0], size: [431.8, 5.0], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 4.4], size: [482.6, 0.6], fill: '#1d1f22', kind: fold}
+        - {id: wall, at: [25.4, 5.0], size: [431.8, 101.36], fill: '#565b61', kind: finger-wall}
+        - {id: slot-1, at: [40.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [86.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [132.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [178.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [224.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [270.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [316.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [362.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+    components:
+      placements:
+        - {ref: eaton/tripplite-duct-1uhd-cover-plan@1, id: cover-top, at: [25.4, 106.36], group: cover, rel-pos: 2, only-in: [base]}
+  bottom:
+    size: {w: 482.6, h: 118.36}
+    panel:
+      decor:
+        - {id: back, at: [25.4, 0], size: [431.8, 5.0], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 4.4], size: [482.6, 0.6], fill: '#1d1f22', kind: fold}
+        - {id: wall, at: [25.4, 5.0], size: [431.8, 101.36], fill: '#565b61', kind: finger-wall}
+        - {id: slot-1, at: [40.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [86.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [132.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [178.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [224.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [270.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [316.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [362.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.3, 8.0], size: [34, 98.36], rx: 6, fill: '#0a0b0c', kind: finger-gap}
+    components:
+      placements:
+        - {ref: eaton/tripplite-duct-1uhd-cover-plan@1, id: cover-bottom, at: [25.4, 106.36], group: cover, rel-pos: 3, only-in: [base]}
+  left:
+    size: {w: 118.36, h: 51.82}
+    panel:
+      decor:
+        - {id: back, at: [0, 0], size: [5.0, 51.82], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [5.0, 1.1], size: [101.36, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-lower, at: [5.0, 49.62], size: [101.36, 1.1], fill: '#565b61', kind: finger-wall}
+    components:
+      placements:
+        - {ref: eaton/tripplite-duct-1uhd-cover-side@1, id: cover-left, at: [106.36, 0.0], group: cover, rel-pos: 4, only-in: [base]}
+  right:
+    size: {w: 118.36, h: 51.82}
+    panel:
+      decor:
+        - {id: back, at: [113.36, 0], size: [5.0, 51.82], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [12.0, 1.1], size: [101.36, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-lower, at: [12.0, 49.62], size: [101.36, 1.1], fill: '#565b61', kind: finger-wall}
+    components:
+      placements:
+        - {ref: eaton/tripplite-duct-1uhd-cover-side@1, id: cover-right, at: [0.0, 0.0], rotate: 180, group: cover, rel-pos: 5, only-in: [base]}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as Tripp Lite ships SRCABLEDUCT1UHD, the cover fitted.'
+    part-numbers:
+      SRCABLEDUCT1UHD: {}
+    component-attrs:
+      tripplite-duct-1uhd-base: {finish: '#3a3d41'}
+      tripplite-duct-1uhd-fingers: {finish: '#4d5156'}
+      tripplite-duct-1uhd-cover: {finish: '#55595e'}
+      tripplite-duct-1uhd-cover-plan: {finish: '#55595e'}
+      tripplite-duct-1uhd-cover-side: {finish: '#55595e'}
+  cover-off:
+    kind: example
+    component-attrs:
+      tripplite-duct-1uhd-base: {finish: '#3a3d41'}
+      tripplite-duct-1uhd-fingers: {finish: '#4d5156'}
+    description: >-
+      The same duct with the cover taken off, the two walls of pockets and the channel between
+      them open to lay a cable in. The cover comes with the duct, so this is an illustration
+      and not a device type.
+datasheet:
+  title: 'Tripp Lite SRCABLEDUCT1UHD spec sheet (SmartRack 1U High Capacity Horizontal Cable Manager - Finger duct with dual-hinge cover)'
+  url: https://assets.tripplite.com/product-pdfs/en/srcableduct1uhd.pdf
+  sha256: 3b5a55e0da014abeb9c881c6e38030432d7f5aec5fa2c95b58e28d244da8ebb1

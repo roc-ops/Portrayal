@@ -1,0 +1,145 @@
+format: 1
+kind: module
+name: ex4600-em-8f
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX4600-EM-8F, the expansion module that adds eight SFP+ ports to an EX4600 switch. The
+  EX4600 hardware guide lists it with the QFX-EM-4Q for the two module bays at the right of the port
+  panel. The module has eight stacked SFP+ cages in four columns, numbered 0 to 7 with the even
+  numbers on top. It takes 10 GbE SFP+ transceivers or 1 GbE SFP transceivers. Each port has two
+  lamps, and one ST lamp shows the module. It is hot-insertable and hot-removable. The same module
+  is used in the QFX5100 switches. Copper SFP transceivers must sit in the top four or the bottom
+  four ports.
+attrs:
+  weight-note: not published
+  sfp-plus: 8
+  ports-note: eight SFP+ ports at 10 Gbps, or SFP ports at 1 Gbps
+part-numbers:
+  EX4600-EM-8F: {part: EX4600-EM-8F}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): Expansion Modules for the
+    EX4600, the EX4600-EM-8F topic with Figure 15 (the faceplate) and Table 9 (the ST lamp); Figure 8
+    (the module). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021), ordering table:
+    EX4600-EM-8F, 8-port SFP+/SFP expansion module for the EX4600. The guide gives no size and no
+    weight for the module.
+  size: >-
+    photo-measured - Juniper's EX4600 front studio photograph (ex4600-front-high.jpg, 1500 x 163 px),
+    which shows two of these modules in the bays. The whole body measures 1483 x 148 px, an aspect of
+    10.02 against the guide's 440.9 / 43.7 = 10.09 (0.7 percent out), read at 3.363 px/mm across and
+    3.393 down. The first module's left edge is at 890 px and the seam between the modules at 1181
+    px; the second ends at 1470 px; the screw rings of the two modules are 87.0 and 86.2 mm apart.
+    86.7 mm is written, with a module height of 43.2 mm from the faceplate's top and bottom edges. No
+    document states the module's size in millimetres.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide for the module's dimensions and weight: Figures
+    7 and 8 carry no scale and no table gives a size. No depth is written.
+  elements: >-
+    photo-measured - the second module in the photograph, read at 26.9 px/mm: cages 14.25 mm apart
+    starting at 15.9 mm, two rows 13.0 mm apart, the lamp pair 5.9 mm apart and centred 1.0 mm left of
+    the cage, the numeral between them, the ST lamp at 6.7 mm across and 17.6 mm down with its label
+    above it, the two thumbscrews with blue rings at the top corners, the two lower latch screws with
+    their wire, the pull bar along the top, the vent hexagons at both sides and the legend at the
+    lower right. Positions are good to about 0.5 mm.
+  stack-orientation: >-
+    photo-measured - the photograph shows the transceiver latches at the foot of every upper cage and
+    at the top of every lower one, so the upper cage is upright and the lower one is turned 180, as
+    on the chassis.
+  drawing-vs-photo: >-
+    photo-measured - guide Figure 15 draws the legend QFX-EM-8S at the lower right. The photograph
+    prints EX4600-EM-8F there, as the part is named in the guide's text and the datasheet. The
+    photograph is followed.
+  led: >-
+    datasheet - guide, Table 9: the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and normal. The port lamps are those of the chassis
+    ports (Table 6): link and activity at the left, status at the right.
+  power: >-
+    estimated - not published. Searched the EX4600 guide and the datasheet for a per-module wattage:
+    only whole-switch figures exist, so the missing-power warning stands.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port, link and activity at the left, status at the right. They sit above
+      the upper cage and below the lower cage.
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the ST lamp of the module (guide Table 9)
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [15.9, 10.2], group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [15.9, 23.2], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [30.15, 10.2], group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [30.15, 23.2], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-4, at: [44.4, 10.2], group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-5, at: [44.4, 23.2], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-6, at: [58.65, 10.2], group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-7, at: [58.65, 23.2], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus}}
+- {ref: common/led-dot@1, id: led-0-link, at: [17.9, 6.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [23.8, 6.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [17.9, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [23.8, 35.7], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [32.15, 6.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [38.05, 6.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [32.15, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [38.05, 35.7], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-4-link, at: [46.4, 6.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-4-status, at: [52.3, 6.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-5-link, at: [46.4, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-5-status, at: [52.3, 35.7], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-6-link, at: [60.65, 6.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-6-status, at: [66.55, 6.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-7-link, at: [60.65, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-7-status, at: [66.55, 35.7], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [5.7, 16.6], group: status, attrs: {function: module status}}
+elements:
+  screw-top-left:
+    at: [1.4, 0.0]
+    size: [10.0, 10.0]
+    class: screw
+  screw-top-right:
+    at: [75.3, 0.0]
+    size: [10.0, 10.0]
+    class: screw
+  screw-bottom-left:
+    at: [3.2, 32.6]
+    size: [6.4, 6.4]
+    class: screw
+  screw-bottom-right:
+    at: [77.1, 32.6]
+    size: [6.4, 6.4]
+    class: screw
+size:
+  w: 86.7
+  h: 43.2
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-top-left
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: photo - the captive thumbscrews stand proud of the faceplate; the projection is not measured
+  - node: screw-top-right
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: photo - the captive thumbscrews stand proud of the faceplate; the projection is not measured
+skins: [default]

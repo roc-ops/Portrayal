@@ -1,0 +1,479 @@
+format: 1
+kind: device
+name: ex4000-48p
+version: 1.0.2
+maturity: modelled
+manufacturer: Juniper
+model: EX4000-48P
+portfolio: {line: EX Series, family: EX4000}
+description: >-
+  Juniper EX4000-48P, a fixed 1U access switch with 48 10/100/1000BASE-T ports that all supply PoE+ (30 W per port, 740 W
+  budget). The front also has two SFP+ Virtual Chassis ports and two SFP+ uplink ports, a USB 2.0 Type-A port, a reset
+  pinhole and the SYS, MST and CLD status lamps. The rear has an RJ-45 management port, an RJ-45 console port, three
+  exhaust fans, an earthing terminal and the AC inlet. The power supply and the three fans are built into the chassis,
+  so there are no bays. Airflow is front to back.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4000 Switch Hardware Guide, Juniper Networks, published 2026-01-20 (261 pages; PDF created 2026-01-20; fetched from
+      https://www.juniper.net/documentation/us/en/hardware/ex4000/ex4000.pdf, which answered): Table 3 (models),
+      Figure 15 and Figure 16 (the EX4000-48P front and rear panels, flat drawings g023279 and g023280), Tables 20 and 21 (cooling,
+      power and the physical specifications and ports), Table 26 (chassis), Tables 27 to 33 (the lamps), Table 34 (input),
+      Table 35 (PoE budget), Table 5 (mounting kits) and the mounting topics. EX4000 Line of Ethernet Switches Datasheet,
+      Juniper Networks (PDF created 2025-05-28, 14 pages; https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4000-line-of-ethernet-switches-datasheet.pdf):
+      Table 1 (the SKUs), Table 2 (maximum system power without PoE), the specifications and the ordering information. Juniper's
+      image-library photographs ex4000-48p-front-high.jpg and ex4000-48p-rear-high.jpg (from
+      https://www.juniper.net/us/en/company/images/image-library-logos-and-product-photos/products/ex4000-48p.html, 2100 px
+      wide, straight on). The guide prints no terms of use; the image-library page prints none either. Nothing of any of them
+      is copied here, since every face is drawn new from measurements. No Visio stencil and no 3D model of the EX4000 is
+      held or published; the intake folder for Juniper EX and QFX was not available to this work and no held photograph, stencil
+      or model was used. End of life was searched on 2026-10-23 and no Juniper notice for the EX4000 was found, so the lifecycle
+      is recorded as none announced.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Table 21 and Table 26 - height 1.71 in (4.34 cm), width 17.36 in (44.10 cm), depth 11.97 in (30.40 cm), weight 10.8 lb
+      (4.9 kg). The datasheet (specifications) gives the same width, height and depth and a system weight of 4.84 kg; the guide's
+      chassis weight 4.9 kg is carried because Table 26 is the table of chassis weights. The width of 441.0 mm is the metal between
+      the bracket fold lines: the photograph shows no ears and the jack pitch closes on the registry at that width.
+  scale:
+    confidence: photo-measured
+    note: >-
+      Gate 1 on the front photograph (2100 x 517 px): the body is 1866 px across (117 to 1983) and its face is 184 px high
+      (163 to 347), against 441.0 by 43.4 mm: 4.231 px/mm across and 4.24 down, so the photograph is near-orthographic and is
+      read at 4.231 px/mm. The ganged jack pitch then reads 59.0 px = 13.95 mm, the registry's 13.97 mm, on a quantity the scale never
+      saw. The guide's flat drawing (Figure 15, 3300 x 1014 px) was checked the same way and does not pass: its body is 3226 px by
+      320 px (aspect 10.08 against 10.16) but its jack pitch is 99.2 px, 13.5 mm, so its ports are drawn about 3.5 percent close.
+      The drawing is used for what is on the face and for the callouts, and the photograph for positions. The rear photograph
+      (2100 x 501 px) was shot larger: its body runs from 120 to 2008 px, so it reads at 4.28 px/mm between its own edges.
+      The rear positions are taken at that scale and not at the front's.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - Figure 15 and the front photograph at 4.231 px/mm. The 48 jacks stand in four shells of six columns and two
+      rows: the first cell at 11.2 mm, the column pitch 13.97 mm and the shell step 87.8 mm (6 x 13.97 plus a 3.98 mm gutter, from the
+      shell edges at 95.7, 183.5 and 271.3 mm); the rows are 14.3 mm apart (shell top 10.3 mm, bottom 35.7 mm) and the upper row is turned 180 so
+      that its latch and lamps face up, as the photograph shows. The two SFP+ columns abut on the registry's 14.25 mm pitch from 365.2 mm,
+      in two stacked rows on the jack rows, the lower row turned 180 so that both latches face the band between them. The vent
+      fields, the status pill, the USB port and the reset pinhole are read off the photograph.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The photograph and Figure 15 print 0 and 1, 2 and 3, up to 46 and 47 under the column pairs, each number followed by its triangle (an up
+      triangle after the even number and a down triangle after the odd one), so the upper jack of a column is the even port. The four SFP+
+      cages are printed 0 and 1 inside a rounded outline (the Virtual Chassis ports) and 2 and 3 outside it (the uplink ports), with the same
+      triangles. Port numbers are as printed on the metal, from 0. The guide gives no interface names for the EX4000 (the hardware guide names
+      none), so none is recorded.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Figures 22 to 26 and Tables 32 and 33 - each RJ-45 jack has a Link Activity lamp at one corner and a Status lamp at the other; the
+      common/rj45-ganged-eth@1 housing carries both. Each SFP+ port has a Link Activity lamp and a Status lamp, the triangles in the band
+      between the two cage rows. The photograph shows them as white triangles in the order down, up, down, up across a column, and
+      the order of the EX4100 (down arrows for the lower port, up arrows for the upper one) is carried; the guide does not say which
+      triangle is which lamp, so that order is estimated. The Status lamp's colour shows speed (Table 32), so its states are not
+      expressible as one vocabulary here (see gaps).
+  status-block:
+    confidence: estimated
+    note: >-
+      estimated - Figure 15 callouts 3, 4 and 5 and the photograph. The three chassis lamps SYS, MST and CLD sit in a rounded pill at the
+      top right; the guide's drawing puts a round lamp before each legend, and the photograph shows the legends only, so the lamps are drawn
+      2.6 mm before each legend. The pill is read at 396.0 to 424.7 mm and 4.6 to 11.1 mm. Tables 27 to 30 give the lamp meanings; the CLD
+      blink patterns are in another document and are not stated here.
+  usb-reset:
+    confidence: estimated
+    note: >-
+      estimated - Figure 15 callouts 6 and 8. The USB 2.0 Type-A port (white tongue, USB-A in the same drawing) is read at 399.4 to 413.0 mm
+      across and 29.1 to 35.3 mm down on the photograph, with the USB symbol below it, and the reset pinhole (callout 6, with the
+      reset symbol below) at 431.3 mm by 34.0 mm. The claim code label (callout 7) is a QR code printed at the right of the face in the
+      drawing and is absent from the photograph, so it is a region and not a part.
+  drawing-vs-photo:
+    confidence: photo-measured
+    note: >-
+      The drawing (Figure 15) and the photograph agree on what is on the face. They disagree on the lettering. The photograph prints the
+      port numbers in orange on this PoE+ model and the drawing in black, and the photograph prints EX4000 PoE+ with PoE+ in orange. The
+      drawing draws a round lamp before each of SYS, MST and CLD where the photograph shows none. The photograph of the real device wins
+      for the lettering and the drawing for the lamps. The Juniper logo and the driven by Mist AI line are not drawn: a logo-zone is
+      reserved.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - Figure 16 and the rear photograph at 4.28 px/mm. From the left: the RJ-45 management port over the RJ-45 console port
+      in one housing, printed MGMT and CON with a triangle each, three round exhaust fans (34.5 mm across, 46 mm apart, centred 57.4,
+      103.3 and 149.5 mm), a lighter plate with the two-hole protective earthing terminal and the earth symbol, a round hole for the power
+      cord retainer (callout 5) and the AC inlet in a black housing with its rating printed under it. Four screw heads sit along the
+      lower edge. The photograph shows three fans with their rotors visible, as the drawing does.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      Table 20 and Table 21 - the switch has an internal power supply (fixed PSU) and three inbuilt fixed fans with front-to-back
+      airflow; the guide's system overview says the EX4000 switch models have inbuilt fixed fans and power supply units. The guide gives
+      no replacement procedure for either, and no part number. They are part of the chassis and not bays and not components.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Table 20, Figure 30 and the cooling section - front to back (air out), the three fans at the rear. The datasheet gives 28 CFM.
+  earthing:
+    confidence: datasheet
+    note: >-
+      The Connect to Power topic and Figure 16 - a two-hole protective earthing terminal on the rear panel, secured with two M5 x 10 mm screws
+      with washers (not supplied) and a lug on 6 AWG wire. The holes are drawn as decor.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 34 - input 100 to 127 VAC at 12 A or 200 to 240 VAC at 7.5 A, 50 to 60 Hz. Table 35 - system budget 75.05 W, PoE budget 740 W,
+      total 815.05 W. The datasheet's Table 2 gives a maximum system power consumption, input power without PoE, of 71 W; the two are
+      different measures (a budget and a maximum) and both are recorded. The cord is a C13 coupler (power cord topic).
+  ears:
+    confidence: datasheet
+    note: >-
+      The guide's quick-start topic says the two-post rack mounting kit EX-RMK (Table 5, provided) ships in the box with brackets
+      that bolt flush with the front, and the mounting topics give a 2 in. recessed position with the 2-in. recessed front-mounting brackets
+      of the four-post kit EX-4PST-RMK (Table 5, orderable; also a flush four-post mount). The enhanced toolless four-post kit JNP-4PST-RMK-1U-E
+      (orderable) is a further kit. The recess is 2 in. (50.8 mm). No figure measures a bracket fold line, so only the recess has an at (the flush at: 0 is the datum of the face),
+      and the kits are not listed under kits in this slice: they are named here and not modelled as kind kit contracts.
+  color:
+    confidence: photo-measured
+    note: >-
+      median of the bare face between the logo zone and the first jack shell in the front photograph, #7d838e (the rear plate reads #858c96).
+      Sampled from a studio photograph, whose white balance may differ from the metal. The numerals are the photograph's orange, #f3855a.
+  guide-faces:
+    confidence: datasheet
+    note: >-
+      The guide has flat drawings of the front (Figure 15) and rear (Figure 16) and no top, bottom or side elevations; the isometric
+      views are not used.
+attrs:
+  physical:
+    weight-note: 10.8 lb (4.9 kg), Table 26; 4.84 kg in the datasheet
+    depth-note: 11.97 in (30.40 cm), Table 21
+  power:
+    power-max-w: 71
+    power-envelope: bare
+    poe-budget-w: 740
+    poe-standard: PoE+ (IEEE 802.3at) on all 48 ports, 30 W per port
+    power-input: 100 to 127 VAC at 12 A or 200 to 240 VAC at 7.5 A, 50 to 60 Hz (Table 34)
+  thermal:
+    cooling: three inbuilt fixed fans, front-to-back airflow, 28 CFM (datasheet)
+  environmental:
+    operating-temp: 0 to 50 C at sea level, 0 to 45 C up to 1500 m, 0 to 40 C up to 3000 m
+    humidity: 5 to 90 percent at 40 C, noncondensing
+    altitude: 3000 m operating, 4500 m storage
+  platform:
+    first-junos-release: 24.4R1-S2 (Table 20)
+  features:
+    virtual-chassis: up to 6 EX4000 switches; the two Virtual Chassis ports are SFP+ and VC formation is not supported with a 10GBASE-T transceiver in them
+    uplink-ports: two SFP+ ports take 1 GbE or 10 GbE transceivers
+    optics-sfp-plus: the two Virtual Chassis ports and the two uplink ports are 1GE or 10GE SFP+ ports (Table 15 and Figure 15 callout 2). Virtual Chassis is supported only with 10GE SFP+, and not with a 10GBASE-T transceiver in a Virtual Chassis port. Industrial-grade optics are asked for only on the fanless models
+  management:
+    oob: management Ethernet RJ-45 on the rear panel, with a link activity lamp and a status lamp
+    console: RJ-45 console on the rear panel, labelled CON
+    usb: one USB 2.0 Type-A port on the front panel
+  compliance:
+    acoustic: 27.3 / 27.1 / 36.6 dBA at 0 / 50 / 100 percent PoE load (guide Table 4); 27.1 dBA in the datasheet
+    seismic: tested for Zone 4 earthquake safety
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 441.0
+  height: 43.4
+  depth: 304.0
+  ru: 1
+  weight-kg: 4.9
+  color: '#7d838e'
+  silk: '#e4e6e9'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front-mount, at: 0, default: true}
+    - {name: recessed, label: 2-in. recess, at: 50.8}
+gaps:
+- what: rack-kits
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The brackets of EX-RMK (provided), EX-4PST-RMK and JNP-4PST-RMK-1U-E (orderable) are named in Table 5 and the mounting topics and are
+    not modelled as kit contracts in this slice. A dimensioned drawing of the bracket fold lines would give the flush position an at.
+- what: port-status-lamp-states
+  scope: [rj45, vcp, uplink]
+  reason: vendor-silent
+  wanted: >-
+    A per-port vocabulary for the Status lamp. Table 32 gives its colour by speed (off 10 Mbps, blinking green 100 Mbps, green 1000 Mbps,
+    amber 2.5 Gbps), which the jack's own lamp states do not carry, so the jack keeps the component's default off, link and activity states.
+- what: label-plate
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The size of the claim code label (Figure 15 callout 7). It is drawn as a region and not as a part, and the photograph does not show it.
+- what: interface-names
+  scope: [rj45, vcp, uplink]
+  reason: vendor-silent
+  wanted: >-
+    The Junos interface names. The hardware guide gives the PIC numbering only inside the Junos configuration topics, which this slice does
+    not read.
+- what: four-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+- what: reset-pinhole-size
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The diameter and depth of the pinhole reset button (Figure 15 callout 6). The guide names the button and gives no size; the hole is drawn
+    at 2.0 mm as an estimate.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: 802.3at}
+    description: 48 PoE+ 10/100/1000BASE-T ports labelled 0 to 47 in four shells of six columns. The even ports are on the upper row
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Two SFP+ Virtual Chassis ports labelled 0 and 1, 1 GbE or 10 GbE, in one column of two. They are bracketed by a rounded outline
+  vcp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: 'on', color: '#22c55e'}, {name: blinking, color: '#22c55e', behavior: blinking}]
+    description: >-
+      A Link Activity lamp and a Status lamp for each Virtual Chassis port, triangles in the band between the two cage rows (Table 33).
+      Link Activity is steady with a link and blinking with traffic. Status shows speed: steady 10 Gbps, blinking 1 Gbps
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Two SFP+ uplink ports labelled 2 and 3, 1 GbE or 10 GbE, in one column of two. The rel-pos carries the printed number
+  uplink-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: 'on', color: '#22c55e'}, {name: blinking, color: '#22c55e', behavior: blinking}]
+    description: >-
+      A Link Activity lamp and a Status lamp for each uplink port, triangles in the band between the two cage rows (Table 33). Link Activity is
+      steady with a link and blinking with traffic. Status shows speed: steady 10 Gbps, blinking 1 Gbps
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      how the switch is reached out of band and reset - the RJ-45 management port and the RJ-45 console port on the rear, the USB port on the front
+      and the reset pinhole
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: SYS, MST and CLD chassis lamps (Tables 27 to 30)
+  power-input:
+    term: Inlet
+    role: service
+    index-origin: 0
+    description: the AC inlet of the built-in power supply
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size: {w: 441.0, h: 43.4}
+    panel:
+      decor:
+      - {at: [28.1, 0.5], size: [406.9, 2.6], pattern: vent, vent: 1}
+      - {at: [50.8, 3.1], size: [340.2, 2.9], pattern: vent, vent: 1}
+      - {id: plate-sfp, at: [364.4, 10.3], size: [29.6, 25.6], rx: 0.6, fill: '#2a2d31'}
+      - {id: band-sfp, at: [364.8, 21.3], size: [28.8, 3.9], fill: '#cfcbc6'}
+      - {id: status-plate, at: [396.0, 4.6], size: [28.7, 6.5], rx: 3.2, fill: '#6f7581'}
+      cutouts:
+      - {block: rj45}
+      - {block: vcp}
+      - {block: uplink}
+      - {id: reset-pinhole, at: [430.3, 33.0], size: [2.0, 2.0], shape: circle}
+      - {id: usb, at: [400.2, 29.95], size: [12.0, 4.5], shape: rect}
+      - {id: led-sys, at: [398.1, 6.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [406.2, 6.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-cld, at: [415.2, 6.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-vcp-1-link, at: [366.52, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-vcp-0-link, at: [369.47, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-vcp-1-status, at: [372.97, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-vcp-0-status, at: [375.57, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-uplink-3-link, at: [380.78, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-uplink-2-link, at: [383.73, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-uplink-3-status, at: [387.23, 22.1], size: [2.25, 2.0], shape: rect}
+      - {id: led-uplink-2-status, at: [389.83, 22.1], size: [2.25, 2.0], shape: rect}
+    silkscreen:
+    - {block: rj45}
+    - {at: [26.0, 6.4], text: EX4000, font-size: 2.9, anchor: start, for: chassis}
+    - {at: [38.0, 6.4], text: PoE+, font-size: 2.9, anchor: start, fill: '#f3855a', for: chassis}
+    - {at: [401.7, 8.32], text: SYS, font-size: 2.0, anchor: start, for: led-sys}
+    - {at: [409.8, 8.32], text: MST, font-size: 2.0, anchor: start, for: led-mst}
+    - {at: [418.8, 8.32], text: CLD, font-size: 2.0, anchor: start, for: led-cld}
+    - {id: vcp-outline, at: [364.6, 37.4], path: 'M 1.8 0 H 12.9 A 1.8 1.8 0 0 1 12.9 3.6 H 1.8 A 1.8 1.8 0 0 1 1.8 0 Z', filled: false, stroke-width: 0.25, for: [vcp-0, vcp-1]}
+    - {at: [369.2, 40.0], text: '0', font-size: 2.4, anchor: end, for: vcp-0}
+    - {at: [370.4, 39.0], mark: arrow-up, size: 1.7, for: vcp-0}
+    - {at: [375.2, 40.0], text: '1', font-size: 2.4, anchor: end, for: vcp-1}
+    - {at: [376.4, 39.0], mark: arrow-down, size: 1.7, for: vcp-1}
+    - {at: [383.1, 40.0], text: '2', font-size: 2.4, anchor: end, for: uplink-2}
+    - {at: [384.1, 39.0], mark: arrow-up, size: 1.7, for: uplink-2}
+    - {at: [389.4, 40.0], text: '3', font-size: 2.4, anchor: end, for: uplink-3}
+    - {at: [390.4, 39.0], mark: arrow-down, size: 1.7, for: uplink-3}
+    - {id: usb-symbol, at: [406.2, 39.0], path: 'M -3.0 0 H 2.0 M 2.0 -0.8 L 3.2 0 L 2.0 0.8 Z M -1.2 0 L -0.2 -1.2 H 0.6 M -0.8 0 L 0.2 1.2 H 1.0 M -3.0 -0.7 A 0.7 0.7 0 1 0 -3.0 0.7 A 0.7 0.7 0 1 0 -3.0 -0.7', filled: false, stroke-width: 0.3, for: usb}
+    - {id: reset-symbol, at: [431.0, 39.1], path: 'M 0.9 -1.4 A 1.7 1.7 0 1 0 1.7 0.2 M 0.2 -2.4 L 1.0 -1.4 L -0.1 -0.9', filled: false, stroke-width: 0.35, for: reset-pinhole}
+    - {at: [19.65, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-0, port-1]}
+    - {at: [33.62, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-2, port-3]}
+    - {at: [47.59, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-4, port-5]}
+    - {at: [61.56, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-6, port-7]}
+    - {at: [75.53, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-8, port-9]}
+    - {at: [89.50, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-10, port-11]}
+    - {at: [107.45, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-12, port-13]}
+    - {at: [121.42, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-14, port-15]}
+    - {at: [135.39, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-16, port-17]}
+    - {at: [149.36, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-18, port-19]}
+    - {at: [163.33, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-20, port-21]}
+    - {at: [177.30, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-22, port-23]}
+    - {at: [195.25, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-24, port-25]}
+    - {at: [209.22, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-26, port-27]}
+    - {at: [223.19, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-28, port-29]}
+    - {at: [237.16, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-30, port-31]}
+    - {at: [251.13, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-32, port-33]}
+    - {at: [265.10, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-34, port-35]}
+    - {at: [283.05, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-36, port-37]}
+    - {at: [297.02, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-38, port-39]}
+    - {at: [310.99, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-40, port-41]}
+    - {at: [324.96, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-42, port-43]}
+    - {at: [338.93, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-44, port-45]}
+    - {at: [352.90, 39.0], mark: arrow-pair, size: 1.7, gap: 3.45, fill: '#f3855a', for: [port-46, port-47]}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth@1
+        at: [11.2, 10.9]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.3
+        gang: 6
+        gutter: 3.98
+        number-from: 0
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx-by-row: [4.9, 10.35], anchor-by-row: [end, end], dy-top: 29.0, dy-bottom: 14.7, font-size: 2.4, fill: '#f3855a'}
+      - id: vcp
+        ref: std/sfp-ganged@1
+        at: [365.2, 10.9]
+        count: 2
+        rows: 2
+        pitch: registry
+        row-pitch: 14.3
+        number-from: 0
+        id-format: 'vcp-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+      - id: uplink
+        ref: std/sfp-ganged@1
+        at: [379.45, 10.9]
+        count: 2
+        rows: 2
+        pitch: registry
+        row-pitch: 14.3
+        number-from: 2
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+      placements:
+      - {block: rj45}
+      - {block: vcp}
+      - {block: uplink}
+      - {ref: common/led-arrow-sm@1, id: led-vcp-1-link, at: [366.52, 22.1], skin: down, for: vcp-1, group: vcp-leds, rel-pos: 0}
+      - {ref: common/led-arrow-sm@1, id: led-vcp-0-link, at: [369.47, 22.1], skin: up, for: vcp-0, group: vcp-leds, rel-pos: 1}
+      - {ref: common/led-arrow-sm@1, id: led-vcp-1-status, at: [372.97, 22.1], skin: down, for: vcp-1, group: vcp-leds, rel-pos: 2}
+      - {ref: common/led-arrow-sm@1, id: led-vcp-0-status, at: [375.57, 22.1], skin: up, for: vcp-0, group: vcp-leds, rel-pos: 3}
+      - {ref: common/led-arrow-sm@1, id: led-uplink-3-link, at: [380.78, 22.1], skin: down, for: uplink-3, group: uplink-leds, rel-pos: 0}
+      - {ref: common/led-arrow-sm@1, id: led-uplink-2-link, at: [383.73, 22.1], skin: up, for: uplink-2, group: uplink-leds, rel-pos: 1}
+      - {ref: common/led-arrow-sm@1, id: led-uplink-3-status, at: [387.23, 22.1], skin: down, for: uplink-3, group: uplink-leds, rel-pos: 2}
+      - {ref: common/led-arrow-sm@1, id: led-uplink-2-status, at: [389.83, 22.1], skin: up, for: uplink-2, group: uplink-leds, rel-pos: 3}
+      - {ref: std/usb-a@1, id: usb, at: [400.2, 29.95], skin: usb2, group: mgmt, rel-pos: 0}
+      - {ref: juniper/ex4100-reset-pinhole@1, id: reset-pinhole, at: [430.3, 33.0], for: chassis, group: mgmt, rel-pos: 1, attrs: {function: reset}}
+      - {ref: common/led-dot@1, id: led-sys, at: [398.1, 6.7], for: chassis, group: status-leds, rel-pos: 0,
+         states: ['off', {name: booted, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}, {name: minor, color: '#f59e0b'}, {name: major, color: '#ef4444'}, {name: reset-short, color: '#3b82f6'}, {name: reset-long, color: '#a855f7'}],
+         description: 'Table 27 - green steady: the switch has booted, no alarms; green blinking: booting; amber: minor alarm; red: major alarm; blue: short press of the pinhole reset button; purple: long press'}
+      - {ref: common/led-dot@1, id: led-mst, at: [406.2, 6.7], for: chassis, group: status-leds, rel-pos: 1,
+         states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#f59e0b'}, {name: linecard, color: '#e5e7eb'}],
+         description: 'Tables 29 and 30 - standalone: green steady is normal, unlit is powered off or halted. Virtual Chassis: green master, yellow backup, white linecard, the blink count giving the member ID'}
+      - {ref: common/led-dot@1, id: led-cld, at: [415.2, 6.7], for: chassis, group: status-leds, rel-pos: 2,
+         description: 'Cloud connection lamp. The guide refers to its blink patterns (Cloud Ready LED Blink Patterns) and does not state them here'}
+    regions:
+    - {id: logo-zone, at: [2.8, 2.6], size: {w: 21.5, h: 6.8}, label: 'Vendor logo; not drawn'}
+    - {id: label-claim, at: [411.0, 13.2], size: {w: 14.4, h: 14.3}, label: 'Claim code label; not drawn'}
+  rear:
+    size: {w: 441.0, h: 43.4}
+    panel:
+      decor:
+      - {id: plate-mgmt, at: [14.6, 7.0], size: [19.3, 27.4], rx: 0.6, fill: '#2a2d31'}
+      - {id: fan-0, kind: fan-grille, at: [40.15, 4.25], size: [34.5, 34.5], rx: 17.25, pattern: vent, vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [86.05, 4.25], size: [34.5, 34.5], rx: 17.25, pattern: vent, vent: 1.0}
+      - {id: fan-2, kind: fan-grille, at: [132.25, 4.25], size: [34.5, 34.5], rx: 17.25, pattern: vent, vent: 1.0}
+      - {id: earth-plate, at: [186.1, 4.9], size: [30.9, 10.5], fill: '#c9cbcd'}
+      - {id: earth-hole-1, at: [189.35, 7.55], size: [5.5, 5.5], rx: 2.75, fill: '#2a2d31'}
+      - {id: earth-hole-2, at: [205.45, 7.55], size: [5.5, 5.5], rx: 2.75, fill: '#2a2d31'}
+      - {id: cord-retainer-slot, at: [393.8, 17.4], size: [5.2, 5.2], rx: 2.6, fill: '#0e0f10'}
+      - {id: inlet-housing, at: [402.8, 7.4], size: [31.5, 24.8], rx: 0.8, fill: '#16181b'}
+      cutouts:
+      - {id: mgmt, at: [16.2, 7.6], size: [15.8, 13.2], shape: rect}
+      - {id: con, at: [16.2, 20.8], size: [15.8, 13.2], shape: rect}
+      - {id: ac-inlet, at: [404.5, 9.8], size: [28.0, 20.0], shape: rect}
+    silkscreen:
+    - {at: [15.6, 39.2], text: MGMT, font-size: 2.2, anchor: start, for: mgmt}
+    - {at: [24.1, 38.3], mark: arrow-up, size: 1.6, for: mgmt}
+    - {at: [26.0, 39.2], text: CON, font-size: 2.2, anchor: start, for: con}
+    - {at: [31.4, 38.3], mark: arrow-down, size: 1.6, for: con}
+    - {at: [199.2, 19.2], mark: ground, size: 4.5, for: chassis}
+    - {at: [402.9, 35.0], text: 'AC INPUT : 50 - 60Hz', font-size: 2.0, anchor: start, for: ac-inlet}
+    - {at: [402.9, 37.6], text: '100 - 127V ~ 12A Max', font-size: 2.0, anchor: start, for: ac-inlet}
+    - {at: [402.9, 40.2], text: '200 - 240V ~ 7.5A Max', font-size: 2.0, anchor: start, for: ac-inlet}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: mgmt, at: [16.2, 7.6], rotate: 180, group: mgmt, rel-pos: 2,
+         attrs: {speed: 1g, role: management},
+         description: 'Table 31 - the Link activity lamp is steady with a link and blinking with traffic; the Status lamp shows speed: steady 1000 Mbps, blinking 100 Mbps, off 10 Mbps'}
+      - {ref: std/rj45@2, id: con, at: [16.2, 20.8], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial, role: console}}
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [404.5, 9.8], group: power-input, rel-pos: 0}
+      - {ref: common/screw-head@1, id: rear-screw-0, at: [6.8, 35.3], group: furniture, rel-pos: 0}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [125.1, 35.3], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [218.8, 35.3], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-3, at: [304.6, 35.3], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: rear-screw-4, at: [427.3, 35.3], group: furniture, rel-pos: 4}
+  left:
+    size: {w: 304.0, h: 43.4}
+    empty: >-
+      Not drawn flat by any source. The hardware guide shows the side panel only at an angle, in the mounting figures, with the bracket holes,
+      and the image library's side photographs are angled; nothing on it can be measured.
+  right:
+    size: {w: 304.0, h: 43.4}
+    empty: >-
+      Not drawn flat by any source. The hardware guide shows the side panel only at an angle, in the mounting figures, with the bracket holes,
+      and the image library's side photographs are angled; nothing on it can be measured.
+  top:
+    size: {w: 441.0, h: 304.0}
+    empty: >-
+      Not drawn flat by any source. The guide has no top view and its airflow figures are schematic; the datasheet shows the unit in perspective only.
+  bottom:
+    size: {w: 441.0, h: 304.0}
+    empty: >-
+      Not drawn by any source. The guide shows the underside nowhere (the packing list names the supplied accessories and gives no position).
+configurations:
+  ac:
+    kind: base
+    description: >-
+      The switch as shipped: 48 PoE+ ports, the built-in AC power supply and three built-in front-to-back fans. EX4000-48P is the only
+      hardware SKU the datasheet lists for the model (Table 1 and the ordering information); there is no DC, back-to-front, -S or -TAA variant.
+    default: true
+    part-numbers:
+      EX4000-48P: {}
+references:
+- {title: 'EX4000 Switch Hardware Guide (Juniper Networks, published 2026-01-20)', url: 'https://www.juniper.net/documentation/us/en/hardware/ex4000/ex4000.pdf', sha256: a4faf391f19a72b69d4e61cf141a71fec81788a1480f894d563751157075e967}
+- {title: 'EX4000 Line of Ethernet Switches Datasheet (Juniper Networks, PDF created 2025-05-28)', url: 'https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4000-line-of-ethernet-switches-datasheet.pdf', sha256: e9b7654d6c8a0773f301fac618014a37ec632cb86412d31d59539cc52a79cb7e}

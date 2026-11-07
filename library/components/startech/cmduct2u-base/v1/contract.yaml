@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: cmduct2u-base
+version: 1.0.0
+class: mechanical
+description: >-
+  The mounting plate of the StarTech.com CMDUCT2U 2U finger duct seen from the front - one
+  steel sheet the full width of the rack, its two ends the ears with a pair of slots each, and
+  three rectangular pass-through holes along it - drawn as the well the duct's two finger walls
+  and its cover stand in, its floor the front face of the plate
+provenance:
+  size: >-
+    drawing - CMDUCT2U_Diagram.pdf (StarTech.com, third angle projection, millimetres,
+    uploaded 1/22/2026), the view of the plate from the duct's open side: 482.60 wide, 88.45
+    high, the ear slots 465.00 apart (8.8 from each end), 75.95 between a pair, each 13.00
+    long and "phi 6.50". The plate is the whole width of the rack, so the ears are the ends of
+    the sheet and are drawn here as the plate itself.
+  size-holes: >-
+    estimated - the drawing dimensions no pass-through hole. Scaled off the same view at 2.606
+    px/mm against its 465.00 dimension: three rectangles with rounded corners 100.1 by 69.1
+    mm, 140.1 apart, centred on the plate both ways; the corner radius reads 4.6. Taken as 100
+    by 69 on a 140 pitch.
+  depth: >-
+    estimated - 70.6. The drawing's side view puts the duct 71.60 deep overall and states no
+    gauge, so the sheet is taken as 1.0 mm and the well is the 71.6 less that.
+  color: >-
+    datasheet - "Color: Black", "Material: Steel and Plastic" (cmduct2u_datasheet.pdf). The
+    drawing is line work, so the shade is this library's render of black steel.
+size: {w: 482.6, h: 88.45, d: 70.6}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {material: steel}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 88.45], class: bezel}
+skins: [default]

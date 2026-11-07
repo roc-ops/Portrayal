@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: qfx5210-lane-leds
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  The four round lamps above or below one QSFP28 column of the QFX5210-64C. The hardware guide
+  (Table 10) says there are four bi-colour lamps for each QSFP28 port. Only the first is lit when the
+  port runs 100 GbE, and all four are lit when it is channelized to 25 or 10 GbE. The lamps are 4.1 mm
+  apart and centred on their cage.
+size: {w: 14.5, h: 2.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: four 2 mm lamps on a 4.1 mm pitch read off the guide's enlargement of the port side, Figure 9
+provenance:
+  size: >-
+    estimated - guide Figure 10 (a 1501 x 511 px raster of the port side whose width matches the
+    table's 438.15 mm at 3.25 px/mm) enlarged in the guide's own Figure 9 detail (10.7 px/mm): four
+    circles about 2 mm across on a 4.1 mm pitch. The studio photograph shows the same dots unlit and
+    too small to measure better. The circle size is the library's 2 mm lamp, as juniper/qfx5200-32c
+    uses.
+  semantics: >-
+    datasheet - guide Tables 10 and 11: green steady for a link with no activity, green blinking for
+    activity, unlit for no link, fault or disabled. Which lamp a channel of a breakout drives is not
+    stated beyond "all four lit for 10 or 25 GbE", so the four lamps carry no per-lane meaning here.
+elements:
+  lane-1:
+    at: [0.1, 0.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', 'on']
+  lane-2:
+    at: [4.27, 0.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', 'on']
+  lane-3:
+    at: [8.44, 0.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', 'on']
+  lane-4:
+    at: [12.61, 0.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', 'on']
+relief:
+  features:
+    - node: lane-1
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the same 2 mm lamp; its dome is carried, not measured
+    - node: lane-2
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the same 2 mm lamp; its dome is carried, not measured
+    - node: lane-3
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the same 2 mm lamp; its dome is carried, not measured
+    - node: lane-4
+      dome: 0.3
+      confidence: estimated
+      source: common/led-dot@1 - the same 2 mm lamp; its dome is carried, not measured
+skins: [default]

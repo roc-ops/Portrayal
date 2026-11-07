@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: qfx5200-32c-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5200-32C-FANAFO, a field-replaceable fan module with front-to-back (port-to-FRU) airflow: air
+  comes in at the port side and leaves at the fan end. It is marked AIR OUT, has a Juniper Gold
+  handle, and is hot-removable and hot-insertable. The QFX5200 hardware guide says the QFX5200-32C
+  and the QFX5200-32C-L take it, five to a switch (fan modules 0 to 4, left to right), and that the
+  same module serves the -AFO and -LAFO builds. The back-to-front sibling is QFX5200-32C-FANAFI.
+  The two are never mixed in one chassis, and never with power supplies of the other direction. The
+  status lamp is on the chassis strip beside each slot, not on the module.
+attrs:
+  model: QFX5200-32C-FANAFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    estimated - the guide's rear figure 19 (a 756 px raster of the whole FRU end) puts a module 67
+    px wide across a 716 px body, 41.2 mm against the table's 440.9 mm, on a 49.2 mm pitch. That figure
+    is 5 percent short of the table's height, so its vertical scale is not trusted and the 41.4 mm
+    height is the QFX5120-48Y photograph's module height (41.5 mm) for the same chassis family, kept
+    because this module fills the same 1RU slot. No document gives the module's size.
+  depth: >-
+    not stated. The guide's figure 27 is an isometric drawing with no scale and its tables give no
+    depth, so none is written.
+  face: >-
+    drawing - the guide's figure 19 (flat, small) and figure 27 (isometric) agree on what is on the
+    face: a captive screw at the top left, a hex grille above and another below a central band, a
+    ribbed grip at each end of the band and a label chip with a fan symbol between them. Positions are
+    fractions of figure 19 and are approximate. No photograph of this module was found.
+  airflow: >-
+    datasheet - guide Table 17 (fan modules in QFX5200 switches): QFX5200-32C-FANAFO carries the
+    label AIR OUT, is Juniper Gold, and is port-to-FRU airflow, also called front-to-back. Figure 19
+    also prints (AFO) after the label.
+  colour: >-
+    borrowed - the guide names the handle Juniper Gold and no photograph of this module exists. The
+    colour is the orange the QFX5120-48Y rear photograph shows on the modules that guide calls Juniper
+    Gold, so the same name carries the same value (it is sRGB read off that photograph, not a paint
+    reference).
+  power: >-
+    not published. Searched the QFX5200 hardware guide for a per-module wattage near its cooling
+    sections and its power tables; only whole-switch figures exist. The module declares power-absent so
+    the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [0.8, 1.9]
+    size: [6.0, 6.0]
+    class: screw
+  handle:
+    at: [0.4, 17.3]
+    size: [40.2, 10.6]
+    class: latch
+size:
+  w: 41.0
+  h: 41.4
+size-confidence: {w: estimated, h: estimated}
+size-notes: width from the guide's figure 19 (41.2 mm at 1.625 px/mm); height from the QFX5120-48Y photograph's module, no document gives either
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: guide figure 27 (isometric) - the band stands proud of the grilles; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: guide figure 19 - captive screw head, projection not measured

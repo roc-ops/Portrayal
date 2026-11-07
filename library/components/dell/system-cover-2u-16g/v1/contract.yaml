@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: system-cover-2u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The system cover of a 16th-generation 2U PowerEdge (R760) - the lid over everything behind the drive backplane, released by its latch
+provenance:
+  sources: >-
+    Dell's R760 service model, working/intake/dell/3d-models/r760.glb (Dell's own CAD, read with glbparts.py, not committed), the un-exploded assembly node `Main Assembly (1)`, `R760_ SystemCover` > `PEr760_ SystemCover_-1.001`, mapped to plan coordinates (rear at y=0: plan y = 736.1 - cad z1, the rear wall at cad z 736.1, where the rear row sits; plan x = 209.0 - cad x1, cad x -8.0 being the body's centre line); the scene also holds exploded copies of the cover, which are not read. The R760 Installation and Service Manual (ISM) 'Removing the system cover' and 'Installing the system cover' (figures 39 and 40) and figure 15 (inside the system, the cover off).
+  size: >-
+    measured (the depth) and datasheet (the width) - `PEr760_ SystemCover_-1.001`, `Body_1_6.001`: 444.0 x 571.6 (cad x -230.0..214.0, z 190.8..762.3), the lid and its side flanges 11.3 deep (cad y 83.9..95.2). SOURCES DISAGREE on the width: the ISM's table 10 gives 434.0 between the ears and the R660's model has its lid at 433.4; the R760's model has the lid 10.0 wider. It is DRAWN AT THE BODY'S 434.0 (the ISM's), because the lint does not let a part reach past the face without a stated overhang and the model's extra 5.0 each side is the lid's flanges; the model's 444.0 is recorded here and in the device's `system-cover-width` gap. The 571.6 depth is the model's. The earlier estimate was 433.4 x 600.0.
+  pose: >-
+    THE MODEL HAS IT SLID BACK, as the R660's: it spans cad z 190.8..762.3, ending 26.2 behind the rear wall at 736.1 - the removal pose, where the lid slides rearward off its hooks. Seated, its rear edge is taken at the rear wall (plan y 0), so its front 28.2 lies under the backplane cover (plan y 543.4). The seated position is inferred from that; the size is not.
+  latch: >-
+    measured - `PEr760_ SystemCover_ Latch_ -1.001` (`Body_1_7.001`): 40.0 x 72.8 x 9.6 (cad x -28.0..12.0, z 314.8..387.6, y 85.4..95.0), at lid-local x 197.0 (cad x 12.0 is plan x 197.0 on the drawn 434.0 lid; 202.0 on the model's 444.0 one), y 374.7 once the pose is undone (lid-local y is measured from the lid's rear edge, cad z 762.3). The screw in it, `PEr760_ SystemCover_ Screw_ -1.001`, is 15.0 x 15.0 and is not drawn. The latch's top is 0.2 BELOW the lid's (cad y 95.0 against 95.2): in the model it is flush, not proud, so the relief's 2.0 is a drawing convention to make it read, not a measurement.
+size: {w: 434.0, h: 571.6}
+size-confidence: {w: datasheet, h: measured}
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: cover
+    out: 1.0
+    color: '#c3c8cd'
+    confidence: estimated
+    source: sheet steel of about a millimetre, so the lid reads as a surface
+  - node: latch
+    out: 0.8
+    color: '#2b6cb0'
+    confidence: estimated
+    source: >-
+      the model's latch is flush with the lid, its top 0.2 below the lid's, so it is drawn 0.2 under the lid's 1.0; the first pass stood it 2.0 proud, 1.0 above the 86.8 chassis' top. The latch is not visible in 3D
+elements:
+  cover: {at: [0.0, 0.0], size: [434.0, 571.6], class: bezel}
+  latch: {at: [197.0, 374.7], size: [40.0, 72.8], class: latch}
+skins: [default]

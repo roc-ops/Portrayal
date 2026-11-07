@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: r660xs-lom-2x1g
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: server
+description: >-
+  The LAN on Motherboard (LOM) card of the PowerEdge R660xs - two 1 GbE RJ45 ports in the rear window at the left, numbered 1 and 2 on the bracket under them
+attrs:
+  ports: 2
+  media: rj45
+  power-absent: not-published
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the two 1 GbE ports, numbered 1 and 2 on the bracket under them
+    attrs: {media: rj45, speed: 1g}
+provenance:
+  identity: >-
+    datasheet - R660xs spec sheet 'Embedded NIC: 2 x 1 GbE LOM card' and ISM
+    table 7 item 12 'NIC ports: the NIC ports that are integrated on the system
+    board', figure 7. THE R660's LOM CARD (dell/lom-2x1g-16g@1) IS NOT SEATED
+    HERE, because the R660xs's ports are on a different pitch, see jacks. Whether
+    the two are one card in a different bracket, or two cards, no document says.
+  sources: >-
+    drawing - the ISM's figure 7 'Rear view of the system' (1650 x 344 px,
+    Dell's render), read as dell/r660xs-riser-1-cage@1 reads it: x at 3.263
+    px/mm from the 434 body, y rounded to the R660's I/O row (24.71..40.64),
+    which the figure agrees with to 1.5 mm. Facts read, art not traced.
+  size: >-
+    drawing - 39.0 x 15.93 at rear-face x 27.2, y 24.71: the bracket round the
+    two jacks, figure x 200..328. The R660's window is 42.58 x 15.93; the extent
+    here is read by eye at the bracket's pressed edge, which the render does not
+    separate from the chassis.
+  jacks: >-
+    drawing - two openings centred at rear-face x 37.7 and 55.8 (figure x 235
+    and 294), an 18.1 PITCH against the R660 LOM's 21.9: the figure's jacks stand
+    59 px apart and the R660's measured model has them 71 px apart at the same
+    scale (its service model's two bodies are 21.9 mm apart). Seated as
+    common/rj45-ganged-eth@1 keyway up (rotate 180) as the R660's are. The
+    '1' and '2' marks sit between and just under them in the figure, so they are
+    printed on this bracket.
+  link-icons: >-
+    drawing - figure 7 prints a small network-link icon left of each numeral
+    (about 4.5 mm centre to centre). The icons are drawn in the form the R660's
+    chassis print uses; the figure resolves each to a few pixels, so the form is
+    original and its place is the reading.
+  power: >-
+    NOT PUBLISHED - the R660xs ISM, technical guide and spec sheet give the
+    card's port count and speed and no wattage.
+  depth: >-
+    NOT KNOWN - no R660xs document gives the card's depth or draws it from
+    above, so it is not projected into the top view and has no body.
+size: {w: 39.0, h: 15.93}
+size-confidence: {w: drawing, h: drawing}
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: ports, at: [4.15, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: ports, at: [22.25, 2.36], rotate: 180, attrs: {media: rj45, speed: 1g}}
+skins: [default]

@@ -100,6 +100,9 @@ from portrayal import render
 
 
 class _Lib:
+    def offers(self, bay):
+        return list(bay.get("accepts") or [])
+
     def resolve(self, ref):
         return ({"name": "blank", "size": {"w": 10.0, "h": 10.0},
                  "skins": ["default"]}, None)

@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: r660xs-riser-1b
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 1b of the PowerEdge R660xs - slot 1, low profile, half length, x8, with a signal cable to the system board, on dell/r660xs-riser-1-cage@1; fitted in riser configuration 6
+attrs:
+  riser: '1b'
+  appears-in: 'riser configuration 6'
+  power-absent: not-published
+  slot-1: 'x8, low profile, half length, processor 1'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R660xs
+    ISM, technical guide and spec sheet were searched for 'riser' beside a
+    wattage and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT, as dell/r660xs-riser-1a@1.
+    ISM figure 77 'Riser 1b' (slot 1, x8, LP-HL; a signal cable connector) and
+    the removal procedure (figure 83: the cable is disconnected first).
+  slots: >-
+    datasheet - ISM table 95: R1b is slot 1, controlled by processor 1, low
+    profile, half length, x8 (ISM table 14 and technical guide table 25 agree).
+    The mechanical connector is taken as x8 to match the electrical width; the
+    ISM states a width and no connector. No PCIe generation is stated, so none
+    is claimed.
+  face: >-
+    estimated - composed from dell/r660xs-riser-1-cage@1. ISM figure 94
+    treats risers 1a and 1b together for the filler bracket ('Installing filler
+    bracket in the Riser 1a/1b'), which is what puts the two on one face. No
+    figure shows a rear with riser 1b fitted.
+  size: >-
+    drawing - the cage's extent, 84.50 x 19.80.
+  seating: >-
+    estimated - as dell/r660xs-riser-1a@1.
+  plan: >-
+    estimated - seen from above, drawn as riser 1a (dell/r660xs-riser-1-plan@1);
+    figure 77 shows a different board with a cable and no figure shows it from
+    above.
+size: {w: 84.5, h: 19.8}
+size-confidence: {w: drawing, h: drawing}
+plan: {ref: dell/r660xs-riser-1-plan@1}
+parts:
+  - {ref: dell/r660xs-riser-1-cage@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x8, lanes: 8, height: low, length: half, processor: 1}
+    plan: {at: [3.40, 0.00]}
+    behind: true
+    at: [1.90, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

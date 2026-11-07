@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: qfx5230-64cd-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5230-64CD-FANAI, the field-replaceable fan module of the QFX5230-64CD with back-to-front airflow (AIR IN,
+  FRU-to-port). Air comes in at the back and leaves at the port side. It is marked AIR IN on a grey chip on its
+  green handle. It holds two counter-rotating 80 mm by 86 mm rotors and is hot-removable and hot-insertable.
+  The switch takes four, in slots 0 to 3 from left to right. The front-to-back sibling is QFX5230-64CD-FANAO.
+  The two are never mixed in one chassis, and never with power supplies of the other airflow direction.
+attrs:
+  model: QFX5230-64CD-FANAI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    borrowed - qfx5230-64cd-fan-afo, the sibling with which it shares its bay: the guide describes one module
+    in two airflow directions that differ in handle colour and label (Tables 5 and 11), and shows only the AIR
+    OUT module in a photograph. The frame is 80.9 by 80.0 mm, photo-measured on that module.
+  depth: >-
+    not stated. Searched the QFX5230-64CD hardware guide (figure 15, the cooling system and fan module sections,
+    the physical specifications). No depth is written rather than a guessed one.
+  face: >-
+    estimated - no photograph or drawing of the AIR IN module is held. It is drawn as the AIR OUT module is, with
+    the handle in the guide's green and the chip reading AIR IN. The guide says the two differ in handle colour
+    (green for AIR IN, Tables 5, 6 and 11) and in the AIR IN marking on the handle (Fan Modules section).
+  airflow: >-
+    datasheet - guide Tables 3, 5, 6 and 11: QFX5230-64CD-FANAI is AIR IN, FRU-to-port, back-to-front, with a
+    green handle.
+  power: >-
+    not published. Searched the QFX5230-64CD hardware guide for a figure per module: only whole-switch figures
+    exist. The module declares power-absent so the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [3.6, 3.6]
+    size: [5.0, 5.0]
+    class: screw
+  handle:
+    at: [0.0, 28.7]
+    size: [79.6, 23.6]
+    class: latch
+size:
+  w: 80.9
+  h: 80.0
+size-confidence: {w: borrowed, h: borrowed}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#6ea301'
+    confidence: estimated
+    source: photo of the AIR OUT sibling - the handle band stands proud of the grille; its projection is not measured
+  - node: screw
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: photo of the AIR OUT sibling - captive screw head, projection not measured

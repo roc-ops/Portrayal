@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: rear-drive-4x25-2u-16g
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: server
+description: >-
+  The 4 x 2.5 inch rear drive module of a 16th-generation 2U PowerEdge (R760) - four 2.5 inch drives lying flat in two frames side by side, two each, in riser 1's place and the BOSS module's
+attrs:
+  media: sff-2.5
+provenance:
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 13 (rear view with the 4 x 2.5-inch rear drive module, callout 1) at 3.36 px/mm, see dell/riser-1-cage-2u-16g@1/provenance/sources for the scale and tolerance; ISM figures 81 and 82 and table 89 (rear drive bay slot numbers) for what the module is. Facts read, art not traced.
+  size: >-
+    photo-measured - 177.2 x 36.0 from rear-face x 14.3, y 5.4: two dark frames 83.2 wide at module-local x 0 and 94.0, side by side, which fill the place of riser 1 and the BOSS bay (the BOSS module moves to the middle in this build: see the device's rear-4x25 view).
+  drives: >-
+    photo-measured - four carriers lying flat, release ring at the left, 69.7 long in the figure (module-local x 8.8..78.4 and 102.8..172.4), in two rows centred at module-local y 9.2 and 26.6. The carrier part is 73.0 x 15.3 (common/drive-carrier-25@2); the figure's frames overlap its edges, as on the 2 x 2.5 module.
+  numbering: >-
+    datasheet, WITH A GAP - ISM table 89 names the four rear drives Slot 0, 1, 2 and 3 (Bay 0) for the 12 x 3.5 front and for the 24 x 2.5 front's NVMe rear drives, and Slot 24 to 27 (Bay 1) for the 24 x 2.5 SAS/SATA front; it does not say which slot is which drive. 0 to 3 are taken in reading order, left frame top, left frame bottom, right frame top, right frame bottom (estimated), and the bays are named drive-0 to drive-3 for it; the 24 to 27 build is not modelled.
+  default-blanks: >-
+    EVERY BAY DEFAULTS TO A BLANK, as the fronts do.
+  power: >-
+    NOT APPLICABLE - sheet metal; the drives carry their own.
+size: {w: 177.2, h: 36.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+bays:
+  drive-0:
+    at: [7.1, 1.55]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+  drive-1:
+    at: [7.1, 18.95]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+  drive-2:
+    at: [101.1, 1.55]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+  drive-3:
+    at: [101.1, 18.95]
+    size: [73.0, 15.3]
+    rotate: 270
+    accepts: [common/drive-carrier-25@2, common/drive-blank-25@2]
+    default: common/drive-blank-25@2
+skins: [default]

@@ -1,0 +1,2 @@
+### Added
+- `mini-usb-b` in `spec/schemas/standards.yaml` and `spec/schemas/connectors.yaml` (refs #1275): the Mini-B receptacle. Its shell is 7.7 x 3.9 and 9.0 deep, at drawing confidence, from Molex sales drawing SD-54819-026 rev A (part 54819-0519); the plug opening inside it is 6.9 x 3.1. A component may now say `conforms: mini-usb-b`, and lint L9 holds it to that size. No part presents the interface and no cable plug mates it yet.

@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: r960-system-board
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The PowerEdge R960 system board seen from above - the PCB that processors 1 and 2, their 32 memory
+  sockets, the riser connectors and the power distribution connectors stand on, and the floor of the
+  interior; the processor expansion module stands over it
+provenance:
+  sources: >-
+    R960 ISM figures 15, 95, 99 and 219 (the system board from above, with and without its components) and figure 12
+    (the machine from above). ESTIMATED GEOMETRY: the figures are photographs taken from above, not
+    orthographic, and the two axes differ by 2.7% against the chassis (1.81 px/mm across the 444 body, 1.86 down
+    the 866.74 depth) - and 15% against the memory sockets' own 133.4 length (ISM figure 15 draws them about 157
+    long at 1.81 px/mm; the R660's service model measures the DDR5 socket at 133.4). Every plan position on this device
+    takes its x from the width and its y from the depth.
+  size: >-
+    estimated - 427.0 x 560.0, the board's outline in ISM figure 15 (px 232..1005 across, 205..1195 down) as plan
+    millimetres, rear at y 0. The board's L-shaped outline in figure 95 (a narrow rear section over the riser
+    connectors and wide ones either side) is not drawn: it is a rectangle here.
+  depth: >-
+    estimated - the interior's floor to the cover, 174.3 less the sheet metal (R660: 38.3 of 42.8); taken as 160.0.
+  board-variants: >-
+    ISM table 98's jumper settings and the memory figures show one board. The processor expansion module (PEM) is a second
+    board stacked over this one (ISM figure 14: "Inside the system with processor expansion module"), and is
+    dell/r960-pem-board@1.
+size: {w: 427.0, h: 560.0, d: 160.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [427.0, 560.0], class: bezel}
+skins: [default]

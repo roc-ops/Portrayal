@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: pla03-receptacle
+version: 1.0.0
+class: inlet
+profile: power
+interface: positronic-pla03
+description: >-
+  A male three-position, one-row power connector of the Positronic PCS series (PLA03), as the
+  Edgecore 650 W DC supplies PSU-48V-650-F and -B carry it on their rear face: a blue insulator
+  with a mounting ear at each end and three pins in one row, 5.00 mm apart, drawn upright. The
+  female cable connector PLA03F7000/AA seats at its mate point.
+size: {w: 10.36, h: 28.60}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  Positronic Power Connection Systems catalog C-014 Rev. G9: the PLA03 male printed board mount
+  connector is 1.126 [28.60] long over its mounting ears and 0.408 [10.36] wide, the straight
+  form on page 11 and the right angle (90 degree) form on page 16 alike. The row of contacts runs
+  along the 28.60, so the part is drawn upright, the row top to bottom, as the supply carries it.
+attrs: {connector: PLA03, positions: 3, pitch-mm: 5.0}
+provenance:
+  gender: >-
+    catalog and photograph - the Edgecore DCS204 (AS7726-32X) quick start guide, step 4 "Connect
+    Power", page 2, names the plug on the cable "Positronic PLA03F7000/AA connector" (callout 1),
+    and the catalog's ordering code (page 26) reads that number as PLA (one row), 03 (three
+    positions), F (female), 7 (a cable connector, contacts ordered separately), so the supply's
+    half is the male. The guide's photograph shows pins in the supply's connector. The DCS204 data
+    sheet (EC-DS-0726-R09, page 3) prints "DC Inlet: Positronic PLA03F7000/AA", the plug's number
+    against the inlet; the catalog settles which half is which.
+  part: >-
+    A DECLARED STAND-IN FOR THE PART NUMBER. No held document names the male connector on the
+    supply. Its face is a PLA03 male printed board mount connector with mounting ears (the
+    photograph shows an ear at each end); the catalog's straight (code 3, page 11) and right angle
+    (code 4, page 16) forms share the face drawn here, and the mounting style, termination and
+    plating codes are not known, so no part number is stated.
+  size: >-
+    drawing - see size-notes. The ears are drawn 4.6 long at each end, their holes 22.40 apart (the
+    PLA03 contact hole pattern, page 14), and the insulator between them is a reading of the
+    catalog's face views, not a dimension.
+  contacts: >-
+    drawing - three size 16 contacts in one row on a 5.00 [0.197] pitch, the middle one at the
+    centre (the PLA03 contact hole pattern, catalog page 14); the male contact is 0.0625 [1.588]
+    across (page 8). Drawn as three pins in the insulator's window, top to bottom.
+  lock: >-
+    catalog and photograph - the cable connectors of connection systems 5 to 8 lock to the mating
+    connector by a lock tab in a lock hole (catalog page 1). The photograph shows a square hole in
+    the top end of the supply's connector; it is drawn there.
+  mate: >-
+    derived - the centre of the middle contact, (5.18, 14.30), facing out. The female cable
+    connector's own middle contact is at its centre too, so the two align.
+  colour: >-
+    photograph - medians of the DCS204 guide's page 2 photograph at 500 dpi: the ear #236bb2 and
+    the side of the insulator #215b9c. Drawn #2366ae with an edge #17457a. The catalog gives the
+    insulator as glass-filled polyester and no colour (page 8).
+  relief: >-
+    NONE STATED. The photograph shows the connector standing out of the supply's face, by how much
+    no document says, so it is drawn flush and states no relief.
+elements: {}
+connection-points:
+  mate: {at: [5.18, 14.30], direction: front}
+skins: [default]

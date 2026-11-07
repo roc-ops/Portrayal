@@ -1,0 +1,47 @@
+format: 1
+kind: module
+name: riser-1p-2u-16g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 1P of the PowerEdge R760 - one full-height PCIe Gen5 x16 slot (slot 2, the upper) on dell/riser-1-cage-2u-16g@1, its lower window closed by a vented plate; fitted in riser configurations 3, 4 and 10
+attrs:
+  riser: '1P'
+  appears-in: 'riser configurations 3, 4 and 10'
+  power-absent: not-published
+  slot-2: 'x16, full height (double width with the full-length 1P FL), half length, processor 1, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R760 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  slots: >-
+    datasheet - R760 ISM table 153, configurations 3-1, 3-2, 4-1, 10-1 and 10-2: R1P carries slot 2 only, full height, PCIe Gen5 x16 on processor 1; the -2 builds (1P FL) take a double-width card there. ISM figure 211 shows one connector, labelled slot 2, and its lower bracket window shut by a plate: the plate is modelled as `window-1`, which takes the filler and nothing else and is deliberately NOT named a slot: the ISM lists no slot 1 for this riser, and a `slot-1` bay would be exported as a PCIe slot that does not exist.
+  face: >-
+    photo-measured - composed from dell/riser-1-cage-2u-16g@1, the same face as the two-slot risers: the figure shows both windows and nothing in them to tell the risers apart from behind.
+  seating: >-
+    estimated - as dell/riser-1b-2u-16g@1.
+  size: >-
+    photo-measured - the cage's extent, 125.0 x 44.0.
+size: {w: 125.0, h: 44.0, d: 246.9}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+plan: {ref: dell/riser-1-plan-2u-16g@1}
+parts:
+  - {ref: dell/riser-1-cage-2u-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-2:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 5}
+    behind: true
+    at: [0.4, -0.65]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-16g@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: dell/pcie-filler-fh-16g@1
+  window-1:
+    behind: true
+    at: [0.4, 19.8]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-16g@1]
+    default: dell/pcie-filler-fh-16g@1
+skins: [default]

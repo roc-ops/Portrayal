@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: ex4300-jpsu-350-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-350-AC-AFO-A, the 350 W AC power supply of the EX4300 24-port and 48-port switches,
+  labelled AIR OUT (AFO): front-to-back airflow. Up to two seat in the rear panel, in slots PSU 0 and
+  PSU 1, load-sharing, hot-insertable and hot-removable; one supply carries the switch. It ships
+  in the EX4300-24T and EX4300-48T. The face carries IN OK and OUT OK status lamps, the airflow
+  label, a honeycomb vent, a loop handle and a C14 appliance inlet for a C13 cord with a cord
+  retainer. The EX4300-32F also takes this supply and is not modelled here.
+attrs:
+  model: JPSU-350-AC-AFO-A
+  part-number: JPSU-350-AC-AFO-A
+  role: ac-power-supply
+  power-output-w: 350
+  input-voltage: 100-120 VAC low line or 200-240 VAC high line, 50-60 Hz
+  input-current: 4 A at low line, 2 A at high line
+  airflow: front-to-back
+  airflow-label: AIR OUT (AFO)
+  weight-kg: 1.1
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 30 "Details of the AC
+    Power Supplies in EX4300 Switches": the 350 W supply is JPSU-350-AC-AFO-A (AIR OUT,
+    front-to-back) and JPSU-350-AC-AFI-A (AIR IN, back-to-front); Table 31 gives the airflow of
+    each. The datasheet's ordering table writes the same part without the -A suffix. The guide's
+    sample `show chassis hardware` output (Listing the Switch and Components Details with the CLI)
+    prints JPSU-350-AC-AFO-A for a power supply in an EX4300-48P, which is the guide's own evidence
+    that a 350 W supply seats in a PoE model
+  power-output-w: >-
+    datasheet - guide Table 40, 350 W AC Power Supply Specifications: output power 350 W; low-line
+    100-120 VAC at 4 A, high-line 200-240 VAC at 2 A, 50-60 Hz. An OUTPUT, because a supply provides
+    power
+  weight: >-
+    datasheet - guide Table 30: power supply weight 2.43 lb (1.1 kg)
+  size: >-
+    drawing - the visible face, 84.0 x 42.0 mm, is read off the guide's rear-panel figure (Figure 13,
+    g022074), which passes the aspect check (chassis 10.05 to 1 against the stated 441.0 / 43.7 =
+    10.09): at 4.42 px per mm the slot 0 supply spans 370 px, 83.7 mm (taken as 84.0), and the
+    height of the chassis less a margin. The guide gives no mechanical drawing, no face size and no
+    depth for the supply, so no depth is stated
+  face: >-
+    estimated - positions are fractions of the guide's rear-panel figure (Figure 13) and its supply
+    drawing (Figure 42, g022464): IN OK and OUT OK lamps with their legends at the upper left, the
+    AIR OUT (AFO) label with a fan symbol beneath them, a honeycomb vent along the lower left, the
+    loop handle in the middle and the inlet at the right with the cord retainer clip beside it, which
+    is not drawn (cable furniture). The community NetBox elevation of an EX4300-24P rear, which is
+    not the maker's, is used only to see that the face is mid grey with a black vent and a black
+    handle. The inlet is the registry's C14 aperture
+  leds: >-
+    datasheet - guide, AC Power Supply LEDs in EX4300 Switches, Figure 43 and Table 46 (transcribed
+    into the states below): IN OK green when the supply is receiving proper input power, unlit when
+    the input is absent or out of range; OUT OK green when it is delivering power correctly, unlit
+    when IN OK is unlit or it is not delivering, red when the supply has failed. The legends are
+    printed IN OK and OUT OK
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output; its own consumption is not given
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [47.0, 10.5]}
+elements:
+  led-in-ok:
+    at: [6.8, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out-ok:
+    at: [18.1, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#ef4444'}
+    - 'off'
+  latch:
+    at: [32.8, 3.4]
+    size: [5.6, 35.0]
+    class: latch
+size:
+  w: 84.0
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 42 - the loop handle stands proud of the face; projection not measured

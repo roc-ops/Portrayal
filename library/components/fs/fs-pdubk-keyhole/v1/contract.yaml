@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: fs-pdubk-keyhole
+version: 1.0.0
+class: mount
+interface: pdu-button
+profile: power
+description: >-
+  A keyhole slot in the plate of the FS FS-PDUBK PDU bracket: a narrow slot standing upright
+  with a wider opening half way up it. A zero-U PDU's mounting button (eaton/g4-mounting-button@1)
+  enters the wide opening and is slid down into the lower narrow end, where it seats. It
+  presents `pdu-button`, so a PDU hung on two brackets is judged by where this seat stands.
+provenance:
+  size: >-
+    estimated - the FS-PDUBK product page's dimensioned drawing (a render, 135 across the plate
+    and 88.4 high) draws three of these and dimensions only their 31.5 pitch. Scaled against
+    its own 6.25 px/mm along the plate and 6.66 px/mm across it: a narrow slot 11.5 wide, 47.3
+    from end to end, with a wider opening 21.3 across and 19 high at the middle. The guide
+    gives no slot size. The 11.5 is the bottom of the 11.5 to 12.5 mm slot the Eaton Rack PDU
+    G4 installation guide (P-164001156 rev 3, 2.11) asks of a keyhole in 1.5 to 2 mm sheet,
+    which is the width `pdu-button` states in the connectors registry; the scaled slot meets it
+    and does not exceed it, so it does not contradict the registry note.
+  mates: >-
+    estimated - the seat. The PDU hangs by its weight, the button pushed down into the lower
+    narrow end (the guide's Option 2 figure draws the button at the bottom of the middle
+    keyhole), so it seats on the axis of the lower end's round, 5.75 above the slot's bottom.
+    The opening is symmetric, so the other end would seat as well if a PDU hung from the top;
+    the library takes the lower. Every bracket of a pair is the same part, so a PDU's pitch
+    is the pitch between the two brackets and is unaffected by where in the slot the seat is.
+size: {w: 21.3, h: 47.3}
+size-confidence: {w: estimated, h: estimated}
+elements:
+  slot: {at: [0.0, 0.0], size: [21.3, 47.3], class: mount}
+connection-points:
+  mate: {at: [10.65, 41.55], direction: front}
+skins: [default]

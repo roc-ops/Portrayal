@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: ex4100-reset-pinhole
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  Reset pinhole of the Juniper EX4100 switches, a small recessed hole printed between the two middle port groups of
+  the front panel, reached with a straightened paper clip. The EX4100 Switch Hardware Guide lists it as the Reset
+  button (Figures 3, 7, 12 and 16, callout 9).
+attrs:
+  function: reset
+provenance:
+  sources: >-
+    datasheet - EX4100 Switch Hardware Guide (Juniper Networks, PDF created 2026-10-01). Figures 3, 7, 12 and 16,
+    callout 9, Reset button. The guide states no size for it.
+  size: >-
+    estimated - the guide gives no size. The hole is drawn at 2.0 mm, the width of the 2.0 mm lamps beside it, because
+    a reset pinhole is smaller than the Factory Reset/Mode button (5.4 mm) and reads as a dot in the guide's
+    renders. The figure was not measured.
+size:
+  w: 2.0
+  h: 2.0
+size-confidence: {w: estimated, h: estimated}
+elements:
+  pinhole:
+    at: [0.3, 0.3]
+    size: [1.4, 1.4]
+    class: button
+    label-anchor: below
+relief:
+  wall: '#101214'
+  features:
+    - node: pinhole
+      pocket: 1.5
+      confidence: estimated
+      source: >-
+        this part itself - unsourced. The guide gives neither the size of the hole nor its depth.
+skins: [default]

@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: qfx5110-fanafo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5110-FANAFO, a field-replaceable fan module with front-to-back airflow. Cold air comes in at the
+  switch's port side and hot air leaves at the back. It is marked AIR OUT on a grey chip on its
+  Juniper Gold handle. It is hot-removable and hot-insertable, one at a time. The QFX5120 hardware
+  guide says the QFX5120-48T, QFX5120-48Y and QFX5120-48YM take it. They seat five (4+1), in slots 0
+  to 4 left to right. The back-to-front sibling is QFX5110-FANAFI. The two are never mixed in one
+  chassis, and never with power supplies of the other direction. The status lamp is on the chassis
+  strip beside each slot, not on the module.
+attrs:
+  model: QFX5110-FANAFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5120-48Y (aspect of the whole face
+    checked against the guide's 440.9 x 43.7 mm: 10.04 against 10.09), scaled at 4.26 px/mm: the
+    orange face of five modules measures 40.8 to 41.0 mm across on a 49.0 mm pitch and 41.5 mm
+    high. The 48YM photograph (3.24 px/mm) reads 41.4. No document states the module's size in
+    millimetres: the guide's fan table for the QFX5120-32C is empty and the guide gives no table
+    for this module.
+  depth: >-
+    not stated. Searched the QFX5120 hardware guide for the module's dimensions: its only figure
+    of the module is an isometric drawing with no scale. No depth is written rather than a guessed
+    one.
+  face: >-
+    photo and drawing - the guide's isometric figure of the module and the studio photographs agree
+    on what is on it: a captive screw at the top left, a hex grille above and another below a
+    handle band, a grey AIR OUT chip with a fan symbol on the band. Positions are fractions of the
+    photograph; the colour is the photograph's orange, sampled.
+  airflow: >-
+    datasheet - guide, Fan Modules for QFX5120 Switches and the airflow table: front-to-back is
+    marked AIR OUT on a Juniper Gold handle, back-to-front AIR IN on a Juniper Azure Blue handle,
+    for the 48T, 48Y and 48YM. The 32C's own fan is a different part (red and blue, F2B and B2F).
+  power: >-
+    not published. Searched the QFX5120 hardware guide for a per-module wattage near its fan
+    sections and its power tables; only whole-switch figures exist. The module declares
+    power-absent so the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [1.7, 1.9]
+    size: [6.0, 6.0]
+    class: screw
+  handle:
+    at: [1.2, 12.6]
+    size: [38.5, 16.4]
+    class: latch
+size:
+  w: 40.9
+  h: 41.6
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle band stands proud of the grilles; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw head, projection not measured

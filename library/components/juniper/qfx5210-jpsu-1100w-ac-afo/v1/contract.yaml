@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: qfx5210-jpsu-1100w-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-1100W-AC-AFO, a 1100 W AC power supply with port-to-FRU (front-to-back) airflow (AIR OUT). It is
+  a field-replaceable unit, hot-removable and hot-insertable, with a 12 V output and a 12 V standby, and
+  it load-shares with its twin (2N). The QFX5210 hardware guide says the QFX5210-64C-AFO takes two, in
+  slots 0 and 1 at the two ends of the FRU panel. The face carries an appliance inlet turned on its
+  side with a cord retainer over it. The guide's cords end in a C15 coupler, and the drawn opening is the
+  registry's closest shape. It also has a tall gold handle, one round bi-colour lamp and a black
+  ejector lever. The power supply has its own fan. The back-to-front sibling is JPSU-1100W-AC-AFI. AC and DC
+  supplies, and supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-1100W-AC-AFO
+  role: ac-power-supply
+  power-output-w: 1100
+  airflow: front-to-back
+  input: 90 to 264 VAC, 50 to 60 Hz, 12 A at 100 VAC or 6 A at 240 VAC (guide Table 18)
+provenance:
+  size: >-
+    estimated - the guide's tables give no size for the supply. The bay is read off the FRU-side studio
+    photograph of the AIR OUT build (4.1 px/mm: the supply at 51 mm by 40 mm) and the guide's Figure 8 (3.25
+    px/mm: 53 by 43 mm); 52.0 x 41.8 fits both and the photograph's seating at the foot of the chassis.
+  depth: >-
+    not stated. Guide Figures 16 and 18 are isometric drawings with no scale.
+  face: >-
+    drawing - guide Figure 17 (a straight-on figure of the AC faceplate, 1501 x 700 px, aspect 1.27
+    against the bay's 1.24, so its fractions are taken against the bay's size): at the left a column of four
+    square vents and the inlet housing, with the opening turned so its keyway is at the left; then the tall
+    handle, a field of square vents in two columns at the right of it, the round lamp below them and the
+    ejector lever at the lower right. The studio photograph shows the same arrangement, and in it a black
+    wire cord retainer wraps the inlet. Positions are read at 11.5 px/mm and are estimated.
+  inlet: >-
+    estimated - guide Tables 19 and 20 ship only "C14 to C15" cords and the text says "The coupler is type
+    C15 as described by IEC 60320", so the supply's inlet is the C15-mating type, not a C14. The registry
+    has no such inlet, so the drawn opening is std/c14-inlet@1, the closest available shape; the real
+    opening may differ and no document held gives its size.
+  power-output-w: >-
+    datasheet - the part number and the guide's text ("each of the 1100-W power supplies has a single AC
+    input and a 12-VDC output") say 1100 W. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 22: one bi-colour lamp; green flashing when AC is present and the supply is in
+    standby, green steady when DC output is present and the supply is working, red flashing when the
+    supply has failed, and green and red alternating for a warning. Unlit when no supply has power.
+  airflow: >-
+    datasheet - guide Table 17: JPSU-1100W-AC-AFO is port-to-FRU (front-to-back) airflow, Juniper Gold
+    handle; the guide's Table 3 gives the CLI name "AC AFO 11000W PSU", a misprint of 1100.
+  colour: >-
+    photo-measured - the guide names the handle Juniper Gold and the studio photograph of the AIR OUT build
+    shows it orange, the value drawn.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [4.7, 9.1], rotate: 270}
+elements:
+  led-power:
+    at: [39.0, 34.1]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#e5484d'}
+    - 'off'
+  latch:
+    at: [30.0, 1.8]
+    size: [7.0, 36.0]
+    class: latch
+  lever:
+    at: [46.4, 18.0]
+    size: [5.6, 20.1]
+    class: latch
+size:
+  w: 52.0
+  h: 41.8
+size-confidence: {w: estimated, h: estimated}
+size-notes: the bay's size on the FRU-side photograph and Figure 8; no document gives the module's own size
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: studio photograph - the handle stands proud of the face; its projection is not measured
+skins: [default]

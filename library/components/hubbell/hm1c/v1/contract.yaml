@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: hm1c
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged, removable cover of the Hubbell M-Series 1 RU cable manager, catalogue HM1C.
+  The HM14C sheet lists it as the replacement cover. It is a steel panel across the front
+  of the wire rings. It opens, or lifts off its hinge, so patch cords can be added.
+provenance:
+  size: >-
+    datasheet - the HM14C sheet lists "Replacement Cover, 1U HM1C" and draws the cover the
+    width of the manager, B, 19 in (483 mm). Its height is estimated as the plate's, A,
+    1.75 in (44 mm): the figure draws it open as a sheet as wide as the plate.
+  relief: >-
+    estimated - a flat panel 1.5 mm thick standing at the very front of the rings, C out
+    of the plate. The folded edge the figure shows is drawn in the face only (see `face`),
+    not in the 3D section, which no sheet dimensions.
+  face: >-
+    estimated - STAND-IN. The figure shows a folded edge along the cover and the photograph
+    shows a lip along its top and the name plate at the middle. None is dimensioned. The
+    face draws a folded band 6 mm high along the top and along the foot (the width of a
+    fold is a stand-in: it is not the maker's), in a lighter steel tone than the panel so
+    it reads on both stages, and the name plate as a blank panel in its reserved box. No
+    mark is drawn on the plate. The photograph names the top lip; the foot's fold is read
+    from the figure's folded edge and is estimated.
+  lid: >-
+    datasheet - "Cover: Included, hinged & removable" on the sheet, and "Door hinges and is
+    removeable to allow for easy addition of patch cords" in its features; the figure draws
+    the cover swung open on a dashed arc. It opens over the plate's windows, so it is a lid
+    (`lid: true`) and the windows beneath it may be declared pass-throughs. The format has
+    no hinge, so the cover is drawn fitted, one panel; the device's `cover-hinge` gap says so.
+  color: >-
+    datasheet - "Finish: Black Powder Coated", the sheet's, for the whole manager.
+  logo-zone: >-
+    reserved, not drawn, estimated - the maker's name plate sits at the middle of the
+    cover; its box, 58 mm by 12 mm, is read on the HM24C photograph against the cover's
+    length, as no HM14C photograph is as close. The library reproduces no vendor logo.
+size: {w: 482.6, h: 44.45}
+size-confidence: {w: datasheet, h: estimated}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 44.45], class: bezel}
+  fold-top: {at: [0.0, 0.0], size: [482.6, 6.0], class: bezel}
+  fold-bottom: {at: [0.0, 38.45], size: [482.6, 6.0], class: bezel}
+  name-plate: {at: [212.3, 16.225], size: [58.0, 12.0], class: label}
+  logo-zone: {at: [212.3, 16.225], size: [58.0, 12.0], class: label}
+relief:
+  features:
+    - node: plate
+      lift: 100.1
+      out: 101.6
+      color: '#2a2d31'
+      confidence: estimated
+      source: no sheet dimensions the cover's section; a thin panel at the front of the rings
+skins: [default]

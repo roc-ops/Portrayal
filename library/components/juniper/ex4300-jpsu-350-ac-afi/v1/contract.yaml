@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: ex4300-jpsu-350-ac-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-350-AC-AFI-A, the 350 W AC power supply of the EX4300 24-port and 48-port switches
+  labelled AIR IN (AFI): back-to-front airflow. Seats in the rear panel slots PSU 0 and PSU 1 with
+  EX4300-FAN-AFI fan modules, and ships in the EX4300-48T-AFI. The same face as the AIR OUT supply
+  with the opposite airflow label: IN OK and OUT OK lamps, a honeycomb vent, a loop handle and a
+  C14 appliance inlet for a C13 cord.
+attrs:
+  model: JPSU-350-AC-AFI-A
+  part-number: JPSU-350-AC-AFI-A
+  role: ac-power-supply
+  power-output-w: 350
+  input-voltage: 100-120 VAC low line or 200-240 VAC high line, 50-60 Hz
+  input-current: 4 A at low line, 2 A at high line
+  airflow: back-to-front
+  airflow-label: AIR IN (AFI)
+  weight-kg: 1.1
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 30 and Table 31:
+    JPSU-350-AC-AFI-A, label AIR IN (AFI), back-to-front. Table 7 and the airflow section say the
+    same of the 350 W AC supply. The EX4300-48T-AFI ships with it (Table 3, Table 28)
+  power-output-w: >-
+    datasheet - guide Table 40, 350 W AC Power Supply Specifications, which does not separate the two
+    airflow models: output 350 W, 100-120 VAC at 4 A or 200-240 VAC at 2 A, 50-60 Hz
+  weight: >-
+    datasheet - guide Table 30: 2.43 lb (1.1 kg)
+  size: >-
+    drawing - the same aperture as the AIR OUT supply, 84.0 x 42.0 mm, off the guide's rear-panel
+    figure (Figure 13, g022074); see juniper/ex4300-jpsu-350-ac-afo. No drawing shows an AIR IN supply
+  face: >-
+    estimated - no figure or photograph of an AIR IN supply was found; the art is the AIR OUT
+    supply's with the printed label changed to AIR IN (AFI). The guide states no handle colour for
+    either, so none differs
+  leds: >-
+    datasheet - guide Figure 43 and Table 46: IN OK green when receiving proper input power; OUT OK
+    green when delivering power correctly, red when the supply has failed; each unlit otherwise
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [47.0, 10.5]}
+elements:
+  led-in-ok:
+    at: [6.8, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out-ok:
+    at: [18.1, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#ef4444'}
+    - 'off'
+  latch:
+    at: [32.8, 3.4]
+    size: [5.6, 35.0]
+    class: latch
+size:
+  w: 84.0
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 42 - the loop handle stands proud of the face; projection not measured

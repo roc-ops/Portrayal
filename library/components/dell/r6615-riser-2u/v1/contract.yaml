@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: r6615-riser-2u
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2U of the PowerEdge R6615 - slot 1 and the two-drive rear EDSFF E3.S module on dell/riser-2s-cage-16g@1, fitted in riser configuration 7
+attrs:
+  riser: '2U'
+  appears-in: 'riser configuration 7'
+  power-absent: not-published
+  slot-1: 'x16, low profile, half length, processor 1, PCIe Gen5'
+  rear-drives: '2 x EDSFF E3.S'
+provenance:
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT (ISM figure 118, 'Riser 2U',
+    slot 1; a cable leaves its board for the system board), so it is a module
+    with `bays`. The two rear E3.S drives are the rear drive module of ISM
+    figure 9 and figure 53, listed beside riser 2U in the same rear.
+  slots: >-
+    datasheet - R6615 ISM table 16 and table 97: slot 1 low profile, half
+    length, x16 (Gen5), processor 1. Table 17 (technical guide table 11)
+    lists the riser in configuration 7, R2U + R3S, rear storage possible.
+  rear-drives: >-
+    datasheet - ISM figure 9, 'Rear view of the system with 2 x E3.S rear drive
+    module', item 4 'E3.S Drives', between riser 1's place and riser 3. The drive
+    bays are numbered 0 and 1 top to bottom here, as dell/riser-2s-16g@1
+    numbers them: no figure held prints their numbers. Their places are the
+    R660's (ISM figure 13 there), checked against ISM figure 9 here: the figure
+    puts the pair between slot 1 and slot 3 as that part does, at 3.2 px/mm,
+    and was not measured finer.
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R6615 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  face: >-
+    borrowed - composed from dell/riser-2s-cage-16g@1, the metal of the R660's
+    riser 2S, which has the same one slot and two E3.S carriers.
+  size: >-
+    borrowed - the cage's extent, 163.60 x 19.80.
+  seating: >-
+    borrowed - the slot bay is dell/riser-2s-16g@1's.
+  body: >-
+    borrowed - the board and connector are dell/riser-2s-16g@1's, themselves
+    estimated by analogy with riser 2A.
+  plan: >-
+    borrowed - dell/riser-2s-plan-16g@1, read off Dell's top views of the R6615
+    and R6625.
+size: {w: 163.60, h: 19.80, d: 246.9}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body:
+  depth: 246.9
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [73.30, -0.30], size: [2.40, 33.20],
+     from: 27.6, depth: 219.3, color: '#1f5138',
+     confidence: estimated, source: "borrowed from dell/riser-2s-16g@1, itself estimated by analogy with riser 2A shifted 12.1 left with slot 1"}
+  - {id: slot-1-connector, at: [62.60, 12.70], size: [10.00, 8.70],
+     from: 48.3, depth: 89.0, color: '#15171b',
+     confidence: estimated, source: "borrowed from dell/riser-2s-16g@1, itself estimated by analogy with riser 2A shifted 12.1 left with slot 1"}
+plan: {ref: dell/riser-2s-plan-16g@1}
+parts:
+  - {ref: dell/riser-2s-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
+    rotate: 180
+    plan: {at: [82.33, 0.00]}
+    behind: true
+    at: [2.07, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  e3s-0:
+    at: [82.52, 0.53]
+    size: [77.65, 7.75]
+    accepts: [dell/e3s-carrier-blank@2, dell/e3s-carrier@1, std/drive-e3s@1]
+    default: dell/e3s-carrier-blank@2
+  e3s-1:
+    at: [82.52, 10.93]
+    size: [77.65, 7.75]
+    accepts: [dell/e3s-carrier-blank@2, dell/e3s-carrier@1, std/drive-e3s@1]
+    default: dell/e3s-carrier-blank@2
+skins: [default]

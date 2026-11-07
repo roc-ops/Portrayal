@@ -1,0 +1,70 @@
+format: 1
+kind: component
+name: l40s-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA L40S card, seen from behind. It shows the open
+  shroud with its fin stack edge-on. The 16-pin 12VHPWR power connector is at
+  the corner by the top edge. Two bosses take the extenders' thumbscrews. It is
+  the card's `faces.rear`.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height on PB-11470 figure 3, 28.41 to
+  126.31 on the card) and runs from the backplate's outer face to the shroud's far
+  wall, 38.23 (the card's thickness is itself estimated at 38.2, see the card's
+  `thickness`). NO DEPTH IS DECLARED: a face is a drawing of a back. SEEN FROM
+  BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' = 126.31 less the card's x (the
+  top edge at the left) and y' = the card's y less 1.77. This is the frame of
+  nvidia/a100-pcie-80gb-tail@1. The kit's rear frame measures x from the
+  bracket's tip and has no room for a card whose top edge stands past the
+  bracket's 120.02, so this face is not painted on the body's pieces; the pieces
+  are built from the same figures (the card's `body.boxes`).
+attrs: {media: gpu}
+parts:
+  # The header is 20.85 across and 11.7 down. The photograph puts the housing's
+  # long side along the card, so it is not turned, only half-turned so that the
+  # four sense contacts are at the top, toward the backplate, where the
+  # photograph has them. Its centre is the housing's: x' 12.76, y' 6.18.
+  - {ref: std/12vhpwr-header@1, id: aux-power, at: [2.335, 0.33], rotate: 180}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  fins: >-
+    photo-measured - PNY's straight-on photograph of the card's east end
+    (l40s-right.png, 108 x 276 px, 2.82 px/mm: the 276 px over the 97.9 and the
+    108 over the 38.3 agree to 1 percent, so it is near orthographic). The fin
+    stack shows edge-on as dark horizontal lines on a pitch of 4.93 (112 px at
+    22.6 px/mm in an 8 times enlargement; 19 of them, the first 3.98 from the top
+    edge and the last 92.72), which is nearer the A100's 5.0 than the 4.18 the
+    bracket's vent window shows on this card (see the card's `face-grille`).
+    The two readings were not reconciled: the window sees the stack from the
+    other end and may see the fins' flared roots. The fin thickness (0.8) and
+    the wall round the opening (2.1) are estimated; how far the fins run in is
+    not seen, and the card's body draws them 40 mm deep.
+  connector: >-
+    photo-measured - the same photograph. The housing is black, 9.1 across the
+    card's thickness and 18.9 along it, from the card's x 104.1 to 123.0 and y
+    3.4 to 12.5, which is 3.3 from the top edge and 1.6 from the backplate's outer
+    face. It holds 12 power contacts in two columns of six on a 3.0 pitch (2.9
+    to 3.0 measured) and a strip of four sense contacts on the backplate side.
+    The part is std/12vhpwr-header@1 because PB-11470 figure 5 says "per PCIe
+    CEM 5.0 specification". Its 20.85 x 11.7 is the plug's outline, estimated,
+    which is 1.9 and 2.6 more than the housing measured here, so this face draws
+    the header's own size and the card's 3D housing keeps the measured one.
+  mount: >-
+    photo-measured - the same photograph: two round bosses 3.5 across, 28.4
+    apart, at the card's x 36.8 and 65.2 and y 10.5. The A100 80GB's are at x 35.3
+    and 64.1 and y 8.4 (estimated there from the flange's middle), so this card's
+    are 1.5 further from the bracket's tip and 2.1 higher.
+  not-drawn: >-
+    the photograph shows two large windows in the end plate (about 26 and 33 mm
+    long) and a slot at its foot. Nothing says what they are, and an extender
+    hides them; they are not drawn.
+elements:
+  fins: {at: [3.58, 12.63], size: [89.54, 23.5], class: vent}
+  mount-1: {at: [87.76, 6.98], size: [3.5, 3.5], class: screw}
+  mount-2: {at: [59.36, 6.98], size: [3.5, 3.5], class: screw}
+skins: [default]

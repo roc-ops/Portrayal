@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: qfx3500-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX3500-FAN-AFO, a field-replaceable fan tray with port-to-FRU airflow. Cold air comes in at the
+  port end of the switch and hot air leaves at the FRU end. The tray holds two fan modules and has a
+  single lamp, green when the tray is healthy and blinking amber on an error. It is hot-removable
+  and hot-insertable, and one fan module cannot be replaced alone. The QFX3500 hardware guide gives
+  it to the QFX3500-48S4Q-AFO. The chassis seats two, in slots 0 and 1 on either side of the
+  management board. The front-to-back and back-to-front trays are never mixed in one chassis. The
+  back-to-front sibling is QFX3500-FANAI.
+attrs:
+  model: QFX3500-FAN-AFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    drawing - QFX3500 Device Hardware Documentation (modified 2018-07-03), figure 5, the flat drawing of
+    the FRU side (page 27, drawing g050012). The body of that drawing measures 309.72 x 31.66 pt for the
+    table's 17.4 x 1.74 in (aspect 9.78 against 10.0, 2.2 percent out), so each axis is scaled to its
+    table figure, 1.427 mm/pt across and 1.396 down. The tray is the grille between its two divider
+    strips: 61.2 pt across and 29.1 pt high, 87.3 x 40.6 mm. Good to about 1 mm. No document gives the
+    tray's size in millimetres.
+  depth: >-
+    estimated - not stated. The guide's figure 13 is an isometric drawing with no scale and no table
+    gives a depth, so none is written.
+  face: >-
+    drawing - figure 5 draws a hexagonal grille across the tray with a pull handle at the lower left and
+    a small ejector at the lower right (figure 13, an isometric drawing, labels the lamp and the
+    ejector). The lamp sits by the fan icon at the lower left. The positions of the lamp and the
+    ejector are read off the isometric drawing without a scale and are estimated.
+  colour: >-
+    estimated - the guide prints no colour for the fan tray (it gives gold and blue handles to the power
+    supplies only) and the drawings are line art. A neutral grey is drawn. No photograph of this tray is
+    held.
+  airflow: >-
+    datasheet - guide, Table 13 (page 40): QFX3500-FAN-AFO is port-to-FRU. In the guide's words AFO is
+    airflow out, which is port-to-FRU, and AFI is FRU-to-port.
+  power: >-
+    not published. Searched the QFX3500 hardware guide near its fan sections, Table 5 (weights) and the
+    power tables 25 and 27: only whole-switch figures exist. The module declares power-absent so the
+    missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  led-fan:
+    at: [4.2, 26.5]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [2.0, 33.0]
+    size: [34.0, 4.5]
+    class: latch
+size:
+  w: 87.3
+  h: 40.6
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

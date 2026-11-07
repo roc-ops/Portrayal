@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: ex4550-em-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The module slot cover panel of the Juniper EX4550 switches. The EX4550 has two module slots, one
+  on the front panel and one on the rear panel, and ships each with a cover panel. The panel is a
+  plain plate with a captive screw at each end. A slot takes an 8-port SFP+ module (EX4550-EM-8XSFP),
+  an 8-port 10GBASE-T module (EX4550-EM-8XT), a 2-port QSFP+ module (EX4550-EM-2QSFP) or a Virtual
+  Chassis module (EX4550-VC-128G). The guide gives no part number for the panel.
+attrs:
+  weight-note: not published
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (published 2020-12-15): Figures 4 to 6, callout 1 on the
+    two front panels and callout 4 on the rear panel, "Module slot cover panel", flat line drawings.
+    Table 3 lists the four modules a slot takes. The guide gives no part number, size or weight for
+    the panel. The guide's own copyright and the Juniper EULA govern it; it is read for facts only and
+    nothing of it is copied.
+  size: >-
+    estimated - Figure 6 gives a rear panel width of 86.2 mm and Figure 4 an outline of 88.9 mm
+    across, at figure aspects 2 percent and 1 percent out. One panel serves both slots, so 86.5 x 41.0
+    mm is written, which is the rear reading. The front cover reads 2.6 mm wider and a gap records it.
+  face: >-
+    drawing - Figures 4 and 6: a plate with a captive screw 7.0 mm across at each end, 4.9 mm from the
+    edge and on the centre line. Positions are estimated.
+  depth: >-
+    estimated - not stated. Searched the EX4550 guide for the panel's dimensions: nothing is given.
+    No depth is written.
+states: [absent]
+elements:
+  screw-left:
+    at: [1.4, 17.0]
+    size: [7.0, 7.0]
+    class: screw
+  screw-right:
+    at: [78.1, 17.0]
+    size: [7.0, 7.0]
+    class: screw
+size:
+  w: 86.5
+  h: 41.0
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+skins: [default]

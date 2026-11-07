@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: 7010tx-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Arista FAN-7010X, the one hot-swappable dual-inline fan module of the 7010TX-48 switches,
+  reversible: turned 180 degrees and pushed back in, it draws air the other way. It slides in a
+  slot in the middle of the rear panel that is longer than the module, between a blue AIR INLET
+  label band and a red AIR EXIT label band printed on the chassis; the module covers one band
+  and shows the other. With the module at the end of the slot that covers the red band the blue
+  AIR INLET shows and the switch runs back-to-front (the -R part numbers); with it at the other
+  end the red AIR EXIT shows and it runs front-to-back (the -F part numbers). The `airflow`
+  field says which, and a configuration sets it. The face is a pale grey plate with a handle
+  window carrying a FAN 7010X tag, and a status lamp and a fan glyph at one end.
+attrs:
+  role: chassis-fan
+  hot-swap: 'yes'
+  redundancy: dual inline fans in one module
+provenance:
+  sources: >-
+    datasheet - 7010 Series 1RU Quick Start Guide (Arista Networks, PDOC-00061-08, PDF created
+    2025-10-06): Appendix E (Maintenance and Field Replacement: "Only the fan module is field
+    replaceable", the module is hot-swappable and can be reoriented), Appendix A.2 and Figure
+    A-3 (rear status indicators), Figures D-2 and D-4 (rear panels), and Chapter 2.1 (Airflow
+    Orientation: squeeze the handle, pull the module out, rotate 180 degrees, insert it again).
+    7010X Series Data Sheet (03-0052-14, 20 Aug 2025): the Fans row names FAN-7010X and the
+    spare-options table lists it as a "configurable fan module (reversible airflow)". The
+    datasheet's straight-on rear photographs of the AC build with each airflow, and of the DC
+    build, are the drawing: the module was measured off them.
+  size: >-
+    estimated - read off the datasheet's rear photographs of the 7010TX-48 (5227 px across for the
+    439 mm body, 11.9 px per mm, aspect within a percent of the stated 439 x 43.5). The slot,
+    175.0 to 265.0 mm along the rear and 2.3 to 42.3 mm down, is 90.0 x 40.0 and is this part's
+    own size, because the module and the two label bands move inside it. The module itself reads
+    73.0 x 38.2: 190.0 to 263.0 in the back-to-front photograph and 177.3 to 250.3 in the
+    front-to-back one, so the two are the same plate 12.7 mm apart. No document states the module's
+    width, height or depth. Depth is not stated here (see the device gap fan-module-depth).
+  elements: >-
+    estimated - read off the same photographs. In the back-to-front orientation the lamp sits 5.0 mm
+    from the module's left end and 18.6 down, with the fan glyph 5.3 mm further along; in the
+    front-to-back one it is at the other end, 5.0 from the right end, as the module is the same plate
+    turned 180 degrees (measured 67.9 from the left against the 68.0 that turning the plate gives). The
+    handle window is 15.5 x 30.5 and the FAN 7010X tag 15.0 x 14.5 on it, each measured to
+    about half a millimetre. One lamp element per orientation, because the lamp moves with the turn.
+  labels: >-
+    estimated - read off the photographs: the blue AIR INLET band is 10.0 mm wide (175.0 to 185.0) and the red AIR EXIT
+    band 10.0 mm wide (254.1 to 264.1; drawn 8.9 wide, to 263.0, so that it ends where the module
+    does in the back-to-front photograph, which shows no red beside it), each about 38.8 mm tall, both printed on the chassis and
+    drawn here under the module because they sit inside this part's slot. Their colours are the
+    median of the photographs' pixels (#154269 and #832841). The guide's Figure 4-1 calls them the
+    air inlet indicator (blue label) and the air exit indicator (red label); it says the labels, not
+    the handle, carry the colour.
+  airflow: >-
+    datasheet - 7010 Series 1RU Quick Start Guide, Chapter 2.1: "The fan module, when inserted,
+    covers one of the two airflow labels with the visible label indicating the current airflow
+    direction." The datasheet's ordering table gives the front-to-rear unit as -F and the rear-to-front
+    unit as -R. A visible AIR EXIT band means air leaves at the rear, front-to-back.
+  led: >-
+    datasheet - Appendix A.2, Table 8: green when the fan is operating normally, red when it has failed,
+    unlit when the module is inserted but not receiving power. The photographs show the lamp as a small
+    dot beside a fan glyph.
+  power: >-
+    NO FIGURE IS PUBLISHED. Searched the guide's Tables 1 to 3 and the data sheet's technical
+    specifications for a fan wattage and found whole-switch figures only, so the missing-power warning
+    stands as the record that it is missing.
+  colour: >-
+    estimated - the module plate is the median of 400 pixels of its face in the datasheet's rear
+    photograph, #bfc2cb; the slot well is estimated.
+  part-number: >-
+    datasheet - Ordering Information, Spare Options: FAN-7010X, "Configurable fan module for Arista 7010
+    switches (reversible airflow)". One code serves both airflows, so one module type is exported.
+  relief: >-
+    not modelled - the handle stands proud of the plate but no source gives how far.
+fields:
+  airflow:
+    label: Airflow
+    type: choice
+    options: [front-to-back, back-to-front]
+    default: front-to-back
+states:
+  - ok
+  - fault
+  - absent
+elements:
+  led-b2f:
+    at: [19.0, 18.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+      - {name: green, color: '#39b54a'}
+      - {name: red, color: '#ef4444'}
+      - 'off'
+  led-f2b:
+    at: [69.3, 19.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+      - {name: green, color: '#39b54a'}
+      - {name: red, color: '#ef4444'}
+      - 'off'
+part-numbers:
+  FAN-7010X: {part: FAN-7010X}
+size:
+  w: 90.0
+  h: 40.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

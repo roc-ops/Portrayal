@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: ex9214-pwr-mx960-4100-dc
+version: 1.0.1
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 4100 W DC power supply (PWR-MX960-4100-DC) of the EX9214. It is the high-capacity DC supply of the MX960. It stands
+  upright in PEM0 to PEM3 at the rear. It has two DC power inputs: INP0 at the top of the supply and INP1 in a feed above it. It has
+  a switch behind a door, a vertical handle and a lower terminal block under a cover. The four lamps are INP0 OK, INP1 OK,
+  DC OK and PS FAIL. The supplies work in two zones. PEM0 and PEM2 feed one zone, and PEM1 and PEM3 feed the other.
+superseded-by: juniper/ex9214-pwr-mx960-4100-dc@2
+part-numbers:
+  PWR-MX960-4100-DC-S: {part: PWR-MX960-4100-DC-S}
+attrs:
+  power-output-w: 4100
+  input-voltage: -40 to -72 VDC
+  inlet: dc-terminal
+  redundancy: 1+1 per zone
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "PWR-MX960-4100-DC-S 4100 W DC Power Supply for EX9214, spare". The MX960
+    guide lists PWR-MX960-4100-DC as "DC 4.1kW Power Entry Module". The MX960 device on main seats no DC supply.
+  power: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (Aug 2022), Table 4: 4,100 W per chassis zone on a -40 to -72 V DC input, and the EX9214 text "deliver 4,100 W of power to
+    the chassis". The guide's DC chapter recommends a 208 A circuit breaker for the maximum configuration, 104 A per supply.
+  size: >-
+    estimated - the face is 101.6 mm wide and 368.3 mm tall, as the AC supply (juniper/ex9214-pwr-mx960-4100-ac size). Table 7 gives the DC supply 1.75 x 14.5 x 9.05 in.
+  face: >-
+    estimated - the guide's Figure 23 is one isometric drawing of the supply, upright, seen from the left-front: the two inputs, the door over the switch, four lamps in a
+    column with their legends INP0 OK, INP1 OK, DC OK and PS FAIL, a handle, and below it a terminal strip with a cover plate. No flat drawing and no photograph of the DC
+    supply is held. Every place is a fraction of the figure drawn on the AC supply's outline and is estimated to about 5 mm. See the device gap dc-supply-face.
+  leds: >-
+    guide, DC power supply LED table: INP0 OK and INP1 OK green (input present, correct polarity), DC OK green (output in range), PS FAIL red; each off when not lit.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-inp0-ok: {at: [10.5, 66.0], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-inp1-ok: {at: [10.5, 72.2], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-dc-ok: {at: [10.5, 78.4], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-ps-fail: {at: [10.5, 84.6], size: [2.2, 2.2], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  switch: {at: [45.0, 7.5], size: [16.0, 31.0], class: switch}
+  handle: {at: [46.6, 135.0], size: [10.2, 111.0], class: latch}
+size:
+  w: 101.6
+  h: 368.3
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.4
+    color: '#9aa0a6'
+    confidence: estimated
+    source: guide Figure 23 - the vertical pull handle stands proud of the face
+  - node: switch
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: guide Figure 23 - the switch projects
+skins: [default]

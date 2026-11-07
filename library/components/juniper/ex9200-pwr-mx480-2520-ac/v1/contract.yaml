@@ -1,0 +1,105 @@
+format: 1
+kind: module
+name: ex9200-pwr-mx480-2520-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 2520 W AC power supply (PWR-MX480-2520-AC) of the EX9204 and EX9208. It is the high-capacity AC supply of the MX240
+  and MX480. The CLI calls it "PS 1.4-2.52kW; 90-264V AC in". It has one IEC C20 appliance inlet, an input switch, an
+  internal fan and a pull handle. Its three lamps are AC OK, DC OK and PS FAIL. It takes low-line (100 to 120 V) or high-line
+  (200 to 240 V) input. It seats in PEM0 to PEM3. It cools from the chassis front to its own rear.
+part-numbers:
+  PWR-MX480-2520-AC-S: {part: PWR-MX480-2520-AC-S}
+attrs:
+  power-output-w: 2400
+  power-output-low-line-w: 1167
+  input-voltage: 100-120 VAC (low line) or 200-240 VAC (high line), 50-60 Hz
+  input-current-a: 16 (low line), 15.1 (high line)
+  airflow: front-to-back (the supply draws air from the front of the chassis and exhausts at its own rear)
+  redundancy: high-line 1+1; low-line 2+2
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "PWR-MX480-2520-AC-S 2520 W
+    AC Power Supply for EX9208, spare (Note: AC power cords are sold separately)". The EX9204 guide's CLI sample prints the
+    EX9204 supply as part 740-029970, "PS 1.4-2.52kW; 90-264V AC in", which is the description the MX240 and MX480 guides give
+    PWR-MX480-2520-AC in its component table. The MX normal-capacity supplies on main (juniper/mx240-psu-ac and
+    juniper/mx480-psu-ac, 1590 W) are different parts and are not reused. The datasheet lists the spare under EX9208 and names none
+    for EX9204; the EX9204 guide's supply is the one this contract draws.
+  power: >-
+    guide - EX9204 Switch Hardware Guide (2025-08-12), Table 16: low-voltage line 1167 W and high-voltage line 2050 W per supply.
+    The same chapter then says that from Junos OS Release 18.4R1 the enhanced AC PEM gives 2400 W in the high-line configuration,
+    and that earlier releases gave 2050 W. The supply is named 2520 W, and the EX9200 datasheet says 2050 W. The newest statement, 2400 W, is carried as the high-line output
+    and 1167 W beside it as the low-line output; Table 16 and the datasheet are the older figures. See the device gap
+    psu-output.
+  size: >-
+    estimated - the face is 101.6 mm wide (the guide's 4 in) by 89.7 mm, read off the EX9204 studio rear photograph at 1.65 px/mm
+    (a supply from its top edge to the foot of its screw flange). The MX240 DC supply bay measures 101.5 x 79.7 on a 3.37 px/mm
+    photograph; the flange accounts for the extra height, which hangs over the chassis plate below the bay. Table 7 gives the AC
+    supply 1.75 in high, 14.5 in wide and 4 in deep, which are the module's own axes, not its face.
+  face: >-
+    estimated - the EX9204 and EX9208 studio rear photographs (1.65 and 1.31 px/mm), one supply enlarged 2.8 times: a vent field
+    of square holes over the upper face, the AC OK, DC OK and PS FAIL lamps on a white label at the upper right, the input
+    switch and the C20 inlet at the lower left, a black pull handle at the lower middle, and a screw flange with a caution label
+    along the foot. Every place is read at about 0.6 mm resolution.
+  leds: >-
+    guide Table 18: AC OK green (input in range), yellow (input below range), off; DC OK green (output in range), off; PS FAIL
+    red (output out of regulation), off.
+  handle: >-
+    photo - the pull handle is black on every EX9200 supply photographed, the AC supply in the EX9204, EX9208 and EX9214 studio
+    photographs. The guides state no airflow variant of the supply, so no handle colour follows from airflow here.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-ac-ok:
+    at: [90.7, 20.3]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-dc-ok:
+    at: [90.7, 26.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-ps-fail:
+    at: [90.7, 31.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  switch:
+    at: [4.3, 40.2]
+    size: [15.3, 30.0]
+    class: switch
+  handle:
+    at: [52.3, 63.0]
+    size: [42.0, 6.4]
+    class: latch
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [19.6, 39.8], rotate: 90, attrs: {function: AC inlet}}
+size:
+  w: 101.6
+  h: 89.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the pull handle stands proud of the face
+  - node: switch
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the input switch projects
+skins: [default]

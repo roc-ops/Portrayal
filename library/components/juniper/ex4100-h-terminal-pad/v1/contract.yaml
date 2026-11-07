@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: ex4100-h-terminal-pad
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  One wire terminal of the power input block behind the terminal door on the front of the Juniper EX4100-H-24MP and
+  EX4100-H-24F: a round pad with a clamp screw. Each of the two PSU sections has six - L, N and G for an AC supply and
+  DC+, DC- and G for a DC supply - and the door's legends are printed beside them, so the part carries none. The wire
+  is loosened and tightened with a Phillips screwdriver, and the door is shut after it.
+attrs:
+  media: power-terminal
+provenance:
+  sources: >-
+    drawing and photo-measured - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01), Figures 3 and 5
+    (callout 11 and callout 10, the PSU power input terminal) and the power connection steps for the EX4100-H-24MP and
+    EX4100-H-24F, and Juniper's studio photographs of both models, front.
+  size: >-
+    estimated - the pad is 4.0 mm across in Figure 3 (6.568 px/mm against the 439.0 mm body, its height agreeing with
+    43.3 mm to 0.1 percent), with its centres 9.6 mm apart along each row. The guide gives no dimension for it.
+  the-face: >-
+    photo-measured - the photograph shows a plain grey disc in a dark ring; no screw head or slot resolves at the
+    photograph's scale, so none is drawn. The torque and the screwdriver the guide names belong to provenance only.
+elements:
+  pad: {at: [0.0, 0.0], size: [4.0, 4.0], class: connector}
+size:
+  w: 4.0
+  h: 4.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

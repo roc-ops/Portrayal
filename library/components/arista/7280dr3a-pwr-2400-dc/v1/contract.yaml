@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: 7280dr3a-pwr-2400-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2400 W DC power supply of the Arista 7280DR3A-36, PWR-2411-DC-RED (forward airflow, red
+  handle): a 1RU, 73.5 mm wide module with the same round fan guard and red diagonal handle as
+  the AC supply, and a terminal block in place of its inlet. The block is drawn with the two
+  poles the guide's section 4.4.2.2 names, negative (-48V) and positive (RTN); the protective
+  earth terminal is on the other side of the module and is not drawn.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-2411-DC-RED: {part: PWR-2411-DC-RED}
+attrs:
+  power-output-w: 2400
+  input: dc
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-note: '-48 to -60 VDC, 55 A'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height, as the AC supply (arista/7280dr3a-pwr-2400-ac):
+    "PWR-2411-DC-RED  Arista PSU, 1RU, DC/DC, 2400W, FORWARD, 73.5MM", 1RU.
+  part-number: >-
+    datasheet - ordering information for the 7280DR3A-36: "PWR-2411-DC-RED  Arista PSU, 1RU,
+    DC/DC, 2400W, FORWARD, 73.5MM". The quick start guide's table 3 lists PWR-2411-DC and table
+    4 gives it as the supported DC supply of the DR3A-36. The data sheet lists no DCS-7280DR3A-36
+    SKU for a DC build: the DC supply is a spare, and the "#" configurable orders take it.
+  power-output: >-
+    datasheet - the "2400W" of the ordering description. An output.
+  input: >-
+    datasheet - quick start guide table 3: PWR-2411-DC "-48 to -60 VDC, 55 A". Table 7 gives
+    its wire as 2 to 4 AWG (35 to 25 mm2) and its tightening torque as 2.7 N-m (24 in-lbs).
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. The guide holds no picture of a PWR-2411-DC. Its figure
+    4-5 shows the PWR-1900-DC and PWR-500-DC, and its figure 4-7 a connection example. The guard,
+    handle, latch and lamp are drawn as the AC supply's (the figure D-3 art, the AC module of
+    the same housing), and the terminal block is a plain two-pole block that follows figure 4-7's
+    -48V and RTN terminals. The real terminal arrangement (table 7 note 2: "twin #10 studs spaced
+    for dual-hole lug with 5/8 inch hole spacing") is not drawn and is a gap on the device.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; no blue DC supply is listed for the
+    DR3A-36.
+  handle-finish: >-
+    As the AC supply: a field, `handle-finish`, default `#a32a38`.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [67.6, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [67.2, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [53.8, 9.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [53.8, 27.9]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

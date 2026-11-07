@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: qfx5130-32cd-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5220-32CD-FANAI, the field-replaceable fan module of the QFX5130-32CD with back-to-front airflow (AIR
+  IN, FRU-to-port). Cold air comes in at the back and hot air leaves at the port side. It is marked AIR IN
+  on a grey chip on its Juniper azure blue handle. It is hot-removable and hot-insertable. The QFX5130-32CD
+  takes six, in slots 0 to 5 from left to right, and runs on five (5+1). The front-to-back sibling is
+  QFX5220-32CD-FANAO. The two are never mixed in one chassis, and never with supplies of the other
+  direction. The guide's Table 3 and the datasheet name it QFX5220-32CD-FANAI; its Table 17 names the same
+  module QFX5130-32CD-FANAI (and QFX5130E-32CD-FANAI for the E model, which is not modelled here). The
+  status lamp is on the chassis strip beside each slot, not on the module.
+attrs:
+  model: QFX5220-32CD-FANAI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured, from the AIR OUT sibling - qfx5130-32cd-fan-afo: no photograph of the AIR IN module is
+    held, and the guide's table gives the two modules one wattage class and one slot, so the face is the
+    same size, 41.1 by 41.5 mm. No document states the module's size in millimetres.
+  depth: >-
+    not stated. Searched the QFX5130 hardware guide (figure 35 shows the airflow, not the module) and the
+    datasheet. No depth is written rather than a guessed one.
+  face: >-
+    drawing and sibling - the guide's figure 104 shows an AIR IN module on the chassis (a hex grille, the
+    handle band, an AIR IN chip, a screw at the top left), and the AIR OUT photograph gives the positions.
+    The AIR IN module is drawn as the AIR OUT one with the label and handle colour changed. Positions are
+    estimated to about 0.3 mm.
+  airflow: >-
+    datasheet - guide Table 17 and the cooling-system text: AIR IN is back-to-front on a Juniper azure
+    blue handle. The blue is the QFX5110 fan component's colour and is estimated, since no photograph of
+    the blue module is held.
+  power: >-
+    not published. Searched the QFX5130 hardware guide and datasheet: only whole-switch figures exist. The
+    module declares power-absent so the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [1.0, 1.8]
+    size: [6.2, 6.2]
+    class: screw
+  handle:
+    at: [0.6, 14.6]
+    size: [39.9, 12.2]
+    class: latch
+size:
+  w: 41.1
+  h: 41.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo - the handle band stands proud of the grilles; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw head, projection not measured

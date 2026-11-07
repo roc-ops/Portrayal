@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: ex4300-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module EX4300-FAN for the Juniper EX4300 24-port and 48-port switches, labelled AIR OUT (AFO):
+  front-to-back airflow, the air leaving through this face. Two seat side by side in the rear panel,
+  in slots 0 and 1; hot-insertable and hot-removable, and both must be installed for the switch to
+  cool as designed. A grey face with a honeycomb grille, a loop handle at one edge, two captive
+  screws and the airflow label printed up the other edge. The fan status LED is on the chassis
+  beside each slot, not on the module.
+attrs:
+  model: EX4300-FAN
+  part-number: EX4300-FAN
+  role: fan-module
+  airflow: front-to-back
+  airflow-label: AIR OUT (AFO)
+  weight-kg: 0.15
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 27 "Fan Modules in EX4300
+    Switches": EX4300-FAN carries the label AIR OUT (AFO); EX4300-FAN-AFI carries AIR IN (AFI). The
+    datasheet's spare-chassis matrix (Table 2) names both parts the same way. Airflow follows the
+    guide's Table 28: AIR OUT (AFO) is front-to-back
+  weight: >-
+    datasheet - guide Table 10 and the datasheet physical specifications: fan module 0.33 lb (0.15 kg)
+  size: >-
+    drawing - the visible face, 48.6 x 42.0 mm, is read off the guide's rear-panel figure (Figure 13,
+    g022074): the chassis outline in that figure is 10.05 wide to 1 high against the stated 441.0 /
+    43.7 = 10.09, so the figure is orthographic to within half a percent and carries geometry.
+    Anchored at 4.42 px per mm to the 441 mm width, the slot 0 module face spans 215 px across (48.6
+    mm) and the full height of the chassis less a thin margin top and bottom (42.0 mm). No document
+    gives the module's own width, height or depth, so the module is the aperture the figure shows
+    and the depth is left unstated
+  face: >-
+    estimated - the art follows the guide's fan-module drawing (Figure 38, g022082) for what is on the
+    face: a loop handle on one edge, a honeycomb grille, a large captive thumbscrew at the top and a
+    smaller one at the bottom of the far edge, and the AIR OUT (AFO) label with a fan symbol turned
+    up the far edge. The drawing is an isometric line drawing without colour. The community NetBox
+    elevation of an EX4300-24P rear (not the maker's) shows the module face dark grey with a black
+    handle; only that tone is taken from it, and the positions are fractions of the guide's rear
+    figure. Handle colour: the guide states none, so the handle is drawn dark and the AFO and AFI
+    modules differ by their printed label alone
+  states: >-
+    datasheet - no lamp on this part. The guide's Table 29 (Fan Module Status LED) puts the status
+    LED on the chassis rear panel beside each slot, so the chassis draws it
+  power-draw: >-
+    NOT STATED - searched the guide for a per-module wattage (the power tables give the whole
+    switch's PoE budget and the supplies' output only) and the datasheet for fan power; neither
+    carries one. L27 stands on purpose
+states: [absent]
+elements:
+  handle:
+    at: [1.6, 5.0]
+    size: [8.8, 32.0]
+    class: latch
+  screw-top:
+    at: [38.9, 2.6]
+    size: [5.0, 5.0]
+    class: screw
+  screw-bottom:
+    at: [39.4, 34.6]
+    size: [4.0, 4.0]
+    class: screw
+size:
+  w: 48.6
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: handle
+    out: 3.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 38 - the loop handle stands proud of the grille face; projection not measured
+  - node: screw-top
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: guide Figure 38 - knurled captive thumbscrew, projection estimated

@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: qfx10002-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX10002 fan module (QFX10002-FAN, spare QFX10002-FAN-S), the 2U fan module of the
+  QFX10002-36Q and QFX10002-72Q, with port-to-FRU (AFO, front-to-back) airflow. A near-square face
+  with two honeycomb exhaust windows above and below a centre bar that carries the AIR OUT label
+  and two ribbed release tabs, and a captive screw at the top left. Each module holds two
+  counter-rotating fans. Three fit across the right of the rear panel, hot-swappable. The
+  QFX10002-60C takes a different fan module with another orientation.
+attrs:
+  role: fan-module
+  airflow: front-to-back
+  power-draw-max-w: 80
+  fans-per-module: 2
+  airflow-cfm: 150
+  hot-swap: 'yes'
+part-numbers:
+  QFX10002-FAN: {part: QFX10002-FAN}
+  QFX10002-FAN-S: {part: QFX10002-FAN-S}
+provenance:
+  sources: >-
+    datasheet - QFX10002 Switch Hardware Guide (Juniper Networks, published 2026-02-11). Topics
+    QFX10002 Cooling System and Airflow (Table 17, Figures 25 and 26), QFX10002 Fan Module LED,
+    Installing a Fan Module in a QFX10002, and Table 3. Figure 4 (g050372) and Figure 5 (g050404)
+    are flat rear elevations of the 72Q and the 36Q and show the same module in all three bays.
+    Figure 25 (g050375) is the isometric of one module. The 36Q studio photograph of the rear
+    (qfx10002-36q-rear-high) shows the face in colour.
+  size: >-
+    drawing - measured on Figure 4 (g050372, 1512 x 505 px, body 1464 x 294 px against the stated
+    441.0 x 88.0 mm, 0.7 percent out in aspect, 3.32 px per mm across and 3.34 down). One module
+    face runs 269 px across and 273 px down, 81.0 x 81.7 mm. The three faces sit on a 296 px
+    pitch, 88.9 mm, with an 8 mm chassis strip between faces that carries the fan number and the
+    status lamp. The 36Q photograph reads 81.6 mm across at 4.17 px per mm, within a millimetre.
+  depth: >-
+    estimated - 115 mm. The hardware guide gives no depth for the fan module. Figure 25 (g050375)
+    is an isometric that shows a body somewhat longer than the face is wide behind the face, with
+    two fan rotors in a row. The figure dimensions nothing.
+  face: >-
+    drawing - in module coordinates from Figure 4: upper exhaust window x 8.9 to 74.2 and y 4.3 to
+    35.1, narrowing toward the centre bar, and the lower window its mirror; the centre bar y 35.1
+    to 46.6 with the AIR OUT label at x 33.3 to 47.3 and y 37.2 to 44.9; ribbed release tabs at
+    each end of the bar, x 0.2 to 11.6 and x 69.4 to 80.8; the captive screw centred at 3.9, 5.1.
+    The honeycomb in the windows is drawn as a repeating pattern and is not hole for hole.
+  handle-colour: >-
+    photo-measured - the guide's Table 17 gives the handle colour as Juniper Gold and the
+    handles as gold-coloured, and the guide's line drawings carry no colour. The 36Q studio
+    photograph shows the bezel and the handle as orange; the median of the bezel pixels reads
+    #ec640e. The photograph of the real unit wins, so the default is that orange and the guide's
+    word is kept here. The finish is a field so that a viewer can change it.
+  airflow: >-
+    datasheet - Table 17 and the install topic: the module is port-to-FRU airflow (airflow out),
+    labelled AIR OUT, with the gold handle. Air enters at the port end and leaves through the module.
+    In legacy switches this is called front-to-back. The guide lists no other fan module for the
+    36Q and 72Q.
+  part-number: >-
+    datasheet - Table 3 lists the fan module with the spare model number QFX10002-FAN-S, and
+    Table 17 names the module QFX10002-FAN. Table 3 also lists JNP10002-FAN1 next to the spare, in
+    the row that also carries the QFX10002-60C fan tray, and the install topic says the 60C takes
+    a different fan module, so JNP10002-FAN1 is read as the 60C's and is not carried here.
+  power: >-
+    datasheet - the cooling topic and Cooling and Power: three 80 W fan modules, each with two
+    counter-rotating fans, 150 CFM at full speed. 80 W is read as the figure for one module and is
+    filed as the maximum, because the guide does not qualify it as typical or maximum.
+  status-lamp: >-
+    datasheet - Fan Module Status: each slot has a status lamp labelled ST on the left of the
+    slot, so the lamp is on the chassis panel and not on the module (Figure 27, Table 18 and
+    Table 19). The module draws no lamp.
+  relief: >-
+    estimated - the depth of the exhaust windows is taken as the 115 mm module depth less the
+    rotor housings, and the release tabs are taken to stand 1.5 mm proud of the face. Neither is
+    stated by the guide.
+states: [absent]
+elements:
+  handle: {at: [0.0, 0.0], size: [81.0, 81.7], class: handle}
+  grille-top: {at: [8.9, 4.3], size: [65.3, 30.8], class: rotor}
+  grille-bottom: {at: [8.9, 46.6], size: [65.3, 30.8], class: rotor}
+  latch-left: {at: [0.2, 35.4], size: [11.4, 9.2], class: latch}
+  latch-right: {at: [69.4, 35.4], size: [11.4, 9.2], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#ec640e'}
+size: {w: 81.0, h: 81.7, d: 115.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille-top
+      vent: 60
+      confidence: estimated
+      source: >-
+        qfx10002-fan-afo@1 provenance.relief - the window depth is not stated by the guide.
+    - node: grille-bottom
+      vent: 60
+      confidence: estimated
+      source: >-
+        qfx10002-fan-afo@1 provenance.relief - the window depth is not stated by the guide.
+    - node: latch-left
+      out: 1.5
+      color: '#c84f08'
+      confidence: estimated
+      source: >-
+        qfx10002-fan-afo@1 provenance.relief - the tab stands proud of the face in Figure 25
+        (g050375) and nothing gives how far.
+    - node: latch-right
+      out: 1.5
+      color: '#c84f08'
+      confidence: estimated
+      source: >-
+        qfx10002-fan-afo@1 provenance.relief - the tab stands proud of the face in Figure 25
+        (g050375) and nothing gives how far.
+skins: [default]

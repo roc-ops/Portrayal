@@ -343,6 +343,74 @@ def test_the_neutral_lamped_cell_has_the_eth_cells_lamps_and_no_ethernet_claim()
     assert s == skin("common/rj45-ganged-eth@1"), "the same drawing"
 
 
+PLAIN_ETH = "common/rj45-ganged-eth-plain@1"
+
+
+def test_the_plain_ethernet_cell_is_the_bare_cell_with_an_ethernet_claim_and_no_lamps():
+    """The eighth member: a ganged Ethernet jack whose housing has no lamps (the
+    Fibrain HD modules). The same cell and cavity as the bare cell and nothing
+    drawn that the bare cell does not draw."""
+    c, eth = contract(PLAIN_ETH), contract("common/rj45-ganged-eth@1")
+    assert c["name"] == "rj45-ganged-eth-plain" and c["class"] == "port"
+    assert c["size"] == eth["size"]
+    assert c["parts"] == eth["parts"] == [{"ref": "std/rj45-ganged@2", "id": "jack", "at": [0.0, 0.0], "behind": True}]
+    assert not c.get("elements"), "no lamps"
+    assert not (c.get("relief") or {}).get("features"), "nothing stands out of the face"
+    assert c["fields"] == eth["fields"], "the same finish rule"
+    assert c["connection-points"] == eth["connection-points"]
+    assert c["attrs"]["media"] == "rj45", "the Ethernet claim"
+    for key in ("name", "lamps", "finish", "media"):
+        assert key in c["provenance"], key
+    s = skin(PLAIN_ETH)
+    assert "led" not in s and 'fill-rule="evenodd"' in s
+
+
+def test_the_plain_ethernet_cell_draws_the_bare_cells_housing():
+    """Its face is the bare cell's housing outline, so composing it changes no pixel
+    of the jack but the finish it takes from the placement."""
+    face = re.search(r'\bd="([^"]+)"', skin(PLAIN_ETH), re.S).group(1)
+    bare = re.search(r'id="housing"[^>]*\bd="([^"]+)"', skin("std/rj45-ganged@2"), re.S).group(1)
+    assert " ".join(face.split()) == " ".join(bare.split())
+
+
+def test_l76_takes_an_ethernet_jack_on_the_plain_ethernet_cell():
+    assert lint.rj45_class(PLAIN_ETH, [str(LIB)]) == "plain-eth"
+    eth = {"id": "port-1", "ref": PLAIN_ETH, "at": [0, 0], "group": "mgmt", "attrs": {"role": "port"}}
+    assert l76(_dev([eth])) == []
+    assert l76c("module", [{"id": "jack", "ref": PLAIN_ETH, "at": [0, 0]}]) == []
+    # no lamps are asked for, which is the point of the part
+    assert l76(_dev([{**eth, "id": "jack", "attrs": {}}])) == []
+
+
+def test_l76_still_sends_an_ethernet_jack_on_the_bare_cell_to_a_lamped_part():
+    ws = l76(_dev([{"id": "jack", "ref": "std/rj45-ganged@2", "at": [0, 0], "group": "mgmt"}]))
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+    ws = l76c("module", [{"id": "jack", "ref": "std/rj45-ganged@2", "at": [0, 0]}])
+    assert len(ws) == 1 and "1 Ethernet jack(s) on a part with no lamps" in ws[0]
+    assert PLAIN_ETH in ws[0], "the message names the new member"
+
+
+def test_l76_does_not_census_the_plain_ethernet_cell_itself():
+    p = LIB / "components/common/rj45-ganged-eth-plain/v1/contract.yaml"
+    with lint.collecting() as _found:
+        lint.lint_component_rj45_lamps(p, yaml.safe_load(p.read_text()), [str(LIB)])
+    assert [w for w in _found.warnings if "[L76]" in w] == []
+
+
+def test_the_plain_ethernet_cell_exports_as_an_interface_like_the_other_ethernet_members():
+    assert dx.FAMILY_PART[PLAIN_ETH] == dx.FAMILY_PART["common/rj45-ganged-eth@1"] == ("iface", "1000base-t")
+    assert dx.iface_type({"ref": PLAIN_ETH, "id": "jack"}, {}, None) == "1000base-t"
+    out = dx.build_module({"kind": "module", "name": "m", "attrs": {"model": "m"},
+                           "parts": [{"id": "jack", "ref": PLAIN_ETH}]}, "X")
+    assert out["interfaces"] == [{"name": "jack", "type": "1000base-t"}]
+    assert "console-ports" not in out
+
+
+def test_the_family_design_note_lists_the_plain_ethernet_cell():
+    note = (ROOT / "docs/rj45-family-design.md").read_text()
+    assert "| `common/rj45-ganged-eth-plain@1` |" in note
+
+
 def test_the_dell_carrier_attaches_ism_meanings_to_the_new_lamps():
     c = contract("dell/rj45-port-14g@1")
     assert c["version"] == "1.3.0"
@@ -1397,6 +1465,7 @@ def test_the_retired_rj45_parts_are_gone_and_unreferenced():
     assert hits == [], hits
 
 
+@pytest.mark.heavy
 def test_no_lamp_placement_still_declares_for_a_lamped_rj45():
     """Checks `for:` declarations, not geometry: a lamped jack (common/rj45-eth@1,
     common/rj45-ganged-eth@1) already draws its own led-a/led-b, so a separate

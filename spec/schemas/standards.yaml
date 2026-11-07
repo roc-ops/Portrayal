@@ -44,6 +44,27 @@ standards:
       is what the panel is cut for, so the shell is what is registered here. No
       radius - the Micro-B shell is a D-profile with two chamfered corners rather
       than a rounded rectangle, and no corner figure is sourced.
+  mini-usb-b:
+    registry: Molex sales drawing SD-54819-026 rev A (USB Series Mini-B Receptacle Ass'y, Lead Free; part 54819-0519, right angle, through hole), https://www.molex.com/content/dam/molex/molex-dot-com/products/automated/en-us/salesdrawingpdf/548/54819/548190519_sd.pdf
+    w: 7.7
+    h: 3.9
+    confidence: drawing
+    depth: 9.0
+    depth-confidence: drawing
+    notes: Mini-B receptacle shield case, from one maker's drawing of one part (Molex
+      54819-0519, sheets 1 and 2). 7.7 is the case's widest line on the front view. The
+      shell is 3.9 high, the 3.1 opening plus two 0.4 walls (note 1, t=0.4), which both
+      views show at scale; the printed 3.95 on the side view runs from the shell's top to
+      the seating plane, so 3.9 is the shell. The front view's 3.55 runs from the top of
+      the opening (the shell's inner top) to the base. Depth 9 is the overall length on
+      the side view, as dimensioned. The plug opening inside it is 6.9 wide by 3.1 high,
+      with five contacts at 0.8 pitch. No radius - the shell is not a rounded rectangle; its
+      lower sides bend inward through two R0.7 bends, with R0.3 at the other corners, and
+      7.7 x 3.9 is its bounding box. Sheet 2's bracketed 4.2 and 4.5 are reference heights
+      across the case and its spring tabs and are not used. Other makers' Mini-B shells
+      may differ by a few tenths. Mini-B is
+      not Micro-B (micro-usb-b, 7.5 x 2.75) and not Mini-AB, which is a different
+      receptacle that also takes a Mini-A plug.
   sfp:
     registry: SFF-8432 / INF-8074
     w: 14.5
@@ -518,6 +539,122 @@ standards:
       at 14.00 x 9.50 inside the 14.25 pitch, leaving a 0.25 shared wall. Depth 41.0
       is the bezel-to-connector distance, STEP planes at 40.9-42.7 (SFF-8433 C07/C08
       give 38.9/39.4 to the guide-pin centreline, a slightly different datum).
+  sfp-dd:
+    registry: >-
+      TE Connectivity customer drawing C-2359845 rev A (2020-06-18), cage
+      assembly SFP-DD 1x1, sheet 3 (bezel cutout) and sheet 1 (port opening);
+      TE application specification 114-60027 rev A (2020-06-18), Figure 4;
+      Molex product customer drawing 2048233001 rev A (2022-12-10), SFP-DD 1x1
+      cage, sheets 1 and 6; Molex application specification 2048230001 rev A
+      (2020-01-02). The SFP-DD MSA was not used.
+    w: 15.45
+    h: 10.4
+    radius: 0.3
+    confidence: drawing
+    depth: 38.9
+    depth-confidence: drawing
+    depth-notes: >-
+      Bezel face to the centreline of the connector guide pins, 38.90 +/-0.30,
+      TE 2359845 sheet 3 (single-side and belly-to-belly views). Molex's held
+      sheets give no bezel-to-connector figure. This is a guide-pin datum, not a
+      connector face, so it is not comparable with the 41.0 std/sfp carries,
+      which is measured to the connector planes.
+    cavity: {w: 14.0, h: 8.95}
+    cavity-confidence: drawing
+    pitch: 16.25
+    pitch-confidence: drawing
+    pitch-kind: floor
+    pitch-kind-note: >-
+      TE 2359845 sheet 3 labels 16.25 "MIN PITCH" and 114-60027 Figure 4 column
+      B (Min) repeats it for 1x1, so it is a floor. Molex 2048233001 states no
+      centreline pitch. Its sheet 6 dimensions a 1.30 MIN web between
+      neighbouring bezel cutouts, marked "for reference only" and said to vary
+      with the adjacent cage's hole distance, which would put a floor at
+      15.45 + 1.30 = 16.75 (derived, not stated). Its sheets 4 and 5 give
+      "adjacent cage pitch 3.5 MM minimum" for rework, which is a hole-to-hole
+      gap (1.00 + 2.50 on the drawing), not a centreline pitch. TE's 16.25 and
+      Molex's derived 16.75 differ by 0.50; the library takes TE's because it
+      is the one stated as a pitch.
+    media: sfp-dd
+    export-media: 100gbase-x-sfpdd
+    connector-positions: 40
+    connector-pitch: 0.8
+    lanes: 2
+    lanes-confidence: unconfirmed
+    speeds:
+      per-lane: [25g, 50g]
+      aggregate: [50g, 100g]
+    speeds-confidence: unconfirmed
+    backwards-compatible-with: sfp
+    backwards-confidence: unconfirmed
+    backwards-note: >-
+      UNCONFIRMED: only the SFP-DD MSA settles lane count, rate and whether an
+      SFP module is specified to work in the cage, and the MSA was not used.
+      What the makers' documents do state: the cage mates with "SFP-DD MSA
+      compliant transceivers" (TE note 3) and "SFP-DD transceivers" (Molex note
+      3); its connector is 40 positions at 0.8 mm pitch (TE 114-60027
+      section 1; the contact pattern is four rows of ten, TE sheet 4). That is
+      twice an SFP connector's 20 contacts, a figure from outside the makers'
+      documents and the only basis here for the lane count. The port interior, 14.00 x 8.95, is the figure std/sfp
+      records for an SFP cage body, and TE 3.2 A caps the module outside the
+      cage at 14 wide as sfp-module does, so an SFP module is the same size as
+      the opening; that is a dimension match, not a statement that the two
+      interoperate. `export-media` is the name NetBox (dcim/choices.py at
+      758af333) and Nautobot (at 45d26083) give an SFP-DD interface, both
+      labelled 100GE; neither has a 50G SFP-DD type.
+    notes: >-
+      Single cage. w and h are the bezel cutout both makers give, 15.45 +/-0.10
+      by 10.40 +/-0.10, R0.30 max, 0.8 to 2.6 thick bezel (TE) or 0.8 min
+      (Molex). A key notch stands 1.20 +/-0.10 above the top edge, 3.56 +/-0.10
+      wide at its base and 2.18 +/-0.10 at its top, 3.90 +/-0.10 off the cage
+      centreline (TE sheet 3; Molex sheets 1 and 6 agree); it is not drawn, so
+      the opening is the plain rectangle. `cavity` is the port opening inside
+      the cage, 14.00 +/-0.10 by 8.95 (+/-0.10 TE, +/-0.15 Molex). The cutout
+      bottom sits 0.175 +/-0.10 (TE) or 0.40 +/-0.10 (Molex) above the board;
+      the makers differ and the library draws neither. Belly-to-belly rows
+      both makers draw with the key notches outward; no row pitch is stated,
+      because it follows from the board thickness (TE 2.20 min, Molex 2.55 min
+      on the drawing and 2.70 min in its application specification).
+  sfp-dd-ganged:
+    registry: >-
+      TE application specification 114-60027 rev A (2020-06-18), 3.2 A and
+      Figure 4 (1x1 15.45, 1x4 58.20, 1x6 86.70, 1x8 115.20 by 10.4); TE
+      customer drawing C-2359845 rev A, sheets 1 and 3. The SFP-DD MSA was not
+      used.
+    w: 14.25
+    h: 10.4
+    radius: 0.3
+    confidence: drawing
+    depth: 38.9
+    depth-confidence: drawing
+    depth-notes: >-
+      As sfp-dd: bezel face to the centreline of the connector guide pins,
+      38.90 +/-0.30, TE 2359845 sheet 3.
+    cavity: {w: 14.0, h: 8.95}
+    cavity-confidence: drawing
+    media: sfp-dd
+    export-media: 100gbase-x-sfpdd
+    lanes: 2
+    lanes-confidence: unconfirmed
+    speeds:
+      per-lane: [25g, 50g]
+      aggregate: [50g, 100g]
+    speeds-confidence: unconfirmed
+    backwards-compatible-with: sfp
+    backwards-confidence: unconfirmed
+    notes: >-
+      Per-port share of a ganged SFP-DD bezel slot, as sfp-ganged is for SFP+.
+      TE 114-60027 3.2 A: "port-to-port centerline spacing is 14.25", and the
+      Figure 4 cutouts are N x 14.25 + 1.2 wide by 10.4 high, one continuous
+      slot, so w is the port pitch and neighbours abut. The same section caps
+      the module outside the cage at 14 wide. Only TE states a ganged
+      configuration with a figure; Molex's held documents list 1x2 to 1x8
+      cages (2048230001 section 1) and dimension none. The lower row of a
+      belly-to-belly pair is the upper row turned 180, notches outward (TE
+      sheet 3, Molex sheet 6). Neither maker states a row pitch - it follows
+      from the board thickness - so none is recorded here. The lint rules that
+      read the registry's `pitch` apply to sfp-dd, not this entry, because w is
+      already the pitch.
   rj45-ganged:
     registry: (ganged block aperture - no governing spec found)
     w: 12.7
@@ -670,6 +807,21 @@ standards:
       PDU receptacle has its own face; this is the one dimensioned public
       drawing found of a single 5-20R. No depth: the holes are pockets on the
       part, as deep as a 5-20P's blades (Leviton 5366-C).
+  nema-5-15r:
+    registry: NEMA WD 6 configuration 5-15R (125 V 15 A, takes a 5-15P), on the face of the Qualtek 739W-X2/30 5-20R receptacle with a plain neutral slot
+    w: 27.0
+    h: 27.0
+    confidence: estimated
+    source: >-
+      BORROWED from `nema-5-20r`: Qualtek 739W-X2/30, "Snap-in 20 Amp T-slot
+      receptacle", drawn 05-14-07, the face 27 x 27. No dimensioned drawing of
+      a 5-15R was found, so the size of a 15 A face is not known.
+    notes: >-
+      THE RECEPTACLE'S FACE, flat, with three holes; NEMA WD 6 governs the
+      configuration and not the face, and is not held. The line slot and the
+      earth hole are the 5-20R's, centred; the neutral slot is the line slot
+      mirrored, an estimate. No depth: the holes are pockets on the part, as
+      deep as a 5-15P's blades (Volex PS204).
   saf-d-grid:
     registry: >-
       Anderson Power Products Saf-D-Grid (no IEC or ISO standard governs it;
@@ -1348,6 +1500,77 @@ standards:
       cover the low profile one. Two figures disagreeing is a fact about the
       parts until something settles it, and it is recorded here rather than
       smoothed over.
+  ocp3-sff:
+    w: 76.00
+    h: 115.00
+    description: >-
+      OCP NIC 3.0 small form factor card - a 76.00 wide, 115.00 deep board, 11.50
+      high (Z), on one 4C+ connector. The card outline, not a faceplate aperture
+    confidence: verified
+    registry: OCP NIC 3.0 R1.6.0 Table 5
+    source: >-
+      OCP NIC 3.0 Design Specification, Version 1.6.0, Open Compute Project, Table
+      5 "OCP NIC 3.0 Form Factor Dimensions", page 25: SFF width 76.00 (W1),
+      depth 115.00, Z-height 11.50, primary connector 4C+, no secondary
+      connector, connector pitch 89.00. Published under the Open Compute Project
+      Hardware License (Permissive) Version 1.0 (section 1.1, page 14).
+      w and h ARE THE BOARD'S WIDTH AND DEPTH, and the entry has no key for the
+      Z-height, so 11.50 is stated here and nowhere as a number a lint reads.
+      This is NOT a vendor's bracket: Dell's bracket for this card is 71.8 x
+      15.1 and is the vendor's own.
+  ocp3-tsff:
+    w: 76.00
+    h: 115.00
+    description: >-
+      OCP NIC 3.0 tall small form factor card - the SFF outline at 14.20 high (Z)
+      for taller cages and heatsinks, on one 4C+ connector. The card outline, not
+      a faceplate aperture
+    confidence: verified
+    registry: OCP NIC 3.0 R1.6.0 Table 5
+    source: >-
+      OCP NIC 3.0 Design Specification, Version 1.6.0, Open Compute Project, Table
+      5 "OCP NIC 3.0 Form Factor Dimensions", page 25: TSFF width 76.00, depth
+      115.00, Z-height 14.20, primary connector 4C+, no secondary connector.
+      Section 2.1.2, page 26: it shares the SFF's PCB outline, connector and gold
+      fingers. Published under the Open Compute Project Hardware License
+      (Permissive) Version 1.0 (section 1.1, page 14).
+      w and h ARE THE BOARD'S WIDTH AND DEPTH; the Z-height 14.20 is 2.70 more
+      than the SFF's, so a TSFF card does not seat in an SFF slot, while a TSFF
+      slot may take an SFF card (section 2.1.2 and Table 7, page 43).
+  ocp3-dsff:
+    w: 157.55
+    h: 115.00
+    description: >-
+      OCP NIC 3.0 dual small form factor card - a 157.55 wide, 115.00 deep board,
+      11.50 high (Z), on two 4C+ connectors. The card outline, not a faceplate
+      aperture
+    confidence: verified
+    registry: OCP NIC 3.0 R1.6.0 Table 5
+    source: >-
+      OCP NIC 3.0 Design Specification, Version 1.6.0, Open Compute Project, Table
+      5 "OCP NIC 3.0 Form Factor Dimensions", page 25: DSFF width 157.55 (W3),
+      depth 115.00, Z-height 11.50, primary and secondary connectors both 4C+,
+      connector pitch 81.55. Section 2.1.3, page 27: a DSFF slot is two SFF slots
+      with a removable guide rail. Published under the Open Compute Project
+      Hardware License (Permissive) Version 1.0 (section 1.1, page 14).
+      w and h ARE THE BOARD'S WIDTH AND DEPTH; the entry has no key for the
+      Z-height, so 11.50 is stated here.
+  ocp3-tdsff:
+    w: 157.55
+    h: 115.00
+    description: >-
+      OCP NIC 3.0 tall dual small form factor card - the DSFF outline at 14.20
+      high (Z), on two 4C+ connectors. The card outline, not a faceplate aperture
+    confidence: verified
+    registry: OCP NIC 3.0 R1.6.0 Table 5
+    source: >-
+      OCP NIC 3.0 Design Specification, Version 1.6.0, Open Compute Project, Table
+      5 "OCP NIC 3.0 Form Factor Dimensions", page 25: TDSFF width 157.55,
+      depth 115.00, Z-height 14.20, primary and secondary connectors both 4C+.
+      Published under the Open Compute Project Hardware License (Permissive)
+      Version 1.0 (section 1.1, page 14).
+      w and h ARE THE BOARD'S WIDTH AND DEPTH; the entry has no key for the
+      Z-height, so 14.20 is stated here.
   fhd-lc-cassette:
     registry: >-
       MEASURED, NOT READ FROM A STANDARD. No published figure governs how FS
@@ -2475,8 +2698,8 @@ standards:
       is read at five positions. The MSTB 2,5/ 5-GF-5,08 header's data sheet
       (p.18) names MSTB 2,5/ 5-STF-5,08, 1778014, as a mate.
   # The DC barrel jack and its plug (#789). ONE NOMINAL SIZE, CHOSEN FOR THE
-  # LIBRARY: barrel diameters vary by product, and no document held for any
-  # device that places common/dc-barrel@1 states one. Neither entry is a
+  # LIBRARY: barrel diameters vary by product, and of the seven devices that place
+  # common/dc-barrel@1 only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one. Neither entry is a
   # figure from a placing device. THE KEYS DO NOT OPEN WITH `dc`: lint L62
   # reads every `conforms:` value and its leading segment as a connector
   # word, and `dc` as one flags every `dc-in` placement id.

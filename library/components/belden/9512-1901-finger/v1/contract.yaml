@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: 9512-1901-finger
+version: 1.0.0
+class: mechanical
+description: >-
+  One finger of the finger stock of the Belden 9512-1901 1U horizontal manager, seen end-on from the
+  front. A steel finger is stamped out of the sheet and stands from the back plate toward the cover.
+  Its tip curls to leave a narrow neck that a cable is pressed through into the manager.
+provenance:
+  size: >-
+    estimated - the width is one finger pitch, 21.5: about twenty slits counted along each row on the
+    technical data sheet's photograph of the 9512-1901 (a 430 px picture, so the count may be out by
+    two), so twenty openings and twenty-one fingers across the 450.0 between the ears. No Belden
+    document dimensions a finger. The finger is taken as 7.0 of the 21.5 and the opening as 14.5, read
+    off the photograph as the slit against the steel between slits. The height, 6.0, is the depth of the
+    curled finger stock against the 38.1 face on the same photograph.
+  relief: >-
+    estimated - a finger stands from the back plate to the cover, 36 of stem and a curled tip from 36
+    to 41 under the cover's return; the root, the solid band between the plate and the rounded ends of
+    the slits, is 6. The data sheet gives the overall depth, 2.0 in, and nothing inside it; the slit ends
+    are read off the photograph against that depth. The tip is 2.0 wider each side than the stem, which
+    leaves a 10.5 neck: nothing dimensions it.
+  shading: >-
+    estimated - a stand-in for the light a render would give: the tip carries a lit rim, and the 3.0
+    either side of it is shaded, so a black finger reads against the black back plate on the light stage
+    and on the dark one. The rim and the shade are semi-transparent white and black over the fill. The
+    data sheet states "Black Powdercoat Finish".
+size: {w: 21.5, h: 6.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Steel}
+elements:
+  root: {at: [0.0, 0.0], size: [21.5, 6.0], class: bezel}
+  stem: {at: [7.25, 0.0], size: [7.0, 6.0], class: bezel}
+  tip: {at: [5.25, 0.0], size: [11.0, 6.0], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 6.0
+      color: '#34383c'
+      confidence: estimated
+      source: the slit ends read off the data sheet photograph against the 2.0 in overall depth
+    - node: stem
+      out: 36.0
+      color: '#383c41'
+      confidence: estimated
+      source: the finger from the back plate to where its tip curls, read off the same photograph
+    - node: tip
+      lift: 36.0
+      out: 41.0
+      color: '#454a50'
+      confidence: estimated
+      source: the curled tip under the cover's return, read off the same photograph
+skins: [default]

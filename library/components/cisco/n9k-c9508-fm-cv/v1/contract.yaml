@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: n9k-c9508-fm-cv
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9508 fabric-module blank card (N9K-C9508-FM-CV). A plain cover that fills a fabric-module slot
+  holding no fabric module. The guide says to fill empty fabric slots with it when the fabric modules are
+  any type other than the N9K-C9508-FM-G, and it is the blank for an empty odd slot (FM 1, FM 3, FM 5). It is
+  a different part number from the N9K-C9508-FM-Z, which goes in an empty even slot (FM 2, FM 4, FM 6)
+  because it also passes power to the fan tray.
+size: {w: 62.48, h: 416.56, d: 297.18}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'N9K-C9508-FM-CV'
+  role: 'airflow-blank'
+  eol: 'unknown'
+provenance:
+  size: >-
+    estimated - the guide gives dimensions for the fabric module (2.46 in by 16.4 in by 11.7 in) and none
+    for its blank, so the blank takes the fabric module's slot envelope.
+  purpose: >-
+    install guide - "Overview" note (PDF p10): with any fabric module other than N9K-C9508-FM-G, "any empty
+    slots should be filled with N9K-C9508-FM-CV cards". The migration procedures (PDF pp113-116) say to
+    fill an empty FM1, FM3 or FM5 with "blank modules (N9K-C95xx-FM-CV)" and to fill FM2, FM4 or FM6 with
+    fabric modules to power the fan trays. The coverage list of the intake names
+    N9K-C9508-FM-CV among parts that appear in the guides and are not in its model list.
+  conflict: >-
+    Table 1 of the same guide (PDF p7) names N9K-C9508-FM-Z alone in its blank column for the same fabric
+    types. The guide settles it slot by slot: FM-CV is the blank for an empty odd slot, and FM-Z is the
+    blank for an empty even slot, where it powers the fan tray (PDF p135); see cisco/n9k-c9508-fm-z. Both
+    are accepted in every fabric bay, and FM-CV is the default for the odd slot FM 1.
+  skin: >-
+    estimated - a plain unpunched plate with two captive screws; no figure draws the blank.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+skins: [default]

@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: rj45-ganged-eth-plain
+version: 1.0.0
+class: port
+profile: networking
+description: An Ethernet RJ45 in a ganged block whose housing has no lamps. It is the std/rj45-ganged@2
+  cell with an Ethernet claim.
+size: {w: 12.7, h: 11.0, d: 18.6}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+attrs: {media: rj45}
+provenance:
+  name: >-
+    the family's lamped members are named for what they add to the bare cell: `-eth` says the lamps are
+    an Ethernet jack's, `-link` that there is one, `-lamped` that there are two and no claim. This one
+    adds the Ethernet claim and no lamps, so it is `-eth` with `-plain` after it, as `common/rj45-hd-plain`
+    was the ganged bezel without lamps. The exporter reads `-eth` in the ref to type the jack as an
+    interface, which this name keeps true.
+  size: via std/rj45-ganged@2 - the housing, TE 1734264 rev A2.
+  depth: via std/rj45-ganged@2.
+  media: >-
+    `rj45`, as common/rj45-ganged-eth@1 carries it. The part says the jack carries Ethernet and nothing
+    about its speed: the export types it as the family's default for an Ethernet cell, 1000base-t, and a
+    placement that states a speed overrides it. A datasheet's cable category (Cat.5, 6, 6A) is a fact
+    about the cable and not a rate, and the part does not turn it into one.
+  lamps: >-
+    none, on purpose. The Fibrain HD modules (DSH XE100 to XR210) show an opening with no lamp window, in
+    the elevation and in the maker's photographs. L76 accepts an Ethernet jack on this part without
+    asking for lamps, and sends one on the bare std/rj45-ganged@2 to a lamped member.
+  finish: via common/rj45-ganged-eth@1 - the same `finish` field and default, a convention and not a census.
+    The skin draws the bare cell's own housing outline, so the part adds no pixel to the jack but the
+    finish it takes from the placement.
+fields:
+  finish:
+    label: Shell finish
+    type: text
+    default: '#b0b5bb'
+parts:
+  - {ref: std/rj45-ganged@2, id: jack, at: [0.0, 0.0], behind: true}
+connection-points:
+  net: {at: [6.35, 5.1], direction: front}
+skins: [default]

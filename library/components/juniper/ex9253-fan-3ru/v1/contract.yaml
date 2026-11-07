@@ -1,0 +1,90 @@
+format: 1
+kind: module
+name: ex9253-fan-3ru
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-FAN-3RU, the universal fan tray of the EX9253, labelled AIR OUT. Air enters at the front
+  of the chassis and leaves at the rear. The tray stands upright in the rear panel and holds two
+  counter-rotating fans behind two hexagonal grilles, one above and one below an AIR OUT chip. It has
+  a captive screw at the top, a latch handle at the foot and a status lamp at the lower left. The
+  EX9253 seats four, in slots FT0 to FT3 from the left. They are hot-removable and hot-insertable;
+  a single fan cannot be replaced, only the tray. There is no back-to-front tray in the guide.
+attrs:
+  role: chassis-fan
+  airflow: front-to-back
+  power-draw-typical-w: 20
+  power-draw-max-w: 95
+part-numbers:
+  JNP-FAN-3RU (EX9253): {part: JNP-FAN-3RU}
+provenance:
+  sources: >-
+    datasheet - EX9253 Switch Hardware Guide (published 2022-11-30): EX9253 Cooling System, Figures 8
+    and 9 (the tray, and its faceplate drawn flat, g009828), Figure 11 and Table 7 (the lamp), Table 5
+    (size and weight), Table 4 (the CLI name) and Table 13 (power). EX9250 Ethernet Switch Datasheet
+    (1000632-006-EN, Sep 2021), ordering table: JNP-FAN-3RU, universal fan tray, 3 U (the system
+    orders name it JNP-C1-FAN-3RU). The key of part-numbers carries the suffix (EX9253) so that its
+    DCIM module type does not share a file with the same part number in another line's slice.
+  size: >-
+    drawing - Figure 9 outline is 495 x 1010 px, an aspect of 0.490, against Table 5's 2.46 x 4.99 in
+    (6.25 x 12.6 cm), 0.493. The rear panel of Figure 2 (3.03 px/mm) measures the bay at 61.8 mm
+    across and 125.5 mm high. The face is 62.0 x 125.5 mm, the bay; Table 5's 62.5 x 126.7 mm is the
+    tray body with its flange.
+  depth: >-
+    datasheet - Table 5: 9.27 in (23.54 cm). No depth is written, because the component schema has no
+    depth key the explorer reads here; the figure is kept in this note.
+  face: >-
+    drawing - Figure 9 read at 7.99 px/mm on its 495 px width: the captive screw (callout 1) at the top,
+    31.6 mm across and 6.9 mm down; an upper grille 56 mm wide and 53 mm high; an AIR OUT chip, 14 x
+    8 mm, at 59.6 mm down; a lower grille with the latch handle (callout 2) arching over its foot; and
+    the status lamp (callout 3) at the lower left, 5.6 mm across and 119 mm down. Every position is
+    estimated to about 0.7 mm.
+  handle: >-
+    estimated - the guide says nothing about the tray's colour or whether it is airflow-coded; Figure 9
+    is a line drawing. The handle is a dark neutral grey, a colour that asserts no airflow code. The
+    colour is the field handle-finish.
+  airflow: >-
+    datasheet - the guide: the switch has front-to-back (AIR OUT) airflow, and the tray is labelled
+    AIR OUT. The datasheet says front-to-back.
+  power: >-
+    datasheet - guide Table 13, Power Requirements for EX9253 Components: fan tray 20 W typical at 25 C and
+    95 W maximum at 55 C. A draw, since a fan consumes power.
+states: [ok, fault, absent]
+elements:
+  screw:
+    at: [28.4, 3.7]
+    size: [6.4, 6.4]
+    class: screw
+  handle:
+    at: [19.4, 102.0]
+    size: [23.2, 20.5]
+    class: latch
+  led-status:
+    at: [4.6, 117.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: running, color: '#22c55e'}
+    - {name: initialising, color: '#22c55e', behavior: blinking}
+    - {name: fault, color: '#ef4444'}
+    - 'off'
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#4a4e54'}
+size:
+  w: 62.0
+  h: 125.5
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle stands proud of the grille in Figure 8; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: figure - captive screw head, projection not measured
+skins: [default]

@@ -1,0 +1,780 @@
+format: 1
+kind: device
+name: ex4400-48f
+version: 0.1.2
+maturity: modelled
+manufacturer: Juniper
+model: EX4400-48F
+portfolio:
+  line: EX Series
+  family: EX4400
+description: >-
+  Juniper EX4400-48F campus access switch with fibre ports, 1RU. It has 36 SFP ports for 100 Mbps
+  or 1GbE optics. It has 12 SFP/SFP+ ports for 1GbE or 10GbE optics. They sit in 24 columns of two cages. The
+  front also holds a USB-C console port, the chassis and port mode lamps, a mode button and one
+  extension module slot. The rear holds two 100GbE QSFP28 ports, console, management and USB-A
+  ports, two fan modules and two power supply slots. A shipped switch carries one 550 W supply,
+  two fan modules and covers on the empty slots. The configurations give the supply type and the
+  airflow, and the -S spare ships with no supply and no fans.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4400 Switch Hardware Guide, Juniper Networks, PDF created 2026-07-22 (331 pages), fetched
+      from www.juniper.net/documentation/us/en/hardware/ex4400/ex4400.pdf. Taken from it - Table 4
+      and Table 7 (the model list), Tables 17 to 19 with Figures 19 to 24 (EX4400-48F), Table 5
+      (extension modules), Table 38 to Table 40 (chassis, fan and supply sizes), Tables 41 to 51
+      (lamps), Tables 52 to 58 and Tables 73 to 80 (heat and supplies), Table 93 (environment),
+      Table 105 (what ships), Table 114 (CLI names) and Table 115 (acoustics). Figures 19 and 20
+      (g022661, g022646) are renders of the real product and are the pictures measured here;
+      Figure 21 (g022649) is the DC rear. Juniper's image library answered for none of the
+      48F views - the address ex4400-48f/ex4400-48f-front-high.jpg returned an HTML 404 page, as
+      did the 24MP and 48MP - so the guide's renders are the only picture of each face. The 24X
+      studio photograph, which shares the chassis and the status block, confirms the colour and
+      finish. The EX4400 datasheet on juniper.net (a French-language PDF of 2025-10-14, the only
+      one the site answers for) lists the 48F as 12 SFP+ 10GbE and 36 SFP 1GbE ports; no figure
+      here comes from it. Terms - Juniper's documentation pages state no licence for the guide,
+      so the facts are transcribed and nothing is copied; no drawing or photograph is in the
+      repository. The held intake folder was not readable by this account, so no earlier
+      photograph, stencil or 3D model could be used. An end-of-life search made 2026-10-20 found
+      no notice for the EX4400 line, so the lifecycle is none-announced.
+  gate-1:
+    confidence: measured
+    note: >-
+      Figure 19 (g022661, 1500 x 199 px, embedded image extracted from the PDF) gives a face 1297
+      px wide (83 to 1379.5) and about 127 px tall, which is 2.936 px per mm across on the stated
+      441.7 mm and 2.92 down on 43.7 mm. The SFP cage width on that scale reads 13.96 mm and the
+      column pitch 14.2 mm, the registry's 14.25 ganged pitch, measured on a quantity the scale
+      never saw. The rear render (Figure 20, g022646, 2000 x 265 px) gives a face 1733.5 px by
+      168.5 px, aspect 10.29, 3.92 px per mm across and 3.86 down. Positions are taken per axis on
+      those scales and each reads to about half a millimetre on the front and a quarter on the rear.
+  width:
+    confidence: datasheet
+    note: >-
+      Table 18 gives the chassis 17.39 in (44.17 cm) wide, and says the outer edges of the front
+      mounting brackets extend the width to 19 in (48.2 cm). The face is the body between the
+      folds, 441.7 mm, with no ears drawn. Height is 1.72 in (4.37 cm), 1RU. Depth is 15.71 in
+      (39.9 cm) with no supply, fan module or extension module fitted, 16.93 in (43 cm) with a
+      supply and fan modules, 17.35 in (44.07 cm) with an extension module as well. The bare
+      figure 399.0 mm is carried as the chassis depth, because every module is its own part. The
+      other two are in attrs.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 19 and Figure 22 - 48 SFP-family ports in two rows of 24, in four blocks of six
+      columns on the registry's 14.25 mm ganged pitch with a 3.35 mm gutter, so the block step is
+      88.85 mm (6.13, 95.03, 183.92 and 272.48 mm at the first cage of each block on the render).
+      The first cage opens at 5.9 mm. The upper cage starts 9.9 mm down and the lower 14.9 mm below
+      it. The first 36 ports (three blocks) are SFP and the last 12 (the fourth block) are SFP+, so
+      the face is two port groups and two blocks. Counts confirmed by Table 18 (10/100/1000BASE-X
+      ports 36 and 100/1000/2500/5000/10000BASE-X ports 12 - the row is misprinted, see the gap
+      built-in-port-row) and Table 114 (PIC 0, 36x1G SFP and 12x1G/10G SFP/SFP+).
+  port-speeds:
+    confidence: datasheet
+    note: >-
+      Table 18 and its notes - with fibre transceivers, ports 0 to 35 run 100 Mbps and 1000 Mbps
+      and ports 36 to 47 run 1000 Mbps and 10 Gbps. With a 1G SFP-T transceiver, ports 0 to 35 run
+      10, 100 and 1000 Mbps and ports 36 to 47 run 1000 Mbps. The EX-SFP-1FE-FX, -SX and -LX optics
+      do not autonegotiate on ports 36 to 47. Table 44 gives the SPD lamp - 1000 Mbps steady and
+      100 Mbps blinking on the SFP ports, 10 Gbps steady and 1000 Mbps blinking on the SFP+ ports.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Figure 19 and Figure 22 - under each column one pair, an even number with an up arrow and the
+      next odd number with a down arrow ("0 up 1 down" to "46 up 47 down"). Numbering starts at 0, as
+      printed. The legend sits 28.1 mm below the upper cage's top, the arrows 5.9 and 11.0 mm from
+      the column's left edge; both are estimated from the render. CLI names are not printed on the
+      metal and Table 114 gives the ports as PIC 0 ports 0 to 47.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md) - a belly-to-belly pair is the
+      upper cage upright and the lower turned 180. The render shows the latch bars in the belly
+      between the cages, which agrees. The rear QSFP28 cages are stacked this way too, and the
+      render at 3.9 px per mm does not resolve which way their latches point, so the rule decides
+      and a photograph overturns it.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      Figures 52 and 53 (g022609 and its SFP+ twin) and Tables 43 and 44 - each port has a link
+      activity lamp and a status lamp, four small triangles in the belly between the two cages.
+      From the left they are the lower port's link lamp, the upper port's link lamp, the lower
+      port's status lamp and the upper port's status lamp (callouts 4, 1, 3 and 2). The upper port's
+      triangles point up and the lower port's down. They sit 2.6, 5.3, 8.95 and 11.65 mm from the
+      column's left edge, 11.0 mm below the top of the upper cage, read off the render of the 24X
+      face, which has the same cage and lamp artwork, and estimated. The link lamp is green, steady
+      for a link without traffic and blinking for traffic. The status lamp shows one parameter at a
+      time, chosen with the mode button.
+  status-block:
+    confidence: drawing
+    note: >-
+      Figure 22 callouts 3 to 6 and Figure 19. A dark plate 361.2 to 439.5 across and 1.4 to 15.5
+      down. The model name EX4400-48F is printed at the left from 367.7 mm. The USB-C console port
+      is centred at 393.7, 8.3 with the USB symbol below it. Two columns of lamps sit at 406.2 and
+      410.1 across - SYS, ALM, MST and CLD on the left, SPD, DX and EN on the right, with no POE
+      lamp on a non-PoE model. The rows are at 3.8, 6.8, 9.7 and 12.8 down; the render scatters them
+      by up to 0.5 mm and they are aligned. The mode button is a flush disc at 423.1, 8.6.
+  extension-slot:
+    confidence: estimated
+    note: >-
+      Figure 22 callout 7. The slot is a recess 363.8 to 437.8 across and 17.7 to 41.2 down in the
+      render of Figure 19, which draws a four-cage module seated; a shipped switch has the cover,
+      because the shipped-components statement under Table 18 names one cover for the empty
+      extension module slot. The slot is a bay and takes the three extension modules the guide names.
+  rear:
+    confidence: drawing
+    note: >-
+      Figure 20 and Figure 23 measured on the render, per axis, from the rear left edge (the
+      chassis right side as seen from the front). CON jack centre 18.35, 13.6; MGMT jack centre
+      39.6, 13.6, both with the contact comb up; USB-A at 55.0, 12.5, vertical; RESET pinhole at
+      55.3, 24.9; ground plate 27.8 to 61.7 across and 27.6 to 39.7 down with two threaded holes
+      15.0 apart at 39.5 and 54.5; QSFP28 cages centred at 75.5 across and 14.5 and 28.2 down,
+      labelled 0 and 1 to their left; two columns of lamps at 89.4 and 94.3 across, two for each
+      cage per row; ESD socket at 101.1, 36.0. Fan module slots are at 108.2 and 206.0 across, and
+      power supply slots at 255.0 and 346.4 across, each with a fan or power icon and its number
+      above the slot or beside it. All of these are estimated from the render, to about 0.3 mm. The
+      guide draws one rear for the 24T, 24P, 48T, 48P, 48F, 24MP and 48MP, and the callout list of
+      Figure 23 is the same as that of the other models.
+  rear-labels:
+    confidence: drawing
+    note: >-
+      Figure 23 callouts 1, 6, 10 and 15 are the serial number ID label, the CLEI code label, the
+      power supply rating label and the claim code label. They are stickers, not metal, so each is
+      a named region and is not drawn. The render shows them as blank plates. The guide shows no
+      content, and none is invented.
+  grounding:
+    confidence: datasheet
+    note: >-
+      Connect Earth Ground to an EX4400 Switch - a 2-hole protective grounding terminal on the rear
+      panel, used with 10-32 x 0.25 in screws and the lugs LCD10-10AF-L, LCD8-10AF-L or LCD6-10AF-L.
+      The guide gives no hole spacing. The 15.0 mm spacing is measured on the render and is
+      estimated. The render shows two bare holes, so they are drawn as dark holes on the plate.
+  vents:
+    confidence: drawing
+    note: >-
+      The front has a hexagon punching in a band over and under the port blocks, from the logo to
+      the status block. The rear punching is two small fields above and below the QSFP28 cages. The
+      fields are drawn as a repeating pattern in simplified outlines, not hole for hole.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Median of bare face on the guide renders (#777777 at the front, #707070 at the rear) and of
+      the status plate (#50575f). The 24X studio photograph shows the same mid-grey finish. The
+      legends of the non-PoE models are near white on the render.
+  power-supplies:
+    confidence: datasheet
+    note: >-
+      Table 17 ships the 48F with a 550 W AC supply, and Table 19 gives the same for the other
+      builds. The text under Figure 22 says the 48F takes 550 W AC or DC supplies and that the -S
+      spare takes the 550 W VDC supply, and that AC, DC and VDC must not be mixed. The rear
+      renders show two supplies; the default here ships one supply and a cover on the second slot,
+      as the text under Table 18 states. A bay cannot say that supplies of one chassis must match.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Tables 17 and 19 - the 48F is sold front-to-back (AIR OUT label, orange handle) as
+      EX4400-48F and EX4400-48F-DC, and back-to-front (AIR IN label, blue handle) as EX4400-48F-AFI
+      and EX4400-48F-DC-AFI. The -S spare ships with no supply and no fan modules, and the guide
+      says a buyer orders them separately, front-to-back or back-to-front.
+  mounting:
+    confidence: datasheet
+    note: >-
+      Mounting Options and the mounting procedures - the two-post kit EX-RMK ships in the box and
+      mounts the brackets flush with the front or along the middle of the side panels. The separately
+      orderable EX-4PST-RMK mounts the switch flush with the front posts of a four-post rack or
+      recessed inside it. EX-WMK is a wall kit. No ear distance in millimetres, no rack depth range
+      and no bracket drawing that can be measured is in the guide, so the positions are named
+      without a number and no kit is listed. The library holds no rail kit for them.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Table 114 - the CLI addresses the switch as FPC 0, the built-in ports as PIC 0 ports 0 to 47,
+      the two rear QSFP28 ports as PIC 1 ports 0 and 1, and the extension module as PIC 2. The names
+      are not printed on the metal, so no interfaces block is written.
+attrs:
+  physical:
+    weight: 6.65 kg with no supply, fan or extension module (EX4400-48F); -AFI 6.94 kg, -DC and -DC-AFI 6.89 kg, -S 5.8 kg
+    depth-with-modules: 430.0 mm with power supply and fan modules; 440.7 mm with an extension module as well
+    mounting: two-post kit EX-RMK in the box; four-post kit EX-4PST-RMK and wall kit EX-WMK separate
+  performance:
+    throughput: 348 Gbps unidirectional, 696 Gbps bidirectional
+  thermal:
+    heat-dissipation: 388.74 BTU/hr idle and 412.61 at 100 percent traffic with a 550 W AC supply; 429.66 and 453.53 with a 550 W DC supply
+  environmental:
+    operating-temp: 0 C to 45 C (32 F to 113 F)
+    storage-temp: -40 C to 70 C (-40 F to 158 F) in the shipping container
+    humidity: 5 to 90 percent noncondensing
+    altitude: no performance degradation up to 1828.8 m (6000 ft) at 40 C
+    acoustic-noise: 43.23 dB(A) typical with one 550 W AC supply and front-to-back airflow (Table 115)
+  platform:
+    cpu: quad-core x86
+    memory: 4 GB DDR4 with ECC
+    storage: 20 GB eMMC
+  features:
+    virtual-chassis: up to 10 switches over the QSFP28 ports, which are Virtual Chassis ports by default
+    macsec: AES-256 on all SFP and SFP+ network ports and the SFP28 and QSFP28 extension module ports
+    optics-sfp: 100 Mbps and 1 GbE SFP transceivers on ports 0 to 35; 1G SFP-T copper transceivers take 10, 100 and 1000 Mbps
+    optics-sfp-plus: 10 GbE SFP+ and 1 GbE SFP transceivers on ports 36 to 47; the exact list is in the Hardware Compatibility Tool
+    optics-qsfp28: >-
+      The two rear ports take 100GbE QSFP28 or 40GbE QSFP+ transceivers (40G from Junos OS 22.1R1).
+      Breakout cables give 4x25G and 4x10G. The exact list is in the Hardware Compatibility Tool
+    qsfp28-channelization: each QSFP28 port runs as 100G, as 40G from Junos OS 22.1R1, or channelized
+    extension-slot: one slot for the EX4400-EM-4S, EX4400-EM-4Y or EX4400-EM-1C module
+  management:
+    console: USB-C on the front and RJ-45 (CON) on the rear
+    oob: MGMT RJ-45 on the rear, 10/100/1000, with link activity and status lamps
+    usb: USB-A on the rear
+    cloud: Juniper Mist Wired Assurance, and the Junos CLI and J-Web
+  compliance:
+    seismic: Tested for Zone 4 earthquake according to NEBS GR-63-CORE, Issue 5
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 441.7
+  height: 43.7
+  depth: 399.0
+  ru: 1
+  color: '#777777'
+  ears:
+    positions:
+      - {name: flush, label: flush with the front panel}
+      - {name: mid, label: along the middle of the side panels}
+      - {name: recessed, label: recessed inside a four-post rack, racks: [4-post]}
+gaps:
+  - what: built-in-port-row
+    scope: [sfp, sfp-plus]
+    reason: sources-disagree
+    note: >-
+      Table 18 prints "100/1000/2500/5000/10000BASE-X ports: 12" for the 48F, the speed list of the
+      multigigabit copper models. The note under it, Table 44, Table 114 and the opening of the
+      48F topic all give these 12 ports as SFP+ ports for 1G and 10G optics. The SFP+ speeds are
+      modelled and the printed row is not used.
+    wanted: the maker's correction of Table 18
+  - what: vdc-supply
+    scope: [psu-0, psu-1]
+    reason: needs-drawing
+    note: >-
+      The -S spare takes a 550 W VDC supply, JPSU-550-C-VDC-AFO (Figure 86, Tables 74 and 77, 24 cm
+      deep), which the library has no part for. The -S configuration leaves both supply bays open
+      and the bays do not accept the VDC supply, so it is not offered. The 550 W AC and DC supplies
+      of the other builds are seated as in the 24T.
+    wanted: a part for the JPSU-550-C-VDC-AFO, drawn from Figure 86
+  - what: cld-lamp-states
+    scope: [led-cld]
+    reason: vendor-silent
+    note: >-
+      The hardware guide names the CLD lamp and sends the reader to the cloud-ready LED blink
+      patterns, which are not in this guide.
+    wanted: the cloud-ready LED blink patterns and their meanings
+  - what: datasheet
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      The English EX4400 datasheet did not answer from juniper.net and the HPE copy a00150783enw
+      did not either. The French-language datasheet of 2025-10-14 is cited and no figure comes from it.
+    wanted: the English EX4400 datasheet, for the ordering part numbers and mounting kit codes
+  - what: fan-part-number
+    scope: [fan-0, fan-1]
+    reason: vendor-silent
+    note: >-
+      The guide prints EX4400-FAN once, in the switch-tray assembly table, with no airflow
+      direction. No ordering code is stated for the fan modules.
+    wanted: the ordering codes of the front-to-back and back-to-front fan modules
+  - what: ground-spacing
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      The guide states the screw size and lug codes but not the spacing of the two grounding
+      holes. The 15.0 mm spacing is estimated from the render. The holes are drawn as decor, so
+      no two-hole lug can be seated on them.
+    wanted: the spacing of the two-hole protective earthing terminal, and a 10-32 pair part for it
+  - what: supported-optics
+    scope: [qsfp28, extension]
+    reason: vendor-silent
+    note: >-
+      The guide sends the reader to the Hardware Compatibility Tool page for EX4400 for the
+      transceivers and cables each port takes, and holds no table of them. The QSFP28 and extension
+      groups therefore declare no interface.
+    wanted: the EX4400 transceiver list from the Hardware Compatibility Tool
+  - what: labels-not-drawn
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      The ESD hazard symbol beside the ESD socket and the legends printed on the fan and power
+      supply slot plates are drawn as simple marks. The air-flow word printed on the supply
+      fan hub is not drawn, because no maker figure shows it.
+    wanted: a close-up of the rear panel
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+      speed: 1g
+    description: >-
+      36 ports, numbered 0 to 35 as printed, upper cage of each column even. Each cage takes a
+      100 Mbps or 1GbE SFP transceiver
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      12 ports, numbered 36 to 47 as printed. Each cage takes a 1GbE SFP or a 10GbE SFP+ transceiver
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each SFP port in the belly between the cages - link activity and status, as in
+      guide Figure 52
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each SFP+ port in the belly between the cages - link activity and status, as in
+      guide Figure 53
+  extension:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: the extension module slot, PIC 2 in the CLI
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: reaching and restarting the switch - USB-C console and mode button on the front,
+      RJ-45 console and management, USB-A and the reset pinhole on the rear
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: >-
+      Two rear ports numbered 0 and 1. They are Virtual Chassis ports by default and can run as
+      network ports. Each takes a 100G or a 40G transceiver
+  qsfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four lamps for each QSFP28 port, in two rows of two. Table 46 - green for 100G, amber for
+      40G, and all four lamps show the four channels of a channelized port
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the chassis status and port mode lamps at the right of the front panel
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Cooling System and Airflow in an EX4400 Switch - "We ship EX4400 switches with two fan
+        modules (1+1 redundancy) preinstalled in the rear panel of the switch."
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Two slots, one supply shipped. The guide says a second supply gives full redundancy and
+        that AC and DC supplies, and supplies with different airflow, must not be mixed
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear two-hole protective earthing terminal
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear wrist-strap socket (guide Figure 23 callout 11)
+views:
+  front:
+    size:
+      w: 441.7
+      h: 43.7
+    panel:
+      decor:
+        - {id: top-left-plate, at: [0.3, 0.3], size: [26.6, 9.3], rx: 0.8, fill: '#828282'}
+        - {id: vent-top, at: [27.0, 1.2], size: [331.0, 7.8], pattern: vent, pattern-pitch: [5.5, 5.4], vent: 1.0}
+        - {id: vent-bottom, at: [3.5, 38.7], size: [356.0, 4.6], pattern: vent, pattern-pitch: [5.5, 5.4], vent: 1.0}
+        - {id: status-plate, at: [361.2, 1.4], size: [78.3, 14.1], rx: 0.8, fill: '#50575f'}
+      cutouts:
+        - {block: sfp}
+        - {block: sfp-plus}
+        - {id: usb-c, at: [389.53, 7.0], size: [8.34, 2.56], shape: rect}
+        - {id: led-sys, at: [405.2, 2.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-alm, at: [405.2, 5.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-mst, at: [405.2, 8.7], size: [2.0, 2.0], shape: circle}
+        - {id: led-cld, at: [405.2, 11.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-spd, at: [409.1, 2.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-dx, at: [409.1, 5.8], size: [2.0, 2.0], shape: circle}
+        - {id: led-en, at: [409.1, 8.7], size: [2.0, 2.0], shape: circle}
+        - {id: mode-button, at: [420.4, 5.9], size: [5.4, 5.4], shape: circle}
+    silkscreen:
+      - {block: sfp}
+      - {block: sfp-plus}
+      - {at: [367.7, 5.3], text: EX4400-48F, font-size: 3.0, anchor: start, fill: '#e6e8ea', for: chassis}
+      - {at: [404.1, 4.4], text: SYS, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-sys}
+      - {at: [404.1, 7.4], text: ALM, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-alm}
+      - {at: [404.1, 10.3], text: MST, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-mst}
+      - {at: [404.1, 13.4], text: CLD, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-cld}
+      - {at: [412.3, 4.4], text: SPD, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-spd}
+      - {at: [412.3, 7.4], text: DX, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-dx}
+      - {at: [412.3, 10.3], text: EN, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-en}
+      - {at: [393.7, 12.4], mark: usb, size: 3.0, fill: '#dfe2e6', for: usb-c}
+      - {at: [11.80, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-0}
+      - {at: [16.90, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-1}
+      - {at: [26.05, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-2}
+      - {at: [31.15, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-3}
+      - {at: [40.30, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-4}
+      - {at: [45.40, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-5}
+      - {at: [54.55, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-6}
+      - {at: [59.65, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-7}
+      - {at: [68.80, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-8}
+      - {at: [73.90, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-9}
+      - {at: [83.05, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-10}
+      - {at: [88.15, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-11}
+      - {at: [100.65, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-12}
+      - {at: [105.75, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-13}
+      - {at: [114.90, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-14}
+      - {at: [120.00, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-15}
+      - {at: [129.15, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-16}
+      - {at: [134.25, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-17}
+      - {at: [143.40, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-18}
+      - {at: [148.50, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-19}
+      - {at: [157.65, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-20}
+      - {at: [162.75, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-21}
+      - {at: [171.90, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-22}
+      - {at: [177.00, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-23}
+      - {at: [189.50, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-24}
+      - {at: [194.60, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-25}
+      - {at: [203.75, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-26}
+      - {at: [208.85, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-27}
+      - {at: [218.00, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-28}
+      - {at: [223.10, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-29}
+      - {at: [232.25, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-30}
+      - {at: [237.35, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-31}
+      - {at: [246.50, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-32}
+      - {at: [251.60, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-33}
+      - {at: [260.75, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-34}
+      - {at: [265.85, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-35}
+      - {at: [278.35, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-36}
+      - {at: [283.45, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-37}
+      - {at: [292.60, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-38}
+      - {at: [297.70, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-39}
+      - {at: [306.85, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-40}
+      - {at: [311.95, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-41}
+      - {at: [321.10, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-42}
+      - {at: [326.20, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-43}
+      - {at: [335.35, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-44}
+      - {at: [340.45, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-45}
+      - {at: [349.60, 37.3], mark: arrow-up, size: 1.1, fill: '#e1e3e5', for: port-46}
+      - {at: [354.70, 37.3], mark: arrow-down, size: 1.1, fill: '#e1e3e5', for: port-47}
+    components:
+      blocks:
+        - id: sfp
+          ref: std/sfp-ganged@1
+          at: [5.9, 9.9]
+          count: 36
+          rows: 2
+          pitch: registry
+          row-pitch: 14.9
+          gang: 6
+          gutter: 3.35
+          number-from: 0
+          cutouts: true
+          rotate: {bottom: 180}
+          numerals: {dx-by-row: [4.9, 8.5], anchor-by-row: [end, start], dy-top: 28.1, dy-bottom: 13.2, font-size: 1.9, fill: '#e1e3e5'}
+          led:
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-link'
+              dx-by-row: [4.2, 1.5]
+              dy-top: 11.1
+              dy-bottom: -4.2
+              skin-top: up
+              skin-bottom: down
+              group: sfp-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 0
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-status'
+              dx-by-row: [10.5, 7.8]
+              dy-top: 11.1
+              dy-bottom: -4.2
+              skin-top: up
+              skin-bottom: down
+              group: sfp-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 1
+              states: ['off', {name: lit, color: '#22c55e'}, {name: blinking, color: '#22c55e', behavior: blinking}]
+        - id: sfp-plus
+          ref: std/sfp-ganged@1
+          at: [272.5, 9.9]
+          count: 12
+          rows: 2
+          pitch: registry
+          row-pitch: 14.9
+          gang: 6
+          gutter: 3.35
+          number-from: 36
+          cutouts: true
+          rotate: {bottom: 180}
+          numerals: {dx-by-row: [4.9, 8.5], anchor-by-row: [end, start], dy-top: 28.1, dy-bottom: 13.2, font-size: 1.9, fill: '#e1e3e5'}
+          led:
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-link'
+              dx-by-row: [4.2, 1.5]
+              dy-top: 11.1
+              dy-bottom: -4.2
+              skin-top: up
+              skin-bottom: down
+              group: sfp-plus-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 0
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-status'
+              dx-by-row: [10.5, 7.8]
+              dy-top: 11.1
+              dy-bottom: -4.2
+              skin-top: up
+              skin-bottom: down
+              group: sfp-plus-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 1
+              states: ['off', {name: lit, color: '#22c55e'}, {name: blinking, color: '#22c55e', behavior: blinking}]
+      bays:
+        - {id: ext-module, at: [363.8, 17.7], size: {w: 74.0, h: 23.5},
+           accepts: [juniper/ex4400-em-cover@1, juniper/ex4400-em-4s@1, juniper/ex4400-em-4y@1, juniper/ex4400-em-1c@1],
+           default: juniper/ex4400-em-cover@1, group: extension, rel-pos: 2}
+      placements:
+        - {block: sfp}
+        - {block: sfp-plus}
+        - {id: usb-c, ref: std/usb-c@1, at: [389.53, 7.0], group: mgmt, rel-pos: 0, attrs: {role: console, media: usb-c}}
+        - {id: led-sys, ref: common/led-dot@1, at: [405.2, 2.8], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+           description: 'Table 41 - green steady: Junos OS is loaded; green blinking: the switch is booting; unlit: powered off or halted'}
+        - {id: led-alm, ref: common/led-dot@1, at: [405.2, 5.8], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'}],
+           description: 'Table 41 - red: major hardware fault and the switch is halted; amber: minor alarm; unlit: no alarm or halted'}
+        - {id: led-mst, ref: common/led-dot@1, at: [405.2, 8.7], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+           description: 'Table 41 - standalone switch: green steady is normal, unlit is powered off or halted. Virtual Chassis: green steady primary, green blinking backup, unlit linecard member'}
+        - {id: led-cld, ref: common/led-dot@1, at: [405.2, 11.8], for: chassis, group: status-leds, rel-pos: 3,
+           description: 'Cloud connection lamp, enabled in Junos OS 21.2R1. The blink patterns are not in this guide'}
+        - {id: led-spd, ref: common/led-dot@1, at: [409.1, 2.8], for: chassis, group: status-leds, rel-pos: 4,
+           states: ['off', {name: 1g, color: '#22c55e'}, {name: 100m, color: '#22c55e', behavior: blinking}],
+           description: 'Table 44 - port mode lamp; lit shows the speed of the network ports. SFP ports: steady 1000 Mbps, blinking 100 Mbps. SFP+ ports: steady 10 Gbps, blinking 1000 Mbps'}
+        - {id: led-dx, ref: common/led-dot@1, at: [409.1, 5.8], for: chassis, group: status-leds, rel-pos: 5,
+           states: ['off', {name: full-duplex, color: '#22c55e'}],
+           description: 'Table 44 - port mode lamp; lit shows full duplex, unlit half duplex'}
+        - {id: led-en, ref: common/led-dot@1, at: [409.1, 8.7], for: chassis, group: status-leds, rel-pos: 6,
+           states: ['off', {name: enabled, color: '#22c55e'}],
+           description: 'Table 44 - port mode lamp; lit shows ports administratively enabled, unlit disabled'}
+        - {id: mode-button, ref: juniper/ex4400-mode-button@1, at: [420.4, 5.9], for: chassis, group: mgmt, rel-pos: 1,
+           attrs: {function: factory reset and port mode}}
+    regions:
+      - {id: logo-zone, at: [2.3, 2.1], size: {w: 23.7, h: 6.1}, label: 'Vendor logo; not drawn'}
+  rear:
+    size:
+      w: 441.7
+      h: 43.7
+    panel:
+      decor:
+        - {id: ground-plate, at: [27.8, 27.6], size: [33.9, 12.1], rx: 0.6, fill: '#666666'}
+        - {id: ground-hole-1, at: [36.7, 30.9], size: [5.6, 5.6], rx: 2.8, fill: '#0e0f10'}
+        - {id: ground-hole-2, at: [51.7, 30.9], size: [5.6, 5.6], rx: 2.8, fill: '#0e0f10'}
+        - {id: vent-rear-top, at: [62.5, 1.0], size: [26.0, 7.5], pattern: vent, pattern-pitch: [5.5, 5.4], vent: 1.0}
+        - {id: vent-rear-bottom, at: [62.5, 34.0], size: [26.0, 7.0], pattern: vent, pattern-pitch: [5.5, 5.4], vent: 1.0}
+      cutouts:
+        - {id: con, at: [10.45, 7.0], size: [15.8, 13.2], shape: rect}
+        - {id: mgmt, at: [31.7, 7.0], size: [15.8, 13.2], shape: rect}
+        - {id: usb, at: [52.75, 6.5], size: [4.5, 12.0], shape: rect}
+        - {id: reset, at: [53.3, 22.9], size: [4.0, 4.0], shape: circle}
+        - {id: qsfp-0, at: [65.5, 9.43], size: [20.0, 10.15], shape: rect}
+        - {id: qsfp-1, at: [65.5, 23.1], size: [20.0, 10.15], shape: rect}
+        - {id: led-qsfp-0-0, at: [88.4, 10.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-0-1, at: [93.3, 10.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-0-2, at: [88.4, 15.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-0-3, at: [93.3, 15.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-1-0, at: [88.4, 23.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-1-1, at: [93.3, 23.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-1-2, at: [88.4, 28.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-qsfp-1-3, at: [93.3, 28.9], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [18.35, 22.5], text: CON, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: con}
+      - {at: [39.6, 22.5], text: MGMT, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: mgmt}
+      - {at: [55.0, 21.0], mark: usb, size: 3.0, fill: '#e6e8ea', for: usb}
+      - {at: [52.6, 25.45], text: RESET, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: reset}
+      - {at: [63.3, 15.1], text: '0', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: qsfp-0}
+      - {at: [63.3, 28.8], text: '1', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: qsfp-1}
+      - {at: [153.1, 5.6], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, for: fan-0}
+      - {at: [153.1, 9.9], text: '0', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: fan-0}
+      - {at: [202.0, 5.6], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, for: fan-1}
+      - {at: [202.0, 9.9], text: '1', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: fan-1}
+      - {at: [250.6, 5.8], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, for: psu-0}
+      - {at: [250.6, 9.9], text: '0', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: psu-0}
+      - {at: [342.1, 5.9], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, for: psu-1}
+      - {at: [342.1, 10.0], text: '1', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [108.2, 0.95], size: {w: 41.8, h: 41.8},
+           accepts: [juniper/ex4400-fan-afo@1, juniper/ex4400-fan-afi@1],
+           default: juniper/ex4400-fan-afo@1, group: fans, rel-pos: 0}
+        - {id: fan-1, at: [206.0, 0.95], size: {w: 41.8, h: 41.8},
+           accepts: [juniper/ex4400-fan-afo@1, juniper/ex4400-fan-afi@1],
+           default: juniper/ex4400-fan-afo@1, group: fans, rel-pos: 1}
+        - {id: psu-0, at: [255.0, 1.65], size: {w: 83.06, h: 40.39},
+           accepts: [juniper/jpsu-550-c-ac-afo@1, juniper/jpsu-550-c-ac-afi@1, juniper/jpsu-550-c-dc-afo@1,
+                     juniper/jpsu-550-c-dc-afi@1, juniper/ex4400-psu-cover@1],
+           default: juniper/jpsu-550-c-ac-afo@1, group: psus, rel-pos: 0}
+        - {id: psu-1, at: [346.4, 1.65], size: {w: 83.06, h: 40.39},
+           accepts: [juniper/jpsu-550-c-ac-afo@1, juniper/jpsu-550-c-ac-afi@1, juniper/jpsu-550-c-dc-afo@1,
+                     juniper/jpsu-550-c-dc-afi@1, juniper/ex4400-psu-cover@1],
+           default: juniper/ex4400-psu-cover@1, group: psus, rel-pos: 1}
+      placements:
+        - {id: con, ref: std/rj45@2, at: [10.45, 7.0], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {id: mgmt, ref: common/rj45-eth@1, at: [31.7, 7.0], group: mgmt, rel-pos: 3, attrs: {speed: 1g, role: management},
+           description: 'Table 42 - link activity lamp: steady link with no traffic, blinking traffic, unlit no link. Status lamp: steady 1000 Mbps, blinking 100 Mbps, unlit 10 Mbps'}
+        - {id: usb, ref: std/usb-a@1, at: [49.0, 10.25], rotate: 90, group: mgmt, rel-pos: 4}
+        - {id: reset, ref: common/reset-button@1, at: [53.3, 22.9], for: chassis, group: mgmt, rel-pos: 5,
+           attrs: {function: reset}}
+        - {id: qsfp-0, ref: std/qsfp28@1, at: [65.5, 9.43], group: qsfp28, rel-pos: 0}
+        - {id: qsfp-1, ref: std/qsfp28@1, at: [65.5, 23.1], rotate: 180, group: qsfp28, rel-pos: 1}
+        - {id: led-qsfp-0-0, ref: common/led-dot@1, at: [88.4, 10.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 0}
+        - {id: led-qsfp-0-1, ref: common/led-dot@1, at: [93.3, 10.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 1}
+        - {id: led-qsfp-0-2, ref: common/led-dot@1, at: [88.4, 15.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 2}
+        - {id: led-qsfp-0-3, ref: common/led-dot@1, at: [93.3, 15.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 3}
+        - {id: led-qsfp-1-0, ref: common/led-dot@1, at: [88.4, 23.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 4}
+        - {id: led-qsfp-1-1, ref: common/led-dot@1, at: [93.3, 23.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 5}
+        - {id: led-qsfp-1-2, ref: common/led-dot@1, at: [88.4, 28.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 6}
+        - {id: led-qsfp-1-3, ref: common/led-dot@1, at: [93.3, 28.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 7}
+        - {id: ground-mark, ref: common/ground-symbol@1, at: [21.4, 31.0], for: chassis, group: grounding, rel-pos: 0}
+        - {id: esd-jack, ref: common/esd-jack@1, at: [98.1, 33.0], for: chassis, group: esd, rel-pos: 0}
+    regions:
+      - {id: label-serial, at: [4.0, 3.0], size: {w: 5.1, h: 20.7}, label: 'Serial number ID label; not drawn'}
+      - {id: label-claim, at: [4.0, 24.4], size: {w: 15.1, h: 15.5}, label: 'Claim code label; not drawn'}
+      - {id: label-clei, at: [98.7, 2.5], size: {w: 5.1, h: 28.8}, label: 'CLEI code label; not drawn'}
+      - {id: label-rating, at: [431.3, 1.7], size: {w: 7.7, h: 41.5}, label: 'Power supply rating label; not drawn'}
+  left:
+    size:
+      w: 399.0
+      h: 43.7
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures
+      of the mounting brackets (Figures 95 to 106), with screw holes that cannot be measured.
+  right:
+    size:
+      w: 399.0
+      h: 43.7
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures
+      of the mounting brackets (Figures 95 to 106), with screw holes that cannot be measured.
+  top:
+    size:
+      w: 441.7
+      h: 399.0
+    empty: >-
+      Not drawn by any source. The guide has no figure of the top cover, and the heat and
+      airflow figures (Figures 63 to 76) are schematic section drawings.
+  bottom:
+    size:
+      w: 441.7
+      h: 399.0
+    empty: >-
+      Not drawn by any source. The guide has no figure of the underside except the step that
+      fits the four rubber feet, which shows no position.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      One 550 W AC supply, two front-to-back fan modules and covers on the empty slots, the
+      switch as shipped (EX4400-48F).
+    default: true
+    power: ac
+    airflow: front-to-back
+    part-numbers:
+      EX4400-48F: {}
+  afi:
+    kind: orderable
+    description: >-
+      One 550 W AC supply and two fan modules with back-to-front airflow (AIR IN label, blue
+      handle) and covers on the empty slots (EX4400-48F-AFI).
+    power: ac
+    airflow: back-to-front
+    bays:
+      fan-0: juniper/ex4400-fan-afi@1
+      fan-1: juniper/ex4400-fan-afi@1
+      psu-0: juniper/jpsu-550-c-ac-afi@1
+    part-numbers:
+      EX4400-48F-AFI: {}
+  dc:
+    kind: orderable
+    description: >-
+      One 550 W DC supply with a D-sub 3W3 input and two front-to-back fan modules, and covers on
+      the empty slots (EX4400-48F-DC).
+    power: dc
+    airflow: front-to-back
+    bays:
+      psu-0: juniper/jpsu-550-c-dc-afo@1
+    part-numbers:
+      EX4400-48F-DC: {}
+  dc-afi:
+    kind: orderable
+    description: >-
+      One 550 W DC supply and two fan modules with back-to-front airflow (AIR IN label, blue
+      handle) and covers on the empty slots (EX4400-48F-DC-AFI).
+    power: dc
+    airflow: back-to-front
+    bays:
+      fan-0: juniper/ex4400-fan-afi@1
+      fan-1: juniper/ex4400-fan-afi@1
+      psu-0: juniper/jpsu-550-c-dc-afi@1
+    part-numbers:
+      EX4400-48F-DC-AFI: {}
+  s:
+    kind: orderable
+    description: >-
+      The spare chassis EX4400-48F-S. It ships with no power supply and no fan modules, which
+      are ordered separately. The guide gives it a 550 W VDC supply, which has no part here.
+    bays:
+      fan-0: ''
+      fan-1: ''
+      psu-0: ''
+      psu-1: ''
+    part-numbers:
+      EX4400-48F-S: {}
+  em-4y:
+    kind: example
+    description: >-
+      The EX4400-48F as shipped, with an EX4400-EM-4Y extension module in the extension slot in
+      place of the cover. An illustration, not an order code.
+    power: ac
+    bays:
+      ext-module: juniper/ex4400-em-4y@1
+  dual-psu:
+    kind: example
+    description: >-
+      The EX4400-48F with a second 550 W supply in slot 1, for the 1+1 redundancy the guide
+      describes. An illustration, not an order code.
+    power: ac
+    bays:
+      psu-1: juniper/jpsu-550-c-ac-afo@1
+datasheet:
+  title: 'EX4400 Line of Ethernet Switches Datasheet (Juniper Networks, French-language PDF created 2025-10-14)'
+  sha256: 86da8694a5d3c5dfdf87c00c2773d0e06a6c2b2d60a3b0dbd5a6d0537bc7c2e9
+references:
+  - {title: 'EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22)', sha256: 649e4800b252e1a7f1836f4607efa2683b747bc4fef8758bf77246d74f513a4d}

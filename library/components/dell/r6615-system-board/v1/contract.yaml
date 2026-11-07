@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: r6615-system-board
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The R6615 system board seen from above - the one-socket PCB the processor, memory, risers and fan connectors stand on, and the floor of the interior
+provenance:
+  sources: >-
+    Dell's R6615 Installation and Service Manual, figure 10 'Inside the system
+    without Risers' (page 16), a top-down view of the open chassis, 1748 x 2479
+    px. Its scale is the front flange: 1058 px across for the 482 mm rack face,
+    2.195 px/mm, and the rear wall to the front face reads 773.5 mm at that
+    scale, the depth the chassis table gives. Positions are read as runs of
+    light and dark along single rows and columns of the figure. The figure is
+    in perspective only slightly, so heights are not taken from it.
+  size: >-
+    drawing - 425.0 x 456.0 at plan x 5.1, y 1.4. The front edge of the board
+    reads 457.4 from the rear wall (a run along a column through the middle of
+    the board), so the height is 456.0 from the rear mount. The width is the
+    R660's board width: the figure shows the board running to the side walls
+    and the walls' thickness hides the edge, so the width is ESTIMATED.
+  depth: >-
+    borrowed - 38.3, dell/system-board-r660@1's: the same chassis lid line over
+    a board top at 4.5. Not measured on this board.
+  why-this-is-not-dell/system-board-r660: >-
+    THE R660 BOARD HAS TWO SOCKETS AND THIS ONE HAS ONE; its front edge is 15
+    mm nearer the rear. The two boards share a chassis and a rear layout.
+size: {w: 425.0, h: 456.0, d: 38.3}
+size-confidence: {w: estimated, h: drawing, d: borrowed}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [425.0, 456.0], class: bezel}
+skins: [default]

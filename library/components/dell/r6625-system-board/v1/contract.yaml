@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: r6625-system-board
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The R6625 system board seen from above, with the chassis floor behind it where the supplies and risers stand. The PCB carries the processors, memory and fan connectors, and is narrower at the rear than across them.
+provenance:
+  sources: >-
+    Dell's R6625 Installation and Service Manual, figure 101 (the system board
+    with the memory sockets labelled) and figure 11 (the interior from above),
+    read at 1.923 px/mm (figure 101, from the 8.32 pitch of the memory sockets)
+    and 2.189 px/mm (figure 11, from the 434.0 body width at 950 px). Rear at
+    y=0, the library's plan convention, so plan y is the distance from the
+    rear wall and plan x runs left to right as the body is seen from above. No
+    CAD model of the R6625 is held; every outline here is read off those two
+    figures.
+  size: >-
+    drawing - the PCB reads 421 wide across the processors and memory (x 6.4 to
+    427.3 in the body) and 341.7 deep from its rear edge at plan y 127.3 to its
+    front edge at 469.0, where the fan modules begin at 471.8. Its rear part,
+    behind the memory, is narrower: x 99.3 to 334.4, 235.1 wide, to plan y 226.5.
+    The contract's box runs from plan y 1.4 to the PCB's front edge because
+    the supplies, risers and rear I/O stand in the same interior well; the PCB
+    itself is the green outline the skin draws. Good to about 2 mm, the
+    figures' resolution, and the 16th-generation chassis is the R660's: the
+    R660's own PCB is 423.1 x 342.0, which this agrees with to the figure's
+    resolution.
+  depth: >-
+    borrowed - dell/system-board-r660@1's 38.3, the interior well under the 42.8
+    lid line. The R6625 shares the R660's chassis (ISM table 10 gives the same
+    42.8 height and 751.48 ear to rear wall as the R660's table 12) and no
+    figure here measures the board's height.
+  board-variants: >-
+    NOT DISTINGUISHED. The ISM names processor and heat sink variants by TDP
+    (table 33) and no board variants; the outline is one.
+size: {w: 421.0, h: 467.6, d: 38.3}
+size-confidence: {w: drawing, h: drawing, d: borrowed}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  floor: {at: [0.0, 0.0], size: [421.0, 467.6], class: bezel}
+skins: [default]

@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: qfx10000-lc-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Line card cover for the QFX10008 and QFX10016. Every configuration ships one in each line-card
+  slot, eight on the QFX10008 and sixteen on the QFX10016. A plain horizontal panel the width of
+  the card cage with a pull at each end.
+attrs:
+  model: QFX10000 line card cover
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an
+    opening: it has no indicator to light and no condition to report, so this part draws no
+    elements at all. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    datasheet - the line cards of this chassis measure 17.2 in. wide by 1.89 in. high (Table 63 of
+    both hardware guides), 437 by 48 mm, and a cover is the shape of the hole it covers. The size is
+    the line-card slot the devices declare, 437.0 by 48.0 mm.
+  part-number: >-
+    The QFX10008 and QFX10016 hardware guides list "Eight line card covers" and "Sixteen line card
+    covers" in every configuration table (Table 2 and Table 3) and name no part number for the
+    cover. The cover is therefore a part of this chassis family under its own name and not
+    juniper/jnp10k-lc-blank@1, whose part number JNP10K-LC-BLNK the QFX guides never print. The two
+    may be one cover; nothing held says so.
+  face: >-
+    estimated - the guides draw the chassis with line cards fitted and show no cover, and no
+    photograph of a cover was obtained. The art follows the MX10000 line-card cover already in the
+    library: a plain light panel with a pull at each end, at the slot's own size. The outline is
+    sourced and the detail is not.
+states: [absent]
+size:
+  w: 437.0
+  h: 48.0
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  The line-card slot of the QFX10008 and QFX10016, from the line-card dimensions in Table 63 of the
+  hardware guides. Nothing measured the cover itself.
+skins: [default]

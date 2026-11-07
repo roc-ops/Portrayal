@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: hex-nut-stud-pair-5-8
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one two-hole lug
+# lands across both studs, at their midpoint. That slot and the two stud slots below are mutually
+# exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One input terminal of a DC power supply drawn as two hex nuts on studs, a washer under each nut, on 5/8 in.
+  (15.875) centres: the landing a two-hole DC lug takes. Generic: it stands for any supply whose documents
+  draw hex nuts on studs at that pitch, and carries no maker's facts.
+size: {w: 23.075, h: 7.2}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, side by side: the width is the pitch and one
+  stud, the height one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    estimated - the pitch is the interface's, 5/8 in. (15.875), the two-hole lug's
+    (spec/schemas/standards.yaml `two-hole-lug-5-8`); each stud is common/hex-nut-stud@1, whose own
+    7.2 across is estimated off EX6210 Switch Hardware Guide, Figure 23 (printed page 79).
+  pitch: >-
+    THE PITCH IS THE INTERFACE, NOT A READING OF ANY ONE DEVICE. A two-hole lug is one stamping with
+    its holes 5/8 in. apart, so this part composes its studs at exactly 15.875 and lint L116 holds it
+    there to 0.01. A device whose documents state another spacing does not place it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a two-hole lug
+    is drawn on, and a lug seated here leaves its wire to the right (manifest.spanning_axis). A pair
+    stood on end is this part placed at `rotate: 90`, which carries the first stud to the top and the
+    wire downward.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own `mate`
+    points and states `seat-out: 10.6`, the height each stud presents at (its lift 3.6 and its 7.0
+    stud), so a lug across the pair lies exactly where a one-hole lug on either stud would. L116 holds
+    the two to one figure.
+  lift: >-
+    estimated - 3.6 is how far the washers stand off the face, by eye off Figure 23 (printed page 79);
+    no document dimensions it.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its own,
+  # `<placement>/1` and `<placement>/2`, which the ring lug still seats in.
+  - {ref: common/hex-nut-stud@1, id: '1', at: [0, 0], lift: 3.6}
+  - {ref: common/hex-nut-stud@1, id: '2', at: [15.875, 0], lift: 3.6}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (3.6, 3.6) and
+  # (19.475, 3.6), at the height they present.
+  mate: {at: [11.5375, 3.6], direction: front, seat-out: 10.6}
+skins: [default]

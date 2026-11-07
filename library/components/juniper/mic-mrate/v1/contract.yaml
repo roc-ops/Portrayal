@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-mrate
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,16 @@ description: >-
 attrs:
   model: MIC-MRATE
   power-draw-max-w: 85
+  qsfp: 12
 provenance:
+  qsfp-rate: >-
+    module reference, 'MIC MRATE' (Table 39, p360): 'Twelve Gigabit Ethernet ports that support quad small
+    form-factor pluggable plus (QSFP+) transceivers', each 'configured as a 40- Gigabit Ethernet port or as
+    four 10-Gigabit Ethernet ports'. THE 100G RATE DEPENDS ON THE CARRIER, so every port is counted at the
+    40G it always runs: 'Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet
+    ports' (Table 39: ports 4, 5, 10 and 11 'no'), and 'When used in MX2K-MPC8E: 4 ports out of the total
+    12 support 100-Gigabit Ethernet speed' (four ports the book does not name), so the eight 100G ports
+    are those of an MPC9E. The placements are left as they were.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
     drawn on its side a pair sits left and right, the left cage 270 beside the right 90,

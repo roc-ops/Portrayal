@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx10008
-version: 2.0.6
+version: 4.0.2
 maturity: modelled
 manufacturer: Juniper
 model: MX10008
@@ -40,7 +40,17 @@ provenance:
     note: >-
       drawing - g050553 (isometric, fractions only): one six-high stack of JNP10K-PWR supplies at
       the left, two tall fan trays right. The MX10008 rear has no usable photograph in the intake
-      - see gaps
+      - see gaps. Each supply bay is 91.4 x 88.9 mm, the JNP10K-PWR-AC2 as the guide's Table 55
+      gives it (3.6 in. wide, 3.5 in. high; guide page 184), and the six stand one above the next
+      with no gap, as the figure draws them, the earthing terminal's strip below PSU 5. The bays
+      were 84.0 x 93.5 mm, spread over the fan trays' height. The guide's Table 12 gives the fan
+      trays 6.6 in. (16.8 cm, about 167.6 mm) wide and 22.4 in. (56.9 cm) high (guide page 61), and
+      juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2 and juniper/jnp10008-fan3@2 are drawn at that
+      size; juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1 and juniper/jnp10008-fan3@1, 176 x 560
+      mm from the drawing, are kept for a saved rack that names them. The two fan bays are 167.6 x
+      569.0 mm, the size of the QFX10008's, and stand against the supply column and against each
+      other, centred in the 574 mm height (y 2.5). 91.4 + 2 x 167.6 mm is 426.6 mm of the 442 mm
+      body, and no figure shows the other 15.4 mm, so it is left empty at the right edge, an estimate
   power:
     confidence: datasheet
     note: >-
@@ -73,6 +83,7 @@ chassis:
   depth: 813.0
   ru: 13
   color: '#565b61'
+  power: [ac, hvdc]
 gaps:
   - what: rcb-which-board
     scope: [res]
@@ -95,11 +106,23 @@ gaps:
     reason: needs-photo
     wanted: the JNP10K-PWR-AC3 (four-feed) and DC faces; only AC2 is
       modelled.
+  - what: psu-ac2-face
+    scope: [psus]
+    reason: needs-photo
+    wanted: >-
+      a flat figure or square-on photograph of the JNP10K-PWR-AC2 face; the guide gives its outer
+      size (Table 55) and isometric drawings, so juniper/jnp10k-pwr-ac2@2 refits the face of
+      version 1 to 91.4 x 88.9 mm by estimate
   - what: line-card-catalogue
     scope: [fpcs]
     reason: needs-photo
     wanted: LC4800/LC4802 faceplates - named with dimensions and power
       in the guides but with no usable face art in the extraction.
+  - what: sfb-bays
+    reason: needs-photo
+    wanted: the switch fabric boards (JNP10008-SF, JNP10008-SF2) and their cover
+      (JNP10008-SF-BLNK2) sit inside the chassis behind the fan trays, where no face
+      shows them. Vendor count is five boards and one cover on the base; none is drawn.
 groups:
   res:
     term: Slot
@@ -163,10 +186,10 @@ views:
     components:
       bays:
         - {id: cb0, at: [2.5, 22.0], size: {w: 389.0, h: 38.1},
-           accepts: [juniper/jnp10k-re1@2], default: juniper/jnp10k-re1@2,
+           accepts: [juniper/jnp10k-re1@2, juniper/jnp10k-re-blnk@1], default: juniper/jnp10k-re1@2,
            group: res, rel-pos: 0}
         - {id: cb1, at: [2.5, 60.1], size: {w: 389.0, h: 38.1},
-           accepts: [juniper/jnp10k-re1@2], default: juniper/jnp10k-re1@2,
+           accepts: [juniper/jnp10k-re1@2, juniper/jnp10k-re-blnk@1], default: juniper/jnp10k-re1@2,
            group: res, rel-pos: 1}
         - {id: fpc0, at: [2.5, 117.0], size: {w: 437.0, h: 48.0},
            accepts: [juniper/jnp10k-lc2101@1, juniper/jnp10k-lc9600@1, juniper/jnp10k-lc480@1, juniper/jnp10k-lc-blank@1],
@@ -214,29 +237,29 @@ views:
       h: 574.0
     components:
       bays:
-        - {id: psu0, at: [3.0, 6.0], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu0, at: [0.0, 6.0], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 0}
-        - {id: psu1, at: [3.0, 100.5], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu1, at: [0.0, 94.9], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 1}
-        - {id: psu2, at: [3.0, 195.0], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu2, at: [0.0, 183.8], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 2}
-        - {id: psu3, at: [3.0, 289.5], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu3, at: [0.0, 272.7], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 3}
-        - {id: psu4, at: [3.0, 384.0], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu4, at: [0.0, 361.6], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 4}
-        - {id: psu5, at: [3.0, 478.5], size: {w: 84.0, h: 93.5},
-           accepts: [juniper/jnp10k-pwr-ac2@1], default: juniper/jnp10k-pwr-ac2@1,
+        - {id: psu5, at: [0.0, 450.5], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/jnp10k-pwr-ac2@2, juniper/jnp10k-pwr-blnk@2], default: juniper/jnp10k-pwr-ac2@2,
            group: psus, rel-pos: 5}
-        - {id: fan0, at: [89.0, 7.0], size: {w: 176.0, h: 560.0},
-           accepts: [juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1, juniper/jnp10008-fan3@1], default: juniper/jnp10008-fan@1,
+        - {id: fan0, at: [91.4, 2.5], size: {w: 167.6, h: 569.0},
+           accepts: [juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2, juniper/jnp10008-fan3@2], default: juniper/jnp10008-fan@2,
            group: cooling, rel-pos: 0}
-        - {id: fan1, at: [266.0, 7.0], size: {w: 176.0, h: 560.0},
-           accepts: [juniper/jnp10008-fan@1, juniper/jnp10008-fan2@1, juniper/jnp10008-fan3@1], default: juniper/jnp10008-fan@1,
+        - {id: fan1, at: [259.0, 2.5], size: {w: 167.6, h: 569.0},
+           accepts: [juniper/jnp10008-fan@2, juniper/jnp10008-fan2@2, juniper/jnp10008-fan3@2], default: juniper/jnp10008-fan@2,
            group: cooling, rel-pos: 1}
   left:
     size:
@@ -278,27 +301,28 @@ configurations:
   base:
     kind: base
     source: >-
-      vendor - Juniper publishes this as an orderable bundle. the hardware
-      guide's 'MX10008 Components and Configurations' section lists the components of each
-      configuration, and the line-card covers in this base are its own: it ships sixteen
-      of them on the MX10016 in EVERY configuration, over the note that "Line cards and
-      the cable management system are not part of the base or redundant configurations.
-      You must order them separately." NOT YET FULLY FAITHFUL: the vendor bundle also
-      ships ONE routing engine rather than two, and covers rather than modules in one
-      SFB slot and one power slot. This library seats all of them, because JNP10K-PWR-BLNK
-      and the SF blank are not modelled yet. The line-card half - the part that was
-      drawing holes - is now right.
+      vendor - Juniper publishes this as an orderable bundle. The hardware guide's
+      'MX10008 Components and Configurations' table (MX10008-BASE) lists one RCB with one
+      Routing Control Board cover, three power supplies with three power supply covers,
+      and eight line card covers, over the note that line cards and the cable management
+      system are not part of the base configuration. The table gives no part number for
+      the RCB or power supply covers; JNP10K-RE-BLNK and JNP10K-PWR-BLNK, named for the
+      same cages in the MX10004 guide, are carried over. This base draws exactly that:
+      one board in RCB slot 0 and its cover in slot 1, three supplies and a cover in each
+      of the other three supply slots, and a cover in each of the eight line-card slots.
+      The five switch fabric boards and their cover sit inside the chassis, not visible
+      from outside, and no bay for them is drawn.
     default: true
     description: >-
-      Chassis only - what you spec before deciding what goes in it. The 8 slot bays are
-      EMPTY; cooling, psus, res are populated. Enough to power on and reach the box,
-      which is the question most people ask first and the one `default` used to answer
-      with whatever the drawing happened to be populated with. The line-card slots are
-      drawn EMPTY rather than blanked, which is not the intent: no MX10000-series
-      line-card blank is modelled, and none is named in the staged guides - they
-      document power-supply cover panels only. Every other chassis in the library seats
-      a blank here.
+      The chassis as Juniper ships MX10008-BASE. One routing and control board with a
+      cover over the second slot. Three power supplies with a cover over each of the
+      other three, fans, and a cover in each of the eight line-card slots. Line cards are
+      ordered separately.
     bays:
+      cb1: juniper/jnp10k-re-blnk@1
+      psu3: juniper/jnp10k-pwr-blnk@2
+      psu4: juniper/jnp10k-pwr-blnk@2
+      psu5: juniper/jnp10k-pwr-blnk@2
       fpc0: juniper/jnp10k-lc-blank@1
       fpc1: juniper/jnp10k-lc-blank@1
       fpc2: juniper/jnp10k-lc-blank@1
@@ -312,3 +336,4 @@ datasheet:
   sha256: ab3515c71b3176e48185c8a6b686f03f90d8345cf7d067640490e4ef8e22564b
 references:
   - {title: 'Juniper MX10008 Universal Routing Platform Hardware Guide (2026-08-25)', sha256: a7b68beb8f0e21bf6f7e4b279ac62a0c8adccfcfc9925dff72ffe07b2c152d2d}
+  - {title: 'Juniper MX10008 Universal Routing Platform Hardware Guide (2026-09-24, the revision read for the fan-tray width, Table 12)', sha256: 89cd214e8497a7ba90d72179759c30c7c6a2eda7752b8d9e50fce20c67d30129}

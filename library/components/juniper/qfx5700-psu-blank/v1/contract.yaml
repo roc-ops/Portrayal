@@ -1,0 +1,28 @@
+format: 1
+kind: module
+name: qfx5700-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The blank panel for an empty power supply slot of the QFX5700, which the base configuration ships two of, one over each
+  of the two slots that hold no supply. A plain plate the size of a supply's face. The guide gives it no part number.
+provenance:
+  part-number: >-
+    not stated. Searched the QFX5700 hardware guide (Table 27, the unpacking and power sections) and the datasheet (1000719-009,
+    ordering information) for a code: Table 27 lists "Blanks for empty power slots", 2, without one, and the datasheet's
+    additional SKUs list blanks for the FEB, FPC and RCB slots only. So the part is not exported under a code.
+  size: >-
+    borrowed - juniper/qfx5230-jnp-3000w-ac-afo@1, the supply that stands in the same bay (74.8 by 40.2 mm). A cover is
+    the shape of the opening it covers.
+  face: >-
+    estimated - no figure and no photograph shows an empty power slot with its blank. A plain plate with a round
+    fingerhole at the middle, which is a guess at how it is pulled; the outline is the opening's and the detail is not
+    sourced.
+states: [absent]
+elements: {}
+size:
+  w: 74.8
+  h: 40.2
+size-confidence: {w: borrowed, h: borrowed}

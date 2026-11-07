@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: sfp-dd-ganged
+version: 1.0.0
+class: port
+profile: networking
+conforms: sfp-dd-ganged
+interface: sfp-dd
+description: Per-port opening inside a ganged SFP-DD block - the port's share of a
+  continuous 1xN bezel slot, so adjacent instances abut with no gap
+size: {w: 14.25, h: 10.4, d: 38.9}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: sfp-dd}
+provenance:
+  size: >-
+    drawing - port-to-port centreline spacing 14.25 (TE application specification 114-60027
+    rev A (2020-06-18) 3.2 A), cutout height 10.4 and cutout width N x 14.25 + 1.2 (Figure 4: 1x4
+    58.20, 1x6 86.70, 1x8 115.20; the 1x1 is 15.45), so the 0.6 end margin belongs to the block
+    and not the port. TE customer drawing C-2359845 rev A (2020-06-18) sheet 3 gives the 1x1
+    cutout and its 16.25 pitch. Molex 2048230001 rev A (2020-01-02) section 1 lists 1x2 to 1x8
+    cages and Molex 2048233001 rev A shows only the 1x1, so the ganged figures are one maker's.
+  depth: >-
+    drawing - as std/sfp-dd, bezel face to the centreline of the connector guide pins, 38.90
+    +/-0.30, TE 2359845 rev A sheet 3. One maker.
+  relief.size: >-
+    drawing - the port opening inside the cage, 14.00 by 8.95, TE 2359845 rev A sheet 1 and
+    Molex 2048233001 rev A sheet 1 (see std/sfp-dd; both are 1x1 cages, so the ganged interior
+    is read from them). TE 114-60027 3.2 A caps the module outside the cage at 14 wide for the
+    ganged cage.
+  latch: >-
+    estimated - as std/sfp-dd: read off the TE 2359845 sheet 1 front view (a locking tab on the
+    lower edge of the port opening); Molex 2048230001 says "side latch tabs". Not drawn.
+  row-pitch: >-
+    not stated - neither maker gives a belly-to-belly row pitch; it follows from the board
+    thickness (TE 2.20 min, Molex 2.55 min on its drawing and 2.70 min in its application
+    specification), so devices are not linted against one. Both draw the lower row as the upper
+    turned over, key notches outward (TE sheet 3, Molex sheet 6).
+  registry: >-
+    spec/schemas/standards.yaml `sfp-dd-ganged`. The SFP-DD MSA was not used.
+elements:
+  opening: {at: [0.0, 0.0], size: [14.25, 10.4], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  # THE CAGE INTERIOR, NOT THE BEZEL BORE: 14.00 x 8.95 inside the 14.25 x 10.4 share, which
+  # leaves the 0.25 shared wall. NO COLLAR, as std/sfp-ganged: the cutout is one continuous slot,
+  # and the only thing between two ports is that wall.
+  size: {w: 14.0, h: 8.95}
+connection-points:
+  mate: {at: [7.125, 5.2], direction: front}
+skins: [default]

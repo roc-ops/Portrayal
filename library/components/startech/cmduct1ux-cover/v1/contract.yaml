@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: cmduct1ux-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The removable top cover of the StarTech.com CMDUCT1UX 1U finger duct seen from the front - a
+  steel plate across the open side of the duct with a lip along its top and bottom that fits
+  over the finger tips. It ships fitted and comes off to lay a cable in
+provenance:
+  size: >-
+    drawing - CMDUCT1UX_Diagram.pdf (StarTech.com, third angle projection): the cover closes the
+    435.00 duct body, between the two ears, and the end profile is 44.00 across. The cover is
+    the 435.0 wide and 44.0 high of that body.
+  relief: >-
+    drawing - the view of the duct from its side: the cover is the strip across the front end
+    of the duct, its lower edge 49.9 mm in front of the plate (scaled at 2.264 px/mm against
+    the 71.60 depth) and its face the 71.6. It is 21.7 deep over the finger tips. The lips and
+    the face are 1.0 mm: estimated, the drawing states no gauge. The reference of this part is
+    the cover's rear edge, 21.7 mm from the front, so a placement lifts it by the well's depth
+    less 21.7. The cover's notched edge in the end profile is not drawn.
+  lid: >-
+    datasheet - "The cable organizer features a removable top cover that makes it easy to add
+    or remove bundled cables quickly" (cmduct1ux_datasheet.pdf), and the quick-start guide
+    (CMDUCT1UX_QSG.pdf, revision February 15, 2023) says the duct cover "can be removed for
+    installation or upgrades" and is latched on with four latches, one in each corner, after
+    the cables are inserted. It is drawn fitted, as the datasheet and the guide picture it. It
+    lifts off and opens the duct, so it is a lid (`lid: true`) and a pass-through in the plate
+    beneath it may be declared. The latches are not drawn.
+  color: >-
+    datasheet - "Color: Black". The drawing is line work, so the shade is this library's
+    render, a little lighter than the duct so the two read apart.
+size: {w: 435.0, h: 44.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel}
+elements:
+  lip-top: {at: [0.0, 1.0], size: [435.0, 1.0], class: bezel}
+  lip-bottom: {at: [0.0, 42.0], size: [435.0, 1.0], class: bezel}
+  plate: {at: [0.0, 0.0], size: [435.0, 44.0], class: bezel}
+relief:
+  features:
+    - {node: lip-top, out: 21.7, color: '#303336', confidence: estimated, source: 'the side view of the CMDUCT1UX drawing, the cover over the front 21.7 mm; the lip gauge is not stated'}
+    - {node: lip-bottom, out: 21.7, color: '#303336', confidence: estimated, source: 'the same'}
+    - {node: plate, lift: 20.7, out: 21.7, color: '#303336', confidence: estimated, source: 'the same view, the face of the cover at the front of the duct; its gauge is not stated'}
+skins: [default]

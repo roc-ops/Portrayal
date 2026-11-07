@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: rtx-4500-ada-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA RTX 4500 Ada card, seen from behind. It is a closed
+  black end plate over the backplate, with the 16-pin CEM5 power connector at the
+  corner by the top edge. It is the faces.rear of the RTX 4500 Ada and of the RTX
+  5000 Ada, whose body is drawn from the same figures.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height from the A100 80GB's PB-10577
+  figure 3, 28.41 to 126.31 on the card, which the RTX 4500 Ada's photographed
+  side agrees with to 0.3 percent) and runs from the backplate's outer face to the
+  shroud's far wall, 38.23 (the card's thickness is itself estimated, see the
+  card's `thickness`). NO DEPTH IS DECLARED: a face is a drawing of a back. SEEN
+  FROM BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' = 126.31 less the card's x
+  (the top edge at the left) and y' = the card's y less 1.77. This is the frame of
+  nvidia/l40s-tail@1, which has a backplate the same way.
+attrs: {media: gpu}
+parts:
+  # The header is 20.85 across and 11.7 down. Its centre is the housing's: x'
+  # 12.76 (the card's x 113.55) and y' 8.84 (the card's y 10.61). Half-turned so
+  # that the four sense contacts are at the top, toward the backplate, as
+  # nvidia/l40s-tail@1 has it.
+  - {ref: std/12vhpwr-header@1, id: aux-power, at: [2.335, 2.99], rotate: 180}
+provenance:
+  size: >-
+    estimated - see size-notes.
+  connector: >-
+    estimated - the datasheets say nothing of the connector; NVIDIA's Ada
+    quick-start guide names the 16-pin PCIe CEM5 connector "on the back edge" of
+    the RTX 6000, 5000, 4500 and 4000, and lists a 2x PCIe 8-pin to 1x CEM5
+    16-pin power adapter in the box of the RTX 6000, 5000 and 4500. NVIDIA's
+    power guide DA-07261 (July 2023) predates the RTX 4500 and lists the RTX 6000
+    and 5000 as "CEM5 16-pin". NVIDIA's render of the RTX 5000 Ada shows the
+    connector at the end face's corner by the top edge, on the board's side, its
+    long side along the card's width; it has no scale. The place and size are
+    nvidia/l40s-tail@1's (the L40S housing, measured on a photograph of that
+    card), on this card's component face. The part is std/12vhpwr-header@1
+    because the guide calls it the PCIe CEM5 16-pin, the 12VHPWR of CEM 5.0. No
+    photograph of this card's end is held.
+  end-plate: >-
+    estimated - a closed black end plate over the full 97.9 x 38.23, with the
+    backplate's 2.67 band along the foot. No photograph of the end is held;
+    NVIDIA's render of the RTX 5000 Ada shows a plain end face with two small round
+    holes, which are not drawn.
+elements: {}
+skins: [default]

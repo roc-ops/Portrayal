@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: sr-7-pem-3
-version: 1.1.0
+version: 1.2.0
 class: power
 behaviour: fills
 profile: networking
@@ -80,12 +80,47 @@ provenance:
     terminals-left build). Either the bay-2 unit is installed inverted and the illustrator
     redrew the text upright, or the chassis takes a handed pair with one part number; a
     photograph of an SR-7 rear settles it. Until then the chassis seats this one face in both
-    bays. A gap.
+    bays. A gap. The two pole seats below stand on this same face, so in bay 2 they stand at
+    the left where Fig 8 draws the block at the right; the conflict is the drawing's and
+    reaches the seats as it reaches the studs.
   terminals: >-
     datasheet - SR7 Table 13 p73: key 2 "-48 VDC power cable", key 3 "RTN power cable", key 4
     "Protective cover"; Table 12 p72 key 5 "-48 VDC and RTN terminals, with protective
     cover"; p231 steps 5-7: two cover screws, lugs torqued to 40 lbf-in on a 7/16 in nut.
     Single feed: one -48 V pole and one RTN pole, each on two studs.
+  seats: >-
+    estimated - each pole is nokia/sr-7-dc-pole@1, a pair of studs on 5/8 in. centres that one
+    two-hole lug lands across, standing so that the pair's midpoint is the midpoint of the two
+    rings the skin draws for the pole (56.59 across; 12.13 down for -48 and 30.76 for RTN).
+    The skin draws the rings 16.5 apart and the part composes its studs 15.875 apart, the
+    pitch of the lug the guide names (p134 and Table 60 p135), so each seat stands 0.33 from
+    the centre of its ring and the skin is not redrawn. THE PITCH IS INFERRED, NOT STATED: no
+    document held dimensions the studs. The studs are common/terminal-screw-34@1, a stand-in
+    that claims no thread (the guide's nuts are 1/4-20, Table 62 p137); each is lifted 8.0 mm,
+    the height the stud relief below already estimates.
+  poles: >-
+    Nokia 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide (3HE18643AAAATQZZA03, 22.7):
+    Table 13 p73 key 2 "-48 VDC power cable" and key 3 "RTN power cable"; section 6.2.1.2
+    p138, step 3 connects the "RTN positive/return (+)" cable to the RTN terminal and step 5
+    the "-48 VDC negative" cable to the top terminal; Figure 33 p138 and Figure 8 p51 print
+    "-48" over "RTN" at the left of the block. The roles are the guide's words:
+    `batt` for the -48 VDC pole (spec/schemas/dc.yaml writes `batt` as -48V and negative
+    (battery)) and `rtn` for the RTN pole (it writes `rtn` as RTN and positive (battery
+    return)), listed top to bottom as the skin draws them. The block is a single feed: one
+    port, two poles.
+  rating: >-
+    datasheet - Nokia 7450 ESS-7 and 7750 SR-7 Chassis Installation Guide (3HE18643AAAATQZZA03,
+    22.7), Table 31 p95: "100 A" at both voltage ranges (-40 to -72 VDC and -46 to -72 VDC);
+    the internal breaker is rated 100 A (section 4.2.3.1.1 p95). One current, so the port
+    states it.
+  voltage: >-
+    NOT STATED AS A NOMINAL. Table 31 p95 gives two ranges, -40 to -72 VDC and -46 to -72 VDC,
+    and the guide's "-48" names the cable and the terminal. No table prints a nominal for the
+    port, so it states no `voltage`. A feed is matched on its roles.
+  awg: >-
+    NOT STATED AS ONE SIZE. The guide gives "a minimum of #2AWG cable" for the 100A PEM-3 and
+    "#2AWG" for its lugs (p134), and in the same list "a minimum of #4AWG conductors" are
+    recommended: a floor each and two different ones. The port states no `awg`.
   cover: >-
     drawing - the figures shade the safety cover as a clear moulding over the studs (Fig 8,
     Fig 13 key 4, Fig 75 p231). It is drawn as a light tint with the studs showing through
@@ -132,6 +167,18 @@ relief:
     - {node: captive-screw-right, cyl: 4.0, confidence: estimated, source: as captive-screw-left}
     - {node: handle, uhandle: 18.0, confidence: estimated, source: 'Fig 13 p73 draws a bent tube handle standing well off the face; not dimensioned'}
     - {node: breaker, out: 4.0, confidence: estimated, source: 'the breaker frame stands proud of the plate in Fig 13; not dimensioned'}
+parts:
+  - {ref: nokia/sr-7-dc-pole@1, id: pole-batt, at: [46.95, 10.43]}
+  - {ref: nokia/sr-7-dc-pole@1, id: pole-rtn, at: [46.95, 29.06]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 100
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating}
 connection-points:
   mate: {at: [109.75, 21.35], direction: rear}
   feed: {at: [56.59, 21.45], direction: down}

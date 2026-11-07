@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: ex6200-blnk-pwr-2u
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200-BLNK-PWR-2U, the power supply cover panel for the 2500 W AC power supply (about 2 U high).
+  It closes a power supply slot that holds no supply. Every EX6210 order ships one supply and three covers.
+  The guide uses it over the 2500 W AC slots and, in the parts lists, over the 2100 W DC slots. Two captive
+  screws hold it at the top.
+attrs:
+  role: slot-blank
+part-numbers:
+  EX6200-BLNK-PWR-2U: {part: EX6200-BLNK-PWR-2U}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Table 21 (the cover panel for each supply:
+    EX6200-BLNK-PWR-2U, "Height - Approximately 2 U", for the 2500 W AC supply) and Figure 20 (the two
+    covers, isometric, g021273), Tables 5 and 51 (three covers in every shipping configuration). Table 5
+    lists three 2500 W AC cover panels for the DC order EX6210-S64-96T-D21, and Table 51 lists "three 2100 W DC
+    power supply cover panels"; Table 21 names no cover for the DC supply. The 2U cover is used for the DC
+    slots and the guide's two statements are noted as unreconciled.
+  size: >-
+    estimated - the slot, not the part. Figure 5 (the four supply slots drawn flat, 4.766 px/mm on the
+    17.3 in body width) puts a 2500 W supply face at 100.7 mm across and 101.8 mm high, which is the
+    slot. Figure 20 draws the cover as an isometric plate and gives no dimension; the guide's "approximately
+    2 U" is 88.9 mm and does not match the slot.
+  face: >-
+    estimated - Figure 20 shows a plain plate with two captive screws near the top corners (11.0 mm and
+    87.6 mm across, 5.2 mm down, as the supply's own screws in Figure 5) and no printing.
+states: [absent]
+elements:
+  screw-left: {at: [9.2, 3.4], size: [3.6, 3.6], class: screw}
+  screw-right: {at: [85.8, 3.4], size: [3.6, 3.6], class: screw}
+size:
+  w: 100.7
+  h: 101.8
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

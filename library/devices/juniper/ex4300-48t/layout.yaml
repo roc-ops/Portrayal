@@ -1,0 +1,618 @@
+format: 1
+kind: device
+name: ex4300-48t
+version: 0.3.0
+maturity: modelled
+manufacturer: Juniper
+model: EX4300-48T
+portfolio: {line: EX Series, family: EX4300}
+description: >-
+  Juniper EX4300-48T - a fixed 1RU Gigabit Ethernet access switch with 48 10/100/1000BASE-T ports
+  (no PoE) and four built-in 40-Gigabit QSFP+ ports on the rear panel that are Virtual Chassis
+  ports by default. The front carries the 48 jacks in two stacked rows, an LCD panel with Menu and
+  Enter buttons, three chassis status lamps, a mini-USB console port and a slot for an optional
+  uplink module, which ships covered. The rear carries the management and console jacks, a USB
+  port, the four QSFP+ ports, two fan modules and two power supply slots; as shipped it holds one
+  350 W AC power supply, front-to-back (AIR OUT) fan modules and a cover panel over the second
+  power supply slot. The same chassis is ordered back-to-front (EX4300-48T-AFI), with a 550 W DC
+  supply (EX4300-48T-DC, and back-to-front EX4300-48T-DC-AFI) or as the spare chassis EX4300-48T-S
+  with the supplies and fans ordered separately. The EX4300-48P is the same front with PoE+.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4300 Switch Hardware Guide, Juniper Networks, published 2025-08-12 (414 pages;
+      https://www.juniper.net/documentation/us/en/hardware/ex4300/ex4300.pdf): Figures 5 and 7
+      (48-port panel drawings), Figures 11 and 13 (callouts), Table 3 and Table 8 (models and what
+      each ships with), Table 10 (chassis size and weight), Tables 18 to 26 (LEDs), Tables 27, 28, 30,
+      31, 40-42, 47, 48 (fans and supplies), Table 34 and Table 49 (power budgets) and Table 68
+      (cover panels). EX4300 Line of Ethernet Switches Datasheet (https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4300-line-of-ethernet-switches-datasheet.pdf,
+      17 pages, PDF created 2022-07-25): Table 1 (models), Table 2 (spare chassis), Table 3
+      (acoustics), physical and environmental specifications, ordering information. Juniper's
+      straight-on studio photographs ex4300-48p-front-high.jpg (1500 x 211 px, the PoE sibling,
+      whose front is the same) and ex4300-24t-front-high.jpg (1500 x 195 px) from its image library.
+      The NetBox device-type library's EX4300-24P, 24T and 48P elevations (community drawings, not the
+      maker's) were used only to cross-check counts and which side a feature sits. The guide's own
+      panel figures are isometric drawings, so every front position is read off a straight-on
+      photograph and every rear position off the flat callout figure. The maker's image library has
+      no EX4300-48T photograph: both addresses tried for it (ex4300-48t-front-high.jpg and
+      ex4300-48t-rear-high.jpg, once each) returned an error page. Terms of use: the guide,
+      datasheet and photographs are Juniper's, published for customers; none is copied into the
+      library, only transcribed facts and new drawings.
+  gate-1-front:
+    confidence: photo-measured
+    note: >-
+      THE FRONT PHOTOGRAPH PASSES. ex4300-48p-front-high.jpg shows the face 1452 px across (x 24 to
+      1475) and 144 px down: aspect 10.08 against the stated 441.0 / 43.7 = 10.09, so it is
+      near-orthographic and carries geometry, at 3.29 px per mm. Positions are good to about half a
+      millimetre. The 24T photograph (3.245 px per mm) gives the same column centres to 0.2 mm, the
+      second image the pitch is measured against. The guide's Figure 5 covers the 48-port EX4300 front
+      for the T and P models alike and is a perspective drawing that gives counts only. No
+      photograph of the 48T itself exists in the maker's library, so its front is the 48P's:
+      the guide shows one front for both, and the NetBox community elevations show the 24P and 24T
+      faces identical.
+  gate-1-rear:
+    confidence: drawing
+    note: >-
+      THE REAR CALLOUT FIGURE PASSES. Guide Figure 13 (g022074) is a flat rear elevation: rendered
+      at 600 dpi its chassis outline is 1950 x 194 px, aspect 10.05 against 10.09, 4.42 px per mm.
+      Positions on the rear are fractions off it, good to about half a millimetre; it is a
+      low-resolution raster.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 10 and the datasheet: height 1.72 in (4.37 cm) = 43.7 mm; width 17.36 in (44.1 cm)
+      = 441.0 mm, "the outer edges of the front-mounting brackets extend the width to 19 in", so
+      441.0 is the body between the bracket flanges; depth 16.38 in (41.6 cm) with no power supply
+      or uplink module, 17.51 in (44.47 cm) with a power supply installed and 18 in (45.73 cm) with a
+      power supply and an uplink module. The modelled depth is 444.7 mm, the figure with the power
+      supply fitted, as shipped; the other two are in attrs. The guide's centimetre figure for the
+      last (45.73) is 0.1 mm from its inches (457.2): the centimetre figure is carried. 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide's inventory (Table 68) ships two mounting brackets and mounting
+      screws and says the switch mounts in a two-post or four-post rack; the datasheet lists the
+      kits EX-4PST-RMK (four-post), EX-RMK (rack-mount) and EX-WMK (wall-mount) as separate items. No figure measures the bracket position, so no
+      ear position is written and no rail kit is listed in chassis.kits. The kit's part number is
+      recorded here for the later dedupe.
+  front-ports:
+    confidence: photo-measured
+    note: >-
+      48 jacks in two stacked rows, four blocks of six columns. The dark jack cavities of the top row
+      read, in mm from the left edge, 14.13, 28.12, 42.10, 56.08, 70.06 and 84.04 in the first block
+      and 102.89, 191.64 and 280.55 for the first column of the next three (the 24T photograph reads
+      14.33 and 103.08), so the column pitch is 13.98, the registry's 13.97 ganged-jack pitch (0.550
+      in), and the blocks start 88.8 mm apart, a 4.98 mm gutter. Row centres read 15.5 and 30.7 mm
+      down on this photograph and 14.9 and 29.6 on the 24T one: the pooled 15.2 and 30.0 were the
+      first draft, and the render laid over the photograph at matched scale sat 0.8 mm high, so the
+      rows centre 16.0 and 30.8 mm down (a 14.8 step, which is also what the registry's ganged-jack notes allow for a 1U face; the
+      registry's 12.09 is a magjack-only figure). The top row is the same part turned 180 so that its
+      keyway is up, as the photograph shows lamp tabs above the upper jacks and below the lower.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      The photograph prints the numbers in pairs under each column: 0 and 1 under the first column,
+      2 and 3 under the second, up to 46 and 47, with the even number set higher and the odd lower
+      beside it. The even number belongs to the upper jack and the odd to the lower, so numbering
+      runs down each column and then across. The guide's CLI interface names are not printed on the
+      metal and are not modelled; the photograph prints no block legends.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Guide, Network Port, Built-In QSFP+ Port, Uplink Port, and Uplink Module Port LEDs, Figure 30
+      and Tables 21 and 22: each 10/100/1000BASE-T port has two lamps, a Link activity lamp (green,
+      blinking with activity, steady when linked) and a Status lamp whose meaning is chosen with the
+      LCD Enter button (ADM, DPX or SPD on a non-PoE model). The lamps are the jack housing's two
+      corner windows (common/rj45-ganged-eth) and carry that component's default vocabulary. Which
+      window is which on this hardware is not stated by any document held, so the pairing is the
+      component's convention.
+  front-right:
+    confidence: estimated
+    note: >-
+      Read off the 48P photograph at 3.29 px per mm with the face's left edge at 0 (the 24T
+      photograph agrees within a millimetre): LCD window 377.2 to 412.8 x 6.8 to 16.4 mm (35.6 x
+      9.6); the EX4300 legend above it centred at 395.4, 4.1; Menu button centre (422.2, 9.0) and
+      Enter button (422.2, 17.2), 6.1 mm across; three chassis status lamps at x 428.9, y 6.2, 9.9
+      and 13.6; a face screw each side of this block at (367.4, 12.8) and (436.0, 13.1); the mini-USB
+      console jack at (359.7, 5.8) with CON1 printed to its left; the uplink slot opening 363.3 to
+      437.2 x 24.2 to 42.9 mm. Each is placed by eye on that photograph.
+  lamp-legends:
+    confidence: photo-measured
+    note: >-
+      drawing-vs-photo, and the PHOTOGRAPH wins: the guide says the three chassis lamps are labeled
+      ALM, SYS and MST, but both photographs show three bare lamps with no legend beside them. The
+      CON1 legend, about the same height, resolves in the same photograph, so the silence is a
+      reading and not the image's limit. No legend is drawn. The order top to bottom is the guide's
+      order of naming (ALM, SYS, MST); no document states it, so it is estimated.
+  lcd:
+    confidence: photo-measured
+    note: >-
+      The LCD panel shows two lines of 16 characters (guide, LCD Panel in EX4300 Switches). It is
+      drawn as the dark green window the photograph shows; no library component exists for a display
+      and none is added, so it is a decor rectangle and not a part.
+  uplink-slot:
+    confidence: photo-measured
+    note: >-
+      Every EX4300 24-port and 48-port switch has one front-panel uplink module slot (guide, Uplink
+      Modules in EX4300 Switches); uplink modules are not part of the shipping configuration and the
+      guide's inventory (Table 68) says a cover panel for the slot is provided. The slot is a bay
+      that takes the cover panel here; the EX-UM-4X4SFP module it is sold with is left for a later
+      slice. The photographs are of switches with a module fitted, so they give the opening and not
+      the cover.
+  rear:
+    confidence: drawing
+    note: >-
+      Guide Figure 13 (g022074), 4.42 px per mm, rear seen from behind with x = 0 at the left of the
+      drawing: MGMT and CON2 jacks stacked at 9.7 to 25.5 mm (centres y 16.6 and 30.8), the ESD point
+      at (36.2, 8.4), the vertical USB port at (35.1, 28.7), fan module 0 from 49.1 to 97.7, four
+      QSFP+ ports from 108.0 to 183.5 on the registry's 19.0 mm pitch (the figure's separators read
+      107.9, 127.4, 146.8, 165.8 and 184.3), fan slot numbers beside the block, fan module 1 from
+      194.9 to 243.5, power supply slot 0 from 257.5 and slot 1 from 348.9 (module edges found in the 600 dpi figure at 257.3 and 348.7), each 84.0 mm wide, and a
+      strip at the right edge. The serial number label (callout 4) sits at 101.3 to 123.2 x 13.6 to
+      18.1. The figure is shared by the 24-port and 48-port models, and the guide's DC note says the
+      DC supplies are installed in the same slots.
+  rear-qsfp-lamps:
+    confidence: drawing
+    note: >-
+      Guide Figure 13 callout 11 and Figure 32: each QSFP+ port has two lamps below it, a Link
+      activity lamp and a Status lamp (Table 24: steady green when the 40-Gigabit port is up). Eight
+      small rectangles below the block at y 39.6, each pair 7.4 mm apart about its port's centre. The
+      lamps' roles within a pair are not stated.
+  rear-ground:
+    confidence: datasheet
+    note: >-
+      The guide says the protective earthing terminal of the EX4300 is on the rear panel (Table 69:
+      two-hole terminal, two 10-32 screws, Panduit LCD10-10A-L lug) but no figure identifies it or
+      gives its pitch, and the rear-panel figure's right-edge screws are not named by a callout. It
+      is not modelled; see gaps.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Two power supply bays (PSU 0, PSU 1) and two fan bays (0, 1), each seating the guide's FRU
+      parts. Mixing AFO and AFI parts, or AC and DC, is forbidden by the guide and is left to the
+      configuration: a bay lists every part it can take and a configuration seats a matching set. The
+      cover panel the guide ships for an empty supply slot is seated in slot 1 as shipped. The guide
+      says the plain EX4300-48T and the -AFI do not support DC supplies and that the -DC, -DC-AFI and
+      -S models do; the DC supplies are seated in those configurations only. No supply or fan is
+      built into the chassis: all are FRUs.
+  ac-psu-seating:
+    confidence: datasheet
+    note: >-
+      The guide's AC power supply table (Table 30 and the text around it) lists 350 W, 715 W and
+      1100 W supplies for every EX4300 except the 48MP, so the bays accept all three AC ratings;
+      this non-PoE model ships with the 350 W supply (Table 3 and Table 8; datasheet Table 1) and
+      its power budget tables (Table 34) work the 715 W and 1100 W combinations for the PoE models.
+      The 715 W and 1100 W supplies are seatable here but no configuration of this device ships
+      them.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Guide Tables 7, 27, 28 and 31: AIR OUT (AFO) is front-to-back and AIR IN (AFI) is back-to-front.
+      The guide's Table 3 and Table 28 list this model in four builds: EX4300-48T (AC, AFO), -AFI (AC,
+      AFI), -DC (DC, AFO) and -DC-AFI (DC, AFI), which are configurations of this chassis because
+      their rear differs only by the supplies and fan modules seated; -S is the spare chassis
+      without them. AFI models run 0 to 35 C against 0 to 45 C for AFO (datasheet).
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 34 (AC) and Table 49 (DC): the base power the system needs is 175 W for a 48-port
+      switch; a single 350 W supply leaves 175 W for PoE on a PoE model, and this non-PoE model has
+      no PoE. The 550 W DC supply is N+0 or N+N like the AC ones. No typical or maximum draw of the
+      switch itself is stated by the guide or the datasheet.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The face is the median of 400 pixels of bare plate between the ports and the LCD in the 24T
+      studio photograph, #898d94. The supply and fan faces are a tone darker and their tone is taken
+      from the community NetBox elevation (estimated); see the components.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. The guide's configuration examples name the 48-port switch's
+      jacks ge-0/0/0 to ge-0/0/47 and the uplink module's ports ge-0/2/0 to ge-0/2/3 and xe-0/2/0 to
+      xe-0/2/3. The built-in QSFP+ ports' names are stated nowhere held. No table gives the numbering
+      rule, so the names stay out of the file as a block and go here.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched Juniper's end-of-life notices and third-party trackers on 2026-10-21. Trackers list
+      end-of-life notices for the EX4300-32F (last order 2026-03-31) and the EX4300-48MP (last order
+      2026-12-29) and for older bundle SKUs (2020), and none for the EX4300-24T, -24P, -48T or -48P;
+      Juniper's own milestones page did not render for the search, so the absence is unconfirmed.
+      Recorded as none-announced.
+  other-faces:
+    confidence: drawing
+    note: >-
+      No source draws the top, bottom or sides flat: the guide's front and rear figures show them in
+      perspective with a logo on the lid and mounting holes in the sides. Each carries an `empty`
+      sentence.
+attrs:
+  physical:
+    weight: 13 lb (5.9 kg) with no power supply and no fan module; 16.1 lb (7.3 kg) with one power supply and two fan modules
+    depth-no-psu: 416.1 mm (16.38 in) with no power supply or uplink module (Table 10)
+    depth-with-uplink: 457.3 mm (18 in, 45.73 cm) with a power supply and an uplink module (Table 10)
+    uplink-module-weight: 0.44 lb (0.2 kg) for the 4-port EX-UM-4X4SFP
+  performance:
+    switching-capacity: 248 Gbps unidirectional, 496 Gbps bidirectional, 64-byte packets (datasheet)
+    throughput: 369 Mpps wire speed for the 48-port models (datasheet)
+    mac-addresses-max: 64000
+    airflow-cfm: fan 22 CFM, each power supply 7.5 CFM; 59 CFM total with two supplies (datasheet)
+  power:
+    power-base-w: 175
+    psu-redundancy: N+0 or N+N; up to two supplies, one is enough for the chassis
+  environmental:
+    acoustic-noise: 37.8 dBA AC AFO, 38.9 dBA AC AFI, 39.7 dBA DC AFO and DC AFI (datasheet Table 3, ISO 7779 at 23 C)
+    operating-temp: 0 to 45 C (32 to 113 F) for AFO models; 0 to 35 C for AFI models
+    storage-temp: -40 to 70 C
+    humidity: 10 to 85 percent noncondensing operating; 0 to 95 percent non-operating
+    altitude: up to 3049 m operating (10,000 ft); 4877 m non-operating
+  platform:
+    cpu: 1.5 GHz dual-core PowerPC
+    memory: 2 GB DRAM with ECC
+    storage: 2 GB
+  features:
+    virtual-chassis: up to 10 members; the four rear QSFP+ ports are Virtual Chassis ports by default
+    macsec: IEEE 802.1AE on all Gigabit Ethernet and 10 Gigabit Ethernet ports
+    uplink-module: one slot; 4-port 1/10 GbE SFP+ EX-UM-4X4SFP (not part of the shipping configuration)
+    optics-qsfp: 40GbE QSFP+ SR (multimode) and DAC direct-attach copper (datasheet, Supported Optics)
+  management:
+    console: mini-USB on the front, RJ-45 CON2 on the rear
+    oob: MGMT RJ-45 with link activity and status lamps (rear)
+    lcd: 2 lines of 16 characters with Menu and Enter buttons
+    usb: one USB port on the rear
+  compliance:
+    rohs: RoHS 6/6 (datasheet)
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 441.0
+  height: 43.7
+  depth: 444.7
+  ru: 1
+  color: '#898d94'
+  airflow: front-to-back
+  power: ac
+gaps:
+  - what: rear-earthing-terminal
+    scope: [rear]
+    reason: needs-drawing
+    wanted: >-
+      Where the two-hole protective earthing terminal sits on the rear panel and its hole pitch. The
+      guide's Table 69 puts it on the rear panel with a two-hole lug and 10-32 screws, and Figure
+      13's right-edge screws carry no callout. A rear photograph or a dimensioned drawing settles it.
+  - what: rear-photograph
+    scope: [rear]
+    reason: needs-photo
+    wanted: >-
+      A straight-on studio photograph of the rear, and of the DC and AIR IN supplies. The maker's
+      image library holds none for this family, so the rear is read off the low-resolution callout
+      figure and the supply and fan art follows the isometric drawings.
+  - what: front-photograph
+    scope: [front]
+    reason: needs-photo
+    wanted: >-
+      A straight-on studio photograph of the EX4300-48T front. The maker's library has the
+      EX4300-48P and EX4300-24T; the 48T front is taken from the 48P, which the guide's shared
+      figure shows to be the same face.
+  - what: rack-ears
+    scope: [front]
+    reason: needs-drawing
+    wanted: >-
+      The bracket positions of the front-mounting brackets: no figure in the guide measures them,
+      so no ear position or kit is listed.
+  - what: lcd-component
+    scope: [front]
+    reason: vendor-silent
+    wanted: >-
+      A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
+  - what: uplink-modules
+    scope: [front]
+    reason: needs-drawing
+    wanted: >-
+      The EX-UM-4X4SFP uplink module and its ports, left for the later uplink-module slice; the bay
+      takes only the cover panel here.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      The 48 built-in 10/100/1000BASE-T ports. rel-pos carries the number printed on the faceplate;
+      the upper jack of a column takes the even number
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      how the switch is reached out of band - the mini-USB console port on the front, the RJ-45
+      console port, the management Ethernet port and the USB port on the rear
+  lcd-buttons:
+    term: Button
+    role: management
+    index-origin: 0
+    description: the LCD panel's Menu and Enter buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the three chassis status lamps right of the LCD panel
+  uplink:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: the front-panel uplink module slot
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
+    description: >-
+      The four built-in 40-Gigabit QSFP+ ports on the rear panel; Virtual Chassis ports by default
+      and usable as network ports on this model
+  vcp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: two lamps below each QSFP+ port, link activity and status
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+0
+      redundancy-note: >-
+        Hardware guide, Fan Modules: "Both the fan modules must be installed for optimal functioning
+        of the switch"; the switch keeps running for 30 seconds without thermal shutdown while one is
+        replaced. The guide gives no N+1 form, so no spare fan is claimed
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: ok, color: '#22c55e'}]
+    description: Table 29 - green when the fan module is functioning normally; unlit when it is absent, failed or of the wrong airflow
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+n
+      redundancy-note: >-
+        Hardware guide, AC and DC Power Supply: two redundancy configurations, N+0 (no power is
+        reserved) and N+N (a full second supply is reserved); one supply carries the switch and up
+        to two seat
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size: {w: 441.0, h: 43.7}
+    panel:
+      decor:
+        - {id: shell-1, kind: jack-shell, at: [5.8, 10.3], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-2, kind: jack-shell, at: [94.6, 10.3], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-3, kind: jack-shell, at: [183.4, 10.3], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-4, kind: jack-shell, at: [272.2, 10.3], size: [86.9, 25.9], rx: 0.6, fill: '#b1b2b5'}
+        - {at: [29.8, 0.8], size: [320.2, 6.2], pattern: vent, vent: 1.0}
+        - {at: [12.5, 41.0], size: [75.5, 2.2], pattern: vent, vent: 1.0}
+        - {at: [101.3, 41.0], size: [75.5, 2.2], pattern: vent, vent: 1.0}
+        - {at: [190.1, 41.0], size: [75.5, 2.2], pattern: vent, vent: 1.0}
+        - {at: [278.9, 41.0], size: [75.5, 2.2], pattern: vent, vent: 1.0}
+        - {id: lcd, kind: display, at: [377.2, 6.8], size: [35.6, 9.6], rx: 0.6, fill: '#404c40'}
+      cutouts:
+        - {block: rj45}
+        - {id: console, at: [355.75, 3.5], size: [7.9, 4.6], shape: rect}
+        - {id: btn-menu, at: [419.15, 5.95], size: [6.1, 6.1], shape: circle}
+        - {id: btn-enter, at: [419.15, 14.15], size: [6.1, 6.1], shape: circle}
+        - {id: led-alm, at: [427.9, 5.2], size: [2.0, 2.0], shape: circle}
+        - {id: led-sys, at: [427.9, 8.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-mst, at: [427.9, 12.6], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {block: rj45}
+      - {at: [395.4, 4.9], text: EX4300, font-size: 2.4, anchor: middle, fill: '#e4e6e9', for: chassis}
+      - {at: [352.1, 6.26], text: CON1, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: console}
+    components:
+      bays:
+        - {id: uplink, at: [363.3, 24.2], size: {w: 73.9, h: 18.7}, group: uplink, rel-pos: 0,
+           accepts: [juniper/ex4300-uplink-blank@1], default: juniper/ex4300-uplink-blank@1}
+      blocks:
+        - id: rj45
+          ref: common/rj45-ganged-eth@1
+          at: [7.85, 10.5]
+          count: 48
+          rows: 2
+          pitch: 13.97
+          row-pitch: 14.8
+          gang: 6
+          gutter: 4.98
+          number-from: 0
+          cutouts: true
+          rotate: {top: 180}
+          attrs: {media: rj45, speed: 1g}
+          numerals: {dx-by-row: [6.35, 8.65], dy-top: 28.7, dy-bottom: 14.7, font-size: 1.7, anchor: middle, fill: '#e4e6e9'}
+      placements:
+        - {block: rj45}
+        - {ref: juniper/ex4300-console-usb-mini@1, id: console, at: [355.75, 3.5], group: mgmt, rel-pos: 0}
+        - {ref: juniper/ex4300-lcd-button@1, id: btn-menu, skin: menu, at: [419.15, 5.95], for: chassis, group: lcd-buttons, rel-pos: 0,
+           attrs: {function: LCD menu}}
+        - {ref: juniper/ex4300-lcd-button@1, id: btn-enter, skin: enter, at: [419.15, 14.15], for: chassis, group: lcd-buttons, rel-pos: 1,
+           attrs: {function: LCD enter}}
+        - {ref: common/led-dot@1, id: led-alm, at: [427.9, 5.2], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#eab308'}],
+           description: 'Table 18 - ALM: red major alarm, yellow minor alarm, unlit no alarm (red at power-up until a network link is made)'}
+        - {ref: common/led-dot@1, id: led-sys, at: [427.9, 8.9], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+           description: 'Table 18 - SYS: green steady, Junos OS loaded; green blinking, booting; unlit, powered off or halted'}
+        - {ref: common/led-dot@1, id: led-mst, at: [427.9, 12.6], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+           description: 'Table 18 - MST: standalone, green steady when functioning; Virtual Chassis, green steady primary, blinking backup, unlit line card'}
+        - {ref: common/screw-head@1, id: face-screw-l, at: [365.6, 11.0], group: furniture, rel-pos: 0}
+        - {ref: common/screw-head@1, id: face-screw-r, at: [434.2, 11.3], group: furniture, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [6.5, 1.7], size: {w: 23.0, h: 6.4}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 441.0, h: 43.7}
+    panel:
+      decor:
+        - {at: [127.8, 2.7], size: [45.0, 10.2], pattern: vent, vent: 1.0}
+        - {id: serial-label, kind: label-plate, at: [101.3, 13.6], size: [21.9, 4.5], rx: 0.3, fill: '#e4e6e8'}
+      cutouts:
+        - {id: mgmt, at: [9.7, 10.0], size: [15.8, 13.2], shape: rect}
+        - {id: con2, at: [9.7, 24.2], size: [15.8, 13.2], shape: rect}
+        - {id: esd-rear, at: [34.05, 6.25], size: [4.3, 4.3], shape: circle}
+        - {id: usb, at: [32.85, 22.7], size: [4.5, 12.0], shape: rect}
+        - {id: vcp-0, at: [108.0, 25.5], size: [18.5, 9.58], shape: rect}
+        - {id: vcp-1, at: [127.0, 25.5], size: [18.5, 9.58], shape: rect}
+        - {id: vcp-2, at: [146.0, 25.5], size: [18.5, 9.58], shape: rect}
+        - {id: vcp-3, at: [165.0, 25.5], size: [18.5, 9.58], shape: rect}
+        - {id: led-vcp-0-a, at: [112.15, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-0-b, at: [119.55, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-1-a, at: [131.15, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-1-b, at: [138.55, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-2-a, at: [150.15, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-2-b, at: [157.55, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-3-a, at: [169.15, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-3-b, at: [176.55, 38.8], size: [2.8, 1.6], shape: rect}
+        - {id: led-fan-0, at: [105.7, 38.4], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [185.1, 38.4], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [17.6, 8.6], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: mgmt}
+      - {at: [17.6, 40.9], text: CON2, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: con2}
+      - {at: [36.2, 14.2], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0 2.6 M 1.0 2.6 L 2.4 2.6', fill: '#e4e6e9', for: esd-rear-jack}
+      - {at: [117.25, 23.6], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: vcp-0}
+      - {at: [136.25, 23.6], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: vcp-1}
+      - {at: [155.25, 23.6], text: '2', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: vcp-2}
+      - {at: [174.25, 23.6], text: '3', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: vcp-3}
+      - {at: [102.3, 31.5], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: fan-0}
+      - {at: [188.2, 31.5], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: fan-1}
+      - {at: [344.0, 36.2], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: psu-0}
+      - {at: [434.3, 36.2], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: psu-1}
+    components:
+      bays:
+        - {id: fan-0, at: [49.1, 0.85], size: {w: 48.6, h: 42.0}, group: fans, rel-pos: 0,
+           accepts: [juniper/ex4300-fan-afo@1, juniper/ex4300-fan-afi@1], default: juniper/ex4300-fan-afo@1}
+        - {id: fan-1, at: [194.9, 0.85], size: {w: 48.6, h: 42.0}, group: fans, rel-pos: 1,
+           accepts: [juniper/ex4300-fan-afo@1, juniper/ex4300-fan-afi@1], default: juniper/ex4300-fan-afo@1}
+        - {id: psu-0, at: [257.5, 0.85], size: {w: 84.0, h: 42.0}, group: psus, rel-pos: 0,
+           accepts: [juniper/ex4300-jpsu-350-ac-afo@1, juniper/ex4300-jpsu-350-ac-afi@1, juniper/ex4300-jpsu-715-ac-afo@1,
+                     juniper/ex4300-jpsu-1100-ac-afo@1, juniper/ex4300-jpsu-550-dc-afo@1, juniper/ex4300-jpsu-550-dc-afi@1,
+                     juniper/ex4300-psu-blank@1],
+           default: juniper/ex4300-jpsu-350-ac-afo@1}
+        - {id: psu-1, at: [348.9, 0.85], size: {w: 84.0, h: 42.0}, group: psus, rel-pos: 1,
+           accepts: [juniper/ex4300-jpsu-350-ac-afo@1, juniper/ex4300-jpsu-350-ac-afi@1, juniper/ex4300-jpsu-715-ac-afo@1,
+                     juniper/ex4300-jpsu-1100-ac-afo@1, juniper/ex4300-jpsu-550-dc-afo@1, juniper/ex4300-jpsu-550-dc-afi@1,
+                     juniper/ex4300-psu-blank@1],
+           default: juniper/ex4300-psu-blank@1}
+      placements:
+        - {ref: common/rj45-eth@1, id: mgmt, at: [9.7, 10.0], rotate: 180, group: mgmt, rel-pos: 1,
+           attrs: {speed: 1g, role: mgmt},
+           states: {led-a: ['off', {name: link-activity, color: '#22c55e', behavior: blinking}],
+                    led-b: ['off', {name: speed, color: '#22c55e'}]},
+           description: 'Tables 19 and 20 - Link/Activity green blinking with activity, steady without; Status green steady at 1000 Mbps, blinking at 100 Mbps, off at 10 Mbps'}
+        - {ref: std/rj45@2, id: con2, at: [9.7, 24.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/esd-jack@1, id: esd-rear-jack, at: [33.2, 5.4], for: chassis, group: esd, rel-pos: 0}
+        - {ref: std/usb-a@1, id: usb, at: [29.1, 26.45], rotate: 90, group: mgmt, rel-pos: 3}
+        - {ref: common/usb-symbol@1, id: usb-mark, at: [31.9, 36.0], for: usb, group: furniture, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: vcp-0, at: [108.0, 25.5], group: vcp, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: vcp-1, at: [127.0, 25.5], group: vcp, rel-pos: 1}
+        - {ref: std/qsfp-ganged@1, id: vcp-2, at: [146.0, 25.5], group: vcp, rel-pos: 2}
+        - {ref: std/qsfp-ganged@1, id: vcp-3, at: [165.0, 25.5], group: vcp, rel-pos: 3}
+        - {ref: common/led-rect-sm@1, id: led-vcp-0-a, at: [112.15, 38.8], for: vcp-0, group: vcp-leds, rel-pos: 0}
+        - {ref: common/led-rect-sm@1, id: led-vcp-0-b, at: [119.55, 38.8], for: vcp-0, group: vcp-leds, rel-pos: 1}
+        - {ref: common/led-rect-sm@1, id: led-vcp-1-a, at: [131.15, 38.8], for: vcp-1, group: vcp-leds, rel-pos: 2}
+        - {ref: common/led-rect-sm@1, id: led-vcp-1-b, at: [138.55, 38.8], for: vcp-1, group: vcp-leds, rel-pos: 3}
+        - {ref: common/led-rect-sm@1, id: led-vcp-2-a, at: [150.15, 38.8], for: vcp-2, group: vcp-leds, rel-pos: 4}
+        - {ref: common/led-rect-sm@1, id: led-vcp-2-b, at: [157.55, 38.8], for: vcp-2, group: vcp-leds, rel-pos: 5}
+        - {ref: common/led-rect-sm@1, id: led-vcp-3-a, at: [169.15, 38.8], for: vcp-3, group: vcp-leds, rel-pos: 6}
+        - {ref: common/led-rect-sm@1, id: led-vcp-3-b, at: [176.55, 38.8], for: vcp-3, group: vcp-leds, rel-pos: 7}
+        - {ref: common/led-dot@1, id: led-fan-0, at: [105.7, 38.4], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {ref: common/led-dot@1, id: led-fan-1, at: [185.1, 38.4], for: fan-1, group: fan-leds, rel-pos: 1}
+  top:
+    size: {w: 441.0, h: 444.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's Figures 5 and 7 show the lid in perspective with a
+      logo and mounting holes along the sides; nothing there can be measured.
+  bottom:
+    size: {w: 441.0, h: 444.7}
+    empty: >-
+      Not drawn by any source held: neither the guide nor the datasheet pictures the underside (the
+      guide lists four rubber feet in its inventory, Table 68).
+  left:
+    size: {w: 444.7, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the left side wall
+      with mounting holes, and the front-mounting brackets are separate hardware.
+  right:
+    size: {w: 444.7, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the right side wall
+      with mounting holes.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      EX4300-48T as shipped - one 350 W AC power supply (AIR OUT) in slot 0 with a cover panel over
+      slot 1, two EX4300-FAN (AIR OUT) fan modules, and the uplink slot covered. Front-to-back airflow.
+    default: true
+    part-numbers:
+      EX4300-48T: {}
+  afi:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      EX4300-48T-AFI - one 350 W AC power supply (AIR IN) in slot 0 and two EX4300-FAN-AFI (AIR IN)
+      fan modules: back-to-front airflow, air entering at the rear and leaving through the front.
+    bays:
+      psu-0: juniper/ex4300-jpsu-350-ac-afi@1
+      fan-0: juniper/ex4300-fan-afi@1
+      fan-1: juniper/ex4300-fan-afi@1
+    part-numbers:
+      EX4300-48T-AFI: {}
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX4300-48T-DC - one 550 W DC power supply (AIR OUT) in slot 0 and two EX4300-FAN (AIR OUT) fan
+      modules: front-to-back airflow, DC powered. The DC supply does not provide PoE.
+    bays:
+      psu-0: juniper/ex4300-jpsu-550-dc-afo@1
+    part-numbers:
+      EX4300-48T-DC: {}
+  dc-afi:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      EX4300-48T-DC-AFI - one 550 W DC power supply (AIR IN) in slot 0 and two EX4300-FAN-AFI (AIR
+      IN) fan modules: back-to-front airflow, DC powered.
+    bays:
+      psu-0: juniper/ex4300-jpsu-550-dc-afi@1
+      fan-0: juniper/ex4300-fan-afi@1
+      fan-1: juniper/ex4300-fan-afi@1
+    part-numbers:
+      EX4300-48T-DC-AFI: {}
+  s:
+    kind: orderable
+    description: >-
+      EX4300-48T-S - the spare chassis, shipped with no power supply and no fan module; either AC or
+      DC supplies and AIR OUT or AIR IN fans are ordered separately, and the datasheet's spare-chassis
+      matrix says which combinations are supported. The supply and fan bays are shown open.
+    bays:
+      psu-0: ''
+      psu-1: ''
+      fan-0: ''
+      fan-1: ''
+    part-numbers:
+      EX4300-48T-S: {}
+datasheet:
+  title: 'EX4300 Line of Ethernet Switches Datasheet (Juniper Networks, PDF created 2022-07-25)'
+  url: https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4300-line-of-ethernet-switches-datasheet.pdf
+  sha256: fe874bd323cf1c03a38742f3187650e4bb4a94a177ddb195cc6ba1f4092ecb0b
+references:
+  - {title: 'EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12)', sha256: 69be5bb48f30174c1e7e223cf3496f47c442a1a22384f6fcddb51cdc87e6fc05}

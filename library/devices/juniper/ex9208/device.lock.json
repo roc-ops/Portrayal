@@ -1,0 +1,345 @@
+{
+ "bay-accepts": {
+  "front/bays/craft": [
+   "juniper/ex9208-craft@1"
+  ],
+  "front/bays/lc0": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/lc1": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/lc2": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/lc3": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/lc4": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/lc5": [
+   "juniper/ex9200-lc-sf-blank@1"
+  ],
+  "front/bays/sf0": [
+   "juniper/ex9200-sf2@1",
+   "juniper/ex9200-sf3@1",
+   "juniper/ex9200-sf@1"
+  ],
+  "front/bays/sf1": [
+   "juniper/ex9200-lc-sf-blank@1",
+   "juniper/ex9200-sf2@1",
+   "juniper/ex9200-sf3@1",
+   "juniper/ex9200-sf@1"
+  ],
+  "rear/bays/air-filter": [
+   "juniper/mx480-air-filter@1"
+  ],
+  "rear/bays/fan-tray": [
+   "juniper/mx480-fan-tray@1"
+  ],
+  "rear/bays/pem0": [
+   "juniper/ex9200-pwr-mx480-2400-dc@1",
+   "juniper/ex9200-pwr-mx480-2400-dc@2",
+   "juniper/ex9200-pwr-mx480-2520-ac@1"
+  ],
+  "rear/bays/pem1": [
+   "juniper/ex9200-pwr-mx480-2400-dc@1",
+   "juniper/ex9200-pwr-mx480-2400-dc@2",
+   "juniper/ex9200-pwr-mx480-2520-ac@1"
+  ],
+  "rear/bays/pem2": [
+   "juniper/ex9200-pwr-mx480-2400-dc@1",
+   "juniper/ex9200-pwr-mx480-2400-dc@2",
+   "juniper/ex9200-pwr-mx480-2520-ac@1"
+  ],
+  "rear/bays/pem3": [
+   "juniper/ex9200-pwr-mx480-2400-dc@1",
+   "juniper/ex9200-pwr-mx480-2400-dc@2",
+   "juniper/ex9200-pwr-mx480-2520-ac@1"
+  ]
+ },
+ "composed": "36f605512803e134",
+ "composed-refs": {
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
+  "common/esd-warning@1": "1.0.0+630c20786ff1f896",
+  "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/ex9200-lc-sf-blank@1": "1.0.0+269a66fe95e5120e",
+  "juniper/ex9200-pwr-mx480-2400-dc@1": "1.0.1+40c752dc8b2af623",
+  "juniper/ex9200-pwr-mx480-2400-dc@2": "2.0.0+1d0f1932b5b5c4a0",
+  "juniper/ex9200-pwr-mx480-2520-ac@1": "1.0.0+008fbd303affacde",
+  "juniper/ex9200-re2@1": "1.0.0+47cae2a7b5de70d8",
+  "juniper/ex9200-re@1": "1.0.0+db4005676aab5fd3",
+  "juniper/ex9200-sf2@1": "1.0.0+af7d251f1e3e1610",
+  "juniper/ex9200-sf3@1": "1.0.0+91d455571b61cd45",
+  "juniper/ex9200-sf@1": "1.0.0+0d048a6fc06c738c",
+  "juniper/ex9208-craft@1": "1.0.0+eabc39bdcf6f791d",
+  "juniper/mx-ground-stud-pair-5-8@1": "1.0.0+c975dff16d7abae3",
+  "juniper/mx-ground-stud@1": "1.0.1+23a05a5129dadc5b",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
+  "juniper/mx480-air-filter@1": "1.0.0+41d58af039c8efe9",
+  "juniper/mx480-fan-tray@1": "1.0.0+c073047338e5fb07",
+  "std/c20-inlet@1": "1.4.0+618074a1c18c1faa",
+  "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
+  "std/sfp@1": "1.4.1+3cc1934aedfbc611",
+  "std/usb-a@1": "1.3.0+3c77f06ea6794bfc"
+ },
+ "configs": [
+  "base",
+  "base-ac",
+  "base3a-ac",
+  "base3b-ac",
+  "base3b-ac-t",
+  "base3c-ac",
+  "chassis",
+  "red3b-ac",
+  "red3b-ac-t",
+  "red3b-dc",
+  "red3c-ac",
+  "red3c-dc",
+  "redund-ac",
+  "redund-dc",
+  "redund3a-ac",
+  "redund3a-dc"
+ ],
+ "dc-ports": {
+  "pem0/module/input": {
+   "juniper/ex9200-pwr-mx480-2400-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "red3b-dc",
+     "red3c-dc",
+     "redund-dc",
+     "redund3a-dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem0/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem1/module/input": {
+   "juniper/ex9200-pwr-mx480-2400-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "red3b-dc",
+     "red3c-dc",
+     "redund-dc",
+     "redund3a-dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem1/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem2/module/input": {
+   "juniper/ex9200-pwr-mx480-2400-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "red3b-dc",
+     "red3c-dc",
+     "redund-dc",
+     "redund3a-dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem2/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem2/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  },
+  "pem3/module/input": {
+   "juniper/ex9200-pwr-mx480-2400-dc@2": {
+    "awg": [
+     6
+    ],
+    "configs": [
+     "red3b-dc",
+     "red3c-dc",
+     "redund-dc",
+     "redund3a-dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "pem3/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "pem3/module/pole-batt"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": {
+     "nominal": -48,
+     "range": [
+      -40.5,
+      -72
+     ]
+    }
+   }
+  }
+ },
+ "format": 1,
+ "gaps": "61347d5b4ca5b39d",
+ "groups": [
+  "cooling",
+  "craft",
+  "esd",
+  "grounding",
+  "psus",
+  "sf-slots",
+  "slots"
+ ],
+ "ids": [
+  "front/bays/craft",
+  "front/bays/lc0",
+  "front/bays/lc1",
+  "front/bays/lc2",
+  "front/bays/lc3",
+  "front/bays/lc4",
+  "front/bays/lc5",
+  "front/bays/sf0",
+  "front/bays/sf1",
+  "front/cutout/esd-front",
+  "front/placements/esd-front-jack",
+  "rear/bays/air-filter",
+  "rear/bays/fan-tray",
+  "rear/bays/pem0",
+  "rear/bays/pem1",
+  "rear/bays/pem2",
+  "rear/bays/pem3",
+  "rear/cutout/esd-rear",
+  "rear/cutout/ground-stud-0",
+  "rear/cutout/ground-stud-1",
+  "rear/placements/esd-rear-jack",
+  "rear/placements/esd-rear-label",
+  "rear/placements/ground-studs"
+ ],
+ "names": "3b5055674161d9a3",
+ "placement-addressing": {
+  "for": {
+   "front/placements/esd-front-jack": [
+    "chassis"
+   ],
+   "rear/placements/esd-rear-jack": [
+    "chassis"
+   ],
+   "rear/placements/esd-rear-label": [
+    "chassis"
+   ],
+   "rear/placements/ground-studs": [
+    "chassis"
+   ]
+  },
+  "rel-pos": {
+   "front/bays/craft": 0,
+   "front/bays/lc0": 0,
+   "front/bays/lc1": 1,
+   "front/bays/lc2": 2,
+   "front/bays/lc3": 3,
+   "front/bays/lc4": 4,
+   "front/bays/lc5": 5,
+   "front/bays/sf0": 0,
+   "front/bays/sf1": 1,
+   "front/placements/esd-front-jack": 0,
+   "rear/bays/air-filter": 0,
+   "rear/bays/fan-tray": 1,
+   "rear/bays/pem0": 0,
+   "rear/bays/pem1": 1,
+   "rear/bays/pem2": 2,
+   "rear/bays/pem3": 3,
+   "rear/placements/esd-rear-jack": 2,
+   "rear/placements/esd-rear-label": 3,
+   "rear/placements/ground-studs": 0
+  }
+ },
+ "placement-attrs": "c852badd3305fc3f",
+ "placement-geometry": "bddac0d0d4010e5d",
+ "placement-groups": {
+  "front/bays/craft": "craft",
+  "front/bays/lc0": "slots",
+  "front/bays/lc1": "slots",
+  "front/bays/lc2": "slots",
+  "front/bays/lc3": "slots",
+  "front/bays/lc4": "slots",
+  "front/bays/lc5": "slots",
+  "front/bays/sf0": "sf-slots",
+  "front/bays/sf1": "sf-slots",
+  "front/placements/esd-front-jack": "esd",
+  "rear/bays/air-filter": "cooling",
+  "rear/bays/fan-tray": "cooling",
+  "rear/bays/pem0": "psus",
+  "rear/bays/pem1": "psus",
+  "rear/bays/pem2": "psus",
+  "rear/bays/pem3": "psus",
+  "rear/placements/esd-rear-jack": "esd",
+  "rear/placements/esd-rear-label": "esd",
+  "rear/placements/ground-studs": "grounding"
+ },
+ "placement-surface": "44136fa355b3678a",
+ "shape": "5d96f09864ad5ba3",
+ "surface": "882b4a107a39ecbb",
+ "version": "0.2.0"
+}

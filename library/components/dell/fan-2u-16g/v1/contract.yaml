@@ -1,0 +1,23 @@
+format: 1
+kind: module
+name: fan-2u-16g
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: server
+description: >-
+  Hot-plug cooling fan module of a 16th-generation 2U PowerEdge (R760) seen from above - one 60 mm fan in a housing with its orange handle; six of them across the chassis
+provenance:
+  sources: >-
+    Dell's R760 service model, working/intake/dell/3d-models/r760.glb (Dell's own CAD, read with glbparts.py, not committed), the un-exploded assembly node `Main Assembly (1)`, `R760_ CoolingFan` > `PEr760_ CoolingFan_ Assembly-1.001` > `PEr760_ CoolingFan` > `CoolingFan Prefab (1)` to `(6)`, mapped to the plan with the rear wall at cad z 736.1 (plan y = 736.1 - cad z1) and plan x = 209.0 - cad x1. The R760 Installation and Service Manual (ISM) figure 15 (inside the system), the embedded top view at 1.965 px/mm (about 2%): six modules in two groups of three across the fan cage, each with an airflow arrow, a hazard mark and an orange handle at its right; and 'Cooling fan specifications' (table 17): up to six fans, of three grades - standard (no label), High performance Silver and High performance Gold - the grade being the label colour.
+  size: >-
+    measured - r760.glb `CoolingFan Prefab (n)` (`PEr760_ CoolingFan_-1.002`): 64.0 wide (63.8 here: the model's six modules sit on a 63.8 pitch, so each one's handle overlaps its neighbour's box by 0.2, which the lint does not allow of bays, and the part is the pitch) x 58.2 long on the plan (cad z 240.6..298.8, plan y 437.3..495.5) and 68.0 tall (cad y 24.5..92.6, the housing `Body_3_5.001` 62.1 x 68.1 x 56.9 with the handle `Body_2_8.001` beside it). The six sit at plan x 16.6, 80.4, 144.2, 227.5, 291.3 and 355.1 - a 63.8 pitch and a 19.3 gap in the middle (cad x -18.5 to 0.8). The fan itself, `Body_1_37.001`, is 60.0 x 60.0 x 38.3. SOURCES DISAGREE on the length: the ISM's figure 15 read 64.0 x 61.0 and a pitch of 64.4 with a 19 gap, modules at plan y 432.6 - see the device's `fan-module-length` gap. The earlier height, 56.0 by analogy with a 60 mm fan, was an estimate.
+  grade: >-
+    NOT MODELLED - the three grades differ by label colour and by the thermal restriction matrix (ISM tables 39 to 53), and the figure's modules are unlabelled standard fans; one part stands for all three.
+  power: >-
+    NOT STATED in the R760 documents held.
+size: {w: 63.8, h: 58.2, d: 68.0}
+size-confidence: {w: measured, h: measured, d: measured}
+elements:
+  body: {at: [0.0, 0.0], size: [63.8, 58.2], class: bezel}
+skins: [default]

@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: ex9214-craft
+version: 1.0.0
+class: display
+behaviour: fills
+profile: networking
+description: >-
+  Craft interface (front panel display, FPM board) of the Juniper EX9214 switch. It spans the chassis above the upper
+  fan tray. It has the OK and FAIL lamps of PEM 0 to PEM 3 and of the upper and lower fan trays. It has the MASTER, ONLINE
+  and OFFLINE lamps for RE0 and RE1. It has a minor (yellow) and a major (red) alarm lamp and the alarm cutoff and lamp test
+  button (ACO/LT). It has the MINOR ALARM and MAJOR ALARM relay contacts (NC, C, NO). Each of the fourteen slots has an OK
+  lamp, a FAIL lamp and an ONLINE control button. The slots are line cards 0 to 5, Switch Fabric slots 0 and 1, the shared
+  slot 2|6 and line cards 7 to 11. The EX9214 model name is printed on it.
+attrs:
+  model: EX9214 Craft Interface
+  power-absent: not-published
+provenance:
+  sources: >-
+    EX9214 Switch Hardware Guide (published 2025-07-28), "Craft Interface in an EX9200 Switch": Figure 12 (the craft interface of
+    the EX9214, drawn flat, with ten callouts), the alarm relay contacts figure, Tables 9 to 14 (the lamps), and the EX9214 studio front
+    photograph (about 1.38 px/mm), which shows the panel with its lamps unlit.
+  lamp-states: >-
+    The vocabularies are the guide's: Table 9 (host subsystem: MASTER green, ONLINE green, OFFLINE red), Table 10 (fan: OK green, FAIL
+    red), Table 11 (power supply: OK green, FAIL red), Table 12 (Switch Fabric module: OK green or blinking, FAIL red), Table 13 (line card:
+    OK green or blinking, FAIL red), Table 14 (alarm: major red, minor yellow). Each lamp fills from the LED variable, with its drawn colour
+    as the unlit fallback.
+  power: >-
+    NOT PUBLISHED. The guide's FRU power table lists the Routing Engine, the Switch Fabric modules and the line cards and does not list the
+    craft interface; the EX9200 datasheet (Aug 2022) Table 3 lists none either.
+  size: >-
+    estimated - the panel spans 423.4 x 52.3 mm on the EX9214 front photograph, read on a millimetre grid from 8.0 to 431.4 mm across the body
+    and from 6.2 to 58.5 mm down. The photograph resolves about 0.7 mm to the pixel. The guide gives no dimension for it. The MX960's craft panel is
+    441 x 48 mm (juniper/mx960-craft); the EX9214 panel is a different part.
+  features: >-
+    photo-measured - every lamp, button, tab and relay block is placed from the EX9214 studio front photograph, read on a millimetre grid, from the
+    panel's own origin at 8.0 mm across and 6.2 mm down. The PEM lamp columns read at 128.6, 135.1, 141.5 and 148.0 mm across the body, the fan
+    lamps at 175.6 and 182.0, the RE lamp columns at 203.4 and 234.0, the minor alarm triangle at 264.6, the major circle at 283.6, the ACO/LT
+    button at 305.9 and the relay blocks 331.0 to 356.8 and 358.0 to 383.3. The fourteen slot tabs read 30.72 mm apart from 19.5 mm. The
+    photograph's two scales differ by about 3 percent, so a reading is estimated to about 1.5 mm.
+  slot-tabs: >-
+    photo and guide Figure 12 - fourteen oval tabs under the slot lamp pairs, each with the word ONLINE under it: line cards 0 to 5, the two Switch
+    Fabric slots 0 and 1 (blue), the shared slot 2|6 (half blue), and line cards 7 to 11. Callouts 8, 9 and 10 of the figure name the groups.
+  logo-zone: >-
+    estimated - reserved, not drawn. The maker's wordmark sits at the left, about 30 x 11 mm, and the "running junos" badge at the right, about 27 x
+    11.5 mm. The library reproduces no vendor logo.
+states: [absent]
+elements:
+  led-pem0-ok: {at: [119.7, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-pem0-fail: {at: [119.7, 12.9], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-pem1-ok: {at: [126.2, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-pem1-fail: {at: [126.2, 12.9], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-pem2-ok: {at: [132.6, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-pem2-fail: {at: [132.6, 12.9], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-pem3-ok: {at: [139.1, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-pem3-fail: {at: [139.1, 12.9], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-fan-upper-ok: {at: [166.7, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-fan-upper-fail: {at: [173.1, 6.7], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-fan-lower-ok: {at: [166.7, 13.4], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-fan-lower-fail: {at: [173.1, 13.4], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-re0-master: {at: [194.5, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-re0-online: {at: [194.5, 12.9], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-re0-offline: {at: [194.5, 19.3], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-re1-master: {at: [225.1, 6.7], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-re1-online: {at: [225.1, 12.9], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-re1-offline: {at: [225.1, 19.3], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-alarm-minor: {at: [252.35, 10.75], size: [8.5, 7.5], class: led, states: [{name: yellow, color: '#f5a623'}, 'off']}
+  led-alarm-major: {at: [271.0, 9.2], size: [9.2, 9.2], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc0-ok: {at: [6.8, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc0-fail: {at: [14.4, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc1-ok: {at: [37.5, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc1-fail: {at: [45.1, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc2-ok: {at: [68.2, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc2-fail: {at: [75.8, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc3-ok: {at: [98.9, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc3-fail: {at: [106.5, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc4-ok: {at: [129.6, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc4-fail: {at: [137.2, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc5-ok: {at: [160.3, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc5-fail: {at: [167.9, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-sf0-ok: {at: [191.0, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-sf0-fail: {at: [198.6, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-sf1-ok: {at: [221.7, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-sf1-fail: {at: [229.3, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-sf2-lc6-ok: {at: [252.4, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-sf2-lc6-fail: {at: [260.0, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc7-ok: {at: [283.1, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc7-fail: {at: [290.7, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc8-ok: {at: [313.8, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc8-fail: {at: [321.4, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc9-ok: {at: [344.5, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc9-fail: {at: [352.1, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc10-ok: {at: [375.2, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc10-fail: {at: [382.8, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  led-slot-lc11-ok: {at: [405.9, 33.6], size: [1.8, 1.8], class: led, states: [{name: green, color: '#39b54a'}, {name: blinking, behavior: blinking, color: '#39b54a'}, 'off']}
+  led-slot-lc11-fail: {at: [413.5, 33.6], size: [1.8, 1.8], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  logo-zone: {at: [14.3, 12.3], size: [30.0, 11.0], class: label}
+  logo-zone-2: {at: [379.9, 11.5], size: [26.5, 11.5], class: label}
+size:
+  w: 423.4
+  h: 52.3
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

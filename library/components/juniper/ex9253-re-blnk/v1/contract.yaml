@@ -1,0 +1,38 @@
+format: 1
+kind: module
+name: ex9253-re-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9253-RE-BLNK, the Routing Engine blank cover panel of the EX9253. A base order ships one
+  Routing Engine, in slot RE0, and the second slot, RE1, takes this panel; the redundant order fills it with
+  a second Routing Engine. The guide says to install a replacement Routing Engine shortly after removing
+  one. The panel is a flat metal plate the width of a Routing Engine.
+attrs:
+  role: slot-blank
+part-numbers:
+  EX9253-RE-BLNK (EX9253): {part: EX9253-RE-BLNK}
+provenance:
+  sources: >-
+    datasheet - EX9250 Ethernet Switch Datasheet (1000632-006-EN, Sep 2021), FRU table: EX9253-RE-BLNK,
+    "EX9253 RE blank cover panel". EX9253 Switch Hardware Guide (published 2022-11-30), Table 3 ("Blank
+    panels for empty slots") and Table 32 ("one blank panel for each slot not occupied by a component"); the
+    guide prints no part number for an RE panel, so it is the datasheet that names it. The key of part-numbers
+    carries the suffix (EX9253) so that its DCIM module type does not share a file with the same part
+    number in another line's slice.
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an opening,
+    so this part draws no elements. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    estimated - a chassis slot opening, not the part. No document dimensions the panel; it takes the size
+    of the juniper/ex9253-re@1 face it replaces.
+  face: >-
+    estimated - no figure or photograph shows the panel. It is drawn as a plain plate with a stiffener.
+states: [absent]
+size:
+  w: 189.5
+  h: 42.2
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

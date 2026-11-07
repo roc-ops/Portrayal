@@ -1,0 +1,125 @@
+format: 1
+kind: module
+name: jpsu-550-c-dc-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-550-C-DC-AFI, the 550 W DC power supply of the EX4400 switches,
+  back-to-front airflow (AFI). The guide ships it with the EX4400-24T-DC-AFI
+  and EX4400-48T-DC-AFI, and takes the 550 W DC units for the EX4400-24X and
+  -48F as well. Up to two fit in the rear slots 0 and 1, and a second unit
+  gives 1+1 redundancy. The face is that of the front-to-back unit with a blue
+  (Juniper Azure Blue) handle across the fan. Do not mix AC and DC supplies,
+  or supplies with different airflow, in one chassis.
+attrs:
+  role: dc-power-supply
+  power-output-w: 550
+  airflow: back-to-front
+  input-voltage: -48 VDC to -60 VDC rated operating voltage
+  input-current: 13 A
+  inlet: other
+  input-connector: D-sub 3W3 - -48 VDC input (-), return (+) and ground
+  weight-kg: 0.75
+  hot-swap: 'yes'
+part-numbers:
+  JPSU-550-C-DC-AFI: {part: JPSU-550-C-DC-AFI}
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic DC
+    Power Supply in EX4400 Switches. Table 73 lists JPSU-550-C-DC-AFI beside the AFO unit under
+    one set of figures. Table 76 gives the electrical specification, Table 79 the DC power
+    cable, Table 82 the airflow (AIR IN label and Juniper Azure Blue handle) and Table 114 the
+    CLI name. Tables 11 and 26 ship it in the -DC-AFI builds of the 24T and 48T. No figure in the
+    guide draws this supply.
+  size: >-
+    datasheet - Table 40, Physical Specifications of the EX4400 PSUs - width 3.27 in (8.3 cm),
+    height 1.59 in (4.04 cm), depth 8.88 in (22.56 cm) for the AC and DC units. The guide gives
+    one set of figures and draws one 550 W DC unit, so the back-to-front unit takes the same
+    size. Carried as 83.06 x 40.39 x 225.55 mm.
+  depth: >-
+    datasheet - Table 40, depth 8.88 in (22.56 cm), carried as 225.55 mm.
+  power-output-w: >-
+    datasheet - Table 76, 550-W DC power supplies - output power 550 W. An output figure, because
+    a power supply provides power. The guide gives no draw or loss figure for the unit.
+  input: >-
+    datasheet - Table 76 gives the rated operating voltage -48 VDC through -60 VDC and the input
+    current rating 13 A. The section on the DC power cable says the supplies need a D-sub 3W3
+    type connector whose three pins carry the -48 VDC input (-), the return (+) and the
+    ground. The connector is drawn in the skin, because the library has no D-sub 3W3 power
+    part.
+  elements: >-
+    borrowed - from jpsu-550-c-dc-afo@1, which was read off the rear render of the DC build of the
+    EX4400-24T (Figure 10, g022649). The guide shows no back-to-front supply, so only the handle
+    colour differs. The estimated positions are those of the front-to-back unit.
+  colour: >-
+    estimated - the guide names the handle Juniper Azure Blue and shows no picture of it. The
+    blue is the one used for the back-to-front fan module, ex4400-fan-afi@1.
+  airflow: >-
+    datasheet - Table 82. JPSU-550-C-DC-AFI is back-to-front. Cold air enters through the vents
+    on the rear panel and hot air leaves through the vents on the front panel, indicated by the
+    AIR IN label and the Juniper Azure Blue handle.
+  led: >-
+    datasheet - Table 73 names the lamp DC.OK. Table 89 and Figure 92 give its states. Steady
+    green means the supply receives input and gives proper output. Blinking green means the
+    supply fan failed or its internal communication failed. Unlit means the cable is loose, the
+    input is wrong, the supply is in standby, the ambient is too hot or the supply failed.
+  relief: >-
+    estimated - the handle stands proud of the fan in the front-to-back unit's Figure 84. Its
+    projection is not measured in any source. The value only makes it read as a handle in 3D.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit
+    itself draws.
+states:
+- ok
+- fault
+- absent
+elements:
+  led:
+    at: [73.5, 2.7]
+    size: [5.2, 5.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  handle:
+    at: [0.3, 17.9]
+    size: [43.3, 5.4]
+    class: handle
+  dc-input:
+    at: [58.9, 2.0]
+    size: [10.1, 34.9]
+    class: inlet
+  latch:
+    at: [74.4, 9.3]
+    size: [6.1, 17.9]
+    class: latch
+size:
+  w: 83.06
+  h: 40.39
+  d: 225.55
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 6.0
+    color: '#2a8bd8'
+    confidence: estimated
+    source: >-
+      The handle bar stands proud of the supply fan in the front-to-back unit's Figure 84
+      (g022581). The back-to-front unit is not drawn. The projection is not stated or measured.
+  - node: latch
+    out: 1.4
+    color: '#2d2e30'
+    confidence: estimated
+    source: >-
+      The ejector lever stands proud of the face in Figure 84. The projection is not stated or
+      measured.
+connection-points:
+  power: {at: [63.9, 19.6], direction: rear}
+body:
+  depth: 225.55
+  color: '#b9bec4'
+skins: [default]

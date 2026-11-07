@@ -1,0 +1,97 @@
+format: 1
+kind: module
+name: qfx3500-mb-sfp-afo
+version: 1.0.0
+class: control-panel
+behaviour: fills
+profile: networking
+description: >-
+  QFX3500-MB-SFP-AFO, the SFP management board with port-to-FRU airflow. It is the field-replaceable
+  unit in the middle of the FRU side of a QFX3500, between the two fan trays. It differs from the RJ-45
+  board in its two management ports, which are 1 Gbps SFP cages and not 1000BASE-T jacks. Its
+  faceplate carries the LCD that shows the host name and the number of active alarms, the Power, Status
+  and Fan lamps, a USB port, the RJ-45 console port and the C0 and C1 SFP management ports. Two fan
+  modules inside the board cool the chassis. The switch must be powered off to replace the board. Its
+  siblings are QFX3500-MB-SFP-AFI (FRU-to-port airflow) and the RJ-45 boards QFX3500-MB and
+  QFX3500-MB-RJ45-AFO. A board only fits a chassis of its own airflow, so this one fits the
+  QFX3500-48S4Q-AFO.
+attrs:
+  model: QFX3500-MB-SFP-AFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    drawing - the same board outline as juniper/qfx3500-mb@1: QFX3500 Device Hardware Documentation
+    (modified 2018-07-03), figure 5 (page 27, drawing g050012), scaled to the table's 17.4 x 1.74 in at
+    1.427 mm/pt across and 1.396 down, 133.4 x 40.6 mm. The guide draws only the RJ-45 board.
+  depth: >-
+    estimated - not stated. The guide's figures 11 and 14 are isometric drawings with no scale and no
+    table gives a depth, so none is written.
+  face: >-
+    estimated - the guide draws the RJ-45 board only (figures 5, 11 and 14) and says in words that the
+    SFP board provides two 1 Gbps SFP management ports and, for the lamps, that those of the SFP ports
+    are identical (figure 12 note). This face is the RJ-45 board's with the two jacks replaced by two
+    SFP cages on the same centres, so the cage positions and which way up the cages sit are estimated,
+    and the lamps of the two SFP ports are not drawn.
+  logo-zone: >-
+    estimated - reserved, not drawn. Figure 5 draws the maker's wordmark at the upper left of the board,
+    about 25 x 11 mm. The library reproduces no vendor logo.
+  airflow: >-
+    datasheet - guide, Table 10 (page 34) and Table 13 (page 40): QFX3500-MB-SFP-AFO is port-to-FRU.
+  power: >-
+    not published. Searched the QFX3500 hardware guide near its management board, Table 5 (weights) and
+    the power tables 25 and 27: only whole-switch figures exist. The module declares power-absent so
+    the missing figure is a statement and not a silence.
+  speed: >-
+    datasheet - guide, Management Board for a QFX3500 Device (page 32): the SFP board provides two
+    1-Gbps small form-factor pluggable (SFP) management ports.
+states: [absent]
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the out-of-band cluster of the management board: two SFP management ports, an RJ-45 console
+      port and a USB port. Three kinds, one purpose: reaching and recovering the switch when the data
+      plane cannot.
+parts:
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [16.6, 15.95], skin: usb2, attrs: {media: usb-a, function: USB}}
+- {ref: std/sfp-ganged@1, id: c0, group: mgmt, at: [51.4, 27.3], attrs: {speed: 1g, media: sfp, function: out-of-band management C0}}
+- {ref: std/sfp-ganged@1, id: c1, group: mgmt, at: [67.8, 27.3], attrs: {speed: 1g, media: sfp, function: out-of-band management C1}}
+- {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [104.65, 11.6], attrs: {media: rj45-serial, function: serial console}}
+elements:
+  led-power:
+    at: [92.55, 7.56]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  led-status:
+    at: [92.55, 12.2]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: beacon, color: '#39b54a', behavior: blinking}
+    - {name: error, color: '#f5a623', behavior: blinking}
+    - 'off'
+  led-fan:
+    at: [92.55, 16.9]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  logo-zone:
+    at: [14.3, 2.3]
+    size: [24.9, 10.9]
+    class: label
+size:
+  w: 133.4
+  h: 40.6
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

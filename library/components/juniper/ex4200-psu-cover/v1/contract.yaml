@@ -1,0 +1,48 @@
+format: 1
+kind: module
+name: ex4200-psu-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover panel of the Juniper EX4200 switches. The switch ships with one power
+  supply and a cover panel preinstalled over the second slot. The guide says a power supply
+  must not leave its slot empty for long while the switch is on, because it must stay in for
+  proper airflow, and the same holds for the cover. A plain plate with a captive screw at the
+  left, where the supplies carry their locking lever.
+attrs:
+  model: EX4200 power supply cover panel
+  covers: power supply slot
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), Table 37 (packing list: "Power
+    supply cover panel: 1", preinstalled). Removing a Power Supply from an EX4200 Switch says the
+    slot must not be left empty for long while the switch is on, because the supply must stay in
+    the chassis for proper airflow. No part number is given
+  size: >-
+    estimated - modelled at the power supply slot, 90.0 x 41.5 mm, so that it fills the bay a
+    supply fills (see the supply contracts). The guide gives no dimension for the cover
+  face: >-
+    estimated - no figure or photograph of the cover panel is held. It is drawn as a plain plate
+    with a screw at the left, where the supplies carry their locking lever
+states: [absent]
+elements:
+  screw:
+    at: [3.0, 4.2]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 90.0
+  h: 41.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names screws on the supply faceplate; projection estimated

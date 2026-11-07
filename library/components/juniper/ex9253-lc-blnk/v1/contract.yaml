@@ -1,0 +1,38 @@
+format: 1
+kind: module
+name: ex9253-lc-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9253-LC-BLNK, the line card blank cover panel of the EX9253. Every base and redundant order
+  ships a blank in each line card slot that holds no card (MPC0 and MPC1), to keep the airflow through
+  the chassis; the guide says to fit a blank or a replacement card shortly after a card is removed. The
+  panel is a flat metal plate the width of a line card.
+attrs:
+  role: slot-blank
+part-numbers:
+  EX9253-LC-BLNK: {part: EX9253-LC-BLNK}
+provenance:
+  sources: >-
+    datasheet - EX9253 Switch Hardware Guide (published 2022-11-30), Table 3 ("Blank panels for empty slots:
+    EX9253-LC-BLNK"), the line card sections ("install a replacement line card or a blank panel in the line
+    card slot") and Table 32. EX9250 Ethernet Switch Datasheet (1000632-006-EN, Sep 2021), FRU table:
+    EX9253-LC-BLNK, "EX9253 line card blank cover panel".
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an opening,
+    so this part draws no elements. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    estimated - a chassis slot opening, not the part. The guide gives no figure or dimension for the
+    panel. It takes the size of the line card it replaces, 16.5 x 1.65 in (419.1 x 41.9 mm, Table 5), which
+    Figure 1 confirms: the slot opening runs 105 to 1370 px on that figure at 3.03 px/mm, 417.5 mm.
+  face: >-
+    estimated - no figure or photograph shows the panel. It is drawn as a plain plate with a stiffener,
+    as juniper/jnp-pwr-blnk-3@1 is; whether it has levers or finger holes is not known.
+states: [absent]
+size:
+  w: 419.1
+  h: 41.9
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

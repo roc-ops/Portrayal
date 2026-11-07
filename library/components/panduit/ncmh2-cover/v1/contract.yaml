@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: ncmh2-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged front cover of a Panduit NetManager NCMH2 or NCMHF2 2RU horizontal manager seen from
+  the front - a polycarbonate plate across the finger tips with a lip along its top and bottom
+  edge. It ships fitted and opens 180 degrees up or down
+provenance:
+  size: >-
+    drawing - the NCMH2 and NCMHF2 customer drawings (Panduit 00787-07 and 00787-10): the front
+    cover is the thin bar along the front edge of the plan ("COVER REMOVED FOR CLARITY" on the front
+    view), as wide as the body; the NCMHF2 parts list says "(1) HINGED COVER (NCMH2-REC)"; the NCMH2
+    drawing's materials list "FRONT COVER: PC". 444.83 wide as the body and 88.14 high.
+  relief: >-
+    drawing - the cover is the front 12.27 mm of the plan. Its plate and lips are 3.5 and 1.5
+    thick, ESTIMATED: no view sections the cover. The reference of this part is the front of the
+    manager: the plate stands from 78.77 to 82.27 above the well's floor and the lips from 70.
+  lid: >-
+    datasheet - the NetManager Horizontal Cable Managers specification sheet (RKSP225, the Spanish
+    edition read): the hinged front cover ("La cubierta frontal con bisagra") opens 180° up or
+    down ("hacia arriba o hacia abajo"), and the product page's "Removable hinged plastic cover". It
+    opens over the channel, so it is a lid (`lid: true`). The format has no hinge, so the cover is
+    on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: Polycarbonate", "The manager is black" on the product pages. The
+    shade is this library's render, a little lighter than the manager so the two read apart.
+size: {w: 444.83, h: 88.14}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: polycarbonate}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 86.64], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 88.14], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 70
+      out: 82.27
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NCMH2 drawing, the cover over the front 12.27 mm; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      lift: 70
+      out: 82.27
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NCMH2 drawing, the cover over the front 12.27 mm; the lip's thickness is not dimensioned
+    - node: plate
+      lift: 78.77
+      out: 82.27
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NCMH2 drawing; the plate's thickness is not dimensioned
+skins: [default]

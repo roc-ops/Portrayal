@@ -1,0 +1,364 @@
+format: 1
+kind: device
+name: 49253-6pm
+version: 0.1.1
+maturity: modelled
+manufacturer: Leviton
+model: 49253-6PM
+description: >-
+  1RU five-ring horizontal cable manager with 6 in rings, Leviton 49253-6PM: a flat black
+  16-gauge steel panel on the rack rails with five steel distribution rings welded to it,
+  each a bar loop standing 6 in out of the panel with a slit in its front end that a
+  patch cord is laid in through. A metal cover, 49253-1CV, is sold separately and hooks
+  over the two outer rings.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The ears are
+      the flat ends of the panel, so the ear plane is the panel, and its back face is the one
+      that meets the rail: the top view of the 49253-6PM dimensional drawing dimensions the
+      plate's front face 152.4 mm [6.00 in] behind the ring tips and the sheet 1.5 mm, so
+      `at` is 153.9. Of the 165.1 depth, 11.2 stands behind the rail. This states a
+      placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the rings stand 152.4 mm in front of the panel and its folded
+      edges reach only 11.2 behind it (the side view), so the rear face of its rack unit
+      stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DIMENSIONAL DRAWING. Leviton publishes the 49253-6PM
+      drawing as DXF and DWG on its product page; the DXF is vector CAD in inches with five
+      views, and its dimensions read 19.00 in, 1.72 in and 6.0 in. Every figure here is
+      read from its line work at 25.4 mm to the inch and agrees with those dimensions and
+      with the specification sheet's page 2 (482.6, 43.7, 152.4 and 165.1 mm). It is the
+      49253-LPM with 50.8 mm more depth between the back leg and the front legs.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 444.5 x 43.7 x 165.1. The plate is flat over the whole 19.00 in [482.6mm] and
+      its top and bottom edges fold back from 0.75 in [19.05mm] inside each end to 17.5 in
+      [463.55mm], so the flat ends outside the folds are the ears, which this library does
+      not draw, and the body is the 444.5. Overall depth is 6.50 in [165.1mm]: the rings 6.00
+      in [152.4mm] from the face of the plate, the sheet 1.5 and the fold 11.2 behind it.
+  thickness:
+    confidence: drawing
+    note: >-
+      drawing - 1.5 mm, the plate's two faces 152.4 and 153.9 mm from the front in the top
+      view; "16-gauge steel" on the specification sheet.
+  weight:
+    confidence: estimated
+    note: >-
+      no document states a weight: the specification sheet, the product page and the
+      instruction sheet are silent. `weight-kg` is left out and a gap says so.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view: the plate between the folds and the five rings on it, at
+      the other 49253 managers' positions (centred 26.1 mm from the left end of the 482.6
+      and 107.6 apart), each 38.1 mm high and centred on the 43.7 plate (2.8 above and
+      below). Leviton's mark, printed on the plate near the right ring, is not drawn: a
+      vendor mark never is.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view: the back of the plate, plain, with ten round holes 4.58 mm
+      across, two behind each ring's middle 14.2 mm apart, and the folded edges end-on.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top of the drawing: the folded edge behind the
+      plate and the five rings' top bars from above, with each bottom bar's last 12.7 mm
+      showing beyond the top bar's end. The bottom is the same from underneath, where each
+      ring's bottom bar runs its full length.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, the drawing's side view: the folded edges behind the plate and
+      the ring's profile in front of it. The right is the same, turned round.
+  rings:
+    confidence: drawing
+    note: >-
+      drawing - the side view of a ring and the front view of five: see the contract. The
+      drawing carries no dimension for the inner leg's place, which its line work puts 12.7
+      mm behind the front, as on the 4 in rings; the specification sheet's page 2 gives this
+      part's 6.00 and 6.50 in only. The application note's usable depth of 5.25 in agrees
+      with that place.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - the five rings are the guides: each a component with a `ring` guide
+      (see its contract), cables passing along the panel through each in turn. The opening
+      is 31.75 x 133.35 mm, 6.6 sq in, and Leviton's application note gives the ring's
+      cross-section as 6.5 sq in.
+  cover:
+    confidence: drawing
+    note: >-
+      drawing - the 49253-1CV cover is a separate part sold separately (specification sheet:
+      "Covers are available (sold separately)"), so the manager is drawn without it; the
+      `with-cover` configuration fits it. The instruction sheet, step 3, says to align the
+      cover's sides to the outside split rings and slide it down until fully seated.
+      Nothing says the cover is hinged.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - Leviton's application note "Maximum Cable Fill Ratios in Cable Managers"
+      (NS-AN-23-006-05-30-23, 5/30/2023), page 14: "Ring size: 6.5 sq.in. (49253-6PM)", and
+      for the 6AS10 patch cord (0.240 in) 71 cords at 50 percent fill, 43 at 30 percent,
+      35 at 25 percent. It states 30 percent as the "recommended practical maximum" for
+      patch cords in front managers. The count is a ring's: each of the five has the same
+      opening. It names the cord by Leviton part number and not by category, so no
+      `cable-capacity-media` is stated.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, the finish, the standards (c(UL)us, RoHS, EIA 310.E) and the
+      four #12-24 screws supplied are the specification sheet's; "Color: Black" is the
+      product page's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black" and "black powder-coat finish". The drawing is line work
+      and the product images were not used, so the shade is this library's render of black.
+attrs:
+  physical:
+    material: 16-gauge steel, black powder coated
+    color: Black
+    mounting-hardware: Four #12-24 screws supplied
+  performance:
+    cable-capacity: 43
+    cable-capacity-basis: >-
+      6AS10 patch cords (0.240 in OD) at the 30 percent recommended practical maximum fill
+      of one ring's 6.5 sq in usable area (1.25 x 5.25 in); 71 at 50 percent and 35 at 25
+      percent - Leviton application note NS-AN-23-006-05-30-23, page 14. A ring's count
+  features:
+    standards: c(UL)us, RoHS, EIA 310.E
+chassis:
+  width: 444.5
+  height: 43.7
+  depth: 165.1
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 153.9, default: true}
+  shell: sheet
+  thickness: 1.5
+  color: '#1b1d20'
+gaps:
+  - what: weight
+    scope: [front, rear, top, bottom, left, right]
+    reason: vendor-silent
+    note: >-
+      the specification sheet, the product page and the instruction sheet state no weight.
+    wanted: a shipping weight on the product page or the specification sheet
+  - what: ring-fixing
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the drawing's rear view shows ten round holes 4.58 mm across behind the rings and
+      no document says what they are (the rings' tabs, rivets or open holes), so they are
+      drawn as dark discs.
+    wanted: a section of the panel through a ring's back leg
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the flat steel panel and its folded edges
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: five steel distribution rings, cables passing through along the panel
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the separately sold metal cover that hooks over the two outer rings
+views:
+  front:
+    size: {w: 444.5, h: 43.7}
+    components:
+      placements:
+        - {ref: leviton/49253-6pm-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: leviton/49253-6pm-ring@1, id: guide-1, at: [2.3, 2.8], group: guides, rel-pos: 1, in: panel, under: cover}
+        - {ref: leviton/49253-6pm-ring@1, id: guide-2, at: [109.9, 2.8], group: guides, rel-pos: 2, in: panel, under: cover}
+        - {ref: leviton/49253-6pm-ring@1, id: guide-3, at: [217.5, 2.8], group: guides, rel-pos: 3, in: panel, under: cover}
+        - {ref: leviton/49253-6pm-ring@1, id: guide-4, at: [325.1, 2.8], group: guides, rel-pos: 4, in: panel, under: cover}
+        - {ref: leviton/49253-6pm-ring@1, id: guide-5, at: [432.7, 2.8], group: guides, rel-pos: 5, in: panel, under: cover}
+        - {ref: leviton/49253-1cv@1, id: cover, at: [0.9, 0.0], group: cover, rel-pos: 1, in: panel, lift: 146.15, only-in: [with-cover]}
+  rear:
+    size: {w: 444.5, h: 43.7}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [444.5, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [0, 0], size: [444.5, 1.5], rx: 0, fill: '#232528', kind: flange}
+        - {id: fold-bottom, at: [0, 42.2], size: [444.5, 1.5], rx: 0, fill: '#232528', kind: flange}
+        - {id: hole-1a, at: [4.76, 12.45], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-1b, at: [4.76, 26.68], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-2a, at: [112.36, 12.45], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-2b, at: [112.36, 26.68], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-3a, at: [219.96, 12.45], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-3b, at: [219.96, 26.68], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-4a, at: [327.56, 12.45], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-4b, at: [327.56, 26.68], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-5a, at: [435.16, 12.45], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+        - {id: hole-5b, at: [435.16, 26.68], size: [4.58, 4.58], rx: 2.29, fill: '#0a0b0c', kind: hole}
+  top:
+    size: {w: 444.5, h: 165.1}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11.2], size: [444.5, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-top, at: [2.3, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-2-top, at: [109.9, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-3-top, at: [217.5, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-4-top, at: [325.1, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-5-top, at: [432.7, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-1-foot, at: [2.3, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-2-foot, at: [109.9, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-3-foot, at: [217.5, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-4-foot, at: [325.1, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-5-foot, at: [432.7, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+    components:
+      placements:
+        - {ref: leviton/49253-flange@1, id: flange-top, at: [0.0, 0.0], group: body, rel-pos: 2}
+  bottom:
+    size: {w: 444.5, h: 165.1}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11.2], size: [444.5, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-bottom, at: [2.3, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-2-bottom, at: [109.9, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-3-bottom, at: [217.5, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-4-bottom, at: [325.1, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-5-bottom, at: [432.7, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+    components:
+      placements:
+        - {ref: leviton/49253-flange@1, id: flange-bottom, at: [0.0, 0.0], group: body, rel-pos: 3}
+  left:
+    size: {w: 165.1, h: 43.7}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.2], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [11.2, 0], size: [1.5, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-back, at: [12.7, 2.8], size: [3.175, 38.1], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-top, at: [12.7, 2.8], size: [139.7, 3.175], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-bottom, at: [12.7, 37.725], size: [152.4, 3.175], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-inner, at: [149.225, 2.8], size: [3.175, 25.4], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-outer, at: [161.925, 15.5], size: [3.175, 25.4], rx: 0, fill: '#101214', kind: ring}
+  right:
+    size: {w: 165.1, h: 43.7}
+    panel:
+      decor:
+        - {id: fold-top, at: [153.9, 0], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [153.9, 42.2], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [152.4, 0], size: [1.5, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-back, at: [149.225, 2.8], size: [3.175, 38.1], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-top, at: [12.7, 2.8], size: [139.7, 3.175], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-bottom, at: [0, 37.725], size: [152.4, 3.175], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-inner, at: [12.7, 2.8], size: [3.175, 25.4], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-outer, at: [0, 15.5], size: [3.175, 25.4], rx: 0, fill: '#101214', kind: ring}
+  top-covered:
+    face: top
+    size: {w: 444.5, h: 165.1}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11.2], size: [444.5, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-top, at: [2.3, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-2-top, at: [109.9, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-3-top, at: [217.5, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-4-top, at: [325.1, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-5-top, at: [432.7, 12.7], size: [9.5, 139.7], rx: 1.2, fill: '#111315', kind: ring}
+        - {id: guide-1-foot, at: [2.3, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-2-foot, at: [109.9, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-3-foot, at: [217.5, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-4-foot, at: [325.1, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-5-foot, at: [432.7, 152.4], size: [9.5, 12.7], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: cover-tab-left, at: [0.9, 158.85], size: [37.03, 1.22], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-tab-right, at: [406.57, 158.85], size: [37.03, 1.22], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-plate, at: [0.9, 163.88], size: [442.7, 1.22], rx: 0, fill: '#2a2c2f', kind: cover}
+    components:
+      placements:
+        - {ref: leviton/49253-flange@1, id: flange-top, at: [0.0, 0.0], group: body, rel-pos: 2}
+  bottom-covered:
+    face: bottom
+    size: {w: 444.5, h: 165.1}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 11.2], size: [444.5, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-bottom, at: [2.3, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-2-bottom, at: [109.9, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-3-bottom, at: [217.5, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-4-bottom, at: [325.1, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: guide-5-bottom, at: [432.7, 12.7], size: [9.5, 152.4], rx: 1.2, fill: '#0d0f10', kind: ring}
+        - {id: cover-tab-left, at: [0.9, 158.85], size: [37.03, 1.22], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-tab-right, at: [406.57, 158.85], size: [37.03, 1.22], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-plate, at: [0.9, 163.88], size: [442.7, 1.22], rx: 0, fill: '#2a2c2f', kind: cover}
+    components:
+      placements:
+        - {ref: leviton/49253-flange@1, id: flange-bottom, at: [0.0, 0.0], group: body, rel-pos: 3}
+  left-covered:
+    face: left
+    size: {w: 165.1, h: 43.7}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.2], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [11.2, 0], size: [1.5, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-back, at: [12.7, 2.8], size: [3.175, 38.1], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-top, at: [12.7, 2.8], size: [139.7, 3.175], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-bottom, at: [12.7, 37.725], size: [152.4, 3.175], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-inner, at: [149.225, 2.8], size: [3.175, 25.4], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-outer, at: [161.925, 15.5], size: [3.175, 25.4], rx: 0, fill: '#101214', kind: ring}
+        - {id: cover-fold, at: [158.85, 8.4], size: [6.25, 26.9], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-plate, at: [163.88, 0], size: [1.22, 43.7], rx: 0, fill: '#2a2c2f', kind: cover}
+  right-covered:
+    face: right
+    size: {w: 165.1, h: 43.7}
+    panel:
+      decor:
+        - {id: fold-top, at: [153.9, 0], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [153.9, 42.2], size: [11.2, 1.5], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [152.4, 0], size: [1.5, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-back, at: [149.225, 2.8], size: [3.175, 38.1], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-top, at: [12.7, 2.8], size: [139.7, 3.175], rx: 0, fill: '#111315', kind: ring}
+        - {id: ring-bar-bottom, at: [0, 37.725], size: [152.4, 3.175], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-inner, at: [12.7, 2.8], size: [3.175, 25.4], rx: 0, fill: '#0d0f10', kind: ring}
+        - {id: ring-leg-outer, at: [0, 15.5], size: [3.175, 25.4], rx: 0, fill: '#101214', kind: ring}
+        - {id: cover-fold, at: [0, 8.4], size: [6.25, 26.9], rx: 0, fill: '#25272a', kind: cover}
+        - {id: cover-plate, at: [0, 0], size: [1.22, 43.7], rx: 0, fill: '#2a2c2f', kind: cover}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as Leviton ships 49253-6PM, five rings and no cover.'
+  with-cover:
+    kind: example
+    description: >-
+      The same manager with the separately sold 49253-1CV metal cover hooked over its two
+      outer rings. The cover is a second purchase, so this is an illustration and not a
+      device type.
+    views: {top: top-covered, bottom: bottom-covered, left: left-covered, right: right-covered}
+datasheet:
+  title: 'Product Specifications 49253-xxx - Five-Ring Horizontal Cable Managers and Covers'
+  url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/product_specification/Leviton-Spec-49253-Five-Ring-Horizontal-Cable-Managers-and-Covers.pdf
+  sha256: 595a8fbb68cc7f489c346bf0c66136a4cb072e2ac463d5f4838c39edba6842b8
+references:
+  - title: '49253-6PM dimensional drawing (DXF)'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/dimensional_drawing/49253-6PM.dxf
+    sha256: ff914baf8867b41713c70e0ed63cf7da3b46e07acf7072a064e71a96d71b3025
+  - title: 'Horizontal Patch Cord Organizers & Covers - Instructions for Use'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/instruction_sheet/Leviton_IST_Horizontal_Patchcord_Organizers_Covers.pdf
+    sha256: 4dcbcf5e0640f26a62b93714c541cba4028bc7b48316b40afb4803f6153e54ad
+  - title: 'Application Note - Maximum Cable Fill Ratios in Cable Managers (NS-AN-23-006-05-30-23)'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/application_note/Leviton_AppNote_MaxCableFillRatiosinCableManagers.pdf
+    sha256: 291159dbd2621e6a61a0ee449aeb8d9e4f18d3889e9f5439176c2f5bfb5132b7
+  - title: '49253-1CV dimensional drawing (DXF)'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/dimensional_drawing/49253-1CV.DXF
+    sha256: 6613ef46728f953e3c97227ef17dd8f8a7ae44c3eafa776733a807d6329b123d

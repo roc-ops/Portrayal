@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: qfx5241-1u-pwr-ao
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  QFX5241-1U-PWR-AO, the 2400 W AC power supply of the QFX5241-32OD, with front-to-back airflow (AIR OUT,
+  port-to-FRU, also written AFO). It is a field-replaceable unit, hot-removable and hot-insertable, in a 1+1 pair;
+  the switch ships with two, in the slots at the two ends of the rear, either side of the seven fan modules. The
+  face carries a grille with the status lamp at its upper left, an orange pull handle, a C20 appliance inlet and
+  an orange release latch. It delivers 2400 W from 200 to 240 VAC and 1000 W from 100 to 127 VAC, and it is
+  redundant only on the high range.
+attrs:
+  model: QFX5241-1U-PWR-AO
+  role: ac-power-supply
+  power-output-w: 2400
+  airflow: front-to-back
+  input: 200 to 240 VAC at 15 A, or 100 to 127 VAC at 12 A with 1000 W output, 50 to 60 Hz (guide Table 6)
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5241-32OD (2100 x 641 px, the body 1842 px wide,
+    which is the guide's Table 10 width of 17.26 in at 4.202 px/mm): the first supply measures 55.3 mm across and
+    40.0 mm high and the second 54.1 by 39.2; 54.7 by 39.6 is their mean. No document gives the supply's size in
+    millimetres; the guide's figures 20 to 23 carry no scale.
+  depth: >-
+    not stated. Searched the QFX5241-32OD hardware guide (figures 22 and 23, the AC power supply description, Tables
+    6 and 15 and the physical specifications) for the supply's depth or weight. No depth is written.
+  face: >-
+    photo - the studio rear photograph at 2.8 times zoom, checked against the guide's figure 23: a grille of square
+    holes with a round lamp lens at the upper left, a loop handle in orange standing slanted across the grille, a
+    black C20 inlet block at the right and an orange release latch under it. Positions are read off the photograph
+    and estimated to about 0.4 mm. The latch is drawn within the supply's outline, where the photograph lets it
+    stand 1.7 mm below.
+  power-output-w: >-
+    datasheet - the part number and guide Tables 6 and 15 (QFX5241-1U-PWR-AO, 2400 W maximum output power at 200 to
+    240 VAC, 1000 W at 100 to 127 VAC). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5241-32OD AC Power Supply Unit LED: the single lamp on the faceplate shows the supply's
+    state. Its position is the lens at the upper left of the photograph; the lamp's colours are those the guide
+    describes for the supply (green, amber, off).
+  airflow: >-
+    datasheet - guide Tables 4, 6 and 8: QFX5241-1U-PWR-AO is airflow out, ports-to-FRUs, front-to-back.
+  input: >-
+    datasheet - guide Tables 6 and 15: 200 to 240 VAC at 15 A and 100 to 127 VAC at 12 A, 50 to 60 Hz.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [25.15, 5.2], rotate: 90}
+elements:
+  led-pwr:
+    at: [4.6, 3.5]
+    size: [4.0, 4.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [1.6, 2.0]
+    size: [21.0, 36.0]
+    class: latch
+  release-latch:
+    at: [39.1, 35.3]
+    size: [10.2, 4.2]
+    class: latch
+size:
+  w: 54.7
+  h: 39.6
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the loop handle stands proud of the grille; its projection is not measured

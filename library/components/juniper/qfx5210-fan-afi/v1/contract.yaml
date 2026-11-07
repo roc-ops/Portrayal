@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: qfx5210-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5210-64C-FANAFI, a field-replaceable fan module with FRU-to-port (back-to-front) airflow: air
+  comes in at the fan end and leaves through the vents at the port end. It is marked AIR IN (AFI)
+  and has an azure blue handle, and it is hot-removable and hot-insertable. The QFX5210 hardware guide
+  says the QFX5210-64C takes four, numbered 0 to 3 from left to right. The front-to-back sibling is
+  QFX5210-64C-FANAFO. Fan modules of the two directions are never mixed in one chassis, and never
+  with power supplies of the other direction. The fan lamp the guide describes (Table 16) is not on
+  the module in any figure held.
+attrs:
+  model: QFX5210-64C-FANAFI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    estimated - the same body as the AIR OUT module, since the two fill the same slot: a 69.0 mm slot
+    pitch and a 64.3 mm height read off the FRU-side photograph (AIR OUT build, 4.1 px/mm) and the
+    guide's Figure 8. No document gives the module's size and no photograph of the AIR IN build was
+    held.
+  depth: >-
+    not stated. Guide Figure 13 (isometric, the AIR IN module) carries no scale and Table 3 states no
+    dimensions.
+  face: >-
+    drawing - the guide's Figure 13 draws this module with the same grille, handle bar, bracket, captive
+    screw and label chip as the AIR OUT build, the chip reading AIR IN (AFI) beside a blue fan symbol.
+    Positions are those of juniper/qfx5210-fan-afo@1, taken from the AIR OUT photograph, because Figure
+    13 is isometric; only the colour and the label change.
+  airflow: >-
+    datasheet - guide Table 15: QFX5210-64C-FANAFI carries the label AIR IN, is Juniper Azure Blue, and
+    is FRU-to-port airflow, also called back-to-front. Table 3 spells the part QFX5210-FANAFI; the
+    longer spelling of Table 15 is used.
+  colour: >-
+    estimated - the guide names the handle Juniper Azure Blue (Tables 15 and 17) and no photograph of this
+    build was held, so the blue is a plain azure and not a paint reference. The sentence in the guide that
+    calls the FRU-to-port handle gold is contradicted by its own tables and is not used.
+  power: >-
+    not published. Searched the QFX5210 hardware guide's cooling and power chapters; only whole-switch
+    figures exist. The module declares power-absent so the missing figure is a statement and not a
+    silence.
+states: [absent]
+elements:
+  screw:
+    at: [62.7, 20.6]
+    size: [4.4, 4.4]
+    class: screw
+  handle:
+    at: [2.9, 20.5]
+    size: [52.1, 4.0]
+    class: latch
+size:
+  w: 69.0
+  h: 64.3
+size-confidence: {w: estimated, h: estimated}
+size-notes: the slot pitch and the module height read off the FRU-side photograph and Figure 8; no document gives the module's own size
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2a8fd6'
+    confidence: estimated
+    source: guide Figure 13 - the bar stands proud of the grille; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: guide Figure 13 - captive screw head, projection not measured
+skins: [default]

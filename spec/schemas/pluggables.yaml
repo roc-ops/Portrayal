@@ -16,11 +16,13 @@
 # was cut for; a lower rate still seats and links up, which is `rates:` in
 # ascending order.
 #
-# THE VOCABULARY GOVERNS, NOT THE LIBRARY. `sfp-dd` is the one family here
-# with no `std/` cage behind it. It is still a family, because `sfp-dd` is a
-# value `PLUGGABLE_CAGES` already carries and a value in that vocabulary
-# needs a home on some ladder or L40's question has nowhere to land. Its
-# `source` says so rather than implying a cage this library has not modelled.
+# THE VOCABULARY GOVERNS, NOT THE LIBRARY. `sfp-dd` was the one family here
+# with no `std/` cage behind it, because `sfp-dd` is a value `PLUGGABLE_CAGES`
+# carried before any cage was modelled and a value in that vocabulary needs a
+# home on some ladder or L40's question has nowhere to land. `std/sfp-dd` and
+# `std/sfp-dd-ganged` now exist, drawn from two cage makers' drawings, and
+# every family has a cage. A family that is added ahead of its cage again
+# should say so in its `source`, as this one did.
 #
 # `qsfp-dd800` IS DELIBERATELY ABSENT. It is not a rate any device declares
 # and it is not in `PLUGGABLE_CAGES` - and `PLUGGABLE_CAGES` IS the rate
@@ -39,6 +41,13 @@
 # second time. A registry that implied we hold documents we do not is the
 # laundering this library refuses everywhere else, and a ladder is not an
 # exception.
+#
+# A FAMILY MAY CARRY `unmated`, a map from a rate of the family to a sentence of
+# at least 40 characters saying why no module is made at that rate. The
+# part-conformance runner reads it: its check that every published slot has a
+# mate (C21) does not report a cage slot of that rate. A rate that has modules
+# in the world but none in the library is a gap, not a sentence, and a sentence
+# for a rate some library module fills is an error. No family carries one yet.
 format: 1
 families:
   sfp:
@@ -49,7 +58,7 @@ families:
     interface: sfp-dd
     rates: [sfp-dd]
     also-accepts: [sfp]
-    source: 'SFP-DD MSA - not held; an SFP-DD cage accepts a single-row SFP by industry convention. NO CAGE IN THE LIBRARY YET; the family exists because sfp-dd is in the media vocabulary'
+    source: 'SFP-DD MSA - not held, and not used. std/sfp-dd and std/sfp-dd-ganged are drawn from TE Connectivity customer drawing C-2359845 rev A and application specification 114-60027 rev A, and Molex customer drawing 2048233001 rev A and application specification 2048230001 rev A. Those documents state no rate, no lane count and no SFP compatibility: that an SFP-DD cage accepts a single-row SFP is by industry convention and UNCONFIRMED, though the port opening (14.00 x 8.95) is the SFP cage body figure'
   qsfp:
     interface: qsfp
     rates: [qsfp, qsfp28, qsfp56, qsfp112]

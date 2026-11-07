@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: qfx10016-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX10016-FAN, the fan tray of the QFX10016. Two stand side by side at the rear, each a
+  full-height door. A top plate carries two captive screws and the FAN, FTC and three SIB STATUS
+  lamps. Four columns of rounded exhaust cells have a grab handle above and below them. Each tray
+  has twenty-one fans and cools port-to-FRU (front-to-back, airflow out). A fan tray controller and
+  three switch interface boards sit behind each tray and are not visible. The face is the
+  QFX10008-FAN's, taller.
+attrs:
+  model: QFX10016-FAN
+  role: fan-tray
+  airflow: front-to-back
+  fans-per-tray: 21
+  power-draw-max-w: 975
+  power-draw-typical-w: 475
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - QFX10016 Switch Hardware Guide (Juniper Networks, published 2025-12-11): Fan Tray
+    QFX10016-FAN (Table 8 and Figure 21), Figure 8 (the isometric of the tray), the fan tray LEDs
+    topic (Figure 23 of the QFX10008 guide, g050590, is shared: "the QFX10008-FAN and QFX10016-FAN fan
+    tray") and Table 64.
+  size: >-
+    datasheet - Table 8 gives 36.6 in. high (92.97 cm) by 6.6 in. wide (16.8 cm), 929.6 by 168 mm.
+  depth: >-
+    datasheet - Table 8: 4.0 in. (10.2 cm) without handles, 5.3 in. (13.46 cm) with handles. The body
+    depth 102 mm is used.
+  power: >-
+    datasheet - Table 64 gives "QFX10016-FAN, QFX10016 fan tray, 475 W at 77 F (25 C), 975 W at maximum
+    fan speed". The 975 W is carried as the maximum and the 475 W as typical, read per tray as for the
+    QFX10008-FAN.
+  fans: >-
+    datasheet - "Each fan tray contains 21 fans (0-20)", and "the fans in each fan tray are numbered 0
+    through 20".
+  face: >-
+    drawing - the top of the tray as qfx10008-fan@1 (Figure 23, g050590, which the guide gives for both
+    trays): the same plate, lamps, four columns of cells and upper handle. Eighteen full rows of cells
+    on a 43.55 mm pitch, a lower handle and two cells under it are read off Figure 3 (g050702) and
+    Figure 8, isometrics, as fractions of the 929.6 mm height; the row count and pitch are estimated.
+  colour: >-
+    borrowed - the line drawings carry no colour and no photograph of the tray was obtained. The dark
+    grey finish of juniper/jnp10016-fan@2 is used.
+states:
+  - ok
+  - fail
+  - absent
+elements:
+  led-fan:
+    at: [13.1, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-ftc:
+    at: [22.0, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-a:
+    at: [30.8, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-b:
+    at: [38.9, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-c:
+    at: [47.1, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  handle-top: {at: [3.5, 85.9], size: [162.2, 7.7], class: handle}
+  handle-bottom: {at: [3.5, 872.0], size: [162.2, 7.7], class: handle}
+size: {w: 168.0, h: 929.6, d: 102.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+skins: [default]

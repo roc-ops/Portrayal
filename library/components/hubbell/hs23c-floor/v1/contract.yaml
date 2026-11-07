@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: hs23c-floor
+version: 1.0.1
+class: mechanical
+description: >-
+  The bottom flange of the Hubbell S-Series HS23C horizontal cable manager, seen from the
+  front. It is a 14 gauge steel strip as wide as the rack, folded forward from the foot of
+  the plate. The cables laid in the manager rest on it.
+provenance:
+  size: >-
+    datasheet - the strip is the width of the plate, B, 19 in (483 mm) taken as 482.6, and 14
+    gauge, 1.9 mm, thick (the sheet's "Gauge 14"; 1.897 mm by the standard gauge).
+  relief: >-
+    estimated - the figure draws the flange running the plate's whole length and out to the
+    front by the manager's depth, C, 3 in (76 mm), less the 1.9 mm plate it stands on and
+    the 1.9 mm cover in front: 72.4 mm. Its front edge is drawn square; the figure shows
+    openings cut in it between the tabs, which are not drawn because the figure dimensions
+    none.
+  color: >-
+    datasheet - "Finish: Black Powder Coated" on the sheet. Drawn a step lighter than the
+    plate so the flange and the plate it stands on read apart (a stand-in: the sheet
+    states no tone).
+size: {w: 482.6, h: 1.9}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {material: Steel}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 1.9], class: bezel}
+relief:
+  features:
+    - node: floor
+      out: 72.4
+      color: '#33383d'
+      confidence: estimated
+      source: the figure draws the flange the whole depth, C, 3 in (76 mm), less the plate and the cover
+skins: [default]

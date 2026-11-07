@@ -1,0 +1,36 @@
+format: 1
+kind: module
+name: ex6200-sre-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200 SRE module cover panel. It closes an SRE module slot that holds no module. It is two
+  plates: an SRE module filler panel above and a line card cover panel below. Every shipping order of the
+  EX6210 includes one, because the base order has one SRE module and the other SRE slot is covered.
+attrs:
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Table 5 and Table 51 ("The SRE module
+    cover panel consists of 1 line card cover panel and 1 SRE module filler panel"), the SRE module removal
+    and installation sections, Figure 71 (the cover panel over an SRE slot, drawn flat, g021221) and Figure 73
+    (the cover panel). The guide gives the panels no model number, so no part number is written.
+  size: >-
+    estimated - the slot, not the part. Figure 4 (flat, 3.967 px/mm on the 17.3 in body width) puts an SRE
+    slot plate at 392.1 mm across and 56.7 mm high. Figure 71 shows the cover as a filler panel over a line
+    card cover panel; the line card cover is 38.1 mm (juniper/ex6200-lc-cover@1) and the filler takes the
+    remaining 18.6 mm. The split is read off Figure 71 by eye and is estimated.
+  face: >-
+    estimated - as juniper/ex6200-lc-cover@1: a plain plate with a captive screw at each end, here on the
+    line card panel. The seam between the two plates is drawn as one line. No photograph is held.
+states: [absent]
+elements:
+  screw-left: {at: [6.4, 36.6], size: [4.4, 4.4], class: screw}
+  screw-right: {at: [384.7, 36.6], size: [4.4, 4.4], class: screw}
+size:
+  w: 392.1
+  h: 56.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: ex3400-ground-pair
+version: 1.0.0
+class: ground
+# THE PLATE IS A PAIR OF STUDS ONE TWO-HOLE LUG LANDS ACROSS (docs/connectors-dc-terminal-design.md
+# section 13.7): it presents `stud-pair-5-8` at the midpoint of its two screws, and each screw is a slot
+# of its own, `<placement>/1` and `<placement>/2`.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  Protective earthing terminal on the rear panel of the Juniper EX3400. A lighter plate carries two
+  10-32 screws, and one two-hole lug lands across them. The guide requires an earth connection for
+  DC-powered switches and recommends one for AC-powered switches.
+attrs:
+  connector: stud-pair-5-8
+provenance:
+  size: >-
+    photo-measured - the lighter plate behind the two holes in Juniper's EX3400-48P rear studio
+    photograph (ex3400-48p-rear-high), 3.327 px/mm: 33.1 by 12.1 mm. The guide gives no dimension for it.
+  holes: >-
+    photo-measured - the two holes stand 16.0 mm apart in the photograph. The guide states no spacing
+    (Table 41 names only the two-hole lug, Panduit LCD10-10A-L, and two 10-32 screws). The screws are
+    composed on 15.875 mm (5/8 in.) centres, the `stud-pair-5-8` pitch, which the photograph agrees
+    with to 0.13 mm, and a two-hole lug is one stamping at a fixed pitch.
+  thread: >-
+    datasheet - EX3400 Switch Hardware Guide (published 2026-01-09), Table 41: two 10-32 by 0.25 in.
+    screws with a #10 split-lock washer, not provided. Drawn as common/ground-screw-10-32@1.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS SCREW HEADS, 2.79 off the plate, as common/ground-screw-10-32@1
+    presents it: `mate` is the midpoint of the two screws' own mate points.
+size:
+  w: 33.1
+  h: 12.1
+size-confidence: {w: photo-measured, h: photo-measured}
+elements: {}
+parts:
+  # FIRST SCREW, then second, left to right: the pair's axis, so a lug's wire leaves to the right
+  - {ref: common/ground-screw-10-32@1, id: '1', at: [4.57, 1.315]}
+  - {ref: common/ground-screw-10-32@1, id: '2', at: [20.445, 1.315]}
+connection-points:
+  # the midpoint of the two screws' mate points
+  mate: {at: [17.2425, 6.05], direction: front, seat-out: 2.79}
+skins: [default]

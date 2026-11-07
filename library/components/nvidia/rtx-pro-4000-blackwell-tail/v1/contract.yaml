@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: rtx-pro-4000-blackwell-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA RTX PRO 4000 Blackwell card, seen from behind. It is
+  a closed black end plate over the backplate, with the 16-pin PCIe CEM5 power
+  connector at the corner by the top edge. It is the card's `faces.rear`.
+size: {w: 97.90, h: 18.71}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height from the A100 80GB's PB-10577
+  figure 3, 28.41 to 126.31 on the card, which the RTX PRO 4000's photographed
+  side agrees with: 276 px at 2.819 px/mm is 97.9) and runs from the backplate's
+  outer face to the shroud's far wall, 18.71 (the card's thickness is itself
+  estimated, see the card's `thickness`). NO DEPTH IS DECLARED: a face is a
+  drawing of a back. SEEN FROM BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' =
+  126.31 less the card's x (the top edge at the left) and y' = the card's y less
+  1.77. This is the frame of nvidia/l40s-tail@1, which has a backplate the same
+  way.
+attrs: {media: gpu}
+parts:
+  # The header is 20.85 across and 11.7 down. Its centre is the housing's: x'
+  # 12.76 (the card's x 113.55) and y' 8.84 (the card's y 10.61). Half-turned so
+  # that the four sense contacts are at the top, toward the backplate, as
+  # nvidia/l40s-tail@1 has it. The header's lower edge is at y' 14.69, inside the
+  # 18.71.
+  - {ref: std/12vhpwr-header@1, id: aux-power, at: [2.335, 2.99], rotate: 180}
+provenance:
+  size: >-
+    estimated - see size-notes.
+  connector: >-
+    estimated - the datasheet says "Power connector 1x PCIe CEM5 16-pin" and
+    NVIDIA's RTX PRO Blackwell quick-start guide (r18, 17 March 2026), step 8, puts
+    the 16-pin PCIe Gen5 connector "on the east edge" of the RTX PRO 4000, with a 1x
+    PCIe 8-pin to 1x PCIe Gen5 16-pin adapter in the box. The place and size are
+    nvidia/l40s-tail@1's (the L40S housing, measured on a photograph of that card),
+    on this card's component face. The part is std/12vhpwr-header@1 because the
+    datasheet calls it the PCIe CEM5 16-pin, the 12VHPWR of CEM 5.0; whether the
+    board carries the 12V-2x6 revision (CEM 5.1) is not stated. No photograph of this
+    card's end is held.
+  end-plate: >-
+    estimated - a closed black end plate over the full 97.9 x 18.71, with the
+    backplate's 2.67 band along the foot. No photograph of the end is held.
+elements: {}
+skins: [default]

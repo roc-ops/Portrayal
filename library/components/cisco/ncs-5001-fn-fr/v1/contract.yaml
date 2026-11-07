@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: ncs-5001-fn-fr
+version: 1.0.1
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The one-rack-unit fan module of the Cisco NCS 5001, ordered as NCS-5001-FN-FR: front-to-back airflow, which
+  the guide calls port-side intake. A dark honeycomb grille filling the face with a pull-handle loop across its
+  middle. Hot-swappable; the router runs on one of its two fan modules. The back-to-front twin is
+  NCS-5001-FN-BK.
+size: {w: 88.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NCS-5001-FN-FR: {part: NCS-5001-FN-FR}
+attrs:
+  airflow: front-to-back
+  hot-swappable: 'yes'
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23, last
+    modified 2019-01-31), Table 3: NCS-5001-FN-FR "Cisco NCS 5001 Router Fan Front to Back Airflow", with a spare
+    NCS-5001-FN-FR= that is the same part. The guide says the 5001 has "slots for two 1+1 redundant fan modules",
+    "hot-swappable", and "The system can work with a single fan failure."
+  power: >-
+    NOT STATED. Searched the guide for the fan module's watts, amps and CFM: Appendix C gives power-supply figures
+    only. No power figure is written, and lint's missing-power warning stands.
+  size: >-
+    estimated - NO HELD DOCUMENT STATES THE MODULE'S DIMENSIONS. Width is a fraction of the rear face in Figure 1
+    (the two fan modules together take about 36% of the width between the supplies), height is the one-rack-unit
+    slot. Figure 1 is a three-quarter view, so the width is an estimate to roughly ten percent.
+  elements: >-
+    estimated - Figure 1 and Figure 17 show a dark mesh face with a handle across it; the replacement steps
+    say to "press the two sides of the fan module handle next to where it connects to the fan module". The guide's
+    LED appendix names no fan-module lamp, so none is drawn.
+  handle: >-
+    estimated - Figure 1 (printed page 2, the back view) draws each fan module's handle as an open loop that
+    spans nearly the module's width, with the mesh seen through its window, and not as a flat bar. The loop is
+    drawn 72 mm wide and 20 mm tall (a fraction of the module read off the figure, which is a greyscale
+    three-quarter view and cannot be measured) with a 3.5 mm band; the band's thickness is a guess.
+  latch-colour: >-
+    NOT STATED. The guide gives no handle colour for either airflow ("the same coloring as the other fan and power
+    supply modules"), and its fan figures are greyscale.
+  depth: >-
+    estimated - not stated in any held document; 100 mm is a round figure for a fan module of this class.
+states: [absent]
+elements:
+  grille: {at: [3.0, 2.0], size: [82.0, 36.0], class: rotor}
+  handle: {at: [8.0, 10.0], size: [72.0, 20.0], class: handle}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 24
+      confidence: estimated
+      source: the grille's extent is read off Figure 1; the cavity behind it is not stated.
+    - node: handle
+      uhandle: 12.0
+      color: '#4a4f55'
+      confidence: estimated
+      source: Figure 17 shows the handle as a loop standing clear of the face; 12 mm is a reading of its proportions.
+skins: [default]
+body:
+  depth: 100
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [88.0, 40.0]}

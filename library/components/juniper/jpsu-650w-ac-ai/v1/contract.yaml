@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: jpsu-650w-ac-ai
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-650W-AC-AI, a 650 W AC power supply with back-to-front airflow (AIR IN). It is a
+  field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The QFX5120
+  hardware guide says the QFX5120-48T and QFX5120-48Y take it. They seat two, in slots 0 and 1 at the
+  right of the rear. No other line is named in the guide held here. The face is that of its
+  front-to-back sibling JPSU-650W-AC-AO with a Juniper Azure Blue handle. AC and DC supplies, and
+  supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-650W-AC-AI
+  role: ac-power-supply
+  power-output-w: 650
+  airflow: back-to-front
+  input: 100 to 240 VAC, 50 to 60 Hz, 6 A (QFX5120-48Y, guide Table 29)
+provenance:
+  size: >-
+    borrowed - the body is juniper/jpsu-650w-ac-ao@1, measured off the front-to-back unit's studio
+    photograph (54.6 x 40.2 mm). The guide gives the two supplies one figure and one slot and
+    differs only in the handle colour and label; no photograph of the back-to-front supply was
+    found, so its size is its sibling's, not a measurement of its own.
+  depth: >-
+    not stated; the guide's figure is an isometric drawing with no scale.
+  face: >-
+    borrowed - the face is juniper/jpsu-650w-ac-ao@1 with the handle recoloured: the same vent grid,
+    lamps, inlet and lever, because the guide's figure for the 48T and 48Y supply is one drawing
+    and the table lists the two airflow variants side by side.
+  handle-colour: >-
+    estimated - the guide names the colour (Juniper Azure Blue) and prints no value, and no
+    photograph of the blue supply was found; the shade is chosen to read as blue beside the orange
+    sibling.
+  power-output-w: >-
+    datasheet - the part number and the guide's text call it a 650-W supply; the guide gives no
+    separate output rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, LEDs on the AC Power Supplies (Table 34): AC green when the supply receives
+    power, DC green when it sends power out correctly, the fault lamp amber on an error.
+  airflow: >-
+    datasheet - guide, airflow direction in AC power supplies (Table 26): JPSU-650W-AC-AI is
+    back-to-front and carries the label AIR IN and a Juniper Azure Blue handle.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [24.5, 8.7], rotate: 270}
+elements:
+  led-ac:
+    at: [4.4, 20.1]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [4.4, 26.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [4.4, 32.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [18.2, 0.8]
+    size: [9.7, 39.0]
+    class: latch
+  lever:
+    at: [48.8, 19.9]
+    size: [5.8, 20.3]
+    class: latch
+size:
+  w: 54.6
+  h: 40.2
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: borrowed from juniper/jpsu-650w-ac-ao@1, the front-to-back supply of the same family and slot
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo of the orange sibling - the handle stands proud of the face; not measured

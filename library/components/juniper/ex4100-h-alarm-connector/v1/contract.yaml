@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: ex4100-h-alarm-connector
+version: 1.1.0
+class: inlet
+behaviour: mounts
+profile: networking
+interface: terminal-350-6
+description: >-
+  The dry contact alarm connector of the Juniper EX4100-H switches: a green pluggable screw-terminal plug with six
+  wire openings on a 3.5 mm pitch and a captive screw at each end, seated in its header on the front panel. The poles
+  are GND, IN0, IN1, NO, COM and NC; the legends are printed on the panel beside it, so the part carries none. It is
+  drawn along its length, and the EX4100-H-12MP turns it upright. The plug ships preassembled to the switch.
+attrs:
+  media: dry-contact
+  positions: 6
+  pitch-mm: 3.5
+provenance:
+  sources: >-
+    drawing and photo-measured - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01), Figures 1 and 3
+    (the front panels of the EX4100-H-12MP and EX4100-H-24MP, callouts 13 and 16) and Table 4, and Juniper's studio
+    photographs of the three models, front.
+  size: >-
+    estimated - read off the guide's flat figures after Gate 1 (Figure 3, 6.568 px/mm against the 439.0 mm body, its
+    height agreeing with the 43.3 mm table figure to 0.1 percent): 32.2 mm along its length and 7.6 across on the
+    EX4100-H-24MP, and 32.1 by 7.8 on the 12MP (Figure 1, 15.085 px/mm against 111.7 mm). 7.7 is carried for the
+    width across. The guide gives no dimension for the plug.
+  the-face: >-
+    estimated - eight positions: a captive screw at each end, centred 2.75 mm from the end, and six wire openings on
+    a 3.5 mm pitch between them, centred on the plug. The 24MP figure reads the openings at 3.46 mm and the 12MP's at
+    3.5. The openings and screw heads are drawn as the studio photographs show them; the depth of the plug is not
+    stated and is not set.
+  colour: photo-measured - the plug housing is a bright green (#4cae4f) in all three photographs.
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED FOR THE CONNECTOR. The EX4100-H Switch
+    Hardware Guide (Juniper Networks, published 2026-10-01) calls it a "dry contact connector" and an "Alarm
+    connector" ("Dry Contact Alarm"; Figure 1, callout 13; Table 65, "preassembled to switch") and names no maker or part. The pitch in the
+    key's name is read off the figures and is not printed in the guide; the 3.5 mm the guide prints is the screwdriver's.
+  roles: >-
+    guide and photo - the marks printed beside the six openings, in the order the photographs and Figure 1 print them:
+    GND, IN0, IN1, NO, COM and NC. GND and the two inputs are the alarm input ports ("Remember to mandatorily connect a
+    wire to the GND port"), and NO, COM and NC are the alarm relay ports. THE CONNECTOR CARRIES NO POWER: it takes
+    dry contacts from door or window sensors (a 5 V input threshold) and gives relay contacts to a bell or a light, so
+    it is a signal connector and no DC or AC port is stated for it. Its class, inlet, is the class it was drawn with.
+  mate: >-
+    derived - the centre of the plug, (16.1, 3.85), facing out. The wires clamp into the six openings, the clamping
+    screws are tightened at 1.77 lb.in and the end screws at 2.65 lb.in (the guide, "Dry Contact Alarm").
+    juniper/ex4100-h-alarm-plug@1 is the part that mates it.
+states: []
+elements:
+  body: {at: [0.0, 0.0], size: [32.2, 7.7], class: connector}
+connection-points:
+  mate: {at: [16.1, 3.85], direction: front}
+size:
+  w: 32.2
+  h: 7.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

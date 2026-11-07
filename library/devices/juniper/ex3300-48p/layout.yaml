@@ -1,0 +1,480 @@
+format: 1
+kind: device
+name: ex3300-48p
+version: 0.1.2
+maturity: modelled
+manufacturer: Juniper
+model: EX3300-48P
+portfolio:
+  line: EX Series
+  family: EX3300
+description: >-
+  Juniper EX3300-48P, a 1U access switch with 48 10/100/1000BASE-T PoE+ ports. It has four SFP or SFP+
+  uplink ports, an LCD panel with Menu and Enter buttons and three chassis lamps on the front. The rear
+  has a management port, a USB port, an RJ-45 console port and a redundant power system port. It also
+  has an earthing terminal, a built-in fan and an AC power cord inlet. The power supply and the fan are
+  built into the chassis. Its non-PoE sibling, the EX3300-48T, is a separate device.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX3300 Switch Hardware Guide, Juniper Networks, published 2020-12-15 (263 pages, PDF creation date
+      2020-12-16): Tables 3 to 5 and 13 to 16 and 19 and 32, Figures 1 to 4 and 6 to 11, the mounting
+      topics and Table 33 of the earth ground topic. The guide is the maker's, taken from Juniper's EX
+      Series documentation archive zip (ex-series-doc-archives.zip, file ex3300.pdf), which holds it
+      and a letter of volatility and no quick start. Juniper's image-library photographs of the
+      EX3300 (the paths named for the other EX lines, with the SKU in upper and in lower case) answer
+      404, and the maker's datasheet is no longer on juniper.net (the numbered datasheet path answers
+      404), so no photograph and no datasheet figure is used; the datasheet exists only as reseller
+      and archive mirrors, which are not used. The guide is copyright Juniper Networks, 2020, all
+      rights reserved, and the archive states no terms of use. Nothing of it is copied here; every
+      face is drawn new from measurements. End of life was searched on 2026-10-23, and only reseller
+      and tracker pages carry dates (see lifecycle).
+  chassis:
+    confidence: datasheet
+    note: >-
+      Table 5 - height 1.75 in. (4.45 cm), width 17.5 in. (44.5 cm), or 19 in. (48.2 cm) with the
+      mounting brackets attached, depth 12 in. (30.5 cm), weight 12.8 lb (5.8 kg) for the EX3300-48P.
+      The body of 444.5 mm is the metal between the bracket fold lines, the 44.5 mm height is the metric
+      figure as printed, and the 305.0 mm depth is the 12 in. as printed. The depth carries no allowance
+      for the power cord retainer, which the rear panel topic says extends 3 in. (7.62 cm) out of the
+      chassis.
+  scale:
+    confidence: drawing
+    note: >-
+      Gate 1 - Figures 1 and 2 (pages 25 and 26) are vector drawings, read as PDF paths. The front face
+      is drawn flat and straight on: its width is 292.02 pt and its height 29.05 pt, an aspect of 10.05
+      against 9.99 for 444.5 by 44.5 mm, which is 0.6 percent. So the face carries geometry at 0.657
+      pt/mm, and positions are taken from the paths of the drawing, not from pixels. Figure 1 is the
+      48-port face and prints "EX3300 PoE+". The rear figures (Figures 3 and 4, pages 26 and 27) are
+      drawn flat too but at their own scale: the face is 326.81 pt wide and 31.89 pt high, an aspect of
+      10.25 against 9.99, which is 2.6 percent out. The width anchors the scale there, 0.735 pt/mm, and
+      the rear heights are good to about 3 percent. The photograph that would settle both is not held.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 1 draws 48 jacks in four blocks of 6 columns by 2 rows, each jack 12.51 by 10.32 mm, the
+      first jack at 10.21 mm and the block step 89.66 mm (starts 10.21, 100.03, 189.45, 279.19 mm; the
+      block frames start at 7.1, 97.2, 186.6 and 276.3 mm and are 88.6 mm wide). The columns inside a
+      block stand 14.16 mm apart, which is used as the pitch, and the two rows 14.14 mm apart with the
+      upper row at 12.85 mm. The four SFP+ cages sit in a frame 58.22 mm wide at 366.60 mm, which is the
+      SFF-8433 width of four cages (4 x 14.25 + 1.2 = 58.2), so the cages start at 367.2 mm on the
+      registry's 14.25 mm pitch. The upper row of jacks is turned 180 so that its keyway and lamp tabs
+      face up, as Figure 8 shows them.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      Table 4 and the front panel topic label the ports 0 through 47 and the uplinks 0 through 3. Figure
+      8 prints each pair of numerals over its column, even over odd, above the upper row of jacks (the
+      figure shows 0 to 23; the 48-port panel continues the pattern, which is not drawn in Figure 1),
+      so the upper jack of a column is the even port and the lower the odd one. The uplink numerals 0 to
+      3 are drawn between the two lamp slots of each uplink, under the cages (Figures 1 and 9). Interface
+      names are not printed on the metal: the guide names ge-0/0/n for the 48 built-in ports (PIC 0), and
+      ge-0/1/n or xe-0/1/n for the four uplinks (PIC 1, Table 4 and the Uplink Ports topic). They go
+      here only.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      Figure 8 - each network port has two lamps, a Link/Activity lamp at one keyway-side corner and a
+      Status lamp at the other, on the corners of the jack that face outward (the upper jack's at its top,
+      the lower jack's at its foot). The common/rj45-ganged-eth@1 housing carries both. Figure 9 - each
+      uplink port has a Link/Activity lamp and a Status lamp, drawn in Figure 1 as two tall slots 2.12 by
+      3.70 mm on a 7.19 mm pitch under the cage, with the numeral between them; they are drawn as
+      common/led-rect@1 turned 90. The Status lamp shows speed, administrative state, duplex or PoE
+      according to the mode the LCD Enter button chose (Tables 11 and 12), so its states are not
+      expressible as one vocabulary here (see gaps).
+  status-block:
+    confidence: drawing
+    note: >-
+      Figure 6 and Table 7 give the chassis lamps ALM, SYS and MST, in that order from the top, at the far
+      right of the panel. Figure 1 draws three circles 2.63 mm across at x 430.94 mm and y 5.89, 9.70 and
+      13.51 mm, with the legends at x 435.43 mm. The LCD panel is a window 36.92 by 10.73 mm at (379.18,
+      8.25) mm, with the Menu button at (421.5, 7.64) and the Enter button at (421.7, 15.6) mm, both
+      about 6 by 5 mm (Figure 5 and Table 6). The LCD panel is drawn as a window and not as a component:
+      no library component for an LCD display exists.
+  drawing-vs-photo:
+    confidence: estimated
+    note: >-
+      No photograph is held, so no drawing was checked against the real device. Figure 1 is captioned for
+      a switch with 48 ports and prints "EX3300 PoE+" over the LCD panel, which is the legend used on
+      this PoE model, and Figure 2 is captioned for 24 ports and prints "EX3300". The guide does not say
+      which model either figure shows. A PoE mode lamp and a POE legend like those of other EX lines are
+      not drawn: the guide shows no such lamp, only the LCD menu that chooses the Status lamp mode (the POE
+      option, Table 11).
+  rear:
+    confidence: drawing
+    note: >-
+      Figure 3 (page 26), flat, at 0.735 pt/mm across. From the left: the MGMT RJ-45 over a USB-A port in
+      one stack at 10.7 mm, the CON RJ-45 at 31.4 mm, the RPS port plate at 50.2 mm (67.8 by 14.1 mm), a
+      lighter plate with two earthing holes at 34.1 mm over the RPS port and an earth symbol at 88.5 mm,
+      the ESD socket at 109.7 mm, the round grille of the rear fan at 127.6 mm, the serial number ID
+      label at 281.9 mm and a smaller label at 354.3 mm, five screw heads along the foot, and the AC
+      power cord inlet at 400 mm. The EX3300-48P rear is taken from the same figure as the other AC
+      models: the guide draws one AC rear panel and one DC rear panel for the whole family.
+  rear-modules:
+    confidence: datasheet
+    note: >-
+      Table 4 and the power supply topic - the power supply and the fan tray are built in ("Built-in
+      power supply", "Built-in fan tray"), the packing list (Table 32) lists a "Switch with built-in
+      power supply", and the Troubleshooting topic does not list either as a replaceable unit. So the
+      switch has no power supply bay and no fan bay: the inlet and the fan grille are part of the
+      chassis, drawn as placements. There is no handle colour to record, and no blank.
+  earthing:
+    confidence: datasheet
+    note: >-
+      Table 33 - the EX3300 earthing terminal is on the rear panel, with two 10-32 by 0.25 in. screws
+      with #10 split-lock washers (not provided), two #10 flat washers and a Panduit LCC10-14BWL lug or
+      equivalent, as for the EX3200 and EX3400. Figure 3 draws the plate as 45.0 by 12.65 mm with two
+      holes 19.8 mm apart, which disagrees with the 5/8 in. pitch of a two-hole lug; juniper/ex3400-ground-pair@1
+      is reused (33.1 by 12.1 mm, screws on 15.875 mm), set at the centre of the drawn plate.
+  ears:
+    confidence: datasheet
+    note: >-
+      Mounting topics - two brackets and eight screws ship in the box (Table 32) and mount along the
+      front or the rear of the side panels, for a two-post mount; four rubber feet ship for a desk. The
+      separately orderable four-post rack-mount kit holds flush and 2-in.-recess front-mounting brackets,
+      side mounting rails and rear mounting blades, and the separately orderable wall-mount kit holds
+      the wall brackets and a baffle. The guide names no part number for either kit, so neither is
+      listed under kits, and its figures place the brackets without a measurable fold line, so only the
+      recess (2 in., 50.8 mm) has an `at`.
+  color:
+    confidence: estimated
+    note: >-
+      The face colour #8c9094 and the lettering #eef0f2 are borrowed from the EX3400 family, whose
+      photographs were sampled. No photograph or colour description of the EX3300 is held; the drawings
+      are line art.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 14 - the EX3300-48P consumes at most 91 W when no PoE power is drawn, with 740 W available for
+      PoE across 48 PoE-enabled ports, and Table 3 gives the same 740 W. The maximum power on a PoE+ port
+      is 30 W and the guaranteed power is 25.5 W (the power supply topic). Table 15 - AC input 100 through
+      240 VAC at 50 or 60 Hz, 7 A at 100 VAC and 2.9 A at 230 VAC for switches with ports enabled for PoE.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Table 4 and the power supply topic - the power supply and the fan tray are built in; there are no
+      field-replaceable power or fan units. Transceivers in the uplink cages are the only seated modules,
+      and the guide lists them under Pluggable Transceivers Supported on EX3300 Switches (page 61).
+attrs:
+  physical:
+    weight: 5.8 kg (12.8 lb) (Table 5)
+    width-with-brackets: 482 mm (19 in.) with the mounting brackets attached (Table 5)
+  power:
+    power-max-w: 91
+    power-envelope: bare
+    power-input-ac: 100 through 240 VAC, 50 or 60 Hz (Table 15)
+    power-current-max: 7 A at 100 VAC and 2.9 A at 230 VAC for a switch with PoE ports (Table 15)
+    poe-budget-w: 740 W available for PoE (Tables 3 and 14)
+    poe-standard: PoE+ (IEEE 802.3at) on all 48 ports, at most 30 W per port and 25.5 W guaranteed (Power Supply in EX3300 Switches)
+  thermal:
+    cooling: two fans, one along the rear and one along the left side of the chassis (Cooling System)
+  environmental:
+    operating-temp: 0 to 45 C (32 to 113 F) (Table 19)
+    altitude: no performance degradation up to 3048 m (10,000 ft) (Table 19)
+    humidity: 10 to 85 percent, noncondensing (Table 19)
+  platform:
+    first-junos-release: 11.3R1 (Table 3)
+  features:
+    virtual-chassis: up to 10 switches. Uplink ports 2 and 3 are Virtual Chassis ports by default and ports 0 and 1 are network ports
+    uplink-ports: four SFP or SFP+ ports on the front
+    optics-sfp-plus: the uplink ports take SFP and SFP+ transceivers, singly or mixed (Pluggable Transceivers Supported on EX3300 Switches, page 61)
+  management:
+    oob: management Ethernet RJ-45 on the rear panel, with a Link/Activity lamp and a Status lamp
+    console: RJ-45 console on the rear panel
+    usb: one USB port on the rear panel
+    lcd: LCD panel with two lines of 16 characters and Menu and Enter buttons
+  compliance:
+    seismic: Complies with Zone 4 earthquake requirements as per GR-63, Issue 4 (Table 19)
+  lifecycle:
+    eol: announced
+    end-of-sale: '2019-06-30'
+    end-of-support: '2024-06-30'
+chassis:
+  width: 444.5
+  height: 44.5
+  depth: 305.0
+  ru: 1
+  weight-kg: 5.8
+  color: '#8c9094'
+  silk: '#eef0f2'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front-mount, at: 0, default: true}
+    - {name: recessed, label: 2-in. recess, at: 50.8}
+    - {name: rear, label: rear-mount}
+gaps:
+- what: lifecycle-source
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    Juniper's own end-of-life notice for the EX3300. The end-of-sale and end-of-support dates (2019-06-30
+    and 2024-06-30) are those that reseller and tracker pages give for the end-of-life announcement of
+    2019-02-01, which Juniper's page keeps behind a login; the maker's page was not reachable.
+- what: photographs
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A straight-on photograph of the front and of the rear. Juniper's image library holds none at the
+    paths its other EX lines use. Face colour, finish, the legends the real faceplate prints (the port
+    numerals, the uplink numbers, the lamp legends) and the colour of the lamps' windows are drawn from
+    the guide's line art only.
+- what: datasheet
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The EX3300 datasheet, which would state the power and thermal figures a second time. It is no longer
+    on juniper.net.
+- what: lcd-component
+  scope: [front]
+  reason: vendor-silent
+  wanted: A library component for an LCD display; the LCD panel is a decor window until one exists.
+- what: port-status-lamp-states
+  scope: [rj45, uplink-leds]
+  reason: vendor-silent
+  wanted: >-
+    A per-port vocabulary for the Status lamp. Table 11 gives it four meanings that depend on the
+    mode the LCD Enter button chose (speed, administrative status, duplex, PoE), so the jack keeps the
+    component's default off, link and activity states.
+- what: rps-port-connector
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The connector type and pinout of the redundant power system port, and the model of the external
+    power system. The guide names the port and nothing else, and this part is drawn as a plate and an
+    opening.
+- what: rear-label-rectangles
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The text of the serial number ID label and the other label rectangles on the rear. Figure 51 of the
+    guide prints a sample serial number ID label, which is not transcribed.
+- what: side-fan
+  scope: [left]
+  reason: needs-drawing
+  wanted: >-
+    The second fan, along the left side of the chassis (Cooling System). No figure draws the side
+    panel flat.
+- what: four-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: 802.3at}
+    description: 48 PoE+ ports labelled 0 to 47, the even ports on the upper row
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      Four uplink ports labelled 0 to 3. Each takes an SFP or an SFP+ transceiver. Ports 2 and 3 are
+      Virtual Chassis ports by default
+  uplink-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: 'on', color: '#22c55e'}, {name: blinking, color: '#22c55e', behavior: blinking}]
+    description: >-
+      A Link/Activity lamp and a Status lamp beside each uplink port. Table 10 - the Link/Activity lamp
+      blinks green with traffic and is steady green with a link and no traffic. Table 12 - the Status
+      lamp is unlit at 10 or 100 Mbps, blinking at 1000 Mbps and steady at 10 Gbps
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the management corner - the out-of-band RJ-45, the USB port and the RJ-45 console, with the RPS port
+  lcd-buttons:
+    term: Button
+    role: management
+    index-origin: 0
+    description: the LCD panel's Menu and Enter buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: ALM, SYS and MST chassis lamps (Table 7)
+  power-in:
+    term: Inlet
+    role: service
+    index-origin: 0
+    description: the built-in power supply's input, an AC power cord inlet or a DC terminal block
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy-note: >-
+        The fan along the rear is built in and not replaceable. If a fan fails the others run faster and
+        the switch raises an alarm (Cooling System)
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear earthing terminal, two 10-32 screws for a two-hole lug (Table 33)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the rear wrist-strap ESD point (Figure 3)
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+    description: screw heads on the rear panel
+views:
+  front:
+    size: {w: 444.5, h: 44.5}
+    panel:
+      decor:
+      - {at: [34.6, 0.6], size: [327.8, 8.0], pattern: vent, vent: 1}
+      - {at: [9.5, 41.4], size: [352.5, 1.9], pattern: vent, vent: 1}
+      - {at: [366.6, 24.6], size: [58.2, 1.8], pattern: vent, vent: 1}
+      - {at: [426.6, 24.9], size: [12.4, 17.1], pattern: vent, vent: 1}
+      - {id: lcd, kind: display, at: [379.2, 8.25], size: [36.9, 10.7], rx: 0.6, fill: '#404c40'}
+      cutouts:
+      - {block: rj45}
+      - {block: sfp-plus}
+      - {id: btn-menu, at: [421.5, 7.55], size: [6.4, 5.1], shape: rect}
+      - {id: btn-enter, at: [421.55, 15.6], size: [6.4, 5.1], shape: rect}
+      - {id: led-alm, at: [431.25, 6.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [431.25, 10.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [431.25, 13.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-act, at: [368.52, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-0-status, at: [375.71, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-1-act, at: [382.9, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-1-status, at: [390.09, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-2-act, at: [397.28, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-2-status, at: [404.47, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-3-act, at: [411.66, 38.76], size: [2.6, 4.6], shape: rect}
+      - {id: led-uplink-3-status, at: [418.85, 38.76], size: [2.6, 4.6], shape: rect}
+    silkscreen:
+    - {block: rj45}
+    - {block: sfp-plus}
+    - {at: [379.2, 7.1], text: EX3300 PoE+, font-size: 4.0, anchor: start, for: chassis}
+    - {at: [435.4, 7.82], text: ALM, font-size: 2.0, anchor: start, for: led-alm}
+    - {at: [435.4, 11.62], text: SYS, font-size: 2.0, anchor: start, for: led-sys}
+    - {at: [435.4, 15.42], text: MST, font-size: 2.0, anchor: start, for: led-mst}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth@1
+        at: [10.1, 12.5]
+        count: 48
+        rows: 2
+        pitch: 14.16
+        row-pitch: 14.15
+        gang: 6
+        gutter: 4.7
+        number-from: 0
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx-by-row: [5.15, 7.55], dy-top: -1.3, dy-bottom: -14.15, font-size: 2.0, anchor: middle, fill: '#e4e6e9'}
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [367.2, 27.4]
+        count: 4
+        rows: 1
+        pitch: registry
+        number-from: 0
+        id-format: 'uplink-{n}'
+        cutouts: true
+        numerals: {dx: 7.125, dy-top: 14.7, font-size: 2.4, anchor: middle, fill: '#e8eaec'}
+      placements:
+      - {block: rj45}
+      - {block: sfp-plus}
+      - {ref: common/led-rect@1, id: led-uplink-0-act, at: [367.52, 39.76], rotate: 90, for: uplink-0, group: uplink-leds, rel-pos: 0}
+      - {ref: common/led-rect@1, id: led-uplink-0-status, at: [374.71, 39.76], rotate: 90, for: uplink-0, group: uplink-leds, rel-pos: 1}
+      - {ref: common/led-rect@1, id: led-uplink-1-act, at: [381.9, 39.76], rotate: 90, for: uplink-1, group: uplink-leds, rel-pos: 2}
+      - {ref: common/led-rect@1, id: led-uplink-1-status, at: [389.09, 39.76], rotate: 90, for: uplink-1, group: uplink-leds, rel-pos: 3}
+      - {ref: common/led-rect@1, id: led-uplink-2-act, at: [396.28, 39.76], rotate: 90, for: uplink-2, group: uplink-leds, rel-pos: 4}
+      - {ref: common/led-rect@1, id: led-uplink-2-status, at: [403.47, 39.76], rotate: 90, for: uplink-2, group: uplink-leds, rel-pos: 5}
+      - {ref: common/led-rect@1, id: led-uplink-3-act, at: [410.66, 39.76], rotate: 90, for: uplink-3, group: uplink-leds, rel-pos: 6}
+      - {ref: common/led-rect@1, id: led-uplink-3-status, at: [417.85, 39.76], rotate: 90, for: uplink-3, group: uplink-leds, rel-pos: 7}
+      - {ref: juniper/ex3300-lcd-button@1, id: btn-menu, skin: menu, at: [421.5, 7.55], for: chassis, group: lcd-buttons, rel-pos: 0,
+         attrs: {function: LCD menu}}
+      - {ref: juniper/ex3300-lcd-button@1, id: btn-enter, skin: enter, at: [421.55, 15.6], for: chassis, group: lcd-buttons, rel-pos: 1,
+         attrs: {function: LCD enter}}
+      - {ref: common/led-dot@1, id: led-alm, at: [431.25, 6.2], for: chassis, group: status-leds, rel-pos: 0,
+         states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'}],
+         description: 'Table 7 - red: major alarm; amber: minor alarm; unlit: no alarm or halted (red at power-up until a network link is made)'}
+      - {ref: common/led-dot@1, id: led-sys, at: [431.25, 10.0], for: chassis, group: status-leds, rel-pos: 1,
+         states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+         description: 'Table 7 - green steady: Junos OS loaded; green blinking: booting; off: powered off or halted'}
+      - {ref: common/led-dot@1, id: led-mst, at: [431.25, 13.8], for: chassis, group: status-leds, rel-pos: 2,
+         states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+         description: 'Table 7 - standalone: green steady when functioning; Virtual Chassis: green steady primary, green blinking backup, off line card member or halted'}
+    regions:
+    - {id: logo-zone, at: [7.2, 2.3], size: {w: 23.3, h: 6.0}, label: 'Vendor logo; not drawn'}
+    - {id: junos-badge, at: [407.4, 0.6], size: {w: 21.0, h: 6.6}, label: 'Running Junos badge; not drawn'}
+  rear:
+    size: {w: 444.5, h: 44.5}
+    panel:
+      decor:
+      - {id: serial-label, kind: label-plate, at: [281.9, 5.3], size: [69.8, 23.0], rx: 0.5, fill: '#e4e6e8'}
+      - {id: label-small, kind: label-plate, at: [354.3, 11.1], size: [27.1, 12.1], rx: 0.5, fill: '#e4e6e8'}
+      cutouts:
+      - {id: mgmt, at: [10.9, 16.5], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [12.8, 30.6], size: [12.0, 4.5], shape: rect}
+      - {id: con, at: [31.7, 24.2], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - {at: [18.8, 14.2], text: MGMT, font-size: 3.4, anchor: middle, for: mgmt}
+    - {at: [39.6, 22.4], text: CON, font-size: 3.4, anchor: middle, for: con}
+    - {id: usb-symbol, at: [19.0, 38.8], path: 'M -3.0 0 H 2.2 M 0.8 0 L 2.2 0 M -0.9 -1.2 L 0.4 -1.2 L 1.2 -0.3 M -0.9 1.2 L 0.4 1.2 L 1.2 0.3', for: usb}
+    - {id: earth-symbol, at: [88.5, 11.1], path: 'M 0 -3.6 A 3.6 3.6 0 1 0 0.01 -3.6 Z M -2.2 -0.8 H 2.2 M -1.4 0.8 H 1.4 M -0.5 2.2 H 0.5 M 0 -2.5 V -0.8', for: ground-pair}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: mgmt, at: [10.9, 16.5], rotate: 180, group: mgmt, rel-pos: 0,
+         attrs: {speed: 1g, role: mgmt},
+         states: {led-a: ['off', {name: activity, color: '#22c55e', behavior: blinking}],
+                  led-b: ['off', {name: 100m, color: '#22c55e', behavior: blinking}, {name: 1000m, color: '#22c55e'}]},
+         description: 'Tables 8 and 9 - the Link/Activity lamp blinks green with traffic; the Status lamp shows speed by blink rate: one blink per second 10 Mbps, two 100 Mbps, three 1000 Mbps'}
+      - {ref: std/usb-a@1, id: usb, at: [12.8, 30.6], group: mgmt, rel-pos: 1}
+      - {ref: std/rj45@2, id: con, at: [31.7, 24.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+      - {ref: juniper/ex3300-rps-port@1, id: rps, at: [50.2, 24.6], group: mgmt, rel-pos: 3}
+      - {ref: juniper/ex3400-ground-pair@1, id: ground-pair, at: [40.05, 4.65], group: grounding, rel-pos: 0}
+      - {ref: common/esd-jack@1, id: esd-rear, at: [106.7, 8.3], for: chassis, group: esd, rel-pos: 0}
+      - {ref: juniper/ex3300-rear-grille@1, id: fan-grille, at: [127.55, 5.5], for: chassis, group: fans, rel-pos: 0}
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [401.85, 11.05], group: power-in, rel-pos: 0}
+      - {ref: common/screw-head@1, id: foot-screw-0, at: [165.2, 37.7], group: furniture, rel-pos: 0}
+      - {ref: common/screw-head@1, id: foot-screw-1, at: [223.0, 37.7], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: foot-screw-2, at: [286.4, 37.7], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: foot-screw-3, at: [359.1, 37.7], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: foot-screw-4, at: [431.8, 37.7], group: furniture, rel-pos: 4}
+  left:
+    size: {w: 305.0, h: 44.5}
+    empty: >-
+      Not drawn flat by any source. The hardware guide's mounting figures 22 to 31 show the side panel only
+      at an angle, with the bracket holes, and no photograph is held. Nothing on it can be measured.
+  right:
+    size: {w: 305.0, h: 44.5}
+    empty: >-
+      Not drawn flat by any source. The hardware guide's mounting figures 22 to 31 show the side panel only
+      at an angle, with the bracket holes, and no photograph is held. Nothing on it can be measured.
+  top:
+    size: {w: 444.5, h: 305.0}
+    empty: >-
+      Not drawn by any source. The guide shows no top view of the chassis; its perspective front figures
+      show a blank lid.
+  bottom:
+    size: {w: 444.5, h: 305.0}
+    empty: >-
+      Not drawn by any source. The guide shows the underside only in the rubber feet figure 22, which
+      gives no dimension.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      The switch as shipped (Table 3) - AC powered, with front-to-back airflow. 740 W is available for PoE.
+    default: true
+    part-numbers:
+      EX3300-48P: {}
+references:
+- {title: 'EX3300 Switch Hardware Guide, Juniper Networks, published 2020-12-15', url: 'https://www.juniper.net/documentation/en_US/release-independent/downloads/ex-series/ex-series-doc-archives.zip', sha256: 9dfa5e01a75823ff660c0c3205359134a5648f0451d7dec10c9dcb3b8c930670}

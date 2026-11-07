@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: qfx5100-96s-fanafi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5100-96S-FANAFI, the 2RU fan module with FRU-to-port airflow, which the guide also calls
+  back-to-front. Cold air comes in at the fan end of the switch and hot air leaves at the port end. It
+  is marked AIR IN and has a Juniper Azure Blue handle. It is hot-removable and hot-insertable. The
+  QFX5100 hardware guide says only the QFX5100-96S takes it, in three slots numbered 0 to 2 from left
+  to right. The front-to-back sibling is QFX5100-96S-FANAFO. The two are never mixed in one chassis, and
+  never with power supplies of the other direction. The 1RU models use QFX5100-FAN-AFI, a smaller part.
+attrs:
+  model: QFX5100-96S-FANAFI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    estimated - read off the guide's Figure 21, the flat drawing of the QFX5100-96S fan end. The
+    figure's body is 1787 x 356 px on the page rendered at 400 dpi, an aspect of 5.02 against Table 3's
+    440.9 / 88 = 5.01 (0.2 percent out), so 4.053 px/mm: the first module measures 345 px, 85.1 mm,
+    across and 333 px, 82.2 mm, high, and the three modules stand on a 96.9 mm pitch. The width and the
+    height are taken as 85.5 x 82.4 mm, twice the 1RU module's height with the 2RU slot's 0.4 mm
+    margin. No document states the module's size in millimetres.
+  depth: >-
+    not stated. Searched the QFX5100 hardware guide (published 2023-02-26) and the datasheet (July 2024)
+    for the module's depth: the guide's Figure 36 is an isometric drawing with no scale and the tables
+    give no depth. No depth is written rather than a guessed one.
+  face: >-
+    drawing - the guide's flat Figure 21 and its isometric Figure 36 agree on what is on it: a large hex
+    grille above and another below a handle band that carries a small label, with a latch at each end of
+    the band. The chip lettering AIR IN and (AFI) and the fan symbol are those of the 1RU AIR IN module's
+    photograph and Table 19. Positions are fractions of the figure, good to about 0.5 mm, and estimated.
+  colour: >-
+    estimated - the guide's Table 19 names the colour, Juniper Azure Blue, and prints no value. The blue
+    is that of juniper/qfx5100-fan-afi@1, measured on the 1RU module's photograph.
+  airflow: >-
+    datasheet - guide, Table 19 and Cooling System and Airflow: QFX5100-96S-FANAFI is FRU-to-port, label
+    AIR IN, colour Juniper Azure Blue, "also known as back-to-front airflow", for the QFX5100-96S. The
+    datasheet's ordering table prints QFX5100-96S-FANAFI as the back-to-front fan module for the
+    QFX5100-96S.
+  power: >-
+    not published. Searched the QFX5100 hardware guide near its fan sections and its power tables: only
+    whole-switch figures exist. The module declares power-absent so the missing figure is a statement and
+    not a silence.
+states: [absent]
+elements:
+  handle:
+    at: [1.3, 35.3]
+    size: [82.9, 11.8]
+    class: latch
+size:
+  w: 85.5
+  h: 82.4
+size-confidence: {w: estimated, h: estimated}
+size-notes: read off the guide's flat Figure 21 at 4.053 px/mm, whose aspect agrees with Table 3 to 0.2 percent; no document states the module's size
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#6ab3da'
+    confidence: estimated
+    source: the 1RU module's handle, which the photograph shows standing proud of the grilles; not measured on this module

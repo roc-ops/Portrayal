@@ -1,0 +1,136 @@
+format: 1
+kind: module
+name: r960-psu-2800w-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  2800 W Titanium AC/HVDC hot-plug power supply in Dell's 86 mm form factor, as fitted to the
+  PowerEdge R960 - a square fan, a translucent handle that is the status lamp and carries the
+  wattage label, a C21 inlet and an orange release latch
+attrs:
+  power-output-w: 2800
+  form-factor: 86mm
+  inlet: other
+  input: 200-240 V AC or 240 V DC
+  efficiency: titanium
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '2800W'
+    pattern: '^\\d+W$'
+    description: what the handle label prints; the sum reads power-output-w, not this
+provenance:
+  sources: >-
+    Two, each answering its own question. (1) R960 ISM figure 10, the rear view, a 1565 x 807
+    photograph of a machine with four 2800 W supplies: the face's layout and positions, read at
+    3.374 px/mm across the 444 body (x) and 3.333 px/mm down the 174.3 height (y) - the two
+    scales are 1.2% apart, so positions are good to about a millimetre. (2) The R960 technical
+    guide figures 7-9, 600 ppi photographs of the same supply, for the shapes (they are not
+    orthographic: 5% out between width and height, so they were not measured). Facts read, art
+    not traced.
+  size: >-
+    photo-measured - ISM figure 10: the supply's plate 290 px wide and 135 px tall, 86.0 x 40.5
+    mm; Dell's name for the form factor is 86 mm (ISM table 11: "Redundant 86 mm"), and 40.1 is the
+    height every Dell 16th-generation supply of this family carries (dell/psu-1400w-ac-60mm@1,
+    measured off Dell's service model there). The figure puts it at 40.1 with a 0.4 shadow line. Dell's R960 service
+    model, working/intake/dell/3d-models/r960.glb, agrees: `Body_6.011`, the face, is 40.5 x 40.1 (the can,
+    `Body_5_2.005`, 86.3 x 40.7), so the height is measured. The model's one supply, `PEr960_
+    PowerSupplyUnit.STEP-1` under `R960_ PSU Prefab` in the `Main Assembly` node, is not told apart by wattage; both 86 mm
+    supplies take its form.
+  depth: >-
+    measured - r960.glb: the can runs 233.5 into the chassis from the face (cad z 619.5 to 853.0), and the handle
+    stands 33.5 proud of the face to cad z 886.5, 2.6 past the rear wall at 883.94 - ISM table 7's 2.455 between the rear
+    wall and the handle (Zc less Zb). So the face is recessed 30.9 inside the rear wall, which the rear view does not
+    show. In 3D the face stands at the wall (a bay has no recess to give it) and the grip is built only as far as it
+    is past the wall, 2.6. The first pass borrowed 222.0 from the 60 mm supply.
+  features: >-
+    photo-measured - ISM figure 10 at 3.374 px/mm: the fan housing 5.0..43.6 across and 2.1..39.0
+    down with a 19 mm hub centred at (23.7, 20.3) and four corner bosses; the translucent handle
+    37.6..57.8 across and 4.5..40.5 down with the label on its left edge (a black bar printed
+    2800W, reading downwards, 37.6..42.0 across); the inlet bezel 52.5..80.0 across and 3.3..39.0
+    down, its socket 57.8..77.1 across; the orange latch 78.8..85.7 across and 14.3..29.3 down.
+  inlet: >-
+    ISM table 11 gives the 2800 W supply a C21 power CORD, which mates a C22 inlet (`attrs.inlet:
+    other`, the schema having no C22), and the 2400 W a C19 cord, which mates a C20. Both inlets are
+    drawn as the same dark socket with three slots: the photograph resolves the socket's outline
+    and not its contact shapes. NOT std/c14-inlet: that part is a C14. The inlet types are the
+    mating connectors' standard pairing, not words in an R960 document.
+  handle-is-the-lamp: >-
+    ISM "Power supply unit indicator codes" (the same wording as the R660's): the handle is
+    illuminated and is the indicator. The ISM's table 108 gives green, blinking amber, off, blinking
+    green and the mismatch code; this part states them as the 60 mm supplies do.
+  power: >-
+    power-output-w 2800 is the rating on the handle label and in ISM table 10: 2800 W Titanium at
+    200-240 V AC or 240 V DC, N/A at 100-120 V. A rating, not a draw.
+size: {w: 86.0, h: 40.1, d: 233.5}
+plan: {ref: dell/r960-psu-plan@1}
+size-confidence: {w: photo-measured, h: measured, d: measured}
+body:
+  depth: 233.5
+  color: '#b9bec4'
+relief:
+  wall: '#3a4045'
+  features:
+  - node: grip
+    uhandle: 2.6
+    color: '#e9ecef'
+    confidence: measured
+    source: >-
+      r960.glb `Body_2_5.005`, the handle, which stands 2.6 past the rear wall (cad z 883.94 to 886.5) and
+      agrees with ISM table 7's 2.455 (Zc less Zb). THE FACE IS DRAWN AT THE WALL BECAUSE A BAY CANNOT RECESS ITS
+      OCCUPANT: the model's handle is 33.5 long from a face 30.9 inside the wall, and drawn from the wall that length
+      stood 30.9 outside the chassis. Only the part past the wall is built
+  - node: latch
+    out: 1.0
+    color: '#d9661a'
+    confidence: estimated
+    source: >-
+      the orange latch of dell/psu-1400w-ac-60mm@1 (14.7 there, measured) stands inside the 30.9 mm the face is
+      recessed on the R960, so no part of it is past the rear wall; it is drawn as a 1.0 tab on the face the wall
+      plane stands in for
+elements:
+  grip:
+    at: [43.0, 4.5]
+    size: [14.8, 35.0]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within. R960 ISM table 108: green - a valid source is
+      connected and the supply is operational; blinking amber - a problem with the supply; not
+      illuminated - no power; blinking green - firmware being updated; five green blinks at 4 Hz
+      then off - a mismatch with the other supply.
+  label:
+    at: [37.6, 6.0]
+    size: [4.4, 15.7]
+    class: label
+    description: the wattage label on the handle's left edge, printed downwards
+  inlet-bezel:
+    at: [52.5, 3.3]
+    size: [27.5, 35.7]
+    class: inlet
+    description: the recess the C21 inlet sits in
+  latch:
+    at: [78.8, 14.3]
+    size: [6.9, 15.0]
+    class: latch
+    description: the orange release latch, pressed to withdraw the supply
+skins: [default]

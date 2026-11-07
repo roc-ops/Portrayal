@@ -1,0 +1,54 @@
+format: 1
+kind: module
+name: ex8208-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8208 fan tray (EX8208-FAN-S as a spare, EX8208-FT in the CLI): one vertical tray of 12 fans down the left
+  of the chassis front. Its face carries the slot numbers of the whole front - the line card slots 0 to 7 and the SRE0,
+  SF and SRE1 slots between them - a handle, two screws and a spring-loaded latch, under the EX8208 FAN legend and a
+  warning mark. It provides side-to-side cooling: air enters on the right side, crosses the card cage and leaves on the
+  left. Hot-insertable and hot-removable, but it must be replaced within 2 minutes. One fan cannot be replaced alone.
+attrs:
+  role: fan-tray
+  power-draw-max-w: 1100
+  power-draw-typical-w: 300
+  airflow: side-to-side
+  fans: 12
+part-numbers:
+  EX8208-FAN-S: {part: EX8208-FAN-S}
+provenance:
+  sources: >-
+    datasheet - EX8208 Switch Hardware Guide (PDF dated 2020-12-16): Fan Tray (Figure 8, isometric), Airflow Direction
+    in the EX8208 Switch Chassis (Figure 9), Table 57 (power), Table 6 (CLI name EX8208-FT), Table 11 and Figure 3 (the
+    slot numbers drawn on the tray, flat). EX8208 Ethernet Switch Datasheet (1000261-022-EN, June 2015): "EX8208-FAN-S,
+    EX8208 fan tray, spare".
+  size: >-
+    estimated - 42.8 x 497.0 mm, read off Figure 3 (flat, 3.479 px/mm across and 3.4655 down, anchored on the 17.25 in
+    body and the 24.25 in height): the strip between the chassis edge and the header plate, from the top edge to the
+    latch plate above the supply row. No document dimensions the tray.
+  face: >-
+    estimated - Figure 3 and Figure 8: the eleven slot boxes (21.5 mm wide, 35.7 mm high, on the slots' 38.2 mm pitch)
+    carry the labels 0, 1, 2, 3, SRE0, SF, SRE1, 4, 5, 6, 7 down the tray; the handle is 8.6 x 136.5 mm at 12.1 across
+    and 178.3 down; the two screws at 13.5 and 29.9 mm across and 483.0 down. About 1 mm. The EX8208 FAN legend and the
+    warning triangle sit at the top.
+  power: >-
+    datasheet - guide Table 57: 300 W at normal fan speed and 1100 W at maximum fan speed, whole tray. The maximum is
+    carried as the draw and the normal figure as the typical.
+  airflow: >-
+    datasheet - Airflow Direction in the EX8208 Switch Chassis: "The air intake to cool the chassis is located on the
+    right side of the chassis ... Hot air exhausts from the left side." Side-to-side; the guide has no other direction,
+    so no handle colour is stated or drawn.
+states: [absent]
+elements:
+  handle:
+    at: [12.1, 178.3]
+    size: [8.6, 136.5]
+    class: latch
+size:
+  w: 42.8
+  h: 497.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

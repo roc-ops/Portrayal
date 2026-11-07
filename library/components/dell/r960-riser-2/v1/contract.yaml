@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: r960-riser-2
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2 of the PowerEdge R960 - two low-profile PCIe Gen5 x16 slots, 4 and 9, side by side in
+  the band under riser 3 and the VGA bracket; fitted in riser configurations 2 and 3
+attrs:
+  riser: '2'
+  appears-in: 'riser configurations 2 and 3'
+  power-absent: not-published
+  slot-4: 'x16, low profile, half length, processor 2, PCIe Gen5'
+  slot-9: 'x16, low profile, half length, processor 1, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R960 ISM, technical guide
+    and spec sheet were searched for 'riser' beside a wattage and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS (ISM figures 104, 113-118: the riser 2 and its
+    blank), so it is a module with `bays`.
+  slots: >-
+    datasheet - R960 ISM table 88 (configurations 2 and 3: R2 slot 4 processor 2, slot 9 processor
+    1; both Gen5 x16, low profile) and the technical guide's tables 16 and 17.
+  slot-numbers: >-
+    DISAGREEMENT, THE TABLES USED. The ISM's rear table 5 names this riser "(slot 3 and slot 9)"; its
+    liquid-cooling rear table 6, its table 13, its table 88, its figure 104 and the technical guide
+    all say slots 4 and 9, and slot 3 is riser 1's. Slots 4 and 9 are used.
+  slot-order: >-
+    ESTIMATED - slot 4 is drawn at the left and slot 9 at the right, the order of ISM figure 104's
+    callouts ("1. Slot 4, 2. Slot 9"); the cage prints no number on figure 10.
+  face: >-
+    photo-measured - ISM figure 10, the band 124.2..273.9 across and 132.0..150.0 down: two windows,
+    137.5..192.4 and 209.5..261.4, the vent patterns of dell/pcie-filler-lp-16g@1 (the R660's low-profile
+    filler, the same part: Dell's low-profile bracket) interleaved as the R660's riser 2A does. The
+    bay positions follow the R660's offsets from window to bracket (8.67 and 11.85).
+  size: >-
+    photo-measured - 149.7 x 18.5.
+  depth: >-
+    measured - Dell's R960 service model, working/intake/dell/3d-models/r960.glb: `ExpansionCardRiser2_` under `R960_ Riser 2` in the `Main
+    Assembly` node is 275.5 long (cad z 595.8 to 871.3). The first pass had 250.0, read off ISM figure 15 at 1.86 px/mm.
+size: {w: 149.7, h: 18.5, d: 275.5}
+size-confidence: {w: photo-measured, h: photo-measured, d: measured}
+body:
+  depth: 275.5
+  color: '#4a5057'
+plan: {ref: dell/r960-riser-2-plan@1}
+relief:
+  features:
+  - node: plate
+    out: 1.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the cage's plate is the rear wall's own sheet metal, and ISM table 7 puts nothing but the supplies'
+      handles past the wall; no R960 model or side figure is held. The first pass drew it 20.0 proud by analogy with
+      dell/riser-2-lp-cage-16g@1, which stood the cage outside the 866.74 chassis
+  - node: flange-cover
+    out: 19.3
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - carried from Dell's R660 service model (r660.glb), which has the pieces of the low-profile risers' cages over
+      their flange ends reach 19.2 to 19.8 past the plane the supplies' faces sit in (see dell/riser-2-lp-cage-16g@1); 19.3,
+      riser 2A's lower figure, is drawn. Dell's R960 service model (r960.glb) is held but gives no reach to read: its supply runs
+      z 834.0 to 886.5, so the wall is at 886.5 less the handle's 2.455 (ISM table 7), 884.0, and its riser 2 assembly ends at
+      871.3, 12.7 short of it; that disagreement is kept here. This is the way dell/r740xd draws its riser's outer skin:
+      dell/riser-1-shroud-14g@1 stands 17.76 proud of the panel plane, measured from the service model because the assembly has
+      to stand off far enough to contain the L of a PCIe bracket's flange, and the cards and fillers sit behind it; the rest of
+      the riser stays at the plate. Here too the plate stays 1.0 and the cover is the cage's plain metal from slot 4's fold to
+      its window, the whole height of the cage, cut round the two printed pockets at the left end. A filler's bracket gets it as
+      a card's does, because it is the riser's metal and not the occupant's. The bracket's return flange, std/pcie-bracket-lp@1's
+      9.40 (PCIe CEM 5.0 figure 11-9), is inside it. 19.3 is the lower of riser 2A's two pieces in the R660 model, kept so as not
+      to overstate; which piece is at the flange end is not known. SLOT 9'S FLANGE HAS NO COVER, AND THAT IS NOT A MEASUREMENT: the
+      bay's estimated seat (unrotated, the R660's 11.85 from window to bracket) puts its fold at 151.84, 2.1 past the cage's right
+      edge (149.7), but the plate has 12.2 mm of metal right of window 9 (window ends 137.2, plate 149.4), so a flange end that
+      fell inside the cage would have metal over it. The seat is unresolved: slot 9's bracket opening (89.13 to 143.66) sits 3.8 to
+      6.4 mm right of its window (85.3 to 137.2) while slot 4's lines up with its own; turning slot 9 over like slot 4 (ISM figure
+      104 shows both cards the same way up) lines the opening up but puts the bracket's far end 4.6 past the cage's right edge; and
+      Dell's model has this riser 158.3 mm wide (x -99.0 to 59.3) against the 149.7 read off ISM figure 10. See the device's
+      `riser-2-slot-9-flange-seat-unresolved` gap. This replaces an estimate of 10.26, the flange and one 0.86 sheet.
+bays:
+  slot-4:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 5}
+    rotate: 180
+    behind: true
+    at: [4.6, 0.04]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-9:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 5}
+    behind: true
+    at: [73.5, 0.04]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+elements:
+  plate: {at: [0.3, 0.3], size: [149.1, 17.9], class: bezel}
+skins: [default]

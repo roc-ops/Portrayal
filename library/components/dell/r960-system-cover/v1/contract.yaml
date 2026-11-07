@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: r960-system-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The system cover of the PowerEdge R960 - the lid over everything behind the drive cage, with its lock and release
+  latch
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `R960_ SystemCover`
+    in the `Main Assembly` node (the un-exploded assembly), whose `SystemCover_ latch` and `R960_SystemCover_Latchfbx`
+    are the latch. R960 ISM "Removing the system cover" (figure 36) and "Installing the system cover" (figure 37): a lock
+    turned with a flat-head or Phillips screwdriver, a release latch lifted until the cover slides back.
+  size: >-
+    measured - r960.glb, the node box 444.0 x 754.1 (the 444 body, cad x -216.0 to 228.0). The model has the lid slid 11.4
+    back for removal, standing from plan y -11.4 to 742.7; it is SEATED here at the rear wall (y 0, front end at 754.1) by
+    inference, as the R660's is (dell/system-cover-1u-16g@1, slid 29.9). The first pass had 440.0 x 745.0 estimated.
+  depth: >-
+    measured - r960.glb, 13.0 (cad y 161.3 to 174.3): the lid with its down-turned flanges, and the top of the 174.3 chassis.
+  latch: >-
+    measured - r960.glb `PEr960_ SystemCover_ latch-1.001`, 25.2 x 63.8 at plan x 209.4, y 599.4 as the model has the lid (610.8
+    seated); inside it `R960_SystemCover_Latchfbx` (13.2 x 53.6 at x 215.4) is the lever. The latch is 7.8 tall, cad y 166.3 to
+    174.1: 0.2 below the lid's top, so flush with it. The first pass drew it at (208.0, 560.0) 24.0 x 60.0, a guess;
+    the position was 50.8 out along the lid. The lock is in figures 36 and 37, a perspective view without a scale, and is not
+    drawn.
+size: {w: 444.0, h: 754.1}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#1a1d21'
+  features:
+  - node: cover
+    out: 13.0
+    color: '#c3c8cd'
+    confidence: measured
+    source: r960.glb `R960_ SystemCover`, cad y 161.3 to 174.3
+  - node: latch
+    out: 12.8
+    color: '#2b6cb0'
+    confidence: measured
+    source: r960.glb `PEr960_ SystemCover_ latch-1.001`, cad y 166.3 to 174.1, taken from the lid's underside at 161.3
+elements:
+  cover: {at: [0.0, 0.0], size: [444.0, 754.1], class: bezel}
+  latch: {at: [209.4, 610.8], size: [25.2, 63.8], class: latch}
+skins: [default]

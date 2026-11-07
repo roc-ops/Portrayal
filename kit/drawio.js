@@ -17,6 +17,7 @@
 
 import { readDrawing, exportName } from './zones.js';
 import { normalise } from './marks.js';
+import { COLORS, mediaColor } from './rack/cable-geometry.js';
 
 // Standalone entries are drawn at 2 px/mm, which is legible on a blank canvas.
 export const SCALE = 2;
@@ -314,14 +315,28 @@ const TOP = 30;
 // port's data-path - `slot-2/module/p0` for a port on a seated card - and
 // `view` the face it is on.
 
-/** Jacket colours by `media`. A default, not a rule: `cableStyle` takes a map
- *  of the embedder's own (merged over this one) or a function. */
-export const CABLE_COLOURS = {
-  dac: '#4D4D4D', aoc: '#2F80C0', cu: '#7A5C99', mm: '#16A5A5', sm: '#D4A017',
-  om1: '#E07B39', om2: '#E07B39', om3: '#16A5A5', om4: '#16A5A5', om5: '#7DB343',
-  os1: '#D4A017', os2: '#D4A017', cat5e: '#7A5C99', cat6: '#7A5C99', cat6a: '#7A5C99',
-  default: '#808080',
-};
+// THE COLOUR OF A CABLE IS THE KIT'S (#1028): the one the Rack Builder draws it
+// in (rack/cable-geometry.js COLORS, by mediaColor), so a drawing exported here
+// shows each cable as the explorer does. A media the kit has no colour for takes
+// what the explorer gives it. The table is derived, never a second set of hexes.
+const MEDIA_KEYS = ['dac', 'aoc', 'cu', 'mm', 'sm', 'om1', 'om2', 'om3', 'om4', 'om5',
+  'os1', 'os2', 'cat5e', 'cat6', 'cat6a', 'default'];
+
+/** Jacket colours by `media`, as the kit draws them. A default, not a rule:
+ *  `cableStyle` takes a map of the embedder's own (read ahead of this) or a
+ *  function. */
+export const CABLE_COLOURS = Object.fromEntries(MEDIA_KEYS.map(k => [k, mediaColor({media: k})]));
+
+// The kit's colour for a cable of a plan: its media, and its purpose where it
+// is copper, which a plan keys as `copper-<purpose>` (rack/export-data.js
+// drawioMedia).
+function kitColour(cable, key) {
+  const m = /^copper-(.*)$/.exec(key);
+  if (m || key === 'copper') return mediaColor({media: 'copper', purpose: cable.purpose ?? (m && m[1])});
+  return mediaColor({media: key});
+}
+// Whether the kit has a colour of its own for this media key.
+const kitKnows = key => /^copper(-|$)/.test(key) || (Object.hasOwn(COLORS, key) && key !== 'copper');
 
 // ORTHOGONAL, AND NO ARROWS. A patch lead has no direction, and draw.io's
 // default edge ends in an arrowhead that says it does. NOT html=1, here or on
@@ -337,9 +352,12 @@ const CABLE_EDGE = 'edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=none;' +
 const HEX = /^#(?:[0-9a-f]{3}|[0-9a-f]{6})$/i;
 function cableStyleOf(cable, opt) {
   if (typeof opt === 'function') return String(opt(cable));
-  const map = opt ? {...CABLE_COLOURS, ...opt} : CABLE_COLOURS;
   const own = typeof cable.color === 'string' && HEX.test(cable.color) ? cable.color : null;
-  const colour = own || map[String(cable.media || '').toLowerCase()] || map.default;
+  const key = String(cable.media || '').toLowerCase();
+  // a caller's map is read first: its entry for the media, else its `default`
+  // for a media the kit has no colour for; the kit's colour answers the rest
+  const mapped = opt && (Object.hasOwn(opt, key) ? opt[key] : !kitKnows(key) ? opt.default : undefined);
+  const colour = own || mapped || kitColour(cable, key);
   return `${CABLE_EDGE}strokeColor=${colour};`;
 }
 

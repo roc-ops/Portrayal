@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: r660xs-riser-2d
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2d of the PowerEdge R660xs - slot 2, low profile, half length, x8, PCIe Gen5, on processor 1, with a signal and a power cable to the system board, on dell/r660xs-riser-2-cage@1 with its second window closed by a filler; fitted in riser configuration 5
+attrs:
+  riser: '2d'
+  appears-in: 'riser configuration 5'
+  power-absent: not-published
+  slot-2: 'x8, low profile, half length, processor 1, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R660xs
+    ISM, technical guide and spec sheet were searched for 'riser' beside a
+    wattage and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT, as dell/r660xs-riser-1a@1.
+    ISM figure 80 'Riser 2d' (a signal cable connector, slot 2 x8 LP-HL and a
+    power cable connector) and the removal procedure (figure 85).
+  slots: >-
+    datasheet - ISM table 95: R2d is slot 2, controlled by processor 1 (the
+    table says 'Processor 1' where R2a and R2e say 'Processor 2'), low profile, half length,
+    x8, and the table marks it 'Gen5'. The mechanical connector is taken as x8 to
+    match; the ISM states a width and no connector.
+  face: >-
+    estimated - THE SECOND WINDOW IS CLOSED BY A FILLER AND THAT IS READ OFF AN
+    ISOMETRIC, not off a rear: ISM figure 80 draws a cage with two window
+    positions at its rear end and one card in it, and no figure draws a rear with
+    riser 2d fitted. The cage is dell/r660xs-riser-2-cage@1, slot 2 in its first
+    window and the filler (`cover-3`, in the position slot 3 takes on riser 2a)
+    in its second. The cage's width is riser 2a's, which the figure's
+    perspective cannot confirm.
+  size: >-
+    drawing - the cage's extent, 170.10 x 19.80.
+  seating: >-
+    estimated - as dell/r660xs-riser-2a@1.
+  plan: >-
+    estimated - seen from above, drawn as riser 2a (dell/r660xs-riser-2-plan@1);
+    figure 80 shows a smaller board and no figure shows it from above.
+size: {w: 170.1, h: 19.8}
+size-confidence: {w: drawing, h: drawing}
+plan: {ref: dell/r660xs-riser-2-plan@1}
+parts:
+  - {ref: dell/r660xs-riser-2-cage@1, id: plate, at: [0, 0]}
+bays:
+  slot-2:
+    slot: {connector: x8, lanes: 8, height: low, length: half, processor: 1, generation: 5}
+    plan: {at: [78.10, 0.00]}
+    behind: true
+    at: [12.80, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  cover-3:
+    behind: true
+    at: [84.80, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

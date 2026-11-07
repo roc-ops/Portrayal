@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: 7280r3-pwr-500-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 500 W AC power supply of the Arista 7280SR3-48YC8 and 7280SR3-40YC6, PWR-511-AC-RED (forward
+  airflow, red handle). It is a 1RU module, 73.5 mm wide. A round fan guard with a red diagonal
+  handle is at the left. An IEC C14 inlet, a latch and a status lamp are at the right. Two seat at
+  the ends of the rear. The pair is 1+1 redundant and hot-swappable.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-511-AC-RED: {part: PWR-511-AC-RED}
+attrs:
+  power-output-w: 500
+  input: ac
+  inlet: c14
+  airflow: front-to-back
+  input-note: '100 - 240 VAC, 6.3 to 2.3 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height. The 7280R3 Series Data Sheet (03-0045-59,
+    August 11th, 2025) describes the part as "PWR-511-AC-RED  Arista PSU, 1RU, AC, 500W, FORWARD,
+    73.5mm": 73.5 is its width. The 1RU module height is taken as 40.0, as for the library's other
+    73.5 mm supplies (arista/7280cr3-pwr-1000-ac, measured off figure D-2 of the 7280R3 Series Quick
+    Start Guide, DOC-07041-01).
+  part-number: >-
+    datasheet - ordering information for the 7280SR3-48YC8 and 7280SR3-40YC6: "PWR-511-AC-RED
+    Arista PSU, 1RU, AC, 500W, FORWARD, 73.5mm". The guide's table 3 lists the supply as
+    PWR-511-AC and table 4 gives it as the supported AC supply of the 7280SR3-48YC8, SR3K-48YC8,
+    SR3K-48YC8A, SR3-40YC6, SR3E-40YC6-M and TR3-40C6.
+  power-output: >-
+    datasheet - the "500W" of the ordering description and the "Output Power 500W" row of the data
+    sheet's power supply table. An output, because a supply provides power. The guide's table 4
+    gives each switch's own draw and is the switch's figure, not this one.
+  input: >-
+    datasheet - guide table 3: PWR-511-AC "100 - 240 VAC< 7.1 A, 50/60 Hz" (the guide's own
+    typography); the data sheet's power supply table gives 100-240 V AC, typical input current 6.3
+    - 2.3 A, 93 percent efficiency (Platinum) and an IEC 60320 C14 input connector. The two
+    currents differ (7.1 A against 6.3 A) and are different measures, a maximum rating and a
+    typical input current, so both are kept here.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; the guide's section 2.1 gives red as
+    the colour of an air-exit module. The reverse build is the separate component
+    arista/7280r3-pwr-500-ac-rev (PWR-511-AC-BLUE).
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a PWR-511 is held: the guide's rear figures
+    D-1 to D-4 draw one generic supply, which is the 1RU module drawn for arista/7280cr3-pwr-1000-ac
+    (guide appendix D: "Depending on the installed power supply module, the appearance could differ
+    from those shown"). This module is drawn as that supply. Its lamp is the module's status lamp
+    (guide figure A-5, table 12).
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`, read off figure D-1.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.85, 14.3], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

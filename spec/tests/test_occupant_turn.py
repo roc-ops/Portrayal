@@ -57,6 +57,7 @@ def _conn():
 
 # --- 1. the turns a host allows --------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_registry_lets_a_lug_turn_freely_on_a_stud_and_names_no_other_turns():
     reg = yaml.safe_load((ROOT / "spec/schemas/connectors.yaml").read_text())["interfaces"]
     assert reg["terminal-stud"]["turns"] == [0, 90, 180, 270]
@@ -67,11 +68,13 @@ def test_the_registry_lets_a_lug_turn_freely_on_a_stud_and_names_no_other_turns(
     assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", *pairs])
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", STUDS)
 def test_a_ground_stud_allows_the_four_right_angles(ref):
     assert manifest.allowed_turns(_res(ref), _res, _conn()) == [0, 90, 180, 270]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", SCREWS)
 def test_a_terminal_screw_narrows_its_interface_to_0(ref):
     c = _res(ref)
@@ -83,6 +86,7 @@ def test_a_terminal_screw_narrows_its_interface_to_0(ref):
         assert manifest.allowed_turns(_res(block), _res, _conn()) == [0]
 
 
+@pytest.mark.heavy
 def test_a_cage_and_a_contract_presenting_nothing_allow_0_alone():
     assert manifest.allowed_turns(_res("std/sfp-ganged@1"), _res, _conn()) == [0]
     assert manifest.allowed_turns(_res(LUG), _res, _conn()) == [0]
@@ -108,6 +112,7 @@ TWO_HOLE = {"name": "two-hole", "mates": "stud-pair-x", "size": {"w": 6, "h": 30
 FAKE = {"x/s@1": STUD, "x/pair@1": PAIR, "x/two-hole@1": TWO_HOLE}
 
 
+@pytest.mark.heavy
 def test_a_spanning_pair_allows_its_own_turns_and_a_point_narrows_them():
     res = FAKE.get
     assert manifest.allowed_turns(PAIR, res, PAIR_REG) == [0, 180]
@@ -124,6 +129,7 @@ def test_a_spanning_pair_allows_its_own_turns_and_a_point_narrows_them():
     assert manifest.allowed_turns(widened, res, PAIR_REG) == [0]
 
 
+@pytest.mark.heavy
 def test_a_pair_publishes_its_turns_and_its_default_never_turns_across_the_pair():
     """The slot a pair presents publishes [0, 180]; the default turn takes
     only what the pair allows, whatever is in the way."""
@@ -147,6 +153,7 @@ def _host(ref, at=(100.0, 50.0), rotate=None):
     return {"ref": ref, "at": list(at), "rotate": rotate}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", STUDS)
 @pytest.mark.parametrize("host_rotate", [None, 90])
 @pytest.mark.parametrize("turn", [0, 90, 180, 270])
@@ -164,6 +171,7 @@ def test_a_lug_lands_on_its_stud_at_every_turn(ref, host_rotate, turn):
         assert orot == R.solve_seat(_lib, "t", LUG, "h", host)[1]
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", SCREWS)
 def test_a_turn_on_a_terminal_screw_is_refused(ref):
     with pytest.raises(ValueError, match="turn 90 is not one its host"):
@@ -173,6 +181,7 @@ def test_a_turn_on_a_terminal_screw_is_refused(ref):
     R.solve_seat(_lib, "t", LUG, "h", _host(ref), occ_turn=0)
 
 
+@pytest.mark.heavy
 def test_a_turn_on_a_cage_is_refused():
     with pytest.raises(ValueError, match=r"allows \(0\)"):
         R.solve_seat(_lib, "occupants/port-1", "generic/sfp-lc@1", "port-1",
@@ -222,6 +231,7 @@ def mx150(tmp_path_factory):
 TWO_HOLE_34 = "generic/two-hole-lug-3-4@1"
 
 
+@pytest.mark.heavy
 def test_the_expansion_carries_a_turn_and_the_drawing_records_it(mx150):
     """The stud with no turn takes the default, up, because down crosses the
     ESD jack and both sides cross the other stud or a fan."""
@@ -255,6 +265,7 @@ def _node(occ, name):
     return hits[0]
 
 
+@pytest.mark.heavy
 def test_a_lug_turned_90_lies_along_x_and_its_cable_leaves_left(mx150):
     """WHAT 3D AND A CABLE LIBRARY READ, through the composed transform (the
     CTM): every solid of the lug turned 90 runs along x, to the left of its
@@ -281,6 +292,7 @@ def test_a_lug_turned_90_lies_along_x_and_its_cable_leaves_left(mx150):
     assert (m[0][1], m[1][1]) == pytest.approx((-1.0, 0.0), abs=1e-9)   # (0, 1) -> left
 
 
+@pytest.mark.heavy
 def test_a_nested_stud_turns_and_its_default_is_published_by_its_path(tmp_path):
     name, o, config, r = _render(tmp_path, "casa/c40g", {
         "ground-studs-rear/stud-bl": {"ref": LUG, "turn": 270},
@@ -302,6 +314,7 @@ def test_a_nested_stud_turns_and_its_default_is_published_by_its_path(tmp_path):
     assert set(idx["seat-turns"]) == {"rear"}
 
 
+@pytest.mark.heavy
 def test_a_turn_on_a_barrier_block_pole_fails_the_build(tmp_path):
     name, o, config, r = _render(tmp_path, "edgecore/csr180",
                                  {"psu1-input/lug-2": {"ref": LUG, "turn": 90}})
@@ -329,6 +342,7 @@ def _occupants_lint(occupants, device="juniper/mx150"):
     return [e for e in got.errors if "[L146]" in e]
 
 
+@pytest.mark.heavy
 def test_l146_passes_an_allowed_turn_and_no_turn():
     # the MX150's studs are one level into its pair host (#828)
     assert not _occupants_lint({"ground-studs/1": {"ref": LUG, "turn": 270},
@@ -338,6 +352,7 @@ def test_l146_passes_an_allowed_turn_and_no_turn():
                                device="edgecore/csr180")
 
 
+@pytest.mark.heavy
 def test_l146_fails_a_turn_the_host_does_not_allow():
     bad = _occupants_lint({"psu1-input/lug-2": {"ref": LUG, "turn": 180}},
                           device="edgecore/csr180")
@@ -356,11 +371,13 @@ def _point_lint(contract):
     return [e for e in got.errors if "[L147]" in e]
 
 
+@pytest.mark.heavy
 def test_l147_passes_the_library_and_a_narrowing():
     for ref in (*STUDS, *SCREWS, LUG):
         assert not _point_lint(_res(ref)), ref
 
 
+@pytest.mark.heavy
 def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
     screw = copy.deepcopy(_res("common/terminal-screw-34@1"))
     screw["interface"] = "rj45"
@@ -392,7 +409,30 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # The Eaton PDU12IEC's grounding stud (#1044), a common/ground-stud@1 on its rear
 # face between the inlet and the breakers, adds one more seat (down) and one
 # more device.
-WANT = {"down": 108, "left": 27, "up": 8, "right": 21}
+# The seven ReadyLinks GL-x siblings (#763) each place the GL-12xB-240D's rear
+# stud again, seven more seats (down) on seven more devices.
+# The Arista 7010TX-48's DC rear (#1204) places two arista/7010tx-dc-terminal@1 blocks, each
+# composing two terminal screws that a ring lug lands on: four more seats (down), no new device.
+# the four Juniper EX3400 earthing plates add eight ring-lug seats, four left and four right
+# the Arista 7280DR3A-36's two rear grounding screws, 19.2 apart, add one seat down and one up
+# the Juniper QFX5200-48Y places a single M4 earthing screw at each end of its FRU panel: two more seats (down)
+# the Juniper QFX5240-64OD and -64QD each place a two-stud M6 earthing pad on the rear: four more seats, two down and two left
+# the Juniper QFX5120-32C places a single M4 earthing screw at each end of its rear: two more seats (down)
+# the four Juniper EX3300 earthing plates (the EX3400's part, reused) add eight more, four left and four right
+# the Juniper EX9251 places two 10-32 earthing screws: two more seats (down)
+# the Arista 7280CR3-96's two rear grounding screws, the 7280DR3A-36's strip drawn the same: one seat down and one up
+# the Arista 7050CX4M-48D8's two rear grounding screws (#1204, the same strip as the 7280DR3A-36's) add one seat down and one up
+# the Juniper QFX5700's two-stud M6 earthing pad on the rear leaves two more seats, both left
+# the Arista 7280CR3A-48D6's and -72's two rear grounding screws each (#1204, the same strip as the 7280DR3A-36's): two more seats down and two up
+# the Juniper QFX5241-64OD and -64QD each place the same two-stud M6 earthing pad on the rear: four more seats,
+# two down and two left
+# the Juniper EX9214's stud pair on its lower rear plate (guide Figure 5): two more seats (down)
+# the Cisco C9300-48P's and C9300-48T's two rear ground screws each: one more seat down and one left on each
+# the Cisco C9300-24P's, C9300-24U's and C9300-48U's two rear ground screws each: one more seat down and one left on each
+# the 23 Juniper earthing terminals of this change: 48 ring seats (down 25, left 3, up 14, right 6), the two holes of each pair and the QFX5210 plate's, and the one M4 screw of the EX2300-24MP and -48MP
+# the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
+# the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
+WANT = {"down": 213, "left": 57, "up": 27, "right": 40}   # the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -402,7 +442,19 @@ WANT = {"down": 108, "left": 27, "up": 8, "right": 21}
 # (#918) and the S9501-18SMT's two M4 pairs, one leading left and one right,
 # which brought the pair seats to 61 on 34 devices; their four studs are
 # still ring-lug seats, as the four lugs they replace were
-WANT_PAIRS = {"down": 45, "left": 13, "up": 1, "right": 2}
+# The Arista 7010TX-48's grounding pair (#1204), one on its AC rear and one on its DC rear,
+# each leading its wire left: two more pair seats on one more device.
+# and one two-hole lug on each EX3400, leading its wire right
+# and one on each of the four EX3300, the EX3400's plate again, leading its wire right
+# the two-stud M6 pad on the rear of each Juniper QFX5240 is one more pair seat, leading its wire down
+# the two-stud M6 pad on the rear of the Juniper QFX5700 is one more pair seat, leading its wire up
+# the same pad on the rear of the QFX5241-64OD and -64QD: two more pair seats, leading their wires down
+# the Juniper EX9204, EX9208 and EX9214 stud pairs: two more seats leading down, one leading left
+# the 23 Juniper earthing terminals of this change: 23 pair seats on 21 devices (down 3, left 5, right 15)
+# the Nokia SR-1e, SR-2e and SR-3e 10-32 pairs lead down, the SR-12's 1/4-20 pair leads left
+# the Cisco ASR 9000 grounding pad: 13 pair seats on 10 devices (left 7, right 5, up 1)
+# the Amphenol Network Solutions 300CB08 input terminals: four pair seats on each of eight devices, leading down
+WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 30}   # left: one more on each of the four Juniper EX3200
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -417,7 +469,32 @@ RESIDUAL = {("ufispace/s9600-102xc", "rear", "ground-2"): ("down", 0, 1),
 # MX150's ESD jack (y 10.4) starts under the tongue of a lug 10.67 wide across
 # studs at y 6.5, and the MX480's pair stands 0.34 inside the PEM3 bay's edge.
 HARD_RESIDUAL = {("juniper/mx150", "rear", "ground-studs"): ("left", 1, 0),
-                 ("juniper/mx480", "rear", "ground-studs"): ("down", 1, 0)}
+                 ("juniper/mx480", "rear", "ground-studs"): ("down", 1, 0),
+                 # the EX3400's earthing pair is photograph geometry: the least bad direction along
+                 # the pair still crosses a neighbouring part (not the rule's doing)
+                 ("juniper/ex3400-24p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3400-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3400-48p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3400-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 # and the EX3300 reuses that plate, set in a different rear
+                 ("juniper/ex3300-24p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3300-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3300-48p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex3300-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 # the earthing pairs of the Juniper EX2200, EX2300 and EX4100-F are photograph geometry: the least bad
+                 # direction along the pair still crosses a neighbouring part (not the rule's doing)
+                 ("juniper/ex2200-24p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-24t", "rear-dc", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-48p", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2200-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex2300-24p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex2300-24t", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex2300-48p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-24p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-24t", "rear", "ground-pair"): ("right", 1, 0),
+                 ("juniper/ex4100-f-48p", "rear", "ground-pair"): ("right", 2, 0),
+                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0)}
 # the crossings the seat's own direction made, which the default must not.
 # The MX150's second stud is `ground-stud-1` of main, one level into its pair.
 CROSSED_BEFORE = {("supermicro/sys-111e-fwtr", "front", "ground-stud"),
@@ -462,16 +539,18 @@ def _pairs(census):
     return {k: r for k, r in census.items() if r["lug"] != LUG}
 
 
+@pytest.mark.heavy
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 66   # 63, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC
+    assert len({k[0] for k in ring}) == 158   # 154 and the four Juniper EX3200: the ten AurCore AIS switches and the Eaton PDUMH20NET (11 devices), and 143: the ten Cisco ASR 9000 chassis that place the grounding pad, and 133: the Nokia SR-12, SR-1e, SR-2e and SR-3e and the MikroTik CRS309, CRS326 and CSS326 earth studs (7 devices), and the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
-    assert len({k[0] for k in pairs}) == 34
+    assert len({k[0] for k in pairs}) == 90   # 86 and the four Juniper EX3200: the same ten Cisco chassis, and 76: the Nokia SR-12, SR-1e, SR-2e and SR-3e (4 devices), and the 21 Juniper earthing pairs of this change, and 51: the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
     # a pair is turned only along itself
     assert {r["turn"] for r in pairs.values()} == {0, 180}
 
 
+@pytest.mark.heavy
 def test_no_default_crosses_a_part_a_bay_or_another_seat(census):
     assert not [k for k, r in _ring(census).items() if r["hard"]]
     hard = {k: (r["dir"], r["hard"], r["soft"]) for k, r in census.items() if r["hard"]}
@@ -481,6 +560,7 @@ def test_no_default_crosses_a_part_a_bay_or_another_seat(census):
     assert left == RESIDUAL
 
 
+@pytest.mark.heavy
 def test_a_pairs_own_studs_are_not_in_its_lugs_way():
     """A two-hole lug lands on both studs of its pair, and neither holds the
     pair's midpoint: counted as obstacles they made every direction cross
@@ -497,6 +577,7 @@ def test_a_pairs_own_studs_are_not_in_its_lugs_way():
     assert len(stud["obstacles"]) == len(seat["obstacles"]) + 1
 
 
+@pytest.mark.heavy
 def test_the_four_crossings_the_seat_gave_are_gone(census):
     for k in CROSSED_BEFORE:
         assert census[k]["hard0"] >= 1, k
@@ -512,9 +593,22 @@ def test_the_four_crossings_the_seat_gave_are_gone(census):
     # lug at its seat's own direction lying across the plate's OTHER screw, 16
     # to 17 away; which screw draws the earth symbol does not move them.
     crossed = {k for k, r in _ring(census).items() if r["hard0"]}
-    assert len(crossed) == 17 and not [k for k in crossed if census[k]["hard"]]
+    # and both screws of each of the four EX3400 earthing pairs, 16 away from each other
+    # and one of the 7280DR3A-36's two rear grounding screws, 19.2 away from its neighbour
+    # and both screws of each of the four EX3300 earthing pairs, the same plate
+    # and the same screw of the 7280CR3-96, whose rear strip is drawn the same way
+    # and one of the 7050CX4M-48D8's, on the same strip
+    # and one of the two rear grounding screws of each of the 7280CR3A-48D6 and -72, on the same strip
+    # and both studs of each of the EX9204's and EX9208's pairs, the MX240's and MX480's pair host
+    # and one of the two rear ground screws of each of the Cisco C9300-48P and C9300-48T, 15.8 away from its neighbour
+    # and the same ground screw of each of the Cisco C9300-24P, C9300-24U and C9300-48U
+    # and the 23 Juniper earthing terminals of this change: 24 ring seats whose own direction crosses a part (ten holes of the EX2200, six seats of the EX2300, two of the EX4100-F, four of the EX4100-H and two of the QFX5210 plate), the default clearing every one
+    # and both studs of the Nokia SR-12's pair, 15.9 away from each other
+    # and the two screws of the Cisco ASR 9902's grounding pad, 15.9 away from each other
+    assert len(crossed) == 75 and not [k for k in crossed if census[k]["hard"]]
 
 
+@pytest.mark.heavy
 def test_a_barrier_block_pole_is_no_turnable_seat():
     for device in ("edgecore/csr180", "edgecore/csr200"):
         d = yaml.safe_load((LIB / "devices" / device / "device.yaml").read_text())
@@ -524,6 +618,7 @@ def test_a_barrier_block_pole_is_no_turnable_seat():
 
 # --- 6. the lock and the exports ------------------------------------------------------
 
+@pytest.mark.heavy
 def test_a_configuration_turn_asks_a_patch():
     d = yaml.safe_load((LIB / "devices/juniper/mx240/device.yaml").read_text())
     cfg = next(iter(d["configurations"]))
@@ -535,6 +630,7 @@ def test_a_configuration_turn_asks_a_patch():
     assert devicelock.required_bump(old, new) == "patch"
 
 
+@pytest.mark.heavy
 def test_the_dcim_exports_do_not_read_a_turn():
     d = yaml.safe_load((LIB / "devices/juniper/mx240/device.yaml").read_text())
     cfg_name = next(iter(d["configurations"]))

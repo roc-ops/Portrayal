@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: r960-support-bar
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The support bar of the PowerEdge R960 seen from above - the steel bar across the chassis behind the air shroud, held
+  by blue captive screws
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `R960_ SupportBar`
+    in the `Main Assembly` node (the un-exploded assembly), with its four screws. R960 ISM figure 12 (callout 10,
+    "Support bar") and the "Removing / Installing the support bar" procedures (figures 39 and 40: a different bar for
+    full-length and half-length risers).
+  size: >-
+    measured - r960.glb, the node box 438.3 x 59.7 at plan (2.8, 339.9) (plan x = 228.0 - cad x1, plan y = 883.94 - cad
+    z1). The first pass read 436.0 x 35.0 at y 370.0 off ISM figure 12 (px 220..1015 across at 1.813; 815..880 down at
+    1.863).
+  variants: >-
+    ISM figures 39 and 40 show a support bar for full-length risers and one for half-length risers. The model is the
+    full-length-riser build, so this is the full-length bar; figure 12's is the half-length one (35.0 deep). The half-length
+    bar is not drawn: see `top-view-model-vs-ism` on the device.
+  height: >-
+    measured - r960.glb, 29.2 (cad y 142.6 to 171.8), with the four screw heads (`3DGeom~6590` and its three twins) 13.8 tall on
+    it. The first pass had 4.0, estimated.
+size: {w: 438.3, h: 59.7}
+size-confidence: {w: measured, h: measured}
+relief:
+  features:
+  - node: bar
+    out: 29.2
+    color: '#b9bec4'
+    confidence: measured
+    source: r960.glb `R960_ SupportBar`, cad y 142.6 to 171.8
+elements:
+  bar: {at: [0.0, 0.0], size: [438.3, 59.7], class: bezel}
+skins: [default]

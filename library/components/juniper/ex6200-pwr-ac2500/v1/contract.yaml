@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: ex6200-pwr-ac2500
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200-PWR-AC2500, the 2500 W AC power supply of the EX6200 line. It delivers 2500 W from a high
+  line (200 to 240 VAC) and 1250 W from a low line (100 to 120 VAC). The faceplate has one IEC C20 appliance
+  inlet, an Enable switch (Standby or On), the INPUT OK, OUTPUT OK and FAIL lamps, a vent field with a
+  diagonal handle and two captive screws. The airflow runs from front to back. The EX6210 seats up to four,
+  in slots PSU 0 to PSU 3; a shipping order includes one. They are hot-removable and hot-insertable.
+attrs:
+  role: ac-power-supply
+  power-output-w: 2500
+  power-output-low-line-w: 1250
+  airflow: front-to-back
+  input: 100 to 120 VAC (1250 W) or 200 to 240 VAC (2500 W), 50 to 60 Hz, 15 A per cord (guide Tables 20 and 25)
+part-numbers:
+  EX6200-PWR-AC2500: {part: EX6200-PWR-AC2500}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Figure 16 and Figure 21 (the supply,
+    isometric, g021106), Figure 5 and Figure 64 (the four slots with 2500 W supplies, drawn flat, g021103 and
+    g021272), Tables 4, 20, 24 and 25 (the electrical figures and the lamps). EX6200 datasheet 1000390-002-EN (Aug 2011), ordering table: EX6200-PWR-AC2500, "2,500 W AC
+    Power Supply at 220 V (1,250 W at 110 V), power cord not included".
+  size: >-
+    drawing - Figure 5 (flat, read at 4.766 px/mm: its body, between the fold lines, is 2094 px for the
+    17.3 in, 439.4 mm width) gives each supply face 480 px across and 485 px high, 100.7 x 101.8 mm, on a 108.5 mm
+    pitch. The guide gives no dimension for the supply. The figure passes the width check: the four supplies
+    and their margins sum to the 2094 px body.
+  face: >-
+    estimated - Figure 5 read at 1.906 px/mm on the 960 px crop: the C20 inlet (portrait) centred 87.6 mm across
+    and 31.2 mm down, the Enable switch 76 to 94 mm across and 61 to 73 mm down, the three lamps at the bottom
+    edge, 73.5, 82.5 and 90.0 mm across and 98.1 mm down, the screws at 11.0 and 87.6 mm across and 5.2 mm
+    down, the diagonal handle from 6.3 across and 73.5 down to 61.4 across and 14.2 down, and the vent
+    field 6.3 to 66.6 mm across and 14.2 to 99.2 mm down. Every position is estimated to about 1 mm.
+  handle: >-
+    estimated - the guide gives no colour for the handle; the guide's figures are line drawings. It is drawn in
+    neutral grey. The guide shows one build only, with airflow from front to back.
+  power-output-w: >-
+    datasheet - guide Table 20 and Table 25: 2500 W from a high-line input and 1250 W from a low-line input. The
+    higher figure is the rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 24: INPUT OK is green and steady for a normal input voltage, blinking for one out
+    of range, off when no AC arrives; OUTPUT OK is green and steady for a normal DC output, blinking for a fault,
+    off otherwise; FAIL is red and steady when the supply has failed, off when it works.
+  efficiency: >-
+    datasheet - guide Table 20 (read from the rendered page): 92 percent at a low-line input and 94 percent at a
+    high-line input for the 2500 W supply.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [71.4, 19.0], rotate: 90}
+elements:
+  led-input-ok:
+    at: [72.6, 97.2]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: out-of-range, color: '#22c55e', behavior: blinking}]
+  led-output-ok:
+    at: [81.6, 97.2]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#22c55e', behavior: blinking}]
+  led-fail:
+    at: [89.1, 97.2]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: failed, color: '#ef4444'}]
+  enable-switch:
+    at: [76.0, 62.0]
+    size: [17.0, 11.0]
+    class: button
+  handle:
+    at: [6.0, 14.0]
+    size: [56.0, 60.0]
+    class: latch
+size:
+  w: 100.7
+  h: 101.8
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle bar stands proud of the vent field in Figure 16; its projection is not measured
+skins: [default]

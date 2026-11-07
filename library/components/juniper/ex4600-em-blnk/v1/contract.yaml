@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: ex4600-em-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX5100-EM-BLNK, the blank cover panel for an empty expansion module bay of the EX4600
+  switch. The EX4600 hardware guide draws one cover panel on each bay of the port panel. It says to
+  fit a panel or a module in every bay. This prevents overheating and dust. The datasheet lists the
+  panel as a blank module for the EX4600. It is a plain plate with two screws at the top corners and
+  a strip of hexagonal vents at the top and the bottom. It carries no port and no lamp.
+attrs:
+  weight-note: not published
+part-numbers:
+  QFX5100-EM-BLNK (EX4600): {part: QFX5100-EM-BLNK}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): Figure 9 (the port panel,
+    callout 4, "expansion module bays with cover panels (2)"), and Removing and Installing an
+    Expansion Module in an EX4600 Switch (a cover panel is removed with a screwdriver and fitted over
+    an empty slot). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021), ordering table:
+    QFX5100-EM-BLNK, blank module for the EX4600. The guide gives no size and no weight. The key of
+    part-numbers carries the suffix (EX4600) so that its DCIM module type does not share a file with
+    the same part number in another line's slice.
+  size: >-
+    photo-measured - the panel fills the module bay, which is the EX4600-EM-8F's 86.7 x 43.2 mm
+    measured on Juniper's EX4600 front studio photograph (ex4600-front-high.jpg). The photograph
+    shows no cover panel, so the panel takes the bay's size.
+  face: >-
+    drawing - Figure 9, read as fractions of one panel: a screw at each top corner and a strip of
+    hexagonal vents along the top and along the bottom. The strips are drawn between the screws at
+    the top and under the whole width at the bottom. The figure is a line drawing at 1.66 px/mm, so
+    the positions are estimated.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide and the datasheet for the panel's dimensions:
+    nothing is given. No depth is written.
+states: [absent]
+elements:
+  screw-left:
+    at: [2.0, 1.0]
+    size: [4.4, 4.4]
+    class: screw
+  screw-right:
+    at: [80.3, 1.0]
+    size: [4.4, 4.4]
+    class: screw
+size:
+  w: 86.7
+  h: 43.2
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+skins: [default]

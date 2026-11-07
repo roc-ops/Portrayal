@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: ex3400-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module, airflow in (AFI), for the Juniper EX3400-48T-AFI. Two sit side by side on the rear
+  panel, numbered 0 and 1. Each is hot-removable and hot-insertable. The face has a handle with a
+  grey AIR IN chip. A honeycomb grille sits above and below the handle, and a captive screw at the
+  top left. Air enters the chassis at this face, back to front. The guide names no part number for it.
+attrs:
+  cli-name: Fan Module, Airflow In (AFI)
+  airflow: back-to-front
+  weight-kg: 0.72
+provenance:
+  size: >-
+    estimated - no photograph of the back-to-front fan module is held. Its face is drawn at the size
+    and art of the front-to-back module (40.8 by 41.6 mm), which Juniper's EX3400-48P rear studio
+    photograph shows at 3.327 px/mm, with the legend changed to AIR IN. The guide gives no fan
+    module dimension, only its weight, 1.59 lb (0.72 kg), Table 3, and no depth.
+  airflow: >-
+    datasheet - Table 2 names the module Fan Module, Airflow In (AFI), and Tables 10 and 12 give the
+    EX3400-48T-AFI back-to-front airflow. The guide does not state the label on the module, so AIR IN
+    is estimated from the supply label, which Table 12 gives as AIR IN.
+  part-number: >-
+    NOT STATED. Table 38 names EX3400-FAN-AFO2 for the front-to-back fan of the ORv3 assembly, and the
+    guide names no part number for the airflow-in module, so the module is exported under its
+    component name.
+  handle-colour: >-
+    estimated - the guide states no handle colour for either airflow direction and no photograph of a
+    back-to-front module is held, so the handle keeps the orange of the front-to-back module. A
+    different colour on the real unit is not ruled out.
+  power: >-
+    NOT STATED. The guide's power chapter (Tables 11, 12, 15 and 19) gives whole-chassis and
+    power supply figures only. No per-fan figure appears in it, so L27 stands.
+states: [absent]
+elements:
+  screw:
+    at: [2.0, 2.0]
+    size: [4.8, 4.8]
+    class: screw
+  handle:
+    at: [1.0, 14.6]
+    size: [38.8, 12.2]
+    class: latch
+size:
+  w: 40.8
+  h: 41.6
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#ee6a1f'
+    confidence: estimated
+    source: photo - the handle of the front-to-back module stands proud of the grilles; the projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw of the front-to-back module, projection estimated
+skins: [default]

@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: ex4400-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module for the Juniper EX4400 switches, front-to-back airflow (AFO).
+  The guide names this unit for the EX4400-24T, -24P, -24MP, -24X, -48T,
+  -48P, -48XP, -48MP, -48MXP and -48F. Two fit side by side at the rear, in
+  slots 0 and 1. Cold air enters at the front panel and leaves through this
+  face. The face is an orange (gold) square with a hexagon grille and a
+  captive screw at the top left. A handle bar with an AIR OUT chip runs across
+  the middle. A status lamp sits at the lower right. Do not mix this unit with
+  back-to-front fans or power supplies in one chassis.
+attrs:
+  model: EX4400 fan module, airflow out (AFO)
+  role: chassis-fan
+  airflow: front-to-back
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic
+    Cooling System and Airflow in an EX4400 Switch - two fan modules (1+1) in rear slots 0 and
+    1, a fan icon beside each slot, and two airflow models told apart by the legend and the
+    handle. Front-to-back is AIR OUT with the Juniper Gold (orange) handle. Figure 62 (g022586)
+    draws the module. Table 114 names it in the CLI as Fan Module, Airflow Out (AFO).
+  size: >-
+    datasheet - Table 39, Physical Specifications of the EX4400 Fan FRU - width 1.65 in (4.18
+    cm), height 1.65 in (4.18 cm), depth 4.55 in (11.57 cm). Carried as 41.8 x 41.8 x 115.7 mm.
+    The rear render in Figures 5 and 9 measures 41.0 wide by 42.8 tall at 3.92 and 3.86 px/mm.
+    The figure is stretched 1.7 percent between its axes, and the table's size holds to within
+    that.
+  depth: >-
+    datasheet - Table 39, depth 4.55 in (11.57 cm), carried as 115.7 mm. It is the module body
+    behind the face.
+  elements: >-
+    estimated - read off the guide's rear render of the EX4400-24T (Figure 9, g022646, 2000 x
+    265 px, the chassis 441.7 mm across at 3.92 px/mm). The grille octagon is 3.3 to 37.5 across
+    and 3.9 to 38.6 down. The screw centre is at 4.3, 4.9. The handle band is 21.5 to 31.4 down
+    with a trapezoid window either side. The AIR OUT chip is 14.0 to 27.0 across and 24.2 to 30.8
+    down. The lamp centre is at 36.4, 37.6. The hexagon pitch is estimated and the grille is
+    drawn as a repeating pattern, not cell by cell.
+  colour: >-
+    photo-measured - the guide's rear render, median of the module margin and of the handle bar
+    of the power supplies beside it. The guide calls the handle Juniper Gold and describes it as
+    orange. The rear render of the DC build draws a redder orange. The AC build's value is used.
+  airflow: >-
+    datasheet - Cooling System and Airflow in an EX4400 Switch. Front-to-back means cold air
+    enters through the vents on the front panel and hot air leaves through the vents on the rear
+    panel, indicated by the AIR OUT label and the Juniper Gold handle.
+  led: >-
+    datasheet - Fan Module Status, Figure 79 and Table 51. Each fan module has one status lamp.
+    Lit green means the module works normally. Unlit means the module is not seated, has
+    failed, or has an airflow direction that does not match the other parts. Figure 79 (g022612)
+    places the lamp at the lower right of the face.
+  relief: >-
+    estimated - the handle and the captive screw stand proud of the grille. The projection is
+    not measured in any source. Figure 62 is a perspective drawing and gives no projection.
+  power: >-
+    NO FIGURE IS PUBLISHED - the guide's heat-dissipation table (Table 52) and its PoE budget
+    tables give whole-switch figures only. Searched the guide text for the fan module near watt
+    and current figures. The missing-power warning stands, as the record that the figure is
+    missing.
+  part-number: >-
+    The guide prints the model EX4400-FAN once, in Table 107 (the switch-tray assembly
+    components), without an airflow direction. The brief for this part also lists EX4400-FAN for
+    both directions. Neither source says whether one code serves both airflows, so no ordering
+    code is stated. See the device gap fan-part-number.
+states:
+- ok
+- fault
+- absent
+elements:
+  screw:
+    at: [1.1, 1.7]
+    size: [6.4, 6.4]
+    class: screw
+  handle:
+    at: [0.6, 21.5]
+    size: [40.6, 9.9]
+    class: latch
+  led:
+    at: [34.9, 36.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+size:
+  w: 41.8
+  h: 41.8
+  d: 115.7
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8a010'
+    confidence: estimated
+    source: >-
+      The handle bar stands proud of the grille in the guide's Figure 62 (g022586). The
+      projection is not stated or measured.
+  - node: screw
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: >-
+      The captive thumbscrew of Figure 62 stands proud of the face. The projection is not
+      stated or measured.
+body:
+  depth: 115.7
+  color: '#4a4d52'
+skins: [default]

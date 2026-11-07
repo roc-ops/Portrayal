@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: control-panel-left-2u-16g
+version: 1.0.0
+class: control-panel
+behaviour: fills
+profile: server
+description: >-
+  Left control panel of a 16th-generation 2U PowerEdge (R760) - five status glyphs that are themselves the lamps, the system health and ID bar under its italic i, and the optional iDRAC Quick Sync 2 bar with its wireless mark, on a strip that runs the height of the ear
+provenance:
+  sources: >-
+    (1) photo-measured - R760 Installation and Service Manual (ISM) figure 1 (front view of the 24 x 2.5-inch drive system), the embedded 1650 x 516 image at 3.30 px/mm (its 482.6 mm width against 1594 px; the height 86.8 against 286 px, 0.2% apart, so the figure is orthographic): where the strip and every mark sit. Facts read, art not traced. (2) ISM tables 2 and 3 and figures 7 and 8 (left control panel; with the optional iDRAC Quick Sync 2 indicator): what each mark is. (3) dell/control-panel-left-16g@1, the R660's 1U panel: the glyph art and the lamp states, which the R760 tables repeat (ISM 'Status LED indicators' and 'System health and system ID indicator codes' were not read again for a difference).
+  size: >-
+    photo-measured - 10.1 x 82.0, the strip at face x 14.2..24.3, y 2.1..84.1: the R660 panel's width (the R760's strip measures 13.3..23.9 in the figure, 10.6 wide, within the figure's 1.5 mm), and the full height of the ear between its top and bottom rims.
+  marks: >-
+    photo-measured, panel-local mm: the five status glyphs centred at y 10.6, 14.9, 19.4, 23.6 and 28.3 (drive, temperature, electrical, memory, PCIe - ISM table 2's order; the R660's glyph art moved from its 8.25 to 29.28), the italic i at y 4.7..6.9, the health bar 2.05 wide at x 7.0 from y 10.2 to 27.2 (17.0 long - twice the R660's, which splits that length between the health bar and the Quick Sync bar), and the Quick Sync bar below it to 36.4 with the wireless arcs at about 38.5.
+  depth: >-
+    BORROWED from dell/control-panel-left-16g@1 (itself borrowed from dell/control-panel-left-14g@1's measured 22.80); Dell's R760 service model (r760.glb, `R760_ LeftCP`) is held but its depth was not read from it in the change that measured the covers and fans.
+  quick-sync-is-optional: >-
+    the ISM calls the Quick Sync 2 indicator optional (figure 8 against figure 7); every R760 front figure held draws the bar below the health bar as a dark strip, so it is drawn. A build without it is not modelled as a variant.
+size: {w: 10.1, h: 82.0, d: 22.8}
+size-confidence: {w: photo-measured, h: photo-measured, d: borrowed}
+body: {depth: 22.8, color: '#15181b'}
+elements:
+  lamp-drive:
+    at: [2.05, 9.3]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the drive glyph, lit. ISM table 2 - solid amber if there is a drive error.
+  lamp-temperature:
+    at: [2.05, 13.6]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the thermometer glyph. Solid amber on a thermal error - ambient out of range, or a fan failure.
+  lamp-electrical:
+    at: [2.05, 18.1]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: >-
+      the lightning glyph. Solid amber on voltage out of range, a failed PSU or a failed voltage regulator.
+  lamp-memory:
+    at: [2.05, 22.3]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the memory glyph. Solid amber on a memory error.
+  lamp-pcie:
+    at: [2.05, 27.0]
+    size: [2.6, 2.6]
+    class: led
+    states: ['off', {name: fault, color: '#eab308'}]
+    description: the PCIe glyph. Solid amber when a PCIe card errors.
+  lamp-health:
+    at: [7.0, 10.2]
+    size: [2.05, 17.0]
+    class: led
+    states: ['off',
+             {name: healthy, color: '#2563eb'},
+             {name: identify, color: '#2563eb',
+              behavior: {mode: blinking, rate: 1}},
+             {name: fail-safe, color: '#eab308'},
+             {name: fault, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the system health and system ID bar, and the button that switches between the two modes: solid blue - on, healthy, ID mode not active; blinking blue - ID mode active; solid amber - fail-safe mode; blinking amber - a fault, check the event log. The codes are the R660's table 129 (dell/control-panel-left-16g@1). NO RATE IS PUBLISHED for either blink, so 1 Hz is this library's reading and is not a figure Dell states.
+  lamp-quicksync:
+    at: [7.0, 27.4]
+    size: [2.05, 9.0]
+    class: led
+    states: ['off',
+             {name: ready, color: '#f8fafc'},
+             {name: transfer, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 4}},
+             {name: updating, color: '#f8fafc',
+              behavior: {mode: blinking, rate: 0.5}},
+             {name: disabled,
+              behavior: {mode: sequence,
+                         phases: [{color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 0.12},
+                                  {color: '#f8fafc', seconds: 0.12},
+                                  {seconds: 2.5}]}},
+             {name: fail-safe, color: '#eab308'},
+             {name: unresponsive, color: '#eab308',
+              behavior: {mode: blinking, rate: 1}}]
+    description: >-
+      the iDRAC Quick Sync 2 bar, and the button that turns the feature on and off. Every code in the R660's table 130, at the shape that table gives (dell/control-panel-left-16g@1): off, solid and blinking white, five rapid blinks then off, solid and blinking amber. The 2.5 second tail of `disabled` is this library's reading of 'and then turns off'.
+skins: [default]

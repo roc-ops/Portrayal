@@ -19,6 +19,7 @@ LIB = SPEC.parent / "library"
 
 from portrayal import lint
 from portrayal import libwalk
+import pytest
 
 P = Path("fixture.yaml")
 
@@ -446,6 +447,7 @@ def test_a_pitch_broken_by_a_cage_division_is_not_a_defect():
     assert lint._bay_pitch_is_uneven([15.0, 38.8]), "the MX304 gaps must still fire"
 
 
+@pytest.mark.heavy
 def test_the_library_sits_on_an_even_pitch():
     import glob as _g
     for f in libwalk.iter_devices([LIB]):

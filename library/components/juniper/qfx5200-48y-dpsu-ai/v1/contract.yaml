@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: qfx5200-48y-dpsu-ai
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  QFX520048Y-DPSU-AI, the 650 W DC power supply of the QFX5200-48Y, with back-to-front (FRU-to-port)
+  airflow. It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The
+  QFX5200 hardware guide says the QFX5200-48Y takes it, two to a switch, in the slots at the two ends of the FRU
+  panel, and that AC and DC supplies of the same airflow may be mixed in the 48Y. The face is that of the
+  front-to-back DC supply with a blue latch: one bi-coloured lamp, a silver frame with square vents, a black bail
+  handle and a three-pin DC power connector (pin 3 return, pin 2 -36 to -72 V, pin 1 grounding). The front-to-back
+  sibling is QFX520048Y-DPSU-AO.
+attrs:
+  model: QFX520048Y-DPSU-AI
+  role: dc-power-supply
+  inlet: dc-terminal
+  power-output-w: 650
+  airflow: back-to-front
+  input: rated -48 to -60 VDC at 21 A; -36 to -72 VDC at 25 A to 11 A (QFX5200-48Y, guide Table 25)
+provenance:
+  size: >-
+    photo-measured, for the AC sibling - the same frame and latch as qfx5200-48y-dpsu-ao@1 (54.4 x 39.7 mm). No
+    photograph of this back-to-front DC supply exists, so nothing here is measured on it.
+  depth: >-
+    not stated. The guide's figure 40 is an isometric drawing with no scale and its tables give no depth.
+  face: >-
+    drawing - that of qfx5200-48y-dpsu-ao@1 (the guide's flat figures 42 and 44). The guide draws one DC supply and says the
+    AI supply differs by airflow and colour.
+  power-output-w: >-
+    datasheet - the guide's table of hardware components gives the CLI name DC AFI 650W PSU for the 48Y; there is no separate
+    output rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 27 (DC Power Supply LED on a QFX5200-48Y): one bi-coloured lamp. Off: disconnected or no power in;
+    green blinking: standby; green steady: output good; red and green alternating: a warning; red steady: an error; red
+    blinking: the supply's internal fan has failed.
+  airflow: >-
+    datasheet - guide Table 3: QFX520048Y-DPSU-AI is FRUs-to-ports airflow (back-to-front). The guide's Table 19 gives the AC
+    supply's panel as blue for airflow in; the DC supply's colour is carried from it by the same direction.
+  colour: >-
+    borrowed - the blue the library already carries for Juniper Azure Blue on juniper/jpsu-650w-ac-ai@1; estimated.
+  connector: >-
+    the supply composes juniper/qfx5200-48y-dc-header@1 as `dc-header`, the three-position DC power header of
+    the QFX5200 Hardware Guide (Juniper Networks), Figure 42 (flat faceplate) and Figure 85 (the cable connector
+    going in), at the box of the `connector` element. The guide names no maker or part number for it, so the
+    part is a declared stand-in (its own provenance). juniper/qfx5200-48y-dc-plug@1, the cable connector of
+    Figure 85, mates it. The supply's own skin no longer draws the block, its cells or the pin numbers 3, 2 and 1
+    printed beside them; the part does, because a part is drawn over the supply's face and would hide them.
+  roles: >-
+    guide - Figure 42, top to bottom as the supply numbers the cells 3, 2 and 1: pin 3 "Red: RTN" (the library's
+    `rtn`), pin 2 "Black: -36 -72V" (`batt`) and pin 1 "Green: Grounding" (`gnd`). Step 5 of the DC connection
+    topic wires the red cable to the positive source and the black one to the negative source. Table 25 gives
+    a rated range and no nominal.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is
+    offered only where that path's part is itself the connector; on a supply in a bay it is the supply, not
+    the connector it composes, so a port stated here would be published and then not offered. The roles above
+    are recorded for the port a later change can state, a minor on the devices that seat this supply.
+states:
+- ok
+- fault
+- absent
+elements:
+  led:
+    at: [11.8, 4.1]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: standby, color: '#39b54a', behavior: blinking}
+    - {name: warning, color: '#f5a623', behavior: blinking}
+    - {name: fault, color: '#e53935'}
+    - {name: fan-failed, color: '#e53935', behavior: blinking}
+    - 'off'
+  latch:
+    at: [0.0, 2.5]
+    size: [9.4, 21.0]
+    class: latch
+  bail:
+    at: [15.2, 3.0]
+    size: [5.6, 36.0]
+    class: latch
+  connector:
+    at: [37.6, 8.5]
+    size: [10.9, 28.4]
+    class: terminal
+parts:
+- {ref: juniper/qfx5200-48y-dc-header@1, id: dc-header, at: [37.6, 8.5]}
+size:
+  w: 54.4
+  h: 39.7
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo of the AC front-to-back sibling - the latch stands proud of the frame; its projection is not measured

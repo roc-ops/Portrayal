@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: r6615-riser-2a
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2A of the PowerEdge R6615 - slot 1 and slot 2 on dell/riser-2-lp-cage-16g@1, fitted in riser configurations 1 and 6
+attrs:
+  riser: '2A'
+  appears-in: 'riser configurations 1 and 6'
+  power-absent: not-published
+  slot-1: 'x8, low profile, half length, processor 1, PCIe Gen4'
+  slot-2: 'x8, low profile, half length, processor 1, PCIe Gen4'
+provenance:
+  why-this-is-not-dell/riser-2a-16g: >-
+    THE METAL IS THE R660'S AND THE WIRING IS NOT. The R6615 has one processor:
+    ISM table 16 (and table 97) give R2A's two slots as x8 Gen4 on processor 1,
+    where the R660's riser 2A is two x16 Gen4 slots on processors 1 and 2. A
+    slot's electrical width and processor are contract data, so the R660's part
+    would state a wiring this server does not have. The face is composed from
+    the same cage, which the R6615's figure 6 and table 6 do not distinguish.
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R6615 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS (ISM figure 116, 'Riser 2A',
+    slot 1 and slot 2), so it is a module with `bays`, as dell/riser-2a-16g@1 is.
+  slots: >-
+    datasheet - R6615 ISM table 16 and table 97: slot 1 and slot 2 low profile,
+    half length, x8 (Gen4), processor 1. Table 17 (technical guide table 11)
+    lists the riser in configurations 1 and 6.
+  face: >-
+    borrowed - composed from dell/riser-2-lp-cage-16g@1, the metal of the R660's
+    riser 2A, which ISM figure 116 shows with the same two windows.
+  size: >-
+    borrowed - the cage's extent, 163.60 x 19.80.
+  seating: >-
+    borrowed - the slot bays are dell/riser-2a-16g@1's, which read them off
+    Dell's R660 service model.
+  body: >-
+    borrowed - the board and connectors are dell/riser-2a-16g@1's.
+  plan: >-
+    borrowed - dell/riser-2-lp-plan-16g@1, the R660's riser 2 outline. The
+    R6615's interior view with risers (ISM figure 11) shows riser 2 on the
+    right of riser 3 from above, and the outline lands on it at matched scale
+    (x 288 to 550 against the figure's 290 to 555 px at 0.8 of 2.195 px/mm).
+size: {w: 163.60, h: 19.80, d: 246.9}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+body:
+  depth: 246.9
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [85.40, -0.30], size: [2.40, 33.20],
+     from: 27.6, depth: 219.3, color: '#1f5138',
+     confidence: borrowed, source: "borrowed from dell/riser-2a-16g@1 (Dell's R660 service model, PE_R660_L_Riser_2A_Assembly Body_2_57, 2.4 x 33.2 x 219.3 at rear x 192.4)"}
+  - {id: slot-1-connector, at: [74.70, 12.70], size: [10.00, 8.70],
+     from: 48.3, depth: 89.0, color: '#15171b',
+     confidence: borrowed, source: "borrowed from dell/riser-2a-16g@1 (Dell's R660 service model, Body_6_31, 10.0 x 8.7 x 89.0 - low, on the board's left face)"}
+  - {id: slot-2-connector, at: [88.40, 0.40], size: [10.00, 8.70],
+     from: 47.2, depth: 89.0, color: '#15171b',
+     confidence: borrowed, source: "borrowed from dell/riser-2a-16g@1 (Dell's R660 service model, Body_7_24, 10.0 x 8.7 x 89.0 - high, on the board's right face)"}
+plan: {ref: dell/riser-2-lp-plan-16g@1}
+parts:
+  - {ref: dell/riser-2-lp-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 4}
+    rotate: 180
+    plan: {at: [70.23, 0.00]}
+    behind: true
+    at: [14.17, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-2:
+    slot: {connector: x16, lanes: 8, height: low, length: half, processor: 1, generation: 4}
+    plan: {at: [4.73, 0.00]}
+    behind: true
+    at: [79.67, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

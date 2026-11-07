@@ -1,0 +1,580 @@
+format: 1
+kind: device
+name: ex9253
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: EX9253
+portfolio: {line: EX Series, family: EX9250}
+description: >-
+  Juniper EX9253, a 3RU modular core and aggregation switch that runs Junos OS, the larger of the two
+  EX9250 chassis. The front has two Routing Engine slots (RE0 and RE1) across the top and two line card
+  slots (MPC1 above MPC0) below, with the ESD point between the Routing Engines. The rear has six power
+  supply slots (PSM0 to PSM5), three each side, and four fan trays between them (FT0 to FT3). The base
+  order ships one Routing Engine, three supplies and the blank panels; the redundant order two Routing
+  Engines and four supplies. Line cards are ordered separately and are not modelled here: both line card
+  slots show their blank panels.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper EX9253 Switch Hardware Guide, published 2022-11-30, 251 pages (Juniper Networks, copyright
+      2022), https://www.juniper.net/documentation/us/en/hardware/ex9253/ex9253.pdf: Tables 1 to 4 (the
+      line cards, power supplies, orders and CLI names), the front and rear views (Figures 1 to 4), the
+      host subsystem (Figures 6 and 7, Table 6), the cooling system (Figures 8 to 12, Table 7), the power
+      system (Figures 13 to 17, Tables 8 to 13), the chassis (Table 5), the line cards (Tables 14 and
+      18), the environmental table (Table 23) and the parts lists (Tables 32 and 33). EX9250 Ethernet
+      Switch Datasheet, 1000632-006-EN, Sep 2021 (PDF produced 2022-07-27): the chassis table (Table 5),
+      the power tables and the ordering table. The datasheet's own address now redirects to a page on
+      the hpe.com site, which did not answer; the PDF was read from the Internet Archive's capture of
+      Juniper's address (https://web.archive.org/web/20240111201612/https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex9250-ethernet-switch-datasheet.pdf).
+      Juniper's EX9250 specifications page (https://www.juniper.net/us/en/products/switches/ex-series/ex9250-core-and-aggregation-switches/specs.html)
+      for the body width. Terms: the documents are Juniper's, read here for facts only, and nothing of
+      them is copied into the library. No photograph of the EX9253 was reachable: Juniper's image library
+      holds one image of the EX9250 line (ex9250-11) and it shows the EX9251. No held intake folder, Visio
+      stencil or 3D model was reachable from this work, so the public documents above are the only sources.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 5: 5.21 in (13.23 cm, 3 U) high; 19 in (48.26 cm) wide; 30 in (76.2 cm) deep without
+      the cable management brackets, air filter unit and handles, or 36.5 in (92.7 cm) with them on an
+      AC chassis and 38.5 in (97.79 cm) on a DC one; 50 lb (22.68 kg) without a FRU, 157.4 lb (71.4 kg)
+      AC and 163.4 lb (74.11 kg) DC fully loaded. The datasheet gives 19 x 5.217 x 30 in and the specifications
+      page 17.4 x 5.25 x 30 in (44.2 x 13.3 x 76.2 cm). The 19 in is the width with the front-mounting
+      brackets, so the body is the specifications page's 44.2 cm, which the figure agrees with: its fold
+      lines are 75 and 1413 px apart at 3.03 px/mm, 442.0 mm. The height is the guide's 132.3 mm. See
+      the gap named chassis-size.
+  gate-1:
+    confidence: estimated
+    note: >-
+      Guide Figures 1 and 2 are 1500 px wide rasters of the front and the AC rear, drawn flat. The outline,
+      ears included, is 1461 x 400 px, an aspect of 3.65 against 482.6 / 132.3 = 3.65 (0.1 percent out),
+      so both are read as flat at 3.03 px/mm. The body is the metal between the fold lines at 75 and 1413
+      px, 442.0 mm; the ears outside them carry the slot legends (RE0, MPC1, MPC0 and RE1, MPC1, MPC0)
+      and are not drawn. Rows are taken from the top outline at 149.5 px (front) and 144.5 px (rear).
+      Every position read off these figures is estimated to about 0.7 mm: a pixel is 0.33 mm.
+  slots:
+    confidence: estimated
+    note: >-
+      Figure 1 at 3.03 px/mm: the two Routing Engine openings are 569 px, 188 mm wide and start at 24.1
+      and 226.3 mm; the two line card openings are 417 mm wide and start at 9.9 mm, MPC1 at 46.4 mm down
+      and MPC0 at 89.2 mm, each 41.9 mm high (Table 5's line card is 16.5 x 1.65 in, 419.1 x 41.9 mm).
+      Callout 1 is the host subsystem and callout 2 the line cards. The slot labels are MPC0 and MPC1
+      (the guide says "line card slots labeled MPC0 and MPC1" and numbers them from the bottom) and RE0
+      and RE1 from the left.
+  esd:
+    confidence: estimated
+    note: >-
+      Figure 4 shows the ESD point on the front panel (a hex-nut jack with the ESD mark under it), and
+      Figure 1 places it on the divider between the Routing Engines, 218.9 mm across and 11.1 mm down,
+      with the mark at 29.9 mm.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      Figures 2 and 3 at 3.03 px/mm: three power supply slots in a column at each side, PSM0, PSM2 and
+      PSM4 at the left and PSM1, PSM3 and PSM5 at the right (Figure 2's rotated legends), each 87 mm wide
+      on a 40.5 mm pitch; and four fan trays between them, FT0 to FT3 from the left, 62.0 mm wide on a
+      62.3 mm pitch and 125.5 mm high. The fan tray legends FT0 to FT3 are printed on the lower lip below
+      each tray and are not drawn. The guide's CLI table numbers the supplies PEM0 to PEM3 and the redundancy
+      section PEM0 to PEM5 (and the power section PSM0 to PSM5); the printed legend is PSM and is followed.
+  psu-population:
+    confidence: estimated
+    note: >-
+      The guide says a base order ships three supplies and a redundant order four, and the figures show
+      all six slots filled, but no document says which slots the shipped supplies take. They are placed
+      in PSM0, PSM1 and PSM2 (and PSM3), and the other slots show the blank panel the guide says ships
+      for each empty slot. The guide says "in a base configuration, if one power supply fails or is removed,
+      one of the line cards is disabled".
+  modules:
+    confidence: datasheet
+    note: >-
+      The Routing Engines, supplies and fan trays are field-replaceable units in bays, each its own component.
+      The line cards (EX9253-6Q12C and EX9253-6Q12C-M, Tables 14 and 18) are named but not modelled: the
+      guide says they are not part of the base or the redundant order ("you must order them separately"),
+      so each line card bay accepts the blank panel only and ships with it. The air filter unit and the
+      cable management bracket (JNP-CM-3RU) bolt onto the front of the chassis and are not drawn (see
+      the gap named cable-management). The slot-by-slot cooling note: the blank panel for a line card
+      slot is EX9253-LC-BLNK, for a Routing Engine slot EX9253-RE-BLNK (datasheet FRU table only), and
+      the guide names no part number for a supply or a fan tray panel.
+  airflow:
+    confidence: datasheet
+    note: >-
+      The guide: the switch has front-to-back (AIR OUT) airflow, intake at the front of the chassis, including
+      for the power supplies, and exhaust at the rear. There is no back-to-front build, so no airflow
+      configuration is written.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide mounts the switch on four posts of a 19 in rack or cabinet with front-mounting
+      brackets and rear-mounting brackets that slide on the chassis sides (Figures 23 to 27), and has
+      a cable management bracket (Figure 5). No rail or mounting kit has a part number, and the library
+      holds no contract for the brackets, so chassis.ears and chassis.kits are left out and a gap says
+      so.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Tables 9 and 11: AC system input 2500 W at 25 A (low line 90 to 140 VAC, high line 180 to
+      264 VAC, 50 to 60 Hz); DC system input 2500 W at 54 A at -48 VDC (operating -40 to -72 VDC). Table
+      13: line cards 740 W typical and 800 W maximum (EX9253-6Q12C) or 770 and 835 W (the -M card, which
+      the datasheet's Table 2 gives as 770 and 770), the Routing Engine 58 and 65 W, a fan tray 20 and
+      95 W, at 25 C and 55 C. The datasheet's Table 3 gives a maximum power draw of 2692 W for both AC
+      and DC. They are different scopes and the figures are kept as printed.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph of the EX9253 is held. The chassis is drawn the grey of the EX9251's photograph, #8b8e94,
+      a relative and not a reading of this chassis; Figures 1 and 2 are line drawings.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life notice. No Juniper bulletin was found. Two third-party trackers (endoflife.ai,
+      parkplacetechnologies.com) give an end of service life of 2027-03-31 for the EX9253-BASE-AC, with
+      no last order date; that is not a Juniper notice, so none is written as announced.
+attrs:
+  physical:
+    weight-note: >-
+      50 lb (22.68 kg) without a FRU; 157.4 lb (71.4 kg) AC and 163.4 lb (74.11 kg) DC fully loaded (guide
+      Table 5)
+    depth-note: >-
+      30 in (76.2 cm) without the cable management brackets, air filter unit and handles; 36.5 in (92.7
+      cm) AC or 38.5 in (97.79 cm) DC with them
+    width-note: >-
+      19 in (48.26 cm) with the brackets in the guide and the datasheet, 17.4 in (44.2 cm) in the specifications
+      page; the body is modelled
+  performance:
+    switching-capacity: up to 2.4 Tbps per slot, 4.8 Tbps maximum throughput (datasheet)
+    port-density: >-
+      up to 144 x 10 GbE with breakout cables, 36 x 40 GbE or 24 x 100 GbE at wire speed (datasheet, Table
+      4)
+    line-cards: >-
+      two slots; EX9253-6Q12C and EX9253-6Q12C-M, each 6 x QSFP+ and 12 x QSFP28 (not modelled)
+  power:
+    power-max-w: 2692
+    power-envelope: fully-configured
+    power-envelope-note: fully loaded switch, AC or DC; the datasheet's maximum power draw
+    power-system-input-w: 2500 W AC and 2500 W DC system input power (guide Tables 9 and 11)
+    power-input-ac: low line 90 to 140 VAC, high line 180 to 264 VAC, 50 to 60 Hz; 25 A system
+    power-input-dc: operating -40 to -72 VDC, nominal -48 and -60 VDC; 54 A at -48 VDC system
+    redundancy-note: >-
+      up to six supplies; a base order is not redundant, a redundant order has four; two high-line or
+      three low-line AC supplies for non-redundant operation
+  thermal:
+    thermal-output: 1705 BTU/hour (500 W) in the guide's Table 23; 13,600 BTU/hour (3840 W) in the datasheet
+    fans: >-
+      four fan trays, each with two counter-rotating fans, an air filter unit, and a fan in each supply
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -40 to 70 C (-40 to 158 F) in the shipping container
+    humidity: >-
+      5 to 90 percent noncondensing in operation; the datasheet gives 5 to 95 percent non-operating
+    altitude: up to 10,000 ft (3,048 m) with no performance degradation
+  platform: {cpu: '1.6 GHz Intel Xeon, 8 cores (datasheet)', memory: up to 64 GB DRAM (datasheet), storage: two
+      front-pluggable SSDs of up to 100 GB each (datasheet), software: 'Junos OS, first release 18.2R1'}
+  features:
+    redundancy: >-
+      two Routing Engines, graceful Routing Engine switchover, nonstop active routing and nonstop bridging
+      (datasheet)
+    macsec: the EX9253-6Q12C-M line card, with the EX9253-SFL licence (datasheet)
+    junos-fusion: Junos Fusion Enterprise
+  management:
+    oob: one RJ-45 management Ethernet port (MGMT) on each Routing Engine, 10/100/1000
+    console: RJ-45 serial console port (CON) on each Routing Engine
+    usb: one USB port on each Routing Engine
+    clock-and-time-io: BITS and ToD RJ-45, 10MHz and PPS SMB in and out, on each Routing Engine
+  compliance:
+    safety: CAN/CSA-22.2 No. 60950-00/UL 1950, EN 60950, IEC 60950-1, EN 60825-1 (datasheet)
+    emc: FCC 47 CFR Part 15 Class A, EN 55022, VCCI, BSMI CNS 13438, AS/NZS CISPR22 (datasheet)
+    nebs: SR-3580 NEBS Criteria Level 3, GR-63-Core, GR-1089-Core (as the datasheet lists them)
+    materials: RoHS 5/6 (datasheet)
+    seismic: Telcordia Technologies Zone 4 earthquake requirements
+  lifecycle: {eol: none-announced}
+chassis: {width: 442.0, height: 132.3, depth: 762.0, ru: 3, weight-kg: 22.68, color: '#8b8e94', airflow: front-to-back,
+  power: ac}
+gaps:
+- what: chassis-size
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    Width: 19 in (48.26 cm) in the guide's Table 5 and the datasheet, which is with the brackets, and
+    17.4 in (44.2 cm) in the specifications page, which the figure's fold lines match. Height: 5.21 in
+    (132.3 mm) in the guide, 5.217 in in the datasheet and 5.25 in (133.4 mm) in the specifications page.
+    Depth: 30 in (762 mm) in all three, with 36.5 or 38.5 in in the guide when the brackets and handles
+    are counted. The specifications page's width and the guide's height and depth are carried.
+  wanted: >-
+    a mechanical drawing of the chassis, or Juniper's confirmation of the body width and height
+- what: ears-and-kits
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The part numbers of the front-mounting and rear-mounting brackets and of the cable management bracket,
+    which the guide lists by name only, and the bracket extents.
+- what: cable-management
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The cable management bracket and the air filter unit (JNP-CM-3RU, Figures 5 and 10). They bolt onto
+    the front of the chassis in front of the line cards and are drawn in no flat figure; the guide's Table
+    5 gives the pair as 19 in wide, 5.43 in deep and 5.19 in high. They are not drawn.
+- what: line-cards
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The EX9253-6Q12C and EX9253-6Q12C-M line cards (Tables 14 and 18, Figures 18 and 19), each with six
+    QSFP+ and twelve QSFP28 ports and a lamp block, and the EX9253-BND1 bundle that pairs a base chassis
+    with a 6Q12C card. The guide's base and redundant orders ship no card, so the two bays show blank
+    panels. A line card family is a separate piece of work.
+- what: psu-height
+  scope:
+  - rear
+  reason: sources-disagree
+  note: >-
+    Table 5 gives the supplies 1.63 in (41.4 mm) high; the rear figures stack three on a 40.3 mm pitch,
+    39 to 40 mm high. The bays carry the figure's 39.6 mm, the table's width of 86.7 mm.
+  wanted: Juniper's confirmation of the supply face height
+- what: psu-slot-population
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: which power supply slots the base and the redundant orders populate
+- what: ground-point
+  scope:
+  - left
+  - right
+  reason: needs-photo
+  wanted: >-
+    The protective earthing terminal, a two-hole terminal on the side of the chassis (Figure 28); the
+    guide draws it in an isometric figure with no scale, so the side faces are left empty.
+- what: ear-legends
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The slot legends RE0, MPC1, MPC0, RE1 and PSM0 to PSM5 printed on the ears and the fan tray legends
+    FT0 to FT3 on the lower lip. The ears are not drawn; the PSM legends that sit on the body are drawn.
+- what: fan-handle-colour
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The colour of the fan tray handle. The guide draws the tray as a line drawing and states no colour
+    or airflow code; the tray is drawn dark grey with the label AIR OUT.
+- what: bits-media
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    What the BITS jack carries on the Routing Engine, a T1, an E1 or another clock signal. The guide gives
+    no rate or framing.
+- what: photo-view
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A straight-on photograph of the front and of the rear; every position comes from the guide's flat
+    figures.
+- what: interface-names
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The Junos names of the line card ports. The guide's Table 4 names FPC and PIC slots 0 and 1 and refers
+    to the Hardware Compatibility Tool for transceivers.
+groups:
+  re-slots:
+    term: Bay
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Guide, Host Subsystem in an EX9253 Switch: "If two REs are installed, one functions as the primary
+        and the other functions as the backup." A base order has one Routing Engine and a redundant order
+        two
+    description: >-
+      The two Routing Engine slots across the top of the front, RE0 and RE1 from the left (guide Figure
+      1, callout 1)
+  lc-slots:
+    term: Bay
+    role: traffic
+    index-origin: 0
+    description: >-
+      The two line card slots, MPC0 at the bottom and MPC1 above it (guide Figure 1, callout 2)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD point on the divider between the Routing Engines (guide Figure 4)
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 3+1
+      redundancy-note: >-
+        Datasheet, Table 1: the EX9253 "holds up to six power supplies" with "-40 to -72 V DC (3+1 redundancy)"
+        and the same for 100-120 V AC and 200-240 V AC. Six slots, PSM0 to PSM5; a base order ships three
+        supplies and a redundant order four. Do not mix AC and DC supplies
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    description: >-
+      Four fan trays, FT0 to FT3 from the left, each with two counter-rotating fans. The guide says a
+      fully configured switch needs all four to operate normally and a failed tray must be replaced at
+      once; it states no N+M form
+views:
+  front:
+    size: {w: 442.0, h: 132.3}
+    panel:
+      cutouts:
+      - {id: esd-front-jack, at: [215.9, 8.1], size: [6.0, 6.0], shape: circle}
+    silkscreen:
+    - {id: silk-model, at: [426.3, 5.2], text: EX9253, font-size: 3.0, anchor: middle, fill: '#1a1d1f',
+      for: chassis}
+    - id: silk-esd
+      at: [218.9, 28.0]
+      path: M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 H -1.0 M 1.0 2.6 H 2.4
+      fill: '#1a1d1f'
+      for: esd-front-jack
+    components:
+      bays:
+      - id: re-0
+        at: [24.1, 0.2]
+        size: {w: 189.5, h: 42.2}
+        group: re-slots
+        rel-pos: 0
+        accepts:
+        - juniper/ex9253-re@1
+        - juniper/ex9253-re-blnk@1
+        default: juniper/ex9253-re@1
+      - id: re-1
+        at: [226.3, 0.2]
+        size: {w: 189.5, h: 42.2}
+        group: re-slots
+        rel-pos: 1
+        accepts:
+        - juniper/ex9253-re@1
+        - juniper/ex9253-re-blnk@1
+        default: juniper/ex9253-re-blnk@1
+      - id: mpc-1
+        at: [9.9, 46.4]
+        size: {w: 419.1, h: 41.9}
+        group: lc-slots
+        rel-pos: 1
+        accepts:
+        - juniper/ex9253-lc-blnk@1
+        default: juniper/ex9253-lc-blnk@1
+      - id: mpc-0
+        at: [9.9, 89.2]
+        size: {w: 419.1, h: 41.9}
+        group: lc-slots
+        rel-pos: 0
+        accepts:
+        - juniper/ex9253-lc-blnk@1
+        default: juniper/ex9253-lc-blnk@1
+      placements:
+      - {ref: common/esd-jack@1, id: esd-front-jack, at: [215.9, 8.1], for: chassis, group: esd, rel-pos: 0}
+    regions:
+    - id: logo-zone
+      at: [0.0, 0.8]
+      size: {w: 23.5, h: 8.0}
+      label: Vendor logo; not drawn
+    - id: logo-zone-2
+      at: [416.0, 6.4]
+      size: {w: 21.0, h: 3.4}
+      label: Junos OS mark; not drawn
+  rear:
+    size: {w: 442.0, h: 132.3}
+    silkscreen:
+    - {id: silk-psm-0, at: [2.0, 25.9], text: PSM0, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-0}
+    - {id: silk-psm-2, at: [2.0, 66.2], text: PSM2, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-2}
+    - {id: silk-psm-4, at: [2.0, 106.8], text: PSM4, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-4}
+    - {id: silk-psm-1, at: [436.4, 25.9], text: PSM1, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-1}
+    - {id: silk-psm-3, at: [436.4, 66.2], text: PSM3, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-3}
+    - {id: silk-psm-5, at: [436.4, 106.8], text: PSM5, font-size: 1.6, anchor: middle, rotate: 90, fill: '#1a1d1f',
+      for: psm-5}
+    components:
+      bays:
+      - id: psm-0
+        at: [4.3, 6.1]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 0
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-jnp-pwr1600-ac@1
+      - id: psm-1
+        at: [346.9, 6.1]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-jnp-pwr1600-ac@1
+      - id: psm-2
+        at: [4.3, 46.4]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-jnp-pwr1600-ac@1
+      - id: psm-3
+        at: [346.9, 46.4]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 3
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-psu-blank@1
+      - id: psm-4
+        at: [4.3, 87.0]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 4
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-psu-blank@1
+      - id: psm-5
+        at: [346.9, 87.0]
+        size: {w: 86.7, h: 39.6}
+        group: psus
+        rel-pos: 5
+        accepts:
+        - juniper/ex9253-jnp-pwr1600-ac@1
+        - juniper/ex9253-jnp-pwr1100-dc@1
+        - juniper/ex9253-psu-blank@1
+        default: juniper/ex9253-psu-blank@1
+      - id: fan-0
+        at: [93.5, 5.1]
+        size: {w: 62.0, h: 125.5}
+        group: fans
+        rel-pos: 0
+        accepts:
+        - juniper/ex9253-fan-3ru@1
+        default: juniper/ex9253-fan-3ru@1
+      - id: fan-1
+        at: [155.8, 5.1]
+        size: {w: 62.0, h: 125.5}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - juniper/ex9253-fan-3ru@1
+        default: juniper/ex9253-fan-3ru@1
+      - id: fan-2
+        at: [218.1, 5.1]
+        size: {w: 62.0, h: 125.5}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - juniper/ex9253-fan-3ru@1
+        default: juniper/ex9253-fan-3ru@1
+      - id: fan-3
+        at: [280.4, 5.1]
+        size: {w: 62.0, h: 125.5}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - juniper/ex9253-fan-3ru@1
+        default: juniper/ex9253-fan-3ru@1
+  top:
+    size: {w: 442.0, h: 762.0}
+    empty: >-
+      Not drawn by any source held. The guide shows the lid only in isometric installation figures with
+      no scale.
+  bottom:
+    size: {w: 442.0, h: 762.0}
+    empty: Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size: {w: 762.0, h: 132.3}
+    empty: >-
+      Not drawn flat by any source held. Figure 28 shows the grounding point on the side wall in an isometric
+      view with no scale, and Figures 23 to 27 show the brackets in three-quarter view only.
+  right:
+    size: {w: 762.0, h: 132.3}
+    empty: Not drawn flat by any source held. No figure shows the right wall flat.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The switch as the base AC order ships: one Routing Engine (RE0), three AC power supplies, four fan
+      trays and the blank panels, with both line card slots covered. Line cards are ordered separately.
+    bays: {mpc-0: juniper/ex9253-lc-blnk@1, mpc-1: juniper/ex9253-lc-blnk@1}
+  base-ac:
+    kind: orderable
+    description: >-
+      EX9253-BASE-AC: the EX9253-CHAS-3RU chassis with one Routing Engine (EX9253-RE), four fan trays
+      (JNP-FAN-3RU), three AC power supplies (JNP-PWR1600-AC, in PSM0 to PSM2 as drawn), the cable management
+      bracket and air filter unit (JNP-CM-3RU) and blank panels for the empty slots (EX9253-LC-BLNK).
+      First Junos OS release 18.2R1. Front-to-back airflow.
+    part-numbers:
+      EX9253-BASE-AC: {}
+  base-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9253-BASE-DC: as the base AC order with three DC power supplies (JNP-PWR1100-DC) in place of the
+      AC ones.
+    bays: {psm-0: juniper/ex9253-jnp-pwr1100-dc@1, psm-1: juniper/ex9253-jnp-pwr1100-dc@1, psm-2: juniper/ex9253-jnp-pwr1100-dc@1}
+    part-numbers:
+      EX9253-BASE-DC: {}
+  red-ac:
+    kind: orderable
+    description: >-
+      EX9253-RED-AC: the redundant order, with two Routing Engines (RE0 and RE1) and four AC power supplies
+      (PSM0 to PSM3 as drawn); otherwise as the base AC order.
+    bays: {re-1: juniper/ex9253-re@1, psm-3: juniper/ex9253-jnp-pwr1600-ac@1}
+    part-numbers:
+      EX9253-RED-AC: {}
+  red-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9253-RED-DC: the redundant order with two Routing Engines and four DC power supplies (JNP-PWR1100-DC).
+    bays: {re-1: juniper/ex9253-re@1, psm-0: juniper/ex9253-jnp-pwr1100-dc@1, psm-1: juniper/ex9253-jnp-pwr1100-dc@1,
+      psm-2: juniper/ex9253-jnp-pwr1100-dc@1, psm-3: juniper/ex9253-jnp-pwr1100-dc@1}
+    part-numbers:
+      EX9253-RED-DC: {}
+  chas:
+    kind: orderable
+    description: >-
+      EX9253-CHAS-3RU, the spare chassis (datasheet FRU table). It ships without Routing Engines, supplies
+      or fan trays, which are ordered separately; the bays are shown open.
+    bays: {re-0: '', re-1: '', mpc-0: '', mpc-1: '', psm-0: '', psm-1: '', psm-2: '', psm-3: '', psm-4: '',
+      psm-5: '', fan-0: '', fan-1: '', fan-2: '', fan-3: ''}
+    part-numbers:
+      EX9253-CHAS-3RU: {}
+datasheet:
+  title: Juniper EX9250 Ethernet Switch Datasheet (1000632-006-EN, Sep 2021)
+  url: >-
+    https://web.archive.org/web/20240111201612/https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex9250-ethernet-switch-datasheet.pdf
+  sha256: e143447afcda765405e2761eebe1afd6cc5edc72152e08210c20870ae490b4e0
+references:
+- title: Juniper EX9253 Switch Hardware Guide (published 2022-11-30)
+  url: https://www.juniper.net/documentation/us/en/hardware/ex9253/ex9253.pdf
+  sha256: 7f9c41122084753a522140c74313a5407b5ef34137eb830d2c45e3f1b5adf954

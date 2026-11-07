@@ -1,0 +1,181 @@
+format: 1
+kind: module
+name: p4
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA Tesla P4 GPU Accelerator (8 GB GDDR5) on its low profile bracket, a
+  passive half-height half-length single-slot card that takes no auxiliary
+  power. The bracket face is a plate with two columns of eight rectangular vent
+  holes and two screws. The card ships with this bracket or with a full-height
+  (ATX) one, whose weight the brief gives; nvidia/p4@1 draws the low profile
+  one. It is offered as a 75 W card (SKU 200) or a 50 W card (SKU 201).
+size: {w: 79.20, h: 18.42, d: 167.64}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. Whether a server's
+  documents in the library list a P4 was not read, so no riser was edited; a
+  riser bay that takes a low profile card names each card by hand
+  (docs/cards-by-interface-design.md).
+attrs:
+  model: 'Tesla P4'
+  part-numbers: 'NVPN 699-2G414-0200-100 (PG414 SKU 200, 75 W), NVPN 699-2G414-0201-100 (PG414 SKU 201, 50 W)'
+  gpu-sku: 'GP104-895-A1'
+  role: gpu
+  form-factor: 'Half-height, half-length, single-slot, 6.6 in, low profile bracket'
+  pcie-connector: x16
+  pcie-generation: 3
+  pcie-height: low
+  power-draw-max-w: 75
+  power-input: 'host PCIe slot only'
+  memory: '8 GB GDDR5, 256-bit, up to 192 GB/s'
+  cooling: passive
+  airflow: 'bidirectional'
+  nvlink: 'none'
+  weight-kg: 0.24
+  eol: none-announced
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+provenance:
+  sources: >-
+    NVIDIA Tesla P4 GPU Accelerator Product Brief PB-08449-001_v01, NVIDIA's own
+    copy (https://www.nvidia.com/content/dam/en-zz/Solutions/design-visualization/solutions/resources/documents1/Tesla-P4-Product-Brief.pdf).
+    Tables 1 and 2, figure 1 (the card, a line drawing in perspective from the
+    bracket end), figure 2 (board dimensions, a plan drawing) and the form-factor
+    text. NVIDIA's P4 datasheet carries no card dimension. NVIDIA's brief
+    forbids reproducing its figures, so its facts are transcribed and none of its
+    figures is copied.
+  reference-photos: >-
+    NONE. No photograph of this card was found at NVIDIA or PNY (NVIDIA's P4
+    page returns 404 and PNY has no page).
+    The only pictures are figures 1 and 2 of the brief, line drawings. The bracket
+    face is drawn from figure 1, in perspective, and every colour is a choice
+    (see `body-colour`).
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42 (PCIe CEM 5.0
+    figure 11-9), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    drawing - PB-08449 figure 2: "167.64 mm, (6.6 inches)" long and "68.58 mm,
+    (2.7 inches)" high; the text says "The dimensions are 68.58 mm x 167.64 mm".
+    The arrow starts at the bracket's plate, so the length is taken from the
+    bracket's outer face; THE FIGURE IS NOT ORTHOGRAPHIC (its arrows read 5.4 px/mm
+    along and 4.5 across) and nothing else on it is read. Whether 167.64 includes
+    the bracket's thickness is not stated.
+  face-bracket: >-
+    registry - the bracket is std/pcie-bracket-lp@1, so the outline, the tip's
+    retention tab and the flange are CEM's. Figure 1 draws the same flange tab.
+    The plate drawn over the opening is silver as the standard part is, because
+    no colour is held.
+  face-holes: >-
+    estimated - figure 1 draws the bracket seen obliquely: two columns of
+    rectangular holes along it, seven full rows and a short eighth at the foot, and
+    one round screw above and one below the field, with part-number text turned
+    near the tip. A perspective drawing cannot measure them. They are drawn in the
+    standard's opening as nvidia/t4@1 draws its holes: 8 holes along the bracket
+    on a 5.76 pitch (x 23.6 to 69.7) and 2 across on a 6.0 pitch (y 3.3 to 15.15),
+    each 5.0 long and 5.6 across, and two screws of 2.0 radius at x 72.8 and 20.5,
+    y 10.9. The count and the two-by-eight layout are read; every size and place
+    is estimated. The text is not drawn.
+  thickness: >-
+    estimated - nothing held states the card's thickness. The single-slot
+    component envelope on the component side of a PCIe card is 14.47 (PCIe CEM
+    5.0), so the shroud's far face is put 14.47 above the board's component
+    surface, as nvidia/t4@1 does.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-lp@1 is. The board is at the top (small
+    y); the cooler is below it in this frame. Figure 1 shows the bracket upright
+    with the card to its right, so it is turned a quarter into this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/t4@1 has them) at PB-08449 figure 2's overall size: the card 68.58
+    high from the finger datum W, which is put so that the card's top edge is at
+    the bracket's flange end (the figure draws them level), so W is at x 10.62
+    and the top edge at 79.20; the board's lower edge 13.25 above W (as the L4's
+    and T4's); the key datum at CEM's 57.15 behind the bracket and the finger tab
+    to the standard's 72.15 past it, 129.3. THE FIGURE DOES NOT DIMENSION THE KEY OR THE
+    TAB, so the T4's are not copied (the T4's brief dimensions its own) and
+    CEM's are used. The cover and the shroud begin 2.2 behind the bracket and
+    their lower edge is 13.8 above W with their top 1.0 below the board's edge,
+    as the T4's, so they are 53.8 across; figure 2 draws a plain rectangle with
+    six screws, which are not drawn.
+  body-colour: >-
+    estimated - figures 1 and 2 are line drawings, so NO COLOUR IS HELD. The
+    shroud is drawn a dark grey and the cover black to mark an unknown, not a
+    finding. Figure 1 shows a cover with a raised rim, "TESLA" up the bracket end
+    beside a window of about fourteen parallel fins, the NVIDIA mark and "TESLA
+    P4" on the top edge and six screws round the broad side.
+  body-top-edge: >-
+    estimated - figure 1 shows the NVIDIA mark and "TESLA P4" on the top edge near
+    the far end. Their places are fractions of the card's length read off the
+    figure (about 0.70 and 0.84) and their sizes are the T4's. The mark is
+    reserved as `logo-zone`.
+  body-far-end: >-
+    NOT MODELLED - the far end is drawn closed. Figure 1 shows the far end as a
+    plain end of the cover and no photograph exists.
+  power: >-
+    datasheet - PB-08449 table 1: total board power 75 W for PG414 SKU 200 and 50
+    W for SKU 201; the overview says "a 75 W maximum power limit". Filed as the
+    maximum of the card, 75. No auxiliary power connector is listed or drawn, so
+    the card takes slot power only.
+  weight: >-
+    datasheet - PB-08449 table 1: board 240 g; the low profile bracket with screws
+    9.7 g and the ATX bracket 15.6 g.
+  memory: >-
+    datasheet - PB-08449 table 2: 8 GB GDDR5 (8 pieces of 256M x 32), 256-bit,
+    up to 192 GB/s.
+  pcie: >-
+    datasheet - PB-08449 table 1: PCI Express 3.0 x16, lane and polarity reversal
+    supported.
+  part-numbers: >-
+    datasheet - PB-08449 table 1: PG414 SKU 200, NVPN 699-2G414-0200-100 (75 W)
+    and PG414 SKU 201, NVPN 699-2G414-0201-100 (50 W). No order code or reseller
+    part number is written in a document held.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on (needs-photo: the
+    holes' sizes and places are estimated from a line drawing in perspective);
+    (2) every colour (needs-photo); (3) the full-height ATX bracket variant, which
+    the brief weighs and does not draw (needs-drawing); (4) the far end
+    (needs-photo); (5) the key datum and the tab's end (needs-drawing: CEM's are
+    used); (6) the top edge's printing places (needs-drawing); (7) the 50 W SKU's
+    difference, which the brief gives as a power figure only; (8) the thickness,
+    which no source states (vendor-silent).
+  lifecycle: >-
+    No end-of-life notice for the P4 was found. NVIDIA's own P4 page returns a 404
+    and PNY has no page, which is retirement shown as a missing page, not an
+    announcement; the attr says `none-announced` because nothing was announced.
+body:
+  depth: 167.64
+  color: '#2c2f33'
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [23.87, 1.27], size: [55.33, 1.57], from: 2.20, depth: 165.44,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-08449 fig 2: card 68.58 high above W, lower edge put 13.25 above W, to the 167.64 end; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge; the board''s start is the cover''s'}
+  - {id: edge-tab-short, at: [10.62, 1.27], size: [13.25, 1.57], from: 45.00, depth: 11.20,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM datum 57.15 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [10.62, 1.27], size: [13.25, 1.57], from: 58.10, depth: 71.20,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the finger tab ends 72.15 past the key datum (x16 DIM B), at 129.3'}
+  - {id: edge-pads-short, at: [13.22, 1.22], size: [3.00, 1.67], from: 45.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.22, 1.22], size: [3.00, 1.67], from: 58.35, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: cover, at: [24.42, 2.84], size: [53.78, 3.62], from: 2.20, depth: 165.44,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'a quarter of the 14.47 component height, as the T4''s black band; no colour is held'}
+  - {id: shroud, at: [24.42, 6.46], size: [53.78, 10.85], from: 2.20, depth: 165.44,
+     color: '#4a4e53', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded by the CEM single-slot component height 14.47 (see provenance thickness); cover edges 13.8 above W and 1.0 below the board edge, as the T4''s; dark grey marks an unknown colour'}
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+elements:
+  vent: {at: [23.60, 3.30], size: [46.10, 11.85], class: vent}
+  screw-1: {at: [18.50, 8.90], size: [4.00, 4.00], class: screw}
+  screw-2: {at: [70.80, 8.90], size: [4.00, 4.00], class: screw}
+skins: [default]

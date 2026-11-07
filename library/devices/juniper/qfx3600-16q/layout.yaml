@@ -1,0 +1,511 @@
+format: 1
+kind: device
+name: qfx3600-16q
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: QFX3600-16Q
+portfolio: {line: QFX Series, family: QFX3600}
+description: >-
+  Juniper QFX3600-16Q, an end-of-life 1RU data-centre switch running Junos OS as a standalone switch, a member
+  of a QFX Virtual Chassis or a Node device in a QFabric system. It has 16 QSFP+ ports, Q0 to Q15, each running
+  at 40 GbE or as four 10 GbE ports. The ports and their lamps are on the port side, with the LCD, the three chassis
+  lamps, the console, a USB port and four management ports (C0 and C1 are 1000BASE-T RJ-45, C0S and C1S are
+  1 Gbps SFP). The other side carries two power supplies and three fan trays. One chassis ships in two airflow builds,
+  port-to-FRU (AFO) or FRU-to-port (AFI), and takes AC or DC supplies.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX3600 Device Hardware Documentation, Modified 2018-07-03, Copyright 2018 Juniper Networks, 248 pages
+      (Juniper Networks; terms: the guide's own copyright notice and the Juniper EULA, a reference copy kept
+      outside the repository). Fetched from
+      https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/hardware/qfx-series/qfx3600.pdf
+      Read: Table 5 (physical specifications), Table 6 (FRUs), figures 1 to 4 (the two panels), figure 5 and Tables 7
+      and 8 (port lamps), figure 6 and Table 9 (chassis lamps), figure 7 and Table 10 (management port lamps), figures
+      8 to 12 and Tables 11 to 13 (fan trays and airflow), figures 13 to 20 and Tables 14 to 17 (power supplies),
+      Tables 19 (environment), 21 and 22 (rack and cabinet), 23 and 25 (power), 32 (accessory kit). The QFX3500 and
+      QFX3600 datasheets were searched for on juniper.net and not found (the product is end of life and its
+      datasheets are no longer served); no figure is taken from a reseller. Juniper's image library has no photograph
+      of this model at the address pattern /image-library/qfx-series/<SKU>/<SKU>-front-high.jpg for qfx3600 or
+      qfx3600-16q (both 404), so no photograph is held. The held-sources folders of the intake area were not
+      readable from this worker, so no Visio stencil or 3D model could be looked for there, and none is named by the
+      guide.
+  chassis:
+    confidence: datasheet
+    note: >-
+      guide Table 5 (shared with the QFX3600-I): 1.74 in (4.4 cm) high; 16.9 in (42.9 cm) wide excluding the mounting
+      brackets, 19.2 in (48.8 cm) including them; 19.3 in (49 cm) deep excluding the FRU handles and locking levers,
+      19.4 in (49.3 cm) including them; 20.5 lb (9.3 kg) with FRUs, 14.6 lb (6.6 kg) without. The body is drawn: the
+      brackets are not part of it. The rack requirements (Table 21) put four-post rails 19.3 to 36 in apart.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The guide's figures 3 and 4 (pages 26 and 27, drawings g050202 and g050203) are flat vector drawings of the two
+      sides. Their body outline measures 304.13 x 30.48 pt, an aspect of 9.98 against the table's 16.9 / 1.74 = 9.71,
+      2.8 percent out (9.98 is the aspect of a 17.4 in body, the QFX3500's width). The two figures of one guide
+      disagree, so each axis is scaled to its own table figure, 1.4106 mm/pt across and 1.450 down, and every position is
+      good to about 1.5 mm. The vector coordinates were read from the PDF page itself, not from a render.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 3. Eight columns of QSFP+ cages in two rows: cage faces 19.95 mm wide (the registry's 18.5 x 9.58 aperture
+      is centred on them) on a column pitch of 33.47 mm, the first at 90.37 mm, wide because the two lamps of a port sit
+      between the columns. The registry's 19.0 QSFP+ ganged pitch is a floor, not the figure, so the drawing's pitch is
+      used.
+  row-pitch:
+    confidence: drawing
+    note: >-
+      Figure 3: the cage faces centre 19.07 and 32.93 mm below the top edge, a row pitch of 13.86 mm.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The flat figure draws the cages with no latch tongue that could be read. The lower row is turned 180, the library's
+      stack convention for a two-row QSFP+ block, which is an assumption.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      Printed on the metal and read off figure 3: Q0 to Q15, Q0 and Q1 over each other in the first column, Q2 and Q3 in
+      the second, and so on, the even number above the upper cage and the odd number below the lower one. The ports are
+      numbered as printed. Interface names (the guide's xle and xe names of its Port Type topics) are not printed on
+      the unit and are not written to the manifest.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      Figure 5 and Tables 7 and 8: two lamps on every port, legended LA (Link/Activity) above ST (Status), a stack of two
+      to the left of each cage, 3.7 mm apart in the drawing's lamp circles (3.55 pt). Link/Activity is green when a link is
+      established and blinks with activity (a QSFP+ access port stays lit while any of its four 10 GbE breakout links is
+      up); Status is green when a transceiver is installed. The lamp positions are read off figure 3 by lamp circle.
+  chassis-lamps:
+    confidence: drawing
+    note: >-
+      Figure 6 and Table 9: three lamps in a column to the right of the LCD, Power, Status (legended OK/!) and Fan, 4.9 mm
+      apart. Power is green when the switch is on and blinks amber on a temperature or voltage shutdown; Status is green
+      when Junos OS is loaded, blinks intermittently for the beacon and blinks amber on a software error; Fan is green
+      when the fan trays are normal and blinks amber on a fan tray error. Their icons are drawn beside them. The Junos
+      mark in the drawing is a logo and is not drawn.
+  vents:
+    confidence: estimated
+    note: >-
+      Figure 3 draws hexagonal holes above and below the port block and around the console and USB jacks. They are
+      drawn as vent strips; the hexagon pitch (4.4 mm along the strip) is estimated as the drawing's hexagons are too
+      small to measure to a tenth.
+  fru-side-layout:
+    confidence: drawing
+    note: >-
+      Figure 4 (flat) with Tables 11 and 12. Supply 0 at the left end, a two-hole grounding point, fan trays 0 to 2 on a
+      86.3 mm pitch and supply 1 at the right end. The supplies are 54.8 x 39.8 mm (the size of the same JPSU-650W unit in
+      the QFX5100, which the drawing agrees with to 3 percent, 56 mm across the frame) and the fan trays 80.0 x 41.6 mm.
+      The grounding point is drawn as one small block 8.0 x 6.7 mm; the guide says the chassis has grounding points for M5
+      screws 0.625 in (15.86 mm) apart (page 60), which does not fit the block, so the block is drawn as it is and the
+      spacing is a gap.
+  front-and-rear:
+    confidence: datasheet
+    note: >-
+      The guide calls the port side the front panel and the FRU side the rear panel, and the library does the same
+      (the QFX3500 guide names its two sides the other way round). The guide's AFI (airflow in, FRU-to-port) is the
+      library's back-to-front and AFO (port-to-FRU) its front-to-back.
+  modules:
+    confidence: datasheet
+    note: >-
+      The two power supplies and the three fan trays are field-replaceable units in bays, each its own component
+      (Table 6). The supplies are the 650 W JPSU-650W units, reused from the QFX5100 by part number
+      (juniper/qfx5100-jpsu-650w-ac-afo, -ac-afi, -dc-afo and -dc-afi: the guide gives the one unit to the QFX3500, QFX3600
+      and QFX3600-I, Tables 14 and 15). The fan trays are QFXC01-FANBO and QFXC01-FANBI (Table 12). The guide says to fit
+      a blank panel in an empty supply slot and gives it no part number, so no blank is modelled and no empty-bay
+      configuration is offered. The supplies carry their own fans. The management ports, the LCD and the lamps are part
+      of the chassis here, not a board: the QFX3600 guide lists no management board among its FRUs (Table 6).
+  models:
+    confidence: datasheet
+    note: >-
+      guide Table 11: QFX3600-16Q-AFI (FRU-to-port), QFX3600-16Q-AFO (port-to-FRU), and the Interconnect models
+      QFX3600-I-16Q-AFI and QFX3600-I-16Q-AFO. The two QFX3600-16Q models are the orderable configurations. The
+      QFX3600-I shares the chassis table and the rear panel (figure 4 is captioned for both) but its front panel is
+      described in a topic of another document ("Front Panel of a QFX3600-I Interconnect Device") that this slice does not
+      hold, so the Interconnect is not modelled and is left for a later change. A QFX3600 can be configured as a Node device
+      or as an Interconnect device in a QFX3000-M system (guide, Overview); that is software, not a configuration here.
+      Neither the guide nor anything held names a DC chassis model: the DC supplies are listed as units (Tables 14, 15)
+      and the DC power figures are given for the chassis (Table 25), so the two DC builds are illustrations (`example`)
+      that do not export a device type.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide supplies four pairs of brackets with the switch: front or rear two-post, mid-mount two-post,
+      fixed-rail four-post and adjustable-rail four-post (Table 21 and the mounting topics). No part number is given for
+      any of them, so `chassis.ears` and `chassis.kits` are left out and a gap says so. The body is the 16.9 in chassis,
+      without the 19.2 in brackets.
+  power:
+    confidence: datasheet
+    note: >-
+      guide Table 23 (AC): typical 255 W, maximum 345 W; 100 to 240 VAC, 4 A at 100 VAC or 2 A at 240 VAC, 50 to 60 Hz.
+      Table 25 (DC): -40 to -72 VDC, nominal -48 VDC, 8 A maximum; the table prints 341 W as the typical and 252 W as the
+      maximum consumption, which cannot both be right (a typical above the maximum), so the DC figures are a gap and are
+      carried the other way round, 252 W typical and 341 W maximum, as an estimate.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph is held and the drawings are line art, so the colour is a neutral steel grey, not a reading of the
+      metal.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Juniper's support page for the QFX3500 labels it end of life and the technical bulletin that extends the end of
+      service of its parts (TSB17796) lists a QFX3600 part (QFX3600-16Q-AFIS) among them; the bulletin could not be fetched
+      from this worker, so no date is stated, and the QFX3600 support page was not read. Estimated, because it is read
+      from a search result and the bulletin was not opened.
+attrs:
+  physical:
+    weight-note: 20.5 lb (9.3 kg) with FRUs installed; 14.6 lb (6.6 kg) without (Table 5)
+    depth-note: 19.3 in (49 cm) excluding FRU handles and locking levers; 19.4 in (49.3 cm) including them (Table 5)
+  performance:
+    qsfp-plus-speeds: 40 GbE; or four 10 GbE with a breakout cable
+  power:
+    power-typical-w: 255
+    power-max-w: 345
+    power-envelope: unstated
+    power-dc-typical-w: 252
+    power-dc-max-w: 341
+    power-input-ac: 100 to 240 VAC, 4 A at 100 VAC or 2 A at 240 VAC, 50 to 60 Hz (Table 23)
+    power-input-dc: nominal -48 VDC, operating range -40 to -72 VDC, 8 A maximum (Table 25)
+    redundancy-note: two supplies, load-sharing and fully redundant; both should be installed
+  thermal:
+    fans: three fan trays of two fan modules, hot-swappable; the supplies carry their own fans
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F) normal operation; -5 to 55 C short term
+    storage-temp: -40 to 70 C (-40 to 158 F) in the shipping container
+    humidity: 5 to 85 percent noncondensing
+    altitude: no performance degradation to 3048 m (10000 ft)
+  platform:
+    storage: 8 GB internal flash
+    software: Junos OS
+  features:
+    virtual-chassis: up to 10 switches with QFX3500, QFX3600, QFX5100 and EX4300 members; a Virtual Chassis Fabric leaf
+    qfabric: a Node device, or an Interconnect device in a QFX3000-M system, connected by the first QSFP+ ports
+    optics-qsfp: QSFP+ transceivers, QSFP+ DAC and DAC breakout cables, fibre breakout to four 10GBASE-SR SFP+
+  management:
+    oob: management ports C0 and C1 (1000BASE-T RJ-45) and C0S and C1S (1 Gbps SFP), with link-speed and activity lamps; an SFP in C0S or C1S disables the RJ-45 port beside it
+    console: RJ-45 console port (CON)
+    usb: one USB port
+    lcd: an LCD showing the host name and the number of active alarms
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/?p=qfx3500
+chassis: {width: 429.3, height: 44.2, depth: 490.2, ru: 1, weight-kg: 9.3, color: '#7b8087', airflow: front-to-back, power: ac}
+gaps:
+- what: datasheet
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The QFX3600 datasheet. Searched juniper.net for it and found only the hardware guide; the product is end
+    of life. The weight, dimensions and power are the guide's.
+- what: photographs
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A photograph of either side. The image-library address pattern returns 404 for this model, so every
+    measure is read from the guide's flat vector drawings and the colour is estimated.
+- what: width-aspect
+  scope: [front, rear]
+  reason: sources-disagree
+  wanted: >-
+    Table 5 gives the width as 16.9 in (42.9 cm) and the guide's flat figures 3 and 4 have the aspect of a 17.4 in body
+    (9.98 against 9.71). The table is carried for the chassis and the drawings are scaled to it, which squeezes the
+    positions by up to 3 percent across; a photograph or a datasheet row would settle it.
+- what: dc-power-figures
+  scope: [rear]
+  reason: sources-disagree
+  wanted: >-
+    Table 25 prints 341 W as the DC typical power consumption and 252 W as the maximum. A typical figure above the
+    maximum is impossible, so they are carried the other way round (252 typical, 341 maximum) as an estimate. The AC
+    figures (Table 23) are 255 W typical and 345 W maximum.
+- what: end-of-life-dates
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The dates of the end of sale and end of service. Juniper's technical bulletin TSB17796 lists the end-of-service dates
+    of the product's parts; the bulletin could not be fetched.
+- what: mounting-kit
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The part numbers of the four pairs of brackets (two-post front or rear, two-post mid-mount, four-post fixed rail and
+    four-post adjustable rail) and their depth ranges. The guide describes them in prose and in figures 22 to 24 and gives
+    the rack depth (19.3 to 36 in) and no part number.
+- what: qfx3600-i
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The front panel of the QFX3600-I Interconnect (QFX3600-I-16Q-AFI and -AFO, guide Table 11), which the guide refers to a
+    topic of another document. The rear panel is shared (figure 4). Not modelled.
+- what: grounding-points
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The two grounding points for M5 screws 15.86 mm apart (guide page 60). Figure 4 draws one small block and no hole
+    spacing, so the block is drawn as it is.
+- what: esd-point
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The sliding panel at the top right of the front that carries the serial number label and serves as the ESD point
+    (figure 3, callout 4). It is drawn as a plate; the guide gives no more of it.
+- what: lcd-contents
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The size of the LCD in characters. The guide says it shows the host name and the number of active alarms and gives no
+    character count, so it is drawn as a window.
+- what: junos-mark
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The Junos mark beside the chassis lamps, which is a logo and is not drawn.
+- what: usb-generation
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The USB revision. The guide names one USB port and gives no generation. It is drawn with the kit's neutral usb2 skin.
+- what: four-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+groups:
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
+    description: 16 ports labelled Q0 to Q15, the even ports on the upper row. Each takes a QSFP+ transceiver, a QSFP+ DAC or a DAC breakout cable.
+  qsfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+    description: The Link/Activity lamp, legended LA, of each port; it is lit while any of the four 10 GbE breakout links is up (guide Tables 7 and 8).
+  qsfp-plus-status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: transceiver, color: '#22c55e'}]
+    description: The Status lamp, legended ST, of each port - green when a transceiver is installed (guide Tables 7 and 8).
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the out-of-band cluster at the left and right of the port side - an RJ-45 console port, a USB port, two
+      1000BASE-T RJ-45 management ports and two SFP management ports. Three kinds, one purpose: reaching and
+      recovering the switch when the data plane cannot.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The three chassis lamps Power, Status (OK/!) and Fan (guide Table 9).
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy-note: >-
+        guide, Cooling System and Airflow: three fan trays of two fan modules each; one fan module cannot be replaced
+        alone, the whole tray is replaced
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: two supplies, load-sharing; one may be removed at a time while the switch runs
+views:
+  front:
+    size: {w: 429.3, h: 44.2}
+    panel:
+      decor:
+      - {id: vent-top, at: [80.0, 0.9], size: [270.0, 5.2], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      - {id: vent-bottom, at: [80.0, 42.2], size: [270.0, 1.6], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      - {id: vent-left-low, at: [2.0, 24.0], size: [28.0, 18.0], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      - {id: vent-left-mid, at: [70.0, 24.0], size: [7.0, 18.0], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      - {id: lcd-plate, at: [2.9, 2.1], size: [72.5, 20.6], rx: 0.6, fill: '#6f7279'}
+      - {id: lcd-window, at: [18.3, 8.35], size: [37.3, 11.5], rx: 0.5, fill: '#101214'}
+      - {id: esd-slider, at: [354.5, 2.1], size: [23.4, 5.9], rx: 0.6, fill: '#6f7279'}
+      cutouts:
+      - {block: qsfp-plus}
+      - {id: mgmt-c0s, at: [358.5, 13.9], size: [14.25, 10.4]}
+      - {id: mgmt-c1s, at: [358.5, 27.75], size: [14.25, 10.4]}
+      - {id: mgmt-c0, at: [383.35, 10.2], size: [12.7, 11.0]}
+      - {id: mgmt-c1, at: [397.35, 10.2], size: [12.7, 11.0]}
+      - {id: console, at: [55.7, 27.47], size: [12.7, 11.0]}
+      - {id: usb, at: [32.75, 29.94], size: [12.0, 4.5]}
+      - {id: led-power, at: [68.85, 8.06], size: [2.0, 2.0], shape: circle}
+      - {id: led-status, at: [68.85, 13.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [68.85, 18.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {block: qsfp-plus}
+    - {id: silk-q0, at: [100.35, 12.5], text: Q0, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-0}
+    - {id: silk-q1, at: [100.35, 41.0], text: Q1, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-1}
+    - {id: silk-q2, at: [133.82, 12.5], text: Q2, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-2}
+    - {id: silk-q3, at: [133.82, 41.0], text: Q3, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-3}
+    - {id: silk-q4, at: [167.29, 12.5], text: Q4, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-4}
+    - {id: silk-q5, at: [167.29, 41.0], text: Q5, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-5}
+    - {id: silk-q6, at: [200.76, 12.5], text: Q6, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-6}
+    - {id: silk-q7, at: [200.76, 41.0], text: Q7, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-7}
+    - {id: silk-q8, at: [234.23, 12.5], text: Q8, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-8}
+    - {id: silk-q9, at: [234.23, 41.0], text: Q9, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-9}
+    - {id: silk-q10, at: [267.7, 12.5], text: Q10, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-10}
+    - {id: silk-q11, at: [267.7, 41.0], text: Q11, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-11}
+    - {id: silk-q12, at: [301.17, 12.5], text: Q12, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-12}
+    - {id: silk-q13, at: [301.17, 41.0], text: Q13, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-13}
+    - {id: silk-q14, at: [334.64, 12.5], text: Q14, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-14}
+    - {id: silk-q15, at: [334.64, 41.0], text: Q15, font-size: 1.6, anchor: middle, fill: '#eef0f2', for: port-15}
+    - {id: silk-model, at: [36.4, 5.9], text: QFX3600-16Q, font-size: 2.6, anchor: middle, fill: '#eef0f2', for: chassis}
+    - {id: silk-c0s, at: [365.6, 10.9], text: C0S, font-size: 1.5, anchor: middle, fill: '#eef0f2', for: mgmt-c0s}
+    - {id: silk-c1s, at: [365.6, 40.4], text: C1S, font-size: 1.5, anchor: middle, fill: '#eef0f2', for: mgmt-c1s}
+    - {id: silk-c0, at: [389.7, 24.6], text: C0, font-size: 1.5, anchor: middle, fill: '#eef0f2', for: mgmt-c0}
+    - {id: silk-c1, at: [403.7, 24.6], text: C1, font-size: 1.5, anchor: middle, fill: '#eef0f2', for: mgmt-c1}
+    - {id: silk-con, at: [62.05, 26.2], text: CON, font-size: 1.5, anchor: middle, fill: '#eef0f2', for: console}
+    - {id: silk-usb-mark, at: [38.8, 26.8], mark: usb, size: 3.0, fill: '#eef0f2', for: usb}
+    - {id: silk-ok, at: [68.0, 14.43], text: OK/!, font-size: 1.4, anchor: end, fill: '#eef0f2', for: led-status}
+    - {id: silk-power-icon, at: [66.4, 9.1], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#eef0f2', for: led-power}
+    - {id: silk-fan-icon, at: [66.4, 19.0], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#eef0f2', for: led-fan}
+    components:
+      blocks:
+      - id: qsfp-plus
+        ref: std/qsfp-ganged@1
+        at: [91.1, 14.28]
+        count: 16
+        rows: 2
+        pitch: 33.47
+        row-pitch: 13.86
+        number-from: 0
+        cutouts: true
+        rotate: {bottom: 180}
+        led:
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          dx: -6.38
+          dy-top: 1.2
+          dy-bottom: 1.2
+          group: qsfp-plus-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}-status'
+          dx: -6.38
+          dy-top: 6.35
+          dy-bottom: 6.35
+          group: qsfp-plus-status-leds
+          states: ['off', {name: transceiver, color: '#22c55e'}]
+      placements:
+      - {block: qsfp-plus}
+      - {ref: std/sfp-ganged@1, id: mgmt-c0s, at: [358.5, 13.9], group: mgmt, rel-pos: 0, attrs: {media: sfp, speed: 1g, role: mgmt}}
+      - {ref: std/sfp-ganged@1, id: mgmt-c1s, at: [358.5, 27.75], rotate: 180, group: mgmt, rel-pos: 1, attrs: {media: sfp, speed: 1g, role: mgmt}}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-c0, at: [383.35, 10.2], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45, speed: 1g, role: mgmt},
+         states: {led-a: ['off', {name: 1000m, color: '#22c55e'}, {name: 100m, color: '#f59e0b'}],
+                  led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]},
+         description: 'Table 10 - the speed lamp is green at 1 Gbps and amber at 10 or 100 Mbps, unlit when the port is not active; the activity lamp flickers green with traffic'}
+      - {ref: common/rj45-ganged-eth@1, id: mgmt-c1, at: [397.35, 10.2], group: mgmt, rel-pos: 3,
+         attrs: {media: rj45, speed: 1g, role: mgmt},
+         states: {led-a: ['off', {name: 1000m, color: '#22c55e'}, {name: 100m, color: '#f59e0b'}],
+                  led-b: ['off', {name: activity, color: '#22c55e', behavior: blinking}]},
+         description: 'Table 10 - the speed lamp is green at 1 Gbps and amber at 10 or 100 Mbps, unlit when the port is not active; the activity lamp flickers green with traffic'}
+      - {ref: std/rj45-ganged@2, id: console, at: [55.7, 27.47], group: mgmt, rel-pos: 4,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [32.75, 29.94], skin: usb2, group: mgmt, rel-pos: 5, attrs: {media: usb-a}}
+      - {ref: common/led-dot@1, id: led-power, at: [68.85, 8.06], group: status-leds, rel-pos: 0, for: chassis,
+         states: ['off', {name: powered, color: '#22c55e'}, {name: shutdown, color: '#f59e0b', behavior: blinking}],
+         description: 'Table 9 - green steady: the device is powered on; amber blinking: a temperature or voltage error was detected and the device has shut down'}
+      - {ref: common/led-dot@1, id: led-status, at: [68.85, 13.0], group: status-leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: junos, color: '#22c55e'}, {name: beacon, color: '#22c55e', behavior: blinking}, {name: software-error, color: '#f59e0b', behavior: blinking}],
+         description: 'Table 9 - green steady: Junos OS is loaded; green intermittent blinking: the beacon feature is enabled; amber blinking: a software error occurred'}
+      - {ref: common/led-dot@1, id: led-fan, at: [68.85, 18.0], group: status-leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: normal, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}],
+         description: 'Table 9 - green steady: the fan trays are operating normally; amber blinking: an error was detected in a fan tray'}
+    regions:
+    - {id: logo-zone, at: [1.0, 2.7], size: {w: 18.0, h: 6.5}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 429.3, h: 44.2}
+    panel:
+      decor:
+      - {id: ground-plate, at: [69.3, 7.5], size: [8.0, 6.7], rx: 0.5, fill: '#6f7279'}
+    components:
+      bays:
+      - {id: psu-0, at: [5.1, 3.1], size: {w: 54.8, h: 39.8}, group: psus, rel-pos: 0,
+         accepts: ['juniper/qfx5100-jpsu-650w-ac-afo@1', 'juniper/qfx5100-jpsu-650w-ac-afi@1', 'juniper/qfx5100-jpsu-650w-dc-afo@1', 'juniper/qfx5100-jpsu-650w-dc-afi@1'],
+         default: 'juniper/qfx5100-jpsu-650w-ac-afo@1'}
+      - {id: fan-0, at: [100.7, 2.3], size: {w: 80.0, h: 41.6}, group: fans, rel-pos: 0,
+         accepts: ['juniper/qfx3600-qfxc01-fanbo@1', 'juniper/qfx3600-qfxc01-fanbi@1'], default: 'juniper/qfx3600-qfxc01-fanbo@1'}
+      - {id: fan-1, at: [187.0, 2.3], size: {w: 80.0, h: 41.6}, group: fans, rel-pos: 1,
+         accepts: ['juniper/qfx3600-qfxc01-fanbo@1', 'juniper/qfx3600-qfxc01-fanbi@1'], default: 'juniper/qfx3600-qfxc01-fanbo@1'}
+      - {id: fan-2, at: [273.4, 2.3], size: {w: 80.0, h: 41.6}, group: fans, rel-pos: 2,
+         accepts: ['juniper/qfx3600-qfxc01-fanbo@1', 'juniper/qfx3600-qfxc01-fanbi@1'], default: 'juniper/qfx3600-qfxc01-fanbo@1'}
+      - {id: psu-1, at: [369.1, 3.1], size: {w: 54.8, h: 39.8}, group: psus, rel-pos: 1,
+         accepts: ['juniper/qfx5100-jpsu-650w-ac-afo@1', 'juniper/qfx5100-jpsu-650w-ac-afi@1', 'juniper/qfx5100-jpsu-650w-dc-afo@1', 'juniper/qfx5100-jpsu-650w-dc-afi@1'],
+         default: 'juniper/qfx5100-jpsu-650w-ac-afo@1'}
+  top:
+    size: {w: 429.3, h: 490.2}
+    empty: >-
+      Not drawn by any source held. The guide gives no flat figure of the lid; figures 1 and 2 are isometric views with
+      no scale.
+  bottom:
+    size: {w: 429.3, h: 490.2}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size: {w: 490.2, h: 44.2}
+    empty: >-
+      Not drawn by any source held. The mounting figures (22 to 24) show the brackets in isometric view only, with no
+      scale from which a hole could be placed.
+  right:
+    size: {w: 490.2, h: 44.2}
+    empty: >-
+      Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  ac-f2b:
+    kind: orderable
+    default: true
+    description: >-
+      QFX3600-16Q-AFO: two 650 W AC supplies (JPSU-650W-AC-AFO) and three fan trays (QFXC01-FANBO). All have port-to-FRU
+      airflow, which the library calls front-to-back (guide Tables 11 and 12).
+    part-numbers:
+      QFX3600-16Q-AFO: {}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      QFX3600-16Q-AFI: two 650 W AC supplies (JPSU-650W-AC-AFI) and three fan trays (QFXC01-FANBI). All have FRU-to-port
+      airflow, which the library calls back-to-front (guide Tables 11 and 12). The supplies have blue handles lettered AFI.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-ac-afi@1
+      psu-1: juniper/qfx5100-jpsu-650w-ac-afi@1
+      fan-0: juniper/qfx3600-qfxc01-fanbi@1
+      fan-1: juniper/qfx3600-qfxc01-fanbi@1
+      fan-2: juniper/qfx3600-qfxc01-fanbi@1
+    part-numbers:
+      QFX3600-16Q-AFI: {}
+  dc-f2b:
+    kind: example
+    power: dc
+    description: >-
+      An illustration, not a chassis model: two 650 W DC supplies (JPSU-650W-DC-AFO) with the port-to-FRU fan trays. The
+      guide lists the DC supplies and the DC power figures and names no DC chassis model.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-dc-afo@1
+      psu-1: juniper/qfx5100-jpsu-650w-dc-afo@1
+  dc-b2f:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      An illustration, not a chassis model: two 650 W DC supplies (JPSU-650W-DC-AFI) with the FRU-to-port fan trays. The
+      guide lists the DC supplies and the DC power figures and names no DC chassis model.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-dc-afi@1
+      psu-1: juniper/qfx5100-jpsu-650w-dc-afi@1
+      fan-0: juniper/qfx3600-qfxc01-fanbi@1
+      fan-1: juniper/qfx3600-qfxc01-fanbi@1
+      fan-2: juniper/qfx3600-qfxc01-fanbi@1
+references:
+- title: 'QFX3600 Device Hardware Documentation, Juniper Networks, modified 2018-07-03'
+  url: https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/hardware/qfx-series/qfx3600.pdf
+  sha256: 2bbd829720054c8731e284d46fb3c8ef7dcf83367ba3c56e4952c8856d1f78f1

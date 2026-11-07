@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: r660xs-system-board
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The PowerEdge R660xs system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, with its stepped corner, and the power interposer board beside the supplies; the floor of the interior
+provenance:
+  sources: >-
+    drawing - the R660xs Installation and Service Manual, figure 8 'Inside the
+    system' (1207 x 1450 px, Dell's render from above, cover off), read at 1.802
+    px/mm from the 434 body (the side walls at x 207..989), with the plan's y
+    from the rear wall, which the 699.1 front-to-rear depth puts 1260 px behind
+    the front face (figure y 110 against 1370); and figure 60 'Memory socket
+    location' (1897 px square, the bare board with its sockets named), which
+    shows the board's outline. Facts read, art not traced.
+  size: >-
+    drawing - the green PCB in figure 8 is 298.3 x 373.0 at plan x 133.2, y 4.4
+    (figure x 447..985, y 118..790), and a second green region, 128 x 144 beside
+    the supply cage (figure x 217..447, y 530..790), lies to its left. Figure 60
+    shows the board alone with one corner stepped out 44 mm to the left below
+    the memory (the figure's 170 px at 3.8 px/mm, scaled by the sockets'
+    pitch) and nothing wider, so of the 128 mm only the 44 is the board and the
+    rest is the power interposer board, which the ISM lists as its own FRU
+    ('Removing the power interposer board', figure 128). Both are drawn in
+    this one part, the corner as the board's. The corner's height is read off
+    figure 60 against its sockets (the 3.7 px/mm there is the sockets' 147 mm
+    over 545 px) and is an estimate. The board's rear 4.4, where the connectors
+    pass the wall, is not drawn. The interposer board's top edge is taken at the
+    end of the supplies' cans (222.0 down the top view, where
+    dell/psu-60mm-plan@1 stops; 217.6 down this part, which stands 4.4 below the
+    view's rear edge), which is where figure 8 shows the cans meeting it; a
+    reading at 228.7 left a 6.7 mm white gap the figure does not have.
+  depth: >-
+    ESTIMATED - 38.3, the R660's interior well (dell/system-board-r660@1: the
+    PCB top at 4.5 against a 42.8 lid line). Both are 1U chassis of the same
+    height, and no R660xs figure gives the board's height.
+  board-variants: >-
+    NOT DISTINGUISHED - the ISM's 'Removing the system board' names no board
+    variants for the R660xs.
+size: {w: 426.0, h: 373.0, d: 38.3}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [127.7, 0.0], size: [298.3, 373.0], class: bezel}
+  corner: {at: [83.7, 176.0], size: [44.0, 197.0], class: bezel}
+  pib: {at: [0.0, 217.6], size: [83.7, 155.4], class: bezel}
+skins: [default]

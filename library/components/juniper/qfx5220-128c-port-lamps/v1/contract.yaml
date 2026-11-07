@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: qfx5220-128c-port-lamps
+version: 1.0.0
+class: led
+profile: networking
+description: >-
+  The four lamp windows of one QFX5220-128C QSFP28 port, in a row in the light pipe of its cell. There is one
+  lamp for each channel. When a port is not channelized, the leftmost lamp shows the link of the whole
+  port. Each lamp is green or amber (guide Table 9).
+size: {w: 9.85, h: 1.45}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  four windows 2.2 mm wide and 1.45 mm high on a 2.55 mm pitch, read off the guide's figure 17
+  (g051150, scale 3.213 px/mm) at 6 times zoom
+provenance:
+  size: >-
+    drawing - QFX5220 Switch Hardware Guide (published 2026-10-14) figure 17 and figure 18 callout 1: the
+    light pipe of each cell carries two rows of four small rounded windows between an up-arrow and a
+    down-arrow. A window reads 7 px by 4.7 px at 3.213 px/mm, 2.2 by 1.45 mm, estimated to 0.3 mm. The pitch
+    reads 8.2 px, 2.55 mm. The two rows of a cell are 1.55 mm apart, so a window row has no room for a
+    bezel and none is drawn. The existing small bar lamp (common/led-rect-sm@1) is 2.8 by 1.6 mm, so four on
+    this pitch overlap by 0.25 mm and two rows overlap vertically, and it was not used.
+  semantics: >-
+    datasheet - guide Table 9 and the QFX5220-128C Network LEDs text: a QSFP28 port uses one bicolour lamp for
+    each port or channel. Off is unlit. Green steady is a link without activity, and green flashing is a link
+    with activity. Amber blinking is an interface error. For a channelized port, green steady is every
+    sub-channel up, amber steady is some but not all up, and amber flashing is some up with activity. The
+    guide gives no colours as hex values, so the states carry the library's usual lamp greens and ambers.
+  windows: >-
+    drawing - no cutout is declared. The windows are openings filled by the light pipe, which the device draws
+    as a pale strip, so they are not dark holes. The four-window part declares four openings and expand.py
+    does not derive a hole from several.
+elements:
+  lane-1:
+    at: [0.0, 0.0]
+    size: [2.2, 1.45]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#f59e0b', behavior: blinking}, {name: partial, color: '#f59e0b'}]
+  lane-2:
+    at: [2.55, 0.0]
+    size: [2.2, 1.45]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#f59e0b', behavior: blinking}, {name: partial, color: '#f59e0b'}]
+  lane-3:
+    at: [5.1, 0.0]
+    size: [2.2, 1.45]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#f59e0b', behavior: blinking}, {name: partial, color: '#f59e0b'}]
+  lane-4:
+    at: [7.65, 0.0]
+    size: [2.2, 1.45]
+    class: led
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#f59e0b', behavior: blinking}, {name: partial, color: '#f59e0b'}]
+skins: [default]

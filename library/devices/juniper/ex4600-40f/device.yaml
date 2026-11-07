@@ -1,0 +1,1232 @@
+format: 1
+kind: device
+name: ex4600-40f
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: EX4600-40F
+portfolio: {line: EX Series, family: EX4600}
+description: >-
+  Juniper EX4600-40F, a 1RU 10 GbE campus aggregation and small data-centre switch that runs Junos OS.
+  The port side has 24 SFP+ ports (10 or 1 GbE) and 4 QSFP+ ports (40 GbE). It also has two expansion
+  module bays, which hold a QFX-EM-4Q or an EX4600-EM-8F or a cover panel. The other side carries the
+  management panel, five fan modules and two power supplies. One panel serves five models. Four have AC
+  or DC supplies, with air in or air out. The fifth is a spare chassis without supplies or fans.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper EX4600 Switch Hardware Guide, published 2025-08-12, 197 pages (Juniper Networks, copyright
+      2025): Table 3 (the models), Table 4 (the chassis), the port panel (Figure 9), the port lamps (Figures
+      10 and 11, Tables 6 and 7), the management panel (Figures 12 to 14, Table 8), the expansion modules
+      (Figures 15 and 16, Tables 9 and 10), the cooling system (Figure 17, Tables 11 to 13) and the power
+      system (Figures 21 to 26, Tables 14 to 19). Juniper EX4600 Ethernet Switch Datasheet, 1000511-016-EN,
+      Sep 2021 (PDF produced 2022-07-25): the specifications, the power consumption by model and the ordering
+      table. Juniper's own studio photographs of the front and the rear, 1500 x 163 and 1500 x 151 px
+      (image library, ex4600-front-high.jpg and ex4600-rear-high.jpg). The held intake folders for the
+      EX and QFX lines were not readable from this work, so no held photograph, stencil or 3D model was
+      used; the public documents above are the only sources. Terms: the documents and photographs are
+      Juniper's, read here for facts only, and nothing of them is copied into the library.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 4: 1.72 in (4.3 cm) high, 17.36 in (44.1 cm) wide, 20.48 in deep, 21.7 lb (9.84 kg)
+      with the power supplies and fan modules installed. The table prints the depth as "20.48 in. (4.37
+      cm)", a slip; the datasheet gives 1.72 x 17.36 x 20.48 in (4.37 x 44.09 x 52.02 cm), so the height
+      is 43.7 mm, the width 440.9 and the depth 520.2. The width is the body: the brackets extend it to
+      19 in (Table 23), so they are not modelled.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The front photograph's body, between its edges, is 1483 x 148 px, an aspect of 10.02 against the
+      table's 440.9 / 43.7 = 10.09 (0.7 percent out); the rear photograph's is 1454 x 145 px, 10.03 (0.6
+      percent out). So both are read as orthographic, the front at 3.363 px/mm across and 3.393 down,
+      the rear at 3.298 across and 3.318 down. A pixel is 0.3 mm, so every position read off them is estimated
+      to about 0.5 mm. Guide Figures 9 and 12 are line drawings at 1.66 px/mm and are used to count and
+      to read the printing.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Front photograph: the SFP+ dot pairs, which are flat on the metal, centre at 22.7, 27.0, 31.2, 35.5,
+      39.7 and 44.0 mm and again from 114.8 mm on a 14.25 mm pitch, the registry's, to 0.1 mm. The two
+      blocks of six columns have a 6.6 mm gutter. The cage fronts sit 1.2 mm left of the numeral and lamp
+      pair, so the cells start at 14.4 and 106.5 mm. The four QSFP+ cages stand in two columns of two,
+      centred at 209.1 and 238.0 mm, 28.9 mm apart, with the laser warning label to their right. The counts,
+      24 and 4, are callouts 2 and 3 of figure 9. The QSFP+ pitch is not the registry's 19.0 mm, which
+      is the pitch of a ganged block: these are two columns.
+  row-pitch:
+    confidence: photo-measured
+    note: >-
+      The two SFP+ cages measure 11.8 and 10.9 mm high with the module bodies in them, tops 13.0 mm apart,
+      so 13.0 mm is the row pitch. The registry's 15.0 mm is measured on another cage and is not a conformance
+      figure. The QSFP+ cages are 14.3 mm apart. Both rows are read off cages with transceivers seated,
+      which hide the openings, so the cell positions are estimated.
+  stack-orientation:
+    confidence: photo-measured
+    note: >-
+      The photograph shows the latch tongues at the foot of every upper SFP+ and QSFP+ cage and at the
+      top of every lower one, so both lips face the band between the rows: the upper cage upright and
+      the lower one turned 180, the library's stack convention.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Printed on the metal: the SFP+ ports are 0 to 23, even above the cage and odd below it, the numeral
+      between its two lamps, above the upper row and below the lower one; the QSFP+ ports are 24 and 25
+      in the left column and 26 and 27 in the right, printed at the left of the lamps. Guide figure 9
+      numbers 0 to 23 and 24 to 27 as well. Interface names are not printed and the guide does not give
+      the xe or et names, so none is written. The guide names the management ports em0 (C0) and em1 (C1),
+      which are written.
+  port-lamps:
+    confidence: photo-measured
+    note: >-
+      Guide Figure 10 and Table 6: two lamps on each SFP+ port, link and activity at the left and status
+      at the right. Figure 11 and Table 7: four lamps on each QSFP+ port, above the upper cage and below
+      the lower one. The photograph shows the same dots; they are 5.8 mm apart on an SFP+ pair and 4.2
+      mm apart on a QSFP+ row, centred on the printed numeral and on the cage. Lamp positions are estimated;
+      a pixel is 0.3 mm.
+  vents:
+    confidence: photo-measured
+    note: >-
+      The photograph shows a honeycomb strip along the top edge, 0.4 to 4.8 mm down, and another along
+      the bottom edge, 40.0 to 43.5 mm, both from 20.3 mm to 246.0 mm, and four hexagonal holes in a column
+      at the left, 8.9 to 13.1 mm across, centred 10.9, 15.9, 21.1 and 26.0 mm down. They are declared
+      vents.
+  esd:
+    confidence: photo-measured
+    note: >-
+      Guide Figure 9 callout 1, the electrostatic discharge terminal, is the round jack at the lower left,
+      centred 7.2 mm across and 38.4 mm down, with the ESD mark above it at 31.0 mm.
+  stickers:
+    confidence: photo-measured
+    note: >-
+      The yellow laser warning label, 5.1 x 26.0 mm at 251.1 across and 6.6 down, and the hazard triangle
+      below it, 7.7 x 7.4 mm at 251.1 and 34.3, are applied labels. They are reserved as regions and not
+      drawn.
+  modules:
+    confidence: datasheet
+    note: >-
+      The two bays at the right of the port panel (guide Figure 9 callout 4, "Expansion module bays with
+      cover panels (2)"). The first bay starts at 890 px, 262.4 mm, the seam is at 349.1 mm and the second
+      ends at 435.8 mm; each module face is 86.7 x 43.2 mm. The guide numbers no bay, so they are em-0
+      and em-1 from the left. The bays ship with cover panels (QFX5100-EM-BLNK in the datasheet); the
+      modules are ordered separately. The guide says the EX4600 "is configured for the QFX-EM-4Q by default"
+      and also says the modules "are not shipped with the switch", so the shipped state is the cover panel
+      and the 4Q is the module the software expects.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      Rear photograph at 3.298 px/mm, checked against guide Figures 12 to 14: at the left a 63 mm management
+      panel with the four chassis lamps, the SFP management cage C1 with its two lamps, the RJ-45 console
+      jack above the RJ-45 management jack C0 in one shell, the USB port, and the reset pinhole; then
+      five fan slots numbered 0 to 4 on a 49.3 mm pitch, each preceded by a strip carrying its fan symbol,
+      number and lamp; then two supply slots, 0 and 1, the first preceded by its power symbol and number,
+      and at the right edge a strip with the rating legend. The fan modules measure 40.9 x 41.5 mm and
+      the supplies 54.7 mm wide.
+  mgmt-labels:
+    confidence: photo-measured
+    note: >-
+      The photograph prints CON above the upper RJ-45 jack and C0 below the lower one, with the legend
+      C1 above the SFP cage; guide Figure 13 calls the upper jack the console (CON) and the lower one
+      em0 (C0), and the SFP cage em1 (C1). The photograph and the figure agree.
+  rear-photo-vs-drawing:
+    confidence: photo-measured
+    note: >-
+      Figure 13 prints EX4600-40F on the label plate and the photograph prints EX4600; the photograph
+      is followed, and the plate carries the words RUNNING JUNOS in both. The photograph is of a back-to-front
+      build (AIR IN fan modules, a supply labelled AFI) with one supply and a cover panel in slot 1, and
+      Figure 12 is the same build with two supplies. The default configuration here is the front-to-back
+      AC build; the fan and supply faces are drawn from the AIR IN units and given the AIR OUT legend
+      and orange handles that Tables 11 and 14 state.
+  fans-and-supplies:
+    confidence: datasheet
+    note: >-
+      The five fan modules (QFX5100-FAN-AFO and QFX5100-FAN-AFI, Table 11) and the two supplies (JPSU-650W-AC-AFO
+      and -AFI, Table 14; JPSU-650W-DC-AFO and -AFI, datasheet ordering table) are field-replaceable units
+      in bays, each its own component. The cover panel for an empty supply slot is a component too. Nothing
+      on this chassis is a built-in unit that is not a bay; the fan in each supply is inside the supply.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide describes flush and 2 in recessed mounting in a four-post rack with front
+      mounting rails, rear mounting blades and extension brackets (Table 32), and the datasheet lists
+      a four-post rack mount kit with each model. Neither prints a part number for the kit, the library
+      holds no contract for it and none is written, so chassis.ears and chassis.kits are left out and
+      a gap says so. The modelled body is the 440.9 mm chassis without brackets.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 16 (AC): 100 to 240 VAC, 50 to 60 Hz, 4.5 A at 100 to 120 VAC and 2.0 A at 200 to 240
+      VAC, typical 230 W and maximum 365 W. Table 19 (DC): rated -48 to -60 VDC, operating -40 to -72
+      VDC, 10 A maximum, typical 300 W and maximum 385 W. The datasheet gives a power consumption for
+      one stated load, which is a different scope: 279 W (AFO), 285 W (AFI), 392 W (DC-AFO) and 320 W
+      (DC-AFI) with every fixed port forwarding at line rate with optics, a QSFP+ module and an 8 x 10
+      GbE module, and two supplies. The tables' typical and maximum are the device's; the datasheet figures
+      are kept as attributes.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The front plate samples #6a6d71 to #76797d (median of bare patches) and the rear panel #7a7f85.
+      The chassis colour is a mid grey between them. The photographs are lit and these are their values,
+      not a paint reference.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life notice. Two third-party trackers (endoflife.ai, eol.network) report
+      a Juniper notice of 2026-06-29 (TSB109286) with a last order date of 2026-12-29 and end of support
+      on 2031-12-29. The Juniper bulletin itself was not reached, so the dates are estimated.
+attrs:
+  physical:
+    weight-note: 21.7 lb (9.84 kg) with power supplies and fan modules installed (Table 4)
+    depth-note: 20.48 in (52.02 cm); Table 4 prints 4.37 cm in the metric column, a slip
+  performance:
+    switching-capacity: 720 Gbps unidirectional, 1.44 Tbps bidirectional (datasheet)
+    forwarding-rate: 1,071 Mpps at 64 byte packets, wire speed (datasheet)
+    buffers: 12 MB shared, 25 percent dedicated (guide, Benefits of the EX4600 Switch)
+    sfp-plus-speeds: 10 or 1 GbE on each SFP+ port
+    qsfp-plus-speeds: 40 GbE, or 4 x 10 GbE with a breakout cable
+  power:
+    power-typical-w: 230
+    power-max-w: 365
+    power-envelope: unstated
+    power-dc-typical-w: 300
+    power-dc-max-w: 385
+    power-datasheet-load-w: 279 W AFO, 285 W AFI, 392 W DC-AFO, 320 W DC-AFI at the datasheet's stated
+      load
+    power-input-ac: 100 to 240 VAC, 50 to 60 Hz; 4.5 A at 100 to 120 VAC, 2.0 A at 200 to 240 VAC
+    power-input-dc: rated -48 to -60 VDC, operating range -40 to -72 VDC, 10 A maximum
+    redundancy-note: two supplies, 1+1; the switch runs on one
+  thermal:
+    fans: >-
+      five fan modules and a fan in each supply; the switch runs 30 seconds while one fan module is replaced
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -40 to 70 C (-40 to 158 F)
+    humidity: 5 to 90 percent noncondensing in operation, 0 to 95 percent out of operation
+    altitude: up to 2,000 (datasheet, unit not printed)
+    mtbf: 150,000 hours predicted, FIT rate 4,987 (datasheet)
+  platform: {cpu: 1.5 GHz dual-core Intel, storage: 32 GB SSD, software: 'Junos OS, first release 13.2X51-D25'}
+  features:
+    virtual-chassis: up to 10 switches in a ring; mixed with EX4300 switches
+    optics-sfp-plus: >-
+      10 GbE SFP+ and 1 GbE SFP in any port; a restriction on 1 GbE copper SFP stacked above or below
+      another (guide, Port Panel)
+    optics-qsfp: 40 GbE QSFP+, or 4 x 10 GbE with a breakout cable
+    expansion: >-
+      two bays, QFX-EM-4Q (4 x 40 GbE QSFP+) and EX4600-EM-8F (8 x 10 GbE SFP+), 72 ports at most
+  management: {oob: 'one RJ-45 (C0, em0) and one SFP (C1, em1) management port', console: RJ-45 console
+      port (CON), usb: one USB port}
+  compliance:
+    safety: UL 60950-1, CAN/CSA-C22.2 No. 60950-1, EN 60950-1, IEC 60950-1, EN 60825-1
+    emc: >-
+      FCC 47 CFR Part 15 Class A, EN 55022 Class A, VCCI Class A, BSMI CNS 13438, AS/NZS CISPR22
+    nebs: GR-63-Core, GR-1089-Core, SR-3580 NEBS Criteria Level 3 (as the datasheet lists them)
+    materials: RoHS 6/6, China RoHS, REACH, WEEE, 80 Plus Silver supply efficiency
+  lifecycle: {eol: announced, eol-announcement: 'https://endoflife.ai/article-juniper-ex4300-48mp-ex4600-eol',
+    end-of-sale: '2026-12-29', end-of-life: '2031-12-29'}
+chassis: {width: 440.9, height: 43.7, depth: 520.2, ru: 1, weight-kg: 9.84, color: '#74777c', airflow: front-to-back,
+  power: ac}
+gaps:
+- what: ears-and-kits
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The part number of the four-post rack mount kit and the ear positions. The guide names front mounting
+    rails, rear mounting blades and extension brackets (Table 32) and the datasheet lists a four-post
+    kit with every model, and neither prints a part number.
+- what: interface-names
+  scope:
+  - sfp-plus
+  - qsfp-plus
+  reason: vendor-silent
+  wanted: >-
+    The Junos names of the SFP+ and QSFP+ ports and of the module ports. The guide held names only em0
+    and em1 and refers the reader to the Hardware Compatibility Tool for transceivers.
+- what: power-input-range-dc
+  scope:
+  - dc-f2b
+  - dc-b2f
+  reason: sources-disagree
+  note: >-
+    The datasheet (Sep 2021) says "-36 to -72 V DC power"; the guide (2025-08-12), Table 19, says the
+    operating range is -40 VDC through -72 VDC. The guide is the newer and is carried.
+  wanted: which lower bound the hardware is rated to, from Juniper
+- what: dc-handle-colour
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The handle colour and airflow label of the DC supplies. The guide's Table 14 covers the AC pair; the
+    DC supplies take the same orange and blue by relation, not by reading, and no photograph of one is
+    held.
+- what: front-airflow-photo
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A photograph of a front-to-back build. The rear photograph is a back-to-front build; the AIR OUT fan
+    modules and the AFO supply are drawn from it with the legend and colour of Tables 11 and 14. The photographed
+    AFI supply has a dark handle, not the blue the table gives.
+- what: usb-generation
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The USB revision. The guide names one USB port for image updates. It is drawn with the neutral usb2
+    skin, because the photograph shows a dark tongue with four contacts.
+- what: c1-lamps
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    What the two small lamps above the C1 SFP cage show. Figure 13 and the photograph draw them, and the
+    guide's text and tables do not describe them.
+- what: labels-not-drawn
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    The laser warning label and its hazard mark at the front, the serial number label and the vertical
+    rating legend at the right of the rear are applied or printed small. The rating legend is drawn as
+    read, and the two front labels are reserved as regions.
+- what: module-depths
+  scope:
+  - rear
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The depth of the fan modules, the supplies and the expansion modules. The guide's figures are isometric
+    with no scale and its tables give weights of the chassis only.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Ports 0 to 23 as printed; each takes a 10 GbE SFP+ or a 1 GbE SFP
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
+    description: >-
+      Ports 24 to 27 as printed, rel-pos carrying the printed number, since the origin token cannot express
+      a block that starts at 24. Each runs as one 40 GbE port or as 4 x 10 GbE
+  sfp-plus-activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The link and activity lamp of each SFP+ port, left of the numeral (guide Table 6)
+  sfp-plus-status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The status lamp of each SFP+ port, right of the numeral (guide Table 6)
+  qsfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The first of the four lamps of each QSFP+ port, used for a 40 GbE link (guide Table 7)
+  qsfp-plus-channel-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      The second to fourth lamps of each QSFP+ port, used for the links of a 4 x 10 GbE breakout (guide
+      Table 7)
+  expansion:
+    term: Bay
+    role: traffic
+    index-origin: 0
+    description: The two expansion module bays at the right of the port panel, numbered from the left
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the management cluster at the left of the rear: an RJ-45 console, an RJ-45 and an SFP management
+      port, a USB port and the recessed reset button. Four kinds, one purpose: reaching and recovering
+      the switch when the data plane cannot.
+  mgmt-leds: {term: LED, role: indicator, index-origin: 0, description: the two small lamps above the
+      C1 management SFP cage}
+  status-leds: {term: LED, role: indicator, index-origin: 0, description: 'The four chassis lamps ALM,
+      SYS, MST and ID (guide Table 8)'}
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 4+1
+      redundancy-note: >-
+        Datasheet, Power Supply and Fan Modules - "Redundant (N+1) and hot-pluggable fan modules" - and
+        the guide, Cooling System and Airflow: five fan modules in slots 0 to 4 from left to right, so
+        N is four. All must be installed for the best cooling, and the switch runs 30 seconds while one
+        is replaced
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      The status lamp (ST) in the strip at the left of each fan slot: green when the module is present
+      and healthy, amber blinking on an error (guide Tables 12 and 13)
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Two supplies, each able to carry the load; one may be removed while the other runs. Do not mix
+        AC and DC supplies, or supplies of different airflow
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the wrist-strap ESD terminal at the lower left of the port panel (guide Figure 9, callout 1)
+views:
+  front:
+    size: {w: 440.9, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-top, at: [20.3, 0.4], size: [225.7, 4.4], pattern: vent, vent: 1}
+      - {id: vent-bottom, at: [20.3, 40.0], size: [225.7, 3.5], pattern: vent, vent: 1}
+      - {id: vent-left-1, at: [8.9, 8.9], size: [4.2, 4.0], rx: 1.0, vent: 1}
+      - {id: vent-left-2, at: [8.9, 13.9], size: [4.2, 4.0], rx: 1.0, vent: 1}
+      - {id: vent-left-3, at: [8.9, 19.1], size: [4.2, 4.0], rx: 1.0, vent: 1}
+      - {id: vent-left-4, at: [8.9, 24.0], size: [4.2, 4.0], rx: 1.0, vent: 1}
+      cutouts:
+      - {id: port-0, at: [14.4, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-0, at: [18.83, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-1, at: [14.4, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-1, at: [18.83, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-2, at: [28.65, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-2, at: [33.08, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-3, at: [28.65, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-3, at: [33.08, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-4, at: [42.9, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-4, at: [47.33, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-5, at: [42.9, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-5, at: [47.33, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-6, at: [57.15, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-6, at: [61.58, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-7, at: [57.15, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-7, at: [61.58, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-8, at: [71.4, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-8, at: [75.83, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-9, at: [71.4, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-9, at: [75.83, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-10, at: [85.65, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-10, at: [90.08, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-11, at: [85.65, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-11, at: [90.08, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-12, at: [106.5, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-12, at: [110.93, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-13, at: [106.5, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-13, at: [110.93, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-14, at: [120.75, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-14, at: [125.18, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-15, at: [120.75, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-15, at: [125.18, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-16, at: [135.0, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-16, at: [139.43, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-17, at: [135.0, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-17, at: [139.43, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-18, at: [149.25, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-18, at: [153.68, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-19, at: [149.25, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-19, at: [153.68, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-20, at: [163.5, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-20, at: [167.93, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-21, at: [163.5, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-21, at: [167.93, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-22, at: [177.75, 10.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-22, at: [182.18, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-23, at: [177.75, 23.4], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-23, at: [182.18, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: port-24, at: [199.9, 10.1], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-24, at: [201.85, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-25, at: [199.9, 24.4], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-25, at: [201.85, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-26, at: [228.8, 10.1], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-26, at: [230.75, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-27, at: [228.8, 24.4], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-27, at: [230.75, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: esd-front-jack, at: [4.2, 35.4], size: [6.0, 6.0], shape: circle}
+      - {id: led-port-0-status, at: [24.63, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1-status, at: [24.63, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2-status, at: [38.88, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3-status, at: [38.88, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4-status, at: [53.13, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5-status, at: [53.13, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6-status, at: [67.38, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7-status, at: [67.38, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8-status, at: [81.63, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9-status, at: [81.63, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10-status, at: [95.88, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11-status, at: [95.88, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12-status, at: [116.73, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13-status, at: [116.73, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14-status, at: [130.98, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15-status, at: [130.98, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16-status, at: [145.23, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17-status, at: [145.23, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18-status, at: [159.48, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19-status, at: [159.48, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20-status, at: [173.73, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21-status, at: [173.73, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22-status, at: [187.98, 6.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23-status, at: [187.98, 35.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-lane-2, at: [206.05, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-lane-3, at: [210.25, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-lane-4, at: [214.45, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-lane-2, at: [206.05, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-lane-3, at: [210.25, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25-lane-4, at: [214.45, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-lane-2, at: [234.95, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-lane-3, at: [239.15, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26-lane-4, at: [243.35, 6.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-lane-2, at: [234.95, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-lane-3, at: [239.15, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27-lane-4, at: [243.35, 36.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [22.73, 7.1], text: '0', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-0}
+    - {at: [22.73, 39.4], text: '1', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-1}
+    - {at: [36.98, 7.1], text: '2', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-2}
+    - {at: [36.98, 39.4], text: '3', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-3}
+    - {at: [51.23, 7.1], text: '4', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-4}
+    - {at: [51.23, 39.4], text: '5', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-5}
+    - {at: [65.48, 7.1], text: '6', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-6}
+    - {at: [65.48, 39.4], text: '7', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-7}
+    - {at: [79.73, 7.1], text: '8', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-8}
+    - {at: [79.73, 39.4], text: '9', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-9}
+    - {at: [93.98, 7.1], text: '10', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-10}
+    - {at: [93.98, 39.4], text: '11', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-11}
+    - {at: [114.83, 7.1], text: '12', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-12}
+    - {at: [114.83, 39.4], text: '13', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-13}
+    - {at: [129.08, 7.1], text: '14', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-14}
+    - {at: [129.08, 39.4], text: '15', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-15}
+    - {at: [143.33, 7.1], text: '16', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-16}
+    - {at: [143.33, 39.4], text: '17', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-17}
+    - {at: [157.58, 7.1], text: '18', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-18}
+    - {at: [157.58, 39.4], text: '19', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-19}
+    - {at: [171.83, 7.1], text: '20', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-20}
+    - {at: [171.83, 39.4], text: '21', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-21}
+    - {at: [186.08, 7.1], text: '22', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-22}
+    - {at: [186.08, 39.4], text: '23', font-size: 1.9, anchor: middle, fill: '#e1e3e5', for: port-23}
+    - {at: [199.0, 7.9], text: '24', font-size: 1.9, anchor: end, fill: '#e1e3e5', for: port-24}
+    - {at: [199.0, 38.0], text: '25', font-size: 1.9, anchor: end, fill: '#e1e3e5', for: port-25}
+    - {at: [227.9, 7.9], text: '26', font-size: 1.9, anchor: end, fill: '#e1e3e5', for: port-26}
+    - {at: [227.9, 38.0], text: '27', font-size: 1.9, anchor: end, fill: '#e1e3e5', for: port-27}
+    - id: silk-esd
+      at: [7.2, 30.4]
+      path: M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 H -1.0 M 1.0 2.6 H 2.4
+      fill: '#e1e3e5'
+      for: esd-front-jack
+    components:
+      bays:
+      - id: em-0
+        at: [262.4, 0.3]
+        size: {w: 86.7, h: 43.2}
+        group: expansion
+        rel-pos: 0
+        accepts:
+        - juniper/ex4600-em-blnk@1
+        - juniper/ex4600-em-8f@1
+        - juniper/ex4600-em-4q@1
+        default: juniper/ex4600-em-blnk@1
+      - id: em-1
+        at: [349.1, 0.3]
+        size: {w: 86.7, h: 43.2}
+        group: expansion
+        rel-pos: 1
+        accepts:
+        - juniper/ex4600-em-blnk@1
+        - juniper/ex4600-em-8f@1
+        - juniper/ex4600-em-4q@1
+        default: juniper/ex4600-em-blnk@1
+      placements:
+      - {ref: std/sfp-ganged@1, id: port-0, at: [14.4, 10.4], group: sfp-plus, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: port-1, at: [14.4, 23.4], rotate: 180, group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [28.65, 10.4], group: sfp-plus, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [28.65, 23.4], rotate: 180, group: sfp-plus, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [42.9, 10.4], group: sfp-plus, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [42.9, 23.4], rotate: 180, group: sfp-plus, rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [57.15, 10.4], group: sfp-plus, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [57.15, 23.4], rotate: 180, group: sfp-plus, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [71.4, 10.4], group: sfp-plus, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [71.4, 23.4], rotate: 180, group: sfp-plus, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [85.65, 10.4], group: sfp-plus, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [85.65, 23.4], rotate: 180, group: sfp-plus, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [106.5, 10.4], group: sfp-plus, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [106.5, 23.4], rotate: 180, group: sfp-plus, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [120.75, 10.4], group: sfp-plus, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [120.75, 23.4], rotate: 180, group: sfp-plus, rel-pos: 15}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [135.0, 10.4], group: sfp-plus, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [135.0, 23.4], rotate: 180, group: sfp-plus, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [149.25, 10.4], group: sfp-plus, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [149.25, 23.4], rotate: 180, group: sfp-plus, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [163.5, 10.4], group: sfp-plus, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [163.5, 23.4], rotate: 180, group: sfp-plus, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [177.75, 10.4], group: sfp-plus, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [177.75, 23.4], rotate: 180, group: sfp-plus, rel-pos: 23}
+      - ref: common/led-dot@1
+        id: led-port-0
+        at: [18.83, 6.9]
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, color: '#22c55e', behavior: blinking}
+        - {name: beacon, color: '#f59e0b', behavior: blinking}
+        for: port-0
+        group: sfp-plus-activity-leds
+        rel-pos: 0
+      - ref: common/led-dot@1
+        id: led-port-1
+        at: [18.83, 35.9]
+        states: *id001
+        for: port-1
+        group: sfp-plus-activity-leds
+        rel-pos: 1
+      - ref: common/led-dot@1
+        id: led-port-2
+        at: [33.08, 6.9]
+        states: *id001
+        for: port-2
+        group: sfp-plus-activity-leds
+        rel-pos: 2
+      - ref: common/led-dot@1
+        id: led-port-3
+        at: [33.08, 35.9]
+        states: *id001
+        for: port-3
+        group: sfp-plus-activity-leds
+        rel-pos: 3
+      - ref: common/led-dot@1
+        id: led-port-4
+        at: [47.33, 6.9]
+        states: *id001
+        for: port-4
+        group: sfp-plus-activity-leds
+        rel-pos: 4
+      - ref: common/led-dot@1
+        id: led-port-5
+        at: [47.33, 35.9]
+        states: *id001
+        for: port-5
+        group: sfp-plus-activity-leds
+        rel-pos: 5
+      - ref: common/led-dot@1
+        id: led-port-6
+        at: [61.58, 6.9]
+        states: *id001
+        for: port-6
+        group: sfp-plus-activity-leds
+        rel-pos: 6
+      - ref: common/led-dot@1
+        id: led-port-7
+        at: [61.58, 35.9]
+        states: *id001
+        for: port-7
+        group: sfp-plus-activity-leds
+        rel-pos: 7
+      - ref: common/led-dot@1
+        id: led-port-8
+        at: [75.83, 6.9]
+        states: *id001
+        for: port-8
+        group: sfp-plus-activity-leds
+        rel-pos: 8
+      - ref: common/led-dot@1
+        id: led-port-9
+        at: [75.83, 35.9]
+        states: *id001
+        for: port-9
+        group: sfp-plus-activity-leds
+        rel-pos: 9
+      - ref: common/led-dot@1
+        id: led-port-10
+        at: [90.08, 6.9]
+        states: *id001
+        for: port-10
+        group: sfp-plus-activity-leds
+        rel-pos: 10
+      - ref: common/led-dot@1
+        id: led-port-11
+        at: [90.08, 35.9]
+        states: *id001
+        for: port-11
+        group: sfp-plus-activity-leds
+        rel-pos: 11
+      - ref: common/led-dot@1
+        id: led-port-12
+        at: [110.93, 6.9]
+        states: *id001
+        for: port-12
+        group: sfp-plus-activity-leds
+        rel-pos: 12
+      - ref: common/led-dot@1
+        id: led-port-13
+        at: [110.93, 35.9]
+        states: *id001
+        for: port-13
+        group: sfp-plus-activity-leds
+        rel-pos: 13
+      - ref: common/led-dot@1
+        id: led-port-14
+        at: [125.18, 6.9]
+        states: *id001
+        for: port-14
+        group: sfp-plus-activity-leds
+        rel-pos: 14
+      - ref: common/led-dot@1
+        id: led-port-15
+        at: [125.18, 35.9]
+        states: *id001
+        for: port-15
+        group: sfp-plus-activity-leds
+        rel-pos: 15
+      - ref: common/led-dot@1
+        id: led-port-16
+        at: [139.43, 6.9]
+        states: *id001
+        for: port-16
+        group: sfp-plus-activity-leds
+        rel-pos: 16
+      - ref: common/led-dot@1
+        id: led-port-17
+        at: [139.43, 35.9]
+        states: *id001
+        for: port-17
+        group: sfp-plus-activity-leds
+        rel-pos: 17
+      - ref: common/led-dot@1
+        id: led-port-18
+        at: [153.68, 6.9]
+        states: *id001
+        for: port-18
+        group: sfp-plus-activity-leds
+        rel-pos: 18
+      - ref: common/led-dot@1
+        id: led-port-19
+        at: [153.68, 35.9]
+        states: *id001
+        for: port-19
+        group: sfp-plus-activity-leds
+        rel-pos: 19
+      - ref: common/led-dot@1
+        id: led-port-20
+        at: [167.93, 6.9]
+        states: *id001
+        for: port-20
+        group: sfp-plus-activity-leds
+        rel-pos: 20
+      - ref: common/led-dot@1
+        id: led-port-21
+        at: [167.93, 35.9]
+        states: *id001
+        for: port-21
+        group: sfp-plus-activity-leds
+        rel-pos: 21
+      - ref: common/led-dot@1
+        id: led-port-22
+        at: [182.18, 6.9]
+        states: *id001
+        for: port-22
+        group: sfp-plus-activity-leds
+        rel-pos: 22
+      - ref: common/led-dot@1
+        id: led-port-23
+        at: [182.18, 35.9]
+        states: *id001
+        for: port-23
+        group: sfp-plus-activity-leds
+        rel-pos: 23
+      - {ref: std/qsfp-ganged@1, id: port-24, at: [199.9, 10.1], group: qsfp-plus, rel-pos: 24}
+      - {ref: std/qsfp-ganged@1, id: port-25, at: [199.9, 24.4], rotate: 180, group: qsfp-plus, rel-pos: 25}
+      - ref: common/led-dot@1
+        id: led-port-24
+        at: [201.85, 6.3]
+        states: &id002
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, color: '#22c55e', behavior: blinking}
+        - {name: beacon, color: '#f59e0b', behavior: blinking}
+        for: port-24
+        group: qsfp-plus-leds
+        rel-pos: 24
+      - ref: common/led-dot@1
+        id: led-port-25
+        at: [201.85, 36.3]
+        states: *id002
+        for: port-25
+        group: qsfp-plus-leds
+        rel-pos: 25
+      - {ref: std/qsfp-ganged@1, id: port-26, at: [228.8, 10.1], group: qsfp-plus, rel-pos: 26}
+      - {ref: std/qsfp-ganged@1, id: port-27, at: [228.8, 24.4], rotate: 180, group: qsfp-plus, rel-pos: 27}
+      - ref: common/led-dot@1
+        id: led-port-26
+        at: [230.75, 6.3]
+        states: &id003
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, color: '#22c55e', behavior: blinking}
+        - {name: beacon, color: '#f59e0b', behavior: blinking}
+        for: port-26
+        group: qsfp-plus-leds
+        rel-pos: 26
+      - ref: common/led-dot@1
+        id: led-port-27
+        at: [230.75, 36.3]
+        states: *id003
+        for: port-27
+        group: qsfp-plus-leds
+        rel-pos: 27
+      - {ref: common/esd-jack@1, id: esd-front-jack, at: [4.2, 35.4], for: chassis, group: esd, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-port-0-status, at: [24.63, 6.9], for: port-0, group: sfp-plus-status-leds,
+        rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-port-1-status, at: [24.63, 35.9], for: port-1, group: sfp-plus-status-leds,
+        rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-port-2-status, at: [38.88, 6.9], for: port-2, group: sfp-plus-status-leds,
+        rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-port-3-status, at: [38.88, 35.9], for: port-3, group: sfp-plus-status-leds,
+        rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-port-4-status, at: [53.13, 6.9], for: port-4, group: sfp-plus-status-leds,
+        rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-port-5-status, at: [53.13, 35.9], for: port-5, group: sfp-plus-status-leds,
+        rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-port-6-status, at: [67.38, 6.9], for: port-6, group: sfp-plus-status-leds,
+        rel-pos: 6}
+      - {ref: common/led-dot@1, id: led-port-7-status, at: [67.38, 35.9], for: port-7, group: sfp-plus-status-leds,
+        rel-pos: 7}
+      - {ref: common/led-dot@1, id: led-port-8-status, at: [81.63, 6.9], for: port-8, group: sfp-plus-status-leds,
+        rel-pos: 8}
+      - {ref: common/led-dot@1, id: led-port-9-status, at: [81.63, 35.9], for: port-9, group: sfp-plus-status-leds,
+        rel-pos: 9}
+      - {ref: common/led-dot@1, id: led-port-10-status, at: [95.88, 6.9], for: port-10, group: sfp-plus-status-leds,
+        rel-pos: 10}
+      - {ref: common/led-dot@1, id: led-port-11-status, at: [95.88, 35.9], for: port-11, group: sfp-plus-status-leds,
+        rel-pos: 11}
+      - {ref: common/led-dot@1, id: led-port-12-status, at: [116.73, 6.9], for: port-12, group: sfp-plus-status-leds,
+        rel-pos: 12}
+      - {ref: common/led-dot@1, id: led-port-13-status, at: [116.73, 35.9], for: port-13, group: sfp-plus-status-leds,
+        rel-pos: 13}
+      - {ref: common/led-dot@1, id: led-port-14-status, at: [130.98, 6.9], for: port-14, group: sfp-plus-status-leds,
+        rel-pos: 14}
+      - {ref: common/led-dot@1, id: led-port-15-status, at: [130.98, 35.9], for: port-15, group: sfp-plus-status-leds,
+        rel-pos: 15}
+      - {ref: common/led-dot@1, id: led-port-16-status, at: [145.23, 6.9], for: port-16, group: sfp-plus-status-leds,
+        rel-pos: 16}
+      - {ref: common/led-dot@1, id: led-port-17-status, at: [145.23, 35.9], for: port-17, group: sfp-plus-status-leds,
+        rel-pos: 17}
+      - {ref: common/led-dot@1, id: led-port-18-status, at: [159.48, 6.9], for: port-18, group: sfp-plus-status-leds,
+        rel-pos: 18}
+      - {ref: common/led-dot@1, id: led-port-19-status, at: [159.48, 35.9], for: port-19, group: sfp-plus-status-leds,
+        rel-pos: 19}
+      - {ref: common/led-dot@1, id: led-port-20-status, at: [173.73, 6.9], for: port-20, group: sfp-plus-status-leds,
+        rel-pos: 20}
+      - {ref: common/led-dot@1, id: led-port-21-status, at: [173.73, 35.9], for: port-21, group: sfp-plus-status-leds,
+        rel-pos: 21}
+      - {ref: common/led-dot@1, id: led-port-22-status, at: [187.98, 6.9], for: port-22, group: sfp-plus-status-leds,
+        rel-pos: 22}
+      - {ref: common/led-dot@1, id: led-port-23-status, at: [187.98, 35.9], for: port-23, group: sfp-plus-status-leds,
+        rel-pos: 23}
+      - {ref: common/led-dot@1, id: led-port-24-lane-2, at: [206.05, 6.3], for: port-24, group: qsfp-plus-channel-leds,
+        rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-port-24-lane-3, at: [210.25, 6.3], for: port-24, group: qsfp-plus-channel-leds,
+        rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-port-24-lane-4, at: [214.45, 6.3], for: port-24, group: qsfp-plus-channel-leds,
+        rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-port-25-lane-2, at: [206.05, 36.3], for: port-25, group: qsfp-plus-channel-leds,
+        rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-port-25-lane-3, at: [210.25, 36.3], for: port-25, group: qsfp-plus-channel-leds,
+        rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-port-25-lane-4, at: [214.45, 36.3], for: port-25, group: qsfp-plus-channel-leds,
+        rel-pos: 5}
+      - {ref: common/led-dot@1, id: led-port-26-lane-2, at: [234.95, 6.3], for: port-26, group: qsfp-plus-channel-leds,
+        rel-pos: 6}
+      - {ref: common/led-dot@1, id: led-port-26-lane-3, at: [239.15, 6.3], for: port-26, group: qsfp-plus-channel-leds,
+        rel-pos: 7}
+      - {ref: common/led-dot@1, id: led-port-26-lane-4, at: [243.35, 6.3], for: port-26, group: qsfp-plus-channel-leds,
+        rel-pos: 8}
+      - {ref: common/led-dot@1, id: led-port-27-lane-2, at: [234.95, 36.3], for: port-27, group: qsfp-plus-channel-leds,
+        rel-pos: 9}
+      - {ref: common/led-dot@1, id: led-port-27-lane-3, at: [239.15, 36.3], for: port-27, group: qsfp-plus-channel-leds,
+        rel-pos: 10}
+      - {ref: common/led-dot@1, id: led-port-27-lane-4, at: [243.35, 36.3], for: port-27, group: qsfp-plus-channel-leds,
+        rel-pos: 11}
+    regions:
+    - id: label-laser
+      at: [251.1, 6.6]
+      size: {w: 5.1, h: 26.0}
+      label: Laser warning label; not drawn
+    - id: label-laser-mark
+      at: [251.1, 34.3]
+      size: {w: 7.7, h: 7.4}
+      label: Laser hazard mark; not drawn
+  rear:
+    size: {w: 440.9, h: 43.7}
+    panel:
+      decor:
+      - {id: model-plate, at: [42.9, 2.0], size: [18.8, 6.6], rx: 0.5, fill: '#868b90'}
+      cutouts:
+      - {id: led-alm, at: [7.3, 17.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [7.3, 22.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [7.3, 27.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-id, at: [7.3, 32.3], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt-c1, at: [13.6, 25.6], size: [14.5, 10.0]}
+      - {id: led-c1-a, at: [16.9, 20.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-c1-b, at: [22.8, 20.5], size: [2.0, 2.0], shape: circle}
+      - {id: console, at: [35.2, 9.8], size: [12.7, 11.0]}
+      - {id: mgmt-c0, at: [35.2, 24.4], size: [12.7, 11.0]}
+      - {id: usb, at: [55.35, 22.35], size: [4.5, 12.0]}
+      - {id: reset-btn, at: [39.4, 37.3], size: [4.0, 4.0], shape: circle}
+      - {id: led-fan-0, at: [66.5, 29.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-1, at: [115.8, 29.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-2, at: [165.1, 29.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-3, at: [214.4, 29.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-4, at: [263.7, 29.2], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-alm, at: [6.4, 19.0], text: ALM, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: led-alm}
+    - {id: silk-sys, at: [6.4, 23.9], text: SYS, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: led-sys}
+    - {id: silk-mst, at: [6.4, 28.7], text: MST, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: led-mst}
+    - {id: silk-id, at: [6.4, 33.9], text: ID, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: led-id}
+    - {id: silk-c1, at: [20.9, 19.5], text: C1, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: mgmt-c1}
+    - {id: silk-con, at: [32.7, 7.5], text: CON, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: console}
+    - {id: silk-c0, at: [34.1, 39.9], text: C0, font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: mgmt-c0}
+    - {id: silk-reset, at: [41.4, 42.5], text: Reset, font-size: 1.3, anchor: middle, fill: '#e6e8ea',
+      for: reset-btn}
+    - id: silk-usb-mark
+      at: [57.6, 37.6]
+      fill: '#e6e8ea'
+      for: usb
+      path: >-
+        M 0 1.5 L 0 -0.825 M -0.42 -0.825 L 0.42 -0.825 L 0 -1.5 Z M 0 0.15 L -0.825 -0.45 M 0 -0.15 L
+        0.825 0.3
+      stroke-width: 0.28
+    - {id: silk-model, at: [52.3, 5.2], text: EX4600, font-size: 2.4, anchor: middle, fill: '#f0f2f3',
+      for: chassis}
+    - {id: silk-os, at: [52.3, 7.5], text: RUNNING JUNOS, font-size: 1.3, anchor: middle, fill: '#f0f2f3',
+      for: chassis}
+    - {id: silk-fan-0, at: [67.5, 24.0], text: '0', font-size: 3.0, anchor: middle, fill: '#e6e8ea', for: fan-0}
+    - {id: silk-fan-1, at: [116.8, 24.0], text: '1', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: fan-1}
+    - {id: silk-fan-2, at: [166.1, 24.0], text: '2', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: fan-2}
+    - {id: silk-fan-3, at: [215.4, 24.0], text: '3', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: fan-3}
+    - {id: silk-fan-4, at: [264.7, 24.0], text: '4', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: fan-4}
+    - id: silk-fan-0-mark
+      at: [67.5, 18.8]
+      path: M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      fill: '#e6e8ea'
+      for: fan-0
+    - id: silk-fan-1-mark
+      at: [116.8, 18.8]
+      path: M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      fill: '#e6e8ea'
+      for: fan-1
+    - id: silk-fan-2-mark
+      at: [166.1, 18.8]
+      path: M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      fill: '#e6e8ea'
+      for: fan-2
+    - id: silk-fan-3-mark
+      at: [215.4, 18.8]
+      path: M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      fill: '#e6e8ea'
+      for: fan-3
+    - id: silk-fan-4-mark
+      at: [264.7, 18.8]
+      path: M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      fill: '#e6e8ea'
+      for: fan-4
+    - {id: silk-psu-0, at: [312.4, 24.0], text: '0', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: psu-0}
+    - {id: silk-psu-1, at: [373.1, 24.0], text: '1', font-size: 3.0, anchor: middle, fill: '#e6e8ea',
+      for: psu-1}
+    - {id: silk-psu-0-mark, at: [312.4, 19.6], path: M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2,
+      fill: '#e6e8ea', for: psu-0}
+    - {id: silk-psu-1-mark, at: [373.1, 19.6], path: M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2,
+      fill: '#e6e8ea', for: psu-1}
+    - {id: silk-rating-ac, at: [438.6, 3.0], text: AC INPUT 100-240V~ 50-60Hz 4.5A - 2A, font-size: 1.5,
+      anchor: start, rotate: 90, fill: '#d8dcdf', for: chassis}
+    - {id: silk-rating-dc, at: [436.4, 3.0], text: DC INPUT -48V - -60V 10A, font-size: 1.5, anchor: start,
+      rotate: 90, fill: '#d8dcdf', for: chassis}
+    - {id: silk-rating-each, at: [434.2, 3.0], text: For each power supply, font-size: 1.5, anchor: start,
+      rotate: 90, fill: '#d8dcdf', for: chassis}
+    components:
+      bays:
+      - id: fan-0
+        at: [71.7, 1.7]
+        size: {w: 40.9, h: 41.5}
+        group: fans
+        rel-pos: 0
+        accepts:
+        - juniper/ex4600-fan-afo@1
+        - juniper/ex4600-fan-afi@1
+        default: juniper/ex4600-fan-afo@1
+      - id: fan-1
+        at: [121.0, 1.7]
+        size: {w: 40.9, h: 41.5}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - juniper/ex4600-fan-afo@1
+        - juniper/ex4600-fan-afi@1
+        default: juniper/ex4600-fan-afo@1
+      - id: fan-2
+        at: [170.3, 1.7]
+        size: {w: 40.9, h: 41.5}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - juniper/ex4600-fan-afo@1
+        - juniper/ex4600-fan-afi@1
+        default: juniper/ex4600-fan-afo@1
+      - id: fan-3
+        at: [219.6, 1.7]
+        size: {w: 40.9, h: 41.5}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - juniper/ex4600-fan-afo@1
+        - juniper/ex4600-fan-afi@1
+        default: juniper/ex4600-fan-afo@1
+      - id: fan-4
+        at: [268.9, 1.7]
+        size: {w: 40.9, h: 41.5}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - juniper/ex4600-fan-afo@1
+        - juniper/ex4600-fan-afi@1
+        default: juniper/ex4600-fan-afo@1
+      - id: psu-0
+        at: [315.4, 1.5]
+        size: {w: 54.7, h: 40.5}
+        group: psus
+        rel-pos: 0
+        accepts:
+        - juniper/ex4600-jpsu-650-ac-afo@1
+        - juniper/ex4600-jpsu-650-ac-afi@1
+        - juniper/ex4600-jpsu-650-dc-afo@1
+        - juniper/ex4600-jpsu-650-dc-afi@1
+        - juniper/ex4600-psu-blank@1
+        default: juniper/ex4600-jpsu-650-ac-afo@1
+      - id: psu-1
+        at: [376.0, 1.5]
+        size: {w: 54.7, h: 40.5}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - juniper/ex4600-jpsu-650-ac-afo@1
+        - juniper/ex4600-jpsu-650-ac-afi@1
+        - juniper/ex4600-jpsu-650-dc-afo@1
+        - juniper/ex4600-jpsu-650-dc-afi@1
+        - juniper/ex4600-psu-blank@1
+        default: juniper/ex4600-jpsu-650-ac-afo@1
+      placements:
+      - ref: common/led-dot@1
+        id: led-alm
+        at: [7.3, 17.4]
+        group: status-leds
+        rel-pos: 0
+        for: chassis
+        states:
+        - 'off'
+        - {name: major, color: '#ef4444'}
+        - {name: minor, color: '#f59e0b'}
+        description: >-
+          Table 8 - red: major alarm, the switch halted; amber: minor alarm; unlit: no alarm or halted
+      - ref: common/led-dot@1
+        id: led-sys
+        at: [7.3, 22.3]
+        group: status-leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: junos, color: '#22c55e'}
+        - {name: virtual-chassis-member, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 8 and the management panel text - green steady: Junos OS loaded; green blinking: member
+          of a Virtual Chassis; unlit: off or halted
+      - ref: common/led-dot@1
+        id: led-mst
+        at: [7.3, 27.1]
+        group: status-leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: primary, color: '#22c55e'}
+        - {name: backup, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 8 and the management panel text - green steady: primary in a Virtual Chassis; green blinking:
+          backup; unlit: standalone or a line card member
+      - ref: common/led-dot@1
+        id: led-id
+        at: [7.3, 32.3]
+        group: status-leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: beacon, color: '#3b82f6', behavior: blinking}
+        description: >-
+          Table 8 - blue blinking: the beacon is enabled (request chassis beacon); unlit: not enabled
+      - ref: std/sfp@1
+        id: mgmt-c1
+        at: [13.6, 25.6]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: sfp, speed: 1g, role: mgmt}
+        description: >-
+          em1, the SFP management Ethernet port C1; it takes a 1 GbE copper or fibre SFP (guide Figure
+          13)
+      - {ref: common/led-dot@1, id: led-c1-a, at: [16.9, 20.5], for: mgmt-c1, group: mgmt-leds, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-c1-b, at: [22.8, 20.5], for: mgmt-c1, group: mgmt-leds, rel-pos: 1}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [35.2, 9.8]
+        rotate: 180
+        group: mgmt
+        rel-pos: 0
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-c0
+        at: [35.2, 24.4]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+        description: em0, the RJ-45 management Ethernet port C0, 10/100/1000BASE-T (guide Figure 13)
+      - ref: std/usb-a@1
+        id: usb
+        at: [51.6, 26.1]
+        rotate: 90
+        skin: usb2
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: usb-a}
+      - ref: common/reset-button@1
+        id: reset-btn
+        at: [39.4, 37.3]
+        group: mgmt
+        rel-pos: 4
+        for: chassis
+        attrs: {function: reset}
+      - {ref: common/led-dot@1, id: led-fan-0, at: [66.5, 29.2], for: fan-0, group: fan-leds, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-fan-1, at: [115.8, 29.2], for: fan-1, group: fan-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-fan-2, at: [165.1, 29.2], for: fan-2, group: fan-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-fan-3, at: [214.4, 29.2], for: fan-3, group: fan-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-fan-4, at: [263.7, 29.2], for: fan-4, group: fan-leds, rel-pos: 4}
+    regions:
+    - id: logo-zone
+      at: [1.4, 1.4]
+      size: {w: 24.8, h: 7.0}
+      label: Vendor logo; not drawn
+    - id: label-serial
+      at: [63.8, 38.5]
+      size: {w: 7.0, h: 4.0}
+      label: Serial number label; not drawn
+  top:
+    size: {w: 440.9, h: 520.2}
+    empty: >-
+      Not drawn by any source held. The guide shows no figure of the lid, and the photographs are straight-on
+      of the front and rear only.
+  bottom:
+    size: {w: 440.9, h: 520.2}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no underside, and the photographs are of
+      the front and rear only.
+  left:
+    size: {w: 520.2, h: 43.7}
+    empty: >-
+      Not drawn by any source held. The mounting figures (1 to 3 and 29 to 31) show the rails on the side
+      wall in three-quarter view only, with no scale from which a hole could be placed.
+  right:
+    size: {w: 520.2, h: 43.7}
+    empty: Not drawn by any source held. No figure shows the right wall flat.
+interfaces:
+- {physical: mgmt-c0, name: em0}
+- {physical: mgmt-c1, name: em1}
+configurations:
+  ac-f2b:
+    kind: orderable
+    default: true
+    description: >-
+      EX4600-40F-AFO: two 650 W AC supplies (JPSU-650W-AC-AFO) and five front-to-back fan modules (QFX5100-FAN-AFO),
+      the expansion bays covered. All carry an orange handle and the label AFO or AIR OUT (guide Tables
+      3, 11 and 14).
+    part-numbers:
+      EX4600-40F-AFO: {}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      EX4600-40F-AFI: two 650 W AC supplies (JPSU-650W-AC-AFI) and five back-to-front fan modules (QFX5100-FAN-AFI).
+      All carry a blue handle and the label AFI or AIR IN.
+    bays: {psu-0: juniper/ex4600-jpsu-650-ac-afi@1, psu-1: juniper/ex4600-jpsu-650-ac-afi@1, fan-0: juniper/ex4600-fan-afi@1,
+      fan-1: juniper/ex4600-fan-afi@1, fan-2: juniper/ex4600-fan-afi@1, fan-3: juniper/ex4600-fan-afi@1,
+      fan-4: juniper/ex4600-fan-afi@1}
+    part-numbers:
+      EX4600-40F-AFI: {}
+  dc-f2b:
+    kind: orderable
+    power: dc
+    description: >-
+      EX4600-40F-DC-AFO: two 650 W DC supplies (JPSU-650W-DC-AFO) and five front-to-back fan modules (QFX5100-FAN-AFO).
+    bays: {psu-0: juniper/ex4600-jpsu-650-dc-afo@1, psu-1: juniper/ex4600-jpsu-650-dc-afo@1}
+    part-numbers:
+      EX4600-40F-DC-AFO: {}
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      EX4600-40F-DC-AFI: two 650 W DC supplies (JPSU-650W-DC-AFI) and five back-to-front fan modules (QFX5100-FAN-AFI).
+    bays: {psu-0: juniper/ex4600-jpsu-650-dc-afi@1, psu-1: juniper/ex4600-jpsu-650-dc-afi@1, fan-0: juniper/ex4600-fan-afi@1,
+      fan-1: juniper/ex4600-fan-afi@1, fan-2: juniper/ex4600-fan-afi@1, fan-3: juniper/ex4600-fan-afi@1,
+      fan-4: juniper/ex4600-fan-afi@1}
+    part-numbers:
+      EX4600-40F-DC-AFI: {}
+  s:
+    kind: orderable
+    description: >-
+      EX4600-40F-S, the spare chassis. It ships with no power supplies and no fan modules, which are ordered
+      separately (guide Table 3). The datasheet says front-to-back airflow. The bays are open.
+    bays: {psu-0: '', psu-1: '', fan-0: '', fan-1: '', fan-2: '', fan-3: '', fan-4: ''}
+    part-numbers:
+      EX4600-40F-S: {}
+  em-4q:
+    kind: example
+    description: >-
+      The EX4600-40F-AFO with a QFX-EM-4Q in each bay, 12 QSFP+ ports in all. An illustration, not an
+      order code.
+    bays: {em-0: juniper/ex4600-em-4q@1, em-1: juniper/ex4600-em-4q@1}
+  em-8f:
+    kind: example
+    description: >-
+      The EX4600-40F-AFO with an EX4600-EM-8F in each bay, 16 more SFP+ ports. An illustration, not an
+      order code.
+    bays: {em-0: juniper/ex4600-em-8f@1, em-1: juniper/ex4600-em-8f@1}
+  single-psu:
+    kind: example
+    description: >-
+      The EX4600-40F-AFO with one supply and the cover panel over slot 1, as the guide allows. An illustration,
+      not an order code.
+    bays: {psu-1: juniper/ex4600-psu-blank@1}
+datasheet:
+  title: Juniper EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021)
+  url: >-
+    https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4600-ethernet-switch-datasheet.pdf
+  sha256: ae4344eab1b45579e25dc995e03b765034f74571708dadd072e4b263a057da4d
+references:
+- title: Juniper EX4600 Switch Hardware Guide (published 2025-08-12)
+  url: https://www.juniper.net/documentation/us/en/hardware/ex4600/ex4600.pdf
+  sha256: 1d58c0248937884e130513cd47a04bc539fa17231bfa5329d8ad8221e47d9c30

@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: xe210
+version: 1.0.1
+class: adapter-panel
+behaviour: fills
+profile: networking
+description: >-
+  Fibrain XE210 - HD RJ45 connection module, Cat.5, screened, with keystone
+  adapter. Seats in one position of a Fibrain HD RJ45 holder (XMU00, XMS00).
+  Carries one RJ45 jack on its front; the cable ends on its IDC back. Green dust cover.
+size: {w: 14.6, h: 18.4, d: 38.0}
+size-confidence: {w: datasheet, h: borrowed, d: datasheet}
+size-notes: >-
+  DSH XE210 rev 2 prints 14.60 across and 16.10 high on its front view and
+  38.00 on its side view, the same figures as every module sheet of the
+  family. The 18.40 overall height is BORROWED from the maker's 1:1 front
+  elevation of XR200 (fibrain/xr200@1), the only module elevation published:
+  its housing is 14.60 wide and 18.40 high, with a 0.22 clamp nub on the right
+  side that is not part of the 14.6. The keystone adapter is not dimensioned
+  on the sheet and does not change these figures.
+attrs: {media: rj45, model: XE210, category: '5', screening: screened, keystone: adapter, cover: green}
+body:
+  depth: 38.0
+  boxes:
+    - {id: body, at: [0.0, 1.3], size: [14.6, 16.1], from: 0, depth: 38.0, color: '#c0c1c4',
+       confidence: datasheet, source: 'the module as DSH XE210 rev 2 draws it, 14.60 x 16.10 across the front and 38.00 long; a zinc alloy die-cast shell, bright metal on the photograph. The keystone adapter on the photograph is a clear collar and a latch tab behind the face, not dimensioned, and is not drawn'}
+parts:
+  - {id: jack, ref: common/rj45-ganged-eth-plain@1, at: [0.95, 6.0], attrs: {finish: '#479e35'}}
+provenance:
+  size: >-
+    datasheet for the width, the front height and the depth - see size-notes;
+    the overall height is borrowed from fibrain/xr200@1.
+  datasheet: >-
+    DSH XE210 rev 2 - 'Connection module HD RJ45, kat.5, screened, keystone';
+    Cat.5 to ISO 11801, EN 50173 and ANSI/TIA 568.2-D; screened, housing zinc
+    alloy die cast, 360 degree EMC; IEC 60603-7-3; PoE to IEEE 802.3bt type 4
+    (100 W); 1.5 A; IDC termination, tool or toolless; fixation 'equipped with
+    keystone adapter'; ordering line 'XE210 FibrainDATA connection module,
+    RJ45/s, kat.5, green dust cover, keystone adapter'. The maker's catalogue
+    calls this category Cat.5e.
+  face: >-
+    borrowed from fibrain/xr200@1: the outline, the 14.60 x 16.10 front frame,
+    the label plate, the two round marks and the latch tab, as the maker's
+    front elevation of XR200 draws them. The photograph of this part shows the
+    same face as the one of XR200 in green, with a clear keystone collar behind
+    it.
+  jack: >-
+    estimated - as fibrain/xr200@1: common/rj45-ganged-eth-plain@1, the lamp-less
+    Ethernet member of the family (no lamp window on the maker's drawings, and
+    the bare cell would export as a console port), whose body tier lands on
+    the opening drawn on the XR200 elevation, 11.90 wide from x 1.35 and from y
+    6.50.
+  colour: >-
+    photo - the green of the dust cover and face, #479e35, the median of 40,000
+    pixels on the right border of the maker's render of the Cat.5 module; the
+    datasheet names 'green dust cover'. The shell is bright zinc, #c0c1c4, the
+    median of 90,000 pixels on the screened render's side.
+  keystone: >-
+    datasheet and photo - the sheet's fixation row says 'equipped with
+    keystone adapter'. The photograph shows a clear plastic collar behind the face
+    and a clear latch tab over the shell. The sheet's drawing is the same as the
+    one on the module without the adapter and dimensions neither. The adapter
+    is therefore recorded in `attrs.keystone` and drawn on the face as the stand-in under art-stand-ins; the library's
+    keystone-opening standard is another maker's landscape opening and is not
+    claimed.
+  not-modelled: >-
+    the IDC back, which takes the cable and is not a port here; the dust cover's
+    hinged door; the clamp nub, 0.22 out of the right side; the latch tab under
+    the frame; the keystone collar's depth behind the face (the face draws its front rim only).
+  seating: >-
+    datasheet - the module clips into a window of the XMU00 or XMS00 holder.
+    The keystone adapter is for third-party keystone openings, and no sheet
+    says it is fitted when the module sits in the HD holder.
+  art-stand-ins: >-
+    STAND-INS, in the face. The photograph shows a clear keystone collar and a
+    clear latch tab and the sheet dimensions neither, so: the latch is drawn
+    the width of the tab under the frame (6.78) and 1.1 high over the top
+    strip; the collar is a 0.20 clear outline 0.6 inside the frame edge; the
+    tab under the frame is drawn clear. The shield rim, a 0.30 bright-metal
+    line 0.15 inside the frame edge, is a stand-in too: the sheet says the
+    die-cast shell is 360 degree EMC and the photograph shows bright metal
+    behind the face, and nothing dimensions how much shows round the frame.
+    The widths are chosen, not measured. They stay inside the 14.6 envelope:
+    the registry's keystone jack body, 14.5 x 16.1 (common/keystone-blank@1,
+    size-notes), agrees with this frame, so nothing is drawn outside it, where
+    it would lap the next window.
+skins: [default]

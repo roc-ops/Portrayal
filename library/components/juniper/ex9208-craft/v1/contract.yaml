@@ -1,0 +1,308 @@
+format: 1
+kind: module
+name: ex9208-craft
+version: 1.0.0
+class: display
+behaviour: fills
+profile: networking
+description: >-
+  Craft interface (front panel display, FPM board) of the Juniper EX9208 switch. It spans the chassis above the card
+  cage. It has the MASTER, ONLINE and OFFLINE lamps for RE0 and RE1. It has the fan tray lamps and the OK and FAIL lamps of
+  PEM 0 to PEM 3. It has a minor (yellow) and a major (red) alarm lamp and the alarm cutoff and lamp test button (ACO/LT).
+  It has the MINOR ALARM and MAJOR ALARM relay contacts (NC, C, NO). Each Switch Fabric slot (0, 1) and each line card
+  slot (0 to 5) has an OK lamp, a FAIL lamp and a control button. The EX9208 model name is printed on it.
+attrs:
+  model: EX9208 Craft Interface
+  power-absent: not-published
+provenance:
+  sources: >-
+    EX9208 Switch Hardware Guide (published 2025-07-28), "Craft Interface in an EX9200 Switch": Figure 12 (the craft
+    interface of the EX9208, drawn flat, with nine callouts), the alarm relay contacts figure, Tables 9 to 14 (the lamps),
+    and the EX9208 studio front photograph (1.314 px/mm), which shows the panel with its lamps unlit.
+  lamp-states: >-
+    The vocabularies are the guide's: Table 9 (host subsystem: MASTER green, ONLINE green, OFFLINE red), Table 10 (fan:
+    OK green, FAIL red), Table 11 (power supply: OK green, FAIL red), Table 12 (Switch Fabric module: OK green or blinking,
+    FAIL red), Table 13 (line card: OK green or blinking, FAIL red), Table 14 (alarm: major red, minor yellow). Each lamp
+    fills from the LED variable, with its drawn colour as the unlit fallback.
+  power: >-
+    NOT PUBLISHED. The guide's FRU power table (Table 24) lists the Routing Engine, the Switch Fabric modules and the line
+    cards and does not list the craft interface; the EX9200 datasheet (Aug 2022) Table 3 lists none either.
+  size: >-
+    estimated - the panel spans 420.9 x 42.0 mm, the size the MX480 photograph measures for the craft panel of the same sheet
+    metal (juniper/mx480 craft bay). The EX9208 photograph (1.31 px/mm) reads the panel from 10.5 to 433.3 mm across the body.
+    The guide gives no dimension for it.
+  features: >-
+    photo-measured - every lamp, button, tab and relay block is placed from the EX9208 studio front photograph, read on a
+    millimetre grid at 1.314 px/mm across, from the panel's own origin at 11.0 mm across the body and 38.8 mm down. The photograph
+    resolves 0.8 mm, so every place is read to about 1 mm across and 1.5 mm down. The two RE lamp columns read at 110.2 and
+    141.9 mm across the body, the fan lamp column at 189.2, the four PEM lamp columns at 243.2, 249.6, 255.9 and 262.2, the
+    minor alarm triangle at 306.5, the major circle at 324.3, the ACO/LT button at 343.4, the relay blocks 357.4 to 384.0 and 384.6
+    to 410.3, and the eight slot tabs at 110.2, 141.9, 173.8, 205.4, 237.1, 268.7, 300.3 and 331.9, 31.7 mm apart. The panel
+    is the EX9204's panel with eight slot tabs and the model name EX9208.
+  slot-tabs: >-
+    photo and guide Figure 12 - eight oval tabs under the slot lamp pairs: the two Switch Fabric slots SF0 and SF1 at the left,
+    drawn blue in the photograph, and the six line card slots 0 to 5, grey. Callouts 8 and 9 of the figure name the two groups.
+  logo-zone: >-
+    estimated - reserved, not drawn. The maker's wordmark sits at the left, about 28 x 13 mm, and the "running junos" badge at
+    the lower right, about 28 x 9 mm. The library reproduces no vendor logo.
+states: [absent]
+elements:
+  led-re0-master:
+    at: [98.3, 7.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-online:
+    at: [98.3, 12.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-offline:
+    at: [98.3, 17.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-re1-master:
+    at: [130.0, 7.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-online:
+    at: [130.0, 12.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-offline:
+    at: [130.0, 17.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-fan-ok:
+    at: [177.3, 7.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fan-fail:
+    at: [177.3, 12.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem0-ok:
+    at: [231.3, 6.7]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem0-fail:
+    at: [231.3, 11.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem1-ok:
+    at: [237.7, 6.7]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem1-fail:
+    at: [237.7, 11.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem2-ok:
+    at: [244.0, 6.7]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem2-fail:
+    at: [244.0, 11.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem3-ok:
+    at: [250.3, 6.7]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem3-fail:
+    at: [250.3, 11.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-alarm-minor:
+    at: [291.25, 9.25]
+    size: [8.5, 7.5]
+    class: led
+    states:
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-alarm-major:
+    at: [309.0, 8.5]
+    size: [9.0, 9.0]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sf0-ok:
+    at: [94.45, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-sf0-fail:
+    at: [102.15, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-sf1-ok:
+    at: [126.15, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-sf1-fail:
+    at: [133.85, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc0-ok:
+    at: [158.05, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc0-fail:
+    at: [165.75, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc1-ok:
+    at: [189.65, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc1-fail:
+    at: [197.35, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc2-ok:
+    at: [221.35, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc2-fail:
+    at: [229.05, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc3-ok:
+    at: [252.95, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc3-fail:
+    at: [260.65, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc4-ok:
+    at: [284.55, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc4-fail:
+    at: [292.25, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-lc5-ok:
+    at: [316.15, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-lc5-fail:
+    at: [323.85, 27.1]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  logo-zone:
+    at: [6.0, 8.2]
+    size: [28.0, 13.0]
+    class: label
+  logo-zone-2:
+    at: [382.5, 29.0]
+    size: [28.0, 9.0]
+    class: label
+size:
+  w: 420.9
+  h: 42.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

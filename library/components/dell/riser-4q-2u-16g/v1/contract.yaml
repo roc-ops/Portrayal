@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: riser-4q-2u-16g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 4Q of the PowerEdge R760 - slots 7 and 8 on dell/riser-4-cage-2u-16g@1, two full-height PCIe Gen5 x8 slots on processor 2, fitted in riser configurations 2, 6 and 7 (and 12)
+attrs:
+  riser: '4Q'
+  appears-in: 'riser configurations 2, 6, 7 and 12'
+  power-absent: not-published
+  slot-7: 'x8 on an x16 connector, full height, half length, processor 2, PCIe Gen5'
+  slot-8: 'x8 on an x16 connector, full height, half length, processor 2, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R760 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  slots: >-
+    datasheet - R760 ISM table 153 (configurations 2, 6, 7, 12) and table 18: slots 7 and 8 are full height, Gen5 x8 on an x16 connector, processor 2. Slot 7 is the lower and slot 8 the upper (ISM figure 221 lists slot 7 then slot 8 and points slot 8 at the upper connector).
+  face: >-
+    photo-measured - composed from dell/riser-4-cage-2u-16g@1, the same face as riser 4B.
+  seating: >-
+    estimated - as dell/riser-4b-2u-16g@1.
+  size: >-
+    photo-measured - the cage's extent, 137.3 x 44.0.
+size: {w: 137.3, h: 44.0, d: 246.9}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+plan: {ref: dell/riser-4-plan-2u-16g@1}
+parts:
+  - {ref: dell/riser-4-cage-2u-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-8:
+    slot: {connector: x16, lanes: 8, height: full, length: half, processor: 2, generation: 5}
+    rotate: 180
+    behind: true
+    at: [17.2, -0.65]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-16g@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: dell/pcie-filler-fh-16g@1
+  slot-7:
+    slot: {connector: x16, lanes: 8, height: full, length: half, processor: 2, generation: 5}
+    rotate: 180
+    behind: true
+    at: [17.2, 19.8]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-16g@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: dell/pcie-filler-fh-16g@1
+skins: [default]

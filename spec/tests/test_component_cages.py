@@ -127,6 +127,8 @@ def _bay_modules():
 
     for f in libwalk.iter_devices(LIB) + libwalk.iter_components(LIB):
         doc = load_yaml(f) or {}
+        if doc.get("kind") == "kit":
+            continue    # a kit has no bays, and its `configurations` are a list (#905)
         walk(doc)
         for cfg in (doc.get("configurations") or {}).values():
             found.update(((cfg or {}).get("bays") or {}).values())
@@ -280,14 +282,20 @@ def test_a_card_cage_on_a_facet_publishes_the_facet(index):
 
 
 def test_a_card_cage_has_no_group_side_attrs(index):
-    """R3, for a card that declares no `groups:` - the three named cards do
-    not - the host side contributes nothing to a seated optic. A card that
-    DOES declare groups (#511) is held to the other half below."""
-    for ref in NAMED:
-        assert not _contract(ref).get("groups"), f"{ref} now declares groups - repick"
-        for c in index[ref]["cages"]:
-            assert c["occupant-attrs"] == {}
-            assert c["group-states"] is False
+    """R3, for a card that declares no `groups:` the host side contributes
+    nothing to a seated optic. A card that DOES declare groups (#511) is held
+    to the other half below. Every indexed card with cages and no groups is
+    checked, so a card that gains groups leaves this loop instead of failing
+    it."""
+    checked = 0
+    for ref, entry in index.items():
+        if _contract(ref).get("groups"):
+            continue
+        for c in entry.get("cages") or []:
+            assert c["occupant-attrs"] == {}, (ref, c["id"])
+            assert c["group-states"] is False, (ref, c["id"])
+            checked += 1
+    assert checked > 0, "no card is left without groups - this half is vacuous"
 
 
 def test_a_grouped_card_cage_publishes_its_group_side(index):
@@ -338,6 +346,7 @@ def test_every_component_cage_is_the_device_answer_for_the_same_placement(
     assert checked > 0
 
 
+@pytest.mark.heavy
 def test_the_census_every_cage_presenting_part_is_published(index, lib, families):
     """Across the whole library: the published cages are exactly the
     cage-presenting parts, counted independently of the indexer. 166
@@ -347,8 +356,17 @@ def test_the_census_every_cage_presenting_part_is_published(index, lib, families
     faces = _faces(index)
     bays = _bay_modules()
     # the six single-MTP FHD backs, each ONE bulkhead a wrapper would forward,
-    # and the A100's tail face (its one CPU 8-pin header)
-    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 7
+    # and the tail faces of the A100 (its one CPU 8-pin header), the H100 PCIe,
+    # the H100 NVL and the L40S (each one 16-pin header), and the A10's (one
+    # PCIe 8-pin header), the Quadro RTX passive cards' (one CPU 8-pin header),
+    # the RTX A6000's (one CPU 8-pin header), the RTX A5000's (one PCIe 8-pin
+    # header), and the V100 PCIe's, shared with the P100 PCIe and the P40 (one
+    # CPU 8-pin header), the RTX 6000, 4500 and 4000 Ada's (each one 16-pin
+    # header; the RTX 5000 Ada shares the 4500's), and the top faces of the
+    # GeForce Founders Edition RTX 4070 and 4070 SUPER (shared) and RTX 4090
+    # (one 16-pin header each), and the RTX PRO 5000 and RTX PRO 4000 Blackwell's
+    # (each one 16-pin header)
+    assert sum(1 for r in faces if _forwarded_connector(lib, _contract(r))) == 22
     for ref, entry in index.items():
         skip = _forwarded_connector(lib, _contract(ref), face=ref in faces or ref in bays)
         forwarded += skip is not None

@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: nc5k-pac-650w-fr
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 650 W AC power supply of the Cisco NCS 5000 routers (NCS 5001, 5002 and 5011), ordered as
+  NC5K-PAC-650W-FR: front-to-back airflow, which the guide calls port-side intake. A grey housing
+  with a round fan grille behind a two-screw guard, an amber FAIL lamp over a green OK lamp at the
+  left, a dark pull handle (a vertical bar to the right of the fan), an IEC C14 inlet and a release latch at the right edge.
+  The back-to-front twin is NC5K-PAC-650W-BK.
+size: {w: 98.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NC5K-PAC-650W-FR: {part: NC5K-PAC-650W-FR}
+attrs:
+  power-output-w: 650
+  input: ac
+  inlet: c14
+  input-voltage: 110/220
+  input-frequency: 47 Hz to 53 Hz
+  efficiency: 94% (at 50% load)
+  hot-swappable: 'yes'
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23,
+    last modified 2019-01-31), Tables 2, 4 and 6: NC5K-PAC-650W-FR "Cisco NCS 5000 Series Router Power AC 650W
+    Front to Back Airflow", with a spare NC5K-PAC-650W-FR= that is the same part and is not a second component.
+    The guide's Airflow Direction section equates front-to-back with "port side intake". The same part is
+    listed for the NCS 5001, NCS 5002 and NCS 5011, so one component serves all three.
+  power: >-
+    datasheet - Tables 17, 19 and 21: maximum power 650 W, typical operating power 357 W, input voltage "110/220",
+    frequency 47 to 53 Hz, efficiency 94% at 50% load. Maximum power is an output rating, so `power-output-w`
+    carries 650; the 357 W typical is not stated to be output or input and is left out. Input fuse 12.5 A or
+    15 A/250 V, protective device 16 A (20 A US/CSA), from the installation chapter.
+  size: >-
+    estimated - NO HELD DOCUMENT STATES THE SUPPLY'S DIMENSIONS (searched the guide for "mm", "cm" and "dimensions":
+    Appendix C gives chassis size only). 98 x 40 is the aspect of the guide's Figure 21 (a flat face-on drawing of
+    the DC supply of the same family) applied to a one-rack-unit slot height, and Figures 1, 19 and 20 show the AC
+    supply with the same outline.
+  elements: >-
+    estimated - the element layout (lamp column, fan, handle, latch; the x positions and sizes) is adapted from
+    `cisco/nxa-pac-650w`, with only y shifted for the 40 mm height and the inlet moved from 62.9 to 63.3. The guide's
+    Figure 1 (NCS 5001 rear) and Figures 19 and 20, which are three-quarter views, were used only to confirm that
+    the arrangement matches, and they give no measurements. The lamp roles are Table 24: OK green, FAILED amber.
+  latch-colour: >-
+    NOT STATED. The guide's replacement steps say the replacement "has the same coloring as the other fan and power
+    supply modules in the same chassis" and give no colour for either airflow; its AC figures are greyscale. The
+    latch is drawn neutral grey and the colour is not tied to airflow.
+  depth: >-
+    estimated - not stated in any held document; 185 mm is a round figure for a supply of this class.
+states: [absent]
+elements:
+  fail: {at: [2.5, 12.2], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.5, 28.4], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [11.6, 1.4], size: [37.2, 37.2], class: rotor}
+  handle: {at: [56.1, 2.2], size: [5.9, 36.0], class: handle}
+  latch: {at: [89.0, 10.2], size: [6.8, 19.5], class: latch}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [63.3, 9.2], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        the grille's extent is read off the guide's three-quarter views; the cavity behind it is not stated.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        Figure 19 shows the handle as a loop standing clear of the face; 20 mm is a reading of its proportions.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: the latch stands proud in Figure 19 and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [98.0, 40.0]}

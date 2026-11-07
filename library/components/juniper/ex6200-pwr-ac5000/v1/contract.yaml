@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: ex6200-pwr-ac5000
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200-PWR-AC5000, the 5000 W AC power supply of the EX6200 line. It has two IEC C20 appliance inlets,
+  Input 1 and Input 2, each on its own AC feed. It delivers 5000 W from a high line (200 to 240 VAC) with both
+  feeds, and half that with one feed; at a low line (100 to 120 VAC) it delivers 2500 W with both. The faceplate
+  has an Enable switch, the INPUT 1 OK, INPUT 2 OK, OUTPUT OK and FAIL lamps, a vent field with a handle and two
+  captive screws. The supply is about 3 U high and replaces the power supply blank shelf. The airflow runs from
+  front to back.
+attrs:
+  role: ac-power-supply
+  power-output-w: 5000
+  power-output-low-line-w: 2500
+  airflow: front-to-back
+  input: 100 to 120 VAC (2500 W with both feeds) or 200 to 240 VAC (5000 W with both feeds, 2500 W with one), 50 to 60 Hz, 15 A per cord (guide Tables 20 and 25)
+part-numbers:
+  EX6200-PWR-AC5000: {part: EX6200-PWR-AC5000}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Figure 17 and Figure 22 (the supply, isometric,
+    g021276 and g021277), Figure 63 and Figure 66 (removing and installing it), Tables 4, 20, 24 and 25, Table 21
+    (the 3U cover) and the shelf instruction ("remove the power supply blank shelf" before installing 5000 W
+    supplies). EX6200 datasheet 1000390-002-EN (Aug 2011), ordering table: EX6200-PWR-AC5000, marked
+    "Roadmap" ("5,000 W AC Power Supply at 220 V (2,500 W at 110 V), power cords (2x) not included").
+  size: >-
+    estimated - the guide gives no dimension and no flat drawing. The width is the 2500 W supply's, 100.7 mm
+    (juniper/ex6200-pwr-ac2500@1), because the supplies share the slot pitch. The height is "approximately 3 U"
+    against "approximately 2 U" for the 2500 W supply (Table 21), so 1.5 times its 101.8 mm, 152.7 mm.
+    Figure 66 shows the supply taller than its neighbours by a similar ratio.
+  face: >-
+    estimated - FRACTIONS OFF AN ISOMETRIC. Figure 17 is the only drawing of the face and it is drawn at an
+    angle, so only proportions are taken, on the supply's 100.7 x 152.7 mm: the Enable switch at the top left,
+    the four lamps in a row at the top (44.3, 57.4, 69.5 and 80.6 mm across, 23 mm down), the vent field in
+    the middle (13 to 88 mm across, 35 to 114 mm down), the handle as a bar across the middle at 76 mm down,
+    and the two inlets side by side at the bottom (centres 24 and 68 mm across, 134 mm down), each
+    unrotated, the Input 1 inlet on the left. Every position is estimated to about 3 mm.
+  power-output-w: >-
+    datasheet - guide Table 20 and Table 25: 5000 W with both feeds on a high line (2500 W with one feed), and
+    2500 W with both feeds on a low line (1250 W with one). The higher figure is the rating. An OUTPUT, since
+    a supply provides power.
+  leds: >-
+    datasheet - guide Table 24: INPUT 1 OK and INPUT 2 OK are green and steady for a normal input voltage, blinking
+    for one out of range, off when no AC arrives; OUTPUT OK is green and steady, blinking for a fault; FAIL is
+    red and steady when the supply has failed.
+  efficiency: >-
+    datasheet - guide Table 20 (read from the rendered page): 89 percent at a low-line input and 92 percent at a
+    high-line input for the 5000 W supply.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet-1, at: [7.8, 121.8]}
+- {ref: std/c20-inlet@1, id: inlet-2, at: [51.8, 121.8]}
+elements:
+  led-input-1-ok:
+    at: [43.4, 22.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: out-of-range, color: '#22c55e', behavior: blinking}]
+  led-input-2-ok:
+    at: [56.5, 22.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: out-of-range, color: '#22c55e', behavior: blinking}]
+  led-output-ok:
+    at: [68.6, 22.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#22c55e', behavior: blinking}]
+  led-fail:
+    at: [79.7, 22.1]
+    size: [1.8, 1.8]
+    class: led
+    states: ['off', {name: failed, color: '#ef4444'}]
+  enable-switch:
+    at: [9.0, 13.0]
+    size: [17.0, 11.0]
+    class: button
+  handle:
+    at: [4.0, 73.0]
+    size: [92.7, 6.0]
+    class: latch
+size:
+  w: 100.7
+  h: 152.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle bar stands proud of the vent field in Figure 17; its projection is not measured
+skins: [default]

@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: ex4400-em-4y
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX4400-EM-4Y, the 4x25GbE SFP28 extension module of the EX4400
+  switches. The guide lists it for every EX4400 model, and from Junos OS
+  24.2R1-S1 for the EX4400-48XP and -48MXP as well. It seats horizontally in
+  the extension module slot at the front right. It has four SFP28 cages in one
+  row, numbered 0 to 3. Each cage has a link activity lamp and a status lamp.
+  Two captive screws hold the module. It takes up to four 1GbE SFP, four 10GbE
+  SFP+ or four 25GbE SFP28 transceivers. Do not mix transceiver types in the module. It
+  runs at 25 Gbps by default and supports MACsec with AES-256.
+attrs:
+  model: EX4400-EM-4Y
+  weight-kg: 0.13
+  first-junos-release: 21.1R1
+  macsec: AES-256
+  sfp28: 4
+  ports-note: four SFP28 ports at 25 Gbps by default, or all four at 10 Gbps or at 1 Gbps with a CLI setting
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic
+    Extension Modules in EX4400 Switches - Table 5 and Figure 3 (g022571) describe and draw the
+    4x25GbE SFP28 module, model number EX4400-EM-4Y, first supported in Junos OS 21.1R1. Figure
+    61 and Tables 47 and 50 describe its lamps. Table 12 and its siblings give the module weight,
+    0.29 lb (0.13 kg). The note under Table 5 says all extension modules are supported on the
+    EX4400-48XP and -48MXP from Junos OS 24.2R1-S1.
+  size: >-
+    estimated - the guide gives no dimension for the module face. It is taken as the front-panel
+    recess the module fills, 74.0 x 23.5 mm, read off the front render of the EX4400-48P
+    (Figure 25, g022647, 1500 x 199 px, the chassis 441.7 mm across at 2.94 px/mm and 43.7 mm
+    tall at 2.92 px/mm), where a four-cage module is installed. The module's depth is not stated.
+  elements: >-
+    drawing and photo-measured - the four-cage module of the render of Figure 25 gives the cage
+    block 8.4 to 65.8 across and 8.35 to 17.9 down from the top left of the face (four ganged
+    cages at 14.25 mm is 57.0), the screws at 4.4 across and 6.0 down, and the ring holes at 3.0
+    across and 12.8 and 18.6 down. The render does not say whether it shows the SFP+ or the
+    SFP28 module, and Figures 2 and 3 draw the same layout, so both modules take it. The lamps
+    stand in pairs at 3.1 mm either side of each cage's centre and 6.6 mm down. The port numbers
+    0 to 3 are printed 20.7 mm down under the cages.
+  led: >-
+    datasheet - Figure 61 and Tables 47 and 50. Each port has two lamps, the link activity lamp
+    at the left and the status lamp at the right. Link activity is green - steady for an active
+    link without traffic, blinking for traffic, unlit when the port is not active. Status shows
+    the speed in green - steady 10 Gbps, three blinks per second 25 Gbps, unlit when the port is
+    not active.
+  stack-orientation: >-
+    One row of cages, so no stack rule applies. Every cage sits upright.
+  power: >-
+    NO FIGURE IS PUBLISHED - the guide gives the module weight and no draw. Searched the guide
+    text for the extension modules near watt and current figures. The missing-power warning
+    stands, as the record that the figure is missing.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp28
+      speed: 25g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port - link activity at the left, status at the right. Numbered in
+      printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [8.4, 8.35], group: sfp28, attrs: {media: sfp28}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [22.65, 8.35], group: sfp28, attrs: {media: sfp28}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [36.9, 8.35], group: sfp28, attrs: {media: sfp28}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [51.15, 8.35], group: sfp28, attrs: {media: sfp28}}
+- {ref: common/led-dot@1, id: led-0-link, at: [11.4, 5.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [17.7, 5.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [25.6, 5.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [31.9, 5.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [39.9, 5.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [46.2, 5.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [54.1, 5.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [60.4, 5.6], group: port-leds, attrs: {function: status}}
+elements:
+  screw-left:
+    at: [1.5, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+  screw-right:
+    at: [66.7, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+size:
+  w: 74.0
+  h: 23.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the module face in the guide's front render. The
+      projection is not stated or measured.
+  - node: screw-right
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the module face in the guide's front render. The
+      projection is not stated or measured.
+skins: [default]

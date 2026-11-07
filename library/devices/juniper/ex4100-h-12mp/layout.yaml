@@ -1,0 +1,615 @@
+format: 1
+kind: device
+name: ex4100-h-12mp
+version: 0.2.1
+maturity: modelled
+manufacturer: Juniper
+model: EX4100-H-12MP
+portfolio: {line: EX Series, family: EX4100-H}
+description: >-
+  Juniper EX4100-H-12MP is a hardened (industrial), fanless multigigabit PoE++ access switch in a small upright box, 111.7 mm
+  wide and 152.4 mm high, with twelve RJ-45 ports (four 100M/1/2.5 Gbps and eight 10M/100M/1 Gbps, all PoE++ at 90 W by default),
+  two 1/10 Gbps SFP/SFP+ MACsec uplink ports and two 1/10 Gbps SFP/SFP+ Virtual Chassis ports. Everything is on the front: the jacks
+  in two blocks, the cages in a column, a management Ethernet port with a USB Type-A port and an RJ-45 console port in one housing, a
+  USB Type-C console port, two plug-in PSU connectors, a plug-in dry contact alarm connector, the chassis and port mode lamps, a
+  Mode button, a reset pinhole, an ESD point and a two-hole protective earthing terminal. It is powered by one or two external
+  340 W AC or DC supplies, which are separate boxes wired to the PSU connectors, so the chassis has no power supply bay and no fan.
+  The rear is a vented plate between two plates with mounting holes. The guide's default mounting is desktop or any flat surface in
+  a certified cabinet; DIN rail, magnet, wall and two-post rack kits are orderable.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4100-H Switch Hardware Guide, Juniper Networks (copyright Hewlett Packard Enterprise Development LP), published 2026-10-01,
+      299 pages, https://www.juniper.net/documentation/us/en/hardware/ex4100-h/ex4100-h.pdf (sha256 recorded under references): Tables 3
+      to 9, 14 and 15, 18 to 23, 26, 29, 31, 33 and 36, Figures 1, 2, 7, 9, 11, 13, 15, 17, 19, 21 and 23 to 28, the mounting topics
+      (Figures 39 to 66), the earthing steps (Table 68 and Figure 98) and the packing list (Table 65). The guide's flat front figure
+      (Figure 1, 3000 px wide) is the picture measured. Juniper's studio photographs of the model, front and rear (2100 px high), from the
+      maker's public image library (https://www.juniper.net/content/dam/www/assets/images/us/en/image-library/ex-series/ex4100-h-12mp/ex4100-h-12mp-front-high.jpg
+      and ex4100-h-12mp-rear-high.jpg), confirm the colours, the lamps and what is printed; neither is copied here. The EX4100 datasheet
+      (https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4100-line-of-ethernet-switches-datasheet.pdf) redirects to an HPE
+      PSNow document that did not answer, so no datasheet figure is used. No Visio stencil or 3D model of the EX4100-H was found.
+      Nothing is taken from a reseller. End of life was searched 2026-10-23 and no Juniper notice for the EX4100-H was found,
+      so the lifecycle is none announced.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Tables 9 and 14 - height 6 in (15.24 cm), depth 5.3 in (13.40 cm), width 4.4 in (11.17 cm), weight 5.22 lb (2.37 kg). The inch and
+      centimetre figures of the depth disagree by 0.6 mm (5.3 in is 134.6 mm); the centimetre figure, 134.0 mm, is used, and the width
+      and height agree to the 0.1 mm in either unit. The body is the metal between the top and bottom; the footpads under it (callout 12)
+      are not in the height and are not drawn.
+  scale:
+    confidence: measured
+    note: >-
+      Gate 1 - Figure 1 is 3000 px wide; the body outline is 1685 px across, 15.085 px/mm against 111.7 mm, and 2296 px high, 15.07 px/mm
+      against 152.4 mm: 0.1 percent apart, so the figure is orthographic and carries geometry. The photograph (1836 px wide, the body
+      1231 px across, 11.02 px/mm) agrees with the figure on every feature the two share to within 0.6 mm. Every position is estimated,
+      read off the figure with a millimetre grid laid over it, good to about 0.3 mm.
+  mounting:
+    confidence: datasheet
+    note: >-
+      Table 7 and the mounting topics - desktop mounting, on a desk or any flat level surface inside a certified cabinet, is the default for the
+      EX4100-H-12MP (the Fast Track chapter and the topic on the desktop orientation). The orderable kits are EX4100-H-12-DRK (DIN rail),
+      EX4100-H-12-MMK (magnet pads, not for use near power substations or railway tracks), EX4100-H-12-RMK (two-post rack, screws),
+      EX4100-H-12-WMK (wall) and EX4100-H-12-RM-DRK (two-post rack with a DIN rail channel); each holds the switch and its external
+      supply side by side. The chassis mounts as `desktop`, the guide's default. The library's mount vocabulary has one value per device
+      and no way to say that a desktop box also takes DIN rail, wall and rack kits, so the other four are in provenance only and are
+      named as a gap. No kit contract is written.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Table 9 and Figure 1 - twelve RJ-45 jacks in two blocks of two columns: ports 0 to 3 (the four 100M/1/2.5 Gbps PoE++ MACsec ports,
+      callout 15, in an orange frame) and ports 4 to 11 (the eight 10M/100M/1 Gbps PoE++ ports, callout 14). Every jack is turned a quarter, the
+      contacts toward the middle of the face: the left column's contacts face right (rotate 90) and the right column's face left (rotate 270),
+      with the lamps in the keyway corners at the outer edge as the photograph shows. The jacks centre on 23.85 and 38.6 mm across (a 14.75
+      step, not the registry's 13.97, which is a pitch between abutting cells and not between two shells) and the rows 14.0 mm apart down,
+      from 49.9 to 63.9 and from 84.9 to 126.9. The cages are four SFP cages in one column (callouts 9 and 11), turned the same way, on the
+      registry's 14.25 mm pitch from 73.15 mm down: the upper two are the uplink ports, the lower two the Virtual Chassis ports.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Figure 1 and the photograph - the left column prints a number and an arrow for each row, orange: 0 with an arrow pointing left, 1 with an
+      arrow pointing right, 2 left, 3 right, and on to 10 and 11. The arrow says which jack of the row the number belongs to, so the left
+      jack of a row is the even port and the right jack the odd. The cages print UPLINK 0 and 1 and VCP 0 and 1 beside their lamps. The numbers
+      are as printed, from 0. Interface names are not printed on the metal; the guide's factory-default configuration (Table 73 and the
+      listing under "EX4100-H Default Configuration") names the 2.5 Gbps ports mge-0/0/0 to mge-0/0/3, the 1 Gbps ports ge-0/0/4 to ge-0/0/11 and the
+      two uplink ports xe-0/2/0 and xe-0/2/1, and is recorded here only.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Figures 13, 15 and 17 and Table 19 - every jack and every cage has a Link Activity lamp and a Status lamp. The jacks carry theirs in the keyway
+      corners. The cages' lamps are round and sit in a bordered box to the right of the cage column, two for each cage with the cage's number
+      between them, 14.25 mm apart from cage to cage. The UPLINK box is outlined and the VCP box is a light panel in the photograph. The Status lamp
+      shows what the mode lamps select (Table 20), so its states cannot be one vocabulary here.
+  status-block:
+    confidence: photo-measured
+    note: >-
+      Figures 1, 2 and 19 and Tables 16, 18 and 20 - two columns of lamps right of the PSU connectors: the chassis lamps SYS, ALM, MST and CLD at 76.6 mm
+      and the port mode lamps SPD, DX, EN and POE at 84.8 mm, each lamp with its legend to its right, 7.0 mm apart down from 45.6. The PSU 0
+      and PSU 1 lamps are at 68.4 mm above and below the first PSU connector's foot, each with its legend over or under it. The three
+      dry contact alarm lamps (IN 0, IN 1 and OUT, Table 21 and 22) are at 55.9 mm with a bell mark and the legend to their right. The lamps are
+      round, 2.4 mm across in the figure; common/led-dot@1 is 2.0 and is used.
+  management:
+    confidence: photo-measured
+    note: >-
+      Figure 1 - one metal housing, 33.2 by 17.7 mm, at the top left holds the RJ-45 management port (MGMT, callout 16, with its two lamps), the
+      USB 2.0 Type-A host port (callout 1) and the RJ-45 RS232 console port (CON, callout 2), all turned a quarter. The USB Type-C console port
+      (callout 4, CON) stands upright at 69.5 mm across, with the RESET pinhole (callout 5) under it and the round Mode button (callout 7) under that;
+      the legends are as printed. The claim code label (callout 6) is a sticker.
+  alarm:
+    confidence: datasheet
+    note: >-
+      Table 4 and Figure 21 - the dry contact connector is a six-pole plug on a 3.5 mm pitch, upright at 58.9 mm across and 103.8 to 135.9 mm down,
+      with GND, IN 0, IN 1, NO, COM and NC printed at 45 degrees on its left, each with a dash to its pole. The alarm input threshold is 5 V and
+      the plug is preassembled (Table 65).
+  power-input:
+    confidence: datasheet
+    note: >-
+      Figure 1 callouts 3 and 8, the connection steps and Table 65 - two upright PSU connectors, PSU 0 above PSU 1, preassembled to the switch. Each has
+      a screw at each end and five positions: the first two are 54 V (+ and -), the last two 12 V (- and +), as the legends print, and the guide connects
+      its interconnecting wire to four of them (red to 54 V +, black to 54 V -, brown to 12 V +, gray to 12 V -). One supply per connector; a
+      12 V-only third-party supply is supported with `set chassis fpc N ignore-poe-feed`. The supplies are external boxes with their own input terminals
+      and are not part of the chassis (see the external-power-supplies gap).
+  earthing:
+    confidence: photo-measured
+    note: >-
+      Table 68 and Figure 98 - a two-hole protective earthing terminal on the front panel for a Panduit LCD6-14A-L lug on two M5 by 10 mm
+      screws with washers (the grounding kit is JNP-GL-2H6-M5-RA, separately orderable). The figure shows two round threaded bosses 15.8 mm apart
+      (the 5/8 in lug pitch) in rings 11.2 mm across, at 100.5 mm across, under the earth symbol and above the ESD point. They are drawn as bare holes in rings, the holes now parts: one two-hole seat on that pitch (`ground-stud-pitch` says how the pitch is read).
+  drawing-vs-photo:
+    confidence: photo-measured
+    note: >-
+      The legends are drawn from the photograph and Figure 1, which agree: the model line reads EX4100-H in light grey and MG PoE++ in orange, the port numbers
+      and arrows are orange, and an orange frame surrounds ports 0 to 3. The maker's logo and Mist AI mark above the model line are not drawn and
+      are reserved as a logo-zone. The photograph adds what the figure does not draw: the yellow hazard labels, the lime green line along the bottom
+      edge, the green plugs (drawn as such by the components) and the lime green Mode button. The figure's callouts are not printed on the metal.
+  rear:
+    confidence: photo-measured
+    note: >-
+      Juniper's rear photograph (the guide has no rear figure for the 12MP) - a full-height plate in the middle, 42.2 mm wide, perforated with hexagonal
+      holes, with a screw at each end and one more at each of the two cross lines (six in all), and a plain plate each side with two round mounting
+      holes. A small corner mark and an L mark on the left plate frame a label position. Scale 10.46 px/mm from the body width. The holes are
+      the screws of the mounting kits (Figures 39 to 66 show the brackets bolted to the switch with M5 L8 screws). The perforation is drawn as a
+      hexagonal pattern, as in the photograph.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The face colour is the photograph's median of the bare front, #686f7d, which Figure 1's outline agrees with; the rear median is #5a606d.
+  power:
+    confidence: datasheet
+    note: >-
+      Tables 8, 9, 29 and the PoE sections - PoE++ (90 W by default) on all twelve ports. The PoE budget is 240 W with one supply and 360 W with two, on a
+      66 W system budget, 306 W and 426 W in all against 340 W and 680 W of supply. The budgets are separate figures and the guide
+      states no maximum input power for the chassis.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      INFERRED, NOT STATED. Table 68 names two M5 x 10 mm stainless steel screws with washer (separately orderable;
+      the grounding kit JNP-GL-2H6-M5-RA holds the lug and screws) and a Panduit LCD6-14A-L lug or equivalent (not
+      provided), and gives no spacing. The figure puts the two holes 15.8 mm apart, which is the 5/8 in. (15.875) of
+      the library's two-hole lug for the same hole-spacing code (Panduit LCD6-10A-L: '.63 hole spacing'). The terminal
+      is `common/ground-hole-pair-5-8-m5@1`: two bare M5 holes on 5/8 in. centres, presenting `stud-pair-5-8`, so one
+      two-hole lug (`generic/two-hole-lug-5-8@1`) lands across them and a ring lug still lands on either hole. The
+      holes stay bare, as the photograph shows them; the screws are fitted with the lug. The holes were drawn 15.8
+      apart as decor and the pair stands on their midpoint.
+attrs:
+  physical:
+    weight: 2.37 kg (5.22 lb), Table 9; the external AC supply is 2.05 kg (4.52 lb) and the DC supply 1.85 kg (4.07 lb), Table 15
+  power:
+    poe-budget-w: 240 W with one 340 W supply and 360 W with two (system budget 66 W), Table 29
+    poe-standard: PoE++ (90 W by default) on all 12 ports
+    power-input-ac: 100 through 240 VAC, 50/60 Hz, to the external 340 W AC supply (Table 26)
+    power-input-dc: 20.4 through 72 VDC at the external 340 W DC supply's terminal block, nominal +24, -48 or -60 VDC (Table 36)
+  thermal:
+    cooling: fanless, convection cooled (Table 8); at least 2 in of clearance around the switch except the mounting side
+  environmental:
+    operating-temp: -40 to 60 C in a sealed enclosure, -40 to 70 C in a ventilated enclosure (40 LFM) and -40 to 75 C in a blower-equipped enclosure (200 LFM), up to 15000 ft; safety certified at 60 C
+    storage-temp: -40 to 85 C in the shipping container
+    humidity: 5 to 95 percent, noncondensing
+    altitude: no performance degradation up to 15000 ft (4572 m)
+  platform:
+    first-junos-release: 24.3R1 (Table 8)
+  features:
+    virtual-chassis: up to 10 EX4100, EX4100-F and EX4100-H switches; the two VCP cages are the Virtual Chassis ports (HiGig or HGoE mode) and the two uplink cages support HGoE only. A 10GBASE-T transceiver cannot form a Virtual Chassis in a VCP
+    macsec: the four 2.5 Gbps ports and the two uplink ports are MACsec capable
+    dry-contact-alarm: two alarm inputs (5 V threshold) and one alarm relay output (NO, COM, NC), Table 4
+    optics-sfp-plus: the two uplink and two Virtual Chassis cages take 1 Gbps SFP and 10 Gbps SFP+ transceivers; Tables 44 to 53 list the industrial-grade optics against the ambient they allow. The supported list is in Juniper's Hardware Compatibility Tool, which the guide names and which is not held here
+  compliance:
+    seismic: tested for Zone 4 earthquake safety
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 111.7
+  height: 152.4
+  depth: 134.0
+  mount: desktop
+  weight-kg: 2.37
+  color: '#686f7d'
+  silk: '#dfe2e6'
+gaps:
+- what: external-power-supplies
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The EX4100-H-12MP is powered by one or two EXTERNAL supplies - JPSU-H-340W-E-AC (Table 23) and EX4100-H-12MP-DC-PSU (Table 33), 340 W each, with
+    CBL-PWR-RGD-SYS as the interconnecting wire - which are separate boxes with their own inputs, earth terminal and lamp, mounted beside the switch
+    on the same kit. The guide draws them in Figures 23, 24, 28 and 123. The library has no way to seat an external supply on a front connector, and
+    the supplies are not part of the chassis, so neither is modelled.
+  wanted: a separate device or a module that wires to the PSU connector
+- what: mounting-kits
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    Table 7 lists EX4100-H-12-DRK (DIN rail), EX4100-H-12-MMK (magnet), EX4100-H-12-RMK (two-post rack), EX4100-H-12-WMK (wall) and EX4100-H-12-RM-DRK
+    (rack with DIN rail channel) as orderable kits for the EX4100-H-12MP. The chassis is `mount: desktop`, the guide's default, and the library holds one mount
+    value per device, so a box that also mounts on DIN rail, a wall or a rack has no way to say so. The kits are in provenance only and no kit contract is
+    written.
+  wanted: a way to list the other mounting forms of a desktop device
+- what: port-status-lamp-states
+  scope: [rj45-mg, rj45-gbe, vcp, uplink]
+  reason: vendor-silent
+  note: >-
+    The Status lamp changes meaning with the Mode button (Table 20), so the jack lamps keep the component's link and activity vocabulary and the mode lamps carry
+    the meaning.
+  wanted: none beyond the component's own vocabulary
+- what: cld-lamp-states
+  scope: [led-cld]
+  reason: vendor-silent
+  note: The guide names the CLD lamp and sends the reader to the cloud-ready blink patterns, which it does not hold.
+  wanted: the cloud-ready LED blink patterns
+- what: hazard-icons
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The yellow label at the top of the face prints two icons, a hazard triangle with a bolt and a second pictogram (a cord and a hand) that the guide does not
+    name. The first is the kit's bolt mark in a triangle; the second is drawn as a simplified hand over a cord, estimated from the photograph (centre 76.4 mm across,
+    about 4.8 mm wide, read off the 2100 px photograph at 11.02 px/mm). No kit mark fits it and the guide gives no figure for it, so the shape is approximate.
+  wanted: the second icon's meaning and a figure of it
+- what: label-plates
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The claim code label (front) and the serial number label (rear) are stickers with no content in any figure; they are named regions and are not drawn.
+  wanted: none; stickers
+- what: studio-photograph-sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    The four faces that are not the front and the rear are not drawn flat by any source held; the mounting figures show them in perspective only.
+  wanted: a flat drawing or photograph of the top, the underside and the sides
+- what: ground-pair-pitch
+  scope: [ground-pair]
+  reason: vendor-silent
+  note: >-
+    The guide names the screws and the lug and gives no spacing for the two holes; `ground-stud-pitch` says what the
+    pair is drawn at and why.
+  wanted: a drawing that dimensions the two holes, or the lug's own datasheet
+groups:
+  rj45-mg:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 2.5g, poe: 802.3bt 90 W}
+    description: Four PoE++ ports numbered 0 to 3 as printed, in an orange frame; the left jack of a row takes the even number
+  rj45-gbe:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: 802.3bt 90 W}
+    description: Eight PoE++ ports numbered 4 to 11 as printed; the left jack of a row takes the even number
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Two SFP/SFP+ MACsec uplink ports numbered 0 and 1, the upper pair of the cage column
+  uplink-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: Two lamp windows for each uplink port, Link Activity and Status
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Two SFP/SFP+ Virtual Chassis ports numbered 0 and 1, the lower pair of the cage column
+  vcp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: Two lamp windows for each Virtual Chassis port, Link Activity and Status
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: how the switch is reached and restarted - the management Ethernet port, the USB Type-A port, the RJ-45 console, the USB Type-C console, the reset pinhole and the Mode button
+  alarm:
+    term: Terminal
+    role: management
+    index-origin: 0
+    mixed: the dry contact alarm connector, two alarm inputs and a relay output with its three poles
+  alarm-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the IN 0, IN 1 and OUT dry contact alarm lamps
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the SYS, ALM, MST and CLD chassis lamps
+  mode-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the SPD, DX, EN and POE port mode lamps; the lit one says what each Status lamp shows
+  psu-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the PSU 0 and PSU 1 lamps, which show whether each external supply's output is connected and good
+  power-input:
+    term: Connector
+    role: service
+    index-origin: 0
+    description: the two PSU connectors, PSU 0 above PSU 1, each taking one external supply
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, two bare M5 holes for a two-hole lug (Table 68)
+views:
+  front:
+    size: {w: 111.7, h: 152.4}
+    panel:
+      decor:
+      - {id: green-line, kind: edge-line, at: [3.3, 150.0], size: [105.1, 2.0], fill: '#9fce3b'}
+      - {id: frame-poe, kind: frame, at: [16.1, 39.3], size: [30.4, 35.4], rx: 0.8, fill: '#f96e46'}
+      - {id: shell-mgmt, kind: jack-shell, at: [13.4, 20.7], size: [33.2, 17.7], rx: 0.6, fill: '#b1b2b5'}
+      - {id: shell-a, kind: jack-shell, at: [18.0, 40.8], size: [26.5, 32.8], rx: 0.6, fill: '#b1b2b5'}
+      - {id: shell-b, kind: jack-shell, at: [17.9, 75.7], size: [26.6, 60.5], rx: 0.6, fill: '#b1b2b5'}
+      - {id: hazard-box, kind: label-plate, at: [63.6, 2.2], size: [18.3, 6.3], rx: 0.8, fill: '#f3e21f'}
+      - {id: laser-label, kind: label-plate, at: [65.3, 141.6], size: [26.0, 6.7], fill: '#f3e21f'}
+      - {id: laser-label-edge, kind: label-plate, at: [65.7, 142.0], size: [25.2, 5.9], stroke: '#1a1a1a', stroke-width: 0.25}
+      - {id: console-rim, kind: port-rim, at: [67.5, 12.3], size: [4.1, 9.9], rx: 2.0, fill: '#1b1e22'}
+      - {id: box-uplink-leds, kind: lamp-box, at: [81.7, 74.9], size: [6.2, 25.8], stroke: '#cfd3d8', stroke-width: 0.25}
+      - {id: box-vcp-leds, kind: lamp-box, at: [81.7, 103.2], size: [6.2, 25.8], fill: '#e3e5e8'}
+      - {id: earth-ring-1, kind: earth-boss, at: [94.9, 99.3], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
+      - {id: earth-ring-2, kind: earth-boss, at: [94.9, 115.1], size: [11.2, 11.2], rx: 5.6, fill: '#c9cbcd'}
+      cutouts:
+      - {id: port-0, at: [18.35, 43.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-1, at: [33.1, 43.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-2, at: [18.35, 57.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-3, at: [33.1, 57.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-4, at: [18.35, 78.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-5, at: [33.1, 78.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-6, at: [18.35, 92.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-7, at: [33.1, 92.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-8, at: [18.35, 106.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-9, at: [33.1, 106.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-10, at: [18.35, 120.55], size: [11.0, 12.7], shape: rect}
+      - {id: port-11, at: [33.1, 120.55], size: [11.0, 12.7], shape: rect}
+      - {id: uplink-0, at: [67.65, 73.525], size: [10.4, 14.25], shape: rect}
+      - {id: uplink-1, at: [67.65, 87.775], size: [10.4, 14.25], shape: rect}
+      - {id: vcp-0, at: [67.65, 102.025], size: [10.4, 14.25], shape: rect}
+      - {id: vcp-1, at: [67.65, 116.275], size: [10.4, 14.25], shape: rect}
+      - {id: mgmt, at: [14.0, 21.4], size: [13.2, 15.8], shape: rect}
+      - {id: usb, at: [27.35, 23.5], size: [4.5, 12.0], shape: rect}
+      - {id: console-rj45, at: [33.8, 21.4], size: [13.2, 15.8], shape: rect}
+      - {id: btn-reset, at: [67.6, 24.7], size: [4.0, 4.0], shape: circle}
+      - {id: btn-mode, at: [67.5, 32.5], size: [6.4, 6.4], shape: circle}
+      - {id: usb-c, at: [68.29, 13.08], size: [2.56, 8.34], shape: rect}
+      - {id: led-psu-0, at: [67.4, 44.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-psu-1, at: [67.4, 51.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [75.6, 44.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-alm, at: [75.6, 51.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [75.6, 58.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-cld, at: [75.6, 65.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-spd, at: [83.8, 44.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-dx, at: [83.8, 51.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-en, at: [83.8, 58.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-poe, at: [83.8, 65.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-in0, at: [54.9, 84.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-in1, at: [54.9, 92.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-out, at: [54.9, 99.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-a, at: [83.9, 76.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-0-b, at: [83.9, 83.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-a, at: [83.9, 90.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-uplink-1-b, at: [83.9, 97.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-vcp-0-a, at: [83.9, 104.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-vcp-0-b, at: [83.9, 111.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-vcp-1-a, at: [83.9, 118.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-vcp-1-b, at: [83.9, 125.7], size: [2.0, 2.0], shape: circle}
+      - {id: esd, at: [99.2, 81.4], size: [6.0, 6.0], shape: circle}
+    silkscreen:
+    - {at: [14.4, 14.8], text: EX4100-H, font-size: 3.8, anchor: start, fill: '#dfe2e6', for: chassis}
+    - {at: [34.3, 14.8], text: MG PoE++, font-size: 3.8, anchor: start, fill: '#f96e46', for: chassis}
+    - {at: [20.6, 19.2], text: MGMT, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: mgmt}
+    - {at: [29.6, 19.4], mark: usb, size: 4.0, fill: '#dfe2e6', for: usb}
+    - {at: [40.4, 19.2], text: CON, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: console-rj45}
+    - {at: [72.6, 18.1], text: CON, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: usb-c}
+    - {at: [72.5, 27.5], text: RESET, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: btn-reset}
+    - {id: mode-icon, at: [77.2, 35.7], path: 'M -1.4 -0.9 H 1.4 M -1.4 0 H 1.4 M -1.4 0.9 H 1.4', filled: false, stroke-width: 0.35, fill: '#9fce3b', for: btn-mode}
+    - {at: [68.4, 43.3], text: PSU 0, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: led-psu-0}
+    - {at: [68.4, 56.5], text: PSU 1, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: led-psu-1}
+    - {at: [78.1, 46.41], text: SYS, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-sys}
+    - {at: [78.1, 53.41], text: ALM, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-alm}
+    - {at: [78.1, 60.41], text: MST, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-mst}
+    - {at: [78.1, 67.51], text: CLD, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-cld}
+    - {at: [86.5, 46.41], text: SPD, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-spd}
+    - {at: [86.5, 53.41], text: DX, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-dx}
+    - {at: [86.5, 60.41], text: EN, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-en}
+    - {at: [86.5, 67.51], text: POE, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-poe}
+    - {id: bell-in0, at: [58.9, 85.4], path: 'M -1.0 0.8 H 1.0 L 0.8 0.5 V -0.2 Q 0.8 -1.0 0 -1.0 Q -0.8 -1.0 -0.8 -0.2 V 0.5 Z M -0.4 1.2 H 0.4', filled: true, fill: '#dfe2e6', for: led-in0}
+    - {id: bell-in1, at: [58.9, 92.7], path: 'M -1.0 0.8 H 1.0 L 0.8 0.5 V -0.2 Q 0.8 -1.0 0 -1.0 Q -0.8 -1.0 -0.8 -0.2 V 0.5 Z M -0.4 1.2 H 0.4', filled: true, fill: '#dfe2e6', for: led-in1}
+    - {id: bell-out, at: [58.9, 99.7], path: 'M -1.0 0.8 H 1.0 L 0.8 0.5 V -0.2 Q 0.8 -1.0 0 -1.0 Q -0.8 -1.0 -0.8 -0.2 V 0.5 Z M -0.4 1.2 H 0.4', filled: true, fill: '#dfe2e6', for: led-out}
+    - {at: [60.5, 86.6], text: IN 0, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-in0}
+    - {at: [60.5, 93.9], text: IN 1, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-in1}
+    - {at: [60.5, 100.9], text: OUT, font-size: 2.6, anchor: start, fill: '#dfe2e6', for: led-out}
+    - {at: [49.0, 22.5], text: '+', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.85, 24.7], text: 54V, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.0, 27.0], text: '-', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {id: psu-0-54v-bracket, at: [55.0, 21.3], path: 'M 0 0 H -1.4 V 6.1 H 0 M -1.4 3.05 H -2.7', filled: false, stroke-width: 0.25, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.0, 33.2], text: '-', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.85, 35.8], text: 12V, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.0, 38.5], text: '+', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-0}
+    - {id: psu-0-12v-bracket, at: [55.0, 32.6], path: 'M 0 0 H -1.4 V 6.1 H 0 M -1.4 3.05 H -2.7', filled: false, stroke-width: 0.25, fill: '#dfe2e6', for: psu-0}
+    - {at: [49.0, 57.0], text: '+', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {at: [49.85, 59.2], text: 54V, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {at: [49.0, 61.5], text: '-', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {id: psu-1-54v-bracket, at: [55.0, 55.8], path: 'M 0 0 H -1.4 V 6.1 H 0 M -1.4 3.05 H -2.7', filled: false, stroke-width: 0.25, fill: '#dfe2e6', for: psu-1}
+    - {at: [49.0, 67.7], text: '-', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {at: [49.85, 70.3], text: 12V, font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {at: [49.0, 73.0], text: '+', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: psu-1}
+    - {id: psu-1-12v-bracket, at: [55.0, 67.1], path: 'M 0 0 H -1.4 V 6.1 H 0 M -1.4 3.05 H -2.7', filled: false, stroke-width: 0.25, fill: '#dfe2e6', for: psu-1}
+    - {at: [50.4, 113.2], text: GND, font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {at: [50.4, 116.7], text: IN 0, font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {at: [50.4, 120.2], text: IN 1, font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {at: [50.4, 123.6], text: 'NO', font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {at: [50.4, 127.1], text: COM, font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {at: [50.4, 130.6], text: NC, font-size: 2.4, anchor: end, rotate: 45, fill: '#dfe2e6', for: alarm}
+    - {id: alarm-leaders, at: [51.8, 111.1], path: 'M 0 0 H 2.0 M 0 3.6 H 2.0 M 0 7.1 H 2.0 M 0 10.6 H 2.0 M 0 14.0 H 2.0 M 0 17.5 H 2.0', filled: false, stroke-width: 0.3, fill: '#dfe2e6', for: alarm}
+    - {at: [84.9, 81.46], text: '0', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: uplink-0}
+    - {at: [84.9, 95.71], text: '1', font-size: 2.6, anchor: middle, fill: '#dfe2e6', for: uplink-1}
+    - {at: [84.9, 109.96], text: '0', font-size: 2.6, anchor: middle, fill: '#2b2f36', for: vcp-0}
+    - {at: [84.9, 124.21], text: '1', font-size: 2.6, anchor: middle, fill: '#2b2f36', for: vcp-1}
+    - {at: [88.6, 81.9], text: U, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 84.1], text: P, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 86.3], text: L, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 88.5], text: I, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 90.7], text: N, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 92.9], text: K, font-size: 2.3, anchor: middle, rotate: 90, fill: '#dfe2e6', for: uplink-0}
+    - {at: [88.6, 113.7], text: V, font-size: 2.3, anchor: middle, rotate: 90, fill: '#2b2f36', for: vcp-0}
+    - {at: [88.6, 116.0], text: C, font-size: 2.3, anchor: middle, rotate: 90, fill: '#2b2f36', for: vcp-0}
+    - {at: [88.6, 118.3], text: P, font-size: 2.3, anchor: middle, rotate: 90, fill: '#2b2f36', for: vcp-0}
+    - {id: esd-symbol, at: [102.2, 78.6], path: 'M -2.2 1.6 L 0 -2.2 L 2.2 1.6 Z', filled: false, stroke-width: 0.3, fill: '#dfe2e6', for: esd}
+    - {at: [100.6, 95.7], mark: ground, size: 5.0, fill: '#dfe2e6', for: chassis}
+    - {at: [15.0, 46.9], text: '0', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-0}
+    - {at: [15.0, 48.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-0}
+    - {at: [15.0, 52.8], text: '1', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-1}
+    - {at: [15.0, 54.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-1}
+    - {at: [15.0, 60.9], text: '2', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-2}
+    - {at: [15.0, 62.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-2}
+    - {at: [15.0, 66.8], text: '3', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-3}
+    - {at: [15.0, 68.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-3}
+    - {at: [15.0, 81.9], text: '4', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-4}
+    - {at: [15.0, 83.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-4}
+    - {at: [15.0, 87.8], text: '5', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-5}
+    - {at: [15.0, 89.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-5}
+    - {at: [15.0, 95.9], text: '6', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-6}
+    - {at: [15.0, 97.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-6}
+    - {at: [15.0, 101.8], text: '7', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-7}
+    - {at: [15.0, 103.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-7}
+    - {at: [15.0, 109.9], text: '8', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-8}
+    - {at: [15.0, 111.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-8}
+    - {at: [15.0, 115.8], text: '9', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-9}
+    - {at: [15.0, 117.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-9}
+    - {at: [15.0, 123.9], text: '10', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-10}
+    - {at: [15.0, 125.4], mark: arrow-left, size: 1.5, fill: '#f96e46', for: port-10}
+    - {at: [15.0, 129.8], text: '11', font-size: 2.4, anchor: middle, fill: '#f96e46', for: port-11}
+    - {at: [15.0, 131.1], mark: arrow-right, size: 1.5, fill: '#f96e46', for: port-11}
+    - {id: hazard-triangle, at: [67.7, 5.4], path: 'M 0 -2.6 L 3.0 2.4 H -3.0 Z', filled: false, stroke-width: 0.3, fill: '#1a1a1a', for: chassis}
+    - {at: [67.7, 5.5], mark: bolt, size: 2.8, fill: '#1a1a1a', for: chassis}
+    - {id: hazard-hand, at: [76.4, 5.4], path: 'M -1.8 -1.6 V 0.3 M -0.6 -2.1 V 0.3 M 0.6 -2.1 V 0.3 M 1.8 -1.6 V 0.3 M -2.3 0.3 H 2.3 V 2.3 H -2.3 Z M 2.3 1.3 Q 3.0 1.3 3.0 2.4', filled: false, stroke-width: 0.3, fill: '#1a1a1a', for: chassis}
+    - {id: hot-surface-fill, at: [89.5, 3.4], path: 'M 0 0 L 6.0 11.0 H -6.0 Z', filled: true, fill: '#f3e21f', for: chassis}
+    - {id: hot-surface-edge, at: [89.5, 3.4], path: 'M 0 0 L 6.0 11.0 H -6.0 Z', filled: false, stroke-width: 0.4, fill: '#2b2f36', for: chassis}
+    - {id: hot-surface-waves, at: [89.5, 8.0], path: 'M -2.0 5.6 q 1.0 -1.2 0 -2.4 t 0 -2.4 M 0 5.6 q 1.0 -1.2 0 -2.4 t 0 -2.4 M 2.0 5.6 q 1.0 -1.2 0 -2.4 t 0 -2.4', filled: false, stroke-width: 0.35, fill: '#2b2f36', for: chassis}
+    - {id: laser-triangle-fill, at: [78.3, 133.2], path: 'M 0 0 L 3.8 6.7 H -3.8 Z', filled: true, fill: '#f3e21f', for: chassis}
+    - {id: laser-triangle-edge, at: [78.3, 133.2], path: 'M 0 0 L 3.8 6.7 H -3.8 Z', filled: false, stroke-width: 0.35, fill: '#2b2f36', for: chassis}
+    - {id: laser-burst, at: [78.3, 137.6], path: 'M -1.7 0 H 1.7 M 0 -1.7 V 1.7 M -1.2 -1.2 L 1.2 1.2 M -1.2 1.2 L 1.2 -1.2', filled: false, stroke-width: 0.3, fill: '#2b2f36', for: chassis}
+    - {at: [78.3, 144.2], text: LASER RADIATION, font-size: 1.9, anchor: middle, fill: '#1a1a1a', for: chassis}
+    - {at: [78.3, 145.6], text: DO NOT VIEW DIRECTLY WITH OPTICAL, font-size: 1.2, anchor: middle, fill: '#1a1a1a', for: chassis}
+    - {at: [78.3, 147.0], text: INSTRUMENTS CLASS 1M LASER PRODUCT, font-size: 1.2, anchor: middle, fill: '#1a1a1a', for: chassis}
+    components:
+      placements:
+      - {ref: common/ground-hole-pair-5-8-m5@1, id: ground-pair, at: [90.0625, 110.3], rotate: 90, group: grounding, rel-pos: 0}
+      - {ref: common/rj45-ganged-eth@1, id: port-0, at: [17.5, 44.4], rotate: 90, group: rj45-mg, rel-pos: 0}
+      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [32.25, 44.4], rotate: 270, group: rj45-mg, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [17.5, 58.4], rotate: 90, group: rj45-mg, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [32.25, 58.4], rotate: 270, group: rj45-mg, rel-pos: 3}
+      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [17.5, 79.4], rotate: 90, group: rj45-gbe, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [32.25, 79.4], rotate: 270, group: rj45-gbe, rel-pos: 5}
+      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [17.5, 93.4], rotate: 90, group: rj45-gbe, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [32.25, 93.4], rotate: 270, group: rj45-gbe, rel-pos: 7}
+      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [17.5, 107.4], rotate: 90, group: rj45-gbe, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth@1, id: port-9, at: [32.25, 107.4], rotate: 270, group: rj45-gbe, rel-pos: 9}
+      - {ref: common/rj45-ganged-eth@1, id: port-10, at: [17.5, 121.4], rotate: 90, group: rj45-gbe, rel-pos: 10}
+      - {ref: common/rj45-ganged-eth@1, id: port-11, at: [32.25, 121.4], rotate: 270, group: rj45-gbe, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: uplink-0, at: [65.725, 75.45], rotate: 90, group: uplink, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: uplink-1, at: [65.725, 89.7], rotate: 90, group: uplink, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: vcp-0, at: [65.725, 103.95], rotate: 90, group: vcp, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: vcp-1, at: [65.725, 118.2], rotate: 90, group: vcp, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-uplink-0-a, at: [83.9, 76.2], for: uplink-0, group: uplink-leds, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-uplink-0-b, at: [83.9, 83.1], for: uplink-0, group: uplink-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-uplink-1-a, at: [83.9, 90.3], for: uplink-1, group: uplink-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-uplink-1-b, at: [83.9, 97.3], for: uplink-1, group: uplink-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-vcp-0-a, at: [83.9, 104.5], for: vcp-0, group: vcp-leds, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-vcp-0-b, at: [83.9, 111.3], for: vcp-0, group: vcp-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-vcp-1-a, at: [83.9, 118.6], for: vcp-1, group: vcp-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-vcp-1-b, at: [83.9, 125.7], for: vcp-1, group: vcp-leds, rel-pos: 3}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [12.7, 22.7], rotate: 90, group: mgmt, rel-pos: 0,
+         attrs: {speed: 1g, role: mgmt},
+         description: 'Tables 17 - Link activity green, steady with a link and blinking with traffic; Status green, steady at 1000 Mbps, blinking at 100 Mbps and off at 10 Mbps'}
+      - {ref: std/usb-a@1, id: usb, at: [23.6, 27.25], rotate: 90, group: mgmt, rel-pos: 1}
+      - {ref: std/rj45@2, id: console-rj45, at: [32.5, 22.7], rotate: 270, group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-c@1, id: usb-c, at: [65.4, 15.97], rotate: 90, group: mgmt, rel-pos: 3, attrs: {role: console, media: usb-c}}
+      - {ref: common/reset-button@1, id: btn-reset, at: [67.6, 24.7], for: chassis, group: mgmt, rel-pos: 4}
+      - {ref: juniper/ex4100-h-mode-button@1, id: btn-mode, at: [67.5, 32.5], for: chassis, group: mgmt, rel-pos: 5}
+      - {ref: juniper/ex4100-h-psu-connector@1, id: psu-0, at: [54.8, 14.7], group: power-input, rel-pos: 0}
+      - {ref: juniper/ex4100-h-psu-connector@1, id: psu-1, at: [54.8, 49.2], group: power-input, rel-pos: 1}
+      - {ref: juniper/ex4100-h-alarm-connector@1, id: alarm, at: [42.8, 116.0], rotate: 90, group: alarm, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-psu-0, at: [67.4, 44.5], for: psu-0, group: psu-leds, rel-pos: 0,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: feed-missing, color: '#22c55e', behavior: blinking}],
+         description: 'Tables 6 and 18 - green, the 54 V or 12 V output of the external supply is OK; blinking green, the 54 V feed is not connected; off, no input, standby or a supply fault'}
+      - {ref: common/led-dot@1, id: led-psu-1, at: [67.4, 51.5], for: psu-1, group: psu-leds, rel-pos: 1,
+         states: ['off', {name: ok, color: '#22c55e'}, {name: feed-missing, color: '#22c55e', behavior: blinking}],
+         description: 'Tables 6 and 18 - green, the 54 V or 12 V output of the external supply is OK; blinking green, the 54 V feed is not connected; off, no input, standby or a supply fault'}
+      - {ref: common/led-dot@1, id: led-sys, at: [75.6, 44.6], for: chassis, group: status-leds, rel-pos: 0,
+         states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+         description: 'Table 16 - SYS: green steady, Junos OS loaded; green blinking, booting; unlit, powered off or halted'}
+      - {ref: common/led-dot@1, id: led-alm, at: [75.6, 51.6], for: chassis, group: status-leds, rel-pos: 1,
+         states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'}],
+         description: 'Table 16 - ALM: red, major alarm; amber, minor alarm; unlit, no alarm or halted'}
+      - {ref: common/led-dot@1, id: led-mst, at: [75.6, 58.6], for: chassis, group: status-leds, rel-pos: 2,
+         states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+         description: 'Table 16 - MST: green steady, normal or Virtual Chassis primary; green blinking, backup; unlit, linecard member or halted'}
+      - {ref: common/led-dot@1, id: led-cld, at: [75.6, 65.7], for: chassis, group: status-leds, rel-pos: 3,
+         description: 'Cloud connection lamp; the blink patterns are not in this guide'}
+      - {ref: common/led-dot@1, id: led-spd, at: [83.8, 44.6], for: chassis, group: mode-leds, rel-pos: 0,
+         states: ['off', {name: selected, color: '#22c55e'}], description: 'Table 20 - lit while the Status lamps show speed'}
+      - {ref: common/led-dot@1, id: led-dx, at: [83.8, 51.6], for: chassis, group: mode-leds, rel-pos: 1,
+         states: ['off', {name: selected, color: '#22c55e'}], description: 'Table 20 - lit while the Status lamps show duplex mode'}
+      - {ref: common/led-dot@1, id: led-en, at: [83.8, 58.6], for: chassis, group: mode-leds, rel-pos: 2,
+         states: ['off', {name: selected, color: '#22c55e'}], description: 'Table 20 - lit while the Status lamps show administrative status'}
+      - {ref: common/led-dot@1, id: led-poe, at: [83.8, 65.7], for: chassis, group: mode-leds, rel-pos: 3,
+         states: ['off', {name: selected, color: '#22c55e'}], description: 'Table 20 - lit while the Status lamps show PoE state'}
+      - {ref: common/led-dot@1, id: led-in0, at: [54.9, 84.8], for: alarm, group: alarm-leds, rel-pos: 0,
+         states: ['off', {name: configured, color: '#22c55e'}, {name: minor, color: '#ef4444'}, {name: major, color: '#ef4444', behavior: blinking}],
+         description: 'Table 22 - IN 0: off, not configured; green, configured and no alarm; red, minor alarm; blinking red, major alarm'}
+      - {ref: common/led-dot@1, id: led-in1, at: [54.9, 92.1], for: alarm, group: alarm-leds, rel-pos: 1,
+         states: ['off', {name: configured, color: '#22c55e'}, {name: minor, color: '#ef4444'}, {name: major, color: '#ef4444', behavior: blinking}],
+         description: 'Table 22 - IN 1: off, not configured; green, configured and no alarm; red, minor alarm; blinking red, major alarm'}
+      - {ref: common/led-dot@1, id: led-out, at: [54.9, 99.1], for: alarm, group: alarm-leds, rel-pos: 2,
+         states: ['off', {name: configured, color: '#22c55e'}, {name: triggered, color: '#ef4444'}],
+         description: 'Table 21 - OUT: off, not configured; green, configured and no alarm; red, the output is triggered'}
+      - {ref: common/esd-jack@1, id: esd, at: [99.2, 81.4], for: chassis, group: esd, rel-pos: 0}
+    regions:
+    - {id: logo-zone, at: [13.5, 2.7], size: {w: 31.0, h: 9.0}, label: 'Vendor logo; not drawn'}
+    - {id: label-claim, at: [88.1, 20.7], size: {w: 15.7, h: 14.8}, label: 'Claim code label; not drawn'}
+  rear:
+    size: {w: 111.7, h: 152.4}
+    panel:
+      decor:
+      - {id: plate-centre, kind: vent-plate, at: [34.8, 0.3], size: [42.2, 152.1], fill: '#525966'}
+      - {id: vent-field, at: [36.6, 3.2], size: [38.6, 146.0], pattern: vent, pattern-pitch: [3.0, 2.6], vent: 1.0}
+      - {id: screw-top-left, kind: screw, at: [36.2, 4.6], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: screw-top-right, kind: screw, at: [70.3, 4.6], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: screw-mid-left, kind: screw, at: [36.2, 70.5], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: screw-mid-right, kind: screw, at: [70.3, 70.5], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: screw-bottom-left, kind: screw, at: [36.2, 142.4], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: screw-bottom-right, kind: screw, at: [70.3, 142.4], size: [6.0, 6.0], rx: 3.0, fill: '#aeb3b8'}
+      - {id: hole-left-top, kind: mounting-hole, at: [5.8, 33.3], size: [4.6, 4.6], rx: 2.3, fill: '#101214'}
+      - {id: hole-left-bottom, kind: mounting-hole, at: [5.8, 112.9], size: [4.6, 4.6], rx: 2.3, fill: '#101214'}
+      - {id: hole-right-top, kind: mounting-hole, at: [101.0, 33.3], size: [4.6, 4.6], rx: 2.3, fill: '#101214'}
+      - {id: hole-right-bottom, kind: mounting-hole, at: [101.0, 112.9], size: [4.6, 4.6], rx: 2.3, fill: '#101214'}
+    silkscreen:
+    - {id: label-corner-top, at: [23.7, 4.5], path: 'M 0 0 H 8.3 V 6.5', filled: false, stroke-width: 0.25, fill: '#c9cdd2', for: chassis}
+    - {id: label-corner-bottom, at: [23.7, 26.6], path: 'M 0 -3.8 V 0 H 4.3', filled: false, stroke-width: 0.25, fill: '#c9cdd2', for: chassis}
+    regions:
+    - {id: label-serial, at: [23.7, 4.5], size: {w: 8.3, h: 22.1}, label: 'Serial number label; not drawn'}
+  top:
+    size: {w: 111.7, h: 134.0}
+    empty: >-
+      Not drawn flat by any source held. The guide shows the lid in perspective only, in the mounting and clearance figures, and the studio photographs are
+      of the front and the rear.
+  bottom:
+    size: {w: 111.7, h: 134.0}
+    empty: >-
+      Not drawn by any source held. The guide lists the footpads (callout 12 of Figure 1) and shows the underside only in the mounting figures, in
+      perspective, with no position for them.
+  left:
+    size: {w: 134.0, h: 152.4}
+    empty: >-
+      Not drawn flat by any source held. The mounting figures (Figures 39 to 66) show the side wall in perspective with the bracket screws, and no side
+      elevation is given.
+  right:
+    size: {w: 134.0, h: 152.4}
+    empty: >-
+      Not drawn flat by any source held. The mounting figures (Figures 39 to 66) show the side wall in perspective with the bracket screws, and no side
+      elevation is given.
+configurations:
+  std:
+    kind: orderable
+    description: >-
+      EX4100-H-12MP as shipped (Table 8 and the packing list, Table 65): the switch with its two PSU connectors and alarm connector preassembled, one external
+      340 W AC or DC supply in the box (specific to the SKU) and no fan. The supplies are external and are not modelled.
+    default: true
+    part-numbers:
+      EX4100-H-12MP: {}
+references:
+- {title: 'EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01)', url: 'https://www.juniper.net/documentation/us/en/hardware/ex4100-h/ex4100-h.pdf', sha256: ce4cde76d5f5ee330b82a0e42346ab11fd0c6f894e4dc8bc6f228e63a066ecee}

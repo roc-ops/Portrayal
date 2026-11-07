@@ -158,10 +158,11 @@ A cable crosses a solid only through:
 - **a duct**, into its channel and out through a finger gap;
 - **a pass-through**, along z, when the diameter of the cable (or of the
   bundle, at that point) is no larger than the smaller side of its `size`.
-  On a zero-U part (#992) the tube must also fit: the hole's box is taken
-  less the cable's radius across the hole, so a centre line 2 mm inside the
-  edge is a crossing for a 6 mm cable. The box is not shortened along the way
-  through the plate.
+  On a zero-U part (#992) and on a grommet in a rack device's shell wall the
+  tube must also fit: the hole's box is taken less the cable's radius across
+  the hole, so a centre line 2 mm inside the edge is a crossing for a 6 mm
+  cable. The box is not shortened along the way through the plate, which is
+  the plate's thinnest axis (for a wall, its normal).
 
 A pass-through is the one opening kind for a hole in a plate. A slot that is
 big enough to take a cable is declared as one, with its size, and the check
@@ -271,8 +272,57 @@ still gone round by the same preferred way, and the short leg is a finding
 detour round a plate that is not pulled taut, and the way up behind a tray
 for a plug that ends behind its back edge.
 
+**The gap behind a tray is a way up or down as well (#966).** A
+tray whose floor stops short of the rail it stands on leaves an open gap
+between the floor's back edge and the rail. The FHD-CMP5DR's strip ends 48.8
+mm in front of the rail, and a real cord rises through it, where rule 1 sent
+the same cord round the front edge, 116.5 mm out (the detour's plane 123.7
+out, two bend radii in front of the ring's line). The router finds the gap
+from the floor boxes the tray publishes (`gapsOf` in `kit/rack/solids.js`: the
+largest floor box is the strip; the gap is the band behind it up to the body's
+rear plane, less any other floor box that reaches into the band) and from
+nothing typed into it; a tray that publishes no floor, or whose floor reaches
+the rail, has none. It is a named thing of its own, `{item, via, away, x0,
+x1, z0, z1, width, edge}`: which tray it belongs to and how wide it is.
+A leg that crosses the floor top to bottom is offered the gap beside the front
+edge, and the shorter wins **by length after the installed bend radius**: the
+rise turns in the gap's depth (the plane stands the cable's radius from the
+rail and its radius and `CLEAR` from the strip's edge, and where the cable is
+slanted it turns less than a right angle at each end), and a way whose turns,
+pulled taut, have less than the radius is not taken. A cable (or, for one in a
+bundle, the bundle, by the diameter `bundleDiameter` gives) wider than the
+gap, or both of whose ends stand off the gap's width, keeps the front edge.
+The lay with the gap is kept only if it passed through one and is the better
+of the two by the measure that chooses between a cable's two ends: fewer
+crossings, then less bend short of its room, then shorter; so a cable that does
+not rise through a gap is laid as it was before. **A cord is taken up through
+the gap only where it can be drawn through it** (P-0218, decided 2026-10-22): an
+end that is a plug's reach point (or a point straight out of it) leaves the
+plug straight along its normal and turns onto the rise with a bend of at
+least the cable's radius, so the rise must stand that far beyond the reach
+point, and still clear of the strip by the radius and `CLEAR`. A gap whose
+rise cannot stand there is not offered, and the cord keeps the front edge.
+On the reference rack of the site's cable-lay demo, whose LC plugs reach
+32.5 mm and the rise stands at 42.3 from the rail (9.8 mm for 25), none of
+the lower leaf's cords takes the gap: c9, c10, c11 and c12 go round the
+front edge (610.9, 611.3, 615.8 and 623.3 mm, on 1 m stock). The general
+bend check still takes a plug's reach point as an ordinary corner, with the
+whole plug as its leg, on a route that uses no gap (a known limitation, P-0218). A full gap raises no finding or warning, and a bundle is held to the gap by
+its diameter alone; both are still open.
+
+**The gap is not a pathway a user can pin.** It is used by the automatic route
+only, and the file has no key for it (decided 2026-10-18). **A hand-edited
+route never uses the gap** (decided 2026-10-19): a cable whose route was edited
+(`routeEdited`), a cable in a bundle whose trunk is written, and every cable of
+a bundle with a member edited by hand are offered no gap on any leg, those
+between their waypoints too, and go round the front edge as before. To make it
+pinnable, one more value in a `lay` entry would point at the gap by `item` and
+`via` (`docs/rack-file-v4-design.md` section 3.9), an additive schema change;
+the router's gap already carries both.
+
 A hand route keeps its waypoints; the detours are added between them in the
-same way, and a leg the three rules cannot clear is left as drawn and reported.
+same way (by the front edge, never the gap), and a leg the three rules cannot
+clear is left as drawn and reported.
 
 ### 1.4 The finding
 
@@ -920,7 +970,8 @@ front edge to the ring's face, ran along the face and grazed both legs.
   from a lacer's end ring to the lane beside a zero-U PDU cleared the PDU's
   corner by a fraction of a millimetre with its centre line and ran its tube
   across the outlet face, which rule 4 of 1.3 keeps for the last resort.
-  Every other body is met by the centre line, as in 1.2. Meeting every body
+  The holes in a zero-U part and in a rack device's shell wall are judged on
+  the tube too (1.2). Every other body is met by the centre line, as in 1.2. Meeting every body
   by the tube was measured on a sample of 3,120 generated cables: it
   lengthened routes on racks with no PDU by up to 276 mm, and reported every
   cable as crossing a body, since a plug leaves its port on the face of the
@@ -2421,7 +2472,7 @@ published file or a saved rack file uses it.
 | the lane moving outboard of a zero-U part that stands in the gutter and carries no lane (a zero-U PDU), and routed lengths changing beside one | kit (`laneXAt`), drawings | every route on that lane is longer, and a saved length moves on the next measure; a drawing that places lanes itself must follow |
 | the reach point (`at: 'reach'` with `end`, and `rigid_mm` on a DAC's or an AOC's, #985) in `routePath`, `ctx.plugReachOf`, `PLUG_REACH` and `PLUG_SPLIT` (the helpers that compute them stay internal), with the plug outside the face in the path (1.5) | kit API | a page passes `plugReachOf` and reads the points by these names; moving the plug into the allowance later would change every length again |
 | the end allowance by media, `END_ALLOWANCE_BY_MEDIA` (the table: the plug inside the port and the maker's short tolerance, never slack), `endAllowance(cable)` and the path's `allowance` (what a length adds an end: the table's figure and, until #949 step 4, the temporary dressing allowance of 0.1 m, which is not exported) (1.6); `END_ALLOWANCE_M` is gone | kit API | a page reads the table by these names, and every routed length and stock size depends on the figures; removing the dressing allowance shortens every routed length by 0.2 m |
-| a zero-U part's pass-through hole judged on the tube (1.2, #992) | kit | a route through a pass-through hole, and its length, can change on saved racks |
+| a zero-U part's and a rack device's shell grommet's pass-through hole judged on the tube (1.2, #992) | kit | a route through a pass-through hole, and its length, can change on saved racks |
 | `crosses-body` (with `part` and, for a held-face stack, `face`), `unheld` and the tray findings, `bodyFindings` | kit API, agent output | agents and pages read the kinds |
 | the public subpath `@portrayal/kit/rack/solids` (`solidsOf`, `legCrossings`, `detour` with its `room`, `CLEAR`) | kit package exports | a consumer imports it by that path and those names; a rename or removal is a breaking kit release |
 | `cable.slack`, `cable.slack.clear`, `cable.lay` (with `face`), and `roll` on `patch` | kit commands, offered to agents | agent sessions and saved prompts call them by name |

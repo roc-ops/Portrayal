@@ -24,19 +24,52 @@ export class El {
     this.viewBox = {baseVal: {width: 100, height: 50}};
     this.byQuery = null;          // set on the mount: what the shell's $() finds
   }
-  // data-* attributes, camel-cased, as a browser's dataset reads them
+  // data-* attributes, camel-cased, as a browser's dataset reads them - and
+  // writes them: `row.dataset.path = x` is the attribute data-path
   get dataset() {
-    const out = {};
-    for (const [k, v] of Object.entries(this.attrs))
-      if (k.startsWith('data-')) out[k.slice(5).replace(/-([a-z])/g, (_, c) => c.toUpperCase())] = v;
-    return out;
+    const name = k => 'data-' + k.replace(/[A-Z]/g, c => '-' + c.toLowerCase());
+    const attrs = this.attrs;
+    return new Proxy({}, {
+      get: (_, k) => attrs[name(String(k))],
+      set: (_, k, v) => { attrs[name(String(k))] = String(v); return true; },
+      has: (_, k) => name(String(k)) in attrs,
+      ownKeys: () => Object.keys(attrs).filter(k => k.startsWith('data-'))
+        .map(k => k.slice(5).replace(/-([a-z])/g, (_x, c) => c.toUpperCase())),
+      getOwnPropertyDescriptor: (_, k) => name(String(k)) in attrs
+        ? {value: attrs[name(String(k))], enumerable: true, configurable: true} : undefined,
+    });
   }
+  set className(c) { this.classList.s = new Set(String(c).split(/\s+/).filter(Boolean)); }
+  get className() { return [...this.classList.s].join(' '); }
   get firstChild() { return this.children[0] || null; }
   get childNodes() { return [...this.children]; }
-  set innerHTML(_) { this.replaceChildren(); }
+  get nextElementSibling() {
+    const sibs = this.parentElement?.children || [];
+    return sibs[sibs.indexOf(this) + 1] || null;
+  }
+  get previousElementSibling() {
+    const sibs = this.parentElement?.children || [];
+    return sibs[sibs.indexOf(this) - 1] || null;
+  }
+  before(n) {
+    n.parentElement?.removeChild(n);
+    const sibs = this.parentElement.children;
+    sibs.splice(sibs.indexOf(this), 0, n);
+    n.parentElement = this.parentElement;
+  }
+  // a row's markup is `<span class="c">text</span>` runs, which is all the tree writes
+  set innerHTML(html) {
+    this.replaceChildren();
+    for (const [, cls, text] of String(html).matchAll(/<span class="([^"]*)"[^>]*>(.*?)<\/span>/g)) {
+      const s = new El('span');
+      s.className = cls;
+      s.text = text;
+      this.appendChild(s);
+    }
+  }
   get innerHTML() { return ''; }
-  set textContent(_) { this.replaceChildren(); }
-  get textContent() { return ''; }
+  set textContent(t) { this.replaceChildren(); this.text = String(t); }
+  get textContent() { return this.text ?? this.children.map(c => c.textContent).join(''); }
   appendChild(c) { c.parentElement?.removeChild(c); c.parentElement = this; this.children.push(c); return c; }
   append(...cs) { cs.forEach(c => this.appendChild(c)); }
   removeChild(c) { this.children = this.children.filter(x => x !== c); c.parentElement = null; return c; }
@@ -49,6 +82,8 @@ export class El {
   hasAttribute(k) { return k in this.attrs; }
   addEventListener() {}
   removeEventListener() {}
+  getScreenCTM() { return null; }          // nothing is laid out, so no halo is drawn
+  scrollIntoView() {}
   getBoundingClientRect() { return {left: 0, top: 0, width: 0, height: 0}; }
   closest() { return null; }
   contains(n) { for (; n; n = n.parentElement) if (n === this) return true; return false; }
@@ -66,10 +101,12 @@ export class El {
     return [...this.descendants()].filter(n => alts.some(a => a(n)));
   }
 }
+// `.node.pulled[data-path="x"]`: classes and attribute tests, compounded
 function attrTest(sel) {
-  const parts = [...sel.matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)];
+  const parts = [...sel.matchAll(/\.([\w-]+)|\[([\w-]+)(?:="([^"]*)")?\]/g)];
   if (!parts.length || parts.map(m => m[0]).join('') !== sel) return null;
-  return n => parts.every(([, k, v]) => (v === undefined ? n.hasAttribute(k) : n.getAttribute(k) === v));
+  return n => parts.every(([, cls, k, v]) => cls !== undefined ? n.classList.contains(cls)
+    : (v === undefined ? n.hasAttribute(k) : n.getAttribute(k) === v));
 }
 
 // `fetch` answers from `routes`: {url suffix: url => text | Promise<text>}, the

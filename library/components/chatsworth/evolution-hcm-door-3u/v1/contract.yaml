@@ -1,0 +1,85 @@
+format: 1
+kind: component
+name: evolution-hcm-door-3u
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The snap-on front door of the 3U Chatsworth Evolution horizontal cable manager, seen from
+  the front - a contoured plate that closes the manager, with a longitudinal centre strip in
+  a contrasting aluminium finish, whose returns snap onto the ends of the fingers; it swings
+  open up or down and lifts off
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#1b1c1e'
+provenance:
+  size: >-
+    estimated - the door closes the front between the ears: 450.0 wide, the 482.6 (19 in
+    EIA) of the data sheet's ordering table less an estimated 16.3 of ear each end, and 133.35
+    high, the 3U of that table at the EIA-310 1.75 in a unit. The pictures on page 3 show the
+    door as one plate the full height of the manager; nothing dimensions its width.
+  relief: >-
+    estimated - the door stands at the front of the 208 mm overall depth: a plate 2.0 thick
+    (204 to 206 above the back plate's face) and returns 16 mm deep along its top and bottom
+    edges, 1.5 thick, that clip onto the finger heads. No document gives the door's section;
+    the pictures show a thin contoured moulding.
+  lid: >-
+    datasheet - the Evolution Cable Management System data sheet (page 3) and the product
+    page: "a contoured, snap-on front door [that] opens up or down", "swinging the cover up,
+    down or easily remove it". The installation instructions (IIS-735441) say the same, "The
+    cover will open up or down and can be removed when cabling", and in step 1 "Remove the
+    horizontal cover from the horizontal chassis. The cover snaps onto the ends of the
+    plastic, T-shaped cable guides (fingers)". It lifts off, so it is a lid (`lid: true`).
+  strip: >-
+    estimated - the data sheet's "longitudinal center feature in contrasting aluminum
+    finish" is a strip along the door's middle. Its 6.0 height is read off the pictures
+    against the 3U door; the aluminium shade is the render's.
+  finish: >-
+    estimated - black, or Glacier White (colour letter 7 or E in the part number). The
+    default is the black of the maker's renders; the Glacier White shade is a configuration's
+    to give.
+  contour: >-
+    estimated - STAND-INS, NOT MEASUREMENTS. The data sheet calls the door "contoured" and its
+    pictures (page 3) show a face that falls away toward the top and bottom returns, with the
+    aluminium strip standing proud of it in a darker channel. No document dimensions any of it,
+    so the bevel is declared as a stand-in: 7.0 wide each side, falling 1.0 toward the return
+    (`profile-y` on the plate), the strip 0.8 proud, the channel 1.5 either side of the strip,
+    and the lit and shaded bands drawn over the finish are the light a render would give.
+  mark: >-
+    not drawn - the maker's renders show a small square badge near the door's left end.
+    A vendor mark is never drawn, and nothing is reserved for it.
+size: {w: 450.0, h: 133.35}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [450.0, 133.35], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [450.0, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 131.85], size: [450.0, 1.5], class: bezel}
+  strip: {at: [0.0, 63.675], size: [450.0, 6.0], class: bezel}
+relief:
+  features:
+    - node: strip
+      lift: 206.0
+      out: 206.8
+      confidence: estimated
+      source: the aluminium strip stands proud of the contoured face in the maker's pictures; 0.8 is a stand-in, no document gives it
+    - node: plate
+      lift: 204.0
+      out: 206.0
+      profile-y: [[0.0, 205.0], [7.0, 206.0], [126.35, 206.0], [133.35, 205.0]]
+      confidence: estimated
+      source: no document dimensions the door section; a thin moulding in the maker's pictures
+    - node: lip-top
+      lift: 190.0
+      out: 206.0
+      confidence: estimated
+      source: the door snaps onto the finger ends (installation instructions, step 1); the 16 mm return is read off the pictures
+    - node: lip-bottom
+      lift: 190.0
+      out: 206.0
+      confidence: estimated
+      source: as lip-top
+skins: [default]

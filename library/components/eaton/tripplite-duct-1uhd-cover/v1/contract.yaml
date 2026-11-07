@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: tripplite-duct-1uhd-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The cover of the Tripp Lite SmartRack SRCABLEDUCT1UHD high capacity finger duct, seen from the
+  front - a steel plate across the whole front of the channel with a lip folded back over the
+  front of the top wall and of the bottom wall. It ships fitted and lifts off.
+provenance:
+  size: >-
+    estimated - the cover is the width of the duct (431.8 mm, as the SRCABLEDUCT1U's) and the
+    51.82 mm height of the unit over its lips, a lip 1.1 mm thick outside each wall. No
+    document dimensions the part.
+  relief: >-
+    estimated - the cover takes the front 12.0 mm as the lip over each wall, a stand-in: the
+    spec sheet's photograph shows a deep front plate and gives no reach. It stands in the well, so
+    its plate lies 112.06 to 113.16 above the floor and its lips 101.16 to 113.16.
+  lid: >-
+    datasheet - the spec sheet calls it a "finger duct with dual-hinge cover" and its photographs
+    show a front plate on hinges. THE FORMAT HAS NO HINGE, AND NONE IS INVENTED: the dual-hinge
+    cover is a lid that lifts off, drawn as one plate (`lid: true`), and the hinges are a gap.
+  color: >-
+    datasheet - "Cold rolled steel with black finish". The shade is this library's render of
+    black steel, a little lighter than the walls so the cover reads apart from them, and its
+    top lip lighter again so the part has an edge on the explorer's dark stage.
+size: {w: 431.8, h: 51.82}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Cold rolled steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#55595e'
+elements:
+  plate: {at: [0.0, 0.0], size: [431.8, 51.82], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [431.8, 1.1], class: bezel}
+  lip-bottom: {at: [0.0, 50.72], size: [431.8, 1.1], class: bezel}
+relief:
+  features:
+    - {node: plate, lift: 112.06, out: 113.16, confidence: estimated, source: 'no document dimensions the cover section; the plate is taken as thick as the wall'}
+    - {node: lip-top, lift: 101.16, out: 113.16, color: '#6b7076', confidence: estimated, source: 'a stand-in lip, 12.0 mm; no document gives the reach'}
+    - {node: lip-bottom, lift: 101.16, out: 113.16, color: '#464a4f', confidence: estimated, source: 'the same, the bottom wall'}
+skins: [default]

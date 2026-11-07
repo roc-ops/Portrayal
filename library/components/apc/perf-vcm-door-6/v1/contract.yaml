@@ -1,0 +1,53 @@
+format: 1
+kind: component
+name: perf-vcm-door-6
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The full-length door of the 6 in wide APC Performance vertical cable manager (AR8615 and AR8625)
+  seen from the working face - a steel skin with a return along each edge and two quarter-turn
+  latches at mid-height, that closes the channel. It ships fitted, opens to the left or the right
+  and lifts off its hinge pins
+provenance:
+  size: >-
+    estimated - 152 wide as the manager (the data sheets give no door width) and 2036 high. The height
+    is read off the instruction sheet's figure (990-4576A-001, page 1): the door is 95.5 per cent of
+    the manager's drawn height there, so 95.5 per cent of 2134, centred on it. The figure is not
+    dimensioned.
+  relief: >-
+    estimated - the door stands at the face of the channel, over the finger tips, 296 to 300 above
+    the well's floor: a panel 1.5 thick with a return 3 mm tall along each edge and a latch standing
+    to the face. No view sections the door, so the thicknesses and the 8 mm return are stand-ins.
+  detail: >-
+    estimated - THE DOOR IS NOT ONE SLAB. The instruction sheet draws it with a return down each edge
+    and two latch knobs side by side at mid-height, and the brochure says "Slam to latch full length
+    door opens to left or right"; the door is drawn as a panel inside a raised return with two
+    latches a quarter and three quarters of the way across (the figure and a product photograph put
+    them at about the middle third). The oval opening near the top of the figure's door is not drawn.
+  lid: >-
+    datasheet - the instruction sheet (990-4576A-001, page 1): a quarter turn of each latch releases
+    the door, which swings off the fingers on its hinge pins and can be hung either way; the brochure
+    says it "opens to left or right". It opens over the channel, so it is a lid (`lid: true`) that
+    comes off. The format has no hinge, so the door is on or off; the device records the gap.
+  color: >-
+    datasheet - "Color: Black" on the data sheet. The shade is this library's render of black steel,
+    a little lighter than the back plate, the returns and latches a shade lighter again.
+size: {w: 152, h: 2036}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [152, 2036], class: bezel}
+  rim-left: {at: [0.0, 0.0], size: [8, 2036], class: bezel}
+  rim-right: {at: [144.0, 0.0], size: [8, 2036], class: bezel}
+  latch-1: {at: [31.0, 1004.0], size: [14, 28], class: bezel}
+  latch-2: {at: [107.0, 1004.0], size: [14, 28], class: bezel}
+relief:
+  features:
+    - {node: plate, lift: 296, out: 297.5, color: '#2f3235', confidence: estimated, source: 'the instruction sheet figure; the panel thickness is not dimensioned'}
+    - {node: rim-left, lift: 296, out: 299, color: '#3a3d40', confidence: estimated, source: 'a stand-in for the return along the door edge the instruction sheet draws; its width and height are not dimensioned'}
+    - {node: rim-right, lift: 296, out: 299, color: '#3a3d40', confidence: estimated, source: 'the same return'}
+    - {node: latch-1, lift: 296, out: 300, color: '#4a4e52', confidence: estimated, source: 'the instruction sheet figure: a quarter-turn latch at mid-height; its size and place across the door are read off the figure'}
+    - {node: latch-2, lift: 296, out: 300, color: '#4a4e52', confidence: estimated, source: 'the same figure: the second latch'}
+skins: [default]

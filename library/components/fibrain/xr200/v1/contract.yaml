@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: xr200
+version: 1.0.1
+class: adapter-panel
+behaviour: fills
+profile: networking
+description: >-
+  Fibrain XR200 - HD RJ45 connection module, Cat.6A, screened, without
+  adapters. Seats in one position of a Fibrain HD RJ45 holder (XMU00, XMS00).
+  Carries one RJ45 jack on its front; the cable ends on its IDC back. Aqua dust cover.
+size: {w: 14.6, h: 18.4, d: 38.0}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+size-notes: >-
+  The maker's 1:1 front elevation of XR200 has extents 14.818 x 18.40: the
+  housing is 14.60 wide and 18.40 high, and a 0.22 clamp nub stands out of its
+  right side at mid height (y 9.20 to 11.30), which is not part of the
+  14.6 here. The front frame is 14.60 x 16.10, from 1.30 to 17.40. DSH XR200
+  rev 2 prints 14.60 and 16.10 on its front view and 38.00 on its side view.
+attrs: {media: rj45, model: XR200, category: 6A, screening: screened, keystone: none, cover: aqua}
+body:
+  depth: 38.0
+  boxes:
+    - {id: body, at: [0.0, 1.3], size: [14.6, 16.1], from: 0, depth: 38.0, color: '#c0c1c4',
+       confidence: datasheet, source: 'the module as DSH XR200 rev 2 draws it, 14.60 x 16.10 across the front and 38.00 long; a zinc alloy die-cast shell, which the photograph shows bright metal behind the aqua face. The side view prints 17.40 high over the dust cover and latch, which the box leaves out'}
+parts:
+  - {id: jack, ref: common/rj45-ganged-eth-plain@1, at: [0.95, 6.0], attrs: {finish: '#4cae91'}}
+provenance:
+  size: >-
+    drawing - see size-notes. Height and width are measured on the entities of
+    the maker's 1:1 front elevation of XR200 (the maker's CAD libraries archive,
+    hd.fibrain.com/dxf/cad-libraries.zip, files dated 2020-07-30; AutoCAD DXF,
+    units millimetres). The depth is the datasheet's 38.00.
+  datasheet: >-
+    DSH XR200 rev 2 - 'Connection module HD RJ45, kat.6A, screened'; Cat.6A to
+    ISO 11801, EN 50173 and ANSI/TIA 568.2-D; screened, housing zinc alloy die
+    cast, 360 degree EMC; IEC 60603-7-51 and IEC 60512-99-001; PoE to IEEE 802.3bt
+    type 4 (100 W); 1.5 A; IDC termination, tool or toolless; fixation 'without
+    adapters'; port density up to 48 per 1U. THE SHEET'S ORDERING LINE READS
+    XR210 (the keystone part number, with 'without adapters') under the
+    reference XR200; the title, the shielding row and the fixation row say
+    XR200, so the line is taken as a misprint.
+  face: >-
+    drawing for the outline, the 14.60 x 16.10 front frame, the label plate
+    above the opening (1.65 to 12.95 across, 1.9 to 6.1 down), two 2.5 round
+    marks at (2.0, 15.3) and (12.6, 15.3), and the latch tab under the frame
+    (3.91 to 10.69 across). The maker's logo on the label plate is not drawn.
+  jack: >-
+    estimated - the opening is drawn with the library's own RJ45 family. The
+    cell is common/rj45-ganged-eth-plain@1, the lamp-less Ethernet member: the
+    std/rj45-ganged@2 cell (12.7 x 11.0) with an Ethernet claim and no lamps.
+    The bare cell would export as a console port, and the maker's elevation and
+    photographs show no lamp window, so the lamped members do not fit. The
+    cell's body tier lands on the
+    drawn plug opening, 11.90 wide from x 1.35 and from y 6.50. The elevation
+    runs the opening's latch slot (4.06 wide, 5.27 to 9.33 across) to y 16.5 and
+    the family's runs to 17.0, which is the family's own convention and is not
+    changed. The 11.90 wide body tier agrees with the family's 11.91.
+  colour: >-
+    photo - the aqua of the dust cover and face, the median of 40,000 pixels on
+    the right border of the maker's render of the Cat.6A module, #4cae91; the
+    datasheet names 'Aqua dust cover'. The shell is bright zinc, #c0c1c4, the
+    median of 90,000 pixels on the screened render's side.
+  not-modelled: >-
+    the IDC back, which takes the cable and is not a port here; the dust cover's
+    hinged door; the clamp nub, 0.22 out of the right side; the latch tab under
+    the frame. The plug opening is the part's one port.
+  seating: >-
+    datasheet - 'fixation: without adapters': the module clips into a window of
+    the XMU00 or XMS00 holder directly. The position it sits in is the holder's.
+  art-stand-ins: >-
+    STAND-IN, in the face: the shield rim, a 0.30 bright-metal line 0.15 inside
+    the frame edge. The sheet says the die-cast shell is 360 degree EMC and the
+    photograph shows bright metal behind the face, but no document dimensions
+    how much of it shows round the frame, so the width is chosen and is not
+    measured. There is no keystone collar: the sheet says without adapters.
+skins: [default]

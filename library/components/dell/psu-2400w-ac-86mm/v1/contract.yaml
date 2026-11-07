@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: psu-2400w-ac-86mm
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  2400 W mixed-mode hot-plug power supply in Dell's 86 mm form factor, as fitted to the 16th-generation 2U PowerEdge (R760) - an octagonal fan opening, a translucent handle that is itself the status lamp, a C20 inlet and an orange release latch
+attrs:
+  power-output-w: 2400
+  form-factor: 86mm
+  inlet: c20
+  input: mixed-mode
+provenance:
+  plan: >-
+    seen from above, the supply is dell/psu-86mm-plan@1 - the can it runs into the chassis.
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 10, rear view of the system: the embedded 1529 x 528 image at 3.36 px/mm, the supply at its left (PSU 1) and its right (PSU 2). Facts read, art not traced. The figure labels neither supply's wattage.
+  which-supply-the-figure-shows: >-
+    READ, NOT STATED. The figure shows an 86 mm supply (86.3 mm across the face) with a large inlet. ISM table 16 pairs the 86 mm form factor with 2400 W (C19), 2800 W (C21) and 3200 W (277 Vac and HVDC) and the 60 mm form factor with 700 to 1800 W on C13 and C15; table 15 gives no form factor. The inlet in the figure is read as the C19 (C20 inlet) of the 2400 W, the 86 mm supply that is neither the 277 V nor the C21; a C21 inlet is larger again and the figure's does not look it. This is an estimate.
+  size: >-
+    photo-measured - 86.3 x 41.0: the supply's face from the left wall to the handle's end in the figure (px 55 to 345 of 3.36 px/mm), and from the top of the PSU bay to the bottom of the chassis (y 45.8 to 86.8). The 86 mm of Dell's name is the face width to 0.3 mm.
+  depth: >-
+    ESTIMATED - the ISM gives no supply depth. 195.5 is the 14G R740xd's 2400 W (dell/psu-2400w-ac-14g@1), the one measured 86 mm supply this library holds.
+  handle-stand-off: >-
+    datasheet - ISM table 10 puts the handle 35.59 behind the rear wall: Zc 736.29 ear to PSU handle against Zb 700.7 ear to rear wall.
+  features: >-
+    photo-measured - in supply-local mm: the fan octagon 5.0..36.2 x 2.5..38.1 with its hub centred at (20.6, 20.3) and four corner screws; the translucent strap handle 35.1..52.1 x 3.1..39.6; the inlet housing 52.5..79.3 x 3.5..37.7 with the connector composed in it; the orange release latch 76.5..82.3 x 13.9..28.8. Positions to about 1.5 mm.
+  handle-is-the-lamp: >-
+    ISM 'Power supply unit indicator codes' (the same wording as the R660's): an illuminated translucent handle serves as the indicator - green, blinking amber, not powered, blinking green, and five 4 Hz blinks for a mismatch. The codes are the R660 supplies' (dell/psu-1400w-ac-60mm@1); the R760 ISM was not searched again for a rate beyond the 4 Hz the library already carries.
+  inlet: >-
+    COMPOSED, std/c20-inlet@1 at rotate 90, centred on the housing at (65.9, 20.6). The figure's connector shows its earth contact at the left and the two blades to the right, which is the C20 turned a quarter.
+  power: >-
+    power-output-w 2400 is the rating in ISM table 15 for the 2400 W mixed-mode supply: 2400 W at 200-240 V AC and 240 V DC, 1400 W at 100-120 V AC (Platinum). A rating, not a draw.
+  cable-strap: >-
+    NOT DRAWN - cable management, as on the 60 mm supplies.
+size: {w: 86.3, h: 41.0, d: 195.5}
+plan: {ref: dell/psu-86mm-plan@1}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body:
+  depth: 195.5
+  color: '#b9bec4'
+relief:
+  wall: '#3a4045'
+  features:
+  - node: grip
+    uhandle: 35.6
+    color: '#e9ecef'
+    confidence: datasheet
+    source: ISM table 10, handle 35.59 behind the rear wall (Zc 736.29 less Zb 700.7)
+  - node: latch
+    out: 14.7
+    color: '#d9661a'
+    confidence: estimated
+    source: >-
+      borrowed from the 60 mm supply's latch (dell/psu-1400w-ac-60mm@1, measured on Dell's R660 service model); Dell's R760 service model (r760.glb, `PEr760_ PowerSupplyUnit_ Assembly-1.001`) is held but this latch was not read from it in the change that measured the covers and fans
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [49.7, 8.4], rotate: 90, behind: true}
+elements:
+  grip:
+    at: [38.5, 3.1]
+    size: [10.5, 36.5]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within: green - a valid source is connected and the supply is operational; blinking amber - a problem with the supply; not illuminated - no power connected; blinking green - firmware is being updated; five green blinks at 4 Hz then off - a mismatch with the other supply. The codes are the R660's table 136 (dell/psu-1400w-ac-60mm@1); no rate is published for the amber fault or the firmware blink, so 1 Hz is a reading.
+  inlet-bezel:
+    at: [52.5, 3.5]
+    size: [26.8, 34.2]
+    class: inlet
+    description: the recess the C20 sits in. The connector is std/c20-inlet@1, composed.
+  fan:
+    at: [5.0, 2.5]
+    size: [31.2, 35.6]
+    class: vent
+    description: the exhaust fan opening
+  latch:
+    at: [76.5, 13.9]
+    size: [5.8, 14.9]
+    class: latch
+    description: the orange release latch, pressed to withdraw the supply
+skins: [default]

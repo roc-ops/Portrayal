@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: ex4550-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX4550-FAN-AFI, the field-replaceable fan module with back-to-front airflow (AIR IN, AFI)
+  that the EX4550 hardware guide lists for the EX4550 switches. Air enters at the rear and leaves at
+  the port panel. The module has two hexagonal grilles and a handle band with the label AIR IN
+  (AFI). The EX4550 seats three of them, in rear slots 1 to 3 from left to right. They are
+  hot-removable and hot-insertable. Never mix it with AIR OUT fan modules or with power supplies that
+  carry the AFO label.
+attrs:
+  role: chassis-fan
+  airflow: back-to-front
+  power-draw-typical-w: 4.8
+  power-draw-max-w: 16.8
+part-numbers:
+  EX4550-FAN-AFI: {part: EX4550-FAN-AFI}
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (published 2020-12-15): Fan Modules, Table 17 (the two
+    fan module model numbers, labels and airflow), Figure 21 (the module) and Figure 6 (the rear
+    panel with three AIR OUT modules, a flat line drawing). The guide's own copyright and the Juniper
+    EULA govern it; it is read for facts only and nothing of it is copied.
+  size: >-
+    drawing - Figure 6, a flat elevation of the rear, whose three modules measure about 41.6 mm wide
+    on a 55.1 mm pitch and about 40.0 mm high (aspect of the figure 9.88 against 10.08). The guide
+    draws the AIR OUT module and states no size in millimetres, so the size is estimated to about 0.5
+    mm. This unit is not drawn; it takes the size of the AIR OUT module, since both fit one slot.
+  depth: >-
+    estimated - not stated. Searched the EX4550 guide for the module's dimensions and weight: Figure
+    21 has no scale and the weight table lists no fan module. No depth is written.
+  face: >-
+    drawing - Figure 6, read as fractions of one AIR OUT module and drawn the same way for this unit:
+    a hexagonal grille above and below a handle band that holds a chip with a fan symbol and the
+    label, and a ribbed grip at each end of the band. The label of this unit is AIR IN (AFI), which
+    Table 17 gives. Positions are estimated.
+  handle: >-
+    estimated - the guide names the label and the direction and gives no handle colour for the
+    EX4550 fan module. The shade is the blue the same maker's back-to-front fan modules carry in the
+    EX4600 guide (Table 11), for the same airflow. The colour is the field handle-finish.
+  airflow: >-
+    datasheet - Table 17: EX4550-FAN-AFI is labelled AIR IN (AFI), back-to-front airflow, air comes
+    in from the back of the switch. A supply of this chassis must carry the AFI label.
+  power: >-
+    datasheet - Table 22: power required by each fan module, 4.8 W at normal speed and 16.8 W at high
+    speed. The table does not name the measure, so the normal-speed figure is carried as typical.
+  led: >-
+    datasheet - the status lamp (ST) of a fan module is on the chassis strip at the left of its slot
+    (Fan Module Status, Table 19), so it is a placement of the device.
+states: [absent]
+elements:
+  handle:
+    at: [0.5, 15.6]
+    size: [40.6, 8.6]
+    class: latch
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#88bcda'}
+size:
+  w: 41.6
+  h: 40.0
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle band stands proud of the grilles; its projection is not measured
+skins: [default]

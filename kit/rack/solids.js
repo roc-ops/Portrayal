@@ -237,6 +237,58 @@ export function traysOf(rack, ctx) {
   return out;
 }
 
+// EVERY OPEN GAP BEHIND A TRAY'S FLOOR, found (docs/cable-lay-design.md
+// section 1.3, rule 1, #966): [{item, via, away, x0, x1, z0, z1, width,
+// edge}], from the floors a tray publishes (traysOf) and the body of the part
+// that carries it, and from nothing else. It is the plan the floor leaves open
+// between its back edge and the rail the part is fixed to: a way up or down
+// for a cable, as wide as the gap is deep. The router uses it by itself; a
+// cable can not be pinned to one (a pinnable gap would be one more value in a
+// `lay` entry, docs/rack-file-v4-design.md section 3.9, and would point at
+// `item` and `via`).
+// - `item` and `via` name the tray the gap belongs to (a floor solid's part is
+//   `<via>/floor`);
+// - `x0`..`x1` and `z0`..`z1` are the rectangle in rack mm; `edge` is the z of
+//   the floor's back edge, the side of the gap the strip stands on, and `away`
+//   which way the tray's front looks (+1 toward the front of the rack);
+// - `width` is the smaller side, what a cable's diameter is held to.
+// The floor is the largest box of the tray (the strip); the gap lies behind
+// it, across the strip, less every other floor box that reaches into the same
+// band (an arm of the tray), the widest open stretch kept. A tray that
+// publishes no floor, or whose floor reaches the part's rear, has none.
+const gapMemo = new WeakMap();
+export function gapsOf(rack, ctx) {
+  const chassisOf = ctx?.chassisOf;
+  if (typeof chassisOf !== 'function') return [];
+  let per = gapMemo.get(rack);
+  if (!per) gapMemo.set(rack, per = new WeakMap());
+  if (per.has(ctx)) return per.get(ctx);
+  const out = [];
+  for (const t of traysOf(rack, ctx)) {
+    const it = (rack.items || []).find(x => x.id === t.item), c = it && chassisOf(it.ref);
+    if (!c || !t.floors.length) continue;
+    const body = itemPlacer(rack, it, c)({x: 0, y: 0, z: 0, w: num(c.w), h: num(c.h), d: num(c.d)});
+    const away = it.face === 'rear' ? -1 : 1;
+    const area = f => (f.x1 - f.x0) * (f.z1 - f.z0);
+    const strip = t.floors.reduce((m, f) => (area(f) > area(m) ? f : m));
+    // the band between the strip's back edge and the part's rear plane
+    const z0 = away === 1 ? body.z0 : strip.z1, z1 = away === 1 ? strip.z0 : body.z1;
+    if (!(z1 - z0 > EPS)) continue;
+    // the strip's width, less every floor that reaches into the band
+    let free = [[strip.x0, strip.x1]];
+    for (const f of t.floors) {
+      if (f === strip || !(f.z1 > z0 + EPS && f.z0 < z1 - EPS)) continue;
+      free = free.flatMap(([a, b]) => (f.x1 <= a || f.x0 >= b ? [[a, b]] : [[a, Math.min(b, f.x0)], [Math.max(a, f.x1), b]]))
+        .filter(([a, b]) => b - a > EPS);
+    }
+    if (!free.length) continue;
+    const [x0, x1] = free.reduce((m, f) => (f[1] - f[0] > m[1] - m[0] ? f : m));
+    out.push({item: t.item, via: t.via, away, x0, x1, z0, z1, width: Math.min(x1 - x0, z1 - z0), edge: away === 1 ? z1 : z0});
+  }
+  per.set(ctx, out);
+  return out;
+}
+
 // ── a leg against a box ────────────────────────────────────────────────
 const AX = ['x', 'y', 'z'];
 const lerp = (a, b, t) => ({x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, z: a.z + (b.z - a.z) * t});
@@ -272,8 +324,9 @@ const within = (p, box) => AX.every(k => p[k] >= box[`${k}0`] - EPS && p[k] <= b
 // and one whose centre line clears the corner by a fraction of a millimetre
 // would otherwise run across the PDU's outlet face, which section 1.3 rule 4
 // keeps for the last resort. Its pass-through holes are judged on the tube
-// as well (#992, `legCrossings`). Every other plate or envelope is met by the
-// centre line, as before: a cable lies against those at its radius, and a
+// as well (#992, `legCrossings`), and so are the holes of a rack device's
+// shell walls. Every other plate or envelope is met by the centre line, as
+// before: a cable lies against those at its radius, and a
 // tube touching a plate the cable rests on is contact, not a fault. A plate
 // it does not rest on is left to the lay work (#986).
 const RING_PART = /^ring\/[^/]+\/./;
@@ -365,11 +418,12 @@ export function legCrossings(a, b, solids, {diameter = 0} = {}) {
     const grown = met(s, diameter) !== s.box;
     const own = grown ? inside(a, b, s.box.x0, s.box.x1, s.box.y0, s.box.y1, s.box.z0, s.box.z1) : null;
     const [hp, hq] = own ? [lerp(a, b, own[0]), lerp(a, b, own[1])] : [p, q];
-    // A ZERO-U PART's hole is judged on the tube too (#992): its box is taken
-    // less the cable's radius across the hole, so the tube fits inside it and
-    // does not lie a third in the wall. Not along the way through the plate.
+    // A hole is judged on the tube, a zero-U part's and a rack device's shell
+    // wall's alike: its box is taken less the cable's radius across the hole,
+    // so the tube fits inside it and does not lie a third in the wall. Not
+    // along the way through the plate, which for a wall is its thin axis.
     const through = (s.holes || []).some(h => {
-      const box = s.zeroU === true && diameter > 0 ? shrunk(h.box, s.box, diameter / 2) : h.box;
+      const box = diameter > 0 ? shrunk(h.box, s.box, diameter / 2) : h.box;
       return within(hp, box) && within(hq, box) && diameter <= Math.min(...h.size) + 1e-9;
     });
     if (!through) out.push({solid: s, t0: span[0], t1: span[1], at: p});
@@ -448,7 +502,63 @@ const gap = (p, q) => Math.hypot(p.x - q.x, p.y - q.y, p.z - q.z);
 // front edge leaves a corner short (ROOM ROUND A BODY), so a path with room
 // is as it was.
 const plane = (p, k, v) => set(p, k, v);
-function waysRound(a, b, solid, {diameter, lanes, room = 0, rear = false}) {
+// THE WAYS UP OR DOWN THROUGH THE GAP BEHIND A TRAY (#966, `gapsOf`), offered
+// beside the front edge for a leg that crosses that tray's floor top to
+// bottom: each ends and turns on one plane across the gap, [a moved to the
+// plane, b moved to it], marked `gap` so that `detour` holds it to the bend
+// radius. The cable (or the bundle, `gapD`) must fit the gap by its diameter,
+// both ends must stand over the gap's width, and the plane stands inside the
+// gap, its radius from either side. The planes tried: the one each end stands
+// at, the one just clear of the floor's edge (the radius and CLEAR), and the
+// middle, since a rise that is slanted turns less than a right angle at each
+// end and so needs a shorter leg; and the cable comes off the rise at the far
+// end's x, or up to two bend radii (half of `room`) either side of it, since
+// the leg across the floor to a ring's approach point, which turns again
+// there, is longer slanted (at either end of the leg: the ring may be the
+// first or the last stop). `rearPoint` is the one point behind the back edge
+// that a plug set back from its rail is offered (#1026), a way through the
+// gap as well when it stands inside it. Not offered without `room` (no bend
+// radius).
+function gapWays(a, b, solid, gaps, gapD, room, rearPoint = null, plugs = []) {
+  if (!(room > 0) || !gaps?.length) return [];
+  const g = gaps.find(x => x.item === solid.item && solid.part === `${x.via}/floor`);
+  if (!g || !(gapD > 0) || gapD > g.width + 1e-9) return [];
+  const r = gapD / 2;
+  const across = x => x >= g.x0 + r - 1e-9 && x <= g.x1 - r + 1e-9;
+  if (![a, b].every(p => across(p.x))) return [];
+  // s: how far a z is from the rail, toward the floor
+  const rail = g.away === 1 ? g.z0 : g.z1, depth = g.z1 - g.z0, s = z => g.away * (z - rail);
+  // the plane stands the radius from the rail's side and the radius and CLEAR
+  // from the floor's edge, or the radius from both where the gap is too narrow
+  const lo = r, hi = Math.max(lo, depth - r - CLEAR), clamp = v => Math.max(lo, Math.min(hi, v));
+  const out = [], seen = [];
+  const slid = end => [0, -1, 1, -2, 2].map(k => Math.max(g.x0 + r, Math.min(g.x1 - r, end.x + k * room / 2)))
+    .filter((x, i, all) => all.findIndex(y => Math.abs(y - x) < 1e-6) === i);
+  // A CORD IS TAKEN UP THROUGH THE GAP ONLY WHERE IT CAN BE DRAWN THROUGH IT
+  // (P-0218, owner's option A, 2026-10-22): an end that is a plug's reach point,
+  // or a point straight out of it, leaves the plug along its normal and turns
+  // onto the rise at the way's first (or last) point. The turn is a bend of the
+  // cable's radius, `plugs[].bend`, and the corner it is made at stands that
+  // far beyond the reach point, along the normal: the plug's reach is straight
+  // and is no part of the bend. A way whose corner stands nearer, or behind the
+  // reach point, is not offered (the front edge is). Ends that are no plug's,
+  // and so every route that uses no gap, are not asked.
+  const drawable = way => [[a, way[0]], [b, way.at(-1)]].every(([end, corner]) => plugs.every(g =>
+    !(Math.abs(end.x - g.x) < 1e-6 && Math.abs(end.y - g.y) < 1e-6 && g.out * (end.z - g.z) > -1e-6)
+    || g.out * (corner.z - g.z) >= g.bend - 1e-6));
+  const offer = way => { if (drawable(way)) { way.gap = true; out.push(way); } };
+  for (const v of [s(a.z), s(b.z), hi, (lo + hi) / 2]) {
+    const u = clamp(v);
+    if (seen.some(w => Math.abs(w - u) < 1e-6)) continue;
+    seen.push(u);
+    const z = rail + g.away * u;
+    for (const x of slid(b)) offer([plane(a, 'z', z), {...plane(b, 'z', z), x}]);
+    for (const x of slid(a)) offer([{...plane(a, 'z', z), x}, plane(b, 'z', z)]);
+  }
+  if (rearPoint?.length === 1 && across(rearPoint[0].x) && s(rearPoint[0].z) >= lo - 1e-9 && s(rearPoint[0].z) <= hi + 1e-9) offer(rearPoint);
+  return out;
+}
+function waysRound(a, b, solid, {diameter, lanes, room = 0, rear = false, gaps = [], gapDiameter, plugs = []}) {
   const box = met(solid, diameter), m = diameter / 2 + CLEAR;
   const out = (k, v) => {
     if (!(room > 0)) return v;
@@ -474,15 +584,19 @@ function waysRound(a, b, solid, {diameter, lanes, room = 0, rear = false}) {
   // behind the back edge (above): the end at or behind the back plane is
   // `q`, the other `p`; the one point stands on p's side of the plate
   const behind = p => (solid.away === -1 ? p.z >= back - 1e-9 : p.z <= back + 1e-9);
-  const rearWay = () => {
-    if (!rear || behind(a) === behind(b)) return null;
+  const rearWay = (force = false) => {
+    if (!(rear || force) || behind(a) === behind(b)) return null;
     const [p, q] = behind(a) ? [b, a] : [a, b];
     const y = p.y >= (box.y0 + box.y1) / 2 ? box.y1 + m : box.y0 - m;
     const dp = Math.hypot(p.z - back, p.y - y), dq = Math.hypot(q.z - back, q.y - y);
     return [{x: p.x + (q.x - p.x) * (dp + dq > 1e-9 ? dp / (dp + dq) : 0.5), y, z: back}];
   };
   const round = edge === 'z' && across === 'y' ? rearWay() : null;
-  const tiers = edge === 'z' && across === 'y' ? [...(round ? [[round]] : []), [flat('z', front)], [flat('z', back)]]
+  // (it goes up behind the plate: through a gap there is, which the lay that takes it says, `back`)
+  if (round && gaps?.length) round.back = true;
+  // (the one point behind the back edge is a way through the gap too, offered with the others)
+  const rearPoint = edge === 'z' && across === 'y' && !round ? rearWay(true) : null;
+  const tiers = edge === 'z' && across === 'y' ? [...(round ? [[round]] : []), [flat('z', front), ...gapWays(a, b, solid, gaps, gapDiameter ?? diameter, room, rearPoint, plugs)], [flat('z', back)]]
     : zeroU ? [[flat('z', back), corner('z', back)]] : [both(edge)];
   tiers.push(both(end));
   // A CORD THAT LANDS ON A ZERO-U PART'S FACE (P-0037): an end of the leg
@@ -534,13 +648,21 @@ const lengthOf = pts => pts.reduce((s, p, i) => (i ? s + gap(pts[i - 1], p) : 0)
 // with room are tried first, and the ways as they were without it only when
 // none of those resolves, so a body that leaves no room is still gone round
 // the same preferred way, and the short leg is left for the bend check.
-export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0, rear = false, loose = false} = {}) {
+// THE GAP BEHIND A TRAY (#966): `gaps` (gapsOf) are open ways up or down
+// beside a floor's front edge, taken when they are the shorter and the cable
+// (`gapDiameter`, a bundle's where it is bundled) fits and its turns keep the
+// bend radius, which is half of `room` (a gap way is held to it, and is the
+// way pulled taut that is held, not the way as offered). `plugs` are the
+// plugs' reach points, [{x, y, z, out, bend}] (`out` the sign of the plug's
+// normal along z): a rise from one is taken only where the cord can be drawn
+// through it (gapWays).
+export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0, rear = false, loose = false, gaps = [], gapDiameter, plugs = []} = {}) {
   const lanesAt = typeof lanes === 'function' ? lanes : () => lanes;
   const clear = (u, w, only = null) => gap(u, w) < 1e-9 || !legCrossings(u, w, only ? [only] : solids, {diameter}).length;
   const go = (p, q, depth) => {
     const first = legCrossings(p, q, solids, {diameter})[0];
     if (!first) return [];
-    const opts = {diameter, lanes: lanesAt((p.y + q.y) / 2), rear};
+    const opts = {diameter, lanes: lanesAt((p.y + q.y) / 2), rear, gaps, gapDiameter, plugs};
     const plain = waysRound(p, q, first.solid, opts);
     const roomy = room > 0 ? waysRound(p, q, first.solid, {...opts, room}) : null;
     for (let t = 0; t < plain.length; t++) for (const tier of roomy ? [roomy[t], plain[t]] : [plain[t]]) {
@@ -548,7 +670,14 @@ export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0, rear =
       for (const way of tier) {
         const chain = [p, ...way, q], legs = chain.slice(1).map((w, i) => [chain[i], w]);
         let pts = null;
-        if (legs.every(([u, w]) => clear(u, w))) pts = way;
+        if (way.gap) {
+          // a way through a gap goes through no second body, and keeps the radius once pulled taut
+          if (!legs.every(([u, w]) => clear(u, w))) continue;
+          const all = [p, ...way, q];
+          for (let i = 1; i < all.length - 1;) { if (clear(all[i - 1], all[i + 1])) all.splice(i, 1); else i++; }
+          if (leastRoom(all) < room / 2 - 1e-6) continue;
+          pts = all.slice(1, -1);
+        } else if (legs.every(([u, w]) => clear(u, w))) pts = way;
         else if (depth > 0 && legs.every(([u, w]) => clear(u, w, first.solid))) {
           const parts = legs.map(([u, w]) => (gap(u, w) < 1e-9 ? [] : go(u, w, depth - 1)));
           if (!parts.some(x => x === null)) pts = parts.flatMap((part, i) => (i < way.length ? [...part, way[i]] : part));
@@ -556,9 +685,9 @@ export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0, rear =
         if (!pts) continue;
         pts = pts.filter((x, i, all) => gap(x, i ? all[i - 1] : p) > 1e-9 && gap(x, q) > 1e-9);
         const len = lengthOf([p, ...pts, q]);
-        if (!best || len < best.len - 1e-9) best = {pts, len};
+        if (!best || len < best.len - 1e-9) best = {pts, len, gap: way.gap === true || way.back === true};
       }
-      if (best) return best.pts;
+      if (best) { if (best.gap) best.pts.gap = true; return best.pts; }
     }
     return null;
   };
@@ -585,7 +714,10 @@ export function detour(a, b, solids, {diameter = 0, lanes = [], room = 0, rear =
   for (let i = 1; i < all.length - 1;) {
     if (clear(all[i - 1], all[i + 1]) && !keeps(i)) all.splice(i, 1); else i++;
   }
-  return all.slice(1, -1);
+  const taut = all.slice(1, -1);
+  // (the way up through a gap behind a tray says so, for the lay that chooses it)
+  if (pts.gap) taut.gap = true;
+  return taut;
 }
 // The least room the turns of a way have for a bend, in mm, each leg shared
 // by what its two turns need of it (route-path.js cornersOf, `share: 'need'`),

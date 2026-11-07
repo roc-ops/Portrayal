@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: tripplite-duct-1u-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The cover of the Tripp Lite SmartRack SRCABLEDUCT1U finger duct, seen from the front - a
+  steel plate across the whole front of the channel with a lip folded back over the front of
+  the top wall and of the bottom wall. It ships fitted and lifts off.
+provenance:
+  size: >-
+    drawing - the front view of the SRCABLEDUCT1U submittal drawing: the cover is the width of
+    the duct, 431.80 mm [17.00 in]. Its 42.0 mm is the body's 39.8 over its walls and a lip
+    1.1 mm thick outside each wall (estimated: the side view draws the lid wrapping outside the
+    walls, and its thickness is the wall's).
+  relief: >-
+    drawing - the top view: the cover takes the front 9.8 mm of the 67.71, from the front edge
+    to the start of the slots (9.8 mm of the 62.71 to the ear plane), as the lip over each
+    wall; it stands in the well, so its plate lies 61.41 to 62.51 above the floor and its
+    lips 52.71 to 62.51. The plate and the lips are 1.1 mm, estimated: no view dimensions the
+    cover section.
+  lid: >-
+    datasheet - the spec sheet's title and Highlights call it a "finger duct with cover", and
+    the submittal drawing's top and side views draw a cover over the front of the walls that
+    the fingers' slots begin under. No source describes how it is held or removed, so no clip
+    or hinge is drawn. It is taken as a lid (`lid: true`): a cover on a duct whose point is
+    to lay cable in is a part that comes off.
+  color: >-
+    datasheet - "Cold rolled steel with black finish". The shade is this library's render of
+    black steel, a little lighter than the walls so the cover reads apart from them, and its
+    top lip lighter again so the part has an edge on the explorer's dark stage.
+size: {w: 431.8, h: 42.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: Cold rolled steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#55595e'
+elements:
+  plate: {at: [0.0, 0.0], size: [431.8, 42.0], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [431.8, 1.1], class: bezel}
+  lip-bottom: {at: [0.0, 40.9], size: [431.8, 1.1], class: bezel}
+relief:
+  features:
+    - {node: plate, lift: 61.41, out: 62.51, confidence: estimated, source: 'no view dimensions the cover section; the plate is taken as thick as the wall'}
+    - {node: lip-top, lift: 52.71, out: 62.51, color: '#6b7076', confidence: drawing, source: 'the top view of the SRCABLEDUCT1U submittal drawing, the cover over the front 9.8 mm of the 67.71'}
+    - {node: lip-bottom, lift: 52.71, out: 62.51, color: '#464a4f', confidence: drawing, source: 'the same view, the bottom wall under the same cover'}
+skins: [default]

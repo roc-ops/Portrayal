@@ -1,0 +1,621 @@
+format: 1
+kind: device
+name: qfx3500-48s4q
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: QFX3500-48S4Q
+portfolio: {line: QFX Series, family: QFX3500}
+description: >-
+  Juniper QFX3500-48S4Q, an end-of-life 1RU data-centre switch running Junos OS as a standalone switch,
+  a member of a QFX Virtual Chassis or a Node device in a QFabric system. It has 48 SFP+ access ports and
+  4 QSFP+ uplink ports. An access port takes 10 GbE; ports 6 to 41 also take 1 GbE SFP optics, and ports
+  0 to 5 and 42 to 47 also take 2, 4 or 8 Gbps Fibre Channel optics. A QSFP+ port runs at 40 GbE or as four
+  10 GbE ports. The ports and their lamps are on the port side. The other side carries two power supplies,
+  two fan trays and the management board, with the LCD, the console, a USB port and the management ports.
+  One chassis ships in three airflow builds, port-to-FRU (AFO) or FRU-to-port (AFI and ACR), and takes AC or
+  DC supplies.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX3500 Device Hardware Documentation, Modified 2018-07-03, Copyright 2018 Juniper Networks, 244 pages
+      (Juniper Networks; terms: the guide's own copyright notice and the Juniper EULA, a reference copy kept
+      outside the repository). Fetched from
+      https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/hardware/qfx-series/qfx3500.pdf
+      Read: Table 5 (physical specifications), Table 6 (FRUs), figures 1 to 7 (the two panels), figures 8 and 9 and
+      Tables 7 and 8 (port lamps), figure 10 and Table 9 (chassis lamps), figures 11, 12, 14 and Tables 10, 11
+      (management board), Tables 12 and 13 (airflow and the FRUs), figures 13 to 26 and Tables 14 to 18 (fan
+      trays and power supplies), Tables 20 (environment), 25 and 27 (power), 23 and 24 (rack and cabinet),
+      Table 34 (accessory kit). The QFX3500 and QFX3600 datasheets were searched for on juniper.net and not
+      found (the product is end of life and its datasheets are no longer served); no figure is taken from a
+      reseller. Juniper's image library has no photograph of this model at the address pattern
+      /image-library/qfx-series/<SKU>/<SKU>-front-high.jpg for qfx3500, qfx3500-48s4q, qfx3500-afi or
+      qfx3500-afo (all 404), so no photograph is held. The held-sources folders of the intake area were not
+      readable from this worker, so no Visio stencil or 3D model could be looked for there, and none is named
+      by the guide.
+  chassis:
+    confidence: datasheet
+    note: >-
+      guide Table 5: 1.74 in (4.4 cm) high; 17.4 in (44.2 cm) wide excluding the mounting brackets, 19 in
+      (48.3 cm) including them; 28 in (71.1 cm) deep excluding the FRU handles and locking levers, 29.2 in
+      (74.2 cm) including them; 30.8 lb (14 kg) with FRUs, 23.8 lb (11 kg) without. The body is drawn:
+      the brackets are not part of it. The depth carried is the 28 in without the handles. The rack
+      requirements (Table 23) put the front and rear rails 28 to 36 in apart.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The guide's figure 7 (page 29, drawing g050013) is a flat vector drawing of the port side. Its body
+      outline measures 306.76 x 30.77 pt, an aspect of 9.97 against the table's 17.4 / 1.74 = 10.0, 0.3
+      percent out, so it carries geometry at 1.4408 mm/pt. Its figure 5 (page 27, drawing g050012, the FRU
+      side) measures 309.72 x 31.66 pt, an aspect of 9.78, 2.2 percent out, so each axis of that drawing is
+      scaled to its own table figure (1.427 mm/pt across, 1.396 down) and the positions on the FRU side are
+      good to about 1 mm. The vector coordinates were read from the PDF page itself, not from a render.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 7. 24 columns of access cages in two rows. The first cage faces are at 4.27, 66.28 and 128.29
+      mm and the right half starts at 255.54, with the cages 14.13 mm wide on a column pitch of 14.62 mm in blocks
+      of four, a block stride of 62.02 mm, so a gutter of 3.54 mm between blocks. The registry's 14.25 SFP
+      ganged pitch is a floor for the cell, not the figure, so the drawing's 14.62 is used. The cells use the
+      registry's 14.25 x 10.4 aperture centred on the drawn cage (14.13 x 9.35 mm). The four QSFP+ cages stand
+      in two columns between column 11 and column 12: cage faces at 198.28 and 229.73 mm, 20.30 mm wide, a
+      column pitch of 31.45 mm, the registry's 18.5 x 9.58 aperture centred on them. The drawing shows
+      a column of small circles in the gap between each block of four: a dotted divider, not drawn.
+  row-pitch:
+    confidence: drawing
+    note: >-
+      Figure 7: the access cage faces centre 18.41 and 32.40 mm below the top edge, a row pitch of 14.0 mm; the
+      QSFP+ faces centre 18.55 and 32.32 mm, a pitch of 13.77 mm. The registry's 15.0 SFP row pitch is not a
+      conformance figure.
+  stack-orientation:
+    confidence: drawing
+    note: >-
+      Figure 7 draws the latch tongue at the foot of every upper cage and at the top of every lower one, so
+      both lips face the band between the rows: the upper cage upright and the lower one turned 180, the
+      library's stack convention.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      Printed on the metal and read off figure 7: the access ports run 0 to 47, each column printed
+      up-arrow, the even number, down-arrow, the odd number, on one baseline between the two rows; the
+      uplink ports are printed Q0 and Q1, Q2 and Q3 the same way. The ports are therefore numbered as
+      printed. The guide's interface names (xe-0/1/0 to xe-0/1/15 for the channelized uplinks, in its figure
+      4) are not printed on the unit and are not written to the manifest. Ports 0 to 5 and 42 to 47 are shaded in
+      figure 7 as the Fibre Channel capable blocks; the shading is not metal.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      Figures 8 and 9 and Tables 7 and 8: two lamps on every access port and every uplink port. On an access
+      port the Link/Activity lamp is at the left and the Status lamp at the right, 6.1 mm apart, above the
+      upper cage of a column and below the lower one; the four lamps of a column are in the bands outside the
+      cages. On an uplink port the lamps are LA above ST, a stack of two to the left of the cage, legended LA
+      and ST. Link/Activity is green when a link is established and blinks with activity; the access
+      Status lamp is green for an Ethernet transceiver and amber for a Fibre Channel one; the uplink Status
+      lamp is green when a transceiver is installed. The lamp positions are read off figure 7 by lamp
+      circle; the circles are drawn 3 mm across and carried as the library's 2 mm lamp.
+  vents:
+    confidence: estimated
+    note: >-
+      Figure 7 draws two staggered rows of hexagonal holes above the lamps and one row below them. They are
+      drawn as vent strips; the hexagon pitch (4.4 mm along the strip) is estimated as the drawing's hexagons
+      are too small to measure to a tenth.
+  fru-side-layout:
+    confidence: drawing
+    note: >-
+      Figure 5 (flat) with figure 6 (isometric) and Tables 12 and 13. Supply 0 at the left end, fan tray 0,
+      the management board, fan tray 1 and supply 1 at the right end, the whole row symmetric about the
+      centre. The supplies are 54.8 x 39.8 mm (the size of the same JPSU-650W unit in the QFX5100, which the
+      drawing agrees with to 3 percent, 56 mm across the frame), the fan trays 87.3 x 40.6 mm and the board
+      133.4 x 40.6 mm. Each supply and each tray has a narrow strip beside it carrying the supply's power
+      symbol and number and the fan tray's fan symbol and number; the symbols are read off figure 5.
+  front-and-rear:
+    confidence: datasheet
+    note: >-
+      The guide calls the FRU side the front panel (it carries the LCD) and the port side the rear panel; the
+      QFX3600 guide calls the port side the front. The library puts the ports on `front` for both, as it does
+      for the QFX5100, so `front` here is the guide's rear panel and `rear` the guide's front panel. The
+      guide's AFI (airflow in, FRU-to-port) is the library's back-to-front and AFO (port-to-FRU) its
+      front-to-back, ports being the front.
+  modules:
+    confidence: datasheet
+    note: >-
+      The two power supplies, the two fan trays and the management board are field-replaceable units in
+      bays, each its own component (Table 6). The supplies are the 650 W JPSU-650W units, reused from the
+      QFX5100 by part number (juniper/qfx5100-jpsu-650w-ac-afo, -ac-afi, -dc-afo and -dc-afi: the guide
+      gives the one unit to the QFX3500, QFX3600 and QFX3600-I, Table 13 and Table 15). The fan trays are
+      QFX3500-FAN-AFO and QFX3500-FANAI; the management boards QFX3500-MB (RJ-45, FRU-to-port),
+      QFX3500-MB-RJ45-AFO, QFX3500-MB-SFP-AFI and QFX3500-MB-SFP-AFO (Table 10). The guide says to fit a
+      blank panel in an empty supply slot and gives it no part number, so no blank is modelled and no
+      empty-bay configuration is offered. The two fan modules inside the management board and the fans
+      inside each supply are part of those units, not bays. Nothing on this chassis is a built-in unit that
+      is not a bay, apart from the ports. The guide gives no chassis model that ships with an SFP board, so every
+      configuration seats an RJ-45 board of its own airflow and the SFP boards are accepted by the bay.
+  models:
+    confidence: datasheet
+    note: >-
+      guide Table 12: QFX3500-48S4Q-ACR (FRU-to-port), QFX3500-48S4Q-AFI (FRU-to-port) and QFX3500-48S4Q-AFO
+      (port-to-FRU). These three are the orderable configurations. The guide does not say what -ACR adds to
+      -AFI, so both seat the same units. Neither the guide nor anything held names a DC chassis model: the DC
+      supplies are listed as units (Tables 13, 15, 16) and the DC power figures are given for the chassis
+      (Table 27), so the two DC builds are illustrations (`example`) that do not export a device type. The
+      guide's NOTE on page 4 names a QFX3500-RB-ACRB model with a four-rail kit for a recessed or
+      reversed mounting; its chassis has no mounting holes in its face and no figure of it is held, so it
+      is not modelled.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide mounts the switch on four posts with one of two kits supplied with it: a
+      two-rail kit with two rear installation blades (the management end flush with the rack), or a
+      four-rail kit (either end flush). The rails fit racks 28 to 36 in deep. No part number is given for
+      either kit, so `chassis.ears` and `chassis.kits` are left out and a gap says so. The body is the 17.4 in
+      chassis, without the 19 in brackets.
+  power:
+    confidence: datasheet
+    note: >-
+      guide Table 25 (AC): typical 230 W, maximum 365 W; 100 to 127 VAC at 7.8 A or 200 to 240 VAC at 3.8 A, 50
+      to 60 Hz. Table 27 (DC): typical 250 W, maximum 385 W; -40 to -72 VDC, nominal -48 VDC, 7 A maximum.
+      Both are chassis figures with no ambient or configuration stated.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph is held and the drawings are line art, so the colour is a neutral steel grey, not a
+      reading of the metal.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Juniper's support page for the product (https://support.juniper.net/support/?p=qfx3500) labels it end of life;
+      the technical bulletin that extends the end of service of its parts (TSB17796) could not be fetched from
+      this worker, so no date is stated. Estimated, because the support page is read from a search result
+      and the bulletin was not opened.
+attrs:
+  physical:
+    weight-note: 30.8 lb (14 kg) with FRUs installed; 23.8 lb (11 kg) without (Table 5)
+    depth-note: 28 in (71.1 cm) excluding FRU handles and locking levers; 29.2 in (74.2 cm) including them (Table 5)
+  performance:
+    sfp-plus-speeds: 10 GbE with SFP+ optics; 1 GbE with SFP optics in ports 6 to 41; 2, 4 or 8 Gbps Fibre Channel in ports 0 to 5 and 42 to 47
+    qsfp-plus-speeds: 40 GbE; or four 10 GbE with a breakout cable (15 10 GbE interfaces by default)
+  power:
+    power-typical-w: 230
+    power-max-w: 365
+    power-envelope: unstated
+    power-dc-typical-w: 250
+    power-dc-max-w: 385
+    power-input-ac: 100 to 127 VAC at 7.8 A or 200 to 240 VAC at 3.8 A, 50 to 60 Hz (Table 25)
+    power-input-dc: nominal -48 VDC, operating range -40 to -72 VDC, 7 A maximum (Table 27)
+    redundancy-note: one or two supplies; with two installed they are load-sharing and fully redundant
+  thermal:
+    fans: two fan trays of two fan modules, hot-swappable, and two fan modules on the management board; the supplies carry their own fans
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F) normal operation; -5 to 55 C short term
+    storage-temp: -40 to 70 C (-40 to 158 F) in the shipping container
+    humidity: 5 to 85 percent noncondensing
+    altitude: no performance degradation to 3048 m (10000 ft)
+  platform:
+    storage: 8 GB internal flash
+    software: Junos OS
+  features:
+    virtual-chassis: up to 10 switches with QFX3500, QFX3600, QFX5100 and EX4300 members; a Virtual Chassis Fabric leaf
+    qfabric: a Node device, connected to a QFX3008-I or QFX3600-I Interconnect device by the uplink ports
+    fcoe: an FCoE-FC gateway or FCoE transit switch
+    optics-sfp-plus: SFP+ transceivers, SFP+ direct attach copper cable, SFP transceivers in ports 6 to 41, Fibre Channel SFP+ in ports 0 to 5 and 42 to 47
+    optics-qsfp: QSFP+ transceivers, QSFP+ DAC and DAC breakout cables
+  management:
+    oob: management ports C0 and C1, 1000BASE-T RJ-45 (RJ-45 board) or 1 Gbps SFP (SFP board), with link-speed and activity lamps
+    console: RJ-45 console port (CON)
+    usb: one USB port
+    lcd: an LCD showing the host name and the number of active alarms
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/?p=qfx3500
+chassis: {width: 442.0, height: 44.2, depth: 711.2, ru: 1, weight-kg: 14.0, color: '#7b8087', airflow: front-to-back, power: ac}
+gaps:
+- what: datasheet
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The QFX3500 datasheet. Searched juniper.net for it and found only the hardware guide; the product is end
+    of life. The weight, dimensions and power are the guide's.
+- what: photographs
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A photograph of either side. The image-library address pattern returns 404 for this model, so every
+    measure is read from the guide's flat vector drawings and the colour is estimated.
+- what: end-of-life-dates
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The dates of the end of sale and end of service. Juniper's support page marks the product end of life and
+    its technical bulletin TSB17796 lists the end-of-service dates of its parts; the bulletin could not be fetched.
+- what: mounting-kit
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The part numbers of the two-rail and four-rail kits and their depth ranges. The guide describes them in
+    prose and figures 29 to 32 and gives the rack depth (28 to 36 in) and no part number.
+- what: four-rail-model
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    The QFX3500-RB-ACRB model the guide's NOTE names (four-rail mounting, no mounting holes in the chassis
+    face). No figure of it, and no table row, is held.
+- what: acr-difference
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What QFX3500-48S4Q-ACR is, beyond the FRU-to-port airflow Table 12 gives it. It is seated like -AFI.
+- what: dc-chassis-model
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    A DC chassis model number. The guide gives DC supplies and DC power figures and names no DC chassis.
+- what: esd-point
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The sliding panel that carries the serial number label and serves as the ESD point (figure 6, to the
+    right of the fan tray). It is not marked in the flat figure 5, so it is not placed.
+- what: dotted-dividers
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    The columns of small circles between each block of four access columns in figure 7. They are not
+    named by the guide and are not drawn.
+- what: sfp-board-lamps
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The lamps of the two SFP management ports on the SFP management boards. The guide says they are
+    identical to those of the RJ-45 ports and draws only the RJ-45 board.
+- what: junos-mark
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The Junos mark beside the lamps of the management board, which is a logo and is not drawn.
+- what: usb-generation
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The USB revision. The guide names one USB port and gives no generation. It is drawn with the kit's neutral
+    usb2 skin.
+- what: four-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: 48 access ports labelled 0 to 47, the even ports on the upper row. Each takes an SFP+ transceiver at 10 GbE, an SFP transceiver at 1 GbE in ports 6 to 41, or a Fibre Channel SFP+ in ports 0 to 5 and 42 to 47.
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
+    description: 4 uplink ports labelled Q0 to Q3, Q0 and Q2 on the upper row. Each takes a QSFP+ transceiver, a QSFP+ DAC or a DAC breakout cable.
+  sfp-plus-activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+    description: The Link/Activity lamp of each access port, left of the column centre (guide Table 7).
+  sfp-plus-status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: ethernet, color: '#22c55e'}, {name: fibre-channel, color: '#f59e0b'}]
+    description: The Status lamp of each access port, right of the column centre - green for an Ethernet transceiver, amber for a Fibre Channel one (guide Table 7).
+  qsfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+    description: The Link/Activity lamp, legended LA, of each uplink port; it is lit while any of the four 10 GbE breakout links is up (guide Table 8).
+  qsfp-plus-status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: transceiver, color: '#22c55e'}]
+    description: The Status lamp, legended ST, of each uplink port - green when a transceiver is installed (guide Table 8).
+  mgmt-boards:
+    term: Slot
+    role: management
+    index-origin: 0
+    description: The management board, which carries the LCD, the chassis lamps, the console, the USB port and the two management ports.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy-note: >-
+        guide, Understanding Redundancy: two fan trays and two fan modules on the management board; if a fan module
+        fails and cannot keep the switch within its temperature thresholds the switch raises alarms and may shut down
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: one or two supplies; with two installed they are load-sharing and one can be removed while the switch runs
+views:
+  front:
+    size: {w: 442.0, h: 44.2}
+    panel:
+      decor:
+      - {id: vent-top, at: [2.6, 0.9], size: [437.0, 6.4], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      - {id: vent-bottom, at: [2.6, 42.0], size: [437.0, 1.8], pattern: vent, pattern-pitch: [4.4, 2.1], vent: 1}
+      cutouts:
+      - {block: sfp-plus-a}
+      - {block: sfp-plus-b}
+      - {block: qsfp-plus}
+    silkscreen:
+    - {block: sfp-plus-a}
+    - {block: sfp-plus-b}
+    - {id: silk-arrow-0, at: [6.195, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-0}
+    - {id: silk-arrow-1, at: [12.855, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-1}
+    - {id: silk-arrow-2, at: [20.815, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-2}
+    - {id: silk-arrow-3, at: [27.475, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-3}
+    - {id: silk-arrow-4, at: [35.435, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-4}
+    - {id: silk-arrow-5, at: [42.095, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-5}
+    - {id: silk-arrow-6, at: [50.055, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-6}
+    - {id: silk-arrow-7, at: [56.715, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-7}
+    - {id: silk-arrow-8, at: [68.215, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-8}
+    - {id: silk-arrow-9, at: [74.875, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-9}
+    - {id: silk-arrow-10, at: [82.835, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-10}
+    - {id: silk-arrow-11, at: [89.495, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-11}
+    - {id: silk-arrow-12, at: [97.455, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-12}
+    - {id: silk-arrow-13, at: [104.115, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-13}
+    - {id: silk-arrow-14, at: [112.075, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-14}
+    - {id: silk-arrow-15, at: [118.735, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-15}
+    - {id: silk-arrow-16, at: [130.235, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-16}
+    - {id: silk-arrow-17, at: [136.895, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-17}
+    - {id: silk-arrow-18, at: [144.855, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-18}
+    - {id: silk-arrow-19, at: [151.515, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-19}
+    - {id: silk-arrow-20, at: [159.475, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-20}
+    - {id: silk-arrow-21, at: [166.135, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-21}
+    - {id: silk-arrow-22, at: [174.095, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-22}
+    - {id: silk-arrow-23, at: [180.755, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-23}
+    - {id: silk-arrow-24, at: [257.475, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-24}
+    - {id: silk-arrow-25, at: [264.135, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-25}
+    - {id: silk-arrow-26, at: [272.095, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-26}
+    - {id: silk-arrow-27, at: [278.755, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-27}
+    - {id: silk-arrow-28, at: [286.715, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-28}
+    - {id: silk-arrow-29, at: [293.375, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-29}
+    - {id: silk-arrow-30, at: [301.335, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-30}
+    - {id: silk-arrow-31, at: [307.995, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-31}
+    - {id: silk-arrow-32, at: [319.495, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-32}
+    - {id: silk-arrow-33, at: [326.155, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-33}
+    - {id: silk-arrow-34, at: [334.115, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-34}
+    - {id: silk-arrow-35, at: [340.775, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-35}
+    - {id: silk-arrow-36, at: [348.735, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-36}
+    - {id: silk-arrow-37, at: [355.395, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-37}
+    - {id: silk-arrow-38, at: [363.355, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-38}
+    - {id: silk-arrow-39, at: [370.015, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-39}
+    - {id: silk-arrow-40, at: [381.515, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-40}
+    - {id: silk-arrow-41, at: [388.175, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-41}
+    - {id: silk-arrow-42, at: [396.135, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-42}
+    - {id: silk-arrow-43, at: [402.795, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-43}
+    - {id: silk-arrow-44, at: [410.755, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-44}
+    - {id: silk-arrow-45, at: [417.415, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-45}
+    - {id: silk-arrow-46, at: [425.375, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: port-46}
+    - {id: silk-arrow-47, at: [432.035, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: port-47}
+    - {id: silk-arrow-q0, at: [202.13, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: uplink-0}
+    - {id: silk-q0, at: [205.63, 26.1], text: Q0, font-size: 1.7, anchor: middle, fill: '#eef0f2', for: uplink-0}
+    - {id: silk-arrow-q1, at: [213.43, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: uplink-1}
+    - {id: silk-q1, at: [217.23, 26.1], text: Q1, font-size: 1.7, anchor: middle, fill: '#eef0f2', for: uplink-1}
+    - {id: silk-arrow-q2, at: [233.58, 25.45], mark: arrow-up, size: 1.3, fill: '#eef0f2', for: uplink-2}
+    - {id: silk-q2, at: [237.08, 26.1], text: Q2, font-size: 1.7, anchor: middle, fill: '#eef0f2', for: uplink-2}
+    - {id: silk-arrow-q3, at: [244.88, 25.45], mark: arrow-down, size: 1.3, fill: '#eef0f2', for: uplink-3}
+    - {id: silk-q3, at: [248.68, 26.1], text: Q3, font-size: 1.7, anchor: middle, fill: '#eef0f2', for: uplink-3}
+    - {id: silk-la-0, at: [189.8, 16.75], text: LA, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-0}
+    - {id: silk-st-0, at: [189.8, 21.35], text: ST, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-0-status}
+    - {id: silk-la-1, at: [189.8, 30.5], text: LA, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-1}
+    - {id: silk-st-1, at: [189.8, 35.1], text: ST, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-1-status}
+    - {id: silk-la-2, at: [221.25, 16.75], text: LA, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-2}
+    - {id: silk-st-2, at: [221.25, 21.35], text: ST, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-2-status}
+    - {id: silk-la-3, at: [221.25, 30.5], text: LA, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-3}
+    - {id: silk-st-3, at: [221.25, 35.1], text: ST, font-size: 1.3, anchor: middle, fill: '#eef0f2', for: led-uplink-3-status}
+    components:
+      blocks:
+      - id: sfp-plus
+        as: sfp-plus-a
+        ref: std/sfp-ganged@1
+        at: [4.2, 13.21]
+        count: 24
+        rows: 2
+        pitch: 14.62
+        row-pitch: 14.0
+        gang: 4
+        gutter: 3.54
+        number-from: 0
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [3.475, 9.875], anchor-by-row: [start, start], dy-top: 12.84, dy-bottom: -1.16, font-size: 1.9, fill: '#eef0f2'}
+        led:
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          dx: 3.075
+          dy-top: -4.01
+          dy-bottom: 11.99
+          group: sfp-plus-activity-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}-status'
+          dx: 9.175
+          dy-top: -4.01
+          dy-bottom: 11.99
+          group: sfp-plus-status-leds
+          states: ['off', {name: ethernet, color: '#22c55e'}, {name: fibre-channel, color: '#f59e0b'}]
+      - id: qsfp-plus
+        ref: std/qsfp-ganged@1
+        at: [199.18, 13.76]
+        count: 4
+        rows: 2
+        pitch: 31.45
+        row-pitch: 13.77
+        number-from: 0
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+        led:
+        - ref: common/led-dot@1
+          id-format: 'led-uplink-{n}'
+          dx: -4.2
+          dy-top: 1.49
+          dy-bottom: 1.49
+          group: qsfp-plus-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+        - ref: common/led-dot@1
+          id-format: 'led-uplink-{n}-status'
+          dx: -4.2
+          dy-top: 6.09
+          dy-bottom: 6.09
+          group: qsfp-plus-status-leds
+          states: ['off', {name: transceiver, color: '#22c55e'}]
+      - id: sfp-plus
+        as: sfp-plus-b
+        ref: std/sfp-ganged@1
+        at: [255.48, 13.21]
+        count: 24
+        rows: 2
+        pitch: 14.62
+        row-pitch: 14.0
+        gang: 4
+        gutter: 3.54
+        number-from: 24
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [3.475, 9.875], anchor-by-row: [start, start], dy-top: 12.84, dy-bottom: -1.16, font-size: 1.9, fill: '#eef0f2'}
+        led:
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          dx: 3.075
+          dy-top: -4.01
+          dy-bottom: 11.99
+          group: sfp-plus-activity-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+        - ref: common/led-dot@1
+          id-format: 'led-port-{n}-status'
+          dx: 9.175
+          dy-top: -4.01
+          dy-bottom: 11.99
+          group: sfp-plus-status-leds
+          states: ['off', {name: ethernet, color: '#22c55e'}, {name: fibre-channel, color: '#f59e0b'}]
+      placements:
+      - {block: sfp-plus-a}
+      - {block: qsfp-plus}
+      - {block: sfp-plus-b}
+  rear:
+    size: {w: 442.0, h: 44.2}
+    silkscreen:
+    - {id: silk-psu-0-icon, at: [62.1, 6.0], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#eef0f2', for: psu-0}
+    - {id: silk-psu-0, at: [62.1, 12.6], text: '0', font-size: 1.9, anchor: middle, fill: '#eef0f2', for: psu-0}
+    - {id: silk-fan-0, at: [62.1, 32.6], text: '0', font-size: 1.9, anchor: middle, fill: '#eef0f2', for: fan-0}
+    - {id: silk-fan-0-icon, at: [62.1, 37.6], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#eef0f2', for: fan-0}
+    - {id: silk-psu-1-icon, at: [379.5, 6.0], path: 'M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95', stroke-width: 0.28, fill: '#eef0f2', for: psu-1}
+    - {id: silk-psu-1, at: [379.5, 12.6], text: '1', font-size: 1.9, anchor: middle, fill: '#eef0f2', for: psu-1}
+    - {id: silk-fan-1, at: [379.5, 32.6], text: '1', font-size: 1.9, anchor: middle, fill: '#eef0f2', for: fan-1}
+    - {id: silk-fan-1-icon, at: [379.5, 37.6], path: 'M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4 1.1', stroke-width: 0.28, fill: '#eef0f2', for: fan-1}
+    components:
+      bays:
+      - {id: psu-0, at: [3.2, 2.6], size: {w: 54.8, h: 39.8}, group: psus, rel-pos: 0,
+         accepts: ['juniper/qfx5100-jpsu-650w-ac-afo@1', 'juniper/qfx5100-jpsu-650w-ac-afi@1', 'juniper/qfx5100-jpsu-650w-dc-afo@1', 'juniper/qfx5100-jpsu-650w-dc-afi@1'],
+         default: 'juniper/qfx5100-jpsu-650w-ac-afo@1'}
+      - {id: fan-0, at: [67.0, 2.2], size: {w: 87.3, h: 40.6}, group: fans, rel-pos: 0,
+         accepts: ['juniper/qfx3500-fan-afo@1', 'juniper/qfx3500-fanai@1'], default: 'juniper/qfx3500-fan-afo@1'}
+      - {id: mgmt-board, at: [154.3, 2.2], size: {w: 133.4, h: 40.6}, group: mgmt-boards, rel-pos: 0,
+         accepts: ['juniper/qfx3500-mb@1', 'juniper/qfx3500-mb-rj45-afo@1', 'juniper/qfx3500-mb-sfp-afi@1', 'juniper/qfx3500-mb-sfp-afo@1'],
+         default: 'juniper/qfx3500-mb-rj45-afo@1'}
+      - {id: fan-1, at: [287.7, 2.2], size: {w: 87.3, h: 40.6}, group: fans, rel-pos: 1,
+         accepts: ['juniper/qfx3500-fan-afo@1', 'juniper/qfx3500-fanai@1'], default: 'juniper/qfx3500-fan-afo@1'}
+      - {id: psu-1, at: [384.0, 2.6], size: {w: 54.8, h: 39.8}, group: psus, rel-pos: 1,
+         accepts: ['juniper/qfx5100-jpsu-650w-ac-afo@1', 'juniper/qfx5100-jpsu-650w-ac-afi@1', 'juniper/qfx5100-jpsu-650w-dc-afo@1', 'juniper/qfx5100-jpsu-650w-dc-afi@1'],
+         default: 'juniper/qfx5100-jpsu-650w-ac-afo@1'}
+  top:
+    size: {w: 442.0, h: 711.2}
+    empty: >-
+      Not drawn by any source held. The guide gives no flat figure of the lid; figures 1, 2 and 6 are
+      isometric views with no scale.
+  bottom:
+    size: {w: 442.0, h: 711.2}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size: {w: 711.2, h: 44.2}
+    empty: >-
+      Not drawn by any source held. The mounting figures (29 to 32) show the rails in isometric view only,
+      with no scale from which a hole could be placed.
+  right:
+    size: {w: 711.2, h: 44.2}
+    empty: >-
+      Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  ac-f2b:
+    kind: orderable
+    default: true
+    description: >-
+      QFX3500-48S4Q-AFO: two 650 W AC supplies (JPSU-650W-AC-AFO), two fan trays (QFX3500-FAN-AFO) and the RJ-45
+      management board (QFX3500-MB-RJ45-AFO). All have port-to-FRU airflow, which the library calls front-to-back
+      (guide Tables 12 and 13).
+    part-numbers:
+      QFX3500-48S4Q-AFO: {}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      QFX3500-48S4Q-AFI: two 650 W AC supplies (JPSU-650W-AC-AFI), two fan trays (QFX3500-FANAI) and the RJ-45
+      management board (QFX3500-MB). All have FRU-to-port airflow, which the library calls back-to-front
+      (guide Tables 12 and 13). The supplies have blue handles lettered AFI.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-ac-afi@1
+      psu-1: juniper/qfx5100-jpsu-650w-ac-afi@1
+      fan-0: juniper/qfx3500-fanai@1
+      fan-1: juniper/qfx3500-fanai@1
+      mgmt-board: juniper/qfx3500-mb@1
+    part-numbers:
+      QFX3500-48S4Q-AFI: {}
+  ac-b2f-acr:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      QFX3500-48S4Q-ACR: the guide's Table 12 lists it with FRU-to-port airflow and says no more, so it is seated like
+      the AFI build: two 650 W AC supplies (JPSU-650W-AC-AFI), two fan trays (QFX3500-FANAI) and the RJ-45
+      management board (QFX3500-MB).
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-ac-afi@1
+      psu-1: juniper/qfx5100-jpsu-650w-ac-afi@1
+      fan-0: juniper/qfx3500-fanai@1
+      fan-1: juniper/qfx3500-fanai@1
+      mgmt-board: juniper/qfx3500-mb@1
+    part-numbers:
+      QFX3500-48S4Q-ACR: {}
+  dc-f2b:
+    kind: example
+    power: dc
+    description: >-
+      An illustration, not a chassis model: two 650 W DC supplies (JPSU-650W-DC-AFO) with the port-to-FRU fan trays and
+      management board. The guide lists the DC supplies and the DC power figures and names no DC chassis model.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-dc-afo@1
+      psu-1: juniper/qfx5100-jpsu-650w-dc-afo@1
+  dc-b2f:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      An illustration, not a chassis model: two 650 W DC supplies (JPSU-650W-DC-AFI) with the FRU-to-port fan trays and
+      management board. The guide lists the DC supplies and the DC power figures and names no DC chassis model.
+    bays:
+      psu-0: juniper/qfx5100-jpsu-650w-dc-afi@1
+      psu-1: juniper/qfx5100-jpsu-650w-dc-afi@1
+      fan-0: juniper/qfx3500-fanai@1
+      fan-1: juniper/qfx3500-fanai@1
+      mgmt-board: juniper/qfx3500-mb@1
+references:
+- title: 'QFX3500 Device Hardware Documentation, Juniper Networks, modified 2018-07-03'
+  url: https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/hardware/qfx-series/qfx3500.pdf
+  sha256: 5c3ce2aef801b9eac4fac4ec41d7b980699a9f667db3fd04710feabe93d330b0

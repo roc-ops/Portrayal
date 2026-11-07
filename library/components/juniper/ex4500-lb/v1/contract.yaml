@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: ex4500-lb
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  The intraconnect module of the Juniper EX4500 switches, printed EX4500-LB. It sits horizontally in the
+  strip above the fan tray at the rear. It helps the switch reach line rate on all its ports. It is an
+  offline field-replaceable unit: the switch must be powered off to replace it.
+  The switch cannot run without it or a Virtual Chassis module. It has a status lamp labelled ST and two
+  captive screws. Five of the eight models ship with it. The guide gives no Juniper part number for it.
+attrs:
+  role: intraconnect
+  power-absent: not-published
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Intraconnect Module in EX4500 Switches
+    (Figure 11, Table 8) and Figures 2 and 6, the rear panel. The guide's own copyright and the Juniper EULA
+    govern it; it is read for facts only and nothing of it is copied. The model name EX4500-LB is printed
+    on the module, and the guide prints no part number.
+  size: >-
+    drawing - Figure 6, the flat rear panel, rendered at 1200 dpi: the strip spans 345.9 mm and 21.7 mm at
+    0.227 mm per display pixel across and 0.234 down, an aspect error of 3 percent. It is estimated to
+    1.5 mm.
+  face: >-
+    drawing - Figure 6, read as fractions of the strip: a captive screw at each end, the status lamp ST at
+    37.9 mm from the left and the model name at the right. The maker's mark at the left is a logo and is not
+    drawn. Positions are estimated.
+  led: >-
+    datasheet - Table 8: green means the module works. Unlit means it does not work or the switch is off.
+  depth: >-
+    estimated - not stated. No depth is written.
+  power: >-
+    estimated - not published. The module declares power-absent so that the missing figure is a statement.
+states: [absent]
+elements:
+  led-status:
+    at: [36.9, 13.3]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  screw-left:
+    at: [2.8, 10.3]
+    size: [8.0, 8.0]
+    class: screw
+  screw-right:
+    at: [333.1, 10.3]
+    size: [8.0, 8.0]
+    class: screw
+size:
+  w: 345.9
+  h: 21.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the captive screws stand proud of the faceplate; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the captive screws stand proud of the faceplate; the projection is not measured
+skins: [default]

@@ -1,0 +1,41 @@
+format: 1
+kind: module
+name: c3650-stackwise-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Catalyst 3650 StackWise adapter blank (the guide's "StackWise adapter blank"). A small grey block with
+  a captive screw that fills a StackWise port on the rear and keeps the port closed until a StackWise adapter
+  is installed for stacking. Two are fitted by default. The guide prints no part number for it.
+size: {w: 16.0, h: 26.0, d: 40.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs:
+  model: 'Catalyst 3650 StackWise adapter blank'
+  role: 'port-blank'
+  weight-kg: 0.05
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 3650 Switches Hardware Installation Guide, September 2016, OL-29734-01, StackWise
+    Ports (chapter 1): "StackWise adapter blanks installed in the StackWise ports is the default setup." Spec
+    Table 1-1: "StackWise adapter blank 0.1 lbs (0.05 kg)". The chassis dimensions include "two StackWise
+    adapter blanks". Searched the guide for a part number for the blank and found none; the StackWise adapter
+    and cable are sold as C3650-STACK-KIT=, and no code is printed for the blank, so none is stated.
+  size: >-
+    estimated - no table gives the blank's dimensions. The rear drawing (Figure 1-13) shows the StackWise
+    port as a slot between two fan modules and the install figure draws the blank as a small block with a
+    captive screw; 16 x 26 mm is a reading of those, and 40 mm deep an estimate.
+  skin: >-
+    estimated - Figure 1-13 and the guide's StackWise install figures, isometric line drawings. A plain block
+    with a captive screw; the vendor's logo on the drawn block is not drawn.
+  lifecycle: >-
+    unknown - no part number, so no sale status.
+states: [absent]
+elements:
+  screw: {at: [5.0, 9.0], size: [6.0, 6.0], class: screw}
+skins: [default]
+body:
+  depth: 40.0
+  color: '#9aa1a8'
+  footprint: {at: [0, 0], size: [16.0, 26.0]}

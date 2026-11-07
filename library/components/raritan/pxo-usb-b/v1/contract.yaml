@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: pxo-usb-b
+version: 1.0.0
+class: port
+profile: networking
+description: >-
+  The USB Type-B jack on the controller face of the Raritan PXO compact PDU, labelled USB-B: a square
+  light shell with a square-shouldered opening. The quick setup guide names it as the port for an Android
+  phone or tablet. The device connects through a USB OTG adapter cable and gives the unit a local display.
+size: {w: 12.2, h: 12.7}
+size-confidence: {w: drawing, h: drawing}
+interface: usb-b
+attrs: {media: usb-b}
+provenance:
+  existence: >-
+    datasheet - Raritan PXO data sheet (V1377), page 1, the controller face labels "USB-B"; the PXC/PXO
+    quick setup guide (255-80-0059-00), Appendix A, "Android: USB-B port".
+  size: >-
+    drawing - the front line drawing of the PXO that Raritan's compact power distribution page shows
+    (a 450 x 253 px image, 1.64 px per mm across the 220 mm body): the shell spans about 20 px across
+    and 21 px down, 12.2 x 12.7 mm. An edge on a drawing this small is good to a pixel, about 0.6 mm
+    either way. No document dimensions the jack and none cites a USB standard, so the figure is
+    the drawing's and the shape below is not a standard's.
+  opening: >-
+    estimated - the opening inside the shell is drawn 8.4 across and 7.4 down with its two upper
+    corners cut, from the proportions of the same drawing and of the data sheet photograph of the
+    face. needs-drawing: a maker's drawing of the jack, or the USB 2.0 specification's receptacle
+    figure.
+  depth: >-
+    NOT STATED. No document gives how far the jack reaches behind the face, so the part states no depth.
+elements:
+  opening: {at: [1.9, 3.6], size: [8.4, 7.4], class: port}
+relief:
+  wall: '#8d949c'
+connection-points:
+  mate: {at: [6.1, 7.3], direction: front}
+skins: [default]

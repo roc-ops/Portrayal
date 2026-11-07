@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: r960-heatsink
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The processor heatsink of the PowerEdge R960 seen from above - a finned block over the socket with a wider fin
+  pack across its front edge and four captive screws, over each of the four sockets
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `R960_ HeatSink SYS`
+    (the two on the system board) and `R960_ HeatSink PEM` (the two on the processor expansion module) in the
+    `Main Assembly` node, each a `HeatSink Prefab` of the body names given below. R960 ISM figures 14 and 15 (the
+    heatsinks on the PEM and on the system board, from above) and the "Removing a heat sink" procedure (figure
+    143). ISM table 30 gives the processor and heat sink matrix.
+  size: >-
+    measured - r960.glb, the prefab box 128.0 x 182.1 (plan x = 228.0 - cad x1, plan y = 883.94 - cad z1). It is a
+    78.9 x 120.6 fin block (`Body_28_3.001`, local x 48.7, y 0) on a 73.3 x 132.5 base plate (`Body_30_3.001`) with a
+    126.8 x 49.3 fin pack across its front (`Body_25_2.002`, local y 132.8). The first pass read only the block, 74.5 x
+    123.0, off ISM figure 15 (px 370..505 across at 1.813; 860..1090 down at 1.863): the block agrees to 4.4 and
+    2.4 mm, and the pack is what the figure's 15% stretch down hid. The heatsinks are placed by the prefab's corner, so
+    the block, not the prefab, lies between the memory banks.
+  height: >-
+    measured - r960.glb, the fin block stands 23.5 tall (`Body_28_3.001`, cad y 17.9 to 41.4) and the pack 24.7 from the
+    prefab's lowest face (cad y 17.7 to 42.4). The first pass borrowed dell/heatsink-1u-16g@1's 33.1, a 1U heatsink's.
+    The air-cooled heatsinks of ISM table 30 are not told apart by size in any document held.
+size: {w: 128.0, h: 182.1}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#6d737a'
+  features:
+  - node: block
+    out: 23.5
+    color: '#8a9096'
+    confidence: measured
+    source: r960.glb `Body_28_3.001`, cad y 17.9 to 41.4
+  - node: pack
+    out: 24.7
+    color: '#8a9096'
+    confidence: measured
+    source: r960.glb `Body_25_2.002`, cad y 26.5 to 42.4, taken from the prefab's lowest face at 17.7
+elements:
+  block: {at: [48.7, 0.0], size: [78.9, 120.6], class: bezel}
+  pack: {at: [0.0, 132.8], size: [126.8, 49.3], class: bezel}
+skins: [default]

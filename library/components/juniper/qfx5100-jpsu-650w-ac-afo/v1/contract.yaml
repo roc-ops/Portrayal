@@ -1,0 +1,111 @@
+format: 1
+kind: module
+name: qfx5100-jpsu-650w-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-650W-AC-AFO, a 650 W AC power supply with port-to-FRU airflow, which the guide also calls
+  front-to-back. It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares
+  with its twin. The QFX5100 hardware guide says the QFX5100-24Q, QFX5100-48S, QFX5100-48SH,
+  QFX5100-48T and QFX5100-48TH take it. The 1RU models seat two, in slots 0 and 1 at the right of
+  the rear. The older part number is QFXC01-PWRACO-650A. The face carries three lamps labelled AC,
+  DC and !. It also has a handle lettered AFO in Juniper Gold, a C14 appliance inlet turned on its
+  side and a black ejector lever. The back-to-front sibling is JPSU-650W-AC-AFI. AC and DC
+  supplies, and supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-650W-AC-AFO
+  part-number-older: QFXC01-PWRACO-650A
+  role: ac-power-supply
+  power-output-w: 650
+  airflow: front-to-back
+  input: 110 to 240 VAC single phase (datasheet); the 1RU rating table of the guide is empty
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5100-48S, whose whole-face aspect
+    agrees with Table 3's 440.9 x 43.7 mm to 0.8 percent (10.17 against 10.09), at 3.30 px/mm
+    across and 3.28 down: the module's black recess measures 181 px, 54.8 mm, across and 130.5 px,
+    39.8 mm, high. The 48T photograph gives the same width to 0.3 mm. No document gives the supply's
+    size in millimetres. juniper/jpsu-650w-ac-ao@1, the QFX5120's 650 W supply, measures 54.6 x 40.2
+    by the same method on a different chassis; the two are within the photographs' error.
+  depth: >-
+    not stated. Searched the QFX5100 hardware guide for the supply's depth: Figures 26 and 27 are
+    isometric drawings with no scale and Table 13 gives only wattage, part number, airflow and
+    handle colour. No depth is written.
+  face: >-
+    photo - the QFX5100-48S rear studio photograph at 3.3 px/mm, read at 3.2 times: a field of
+    square vent holes at the upper left (three columns by two rows), three lamps in a column at x
+    5.5 mm and y 21.9, 28.9 and 35.9 with the legends AC, DC and ! to their right, the handle strip
+    at x 21.0 to 29.1 mm carrying AFO (AFI in the photograph), the C14 inlet centred at x 42.4, y
+    21.4 mm, and the ejector lever below the inlet at the right edge. The lever overhangs the bay
+    edge by about 4 mm in the photograph; only the part inside the face width is drawn. A cord
+    retainer wire is not drawn: it is cable furniture. Positions are good to about 0.5 mm.
+  drawing-vs-photo: >-
+    The guide's Table 13 gives the handle of the AFO supply as Juniper Gold and the AFI as Juniper
+    Azure Blue. The 48S photograph shows blue handles lettered AFI; the 48T photograph shows black
+    handles lettered AFI, so the colour is not constant across photographs. No AFO supply is
+    photographed. The table is used. The gold is the orange of juniper/qfx5110-fanafo@1, sampled
+    from a Juniper photograph, and is estimated.
+  power-output-w: >-
+    datasheet - the part number and the datasheet's ordering table (JPSU-650W-AC-AFO, "AC 650W PSU,
+    front-to-back airflow for QFX5100-48S, QFX5100-48T, QFX5100-24Q"); the guide says the 1RU supply
+    is 650 W. An OUTPUT, since a supply provides power.
+  input: >-
+    datasheet - the datasheet's Power Supply and Fan Modules list gives 110-240 V single phase AC.
+    The guide's Table 14 prints the rows for AC input voltage, line frequency and current rating with
+    no value in the PDF held. The label on the chassis rear reads 100-240 V in the photograph.
+  leds: >-
+    datasheet - guide, AC Power Supply LEDs on a QFX5100 Device (Table 16): AC OK is green when power
+    is coming into the supply, DC OK is green when the supply sends power out correctly, and Fault is
+    amber when an error is detected; each is unlit otherwise.
+  airflow: >-
+    datasheet - guide, Table 13: JPSU-650W-AC-AFO is port-to-FRU with a Juniper Gold handle; the
+    datasheet calls it front-to-back. The older part number is QFXC01-PWRACO-650A.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [32.4, 7.4], rotate: 270}
+elements:
+  led-ac:
+    at: [4.4, 20.8]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [4.4, 27.8]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [4.4, 34.8]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [21.0, 0.6]
+    size: [8.1, 39.0]
+    class: latch
+  lever:
+    at: [48.9, 19.8]
+    size: [5.8, 20.0]
+    class: latch
+size:
+  w: 54.8
+  h: 39.8
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle stands proud of the face; its projection is not measured

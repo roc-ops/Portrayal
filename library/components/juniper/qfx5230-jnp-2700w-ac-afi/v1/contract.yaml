@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: qfx5230-jnp-2700w-ac-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JNP-2700W-AC-AFI, a 2700 W AC power supply with back-to-front airflow (AIR IN, FRU-to-port). It is a
+  field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin; the QFX5230-64CD-AFI
+  ships with two. The face carries a round fan guard with a green handle across it, a C20 appliance inlet, a
+  black release latch and one lamp marked PWR. The front-to-back sibling is JNP-3000W-AC-AFO, a 3000 W unit with
+  a Juniper gold handle. AC and DC supplies, and supplies of different airflow direction, are never mixed in
+  one chassis.
+attrs:
+  model: JNP-2700W-AC-AFI
+  role: ac-power-supply
+  power-output-w: 2700
+  airflow: back-to-front
+  input: 180 to 305 VAC, 50 to 60 Hz (guide Table 4); output 12 V at 225 A and 12 V standby at 1 A
+provenance:
+  size: >-
+    borrowed - qfx5230-jnp-3000w-ac-afo, the sibling with which it shares its bay. The guide's figure 20 and its
+    text describe one AC power supply module in two airflow directions, and figure 21, the flat view, is drawn
+    once. The 74.8 by 40.2 mm face is photo-measured on that sibling.
+  depth: >-
+    not stated. Searched the QFX5230-64CD hardware guide (figures 20 and 21, the AC power supply description, the
+    physical specifications). No depth is written.
+  face: >-
+    estimated - no photograph of the AIR IN supply is held. It is drawn as the AIR OUT supply is, with the
+    handle in the guide's green (Tables 3, 6 and 12). Whether the AIR IN supply's fan guard is mirrored is not
+    shown by any held source.
+  power-output-w: >-
+    datasheet - the part number and guide Table 4 (AC AFI, 2700 W; output 12 V at 225 A, 12 V standby at 1 A)
+    and Table 6. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5230-64CD AC Power Supply LED (figure 21): the single lamp on the face shows the
+    supply's state.
+  airflow: >-
+    datasheet - guide Tables 3, 6 and 12: JNP-2700W-AC-AFI is FRU-to-port, back-to-front, and carries a green
+    handle.
+  input: >-
+    datasheet - guide Table 4: 180 to 305 VAC at 50 or 60 Hz.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [38.2, 7.7], rotate: 90}
+elements:
+  led-pwr:
+    at: [67.9, 31.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [1.9, 15.6]
+    size: [41.3, 8.5]
+    class: latch
+  release-latch:
+    at: [68.5, 13.6]
+    size: [6.3, 13.6]
+    class: latch
+size:
+  w: 74.8
+  h: 40.2
+size-confidence: {w: borrowed, h: borrowed}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#6ea301'
+    confidence: estimated
+    source: photo of the AIR OUT sibling - the handle bar stands proud of the fan guard; its projection is not measured

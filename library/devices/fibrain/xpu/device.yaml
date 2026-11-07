@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: xpu
-version: 0.1.1
+version: 0.2.1
 maturity: modelled
 manufacturer: Fibrain
 model: XPU00
@@ -71,7 +71,10 @@ provenance:
       eight openings, each 99.99 wide between two posts and 21.00 high, the
       upper row 1.00 to 22.00 and the lower 22.00 to 43.00. A bay is the 100 x
       21 envelope the holder datasheet states, centred on the opening, so it
-      laps each post by 0.005.
+      laps each post by 0.005. EACH SLOT ALSO TAKES THE SIX-WAY RJ45 HOLDERS,
+      XMU00 and XMS00: the XPU00 datasheet lists 'possibility for FO/Cu
+      assembling', 48 ports per 1U for copper and RJ45/u in kat.5, kat.6 and
+      kat.6A, and the holder datasheets give 8 holders per HD patch panel.
   frame:
     confidence: drawing
     note: >-
@@ -229,6 +232,17 @@ gaps:
       sheet under them. The drawings are followed and the floor is built.
     wanted: >-
       a photograph of the underside of either frame.
+  - what: copper-rear
+    scope: [rear, top]
+    reason: needs-drawing
+    note: >-
+      the six-way RJ45 holders and their modules are drawn from the front only.
+      A seated RJ45 holder shows no back through the open rear, and no plan,
+      because the maker publishes no rear or plan view of a holder or a module
+      and the IDC back of a module is not a port here.
+    wanted: >-
+      a rear and a plan view of an XMS00 or XMU00 holder with modules seated,
+      or a photograph from behind.
   - what: slot-numbering
     scope: [front]
     reason: vendor-silent
@@ -289,6 +303,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 1
           rear: {view: rear, cutout: back-1}
@@ -317,6 +333,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 2
           rear: {view: rear, cutout: back-2}
@@ -345,6 +363,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 3
           rear: {view: rear, cutout: back-3}
@@ -373,6 +393,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 4
           rear: {view: rear, cutout: back-4}
@@ -401,6 +423,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 5
           rear: {view: rear, cutout: back-5}
@@ -429,6 +453,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 6
           rear: {view: rear, cutout: back-6}
@@ -457,6 +483,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 7
           rear: {view: rear, cutout: back-7}
@@ -485,6 +513,8 @@ views:
             - fibrain/xmn1041cb@2
             - fibrain/xmn1041db@2
             - fibrain/xmn1041hb@2
+            - fibrain/xmu00@1
+            - fibrain/xms00@1
           group: slots
           rel-pos: 8
           rear: {view: rear, cutout: back-8}
@@ -615,6 +645,219 @@ configurations:
       slot-6: fibrain/xmn1021gb@2
       slot-7: fibrain/xmi1051ga@2
       slot-8: fibrain/xmi1021ga@2
+  copper-mixed:
+    kind: example
+    description: >-
+      All eight slots in copper: 48 RJ45 ports in the one unit, the most the
+      datasheet gives for copper. Odd slots take a screened six-way holder
+      (XMS00) with screened modules. Even slots take an unscreened one (XMU00)
+      with unscreened modules, as the datasheets pair them. Each holder mixes
+      Cat.5, Cat.6 and Cat.6A. Illustrative: holders and modules are ordered
+      separately from the frame.
+    # The keystone-adapter modules are xe110, xe210, xq110, xq210, xr110 and
+    # xr210. They draw the same face as the plain ones, so only the part
+    # number tells them apart: the screened (odd) slots seat xe210, xq210 and
+    # xr210 as three neighbours (pos 4-6 in slot 1, 3-5 in slot 3, 2-4 in slot
+    # 5, 1-3 in slot 7) and the unscreened (even) slots seat xe110, xq110 and
+    # xr110 the same way (pos 4-6 in slot 2, 3-5 in slot 4, 2-4 in slot 6,
+    # 1-3 in slot 8). The other three modules of a holder are the plain ones.
+    bays:
+      slot-1: fibrain/xms00@1
+      slot-1/pos-1: fibrain/xe200@1
+      slot-1/pos-2: fibrain/xq200@1
+      slot-1/pos-3: fibrain/xr200@1
+      slot-1/pos-4: fibrain/xe210@1
+      slot-1/pos-5: fibrain/xq210@1
+      slot-1/pos-6: fibrain/xr210@1
+      slot-2: fibrain/xmu00@1
+      slot-2/pos-1: fibrain/xe100@1
+      slot-2/pos-2: fibrain/xq100@1
+      slot-2/pos-3: fibrain/xr100@1
+      slot-2/pos-4: fibrain/xe110@1
+      slot-2/pos-5: fibrain/xq110@1
+      slot-2/pos-6: fibrain/xr110@1
+      slot-3: fibrain/xms00@1
+      slot-3/pos-1: fibrain/xq200@1
+      slot-3/pos-2: fibrain/xr200@1
+      slot-3/pos-3: fibrain/xe210@1
+      slot-3/pos-4: fibrain/xq210@1
+      slot-3/pos-5: fibrain/xr210@1
+      slot-3/pos-6: fibrain/xe200@1
+      slot-4: fibrain/xmu00@1
+      slot-4/pos-1: fibrain/xq100@1
+      slot-4/pos-2: fibrain/xr100@1
+      slot-4/pos-3: fibrain/xe110@1
+      slot-4/pos-4: fibrain/xq110@1
+      slot-4/pos-5: fibrain/xr110@1
+      slot-4/pos-6: fibrain/xe100@1
+      slot-5: fibrain/xms00@1
+      slot-5/pos-1: fibrain/xr200@1
+      slot-5/pos-2: fibrain/xe210@1
+      slot-5/pos-3: fibrain/xq210@1
+      slot-5/pos-4: fibrain/xr210@1
+      slot-5/pos-5: fibrain/xe200@1
+      slot-5/pos-6: fibrain/xq200@1
+      slot-6: fibrain/xmu00@1
+      slot-6/pos-1: fibrain/xr100@1
+      slot-6/pos-2: fibrain/xe110@1
+      slot-6/pos-3: fibrain/xq110@1
+      slot-6/pos-4: fibrain/xr110@1
+      slot-6/pos-5: fibrain/xe100@1
+      slot-6/pos-6: fibrain/xq100@1
+      slot-7: fibrain/xms00@1
+      slot-7/pos-1: fibrain/xe210@1
+      slot-7/pos-2: fibrain/xq210@1
+      slot-7/pos-3: fibrain/xr210@1
+      slot-7/pos-4: fibrain/xe200@1
+      slot-7/pos-5: fibrain/xq200@1
+      slot-7/pos-6: fibrain/xr200@1
+      slot-8: fibrain/xmu00@1
+      slot-8/pos-1: fibrain/xe110@1
+      slot-8/pos-2: fibrain/xq110@1
+      slot-8/pos-3: fibrain/xr110@1
+      slot-8/pos-4: fibrain/xe100@1
+      slot-8/pos-5: fibrain/xq100@1
+      slot-8/pos-6: fibrain/xr100@1
+  # The orderable xpu00 and xps00 above stay empty on purpose: DSH XPU00 rev 2
+  # is titled 'empty' and the XPS00 sheet gives the same, so neither SKU ships
+  # with holders, and holders and modules are separate part numbers. These two
+  # examples show each SKU with its slots full. The keystone-adapter modules
+  # (xe110, xq110, xr110 in xpu00-copper; xe210, xq210, xr210 in
+  # xps00-copper) draw the same face as the plain ones. In each holder they
+  # are three neighbours: pos 4-6 in slots 1 and 5, pos 3-5 in slots 2 and 6,
+  # pos 2-4 in slots 3 and 7, pos 1-3 in slots 4 and 8.
+  xpu00-copper:
+    kind: example
+    description: >-
+      XPU00 with all eight slots in copper: eight unscreened six-way holders
+      (XMU00), each full of unscreened RJ45 modules. The modules are Cat.5,
+      Cat.6 and Cat.6A, some with a keystone adapter: 48 ports in the unit.
+      Illustrative: XPU00 ships empty. Holders and modules are ordered
+      separately.
+    bays:
+      slot-1: fibrain/xmu00@1
+      slot-1/pos-1: fibrain/xe100@1
+      slot-1/pos-2: fibrain/xq100@1
+      slot-1/pos-3: fibrain/xr100@1
+      slot-1/pos-4: fibrain/xe110@1
+      slot-1/pos-5: fibrain/xq110@1
+      slot-1/pos-6: fibrain/xr110@1
+      slot-2: fibrain/xmu00@1
+      slot-2/pos-1: fibrain/xq100@1
+      slot-2/pos-2: fibrain/xr100@1
+      slot-2/pos-3: fibrain/xe110@1
+      slot-2/pos-4: fibrain/xq110@1
+      slot-2/pos-5: fibrain/xr110@1
+      slot-2/pos-6: fibrain/xe100@1
+      slot-3: fibrain/xmu00@1
+      slot-3/pos-1: fibrain/xr100@1
+      slot-3/pos-2: fibrain/xe110@1
+      slot-3/pos-3: fibrain/xq110@1
+      slot-3/pos-4: fibrain/xr110@1
+      slot-3/pos-5: fibrain/xe100@1
+      slot-3/pos-6: fibrain/xq100@1
+      slot-4: fibrain/xmu00@1
+      slot-4/pos-1: fibrain/xe110@1
+      slot-4/pos-2: fibrain/xq110@1
+      slot-4/pos-3: fibrain/xr110@1
+      slot-4/pos-4: fibrain/xe100@1
+      slot-4/pos-5: fibrain/xq100@1
+      slot-4/pos-6: fibrain/xr100@1
+      slot-5: fibrain/xmu00@1
+      slot-5/pos-1: fibrain/xe100@1
+      slot-5/pos-2: fibrain/xq100@1
+      slot-5/pos-3: fibrain/xr100@1
+      slot-5/pos-4: fibrain/xe110@1
+      slot-5/pos-5: fibrain/xq110@1
+      slot-5/pos-6: fibrain/xr110@1
+      slot-6: fibrain/xmu00@1
+      slot-6/pos-1: fibrain/xq100@1
+      slot-6/pos-2: fibrain/xr100@1
+      slot-6/pos-3: fibrain/xe110@1
+      slot-6/pos-4: fibrain/xq110@1
+      slot-6/pos-5: fibrain/xr110@1
+      slot-6/pos-6: fibrain/xe100@1
+      slot-7: fibrain/xmu00@1
+      slot-7/pos-1: fibrain/xr100@1
+      slot-7/pos-2: fibrain/xe110@1
+      slot-7/pos-3: fibrain/xq110@1
+      slot-7/pos-4: fibrain/xr110@1
+      slot-7/pos-5: fibrain/xe100@1
+      slot-7/pos-6: fibrain/xq100@1
+      slot-8: fibrain/xmu00@1
+      slot-8/pos-1: fibrain/xe110@1
+      slot-8/pos-2: fibrain/xq110@1
+      slot-8/pos-3: fibrain/xr110@1
+      slot-8/pos-4: fibrain/xe100@1
+      slot-8/pos-5: fibrain/xq100@1
+      slot-8/pos-6: fibrain/xr100@1
+  xps00-copper:
+    kind: example
+    component-attrs:
+      grounding-bar: {finish: '#b87333'}
+    description: >-
+      XPS00 (with grounding) with all eight slots in copper: eight screened
+      six-way holders (XMS00), each full of screened RJ45 modules. The
+      modules are Cat.5, Cat.6 and Cat.6A, some with a keystone adapter: 48
+      ports in the unit. Illustrative: XPS00 ships empty. Holders and modules
+      are ordered separately.
+    bays:
+      slot-1: fibrain/xms00@1
+      slot-1/pos-1: fibrain/xe200@1
+      slot-1/pos-2: fibrain/xq200@1
+      slot-1/pos-3: fibrain/xr200@1
+      slot-1/pos-4: fibrain/xe210@1
+      slot-1/pos-5: fibrain/xq210@1
+      slot-1/pos-6: fibrain/xr210@1
+      slot-2: fibrain/xms00@1
+      slot-2/pos-1: fibrain/xq200@1
+      slot-2/pos-2: fibrain/xr200@1
+      slot-2/pos-3: fibrain/xe210@1
+      slot-2/pos-4: fibrain/xq210@1
+      slot-2/pos-5: fibrain/xr210@1
+      slot-2/pos-6: fibrain/xe200@1
+      slot-3: fibrain/xms00@1
+      slot-3/pos-1: fibrain/xr200@1
+      slot-3/pos-2: fibrain/xe210@1
+      slot-3/pos-3: fibrain/xq210@1
+      slot-3/pos-4: fibrain/xr210@1
+      slot-3/pos-5: fibrain/xe200@1
+      slot-3/pos-6: fibrain/xq200@1
+      slot-4: fibrain/xms00@1
+      slot-4/pos-1: fibrain/xe210@1
+      slot-4/pos-2: fibrain/xq210@1
+      slot-4/pos-3: fibrain/xr210@1
+      slot-4/pos-4: fibrain/xe200@1
+      slot-4/pos-5: fibrain/xq200@1
+      slot-4/pos-6: fibrain/xr200@1
+      slot-5: fibrain/xms00@1
+      slot-5/pos-1: fibrain/xe200@1
+      slot-5/pos-2: fibrain/xq200@1
+      slot-5/pos-3: fibrain/xr200@1
+      slot-5/pos-4: fibrain/xe210@1
+      slot-5/pos-5: fibrain/xq210@1
+      slot-5/pos-6: fibrain/xr210@1
+      slot-6: fibrain/xms00@1
+      slot-6/pos-1: fibrain/xq200@1
+      slot-6/pos-2: fibrain/xr200@1
+      slot-6/pos-3: fibrain/xe210@1
+      slot-6/pos-4: fibrain/xq210@1
+      slot-6/pos-5: fibrain/xr210@1
+      slot-6/pos-6: fibrain/xe200@1
+      slot-7: fibrain/xms00@1
+      slot-7/pos-1: fibrain/xr200@1
+      slot-7/pos-2: fibrain/xe210@1
+      slot-7/pos-3: fibrain/xq210@1
+      slot-7/pos-4: fibrain/xr210@1
+      slot-7/pos-5: fibrain/xe200@1
+      slot-7/pos-6: fibrain/xq200@1
+      slot-8: fibrain/xms00@1
+      slot-8/pos-1: fibrain/xe210@1
+      slot-8/pos-2: fibrain/xq210@1
+      slot-8/pos-3: fibrain/xr210@1
+      slot-8/pos-4: fibrain/xe200@1
+      slot-8/pos-5: fibrain/xq200@1
+      slot-8/pos-6: fibrain/xr200@1
   lc-duplex-192:
     kind: example
     description: >-

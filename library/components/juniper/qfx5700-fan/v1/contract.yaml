@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: qfx5700-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP5700-FAN, the fan tray of the QFX5700, with front-to-back airflow (air out, AFO). A tray holds four
+  fans in a row behind four rounded-square grilles, a status panel at the left with a lamp for each fan and one for
+  the forwarding engine board, a handle slot at each end and a heat warning. The chassis takes two, one above the
+  other, and they are interchangeable. A tray is hot-insertable and hot-removable: replace a failed one within one minute,
+  and the system shuts down 240 seconds after a tray is removed. The trays pull air in through the front panel around
+  the optics; the supplies cool themselves with their own fans.
+attrs:
+  airflow: front-to-back
+  power-absent: not-published
+part-numbers:
+  JNP5700-FAN: {part: JNP5700-FAN}
+provenance:
+  part-number: >-
+    datasheet and guide - the datasheet (1000719-009, September 2024) additional SKUs: JNP5700-FAN, an air-out (AFO)
+    front-to-back fan for the QFX5700 and QFX5700E; the guide's Table 6 lists it as the supported fan tray.
+  size: >-
+    drawing and datasheet - the height is Table 5's 8.5 cm. The width is read off the flat rear figure (figure 17, g101403,
+    2.928 px/mm with the 440.2 mm body as the scale): the tray's face runs from the left edge of the body to a screw
+    column 1249 px, 426.6 mm, across. Table 5 prints the tray as 44 cm by 13.6 cm by 8.5 cm; 44 cm is read as the width
+    over the screw column and 13.6 cm as the depth, which is not written. The figure measures the two trays 83.4 and 84.2
+    mm high, 1 to 2 percent under the table; the table's is kept.
+  face: >-
+    drawing and photograph - figure 17 and the rear photograph (figure 9, g101492): four grilles 69.6 by 69.4 mm on a
+    92.2 mm pitch starting 59.1 mm from the left edge, hex nuts at the corners of each grille, the JNP5700-FAN label at the
+    top left, the status panel with five lamps down the left edge, a handle slot at the left (19.1 mm in) and at the right
+    (413.5 mm in), the heat warning between the status panel and the first grille. Positions are estimated to about 0.7
+    mm. The grilles are drawn as a dark mesh over a hub.
+  drawing-vs-photo: >-
+    sources-disagree and the photograph wins for what is printed: the drawing draws a fan symbol beside the digits 0 to 3
+    on the status panel, and the photograph prints FAN 0 to FAN 3 and FEB. The drawing shows the face pale and the
+    photograph shows it dark grey with black handles. The status heading reads STATUS in both. The photograph is what is drawn.
+  handle: >-
+    photograph - the handles at each end are black; no airflow colour is stated for this tray. The guide describes colours
+    only for the AC supply's handle (orange). The tray is air out only, so there is no second airflow to tell apart.
+  power: >-
+    not published. Searched the QFX5700 hardware guide (the cooling system section and Tables 6 and 7, the power section and
+    Table 9) and the datasheet for a figure per tray: the guide's cooling section points at Juniper's power calculator,
+    which needs an account, and Table 9 gives whole-switch figures only. The module declares power-absent so the missing
+    figure is a statement and not a silence.
+  leds: >-
+    datasheet - guide Table 7: the STATUS lamp (fan status) is green blinking while hardware initialisation is complete and
+    software pending, green steady when working, yellow steady when faulty, and unlit with no input power; the FEB lamp is
+    green blinking while the FEB is booting, green steady online and working, yellow steady failed and unlit offline. The
+    guide's table has one STATUS row and one FEB row where the face has a lamp for each of four fans and one for the FEB;
+    each fan lamp is taken to follow the STATUS row.
+states: [absent]
+elements:
+  led-fan0:
+    at: [9.6, 21.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: initialising, color: '#22c55e', behavior: blinking}, {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  led-fan1:
+    at: [9.6, 28.9]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: initialising, color: '#22c55e', behavior: blinking}, {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  led-fan2:
+    at: [9.6, 37.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: initialising, color: '#22c55e', behavior: blinking}, {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  led-fan3:
+    at: [9.6, 44.9]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: initialising, color: '#22c55e', behavior: blinking}, {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]
+  led-feb:
+    at: [9.6, 57.1]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: booting, color: '#22c55e', behavior: blinking}, {name: online, color: '#22c55e'}, {name: failed, color: '#f59e0b'}]
+size:
+  w: 426.6
+  h: 85.0
+size-confidence: {w: drawing, h: datasheet}

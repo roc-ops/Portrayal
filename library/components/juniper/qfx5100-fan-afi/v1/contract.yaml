@@ -1,0 +1,66 @@
+format: 1
+kind: module
+name: qfx5100-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5100-FAN-AFI, a field-replaceable fan module with FRU-to-port airflow, which the guide also
+  calls back-to-front. Cold air comes in at the fan end of the switch and hot air leaves at the
+  port end. It is marked AIR IN and has a Juniper Azure Blue handle. It is hot-removable and
+  hot-insertable. The QFX5100 hardware guide says the QFX5100-24Q, QFX5100-48S, QFX5100-48SH,
+  QFX5100-48T and QFX5100-48TH take it. The 1RU models seat five, in slots 0 to 4 from left to
+  right. The front-to-back sibling is QFX5100-FAN-AFO. The two are never mixed in one chassis, and
+  never with power supplies of the other direction. The 2RU QFX5100-96S uses a different part.
+attrs:
+  model: QFX5100-FAN-AFI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5100-48S (aspect of the whole face
+    checked against Table 3's 440.9 x 43.7 mm: 10.17 against 10.09, 0.8 percent out), scaled at
+    3.30 px/mm across and 3.28 down: the blue face of five modules measures 137 px, 41.5 mm, across
+    on a 48.95 mm pitch, and 41.3 mm high. The QFX5100-48T photograph reads 43.1 mm on a 48.65 mm
+    pitch at 3.27 px/mm, a different pose of the same part, and is not used for the size. No
+    document states the module's size in millimetres.
+  depth: >-
+    not stated. Searched the QFX5100 hardware guide (published 2023-02-26) and the datasheet
+    (July 2024) for the module's depth: the guide's Figure 35 is an isometric drawing with no
+    scale and the tables give no depth. No depth is written rather than a guessed one.
+  face: >-
+    photo and drawing - the guide's isometric Figure 35 and the studio photographs of the 48S and
+    the 48T agree on what is on it: a hex grille above and another below a handle band, and a grey
+    chip on the band with a blue fan symbol, AIR IN and (AFI). Positions are fractions of the 48S
+    photograph at 3.5 times; the grille and chip are good to about 0.5 mm.
+  colour: >-
+    photo-measured - the blue is the mean of the handle's flat face in the 48S rear photograph,
+    5 by 5 px, which reads about #68b0d3. The guide's Table 19 names the colour, Juniper Azure
+    Blue, and prints no value.
+  airflow: >-
+    datasheet - guide, Table 19 and Cooling System and Airflow: QFX5100-FAN-AFI is FRU-to-port,
+    label AIR IN, colour Juniper Azure Blue, "also known as back-to-front airflow". The datasheet's
+    ordering table lists it as the back-to-front fan module for QFX5100; it prints the 2RU
+    sibling's description under the same row, which the guide's Table 19 corrects.
+  power: >-
+    not published. Searched the QFX5100 hardware guide near its fan sections and its power tables:
+    only whole-switch figures exist. The module declares power-absent so the missing figure is a
+    statement and not a silence.
+states: [absent]
+elements:
+  handle:
+    at: [1.3, 13.2]
+    size: [38.9, 14.9]
+    class: latch
+size:
+  w: 41.5
+  h: 41.3
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#6ab3da'
+    confidence: estimated
+    source: photo - the handle band stands proud of the grilles; its projection is not measured

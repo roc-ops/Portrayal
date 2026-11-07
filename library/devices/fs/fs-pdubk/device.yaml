@@ -1,0 +1,227 @@
+format: 1
+kind: device
+name: fs-pdubk
+version: 0.1.0
+maturity: modelled
+manufacturer: FS.com
+model: FS-PDUBK
+aliases:
+- {name: '78523', kind: vendor, note: FS shop product ID}
+description: >-
+  Vertical PDU mounting brackets, FS SKU #78523, two to a pack. Each is a short black SPCC steel bracket
+  that bolts to a rack post and holds a zero-U PDU beside it. A foot 30 mm across lies against the post
+  and is bolted through four holes. A plate 135 mm deep and 88.4 mm high stands out from it. The plate has
+  three keyhole slots, which take the mounting buttons of a toolless PDU, and two rows of four square
+  holes. The guide shows two ways to fit it, on the front of the post or on its rear side.
+profile: passive
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FS-PDUBK HAS NO DATA SHEET OF ITS OWN. FS's documentation link and its shop link for this SKU both serve
+      the FS-GR42U-PDUBK data sheet, the full-height cabinet bracket (1974 x 135 x 10, M4 screws), which is a
+      different part and is not used. The sources are the FS-PDUBK Quick Start Guide V1.0 (two pages, images
+      only, no dimension on either), the gallery of the product page (SKU 78523), and the product page's one
+      dimensioned drawing of the plate, a render. That drawing gives 135 and 88.4 and the 31.5 pitch of the
+      keyholes and of the square holes; every other position here is scaled off it or off the photographs,
+      on the axis it lies along, and says so.
+  mount:
+    confidence: estimated
+    note: >-
+      `rack-side`, which is the library's one way to say a part stands vertically beside the rack, on a post,
+      and takes no rack unit of its own (docs/vertical-cable-managers-design.md): the guide's Step 1 bolts
+      two of them to a post, one near the top and one near the bottom, and Step 2 hangs a vertical PDU on
+      the pair. `ru: 2` is the 88.4 mm it runs, 1.99 units. It is drawn as it stands beside the rack: the
+      front is its foot, 30 across, with the plate going away from it along the depth of the rack.
+      THE ORIENTATION IS READ OFF THE PHOTOGRAPHS AND THE GUIDE'S FIGURES, NOT A DRAWING: the foot lies on a
+      post's face, so it is a plane across the rack and the plate stands at right angles to it, along the
+      depth, which is where a PDU hung on its keyholes stands. Which edge of the foot the plate is on, left
+      or right, is not stated, and the plate is drawn on the right of the front view.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 135 and 88.4 are the dimensions of the product page's render of the plate (5.3 in [135 mm]
+      and 3.5 in [88.4 mm]). The product page's specification gives 30 x 135 x 88.4 mm (H x W x D as FS prints
+      it); the 30 is the foot's reach from the plate and no view dimensions it. So the part is 30 across the
+      rack's face, 88.4 high and 135 deep.
+  plate:
+    confidence: estimated
+    note: >-
+      estimated - the plate scaled off the dimensioned render, each position on the axis it lies along:
+      the render's own dimensions give 6.25 px/mm along the plate and 6.66 px/mm across it, 6 per cent
+      apart, so it carries a little perspective and no position is taken across both axes at one scale. Three
+      keyholes 31.5 apart (dimensioned) at 38.4, 69.9 and 101.4 from the foot's end of the plate (the first
+      scaled), each a narrow slot 11.5 wide and 47.3 long with a wider opening 21.3 across and 19 high at its
+      middle, centred up the 88.4; four columns of square holes about 9 across, 31.5 apart (dimensioned), at
+      22.9, 54.4, 85.9 and 117.4, in two rows centred 10.3 from the top and from the bottom.
+  keyhole:
+    confidence: estimated
+    note: >-
+      estimated - the guide gives no slot size. The slot scaled off the render is 11.5 wide, which is the
+      lower end of the 11.5 to 12.5 mm the Eaton Rack PDU G4 installation guide (P-164001156 rev 3, 2.11) asks of
+      a keyhole in 1.5 to 2 mm sheet and the width the connectors registry states for `pdu-button`; it does not
+      differ from the registry note. The button seats in the lower narrow end, 26.3 mm up the plate from its
+      bottom: the guide's Option 2 figure draws the button at the bottom of the middle keyhole, and a PDU
+      hangs by its weight. Every keyhole stands at that height, so each configuration publishes three slots at
+      the same height.
+  foot:
+    confidence: estimated
+    note: >-
+      estimated - four bolt holes, two round between two slotted, up the foot's middle, drawn on the EIA-310
+      pattern (15.875, 12.7 and 15.875 up the post, 44.45 end to end) that the photographs' spacing agrees
+      with, centred on the 88.4. Round 6.6 across, slotted 6.6 by 10.5. The guide's Step 1 shows the foot bolted
+      to the post's holes with cup screws and nuts.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - `shell: sheet`, 2.0: FS states the material (SPCC) and not the gauge, and the sheet body builds
+      no floor thinner than 2 mm (docs/cable-managers-design.md section 4). The solid in 3D is the plate and
+      the foot, each a well; the six views are elevations.
+  options:
+    confidence: estimated
+    note: >-
+      the guide's two ways to fit it are its two configurations. `front` is Option 1, the bracket on the front
+      face of the post, so its foot is at the rear end of the plate and the plate runs forward of the post.
+      `rear` is Option 2 ("Back Side"), the bracket on the post's rear face, so its foot is at the front end
+      and the plate runs behind the post. ESTIMATED: the guide's figures show a PDU hung beside the bracket
+      and the plate's face to the viewer and do not show which end of the plate the foot is at, so that is
+      read from where the post is in each figure. The keyholes stand at the same height in both, and so do
+      the squares, because it is the same part turned end for end.
+  fit:
+    confidence: photo-measured
+    note: >-
+      the guide's Option 1 figure fixes the PDU's own ears to the plate through the square holes with four
+      screws; its Option 2 figure hangs the PDU by a button in a keyhole. Only the keyholes are modelled as
+      slots a PDU's buttons are matched to. The square holes are drawn and not published.
+  color:
+    confidence: photo-measured
+    note: >-
+      black, as every photograph of the product page shows, and FS's "SPCC" for the steel.
+  hardware:
+    confidence: datasheet
+    note: >-
+      the guide's accessories figure shows 12 pieces, each an M6 cup screw with its nut, for the two
+      brackets; the product listing says the same.
+attrs:
+  physical:
+    material: SPCC
+    color: Black
+    mounting-hardware: M6 cup screw and nut x12
+    pack-quantity: 2
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 30.0
+  height: 88.4
+  depth: 135.0
+  ru: 2
+  mount: rack-side
+  shell: sheet
+  thickness: 2.0
+  color: '#1b1d20'
+gaps:
+- what: datasheet
+  reason: vendor-silent
+  note: >-
+    the data sheet FS links for this SKU is the FS-GR42U-PDUBK sheet, which is the cabinet bracket and no
+    part of this one. The quick start guide carries no dimension and no weight.
+  wanted: a data sheet or a drawing of FS-PDUBK from FS
+- what: weight
+  reason: vendor-silent
+  note: >-
+    no document held states the bracket's weight.
+  wanted: the product page weight
+- what: sheet-gauge
+  reason: vendor-silent
+  note: >-
+    FS states the material, SPCC, and no thickness for any part of the bracket.
+  wanted: the gauge of the sheet
+- what: plate-lip
+  scope: [left, right, top, bottom]
+  reason: needs-drawing
+  note: >-
+    the far end of the plate turns back into a short lip, and three triangular gussets join the plate to
+    the foot (the product page's photographs). No view dimensions either, so neither is drawn.
+  wanted: a dimensioned drawing of the bracket from the side and from above
+- what: slot-size
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    the guide gives no keyhole size and the dimensioned render gives only the pitch. The width scaled off
+    it, 11.5, meets what the connectors registry states for `pdu-button` and is not confirmed by a figure.
+  wanted: the keyhole dimensions
+groups:
+  foot: {term: Foot, role: furniture, index-origin: 1, description: 'the sheet that lies against the post, bolted through four holes'}
+  plate: {term: Plate, role: furniture, index-origin: 1, description: 'the sheet that stands out from the foot, with the keyholes and the square holes'}
+  keyholes: {term: Keyhole, role: furniture, index-origin: 1, description: 'the slots a PDU''s mounting buttons seat in'}
+views:
+  front:
+    size: {w: 30.0, h: 88.4}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-flange@1, id: foot-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-flange-face@1, id: foot-rear, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-edge@1, id: plate-edge-front, at: [28.0, 0.0], group: plate, rel-pos: 2, only-in: [front], in: foot-front}
+  rear:
+    size: {w: 30.0, h: 88.4}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-flange@1, id: foot-rear, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-flange-face@1, id: foot-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-edge@1, id: plate-edge-rear, at: [0.0, 0.0], group: plate, rel-pos: 2, only-in: [rear], in: foot-rear}
+  top:
+    size: {w: 30.0, h: 135.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [28.0, 0.0], size: [2.0, 135.0], fill: '#2a2d31', kind: plate}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [0.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
+  bottom:
+    size: {w: 30.0, h: 135.0}
+    panel:
+      decor:
+      - {id: plate-edge, at: [0.0, 0.0], size: [2.0, 135.0], fill: '#2a2d31', kind: plate}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [0.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
+  left:
+    size: {w: 135.0, h: 88.4}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-plate@1, id: plate-front, at: [0.0, 0.0], skin: flange-left, group: plate, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-plate@1, id: plate-rear, at: [0.0, 0.0], skin: flange-right, group: plate, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-1, at: [27.75, 20.55], group: keyholes, rel-pos: 1, only-in: [front], in: plate-front}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-2, at: [59.25, 20.55], group: keyholes, rel-pos: 2, only-in: [front], in: plate-front}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-3, at: [90.75, 20.55], group: keyholes, rel-pos: 3, only-in: [front], in: plate-front}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-4, at: [22.95, 20.55], group: keyholes, rel-pos: 1, only-in: [rear], in: plate-rear}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-5, at: [54.45, 20.55], group: keyholes, rel-pos: 2, only-in: [rear], in: plate-rear}
+      - {ref: fs/fs-pdubk-keyhole@1, id: keyhole-6, at: [85.95, 20.55], group: keyholes, rel-pos: 3, only-in: [rear], in: plate-rear}
+      - {ref: fs/fs-pdubk-edge@1, id: foot-edge-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front], in: plate-front}
+      - {ref: fs/fs-pdubk-edge@1, id: foot-edge-rear, at: [133.0, 0.0], group: foot, rel-pos: 1, only-in: [rear], in: plate-rear}
+  right:
+    size: {w: 135.0, h: 88.4}
+    components:
+      placements:
+      - {ref: fs/fs-pdubk-plate-face@1, id: plate-face-front, at: [0.0, 0.0], skin: flange-right, group: plate, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-plate-face@1, id: plate-face-rear, at: [0.0, 0.0], skin: flange-left, group: plate, rel-pos: 1, only-in: [rear]}
+configurations:
+  front:
+    kind: base
+    default: true
+    description: >-
+      Option 1 of the guide: the bracket on the front face of the post, its foot at the rear end of the
+      plate.
+    part-numbers:
+      FS-PDUBK: {}
+  rear:
+    kind: orderable
+    description: >-
+      Option 2 of the guide, "Back Side": the bracket on the rear face of the post, its foot at the front end
+      of the plate.
+    part-numbers:
+      FS-PDUBK: {}
+references:
+- {title: FS FS-PDUBK Vertical PDU Mounting Brackets (2PCS) Quick Start Guide V1.0, sha256: d24778b8a5e961c9c4078028050606889292ab0044285d3045522074024d140f}

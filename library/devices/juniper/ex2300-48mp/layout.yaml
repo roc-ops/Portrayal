@@ -1,0 +1,493 @@
+format: 1
+kind: device
+name: ex2300-48mp
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: EX2300-48MP
+portfolio: {line: EX Series, family: EX2300}
+description: >-
+  Juniper EX2300-48MP is a fixed 1RU Multigigabit access switch. It has 48 PoE+ ports, all with 740 W
+  available: sixteen 100/1000/2500BASE-T ports and thirty-two 10/100/1000BASE-T ports, and six built-in
+  10-Gigabit SFP+/SFP uplink ports. The front carries the 48 jacks in three shells of two stacked rows,
+  numbered 0 to 47 with the upper jack of a column taking the even number (the middle shell, ports 16 to
+  31, is the Multigigabit one), the six uplinks in three stacked pairs numbered 0 to 5, the three system
+  lamps (MGT, FAN, PW), the management Ethernet port with the RJ-45 console port under it, and a USB
+  port. The rear carries the earthing terminal and the AC power cord inlet. The power supply and the four
+  fans are built into the chassis (the fans along the right side panel, moving air from side to side), so
+  there are no bays. It has no mini-USB console port and no mode button.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX2300 Switch Hardware Guide, Juniper Networks, published 2025-08-12 (314 pages;
+      https://www.juniper.net/documentation/us/en/hardware/ex2300/ex2300.pdf): Figure 6 (front panel),
+      Figure 15 (rear panel), Figures 19, 23, 29 and 31 (LEDs), Table 1 (models), Table 3 (chassis size and
+      weight), Tables 5, 8, 9 and 13 (LED states), the cooling system section with Figures 36 and 37,
+      Tables 14 and 15 (power), Table 34 (parts list), Table 35 (mounting methods) and Table 36 (earthing).
+      Juniper's own straight-on studio photograph of the EX2300-48MP front (ex2300m-poe48-front-high.jpg)
+      from the maker's image library
+      (https://www.juniper.net/us/en/company/images/image-library-logos-and-product-photos/products/ex2300-48mp.html),
+      which holds no rear or side photograph of this model. The English datasheet addresses tried (the
+      EX2300 line datasheet under datasheets/us/en/switches) did not answer, so no datasheet is cited.
+  gate-1:
+    confidence: measured
+    note: >-
+      The guide's Figure 6 is 1501 x 413 px; the photograph is 1500 x 230 px with the body 1440 px across
+      (x 30 to 1470): 3.266 px per mm across against the 440.9 mm of Table 3. The photograph's jack pitch
+      reads 46.4 px = 14.2 mm and the shells 117.6 mm apart (a 3.8 mm gutter after eight columns). The
+      photograph is 1440 px across and 163 down including the reflection; its body (face top at 43 px) is
+      read at the same px per mm, the body 43.3 mm high being 141 px. The rear Figure 15 passes the aspect
+      check in x (1449 px, 3.286 px per mm) and is 147 px (44.5 mm) down against 43.3, 2.8 percent out, so
+      its y is taken from the body's centre line. Every position is estimated and good to about a
+      millimetre.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Table 3: height 1.7 in (4.33 cm) for the EX2300-48MP, width 17.36 in (44.09 cm) and 18.95 in (48.13
+      cm) with the mounting brackets attached, depth 14.45 in (36.71 cm), weight 14.33 lb (6.5 kg). 440.9 x
+      43.3 x 367.1 is carried, the metric as printed. The other EX2300 devices are 17.4 in wide and 1.75 in
+      high; the MP models are the guide's own exception.
+  mounting:
+    confidence: datasheet
+    note: >-
+      Table 34: two mounting brackets and eight screws are provided; Table 35: two-post rack or cabinet with
+      those brackets, four-post rack with the separately orderable four-post rack-mount kit
+      (EX-4PST-RMK), recessed 2 in from the front with that kit's recess brackets, and on a desk on the
+      four preinstalled rubber feet. The MP models cannot be wall mounted. No figure measures a bracket
+      position and the kit is not modelled here, so no ear position is stated and no kit is listed.
+  front-layout:
+    confidence: estimated
+    note: >-
+      estimated - read off the photograph as described under gate-1. Three shells of eight columns: the first
+      jack at 36.65 mm, 14.22 mm apart, the shells 117.6 mm apart, the rows 14.4 mm apart (cell tops, latch
+      tab included) with the upper row turned 180 so its latch tab is above, as the photograph shows. The six
+      uplink cages stand in three columns (the first two abutting at 14.7 mm, the third 2.8 mm clear of them)
+      with the registry's 15.0 mm between the stacked rows, the upper cage upright and the lower turned, as
+      the library's stack convention has it. Each port has one small rectangular lamp above its shell, the
+      even port's at the left of its column and the odd port's at the right, with the column's two numbers
+      printed above them in orange, the even number high and left and the odd one low and right. The
+      management jack sits above the console jack at the left, in one housing 17.2 mm wide; its two lamps,
+      ACT and LINK, are separate dots over the housing, printed beside their legends, with MGT, FAN and PW on
+      the line above, and the USB-A port, upright, stands under them. The photograph shows one corner mark
+      beside the USB port that the guide's Figure 6 does not draw; it carries no printing and is not drawn.
+      The photograph shows a light-blue strip along the lower edge of the face, drawn as chassis art. The
+      third uplink column in the photograph has a transceiver seated in its lower cage; the cages are drawn
+      empty.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the photograph prints each column's two numbers in orange over the lamps (0 and 1, 2
+      and 3, ... 46 and 47), so the upper jack takes the even number; the uplinks print 0 to 5 in white the
+      same way. Port numbers are as printed on the metal, from 0. The Junos interface names are not printed:
+      the guide's Table 2 gives PIC 0 as 32x10/100/1G Base-T and 16x100M/1G/2.5G Base-T and PIC 1 as 6x1G/10G
+      SFP/SFP+, recorded here and not in an interfaces block because the faceplate does not print them.
+  multigig-ports:
+    confidence: datasheet
+    note: >-
+      Hardware guide, Front Panel of an EX2300 Switch: sixteen 100/1000/2500BASE-T ports with PoE/PoE+ and
+      thirty-two 10/100/1000BASE-T ports with PoE/PoE+; Figure 6 callout 4 marks the middle shell (ports 16
+      to 31) as the 100/1000/2500 one and callout 3 the first and third. The photograph carries an orange
+      frame round the middle shell only: it is a marketing overlay and not on the metal, so it is not drawn.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Hardware guide, Tables 5, 8, 9 and 13 and Figures 19, 23, 29 and 31. The system lamps are MGT, FAN and
+      PW (Table 5); each RJ-45 port and each uplink has one Link/Activity lamp (Table 13), and the
+      management jack has a Link lamp and an Activity lamp (Figure 23, Tables 8 and 9), printed LINK and
+      ACT on the photograph. Speed, duplex, administrative status and PoE are read with show commands (the
+      guide's note under Table 13), so there are no mode lamps and no mode button.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - positions off Figure 15 (1501 x 331 px, body 1449 px across at 3.286 px per mm, y from the
+      body's centre line at 3.30 px per mm): the AC inlet and its legend, the earthing terminal, the plate
+      near the right with its two large screws, and the model name. No photograph of this rear is held. The
+      guide's drawn serial number and CLEI rectangles (callouts 1 and 2) are left out: they are paper labels
+      carrying real serial numbers. The Running Junos badge Figure 15 draws and the Juniper lockup are
+      maker's logos and are not drawn (the lockup is reserved). Figure 15 calls the ring at the right "ESD
+      point" (callout 4) but prints the earth symbol under it, and Table 36 lists an earthing terminal on
+      the rear panel of the EX2300-48MP (a 14-10 AWG lug on one M4 screw): it is drawn as the earthing
+      terminal. The figure also draws two ring bosses beside the plate and a ring beside the first screw,
+      which the guide names nowhere, and a small slotted screw; the bosses are not drawn.
+  side-fans:
+    confidence: estimated
+    note: >-
+      estimated - the guide's cooling section says four fans built in along the right side panel give
+      side-to-side cooling, and Figure 37 shows them on the right panel in perspective. Their places along
+      the depth are read off the plan in Figure 36 (the box 736 px for 367.1 mm, 2.005 px per mm; the fans'
+      centres 158.6, 199.5, 276.8 and 319.7 mm from the front; on the right view x = 0 is the front), a 40
+      mm fan each. Figure 36 draws the fans on the left of the plan, with the front at the top and the
+      arrows leaving there, while the text and Figure 37 put them on the right panel: the text and Figure
+      37 are followed, so the exhaust is on the right panel and the intake on the left.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      Hardware guide, Power Supply in EX2300 Switches: "The power supply in EX2300 switches is built in
+      along the rear panel of the chassis"; Table 2 lists "Switch with built-in power supply" and, for the
+      fans, "Fan". The cooling system section says "four fans built in along the right side panel" and
+      Figure 37 is captioned "Fans Built-in". Nothing in the guide describes removing or replacing either.
+      They are part of the chassis, not bays and not components.
+  airflow:
+    confidence: datasheet
+    note: >-
+      the cooling system provides side-to-side chassis cooling (Figures 36 and 47).
+  power:
+    confidence: datasheet
+    note: >-
+      Table 14: maximum power consumed by the switch 90 W when no PoE power is drawn, maximum PoE/PoE+
+      power available 740 W; Table 15: 100 through 240 VAC, 50/60 Hz, 10.6 A at 100 VAC and 4.8 A at 240 VAC
+      (the rear legend of Figure 15 prints 10.6-4.8A).
+  colour:
+    confidence: photo-measured
+    note: >-
+      median of the bare front plate in the 24-port photograph (#656d74); the 48-port photograph's plate
+      reads about #81868d near its top edge, lighter under the studio lights; the strip along the lower
+      edge #bbe4f2.
+  ground-stud-pitch:
+    confidence: estimated
+    note: >-
+      Table 36 lists, for the EX2300-24MP and EX2300-48MP, a Panduit LCA10-10L lug or equivalent (not provided) on one
+      Pan Phillips M4 x 6 mm nickel plated screw (provided). The figure calls the ring at the right of the rear the
+      ESD point and prints the earth symbol under it, and the `rear-layout` note draws it as the earthing terminal; it
+      was drawn as a plain light disc, which is how a nickel plated screw head looks. `common/ground-screw-m4@1` is
+      placed on that ring, at the centre the ring was drawn at: the one M4 screw that the guide says is provided,
+      which a ring lug lands on. It is a screw and not a bare hole because the guide says the screw ships with the
+      switch.
+attrs:
+  physical:
+    weight-note: 14.33 lb (6.5 kg), Table 3
+  power:
+    power-max-w: 90
+    power-envelope: bare
+    poe-budget-w: 740
+    poe-standard: IEEE 802.3af/at
+    power-input: 100 through 240 VAC, 50/60 Hz
+    power-current-max: 10.6 A at 100 VAC; 4.8 A at 240 VAC
+  thermal:
+    cooling: four built-in fans, side-to-side
+  environmental:
+    operating-temp-c: 0 to 45
+    humidity: 10 to 85 percent, noncondensing
+    altitude-ft: 13,000 at 40 C
+  features:
+    optics-sfp-plus: >-
+      hardware guide, Uplink Ports: the six uplink ports take SFP and SFP+ transceivers.
+      A Virtual Chassis can be formed with SFP+ and not with SFP
+chassis:
+  width: 440.9
+  height: 43.3
+  depth: 367.1
+  ru: 1
+  weight-kg: 6.5
+  color: '#656d74'
+  airflow: side
+  power: ac
+gaps:
+- what: rack-ears
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    Table 35 lists the supplied two-post mounting brackets and a separately orderable four-post rack-mount
+    kit (EX-4PST-RMK, named in the rack requirements); no figure measures a bracket position, so no ear
+    position is stated and no kit is listed.
+  wanted: A dimensioned drawing of the bracket positions.
+- what: eol
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    Searched for an end-of-life notice: only third-party lifecycle trackers answered; Juniper's own
+    bulletin was not found, so no lifecycle is written.
+  wanted: Juniper's end-of-life bulletin for the EX2300 line.
+- what: rear-photograph
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The maker's image library holds no EX2300-48MP rear photograph; its rear is drawn from Figure 15.
+  wanted: A straight-on studio photograph of the EX2300-48MP rear.
+- what: side-elevations
+  scope: [left, right]
+  reason: needs-drawing
+  note: >-
+    The right panel carries the fans (drawn as grilles at the places read off Figure 36); no flat figure
+    shows its mounting holes or the left panel's intake.
+  wanted: A flat drawing of both side panels.
+- what: earthing-terminal-position
+  scope: [earth-screw]
+  reason: needs-photo
+  note: >-
+    The figure calls the ring at the right of the rear the ESD point and prints the earth symbol under it; Table 36
+    lists an earthing terminal on the rear panel, one M4 screw. The screw is placed on that ring.
+  wanted: a photograph of the rear that shows which feature is the earthing terminal
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: 802.3at}
+    description: >-
+      the thirty-two built-in 10/100/1000BASE-T PoE+ ports (the first and third shells, ports 0 to 15 and 32
+      to 47); rel-pos carries the number printed on the faceplate, the upper jack of a column takes the even
+      number
+  rj45-mgig:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 2.5g, poe: 802.3at}
+    description: >-
+      the sixteen built-in 100/1000/2500BASE-T PoE+ ports (the middle shell, ports 16 to 31); rel-pos carries
+      the number printed on the faceplate, the upper jack of a column takes the even number
+  rj45-b:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: 802.3at}
+    description: >-
+      the third shell's sixteen 10/100/1000BASE-T PoE+ ports (32 to 47), a block of its own because the
+      middle shell's Multigigabit ports stand between it and the first; rel-pos carries the number printed
+      on the faceplate
+  rj45-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the Link/Activity lamp over each RJ-45 port
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the six built-in SFP+/SFP uplink ports, numbered 0 to 5
+  uplink-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the Link/Activity lamp over each uplink
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      how the switch is reached out of band - the management Ethernet port, the RJ-45 console port and the
+      USB port
+  console:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 console port
+  mgmt-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the management port's Link and Activity lamps
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the MGT, FAN and PW system lamps
+  power-input:
+    term: Inlet
+    role: service
+    index-origin: 0
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the earthing terminal, one M4 screw for a lug (Table 36)
+views:
+  front:
+    size: {w: 440.9, h: 43.3}
+    panel:
+      decor:
+      - {id: accent-strip, kind: accent-strip, at: [1.0, 39.9], size: [438.9, 1.8], fill: '#bbe4f2'}
+      - {id: shell-mgmt, kind: jack-shell, at: [15.3, 8.9], size: [17.2, 26.0], rx: 0.6, fill: '#bfc1c4'}
+      - {id: shell-1, kind: jack-shell, at: [34.2, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
+      - {id: shell-2, kind: jack-shell, at: [151.8, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
+      - {id: shell-3, kind: jack-shell, at: [269.4, 8.6], size: [117.4, 26.6], rx: 0.6, fill: '#bfc1c4'}
+      - {id: usb-shell, kind: port-shell, at: [6.9, 20.5], size: [6.3, 13.8], rx: 0.5, fill: '#b9bcc0'}
+      cutouts:
+      - {block: mgmt}
+      - {block: console}
+      - {block: rj45}
+      - {block: rj45-mgig}
+      - {block: rj45-b}
+      - {block: uplink}
+      - {id: usb, at: [7.8, 21.4], size: [4.5, 12.0], shape: rect}
+      - {id: led-mgt, at: [14.5, 3.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [22.3, 3.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-pw, at: [29.8, 3.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-act, at: [14.5, 5.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-link, at: [32.1, 5.3], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {block: rj45}
+    - {block: rj45-mgig}
+    - {block: rj45-b}
+    - {block: uplink}
+    - {at: [13.2, 4.73], text: MGT, font-size: 1.7, anchor: end, fill: '#e4e6e9', for: led-mgt}
+    - {at: [17.1, 4.73], text: FAN, font-size: 1.7, anchor: start, fill: '#e4e6e9', for: led-fan}
+    - {at: [25.4, 4.73], text: PW, font-size: 1.7, anchor: start, fill: '#e4e6e9', for: led-pw}
+    - {at: [13.2, 6.83], text: ACT, font-size: 1.7, anchor: end, fill: '#e4e6e9', for: led-act}
+    - {at: [31.0, 6.83], text: LINK, font-size: 1.7, anchor: end, fill: '#e4e6e9', for: led-link}
+    - {at: [24.2, 8.7], text: MGMT, font-size: 1.7, anchor: middle, fill: '#e4e6e9', for: mgmt}
+    - {at: [24.2, 37.4], text: CON, font-size: 1.7, anchor: middle, fill: '#e4e6e9', for: console-rj45}
+    components:
+      blocks:
+      - id: mgmt
+        ref: common/rj45-ganged-eth-plain@1
+        at: [17.85, 9.8]
+        count: 1
+        rows: 1
+        number-from: 0
+        id-format: 'mgmt'
+        cutouts: true
+        rotate: {top: 180}
+        pitch: 13.97
+        attrs: {speed: 1g, role: mgmt}
+      - id: console
+        ref: std/rj45-ganged@2
+        at: [17.85, 24.2]
+        count: 1
+        rows: 1
+        number-from: 0
+        id-format: 'console-rj45'
+        cutouts: true
+        pitch: 13.97
+        attrs: {media: rj45-serial, role: console}
+      - id: rj45
+        ref: common/rj45-ganged-eth-plain@1
+        at: [36.65, 9.8]
+        count: 16
+        rows: 2
+        pitch: 14.22
+        row-pitch: 14.4
+        number-from: 0
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: rj45, speed: 1g, poe: 802.3at}
+        led: {ref: common/led-rect-sm@1, id-format: 'led-port-{n}', dx-by-row: [1.75, 8.45], dy-top: -4.3, dy-bottom: -18.7, group: rj45-leds, cutout-shape: rect,
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        numerals: {dx-by-row: [5.6, 7.25], dy-top: -5.1, dy-bottom: -18.6, font-size: 1.8, anchor: middle, fill: '#ea6a3c'}
+      - id: rj45-mgig
+        ref: common/rj45-ganged-eth-plain@1
+        at: [154.25, 9.8]
+        count: 16
+        rows: 2
+        pitch: 14.22
+        row-pitch: 14.4
+        number-from: 16
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: rj45, speed: 2.5g, poe: 802.3at}
+        led: {ref: common/led-rect-sm@1, id-format: 'led-port-{n}', dx-by-row: [1.75, 8.45], dy-top: -4.3, dy-bottom: -18.7, group: rj45-leds, cutout-shape: rect,
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        numerals: {dx-by-row: [5.6, 7.25], dy-top: -5.1, dy-bottom: -18.6, font-size: 1.8, anchor: middle, fill: '#ea6a3c'}
+      - id: rj45-b
+        ref: common/rj45-ganged-eth-plain@1
+        at: [271.85, 9.8]
+        count: 16
+        rows: 2
+        pitch: 14.22
+        row-pitch: 14.4
+        number-from: 32
+        cutouts: true
+        rotate: {top: 180}
+        attrs: {media: rj45, speed: 1g, poe: 802.3at}
+        led: {ref: common/led-rect-sm@1, id-format: 'led-port-{n}', dx-by-row: [1.75, 8.45], dy-top: -4.3, dy-bottom: -18.7, group: rj45-leds, cutout-shape: rect,
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        numerals: {dx-by-row: [5.6, 7.25], dy-top: -5.1, dy-bottom: -18.6, font-size: 1.8, anchor: middle, fill: '#ea6a3c'}
+      - id: uplink
+        ref: std/sfp-ganged@1
+        at: [388.1, 9.6]
+        count: 6
+        rows: 2
+        pitch: 14.7
+        gang: 2
+        gutter: 2.8
+        number-from: 0
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+        led: {ref: common/led-rect-sm@1, id-format: 'led-uplink-{n}', dx-by-row: [1.9, 9.5], dy-top: -4.1, dy-bottom: -19.1, group: uplink-leds, cutout-shape: rect,
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+        numerals: {dx-by-row: [6.1, 8.1], dy-top: -4.9, dy-bottom: -19.0, font-size: 1.8, anchor: middle, fill: '#eef0f2'}
+      placements:
+      - {block: mgmt}
+      - {block: console}
+      - {block: rj45}
+      - {block: rj45-mgig}
+      - {block: rj45-b}
+      - {block: uplink}
+      - {ref: std/usb-a@1, id: usb, at: [4.05, 25.15], rotate: 90, group: mgmt, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark, at: [6.85, 34.5], for: usb, group: furniture, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-mgt, at: [14.5, 3.2], for: chassis, group: status-leds, rel-pos: 0,
+         states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+         description: 'Table 5 - MGT: green steady, Junos OS loaded; green blinking, booting; unlit, powered off or halted'}
+      - {ref: common/led-dot@1, id: led-fan, at: [22.3, 3.2], for: chassis, group: status-leds, rel-pos: 1,
+         states: ['off', {name: normal, color: '#22c55e'}, {name: failed, color: '#eab308', behavior: blinking}],
+         description: 'Table 5 - FAN: green steady, the fans are working; amber blinking, at least one fan has failed; unlit, no alarm or powered off'}
+      - {ref: common/led-dot@1, id: led-pw, at: [29.8, 3.2], for: chassis, group: status-leds, rel-pos: 2,
+         states: ['off', {name: normal, color: '#22c55e'}, {name: poe-disabled, color: '#eab308', behavior: blinking}],
+         description: 'Table 5 - PW: green steady, the power supply is working; amber blinking, PoE power to the ports is disabled; unlit, powered off'}
+      - {ref: common/led-dot@1, id: led-act, at: [14.5, 5.3], for: mgmt, group: mgmt-leds, rel-pos: 0,
+         states: ['off', {name: activity, color: '#22c55e', behavior: blinking}],
+         description: 'Table 9 - ACT: green blinking, the port and the link are active and there is link activity; unlit, no link'}
+      - {ref: common/led-dot@1, id: led-link, at: [32.1, 5.3], for: mgmt, group: mgmt-leds, rel-pos: 1,
+         states: ['off', {name: link, color: '#22c55e'}],
+         description: 'Table 8 - LINK: green steady, the port and the link are active; unlit, link not active'}
+  rear:
+    size: {w: 440.9, h: 43.3}
+    panel:
+      decor:
+      - {id: rear-plate-right, kind: label-plate, at: [329.2, 14.9], size: [64.7, 21.8], rx: 0.5, fill: '#7a838b'}
+    silkscreen:
+    - {at: [41.6, 15.7], text: EX2300 MG PoE+, font-size: 4.2, anchor: start, fill: '#f2f4f6', for: chassis}
+    - {at: [158.3, 38.2], text: 'AC INPUT : 100-240V~; 10.6-4.8A; 50/60 Hz', font-size: 3.7, anchor: start, fill: '#f2f4f6', for: chassis}
+    components:
+      placements:
+      - {ref: common/ground-screw-m4@1, id: earth-screw, at: [419.6, 16.3], group: grounding, rel-pos: 0}
+      - {ref: common/ground-symbol@1, id: earth-mark, at: [420.6, 26.9], for: chassis, group: furniture, rel-pos: 0}
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [184.4, 9.7], group: power-input, rel-pos: 0}
+      - {ref: common/screw-head@1, id: rear-screw-0, at: [69.7, 4.9], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [162.0, 15.5], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: rear-screw-2, at: [405.7, 5.2], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: rear-screw-3, at: [332.0, 27.2], group: furniture, rel-pos: 4}
+      - {ref: common/screw-head@1, id: rear-screw-4, at: [387.4, 27.2], group: furniture, rel-pos: 5}
+    regions:
+      - {id: logo-zone, at: [8.1, 9.7], size: {w: 30.4, h: 8.6}, label: 'Vendor logo; not drawn'}
+  top:
+    size: {w: 440.9, h: 367.1}
+    empty: >-
+      Not drawn flat by any source held. The guide shows the lid in perspective only (Figures 36 and 37).
+  bottom:
+    size: {w: 440.9, h: 367.1}
+    empty: >-
+      Not drawn by any source held: neither the guide nor the studio photographs picture the underside
+      (the guide's parts list gives four preinstalled rubber feet).
+  left:
+    size: {w: 367.1, h: 43.3}
+    empty: >-
+      Not drawn flat by any source held. Figure 36 draws air entering on this side, with no vents drawn;
+      the guide's mounting figures show the side wall with bracket holes and no side elevation.
+  right:
+    size: {w: 367.1, h: 43.3}
+    panel:
+      decor:
+      - {id: fan-0, kind: fan-grille, at: [139.3, 2.3], size: [38.7, 38.7], rx: 19.35, pattern: vent, vent: 1.0}
+      - {id: fan-1, kind: fan-grille, at: [180.2, 2.3], size: [38.7, 38.7], rx: 19.35, pattern: vent, vent: 1.0}
+      - {id: fan-2, kind: fan-grille, at: [257.5, 2.3], size: [38.7, 38.7], rx: 19.35, pattern: vent, vent: 1.0}
+      - {id: fan-3, kind: fan-grille, at: [300.4, 2.3], size: [38.7, 38.7], rx: 19.35, pattern: vent, vent: 1.0}
+configurations:
+  ac:
+    kind: base
+    description: >-
+      EX2300-48MP - 48 PoE+ ports (sixteen Multigigabit) and six SFP+/SFP uplinks, built-in AC supply and
+      four built-in fans, side-to-side airflow. Table 1, no Virtual Chassis licence.
+    default: true
+    part-numbers:
+      EX2300-48MP: {}
+references:
+- {title: 'EX2300 Switch Hardware Guide (Juniper Networks, published 2025-08-12)', sha256: a67d6985f5e2227b14e1b8998feef4ef75eab2c5f72967bdbc0ada8fee8dc0e3}

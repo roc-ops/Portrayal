@@ -1,0 +1,91 @@
+format: 1
+kind: module
+name: qfx10008-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX10008-FAN, the fan tray of the QFX10008. Two stand side by side at the rear, each a
+  tall door. A top plate carries two captive screws and the FAN, FTC and three SIB STATUS lamps.
+  Rounded exhaust cells fill four columns, with a grab handle above and below them. Each tray has
+  eleven fans and cools port-to-FRU (front-to-back, airflow out). A fan tray controller and three
+  switch interface boards sit behind each tray and are not visible.
+attrs:
+  model: QFX10008-FAN
+  role: fan-tray
+  airflow: front-to-back
+  fans-per-tray: 11
+  airflow-cfm: 1437
+  power-draw-max-w: 475
+  power-draw-typical-w: 225
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11): QFX10008
+    Cooling System and Airflow (Table 8 and Table 9, Figures 20 to 22), Figure 7 (g050563, the
+    isometric of the tray), Figure 23 (g050590, the flat top of the tray with the lamps numbered),
+    Table 10, and Table 64.
+  size: >-
+    datasheet - Table 8 gives 22.4 in. high by 6.6 in. wide, 569 by 168 mm. Figure 23 shows the top
+    of the tray flat and is 476 px across the body at 2.83 px per mm; its height is cropped, so the
+    aspect cannot be checked and only the widthwise fractions are taken.
+  depth: >-
+    datasheet - Table 8: 4.0 in. (10.2 cm) without handles, 5.2 in. (13.2 cm) with handles. The body
+    depth 102 mm is used.
+  power: >-
+    datasheet - Table 64 gives "QFX10008-FAN, QFX10008 standard fan tray, 225 W at 77 F (25 C), 475 W
+    at maximum fan speed". The 475 W is carried as the maximum and the 225 W as typical; the table
+    does not say whether a figure covers one tray or both, and is read per tray, as the MX10008
+    guide's per-tray figure for JNP10008-FAN (475 W) is. The QFX10016 table gives its tray 975 W.
+  fans: >-
+    datasheet - Table 8 and the fan table of the cooling topic: "Number of fans per fan tray 11", "Number
+    of fans per chassis 22", and a show chassis fan listing of Fan Tray 0 Fan 0 to Fan 10. The text
+    above that listing says the fans "are numbered 0 through 20", which is the QFX10016 tray's count and
+    contradicts the table and the listing; 11 is used.
+  face: >-
+    drawing - module coordinates read off Figure 23 (g050590) for the top of the tray: the plate 0 to
+    16 mm with screws at x 14.5 and 154.2, the lamps on one row at y 27.6 at x 14.1 (FAN), 23.0 (FTC),
+    31.8, 39.9 and 48.1 (SIB STATUS), four columns of cells 34.6 wide on a 41.2 pitch from x 5.3, a first
+    row of two cells in the right two columns at y 51.6 to 85.5, the grab handle y 85.9 to 93.6 spanning
+    x 3.5 to 165.7, then full rows 33.6 tall on a 42.4 pitch. Below Figure 23's crop the number of rows
+    and the lower handle are read off Figure 7 (g050563, an isometric, fractions only): ten full rows,
+    a lower handle and two cells under it in the right two columns. Those are estimated.
+  colour: >-
+    borrowed - the line drawings carry no colour and no photograph of the tray was obtained. The dark
+    grey finish of juniper/jnp10008-fan@2, the tray of the MX10008 that stands in the same rear, is used.
+states:
+  - ok
+  - fail
+  - absent
+elements:
+  led-fan:
+    at: [13.1, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-ftc:
+    at: [22.0, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-a:
+    at: [30.8, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-b:
+    at: [38.9, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  led-sib-c:
+    at: [47.1, 26.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b', behavior: blinking}]
+  handle-top: {at: [3.5, 85.9], size: [162.2, 7.7], class: handle}
+  handle-bottom: {at: [3.5, 513.0], size: [162.2, 7.7], class: handle}
+size: {w: 168.0, h: 569.0, d: 102.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+skins: [default]

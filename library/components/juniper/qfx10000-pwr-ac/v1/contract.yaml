@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: qfx10000-pwr-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX10000-PWR-AC, the 2700 W AC power supply of the QFX10008 and QFX10016 modular
+  chassis. Two independent 16 A C20 inlets stack on the left (INP2 above INP1). The FAULT, PWR OK,
+  INP2 and INP1 lamps run along the top, beside a two-way enable DIP switch. A grab handle crosses
+  the middle, with the captive screw and the power rocker at the lower right. Airflow is
+  port-to-FRU (front-to-back), from an internal fan. The JNP10K-PWR-AC2 fits the same bay and is a
+  separate part.
+attrs:
+  model: QFX10000-PWR-AC
+  role: ac-power-supply
+  power-output-w: 2700
+  airflow: front-to-back
+  input-voltage: 200-240 VAC
+  input-frequency: 50-60 Hz
+  input-current-a: 16
+  output: 12 VDC
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11): Table 1,
+    Table 12 and Table 13, Figure 9 (g050566, isometric) and Figure 31 (g050570), the flat faceplate
+    with the four lamps numbered. The QFX10016 Switch Hardware Guide (published 2025-12-11) carries
+    the same part under Table 2 and Figure 10.
+  size: >-
+    datasheet - Table 13 gives 3.5 in. high by 3.6 in. wide, so 88.9 by 91.4 mm (rounded to 91.4).
+    Figure 31 measures 485 by 465 px at the body, an aspect of 1.043 against the table's 1.029, 1.4
+    percent out, so the flat figure passes the panel gate and its fractions are taken at 5.30 px per
+    mm across and 5.23 down.
+  depth: >-
+    datasheet - Table 13 prints "14.4 in. (6.53 cm)". The two figures disagree: 6.53 cm is shorter
+    than the faceplate is wide, and 14.4 in is 36.6 cm. The inch figure is used (365.8 mm), because
+    the same row for the JNP10K-PWR-AC2 (Table 16, 15.1 in. against 38.35 cm) is self-consistent
+    and Figure 27 shows the QFX10000-PWR-AC the shorter of the two. The depth only gives the 3D body
+    a length.
+  power: >-
+    datasheet - Table 12 gives AC output power 2700 W, and Table 1 gives the same as the maximum
+    output power. That is an output figure, so it is carried as power-output-w. The guide gives no
+    draw or loss figure for the supply.
+  face: >-
+    drawing - module coordinates read off Figure 31 (g050570): lamps on one row at y 10.7 and x 51.5,
+    58.9, 66.2 and 73.2 (FAULT, PWR OK, INP2, INP1, left to right); the INP2 inlet bezel x 10.4 to 44.9
+    and y 14.0 to 41.3, the INP1 bezel at the same x and y 51.6 to 78.9; the grab handle x 9.1 to 83.0
+    and y 43.6 to 49.9; the DIP switch box x 74.7 to 81.9 and y 15.5 to 25.8, printed ON above and 1 2
+    below; the captive screw centred at 56.0, 76.0; the rocker bezel x 66.0 to 84.0 and y 67.5 to 81.3,
+    printed O on the left and a dash on the right. The inlets are the registry's size, centred in the
+    bezels the figure draws. The lamp diameter is left at 3.0 mm: Figure 31 reads 20 px across but a
+    round feature that reads two sizes is measuring the drawing.
+  printing: >-
+    drawing - Figure 31 prints INP2 and INP1 turned beside the inlets, with "200-220V 16A", "220-240V
+    16A" and (on INP2 only) "47-63Hz" in smaller type beside them, and FAULT, PWR OK, INP2 and INP1
+    above the lamps. Figure 9 (isometric) shows the same legends. All are drawn.
+  colour: >-
+    borrowed - the guide's line drawings carry no colour and no photograph of this supply was
+    obtained. The dark grey finish of juniper/jnp10k-pwr-ac2@2, which stands in the same bay of the
+    same chassis, is used so the two sit together.
+  lamps: >-
+    datasheet - Table 21: INP1 and INP2 are green when the input is within 200-240 VAC and yellow
+    blinking when it is out of range; PWR OK is green when the output is in range and yellow
+    blinking when it is out of limits; FAULT is red when the supply has failed.
+  rocker: >-
+    datasheet - the power switch carries the international on (|) and off (O) markings. Figure 31
+    shows O at the left and a dash at the right; the switch is drawn at O, the state the figure
+    shows is not stated to be the off position, so no `state` field is declared.
+states:
+  - ok
+  - fault
+  - absent
+parts:
+  - {ref: std/c20-inlet@1, id: inp2, at: [11.3, 15.5], attrs: {function: feed INP2}}
+  - {ref: std/c20-inlet@1, id: inp1, at: [11.3, 52.8], attrs: {function: feed INP1}}
+elements:
+  led-fault:
+    at: [50.0, 9.2]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: fault, color: '#ef4444'}]
+  led-pwr-ok:
+    at: [57.4, 9.2]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-inp2:
+    at: [64.7, 9.2]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-inp1:
+    at: [71.7, 9.2]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  handle: {at: [9.1, 43.6], size: [73.9, 6.3], class: handle}
+size: {w: 91.4, h: 88.9, d: 365.8}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+connection-points:
+  power: {at: [27.5, 40.0], direction: rear}
+skins: [default]

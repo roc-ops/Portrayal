@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: cablmanagerh-ring
+version: 1.0.0
+class: mechanical
+description: >-
+  A D-ring hook of the StarTech.com CABLMANAGERH 1U manager seen from the front - a steel loop
+  that stands out of the panel, 9.1 mm across and 30.6 mm high, closed at its tip, with the
+  opening a bundle runs through along the panel
+provenance:
+  size: >-
+    estimated - the drawing dimensions no ring but its height, 95.00 from the back of the
+    panel's folds. Scaled at 3.85 px/mm at 600 dpi against the 482.60: the loop is 9.1 mm across
+    along the panel in the side view (35 px, an inner line 3.9 mm) and 30.6 mm high in the front
+    view (117 px), centred on the panel. Five rings, 41.3 mm from the left end and 100.0 apart,
+    so the middle one is on the centre line.
+  relief: >-
+    drawing - the side view: the loop stands 88.79 mm out of the plate's back face, so 87.59 out
+    of its front face with a 1.2 mm sheet (estimated). Built as a frame of plates with square
+    corners where the real loop is a D: a base 4.0 mm thick against the panel, a bar along the
+    top and one along the bottom, and the closed end at the tip. The bars and the end are 4.0
+    mm, about the wire (the inner line of the side view is 3.9 mm); estimated. The side view
+    draws a waist at 44 mm, where two pieces of the loop meet; no document says what it is, and
+    it is not drawn as a slit.
+  guide: >-
+    estimated - the clear opening inside the frame, seen looking along the panel, which is the
+    run: 22.6 mm high across the panel (the 30.6 less a 4.0 bar each side) and 79.59 mm out of
+    it (the 87.59 less the 4.0 base and the 4.0 end). The datasheet says the hooks "hold and
+    guide cable bundles running vertically and horizontally", so the loop's other axis is a
+    way for a cable as well; only the run along the panel is stated here.
+  guide-depth: >-
+    estimated - the loop is 9.1 mm across along the run, as the side view draws it.
+  color: >-
+    datasheet - "Color: Black". The drawing is line work, so the shade is this library's render,
+    a lighter value than the panel so the ring reads against it in 2D and on a light stage.
+size: {w: 9.1, h: 30.6}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: steel}
+guide: {kind: ring, aperture: {w: 22.6, h: 79.59}, run: x, depth: 9.1}
+elements:
+  back: {at: [0.0, 0.0], size: [9.1, 30.6], class: bezel}
+  bar-top: {at: [0.0, 0.0], size: [9.1, 4.0], class: bezel}
+  bar-bottom: {at: [0.0, 26.6], size: [9.1, 4.0], class: bezel}
+  tip: {at: [0.0, 0.0], size: [9.1, 30.6], class: bezel}
+relief:
+  features:
+    - {node: back, out: 4.0, color: '#111315', confidence: estimated, source: 'the side view of the CABLMANAGERH drawing, the loop standing on the panel; the thickness is the wire, estimated'}
+    - {node: bar-top, out: 87.59, color: '#111315', confidence: drawing, source: 'the same view, the loop 88.79 mm out of the plate back face'}
+    - {node: bar-bottom, out: 87.59, color: '#0d0f10', confidence: drawing, source: 'the same view'}
+    - {node: tip, lift: 83.59, out: 87.59, color: '#101214', confidence: estimated, source: 'the same view, the closed end of the loop; the thickness is the wire, estimated'}
+skins: [default]

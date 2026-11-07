@@ -75,6 +75,7 @@ def test_the_regex_reads_every_compiled_drawing():
     assert not bad, f"{len(bad)} drawing(s) the face-size read would get wrong: {bad[:5]}"
 
 
+@pytest.mark.heavy
 def test_only_a_rack_face_is_wider_than_its_plane():
     """If a second device ever draws a face wider than its plane, it should be
     because it has integral ears too - not because a view was mis-sized. This
@@ -96,11 +97,16 @@ def test_only_a_rack_face_is_wider_than_its_plane():
     # with the rack holes at its ends, and its four FHD modules mount on it
     # across 440 - wider than the 430 body - so its front is the whole plate.
     # r660: the R740xd's case in 1U - both control panels sit in the ears.
+    # r6615: the R660's case on the R6615 - both control panels sit in the ears.
+    # r6625: the R660's 1U chassis again - the same two control panels in the ears
+    # (ISM tables 1 to 5), on each of its six fronts.
     # lmfs-f: the Lightspan MF-8's left flange carries the dual-stud grounding
     # point, the front-cover hook and the ESD point (UDS s2.4), so its front is
     # the 481 rack face over a 448 body.
     # cmh-6dr1u: the CMH-6DR1U's ears carry its end rings (#865), so its front
     # is the 482.6 rack face over the 430 panel.
+    # r760: the R740xd's case in 2U again - both control panels sit in the ears
+    # (ISM figures 1 to 6), six fronts.
     # dinrail2u / dinrail4u: FS's DIN rail brackets are an open frame whose ears
     # are the front ends of the two side brackets folded out, one piece with
     # them (the rule decided 2026-10-09: built-in ears are part of the face),
@@ -109,5 +115,16 @@ def test_only_a_rack_face_is_wider_than_its_plane():
     assert set(wide) <= {"r740xd:front", "r740xd:front-lff-12", "fhd-1ufmt-n:front",
                          "r660:front", "r660:front-sff8sf", "r660:front-nobp",
                          "r660:front-e3s16", "r660:front-e3s14", "lmfs-f:front",
-                         "cmh-6dr1u:front", "dinrail2u:front", "dinrail4u:front"}, \
+                         # the R660xs, as the R660: both control panels sit in the ears
+                         "r660xs:front", "r660xs:front-sff8", "r660xs:front-lff4",
+                         "r6615:front", "r6615:front-sff8", "r6615:front-lff4",
+                         "r6615:front-e3s16", "r6615:front-e3s14",
+                         "r6625:front", "r6625:front-sff8sf", "r6625:front-lff4",
+                         "r6625:front-nobp", "r6625:front-e3s16", "r6625:front-e3s14",
+                         # r960: the R660's case in 4U - both control panels sit in the ears (R960 ISM table 7: 482.0 over 444.0)
+                         "r960:front", "r960:front-sff8", "r960:front-sff24", "r960:front-sff32",
+                         "r960:front-e3s16", "r960:front-sff8-e3s16",
+                         "cmh-6dr1u:front", "dinrail2u:front", "dinrail4u:front",
+                         "r760:front", "r760:front-sff16", "r760:front-sff8",
+                         "r760:front-lff12", "r760:front-e3s16", "r760:front-e3s16r"}, \
         f"a face is wider than its plane and is not a known rack face: {wide}"

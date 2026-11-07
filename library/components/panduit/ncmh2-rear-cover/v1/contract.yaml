@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: ncmh2-rear-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The snap-on rear cover of a Panduit NetManager NCMH2 2RU front-and-rear horizontal manager seen
+  from behind - a PVC plate across the rear finger tips with a lip along its top and bottom edge.
+  It ships fitted and snaps off
+provenance:
+  size: >-
+    drawing - the NCMH2 customer drawing (Panduit 00787-07): "REAR COVER: PVC"; the specification
+    sheet (RKSP225) lists "una cubierta trasera de inserción a presión" (a snap-on rear cover) in the
+    package. 444.83 wide as the body and 88.14 high.
+  relief: >-
+    drawing - the cover is the back 12.27 mm of the rear channel, as the front cover is of the front
+    (see ncmh2-cover). Its plate and lips are 3.5 and 1.5 thick, ESTIMATED: no view sections the
+    cover. The plate stands from 148.9 to 152.41 above the rear well's floor and the lips from 140.
+  lid: >-
+    datasheet - the NetManager Horizontal Cable Managers specification sheet (RKSP225): the package
+    holds "una cubierta trasera de inserción a presión", a snap-in rear cover, and the product page
+    lists "(1) Cover". It snaps on over the rear channel, so it is a lid (`lid: true`) that comes
+    off.
+  color: >-
+    datasheet - "REAR COVER: PVC" on the NCMH2 drawing, "The manager is black" on the product page.
+    The shade is this library's render, a little lighter than the manager so the two read apart.
+size: {w: 444.83, h: 88.14}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PVC}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 86.64], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 88.14], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 140
+      out: 152.41
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NCMH2 drawing draws the rear cover only in its materials note
+    - node: lip-bottom
+      lift: 140
+      out: 152.41
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NCMH2 drawing draws the rear cover only in its materials note
+    - node: plate
+      lift: 148.9
+      out: 152.41
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NCMH2 drawing draws the rear cover only in its materials note
+skins: [default]

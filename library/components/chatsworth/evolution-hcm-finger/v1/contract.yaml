@@ -1,0 +1,66 @@
+format: 1
+kind: component
+name: evolution-hcm-finger
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+description: >-
+  One plastic T-shaped cable guide (finger) of the Chatsworth Evolution horizontal cable
+  manager, seen end-on from the front - a finger that stands from the back plate toward the
+  door, with a head that widens under the door to leave a narrow neck a cable is pressed
+  through into the manager
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#1b1c1e'
+provenance:
+  size: >-
+    estimated - the width is one finger pitch, 45.0: nine finger slots counted across the
+    rack width on the Evolution Cable Management System data sheet's four chassis pictures
+    (page 3) and on the installation instructions' three drawings, so ten fingers in a
+    row across the 450.0 between the ears, 45.0 apart. No document dimensions a finger. The
+    body is taken as 21.0 of the 45.0 (a slot 24.0 wide, a little wider than the finger
+    beside it, as the drawings show) and the head as 37.0, which leaves an 8.0 neck. The
+    height, 11.4, is the finger plate's thickness read from the maker's own cable fill table,
+    whose interior width for the 2U manager is 2.6 in: (88.9 - 66.0) / 2 = 11.4 each side.
+  relief: >-
+    estimated - a finger stands from the back plate to the door, 184 mm of body and a head
+    from 184 to 190 under the door; the root, the solid band between the plate and the
+    rounded ends of the slots, is 20 mm. The data sheet gives the overall depth, 8.2 in
+    (208 mm), and the cable fill table the interior depth, 6.5 in (165 mm); the slot ends
+    are read off the pictures against that depth. Nothing dimensions the head.
+  finish: >-
+    estimated - "Finishes: Black or Glacier White powder coat paint" (data sheet page 2)
+    names the finish of the steel; the fingers are plastic and the data sheet gives their
+    colour only with the part colour letter (7 black, E Glacier White). The default is the
+    black of a render of the part.
+  shading: >-
+    estimated - a stand-in for the light a render would give: the head carries a lit rim and a
+    10% lighter face, and the 4.0 either side of it, where the slot is, is shaded, so that a
+    black finger reads against the black back plate. The rim and the shade are semi-transparent
+    white and black over the finish, so they hold for Glacier White too. No document gives a
+    chamfer or a radius for the head.
+size: {w: 45.0, h: 11.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [45.0, 11.4], class: bezel}
+  stem: {at: [12.0, 0.0], size: [21.0, 11.4], class: bezel}
+  tip: {at: [4.0, 0.0], size: [37.0, 11.4], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 20.0
+      confidence: estimated
+      source: the slot ends read off the data sheet pictures against the 165 mm interior depth of the cable fill table
+    - node: stem
+      out: 184.0
+      confidence: estimated
+      source: the finger from the back plate to where its head widens, read off the same pictures
+    - node: tip
+      lift: 184.0
+      out: 190.0
+      confidence: estimated
+      source: the head the door snaps onto (installation instructions, step 1), read off the same pictures
+skins: [default]

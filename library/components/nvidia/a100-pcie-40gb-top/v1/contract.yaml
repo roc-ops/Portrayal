@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: a100-pcie-40gb-top
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The top edge of the NVIDIA A100 40GB PCIe card seen from outside, with the
+  three NVLink bridge connectors that sit under its removable caps. It is the
+  card's `faces.plan`, and it composes the connectors the bridge mates.
+size: {w: 38.23, h: 266.70}
+size-confidence: {w: estimated, h: drawing}
+size-notes: >-
+  THE TOP EDGE SEEN FROM OUTSIDE, as nvidia/a100-pcie-80gb-top@1 draws it: the
+  card's top edge is the one 126.31 from the bracket's tip (the side the NVLink
+  bridges bolt to), and the drawing runs 266.70 behind the bracket's outer face
+  (y' = mm behind it) and 38.23 across the card's thickness (x' = the card's y
+  less 1.77, so the backplate is at the left, as the rear face has it). The
+  thickness is the card's estimated 38.2. This card's depth is 1.9 less than
+  the 80GB's, which is why it is a part of its own and the 80GB's face, 268.60
+  long, is not reused. It is a choice to confirm that `faces.plan` carries the
+  top edge, which the pilot made (docs/connectors-gpu-design.md section 7).
+attrs: {media: gpu}
+parts:
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-1, at: [0.43, 13.50]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-2, at: [0.43, 70.70]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-3, at: [0.43, 126.10]}
+provenance:
+  size: >-
+    drawing - the length is PB-10137 figure 3's 266.7; the width is the card's
+    estimated thickness, see size-notes.
+  connectors: >-
+    estimated - three NVLink bridge connectors on the top edge, 6.6 across and
+    49.5 along, starting 13.5, 70.7 and 126.1 behind the bracket's outer face,
+    from 2.2 to 8.8 across the card (x' 0.43 to 7.03). These are the 80GB card's
+    figures (nvidia/a100-pcie-80gb-top@1), read on PNY's top-edge render, which
+    is the one picture for both cards. NVIDIA's figure 5 draws the keep-out and
+    prints no dimensions. The caps over them are the card's 3D boxes and are
+    not drawn here.
+  bands: >-
+    estimated - the edge's four bands, left to right: the black backplate, the
+    board's edge, the black cover and the champagne shroud, at the card's `body`
+    boxes (the card's y 1.77, 4.44, 6.01, 14.40 and 40.0, less 1.77). The ribs,
+    the lettering and the open end are the card's own side drawings, not drawn
+    here.
+skins: [default]

@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: cmhookmw-ring
+version: 1.0.0
+class: mechanical
+description: >-
+  The D-ring of the StarTech.com CMHOOKMW hook seen from the front - a flat steel loop 64 mm across
+  and 25.5 mm high that stands 102 mm out of a neck on the plate, closed at its ends and open by
+  14.5 mm along one side beside the plate, with a cable running up and down through it
+provenance:
+  size: >-
+    drawing - CMHOOKMW_Diagram.pdf (StarTech.com, third angle projection, millimetres,
+    6/15/2022): the plan draws the loop 102.0 long and 64.0 across, 25.5 high on the side views,
+    standing 15.0 from the plate's face, with an opening 14.5 long at the plate end of one side
+    wall, the other 85.5 of that wall solid. The wall is not dimensioned: 3.2 mm, the maker's
+    CMHOOK1U ring wall, is taken (estimated).
+  relief: >-
+    drawing - built as plates with square corners where the real loop is radiused: a wall down
+    each side, one across the plate end and one across the far end, the side wall beside the
+    plate opening from 27.2 mm out; a neck 8.5 mm across the part and 25.5 high joins the loop
+    to the plate over the 12.7 mm between them (the 15.0 the plan gives, less the plate's 2.3,
+    estimated). The datasheet says the loop is 2.4 x 3.9 in: 64 by 102 less the plate.
+  opening: >-
+    drawing - the 14.5 mm opening in the side wall at the plate end is the datasheet's "wide
+    front opening for quick cable insertion": a bundle is slipped in through it. The format's ring
+    `slit` is a range of height along a leg and cannot state a gap along a side wall, so it is
+    drawn in the relief and not declared (the device's `hook-opening` gap).
+  guide: >-
+    estimated - the clear opening of the loop, 57.6 across the part (the 64.0 less a 3.2 wall each
+    side) and 95.6 out of it (the 102.0 less a 3.2 wall at each end). The loop lies flat, so the
+    run is up and down the rail.
+  guide-depth: >-
+    drawing - the loop is 25.5 mm high along the run, the side views' "25.5".
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmhookmw_datasheet.pdf). The drawing is line
+    work, so the shade is this library's render, a lighter value than the plate so the ring reads
+    against it.
+size: {w: 64.0, h: 25.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel}
+guide: {kind: ring, aperture: {w: 57.6, h: 95.6}, run: y, depth: 25.5}
+elements:
+  neck: {at: [0.0, 0.0], size: [8.5, 25.5], class: bezel}
+  near: {at: [0.0, 0.0], size: [64.0, 25.5], class: bezel}
+  wall-left: {at: [0.0, 0.0], size: [3.2, 25.5], class: bezel}
+  wall-right: {at: [60.8, 0.0], size: [3.2, 25.5], class: bezel}
+  far: {at: [0.0, 0.0], size: [64.0, 25.5], class: bezel}
+relief:
+  features:
+    - {node: neck, out: 12.7, color: '#111315', confidence: estimated, source: 'the plan view of the CMHOOKMW drawing: the loop 15.0 from the plate, the plate 2.3 thick (estimated)'}
+    - {node: near, lift: 12.7, out: 15.9, color: '#111315', confidence: drawing, source: 'the plan view, the loop closed at the plate end, a wall 3.2 thick (estimated)'}
+    - {node: wall-left, lift: 27.2, out: 114.7, color: '#0d0f10', confidence: drawing, source: 'the same view, the side wall beside the plate, open for the first 14.5 mm'}
+    - {node: wall-right, lift: 12.7, out: 114.7, color: '#0d0f10', confidence: drawing, source: 'the same view, the side wall away from the plate, solid for its 85.5 and the corner'}
+    - {node: far, lift: 111.5, out: 114.7, color: '#101214', confidence: drawing, source: 'the same view, the far end'}
+skins: [default]

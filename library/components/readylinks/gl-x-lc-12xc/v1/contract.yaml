@@ -1,0 +1,151 @@
+format: 1
+kind: module
+name: gl-x-lc-12xc
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  ReadyLinks GL-x series 12-port F-type line card - twelve ReadyLink coax ports on F connectors,
+  RL1 to RL12, each with a pair of port lamps to its right, held in a GL-x chassis line-card
+  slot by a captive thumbscrew at each end. It carries ReadyLink and PoE over existing coax
+  and passive splitters to up to sixteen client endpoints per port. The GL-12xC fits one and
+  blanks the second slot; the GL-24xC fits two.
+size: {w: 281.5, h: 19.55}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: GL-x 12-port F-type line card
+  power-absent: not-published
+groups:
+  readylink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f, speed: 1g}
+    description: >-
+      the twelve ReadyLink coax ports, RL1 to RL12 as the card prints them. Every port does
+      PoE and PoE+; ports 11 and 12 also do PoE++ (the data sheet's note - "Ports 11 and 12 of
+      each line card are PoE++ ports").
+  readylink-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      two lamps per port in the gap to the right of its jack, the upper amber and the lower
+      green in the vendor model; the data sheet names neither.
+provenance:
+  identity: >-
+    datasheet - the GL-12xC-240D data sheet lists "(12) F Connector ReadyLink ports" and its PoE
+    note reads "Ports 11 and 12 of each line card are PoE++ ports", so the twelve jacks are a
+    card and not the chassis; the GL-24xC data sheets list "(24) PoX+ ReadyLink ports (F
+    Connector)", two of these cards. No part number for the card is published anywhere held
+    (the data sheets and the product pages name only whole switches), so the name is the
+    vendor's family, GL-x, and what the card carries, as for readylinks/gl-x-lc-12xb@1. The
+    vendor's 3D model names the card assembly (GL24XC_ASM) and its faceplate
+    (GL24X-1U-F-PLATE) as their own nodes, apart from the chassis.
+  size: >-
+    drawing - the faceplate node of the vendor's 3D model of the GL-12xC (GL24X-1U-F-PLATE)
+    spans the same 281.5 x 19.6 as the BNC card's plate (GL24X-1U-NEWBNC) at the same x
+    132.70, so the card is the 281.5 x 19.55 of readylinks/gl-x-lc-12xb@1 and
+    readylinks/gl-x-lc-blank@1 and takes the same slot. The 3D model of the GL-24xC places two
+    of them, at 132.8 and 0.1 to 0.5 lower than the GL-12xC's, which is that export's own
+    pose and not a different plate.
+  elements: >-
+    drawing - measured off the vendor 3D model of the GL-12xC in card coordinates (origin at
+    the faceplate's top left). There are twelve F-type positions, counted in the model
+    (twelve F_DUANTUO_2 jacks) and in the product render; their fronts (8.1 across) are
+    centred at x 24.35 + 20.70 n (n = 0..11) and y 8.50, the same 20.70 pitch as the BNC
+    card, and the GL-24xC model repeats the row on a second card at the same x. The two lamp
+    lenses sit 10.35 right of each jack at y 7.01 and 12.11, 0.1 from the BNC card's; the
+    captive thumbscrews and the two flush plate screws are the BNC card's (x 3.99 and 277.49;
+    11.8 and 269.7), drawn as art only.
+  jacks: >-
+    drawing - std/f-type@1 at each jack centre. The model's jack (F_DUANTUO_2) is 12.1 wide
+    over the body and its front face stands 12.8 in front of the plate (z 173.1 against the
+    plate at 160.3); std/f-type@1 stands 13.0 (the 2.4 nut and the 10.6 thread, Pasternack
+    PE44327). The 0.2 delta is recorded and not drawn.
+  impedance: >-
+    datasheet (application text) - the GL-12xC data sheets show the ports on "RG-6 / RG-59 +
+    passive splitters", both 75 ohm cable, and std/f-type@1 is the 75 ohm F connector, so each
+    port says impedance 75. No held document states the jack's own impedance in figures.
+  poe: >-
+    datasheet - "(10) PoE/PoE+ ReadyLink ports ... (2) PoE/PoE+/PoE++ ReadyLink ports ... Ports
+    11 and 12 of each line card are PoE++ ports"; "Max.PoE wattage per port by PSE PoE: 15.4W
+    PoE+: 30W PoE++: 90W". The same row reads "F center pole: DC-, F shield: DC+", which is the
+    polarity of this F-type card's own jack; the chassis provenance carries it.
+  speed: >-
+    borrowed - no per-port rate table is published for this card. The 1g is the BNC card's
+    reading (readylinks/gl-x-lc-12xb@1), carried over because both cards are the same
+    ReadyLink ports on the same 128 Gbps fabric in the sheets; it is not stated for F-type.
+  port-leds: >-
+    drawing - two 3.0 mm lenses per port in the model (A42_LED_2), drawn with common/led-dot@1
+    (2.0), the library's round port lamp; the 1.0 mm difference in diameter is recorded here.
+    What each lamp means is stated nowhere held.
+  silkscreen: >-
+    drawing - the model carries the legends as flat meshes on the plate (GL24X-1U-F-PLATE_0_1,
+    y 15.9 to 18.3 in card coordinates, 1.2 lower than the BNC card's because the jacks sit
+    0.75 lower): RL1 to RL12 centred under each jack, cap height about 2.3 mm. The same legends
+    read in the product render, 8.3 mm below each jack's centre.
+  power: >-
+    NOT STATED anywhere held - the data sheets give the chassis "Maxpower consumption 80W
+    (Excluding PoE output)" and the PoE budget, and nothing per card.
+states: [absent]
+elements:
+  thumbscrew-left: {at: [0.09, 5.69], size: [7.8, 7.8], class: fastener}
+  thumbscrew-right: {at: [273.59, 5.69], size: [7.8, 7.8], class: fastener}
+parts:
+  - {ref: std/f-type@1, id: rl1, at: [19.5, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl2, at: [40.2, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl3, at: [60.9, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl4, at: [81.6, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl5, at: [102.3, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl6, at: [123.0, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl7, at: [143.7, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl8, at: [164.4, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl9, at: [185.1, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl10, at: [205.8, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+ (to 30 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl11, at: [226.5, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+/PoE++ (to 90 W per port by PSE)'}}
+  - {ref: std/f-type@1, id: rl12, at: [247.2, 4.55], group: readylink, attrs: {impedance: 75, poe: 'PoE/PoE+/PoE++ (to 90 W per port by PSE)'}}
+  - {ref: common/led-dot@1, id: led-rl1-a, at: [33.7, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl1-b, at: [33.7, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl2-a, at: [54.4, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl2-b, at: [54.4, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl3-a, at: [75.1, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl3-b, at: [75.1, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl4-a, at: [95.8, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl4-b, at: [95.8, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl5-a, at: [116.5, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl5-b, at: [116.5, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl6-a, at: [137.2, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl6-b, at: [137.2, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl7-a, at: [157.9, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl7-b, at: [157.9, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl8-a, at: [178.6, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl8-b, at: [178.6, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl9-a, at: [199.3, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl9-b, at: [199.3, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl10-a, at: [220.0, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl10-b, at: [220.0, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl11-a, at: [240.7, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl11-b, at: [240.7, 11.11], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl12-a, at: [261.4, 6.01], group: readylink-leds}
+  - {ref: common/led-dot@1, id: led-rl12-b, at: [261.4, 11.11], group: readylink-leds}
+relief:
+  features:
+    - node: thumbscrew-left
+      cyl: 13.7
+      color: '#b9bec3'
+      confidence: drawing
+      source: >-
+        readylinks/gl-x-lc-12xc@1 elements key - the model's faceplate mesh reaches z 174.04
+        where the plate front is at 160.35, and only the thumbscrew heads stand there, so 13.7
+        in front of the plate, as on the BNC card.
+    - node: thumbscrew-right
+      cyl: 13.7
+      color: '#b9bec3'
+      confidence: drawing
+      source: >-
+        readylinks/gl-x-lc-12xc@1 elements key - the same reading as the left screw.
+connection-points:
+  mate: {at: [140.75, 9.775], direction: rear}
+skins: [default]

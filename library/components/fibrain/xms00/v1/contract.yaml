@@ -1,0 +1,120 @@
+format: 1
+kind: module
+name: xms00
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Fibrain XMS00 - HD holder for six RJ45 connection modules, screened version,
+  empty. Fills one slot of a Fibrain HD patch panel; each of its six positions
+  takes one connection module without an adapter, in any category.
+size: {w: 100.0, h: 21.0, d: 66.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+size-notes: >-
+  DSH XMS00 rev 0 (11.09.2019), dimensions: 0.5U x 100 x 66 mm. THE 100 x 21 IS
+  THE NOMINAL ENVELOPE, kept because it is the slot. The maker's front
+  elevation draws the moulding 99.50 x 21.00, and 103.50 over the latch tab
+  that stands 2.00 out of each end.
+attrs: {media: rj45, model: XMS00, screening: screened}
+body:
+  depth: 66.0
+  # THE FRAME OF THE HOLDER, WITHOUT ITS FLOOR: the two rails above and below
+  # the windows, the two cheeks and the five ribs, each as deep as the holder.
+  boxes:
+    - {id: rail-top, at: [0.25, 0.0], size: [99.5, 2.2], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the rail above the windows, 2.20 on the front elevation; how far it runs back is the datasheet depth of 66 and is not drawn on the elevation'}
+    - {id: rail-bottom, at: [0.25, 18.8], size: [99.5, 2.2], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the rail below the windows, as the top one; the cable-tie floor the datasheet plan shows behind it is not modelled'}
+    - {id: cheek-left, at: [0.25, 2.2], size: [2.3, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the end wall between the moulding edge and the first window, 2.30 on the elevation'}
+    - {id: cheek-right, at: [97.45, 2.2], size: [2.3, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the end wall at the other end'}
+    - {id: rib-1, at: [17.35, 2.2], size: [1.22, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the divider between two windows, 1.22 on the elevation'}
+    - {id: rib-2, at: [33.37, 2.2], size: [1.22, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the divider between two windows, 1.22 on the elevation'}
+    - {id: rib-3, at: [49.39, 2.2], size: [1.22, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the divider between two windows, 1.22 on the elevation'}
+    - {id: rib-4, at: [65.41, 2.2], size: [1.22, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the divider between two windows, 1.22 on the elevation'}
+    - {id: rib-5, at: [81.43, 2.2], size: [1.22, 16.6], from: 0, depth: 66.0, color: '#17191b',
+       confidence: estimated, source: 'the divider between two windows, 1.22 on the elevation'}
+bays:
+  pos-1:
+    at: [2.65, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+  pos-2:
+    at: [18.67, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+  pos-3:
+    at: [34.69, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+  pos-4:
+    at: [50.71, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+  pos-5:
+    at: [66.73, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+  pos-6:
+    at: [82.75, 1.15]
+    size: [14.6, 18.4]
+    accepts: [fibrain/xe100@1, fibrain/xe110@1, fibrain/xe200@1, fibrain/xe210@1, fibrain/xq100@1, fibrain/xq110@1, fibrain/xq200@1, fibrain/xq210@1, fibrain/xr100@1, fibrain/xr110@1, fibrain/xr200@1, fibrain/xr210@1]
+provenance:
+  size: >-
+    datasheet - see size-notes.
+  parts: >-
+    drawing - measured on the entities of the maker's 1:1 front elevation of
+    XMS00, in the maker's CAD libraries archive (hd.fibrain.com/dxf/cad-libraries.zip,
+    files dated 2020-07-30; AutoCAD DXF, units millimetres, no dimension
+    entities). Extents 103.50 x 21.00. Six windows 14.80 x 16.60 stand on a
+    16.02 pitch between dividers 1.22 wide, the first 4.30 from the outer edge
+    of the left latch tab and 2.20 below the top; the row is centred on the
+    holder. In the 100 envelope, which loses 1.75 at each end to the tab, the
+    window centres are 9.95, 25.97, 41.99, 58.01, 74.03 and 90.05, and the
+    bays are those centres with the module's own 14.6 width. The bays are 18.40
+    high, the module's housing, centred on the window, so the module's 16.10 frame
+    stands 0.25 inside the window at top and bottom.
+  positions: >-
+    ASSUMED. Fibrain prints nothing on the holder; port numbers go on a
+    separate label field. Positions are numbered left to right, as the front
+    elevation shows them.
+  moulding: >-
+    drawing for the outline, windows, dividers, end slots and the four 1.5 mm
+    holes; the lower rail's slots and tie places are not drawn. THE LATCH TAB
+    at each end, 2.00 out and about 4.5 tall at mid height, is outside the 100
+    envelope and is not drawn; seated, it is inside the post.
+  depth: >-
+    datasheet for the overall 66; the boxes behind the face are estimated, as
+    they say. The datasheet plan shows an open frame with a floor of tie places
+    behind the windows.
+  screening: >-
+    datasheet and photo - XMS00 is 'Holder for HD Patch panel for 6 x RJ45,
+    screened, empty' (DSH XMS00 rev 0); its photograph shows a bright metal
+    spring plate at the top of each window, which XMU00's does not. The skin
+    draws that plate, 12.0 x 2.4 at the window's top edge, ESTIMATED - the
+    elevation draws no spring and the photograph is three-quarter. The screening
+    contact is the only difference between the two holders in this library.
+  weight: >-
+    sources disagree - DSH XMS00 rev 0 prints 0.02 kg and DSH XMU00 rev 0 prints
+    0.23 kg for the same frame. Neither is carried: this library's holders
+    state no weight, and a holder 0.23 kg beside a 0.02 kg one is a
+    misprint on one sheet that nothing here settles.
+  modules: >-
+    datasheet - the sheet lists support for all Fibrain HD module categories
+    (kat.5/s, kat.6/s, kat.6A/s), installation 'without adapter', a density of
+    6xRJ45/s per holder and 8 holders per HD patch panel. THE SHEET SAYS
+    'SCREENED' ON XMU00 TOO, which is the same text under the other part number. The catalogue says the holder takes
+    Fibrain HD modules, and every module datasheet says 'without adapters' or a
+    keystone adapter, so the holder is modelled to take all twelve modules in
+    both screenings, and a module's own screening does not limit it.
+  catalogue: >-
+    datasheet and catalogue - 'HD 6x RJ45 holder, grounding, unequipped' is
+    XMS00 and 'no grounding' is XMU00. Which pairs with which module screening
+    is the buyer's to choose; the library does not forbid a mix.
+skins: [default]

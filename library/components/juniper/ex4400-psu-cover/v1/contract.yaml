@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: ex4400-psu-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover panel of the Juniper EX4400 switches. Each switch
+  ships with one supply and one cover for the empty second supply slot. A flat
+  light panel the size of a supply face, with one round screw boss at the
+  centre. The guide names no model number for it.
+attrs:
+  role: power-slot-cover
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Table
+    105, Inventory of Components Provided with an EX4400 Switch - covers for slots without
+    preinstalled components, one extension module slot cover panel and one power supply slot
+    cover panel. The mounting procedures end with - cover the empty extension module slot and the
+    empty power supply slot with the covers that came with the switch. The guide gives the cover
+    no model number and no dimensions.
+  states: >-
+    datasheet - a cover has no lamp and no health state, so the part draws no elements. The
+    absent state stays, because an empty slot is a real thing to draw.
+  size: >-
+    estimated - taken as the size of a supply face, 83.06 x 40.39 mm (Table 40), so the cover
+    fills the slot as the supply does. The guide's Figure 7 (g022559) draws the cover filling the
+    slot to the same edges as the supply beside it. No dimension of the cover is stated.
+  face: >-
+    drawing - Figure 7 (g022559) shows a plain panel with a round screw boss at the centre and a
+    shallow notch in each long edge. The screw diameter is estimated from the figure at about 4
+    mm across the head. The colour is estimated, because no photograph shows the cover.
+states: [absent]
+size:
+  w: 83.06
+  h: 40.39
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: ex4300-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module EX4300-FAN-AFI for the Juniper EX4300 24-port and 48-port switches, labelled AIR IN
+  (AFI): back-to-front airflow, the air entering through this face. Two seat side by side in the
+  rear panel, in slots 0 and 1; hot-insertable and hot-removable. The same face as the AIR OUT
+  module with the opposite airflow label. It is fitted only with AIR IN (AFI) power supplies; the
+  guide forbids mixing labels in one chassis. The fan status LED is on the chassis beside each
+  slot, not on the module.
+attrs:
+  model: EX4300-FAN-AFI
+  part-number: EX4300-FAN-AFI
+  role: fan-module
+  airflow: back-to-front
+  airflow-label: AIR IN (AFI)
+  weight-kg: 0.15
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 27 "Fan Modules in EX4300
+    Switches": EX4300-FAN-AFI carries the label AIR IN (AFI), which the guide's Table 28 and its
+    airflow section define as back-to-front. The datasheet's spare-chassis matrix (Table 2) pairs it
+    with the JPSU-350-AC-AFI and JPSU-550-DC-AFI supplies
+  weight: >-
+    datasheet - guide Table 10 and the datasheet physical specifications give one fan module weight,
+    0.33 lb (0.15 kg), without separating the two airflow models
+  size: >-
+    drawing - taken from the AIR OUT module: same slot, same aperture, 48.6 x 42.0 mm off the guide's
+    rear-panel figure (Figure 13, g022074; see juniper/ex4300-fan-afo). The guide draws no AIR IN
+    module on its own, and gives no separate size for it
+  face: >-
+    estimated - the guide shows only the AIR OUT module's face (Figure 38, g022082) and no drawing or
+    photograph of an AIR IN module was found, so this face is the AIR OUT art with the printed label
+    changed to AIR IN (AFI). The guide states no handle colour for either module, so none is drawn
+    differently; whether the real AIR IN module has a distinguishing colour is open
+  states: >-
+    datasheet - no lamp on this part. The guide's Table 29 (Fan Module Status LED) puts the status
+    LED on the chassis rear panel beside each slot
+  power-draw: >-
+    NOT STATED - the same search as the AIR OUT module: no per-module wattage in the guide or the
+    datasheet. L27 stands on purpose
+states: [absent]
+elements:
+  handle:
+    at: [1.6, 5.0]
+    size: [8.8, 32.0]
+    class: latch
+  screw-top:
+    at: [38.9, 2.6]
+    size: [5.0, 5.0]
+    class: screw
+  screw-bottom:
+    at: [39.4, 34.6]
+    size: [4.0, 4.0]
+    class: screw
+size:
+  w: 48.6
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: handle
+    out: 3.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 38 - the loop handle stands proud of the grille face; projection not measured
+  - node: screw-top
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: guide Figure 38 - knurled captive thumbscrew, projection estimated

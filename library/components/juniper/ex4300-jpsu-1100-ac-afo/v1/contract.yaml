@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: ex4300-jpsu-1100-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-1100-AC-AFO-A, the 1100 W AC power supply of the EX4300 switches, labelled AIR OUT
+  (AFO): front-to-back airflow. It ships in the EX4300-48P and seats in the PoE models' PSU 0 and
+  PSU 1 slots. Hot-insertable and hot-removable; IN OK and OUT OK lamps, a honeycomb vent, a loop
+  handle and an appliance inlet that the guide types C15 (a 15 A cord at the 1100 W rating).
+attrs:
+  model: JPSU-1100-AC-AFO-A
+  part-number: JPSU-1100-AC-AFO-A
+  role: ac-power-supply
+  power-output-w: 1100
+  input-voltage: 115-120 VAC low line or 200-240 VAC high line, 50-60 Hz
+  input-current: 12 A at low line, 6 A at high line
+  airflow: front-to-back
+  airflow-label: AIR OUT (AFO)
+  weight-kg: 1.1
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 30 (model
+    JPSU-1100-AC-AFO-A) and Table 31 (AIR OUT, front-to-back); the EX4300-48P ships with it (Table 3,
+    Table 8). The guide's `show chassis hardware` listing prints JPSU-1100-AC-AFO-A for power supply
+    0 of an EX4300-48P
+  power-output-w: >-
+    datasheet - guide Table 42, 1100 W AC Power Supply Specifications: output power 1100 W; low line
+    115-120 VAC at 12 A, high line 200-240 VAC at 6 A, 50-60 Hz
+  weight: >-
+    datasheet - guide Table 30: 2.43 lb (1.1 kg)
+  size: >-
+    drawing - the same aperture as the 350 W supply, 84.0 x 42.0 mm, off the guide's rear-panel figure
+    (Figure 13, g022074). The guide's single AC supply drawing (Figure 42) has no per-rating size
+  inlet: >-
+    estimated - guide Table 30 types the appliance inlet of the 1100 W supply IEC-320-C15, against
+    C13 for the 350 W and 715 W supplies. The registry has no C16 aperture (C15 is the cord side), so
+    the drawn opening is the registry's C14 inlet, the same 28.0 x 20.0 as the lower ratings;
+    whether the real opening differs is not stated by any document held
+  face: >-
+    estimated - the guide's single AC supply drawing (Figure 42) stands for this face; the art is the
+    350 W AIR OUT art
+  leds: >-
+    datasheet - guide Figure 43 and Table 46: IN OK green when receiving proper input power; OUT OK
+    green when delivering power correctly, red when the supply has failed; each unlit otherwise
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [47.0, 10.5]}
+elements:
+  led-in-ok:
+    at: [6.8, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out-ok:
+    at: [18.1, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#ef4444'}
+    - 'off'
+  latch:
+    at: [32.8, 3.4]
+    size: [5.6, 35.0]
+    class: latch
+size:
+  w: 84.0
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 42 - the loop handle stands proud of the face; projection not measured

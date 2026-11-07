@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: nm-cover-3ru
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged cover of a Panduit NetManager High Capacity 3RU front-only horizontal manager
+  (NMF3) seen from the front - a PVC plate across the finger tips with a lip along its top and
+  bottom edge. It ships fitted and opens up or down 110 degrees
+provenance:
+  size: >-
+    drawing - the plan view of the NMF3 customer drawing (Panduit V10404AI-DC): the cover is the thin
+    bar along the front edge of the finger zone, as wide as the body; the parts list says "1- 3RU
+    19" COVER", "3RU COVER: PVC". 444.83 wide as the body (see nm-base-3ru) and 133 high.
+  relief: >-
+    drawing - the cover is the front 12.6 mm of the plan. Its plate and lips are 3.5 and 1.5
+    thick, ESTIMATED: no view sections the cover (see nm-cover-2ru): the plate stands from
+    136.2 to 139.7 above the well's floor and the lips from 127.1.
+  lid: >-
+    datasheet - the NetManager High Capacity specification sheet (RKSP237): "Dual hinged
+    covers shall allow access to the cable pathway", opening 110 degrees to the top or bottom
+    without removing the cover. It opens over the channel, so it is a lid (`lid: true`). The
+    format has no hinge, so the cover is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: PVC", "The manager is black" on the product page. The shade
+    is this library's render, a little lighter than the manager so the two read apart.
+size: {w: 444.83, h: 133}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: PVC}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 131.5], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 133], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 127.1
+      out: 139.7
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NetManager drawings, the cover over the front 12.6 mm; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      lift: 127.1
+      out: 139.7
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NetManager drawings, the cover over the front 12.6 mm; the lip's thickness is not dimensioned
+    - node: plate
+      lift: 136.2
+      out: 139.7
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NetManager drawings; the plate's thickness is not dimensioned
+skins: [default]

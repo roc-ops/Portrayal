@@ -1,0 +1,155 @@
+format: 1
+kind: module
+name: ex9253-jnp-pwr1100-dc
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-PWR1100-DC, the universal DC power supply of the EX9253. It outputs 1100 W from a single
+  -48 VDC feed (operating range -40 to -72 VDC) and has a terminal block with two studs at the left, a
+  fan behind a diagonal ejector handle at the right, a status lamp and an ejector tab. The EX9253 seats
+  up to six, in slots PSM0 to PSM5; the base order ships three and the redundant order four. Each has its
+  own fan and a dedicated feed. They are hot-removable and hot-insertable. Never mix them with AC
+  supplies.
+attrs:
+  role: dc-power-supply
+  power-output-w: 1100
+  inlet: dc-terminal
+  airflow: front-to-back
+  input: operating -40 to -72 VDC, nominal -48 and -60 VDC; 32 A at -48 VDC (guide Table 12)
+part-numbers:
+  JNP-PWR1100-DC (EX9253): {part: JNP-PWR1100-DC}
+provenance:
+  sources: >-
+    datasheet - EX9253 Switch Hardware Guide (published 2022-11-30): DC Power Supply Description,
+    Figures 16 and 17 (the supply, and its face drawn flat, g009811), Tables 11 and 12 (the electrical
+    figures), Table 5 (size and weight) and Tables 3 and 4 (the part number). EX9250 Ethernet Switch
+    Datasheet (1000632-006-EN, Sep 2021): the spare is JNP-PWR1100-DC, "Universal DC power supply,
+    1100 W", and the base and redundant orders ship JNP-PWR1100-DC-BB. The guide's name is carried. The
+    key of part-numbers carries the suffix (EX9253) so that its DCIM module type does not share a file
+    with the same part number in another line's slice.
+  size: >-
+    drawing - Table 5: 3.53 in (8.67 cm) wide and 1.63 in (4.14 cm) high. The rear panel of Figure 3
+    (3.03 px/mm) shows the three supplies of a column on a 40.3 mm pitch, so the face is 86.7 x 39.6
+    mm, the table's width and the figure's height, as for the AC supply.
+  depth: >-
+    datasheet - Table 5: 10.8 in (27.43 cm). No depth is written, because the component schema has no
+    depth key the explorer reads here; the figure is kept in this note.
+  face: >-
+    drawing - Figure 17 read at 9.46 px/mm on its 820 px width: the DC terminal block (callout 3) with two
+    studs and serrated nuts at 25.9 mm across and 12.2 and 27.4 mm down; the status lamp (callout 2) at the
+    upper left, 6.3 mm across and 7.4 mm down; the ejector tab (callout 1) at the left edge; and the fan with
+    its diagonal handle (callout 4) at the right. A small grounding stud sits at the lower left. The two
+    studs are labelled RTN and -48V (see `poles`). Every position is estimated to
+    about 0.7 mm.
+  handle: >-
+    estimated - the guide gives no colour for the handle or the tab; Figure 17 is a line drawing. They
+    are drawn in neutral greys.
+  power-output-w: >-
+    datasheet - guide Table 12: maximum output power 1100 W. An OUTPUT, since a supply provides power.
+  leds: >-
+    estimated - Figure 17 shows one status lamp and no table describes it. It is drawn as one lamp with
+    green and off states.
+  seats: >-
+    estimated - each stud is the library's common/terminal-screw-34@1, a slotted head 3.4 across (that
+    part's own size is an estimate), standing at the centre of the stud this skin already draws (`term-a`
+    and `term-b`: centres 25.9 across, 11.9 and 27.1 down, read off Figure 17, so good to about 0.7 mm).
+    A DECLARED STAND-IN: the terminals are studs with serrated nuts, which the lug is secured to "with the
+    nuts" (step 5 of "Connecting DC Power to an EX9253 Switch and Powering on the Switch", printed page
+    90), and the screw part draws a slotted head and no nut. The seats are not lifted: this contract's
+    relief for the two studs (a cylinder of 1.2) is an estimate of its own and the seats stay at the
+    face's level. The guide asks for "16-14 AWG ring lugs sized for #6 screws (Panduit PN10-10R or
+    equivalent)", which are provided (printed page 87), and a torque of 5 to 6 lb-in on the nuts; the
+    screw part claims no thread, so none is written. The studs stay as drawn, and the seat marks where
+    a lug lands
+  poles: >-
+    Juniper EX9253 Switch Hardware Guide (published 2022-11-30), step 5 of "Connecting DC Power to an
+    EX9253 Switch and Powering on the Switch" (printed page 90): the positive (+) source cable lug goes
+    to "the return terminal (labeled RTN)" and the negative (-) one to "the -48V terminal (labeled
+    -48V)"; Figure 16 (printed page 32) draws a plate beside the upper stud that reads RTN and one beside
+    the lower stud that reads -48V and -60V. The roles are the legend's words: `rtn` for RTN and
+    `batt` for -48V (spec/schemas/dc.yaml writes `batt` as "-48V"). The upper stud (`term-a`) is RTN and
+    the lower (`term-b`) is -48V. The port's poles are in the order the guide names them. The guide's
+    description of the supply (printed page 32) says one terminal block provides "a single DC input
+    (-48 VDC and return)"
+  voltage: >-
+    NOT STATED. Table 12 "DC Power Supply Electrical Specifications" (printed page 33) prints "Minimum:
+    -40 VDC", "Nominal: -48 VDC, -60 VDC" and an operating range of -40 through -72 VDC, and the legend
+    plate of Figure 16 reads -48V and -60V. Two nominals, and a port states one, so the port states
+    none and a later change can state one once a source says which is this supply's. `attrs` keeps the
+    words as printed
+  rating: >-
+    datasheet - Juniper EX9253 Switch Hardware Guide, Table 12 (printed page 33): "DC input current
+    rating: 32 A @ -48 VDC", the supply's own figure. The "54 A @ -48 VDC (maximum)" of Table 11 is the
+    DC system's, for the chassis, and is not stated here; the 40 A breaker the guide recommends is the
+    circuit's
+  awg: >-
+    NOT STATED. The guide's list of parts for "Connecting DC Power to an EX9253 Switch and Powering on the
+    Switch" (printed page 87) gives two sizes that do not agree for one conductor: "DC power source
+    cables (minimum 10 AWG (1.3 mm2)", and "16-14 AWG ring lugs sized for #6 screws", so a 10 AWG
+    cable does not fit the lug the guide provides. No one size is the one the guide gives for the
+    terminals, so the port states none
+states:
+- ok
+- fault
+- absent
+elements:
+  term-a:
+    at: [21.6, 7.6]
+    size: [8.6, 8.6]
+    class: screw
+  term-b:
+    at: [21.6, 22.8]
+    size: [8.6, 8.6]
+    class: screw
+  led-status:
+    at: [5.2, 6.3]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: ok, color: '#22c55e'}
+    - 'off'
+  tab:
+    at: [1.8, 12.4]
+    size: [4.6, 12.8]
+    class: latch
+  handle:
+    at: [46.0, 3.0]
+    size: [30.0, 33.6]
+    class: latch
+size:
+  w: 86.7
+  h: 39.6
+size-confidence: {w: datasheet, h: drawing}
+relief:
+  features:
+  - node: tab
+    out: 1.6
+    confidence: estimated
+    source: figure - the ejector tab stands proud of the face in Figure 16; its projection is not measured
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle bar stands proud of the fan guard in Figure 16; its projection is not measured
+  - node: term-a
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the stud and its nut stand proud of the terminal block; the projection is not measured
+  - node: term-b
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the stud and its nut stand proud of the terminal block; the projection is not measured
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [24.2, 10.2]}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [24.2, 25.4]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 32
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating}
+skins: [default]

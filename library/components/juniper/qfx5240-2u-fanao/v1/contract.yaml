@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: qfx5240-2u-fanao
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5240-2U-FANAO, the field-replaceable fan module of the QFX5240-64OD and QFX5240-64QD, with front-to-back
+  airflow (AIR OUT, port-to-FRU, also written AFO). Air comes in at the port side and leaves at the back. It is
+  marked AIR OUT on a grey chip on its orange handle. Each module holds two rotors, and the cooling system is
+  N+1 at rotor level. It is hot-removable and hot-insertable. The switch takes four, in slots 0 to 3 from left
+  to right. The guide describes no back-to-front module for the QFX5240.
+attrs:
+  model: QFX5240-2U-FANAO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5240-64OD (2100 x 692 px; the body is 1895 px
+    wide, which is the datasheet's 17.26 in at 4.323 px/mm): the module's plate measures 80.3 mm wide and 80.0 mm
+    high, on an 85.7 mm pitch. No document states the module's size in millimetres: the guide's figures 18 and 19
+    carry no scale.
+  depth: >-
+    not stated. Searched the QFX5240 hardware guide (figures 18 and 19, the fan module section, the physical
+    specifications) and the datasheet for the module's depth. No depth is written rather than a guessed one.
+  face: >-
+    photo - the studio rear photograph at 2.4 times zoom: a plate of hexagonal punched holes, a small captive
+    screw at the upper left, and a sloping handle band across the plate, with two slots either side of a grey AIR
+    OUT chip carrying a fan symbol, and a clip at each end. Positions are read off the photograph and estimated
+    to about 0.4 mm. The handle colour is the photograph's orange; the guide does not name it.
+  airflow: >-
+    datasheet - guide Tables 3, 5 and 6 and the cooling system text: four front-to-back (airflow out) fan modules;
+    the datasheet's cooling row reads "Ports-to-PSU (AFO) 4 hot-pluggable fan modules".
+  power: >-
+    not published. Searched the QFX5240 hardware guide (the cooling system, Tables 5 and 6 and the AC power
+    supply sections) and the datasheet for a figure per module: only whole-switch figures exist. The module
+    declares power-absent so the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [2.4, 2.4]
+    size: [3.4, 3.4]
+    class: screw
+  handle:
+    at: [0.0, 28.7]
+    size: [79.6, 23.6]
+    class: latch
+size:
+  w: 80.3
+  h: 80.0
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle band stands proud of the plate; its projection is not measured
+  - node: screw
+    cyl: 1.2
+    confidence: estimated
+    source: photo - captive screw head, projection not measured

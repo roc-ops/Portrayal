@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: cmbrush1u-panel
+version: 1.0.0
+class: mechanical
+description: >-
+  The front plate of the StarTech.com CMBRUSH1U 1U brush panel seen from the front - one steel
+  sheet the full width of the rack with the brush's window cut in it and a pair of slots at each
+  end - drawn as the well the panel's flanges stand behind, its floor the front face of the plate
+provenance:
+  size: >-
+    drawing - CMBRUSH1U_Diagram.pdf (StarTech.com, third angle projection, millimetres, REV A,
+    06/02/2020): the plate is 482.0 [19.0"] wide and 43.7 high, the four mounting slots "4-#7.0x10.0"
+    in a 465.0 by 31.7 rectangle, 6.0 from the top and bottom edges, and the window 382.0 long and
+    23.3 high, 12.4 from the top edge and 8.0 from the bottom.
+  window: >-
+    drawing - 382.0 by 23.3, the front view's dimensions; its place is 12.4 from the top (the
+    43.7 less the 23.3 and the 8.0) and centred across the plate, 50.0 either side (estimated off
+    the front view at 2.336 px/mm). The ends are rounded, the radius read as 5.0 (estimated).
+  slots: >-
+    drawing - "4-#7.0x10.0": 7.0 by 10.0, drawn horizontal (estimated: the raster-sized oval reads
+    about 9.4 by 10) and 7.7 mm in from each end, so 465.0 between the two columns. The
+    datasheet comes "with 2 sets of rack screws (10/32 and 12/24)".
+  depth: >-
+    estimated - 0.1. The plate is at the front face of the panel, which is where the ears bolt, so
+    the well is as shallow as it may be and the 1.2 mm sheet lies just behind the face. The
+    section gives the sheet as "t=1.2mm".
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmbrush1u_datasheet.pdf). The drawing is line
+    work, so the shade is this library's render of black steel.
+size: {w: 482.0, h: 43.7, d: 0.1}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {material: steel}
+relief: {wall: '#1b1d20'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.0, 43.7], class: bezel}
+skins: [default]

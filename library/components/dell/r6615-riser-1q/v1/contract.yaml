@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: r6615-riser-1q
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 1Q of the PowerEdge R6615 - slot 1 on dell/riser-1-fh-cage-16g@1, fitted in riser configuration 3
+attrs:
+  riser: '1Q'
+  appears-in: 'riser configuration 3'
+  power-absent: not-published
+  slot-1: 'x16, full height, half length, processor 1, PCIe Gen5'
+provenance:
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT (ISM figure 115, 'Riser 1Q',
+    slot 1; a cable leaves its board for the system board), so it is a module
+    with `bays`.
+  slots: >-
+    datasheet - R6615 ISM table 16: slot 1 full height, half length, x16 (Gen5),
+    processor 1; table 97 gives the same slot full length with a GPU shroud. The
+    slot is half length here, which never promises a card it cannot hold.
+    Table 17 (technical guide table 11) lists the riser in configuration 3,
+    R1Q + R4P.
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R6615 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  face: >-
+    borrowed - composed from dell/riser-1-fh-cage-16g@1, the metal of the R660's
+    riser 1P, one full-height window. ISM figure 6 shows the R6615 rear with
+    risers 1 and 4 as that cage and dell/riser-4-fh-cage-16g@1 draw them.
+  size: >-
+    borrowed - the cage's extent, 120.60 x 19.80.
+  seating: >-
+    borrowed - the slot bay is dell/riser-1p-16g@1's.
+  body: >-
+    estimated - the board and connector are dell/riser-1p-16g@1's, by analogy
+    with riser 2A's tip-left slot.
+  plan: >-
+    estimated - dell/riser-1-fh-plan-16g@1, an outline by eye from the R660's
+    isometric figure; the R6615's figure 115 is the same kind of isometric.
+size: {w: 120.60, h: 19.80, d: 246.9}
+size-confidence: {w: borrowed, h: borrowed, d: estimated}
+body:
+  depth: 246.9
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [9.82, -0.30], size: [2.40, 33.20],
+     from: 27.6, depth: 219.3, color: '#1f5138',
+     confidence: estimated, source: "borrowed from dell/riser-1p-16g@1, itself estimated by analogy with riser 2A's tip-left slot 2 - the board 0.6 left of the connector"}
+  - {id: slot-1-connector, at: [12.82, 0.40], size: [10.00, 8.70],
+     from: 47.2, depth: 89.0, color: '#15171b',
+     confidence: estimated, source: "borrowed from dell/riser-1p-16g@1, itself estimated by analogy with riser 2A's slot 2"}
+plan: {ref: dell/riser-1-fh-plan-16g@1}
+parts:
+  - {ref: dell/riser-1-fh-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 5}
+    plan: {at: [0.58, 0.00]}
+    behind: true
+    at: [0.00, -1.08]
+    size: [120.02, 21.59]
+    accepts: [dell/pcie-filler-fh-16g@1, std/pcie-bracket-fh@2, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    default: dell/pcie-filler-fh-16g@1
+skins: [default]

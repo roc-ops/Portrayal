@@ -5,6 +5,7 @@
 // (`heldBy: {parts}`), and zero-U overlap judged in millimetres.
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {existsSync, readFileSync} from 'node:fs';
 import * as M from '../../../kit/rack/model.js';
 import * as F from '../../../kit/rack/fit.js';
 import * as Z from '../../../kit/rack/zero-u.js';
@@ -193,6 +194,72 @@ test('bracketPositions: where the brackets go for a PDU, before any is placed', 
   const [a, b] = Z.bracketPositions(rackOf(), {ref: 'pdu', ru: 4}, ctx).offsets;
   const r = {...hung(20), zeroU: hung(20).zeroU.map(z => (z.id === 'z1' ? {...z, offsetMm: a} : z.id === 'z2' ? {...z, offsetMm: b} : z))};
   assert.equal(run(r, {op: 'zerou.hang', id: 'z3', on: ['z1', 'z2']}).error, undefined);
+});
+
+// ── the library's own bracket (#939) ─────────────────────────────────────
+// The tests above hang a PDU on a fixture bracket. These read the built facts of
+// the real parts, as the Rack Builder does: the chassis sizes of rack.json and
+// each device's configs.json, in the shape loadSlots answers.
+
+const DIST = new URL('../../../library/dist/', import.meta.url);
+const skip = existsSync(new URL('rack.json', DIST)) ? false : 'library/dist not built - run ./build.sh';
+const built = skip ? {} : JSON.parse(readFileSync(new URL('rack.json', DIST), 'utf8')).devices;
+const builtSlots = ref => {
+  const f = new URL(`${ref}.configs.json`, DIST);
+  if (!existsSync(f)) return null;
+  const j = JSON.parse(readFileSync(f, 'utf8'));
+  return {bays: j.bays || {}, cages: j.cages || {}, configs: j.configs || [], default: j.default ?? null, 'pdu-class': j['pdu-class'] ?? null};
+};
+const real = {chassisOf: ref => built[ref] || null, slotsOf: builtSlots};
+// an EVMI2130X beside two FS-PDUBK brackets `apart` units apart from U4, both in the configuration `cfg`
+function hungReal(apart, cfg) {
+  const r = run(rackOf(), [
+    {op: 'zerou.place', ref: 'fs-pdubk', cfg, at: 'left-rear', ru: 4, label: 'Bracket'},
+    {op: 'zerou.place', ref: 'fs-pdubk', cfg, at: 'left-rear', ru: 4 + apart, label: 'Bracket'},
+    {op: 'zerou.place', ref: 'evmi2130x', at: 'right-rear', ru: 1, label: 'PDU A'}], real);
+  assert.equal(r.error, undefined);
+  return r.rack;
+}
+
+test('FS-PDUBK publishes three pdu-button slots, 26.3 mm up the plate, in each of its two mounting options', {skip}, () => {
+  const j = JSON.parse(readFileSync(new URL('fs-pdubk.configs.json', DIST), 'utf8'));
+  assert.deepEqual(j.configs.map(c => c.name), ['front', 'rear']);
+  assert.equal(j.default, 'front');
+  for (const c of j.configs) {
+    assert.deepEqual(c.slots, [{interface: 'pdu-button', at: 26.3}, {interface: 'pdu-button', at: 26.3}, {interface: 'pdu-button', at: 26.3}], c.name);
+    assert.deepEqual(c['mount-points'], [], 'a bracket hangs nothing');
+  }
+  // the PDU's side of the same interface
+  assert.deepEqual(configFacts(builtSlots('evmi2130x'), '').mountPoints, [{mates: 'pdu-button', at: 72}, {mates: 'pdu-button', at: 1627.8}]);
+  // a part that stands beside the rack, two units tall
+  assert.deepEqual([built['fs-pdubk'].mount, built['fs-pdubk'].ru], ['rack-side', 2]);
+});
+
+for (const cfg of ['front', 'rear']) {
+  test(`an EVMI2130X hung on two FS-PDUBK brackets 35U apart fits (option ${cfg}), and 34U apart is refused with the distance`, {skip}, () => {
+    const res = run(hungReal(35, cfg), {op: 'zerou.hang', id: 'z3', on: ['z1', 'z2']}, real);
+    assert.equal(res.error, undefined);
+    const pdu = zById(res.rack, 'z3');
+    // the lowest slot is 133.35 + 26.3 up, the lowest button 72 up the PDU: its bottom is 87.65 up
+    assert.deepEqual([pdu.at, pdu.offsetMm, pdu.heldBy], ['left-rear', 87.65, {parts: ['z1', 'z2']}]);
+    assert.deepEqual(Z.fitsHang(res.rack, pdu, real), {ok: true, place: {at: 'left-rear', offsetMm: 87.65}});
+    assert.deepEqual(F.fitsZeroU(res.rack, {...pdu}, real.chassisOf, {ignoreId: 'z3'}), {ok: true}, 'it does not overlap its brackets');
+    assert.deepEqual(Z.hangNotices(res.rack, real), []);
+    // one unit short: the buttons are 1555.8 apart and the brackets 1511.3
+    assert.deepEqual(run(hungReal(34, cfg), {op: 'zerou.hang', id: 'z3', on: ['z1', 'z2']}, real), {index: 0, error:
+      'PDU A has mount points 1555.8 mm apart; brackets z1 and z2 are 1511.3 mm apart. Move z2 up 1U.'});
+  });
+}
+
+test('the brackets for an EVMI2130X are 35 units apart, and placed there they hold it', {skip}, () => {
+  const p = Z.bracketPositions(rackOf(), {ref: 'evmi2130x', ru: 4}, real);
+  assert.deepEqual(p, {units: [0, 35], offsets: [133.35, 1689.1], exact: true});
+  const r = run(rackOf(), [
+    {op: 'zerou.place', ref: 'fs-pdubk', at: 'left-rear', ru: 4 + p.units[0], label: 'Bracket'},
+    {op: 'zerou.place', ref: 'fs-pdubk', at: 'left-rear', ru: 4 + p.units[1], label: 'Bracket'},
+    {op: 'zerou.place', ref: 'evmi2130x', at: 'right-rear', ru: 1, label: 'PDU A'},
+    {op: 'zerou.hang', id: 'z3', on: ['z1', 'z2']}], real);
+  assert.equal(r.error, undefined);
 });
 
 // ── overlap in millimetres ───────────────────────────────────────────────

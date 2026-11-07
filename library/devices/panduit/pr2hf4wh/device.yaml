@@ -1,0 +1,284 @@
+format: 1
+kind: device
+name: pr2hf4wh
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: PR2HF4WH
+description: >-
+  4RU front-only horizontal cable manager, Panduit PatchRunner 2 PR2HF4WH, white: an ABS moulding
+  on the rack rails with a channel 181 mm deep standing out of its front, a wall of seven inset
+  fingers along its top and another along its bottom with wide openings between them, and a
+  dual-hinged magnetic cover across the finger tips that ships fitted. Two large windows in the
+  plate pass cable to the back of the rack. It matches the depth of the PatchRunner 2 vertical
+  managers it stands beside.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The PR2HF customer
+      drawing (Panduit 00224EAE-DC) tabulates the overall depth C 201.7 [7.94 in] and the mounting
+      depth D 181.4 [7.14 in]: D is the front of the manager to the plane its ears bolt to, so the
+      plate stands 20.3 behind it. `at` is 181.4. This states a placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the part is 201.7 deep with 181.4 of it in front of the rails, so the
+      rear face of its rack units stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DOCUMENTS. Panduit publishes the PR2HF as a customer drawing (PDF
+      00224EAE-DC with a table of heights, width, depths and weights; a DXF and a DWG that were not
+      read), the PatchRunner 2 Horizontal Cable Managers specification sheet RKSP188, an installation
+      instruction, a product page, the Space-Saving bulletin RKCB46 and the Cable Capacity
+      Calculator. The customer drawing's front view is read at 300 dpi against its own height.
+      THE FIGURES THE TABLE GIVES ARE `drawing`; EVERYTHING READ OFF THE PICTURE (the finger count,
+      pitch and width, the windows) IS ESTIMATED and said so in the part that carries it.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 483.9 x 177.0 x 201.7. The table gives B 483.9 [19.05 in] over the ears, A 177.0
+      [6.97 in] high and C 201.7 [7.94 in] deep for the PR2HF4 (the specification sheet says 19.0 (484)
+      and 7.9 (202)). The ears are the ends of the plate and are drawn with it, as the front view
+      draws them; no part sits on them.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW CHANNEL, NOT A BOX, as the FS finger ducts are built. The body is a sheet
+      body (docs/cable-managers-design.md section 4) and its six views are elevations. The solid is
+      what its parts build: the plate on the front view as a well 181.4 deep whose floor is open at
+      the two windows, the two walls of fingers standing in it, the cover in it across the finger
+      tips, which opens and uncovers the channel, and the back of the plate standing 20.3 proud of
+      the rear face.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no Panduit document states a wall gauge for the ABS moulding. 2.5 is a moulded
+      wall of this size; the parts carry their own thicknesses.
+  weight:
+    confidence: drawing
+    note: >-
+      drawing - 1.2 kg [2.6 lb] unpacked, the weight table of the PR2HF customer drawing; the
+      shipping weight is 1.5 kg.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front with the cover fitted: the cover, and under it the two rows of seven
+      fingers, the channel between them and the two large windows in the plate behind it. The `duct`
+      guide is the channel between the finger rows, 147 high (the 177 less two 15 mm rows,
+      estimated) and the 419.9 between the plate's ear areas.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate with its two windows, from the front view of the drawing,
+      which draws them through the channel; five plates round them, sunk 0.05 inside the rear face so
+      the plate closes the well within the 201.7 mm envelope. The windows are open: the blanking
+      panel NM4B is a separate accessory (see `gaps:`).
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan, rear at y=0: the plate 20.3 deep behind the ear plane and the seven
+      fingers 150 mm long. The finger sizes are estimated.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the front view draws the same fingers along the bottom as along the top; the bottom
+      is the top again.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - the side view of the drawing is a small outline; the end of the manager is built
+      from the plan and the front view: the plate, and the two finger rows' walls.
+  right:
+    confidence: estimated
+    note: >-
+      estimated - the left view turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the duct is the channel between the two finger rows, run across the rack; its
+      finger pitch, 72.8, is measured off the front view and the gap, 57.8, is that pitch less the
+      15 mm finger.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the Cable Capacity Charts of the Space-Saving bulletin (RKCB46) give the PR2HF4 per
+      cable at the 30 per cent recommended fill and the 50 per cent maximum; the figure stated is
+      the Cat 6 24 AWG 0.235 in (5.97 mm) column at 30 per cent, 232 (387 at 50 per cent). The Cable
+      Capacity Calculator gives the usable area, 33.6 sq in.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, colour, standards and what is in the box are the PR2HF4WH product
+      page and the specification sheet (RKSP188); the materials of the cover (neodymium magnets,
+      steel pins) are the drawing's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "The manager is white" on the PR2HF4WH page. Every image Panduit publishes of the
+      part is a render; the cover is drawn a shade lighter than the moulding.
+attrs:
+  physical:
+    weight-kg: 1.2
+    material: ABS
+    cover-material: ABS with neodymium magnets and steel pins
+    color: White
+    mounting-hardware: 'four #12-24 x 1 in screws'
+  performance:
+    cable-capacity: 232
+    cable-capacity-basis: >-
+      front channel: Cat 6 24 AWG, 0.235 in (5.97 mm), at the 30% recommended fill of its 33.6 sq in
+      usable area; 387 at the 50% maximum fill - Panduit Space-Saving Cable Management Rack
+      Systems bulletin RKCB46, Cable Capacity Charts
+    cable-capacity-media: cat6
+  compliance:
+    rohs: RoHS Compliant
+chassis:
+  width: 483.9
+  height: 177.0
+  depth: 201.7
+  ru: 4
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 181.4, default: true}
+  shell: sheet
+  thickness: 2.5
+  weight-kg: 1.2
+  color: '#d5d8da'
+gaps:
+  - what: cover-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the specification sheet says the magnetic, dual-hinged cover opens 190 degrees up or down
+      without being removed; no view draws a hinge, and the cover is drawn as one fitted plate that
+      is either on or off.
+    wanted: a drawing or a close render of the cover's hinge
+  - what: cover-height
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the drawing's table gives the overall cover height as 179.2 against the manager's 177.0; the
+      cover is drawn at 177 and the 2.2 its lips stand over the body is not drawn.
+    wanted: a section through the cover and the body's top edge
+  - what: blanking-panel
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      the NM4B front-to-rear pass-through blanking panel (V10404BV-DC) is a separate accessory that
+      closes the two windows; it is not drawn and the windows are open.
+    wanted: a drawing of the blanking panel fitted
+  - what: dxf-geometry
+    scope: [front, rear, top, left, right]
+    reason: needs-hardware
+    note: >-
+      the maker's PR2HF DXF (11 MB) and DWG were not read: the figures here come from the PDF
+      drawing's table and its front view.
+    wanted: the DXF read for the finger and window measurements
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the moulded plate and channel with its ears
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the two walls of seven fingers, upper first
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the dual-hinged magnetic cover across the finger tips, shipped fitted
+views:
+  front:
+    size: {w: 483.9, h: 177.0}
+    components:
+      placements:
+        - {ref: panduit/pr2hf-base-4ru@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: panduit/pr2hf-fingers@1, id: fingers-upper, at: [0.0, 0.0], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: panduit/pr2hf-fingers@1, id: fingers-lower, at: [0.0, 162.0], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: panduit/pr2hf-cover-4ru@1, id: cover, at: [32.0, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [94.0, 15.0], size: [118.0, 147.0], shape: rect, cover: open}
+      - {id: pass-through-2, at: [270.0, 15.0], size: [118.0, 147.0], shape: rect, cover: open}
+    guides:
+      - {id: duct, kind: duct, at: [32, 15.0], size: [419.9, 147.0], run: x, finger-pitch: 72.8, finger-gap: 57.8, confidence: estimated, source: 'PR2HF customer drawing front view: seven fingers a row, pitch measured at 300 dpi, gap the pitch less the finger'}
+  rear:
+    size: {w: 483.9, h: 177.0}
+    panel:
+      decor:
+        - {id: back-top, at: [0, 0], size: [483.9, 15], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: back-bottom, at: [0, 162], size: [483.9, 15], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: back-left, at: [0, 15], size: [94, 147], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: back-middle, at: [212, 15], size: [58, 147], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: back-right, at: [388, 15], size: [95.9, 147], fill: '#cfd2d4', sink: 0.05, kind: base}
+  top:
+    size: {w: 483.9, h: 201.7}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [483.9, 20.3], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 19.7], size: [483.9, 0.6], fill: '#a9acae', kind: fold}
+        - {id: finger-1, at: [16.05, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-2, at: [88.85, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-3, at: [161.65, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-4, at: [234.45, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-5, at: [307.25, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-6, at: [380.05, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-7, at: [452.85, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+  bottom:
+    size: {w: 483.9, h: 201.7}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [483.9, 20.3], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 19.7], size: [483.9, 0.6], fill: '#a9acae', kind: fold}
+        - {id: finger-1, at: [16.05, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-2, at: [88.85, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-3, at: [161.65, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-4, at: [234.45, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-5, at: [307.25, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-6, at: [380.05, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+        - {id: finger-7, at: [452.85, 20.3], size: [15, 150], fill: '#d9dcdd', kind: finger-wall}
+  left:
+    size: {w: 201.7, h: 177.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [20.3, 177], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [20.3, 0], size: [150, 15], fill: '#d9dcdd', kind: finger-wall}
+        - {id: wall-lower, at: [20.3, 162], size: [150, 15], fill: '#d9dcdd', kind: finger-wall}
+  right:
+    size: {w: 201.7, h: 177.0}
+    panel:
+      decor:
+        - {id: plate, at: [181.4, 0], size: [20.3, 177], fill: '#cfd2d4', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [31.4, 0], size: [150, 15], fill: '#d9dcdd', kind: finger-wall}
+        - {id: wall-lower, at: [31.4, 162], size: [150, 15], fill: '#d9dcdd', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The manager as Panduit ships PR2HF4WH, cover fitted.'
+  cover-off:
+    kind: example
+    description: >-
+      The same manager with its cover opened, the finger walls and the channel open to lay a
+      cable in. The cover comes with the manager, so this is an illustration and not a device
+      type.
+datasheet:
+  title: 'PatchRunner 2 Horizontal Cable Managers Spec Sheet RKSP188'
+  url: https://www.panduit.com/content/dam/panduit/en/products/media/2/02/002/3002/111713002.pdf
+  sha256: baca01ecedea9118810c969b22a9fe24489ac6f563f6267b11935d7759b68565
+references:
+  - title: 'PR2HF* customer drawing (PDF) 3/24, 00224EAE-DC'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/9/49/249/3249/111153249.pdf
+    sha256: 92a28b1f38b4fd4ce283dcafb5126e7e4db9ba2f3487c1bdf45c5f966e7e546a
+  - title: 'Space-Saving Cable Management Rack Systems Product Bulletin RKCB46'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/7/97/597/2597/110822597.pdf
+    sha256: 36490936d97dc281c4b7162ed94c406a1021ec612594f2aa002ba6b4e8e62fcf
+  - title: 'Cable Capacity Calculator Web V14'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/2/62/062/6062/111776062.xlsx
+    sha256: 947390141fb2a12d3c24a89edeebb6024795965032b91d722c6b90df2a3b8eb7

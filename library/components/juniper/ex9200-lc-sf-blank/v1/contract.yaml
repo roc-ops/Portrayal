@@ -1,0 +1,45 @@
+format: 1
+kind: module
+name: ex9200-lc-sf-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Blank cover panel for an empty line card or Switch Fabric slot of an EX9200 switch (EX9200-LC-SF-BLANK).
+  It is a plain dark plate with a short blue ejector handle at each end. It stands in a horizontal slot of the
+  EX9204 and EX9208, and turned 90 degrees in a slot of the EX9214.
+part-numbers:
+  EX9200-LC-SF-BLANK: {part: EX9200-LC-SF-BLANK}
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information, EX9200 Field
+    Replaceable Units: "EX9200-LC-SF-BLANK  EX9200 line card, switch fabric blank cover panel, spare". The hardware
+    guides say only "blank panels for line card slots" and "cover panel" and give the panel no number.
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an opening: it has
+    no indicator to light and no condition to report, so this part draws no elements. `absent` stays, because an
+    empty slot is a real thing to draw.
+  size: >-
+    estimated - the plate is 396.0 x 29.5 centred in a 413.5 envelope, the size every EX9200 and MX card of this
+    cage reserves (the cage is the MX240, MX480 and MX960 sheet metal; juniper/mx240 provenance card-slots). The
+    guide gives every line card 1.25 x 17 x 22 in (Table 7), whose 1.25 in is the card envelope, and no table
+    dimensions a blank. The blank is drawn at the card's plate size.
+  knobs: >-
+    estimated - read off the EX9208 studio front photograph (1.31 px/mm), slot 2 from the bottom, the only blank
+    visible in the three EX9200 photographs: a dark plate with a short blue ejector handle at each end, each with one screw
+    (the guide's removal steps rotate the ejector handles to unseat the cover panel, and EX9208 Figure 5 draws the blanks with the cards' lever ends).
+    The handle is about 19.6 mm long and 9 mm tall, as the MX blank's knob is measured on a 3.23 px/mm photograph;
+    at this resolution the EX handle reads the same to within the pixel (0.8 mm). Drawn at the MX figures.
+  colour: >-
+    photo - the EX9208 front photograph shows the blank in the same charcoal as the card plates and the knobs in
+    the light blue of the ejector levers. The MX blank is silver; this one is not.
+states: [absent]
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope every card of the cage reserves, so a blank seats like a card; the plate inside it is
+  396.0 wide. h is the plate height, estimated as the cards'.
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: ex4300-jpsu-715-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-715-AC-AFO-A, the 715 W AC power supply of the EX4300 switches, labelled AIR OUT
+  (AFO): front-to-back airflow. It ships in the EX4300-24P and seats in the PoE models' PSU 0 and
+  PSU 1 slots. Hot-insertable and hot-removable; IN OK and OUT OK lamps, a honeycomb vent, a loop
+  handle and a C14 appliance inlet for a C13 cord.
+attrs:
+  model: JPSU-715-AC-AFO-A
+  part-number: JPSU-715-AC-AFO-A
+  role: ac-power-supply
+  power-output-w: 715
+  input-voltage: 100-120 VAC low line or 200-240 VAC high line, 50-60 Hz
+  input-current: 11 A at low line, 5 A at high line
+  airflow: front-to-back
+  airflow-label: AIR OUT (AFO)
+  weight-kg: 1.1
+provenance:
+  part-number: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 30 (model number
+    JPSU-715-AC-AFO-A) and Table 31 (AIR OUT, front-to-back). It is the supply the EX4300-24P ships
+    with (Table 1, Table 8, Table 28); the datasheet's Table 1 gives the same pairing
+  power-output-w: >-
+    datasheet - guide Table 41, 715 W AC Power Supply Specifications: output power 715 W; low line
+    100-120 VAC at 11 A, high line 200-240 VAC at 5 A, 50-60 Hz. Table 30's own input current row
+    reads 11-5 A for the EX4300 switches except the 48MP, the same pair of figures
+  weight: >-
+    datasheet - guide Table 30: 2.43 lb (1.1 kg)
+  size: >-
+    drawing - the same aperture as the 350 W supply, 84.0 x 42.0 mm, off the guide's rear-panel figure
+    (Figure 13, g022074). The guide draws one AC supply (Figure 42, g022464) for all four ratings and
+    gives no per-rating size, so the faces are modelled alike
+  face: >-
+    estimated - the guide's single AC supply drawing (Figure 42) stands for the 715 W face; the face
+    is the 350 W AIR OUT art. The inlet is the registry's C14 aperture, as Table 30's inlet type for
+    this supply is IEC-320-C13 (the cord-side name of a C14 inlet)
+  leds: >-
+    datasheet - guide Figure 43 and Table 46: IN OK green when receiving proper input power; OUT OK
+    green when delivering power correctly, red when the supply has failed; each unlit otherwise
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [47.0, 10.5]}
+elements:
+  led-in-ok:
+    at: [6.8, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out-ok:
+    at: [18.1, 7.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#ef4444'}
+    - 'off'
+  latch:
+    at: [32.8, 3.4]
+    size: [5.6, 35.0]
+    class: latch
+size:
+  w: 84.0
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 42 - the loop handle stands proud of the face; projection not measured

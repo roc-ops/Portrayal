@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: ex6200-psu-shelf
+version: 1.0.0
+class: mechanical
+profile: networking
+description: >-
+  The power supply blank shelf of the EX6210. It is a plate across the foot of the front, under the four power
+  supply slots, with three captive screws and the slot labels PSU0 to PSU3 printed on it. Systems with 2500 W AC or
+  2100 W DC power supplies ship with it fitted. The guide says to remove it, by three screws, before 5000 W AC
+  supplies are installed, because those supplies are taller.
+attrs:
+  role: shelf
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Figure 5 (the shelf under the four supplies,
+    drawn flat, g021103), Figure 64 (g021272), Table 51 (one shelf with each system that ships with 2500 W AC or 2100 W
+    DC supplies, none with 5000 W AC) and the 2500 W and 5000 W AC installation sections.
+  size: >-
+    estimated - Figure 5 read at 4.766 px/mm (its body, 2094 px, is the 17.3 in, 439.4 mm width): the shelf spans the
+    whole body and runs from the foot of the supply row to the bottom of the face, 60.9 mm high (60.0 mm from the
+    foot of the supplies to the bottom line, with the 0.9 mm rim below it). The guide gives no dimension.
+  face: >-
+    estimated - Figure 5: three round screw heads on one line, 110.8, 219.1 and 327.4 mm across and 20.6 mm down,
+    each a 24 mm ring around a 10 mm ring and a 5 mm centre; a row of four label cells along the bottom, 43.3 mm down, divided at 109.1,
+    217.4 and 325.7 mm, with PSU0 to PSU3 starting at 23.5, 121.7, 229.1 and 339.1 mm across. Every position
+    is estimated to about 1 mm.
+size:
+  w: 439.4
+  h: 60.9
+size-confidence: {w: datasheet, h: estimated}
+skins: [default]

@@ -1,0 +1,292 @@
+format: 1
+kind: device
+name: wmpvhc45e
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: WMPVHC45E
+aliases:
+  - {name: WMPVHC45EWH, kind: vendor}
+description: >-
+  45RU front-and-rear vertical cable manager, 6.7 in wide, Panduit NetRunner WMPVHC45E: an ABS
+  backbone in two 22.5RU sections with a column of 45 inset fingers on its front and another on its
+  rear, one finger to each rack unit with 25.4 mm of opening between them, eight oval pass-through
+  holes through the backbone, and two dual-hinge PVC covers on each face that ship fitted. It is
+  bracketed to the side of a rack and takes no rack unit.
+profile: passive
+provenance:
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-side`, as the FS vertical ducts: the drawing (Panduit 10225-25) lists "4-
+      MOUNTING BRACKETS" and "8- #12-24 X 1/2" SCREWS" and its rack outline stands beside the manager;
+      the specification sheet (RKSP112) gives the pitch of the manager side-mounted to a 19 in rack
+      (27.1 in) and the WMPVSMK, WMPVCBE and WMPVCMB mounting kits. It occupies no rack unit; `ru: 45`
+      is the height it runs beside. Which side of the rack is a lab placement to say
+      (docs/vertical-cable-managers-design.md).
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DOCUMENTS. Panduit publishes the WMPVHC45E as a customer drawing (PDF
+      10225-25, two sheets; a 16 MB DXF and a DWG that were not read), the NetRunner Vertical Cable
+      Managers specification sheet RKSP112, installation instructions, a product page and the
+      Cable Capacity Calculator. The drawing's views are read at 110 and 220 dpi. THE FIGURES THE
+      DRAWING DIMENSIONS ARE `drawing`; EVERYTHING READ OFF THE PICTURES (the oval holes' places, the
+      finger's length and the split between the channels' fingers) IS ESTIMATED and said so in the part
+      that carries it.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 170 x 2108 x 357: the drawing's "6.7 [170]", "83.0 [2108]" and "14.1 [357]"; the
+      specification sheet states the same (6.7 x 83.0 x 14.1 in, 45 RU), covers fitted.
+  depth:
+    confidence: drawing
+    note: >-
+      drawing - drawn as a 166.1 front channel, a 24.8 backbone and a 166.1 rear channel: the plan
+      dimensions "6.54 [166.1]" and the 357 overall, and Panduit's calculator gives equal front and
+      rear areas (30.7 sq in).
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - TWO HOLLOW CHANNELS BACK TO BACK, NOT A BOX. The body is a sheet body
+      (docs/cable-managers-design.md section 4) and its six views are elevations. The solid is what
+      its parts build: on each face the backbone as a well 166.1 deep with two columns of 45 fingers
+      and two covers in it; both floors open at the eight oval holes.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no Panduit document states a wall gauge for the ABS moulding. 2.5 is a moulded
+      wall of this size; the parts carry their own thicknesses.
+  weight:
+    confidence: drawing
+    note: >-
+      drawing - 10.43 kg [23.0 lb], the weight table of the WMPVHC45E customer drawing.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front with its two covers fitted: the covers, and under them the backbone with 45
+      fingers in three sections of 15 either side of the eight oval holes. The `duct` guide is the
+      channel between the finger columns, run down the height, 132 across (the calculator's 30.7 sq in
+      over the 150 mm fingers), ESTIMATED; the pitch is the rack unit and the gap the drawing's
+      Detail A, 1.00 in [25.4].
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear as the front: the part is "front and rear" (WMPVHC45E against the front-only
+      WMPVHCF45E), the same backbone, fingers and two covers.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - the plan, rear at y=0: the rear fingers, the backbone and the front fingers, built
+      from the plan view of the drawing and the finger lengths.
+  bottom:
+    confidence: estimated
+    note: >-
+      estimated - the top view again: the two ends of the manager are alike.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no side view is drawn: the backbone, and the two finger zones along it, built from
+      the plan view and the finger columns' extent.
+  right:
+    confidence: estimated
+    note: >-
+      estimated - the left view turned round.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - each duct is the channel between the two finger columns of its face, run down the
+      height (`run: y`); the finger pitch is the 44.45 rack unit and the gap the 25.4 of Detail A.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - Panduit's Cable Capacity Calculator (V14) gives the WMPVHC45E's front and rear usable
+      areas as 30.7 sq in each and, for its entered cable (0.185 in, 4.70 mm, Cat 6A 28 AWG) at the 30
+      per cent recommended fill, 342 front and 342 rear (570 each at the 50 per cent maximum). The
+      specification sheet says each large finger opening accommodates up to 24 Category 6 cables.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, colour, standards and what is in the box are the WMPVHC45E product page
+      and the specification sheet (RKSP112); the temperatures are the customer drawing's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "The manager is black" on the product page. Every image Panduit publishes of the
+      part is a render; the covers are drawn a shade lighter than the backbone.
+attrs:
+  physical:
+    weight-kg: 10.43
+    material: ABS
+    cover-material: PVC
+    color: Black
+    mounting-hardware: 'four mounting brackets and eight #12-24 x 1/2 in screws'
+  performance:
+    cable-capacity: 342
+    cable-capacity-basis: >-
+      front channel: 0.185 in (4.70 mm, Cat 6A 28 AWG) cable at the 30% recommended fill of its
+      30.7 sq in usable area; 570 at the 50% maximum fill - Panduit Cable Capacity Calculator V14
+    cable-capacity-rear: 342
+    cable-capacity-rear-basis: >-
+      rear channel: 0.185 in (4.70 mm, Cat 6A 28 AWG) cable at the 30% recommended fill of its
+      30.7 sq in usable area; 570 at the 50% maximum fill - Panduit Cable Capacity Calculator V14
+    cable-capacity-per-finger: 24
+    cable-capacity-per-finger-basis: >-
+      each large finger opening accommodates up to 24 Category 6 cables - the NetRunner specification
+      sheet RKSP112, Key Features and Benefits
+  environmental:
+    operating-temp: '60 C maximum'
+    storage-temp: '65 C maximum'
+  compliance:
+    rohs: RoHS Compliant
+    ul: UL 2416
+    csa: CSA C22.2
+chassis:
+  width: 170.0
+  height: 2108.0
+  depth: 357.0
+  ru: 45
+  mount: rack-side
+  shell: sheet
+  thickness: 2.5
+  weight-kg: 10.43
+  color: '#232527'
+gaps:
+  - what: cover-hinge
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      the covers are "dual hinge" and open 110 degrees to the left or the right; no view draws a
+      hinge, and each cover is drawn as one fitted plate that is either on or off.
+    wanted: a drawing or a close render of a cover's hinge
+  - what: finger-shape
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the drawing's Detail A gives the finger as 4.73 in [120.1] long with a 25.4 opening between two
+      fingers; each finger is one loop across the width and is drawn as two 40 mm halves, one from
+      each side, so that the eight oval holes lie clear of them, and as a solid block 19.05 high.
+    wanted: a section through a finger and the backbone
+  - what: hole-positions
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      the sheet dimensions the eight holes' sizes (4 x 132.1, 4 x 68.6, all 55.9 wide) and not where
+      they stand down the length; their places are read off the view to about 30 mm.
+    wanted: a dimensioned elevation of the backbone
+  - what: dxf-geometry
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-hardware
+    note: >-
+      the maker's WMPVHC45E DXF (16 MB) and DWG were not read: the figures here come from the PDF
+      drawing.
+    wanted: the DXF read for the finger and hole measurements
+groups:
+  body:
+    term: Backbone
+    role: furniture
+    index-origin: 1
+    description: the backbone, front channel first
+  fingers:
+    term: Finger section
+    role: furniture
+    index-origin: 1
+    description: the sections of 15 fingers, left then right, top to bottom; the front channel first
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the dual-hinge covers, two a face, upper first, front first, shipped fitted
+views:
+  front:
+    size: {w: 170.0, h: 2108.0}
+    components:
+      placements:
+        - {ref: panduit/wmpvhc-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-left-1, at: [8.0, 66.6], group: fingers, rel-pos: 1, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-left-2, at: [8.0, 733.35], group: fingers, rel-pos: 2, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-left-3, at: [8.0, 1400.1], group: fingers, rel-pos: 3, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-right-1, at: [122.0, 66.6], group: fingers, rel-pos: 4, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-right-2, at: [122.0, 733.35], group: fingers, rel-pos: 5, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: fingers-right-3, at: [122.0, 1400.1], group: fingers, rel-pos: 6, in: base, under: [cover-front-1, cover-front-2]}
+        - {ref: panduit/wmpvhc-cover@1, id: cover-front-1, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+        - {ref: panduit/wmpvhc-cover@1, id: cover-front-2, at: [0.0, 1054.0], group: cover, rel-pos: 2, in: base, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [57.05, 42.7], size: [55.9, 68.6], shape: obround, cover: open}
+      - {id: pass-through-2, at: [57.05, 310.95], size: [55.9, 132.1], shape: obround, cover: open}
+      - {id: pass-through-3, at: [57.05, 600.95], size: [55.9, 132.1], shape: obround, cover: open}
+      - {id: pass-through-4, at: [57.05, 913.7], size: [55.9, 68.6], shape: obround, cover: open}
+      - {id: pass-through-5, at: [57.05, 1096.7], size: [55.9, 68.6], shape: obround, cover: open}
+      - {id: pass-through-6, at: [57.05, 1364.95], size: [55.9, 132.1], shape: obround, cover: open}
+      - {id: pass-through-7, at: [57.05, 1654.95], size: [55.9, 132.1], shape: obround, cover: open}
+      - {id: pass-through-8, at: [57.05, 1967.7], size: [55.9, 68.6], shape: obround, cover: open}
+    guides:
+      - {id: duct, kind: duct, at: [19.0, 0], size: [132.0, 2108.0], run: y, finger-pitch: 44.45, finger-gap: 25.4, confidence: drawing, source: 'WMPVHC45E customer drawing, Detail A: fingers on the rack unit with 1.00 in [25.4] between'}
+  rear:
+    size: {w: 170.0, h: 2108.0}
+    components:
+      placements:
+        - {ref: panduit/wmpvhc-base@1, id: rear-base, at: [0.0, 0.0], group: body, rel-pos: 2}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-left-1, at: [8.0, 66.6], group: fingers, rel-pos: 7, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-left-2, at: [8.0, 733.35], group: fingers, rel-pos: 8, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-left-3, at: [8.0, 1400.1], group: fingers, rel-pos: 9, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-right-1, at: [122.0, 66.6], group: fingers, rel-pos: 10, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-right-2, at: [122.0, 733.35], group: fingers, rel-pos: 11, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-fingers@1, id: rear-fingers-right-3, at: [122.0, 1400.1], group: fingers, rel-pos: 12, in: rear-base, under: [cover-rear-1, cover-rear-2]}
+        - {ref: panduit/wmpvhc-cover@1, id: cover-rear-1, at: [0.0, 0.0], group: cover, rel-pos: 3, in: rear-base, only-in: [base]}
+        - {ref: panduit/wmpvhc-cover@1, id: cover-rear-2, at: [0.0, 1054.0], group: cover, rel-pos: 4, in: rear-base, only-in: [base]}
+    guides:
+      - {id: rear-duct, kind: duct, at: [19.0, 0], size: [132.0, 2108.0], run: y, finger-pitch: 44.45, finger-gap: 25.4, confidence: drawing, source: 'WMPVHC45E customer drawing, Detail A: fingers on the rack unit with 1.00 in [25.4] between; the rear is the front again'}
+  top:
+    size: {w: 170.0, h: 357.0}
+    panel:
+      decor:
+        - {id: rear-fingers-left, at: [8, 16.1], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: rear-fingers-right, at: [122, 16.1], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: backbone, at: [0, 166.1], size: [170, 24.8], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers-left, at: [8, 190.9], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: fingers-right, at: [122, 190.9], size: [40, 150], fill: '#26282a', kind: finger-wall}
+  bottom:
+    size: {w: 170.0, h: 357.0}
+    panel:
+      decor:
+        - {id: rear-fingers-left, at: [8, 16.1], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: rear-fingers-right, at: [122, 16.1], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: backbone, at: [0, 166.1], size: [170, 24.8], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers-left, at: [8, 190.9], size: [40, 150], fill: '#26282a', kind: finger-wall}
+        - {id: fingers-right, at: [122, 190.9], size: [40, 150], fill: '#26282a', kind: finger-wall}
+  left:
+    size: {w: 357.0, h: 2108.0}
+    panel:
+      decor:
+        - {id: rear-fingers, at: [16.1, 66.6], size: [150, 1975.3], fill: '#26282a', kind: finger-wall}
+        - {id: backbone, at: [166.1, 0], size: [24.8, 2108], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers, at: [190.9, 66.6], size: [150, 1975.3], fill: '#26282a', kind: finger-wall}
+  right:
+    size: {w: 357.0, h: 2108.0}
+    panel:
+      decor:
+        - {id: rear-fingers, at: [190.9, 66.6], size: [150, 1975.3], fill: '#26282a', kind: finger-wall}
+        - {id: backbone, at: [166.1, 0], size: [24.8, 2108], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers, at: [16.1, 66.6], size: [150, 1975.3], fill: '#26282a', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The manager as Panduit ships WMPVHC45E, all four covers fitted.'
+  covers-off:
+    kind: example
+    description: >-
+      The same manager with its covers taken off, the finger columns and the channels open to lay a
+      cable in. The covers come with the manager, so this is an illustration and not a device type.
+datasheet:
+  title: 'NetRunner Vertical Cable Managers Specification Sheet RKSP112'
+  url: https://www.panduit.com/content/dam/panduit/en/products/media/6/76/376/1376/111711376.pdf
+  sha256: 71cc3824ca0db8700ba17994b494151a0e8ca55f99edb025e6e4cb3a6293dcc6
+references:
+  - title: '6" Wide Vertical Cable Manager WMPVHC45E Part Drawing 10225-25'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/5/55/255/1255/111231255.pdf
+    sha256: a20dd4876ba879d35beef3a3da1d07d3999076258f95d3376eecbe17a703a6e1
+  - title: 'Cable Capacity Calculator Web V14'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/2/62/062/6062/111776062.xlsx
+    sha256: 947390141fb2a12d3c24a89edeebb6024795965032b91d722c6b90df2a3b8eb7

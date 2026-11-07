@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10k-lc2101
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -13,7 +13,14 @@ attrs:
   model: JNP10K-LC2101
   power-draw-typical-w: 1335
   power-draw-max-w: 1425
+  qsfp28: 24
 provenance:
+  qsfp28-rate: >-
+    MX10008 hardware guide, 'MX10K-LC2101' (p137) and the line-card overview (p18): the card 'can support 24
+    100-Gigabit Ethernet ports with a 28-Gbps quad smallform-factor pluggable (QSFP28) transceiver' (or 24
+    40-Gigabit Ethernet ports with a QSFP transceiver), and 'All the ports are Multi-Rate ports. Each port
+    is capable of supporting either 100 Gbps or 40 Gbps or 10 G' (4x10-Gbps with a breakout cable). Counted
+    at the rate every port can run, 100G. Nothing new was measured.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

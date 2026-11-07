@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: hsd13-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The press-on cover of the Hubbell SD-Series HSD13 horizontal cable manager, seen from the
+  front. It is a plastic panel as wide as the rack that presses onto the fingers. It comes
+  off again, so patch cords can be added.
+provenance:
+  size: >-
+    datasheet - the cover closes the part's A by B face, the width and height the sheet gives:
+    1.6 in (41 mm) by 19 in (483 mm, taken as 482.6). Which of the figure's two long faces is
+    the cover and which the base is not labelled; the cover is taken as the face opposite the
+    base. The sheet lists no replacement cover and no catalogue number for one.
+  relief: >-
+    estimated - a flat panel 2.0 mm thick across the fingers' ends, at the front of the part.
+    The sheet gives no thickness.
+  lid: >-
+    datasheet - "Cover: Press On" in the sheet's characteristics, and "Cover is removeable to
+    allow for easy addition of patch cords" in its features. It lifts off and opens the
+    channel, so it is a lid (`lid: true`).
+  color: >-
+    estimated - the sheet states no colour; its photograph shows a dark grey plastic, the
+    cover a shade lighter than the base.
+size: {w: 482.6, h: 40.64}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {material: Plastic}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 40.64], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 76.78
+      out: 78.78
+      color: '#34373a'
+      confidence: estimated
+      source: no sheet dimensions the cover's thickness; a thin panel across the fingers
+skins: [default]

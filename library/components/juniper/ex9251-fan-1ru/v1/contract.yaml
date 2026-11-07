@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: ex9251-fan-1ru
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-FAN-1RU, the 1 U universal fan tray of the EX9251 (the guide calls it "Fan Tray, Front
+  to Back Airflow - AFO" in the CLI table and shows it labelled AIR OUT). Air enters at the port
+  panel and leaves at the rear. The face is a square with a hexagonal grille above and below a
+  moulded handle band that carries the AIR OUT chip, a grip at each end of the band, and a captive
+  screw at the top left. Each tray holds one counter-rotating fan. The EX9251 seats three, in rear
+  slots 0 to 2 from the left. They are hot-removable and hot-insertable. The guide describes no
+  back-to-front tray, so there is no AFI sibling.
+attrs:
+  role: chassis-fan
+  airflow: front-to-back
+  power-absent: not-published
+part-numbers:
+  JNP-FAN-1RU (EX9251): {part: JNP-FAN-1RU}
+provenance:
+  sources: >-
+    datasheet - EX9251 Switch Hardware Guide (published 2022-11-30): EX9251 Cooling System, Figures
+    9 and 10 (the tray and its faceplate drawn flat, g022424), Table 4 (the tray's size and weight),
+    Table 2 (the CLI name) and Airflow Direction in the EX9251 Switch Chassis. EX9250 Ethernet Switch
+    Datasheet (1000632-006-EN, Sep 2021), ordering table: JNP-FAN-1RU, universal fan tray, 1 U. The
+    key of part-numbers carries the suffix (EX9251) so that its DCIM module type does not share a
+    file with the same part number in another line's slice.
+  size: >-
+    drawing - Figure 10 (g022424) is a 1500 px wide raster whose faceplate outline measures 450 x 450
+    px, an aspect of 1.00. Table 4 gives the tray 1.64 in (4.17 cm) high and 1.89 in (4.8 cm) wide.
+    The height is taken as 41.7 mm and the square face as 41.7 x 41.7. The 4.8 cm width is the tray
+    body, which is wider than its face; on the rear figure (Figure 3, 2.99 px/mm) the face measures
+    123 px, 41.1 mm, between the chassis strips that carry the lamps, so the strip and the face
+    together are the table's 4.8 cm and the face is the square.
+  depth: >-
+    datasheet - Table 4: 5.78 in (14.68 cm). No depth is written, because the component schema has no
+    depth key the explorer reads here; the figure is kept in this note.
+  face: >-
+    drawing - Figure 10 read at 10.8 px/mm on the 450 px outline: the captive screw (callout 1) at
+    the top left, centred 4.4 mm across and 4.6 mm down and 6.4 mm across; the upper grille 26.9 x
+    11.0 mm, from 7.8 mm in and 8.9 mm down; the lower grille 26.9 x 11.6 mm from 36 mm down; the
+    handle band across the middle; the AIR OUT chip 13.4 x 6.9 mm in its centre; a ribbed grip at
+    each end of the band, callout 2. Every position is estimated to about 0.5 mm.
+  handle: >-
+    estimated - the guide says nothing about the tray's colour or whether it is airflow-coded; Figure
+    10 is a line drawing. The handle is a dark neutral grey, a colour that asserts no airflow code.
+    The colour is the field handle-finish.
+  airflow: >-
+    datasheet - the guide: the switch has front-to-back (AIR OUT) airflow, and the tray is labelled
+    AIR OUT. The datasheet says front-to-back for both models.
+  power: >-
+    estimated - not published. Searched the guide's power tables (Tables 12 to 14) and the datasheet
+    for a per-tray figure: only whole-switch figures exist. The module declares power-absent so that
+    the missing figure is a statement.
+  led: >-
+    datasheet - the status lamp of a tray is on the chassis strip at the left of its slot (Figure 12,
+    Table 8), not on the tray, so it is a placement of the device.
+states: [absent]
+elements:
+  screw:
+    at: [1.2, 1.4]
+    size: [6.4, 6.4]
+    class: screw
+  handle:
+    at: [0.5, 15.6]
+    size: [40.7, 10.4]
+    class: latch
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#4a4e54'}
+size:
+  w: 41.7
+  h: 41.7
+size-confidence: {w: drawing, h: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: figure - the handle band stands proud of the grilles in Figure 9; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: figure - captive screw head, projection not measured
+skins: [default]

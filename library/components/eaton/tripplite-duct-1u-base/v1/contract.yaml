@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: tripplite-duct-1u-base
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the Tripp Lite SmartRack SRCABLEDUCT1U finger duct seen from the front, with
+  the ears that are its two ends - drawn as the well the two finger walls stand in, its floor
+  the front face of the steel plate
+provenance:
+  size: >-
+    drawing - the front view of the SRCABLEDUCT1U submittal drawing dimensions the part 482.60
+    mm [19.00 in] over the ears and 43.69 mm [1.72 in] high: the plate is that whole face, the
+    ears the 25.4 mm at each end (the duct between them is dimensioned 431.80 mm [17.00 in]).
+  size-holes: >-
+    drawing for where, estimated for how big - the front view puts each ear's two slots 8.8 mm
+    in from the end (465 mm [18.31 in] between the hole centres) and 32 mm [1.26 in] apart
+    across the 43.69. Their 12 x 6 mm size is read off the picture at 2.41 px/mm; the
+    rounding of the plate's corners, 3 mm, is estimated.
+  depth: >-
+    drawing - the top view dimensions 62.71 mm [2.47 in] from the front of the cover to the
+    plane the ears bolt to, and 67.71 mm [2.67 in] overall, so the back plate stands 5.0 mm
+    behind that plane. The well runs from the front to 0.2 mm in front of the plate's front
+    face: 62.71 less 0.2, so the floor stays off the face the rear view draws.
+  color: >-
+    datasheet - "Cold rolled steel with black finish" (the spec sheet's Highlights). The
+    submittal drawing is line work, so the shade is this library's render of black steel,
+    lifted enough to read on the explorer's dark stage as well as on a white one.
+size: {w: 482.6, h: 43.69, d: 62.5}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#3a3d41'
+relief: {wall: '#3a3d41'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 43.69], class: bezel}
+skins: [default]

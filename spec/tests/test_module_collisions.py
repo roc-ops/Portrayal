@@ -49,6 +49,15 @@ KNOWN_DIVERGENT = {
     # ONE SKU MODELLED TWICE, at 80 mm and 82.5 mm - a real duplicate rather
     # than two authors of one card, and roc-ops/Portrayal#266 is where it is resolved.
     ("UfiSpace", "FAN-803816-HI"): "ufispace/fan-803816-hi",
+    # THE EX4100 TAKES FOUR POWER SUPPLIES THE EX3400 ALSO TAKES, under the same part numbers.
+    # Each line's guide draws the unit at its own size (the EX4100 guide gives 73.0 x 40.0 x 225.0
+    # mm, the EX3400 supplies were measured at 71.2 x 39.0), so the two components export different
+    # documents and the one module type written is the EX3400's. They are listed as shared
+    # candidates for a later dedupe in the pull request that added them (Refs #39).
+    ("Juniper", "JPSU-150-AC-AFI"): "juniper/ex4100-jpsu-150-ac-afi",
+    ("Juniper", "JPSU-150-AC-AFO"): "juniper/ex4100-jpsu-150-ac-afo",
+    ("Juniper", "JPSU-150-DC-AFO"): "juniper/ex4100-jpsu-150-dc-afo",
+    ("Juniper", "JPSU-920-AC-AFO"): "juniper/ex4100-jpsu-920-ac-afo",
 }
 
 
@@ -67,8 +76,9 @@ def _groups():
         man = dist.manufacturer_of(c.get("ns"))
         if not man:
             continue
-        doc = dx.build_module(c, man, dist.component_by_ref)
-        out[(man, doc["model"])].append((doc, f"{c['ns']}/{c['name']}"))
+        for model, _part in dx.module_names(c):
+            doc = dx.build_module(c, man, dist.component_by_ref, model=model)
+            out[(man, doc["model"])].append((doc, f"{c['ns']}/{c['name']}"))
     return dict(out)
 
 

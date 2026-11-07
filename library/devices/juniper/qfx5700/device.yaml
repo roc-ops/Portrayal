@@ -1,0 +1,569 @@
+format: 1
+kind: device
+name: qfx5700
+version: 0.1.1
+maturity: modelled
+manufacturer: Juniper
+model: QFX5700
+portfolio: {line: QFX Series, family: QFX5700}
+description: >-
+  Juniper QFX5700, a modular 5RU, 12.8 Tbps data-centre spine and leaf switch running Junos OS Evolved. The port side
+  has two Routing and Control Board slots across the top (RCB 0 and RCB 1, one board fitted), and under them nine
+  line-card slots, FPC 0 to FPC 7 and an eighth, numbered 8, that the guide calls unsupported and that holds a blank.
+  The line cards (QFX5K-FPC-16C, QFX5K-FPC-20Y and QFX5K-FPC-4CD) are ordered separately and are not modelled here:
+  every slot shows its blank. A model plate and the ESD point stand at the right of the port side. The rear has four
+  3000 W supplies in a row across the top, AC or DC, and two fan trays of four fans each below them. It ships as one
+  front panel in AC and DC builds, as the QFX5700E build with its own forwarding engine board, and as a spare chassis.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX5700 Switch Hardware Guide, published 2026-09-30, 241 pages (copyright 2026 Hewlett Packard Enterprise
+      Development LP, the owner of Juniper Networks), from https://www.juniper.net/documentation/us/en/hardware/qfx5700/qfx5700.pdf
+      (the address worked; no other was used): the front and rear photographs (figures 8 and 9, g101491 and g101492),
+      the flat front and rear figures (figures 16 and 17, g101401 and g101403), Table 3 (FRUs), Table 4 (CLI names), the
+      cooling system (figures 27 to 29, Tables 6 and 7), the power system (figures 30 to 34, Tables 8 to 12), the physical
+      specifications (Table 5), the RCB (figures 36 and 37, Tables 13 and 14), the FPCs (figures 38 to 40, Tables 15 to 17),
+      the forwarding engine board (Tables 18 and 19), the environmental tolerances (Table 21), the base configuration order
+      (Table 27) and the accessory kit (Table 28). QFX5700 Switch datasheet, Juniper document 1000719-009, September 2024,
+      from https://www.juniper.net/content/dam/www/assets/datasheets/de/de/switches/qfx5700-switch-datasheet.pdf (the German
+      edition: the English address, www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/qfx5700-switch-datasheet.pdf,
+      redirects to the HPE document a00150803enw, which needs a browser). The datasheet's tables are numbers and part
+      numbers; the German prose is not relied on. Both are the maker's and public; neither states terms of use beyond the
+      copyright notice, so only facts are transcribed and no drawing or photograph is copied. No separate Juniper image-library
+      photograph of the QFX5700 was found: the photographs of figures 8 and 9 in the guide are the photographs used. No
+      Visio stencil, 3D model or mechanical drawing was found.
+  chassis:
+    confidence: datasheet
+    note: >-
+      guide Table 5 and datasheet Table 2: 48.2 cm wide, 22.2 cm high, 81.5 cm deep, 5RU, 69.8 kg with all FRUs installed
+      (the datasheet prints the same). The 48.2 cm is over the front brackets: the flat front figure measures 482.6 mm
+      from ear to ear (1443 px at 2.990 px/mm) and the body between the fold lines 440.8 mm (1318 px). The body is
+      modelled and the ears are not drawn, as every library chassis is; the height is 5RU, 222.25 mm, of which the guide's
+      22.2 cm is the rounded figure. The depth is taken as the table states it; the table does not say whether it is over
+      the fan tray handles. The rack kit is JNP5K-RMK-4POST (datasheet, additional SKUs; the guide's four-post mounting
+      procedure uses front brackets and rear mounting blades); it is named here and not modelled, since no position or
+      kit range is stated in a form the library can take.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The flat front figure (figure 16, g101401, 1500 px wide) is 1443 px from ear to ear and 665 px from the top edge to
+      the bottom edge: an aspect of 2.170 against the table's 482.6 / 222.25 = 2.171, so it is orthographic, and 2.990 px/mm
+      serves both axes. Origin at the left fold (x 83 px) and the top edge (y 237 px). The flat rear figure (figure 17,
+      g101403) is 1413 px from ear to ear, so 2.928 px/mm across; its body is 1289 px, 440.2 mm, agreeing with the front's 440.8
+      to 0.1 percent. Its height reads 669 px from top to bottom lip, 228 mm, 2.8 percent over the table's, so the rear's
+      vertical positions are taken from its top edge at 2.928 px/mm and carry that uncertainty (up to 3 mm at the bottom
+      tray). Origin at the left fold (x 101 px) and the top edge (y 176 px).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - figure 16 at 2.990 px/mm: two RCB bays 198.8 by 30.8 mm at x 12.7 and 226.4 (y 7.6); nine FPC bays 44.3 by
+      168.2 mm at y 45.5, on a 44.95 mm pitch from x 12.4; the model plate 20.4 mm wide at x 419.1. The slot labels FPC 0 and
+      1 to 8 run along the bottom edge (y 218), and RCB 0 and RCB 1 sit under the boards' left ends. The counts agree with the
+      photograph (figure 8) and with the guide's text (two RCB slots, nine FPC slots of which eight are supported).
+  slots:
+    confidence: datasheet
+    note: >-
+      guide, Table 4 and the FPC section: FPC n is 0 to 7, "the chassis has nine FPC slots, but the chassis supports only
+      eight FPCs in slots FPC 0 through 7. Slot 8 is empty"; figures 14 to 16 call it the "unsupported slot". Table 27 ships
+      nine JNP5K-FPC-BLNK blanks in the base configuration, one for each of the nine, so slot 8 is modelled as a bay that
+      accepts the blank only. The brief for this model said eight FPC slots; the guide draws and counts nine.
+  rcb:
+    confidence: datasheet
+    note: >-
+      guide, figures 14 to 16 and the RCB section: two RCB slots, RCB 0 on the left and RCB 1 on the right, with the boards kept upside
+      down. The guide says the QFX5700 supports no RCB or FEB redundancy: a system has one board of each, in slot 0 or slot 1, and the two
+      go in the same slot number. Table 27 ships one QFX5700-RCB and one JNP5K-RCB-BLNK in the base configuration. The guide does not say
+      which slot the shipped board goes in; slot 0 is modelled.
+  feb:
+    confidence: datasheet
+    note: >-
+      NOT A BAY OR A PLACEMENT. The forwarding engine board (QFX5700-FEB, or QFX5700E-FEB in the QFX5700E build) lies horizontally
+      mid-chassis, between the FPCs and the RCB at the front and the fan trays at the rear, and is not visible from outside: one fan
+      tray has to come out to see it (guide, Forwarding Engine Board). It is 8.4 cm high, 43.7 cm
+      wide and 28.1 cm deep, 6.6 kg and 300 W (Table 18), has two lamps and an online/offline button (Table 19), and the base
+      configuration includes one with a blank for the empty FEB slot (JNP5K-FEB-BLNK, datasheet). Nothing of it shows on either
+      face: the fan trays' FEB lamp is the only mark. It is left out.
+  left-out:
+    confidence: datasheet
+    note: >-
+      LEFT OUT OF THIS SLICE, by part number. The line cards are a family of their own: QFX5K-FPC-16C (16 x QSFP28 or QSFP+, 100G or 40G),
+      QFX5K-FPC-20Y (20 x SFP56, SFP28 or SFP+, the first 16 usable in slots 1, 3, 5 and 7) and QFX5K-FPC-4CD (4 x QSFP56-DD, 400G); the
+      guide's Table 4 and photograph print JNP-FPC16C and JNP-FPC4CD on the cards' labels. The forwarding engine board QFX5700-FEB and
+      QFX5700E-FEB and its blank JNP5K-FEB-BLNK. The cable manager QFX5K-EMI (6RU with it fitted; it covers the front, so the port side shown
+      here is without it), the rack kit JNP5K-RMK-4POST and the optional licences and power cords. Each FPC slot shows its blank.
+  power-supplies:
+    confidence: datasheet
+    note: >-
+      guide, Table 4, figures 13 and 30 to 34 and the power sections: four 3000 W supplies, PSU 0 to PSU 3, "you can install the
+      power supplies in any slot", load-sharing, each with its own fans (two counter-rotating fans, front to back); JNP-3000W-AC-AFO
+      (product 740-073765, AC or HVDC) or JNP-3000W-DC-AFO (740-073766); AC and DC are never mixed. Table 27 ships two in the
+      base configuration with two blanks for the empty slots. These are the part numbers the QFX5230-64CD uses for its supplies, so
+      juniper/qfx5230-jnp-3000w-ac-afo@1 and juniper/qfx5230-jnp-3000w-dc-afo@1 are reused unchanged. The reused face is photo-measured
+      at 74.8 by 40.2 mm; the rear figure here measures 73.9 by 40.4 mm, and Table 5 gives 7.4 by 4.4 cm, so the height conflicts
+      by 3.8 mm and the figure agrees with the reused part. The handle is orange in the guide's callout (figure 30) and in the
+      photograph. Airflow is front-to-back only (air out, AFO): the QFX5700 has no back-to-front build.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - figure 17 at 2.928 px/mm: four PSU bays at x 32.0, 132.4, 232.7 and 332.9 (y 1.9, 74.8 by 40.2 mm, a pitch of 100.4
+      mm), with a label plate between PSU 0 and 1 and another between PSU 2 and 3; the earth studs at the left (centre x 12.5, y 18.3
+      and 33.8) with the earth symbol at 23.4, 8.6; the ESD jack at the right (425.2, 9.9) with the warning label under it; two fan
+      trays 426.6 mm wide and 85 mm high at y 45.2 and 131.3, the upper numbered 1 and the lower 0 (FAN TRAY 1, FAN TRAY 0 in a
+      screw column at the right edge).
+  rear-vs-photo:
+    confidence: photo-measured
+    note: >-
+      sources-disagree on the face and the photograph wins: the guide's drawing prints a fan symbol beside 0 to 3 on each fan tray's
+      status panel; the photograph (figure 9) prints FAN 0 to FAN 3 and FEB, and shows the tray faces dark grey with black handles
+      and the PSU handle orange. The drawing prints the model plate and the RCB label as QFX5700 and QFX5700-RCB; the photograph prints
+      JNP5700 and JNP5700-RCB. The legends below are the photograph's. The photograph also prints RUNNING and a maker's name under the
+      model on the plate: the maker's name is a mark and is reserved as the logo zone, and the rest is not carried.
+  grounding:
+    confidence: datasheet
+    note: >-
+      guide, Connect the QFX5700 Switch to Earth Ground and figure 35: the lugs are dual hole and fit M6 at 15.86 mm (0.625 in.)
+      centres, which is the library's 5/8 in. M6 pair (15.875 mm). The two studs are drawn at the left of the rear row, one above the
+      other, at a measured 15.5 mm; the pair is common/ground-stud-pair-5-8-m6@1, turned 90 and centred on their midpoint. The rear
+      photograph shows two cross-head screws in place of the studs, which is what the pair draws.
+  esd:
+    confidence: drawing
+    note: >-
+      guide, figures 4, 16 and 17: an ESD point at the bottom of the model plate (front) and at the right end of the PSU row (rear),
+      each a recessed socket with the warning triangle beside it. The front socket is at (428.3, 195.0) and the rear one at (425.2, 9.9).
+  vents:
+    confidence: drawing
+    note: >-
+      drawing - the vent fields of the top edge, the left rail and the plate's slot grid are drawn as vent decor at the figures'
+      extents; the real punching follows each feature hole for hole and is not reproduced.
+  color:
+    confidence: photo-measured
+    note: >-
+      photo - mid grey chassis, silver line cards and blanks, dark grey fan trays with black handles, orange supply handles.
+  power:
+    confidence: datasheet
+    note: >-
+      guide Table 9 and datasheet: fully loaded with eight cards of one kind, typical 751 W (8 QFX5K-FPC-20Y), 1259 W (8 QFX5K-FPC-16C) or
+      1095 W (8 QFX5K-FPC-4CD), maximum 1622, 2271 or 1762 W. Typical is at 25 C, 50 percent load and IMIX traffic without MACsec and
+      without transceivers; maximum is at 40 C with SR optics and 100 percent IMIX traffic, with MACsec on the 20Y and 16C cards and without
+      it on the 4CD card, measured at 200 to 277 VAC. The heaviest of the three is carried, since this device holds no card; the cards
+      themselves are not modelled. The supplies are 3000 W each (Table 8: AC 180 to 305 V, 47 to 63 Hz; DC 40 to 72 V). Each module's own
+      draw is stated on its contract where the guide gives one (the RCB 80 W); the fan trays' is not published.
+  sources-disagree:
+    confidence: datasheet
+    note: >-
+      two documents of the maker, one device: the guide's Table 21 prints altitude 6000 ft (1828 m), relative humidity 55 to 70 percent
+      non-condensing, non-operating temperature 0 to 40 C and shipping and storage -40 to 85 C. The datasheet (September 2024) prints
+      operating 0 to 40 C, storage -40 to 70 C, altitude up to 1828.8 m, humidity 5 to 90 percent non-condensing (5 to 95 percent not
+      operating). The altitude agrees. The newer document is the guide (2026-09-30) and its figures are carried; the datasheet's are
+      listed in the gaps. The datasheet also prints the supplies as 300 W where the guide and the part numbers say 3000 W: a misprint.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      searched 2026-10-23: Juniper's end-of-life pages and the third-party aggregators list no end-of-sale or end-of-life notice for the QFX5700;
+      none is carried, so the state is none-announced. The search was by the model name and was not a read of Juniper's support milestones table.
+  other-faces:
+    confidence: estimated
+    note: >-
+      no flat figure shows the top, bottom or either side. The guide's isometric (figure 14) shows six square vents on the right side wall
+      and the clearance figures (43 and 44) only a plan and elevation outline. These faces are left empty.
+attrs:
+  physical:
+    weight-full-kg: 69.8
+    weight-note: with all FRUs installed (guide Table 5; datasheet Table 2)
+    cable-manager: 6RU with the cable management system fitted (guide, QFX5700 Physical Specifications)
+    enclosure: IP20 (IEC 60529)
+  performance:
+    throughput: up to 12.8 Tbps unidirectional, 25.6 Tbps bidirectional (datasheet Table 1)
+    forwarding-capacity: 5.3 Bpps
+    packet-buffer: 132 MB shared
+    latency: 900 ns
+    line-cards: FPC 0 to 7 take QFX5K-FPC-4CD (4 x 400G), QFX5K-FPC-16C (16 x 100G) or QFX5K-FPC-20Y (20 x 10/25/50G); at most 144 logical ports
+  power:
+    power-typical-w: 1259
+    power-max-w: 2271
+    power-envelope: fully-configured
+    power-typical-scope: eight QFX5K-FPC-16C cards, 25 C, 50 percent IMIX load, no MACsec, no transceivers (guide Table 9); the 20Y and 4CD
+      builds are 751 W and 1095 W
+    power-max-scope: eight QFX5K-FPC-16C cards, 40 C, SR optics, 100 percent IMIX load, MACsec on (guide Table 9); the 20Y and 4CD builds are
+      1622 W and 1762 W
+    psu-input-ac: 200 to 277 VAC rated, 180 to 305 VAC, 47 to 63 Hz; the supplies detect HVDC (190 to 400 VDC) as well (guide Table 8)
+    psu-input-dc: 40 to 72 VDC, rated 48 to 60 VDC; the input current selector sets 60 A (2700 W, 2200 W under the warning voltage) or 80 A (3000 W) (guide Tables 12)
+  environmental:
+    operating-temp: 0 C to 40 C (datasheet; the guide's Table 21 prints the same range as the non-operating temperature)
+    storage-temp: -40 C to 85 C shipping and storage (guide Table 21; the datasheet prints 70 C)
+    humidity: 55 to 70 percent non-condensing (guide Table 21; the datasheet prints 5 to 90 percent)
+    altitude: 6000 ft (1828 m)
+  platform:
+    cpu: Intel Hewitt Lake 6-core x86 at 2.9 GHz in each Routing and Control Board
+    memory: 32 GB DDR4 (two 16 GB DIMMs), expandable to 64 GB
+    storage: two 100 GB M.2 SATA or NVMe SSDs per Routing and Control Board
+    switching-silicon: Broadcom Trident 4
+    operating-system: Junos OS Evolved
+  features:
+    timing: BITS RJ-45 jack, 10 MHz and PPS SMB connectors in and out, on each Routing and Control Board
+  management:
+    oob: MGMT RJ-45 on the Routing and Control Board, autosensing 10/100/1000 with link and activity lamps
+    console: CON RJ-45 serial on the Routing and Control Board
+    usb: one USB 2.0/3.0 port on the Routing and Control Board
+  compliance:
+    safety: UL 60950-1, CAN/CSA-C22.2 No. 60950-1, EN 60950-1, IEC 60950-1, UL 62368-1, EN 60825-1 (datasheet)
+    emc: FCC 47 CFR Part 15, ICES-003, BS EN 55032, BS EN 55035, EN 300 386, CISPR 32, CISPR 35, IEC/EN 61000 series (datasheet)
+    materials: RoHS 6/6, China RoHS, REACH, WEEE; power supply efficiency 80 Plus Silver (datasheet)
+    acoustic: less than 7.2 Bels (EN 300 753)
+    seismic: tested and meets GR-63 (guide Table 21); designed for GR-63 Zone 4 (datasheet)
+    telco: GR-1089-Core Issue 8; Deutsche Telekom 1TR9; BT GS7; CLEI code (datasheet)
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440.8
+  height: 222.25
+  depth: 815.0
+  ru: 5
+  color: '#8f949a'
+gaps:
+  - what: spare-chassis-contents
+    scope: [chas]
+    reason: vendor-silent
+    wanted: >-
+      what QFX5700-CHAS ships with. The datasheet calls it a spare chassis ("QFX5700/QFX5700E - Ersatzgehaeuse") and the guide's Table 27 lists only
+      the base configuration. It is modelled with every bay open; whether it ships with the FPC blanks, the midplane only or the front brackets
+      is not stated.
+  - what: redundant-build
+    scope: [psus]
+    reason: vendor-silent
+    wanted: >-
+      a redundant (four supply) build. Neither the guide nor the datasheet lists an orderable one: the base configuration has two supplies, and
+      the guide says all four must be fitted for power redundancy. The four-supply population is a population of the PSU bays, not a SKU.
+  - what: empty-rcb-slot-print
+    scope: [res]
+    reason: needs-photo
+    wanted: a photograph or figure of an empty RCB slot or of the JNP5K-RCB-BLNK blank, and of the power-slot blank (which the guide gives no code);
+      both blanks are drawn plain from the openings they cover.
+  - what: dc-supply-face
+    scope: [psus]
+    reason: needs-photo
+    wanted: a flat figure or photograph of the QFX5700 DC supply face (the guide's figure 33 is an isometric); the reused part draws it from the AC
+      supply's outline.
+  - what: environmental-tolerances
+    scope: [storage-temp, humidity]
+    reason: sources-disagree
+    wanted: >-
+      the guide's Table 21 (storage -40 to 85 C, humidity 55 to 70 percent) against the datasheet (storage -40 to 70 C, humidity 5 to 90 percent
+      operating and 5 to 95 percent not operating). The guide's are carried.
+  - what: slot-8-blank-print
+    scope: [fpcs]
+    reason: sources-disagree
+    wanted: the photograph prints nothing on the slot 8 blank and the drawing shows the same latches and screws as a card; the blank is drawn from the drawing.
+groups:
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Routing and Control Board slots RCB 0 and RCB 1, the boards upside down in the top row
+    attrs:
+      redundancy: n+0
+      redundancy-note: >-
+        n+0 - guide, Routing and Control Board: the QFX5700 supports no RCB or FEB redundancy, so a system has one of each, in slot 0 or slot 1,
+        and the RCB and the FEB go in the same slot number. The second slot is not a standby
+  fpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: FPC (line card) slots 0 to 7 and the unsupported slot 8 on the port side, left to right
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: four power supply slots PSU 0 to PSU 3 across the top of the rear
+    attrs:
+      redundancy: n+1
+      redundancy-note: >-
+        n+1 - datasheet: "up to four AC or DC power supplies, providing N+N feed redundancy or N+1 PSU redundancy when all power supplies are
+        present"; guide: the base configuration requires 1+1 redundancy, and "to provide power redundancy to the system, all the four PSUs must be
+        installed". The supplies are load-sharing and take any slot
+  fans:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: fan trays 0 (lower) and 1 (upper), four fans each
+    attrs:
+      redundancy: n+1
+      redundancy-note: >-
+        n+1 - datasheet: "N+1 fan rotor redundancy at chassis level"; guide: the switch continues to operate with one failed rotor, and a second
+        rotor failure or a removed tray raises an alarm and shuts the system down in 240 seconds
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the two M6 earthing studs at the left of the rear row
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD points, one on the port side and one on the rear
+views:
+  front:
+    size: {w: 440.8, h: 222.25}
+    panel:
+      decor:
+      - {id: vent-top, at: [0.0, 0.0], size: [440.8, 6.8], pattern: vent, pattern-pitch: [3.0, 1.6], vent: 1}
+      - {id: vent-left, at: [0.6, 45.5], size: [10.8, 168.2], pattern: vent, pattern-pitch: [3.0, 4.2], vent: 1}
+      - {id: model-plate, at: [419.1, 45.5], size: [20.4, 168.2], rx: 0.6, fill: '#c1c5ca'}
+      - {id: vent-plate, at: [421.5, 77.0], size: [15.4, 108.0], pattern: vent, pattern-pitch: [7.7, 7.8], vent: 1}
+    silkscreen:
+    - {id: silk-model, at: [429.3, 62.0], text: JNP5700, font-size: 2.6, anchor: middle, fill: '#2a2d31', for: chassis}
+    - {id: silk-rcb-0, at: [36.8, 42.2], text: RCB 0, font-size: 1.9, anchor: middle, fill: '#2a2d31', for: rcb-0}
+    - {id: silk-rcb-0-mark, at: [44.6, 41.4], path: 'M -1.0 0.9 L 0 -0.9 L 1.0 0.9 Z', fill: '#2a2d31', for: rcb-0}
+    - {id: silk-rcb-1, at: [248.2, 42.2], text: RCB 1, font-size: 1.9, anchor: middle, fill: '#2a2d31', for: rcb-1}
+    - {id: silk-rcb-1-mark, at: [256.0, 41.4], path: 'M -1.0 0.9 L 0 -0.9 L 1.0 0.9 Z', fill: '#2a2d31', for: rcb-1}
+    - {id: silk-fpc-0, at: [34.55, 218.9], text: FPC 0, font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-0}
+    - {id: silk-fpc-1, at: [79.5, 218.9], text: '1', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-1}
+    - {id: silk-fpc-2, at: [124.45, 218.9], text: '2', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-2}
+    - {id: silk-fpc-3, at: [169.4, 218.9], text: '3', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-3}
+    - {id: silk-fpc-4, at: [214.35, 218.9], text: '4', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-4}
+    - {id: silk-fpc-5, at: [259.3, 218.9], text: '5', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-5}
+    - {id: silk-fpc-6, at: [304.25, 218.9], text: '6', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-6}
+    - {id: silk-fpc-7, at: [349.2, 218.9], text: '7', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-7}
+    - {id: silk-fpc-8, at: [394.15, 218.9], text: '8', font-size: 2.2, anchor: middle, fill: '#2a2d31', for: fpc-8}
+    components:
+      bays:
+      - id: rcb-0
+        at: [12.7, 7.6]
+        size: {w: 198.8, h: 30.8}
+        accepts: [juniper/qfx5700-rcb@1, juniper/qfx5700-rcb-blnk@1]
+        default: juniper/qfx5700-rcb@1
+        group: res
+        rel-pos: 0
+      - id: rcb-1
+        at: [226.4, 7.6]
+        size: {w: 198.8, h: 30.8}
+        accepts: [juniper/qfx5700-rcb@1, juniper/qfx5700-rcb-blnk@1]
+        default: juniper/qfx5700-rcb-blnk@1
+        group: res
+        rel-pos: 1
+      - id: fpc-0
+        at: [12.4, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 0
+      - id: fpc-1
+        at: [57.35, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 1
+      - id: fpc-2
+        at: [102.3, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 2
+      - id: fpc-3
+        at: [147.25, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 3
+      - id: fpc-4
+        at: [192.2, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 4
+      - id: fpc-5
+        at: [237.15, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 5
+      - id: fpc-6
+        at: [282.1, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 6
+      - id: fpc-7
+        at: [327.05, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 7
+      - id: fpc-8
+        at: [372.0, 45.5]
+        size: {w: 44.3, h: 168.2}
+        accepts: [juniper/qfx5700-fpc-blnk@1]
+        default: juniper/qfx5700-fpc-blnk@1
+        group: fpcs
+        rel-pos: 8
+      placements:
+      - {ref: common/esd-jack@1, id: esd-front-jack, at: [425.3, 192.0], for: chassis, group: esd, rel-pos: 0}
+      - {ref: common/esd-warning@1, id: esd-front-label, at: [424.5, 201.0], for: esd-front-jack, group: esd, rel-pos: 1}
+    regions:
+    - id: logo-zone
+      at: [422.6, 47.2]
+      size: {w: 14.4, h: 7.6}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 440.8, h: 222.25}
+    panel:
+      decor:
+      - {id: plate-psu-0-1, at: [108.3, 2.0], size: [23.9, 40.2], rx: 1.0, fill: '#5a5e64'}
+      - {id: plate-psu-2-3, at: [308.7, 2.0], size: [23.9, 40.2], rx: 1.0, fill: '#5a5e64'}
+    silkscreen:
+    - {id: silk-psu-0-mark, at: [110.9, 8.6], path: 'M 1.2 -1.2 L -1.2 0 L 1.2 1.2 Z', fill: '#e8eaec', for: psu-0}
+    - {id: silk-psu-0, at: [121.0, 10.0], text: PSU 0, font-size: 3.0, anchor: middle, fill: '#e8eaec', for: psu-0}
+    - {id: silk-psu-1, at: [119.6, 31.4], text: PSU 1, font-size: 3.0, anchor: middle, fill: '#e8eaec', for: psu-1}
+    - {id: silk-psu-1-mark, at: [129.9, 30.4], path: 'M -1.2 -1.2 L 1.2 0 L -1.2 1.2 Z', fill: '#e8eaec', for: psu-1}
+    - {id: silk-psu-2-mark, at: [311.3, 8.6], path: 'M 1.2 -1.2 L -1.2 0 L 1.2 1.2 Z', fill: '#e8eaec', for: psu-2}
+    - {id: silk-psu-2, at: [321.4, 10.0], text: PSU 2, font-size: 3.0, anchor: middle, fill: '#e8eaec', for: psu-2}
+    - {id: silk-psu-3, at: [320.0, 31.4], text: PSU 3, font-size: 3.0, anchor: middle, fill: '#e8eaec', for: psu-3}
+    - {id: silk-psu-3-mark, at: [330.3, 30.4], path: 'M -1.2 -1.2 L 1.2 0 L -1.2 1.2 Z', fill: '#e8eaec', for: psu-3}
+    - {id: silk-ground, at: [23.4, 8.6], path: 'M 0 -2.6 A 2.6 2.6 0 1 0 0.01 -2.6 Z M -1.5 -0.7 H 1.5 M -1.0 0.4 H 1.0 M -0.5 1.4 H 0.5 M 0 -1.9 V -0.7',
+      for: ground-pad}
+    - {id: silk-fan-tray-1-a, at: [434.1, 120.6], text: FAN, font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-1}
+    - {id: silk-fan-tray-1-b, at: [434.1, 122.4], text: TRAY, font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-1}
+    - {id: silk-fan-tray-1-c, at: [434.1, 124.2], text: '1', font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-1}
+    - {id: silk-fan-tray-0-a, at: [434.1, 205.0], text: FAN, font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-0}
+    - {id: silk-fan-tray-0-b, at: [434.1, 206.8], text: TRAY, font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-0}
+    - {id: silk-fan-tray-0-c, at: [434.1, 208.6], text: '0', font-size: 1.3, anchor: middle, fill: '#e1e4e8', for: fan-0}
+    components:
+      bays:
+      - id: psu-0
+        at: [32.0, 1.9]
+        size: {w: 74.8, h: 40.2}
+        accepts: [juniper/qfx5230-jnp-3000w-ac-afo@1, juniper/qfx5230-jnp-3000w-dc-afo@1, juniper/qfx5700-psu-blank@1]
+        default: juniper/qfx5230-jnp-3000w-ac-afo@1
+        group: psus
+        rel-pos: 0
+      - id: psu-1
+        at: [132.4, 1.9]
+        size: {w: 74.8, h: 40.2}
+        accepts: [juniper/qfx5230-jnp-3000w-ac-afo@1, juniper/qfx5230-jnp-3000w-dc-afo@1, juniper/qfx5700-psu-blank@1]
+        default: juniper/qfx5230-jnp-3000w-ac-afo@1
+        group: psus
+        rel-pos: 1
+      - id: psu-2
+        at: [232.7, 1.9]
+        size: {w: 74.8, h: 40.2}
+        accepts: [juniper/qfx5230-jnp-3000w-ac-afo@1, juniper/qfx5230-jnp-3000w-dc-afo@1, juniper/qfx5700-psu-blank@1]
+        default: juniper/qfx5700-psu-blank@1
+        group: psus
+        rel-pos: 2
+      - id: psu-3
+        at: [332.9, 1.9]
+        size: {w: 74.8, h: 40.2}
+        accepts: [juniper/qfx5230-jnp-3000w-ac-afo@1, juniper/qfx5230-jnp-3000w-dc-afo@1, juniper/qfx5700-psu-blank@1]
+        default: juniper/qfx5700-psu-blank@1
+        group: psus
+        rel-pos: 3
+      - id: fan-0
+        at: [0.0, 131.3]
+        size: {w: 426.6, h: 85.0}
+        accepts: [juniper/qfx5700-fan@1]
+        default: juniper/qfx5700-fan@1
+        group: fans
+        rel-pos: 0
+      - id: fan-1
+        at: [0.0, 45.2]
+        size: {w: 426.6, h: 85.0}
+        accepts: [juniper/qfx5700-fan@1]
+        default: juniper/qfx5700-fan@1
+        group: fans
+        rel-pos: 1
+      placements:
+      - {ref: common/ground-stud-pair-5-8-m6@1, id: ground-pad, at: [-1.44, 20.05], rotate: 90, for: chassis, group: grounding, rel-pos: 0}
+      - {ref: common/esd-jack@1, id: esd-rear-jack, at: [422.2, 6.9], for: chassis, group: esd, rel-pos: 2}
+      - {ref: common/esd-warning@1, id: esd-rear-label, at: [419.2, 17.7], for: esd-rear-jack, group: esd, rel-pos: 3}
+  top:
+    size: {w: 440.8, h: 815.0}
+    empty: >-
+      Not drawn by any source held. The guide has no flat figure of the lid; its clearance figures (43 and 44) are an outline in plan and elevation, and the
+      isometric of figure 14 shows no mark on the top.
+  bottom:
+    size: {w: 440.8, h: 815.0}
+    empty: >-
+      Not drawn by any source held. The guide has no figure of the underside.
+  left:
+    size: {w: 815.0, h: 222.25}
+    empty: >-
+      Not drawn by any source held. Figure 14 is an isometric of the right side, and no figure shows the left side wall.
+  right:
+    size: {w: 815.0, h: 222.25}
+    empty: >-
+      Not drawn flat by any source held. Figure 14 is an isometric of the right side wall with six square vents and no scale from which they could be placed.
+configurations:
+  base:
+    kind: base
+    default: true
+    power: ac
+    source: >-
+      derived - the chassis with the engine, supplies and fans in and the line-card slots under their blanks, which is what the vendor's
+      QFX5700-BASE-AC ships. It carries no part number of its own: the orderable builds below do.
+    description: >-
+      The AC chassis as a first look: one routing board, two supplies, two fan trays, every line-card slot blanked.
+    bays: {fpc-0: juniper/qfx5700-fpc-blnk@1, fpc-1: juniper/qfx5700-fpc-blnk@1, fpc-2: juniper/qfx5700-fpc-blnk@1,
+      fpc-3: juniper/qfx5700-fpc-blnk@1, fpc-4: juniper/qfx5700-fpc-blnk@1, fpc-5: juniper/qfx5700-fpc-blnk@1,
+      fpc-6: juniper/qfx5700-fpc-blnk@1, fpc-7: juniper/qfx5700-fpc-blnk@1, fpc-8: juniper/qfx5700-fpc-blnk@1}
+  ac:
+    kind: orderable
+    power: ac
+    description: >-
+      QFX5700-BASE-AC: the base configuration with AC/HVDC supplies - one QFX5700-RCB (slot 0) with the blank for the other RCB slot, one
+      QFX5700-FEB, two JNP-3000W-AC-AFO supplies with blanks over the other two power slots, two JNP5700-FAN trays and a blank (JNP5K-FPC-BLNK) over
+      every FPC slot (guide Table 27; datasheet "mit 1 5700-FEB, 1 RCB, redundanten Luefter, 2 AC-Netzteilen, Front-to-Back-Luftstrom"). Airflow is
+      front to back only. The line cards and the cable manager ship separately.
+    part-numbers:
+      QFX5700-BASE-AC: {}
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      QFX5700-BASE-DC: the base configuration with DC supplies - two JNP-3000W-DC-AFO supplies in PSU 0 and PSU 1, the rest as the AC build. Each
+      supply has a single feed, so feeds A and B go one to each.
+    bays: {psu-0: juniper/qfx5230-jnp-3000w-dc-afo@1, psu-1: juniper/qfx5230-jnp-3000w-dc-afo@1}
+    part-numbers:
+      QFX5700-BASE-DC: {}
+  e-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      QFX5700E-BASE-AC: the QFX5700E with AC/HVDC supplies. It has the same front and rear as the QFX5700 and differs in its internal forwarding engine
+      board, QFX5700E-FEB in place of QFX5700-FEB, which is not drawn on either face (datasheet ordering information; guide Table 18). The datasheet's
+      software scale differs for the E (96,000 MAC addresses against 160,000).
+    part-numbers:
+      QFX5700E-BASE-AC: {}
+  e-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      QFX5700E-BASE-DC: the QFX5700E with DC supplies, as QFX5700E-BASE-AC but with two JNP-3000W-DC-AFO supplies in PSU 0 and PSU 1.
+    bays: {psu-0: juniper/qfx5230-jnp-3000w-dc-afo@1, psu-1: juniper/qfx5230-jnp-3000w-dc-afo@1}
+    part-numbers:
+      QFX5700E-BASE-DC: {}
+  chas:
+    kind: orderable
+    power: [ac, dc]
+    description: >-
+      QFX5700-CHAS, the spare chassis (datasheet: "QFX5700/QFX5700E - spare chassis"). What it ships with is not stated, so every bay is shown open: no
+      Routing and Control Board, no line-card blank, no power supply and no fan tray.
+    bays: {rcb-0: '', rcb-1: '', fpc-0: '', fpc-1: '', fpc-2: '', fpc-3: '', fpc-4: '', fpc-5: '', fpc-6: '', fpc-7: '', fpc-8: '',
+      psu-0: '', psu-1: '', psu-2: '', psu-3: '', fan-0: '', fan-1: ''}
+    part-numbers:
+      QFX5700-CHAS: {}
+datasheet:
+  title: 'QFX5700 Switch datasheet, Juniper document 1000719-009, September 2024 (German edition)'
+  sha256: ec1de7f4d88639f630fc217eab87da4980b856ccd27bcae2ddd7695bb2c10758
+references:
+- title: QFX5700 Switch Hardware Guide (published 2026-09-30)
+  url: https://www.juniper.net/documentation/us/en/hardware/qfx5700/qfx5700.pdf
+  sha256: 893d1a19b3ce37264bda201b275d3bb86962d8bd7d76cd4a63b48c48be2b8271

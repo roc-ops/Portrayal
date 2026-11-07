@@ -1,0 +1,746 @@
+format: 1
+kind: device
+name: ex9214
+version: 0.3.0
+maturity: modelled
+manufacturer: Juniper
+model: EX9214
+portfolio:
+  line: EX Series
+  family: EX9200
+description: >-
+  Juniper EX9214, a 16 U modular Ethernet switch of the EX9200 family that runs Junos OS. It is built on the MX960 chassis. Fourteen
+  vertical slots stand side by side in the card cage. These are line cards 0 to 5, the Switch Fabric slots SF0 and SF1, the shared slot
+  2|6 and line cards 7 to 11. The shared slot takes a line card or a third Switch Fabric module. Each Switch Fabric module carries a
+  Routing Engine. The craft interface spans the top. A fan tray sits above the cage and one below it, and the air filter tray sits
+  under the cage. Four tall power supplies fill the rear under the inlet strip. The EX9200 line cards are a family of their own and are
+  not modelled: their slots show blank panels.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX9214 Switch Hardware Guide, Juniper Networks, published 2025-07-28, https://www.juniper.net/documentation/us/en/hardware/ex9214/ex9214.pdf. Taken
+      from it: Table 5 (the switch configurations), Table 6 (the CLI terms), Table 7 (the physical specifications), Figures 4 to 6 (the front and rear, in
+      isometric), Figure 12 (the craft interface, flat), Tables 9 to 14 (the lamps), Figures 18 to 23 (fan tray, air filter and supplies), the power
+      chapter and the host subsystem chapter. EX9200 Ethernet Switch Datasheet, 1000432-022-EN, Aug 2022,
+      https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex9200-ethernet-switch-datasheet.pdf: Table 1 (features), Table 4 (supply
+      capacity), Table 7 (chassis), maximum thermal output and the ordering information, which names the spare chassis EX9214-CHAS3-S, the blank
+      EX9200-LC-SF-BLANK, the supplies PWR-MX960-4100-AC-S and PWR-MX960-4100-DC-S, the fan tray FFANTRAY-MX960-HC-S and the air filter FLTR-KIT-MX960-S.
+      The EX9214 studio front, rear and front-with-top photographs from Juniper's image library (671 x 1000 and 616 x 1000 px). The guide and the
+      datasheet are Juniper's documents, read here for facts only, and nothing of them is copied into the library; no drawing or photograph is
+      reproduced. The EX9214 is the MX960 chassis (juniper/mx960); that device's slot cage is used where it is said to be.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 7: 27.8 in (70.5 cm) high, 17.5 in (44.5 cm) wide excluding the mounting flanges, and a depth of 31.08 in (78.94 cm) with the AC supplies or
+      32.65 in (82.93 cm) with the DC supplies. 27.8 in is 706.1 mm, 17.5 in is 444.5 mm and 31.08 in is 789.4 mm. The datasheet gives 17.5 x 27.8 x
+      27.75 in with the standard cable manager (704.9 mm deep), and the MX960 guide gives the same sheet metal 17.37 x 27.75 x 23.0 in. See the gaps
+      chassis-width and chassis-depth. Chassis with midplane, two fan trays, air filter and cable management bracket 150 lb (68.04 kg); maximum configuration
+      350 lb (158.8 kg). 16 U is the datasheet's. Ears are NOT MODELLED by project convention.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      Guide, Moving the Mounting Brackets for Center-Mounting an EX9200 Switch (Figure 49): two removable mounting brackets ship attached to the holes closest to
+      the front of the chassis, so the switch front-mounts flush by default, and the pair moves to the side of the chassis for center-mounting. No figure
+      gives the distance of either from the faceplate, so neither position has an `at`. The mounting shelf is included in the shipping container; the guide
+      gives it no part number. The cable management bracket (Figure 17, 4.1 lb) is a bolt-on accessory and is not drawn. Rack kits go in provenance only,
+      so chassis.kits is not written.
+  scale:
+    confidence: estimated
+    note: >-
+      Gate 1. The EX9214 front photograph is 671 x 1000 px and shows the mounting flanges, so its body is not its overall width. The 14 card levers stand 30.72
+      mm apart, the tabs on the craft interface agree, and the card envelope reads 399.5 mm tall against 413.5 across the same photograph, so its two scales
+      differ by about 3.5 percent; the readings are taken at 1.38 px/mm both ways and every one is estimated to about 2 mm. The rear photograph reads 1.33 px/mm
+      across and 1.357 down, 2 percent apart. Every position here is read off the photographs on a millimetre grid; no MX960 measurement is carried except the card
+      envelope.
+  card-slots:
+    confidence: estimated
+    note: >-
+      Each of the fourteen slots seats the horizontal 413.5 x 29.5 card turned 90 degrees, as the MX960 device does (juniper/mx960 provenance card-slots), with an
+      `opening` of 29.5 x 396. The EX9214 photograph reads the card levers 30.72 mm apart from 19.7 mm across, so the slots are placed on a 30.72 mm pitch from 4.95 mm.
+      The MX960 reads its pitch as 31.0. The card envelope runs from 141.5 to 541 mm down on the photograph (399.5 mm); the bays are 413.5 mm tall and centred on that
+      span, at 134.6 mm down. Slot order left to right is line cards 0 to 5, SF0, SF1, the shared slot 2|6, then line cards 7 to 11 (guide Figure 12).
+  craft:
+    confidence: estimated
+    note: >-
+      The craft interface is the part juniper/ex9214-craft@1, 423.4 x 52.3 mm at 8.0 mm across and 6.2 mm down, read on the photograph's grid. The MX960's craft is
+      441 x 48 mm and a different part.
+  upper-band:
+    confidence: estimated
+    note: >-
+      EX9214 front photograph: under the craft interface a dark plate (60.7 to 97.2 mm down) carries the yellow ESD warning label at 386.7 to 405.1 mm across and the ESD
+      point at 411 mm across and 87.1 mm down; under that plate the upper fan tray bezel (98.8 to 135.5 mm down) prints FFANTRAY-MX960-HC. The MX960 device draws the plate and
+      the bezel as one dark band; here the bezel is the fan tray bay.
+  lower-band:
+    confidence: estimated
+    note: >-
+      EX9214 front photograph, below the card cage: the air filter tray (554.5 to 586.3 mm down) printing FFILTER TRAY-MX960-HC, the lower fan tray bezel (589.5 to 620 mm
+      down) printing FFANTRAY-MX960-HC, and the air intake grille from 625 to 697.6 mm down. The grille is the air intake of the lower fan tray (guide, airflow).
+  populated-with:
+    confidence: estimated
+    note: >-
+      EX9214 front photograph: SF0 and SF1 carry an EX9200-SF with a Routing Engine each, the shared slot 2|6 carries a third EX9200-SF with no Routing Engine, and nine slots
+      carry line cards that the photograph does not name. Two slots, the sixth and the tenth from the left, carry blank panels. The line cards are not modelled. Every configuration seats the
+      generation its Table 5 row names. The device's default configuration is `base`; the redundant EX9200-SF3 build with four AC supplies (EX9214-RED3C-AC) is the newest configuration.
+  rear:
+    confidence: estimated
+    note: >-
+      EX9214 rear photograph, read on a millimetre grid: an exhaust grille across the top (to 100 mm down), an inlet strip with four right-angle C20 inlets and their
+      switches (111 to 160 mm down) over a caution strip and a hex vent band (160 to 205 mm), four upright supplies 102 mm wide on a 105.2 mm pitch from 1.4 mm across, 212 mm down
+      and 368 mm tall, and a beige plate under them (594.5 to 703 mm down) with the legends PEM0 to PEM3, four cable spools and an exhaust grille. A steel strip runs up the right
+      edge, with the yellow ESD label at its foot (428 mm across, 691 mm down). Guide Figure 5 adds the four supply ejectors and the vented plate behind each, and two grounding points
+      on the lower plate; both are drawn from the figure, the ejector and vent sizes read off the isometric. The guide's text puts the earthing pair on the upper rear at 15.86 mm centres, the
+      figure labels it on the lower plate and the photograph shows none; the pair follows the figure's plate and the text's pitch (gap earthing-terminal).
+  ground-stud-size:
+    confidence: datasheet
+    note: >-
+      Guide, "Grounding Points Specifications for an EX9200 Switch": two threaded inserts that fit UNC 1/4-20 screws, on 0.625 in (15.86 mm) centres, which
+      `juniper/mx-ground-stud-pair-5-8@1` draws at 15.875. The size is the pair placement's `stud-size`.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Guide, "Airflow Direction in the EX9214 Switch Chassis" and Figure 20: air enters at the front below the lower fan tray, is pulled through the chassis, rises through the
+      line card slots and leaves through the upper fan tray; the guide calls it front-to-rear cooling and the datasheet front-to-back airflow. There is no back-to-front build, so
+      no handle colour follows from airflow and none is written.
+  fan-and-filter:
+    confidence: datasheet
+    note: >-
+      Two fan trays and one air filter. The fan tray is `juniper/ex9214-ffantray-mx960-hc@1` and the air filter `juniper/ex9214-fltr-kit-mx960@1`, new parts: the MX960 device
+      draws neither as a component. The datasheet names FFANTRAY-MX960-HC-S and FLTR-KIT-MX960-S, and the photograph prints FFANTRAY-MX960-HC and FFILTER TRAY-MX960-HC. Each tray holds
+      six fans.
+  psus:
+    confidence: estimated
+    note: >-
+      Two to four 4100 W supplies stand upright in PEM0 to PEM3, in two zones: PEM0 and PEM2 feed the lower fan tray, line cards 6 to 11 and SF slots 1 and 2, and PEM1 and PEM3 feed the upper fan
+      tray, line cards 0 to 5 and SF slot 0 (guide, redundancy and power chapters). At least one supply is needed in each zone. The supply parts are
+      `juniper/ex9214-pwr-mx960-4100-ac@1` and `juniper/ex9214-pwr-mx960-4100-dc@1`. Table 5 lists the empty bays as holding blank panels; no figure or part number for a supply blank
+      is held, so an empty bay is shown open.
+  inlets:
+    confidence: estimated
+    note: >-
+      The four C20 inlets on the strip above the supplies are the chassis's, one over each supply: the AC supply has an inlet of its own (AC-1) and takes its second feed (AC-2) from
+      the strip (guide, AC power supply description). They are placements of `std/c20-inlet@1` at 37.2, 136.3, 241.5 and 345.5 mm across and 139 mm down. The four switches beside
+      them are not drawn; see the gap inlet-switches.
+  covers:
+    confidence: datasheet
+    note: >-
+      Table 5: blank panels for the line card slots in every configuration. The datasheet's ordering table names EX9200-LC-SF-BLANK, "EX9200 line card, switch fabric blank cover panel,
+      spare", which is `juniper/ex9200-lc-sf-blank@1` turned 90 degrees; the MX960's own blank, `juniper/mx960-blank@1`, is DPC-SCB-BLANK and does not carry the part number.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Guide Table 5 lists fourteen shipping configurations, the datasheet adds the TAA builds EX9214-BASE3B-AC-T and EX9214-RED3B-AC-T, the build EX9214-RED-3B-AC and the spare chassis
+      EX9214-CHAS3-S. They differ in the Switch Fabric generation (EX9200-SF, -SF2 or -SF3), the Routing Engine generation, the supply type and the supply count, and in nothing
+      else on the face, so each is a configuration of this one device. The TAA builds and the build EX9214-RED-3B-AC are the same chassis as EX9214-BASE3B-AC and EX9214-RED3B-AC, and
+      each is a configuration of its own with the same bays, so that each part number exports as a device type. Table 5 gives the EX9214-BASE3C-AC two supplies and a blank for "the empty power supply slot", where two bays are empty; two supplies are seated
+      in PEM0 and PEM1, one per zone.
+  other-faces:
+    confidence: estimated
+    note: >-
+      Guide Figures 4 to 6 show the sides as plain metal with the mounting brackets and a row of holes. The MX960 device carries a rail band on each side; so does this one, estimated.
+      Axis conventions per viewer3d.js: LEFT view x = 0 is the REAR, RIGHT view x = 0 is the FRONT, top and bottom y = 0 at the FRONT.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 24: base system 1290 W typical and 1670 W reserved, redundant system 1530 W typical and 1910 W reserved; Switch Fabric modules and line cards are on their own contracts.
+      Datasheet: maximum power draw 9,318 W (AC) and 9,534 W (DC) in Table 1 and maximum thermal output AC 31,774 BTU per hour (9,318 W), DC 32,510 BTU per hour (9,354 W). The datasheet's DC
+      figures disagree between its two places, 9,534 W and 9,354 W; each is carried where it is printed.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      The datasheet (Aug 2022) lists the EX9214 as current. A web search made on 2026-10-24 found no Juniper end-of-life or end-of-sale notice for the chassis;
+      two third-party trackers disagree about an end-of-service date, and none is carried (see the gap eol).
+  color:
+    confidence: estimated
+    note: >-
+      EX9214 photographs: dark charcoal chassis, craft and cards, a grey craft panel with a light blue accent line, light blue ejector levers, bronze inlet strip, grey supplies and
+      a beige rear plate.
+attrs:
+  physical:
+    weight-kg: 68.04
+    weight-max-kg: 158.8
+    depth-total-mm: 704.9
+  performance:
+    fabric-capacity: up to 12 Tbps backplane capacity (datasheet Table 1)
+  power:
+    power-base-system-w: 1290
+    power-redundant-system-w: 1530
+    power-max-ac-w: 9318
+    power-max-dc-w: 9534
+  thermal:
+    max-thermal-output: AC 31,774 BTU/h (9,318 W); DC 32,510 BTU/h (9,354 W) (datasheet, estimated, subject to change)
+  environmental:
+    operating-temp: 0 C to 40 C
+    storage-temp: -40 C to 70 C
+    humidity: 5-90 percent noncondensing (operating), 5-95 percent noncondensing (nonoperating)
+    altitude: up to 3048 m
+  compliance:
+    seismic: Designed to meet GR-63, Zone 4 earthquake requirements
+    nebs: SR-3580 NEBS Criteria Levels (Level 3 Compliance), GR-63-Core
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 444.5
+  height: 706.1
+  depth: 789.4
+  ru: 16
+  color: '#3a3e43'
+  airflow: front-to-back
+  ears:
+    positions:
+    - {name: flush, default: true}
+    - {name: mid, label: center-mount}
+gaps:
+- what: chassis-width
+  scope: [front, rear]
+  reason: sources-disagree
+  note: >-
+    The EX9214 guide's Table 7 and the EX9200 datasheet give 17.5 in (44.5 cm), the guide adding "excluding the mounting flanges or brackets"; the MX960 guide gives the same sheet metal
+    17.37 in (441.1 mm) and the juniper/mx960 device carries 441.1. The EX guide's figure is carried here, 444.5 mm; the difference is 3.4 mm.
+  wanted: a mechanical drawing of the chassis
+- what: chassis-depth
+  scope: [left, right, top, bottom]
+  reason: sources-disagree
+  note: >-
+    The guide's Table 7 gives a depth of 31.08 in (789.4 mm) with the AC supplies and 32.65 in (829.3 mm) with the DC supplies; 789.4 is carried, so the DC build's extra 39.9 mm is not
+    modelled. The datasheet gives 27.75 in (704.9 mm) with the standard cable manager, the same for all three chassis, and that figure is carried in attrs physical.depth-total-mm. The
+    MX960 guide gives the sheet metal 23.0 in (584.2 mm) deep.
+  wanted: a mechanical drawing of the chassis, and which depth the datasheet's 27.75 in means
+- what: line-cards
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The EX9200 line cards: EX9200-2C-8XS, EX9200-4QS, EX9200-6QS, EX9200-MPC (with the MICs EX9200-10XS-MIC, EX9200-20F-MIC and EX9200-40T-MIC),
+    EX9200-12QS, EX9200-15C, EX9200-32XS, EX9200-40T, EX9200-40F, EX9200-40F-M and EX9200-40XS (guide Table 7). They are a family of their own. No MX
+    card on main carries a part number the EX9214 guide names for a slot occupant, so no MX card is accepted. The twelve line card slots show blanks.
+- what: sf3-width
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    Table 7 gives every other Switch Fabric module 1.25 x 17 x 22 in and the EX9200-SF3 1.2 x 15.7 x 21.2 in, which is 1.3 in (33 mm) narrower. No figure
+    shows whether the SF3's plate is narrower. It is drawn at the cage's 396 mm plate.
+  wanted: a flat drawing or photograph of the EX9200-SF3 face
+- what: dc-supply-face
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing or photograph of the DC supply. The guide draws it once, in an isometric (Figure 23), and Figure 9 draws four of them. The face is drawn from
+    fractions of that figure and estimated to about 5 mm; it is not corrected for the angle of view.
+- what: dc-terminal-studs
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A photograph of the DC supply's terminal strip with its clear cover off. Figures 23 and 58 print the legends -48V, RTN, RTN and -48V and draw no stud, and no document
+    dimensions the studs or says how high on the face they stand. The four poles are placed at the legends, two studs each on the lug's 5/8 in. pitch, and their height is estimated.
+- what: psu-blank
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The supply blank panel. Table 5 lists blank panels for empty supply slots, the MX960 guide names PWR-BLANK-MX960 and the EX documents give no part number. No
+    figure shows one, so an empty bay is shown open.
+- what: inlet-switches
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The four small input switches beside the C20 inlets on the strip above the supplies, and the cable spools on the beige plate. The photograph shows them; no figure
+    or text names them and no component draws them, so they are not drawn. (Figure 5 labels one input mode switch, on the supply itself, not on this strip.)
+- what: earthing-terminal
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    The position of the protective earthing pair. The guide's text puts the two threaded inserts on the upper rear of the chassis at 15.86 mm centres; Figure 5 labels the two
+    grounding points on the lower plate under the supplies, apart; the rear photograph shows no studs. The pair is drawn on the lower plate, following the figure's place
+    and the text's pitch, and its position is estimated. A flat photograph of the plate would settle it.
+- what: eol
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: an end-of-life notice for the EX9214 chassis, if Juniper publishes one
+groups:
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: >-
+      The line card slots 0 to 5 and 7 to 11 (guide Table 6 and Figure 12)
+  sf-slots:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: >-
+      The Switch Fabric slots SF0 and SF1, which take a Switch Fabric module and nothing else, and the shared slot 2|6, which takes a line card or a third Switch Fabric
+      module. Routing Engines seat inside the Switch Fabric modules in SF0 and SF1
+    attrs:
+      redundancy: '2+1'
+      redundancy-note: >-
+        2+1 - EX9200-SF3 interoperability text, "EX9200-SF3 Fabric Bandwidth Performance and Redundancy": with three Switch Fabric modules installed the EX9214 provides 2 + 1
+        redundancy; the third seats in the shared slot, which is why this group holds the shared slot beside SF0 and SF1
+  craft:
+    term: Panel
+    role: management
+    index-origin: 0
+  psus:
+    term: PEM
+    role: service
+    index-origin: 0
+    description: the four upright supplies PEM0 to PEM3, in two zones (PEM0 and PEM2, PEM1 and PEM3)
+    attrs:
+      redundancy: 'n+n'
+      redundancy-note: 'one to two supplies per zone, each supply the redundant of its zone partner; four supplies give full redundancy (guide, redundancy and power chapters)'
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 0
+    description: >-
+      The four C20 receptacles on the strip above the supplies, one per PEM. A separate group from `psus` because the inlet stays with the chassis while a supply comes out
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: the upper fan tray, the lower fan tray and the air filter tray
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: >-
+        n+1 inside each fan tray - guide, "Understanding EX9214 Switch Component and Functionality Redundancy": each tray holds six fans, and if one fails the host subsystem raises
+        the speed of the others to cool the switch indefinitely. A single fan cannot be replaced; the whole tray is replaced
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD points, one on the front plate under the craft interface and a label at the rear lower right (guide Figures 4 and 5)
+  grounding:
+    term: Stud
+    role: furniture
+    index-origin: 0
+    description: the protective earthing pair, two UNC 1/4-20 threaded inserts on 15.86 mm centres, drawn on the lower rear plate where guide Figure 5 labels them
+views:
+  front:
+    size:
+      w: 444.5
+      h: 706.1
+    panel:
+      decor:
+      - {at: [8.0, 60.7], size: [423.4, 37.0], fill: '#2b2f33', confidence: estimated,
+         source: 'photo - the dark plate under the craft interface, 60.7 to 97.2 mm down; see provenance upper-band'}
+      - {at: [6.0, 625.0], size: [432.5, 72.6], pattern: vent, vent: 1.5, confidence: estimated,
+         source: 'photo - the air intake grille under the lower fan tray, 625 to 697.6 mm down; see provenance lower-band'}
+      cutouts:
+      - {id: esd-front, at: [408.5, 84.6], size: [5.0, 5.0], shape: circle}
+    silkscreen:
+    - {at: [411.0, 76.0], path: 'M -1.4 1.2 L 0 -1.2 L 1.4 1.2 Z M -2.1 2.2 L -0.9 2.2 M 0.9 2.2 L 2.1 2.2', fill: '#c7ccd1', for: chassis}
+    components:
+      bays:
+      - {id: craft, at: [8.0, 6.2], size: {w: 423.4, h: 52.3}, accepts: [juniper/ex9214-craft@1],
+         default: juniper/ex9214-craft@1, group: craft, rel-pos: 0}
+      - {id: fan-upper, at: [8.0, 100.4], size: {w: 423.4, h: 33.6}, accepts: [juniper/ex9214-ffantray-mx960-hc@1],
+         default: juniper/ex9214-ffantray-mx960-hc@1, group: cooling, rel-pos: 0}
+      - {id: lc0, at: [4.95, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 0}
+      - {id: lc1, at: [35.67, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 1}
+      - {id: lc2, at: [66.39, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 2}
+      - {id: lc3, at: [97.11, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 3}
+      - {id: lc4, at: [127.83, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 4}
+      - {id: lc5, at: [158.55, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 5}
+      - {id: sf0, at: [189.27, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-sf3@1, juniper/ex9200-sf2@1, juniper/ex9200-sf@1],
+         default: juniper/ex9200-sf3@1, group: sf-slots, rel-pos: 0}
+      - {id: sf1, at: [219.99, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-sf3@1, juniper/ex9200-sf2@1, juniper/ex9200-sf@1],
+         default: juniper/ex9200-sf3@1, group: sf-slots, rel-pos: 1}
+      - {id: sf2-lc6, at: [250.71, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1, juniper/ex9200-sf3@1, juniper/ex9200-sf2@1, juniper/ex9200-sf@1],
+         default: juniper/ex9200-sf3@1, group: sf-slots, rel-pos: 2}
+      - {id: lc7, at: [281.43, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 6}
+      - {id: lc8, at: [312.15, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 7}
+      - {id: lc9, at: [342.87, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 8}
+      - {id: lc10, at: [373.59, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 9}
+      - {id: lc11, at: [404.31, 134.6], size: {w: 29.5, h: 413.5}, opening: {w: 29.5, h: 396}, rotate: 90,
+         accepts: [juniper/ex9200-lc-sf-blank@1], default: juniper/ex9200-lc-sf-blank@1, group: slots, rel-pos: 10}
+      - {id: air-filter, at: [8.0, 554.5], size: {w: 423.4, h: 31.8}, accepts: [juniper/ex9214-fltr-kit-mx960@1],
+         default: juniper/ex9214-fltr-kit-mx960@1, group: cooling, rel-pos: 1}
+      - {id: fan-lower, at: [8.0, 589.5], size: {w: 423.4, h: 33.6}, accepts: [juniper/ex9214-ffantray-mx960-hc@1],
+         default: juniper/ex9214-ffantray-mx960-hc@1, group: cooling, rel-pos: 2}
+      placements:
+      - {id: esd-front-jack, ref: common/esd-jack@1, at: [408.0, 84.1], for: chassis, group: esd, rel-pos: 0}
+      - {id: esd-front-label, ref: common/esd-warning@1, at: [394.0, 80.2], for: chassis, group: esd, rel-pos: 1}
+  rear:
+    size:
+      w: 444.5
+      h: 706.1
+    panel:
+      decor:
+      - {at: [4.0, 4.0], size: [436.5, 94.0], pattern: holes, fill: '#1d2023', confidence: estimated,
+         source: 'photo - the exhaust grille across the top of the rear, 4 to 98 mm down'}
+      - {at: [4.0, 105.0], size: [436.5, 56.0], fill: '#a69f90', confidence: estimated,
+         source: 'photo - the bronze inlet strip, 111 to 160 mm down'}
+      - {at: [4.0, 161.0], size: [436.5, 18.0], fill: '#b5ad9c', confidence: estimated,
+         source: 'photo - the caution strip under the inlets; the caution text on it is not transcribed'}
+      - {at: [10.0, 181.0], size: [425.0, 24.0], pattern: holes, fill: '#6d7278', confidence: estimated,
+         source: 'photo - the hex vent band above the supplies, 180 to 205 mm down'}
+      - {at: [428.0, 100.0], size: [16.5, 600.0], fill: '#8a8f95', confidence: estimated,
+         source: 'photo - the steel strip up the right edge of the rear'}
+      - {at: [8.0, 594.5], size: [398.7, 108.0], fill: '#d8d2c2', confidence: estimated,
+         source: 'photo - the beige plate under the supplies, with the legends PEM0 to PEM3, four cable spools and an exhaust grille; the spools are not drawn'}
+      - {at: [45.3, 610.0], size: [14.0, 14.0], rx: 7.0, fill: '#6d7278', confidence: estimated,
+         source: 'guide Figure 5 - the power supply ejector under PEM0, a round lever head on the lower plate; the size is read off the isometric'}
+      - {at: [150.5, 610.0], size: [14.0, 14.0], rx: 7.0, fill: '#6d7278', confidence: estimated,
+         source: 'guide Figure 5 - the power supply ejector under PEM1'}
+      - {at: [255.7, 610.0], size: [14.0, 14.0], rx: 7.0, fill: '#6d7278', confidence: estimated,
+         source: 'guide Figure 5 - the power supply ejector under PEM2'}
+      - {at: [360.9, 610.0], size: [14.0, 14.0], rx: 7.0, fill: '#6d7278', confidence: estimated,
+         source: 'guide Figure 5 - the power supply ejector under PEM3'}
+      - {at: [22.3, 632.0], size: [60.0, 44.0], pattern: holes, fill: '#8f897a', confidence: estimated,
+         source: 'guide Figure 5 - the vented plate behind the PEM0 ejector'}
+      - {at: [127.5, 632.0], size: [60.0, 44.0], pattern: holes, fill: '#8f897a', confidence: estimated,
+         source: 'guide Figure 5 - the vented plate behind the PEM1 ejector'}
+      - {at: [232.7, 632.0], size: [60.0, 44.0], pattern: holes, fill: '#8f897a', confidence: estimated,
+         source: 'guide Figure 5 - the vented plate behind the PEM2 ejector'}
+      - {at: [337.9, 632.0], size: [60.0, 44.0], pattern: holes, fill: '#8f897a', confidence: estimated,
+         source: 'guide Figure 5 - the vented plate behind the PEM3 ejector'}
+      cutouts:
+      - {id: ground-stud-0, at: [194.6, 684.0], size: [7.0, 7.0], shape: circle}
+      - {id: ground-stud-1, at: [210.5, 684.0], size: [7.0, 7.0], shape: circle}
+      - {id: inlet-0, at: [21.0, 126.8], size: [32.4, 24.4]}
+      - {id: inlet-1, at: [120.1, 126.8], size: [32.4, 24.4]}
+      - {id: inlet-2, at: [225.3, 126.8], size: [32.4, 24.4]}
+      - {id: inlet-3, at: [329.3, 126.8], size: [32.4, 24.4]}
+    silkscreen:
+    - {at: [13.9, 601.0], text: PEM0, font-size: 4.0, anchor: start, fill: '#8a8470', for: pem0}
+    - {at: [114.2, 601.0], text: PEM1, font-size: 4.0, anchor: start, fill: '#8a8470', for: pem1}
+    - {at: [217.0, 601.0], text: PEM2, font-size: 4.0, anchor: start, fill: '#8a8470', for: pem2}
+    - {at: [320.4, 601.0], text: PEM3, font-size: 4.0, anchor: start, fill: '#8a8470', for: pem3}
+    components:
+      bays:
+      - {id: pem0, at: [1.5, 212.0], size: {w: 101.6, h: 368.3},
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
+         default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 0}
+      - {id: pem1, at: [106.7, 212.0], size: {w: 101.6, h: 368.3},
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
+         default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 1}
+      - {id: pem2, at: [211.9, 212.0], size: {w: 101.6, h: 368.3},
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
+         default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 2}
+      - {id: pem3, at: [317.1, 212.0], size: {w: 101.6, h: 368.3},
+         accepts: [juniper/ex9214-pwr-mx960-4100-ac@1, juniper/ex9214-pwr-mx960-4100-dc@1, juniper/ex9214-pwr-mx960-4100-dc@2],
+         default: juniper/ex9214-pwr-mx960-4100-ac@1, group: psus, rel-pos: 3}
+      placements:
+      - {id: inlet-0, ref: std/c20-inlet@1, at: [21.0, 126.8], for: pem0, group: inlets, rel-pos: 0, attrs: {function: AC-2 inlet PEM 0}}
+      - {id: inlet-1, ref: std/c20-inlet@1, at: [120.1, 126.8], for: pem1, group: inlets, rel-pos: 1, attrs: {function: AC-2 inlet PEM 1}}
+      - {id: inlet-2, ref: std/c20-inlet@1, at: [225.3, 126.8], for: pem2, group: inlets, rel-pos: 2, attrs: {function: AC-2 inlet PEM 2}}
+      - {id: inlet-3, ref: std/c20-inlet@1, at: [329.3, 126.8], for: pem3, group: inlets, rel-pos: 3, attrs: {function: AC-2 inlet PEM 3}}
+      - {id: esd-rear-label, ref: common/esd-warning@1, at: [424.15, 686.75], for: chassis, group: esd, rel-pos: 1}
+      - {id: ground-studs, ref: juniper/mx-ground-stud-pair-5-8@1, at: [194.6, 684.0], for: chassis, group: grounding, rel-pos: 0,
+         attrs: {stud-size: '1/4-20'}}
+  left:
+    size:
+      w: 789.4
+      h: 706.1
+    panel:
+      decor:
+      - {at: [0.0, 330.0], size: [789.4, 30.0], fill: '#33373c', confidence: estimated,
+         source: 'rail band, as the MX960 carries it; the guide draws the side as plain metal with the mounting brackets'}
+  right:
+    size:
+      w: 789.4
+      h: 706.1
+    panel:
+      decor:
+      - {at: [0.0, 330.0], size: [789.4, 30.0], fill: '#33373c', confidence: estimated,
+         source: 'rail band, as the MX960 carries it; the guide draws the side as plain metal with the mounting brackets'}
+  top:
+    size:
+      w: 444.5
+      h: 789.4
+    panel:
+      decor:
+      - {at: [40.0, 420.0], size: [364.5, 140.0], pattern: holes, confidence: estimated,
+         source: 'upper rear exhaust, as the MX960; extent estimated'}
+  bottom:
+    size:
+      w: 444.5
+      h: 789.4
+    panel:
+      decor:
+      - {at: [0.0, 0.0], size: [6.0, 789.4], fill: '#33373c', confidence: estimated,
+         source: 'side edge, as the MX960; estimated'}
+      - {at: [438.5, 0.0], size: [6.0, 789.4], fill: '#33373c', confidence: estimated,
+         source: 'side edge, as the MX960; estimated'}
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      derived - built from the group roles rather than from a vendor bundle: every bay whose group is `service` or `management` keeps its seat, and
+      every `traffic` bay takes a blank. This vendor publishes no base configuration for this chassis under that name, so the library defines one.
+    description: >-
+      Chassis only, as every shipping order is built before line cards. The twelve line card slots hold blank panels. The Switch Fabric modules, the craft interface, the
+      four supplies, the two fan trays and the air filter tray keep their seats. Line cards are ordered separately.
+    bays:
+      lc0: juniper/ex9200-lc-sf-blank@1
+      lc1: juniper/ex9200-lc-sf-blank@1
+      lc2: juniper/ex9200-lc-sf-blank@1
+      lc3: juniper/ex9200-lc-sf-blank@1
+      lc4: juniper/ex9200-lc-sf-blank@1
+      lc5: juniper/ex9200-lc-sf-blank@1
+      lc7: juniper/ex9200-lc-sf-blank@1
+      lc8: juniper/ex9200-lc-sf-blank@1
+      lc9: juniper/ex9200-lc-sf-blank@1
+      lc10: juniper/ex9200-lc-sf-blank@1
+      lc11: juniper/ex9200-lc-sf-blank@1
+    power: ac
+  base3c-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-BASE3C-AC: three EX9200-SF3 modules with one EX9200-RE2 in SF0, two fan trays and two 4100 W AC supplies in PEM0 and PEM1. Blank panels fill the
+      line card slots.
+    bays:
+      sf1/re: ''
+      sf2-lc6/re: ''
+      pem2: ''
+      pem3: ''
+    part-numbers:
+      EX9214-BASE3C-AC: {}
+  red3c-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-RED3C-AC: three EX9200-SF3 modules with two EX9200-RE2 in SF0 and SF1, two fan trays and four 4100 W AC supplies. Blank panels fill the line card
+      slots.
+    bays:
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-RED3C-AC: {}
+  red3c-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9214-RED3C-DC: three EX9200-SF3 modules with two EX9200-RE2, two fan trays, four 4100 W DC supplies and blank panels for the line card slots.
+    bays:
+      sf2-lc6/re: ''
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
+    part-numbers:
+      EX9214-RED3C-DC: {}
+  base3b-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-BASE3B-AC: two EX9200-SF2 modules with one EX9200-RE2 in SF0, two fan trays and three 4100 W AC supplies in PEM0 to PEM2.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf1/re: ''
+      sf2-lc6: juniper/ex9200-lc-sf-blank@1
+      pem3: ''
+    part-numbers:
+      EX9214-BASE3B-AC: {}
+  base3b-ac-t:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-BASE3B-AC-T, the TAA build of EX9214-BASE3B-AC (datasheet ordering table): the same chassis, two EX9200-SF2 modules with one EX9200-RE2
+      and three 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf1/re: ''
+      sf2-lc6: juniper/ex9200-lc-sf-blank@1
+      pem3: ''
+    part-numbers:
+      EX9214-BASE3B-AC-T: {}
+  red3b-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-RED3B-AC: three EX9200-SF2 modules with two EX9200-RE2, two fan trays and four 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-RED3B-AC: {}
+  red3b-ac-t:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-RED3B-AC-T, the TAA build of EX9214-RED3B-AC (datasheet ordering table): the same chassis, three EX9200-SF2 modules with two EX9200-RE2
+      and four 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-RED3B-AC-T: {}
+  red-3b-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-RED-3B-AC. The datasheet's ordering table lists it beside EX9214-RED3B-AC with the same contents: three Switch Fabric-2 modules, two
+      EX9200-RE2 and four 4,100 W AC supplies. The guide has no such code. It may be a misprint of EX9214-RED3B-AC.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-RED-3B-AC: {}
+  red3b-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9214-RED3B-DC: three EX9200-SF2 modules with two EX9200-RE2, two fan trays and four 4100 W DC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf1: juniper/ex9200-sf2@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
+    part-numbers:
+      EX9214-RED3B-DC: {}
+  base3a-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-BASE3A-AC: two EX9200-SF2 modules with one EX9200-RE in SF0, two fan trays and three 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf2@1
+      sf1/re: ''
+      sf2-lc6: juniper/ex9200-lc-sf-blank@1
+      pem3: ''
+    part-numbers:
+      EX9214-BASE3A-AC: {}
+  redund3a-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-REDUND3A-AC: three EX9200-SF2 modules with two EX9200-RE, two fan trays and four 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf2@1
+      sf1/re: juniper/ex9200-re@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-REDUND3A-AC: {}
+  redund3a-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9214-REDUND3A-DC: three EX9200-SF2 modules with two EX9200-RE, two fan trays and four 4100 W DC supplies.
+    bays:
+      sf0: juniper/ex9200-sf2@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf2@1
+      sf1/re: juniper/ex9200-re@1
+      sf2-lc6: juniper/ex9200-sf2@1
+      sf2-lc6/re: ''
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
+    part-numbers:
+      EX9214-REDUND3A-DC: {}
+  base3-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-BASE3-AC: two EX9200-SF modules with one EX9200-RE in SF0, two fan trays, one air filter kit and three 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf@1
+      sf1/re: ''
+      sf2-lc6: juniper/ex9200-lc-sf-blank@1
+      pem3: ''
+    part-numbers:
+      EX9214-BASE3-AC: {}
+  redund3-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX9214-REDUND3-DC: three EX9200-SF modules with two EX9200-RE, two fan trays, one air filter kit and four 4100 W DC supplies.
+    bays:
+      sf0: juniper/ex9200-sf@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf@1
+      sf1/re: juniper/ex9200-re@1
+      sf2-lc6: juniper/ex9200-sf@1
+      sf2-lc6/re: ''
+      pem0: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem1: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem2: juniper/ex9214-pwr-mx960-4100-dc@2
+      pem3: juniper/ex9214-pwr-mx960-4100-dc@2
+    part-numbers:
+      EX9214-REDUND3-DC: {}
+  redund3-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-REDUND3-AC: three EX9200-SF modules with two EX9200-RE, two fan trays, one air filter kit and four 4100 W AC supplies.
+    bays:
+      sf0: juniper/ex9200-sf@1
+      sf0/re: juniper/ex9200-re@1
+      sf1: juniper/ex9200-sf@1
+      sf1/re: juniper/ex9200-re@1
+      sf2-lc6: juniper/ex9200-sf@1
+      sf2-lc6/re: ''
+    part-numbers:
+      EX9214-REDUND3-AC: {}
+  chassis:
+    kind: orderable
+    power: ac
+    description: >-
+      EX9214-CHAS3-S, the spare chassis with passive midplane (datasheet ordering table). It ships without Switch Fabric modules, Routing Engines, line cards, supplies, fan
+      trays or air filter, which are ordered separately; the bays are shown open.
+    bays:
+      lc0: ''
+      lc1: ''
+      lc2: ''
+      lc3: ''
+      lc4: ''
+      lc5: ''
+      sf0: ''
+      sf1: ''
+      sf2-lc6: ''
+      lc7: ''
+      lc8: ''
+      lc9: ''
+      lc10: ''
+      lc11: ''
+      pem0: ''
+      pem1: ''
+      pem2: ''
+      pem3: ''
+      fan-upper: ''
+      fan-lower: ''
+      air-filter: ''
+    part-numbers:
+      EX9214-CHAS3-S: {}
+datasheet:
+  title: EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022)
+  url: https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex9200-ethernet-switch-datasheet.pdf
+  sha256: 08a4f6da38d1992597636aa9e413af4c024740ebea732bc3605635e815df0ff9
+references:
+- title: EX9214 Switch Hardware Guide (published 2025-07-28)
+  url: https://www.juniper.net/documentation/us/en/hardware/ex9214/ex9214.pdf
+  sha256: 234dd356a287da109b3ccf22095e101669e6d47563b00c08bbfd0039c801ed36

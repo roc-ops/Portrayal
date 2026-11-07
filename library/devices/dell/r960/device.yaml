@@ -1,0 +1,1722 @@
+# SOURCES:
+# Dell's PowerEdge R960 Installation and Service Manual (the ISM), Technical
+# Guide and Spec Sheet, read as the PDFs Dell publishes (hashes under
+# `datasheet` and `references`), and Dell's R960 service model
+# (working/intake/dell/3d-models/r960.glb, Dell's CAD, held and not committed),
+# read with glbparts.py for the top view, the supplies' depth and the bezel.
+# No stencil, reseller figure or third-party photograph was used. The ISM's
+# figures are photographs and drawings embedded at 150 to 600 ppi, measured at
+# the scale each provenance entry gives; none is orthographic, and each says by
+# how much. The model's positions are the `Main Assembly` node's (the scene also
+# holds exploded copies under `Extra content`), in plan as x = 228.0 - cad x1
+# and y = 883.94 - cad z1.
+# STATE:
+# DONE: the envelope from ISM table 7; six fronts (32, 24, 16 and 8 x 2.5 inch,
+# 16 x E3.S, 8 x 2.5 inch + 16 x E3.S) each a view bound by
+# `configurations.<name>.views`, with the left control panel, the right panel,
+# the Express Service Tag and the honeycomb security bezel fitted; the rear for
+# riser configurations 0-1, 0-2, 1, 2 and 3 over the four 86 mm supply bays
+# (the 60 mm supplies in their adapter, 2400 W and 2800 W), the BOSS-N1 bay,
+# LOM, OCP and rear I/O board; the top view from ISM figures 12 to 15 and 95 to
+# 96 (system board, processor expansion module, 64 DIMM slots, drive cage cover)
+# and from the service model (four heatsinks, six fans, fan cage, shrouds,
+# support bar, system cover and latch, and the plan projections of the seated
+# parts); estimated bottom and sides.
+# LEFT: the 1800 W and -48 V DC supplies, direct liquid cooling, the LCD bezel
+# and rear serial/VGA brackets (see the gaps).
+format: 1
+kind: device
+name: r960
+version: 2.0.2
+maturity: draft
+manufacturer: Dell
+model: PowerEdge R960
+description: >-
+  4U four-socket rack server, 16th generation - up to 32 x 2.5 inch front drive
+  bays (or 24 NVMe, 16, 8, 16 EDSFF E3.S, or 8 + 16 E3.S), four hot-swap power
+  supplies in 2+2 redundancy at the left and right of the rear, up to twelve PCIe
+  Gen5 slots on four risers, an OCP NIC 3.0 slot and a rear BOSS-N1 boot module
+profile: server
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - ISM table 7 (chassis dimensions, figure 32): Xb 444.0 is the body BETWEEN THE EARS and Xa 482.0
+      across them, Y 174.3 the height, Za 36 mm with the bezel and 22 mm without it (ear plane to the front), Zb
+      844.74 ear to rear wall and Zc 847.195 ear to PSU handle. DEPTH 866.74 IS THE FRONT FACE TO THE REAR WALL: the
+      22 mm the ears sit behind the front face without the bezel plus Zb, as the R660's is derived. It
+      agrees with the spec sheet's 869.195 without the bezel and 883.195 with it, which are Za + Zc (22 + 847.195 and 36 +
+      847.195): they reach the PSU handles, 2.455 further than the rear wall. The technical guide's table 2 prints the
+      same 883.195 and 869.195 for the R960 and, beside them, 441.16 wide and 877.84 / 865.9 deep: THOSE ARE THE
+      PREVIOUS-GENERATION R940xa's COLUMN of the same table, not the R960's, which the guide's own chassis
+      table (Xb 444 mm) and ISM table 7 confirm. A converted copy that merged the two columns reads
+      441.16; the ISM governs.
+  front-face:
+    confidence: drawing
+    note: >-
+      THE EARS CARRY THE CONTROL PANELS, SO THEY ARE DRAWN - the R740xd's and R660's reasoning: the left control panel
+      (ISM figure 7) sits in the left ear outboard of the drives and the right panel (power, USB, iDRAC Direct, ISM
+      figure 9) and the VGA in the right. The front is therefore the 482.0 rack face (ISM Xa), 174.3 tall.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      Gate 1 passed. ISM figures 1 to 6 are 1623 x 809 px photographs (300 ppi). Measured by non-white extent, the
+      ear-to-ear width of figures 2 to 6 is 1599 px and the height 581 px: 3.3175 px/mm across the 482.0 face and
+      3.333 px/mm down the 174.3 height, 0.5% apart, so they are orthographic enough to take positions from. Figure 1
+      (32 bays) is a differently scaled copy: 1590 x 578 px, 3.299 and 3.316 px/mm, 0.5% apart. Every front
+      position here is read off them at those scales.
+  drive-bays:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the 2.5 inch bays are columns of 17.4 mm on the figures' own pitch (17.75 mm in the left bank, 17.28 in
+      the middle and right banks of figures 2 and 3, 17.7 across figure 1), each 76.2 tall: the carriers' orange release
+      buttons were found by colour and give each column's centre, and the carrier sits centred in it. The carrier is
+      common/drive-carrier-25@2, standing up, as the R740xd seats it. The three banks of figure 2 do not share a pitch;
+      it is drawn as measured, per bank.
+  drive-numbering:
+    confidence: photo-measured
+    note: >-
+      photo-measured - a number strip runs under the upper row of drives on figures 1 to 3, 5 and 6 and prints the bay
+      numbers: 0-7 in the left bank and 8-15 in the right on the 16 and 32 bay fronts, 0-23 across the 24 bay front, with
+      CPU tags between pairs (CPU4 between 2 and 3, CPU2 between 8 and 9, CPU1 between 14 and 15, CPU3 between 20 and
+      21) and an NVMe tag at the left. The 32-bay front prints 0-15 only, on the strip between its two rows: the lower
+      row's 16 to 31 are NOT PRINTED on the figure, and it is numbered 16-31 by continuing the sequence
+      (see the lower-row gap).
+  drive-default:
+    confidence: datasheet
+    note: >-
+      EVERY BAY DEFAULTS TO A BLANK, as on the R660 and R740xd: Dell publishes no default drive count, and the ISM requires
+      blanks in every empty slot for cooling. A populated machine is a configuration.
+  vent-plates:
+    confidence: photo-measured
+    note: >-
+      photo-measured - where no drives fit, the figures show fixed vented plates: one between the two banks of the 16
+      and 32 bay fronts, two in the upper band of the 8 bay front, two beside the E3.S block and one between the SFF bank
+      and the E3.S block of the 8 + 16 front. The 24 bay front has drives across its whole upper band. Under the upper
+      band three vented plates (the fan wall's grilles) fill the lower band of every front but the 32 bay one, which has a
+      second row of drives there. The plates are read off the figures as rectangles with an inset mesh and are chassis decor;
+      whether Dell's plates are removable blanks is not stated.
+  fronts:
+    confidence: photo-measured
+    note: >-
+      SIX FRONTS, EACH ITS OWN VIEW bound by `configurations.<name>.views`, as the R660's and R740xd's are: ISM figure 1
+      (32 x 2.5 inch, `front-sff32`), 2 (24 x 2.5 inch, `front-sff24`), 3 (16 x 2.5 inch, `front`), 4 (8 x 2.5 inch,
+      `front-sff8`), 5 (16 x EDSFF E3.S, `front-e3s16`) and 6 (8 x 2.5 inch with 16 x EDSFF E3.S, `front-sff8-e3s16`). The
+      ISM's "16 x 2.5 inch SAS/SATA + 8 x 2.5 inch NVMe" is a backplane mix on the 24 bay face (ISM table 70 and the
+      cabling tables 75, 76), not a seventh front; the technical guide's "32 x 2.5 inch (Smart Flow)" caption is
+      figure 1. The ISM names no front without a backplane.
+  e3s:
+    confidence: photo-measured
+    note: >-
+      photo-measured - ISM figures 5 and 6: sixteen EDSFF E3.S carriers standing side by side in the right of the upper
+      band, found by the SSD legend printed down each carrier on a 34.87 px (10.51 mm) pitch from 290.3 mm across; the carrier
+      is dell/e3s-carrier@1 (the R660's, the same Dell part) turned 90 so its orange chevrons are at the top as the figures
+      show. THE E3.S NUMBERS ARE NOT PRINTED on either figure (the strip under the block carries no digits); the bays are
+      numbered from ISM figure 27, the service label (a drive number, then "Bay 1 (0-7)", "Bay 2 (8-15)"): 0-15 left to right on
+      the 16 E3.S front and, because the 2.5 inch bank is bay 1 (0-7), 8-23 on the 8 + 16 front.
+  top:
+    confidence: measured
+    note: >-
+      measured, where it says so. REAR AT y=0, FRONT AT y=866.74 - the library's plan convention, x left to right as the front faces you
+      (CPU 2 and CPU 4 left, CPU 1 and CPU 3 right). MEASURED from Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with
+      glbparts.py: the positions come from the un-exploded `Main Assembly` node only (the scene also holds exploded copies under `Extra
+      content`), mapped as plan x = 228.0 - cad x1 (the system cover, cad x -216.0..228.0, is the 444 body) and plan y = 883.94 - cad z1 (the rear
+      wall: the model's chassis front face at cad z 17.2 plus the ISM's 866.74, where its `Hole` cubes stand at 883.6, and the supply handles end
+      2.56 past it against ISM table 7's 2.455; the handle is modelled at 2.6 mm, the model's figure rounded, 0.145 mm longer than the manual's). What the model gives, each part citing its node: the six fans and the fan cage (`R960_
+      CoolingFan`), the four heatsinks (`R960_ HeatSink SYS` and `R960_ HeatSink PEM`), the air shroud top cover (`R960_ AirShroudTopCover`) and the
+      shroud under it (`R960_ GPU_AirShroud`), the support bar (`R960_ SupportBar`), the system cover and its latch (`R960_ SystemCover`), the supplies
+      (`R960_ PSU Prefab`), the four risers (`Riser 1B - FL`, `Riser 2`, `Riser 3A - FL`, `Riser 4A - FL`) and the rows of the 64 memory sockets (`Memory
+      Module_SB`, `_PEM`). The model is one build: full-length risers, the GPU shroud and the full-length support bar, where ISM figure 12 is
+      the half-length build; see `top-view-model-vs-ism`. NOT FROM THE MODEL, still read off ISM figures 12 to 15, 95 and 96 (photographs from above,
+      1.813 px/mm across the 444 body and 1.863 px/mm down, 2.7% apart, with a memory socket drawn 157 long against 133.4 - a 15% stretch down): the
+      two boards' outlines (the model holds them, system board 425.7 x 558.4 at 9.1, 30.0 and PEM 430.4 x 288.1 at 6.8, 264.3, and they are not re-read
+      here), the sockets' x and their names (figures 95, 96: A1-A16 and B1-B16, C1-C16 and D1-D16, named by the labels the figures print) and the drive cage
+      cover. SEATED MODULES PROJECT INTO THIS VIEW through their rear bay's `plan:` - the two upper supplies, the BOSS-N1 module, the OCP card, LOM,
+      rear I/O board and risers - the supplies and risers at the model's positions, the rest mirrored from their rear bays (plan x = 444 - rear x - w).
+      The standing front drives do not project (a standing 2.5 inch drive is 7 mm wide; the library's std/drive-25-plan@1 is a flat drive). NOT YET IN
+      THIS VIEW: the cards, the backplane and the cabling.
+  bezel:
+    confidence: measured
+    note: >-
+      DRAWN FITTED, as on the R740xd and R660, and taken off in the viewer: the optional security bezel (dell/r960-bezel@1)
+      covers the body between the ears, and `for:` names the bays and parts behind it. Its openings are holes, so the drives
+      show through. MEASURED from Dell's R960 service model, working/intake/dell/3d-models/r960.glb: `R960_ FrontBezel` in the `Main Assembly` node,
+      430.8 x 168.5 at front-face (25.5, 2.7), its plate's 42 openings found by decoding the mesh (large hexagons in a staggered grid, 38.5
+      by 44.45 apart) and its release button. The model's bezel is the LCD bezel and the security bezel's own shape is not in it; the ISM says
+      the mesh is the same (figure 34), and the lock's place is a guess (see `security-bezel-shape-estimated`). The LCD bezel is not modelled.
+  sides-and-bottom:
+    confidence: estimated
+    note: >-
+      estimated - no figure or photograph held shows the bottom or either side; their folded edges and the rail land are
+      plausible shapes at plausible sizes, drawn so the faces are not blank, and marked estimated where drawn.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - ISM figure 10, the rear view (a 1565 x 807 photograph), which is riser configuration 2 (R1B + R2 +
+      R3B + R4B) with four 2800 W supplies. Body 23..1521 px across (444 mm, 3.374 px/mm) and 110..691 down (174.3, 3.333
+      px/mm): 1.2% apart, so positions are good to about a millimetre. The rear face is the 444 body, not the rack face. The
+      technical guide's figures 7 and 8 (600 ppi, 5% out between axes: read for shape only) show configurations 0 and 1: no riser 2
+      (a plate across its band), and in configuration 0 a vented plate where riser 3 would be.
+  rear-psus:
+    confidence: photo-measured
+    note: >-
+      photo-measured - four supplies in two stacks: PSU3 above PSU1 at the left (rear x 16.9..103.4) and PSU4 above PSU2 at the
+      right (341.4..427.4), each plate 86.0 wide and about 40.5 tall at y 90.6 and 131.8 (ISM table 5 items 5, 6, 16, 17 and the
+      figure's printed PSU marks). A 60 mm supply stands in this 86 mm bay in a 26 mm adapter (ISM table 11 note); the adapter's
+      side is not stated. The marks (bolt and number) read 3 at the top left, 1 at the lower left, 4 at the top right and 2 at the
+      lower right, as the figure prints them.
+  rear-boss-lom-io:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the BOSS-N1 module on riser 1's side at 131.3, 10.4 (its two M.2 carriers, 480 GB, orange tab at the bottom of
+      carrier 0 and the top of carrier 1: the R660's dell/boss-n1-module-1u@1, the same part); the LOM window at 118.8..160.6 and the
+      OCP card at 171.4..243.2 (71.8 wide, the library's OCP bay), LOM and OCP in the R660's left-to-right order; the rear I/O board is
+      NOT the R660's (96.4 wide against 85.37 and with its connectors on a different pitch): dell/r960-rear-io-board@1.
+  rear-risers:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the riser cages 18.0..122.1 (riser 1), 176.4..280.7 (riser 3) and 317.7..422.9 (riser 4), the
+      riser 2 band 124.2..273.9 under riser 3 and the VGA bracket blank above it; each riser's windows are 20 mm apart.
+      Riser 4's cage prints 1 up, 2 down, 3 down and 4 down at its left (see the gaps: the ISM numbers its slots 10-12)
+      and riser 3's prints 5 up 6 down and 7 up 8 down at its right; the slot numbers on every riser are those of the ISM.
+  rear-power:
+    confidence: datasheet
+    note: >-
+      chassis.power is `ac`: every supply this device accepts is an AC supply (100-240 V AC or 240 V DC, hot swap): 1100 and 1400 W
+      in the adapter, 2400 and 2800 W. The 1800 W (C15 cord) and -48 V DC supplies of ISM table 10 are not modelled.
+attrs:
+  physical:
+    ru: 4
+    weight-max-kg: 60.2
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 444.0
+  height: 174.3
+  depth: 866.74
+  ru: 4
+  power: ac
+  color: '#2f3439'
+  edge: '#1d2125'
+  silk: '#c9ced3'
+gaps:
+  - what: riser-configuration-3-rear-by-table
+    scope: [rear, top]
+    reason: needs-photo
+    note: >-
+      configuration 3 (R1A + R2 + R3A + R4A, the GPU build) is drawn from ISM tables 88 and 13 and the technical guide's table 17, not
+      from a figure: the ISM and technical guide draw the rears of configurations 0 to 2 only. Slots 3, 6, 8 and 11 are
+      double width, full length; the cages are the half-length risers' with windows merged, estimated.
+    wanted: >-
+      a straight-on rear photograph of an R960 in riser configuration 3, with GPUs or double-width fillers
+  - what: riser-4-printed-marks-against-iso-slot-numbers
+    scope: [rear]
+    reason: sources-disagree
+    note: >-
+      ISM figure 10 and the technical guide's figures 7 to 9 show riser 4's cage printing 1 (up) over 2 (down), 3 and 4 (down arrows); the
+      ISM's table 5 numbers riser 4's slots 10, 11 and 12, and table 88 gives it no slot 4. The marks are drawn as
+      photographed; the slot ids and numbers follow the ISM.
+    wanted: >-
+      a close photograph of riser 4's cage, or a Dell statement of what the marks number
+  - what: riser-2-slot-numbers
+    scope: [rear]
+    reason: sources-disagree
+    note: >-
+      ISM table 5 (rear view) names riser 2 "slot 3 and slot 9"; ISM tables 6, 13 and 88, the technical guide's tables 16 and 17 and ISM
+      figure 104 say slots 4 and 9, and slot 3 is riser 1's. Slots 4 and 9 are used, slot 4 on the left by figure 104's callout order.
+    wanted: >-
+      a rear photograph of riser 2 with its slot numbers printed, or Dell's correction
+  - what: top-view-model-vs-ism
+    scope: [top]
+    reason: sources-disagree
+    note: >-
+      the top view's parts are Dell's service model (r960.glb, the `Main Assembly` node), which is the full-length-riser build: `Riser 1B - FL`,
+      `Riser 3A - FL`, `Riser 4A - FL`, the GPU shroud and the full-length support bar. ISM figure 12 is the half-length build, read at 1.813 px/mm
+      across and 1.863 down (a 15% stretch down). They agree across and disagree down and by build: the support bar is 438.3 x 59.7 in the model
+      against 436.0 x 35.0 in the figure; the shroud under the top cover 438.5 x 327.9 against 426.0 x 93.0; the top cover 434.9 x 173.8 against 436.0 x
+      142.0; the heatsink 128.0 x 182.1 (a 78.9 x 120.6 block and a 126.8 x 49.3 fin pack) against 74.5 x 123.0 (the block, to 4.4 mm); a fan 62.7 x 88.2 against
+      64.0 x 86.0; the cover 444.0 x 754.1 against 440.0 x 745.0. The device draws the model's, which is one build; the half-length support
+      bar and bottom cover (ISM figures 39 and 40, 12) are not drawn.
+    wanted: >-
+      Dell's service model of the half-length build, or an orthographic drawing of the R960 from above with the cover off
+  - what: top-view-boards-not-reread
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      the model is held and gives the boards, `R960_ Systemboard` 425.7 x 558.4 at plan (9.1, 30.0) and `R960_ Processor Expansion Module` 430.4 x
+      288.1 at (6.8, 264.3), but the system board and PEM here are still the rectangles read off ISM figures 12 and 15 (427.0 x 560.0 at 8.5, 20.0 and 424.0 x
+      230.0 at 10.0, 296.0): they were not on the review's list and sit under the parts that were. The drive cage cover is also still the figure's.
+    wanted: >-
+      the boards' and the cage cover's boxes read from r960.glb in a follow-up
+  - what: memory-sockets-model-vs-figure-95
+    scope: [top]
+    reason: sources-disagree
+    note: >-
+      the model holds 30 sockets on each board (`Memory Module_SB` and `_PEM`: 8 at a 7.5 pitch, then 14 at an 8.65 pitch across the middle, then 8) where ISM
+      figures 95 and 96 and the technical guide print 32 each (A1-A16 and B1-B16, C1-C16 and D1-D16). The outer banks agree to 0.6 mm (plan x 21.0 to
+      73.7 and 366.4 to 419.1 against 20.4 to 72.9 and 366.0 to 418.5); the model's middle 14 span 163.5 to 280.5 against the figure's 16, 162.6 to
+      278.9. The device keeps the ISM's 32 at the figure's pitch and moves every row to the model's y, 352.8 (133.4 long, as the model has them), 7.2
+      from the figure's.
+    wanted: >-
+      a Dell drawing of the memory sockets with the middle banks dimensioned
+  - what: psu-x-model-vs-figure-10
+    scope: [top, rear]
+    reason: sources-disagree
+    note: >-
+      the supplies' outer edges stand 11.4 in from the body wall in the model (`R960_ PSU Prefab`, plan x 346.3 and 11.8) and 16.9 in ISM figure 10
+      (rear x 16.9 and 341.4, which mirror to plan x 341.1 and 16.6): 5.2 and 4.8 mm. The top view draws the model's, which is a drawing of the machine from
+      above; the rear face keeps the photograph's, which is a photograph of the machine from behind at 3.374 px/mm, good to a millimetre.
+    wanted: >-
+      a rear photograph of the R960 with a rule across the supplies, or Dell's dimensioned rear drawing
+  - what: riser-length-model-vs-table-13
+    scope: [top, risers]
+    reason: sources-disagree
+    note: >-
+      the model calls riser 1 `Riser 1B - FL` and makes its board 357.0 long, where ISM table 13 gives riser 1B's three slots half length; riser 3A
+      (356.3, full length) agrees with the ISM, and the ISM states no length for riser 4A (357.0 in the model). The model's riser 1B and 4A are 159.9 and 148.4
+      wide in plan against the rear cages' 117.1 and 120.0. The top view draws the model's, and the half-length variants (1C, 3B, 4B, 4C) borrow
+      the nearest held riser's length marked estimated.
+    wanted: >-
+      Dell's statement of the length of riser 1B and a model of a half-length riser
+  - what: front-lower-row-numbering-32-bay
+    scope: [front-sff32]
+    reason: needs-photo
+    note: >-
+      ISM figure 1 prints 0-15 on the strip between the two rows and nothing under the lower row; the lower row is numbered 16-31
+      by continuing the sequence, and the strip is read as the upper row's (as figures 2 and 3 print under the carriers).
+    wanted: >-
+      a photograph of a 32-bay front with the number strip legible under both rows, or Dell's service label (figure 26) at a readable scale
+  - what: e3s-numbering-unprinted
+    scope: [front-e3s16, front-sff8-e3s16]
+    reason: needs-photo
+    note: >-
+      ISM figures 5 and 6 print no digits under the E3.S block. ISM figure 27 (the service label, too small to read a single carrier's
+      number) numbers the bays "Bay 1 (0-7)", "Bay 2 (8-15)" for 16 E3.S drives and "Bay 1 (0-7)" (the 2.5 inch bank), "Bay 2 (8-15)",
+      "Bay 3 (16-23)" for the 8 + 16 build; the carriers are numbered left to right inside those ranges, 0-15 and 8-23, which is an
+      assumption about the order within a bay.
+    wanted: >-
+      a photograph of an E3.S front with the bay numbers printed
+  - what: e3s-blank-face-estimated
+    scope: [front-e3s16, front-sff8-e3s16]
+    reason: needs-photo
+    note: >-
+      the E3.S bays default to dell/e3s-carrier-blank@2, the R660's blank drawn from an angled photograph of the real part; the
+      R960's blank is not shown in any R960 document.
+    wanted: >-
+      a straight-on photograph of an R960 E3.S front with empty slots
+  - what: security-bezel-shape-estimated
+    scope: [front, front-sff8, front-sff24, front-sff32, front-e3s16, front-sff8-e3s16]
+    reason: needs-photo
+    note: >-
+      the model is held (r960.glb, `R960_ FrontBezel`) and gives the honeycomb, the bezel's box and the release button, which are drawn from it.
+      It does not answer for the security bezel: the model's is the LCD bezel (a display window, arrow and tick buttons, their numbers),
+      and Dell's guide shows no other. The ISM says the mesh is the same on both (figure 34), which is why the plate's cells stand; the
+      security bezel's own end plates, the cell where the LCD window is, and its keylock's place are not in any document held (the lock
+      is drawn on the left end plate by guess). The LCD bezel is not modelled.
+    wanted: >-
+      a Dell model or a straight-on photograph of the R960 security bezel fitted
+  - what: psu-1800w-and-dc-not-modelled
+    scope: [psus]
+    reason: needs-photo
+    note: >-
+      ISM table 10 lists a 1800 W Titanium supply (C15 cord, 60 mm form factor) and a 1100 W -48 V DC supply (LOTES connector);
+      no R960 document shows either face, and the 60 mm supplies this device accepts are the R660's 1100 and 1400 W units.
+    wanted: >-
+      rear photographs of the 1800 W and -48 V DC supplies in an R960
+  - what: psu-adapter-not-in-the-model
+    scope: [psus]
+    reason: needs-photo
+    note: >-
+      the 86 mm supplies' depth is answered by the model (r960.glb, `R960_ PSU Prefab`: the can runs 233.5 into the chassis and the handle stands
+      33.5 proud of the face, 2.6 past the rear wall; the face is recessed 30.9 inside it) and is drawn from it. The model holds ONE supply and no
+      adapter: the 26 mm adapter, its side, its face and a 60 mm supply seated in it are in no R960 document (ISM figures 199 and 200 draw the
+      adapter's screws only) and not in the model. The adapter is drawn at the left with the 60 mm supply's 222.0 depth, estimated, in a bay whose
+      can is 233.5.
+    wanted: >-
+      a photograph of a 60 mm supply in its adapter from behind, and a side view of the adapter
+  - what: psu-face-recess-not-built
+    scope: [rear, psus]
+    reason: needs-drawing
+    note: >-
+      the 86 mm supplies' faces are recessed 30.9 mm inside the rear wall and their handles stand 33.5 proud of them, 2.6 past the wall (r960.glb, `R960_
+      PSU Prefab`; ISM table 7's Zc less Zb is 2.455). A rear bay seats its occupant with the face at the wall plane and gives it no recess, so the 3D scene
+      draws the face at the wall and the grip 2.6 proud (the part past the wall), where the first build stood the whole 33.5 handle and a 14.7 latch outside
+      the chassis. The supply's can and the top view are as measured; only the 30.9 mm between the wall and the face, and the latch's own height
+      inside it, are not shown. The 60 mm supplies seated in the adapter are the R660's part and still stand its 35.7 handle past the wall.
+    wanted: >-
+      a bay that can recess its occupant (a `floor` or `inset` on a rear bay), and a section through the R960's rear wall at a supply for the latch
+  - what: riser-cage-plate-depth-estimated
+    scope: [rear, risers]
+    reason: needs-drawing
+    note: >-
+      the risers' rear plates were drawn 20.0 mm proud of the rear wall by analogy with the R660's cages, which put them outside the 866.74 chassis (ISM table
+      7 puts only the supplies' handles past the wall). They are drawn 1.0 proud, estimated: no R960 model or side figure is held for a cage's
+      thickness or for how far the risers' PCBs stand behind it (the model's risers are drawn for the top view only).
+    wanted: >-
+      a side view or section of an R960 rear wall at a riser cage
+  - what: riser-2-slot-9-flange-seat-unresolved
+    scope: [rear, risers]
+    reason: needs-drawing
+    note: >-
+      riser 2's `flange-cover` stands over slot 4's flange only. Slot 9's flange has no cover because the bay's estimated seat (unrotated, taken from the R660's
+      offset from window to bracket) puts its fold 2.1 past the cage's right edge, and the cage's own drawing has 12.2 mm of plate right of window 9, so this
+      is a consequence of an unresolved seat and not a measurement that no metal is there. The seat is unresolved because the figures disagree: slot 4 is
+      turned over and its opening lines up with its window, slot 9's does not (3.8 to 6.4 mm off); turning slot 9 over to match slot 4 and ISM figure 104's
+      two cards (both the same way up) lines its opening up but puts the far end of its 79.2 mm bracket 4.6 past the edge instead; and Dell's model has the
+      riser 2 assembly 158.3 mm wide against the 149.7 read off ISM figure 10. The cage's width, the windows or the seat is wrong, and no document held says which.
+    wanted: >-
+      a straight-on rear photograph of an R960 riser 2 with both slots filled, or its cage drawn with dimensions
+  - what: full-height-slots-take-the-filler-only
+    scope: [risers]
+    reason: needs-drawing
+    note: >-
+      the full-height slots of risers 1, 3 and 4 accept dell/r960-pcie-filler-fh@1 only. A seated full-height card or bracket in this
+      library (std/pcie-bracket-fh@2, common/pcie-card-fh@2) is 120.02 x 21.59, the PCIe CEM envelope, and the R960's cages are 100 to
+      105 mm across on ISM figure 10: no R960 figure shows how the bracket's ends sit under the cage, so a seated card would
+      draw 15 to 20 mm outside it. The low-profile slots of riser 2 take the R660's low-profile bracket and cards, whose envelope
+      the cage covers as the R660's riser 2A does.
+    wanted: >-
+      a rear photograph of an R960 with a full-height card in a riser, or Dell's drawing of the full-height bracket in the cage
+  - what: dlc-rear-and-modules-not-modelled
+    scope: [rear, top]
+    reason: needs-photo
+    note: >-
+      direct liquid cooling (ISM table 6 and figures 11, 16 to 18; the spec sheet's optional DLC) changes the rear (a BOSS blank, coolant
+      tubes, an optional rear VGA and serial port) and the processors' cooling. Not modelled: the ISM's figure 11 shows
+      the rear with coolant tubes over its middle and no straight-on view.
+    wanted: >-
+      a rear photograph of a DLC R960 with the tubes disconnected, and the cold plates from above
+  - what: rear-and-mid-drive-bays-none
+    scope: [rear, front]
+    reason: vendor-silent
+    note: >-
+      the ISM's front, rear and technical-specification sections and the technical guide's table 12 ("Rear storage possible: No" in
+      every riser configuration) list no rear and no mid drive bays; none is modelled.
+    wanted: >-
+      none unless Dell adds a rear or mid storage option
+  - what: rack-ears-and-rail-kits-not-modelled
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the ISM's "Rail sizing and rack compatibility matrix" section (page 30) points to Dell's separate Enterprise Systems Rail Sizing and Rack
+      Compatibility Matrix, which this device did not hold; no ear position or rail kit is stated here.
+    wanted: >-
+      Dell's rail sizing and rack compatibility matrix
+groups:
+  drives:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the 2.5 inch front bays, numbered as the strip under the carriers prints them (the 32 bay front's lower row continues 16-31)
+    attrs: {media: sff-2.5}
+  drives-e3s:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the EDSFF E3.S front bays, sixteen standing carriers numbered left to right as ISM figure 27 gives them (0-15, or 8-23 after the 2.5 inch bank)
+    attrs: {media: e3s}
+  panels:
+    term: Panel
+    role: indicator
+    index-origin: 1
+    description: the left control panel, a field-replaceable module in the left ear
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: local console and service access
+    description: the front VGA, the USB-A and the iDRAC Direct micro-AB USB
+  mgmt:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the power button
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: printed marks seated as parts - the VGA symbol
+  tags:
+    term: Tag
+    role: furniture
+    index-origin: 1
+    description: the slide-out Express Service Tag under the right-hand drives
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: the four 86 mm supply bays, PSU 3 over PSU 1 at the left and PSU 4 over PSU 2 at the right as the rear faces you
+    attrs:
+      redundancy: '2+2'
+      redundancy-note: >-
+        R960 ISM and technical guide: four AC or DC power supply units with 2+2 redundancy (ISM "System overview"; technical guide
+        "Power supply units": up to four AC supplies with 2+2 redundancy, autosensing and auto switching).
+  boss:
+    term: Bay
+    role: service
+    index-origin: 1
+    description: the BOSS-N1 boot module bay beside riser 1 at the rear
+  risers:
+    term: Riser
+    role: service
+    index-origin: 1
+    description: >-
+      the expansion card riser positions, numbered as Dell numbers them (1, 2, 3 and 4). `service` and not `traffic`, as on the R740xd:
+      the group holds the riser, and the cards live in the riser's own slot bays, numbered as ISM table 88 numbers them.
+  blanks:
+    term: Blank
+    role: service
+    index-origin: 1
+    description: the vented plates where riser 2 or riser 3 is absent, and the VGA bracket blank above riser 2
+  memory:
+    term: DIMM
+    role: service
+    index-origin: 1
+    description: >-
+      the 32 DDR5 slots of the system board, A1-A16 for processor 1 and B1-B16 for processor 2, named as ISM figure 95 prints them, seen
+      from above with the rear at the top. The other 32 are `memory-expansion`
+  memory-expansion:
+    term: DIMM
+    role: service
+    index-origin: 1
+    description: >-
+      the 32 DDR5 slots of the processor expansion module, C1-C16 for processor 3 and D1-D16 for processor 4, as ISM figure 96 prints
+      them. A group of their own because the PEM stands over the system board: each of its sockets has a twin under it at the
+      same plan position
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: the six dual-rotor fan modules in the fan cage, numbered 1 to 6 as the cage prints them, left to right as the front faces you
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: >-
+        R960 technical guide, thermal features: "The R960 allows N+1 fan redundancy, allowing continuous operation with one fan failure in
+        the system."
+  processors:
+    term: CPU
+    role: service
+    index-origin: 1
+    description: the four processor heatsinks - CPU 1 and CPU 3 on the right as the front faces you, CPU 2 and CPU 4 on the left (CPU 3 and 4 on the processor expansion module)
+  interior:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: the system board, the processor expansion module, the fan cage, the air shrouds and the support bar
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: >-
+      the system cover and the drive cage cover on top, and the optional security bezel on the front. The bezel is DRAWN FITTED, as on
+      the R740xd and R660: it is `mounts`, so the viewer takes it off to show the drives, and `for:` names what it covers.
+  ocp:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the OCP NIC 3.0 slot
+  lom-card:
+    term: Card
+    role: service
+    index-origin: 1
+    description: the LOM card position, held as a card and not its two ports (the ports are the card's own)
+  rear-io:
+    term: Board
+    role: service
+    index-origin: 1
+    description: the rear I/O board position - the board carries the ID button, the iDRAC port, two USB and the VGA, which are its own ports
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the iDRAC Direct lamp
+views:
+  front:
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        # the drive cage and the fan wall behind them
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#1d2125'}
+        # the fixed vented plate between the two banks
+        - {at: [171.5, 4.5], size: [138.7, 79.5], fill: '#3a3f44'}
+        - {at: [176.0, 16.5], size: [129.7, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        # the fan wall's three grilles
+        - {at: [31.3, 91.5], size: [138.7, 80.1], fill: '#3a3f44'}
+        - {at: [35.6, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.1, 91.5], size: [138.1, 80.1], fill: '#3a3f44'}
+        - {at: [176.4, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.8, 91.5], size: [137.7, 80.1], fill: '#3a3f44'}
+        - {at: [318.1, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      # the right control panel's marks beside the USB port and the iDRAC Direct
+      # port: the USB trident, and a double-ended open wrench for iDRAC Direct
+      # (the R660's glyphs, moved to this panel's positions)
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [27.5, 87.2], text: 'NVMe', font-size: 1.2, fill: '#9aa0a6'}
+      - {at: [75.5, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [79.9, 89.3], text: 'CPU4', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [324.5, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [328.9, 89.3], text: 'CPU2', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [431.6, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [436.0, 89.3], text: 'CPU1', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [35.02, 89.5], text: '0', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-0}
+      - {at: [52.96, 89.5], text: '1', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-1}
+      - {at: [70.59, 89.5], text: '2', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-2}
+      - {at: [88.38, 89.5], text: '3', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-3}
+      - {at: [106.31, 89.5], text: '4', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-4}
+      - {at: [124.10, 89.5], text: '5', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-5}
+      - {at: [141.88, 89.5], text: '6', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-6}
+      - {at: [159.21, 89.5], text: '7', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-7}
+      - {at: [319.12, 89.5], text: '8', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-8}
+      - {at: [336.76, 89.5], text: '9', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-9}
+      - {at: [353.79, 89.5], text: '10', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-10}
+      - {at: [371.12, 89.5], text: '11', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-11}
+      - {at: [388.60, 89.5], text: '12', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-12}
+      - {at: [405.78, 89.5], text: '13', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-13}
+      - {at: [422.97, 89.5], text: '14', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-14}
+      - {at: [440.00, 89.5], text: '15', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-15}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [27.62, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 0}
+        - {id: drive-1, at: [45.56, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 1}
+        - {id: drive-2, at: [63.19, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 2}
+        - {id: drive-3, at: [80.98, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 3}
+        - {id: drive-4, at: [98.91, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 4}
+        - {id: drive-5, at: [116.70, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 5}
+        - {id: drive-6, at: [134.48, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 6}
+        - {id: drive-7, at: [151.81, 7.50], size: {w: 17.2, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 7}
+        - {id: drive-8, at: [311.72, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 8}
+        - {id: drive-9, at: [329.36, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 9}
+        - {id: drive-10, at: [346.39, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 10}
+        - {id: drive-11, at: [363.72, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 11}
+        - {id: drive-12, at: [381.20, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 12}
+        - {id: drive-13, at: [398.38, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 13}
+        - {id: drive-14, at: [415.57, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 14}
+        - {id: drive-15, at: [432.60, 7.50], size: {w: 16.9, h: 76.2},
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 15}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM table 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are the R660's and the R740xd's
+            (R960 ISM "iDRAC Direct LED indicator codes", table 103): solid green for two seconds when a laptop is connected, flashing green
+            (two on, two off) when recognised, off when unplugged. THE LED IS NOT VISIBLE on figure 9 or the front figures; its
+            position under the port is the R660's offset from its port, estimated.
+  rear:
+    size: {w: 444.0, h: 174.3}
+    panel:
+      decor:
+        # the rear wall behind everything that seats in it
+        - {at: [0, 0], size: [444.0, 174.3], fill: '#c3c8cd'}
+        # the top lip of the cover and the deck the risers stand on
+        - {at: [0, 0], size: [444.0, 9.0], fill: '#d9dde1'}
+        - {at: [16.0, 9.0], size: [412.0, 84.0], fill: '#c9ced3'}
+        # the vent strips under the riser band, left and right of the BOSS panel
+        - {at: [22.0, 75.5], size: [150.0, 2.6], fill: '#16191c', vent: 1}
+        - {at: [22.0, 80.3], size: [150.0, 3.2], fill: '#16191c', vent: 1}
+        - {at: [300.0, 75.5], size: [122.0, 2.6], fill: '#16191c', vent: 1}
+        - {at: [300.0, 80.3], size: [122.0, 3.2], fill: '#16191c', vent: 1}
+        # the slim vent columns at the left of the lower band, beside LOM
+        # the blue captive screws on the panels between the risers (ISM figure 10)
+        - {at: [125.2, 20.6], size: [5.6, 5.6], fill: '#2f7fc1', rx: 2.8}
+        - {at: [163.8, 48.2], size: [5.6, 5.6], fill: '#2f7fc1', rx: 2.8}
+        - {at: [305.0, 21.8], size: [5.6, 5.6], fill: '#2f7fc1', rx: 2.8}
+        - {at: [283.7, 47.6], size: [5.6, 5.6], fill: '#2f7fc1', rx: 2.8}
+        - {at: [106.0, 98.0], size: [10.6, 53.0], pattern: grille, pattern-pitch: [5.3, 5.3], vent: 1}
+        - {at: [284.0, 98.0], size: [57.4, 50.0], fill: '#d4d8dc'}
+        - {at: [290.0, 102.0], size: [47.7, 42.0], pattern: grille, pattern-pitch: [5.3, 5.3], vent: 1}
+    silkscreen:
+      # THE CHASSIS PRINT: the supply marks, a boxed bolt and the number, at the outside edge of each
+      # supply as the figure prints them
+      - {at: [8.2, 91.8], path: M 0 0 H 2.6 V 2.6 H 0 Z, stroke-width: 0.2, fill: '#2b2f33', for: psu-3}
+      - {at: [8.2, 91.8], path: M 1.55 0.42 L 0.85 1.45 H 1.33 L 1.08 2.22 L 1.82 1.12 H 1.34 Z, filled: true, fill: '#2b2f33', for: psu-3}
+      - {at: [11.6, 94.4], text: '3', font-size: 3.5, fill: '#2b2f33', for: psu-3}
+      - {at: [105.6, 166.0], path: M 0 0 H 2.6 V 2.6 H 0 Z, stroke-width: 0.2, fill: '#2b2f33', for: psu-1}
+      - {at: [105.6, 166.0], path: M 1.55 0.42 L 0.85 1.45 H 1.33 L 1.08 2.22 L 1.82 1.12 H 1.34 Z, filled: true, fill: '#2b2f33', for: psu-1}
+      - {at: [109.0, 168.6], text: '1', font-size: 3.5, fill: '#2b2f33', for: psu-1}
+      - {at: [431.0, 91.8], path: M 0 0 H 2.6 V 2.6 H 0 Z, stroke-width: 0.2, fill: '#2b2f33', for: psu-4}
+      - {at: [431.0, 91.8], path: M 1.55 0.42 L 0.85 1.45 H 1.33 L 1.08 2.22 L 1.82 1.12 H 1.34 Z, filled: true, fill: '#2b2f33', for: psu-4}
+      - {at: [434.4, 94.4], text: '4', font-size: 3.5, fill: '#2b2f33', for: psu-4}
+      - {at: [336.6, 143.0], path: M 0 0 H 2.6 V 2.6 H 0 Z, stroke-width: 0.2, fill: '#2b2f33', for: psu-2}
+      - {at: [336.6, 143.0], path: M 1.55 0.42 L 0.85 1.45 H 1.33 L 1.08 2.22 L 1.82 1.12 H 1.34 Z, filled: true, fill: '#2b2f33', for: psu-2}
+      - {at: [340.0, 145.6], text: '2', font-size: 3.5, fill: '#2b2f33', for: psu-2}
+      # printed on the chassis under the BOSS bay, ISM figure 10
+      - {at: [128.0, 60.0], text: 'MEST', font-size: 3.6, fill: '#9aa1a8'}
+    components:
+      bays:
+        - {id: boss, at: [131.3, 10.4], size: {w: 29.9, h: 38.9},
+           accepts: [dell/boss-n1-blank-1u@1, dell/boss-n1-module-1u@1], default: dell/boss-n1-module-1u@1,
+           group: boss, rel-pos: 1,
+           plan: {view: top, at: [282.8, 0.0], under: [system-cover]}}
+        - {id: psu-3, at: [16.9, 90.6], size: {w: 86.0, h: 40.4},
+           accepts: [dell/r960-psu-2800w-ac@1, dell/r960-psu-2400w-ac@1, dell/r960-psu-adapter-60mm@1, dell/r960-psu-blank@1],
+           default: dell/r960-psu-2800w-ac@1, group: psus, rel-pos: 3,
+           plan: {view: top, at: [346.3, 30.9], under: [system-cover]}}
+        - {id: psu-1, at: [16.9, 131.8], size: {w: 86.0, h: 40.4},
+           accepts: [dell/r960-psu-2800w-ac@1, dell/r960-psu-2400w-ac@1, dell/r960-psu-adapter-60mm@1, dell/r960-psu-blank@1],
+           default: dell/r960-psu-2800w-ac@1, group: psus, rel-pos: 1}
+        - {id: psu-4, at: [341.4, 90.6], size: {w: 86.0, h: 40.4},
+           accepts: [dell/r960-psu-2800w-ac@1, dell/r960-psu-2400w-ac@1, dell/r960-psu-adapter-60mm@1, dell/r960-psu-blank@1],
+           default: dell/r960-psu-2800w-ac@1, group: psus, rel-pos: 4,
+           plan: {view: top, at: [11.8, 30.9], under: [system-cover]}}
+        - {id: psu-2, at: [341.4, 131.8], size: {w: 86.0, h: 40.4},
+           accepts: [dell/r960-psu-2800w-ac@1, dell/r960-psu-2400w-ac@1, dell/r960-psu-adapter-60mm@1, dell/r960-psu-blank@1],
+           default: dell/r960-psu-2800w-ac@1, group: psus, rel-pos: 2}
+        - {id: vga-bracket, at: [119.0, 102.6], size: {w: 164.0, h: 29.4},
+           accepts: [dell/r960-vga-bracket-blank@1], default: dell/r960-vga-bracket-blank@1,
+           group: blanks, rel-pos: 3}
+        - {id: lom, at: [118.8, 153.8], size: {w: 42.58, h: 15.93},
+           accepts: [dell/lom-2x1g-16g@1, dell/lom-blank-16g@1], default: dell/lom-blank-16g@1,
+           group: lom-card, rel-pos: 1,
+           plan: {view: top, at: [273.6, 1.6], under: [system-cover]}}
+        - {id: rio, at: [244.0, 153.8], size: {w: 96.4, h: 18.8},
+           accepts: [dell/r960-rear-io-board@1], default: dell/r960-rear-io-board@1,
+           group: rear-io, rel-pos: 1,
+           plan: {view: top, at: [106.8, 0.0], under: [system-cover]}}
+        - {id: ocp, at: [171.4, 154.5], size: {w: 71.8, h: 15.1},
+           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1],
+           default: dell/ocp3-2x10g-rj45@1, group: ocp, rel-pos: 1,
+           plan: {view: top, at: [198.7, 0.6], under: [system-cover]}}
+        # RISER 2 BEFORE RISER 3, 1 AND 4: where their plans overlap in the top view
+        # the taller risers paint over it
+        - {id: riser-2, at: [124.2, 132.0], size: {w: 149.7, h: 18.5},
+           accepts: [dell/r960-riser-2@1], default: dell/r960-riser-2@1,
+           group: risers, rel-pos: 2,
+           plan: {view: top, at: [168.7, 12.7], under: [system-cover]},
+           only-in: [sff8-rc2-1b-2-3b-4b, sff8-rc3-1a-2-3a-4a, sff16-rc2-1b-2-3b-4b, sff16-rc3-1a-2-3a-4a, sff24-rc2-1b-2-3b-4b, sff24-rc3-1a-2-3a-4a, sff32-rc2-1b-2-3b-4b, sff32-rc3-1a-2-3a-4a, e3s16-rc2-1b-2-3b-4b, e3s16-rc3-1a-2-3a-4a, sff8-e3s16-rc2-1b-2-3b-4b, sff8-e3s16-rc3-1a-2-3a-4a]}
+        - {id: riser-2-blank, at: [124.2, 132.0], size: {w: 149.7, h: 18.5},
+           accepts: [dell/r960-riser-2-blank@1], default: dell/r960-riser-2-blank@1,
+           group: blanks, rel-pos: 1,
+           only-in: [sff8-rc01-1c-4c, sff8-rc02-1c-4c, sff8-rc1-1c-3b-4c, sff16-rc01-1c-4c, sff16-rc02-1c-4c, sff16-rc1-1c-3b-4c, sff24-rc01-1c-4c, sff24-rc02-1c-4c, sff24-rc1-1c-3b-4c, sff32-rc01-1c-4c, sff32-rc02-1c-4c, sff32-rc1-1c-3b-4c, e3s16-rc01-1c-4c, e3s16-rc02-1c-4c, e3s16-rc1-1c-3b-4c, sff8-e3s16-rc01-1c-4c, sff8-e3s16-rc02-1c-4c, sff8-e3s16-rc1-1c-3b-4c, sff16-rc01-1c-4c-populated, sff16-rc01-1c-4c-psu-1400w]}
+        - {id: riser-3, at: [176.4, 9.0], size: {w: 104.3, h: 84.0},
+           accepts: [dell/r960-riser-3b@1, dell/r960-riser-3b-scale-out@1, dell/r960-riser-3a@1], default: dell/r960-riser-3b@1,
+           group: risers, rel-pos: 3,
+           plan: {view: top, at: [148.4, 1.1], under: [system-cover]},
+           only-in: [sff8-rc1-1c-3b-4c, sff8-rc2-1b-2-3b-4b, sff8-rc3-1a-2-3a-4a, sff16-rc1-1c-3b-4c, sff16-rc2-1b-2-3b-4b, sff16-rc3-1a-2-3a-4a, sff24-rc1-1c-3b-4c, sff24-rc2-1b-2-3b-4b, sff24-rc3-1a-2-3a-4a, sff32-rc1-1c-3b-4c, sff32-rc2-1b-2-3b-4b, sff32-rc3-1a-2-3a-4a, e3s16-rc1-1c-3b-4c, e3s16-rc2-1b-2-3b-4b, e3s16-rc3-1a-2-3a-4a, sff8-e3s16-rc1-1c-3b-4c, sff8-e3s16-rc2-1b-2-3b-4b, sff8-e3s16-rc3-1a-2-3a-4a]}
+        - {id: riser-3-blank, at: [176.4, 9.0], size: {w: 104.3, h: 84.0},
+           accepts: [dell/r960-riser-3-blank@1], default: dell/r960-riser-3-blank@1,
+           group: blanks, rel-pos: 2,
+           only-in: [sff8-rc01-1c-4c, sff8-rc02-1c-4c, sff16-rc01-1c-4c, sff16-rc02-1c-4c, sff24-rc01-1c-4c, sff24-rc02-1c-4c, sff32-rc01-1c-4c, sff32-rc02-1c-4c, e3s16-rc01-1c-4c, e3s16-rc02-1c-4c, sff8-e3s16-rc01-1c-4c, sff8-e3s16-rc02-1c-4c, sff16-rc01-1c-4c-populated, sff16-rc01-1c-4c-psu-1400w]}
+        - {id: riser-1, at: [5.0, 9.0], size: {w: 117.1, h: 63.0},
+           accepts: [dell/r960-riser-1c@1, dell/r960-riser-1b@1, dell/r960-riser-1a@1], default: dell/r960-riser-1c@1,
+           group: risers, rel-pos: 1,
+           plan: {view: top, at: [280.2, 1.2], under: [system-cover]}}
+        - {id: riser-4, at: [317.7, 9.0], size: {w: 120.0, h: 63.0},
+           accepts: [dell/r960-riser-4c@1, dell/r960-riser-4b@1, dell/r960-riser-4a@1], default: dell/r960-riser-4c@1,
+           group: risers, rel-pos: 4,
+           plan: {view: top, at: [4.7, 1.1], under: [system-cover]}}
+  top:
+    # REAR AT y=0, FRONT AT y=866.74 - the library's plan convention. The
+    # fans, cage, heatsinks, shrouds, support bar, cover, supplies and risers
+    # are Dell's R960 service model (plan x = 228.0 - cad x1, plan y = 883.94
+    # - cad z1); the boards, the memory sockets' x and the drive cage cover are
+    # still read off Dell's photographs (see provenance/top).
+    size: {w: 444.0, h: 866.74}
+    panel:
+      decor:
+        # the front drive cage under the drive cage cover
+        - {at: [0.0, 734.7], size: [444.0, 132.04], fill: '#2f3439'}
+    components:
+      bays:
+        - {id: fan-1, at: [20.5, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 1, under: [system-cover, air-shroud-top]}
+        - {id: fan-2, at: [84.9, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 2, under: [system-cover, air-shroud-top]}
+        - {id: fan-3, at: [149.4, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 3, under: [system-cover, air-shroud-top]}
+        - {id: fan-4, at: [233.6, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 4, under: [system-cover, air-shroud-top]}
+        - {id: fan-5, at: [298.1, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 5, under: [system-cover, air-shroud-top]}
+        - {id: fan-6, at: [362.5, 552.3], size: {w: 62.7, h: 88.2},
+           accepts: [dell/r960-fan@1], default: dell/r960-fan@1,
+           group: fans, rel-pos: 6, under: [system-cover, air-shroud-top]}
+        # THE SYSTEM BOARD'S 32 SOCKETS, A (processor 1) and B (processor 2), in the order
+        # ISM figure 95 prints them left to right; the PEM stands over them
+        - {id: dimm-b8, at: [20.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 1, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b16, at: [27.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 2, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b2, at: [35.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 3, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b10, at: [42.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 4, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b6, at: [50.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 5, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b14, at: [57.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 6, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b4, at: [65.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 7, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b12, at: [72.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 8, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b9, at: [162.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 9, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b1, at: [170.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 10, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b15, at: [177.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 11, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b7, at: [185.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 12, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b11, at: [192.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 13, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b3, at: [200.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 14, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b13, at: [207.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 15, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-b5, at: [215.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 16, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a8, at: [222.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 17, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a16, at: [230.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 18, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a2, at: [237.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 19, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a10, at: [245.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 20, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a6, at: [252.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 21, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a14, at: [260.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 22, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a4, at: [267.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 23, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a12, at: [275.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 24, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a9, at: [366.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 25, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a1, at: [373.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 26, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a15, at: [381.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 27, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a7, at: [388.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 28, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a11, at: [396.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 29, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a3, at: [403.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 30, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a13, at: [411.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 31, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {id: dimm-a5, at: [418.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory, rel-pos: 32, in: system-board, under: [system-cover, air-shroud-top, air-shroud-bottom, pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        # THE PEM'S 32 SOCKETS, C (processor 3) and D (processor 4), as ISM figure 96 prints them
+        - {id: dimm-d8, at: [20.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 1, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d16, at: [27.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 2, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d2, at: [35.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 3, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d10, at: [42.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 4, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d6, at: [50.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 5, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d14, at: [57.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 6, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d4, at: [65.40, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 7, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d12, at: [72.90, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 8, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d9, at: [162.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 9, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d1, at: [170.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 10, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d15, at: [177.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 11, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d7, at: [185.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 12, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d11, at: [192.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 13, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d3, at: [200.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 14, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d13, at: [207.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 15, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-d5, at: [215.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 16, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c8, at: [222.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 17, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c16, at: [230.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 18, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c2, at: [237.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 19, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c10, at: [245.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 20, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c6, at: [252.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 21, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c14, at: [260.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 22, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c4, at: [267.60, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 23, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c12, at: [275.10, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 24, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c9, at: [366.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 25, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c1, at: [373.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 26, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c15, at: [381.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 27, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c7, at: [388.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 28, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c11, at: [396.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 29, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c3, at: [403.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 30, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c13, at: [411.00, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 31, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+        - {id: dimm-c5, at: [418.50, 352.8], size: {w: 3.8, h: 133.4}, accepts: [common/dimm-plan@1], default: common/dimm-plan@1, group: memory-expansion, rel-pos: 32, in: pem-board, under: [system-cover, air-shroud-top, air-shroud-bottom]}
+      placements:
+        - {ref: dell/r960-system-board@1, id: system-board, at: [8.5, 20.0],
+           group: interior, rel-pos: 1,
+           under: [pem-board, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5, heatsink-1, heatsink-2, heatsink-3, heatsink-4, air-shroud-top, air-shroud-bottom, support-bar, fan-cage, system-cover, cage-cover, fan-1, fan-2, fan-3, fan-4, fan-5, fan-6, dimm-b8, dimm-b16, dimm-b2, dimm-b10, dimm-b6, dimm-b14, dimm-b4, dimm-b12, dimm-b9, dimm-b1, dimm-b15, dimm-b7, dimm-b11, dimm-b3, dimm-b13, dimm-b5, dimm-a8, dimm-a16, dimm-a2, dimm-a10, dimm-a6, dimm-a14, dimm-a4, dimm-a12, dimm-a9, dimm-a1, dimm-a15, dimm-a7, dimm-a11, dimm-a3, dimm-a13, dimm-a5]}
+        - {ref: dell/r960-pem-board@1, id: pem-board, at: [10.0, 296.0],
+           group: interior, rel-pos: 2,
+           under: [heatsink-3, heatsink-4, air-shroud-top, air-shroud-bottom, support-bar, fan-cage, system-cover, cage-cover, fan-1, fan-2, fan-3, fan-4, fan-5, fan-6, dimm-d8, dimm-d16, dimm-d2, dimm-d10, dimm-d6, dimm-d14, dimm-d4, dimm-d12, dimm-d9, dimm-d1, dimm-d15, dimm-d7, dimm-d11, dimm-d3, dimm-d13, dimm-d5, dimm-c8, dimm-c16, dimm-c2, dimm-c10, dimm-c6, dimm-c14, dimm-c4, dimm-c12, dimm-c9, dimm-c1, dimm-c15, dimm-c7, dimm-c11, dimm-c3, dimm-c13, dimm-c5]}
+        - {ref: dell/r960-heatsink@1, id: heatsink-1, at: [235.3, 349.3],
+           group: processors, rel-pos: 1, in: system-board, under: [heatsink-3, pem-board, support-bar, air-shroud-top, air-shroud-bottom, system-cover]}
+        - {ref: dell/r960-heatsink@1, id: heatsink-2, at: [32.4, 349.3],
+           group: processors, rel-pos: 2, in: system-board, under: [heatsink-4, pem-board, support-bar, air-shroud-top, air-shroud-bottom, system-cover]}
+        - {ref: dell/r960-heatsink@1, id: heatsink-3, at: [235.3, 349.3],
+           group: processors, rel-pos: 3, in: pem-board, under: [support-bar, system-cover, air-shroud-top, air-shroud-bottom]}
+        - {ref: dell/r960-heatsink@1, id: heatsink-4, at: [32.4, 349.3],
+           group: processors, rel-pos: 4, in: pem-board, under: [support-bar, system-cover, air-shroud-top, air-shroud-bottom]}
+        - {ref: dell/r960-fan-cage@1, id: fan-cage, at: [8.7, 546.8],
+           group: interior, rel-pos: 3, under: [system-cover],
+           frames: [fan-1, fan-2, fan-3, fan-4, fan-5, fan-6]}
+        # THE PARTS ABOVE THE BOARDS STAND ON THE SYSTEM BOARD'S FLOOR like the heatsinks, `lift` being the
+        # part's lowest face above that floor in the model (its cad y less the floor's 14.3 = 174.3 - 160.0),
+        # so each tops out where the model has it under the lid and none stands above the 174.3 chassis
+        - {ref: dell/r960-air-shroud-bottom-cover@1, id: air-shroud-bottom, at: [2.8, 224.1],
+           group: interior, rel-pos: 4, in: system-board, lift: 59.7,
+           under: [support-bar, air-shroud-top, system-cover]}
+        - {ref: dell/r960-support-bar@1, id: support-bar, at: [2.8, 339.9],
+           group: interior, rel-pos: 5, in: system-board, lift: 128.3, under: [system-cover]}
+        - {ref: dell/r960-air-shroud-top-cover@1, id: air-shroud-top, at: [4.6, 362.3],
+           group: interior, rel-pos: 6, in: system-board, lift: 78.3,
+           under: [support-bar, system-cover]}
+        # THE LID IS THE TOP FACE: its 13.0 mm (flanges and all) is the top of the 174.3 chassis, and the face
+        # draws it, so it stands 0.5 proud as the R760's and R660's lids stand 1.0, as a plate with nothing of
+        # its depth built: sunk to the top it would stand coplanar with the top and both side faces and
+        # z-fight with them. Its latch, 0.2 below the lid in the model, is 0.2 below it here
+        - {ref: dell/r960-system-cover@1, id: system-cover, at: [0.0, 0.0],
+           group: covers, rel-pos: 1, inset: 12.5, under: [cage-cover]}
+        - {ref: dell/r960-drive-cage-cover@1, id: cage-cover, at: [1.0, 734.7],
+           group: covers, rel-pos: 2}
+  bottom:
+    size: {w: 444.0, h: 866.74}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [4.0, 866.74], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-right, at: [440.0, 0.0], size: [4.0, 866.74], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-front, at: [0.0, 862.74], size: [444.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-rear, at: [0.0, 0.0], size: [444.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+  left:
+    size: {w: 866.74, h: 174.3}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 58.0], size: [866.74, 58.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 4U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [866.74, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 171.3], size: [866.74, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+  right:
+    size: {w: 866.74, h: 174.3}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 58.0], size: [866.74, 58.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 4U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [866.74, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 171.3], size: [866.74, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+  front-sff24:
+    face: front
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        # the drive cage across the whole upper band and the fan wall behind them
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#1d2125'}
+        # the fan wall's three grilles
+        - {at: [31.3, 91.5], size: [138.7, 80.1], fill: '#3a3f44'}
+        - {at: [35.6, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.1, 91.5], size: [138.1, 80.1], fill: '#3a3f44'}
+        - {at: [176.4, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.8, 91.5], size: [137.7, 80.1], fill: '#3a3f44'}
+        - {at: [318.1, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [27.5, 87.2], text: 'NVMe', font-size: 1.2, fill: '#9aa0a6'}
+      - {at: [75.8, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [80.2, 89.3], text: 'CPU4', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [182.8, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [187.2, 89.3], text: 'CPU2', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [290.7, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [295.1, 89.3], text: 'CPU1', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [397.7, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [402.1, 89.3], text: 'CPU3', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [35.02, 89.5], text: '0', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-0}
+      - {at: [52.96, 89.5], text: '1', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-1}
+      - {at: [70.59, 89.5], text: '2', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-2}
+      - {at: [88.38, 89.5], text: '3', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-3}
+      - {at: [106.31, 89.5], text: '4', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-4}
+      - {at: [124.10, 89.5], text: '5', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-5}
+      - {at: [141.88, 89.5], text: '6', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-6}
+      - {at: [159.21, 89.5], text: '7', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-7}
+      - {at: [178.35, 89.5], text: '8', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-8}
+      - {at: [195.99, 89.5], text: '9', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-9}
+      - {at: [213.02, 89.5], text: '10', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-10}
+      - {at: [230.20, 89.5], text: '11', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-11}
+      - {at: [247.68, 89.5], text: '12', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-12}
+      - {at: [265.01, 89.5], text: '13', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-13}
+      - {at: [282.20, 89.5], text: '14', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-14}
+      - {at: [299.23, 89.5], text: '15', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-15}
+      - {at: [319.12, 89.5], text: '16', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-16}
+      - {at: [336.76, 89.5], text: '17', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-17}
+      - {at: [353.79, 89.5], text: '18', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-18}
+      - {at: [371.12, 89.5], text: '19', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-19}
+      - {at: [388.60, 89.5], text: '20', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-20}
+      - {at: [405.78, 89.5], text: '21', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-21}
+      - {at: [422.97, 89.5], text: '22', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-22}
+      - {at: [440.00, 89.5], text: '23', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-23}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [27.62, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 0}
+        - {id: drive-1, at: [45.56, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [63.19, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [80.98, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [98.91, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 4}
+        - {id: drive-5, at: [116.70, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 5}
+        - {id: drive-6, at: [134.48, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 6}
+        - {id: drive-7, at: [151.81, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 7}
+        - {id: drive-8, at: [170.95, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 8}
+        - {id: drive-9, at: [188.59, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 9}
+        - {id: drive-10, at: [205.62, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 10}
+        - {id: drive-11, at: [222.80, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 11}
+        - {id: drive-12, at: [240.28, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 12}
+        - {id: drive-13, at: [257.61, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 13}
+        - {id: drive-14, at: [274.80, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 14}
+        - {id: drive-15, at: [291.83, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 15}
+        - {id: drive-16, at: [311.72, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 16}
+        - {id: drive-17, at: [329.36, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 17}
+        - {id: drive-18, at: [346.39, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 18}
+        - {id: drive-19, at: [363.72, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 19}
+        - {id: drive-20, at: [381.20, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 20}
+        - {id: drive-21, at: [398.38, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 21}
+        - {id: drive-22, at: [415.57, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 22}
+        - {id: drive-23, at: [432.60, 7.50], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 23}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM tables 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are those of the
+            R660 and R740xd (solid green two seconds when connected, flashing green when recognised, off). Its position under
+            the port is estimated: it is not visible on the figures.
+  front-sff8:
+    face: front
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#1d2125'}
+        # the two fixed vented plates beside the one bank
+        - {at: [171.5, 4.5], size: [138.7, 79.5], fill: '#3a3f44'}
+        - {at: [176.0, 16.5], size: [129.7, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.0, 4.5], size: [138.9, 79.5], fill: '#3a3f44'}
+        - {at: [317.5, 16.5], size: [129.9, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        # the fan wall's three grilles
+        - {at: [31.3, 91.5], size: [138.7, 80.1], fill: '#3a3f44'}
+        - {at: [35.6, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.1, 91.5], size: [138.1, 80.1], fill: '#3a3f44'}
+        - {at: [176.4, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.8, 91.5], size: [137.7, 80.1], fill: '#3a3f44'}
+        - {at: [318.1, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [27.5, 87.2], text: 'NVMe', font-size: 1.2, fill: '#9aa0a6'}
+      - {at: [75.5, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [79.9, 89.3], text: 'CPU4', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [35.02, 89.5], text: '0', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-0}
+      - {at: [52.96, 89.5], text: '1', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-1}
+      - {at: [70.59, 89.5], text: '2', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-2}
+      - {at: [88.38, 89.5], text: '3', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-3}
+      - {at: [106.31, 89.5], text: '4', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-4}
+      - {at: [124.10, 89.5], text: '5', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-5}
+      - {at: [141.88, 89.5], text: '6', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-6}
+      - {at: [159.21, 89.5], text: '7', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-7}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [27.62, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 0}
+        - {id: drive-1, at: [45.56, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [63.19, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [80.98, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [98.91, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 4}
+        - {id: drive-5, at: [116.70, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 5}
+        - {id: drive-6, at: [134.48, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 6}
+        - {id: drive-7, at: [151.81, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 7}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM tables 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are those of the
+            R660 and R740xd (solid green two seconds when connected, flashing green when recognised, off). Its position under
+            the port is estimated: it is not visible on the figures.
+  front-e3s16:
+    face: front
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#1d2125'}
+        # the two fixed vented plates left of the E3.S block
+        - {at: [31.3, 4.5], size: [137.8, 79.5], fill: '#3a3f44'}
+        - {at: [35.6, 16.5], size: [129.2, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.7, 4.5], size: [110.9, 79.5], fill: '#3a3f44'}
+        - {at: [177.0, 16.5], size: [102.3, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        # the E3.S cage behind the carriers
+        - {at: [284.0, 3.0], size: [168.8, 81.5], fill: '#16191c'}
+        # the fan wall's three grilles
+        - {at: [31.3, 91.5], size: [138.7, 80.1], fill: '#3a3f44'}
+        - {at: [35.6, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.1, 91.5], size: [138.1, 80.1], fill: '#3a3f44'}
+        - {at: [176.4, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.8, 91.5], size: [137.7, 80.1], fill: '#3a3f44'}
+        - {at: [318.1, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: e3s-0, at: [286.40, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 0}
+        - {id: e3s-1, at: [296.91, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 1}
+        - {id: e3s-2, at: [307.43, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 2}
+        - {id: e3s-3, at: [317.94, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 3}
+        - {id: e3s-4, at: [328.45, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 4}
+        - {id: e3s-5, at: [338.96, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 5}
+        - {id: e3s-6, at: [349.47, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 6}
+        - {id: e3s-7, at: [359.98, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 7}
+        - {id: e3s-8, at: [370.49, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 8}
+        - {id: e3s-9, at: [381.00, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 9}
+        - {id: e3s-10, at: [391.51, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 10}
+        - {id: e3s-11, at: [402.02, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 11}
+        - {id: e3s-12, at: [412.53, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 12}
+        - {id: e3s-13, at: [423.05, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 13}
+        - {id: e3s-14, at: [433.56, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 14}
+        - {id: e3s-15, at: [444.07, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 15}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15, vga, mark-vga],
+           hides: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM tables 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are those of the
+            R660 and R740xd (solid green two seconds when connected, flashing green when recognised, off). Its position under
+            the port is estimated: it is not visible on the figures.
+  front-sff32:
+    face: front
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        # the two drive cages, one above the other, with the strip between them
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#101214'}
+        # the fixed vented plates between the banks of each row
+        - {at: [170.5, 3.6], size: [141.5, 81.1], fill: '#3a3f44'}
+        - {at: [175.0, 14.0], size: [132.5, 61.0], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [170.5, 92.0], size: [141.5, 78.5], fill: '#3a3f44'}
+        - {at: [175.0, 102.0], size: [132.5, 58.5], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [27.5, 87.2], text: 'NVMe', font-size: 1.2, fill: '#9aa0a6'}
+      - {at: [75.3, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [79.7, 89.3], text: 'CPU4', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [324.2, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [328.6, 89.3], text: 'CPU2', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [431.2, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [435.6, 89.3], text: 'CPU1', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [34.93, 89.5], text: '0', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-0}
+      - {at: [53.11, 89.5], text: '1', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-1}
+      - {at: [70.70, 89.5], text: '2', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-2}
+      - {at: [88.28, 89.5], text: '3', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-3}
+      - {at: [106.31, 89.5], text: '4', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-4}
+      - {at: [124.05, 89.5], text: '5', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-5}
+      - {at: [141.63, 89.5], text: '6', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-6}
+      - {at: [159.21, 89.5], text: '7', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-7}
+      - {at: [319.27, 89.5], text: '8', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-8}
+      - {at: [337.46, 89.5], text: '9', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-9}
+      - {at: [354.89, 89.5], text: '10', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-10}
+      - {at: [372.62, 89.5], text: '11', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-11}
+      - {at: [390.66, 89.5], text: '12', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-12}
+      - {at: [408.39, 89.5], text: '13', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-13}
+      - {at: [425.98, 89.5], text: '14', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-14}
+      - {at: [443.56, 89.5], text: '15', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-15}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [27.53, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 0}
+        - {id: drive-1, at: [45.71, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [63.30, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [80.88, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [98.91, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 4}
+        - {id: drive-5, at: [116.65, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 5}
+        - {id: drive-6, at: [134.23, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 6}
+        - {id: drive-7, at: [151.81, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 7}
+        - {id: drive-8, at: [311.87, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 8}
+        - {id: drive-9, at: [330.06, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 9}
+        - {id: drive-10, at: [347.49, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 10}
+        - {id: drive-11, at: [365.22, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 11}
+        - {id: drive-12, at: [383.26, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 12}
+        - {id: drive-13, at: [400.99, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 13}
+        - {id: drive-14, at: [418.58, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 14}
+        - {id: drive-15, at: [436.16, 8.10], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 15}
+        - {id: drive-16, at: [27.53, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 16}
+        - {id: drive-17, at: [45.71, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 17}
+        - {id: drive-18, at: [63.30, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 18}
+        - {id: drive-19, at: [80.88, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 19}
+        - {id: drive-20, at: [98.91, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 20}
+        - {id: drive-21, at: [116.65, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 21}
+        - {id: drive-22, at: [134.23, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 22}
+        - {id: drive-23, at: [151.81, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 23}
+        - {id: drive-24, at: [311.87, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 24}
+        - {id: drive-25, at: [330.06, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 25}
+        - {id: drive-26, at: [347.49, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 26}
+        - {id: drive-27, at: [365.22, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 27}
+        - {id: drive-28, at: [383.26, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 28}
+        - {id: drive-29, at: [400.99, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 29}
+        - {id: drive-30, at: [418.58, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 30}
+        - {id: drive-31, at: [436.16, 92.90], size: {w: 16.9, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 31}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, drive-24, drive-25, drive-26, drive-27, drive-28, drive-29, drive-30, drive-31, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, drive-10, drive-11, drive-12, drive-13, drive-14, drive-15, drive-16, drive-17, drive-18, drive-19, drive-20, drive-21, drive-22, drive-23, drive-24, drive-25, drive-26, drive-27, drive-28, drive-29, drive-30, drive-31],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM tables 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are those of the
+            R660 and R740xd (solid green two seconds when connected, flashing green when recognised, off). Its position under
+            the port is estimated: it is not visible on the figures.
+  front-sff8-e3s16:
+    face: front
+    size: {w: 482.0, h: 174.3}
+    panel:
+      decor:
+        - {at: [0, 0], size: [13.9, 174.3], fill: '#22262a'}
+        - {at: [467.9, 0], size: [14.1, 174.3], fill: '#22262a'}
+        - {at: [13.9, 0], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 172.8], size: [454.0, 1.5], fill: '#9aa0a6'}
+        - {at: [13.9, 1.5], size: [10.5, 171.3], fill: '#1b1e21'}
+        - {at: [456.5, 1.5], size: [11.4, 171.3], fill: '#2a2e32'}
+        - {at: [467.9, 1.5], size: [14.1, 171.3], fill: '#3d4348'}
+        - {at: [1.3, 3.2], size: [12.2, 130.5], fill: '#33383d'}
+        - {at: [1.3, 134.0], size: [12.2, 9.0], fill: '#4a5056'}
+        - {at: [468.5, 134.0], size: [12.5, 12.0], fill: '#4a5056'}
+        - {at: [24.4, 1.5], size: [432.1, 84.2], fill: '#101214'}
+        - {at: [24.4, 85.7], size: [432.1, 5.0], fill: '#2e3338'}
+        - {at: [24.4, 90.7], size: [432.1, 82.1], fill: '#1d2125'}
+        # the fixed vented plate between the SFF bank and the E3.S block
+        - {at: [173.0, 4.5], size: [110.6, 79.5], fill: '#3a3f44'}
+        - {at: [177.3, 16.5], size: [102.0, 50.1], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        # the E3.S cage behind the carriers
+        - {at: [284.0, 3.0], size: [168.8, 81.5], fill: '#16191c'}
+        # the fan wall's three grilles
+        - {at: [31.3, 91.5], size: [138.7, 80.1], fill: '#3a3f44'}
+        - {at: [35.6, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [172.1, 91.5], size: [138.1, 80.1], fill: '#3a3f44'}
+        - {at: [176.4, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+        - {at: [313.8, 91.5], size: [137.7, 80.1], fill: '#3a3f44'}
+        - {at: [318.1, 102.0], size: [129.0, 59.2], pattern: grille, pattern-pitch: [3.05, 3.05]}
+      cutouts:
+        - {id: power-btn, at: [458.18, 4.21], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [459.25, 20.6], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [461.22, 64.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [457.7, 71.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [467.8, 16.87], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [465.6, 24.9], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [465.6, 24.9], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [464.9, 67.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [27.5, 87.2], text: 'NVMe', font-size: 1.2, fill: '#9aa0a6'}
+      - {at: [75.5, 86.9], path: M 0 0 H 8.8 V 3.1 H 0 Z, stroke-width: 0.2, fill: '#9aa0a6'}
+      - {at: [79.9, 89.3], text: 'CPU4', font-size: 1.9, anchor: middle, fill: '#9aa0a6'}
+      - {at: [35.02, 89.5], text: '0', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-0}
+      - {at: [52.96, 89.5], text: '1', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-1}
+      - {at: [70.59, 89.5], text: '2', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-2}
+      - {at: [88.38, 89.5], text: '3', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-3}
+      - {at: [106.31, 89.5], text: '4', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-4}
+      - {at: [124.10, 89.5], text: '5', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-5}
+      - {at: [141.88, 89.5], text: '6', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-6}
+      - {at: [159.21, 89.5], text: '7', font-size: 2.6, anchor: middle, fill: '#d5d9dd', for: drive-7}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 3.0], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [27.62, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 0}
+        - {id: drive-1, at: [45.56, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 1}
+        - {id: drive-2, at: [63.19, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 2}
+        - {id: drive-3, at: [80.98, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 3}
+        - {id: drive-4, at: [98.91, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 4}
+        - {id: drive-5, at: [116.70, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 5}
+        - {id: drive-6, at: [134.48, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 6}
+        - {id: drive-7, at: [151.81, 7.50], size: {w: 17.2, h: 76.2}, accepts: [common/drive-carrier-25@2, common/drive-blank-25@2, std/drive-25@1], default: common/drive-blank-25@2, group: drives, rel-pos: 7}
+        # ISM figure 27b numbers this build's bays "Bay 1 (0-7)" for the SFF bank and "Bay 2 (8-15)", "Bay 3 (16-23)" for the
+        # E3.S: the E3.S carriers continue after the 2.5 inch drives, 8 to 23
+        - {id: e3s-8, at: [286.40, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 8}
+        - {id: e3s-9, at: [296.91, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 9}
+        - {id: e3s-10, at: [307.43, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 10}
+        - {id: e3s-11, at: [317.94, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 11}
+        - {id: e3s-12, at: [328.45, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 12}
+        - {id: e3s-13, at: [338.96, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 13}
+        - {id: e3s-14, at: [349.47, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 14}
+        - {id: e3s-15, at: [359.98, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 15}
+        - {id: e3s-16, at: [370.49, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 16}
+        - {id: e3s-17, at: [381.00, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 17}
+        - {id: e3s-18, at: [391.51, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 18}
+        - {id: e3s-19, at: [402.02, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 19}
+        - {id: e3s-20, at: [412.53, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 20}
+        - {id: e3s-21, at: [423.05, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 21}
+        - {id: e3s-22, at: [433.56, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 22}
+        - {id: e3s-23, at: [444.07, 3.0], size: {w: 7.75, h: 77.65}, rotate: 90, accepts: [dell/e3s-carrier@1, dell/e3s-carrier-blank@2, std/drive-e3s@1], default: dell/e3s-carrier-blank@2, group: drives-e3s, rel-pos: 23}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [458.18, 4.21], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [455.5, 24.35], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [458.84, 67.2], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [463.27, 21.4], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [470.5, 13.55], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [392.5, 172.27], group: tags, rel-pos: 1}
+        - {ref: dell/r960-bezel@1, id: bezel, at: [25.5, 2.7],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15, e3s-16, e3s-17, e3s-18, e3s-19, e3s-20, e3s-21, e3s-22, e3s-23, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15, e3s-16, e3s-17, e3s-18, e3s-19, e3s-20, e3s-21, e3s-22, e3s-23],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [457.7, 71.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R960 ISM tables 1 and 4 name an iDRAC Direct status LED on the right control panel; the codes are those of the
+            R660 and R740xd (solid green two seconds when connected, flashing green when recognised, off). Its position under
+            the port is estimated: it is not visible on the figures.
+configurations:
+  # FIVE RISER CONFIGURATIONS (ISM table 88, technical guide table 12) BY SIX FRONTS, THIRTY BUILDS, and two
+  # examples. The ISM and technical guide publish no restriction pairing a front with a riser configuration
+  # (table 12's only column on storage is "Rear storage possible: No"), so every pairing is built.
+  sff16-rc01-1c-4c:
+    kind: orderable
+    default: true
+    description: >-
+      16 x 2.5 inch front; riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots - 1 and 3 on riser 1 (processors 3 and 1), 10 and 11 on riser 4 (processors 4 and 2); no riser 2 or 3. ISM table 88, technical guide table 13.
+  sff16-rc02-1c-4c:
+    kind: orderable
+    description: >-
+      16 x 2.5 inch front; riser configuration 0-2 (basic entry), R1C + R4C, two processors: the same risers and face as 0-1 with slots 1 and 10 not usable (technical guide table 14 marks them N/A) - slot 3 on processor 1 and slot 11 on processor 2. ISM table 88.
+  sff16-rc1-1c-3b-4c:
+    kind: orderable
+    description: >-
+      16 x 2.5 inch front; riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots - 1 and 3 on riser 1, 5 to 8 on riser 3B (processors 4, 2, 3 and 1), 10 and 11 on riser 4; no riser 2. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  sff16-rc2-1b-2-3b-4b:
+    kind: orderable
+    description: >-
+      16 x 2.5 inch front; riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots - 1 to 3 on riser 1, 4 and 9 (low profile) on riser 2, 5 to 8 on riser 3, 10 to 12 on riser 4. ISM table 88, technical guide table 16; the rear is ISM figure 10.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  sff16-rc3-1a-2-3a-4a:
+    kind: orderable
+    description: >-
+      16 x 2.5 inch front; riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers: single-width slots 1, 4, 9 and 10 and double-width slots 3, 6, 8 and 11 for up to four double-width GPUs. ISM table 88, technical guide table 17; drawn from the tables, not from a rear figure (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  sff8-rc01-1c-4c:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front; riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots - 1 and 3 on riser 1 (processors 3 and 1), 10 and 11 on riser 4 (processors 4 and 2); no riser 2 or 3. ISM table 88, technical guide table 13.
+  sff8-rc02-1c-4c:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front; riser configuration 0-2 (basic entry), R1C + R4C, two processors: the same risers and face as 0-1 with slots 1 and 10 not usable - slot 3 on processor 1 and slot 11 on processor 2. ISM table 88, technical guide table 14.
+  sff8-rc1-1c-3b-4c:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front; riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots - 1 and 3 on riser 1, 5 to 8 on riser 3B, 10 and 11 on riser 4; no riser 2. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  sff8-rc2-1b-2-3b-4b:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front; riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots. ISM table 88, technical guide table 16.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  sff8-rc3-1a-2-3a-4a:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front; riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers, for up to four double-width GPUs. ISM table 88, technical guide table 17; drawn from the tables (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  sff24-rc01-1c-4c:
+    kind: orderable
+    views: {front: front-sff24}
+    description: >-
+      24 x 2.5 inch front (24 NVMe, or 16 SAS/SATA + 8 NVMe on its backplanes: ISM table 70); riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots. ISM table 88, technical guide table 13.
+  sff24-rc02-1c-4c:
+    kind: orderable
+    views: {front: front-sff24}
+    description: >-
+      24 x 2.5 inch front (24 NVMe, or 16 SAS/SATA + 8 NVMe); riser configuration 0-2 (basic entry), R1C + R4C, two processors: slots 3 and 11 usable. ISM table 88, technical guide table 14.
+  sff24-rc1-1c-3b-4c:
+    kind: orderable
+    views: {front: front-sff24}
+    description: >-
+      24 x 2.5 inch front (24 NVMe, or 16 SAS/SATA + 8 NVMe); riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  sff24-rc2-1b-2-3b-4b:
+    kind: orderable
+    views: {front: front-sff24}
+    description: >-
+      24 x 2.5 inch front (24 NVMe, or 16 SAS/SATA + 8 NVMe); riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots. ISM table 88, technical guide table 16.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  sff24-rc3-1a-2-3a-4a:
+    kind: orderable
+    views: {front: front-sff24}
+    description: >-
+      24 x 2.5 inch front (24 NVMe, or 16 SAS/SATA + 8 NVMe); riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers. ISM table 88, technical guide table 17; drawn from the tables (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  sff32-rc01-1c-4c:
+    kind: orderable
+    views: {front: front-sff32}
+    description: >-
+      32 x 2.5 inch front (two rows of 16, dual controller); riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots. ISM table 88, technical guide table 13.
+  sff32-rc02-1c-4c:
+    kind: orderable
+    views: {front: front-sff32}
+    description: >-
+      32 x 2.5 inch front (two rows of 16, dual controller); riser configuration 0-2 (basic entry), R1C + R4C, two processors: slots 3 and 11 usable. ISM table 88, technical guide table 14.
+  sff32-rc1-1c-3b-4c:
+    kind: orderable
+    views: {front: front-sff32}
+    description: >-
+      32 x 2.5 inch front (two rows of 16, dual controller); riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  sff32-rc2-1b-2-3b-4b:
+    kind: orderable
+    views: {front: front-sff32}
+    description: >-
+      32 x 2.5 inch front (two rows of 16, dual controller); riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots. ISM table 88, technical guide table 16.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  sff32-rc3-1a-2-3a-4a:
+    kind: orderable
+    views: {front: front-sff32}
+    description: >-
+      32 x 2.5 inch front (two rows of 16, dual controller); riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers. ISM table 88, technical guide table 17; drawn from the tables (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  e3s16-rc01-1c-4c:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S Gen5 NVMe front; riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots. ISM tables 70 and 88, technical guide table 13.
+  e3s16-rc02-1c-4c:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S Gen5 NVMe front; riser configuration 0-2 (basic entry), R1C + R4C, two processors: slots 3 and 11 usable. ISM table 88, technical guide table 14.
+  e3s16-rc1-1c-3b-4c:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S Gen5 NVMe front; riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  e3s16-rc2-1b-2-3b-4b:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S Gen5 NVMe front; riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots. ISM table 88, technical guide table 16.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  e3s16-rc3-1a-2-3a-4a:
+    kind: orderable
+    views: {front: front-e3s16}
+    description: >-
+      16 x EDSFF E3.S Gen5 NVMe front; riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers. ISM table 88, technical guide table 17; drawn from the tables (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  sff8-e3s16-rc01-1c-4c:
+    kind: orderable
+    views: {front: front-sff8-e3s16}
+    description: >-
+      8 x 2.5 inch SAS/SATA + 16 x EDSFF E3.S Gen5 NVMe front; riser configuration 0-1 (basic entry), R1C + R4C, four processors: four full-height Gen5 x16 slots. ISM tables 70 and 88, technical guide table 13.
+  sff8-e3s16-rc02-1c-4c:
+    kind: orderable
+    views: {front: front-sff8-e3s16}
+    description: >-
+      8 x 2.5 inch SAS/SATA + 16 x EDSFF E3.S Gen5 NVMe front; riser configuration 0-2 (basic entry), R1C + R4C, two processors: slots 3 and 11 usable. ISM table 88, technical guide table 14.
+  sff8-e3s16-rc1-1c-3b-4c:
+    kind: orderable
+    views: {front: front-sff8-e3s16}
+    description: >-
+      8 x 2.5 inch SAS/SATA + 16 x EDSFF E3.S Gen5 NVMe front; riser configuration 1 (scale out), R1C + R3B + R4C: eight full-height Gen5 x16 slots. ISM tables 88 and 13, technical guide table 15.
+    bays:
+      riser-3: dell/r960-riser-3b-scale-out@1
+  sff8-e3s16-rc2-1b-2-3b-4b:
+    kind: orderable
+    views: {front: front-sff8-e3s16}
+    description: >-
+      8 x 2.5 inch SAS/SATA + 16 x EDSFF E3.S Gen5 NVMe front; riser configuration 2 (maximum I/O), R1B + R2 + R3B + R4B: ten full-height and two low-profile Gen5 x16 slots. ISM table 88, technical guide table 16.
+    bays:
+      riser-1: dell/r960-riser-1b@1
+      riser-4: dell/r960-riser-4b@1
+  sff8-e3s16-rc3-1a-2-3a-4a:
+    kind: orderable
+    views: {front: front-sff8-e3s16}
+    description: >-
+      8 x 2.5 inch SAS/SATA + 16 x EDSFF E3.S Gen5 NVMe front; riser configuration 3 (GPU ready), R1A + R2 + R3A + R4A with full-length risers. ISM table 88, technical guide table 17; drawn from the tables (see the gaps).
+    bays:
+      riser-1: dell/r960-riser-1a@1
+      riser-3: dell/r960-riser-3a@1
+      riser-4: dell/r960-riser-4a@1
+  sff16-rc01-1c-4c-populated:
+    kind: example
+    description: >-
+      The default build (16 x 2.5 inch front, riser configuration 0-1) with what the bays can hold seated rather than their blanks - sixteen 2.5 inch carriers, a BOSS-N1 module, the LOM card and a quad 25 GbE SFP28 OCP card - so the rear shows the seated cards.
+    bays:
+      drive-0: common/drive-carrier-25@2
+      drive-1: common/drive-carrier-25@2
+      drive-2: common/drive-carrier-25@2
+      drive-3: common/drive-carrier-25@2
+      drive-4: common/drive-carrier-25@2
+      drive-5: common/drive-carrier-25@2
+      drive-6: common/drive-carrier-25@2
+      drive-7: common/drive-carrier-25@2
+      drive-8: common/drive-carrier-25@2
+      drive-9: common/drive-carrier-25@2
+      drive-10: common/drive-carrier-25@2
+      drive-11: common/drive-carrier-25@2
+      drive-12: common/drive-carrier-25@2
+      drive-13: common/drive-carrier-25@2
+      drive-14: common/drive-carrier-25@2
+      drive-15: common/drive-carrier-25@2
+      boss: dell/boss-n1-module-1u@1
+      lom: dell/lom-2x1g-16g@1
+      ocp: dell/ocp3-4x25g-sfp28@1
+  sff16-rc01-1c-4c-psu-1400w:
+    kind: example
+    description: >-
+      The default build with four 1400 W supplies, each a 60 mm supply in the 26 mm adapter that fills the 86 mm bay (ISM table 11).
+    bays:
+      psu-1: dell/r960-psu-adapter-60mm@1
+      psu-2: dell/r960-psu-adapter-60mm@1
+      psu-3: dell/r960-psu-adapter-60mm@1
+      psu-4: dell/r960-psu-adapter-60mm@1
+datasheet:
+  title: 'Dell PowerEdge R960 Spec Sheet'
+  sha256: 864ee7fc761b10731f0c13004b4a9df861d7b6a390ed716988764f5560b4334e
+references:
+  - {title: 'Dell PowerEdge R960 Installation and Service Manual', sha256: 45a86363e8028dd15eeeab8ca8c58d0fd27907a8f69acdd9eb0fb7a781047f26}
+  - {title: 'Dell PowerEdge R960 Technical Guide', sha256: 399450e04ed7cd1948536ff9a4509ea6f1766703c218514920041a94749fce7e}

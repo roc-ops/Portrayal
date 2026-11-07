@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: ex4100-h-24f-dc-psu
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+unmated: the 90 W DC supply of the EX4100-H-24F as drawn from the rear of the switch; its DC wires do not land on it but on the power input terminals under the terminal door on the front of the switch, in the section for the slot it is in (EX4100-H Switch Hardware Guide, "Connect Power to an EX4100-H-24MP or EX4100-H-24F Switch"), so this part has no inlet, terminal or lug for a cable to land on
+description: >-
+  Juniper EX4100-H-24F-DC-PSU, the 90 W DC field-replaceable power supply of the EX4100-H-24F. The switch ships with one in
+  a rear slot and takes a second, which the guide lists as N+1 redundant and hot swappable. The face is the AC supply's - a
+  finned fanless body with a green release handle, a retaining thumbscrew on a tab, and the OUT_OK lamp with its legend
+  above - with a DC INPUT label. The wires do not land here: the DC+, DC- and G terminals are on the front of the switch,
+  under the terminal door, in the section for the slot the supply is in. The supply has no fan and cools by convection, so
+  it has no airflow direction.
+attrs:
+  role: dc-power-supply
+  power-output-w: 90
+  input: 20.4 through 72 VDC at the terminal block, nominal +24, -48 or -60 VDC
+  input-current: 5.5 A at +24 V, 2.75 A at -48 V and 2.2 A at -60 V, as printed on the label
+  inlet: none
+  cooling: fanless, convection cooled
+  weight-kg: 1.16
+part-numbers:
+  EX4100-H-24F-DC-PSU: {part: EX4100-H-24F-DC-PSU}
+provenance:
+  sources: >-
+    datasheet and drawing - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01): Table 12 (the shipped
+    components), Table 15 (the weight), Tables 35 and 36 (the model number and the specification), Table 42 (the lamp),
+    Figures 6, 30 and 32 and the installation steps. Figure 6 draws this supply in the slot; Figure 30 draws it alone. No
+    photograph of the DC supply seated is held.
+  size: >-
+    estimated - the guide gives no dimension for the supply. It is drawn at the AC supply's module size, 184.9 by 39.5 mm,
+    measured off Figure 6 (see juniper/ex4100-h-jpsu-90w-ac@1), because Figure 6 draws this DC supply in the same slot. The
+    depth is not stated; Table 13 gives the chassis depth as 14.96 in (37.99 cm) and does not split it by supply.
+  power-output-w: >-
+    datasheet - Tables 12 and 35 name a 90 W FRU DC supply. An output figure. The guide gives no draw or loss figure for the unit.
+  input: >-
+    datasheet - Table 36: range at the terminal block 20.4 VDC to 72 VDC, nominal +24, -48 and -60 VDC, for EX4100-H-24F-DC-PSU.
+    Figures 6 and 30 print +24V 5.5A, -48V 2.75A and -60V 2.2A on the label.
+  face: >-
+    drawing - the label block, fins, handle and lamp plate are the AC supply's, and the label text is Figure 6's and Figure 30's.
+    The hot-surface mark below the lamp is the AC supply's photograph's and is carried to this one, which Figure 30 shows with the
+    same mark.
+  airflow: >-
+    datasheet - Tables 8, 10 and 12 give "NA. Fanless model. Convection cooled." The handle is green in the photograph of the AC
+    supply; no photograph of this one is held, so its handle is drawn the same.
+  leds: >-
+    datasheet - Table 42: OUT_OK is green when the 54 V or 12 V output is OK, amber for a fault condition even though there is
+    power, and off with no input.
+  depth: >-
+    estimated - THE GUIDE STATES NO DEPTH FOR THE SUPPLY, and no document held does. The 3D body is carried as 200 mm behind the face, the 90 W AC
+    supply's estimate (juniper/ex4100-h-jpsu-90w-ac@1); Table 13 gives one chassis depth for both builds, so no difference is stated.
+  flank: >-
+    drawn - the strip of the face to the left of the slot's lip, 12.9 mm wide, is painted in the chassis colour (#6a727f) so that the part's own tab reads
+    against metal and not against the dark opening a 184.9 mm bay would otherwise show beside it; the real slot opening starts 12.5 mm in.
+  relief: >-
+    estimated - the handle stands proud of the face in the studio photograph of the AC supply. Its projection is not stated or
+    measured.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit itself draws.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-out-ok:
+    at: [172.1, 14.3]
+    size: [5.0, 5.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [118.5, 0.0]
+    size: [41.4, 38.0]
+    class: latch
+size:
+  w: 184.9
+  h: 39.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 1.6
+    color: '#a2dd35'
+    confidence: estimated
+    source: photo of the AC supply - the green handle stands proud; projection not measured
+body:
+  depth: 200.0
+  color: '#5b626e'
+skins: [default]

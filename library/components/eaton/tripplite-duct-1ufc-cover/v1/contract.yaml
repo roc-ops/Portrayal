@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: tripplite-duct-1ufc-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The snap-on cover of the Tripp Lite SmartRack SRCABLEDUCT1UFC yellow finger duct, seen from the
+  front - a steel plate across the whole front of the channel with a lip folded back over the
+  front of the top wall and of the bottom wall. It ships fitted and snaps off.
+provenance:
+  size: >-
+    estimated - the cover is the width of the duct (431.8 mm, the SRCABLEDUCT1U's drawing) and the
+    55.12 mm height of the unit (spec sheet, the 2.170 in), a lip 1.1 mm thick outside each wall.
+    No document dimensions the part.
+  relief: >-
+    estimated - the cover takes the front 12.0 mm as the lip over each wall, a stand-in: no
+    document gives its reach. It stands in the well, so its plate lies 98.6 to 99.7 above the
+    floor and its lips 87.7 to 99.7.
+  lid: >-
+    datasheet - the spec sheet's highlights ("Convenient snap-on cover allows quick
+    unconstrained access to cabling") and description ("The snap-on cover lets you rapidly add
+    or remove cables"), and its picture of the duct with the cover lifted clear. It is a part
+    that comes off (`lid: true`), drawn as one plate; no clip is drawn, because the format has
+    none and no document draws one.
+  color: >-
+    datasheet - "Color: Yellow", "high-visibility yellow steel". The plate takes the finish field;
+    its top lip is lighter and its bottom lip darker, fixed shades, so the cover has an edge.
+size: {w: 431.8, h: 55.12}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#f2c200'
+elements:
+  plate: {at: [0.0, 0.0], size: [431.8, 55.12], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [431.8, 1.1], class: bezel}
+  lip-bottom: {at: [0.0, 54.02], size: [431.8, 1.1], class: bezel}
+relief:
+  features:
+    - {node: plate, lift: 98.6, out: 99.7, confidence: estimated, source: 'no document dimensions the cover section; the plate is taken as thick as the wall'}
+    - {node: lip-top, lift: 87.7, out: 99.7, color: '#ffd84a', confidence: estimated, source: 'a stand-in lip, 12.0 mm; no document gives the reach'}
+    - {node: lip-bottom, lift: 87.7, out: 99.7, color: '#c99e00', confidence: estimated, source: 'the same, the bottom wall'}
+skins: [default]

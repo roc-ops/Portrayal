@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: ex4200-pwr-930-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-PWR-930-AC, the 930 W AC power supply of the EX4200-48P. It seats in power supply
+  slot 0 or 1 at the rear and extends 2.25 in (57.2 mm) out of the chassis, with the cord
+  retainer clip a further 3 in beyond the supply. Hot-insertable and hot-removable; AC OK and DC
+  OK lamps, a locking lever at the left, a round fan exhaust, a loop handle along the bottom and
+  an appliance inlet that takes a C13 cord. It looks the same as the 600 W supply. The EX4200-24PX
+  and -48PX do not accept it: they work only with the EX-PWR2-930-AC or EX-PWR3-930-AC.
+attrs:
+  part-number: EX-PWR-930-AC
+  role: ac-power-supply
+  power-output-w: 930
+  input-voltage: 100-240 VAC, 50-60 Hz
+  input-current: 12 A (guide Table 12, switches with 48 PoE ports)
+  weight-kg: 1.4
+  depth-beyond-chassis-mm: 57.15
+part-numbers:
+  EX-PWR-930-AC: {part: EX-PWR-930-AC}
+provenance:
+  part-number: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), Power Supply in EX4200
+    Switches: "the 930 W (EX-PWR-930-AC) or the 600 W (EX-PWR-600-AC) AC power supplies that are
+    used in the EX4200-48P and the EX4200-24P switch models". The ordering table of the EX4200
+    datasheet (1000215-026-EN, Feb 2019) no longer lists this code
+  power-output-w: >-
+    datasheet - guide Table 1 (930 W minimum supply of the EX4200-48P), Table 9 (930 W rating,
+    740 W PoE budget) and Table 12 (100 through 240 VAC, 50 through 60 Hz; 12 A for 48 PoE ports).
+    An output, because a supply provides power
+  weight: >-
+    datasheet - guide Table 3: the 600 W and 930 W AC supplies weigh 3.1 lb (1.4 kg)
+  depth: >-
+    datasheet - guide Table 3 and Rear Panel of an EX4200 Switch: with a 600 W or 930 W supply the
+    chassis is 19.25 in (48.9 cm) deep; the supply extends 2.25 in out of the chassis. The
+    device's modelled depth is the 17 in chassis and this part carries the 2.25 in as an attr
+  size: >-
+    estimated - 90.0 x 41.5 mm, the slot width and height read off the rear callout figure
+    (Figure 4, g020084; 1.271 px per mm across, 5 percent foreshortened vertically). The guide
+    gives no supply dimension and draws the 600 W and 930 W supplies only in isometric (Figure
+    18). Good to about 2 mm
+  inlet: >-
+    datasheet - guide, AC Power Cord Specifications: the coupler is type C13 (IEC 60320), so the
+    supply carries the registry's C14 appliance inlet
+  face: >-
+    drawing - guide Figure 18 (600 W and 930 W AC Power Supplies, g020065): "The exterior of the 600
+    W model is identical in appearance to that of the 930 W model", so the art is the 600 W
+    supply's. See the 320 W supply's note on the handle position. No photograph of the supply is
+    held, so its colour is estimated
+  leds: >-
+    datasheet - guide Table 10: AC OK is on when power is coming into the supply; DC OK is on when
+    the supply is sending out power correctly; each is off otherwise
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [11.5, 14.5]}
+elements:
+  led-ac-ok:
+    at: [15.6, 8.8]
+    size: [3.2, 1.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc-ok:
+    at: [24.4, 8.8]
+    size: [3.2, 1.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  latch:
+    at: [1.5, 3.0]
+    size: [8.2, 9.6]
+    class: latch
+  handle:
+    at: [29.5, 35.7]
+    size: [55.0, 4.8]
+    class: latch
+size:
+  w: 90.0
+  h: 41.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#9ba0a6'
+    confidence: estimated
+    source: guide Figure 18 - the locking lever stands proud of the face; projection not measured
+  - node: handle
+    out: 3.0
+    color: '#c9ccd0'
+    confidence: estimated
+    source: guide Figure 18 - the loop handle stands proud of the face; projection not measured

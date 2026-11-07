@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: n9k-sc-a
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 system controller (N9K-SC-A). A flat horizontal card with an ejector lever at each end
+  and the BCN, STS and ACT lamps on its left side; it has no ports. Two go in slots SC 1 and SC 2 (modules
+  29 and 30), in the rear of the chassis below the fan trays; the system controllers are hot swappable. The
+  Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 198.37, h: 36.07, d: 272.8}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-SC-A'
+  role: 'system-controller'
+  power-draw-typical-w: 14
+  power-draw-max-w: 25
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119), "System controller modules": width 6.81 in (17.3 cm) without mounting brackets
+    and 7.81 in (19.84 cm) with them, height 1.42 in (3.61 cm). Drawn at the width with brackets. The Nexus
+    9516 guide prints the same row.
+  depth: >-
+    datasheet - the same row: 10.74 in (27.28 cm) inside the chassis, ejector levers 0.75 in outside it.
+    The inch figure, 272.8 mm, is used.
+  power: >-
+    datasheet - the guide's "Planning for Power Requirements" table (printed p11, PDF p17): typical 14 W,
+    maximum 25 W. The Nexus 9516 guide's module table prints the same figures.
+  lamps: >-
+    install guide - "System Controller LEDs": "located on the left side of the module": BCN (flashing blue),
+    STS (green, flashing amber, flashing red) and ACT (green active, amber standby). Positions estimated.
+  skin: >-
+    estimated - the card face is read from the rear figure of the guide's overview (PDF p12); the guide
+    dimensions nothing on it.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number.
+elements:
+  bcn:
+    at: [12.0, 14.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, left side of the module.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [18.0, 14.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - 'off'
+  act:
+    at: [24.0, 14.0]
+    size: [3.0, 3.0]
+    class: led
+    description: ACT lamp. Green when active, amber when standby.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+skins: [default]

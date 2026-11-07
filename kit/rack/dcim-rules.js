@@ -368,8 +368,13 @@ export function moduleImportRows({target = 'netbox', parts, names, kept, deviceO
 // whose two ends the type files name is written with a blank type, and one
 // whose ends they do not name is left out with that reason, as any cable is
 // (docs/cable-ends-design.md section 7).
+// `stack`, `usb` and `console` have a row, and it is BLANK. The cable-type
+// choices of NetBox v4.7.2 and Nautobot v3.2.6 (the pins this file cites) were
+// not read when these rows were written, so no value is written for them: a
+// value is filled in only from those lists. CABLE_TYPE_NOTES says so.
 export const CABLE_TYPE = {os2: 'smf-os2', om3: 'mmf-om3', om4: 'mmf-om4', om5: 'mmf-om5', cat6: 'cat6', cat6a: 'cat6a',
-                           dac: 'dac-passive', aoc: 'aoc'};
+                           dac: 'dac-passive', aoc: 'aoc', stack: '', usb: '', console: ''};
+export const CABLE_TYPE_NOTES = Object.fromEntries(['stack', 'usb', 'console'].map(m => [m, 'the DCIM cable-type choices were not read']));
 export const cableType = media => (Object.hasOwn(CABLE_TYPE, media ?? '') ? CABLE_TYPE[media] : '');
 
 // Which kinds of end a DCIM lets one cable join (NetBox and Nautobot share the
@@ -453,8 +458,16 @@ export const CABLE_IMPORT_COLUMNS = {
 //   uOf        endName's: how tall a device is
 //   parts      the parts lists, {slotsOf, compByRef}: cableFindings settles the ends with them
 // `notes` are about rows that ARE written: a type left blank, a length changed.
-export function cableImportRows({rack, target = 'netbox', names, kept, resolve, ends = new Map(), unchecked = false, uOf, parts = null}) {
+//
+// NETBOX 4.6 OR LATER (#945, decision 9 in docs/cable-bundles-design.md). When
+// `dcim.netbox` names it and the rack has a site, the NetBox answer also
+// carries `bundleFile` ({columns, rows}: the bundles file, imported before the
+// cables file) and each row has a `bundle`, the same name; see bundleNames.
+// Otherwise nothing is added. Nautobot has no bundle and ignores `dcim`.
+//   dcim       the rack's import settings (model.js dcimOf): site, role, netbox
+export function cableImportRows({rack, target = 'netbox', names, kept, resolve, ends = new Map(), unchecked = false, uOf, parts = null, dcim = {}}) {
   const T = TARGET_NAME[target] || 'NetBox', nautobot = target === 'nautobot';
+  const native = !nautobot && bundlesFileOn(dcim), pending = [];
   const rows = [], left = [], notes = [], used = new Map(), inBundle = new Map();
   const several = [], perFibre = [], firstOnly = [], tied = new Set();
   let dac = false;
@@ -531,9 +544,11 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
     }
     if (!nautobot) {
       if (a.ports.length > 1 || b.ports.length > 1) several.push(f.name);
-      rows.push({side_a_device: a.device, side_a_type: a.type, side_a_name: a.ports.join(','), side_b_device: b.device,
-                 side_b_type: b.type, side_b_name: b.ports.join(','), type, status: 'planned', label, color,
-                 length: len.value, length_unit: len.unit, description});
+      const row = {side_a_device: a.device, side_a_type: a.type, side_a_name: a.ports.join(','), side_b_device: b.device,
+                   side_b_type: b.type, side_b_name: b.ports.join(','), type, status: 'planned', label, color,
+                   length: len.value, length_unit: len.unit, description};
+      if (native) { row.bundle = ''; if (bundle) pending.push([row, bundle]); }
+      rows.push(row);
       continue;
     }
     // Nautobot: a row for each fibre where both ends have as many; else one row, to the first port of the end with several.
@@ -577,16 +592,80 @@ export function cableImportRows({rack, target = 'netbox', names, kept, resolve, 
   // in its description. NetBox 4.6 and later also has cable bundles of its own
   // (dcim.CableBundle, and the cable import's `bundle` column, by name: NetBox
   // v4.7.2 251458b8, dcim/models/cables.py and dcim/forms/bulk_import.py), but
-  // a bundle must exist before a cable can name it, as a tag must, so the kit
-  // leaves that column out and says so. Nautobot's cable has no description and no
+  // a bundle must exist before a cable can name it, as a tag must, and a name
+  // is unique across an instance, which a rack's own bundle names are not. So
+  // the column is written only with the option "NetBox 4.6 or later" (#945),
+  // and a bundles file goes first; otherwise the kit leaves it out and says so.
+  // Nautobot's cable has no description and no
   // bundle (v3.2.6 3dc554b4, dcim/models/cables.py), so membership is listed here and in the cable schedule.
   const held = bundlesOf(rack).filter(b => inBundle.has(b.id))
     .map(b => `${flat(bundleName(b))} holds ${andList(inBundle.get(b.id))}`);
+  let bundleFile = null;
+  if (native) {
+    const made = bundleNames({rack, dcim, bundles: bundlesOf(rack).filter(b => inBundle.has(b.id))});
+    left.push(...made.left);
+    for (const [row, b] of pending) row.bundle = made.names.get(b.id) ?? '';
+    bundleFile = {columns: NETBOX_BUNDLE_COLUMNS, rows: [...made.names.values()].map(name => ({name}))};
+  }
   if (held.length && nautobot)
     notes.push(`Nautobot's cables have no description or bundle, so this file does not say which bundle a cable is in: ${held.join('; ')}. The cable schedule lists each cable's bundle.`);
+  else if (held.length && native)
+    notes.push(`Each cable in a bundle names its bundle first in its description, and fills the bundle column of this file with the name of its cable bundle, which ${NETBOX_BUNDLE_FILES.bundles} makes first.`);
+  else if (held.length && netboxHasBundles(dcim))
+    notes.push('The option for NetBox 4.6 or later is on, but no site is set, so a bundle cannot be given a name that is unique in a NetBox instance: ' +
+               `this kit has no bundles file and the cables file has no bundle column. Each cable still names its bundle first in its description. Set the site and export again.`);
   else if (held.length)
     notes.push("Each cable in a bundle names its bundle first in its description. NetBox 4.6 and later also has cable bundles of its own, which must be made before a cable can name one, so this file does not fill a cable's bundle field.");
-  return {columns: CABLE_IMPORT_COLUMNS[nautobot ? 'nautobot' : 'netbox'], rows, left, notes};
+  return {columns: native ? NETBOX_CABLE_BUNDLE_COLUMNS : CABLE_IMPORT_COLUMNS[nautobot ? 'nautobot' : 'netbox'], rows, left, notes,
+          ...(native ? {bundleFile} : {})};
+}
+
+// ── NETBOX'S OWN CABLE BUNDLES (#945) ──────────────────────────────────
+// NetBox 4.6 added dcim.CableBundle. Read from v4.7.2 (251458b8):
+//   dcim/models/cables.py       CableBundle.name: CharField(max_length=100, unique=True)
+//   dcim/forms/bulk_import.py   CableBundleImportForm: name, description, owner, comments, tags
+//                               CableImportForm.bundle: CSVModelChoiceField on CableBundle, to_field_name='name'
+// So the bundles file has the one column `name` (the rest are optional), the
+// cables file's `bundle` finds a bundle by that name, and the name must be
+// unique across the whole instance: a rack's own "Bundle 1" repeats from rack to
+// rack. A name is "<site> <rack> <bundle name>". With no site there is nothing
+// to make it unique, so the option writes none. A name over the limit is left
+// out, never cut: two cut names could be the same. A name in the instance
+// already is something the kit cannot see (the README says so).
+// The version is read from `dcim.netbox`: a string, "4.6" or later is on. A
+// number, a blank, an older version or a string that is no version is off.
+export const netboxHasBundles = dcim => {
+  const m = typeof dcim?.netbox === 'string' ? /^v?(\d+)\.(\d+)/.exec(dcim.netbox.trim()) : null;
+  return m != null && (Number(m[1]) > 4 || (Number(m[1]) === 4 && Number(m[2]) >= 6));
+};
+const siteOf = dcim => String(dcim?.site ?? '').trim();
+// The files exist when the option is on AND a site is set.
+export const bundlesFileOn = dcim => netboxHasBundles(dcim) && siteOf(dcim) !== '';
+export const NETBOX_BUNDLE_COLUMNS = ['name'];
+export const NETBOX_CABLE_BUNDLE_COLUMNS = [...CABLE_IMPORT_COLUMNS.netbox, 'bundle'];
+// The NetBox kit's files with the option on: the bundles file comes before the cables file, which moves down one.
+export const NETBOX_BUNDLE_FILES = {rack: '1-rack.csv', devices: '2-devices.csv', modules: '3-modules.csv', bundles: '4-bundles.csv', cables: '5-cables.csv'};
+export const netboxFiles = dcim => (bundlesFileOn(dcim) ? NETBOX_BUNDLE_FILES : KIT_FILES.netbox);
+
+// The name each bundle of `bundles` is given, {names: Map(id -> name), left}.
+// A bundle whose name is over the limit, or that shares its name with another
+// of the rack, is left out with its reason; nothing is cut.
+function bundleNames({rack, dcim, bundles}) {
+  const full = new Map(bundles.map(b => [b.id, [siteOf(dcim), flat(rack.name), flat(bundleName(b))].map(s => s.trim()).join(' ')]));
+  const twice = name => [...full.values()].filter(n => n === name).length > 1;
+  const names = new Map(), left = [];
+  for (const b of bundles) {
+    const name = full.get(b.id), own = flat(bundleName(b)).trim(), shown = charCount(own) > 24 ? `${cutTo(own, 24)}...` : own;
+    if (charCount(name) > DCIM_LIMITS.cableBundleName)
+      left.push(`Bundle ${shown} is not in the bundles file: its NetBox name, site, rack and bundle together, is ${charCount(name)} characters, and NetBox allows ${DCIM_LIMITS.cableBundleName}. ` +
+                'The name is never shortened: two shortened names could be the same. Its cables are in the cables file with no bundle, and their descriptions still name it. ' +
+                "Shorten the site, the rack or the bundle's name and export again.");
+    else if (twice(name))
+      left.push(`Bundle ${shown} is not in the bundles file: another bundle of this rack is also named "${name}", and NetBox needs each bundle name once. ` +
+                'Its cables are in the cables file with no bundle, and their descriptions still name it. Give each bundle a label of its own and export again.');
+    else names.set(b.id, name);
+  }
+  return {names, left};
 }
 
 // ── README.txt ──────────────────────────────────────────────────────────
@@ -638,8 +717,9 @@ export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles =
                            left = [], notes = [], script = true, scriptUrl = null, width = README_WIDTH,
                            source = 'Portrayal', settingsAt = "in the rack's DCIM import settings (dcim.site, dcim.role)"}) {
   const nautobot = target === 'nautobot', T = TARGET_NAME[nautobot ? 'nautobot' : 'netbox'];
-  const F = KIT_FILES[nautobot ? 'nautobot' : 'netbox'];
-  const site = String(dcim?.site ?? '').trim(), role = String(dcim?.role ?? '').trim();
+  // With NetBox 4.6 or later on (#945) the bundles file is step 5 and the cables file step 6; Nautobot has neither.
+  const F = nautobot ? KIT_FILES.nautobot : netboxFiles(dcim), bundled = !nautobot && bundlesFileOn(dcim);
+  const site =String(dcim?.site ?? '').trim(), role = String(dcim?.role ?? '').trim();
   const place = nautobot ? 'location' : 'site', cols = nautobot ? ['location__name', 'role__name'] : ['site', 'role'];
   const blank = [!site && cols[0], !role && cols[1]].filter(Boolean);
   const warning = blank.length
@@ -707,7 +787,11 @@ export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles =
     step(2, `${F.rack} (${rowsText(rows.rack)}): Racks > Import. Creates the rack "${rack.name}", ${rack.frame.heightRU}U, ${numbered}.`);
     step(3, `${F.devices} (${rowsText(rows.devices)}): Devices > Import. Every device is planned.`);
     step(4, `${F.modules} (${rowsText(rows.modules)}): Modules > Import. This creates each card's ports, so it comes before the cables.`);
-    step(5, `${F.cables} (${rowsText(rows.cables)}): Cables > Import.`);
+    if (bundled) {
+      step(5, `${F.bundles} (${rowsText(rows.bundles)}): the cable bundles, imported with the CableBundle import form. Each bundle is named "${site} ${flat(rack.name)} <bundle name>", ` +
+              'so that its name is unique in the whole instance. It comes before the cables, which name them.');
+    }
+    step(bundled ? 6 : 5, `${F.cables} (${rowsText(rows.cables)}): Cables > Import.${bundled ? " Its bundle column names a bundle of step 5, by name." : ''}`);
     out.push('');
   }
   // What a kit made for an empty instance meets on one that is not: a rack that is already there, and names
@@ -723,8 +807,13 @@ export function kitReadme({target = 'netbox', rack, date, dcim = {}, typeFiles =
   } else {
     item(`If the rack "${rack.name}" is already in ${site ? 'that' : 'its'} site, skip step 2 and check that it is ${rack.frame.heightRU}U, ` +
          `${numbered}. Step 3 puts the devices in it.`);
-    item('Steps 4 and 5 find a device by its name in every site, and step 4 finds a module type by its model in every manufacturer: ' +
+    item(`Steps 4 and ${bundled ? 6 : 5} find a device by its name in every site, and step 4 finds a module type by its model in every manufacturer: ` +
          'a name NetBox already has twice is refused as not unique.');
+    if (bundled)
+      item('This kit cannot see the cable bundles an instance already has. A bundle name must be unique in NetBox, and NetBox refuses the whole of ' +
+           `${F.bundles} if any bundle in it already exists: nothing in the file is created. Look in the instance's cable bundles before step 5, ` +
+           'and remove the rows of the bundles that already exist. Step 6 finds a bundle by its name, so a cable naming a bundle that already exists joins it, ' +
+           `with the cables already in it. When you import this rack again, skip ${F.bundles} and import ${F.cables} alone.`);
   }
   out.push('');
 

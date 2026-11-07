@@ -18,7 +18,7 @@ import * as D from '../../../kit/rack/dcim-rules.js';
 import * as Q from '../../../kit/rack/queries.js';
 import {COMMANDS, apply} from '../../../kit/rack/commands.js';
 import {validate} from '../../../kit/rack/validate.js';
-import {rackDiagram} from '../../../kit/drawio.js';
+import {rackDiagram, CABLE_COLOURS} from '../../../kit/drawio.js';
 import * as F from './cable-solids-fixture.mjs';
 import {speedRack} from './speed-fixture.mjs';
 import {sampleRack} from './bend-room-sample.mjs';
@@ -29,6 +29,9 @@ import {loadTree, outputsOf} from './speed-goldens.mjs';
 // DECLARES a jacket colour (a field with a default), two makers' ends that
 // compose it and state one, and one that states it two parts down.
 const BLACK = '#1c1c1c', AQUA = '#49eaf8', PURPLE = '#6b3fa0';
+// What an AOC with no colour stated is drawn in (#1028): a deeper teal of the
+// OM3 and OM4 aqua family (rack-aoc-colour.mjs holds how far it is from them).
+const AOC_NOW = '#08788a';
 const ENDS = ['generic/qsfp-cable@1', 'maker/aoc@1', 'maker/aec@1', 'maker/deep@1', 'maker/optic@1'];
 const SLOTS = {sw: {default: 'base', bays: {front: [], rear: []},
   cages: {front: [1, 2, 3, 4].map(n => ({id: `port-${n}`, interface: 'qsfp', media: 'qsfp', accepts: ENDS, default: null})), rear: []},
@@ -102,7 +105,7 @@ test('rule 2: with no colour of its own, two seated ends that state the same jac
 });
 
 test('rule 2 needs both ends: one seated end and one bare end is no agreement, and nor are two ends that differ', () => {
-  const AOC = '#3a3f45';                                    // the media's, as on main
+  const AOC = AOC_NOW;                                      // the media's
   assert.deepEqual(drawn(pair({a: 'maker/aoc@1', b: null})), {color: AOC, from: 'media'});
   assert.deepEqual(drawn(pair({a: null, b: 'maker/aoc@1'})), {color: AOC, from: 'media'});
   assert.deepEqual(drawn(pair({a: 'maker/aoc@1', b: 'maker/aec@1'})), {color: AOC, from: 'media'});
@@ -154,7 +157,7 @@ test('the field command sets an end\'s jacket, and the cable follows it', () => 
   for (const id of ['i1', 'i2']) rack = COMMANDS.field.run(rack, {id, path: 'port-1-occupant', key: 'jacket-color', value: '#ff00ff'}, ctx).rack;
   assert.deepEqual(drawn(rack), {color: '#ff00ff', from: 'ends'});
   rack = COMMANDS.field.run(rack, {id: 'i2', path: 'port-1-occupant', key: 'jacket-color', value: null}, ctx).rack;
-  assert.deepEqual(drawn(rack), {color: '#3a3f45', from: 'media'});
+  assert.deepEqual(drawn(rack), {color: AOC_NOW, from: 'media'});
 });
 
 test('what the configuration builds in a cage states its jacket as what a swap seats does', () => {
@@ -191,7 +194,7 @@ test('an end is not read without the catalogue, on a removed device, an empty ca
   assert.equal(P.seatedJacket(rack.items[0], end('i1', 'port-1--occupant'), parts), null);
   assert.equal(P.jacketAt(rack, end('gone'), {parts}), null);
   // and with no reader at all a cable is its media's, as before
-  assert.deepEqual(C.cableColorOf(rack.cables[0]), {color: '#3a3f45', from: 'media'});
+  assert.deepEqual(C.cableColorOf(rack.cables[0]), {color: AOC_NOW, from: 'media'});
 });
 
 test('what a page read of an end stands over the catalogue: a colour, or null for an end it found bare', () => {
@@ -215,28 +218,34 @@ test('rule 3: a named type\'s colour, where the table states one; a bare media t
   const typeColorOf = T.jacketLookup(types);
   const of = cable => C.cableColorOf({a: end('i1'), b: end('i2'), ...cable}, {typeColorOf});
   assert.deepEqual(of({media: 'aoc', type: 'aoc-maker'}), {color: AQUA, from: 'type'});
-  assert.deepEqual(of({media: 'aoc', type: 'aoc-plain'}), {color: '#3a3f45', from: 'media'});
-  assert.deepEqual(of({media: 'aoc', type: 'aoc-odd'}), {color: '#3a3f45', from: 'media'});
-  assert.deepEqual(of({media: 'aoc', type: 'aoc-flat'}), {color: '#3a3f45', from: 'media'});
-  assert.deepEqual(of({media: 'aoc', type: 'not-in-the-table'}), {color: '#3a3f45', from: 'media'});
+  assert.deepEqual(of({media: 'aoc', type: 'aoc-plain'}), {color: AOC_NOW, from: 'media'});
+  assert.deepEqual(of({media: 'aoc', type: 'aoc-odd'}), {color: AOC_NOW, from: 'media'});
+  assert.deepEqual(of({media: 'aoc', type: 'aoc-flat'}), {color: AOC_NOW, from: 'media'});
+  assert.deepEqual(of({media: 'aoc', type: 'not-in-the-table'}), {color: AOC_NOW, from: 'media'});
   // the media's own type is not read for a cable that names no type: `COLORS` decides
-  assert.deepEqual(of({media: 'aoc'}), {color: '#3a3f45', from: 'media'});
-  assert.deepEqual(of({media: 'aoc', type: 'constructor'}), {color: '#3a3f45', from: 'media'});
+  assert.deepEqual(of({media: 'aoc'}), {color: AOC_NOW, from: 'media'});
+  assert.deepEqual(of({media: 'aoc', type: 'constructor'}), {color: AOC_NOW, from: 'media'});
   // agreeing ends are ahead of the type
   assert.deepEqual(G.cableColor({media: 'aoc', jackets: [PURPLE, PURPLE], typeColor: AQUA}), {color: PURPLE, from: 'ends'});
 });
 
 // ── no default changed ──────────────────────────────────────────────────
-// The colours of main at dc96952ac, written out by hand.
+// The colours of main at dc96952ac, written out by hand, but for the AOC's,
+// which #1028 made aqua.
 const MAIN = {os2: '#e8c547', om3: '#2bb3c8', om4: '#2bb3c8', om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff',
-              dac: '#15171a', aoc: '#3a3f45', unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b'};
+              dac: '#15171a', aoc: AOC_NOW, unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b',
+              // stack, usb and console: estimated shades, no source is held; each is its own colour
+              stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'};
 const mainColor = l => (l.media === 'copper' ? (l.purpose === 'management' ? '#9aa3ad' : '#5aa7ff') : (Object.hasOwn(MAIN, l.media) ? MAIN[l.media] : '#e8c547'));
 
 test('rule 4, and no default changed: every media is the colour it was', () => {
   for (const media of C.MEDIA) assert.equal(G.colorOf({media}), MAIN[media], media);
-  assert.deepEqual(C.MEDIA.map(m => MAIN[m]).length, 10);
+  assert.deepEqual(C.MEDIA.map(m => MAIN[m]).length, 13);
   assert.deepEqual(C.MEDIA.filter(m => !Object.hasOwn(MAIN, m)), [], 'a media with no recorded colour');
-  assert.equal(G.colorOf({media: 'aoc'}), '#3a3f45', 'an AOC is still dark grey');
+  // the three new media are drawn in colours no other media has, so a stack, a USB and a console lead read apart on a plan
+  const others = Object.entries(MAIN).filter(([k]) => !['stack', 'usb', 'console'].includes(k)).map(([, v]) => v);
+  for (const m of ['stack', 'usb', 'console']) assert.ok(!others.includes(MAIN[m]) && new Set(['stack', 'usb', 'console'].map(k => MAIN[k])).size === 3, m);
+  assert.equal(G.colorOf({media: 'aoc'}), AOC_NOW, 'an AOC is the teal of the multimode family');
   assert.equal(G.colorOf({media: 'unset'}), '#9aa3ad');
   assert.equal(G.colorOf({media: 'copper', purpose: 'server'}), '#5aa7ff');
   assert.equal(G.colorOf({media: 'copper', purpose: 'management'}), '#9aa3ad');
@@ -248,7 +257,7 @@ test('rule 4, and no default changed: every media is the colour it was', () => {
   assert.deepEqual(['mm', 'sm', 'dac', 'cu', 'aoc', undefined].map(G.colorOfJacket), ['#2bb3c8', '#e8c547', '#15171a', '#5aa7ff', '#e8c547', '#e8c547']);
   assert.deepEqual(G.PLUGS, {sm: '#2a6fd4', mm: '#2bb3c8'});
   // a value on the link that is no colour is never drawn, and never black
-  for (const bad of ['red', '#12', 7, null, {}]) assert.equal(G.colorOf({media: 'aoc', color: bad, typeColor: bad, jackets: [bad, bad]}), '#3a3f45', JSON.stringify(bad));
+  for (const bad of ['red', '#12', 7, null, {}]) assert.equal(G.colorOf({media: 'aoc', color: bad, typeColor: bad, jackets: [bad, bad]}), AOC_NOW, JSON.stringify(bad));
 });
 
 test('one table decides a media\'s colour: `COLORS`; a jacket of the hero\'s table moves no cable', () => {
@@ -267,7 +276,7 @@ test('one table decides a media\'s colour: `COLORS`; a jacket of the hero\'s tab
     assert.equal(G.colorOf({media: 'aoc'}), '#010203');
     assert.equal(G.colorOf(C.cablePlan(pair({media: 'aoc'})).links[0]), '#010203');
   } finally { G.JACKETS.mm = mm; G.JACKETS.sm = sm; delete G.JACKETS.aoc; G.COLORS.aoc = aoc; }
-  assert.equal(G.colorOf({media: 'aoc'}), '#3a3f45');
+  assert.equal(G.colorOf({media: 'aoc'}), AOC_NOW);
 });
 
 // Every rack the recorded answers are read from (speed-goldens.mjs racksOf):
@@ -345,7 +354,7 @@ test('the reader keeps a colour as six lower-case digits, and moves a value that
     const c = read(bad);
     assert.ok(!('color' in c), JSON.stringify(bad));
     assert.deepEqual(c.colorAsWritten, bad, JSON.stringify(bad));
-    assert.deepEqual(C.cableColorOf(c), {color: '#3a3f45', from: 'media'}, 'drawn by its media, never black');
+    assert.deepEqual(C.cableColorOf(c), {color: AOC_NOW, from: 'media'}, 'drawn by its media, never black');
     assert.deepEqual(validate(SCHEMA, JSON.parse(M.serialize(M.parseDoc(docOf([cab({color: bad})]))))), []);
   }
   assert.ok(!('color' in read(null)) && !('colorAsWritten' in read(null)));
@@ -376,7 +385,7 @@ test('cable.add takes a color; cable.update sets it, changes it and clears it; a
   for (const none of [null, '', '  ']) {
     const cleared = run('cable.update', changed.rack, {id, color: none});
     assert.ok(!('color' in cleared.rack.cables[0]), JSON.stringify(none));
-    assert.deepEqual(C.cableColorOf(cleared.rack.cables[0]), {color: '#3a3f45', from: 'media'});
+    assert.deepEqual(C.cableColorOf(cleared.rack.cables[0]), {color: AOC_NOW, from: 'media'});
   }
   // clearing what is not set changes nothing: the very same rack
   const plain = run('cable.add', bare, {a: end('i1'), b: end('i2')}).rack;
@@ -424,7 +433,7 @@ test('the plans carry what decides a colour, and only what says something; color
     const link = (rack, extra) => plan(rack, readers(rack, extra)).links[0];
     assert.deepEqual([link(own).color, link(own).jackets, G.colorOf(link(own))], ['#ff8800', undefined, '#ff8800']);
     assert.deepEqual([link(ends).jackets, G.colorOf(link(ends))], [[AQUA, AQUA], AQUA]);
-    assert.deepEqual([link(differ).jackets, G.colorOf(link(differ))], [[AQUA, PURPLE], '#3a3f45']);
+    assert.deepEqual([link(differ).jackets, G.colorOf(link(differ))], [[AQUA, PURPLE], AOC_NOW]);
     assert.deepEqual(Object.keys(link(none)), ['id', 'media', 'purpose', 'from', 'to']);
     assert.deepEqual([link(none, {typeColorOf: () => '#0F0'}).typeColor, G.colorOf(link(none, {typeColorOf: () => '#0F0'}))], ['#00ff00', '#00ff00']);
     // with no reader, a link carries the cable's own colour and nothing else
@@ -446,7 +455,7 @@ test('the 3D scene is told when a colour changes: sameCables3d for the cable\'s 
   let set = rack;
   for (const id of ['i1', 'i2']) set = COMMANDS.field.run(set, {id, path: 'port-1-occupant', key: 'jacket-color', value: '#00ff00'}, ctx).rack;
   assert.equal(C.sameCables3d(rack, set), true);
-  assert.equal(C.colorsKey(rack, readers(rack)), 'c1=#3a3f45');
+  assert.equal(C.colorsKey(rack, readers(rack)), `c1=${AOC_NOW}`);
   assert.equal(C.colorsKey(set, readers(set)), 'c1=#00ff00');
   assert.equal(C.colorsKey(tinted), 'c1=#ff8800');
 });
@@ -487,10 +496,65 @@ test('draw.io: a cable whose colour is said carries it and is drawn in it; one c
   // the vendor draws it: the stated colour ahead of the media's entry, and the map's entry without one
   assert.match(strokeOf(rows(pair({cable: {color: '#f80'}})), {aoc: '#111111'}), /strokeColor=#ff8800;$/);
   assert.match(strokeOf(rows(pair()), {aoc: '#111111'}), /strokeColor=#111111;$/);
-  assert.match(strokeOf(rows(pair()), undefined), /strokeColor=#2F80C0;$/, "draw.io's own table is as it was");
+  assert.match(strokeOf(rows(pair()), undefined), new RegExp(`strokeColor=${AOC_NOW};$`), "an AOC is drawn as the kit draws it");
   assert.match(strokeOf([{...base, color: 'red'}], {aoc: '#111111'}), /strokeColor=#111111;$/, 'a value that is no colour is not drawn');
   // a page's own style function is handed the row, colour and all
   assert.equal(strokeOf(rows(pair({cable: {color: '#f80'}})), c => `strokeColor=${c.color};`), 'strokeColor=#ff8800;');
+});
+
+// ── the AOC default, and the draw.io palette that follows the kit (#1028) ──
+test('an AOC with no colour stated is the multimode family\'s teal, not OM4\'s aqua, in the explorer\'s resolver', () => {
+  assert.equal(G.colorOf({media: 'aoc'}), AOC_NOW);
+  assert.equal(G.COLORS.aoc, AOC_NOW);
+  assert.notEqual(G.colorOf({media: 'aoc'}), G.colorOf({media: 'om4'}));
+  assert.equal(G.colorOf(C.cablePlan(pair({media: 'aoc'})).links[0]), AOC_NOW);
+  assert.deepEqual(drawn(pair({media: 'aoc'})), {color: AOC_NOW, from: 'media'});
+  // the hero's jacket for multimode, and its plug, are OM4's entry as before
+  assert.equal(G.JACKETS.mm, G.COLORS.om4);
+  assert.equal(G.PLUGS.mm, G.COLORS.om4);
+});
+
+test('every other COLORS entry is as it was', () => {
+  assert.deepEqual({...G.COLORS, aoc: undefined}, {os2: '#e8c547', copper: {server: '#5aa7ff', management: '#9aa3ad'},
+    om3: '#2bb3c8', om4: '#2bb3c8', om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff', dac: '#15171a', aoc: undefined,
+    unset: '#9aa3ad', power: '#1c1c1c', ground: '#3f9b4b', stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'});
+});
+
+// A cable as a rack plan hands it to the draw.io writer, and the same cable as
+// the explorer draws it.
+const edgeOf = (media, purpose = '') => ({id: 'c1', a: {item: 'i1', path: 'port-1'}, b: {item: 'i2', path: 'port-1'},
+  media: X.drawioMediaKey({media, purpose}), purpose, label: ''});
+const KNOWN = [...C.MEDIA, 'copper', 'os1', 'om1', 'om2', 'cat5e', 'cu', 'mm', 'sm', 'mystery', 'constructor', ''];
+
+test('draw.io: every media the kit knows is stroked in the colour the explorer draws it', () => {
+  for (const media of KNOWN) for (const purpose of media === 'copper' ? ['server', 'management', 'Management', '', 'toString'] : ['']) {
+    const want = G.colorOf({media, purpose});
+    assert.match(strokeOf([edgeOf(media, purpose)], undefined), new RegExp(`strokeColor=${want};$`), `${media}/${purpose}`);
+  }
+  // and through a rack's own plan, which is where a page gets both
+  for (const media of C.MEDIA) {
+    const rack = pair({media});
+    const rows = X.drawioCables(rack, {ends: landed(rack), idOf: id => id, drawn: () => true, parts}).cables;
+    assert.match(strokeOf(rows, undefined), new RegExp(`strokeColor=${G.colorOf(C.cablePlan(rack).links[0])};$`), media);
+  }
+});
+
+test('draw.io: CABLE_COLOURS is derived from the kit, and a key it names is the colour the explorer gives that media', () => {
+  assert.deepEqual(Object.keys(CABLE_COLOURS), ['dac', 'aoc', 'cu', 'mm', 'sm', 'om1', 'om2', 'om3', 'om4', 'om5',
+    'os1', 'os2', 'cat5e', 'cat6', 'cat6a', 'default']);
+  for (const [k, v] of Object.entries(CABLE_COLOURS)) assert.equal(v, G.colorOf({media: k}), k);
+});
+
+test('draw.io: a cable\'s own colour, and a caller\'s map, still win over the kit\'s', () => {
+  const row = edgeOf('aoc');
+  assert.match(strokeOf([{...row, color: '#f80'}], undefined), /strokeColor=#f80;$/);
+  assert.match(strokeOf([{...row, color: '#f80'}], {aoc: '#111111'}), /strokeColor=#f80;$/);
+  assert.match(strokeOf([row], {aoc: '#111111'}), /strokeColor=#111111;$/);
+  assert.match(strokeOf([edgeOf('dac')], {aoc: '#111111'}), /strokeColor=#15171a;$/, 'a media the map does not name is the kit\'s');
+  assert.match(strokeOf([edgeOf('copper', 'management')], {'copper-management': '#222222'}), /strokeColor=#222222;$/);
+  // a map's `default` is still what an unknown media takes
+  assert.match(strokeOf([edgeOf('mystery')], {default: '#333333'}), /strokeColor=#333333;$/);
+  assert.match(strokeOf([edgeOf('aoc')], {default: '#333333'}), new RegExp(`strokeColor=${AOC_NOW};$`));
 });
 
 test('NetBox and Nautobot: the color column is the cable\'s own colour, six digits with no #, and blank otherwise', () => {

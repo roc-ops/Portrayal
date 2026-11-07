@@ -1,0 +1,221 @@
+format: 1
+kind: device
+name: cmbrush1u
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: CMBRUSH1U
+description: >-
+  1U brush strip cable management panel, StarTech.com CMBRUSH1U: a black steel panel the full
+  width of the rack with a window 382 mm long cut in it and a strip of high-density nylon bristles
+  behind the window. Cables are pushed through the bristles from one side to the other, and the
+  bristles close the opening so that air does not pass round them.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The ears are the flat
+      ends of the plate, which is the front of the panel, and its flanges fold back behind it
+      (the section: the plate on one side, the flanges and the brush's holder on the other). The
+      datasheet says "Front Mount (Front Only)". So the plate is flush with the rail and `at` is
+      0. This states a placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the panel reaches 17.2 mm behind the rail, so the rear face of its rack
+      unit stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING. StarTech.com publishes CMBRUSH1U_Diagram.pdf (third
+      angle projection, millimetres, REV A, 06/02/2020): a top view, a front view, a side view
+      with its A-A section and an isometric of the panel and its brush, with the dimensions 482.0,
+      465.0, 435.0, 382.0, 17.2, 23.3, 8.0, 6.0, 31.7, 20.2, 43.7, "4-#7.0x10.0" and "t=1.2mm". The
+      datasheet (cmbrush1u_datasheet.pdf) lists "Product Length 19.0 in [48.2 cm]", "Product Width
+      0.7 in [17.2 mm]", "Product Height 1.7 in [43.7 mm]" and "Internal Depth 0.8 in [20.2 mm]".
+      The window's place and the flanges' extents are scaled off the views at 0.78 to 2.34 px/mm
+      against their own dimensions, and are estimated.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 482.0 x 43.7 x 17.2. The plate is the whole width of the rack, its two ends the
+      ears, so the face is drawn whole with its four slots (L43 stands down above 480 mm); its top
+      and bottom edges fold back between the ears. The datasheet's "Length" is the 482.0 and its
+      "Width" the 17.2 depth. The section's 20.2, which the datasheet calls "Internal Depth", is
+      the depth across the section including the brush holder's head, 3 mm more than the 17.2
+      the maker states the product as; 17.2 is drawn and the head is a gap.
+  thickness:
+    confidence: drawing
+    note: >-
+      drawing - 1.2 mm, "Panel spcc/hc, t=1.2mm" on the A-A section.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight of Product 8.0 oz [228.0 g]" (cmbrush1u_datasheet.pdf).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view: the plate with its four slots in a 465.0 by 31.7 rectangle and the
+      brush window, 382.0 long and 23.3 high, with the bristles seen through it. The window is 12.4
+      from the top edge and 8.0 from the bottom.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the plate: the bristles in their window, the slots and the folded
+      edges end-on. The drawing has no rear view; this is the front view seen from behind, with
+      the strip behind the window.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top: the flange 17.2 deep behind the plate, between the
+      ears. The drawing's top view shows three rivets along it, at which the brush holder is
+      fixed; they are not drawn. The bottom is the same from underneath, the bottom flange
+      shorter (14.4, estimated off the section).
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the A-A section as an elevation: the plate in front, the two flanges folded back
+      from it and the brush strip behind the plate. The right is the same, turned round.
+  passes:
+    confidence: drawing
+    note: >-
+      drawing - the window is the pass-through: a cable crosses it through the bristles, so it is
+      declared `brush` over the window's 382.0 by 23.3. The datasheet says the strip "offers cable
+      separation" and "closes off open spaces between equipment".
+  capacity:
+    confidence: estimated
+    note: >-
+      no document states a cable capacity: the datasheet and the drawing are silent, so none is
+      stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material (steel, with nylon bristles; "Nylon 66" on the section), colour,
+      standard (EIA RS310-D) and the screws (four 10/32 and four 12/24) are the datasheet's; the
+      2-year warranty is its text.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The drawing is line work, so the shade is this library's render
+      of black steel; the bristles are the library's brush pattern.
+attrs:
+  physical:
+    weight-kg: 0.228
+    material: Steel
+    brush-material: Nylon 66
+    color: Black
+    mounting-hardware: four 10/32 and four 12/24 panel screws
+  features:
+    standards: EIA RS310-D
+chassis:
+  width: 482.0
+  height: 43.7
+  depth: 17.2
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: flush, at: 0, default: true}
+  shell: sheet
+  thickness: 1.2
+  weight-kg: 0.228
+  color: '#1b1d20'
+gaps:
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the datasheet and the drawing state no cable capacity, no fill and no cable count.
+    wanted: a cable capacity table, or a stated fill, for the brush panel
+  - what: brush-holder
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the A-A section draws the strip held in a clip on the top flange with a rounded head that
+      reaches 20.2 mm, 3.0 beyond the 17.2 the panel is stated as, and three rivets along the top
+      view; no view dimensions the clip or the head, so the strip is drawn as a thin band behind
+      the plate and the panel's depth is the 17.2.
+    wanted: a dimensioned section of the brush holder
+  - what: brush-bristle-length
+    scope: [rear, left, right]
+    reason: needs-drawing
+    note: >-
+      the section draws the bristles leaning from the holder at the top to the bottom flange, a
+      band about 37 mm long and 1.5 thick at its base (scaled at 9.4 px/mm); no dimension states
+      them, so the band is estimated.
+    wanted: the bristles' length and the strip's thickness
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the steel panel, its ears and its two folded flanges
+views:
+  front:
+    size: {w: 482.0, h: 43.7}
+    panel:
+      decor:
+        - {id: brush-window, at: [50.0, 12.4], size: [382.0, 23.3], rx: 5.0, pattern: brush, bristle: vertical}
+    components:
+      placements:
+        - {ref: startech/cmbrush1u-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+    passes:
+      - {id: brush-window, at: [50.0, 12.4], size: [382.0, 23.3], shape: obround, cover: brush}
+  rear:
+    size: {w: 482.0, h: 43.7}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [482.0, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [33.0, 0], size: [416.0, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: fold-bottom, at: [33.0, 42.5], size: [416.0, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: ear-slot-1, at: [3.5, 2.5], size: [10.0, 7.0], rx: 3.5, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-2, at: [3.5, 34.2], size: [10.0, 7.0], rx: 3.5, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-3, at: [468.5, 2.5], size: [10.0, 7.0], rx: 3.5, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-4, at: [468.5, 34.2], size: [10.0, 7.0], rx: 3.5, fill: '#0a0b0c', kind: hole}
+        - {id: brush-back, at: [50.0, 12.4], size: [382.0, 23.3], rx: 5.0, pattern: brush, bristle: vertical}
+  top:
+    size: {w: 482.0, h: 17.2}
+    panel:
+      decor:
+        - {id: plate, at: [0, 16.0], size: [482.0, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+    components:
+      placements:
+        - {ref: startech/cmbrush1u-flange-top@1, id: flange-top, at: [33.0, 0.0], group: body, rel-pos: 2}
+  bottom:
+    size: {w: 482.0, h: 17.2}
+    panel:
+      decor:
+        - {id: plate, at: [0, 16.0], size: [482.0, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+    components:
+      placements:
+        - {ref: startech/cmbrush1u-flange-bottom@1, id: flange-bottom, at: [33.0, 2.8], group: body, rel-pos: 3}
+  left:
+    size: {w: 17.2, h: 43.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [16.0, 0], size: [1.2, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [0, 0], size: [16.0, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [1.6, 42.5], size: [14.4, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: brush-end, at: [14.5, 4.0], size: [1.5, 37.3], rx: 0, fill: '#40454c', kind: brush}
+  right:
+    size: {w: 17.2, h: 43.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [1.2, 43.7], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [1.2, 0], size: [16.0, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [1.2, 42.5], size: [14.4, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: brush-end, at: [1.2, 4.0], size: [1.5, 37.3], rx: 0, fill: '#40454c', kind: brush}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The brush panel as StarTech.com ships CMBRUSH1U.'
+datasheet:
+  title: 'CMBRUSH1U data sheet: 1U High-density Brush Strip Cable Management Panel'
+  url: https://media.startech.com/cms/pdfs/cmbrush1u_datasheet.pdf
+  sha256: beb5cd3159f589f7ae824d729a57fe107ee885a6f04b491ebcd5dcd91a277631
+references:
+  - title: 'CMBRUSH1U_Diagram.pdf: product drawing, third angle projection, REV A, 06/02/2020'
+    url: https://media.startech.com/downloads/image/CMBRUSH1U_Diagram.pdf
+    sha256: cb574697171d94ef7f86ce1030f58d7421a11adefb9ba8e4b4a8aeaba4f36605
+  - title: 'CMBRUSH1U product page'
+    url: https://www.startech.com/en-us/server-management/cmbrush1u

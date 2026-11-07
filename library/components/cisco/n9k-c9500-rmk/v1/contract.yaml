@@ -1,0 +1,41 @@
+format: 1
+kind: kit
+name: n9k-c9500-rmk
+version: 1.0.0
+description: >-
+  The Nexus 9500 rack-mount kit (N9K-C9500-RMK): two adjustable bottom-support rails that carry
+  the chassis's weight in a four-post rack or cabinet. It ships in the box with the accessory kit.
+unplaced: >-
+  no device lists this kit yet: cisco/n9k-c9508, cisco/n9k-c9504 and cisco/n9k-c9516 will name it
+  in chassis.kits, with supply in-box, once the device batches that hold them can list a kit.
+motion: fixed
+parts:
+- {ref: cisco/n9k-c9500-rmk-rail@1, id: rail, count: 2}
+configurations:
+- id: four-post
+  racks: [4-post]
+  parts: [rail]
+  depth: [609.6, 812.8]
+gaps:
+- what: part-dimensions
+  scope: [four-post]
+  reason: vendor-silent
+  note: >-
+    The Nexus 9508 Hardware Installation Guide, Table 7 (Appendix C, p. 133) and Installing the
+    Bottom-Support Rails (p. 22) print no dimension of a rail; the size of
+    cisco/n9k-c9500-rmk-rail@1 is estimated from the figures.
+  wanted: >-
+    A drawing or a measurement of the N9K-C9500-RMK bottom-support rail: its length, width and
+    height, closed and extended.
+provenance:
+  depth: >-
+    Cisco N9508 NX-OS Mode Switch Hardware Installation Guide (first published 2014-11-21, last
+    modified 2026-09-17), Rack and Cabinet Requirements (p. 17) and Installing the Bottom-Support
+    Rails (p. 22): "24 to 32 inches (61.0 to 81.3 cm)" between the front and rear vertical rails.
+    24 in is 609.6 mm and 32 in is 812.8 mm; the printed centimetres round these.
+  parts: >-
+    Table 7, N9K-C9500-RMK rack mount kit contents (Appendix C, p. 133): a bottom-support rails kit
+    of two adjustable rails with 20 each of 10-32 x 3/4 in screws (and 20 nuts), 12-24 x 3/4 in
+    screws and M6 x 19 mm screws (screws not modelled; at least six per rail, 40 in-lbs [4.5 Nm],
+    p. 23). The accessory kit (N9K-C9500-ACK, also printed N9K-ACC-KIT: a ground lug kit, an SFP
+    extractor and papers) is not a rack kit and is left out.

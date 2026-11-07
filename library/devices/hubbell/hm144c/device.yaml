@@ -1,0 +1,271 @@
+format: 1
+kind: device
+name: hm144c
+version: 0.1.1
+maturity: modelled
+manufacturer: Hubbell
+model: HM144C
+aliases:
+  - {name: '662620665313', kind: vendor}
+description: >-
+  1 RU M-Series horizontal cable manager with a 4 in front extension and a 4 in rear
+  extension, catalogue HM144C, UPC 662620665313. A centre plate as wide as the rack has four
+  windows a cable crosses through. Five wire rings stand out of it on each side, 4 in
+  (102 mm) at the front and 4 in behind. A hinged cover closes the front. Its own page gives
+  no dimensions. The metal is the HM14C's, the 1 RU part with the same figure.
+profile: passive
+provenance:
+  method:
+    confidence: borrowed
+    note: >-
+      borrowed - HM14C (library device hubbell/hm14c). Hubbell's spec sheet for the HM144C,
+      PREM-HM144C-SPEC-EN.pdf (hubbellcdn.com, REV 8/2026; sha256 below), is a catalogue page
+      with a title, a list of five features and a table of four rows: "M-Series", "1-Unit",
+      "4 in Front Extension", "4 in Rear Extension", "With Cover", Type "Horizontal Cable
+      Management", Cover Type "Hinge", Industry Standard "EIA", UPC 662620665313. It has
+      no dimensions table, no figure with dimensions and no material. The older sheet
+      layout, PREMISE_HM144C_spec.pdf, does not exist (HTTP 404, checked 2026-10-18). Its
+      "Customer Drawing [English]" link is a CAD file, hubbellcdn.com/customerusedrawing/
+      HWS14421C-HM1xx_1U_HOR_CBL_ORG.dwg (AutoCAD 2018 format, 382,784 bytes), which
+      nothing on the build host opens, so it was not read. So the 1 RU
+      height and the 19 in width are the HM14C's (same unit count, same figure) and the
+      wire and finish are the HM14C sheet's; what this page states is the 4 in rear
+      extension and the hinged cover.
+  rear-extension:
+    confidence: datasheet
+    note: >-
+      datasheet - 4 in, 101.6 mm: the HM144C sheet's "4 in Rear Extension", beside its
+      "4 in Front Extension". This is the one part of the line whose rear rings are stated.
+      The HM14C, HM24C and HM34C figures mark a rear dimension D that no table gives; for those
+      three it is estimated from this part's 4 in.
+  ears:
+    confidence: estimated
+    note: >-
+      estimated - `positions` states where the part bolts, for the Rack Builder. The plate is
+      the part's own ears, so the rail plane is the back of the plate: the front rings stand
+      101.6 out of its front, and the plate is 1.5 thick (estimated), so `at` is 103.1. The
+      page lists no accessories and no rail kit, so `kits` is not stated.
+  full-depth:
+    confidence: estimated
+    note: >-
+      `full-depth: false` - the rings reach 101.6 in front of the rail and 101.6 behind it,
+      not the depth of the rack, so the rack unit's rear face is not claimed.
+  chassis:
+    confidence: borrowed
+    note: >-
+      borrowed - 482.6 x 44.45 x 204.7, the HM14C's width and height (see `method`); depth is
+      the 4 in front extension and the 4 in rear extension the HM144C sheet states, with the
+      plate's 1.5 mm (estimated) between them.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 1.5 mm. No Hubbell sheet states the plate's gauge for the M-Series.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the HM14C's front: the plate with its four windows, five wire rings and the
+      cover, read off the HM14C figure against its B. The HM144C's own page shows a photograph
+      only (four windows, rings, a front cover), which agrees in count. The cover is drawn
+      fitted; the `cover-off` configuration leaves it off and shows the rings.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - five rings behind the plate, the front's seen from behind, as the HM14C
+      figure draws them; the rear extension that stands them out is stated, 4 in.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation: the plate's edge and the ten rings' top wires, five behind it
+      and five in front. The cover's edge is not drawn.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear on the left: each ring's wires and post, either side of
+      the plate's edge. The right is the same, turned round.
+  attrs:
+    confidence: borrowed
+    note: >-
+      borrowed - material, wire diameter and finish from the HM14C sheet; "Black" and the
+      hinged cover are on the HM144C page, whose title says "Black" and whose table says
+      "Cover Type Hinge"; the UPC is its table's.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the page states no cable capacity, so none is stated here and none is
+      estimated.
+attrs:
+  physical:
+    material: Steel
+    wire-diameter-mm: 5.715
+    finish: Black Powder Coated
+  features:
+    cover: Included, hinged
+    front-extension: 4 in
+    rear-extension: 4 in
+    replacement-cover: HM1C
+chassis:
+  width: 482.6
+  height: 44.45
+  depth: 204.7
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 103.1, default: true}
+  shell: sheet
+  thickness: 1.5
+  color: '#1b1d20'
+gaps:
+  - what: dimensions
+    scope: [front, rear, left, right, top, bottom]
+    reason: vendor-silent
+    note: >-
+      the HM144C sheet (PREM-HM144C-SPEC-EN) gives no dimensions table and no material; the
+      width, the height, the wire and the finish are the HM14C's.
+    wanted: the dimensioned customer drawing, or a dimensions table for the HM144C
+  - what: ring-bend
+    scope: [front, rear, left, right, top, bottom]
+    reason: needs-drawing
+    note: >-
+      the sheet's figure shows each wire ring bent round where it leaves the plate and at its
+      free end, with a hook on the post of alternate rings, and dimensions none of it. The
+      side views draw the loop with a 11.43 mm corner radius (two wire diameters), a stand-in;
+      the 3D loop keeps square corners and no hook is drawn. The rings are drawn in a mid
+      steel tone so they read against the black plate; the sheet states none.
+    wanted: the dimensioned customer drawing, or the maker's figure for the ring's bend and hook
+  - what: cover-face
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the sheet's figure shows a folded edge along the cover, the HM24C photograph a lip along
+      the top and a name plate at the middle. The face draws a 6 mm fold along the top and foot
+      and the plate's 58 by 12 mm box blank; the fold's width is a stand-in.
+    wanted: the dimensioned customer drawing
+  - what: cover-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the page says "Cover Type Hinge"; the format has no hinge, so the cover is one panel
+      drawn fitted, and the `cover-off` configuration is the cover taken off.
+    wanted: a format for a hinge; nothing the maker could add
+  - what: cable-capacity
+    scope: [front, rear]
+    reason: vendor-silent
+    note: the page states no count of cables, nor a basis for one.
+    wanted: a maker's figure with its basis
+  - what: weight
+    scope: [front]
+    reason: vendor-silent
+    note: the page states no weight.
+    wanted: the part's weight
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the steel centre plate with its four windows
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: the five wire rings in front of the plate, left to right
+  rear-guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: the five wire rings behind the plate, left to right as seen from behind
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the hinged cover across the front rings
+views:
+  front:
+    size: {w: 482.6, h: 44.45}
+    components:
+      placements:
+        - {ref: hubbell/hm-plate-1u@1, id: plate, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: hubbell/hm-ring-1u@1, id: guide-1, at: [14.4425, 0.0], group: guides, rel-pos: 1, in: plate, under: cover}
+        - {ref: hubbell/hm-ring-1u@1, id: guide-2, at: [126.4425, 0.0], group: guides, rel-pos: 2, in: plate, under: cover}
+        - {ref: hubbell/hm-ring-1u@1, id: guide-3, at: [238.4425, 0.0], group: guides, rel-pos: 3, in: plate, under: cover}
+        - {ref: hubbell/hm-ring-1u@1, id: guide-4, at: [350.4425, 0.0], group: guides, rel-pos: 4, in: plate, under: cover}
+        - {ref: hubbell/hm-ring-1u@1, id: guide-5, at: [462.4425, 0.0], group: guides, rel-pos: 5, in: plate, under: cover}
+        - {ref: hubbell/hm1c@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: plate, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [31.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-2, at: [143.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-3, at: [255.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-4, at: [367.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+  rear:
+    size: {w: 482.6, h: 44.45}
+    components:
+      placements:
+        - {ref: hubbell/hm-plate-1u@1, id: rear-plate, at: [0.0, 0.0], group: body, rel-pos: 2}
+        - {ref: hubbell/hm-ring-1u@1, id: rear-1, at: [14.4425, 0.0], group: rear-guides, rel-pos: 1, in: rear-plate}
+        - {ref: hubbell/hm-ring-1u@1, id: rear-2, at: [126.4425, 0.0], group: rear-guides, rel-pos: 2, in: rear-plate}
+        - {ref: hubbell/hm-ring-1u@1, id: rear-3, at: [238.4425, 0.0], group: rear-guides, rel-pos: 3, in: rear-plate}
+        - {ref: hubbell/hm-ring-1u@1, id: rear-4, at: [350.4425, 0.0], group: rear-guides, rel-pos: 4, in: rear-plate}
+        - {ref: hubbell/hm-ring-1u@1, id: rear-5, at: [462.4425, 0.0], group: rear-guides, rel-pos: 5, in: rear-plate}
+    passes:
+      - {id: pass-through-1, at: [31.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-2, at: [143.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-3, at: [255.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+      - {id: pass-through-4, at: [367.3, 11.125], size: [84.0, 22.2], shape: obround, cover: open}
+  top:
+    size: {w: 482.6, h: 204.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 101.6], size: [482.6, 1.5], fill: '#1b1d20', kind: plate}
+        - {id: rear-1-top, at: [14.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-2-top, at: [126.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-3-top, at: [238.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-4-top, at: [350.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-5-top, at: [462.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-1-top, at: [14.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-2-top, at: [126.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-3-top, at: [238.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-4-top, at: [350.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-5-top, at: [462.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+  bottom:
+    size: {w: 482.6, h: 204.7}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 101.6], size: [482.6, 1.5], fill: '#1b1d20', kind: plate}
+        - {id: rear-1-bottom, at: [14.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-2-bottom, at: [126.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-3-bottom, at: [238.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-4-bottom, at: [350.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: rear-5-bottom, at: [462.4425, 0], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-1-bottom, at: [14.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-2-bottom, at: [126.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-3-bottom, at: [238.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-4-bottom, at: [350.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+        - {id: guide-5-bottom, at: [462.4425, 103.1], size: [5.715, 101.6], rx: 2.8, fill: '#59616a', kind: ring}
+  left:
+    size: {w: 204.7, h: 44.45}
+    panel:
+      decor:
+        - {id: plate-edge, at: [101.6, 0], size: [1.5, 44.45], fill: '#1b1d20', kind: plate}
+        - {id: rear-loop, at: [2.8575, 2.8575], size: [95.885, 38.735], rx: 8.57, stroke: '#59616a', stroke-width: 5.715, kind: ring}
+        - {id: front-loop, at: [105.9575, 2.8575], size: [95.885, 38.735], rx: 8.57, stroke: '#59616a', stroke-width: 5.715, kind: ring}
+  right:
+    size: {w: 204.7, h: 44.45}
+    panel:
+      decor:
+        - {id: plate-edge, at: [101.6, 0], size: [1.5, 44.45], fill: '#1b1d20', kind: plate}
+        - {id: front-loop, at: [2.8575, 2.8575], size: [95.885, 38.735], rx: 8.57, stroke: '#59616a', stroke-width: 5.715, kind: ring}
+        - {id: rear-loop, at: [105.9575, 2.8575], size: [95.885, 38.735], rx: 8.57, stroke: '#59616a', stroke-width: 5.715, kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as Hubbell ships HM144C, the cover fitted.'
+  cover-off:
+    kind: example
+    description: 'The same manager with the cover taken off, the five rings in front of the plate in view.'
+datasheet:
+  title: 'Hubbell Premise Wiring HM144C spec sheet, M-Series 1-Unit, 4 in front extension, 4 in rear extension, with cover'
+  sha256: c398a9be86224259e3043fd1e66641a848729bb95075aee4fb04dea86dbf62de
+references:
+  - title: 'Hubbell Premise Wiring M-Series Rail Mounted horizontal cable manager, HM14C spec sheet'
+    sha256: 3103cf91d1e8961b4da368a3b19791a0c100b0c2d38d54b7c46772ed1b01fe46

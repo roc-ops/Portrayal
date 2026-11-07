@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: ex3400-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Blank panel for an empty power supply slot on the Juniper EX3400. The switch ships with one
+  power supply, and this panel covers the second slot. It is a dark grey plate with two finger
+  holes. The guide names it only as a blank panel, with no part number.
+attrs:
+  model: EX3400 power supply blank panel
+  covers: power supply slot
+provenance:
+  size: >-
+    photo-measured - Juniper image-library EX3400-48P rear studio photograph (ex3400-48p-rear-high),
+    body width 441.0 mm over 1467 px (3.327 px/mm). The plate measures 255 by 137 px, 76.6 by 41.0 mm,
+    because it overlaps the frame of the slot. It is modelled at the power supply face size
+    71.2 by 39.0 mm so that it fills the bay a supply fills. The guide gives no dimension for it.
+  guide: >-
+    datasheet - EX3400 Switch Hardware Guide (published 2026-01-09), Rear Panel of an EX3400 Switch
+    and Figures 3 and 4, callout 11: "Empty slot for power supply covered by a blank panel".
+    Table 36, the packing list, names no blank panel.
+  face: photo-measured - the two finger holes are read off the same photograph and are approximate.
+states: [absent]
+elements:
+  grip-left:
+    at: [2.0, 6.0]
+    size: [20.0, 27.0]
+    class: latch
+  grip-right:
+    at: [49.2, 6.0]
+    size: [20.0, 27.0]
+    class: latch
+size:
+  w: 71.2
+  h: 39.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

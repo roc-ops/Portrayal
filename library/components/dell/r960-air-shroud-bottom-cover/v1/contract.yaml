@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: r960-air-shroud-bottom-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The air shroud bottom cover of the PowerEdge R960 seen from above - the black plate with screw bosses that runs from the
+  fan cage back over the processor expansion module toward the risers
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `R960_ GPU_AirShroud`
+    in the `Main Assembly` node (the un-exploded assembly), the only shroud body under the top cover in the model. The
+    model is the full-length-riser build (its risers are `Riser 1B - FL`, `Riser 3A - FL` and `Riser 4A - FL`), so
+    this is that build's shroud and the model names it for GPUs. R960 ISM figure 12 (callout 9, "Air shroud bottom
+    cover", a black plate with bosses and an airflow arrow, on the half-length build) and the removal procedures that
+    list "Remove the riser air shroud".
+  size: >-
+    measured - r960.glb, the node box 438.5 x 327.9 at plan (2.8, 224.1) (plan x = 228.0 - cad x1, plan y = 883.94 -
+    cad z1). The first pass read 426.0 x 93.0 at y 276.0 off ISM figure 12 (px 232..1005 across at 1.813; 640..812 down at
+    1.863): the half-length build's bottom cover is a shorter plate behind the support bar, the model's is the full-length
+    build's, 234.9 longer. The two are recorded as sources-disagree on the device (`top-view-model-vs-ism`).
+  height: >-
+    measured - r960.glb, 98.0 (cad y 74.0 to 171.9). The first pass drew it as a 0.5 surface.
+size: {w: 438.5, h: 327.9}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 98.0
+    color: '#16191c'
+    confidence: measured
+    source: r960.glb `R960_ GPU_AirShroud`, cad y 74.0 to 171.9
+elements:
+  shroud: {at: [0.0, 0.0], size: [438.5, 327.9], class: bezel}
+skins: [default]

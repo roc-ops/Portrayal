@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: v100-pcie-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA Tesla V100 PCIe card, seen from behind. It shows
+  the open shroud with a dark opening, and the CPU 8-pin power connector at the
+  east edge. It is the card's `faces.rear`, and the Tesla P100
+  PCIe's too: the two briefs draw one board.
+size: {w: 97.90, h: 38.00}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (PB-08744 figure 3's board height 111.15 less the
+  13.25 below the board's lower edge, 28.41 to 126.31 on the card) and runs from
+  2.0 above the board's outer face (so the connector's housing, which stands
+  above it, is inside the face) to the shroud's far wall, 38.0 (the card's
+  thickness is itself estimated, see the card's `thickness`). NO DEPTH IS
+  DECLARED: a face is a drawing of a back. SEEN FROM BEHIND WITH THE BOARD'S SIDE
+  AT THE TOP, so x' = 126.31 less the card's x (the top edge at the left) and y'
+  = the card's y less 2.0. This is the frame of nvidia/a100-pcie-80gb-tail@1
+  with its backplate taken away.
+attrs: {media: gpu}
+parts:
+  # The header is 12.6 x 18.0 upright. Turned 270 about its centre it is 18.0
+  # across and 12.6 down, centred on the housing's centre (x' 11.51, y' 6.93),
+  # with its latch ramp (the left wall upright) toward the shroud, at the bottom.
+  - {ref: std/eps12v-header@1, id: aux-power, at: [5.21, -2.08], rotate: 270}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  connector: >-
+    estimated - PB-08744: "a CPU 8-pin power connector on the East edge of the
+    board", and figure 4 draws it in an end view beside the board, nearer the middle of the
+    board's height than the place used (by eye, not measured). The part is
+    std/eps12v-header@1 (12.6 x 18.0, figure 4's 12.6 and an estimated 18.0),
+    turned a quarter so its two columns of four become two rows, and centred on
+    the housing the card's body draws at the A100 80GB's place
+    (nvidia/a100-pcie-80gb-tail@1 `connector`, photo-measured there on its own
+    card and borrowed here). No picture of this card's end exists, so the place
+    is the A100's, a placeholder whose error against this card is not known.
+  end-plate: >-
+    estimated - a black end plate over the board's side, 12.4 deep, and the
+    shroud's rim below it with a dark opening. Figure 4's end view draws the
+    heat sink's fins behind the opening; THEY ARE NOT DRAWN, because the figure
+    is not dimensioned and no photograph exists (see the card's `body-far-end`).
+elements: {}
+skins: [default]

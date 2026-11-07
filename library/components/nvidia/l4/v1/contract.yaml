@@ -1,0 +1,195 @@
+format: 1
+kind: module
+name: l4
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA L4 GPU (24 GB GDDR6) on its full-height bracket, a passive half-height
+  half-length single-slot card that takes no auxiliary power. The bracket face
+  is a black plate with one long vent window and no ports. The card is shipped
+  with a full-height bracket; nvidia/l4@1 draws that one, and the low profile
+  bracket the brief also dimensions is not modelled.
+size: {w: 120.02, h: 21.59, d: 168.54}
+size-confidence: {w: registry, h: registry, d: drawing}
+attrs:
+  model: 'L4'
+  part-numbers: 'PNY NVL4TCGPU-KIT'
+  board-sku: 'PG193 SKU 200, NVPN 699-2G193-0200-xxx'
+  role: gpu
+  form-factor: 'Half-height, half-length, single-slot (HHHL-SS), on a full-height bracket'
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+  power-draw-max-w: 72
+  power-input: 'host PCIe slot only'
+  memory: '24 GB GDDR6, 192-bit, 300 GB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'none'
+  weight-kg: 0.270
+  eol: none-announced
+faces:
+  plan:
+    ref: common/pcie-card-plan@1
+provenance:
+  sources: >-
+    NVIDIA L4 Product Brief PB-11316-001_v01,
+    https://www.nvidia.com/content/dam/en-zz/Solutions/Data-Center/l4/PB-11316-001_v01.pdf.
+    Tables 1 and 2, figure 3 (card dimensions with the full-height bracket),
+    figure 4 (with the low profile bracket, not used) and figure 5 (the hockey
+    stick tab). PNY's L4 datasheet,
+    https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20Data%20Center%20GPUs/pny-nvidia-l4-datasheet.pdf,
+    for the PNY part number, and PNY's data center line card
+    (https://www.pny.com/File%20Library/Company/Support/linecards/data-center-gpus/nvidia-data-center-gpu-linecard.pdf)
+    for NVIDIA PN 900-2G193-0000-000, which only that one document gives. NVIDIA's
+    brief forbids reproducing its figures, so its facts are transcribed and none of
+    its figures is copied.
+  reference-photos: >-
+    reference - PNY's product images for the L4, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/f8ba18e3-c163-4bd4-b679-afd300cbce8d/images/:
+    l4_front.png (the broad side, 630 x 286 px) and five 3/4 views
+    (l4_3qtr-front-left.png, l4_3qtr-top-right.png and three more). Licence not
+    stated; facts read from them, pictures not used. THERE IS NO STRAIGHT-ON VIEW
+    OF THE BRACKET, so the face is drawn from the 3/4 views and the standard's
+    opening, and the provenance says which is which.
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59 (PCIe CEM 5.0
+    figure 11-5), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    drawing - PB-11316 figure 3: 168.54 +/-0.5 from the bracket's outer face to the
+    card's end, the key datum 59.05 and 82.70 from it to the notch's near end.
+  face-bracket: >-
+    registry - the bracket is std/pcie-bracket-fh@2, so the outline, the tip's
+    retention tab and the keyed flange are CEM's. THE RENDER SHOWS A BLACK
+    BRACKET and the standard part is zinc coloured; the plate drawn over the
+    opening is dark to say so, and the metal round it stays silver. That is a
+    known difference, not a measurement of the bracket's finish.
+  face-window: >-
+    estimated - one long vent window fills the standard's opening (89.9 x 12.06,
+    x 19.96 to 109.86), a screw at each end of it, as the 3/4 render of
+    l4_3qtr-front-left.png shows. The window's ends, the screws' places and the
+    fins' pitch cannot be measured on a 3/4 view and are estimated: the window
+    runs x 25.5 to 104.3 and y 7.6 to 17.2, the screws are 1.5 radius at x 22.4
+    and 107.4, and 27 fins are drawn on a 2.9 pitch (the render shows about 28
+    slats). The fins are the vent's slats seen end-on, light lines in a dark
+    window.
+  thickness: >-
+    estimated - nothing held states the card's thickness. The single-slot
+    component envelope on the component side of a PCIe card is 14.47 (PCIe CEM
+    5.0), so the shroud's far face is put at y 20.48, 14.47 above the 6.01
+    board surface. The broad-side render is a 3/4 view and cannot measure it.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and
+    the bracket's keyed side, are at the top (small y); the cooler is below the
+    board in this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them) at PB-11316 figure 3's lengths: the card
+    55.65 +/-0.3 high above the lower edge, which is 13.25 above the finger datum
+    W (68.90 in all), the key datum 59.05 behind the bracket, the finger tab
+    running to the standard's 72.15 past it (the figure draws it ending there)
+    and the board's lower edge stepping UP in a notch 82.70 past the datum. The
+    notch's own length (19.50) and depth (3.55) are not dimensioned on this
+    brief and are the A100 80GB's (nvidia/a100-pcie-80gb@1): the figure's
+    trapezoid measures 19.3 long and 4.2 deep at 5.447 px/mm, within its
+    resolution of the first and not of the second, which is estimated. The
+    hockey stick tab of figure 5, east of the fingers, is not modelled.
+    THE COVER AND SHROUD START 1.00 behind the bracket and THE BOARD 1.90 behind
+    it, as nvidia/h100-nvl@1 has them from PB-11773: this brief gives neither
+    figure (estimated).
+  body-shroud: >-
+    estimated - a champagne heat-sink shroud over the board's component side with
+    a black cover along the board, the cover about a quarter of the component
+    height as on the A100 (3.62 of 14.47), and a ribbed top and lower edge as the
+    3/4 renders show. The render shows the card's rear as black, so the PCB's back
+    is left bare and there is no backplate box. The split, the ribs' pitch (the
+    A100's 2.194, borrowed) and the colours are not measured on this card.
+  body-top-edge: >-
+    estimated - PNY's render shows "L4" near the bracket end of the top edge and
+    the NVIDIA mark and wordmark near the far end. Their places are the A100's
+    (2.9 behind the bracket, and the wordmark ending 7.0 before the far end), not
+    measured here. The mark is reserved as `logo-zone`.
+  body-far-end: >-
+    NOT MODELLED - the far end is drawn closed. PNY's top-right render shows a
+    black end with windows and bosses. Nothing at known scale was found, and no
+    other face of the card is drawn there.
+  power: >-
+    datasheet - PB-11316 table 1: total board power 72 W default and maximum,
+    40 W minimum. The card takes no auxiliary connector; the brief names none.
+  weight: >-
+    datasheet - PB-11316 table 1: board 270 g, excluding the bracket; the full
+    height bracket with screws 14 g.
+  memory: >-
+    datasheet - PB-11316 table 2: GDDR6, 24 GB, 192-bit, 6,251 MHz, 300 GB/s.
+  pcie: >-
+    datasheet - PB-11316 table 1: physical x16, PCIe Gen4 x16 and x8, Gen3 x16,
+    lane and polarity reversal supported.
+  part-numbers: >-
+    datasheet - PNY's datasheet gives its part number NVL4TCGPU-KIT; the brief's
+    table 1 gives the board SKU PG193 SKU 200, NVPN 699-2G193-0200-xxx. PNY's line
+    card prints NVIDIA PN 900-2G193-0000-000 for the L4; no second document says
+    it, so it is not written here.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on (needs-photo; the
+    window and fins are estimated from 3/4 views); (2) the low profile bracket,
+    which the brief dimensions in figure 4 and which would be a second module
+    (no photograph of it was found); (3) the thickness, which no source
+    states (vendor-silent); (4) the far end and the hockey stick tab
+    (needs-photo, needs-drawing); (5) the notch's own dimensions (the A100's are
+    used); (6) the bracket's black finish against the standard part's zinc.
+  lifecycle: >-
+    No end-of-life notice for the L4 was found, and PNY's line card of August 2025
+    lists it as a current part. The attr says `none-announced`.
+body:
+  depth: 168.54
+  color: '#9aa1a8'
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [55.65, 1.57], from: 1.90, depth: 139.85,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-11316 fig 3: lower edge W + 13.25, 55.65 high, to the notch at 141.75 (59.05 + 82.70); CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge; the board''s start at 1.90 is estimated'}
+  - {id: board-notch, at: [31.96, 4.44], size: [52.10, 1.57], from: 141.75, depth: 19.50,
+     color: '#1d2420', confidence: estimated, shows: [right],
+     source: 'PB-11316 fig 3 shows the notch undimensioned; the A100 80GB''s 19.50 and 3.55 are used'}
+  - {id: board-east, at: [28.41, 4.44], size: [55.65, 1.57], from: 161.25, depth: 6.89,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-11316 fig 3: lower edge W + 13.25 again east of the notch, to the 168.54 end less 0.4 (as the A100)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 46.90, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-11316 fig 3: key datum 59.05 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 60.00, depth: 71.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-11316 fig 3: the finger tab ends 72.15 past the key datum (CEM 5.0 fig 6-5, x16 DIM B), at 131.2'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: cover, at: [28.41, 6.01], size: [55.65, 3.62], from: 1.00, depth: 140.75,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'a quarter of the 14.47 component height, as the A100''s black band; the L4 render shows a black band along the top edge'}
+  - {id: cover-notch, at: [31.96, 6.01], size: [52.10, 3.62], from: 141.75, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, inside the notch'}
+  - {id: cover-east, at: [28.41, 6.01], size: [55.65, 3.62], from: 161.25, depth: 6.89,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, east of the notch'}
+  - {id: shroud, at: [28.41, 9.63], size: [55.65, 10.85], from: 1.00, depth: 140.75,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded by the CEM single-slot component height 14.47 (see provenance thickness); outline as the board; champagne finish from PNY''s renders'}
+  - {id: shroud-notch, at: [31.96, 9.63], size: [52.10, 10.85], from: 141.75, depth: 19.50,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the board''s notch'}
+  - {id: shroud-east, at: [28.41, 9.63], size: [55.65, 10.85], from: 161.25, depth: 6.89,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to the far end'}
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+elements:
+  window: {at: [25.50, 7.60], size: [78.80, 9.60], class: vent}
+  screw-1: {at: [20.90, 10.88], size: [3.00, 3.00], class: screw}
+  screw-2: {at: [105.90, 10.88], size: [3.00, 3.00], class: screw}
+skins: [default]

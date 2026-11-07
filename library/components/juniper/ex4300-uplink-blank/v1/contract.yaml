@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: ex4300-uplink-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Uplink module slot cover panel for the Juniper EX4300 24-port and 48-port switches. The guide's
+  inventory table lists an uplink module slot cover panel with every switch, for the front panel
+  slot that no uplink module fills, and says to keep it installed in an empty slot to prevent
+  overheating and dust. A plain plate held by two captive screws.
+attrs:
+  model: EX4300 uplink module slot cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 68: an uplink module slot
+    cover panel is provided with every switch. The uplink module removal procedure says to install a
+    cover panel in the empty slot, and to loosen both captive screws on the cover panel's faceplate
+    to remove it. The 32-port front panel figure (Figure 10, callout 1) calls it the "Cover panel
+    for uplink module slot". No part number is given
+  size: >-
+    photo-measured - the slot's opening, 73.9 x 18.7 mm, is read off Juniper's straight-on studio
+    photograph of the EX4300-48P front (ex4300-48p-front-high.jpg, 1500 x 211 px), where an uplink
+    module fills the slot: the chassis face spans 1452 px for the stated 441.0 mm (3.29 px per mm)
+    and 144 px down for 43.7 mm (3.29 again, aspect 10.08 against 10.09, so the photograph is near
+    orthographic), and the module faceplate is 243 px across and 61.5 px high. A cover panel fills
+    the same opening; no document gives its own size. Good to about half a millimetre
+  face: >-
+    estimated - no figure or photograph of the cover panel itself was found for the 24-port and
+    48-port models: it is drawn as a plain plate with two captive screws at the ends, where the
+    installed module's faceplate carries its own. Its colour follows the chassis plate
+states: [absent]
+elements:
+  screw-left:
+    at: [1.8, 6.0]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [67.1, 6.0]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 73.9
+  h: 18.7
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated

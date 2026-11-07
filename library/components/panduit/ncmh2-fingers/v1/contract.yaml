@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: ncmh2-fingers
+version: 1.0.0
+class: mechanical
+description: >-
+  One wall of fingers of the front channel of a Panduit NetManager NCMH2 or NCMHF2 2RU
+  horizontal manager seen from the front - the row along the top or the bottom edge of the
+  channel, twelve arched fingers end-on, 25.4 mm across with 9.5 mm between each pair that a
+  patch cord is laid in through
+provenance:
+  size: >-
+    datasheet - the NetManager Horizontal Cable Managers specification sheet (RKSP225): "El
+    espacio entre los dedos es de 3/8"" [9.5 mm], bend radius 1/2" [12.7 mm] at the front fingers.
+    drawing - the front view of the NCMH2 drawing (Panduit 00787-07), read at 300 dpi against its
+    17.51 [444.83] dimension: twelve arched fingers a row on a 34.9 mm pitch (82.4 px at 2.36
+    px/mm), first and last 28.8 and 413.1 from the left edge of the body. 34.925 [1.375 in] is
+    the pitch taken: 25.4 [1.0 in] across the finger and the sheet's 9.5 between, which the
+    measured pitch confirms; the twelve span 409.6 centred in the 444.83. THE FINGER'S 25.4 IS
+    ESTIMATED (it is the pitch less the stated spacing, and agrees with the arches' width on the
+    drawing); the spacing, 9.5, is stated. The row is 14.07 high, estimated: no view
+    dimensions the finger's end-on size, and the 60.0 of channel it leaves is the clear height
+    that Panduit's calculator area (6 sq in front) divides into a 57 mm depth.
+  relief: >-
+    drawing - the plan view: the fingers stand out of the plate the length of the front section,
+    which leaves 70 to the tips under the cover's 12.27; ESTIMATED, as the finger's profile is not
+    sectioned. Built as plates with square corners where the finger is an arch.
+  color: >-
+    datasheet - "Finger Material: Polycarbonate", "The manager is black" on the product page. The
+    shade is this library's render of black polycarbonate.
+size: {w: 444.83, h: 14.07}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: polycarbonate}
+elements:
+  f1: {at: [17.63, 0.0], size: [25.4, 14.07], class: bezel}
+  f2: {at: [52.55, 0.0], size: [25.4, 14.07], class: bezel}
+  f3: {at: [87.48, 0.0], size: [25.4, 14.07], class: bezel}
+  f4: {at: [122.4, 0.0], size: [25.4, 14.07], class: bezel}
+  f5: {at: [157.33, 0.0], size: [25.4, 14.07], class: bezel}
+  f6: {at: [192.25, 0.0], size: [25.4, 14.07], class: bezel}
+  f7: {at: [227.18, 0.0], size: [25.4, 14.07], class: bezel}
+  f8: {at: [262.1, 0.0], size: [25.4, 14.07], class: bezel}
+  f9: {at: [297.03, 0.0], size: [25.4, 14.07], class: bezel}
+  f10: {at: [331.95, 0.0], size: [25.4, 14.07], class: bezel}
+  f11: {at: [366.88, 0.0], size: [25.4, 14.07], class: bezel}
+  f12: {at: [401.8, 0.0], size: [25.4, 14.07], class: bezel}
+relief:
+  features:
+    - {node: f1, out: 70, color: '#26282a', confidence: estimated, source: 'the plan view of the NCMH2 drawing, fingers from the plate to just under the cover'}
+    - {node: f2, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f3, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f4, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f5, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f6, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f7, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f8, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f9, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f10, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f11, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f12, out: 70, color: '#26282a', confidence: estimated, source: 'the same view'}
+skins: [default]

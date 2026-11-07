@@ -2,8 +2,9 @@
 (#789, docs/connectors-dc-terminal-design.md).
 
 ONE SIZE, BY RULING. The library treats the DC barrel jack as one nominal
-connector, `dc-barrel`: barrel diameters vary by product and no document held
-for any of the four devices that place common/dc-barrel@1 states one. What a
+connector, `dc-barrel`: barrel diameters vary by product and of the eleven devices
+that place common/dc-barrel@1 only two documents held, the CSS326-24G-2S+RM and
+CRS309-1G-8S+IN quick guides, state one. What a
 jack is fed is carried as attributes of its placement, `input-voltage` and
 `current-max-a`, from that device's own documents, and neither the interface
 nor the plug states a rating. generic/dc-barrel-plug@1 is drawn at the common
@@ -48,7 +49,21 @@ PLACED = {
     "nokia/xs-010x-r": ("rear", "dc-in", None, "12 VDC", 1.0, "Table 2-2"),
     "nokia/xs-010xr-p": ("rear", "dc-in", None, "12 VDC", 1.0, "Table 4-2"),
     "telco-systems/tm-280": ("front", "dc-in", None, "5 VDC", 3.0, "5VDC @3A (max)"),
+    "mikrotik/crs326-24g-2s-plus-rm": ("rear", "dc-in", None, "10-28 VDC", 1.2, "DC 10-28V"),
+    "mikrotik/css326-24g-2s-plus-rm": ("rear", "dc-in", None, "8-30 VDC", 1.2, "DC 8 - 30V"),
+    # the CRS309-1G-8S+IN: the rear prints DC 12-57 V; its quick guide gives the barrel size
+    "mikrotik/crs309-1g-8s-plus-in": ("rear", "dc-in", None, "12-57 VDC", 1.2, "DC 12-57 V"),
 }
+# the placing devices whose documents state no rating for the jack: the CM8000 data sheet (p.2, "Power
+# Adapter") says "Universal 110-240V AC to 12V DC external power adapter" and gives no current or barrel
+# size, so their placements carry no `attrs` and they are not in PLACED, whose entries all state both
+NO_RATING_STATED = {"opengear/cm8004", "opengear/cm8004-c", "opengear/cm8008", "opengear/cm8008-c"}
+# the two ReadyLinks access points: each datasheet's Power input names a DC connector (2.1 mm / 5.5 mm at 48 V,
+# 2.5 mm / 5.5 mm at 54 V) and the stock figure draws and legends the DC jack
+WALL_AND_CEILING_APS = {"readylinks/ipc-apwf6-poe-wp", "readylinks/ipc-apwf7-poe-cl"}
+# the placing devices whose own document states a barrel size (the CRS309 quick guide: 5.5 mm outside and 2 mm
+# inside, female, pin positive)
+SIZE_STATED = {"mikrotik/css326-24g-2s-plus-rm", "mikrotik/crs309-1g-8s-plus-in"}
 EACH_DEVICE = pytest.mark.parametrize("device", sorted(PLACED))
 
 
@@ -88,7 +103,7 @@ def test_dc_barrel_is_one_connector_and_claims_no_size_or_rating():
     note = entry["note"]
     assert "ONE nominal connector" in note
     assert "diameters vary by product" in note
-    assert "none of the documents" in note and "four devices" in note
+    assert "seven devices" in note and "only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one" in note
     assert "input-voltage" in note and "current-max-a" in note
     assert "not by the interface" in note and PLUG in note
     for key in ("barrel-jack", "barrel-plug"):
@@ -117,16 +132,18 @@ def test_the_jack_gained_its_interface_and_kept_its_drawing():
 
 
 def test_the_jack_states_no_rating_of_its_own():
-    """Four devices feed it two different voltages; the part carries neither."""
+    """Seven devices feed it five different voltages; the part carries none."""
     attrs = _contract(JACK)["attrs"]
     assert not {"input-voltage", "current-max-a", "voltage"} & set(attrs)
 
 
-# --- 2. the four placements, and their ratings ----------------------------------
+# --- 2. the seven placements, and their ratings ------------------------------------
 
-def test_the_jack_is_placed_on_exactly_these_four_devices():
+@pytest.mark.heavy
+def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part."""
+    composes it inside another part. Thirteen: seven state a rating here, the four
+    CM8000 devices do not, and two access points carry their own (48 V and 54 V)."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
         d = yaml.safe_load(f.read_text())
@@ -134,7 +151,7 @@ def test_the_jack_is_placed_on_exactly_these_four_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) and len(found) == 4
+    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS and len(found) == 13
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())
@@ -152,13 +169,17 @@ def test_each_placement_states_what_its_device_is_fed(device):
     note = " ".join(prov["note"].split())
     assert quoted in note, note
     assert "`input-voltage`" in note and "`current-max-a`" in note
-    assert "no barrel size" in note
+    if device in SIZE_STATED:
+        assert "5.5 mm outside, 2 mm inside, pin positive" in note
+    else:
+        assert "no barrel size" in note
 
 
 def test_the_ratings_differ_which_is_why_they_are_not_the_parts():
     volts = {PLACED[d][3] for d in PLACED}
     amps = {PLACED[d][4] for d in PLACED}
-    assert volts == {"12 VDC", "5 VDC"} and amps == {1.0, 3.0}
+    assert volts == {"12 VDC", "5 VDC", "10-28 VDC", "8-30 VDC", "12-57 VDC"}
+    assert amps == {1.0, 3.0, 1.2}
 
 
 def test_the_attribute_names_are_ones_the_library_already_used():
@@ -179,6 +200,7 @@ def comps():
     return got
 
 
+@pytest.mark.heavy
 def test_the_barrel_plug_is_the_one_part_that_mates_dc_barrel(comps):
     assert sorted(r for r in comps if _contract(r).get("mates") == IFACE) == [PLUG]
     assert [r for r in comps if _contract(r).get("interface") == IFACE] == [JACK]

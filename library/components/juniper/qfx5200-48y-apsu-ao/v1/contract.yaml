@@ -1,0 +1,96 @@
+format: 1
+kind: module
+name: qfx5200-48y-apsu-ao
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  QFX520048Y-APSU-AO, the 650 W AC power supply of the QFX5200-48Y, with front-to-back (port-to-FRU)
+  airflow. It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares with its
+  twin. The QFX5200 hardware guide says the QFX5200-48Y takes it, two to a switch, in the slots at
+  the two ends of the FRU panel. The face carries one bi-coloured lamp, a silver frame with square
+  vents, a black bail handle, a C14 appliance inlet turned on its side and a red latch (the guide's
+  red panel for airflow out). The back-to-front sibling is QFX520048Y-APSU-AI. It is not the
+  JPSU-650W-AC-AO of the QFX5120: that part has three lamps, a different face, and its own part
+  number. AC and DC supplies of the same airflow may be mixed in the 48Y, but supplies of different
+  airflow direction never are.
+attrs:
+  model: QFX520048Y-APSU-AO
+  role: ac-power-supply
+  power-output-w: 650
+  airflow: front-to-back
+  input: 100 to 240 VAC, 50 to 60 Hz, 7.8 A at 100 to 120 VAC or 3.8 A at 200 to 240 VAC (QFX5200-48Y, guide Table 20)
+provenance:
+  size: >-
+    photo-measured - Juniper's studio rear photograph of the QFX5200-48Y, whose whole body measures
+    1948 px across (4.446 px/mm against the guide's 438.1 mm) and 192 px high (4.42 px/mm against 43.4
+    mm): the silver frame is 50.1 mm wide and 39.7 mm high, and the red latch stands out of it on the
+    left. The guide's flat figure 26 (a 1501 px raster, 3.256 px/mm, aspect 10.05 against the table's
+    10.09) reads the frame as 50.5 mm and the latch as overhanging by 3.9 mm, which is used because the
+    latch stands proud and the photograph magnifies it (it reads 7.2 mm). The module is the frame plus
+    that overhang, 54.4 mm. No document gives the supply's size in millimetres.
+  depth: >-
+    not stated. The guide's figures 35 and 40 are isometric drawings with no scale and its table gives
+    only weight, so no depth is written.
+  face: >-
+    photo - the studio rear photograph at 9.8 px/mm on the module: a silver frame with a field of
+    square vents at the left, a black bail handle standing in the frame, a C14 inlet in a black boss
+    with its chamfered side at the left, a ring light pipe at the top left of the frame (the single
+    bi-coloured lamp of guide figure 38), a round hole at the top, and a red latch on the left edge.
+    The inlet is placed as juniper/jpsu-650w-ac-ao@1 places the QFX5120's, turned on its side. The
+    guide's figure 35 agrees with the photograph on what is there. The positions are those of the
+    photograph and the flat figure 26 and are estimated.
+  power-output-w: >-
+    datasheet - the guide's text says the AC power supply in QFX5200-48Y switches is 650 W (QFX5200
+    AC Power Supply Description); it gives no separate output rating. An OUTPUT, since a supply
+    provides power.
+  leds: >-
+    datasheet - guide Table 24 (AC Power Supply LED on a QFX5200-48Y): one bi-coloured lamp. Off:
+    disconnected or no power in; green blinking: standby, power comes in at +5 V; green steady: the supply
+    sends out power correctly; red and green alternating: a warning, check the logs; red steady: an
+    error, replace it and leave it seated for airflow; red blinking: the supply's internal fan has
+    failed.
+  airflow: >-
+    datasheet - guide Table 19 (color indicators for airflow direction): QFX520048Y-APSU-AO is Airflow
+    Out, port-to-FRU, with a red panel. The photographed unit has the red latch.
+  colour: >-
+    photo-measured - the latch samples about #fa595e on an overexposed photograph; the drawn red is a
+    shade darker, estimated.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [21.2, 12.0], rotate: 270}
+elements:
+  led:
+    at: [11.8, 4.1]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: standby, color: '#39b54a', behavior: blinking}
+    - {name: warning, color: '#f5a623', behavior: blinking}
+    - {name: fault, color: '#e53935'}
+    - {name: fan-failed, color: '#e53935', behavior: blinking}
+    - 'off'
+  latch:
+    at: [0.0, 2.5]
+    size: [9.4, 21.0]
+    class: latch
+  bail:
+    at: [15.2, 3.0]
+    size: [5.6, 36.0]
+    class: latch
+size:
+  w: 54.4
+  h: 39.7
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8444a'
+    confidence: estimated
+    source: photo - the red latch stands proud of the frame; its projection is not measured

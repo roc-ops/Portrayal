@@ -1,0 +1,57 @@
+format: 1
+kind: module
+name: ex4300-48mp-uplink-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Uplink module slot cover panel for the Juniper EX4300-48MP. The guide's inventory table lists an
+  uplink module slot cover panel with every switch, for the front panel slot that no uplink module
+  fills, and says to keep it installed in an empty slot to prevent overheating and dust. On the 48MP
+  the slot is the opening below the status block at the right end of the front panel, taking the
+  EX-UM-4SFPP-MR or the EX-UM-2QSFP-MR module. A plain plate held by two captive screws.
+attrs:
+  model: EX4300-48MP uplink module slot cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 68: an uplink module slot
+    cover panel is provided with every switch. Figure 12 (g022449) shows the 48MP front with an uplink
+    module fitted, and the maker's photograph of the front shows the slot covered. No part number is given
+  size: >-
+    photo-measured - the cover's opening, 66.6 x 24.5 mm, read off Juniper's straight-on studio photograph
+    of the EX4300-48MP front (ex4300-48mp-front-high.jpg, 1500 x 206 px): the face spans 1446 px for the
+    stated 441.0 mm (3.279 px per mm), which the 13.97 mm jack pitch confirms (45.8 px), and the cover
+    spans 218 px across and 80 px down. Good to about half a millimetre
+  face: >-
+    photo-measured - a plain plate with a silver slotted captive screw near each upper corner, as the photograph
+    shows. Its colour follows the chassis plate
+states: [absent]
+elements:
+  screw-left:
+    at: [1.7, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [61.2, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 66.6
+  h: 24.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated

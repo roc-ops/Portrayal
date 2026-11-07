@@ -1,0 +1,138 @@
+format: 1
+kind: module
+name: ex4600-em-4q
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX-EM-4Q, the expansion module that adds four QSFP+ ports to an EX4600 switch. The EX4600
+  hardware guide lists it with the EX4600-EM-8F for the two module bays at the right of the port
+  panel. The module has four QSFP+ cages in two columns and two rows, numbered 0 to 3 with 0 and 1 in
+  the left column. Each port runs at 40 GbE or, with a breakout cable, as four 10 GbE ports. Each
+  port has four lamps, and one ST lamp shows the module. It is hot-insertable and hot-removable. The
+  same module is used in the QFX5100 switches. The guide says the EX4600 is configured for this
+  module by default.
+attrs:
+  weight-note: not published
+  qsfp-plus: 4
+  ports-note: four QSFP+ ports at 40 Gbps, each channelizable as 4 x 10 Gbps
+part-numbers:
+  QFX-EM-4Q (EX4600): {part: QFX-EM-4Q}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): Expansion Modules for the
+    EX4600, the QFX-EM-4Q topic with Figure 16 (the faceplate, drawn flat) and Table 10 (the ST
+    lamp); Figure 7 (the module). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021),
+    ordering table: QFX-EM-4Q, 4-port QSFP+ expansion module for the EX4600. The guide gives no size
+    and no weight for the module. The key of part-numbers carries the suffix (EX4600) so that its
+    DCIM module type does not share a file with the same part number in another line's slice, such
+    as the QFX5100-24Q.
+  size: >-
+    photo-measured - the module bays are the EX4600-EM-8F's: 86.7 x 43.2 mm, measured on Juniper's
+    EX4600 front studio photograph (ex4600-front-high.jpg, 1500 x 163 px) with two EX4600-EM-8F
+    modules in the bays. This module is not photographed; the two modules fill the same bay, so it
+    takes the same size. Figure 16's outline is 342 x 177 px, an aspect of 1.93 against the bay's
+    2.01 (3.9 percent out), so the figure gives fractions only.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide for the module's dimensions and weight: Figures
+    7 and 16 carry no scale and no table gives a size. No depth is written.
+  elements: >-
+    estimated - Figure 16 read as fractions of its outline and applied to 86.7 x 43.2 mm: the left
+    column of cages centred at 0.335 of the width and the right column at 0.665, the rows centred at
+    0.35 and 0.65 of the height, a row of four lamps above the upper cages and another below the lower
+    ones, and the numerals 0 to 3 left of each row of lamps. The cage rows are then the chassis
+    QSFP+ rows (14.9 and 29.2 mm) taken from the photograph. The two top thumbscrews, the two lower
+    latch screws, the pull bar along the top and the ST lamp at the left are those of the
+    EX4600-EM-8F in the photograph. The lamp pitch of 4.2 mm is the chassis QSFP+ lamp pitch.
+  legend: >-
+    drawing - Figure 16 prints QFX-EM-4Q at the lower right. The baseline is moved 2.7 mm down from
+    the figure's, to 42.2 mm, to clear the lamps of port 3; the photograph of the EX4600-EM-8F
+    prints its legend at that position.
+  led: >-
+    datasheet - guide, Table 10: the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and normal. Each QSFP+ port has four lamps, as on the
+    chassis (Table 7): the first is used for a 40 GbE link and all four for 10 GbE breakout links.
+  power: >-
+    estimated - not published. Searched the EX4600 guide and the datasheet for a per-module wattage:
+    only whole-switch figures exist, so the missing-power warning stands.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp
+      speed: 40g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four lamps for each port, above the upper cage and below the lower cage. The first shows a 40
+      GbE link and all four show the links of a 4 x 10 GbE breakout (guide Table 7).
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the ST lamp of the module (guide Table 10)
+parts:
+- {ref: std/qsfp-ganged@1, id: port-0, at: [19.75, 9.8], group: qsfp-plus, attrs: {media: qsfp}}
+- {ref: std/qsfp-ganged@1, id: port-1, at: [19.75, 24.1], rotate: 180, group: qsfp-plus, attrs: {media: qsfp}}
+- {ref: std/qsfp-ganged@1, id: port-2, at: [48.45, 9.8], group: qsfp-plus, attrs: {media: qsfp}}
+- {ref: std/qsfp-ganged@1, id: port-3, at: [48.45, 24.1], rotate: 180, group: qsfp-plus, attrs: {media: qsfp}}
+- {ref: common/led-dot@1, id: led-0-a, at: [21.7, 6.0], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-b, at: [25.9, 6.0], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-0-c, at: [30.1, 6.0], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-0-d, at: [34.3, 6.0], group: port-leds, attrs: {function: channel 4}}
+- {ref: common/led-dot@1, id: led-1-a, at: [21.7, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-b, at: [25.9, 35.7], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-1-c, at: [30.1, 35.7], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-1-d, at: [34.3, 35.7], group: port-leds, attrs: {function: channel 4}}
+- {ref: common/led-dot@1, id: led-2-a, at: [50.4, 6.0], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-b, at: [54.6, 6.0], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-2-c, at: [58.8, 6.0], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-2-d, at: [63.0, 6.0], group: port-leds, attrs: {function: channel 4}}
+- {ref: common/led-dot@1, id: led-3-a, at: [50.4, 35.7], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-b, at: [54.6, 35.7], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-3-c, at: [58.8, 35.7], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-3-d, at: [63.0, 35.7], group: port-leds, attrs: {function: channel 4}}
+- {ref: common/led-dot@1, id: led-st, at: [5.7, 16.6], group: status, attrs: {function: module status}}
+elements:
+  screw-top-left:
+    at: [1.4, 0.0]
+    size: [10.0, 10.0]
+    class: screw
+  screw-top-right:
+    at: [75.3, 0.0]
+    size: [10.0, 10.0]
+    class: screw
+  screw-bottom-left:
+    at: [3.2, 32.6]
+    size: [6.4, 6.4]
+    class: screw
+  screw-bottom-right:
+    at: [77.1, 32.6]
+    size: [6.4, 6.4]
+    class: screw
+size:
+  w: 86.7
+  h: 43.2
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-top-left
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: figure - the captive thumbscrews stand proud of the faceplate; the projection is not measured
+  - node: screw-top-right
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: figure - the captive thumbscrews stand proud of the faceplate; the projection is not measured
+skins: [default]

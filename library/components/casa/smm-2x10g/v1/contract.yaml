@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: smm-2x10g
-version: 1.8.0
+version: 1.9.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -193,6 +193,13 @@ provenance:
     `estimated` rather than `borrowed` - applied across the family because these cards share a faceplate.
     No Casa document states a depth for any of them. Eleven cards carrying 4.2 is ONE
     estimate written eleven times, not eleven readings that agreed.'
+  groups: >-
+    Casa Systems C100G Hardware Installation Guide (rev 07/08/2022), Figure 1-7 (PDF
+    page 37): a 10/100BASE-T management port (RJ45), eight GigE SFP ports G0 to G7, two
+    10GigE SFP+ ports XG1 and XG2, and an RS-232 local console port (RJ45). The
+    management jack states no speed: this guide prints 10/100BASE-T for it, while the
+    Casa Systems SMM8x10G and SMM300G datasheets (PDF page 3) print 1G Ethernet (RJ45),
+    so the two documents disagree; the console states no speed.
 elements:
   status: {at: [4.8, 270.90], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#39b54a'}]}
   active: {at: [4.8, 274.55], size: [3.0, 3.0], class: led, states: ['off', {name: active, color: '#39b54a'}]}
@@ -211,18 +218,42 @@ relief:
     - {node: status, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: active, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: alarm, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45}
+    description: the management port (RJ45), labelled 10/100MI
+  gige:
+    term: G
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 1g}
+    description: eight GigE SFP ports, labelled G0 to G7
+  xgige:
+    term: XG
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: two 10GigE SFP+ ports, labelled XG1 and XG2
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the RS-232 local console port (RJ45)
 parts:
-  - {ref: common/rj45-eth@1, id: mgmt, at: [7.33, 41.11], rotate: 90,
+  - {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [7.33, 41.11], rotate: 90,
      states: {led-a: ['off', {name: link, color: '#39b54a'}], led-b: ['off', {name: activity, color: '#39b54a', behavior: blinking}]}}
-  - {ref: common/sfp-plus-cage@2, id: g0, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g1, at: [7.23, 81.68], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g2, at: [7.23, 101.86], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g3, at: [7.23, 119.06], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g4, at: [7.23, 138.84], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g5, at: [7.23, 156.04], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g6, at: [7.23, 176.3], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: g7, at: [7.23, 193.57], rotate: 90, attrs: {media: sfp, speed: 1g}}
-  - {ref: common/sfp-plus-cage@2, id: xg2, at: [7.23, 213.68], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: common/sfp-plus-cage@2, id: xg1, at: [7.23, 228.52], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
-  - {ref: std/rj45@2, id: console, at: [7.33, 241.89], rotate: 90}
+  - {ref: common/sfp-plus-cage@2, id: g0, group: gige, at: [7.23, 64.33], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g1, group: gige, at: [7.23, 81.68], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g2, group: gige, at: [7.23, 101.86], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g3, group: gige, at: [7.23, 119.06], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g4, group: gige, at: [7.23, 138.84], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g5, group: gige, at: [7.23, 156.04], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g6, group: gige, at: [7.23, 176.3], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: g7, group: gige, at: [7.23, 193.57], rotate: 90, attrs: {media: sfp, speed: 1g}}
+  - {ref: common/sfp-plus-cage@2, id: xg2, group: xgige, at: [7.23, 213.68], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: common/sfp-plus-cage@2, id: xg1, group: xgige, at: [7.23, 228.52], rotate: 90, attrs: {media: sfp-plus, speed: 10g}}
+  - {ref: std/rj45@2, id: console, group: console, at: [7.33, 241.89], rotate: 90}
 skins: [default]

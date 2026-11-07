@@ -1,0 +1,869 @@
+format: 1
+kind: device
+name: crs354-48p-4s-plus-2q-plus-rm
+version: 1.0.0
+maturity: modelled
+manufacturer: MikroTik
+model: CRS354-48P-4S+2Q+RM
+portfolio: {line: Switches, family: Cloud Router Switch, series: CRS354}
+description: >-
+  MikroTik CRS354-48P-4S+2Q+RM is a fixed 1U Cloud Router Switch with PoE out. It has 48 10/100/1000 Ethernet
+  ports that all supply PoE (IEEE 802.3af/at, or 26 V / 53 V passive). It also has four SFP+ cages, two
+  40G QSFP+ cages, a 10/100 management port and an RJ45 serial console, and runs RouterOS. The front carries
+  the 48 jacks in four blocks of six columns by two rows. They are numbered 1 to 48 as printed, with the
+  odd number on the lower jack of a column. The four SFP+ cages are numbered 1 to 4 and the two QSFP+
+  cages 1 and 2, each pair stacked, with the odd number below. The right-hand end carries the CONSOLE
+  and MGMT jacks, the RESET button and the POWER and FAULT lamps. The rear carries one AC inlet (100-240
+  V, 10 A) and a vent field; two fan openings are in the left wall. The power supply and the fans are
+  built into the chassis, so there are no bays.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Dimensions drawing "CRS354_48P_dimensions", MikroTik, printed 20.09.2023 (file CRS354_48P_dimensions_230946.pdf,
+      rendered at 200 dpi): front, side, top plan and isometric. CRS354-48P-4S+2Q+RM brochure, MikroTik
+      (file CRS354-48P-4Splus2QplusRM_240917.pdf; no date is printed, the file name carries a revision
+      stamp): specification table, powering table and included parts. CRS354-48P-4S+2Q+RM product page,
+      MikroTik (saved 2026-10-26): dimensions, AC inputs and PSU slots, cooling type, power and PoE. The
+      older quick guide CRS354-48P-4S+2Q+RM (file CRS354-48P-4Splus2QplusRM_200252.pdf; no date is printed):
+      mounting, extension slots and ports, powering, reset. The product-page studio photographs 1911 (front),
+      1913 and 1910 (rear) and 1909 (three-quarter front). The NetBox community device type was read as
+      a second opinion only. No figure numbers: MikroTik prints none. The device name spells MikroTik's
+      + as -plus because a directory name cannot carry +; model: keeps the + as printed.
+  datasheet:
+    confidence: datasheet
+    note: >-
+      The brochure is MikroTik's datasheet for the model: QCA9531 CPU at 650 MHz, 128 MB RAM, 32 MB flash,
+      one 100 Mbps and 48 1 GbE ports, four SFP+ and two QSFP+ cages, RouterOS licence level 5, AC supply
+      100 - 240 V, serial port RJ45, 443 x 382 x 44 mm, -20 to +60 C. Its Powering table gives PoE-out
+      802.3at/af and 26 or 53 V passive on Ether1 - Ether48, 26 W per port at 26 V and 30 W at 53 V, 27
+      A total at 26 V and 13.2 A at 53 V, "Max power consumption" 800 W and "without attachments" 85 W;
+      its text says the supply provides 750 W. The product page adds the switch chip 98DX3257, one AC
+      input, one PSU slot, four fans and a total output power of 700 W; the old quick guide says "With
+      attachments 700 W". The 800 W is filed as the maximum, the 85 W as the figure without attachments,
+      700 W as the PoE budget (page and quick guide) and the brochure's 750 W as the supply rating.
+  gate-1:
+    confidence: drawing
+    note: >-
+      The straight-on front photograph 1911 spans the 482.6 mm between the outer edges of its ears across
+      6400 px (13.26 px per mm), and its jack pitch reads 14.0 mm, the registry's ganged RJ-45 pitch of
+      13.97, on a quantity the scale never saw. The front right end (blocks at 362.3, 396.4 and 418.8
+      mm) and the jack start (10.1 mm) agree with the CRS354-48G drawing's to the photograph's 1 mm, so
+      the two fronts share the 48G drawing's measurements for blocks, cages and jacks. The 48P drawing's
+      own front view is 1.97 px per mm and is used only for that agreement.
+  chassis:
+    confidence: drawing
+    note: >-
+      443 wide, 44.3 high, 380 deep, from the drawing (443, 44.3 and 380 on its front, side and top views).
+      The brochure and the product page print "443 x 382 x 44 mm": the depth is 2 mm longer and the height
+      is rounded. The drawing's figures are carried. The 7 mm the top plan dimensions is the power-cord
+      retaining loop standing off the rear. The side view also draws a bracket standing 29.5 mm behind
+      the body at the rear: these are the rear support ears (below) and are not part of the 380. 443 is
+      the body between the ear folds.
+  front-layout:
+    confidence: photo-measured
+    note: >-
+      Four jack blocks of six columns by two rows on the 13.97 mm pitch, the first jack housing at 10.1
+      mm and the blocks 88.4 mm apart (gutter 4.58 mm), the SFP+ block 30.5 mm wide at 362.3 mm, the QSFP+
+      block 21.1 mm wide at 396.4 mm and the console and management block 18.4 mm wide at 418.8 mm, as
+      measured in photograph 1911. The row pitch is the pilot's 13.4 mm. Colours are the pilot's (face
+      #dadada, plates #bebebe). The grey label pads above the jack numbers and the plug symbol of the
+      PoE out legend are printed marks and are not drawn.
+  poe-markings:
+    confidence: photo-measured
+    note: >-
+      Left of the first column the front prints a red square with 53V, a green square with 26V and the
+      legend PoE out (photograph 1911, 5.8 mm from the face edge). The jack lamps change colour with the
+      passive voltage, so the squares are drawn as a colour key and not as lamps; the brochure and the
+      old quick guide say nothing of it.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      As the CRS354-48G: 2 4 ... 48 above the upper row and 1 3 ... 47 below the lower row; SFP+ 2 and
+      4 above and 1 and 3 below; 40G QSFP+ 2 above and 1 below; CONSOLE above and MGMT below the right-hand
+      pair. The 10/100 port of the brochure is the MGMT jack, whose two lamps the photograph shows.
+  lamps:
+    confidence: photo-measured
+    note: >-
+      The jacks carry their own two lamps in their keyway-side corners. The SFP+ strip carries eight arrow
+      lamps and the QSFP+ strip two arrows with four slots between them, at the CRS354-48G drawing's positions
+      (the photograph shows the same strips). The strip under the RESET button holds the FAULT and POWER
+      lamps, 2.6 and 7.9 mm from its left end (photograph 1911); its right end is the reset button's.
+      No document held says what a lamp shows (the brochure and the quick guide give no LED table), so
+      none carries states beyond the component's own.
+  reset:
+    confidence: photo-measured
+    note: >-
+      RESET is a round button at 430.6 mm (photograph 1911), the library's recessed reset part. The old
+      quick guide's reset section says to hold the button at power-up until the lamp flashes.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      estimated - no rear elevation is held; the positions are read off the studio rear photograph 1913.
+      It looks down on the rear, so x is taken at 14.72 px per mm across the 443 mm body (the photograph
+      is 7560 px wide) and y at 13.4 px per mm for the 44.3 mm panel. They are good to about 1.5 mm in
+      x and 2 mm in y. As seen from the rear: one hex vent field 75 x 36.8 mm at 27.0 mm, and the C14
+      inlet centred at 403.6 mm, 23.2 mm down. The inlet is turned a quarter turn (its earth pin on the
+      right) with the legend 100-240 V / ~10A MAX, 50/60 Hz to its lower right. The wire retaining loop
+      on the inlet is an accessory (the drawing dimensions only its 7 mm standoff) and is not drawn.
+  built-in-power-and-fans:
+    confidence: datasheet
+    note: >-
+      The product page lists one AC input, one PSU slot and "4 fans"; the old quick guide lists "Four
+      cooling fans with automatic speed control" and the brochure a 750 W power supply. The rear photographs
+      show a plain panel with the inlet on it and no removable module, and no held document prints a supply
+      module part number, so the supply is built in: part of the chassis, not a bay. The two fan rings
+      of the drawing's side view are fans of the chassis, drawn as fan openings. The other two fans are
+      placed by no held document and are not drawn. The vent fields are vents.
+  ac-input-rating:
+    confidence: photo-measured
+    note: >-
+      The inlet prints "100-240 V ~10A MAX, 50/60 Hz" beside it (photograph 1913); the brochure's range
+      is 100 - 240 V and the old quick guide's nominal amperage is 13.5 A at 53 V.
+  side-walls:
+    confidence: drawing
+    note: >-
+      The drawing's side view has its rear at the left, so it is the left wall seen from the left (x =
+      0 is the rear on the left face): two fan rings 38.8 mm across at 65.1 and 105.3 mm, centred 22.3
+      mm down, a vent field 37.2 x 37.0 mm at 228.6 mm and another 33.9 x 24.4 mm at 316.4 mm. The isometric
+      and photograph 1909 show the right wall with a vent field at the front end; it is drawn mirrored
+      from the left wall's, 29.7 mm from the front, and is estimated. The right wall's further vent field
+      near the rear is not dimensioned and is not drawn.
+  ears:
+    confidence: drawing
+    note: >-
+      Rack ears are in the box (brochure and product page, Included: Rackmount ears (CRS), K-68 screw
+      kit). The front ear plate sits at the front end of the body, so the shipped position is flush; the
+      top plan shows no ears (443 is the body). The ears are not drawn. The included "rear support ears"
+      and the cable management brackets are not drawn: the library has no way to say an ear at the rear,
+      and the drawing does not dimension them.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The pilot's face (#dadada) and plate (#bebebe) are carried: the photographs are rendered studio
+      views whose shading differs from the pilot's straight-on photograph.
+attrs:
+  power: {power-max-w: 800, power-without-attachments-w: 85, power-supply-w: 750, power-input: '100 -
+      240 V AC, one input', poe-budget-w: 700, poe-standard: IEEE 802.3af/at; 26 V or 53 V passive}
+  thermal: {cooling: 4 fans (product page and old quick guide)}
+  environmental: {operating-temp-c: -20 to 60 (tested)}
+  platform: {cpu: 'QCA9531, 650 MHz', switch-chip: 98DX3257, ram: 128 MB, storage: 32 MB flash, os: RouterOS
+      v7 / SwitchOS (licence level 5)}
+  performance:
+    throughput: non-blocking 168 Gbps, switching capacity 336 Gbps, forwarding rate 235 Mpps (brochure)
+    port-modes-sfp-plus: 10G SFP+ (brochure); no module list is printed
+    port-modes-qsfp: 40G QSFP+ (brochure); no module or breakout list is printed
+  compliance: {certification: 'CE, EAC, RoHS'}
+chassis:
+  width: 443.0
+  height: 44.3
+  depth: 380.0
+  ru: 1
+  color: '#dadada'
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+  power: ac
+gaps:
+- what: rear-elevation
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The dimensions drawing has no rear view; the rear is read off studio photographs that look down on
+    it, so the y positions are estimated.
+  wanted: A dimensioned rear view.
+- what: rear-support-ears
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The box holds rear support ears (brochure and product page; the old quick guide's "additional adjustable
+    mounting ears"); the drawing's side view shows a bracket 29.5 mm behind the body. The ear model has
+    no way to say an ear at the rear, so they are not drawn.
+  wanted: A way to model rear support ears, and a drawing that dimensions them.
+- what: fans-three-and-four
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: >-
+    The product page and the old quick guide count four fans; the drawing shows two fan rings, in the
+    left wall. No held document places the other two.
+  wanted: A drawing or photograph of the other two fans.
+- what: right-side-wall
+  scope:
+  - right
+  reason: needs-drawing
+  note: >-
+    The drawing's one side view is the left wall; the right wall's front vent field is seen only in the
+    isometric and photograph 1909, so it is drawn mirrored from the left and its position is estimated;
+    the vent field near its rear is not drawn.
+  wanted: A dimensioned view of the right wall.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    Searched the brochure and the old quick guide for an LED table: none. The lamps carry the components'
+    own vocabulary and no colour or meaning is stated for POWER and FAULT.
+  wanted: MikroTik's LED description for the CRS354-48P.
+- {what: weight, scope: [front], reason: vendor-silent, note: Neither the brochure nor the product page
+    gives a weight., wanted: MikroTik's weight.}
+- what: eol
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The saved product page carries no Discontinued badge and MikroTik publishes no end-of-life page, so
+    no lifecycle is written.
+  wanted: none
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: >-
+      the 48 10/100/1000 PoE-out ports; rel-pos carries the number printed on the front, the lower jack
+      of a column takes the odd number
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four SFP+ cages, 1 and 3 below, 2 and 4 above
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp, speed: 40g}
+    description: the two 40G QSFP+ cages, 1 below and 2 above
+  sfp-leds: {term: LED, role: indicator, index-origin: 1, description: the arrow lamps of the SFP+ and
+      QSFP+ strips}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the RJ45 serial console over the 10/100 management Ethernet RJ45 at the right-hand end.
+  controls: {term: Button, role: management, index-origin: 1, description: the RESET button}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: the FAULT and POWER lamps}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: the AC inlet}
+views:
+  front:
+    size: {w: 443.0, h: 44.3}
+    panel:
+      decor:
+      - {id: plate-1, kind: jack-plate, at: [7.3, 12.2], size: [86.4, 26.5], fill: '#bebebe'}
+      - {id: plate-2, kind: jack-plate, at: [95.7, 12.2], size: [86.4, 26.5], fill: '#bebebe'}
+      - {id: plate-3, kind: jack-plate, at: [184.1, 12.2], size: [86.4, 26.5], fill: '#bebebe'}
+      - {id: plate-4, kind: jack-plate, at: [272.5, 12.2], size: [86.4, 26.5], fill: '#bebebe'}
+      - {id: poe-key-53v, kind: colour-key, at: [4.9, 15.3], size: [1.8, 1.8], fill: '#d33a32'}
+      - {id: poe-key-26v, kind: colour-key, at: [4.9, 21.4], size: [1.8, 1.8], fill: '#2e9e4f'}
+      - {id: sfp-block, kind: cage-plate, at: [362.3, 12.4], size: [30.3, 26.4], fill: '#2b2b2b'}
+      - {id: sfp-strip, kind: lamp-band, at: [362.3, 22.8], size: [30.3, 5.3], fill: '#8f8f8e'}
+      - {id: qsfp-block, kind: cage-plate, at: [396.1, 12.4], size: [20.9, 26.4], fill: '#2b2b2b'}
+      - {id: qsfp-strip, kind: lamp-band, at: [396.1, 23.1], size: [20.9, 4.7], fill: '#8f8f8e'}
+      - {id: qsfp-lanes-1, kind: lane-marks, at: [402.8, 24.7], size: [2.5, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-2, kind: lane-marks, at: [405.9, 24.7], size: [2.5, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-3, kind: lane-marks, at: [409.0, 24.7], size: [2.5, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: qsfp-lanes-4, kind: lane-marks, at: [412.1, 24.7], size: [2.5, 1.5], fill: '#2b2b2b', rx: 0.3}
+      - {id: mgmt-block, kind: jack-plate, at: [418.6, 12.4], size: [18.3, 26.4], fill: '#6b6b6b'}
+      - {id: lamp-strip, kind: lamp-band, at: [420.4, 6.8], size: [12.0, 2.7], fill: '#8f8f8e'}
+      cutouts:
+      - {id: port-1, at: [10.1, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [10.1, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [24.07, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [24.07, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [38.04, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [38.04, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [52.01, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [52.01, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [65.98, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [65.98, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [79.95, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [79.95, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [98.5, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [98.5, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [112.47, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [112.47, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [126.44, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [126.44, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [140.41, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [140.41, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [154.38, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [154.38, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [168.35, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [168.35, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [186.9, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-26, at: [186.9, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-27, at: [200.87, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-28, at: [200.87, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-29, at: [214.84, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-30, at: [214.84, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-31, at: [228.81, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-32, at: [228.81, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-33, at: [242.78, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-34, at: [242.78, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-35, at: [256.75, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-36, at: [256.75, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-37, at: [275.3, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-38, at: [275.3, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-39, at: [289.27, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-40, at: [289.27, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-41, at: [303.24, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-42, at: [303.24, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-43, at: [317.21, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-44, at: [317.21, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-45, at: [331.18, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-46, at: [331.18, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: port-47, at: [345.15, 27.3], size: [12.7, 11.0], shape: rect}
+      - {id: port-48, at: [345.15, 13.9], size: [12.7, 11.0], shape: rect}
+      - {id: uplink-1, at: [362.8, 28.4], size: [14.25, 10.4], shape: rect}
+      - {id: uplink-2, at: [362.8, 12.4], size: [14.25, 10.4], shape: rect}
+      - {id: uplink-3, at: [378.1, 28.4], size: [14.25, 10.4], shape: rect}
+      - {id: uplink-4, at: [378.1, 12.4], size: [14.25, 10.4], shape: rect}
+      - {id: uplink-40g-1, at: [397.3, 29.2], size: [18.5, 9.58], shape: rect}
+      - {id: uplink-40g-2, at: [397.3, 12.6], size: [18.5, 9.58], shape: rect}
+      - {id: console, at: [419.85, 12.5], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt-eth, at: [419.85, 25.7], size: [15.8, 13.2], shape: rect}
+      - {id: btn-reset, at: [428.6, 2.8], size: [4.0, 4.0], shape: circle}
+      - {id: led-sfp-1a, at: [364.9, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2a, at: [368.8, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-1b, at: [371.2, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-2b, at: [374.1, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-4a, at: [378.6, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-3a, at: [381.5, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-4b, at: [384.1, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-sfp-3b, at: [387.8, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-qsfp-2, at: [398.5, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-qsfp-1, at: [412.2, 24.4], size: [2.25, 2.0], shape: rect}
+      - {id: led-fault, at: [421.6, 7.35], size: [2.8, 1.6], shape: rect}
+      - {id: led-power, at: [426.9, 7.35], size: [2.8, 1.6], shape: rect}
+    silkscreen:
+    - {at: [16.45, 41.6], text: '1', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-1}
+    - {at: [16.45, 10.8], text: '2', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-2}
+    - {at: [30.42, 41.6], text: '3', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-3}
+    - {at: [30.42, 10.8], text: '4', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-4}
+    - {at: [44.39, 41.6], text: '5', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-5}
+    - {at: [44.39, 10.8], text: '6', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-6}
+    - {at: [58.36, 41.6], text: '7', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-7}
+    - {at: [58.36, 10.8], text: '8', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-8}
+    - {at: [72.33, 41.6], text: '9', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-9}
+    - {at: [72.33, 10.8], text: '10', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-10}
+    - {at: [86.3, 41.6], text: '11', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-11}
+    - {at: [86.3, 10.8], text: '12', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-12}
+    - {at: [104.85, 41.6], text: '13', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-13}
+    - {at: [104.85, 10.8], text: '14', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-14}
+    - {at: [118.82, 41.6], text: '15', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-15}
+    - {at: [118.82, 10.8], text: '16', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-16}
+    - {at: [132.79, 41.6], text: '17', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-17}
+    - {at: [132.79, 10.8], text: '18', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-18}
+    - {at: [146.76, 41.6], text: '19', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-19}
+    - {at: [146.76, 10.8], text: '20', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-20}
+    - {at: [160.73, 41.6], text: '21', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-21}
+    - {at: [160.73, 10.8], text: '22', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-22}
+    - {at: [174.7, 41.6], text: '23', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-23}
+    - {at: [174.7, 10.8], text: '24', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-24}
+    - {at: [193.25, 41.6], text: '25', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-25}
+    - {at: [193.25, 10.8], text: '26', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-26}
+    - {at: [207.22, 41.6], text: '27', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-27}
+    - {at: [207.22, 10.8], text: '28', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-28}
+    - {at: [221.19, 41.6], text: '29', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-29}
+    - {at: [221.19, 10.8], text: '30', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-30}
+    - {at: [235.16, 41.6], text: '31', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-31}
+    - {at: [235.16, 10.8], text: '32', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-32}
+    - {at: [249.13, 41.6], text: '33', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-33}
+    - {at: [249.13, 10.8], text: '34', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-34}
+    - {at: [263.1, 41.6], text: '35', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-35}
+    - {at: [263.1, 10.8], text: '36', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-36}
+    - {at: [281.65, 41.6], text: '37', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-37}
+    - {at: [281.65, 10.8], text: '38', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-38}
+    - {at: [295.62, 41.6], text: '39', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-39}
+    - {at: [295.62, 10.8], text: '40', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-40}
+    - {at: [309.59, 41.6], text: '41', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-41}
+    - {at: [309.59, 10.8], text: '42', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-42}
+    - {at: [323.56, 41.6], text: '43', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-43}
+    - {at: [323.56, 10.8], text: '44', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-44}
+    - {at: [337.53, 41.6], text: '45', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-45}
+    - {at: [337.53, 10.8], text: '46', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-46}
+    - {at: [351.5, 41.6], text: '47', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-47}
+    - {at: [351.5, 10.8], text: '48', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: port-48}
+    - {at: [369.9, 41.6], text: '1', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-1}
+    - {at: [369.9, 10.8], text: '2', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-2}
+    - {at: [385.2, 41.6], text: '3', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-3}
+    - {at: [385.2, 10.8], text: '4', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-4}
+    - {at: [406.55, 41.6], text: '1', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-40g-1}
+    - {at: [406.55, 10.8], text: '2', font-size: 1.9, anchor: middle, fill: '#2b2b2b', for: uplink-40g-2}
+    - {at: [27.0, 7.4], text: CRS354-48P-4S+2Q+, font-size: 2.2, anchor: start, fill: '#2b2b2b', for: chassis}
+    - {at: [185.0, 8.3], text: GIGABIT ETHERNET, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [377.5, 8.3], text: SFP+, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [406.5, 8.3], text: 40G QSFP+, font-size: 1.8, anchor: middle, fill: '#2b2b2b', for: chassis}
+    - {at: [427.7, 11.3], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: console}
+    - {at: [427.7, 41.6], text: MGMT, font-size: 1.5, anchor: middle, fill: '#2b2b2b', for: mgmt-eth}
+    - {at: [420.0, 4.7], text: POWER, font-size: 1.4, anchor: end, fill: '#2b2b2b', for: led-power}
+    - {at: [420.0, 8.6], text: FAULT, font-size: 1.4, anchor: end, fill: '#2b2b2b', for: led-fault}
+    - {at: [435.0, 5.25], text: RESET, font-size: 1.4, anchor: start, fill: '#2b2b2b', for: btn-reset}
+    - {at: [3.6, 18.3], text: 53V, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [3.6, 24.3], text: 26V, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    - {at: [3.6, 33.4], text: PoE out, font-size: 1.5, anchor: middle, rotate: -90, fill: '#2b2b2b', for: chassis}
+    components:
+      placements:
+      - ref: common/rj45-ganged-eth@1
+        id: port-1
+        at: [10.1, 27.3]
+        group: rj45
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-2
+        at: [10.1, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 2
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-3
+        at: [24.07, 27.3]
+        group: rj45
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-4
+        at: [24.07, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 4
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-5
+        at: [38.04, 27.3]
+        group: rj45
+        rel-pos: 5
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-6
+        at: [38.04, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 6
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-7
+        at: [52.01, 27.3]
+        group: rj45
+        rel-pos: 7
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-8
+        at: [52.01, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 8
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-9
+        at: [65.98, 27.3]
+        group: rj45
+        rel-pos: 9
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-10
+        at: [65.98, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 10
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-11
+        at: [79.95, 27.3]
+        group: rj45
+        rel-pos: 11
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-12
+        at: [79.95, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 12
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-13
+        at: [98.5, 27.3]
+        group: rj45
+        rel-pos: 13
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-14
+        at: [98.5, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 14
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-15
+        at: [112.47, 27.3]
+        group: rj45
+        rel-pos: 15
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-16
+        at: [112.47, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 16
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-17
+        at: [126.44, 27.3]
+        group: rj45
+        rel-pos: 17
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-18
+        at: [126.44, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 18
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-19
+        at: [140.41, 27.3]
+        group: rj45
+        rel-pos: 19
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-20
+        at: [140.41, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 20
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-21
+        at: [154.38, 27.3]
+        group: rj45
+        rel-pos: 21
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-22
+        at: [154.38, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 22
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-23
+        at: [168.35, 27.3]
+        group: rj45
+        rel-pos: 23
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-24
+        at: [168.35, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 24
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-25
+        at: [186.9, 27.3]
+        group: rj45
+        rel-pos: 25
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-26
+        at: [186.9, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 26
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-27
+        at: [200.87, 27.3]
+        group: rj45
+        rel-pos: 27
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-28
+        at: [200.87, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 28
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-29
+        at: [214.84, 27.3]
+        group: rj45
+        rel-pos: 29
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-30
+        at: [214.84, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 30
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-31
+        at: [228.81, 27.3]
+        group: rj45
+        rel-pos: 31
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-32
+        at: [228.81, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 32
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-33
+        at: [242.78, 27.3]
+        group: rj45
+        rel-pos: 33
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-34
+        at: [242.78, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 34
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-35
+        at: [256.75, 27.3]
+        group: rj45
+        rel-pos: 35
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-36
+        at: [256.75, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 36
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-37
+        at: [275.3, 27.3]
+        group: rj45
+        rel-pos: 37
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-38
+        at: [275.3, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 38
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-39
+        at: [289.27, 27.3]
+        group: rj45
+        rel-pos: 39
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-40
+        at: [289.27, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 40
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-41
+        at: [303.24, 27.3]
+        group: rj45
+        rel-pos: 41
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-42
+        at: [303.24, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 42
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-43
+        at: [317.21, 27.3]
+        group: rj45
+        rel-pos: 43
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-44
+        at: [317.21, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 44
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-45
+        at: [331.18, 27.3]
+        group: rj45
+        rel-pos: 45
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-46
+        at: [331.18, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 46
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-47
+        at: [345.15, 27.3]
+        group: rj45
+        rel-pos: 47
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: common/rj45-ganged-eth@1
+        id: port-48
+        at: [345.15, 13.9]
+        rotate: 180
+        group: rj45
+        rel-pos: 48
+        attrs: {media: rj45, speed: 1g, poe: IEEE 802.3af/at out; 26 V or 53 V passive out}
+      - ref: std/sfp-ganged@1
+        id: uplink-1
+        at: [362.8, 28.4]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 1
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: uplink-2
+        at: [362.8, 12.4]
+        group: sfp-plus
+        rel-pos: 2
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: uplink-3
+        at: [378.1, 28.4]
+        rotate: 180
+        group: sfp-plus
+        rel-pos: 3
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/sfp-ganged@1
+        id: uplink-4
+        at: [378.1, 12.4]
+        group: sfp-plus
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g}
+      - ref: std/qsfp-ganged@1
+        id: uplink-40g-1
+        at: [397.3, 29.2]
+        rotate: 180
+        group: qsfp-plus
+        rel-pos: 1
+        attrs: {media: qsfp, speed: 40g}
+      - ref: std/qsfp-ganged@1
+        id: uplink-40g-2
+        at: [397.3, 12.6]
+        group: qsfp-plus
+        rel-pos: 2
+        attrs: {media: qsfp, speed: 40g}
+      - ref: std/rj45@2
+        id: console
+        at: [419.85, 12.5]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-eth@1
+        id: mgmt-eth
+        at: [419.85, 25.7]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45, role: mgmt, speed: 100m}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1a, skin: down, at: [364.9, 24.4], group: sfp-leds, rel-pos: 1,
+        for: uplink-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2a, skin: up, at: [368.8, 24.4], group: sfp-leds, rel-pos: 2,
+        for: uplink-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-1b, skin: down, at: [371.2, 24.4], group: sfp-leds, rel-pos: 3,
+        for: uplink-1}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-2b, skin: up, at: [374.1, 24.4], group: sfp-leds, rel-pos: 4,
+        for: uplink-2}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-4a, skin: up, at: [378.6, 24.4], group: sfp-leds, rel-pos: 5,
+        for: uplink-4}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-3a, skin: down, at: [381.5, 24.4], group: sfp-leds, rel-pos: 6,
+        for: uplink-3}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-4b, skin: up, at: [384.1, 24.4], group: sfp-leds, rel-pos: 7,
+        for: uplink-4}
+      - {ref: common/led-arrow-sm@1, id: led-sfp-3b, skin: down, at: [387.8, 24.4], group: sfp-leds, rel-pos: 8,
+        for: uplink-3}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp-2, skin: up, at: [398.5, 24.4], group: sfp-leds, rel-pos: 9,
+        for: uplink-40g-2}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp-1, skin: down, at: [412.2, 24.4], group: sfp-leds, rel-pos: 10,
+        for: uplink-40g-1}
+      - {ref: common/led-rect-sm@1, id: led-fault, at: [421.6, 7.35], for: chassis, group: status-leds,
+        rel-pos: 1}
+      - {ref: common/led-rect-sm@1, id: led-power, at: [426.9, 7.35], for: chassis, group: status-leds,
+        rel-pos: 2}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [428.6, 2.8]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+    regions:
+    - id: logo-zone
+      at: [3.4, 3.6]
+      size: {w: 22.0, h: 5.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 443.0, h: 44.3}
+    panel:
+      decor:
+      - {id: rear-vent, kind: vent-field, at: [27.0, 3.6], size: [75.0, 36.8], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: ac-inlet, at: [393.6, 9.2], size: [20.0, 28.0], shape: rect}
+    silkscreen:
+    - {at: [426.2, 38.1], text: 100-240 V, font-size: 2.2, anchor: middle, fill: '#2b2b2b', for: ac-inlet}
+    - {at: [424.0, 41.3], text: '~10A MAX, 50/60 Hz', font-size: 2.2, anchor: middle, fill: '#2b2b2b',
+      for: ac-inlet}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet, at: [389.6, 13.2], rotate: 90, group: inlets, rel-pos: 1}
+  top:
+    size: {w: 443.0, h: 380.0}
+    empty: >-
+      The drawing's top plan shows a plain lid with six embossed ribs and the Cloud Switch mark (a brand
+      mark, not drawn), and no vents or openings.
+  bottom:
+    size: {w: 443.0, h: 380.0}
+    empty: >-
+      Not drawn by any source held: neither the drawing, the brochure nor the studio photographs picture
+      the underside.
+  left:
+    size: {w: 380.0, h: 44.3}
+    panel:
+      decor:
+      - {id: fan-1, kind: fan-grille, at: [45.7, 2.9], size: [38.8, 38.8], rx: 19.4, pattern: vent, vent: 1.0}
+      - {id: fan-2, kind: fan-grille, at: [85.9, 2.9], size: [38.8, 38.8], rx: 19.4, pattern: vent, vent: 1.0}
+      - {id: side-vent-1, kind: vent-field, at: [228.6, 3.7], size: [37.2, 37.0], pattern: vent, vent: 1.0}
+      - {id: side-vent-2, kind: vent-field, at: [316.4, 9.3], size: [33.9, 24.4], pattern: vent, vent: 1.0}
+  right:
+    size: {w: 380.0, h: 44.3}
+    panel:
+      decor:
+      - {id: side-vent, kind: vent-field, at: [29.7, 9.3], size: [33.9, 24.4], pattern: vent, vent: 1.0}
+configurations:
+  base:
+    kind: base
+    description: >-
+      CRS354-48P-4S+2Q+RM - 48 10/100/1000 PoE-out ports, four SFP+ cages, two QSFP+ cages, the management
+      jack and the RJ45 console. The box holds an IEC cord, rack ears, rear support ears, the K-68 screw
+      kit and cable management brackets.
+    default: true
+    part-numbers:
+      CRS354-48P-4S+2Q+RM: {}
+references:
+- title: >-
+    CRS354-48P-4S+2Q+RM brochure (MikroTik; revision stamp 240917, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS354-48P-4Splus2QplusRM_240917.pdf)
+  sha256: f56c50bd6c1a9f6c76a358bb5b103ff8b6a4216dd41adebe76ef345126f7eb0d
+- title: >-
+    CRS354_48P_dimensions (MikroTik; printed 20.09.2023; https://cdn.mikrotik.com/web-assets/product_files/CRS354_48P_dimensions_230946.pdf)
+  sha256: 4d5c705dea1eed5c23dc3d8cb05cc382b29524bc33c1f4ac13c1ce1ecdc3fe1d
+- title: >-
+    CRS354-48P-4S+2Q+RM quick guide (MikroTik; revision stamp 200252, no date printed; https://cdn.mikrotik.com/web-assets/product_files/CRS354-48P-4Splus2QplusRM_200252.pdf)
+  sha256: cbf6e220c3fdb4fda8f5b31e7a8ed8e09bdf99a16e4e323267939622ed57c2fc

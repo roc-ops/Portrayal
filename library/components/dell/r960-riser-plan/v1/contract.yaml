@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: r960-riser-plan
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  riser 1 of the PowerEdge R960 seen from above - the black cage roof with its printed
+  riser caption and the step and handle that run forward under it
+provenance:
+  size: >-
+    measured - Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `PowerEdge_R960_Riser1_Long`
+    under `R960_ Riser 1B_FL` in the `Main Assembly` node, 159.9 x 357.0 at plan (280.2, 1.2) (plan x = 228.0 - cad x1, plan y =
+    883.94 - cad z1). The model holds the full-length 1B only. The first pass read a 105.0 x 258.0 roof off ISM figure 12
+    (1227 x 1854 at 300 ppi, 1.86 px/mm down against 1.81 across): the roof was the cage the rear face gives
+    (ISM figure 10, 100 to 105) and the board runs 54.9 wider and 99.0 longer. The ISM's table 13 gives riser 1B half-length slots, which
+    the model's "FL" name and 357.0 do not: recorded as sources-disagree on the device (`riser-length-model-vs-table-13`). The other
+    riser 1 variants (1A, 1C) are not in the model and share this plan.
+  roof: >-
+    photo-measured - figure 12: a black plate about 130 long from the rear with its caption ("RISER 1") and two square
+    cut-outs, then the handle step (a lighter, rounded plate with a blue stripe) to the end. The art keeps the figure's
+    proportions at the model's width and length; the cage's own width is not separately in the model.
+  is-a-plan: >-
+    A plan part: what the top view draws where the rear bay projects the riser.
+size: {w: 159.9, h: 357.0}
+size-confidence: {w: measured, h: measured}
+skins: [default]

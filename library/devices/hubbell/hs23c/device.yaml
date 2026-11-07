@@ -1,0 +1,280 @@
+format: 1
+kind: device
+name: hs23c
+version: 0.1.1
+maturity: modelled
+manufacturer: Hubbell
+model: HS23C
+aliases:
+  - {name: '662620249834', kind: vendor}
+description: >-
+  2 RU S-Series horizontal cable manager, catalogue HS23C, UPC 662620249834. A 14 gauge steel
+  plate as wide as the rack has four windows a cable crosses through. A flange folds forward
+  along its foot and five fingers run along its top, 3 in (76 mm) out to a lift-off cover.
+  The cover closes the front. The maker says the fingers align with the adaptors of a patch
+  panel.
+profile: passive
+provenance:
+  method:
+    confidence: datasheet
+    note: >-
+      FIGURES FROM THE MAKER'S OWN SPEC SHEET. Hubbell publishes one PDF per catalogue number,
+      PREMISE_HS23C_spec.pdf on hubbellcdn.com (sha256 below): a features list, an ordering
+      table, specifications, characteristics, accessories and a dimensions table, A 2 RU,
+      3.5 in (89), B 19 in (483), C 3 in (76), beside one isometric figure that marks A, B
+      and C. The sheet lists no "Customer Use Drawing" (only "Customer Drawings" and
+      "eCatalog", whose host, ecatalog.hubbell-premise.com, does not resolve, checked
+      2026-10-18), so no dimensioned drawing was read: the figure is a line drawing without
+      a scale, and everything read off it is `estimated`, with how.
+  ears:
+    confidence: datasheet
+    note: >-
+      datasheet - `positions` states where the part bolts, for the Rack Builder. The plate is
+      the part's own ears and stands at the back of the part, so the rail plane is the back of
+      the plate and the whole depth, C, 76.2, stands in front of it: `at` is 76.2. The sheet's
+      accessories list a replacement cover and hook-and-loop ties and no rail kit, so `kits`
+      is not stated.
+  full-depth:
+    confidence: datasheet
+    note: >-
+      `full-depth: false` - nothing of the part stands behind the rail; it reaches 76.2 in
+      front of it, so the rack unit's rear face is free.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 482.6 x 88.9 x 76.2. Width is B, 19 in; height is A, 3.5 in, which the
+      figure marks along the plate's end; ru is the sheet's 2 RU; depth is C, 3 in, the sheet's
+      own "Depth 3 in", the whole projection from the back of the plate to the front of the
+      cover.
+  thickness:
+    confidence: datasheet
+    note: >-
+      datasheet - "Gauge 14", 0.0747 in, 1.9 mm by the standard sheet gauge.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the front: the plate with its four windows, the flange along its foot, the
+      five fingers along its top, the five tabs and the cover. The figure has no scale, so the
+      finger pitch and the window sizes are read against B (see the plate's `windows`): five
+      fingers 104 mm apart, symmetric about the middle, one over the web between each pair of
+      windows and one at each end. The cover is drawn fitted; the `cover-off` configuration
+      leaves it off and shows the fingers and tabs.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the plate: the four windows and the plate round them. The
+      figure draws a hole in each ear, not drawn here (see the plate's `mounting-holes`).
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear at y=0: the plate's edge and the five fingers lying
+      forward from it. The cover's edge is not drawn: the configuration with it off draws the
+      same plan.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear on the left: the plate's edge, a finger along the top,
+      the flange along the foot and a tab standing up at the front of it. The right is the
+      same, turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the `duct` guide is the channel between the finger row and the flange,
+      the width of the part, its run along the rack: 85.1 mm high, from under the fingers to
+      over the flange. `finger-pitch` is the 104 mm between fingers read on the figure and
+      `finger-gap` the 80 mm between two, the pitch less the finger's 24.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - material, gauge and finish are the sheet's specification table; the cover,
+      the pass-through holes and the corresponding vertical manager are its characteristics
+      table; the UPC is its ordering table.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the sheet states no cable capacity, so none is stated here and none is
+      estimated.
+attrs:
+  physical:
+    material: Steel
+    gauge: 14
+    finish: Black Powder Coated
+  features:
+    cover: Included, lift off
+    pass-through-holes: Standard
+    vertical-manager: VS Series
+    replacement-cover: HS2C
+chassis:
+  width: 482.6
+  height: 88.9
+  depth: 76.2
+  ru: 2
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 76.2, default: true}
+  shell: sheet
+  thickness: 1.9
+  color: '#1b1d20'
+gaps:
+  - what: finger-geometry
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the sheet's figure draws five top fingers, a flange with five tabs and windows in the
+      plate, and its table gives A, B and C only. The finger width, the tab size and the
+      window sizes are read off the figure against B and A. The top view's tip radius (6 mm)
+      and folded rim (the sheet's 1.9 mm) are stand-ins for the rounded tip and folded edge
+      the figure shows, and the fold's depth is not drawn. The finger, tab and flange are
+      drawn in mid steel tones so they read against the black plate; the sheet states none.
+    wanted: the dimensioned customer drawing
+  - what: cover-face
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the sheet's figure shows a rolled top edge on the cover, two slot marks near the ends and
+      the name plate at the middle. The face draws a 6 mm roll, a 14 by 4 mm slot 12 mm in from
+      each end and the plate's 45 by 25 mm box blank; the roll's width and the slot's size and
+      place are stand-ins.
+    wanted: the dimensioned customer drawing
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the sheet states no count of cables, nor a basis for one; it says only that the
+      fingers align with the patch panel's adaptors.
+    wanted: a maker's figure with its basis
+  - what: weight
+    scope: [front]
+    reason: vendor-silent
+    note: the sheet states no weight.
+    wanted: the part's weight
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the steel plate with its four windows and the flange along its foot
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: the five fingers along the top of the plate, left to right, and the five tabs along the flange
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the lift-off cover across the front
+views:
+  front:
+    size: {w: 482.6, h: 88.9}
+    components:
+      placements:
+        - {ref: hubbell/hs23c-plate@1, id: plate, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: hubbell/hs23c-floor@1, id: floor, at: [0.0, 87.0], group: body, rel-pos: 2, in: plate}
+        - {ref: hubbell/hs23c-finger@1, id: finger-1, at: [21.3, 0.0], group: fingers, rel-pos: 1, in: plate, under: cover}
+        - {ref: hubbell/hs23c-finger@1, id: finger-2, at: [125.3, 0.0], group: fingers, rel-pos: 2, in: plate, under: cover}
+        - {ref: hubbell/hs23c-finger@1, id: finger-3, at: [229.3, 0.0], group: fingers, rel-pos: 3, in: plate, under: cover}
+        - {ref: hubbell/hs23c-finger@1, id: finger-4, at: [333.3, 0.0], group: fingers, rel-pos: 4, in: plate, under: cover}
+        - {ref: hubbell/hs23c-finger@1, id: finger-5, at: [437.3, 0.0], group: fingers, rel-pos: 5, in: plate, under: cover}
+        - {ref: hubbell/hs23c-tab@1, id: tab-1, at: [25.8, 67.0], group: fingers, rel-pos: 6, in: plate, under: cover}
+        - {ref: hubbell/hs23c-tab@1, id: tab-2, at: [129.8, 67.0], group: fingers, rel-pos: 7, in: plate, under: cover}
+        - {ref: hubbell/hs23c-tab@1, id: tab-3, at: [233.8, 67.0], group: fingers, rel-pos: 8, in: plate, under: cover}
+        - {ref: hubbell/hs23c-tab@1, id: tab-4, at: [337.8, 67.0], group: fingers, rel-pos: 9, in: plate, under: cover}
+        - {ref: hubbell/hs23c-tab@1, id: tab-5, at: [441.8, 67.0], group: fingers, rel-pos: 10, in: plate, under: cover}
+        - {ref: hubbell/hs2c@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: plate, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [45.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-2, at: [149.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-3, at: [253.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-4, at: [357.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+    guides:
+      - {id: duct, kind: duct, at: [0, 1.9], size: [482.6, 85.1], run: x, finger-pitch: 104.0, finger-gap: 80.0, confidence: estimated, source: 'HS23C spec sheet figure: five fingers read against B (19 in) and the plate against A (3.5 in)'}
+  rear:
+    size: {w: 482.6, h: 88.9}
+    panel:
+      decor:
+        - {id: back-top, at: [0, 0], size: [482.6, 8.9], fill: '#1b1d20', kind: plate}
+        - {id: back-bottom, at: [0, 80], size: [482.6, 8.9], fill: '#1b1d20', kind: plate}
+        - {id: back-left, at: [0, 8.9], size: [45.3, 71.1], fill: '#1b1d20', kind: plate}
+        - {id: back-web-1, at: [125.3, 8.9], size: [24, 71.1], fill: '#1b1d20', kind: plate}
+        - {id: back-web-2, at: [229.3, 8.9], size: [24, 71.1], fill: '#1b1d20', kind: plate}
+        - {id: back-web-3, at: [333.3, 8.9], size: [24, 71.1], fill: '#1b1d20', kind: plate}
+        - {id: back-right, at: [437.3, 8.9], size: [45.3, 71.1], fill: '#1b1d20', kind: plate}
+    passes:
+      - {id: pass-through-1, at: [45.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-2, at: [149.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-3, at: [253.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+      - {id: pass-through-4, at: [357.3, 8.9], size: [80.0, 71.1], shape: rect, cover: open}
+  top:
+    size: {w: 482.6, h: 76.2}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.9], fill: '#1b1d20', kind: plate}
+        - {id: finger-1-top, at: [21.3, 1.9], size: [24, 72.4], rx: 6, fill: '#3a3f45', kind: finger}
+        - {id: finger-1-root, at: [21.3, 1.9], size: [24, 12], fill: '#3a3f45', kind: finger}
+        - {id: finger-1-face, at: [21.8, 2.4], size: [23, 71.4], rx: 5.5, fill: '#8b949e', kind: finger}
+        - {id: finger-1-face-root, at: [21.8, 2.4], size: [23, 11.5], fill: '#8b949e', kind: finger}
+        - {id: finger-1-rim-left, at: [21.8, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-1-rim-right, at: [42.9, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-2-top, at: [125.3, 1.9], size: [24, 72.4], rx: 6, fill: '#3a3f45', kind: finger}
+        - {id: finger-2-root, at: [125.3, 1.9], size: [24, 12], fill: '#3a3f45', kind: finger}
+        - {id: finger-2-face, at: [125.8, 2.4], size: [23, 71.4], rx: 5.5, fill: '#8b949e', kind: finger}
+        - {id: finger-2-face-root, at: [125.8, 2.4], size: [23, 11.5], fill: '#8b949e', kind: finger}
+        - {id: finger-2-rim-left, at: [125.8, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-2-rim-right, at: [146.9, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-3-top, at: [229.3, 1.9], size: [24, 72.4], rx: 6, fill: '#3a3f45', kind: finger}
+        - {id: finger-3-root, at: [229.3, 1.9], size: [24, 12], fill: '#3a3f45', kind: finger}
+        - {id: finger-3-face, at: [229.8, 2.4], size: [23, 71.4], rx: 5.5, fill: '#8b949e', kind: finger}
+        - {id: finger-3-face-root, at: [229.8, 2.4], size: [23, 11.5], fill: '#8b949e', kind: finger}
+        - {id: finger-3-rim-left, at: [229.8, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-3-rim-right, at: [250.9, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-4-top, at: [333.3, 1.9], size: [24, 72.4], rx: 6, fill: '#3a3f45', kind: finger}
+        - {id: finger-4-root, at: [333.3, 1.9], size: [24, 12], fill: '#3a3f45', kind: finger}
+        - {id: finger-4-face, at: [333.8, 2.4], size: [23, 71.4], rx: 5.5, fill: '#8b949e', kind: finger}
+        - {id: finger-4-face-root, at: [333.8, 2.4], size: [23, 11.5], fill: '#8b949e', kind: finger}
+        - {id: finger-4-rim-left, at: [333.8, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-4-rim-right, at: [354.9, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-5-top, at: [437.3, 1.9], size: [24, 72.4], rx: 6, fill: '#3a3f45', kind: finger}
+        - {id: finger-5-root, at: [437.3, 1.9], size: [24, 12], fill: '#3a3f45', kind: finger}
+        - {id: finger-5-face, at: [437.8, 2.4], size: [23, 71.4], rx: 5.5, fill: '#8b949e', kind: finger}
+        - {id: finger-5-face-root, at: [437.8, 2.4], size: [23, 11.5], fill: '#8b949e', kind: finger}
+        - {id: finger-5-rim-left, at: [437.8, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+        - {id: finger-5-rim-right, at: [458.9, 13.9], size: [1.9, 54.4], fill: '#6a727b', kind: finger}
+  bottom:
+    size: {w: 482.6, h: 76.2}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.9], fill: '#1b1d20', kind: plate}
+        - {id: floor, at: [0, 1.9], size: [482.6, 72.4], fill: '#33383d', kind: floor}
+  left:
+    size: {w: 76.2, h: 88.9}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [1.9, 88.9], fill: '#1b1d20', kind: plate}
+        - {id: finger-outline, at: [1.9, 0], size: [72.4, 1.9], rx: 0.5, fill: '#3a3f45', kind: finger}
+        - {id: finger, at: [2.2, 0.3], size: [71.8, 1.3], rx: 0.4, fill: '#8b949e', kind: finger}
+        - {id: floor, at: [1.9, 87.0], size: [72.4, 1.9], fill: '#33383d', kind: floor}
+        - {id: tab-outline, at: [72.4, 67.0], size: [1.9, 20.0], fill: '#3a3f45', kind: tab}
+        - {id: tab, at: [72.7, 67.3], size: [1.3, 19.4], fill: '#6f7882', kind: tab}
+  right:
+    size: {w: 76.2, h: 88.9}
+    panel:
+      decor:
+        - {id: plate-edge, at: [74.3, 0], size: [1.9, 88.9], fill: '#1b1d20', kind: plate}
+        - {id: finger-outline, at: [1.9, 0], size: [72.4, 1.9], rx: 0.5, fill: '#3a3f45', kind: finger}
+        - {id: finger, at: [2.2, 0.3], size: [71.8, 1.3], rx: 0.4, fill: '#8b949e', kind: finger}
+        - {id: floor, at: [1.9, 87.0], size: [72.4, 1.9], fill: '#33383d', kind: floor}
+        - {id: tab-outline, at: [1.9, 67.0], size: [1.9, 20.0], fill: '#3a3f45', kind: tab}
+        - {id: tab, at: [2.2, 67.3], size: [1.3, 19.4], fill: '#6f7882', kind: tab}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as Hubbell ships HS23C, the cover fitted.'
+  cover-off:
+    kind: example
+    description: 'The same manager with the cover taken off, the five fingers and tabs in view.'
+datasheet:
+  title: 'Hubbell Premise Wiring S-Series Rail Mounted horizontal cable manager, HS23C spec sheet'
+  sha256: ae983a60cc5c75b139b65cf972b39b445235f621b915b4f8504d5eb272ef3f95

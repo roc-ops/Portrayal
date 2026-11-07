@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: ex8200-pwr-dc3kr
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8200-PWR-DC3KR, the 3000 W DC power supply of the EX8216, with two redundant inputs (A and B) at -48 V.
+  It delivers 3000 W at 52 VDC and works from one input alone. The face has two pairs of DC input terminals
+  (studs for a lug), an ENABLE switch, the FAIL, OUT OK, A IN OK and B IN OK lamps, a vent field, a handle and a
+  captive screw. Up to six fit an EX8216, in slots PSU 0 to PSU 5. Each has its own fan and is hot-insertable and
+  hot-removable. Never mix them with AC supplies. Each input needs a dedicated 100 A circuit breaker.
+attrs:
+  role: dc-power-supply
+  power-output-w: 3000
+  airflow: front-to-back
+  inlet: dc-terminal
+  input: -40 to -72 VDC (nominal -48 VDC), 75 A maximum per input at nominal; output 52 VDC; 100 A internal fuse
+part-numbers:
+  EX8200-PWR-DC3KR: {part: EX8200-PWR-DC3KR}
+provenance:
+  sources: >-
+    datasheet - EX8216 Switch Hardware Guide (PDF dated 2020-12-16): DC Power Supply Description and Figures 18 and
+    19 (isometric), Table 31 (the lamps) and Table 32 (the electrical figures). EX8216 Ethernet Switch Datasheet
+    (1000283-021-EN, June 2015): "EX8200-PWR-DC3KR, DC power supply, 3,000 W at -48 V, dual-input, redundant". The
+    guide's CLI name is EX8200-DC3K; the datasheet's is carried.
+  size: >-
+    estimated - the supply slot, 70.1 x 104.0 mm (the EX8208 guide's Figure 3; the EX8216 guide's Figure 6 is the
+    same drawing, g020641). The guide dimensions no supply.
+  face: >-
+    estimated - as the EX8200-PWR-DC2KR: the guide draws the DC supply only in isometric figures and shows no flat
+    face, so every position is a fraction good to about 3 mm; the two supplies are drawn alike because the guide
+    draws one figure for both ratings, which is not a reading of a 3000 W unit.
+  power-output-w: >-
+    datasheet - guide Tables 4 and 32: 3000 W output at 52 VDC. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 31, as the EX8200-PWR-DC2KR.
+states:
+- ok
+- fault
+- absent
+elements:
+  switch:
+    at: [27.0, 8.0]
+    size: [10.9, 15.0]
+    class: switch
+  led-fail:
+    at: [16.0, 30.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: failed, color: '#eab308'}, {name: overloaded, color: '#eab308', behavior: blinking}]
+  led-out-ok:
+    at: [22.5, 30.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: disabled, color: '#eab308'}]
+  led-a-in-ok:
+    at: [29.0, 30.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fuse, color: '#eab308'}, {name: reversed, color: '#ef4444'}]
+  led-b-in-ok:
+    at: [35.5, 30.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: fuse, color: '#eab308'}, {name: reversed, color: '#ef4444'}]
+  handle:
+    at: [8.0, 94.5]
+    size: [22.0, 6.0]
+    class: latch
+  screw:
+    at: [44.0, 89.7]
+    size: [5.2, 5.2]
+    class: screw
+size:
+  w: 70.1
+  h: 104.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

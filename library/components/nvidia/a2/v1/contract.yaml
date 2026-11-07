@@ -1,0 +1,166 @@
+format: 1
+kind: module
+name: a2
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA A2 GPU (16 GB GDDR6) on its low profile bracket, a passive half-height
+  half-length single-slot card that takes no auxiliary power. The bracket face
+  is a plate with one long vent window with the heat sink's fins behind it and
+  one screw. The brief dimensions the card with a full-height bracket and with
+  this low profile one; nvidia/a2@1 draws the low profile one.
+size: {w: 79.20, h: 18.42, d: 167.64}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. A riser bay that takes a
+  low profile card names each card by hand (docs/cards-by-interface-design.md),
+  and no server document in the library was found to list an A2, so no riser
+  was edited.
+attrs:
+  model: 'A2'
+  part-numbers: 'PNY NVA2TCGPU-KIT'
+  board-sku: 'PG179 SKU 220, NVPN 699-2G179-0220-xxx'
+  role: gpu
+  form-factor: 'Half-height, half-length, single-slot (HHHL-SS), on a low profile bracket'
+  pcie-connector: x8
+  pcie-generation: 4
+  pcie-height: low
+  power-draw-max-w: 60
+  power-input: 'host PCIe slot only'
+  memory: '16 GB GDDR6, 128-bit, 200 GB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'none'
+  weight-kg: 0.26
+  eol: none-announced
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+provenance:
+  sources: >-
+    NVIDIA A2 Tensor Core GPU Product Brief PB-10727-001_v02, NVIDIA's own copy.
+    Tables 1 and 2, figure 3 (dimensions with the full-height bracket), figure 4
+    (with the low profile bracket), figures 5 and 6 (the hockey stick tab). NVIDIA's
+    A2 datasheet and PNY's datasheet for the PNY part number. NVIDIA's brief
+    forbids reproducing its figures, so its facts are transcribed and none of its
+    figures is copied.
+  reference-photos: >-
+    reference - PNY's product images for the A2, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/69aa2af2-613c-4700-b039-addc00ab9128/images/:
+    1-nvidia-a2-fr.png (the broad side), 3-nvidia-a2-top.png (the top edge
+    straight on, 593 x 77 px) and four 3/4 views, the first of which shows the low
+    profile bracket. Licence not stated; facts read from them, pictures not used.
+    THERE IS NO STRAIGHT-ON VIEW OF THE BRACKET OR THE FAR END.
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42 (PCIe CEM 5.0
+    figure 11-9), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    drawing - PB-10727 figure 3: 167.64 from the bracket's outer face to the
+    card's end, printed as a reference dimension in brackets, with the key
+    datum (58.15) also a reference. 68.90 card height, 55.65 above the lower edge,
+    which is 13.25 above the finger datum W. Figure 4 repeats the height for the
+    low profile bracket with 68.09 to the flange end.
+  face-bracket: >-
+    registry - the bracket is std/pcie-bracket-lp@1, so the outline, the tip's
+    retention tab and the flange are CEM's. PNY's 3/4 view shows the A2's bracket
+    in the same silver as the standard part.
+  face-window: >-
+    estimated - PNY's 2-nvidia-a2-3qtr.png shows one long dark vent window with
+    fins behind it along the bracket and one screw at the tip end. A 3/4 view
+    cannot measure it. The window is drawn x 22.0 to 68.0 and y 4.2 to 14.2, 16
+    fins on a 2.9 pitch (the L4's), and the screw is 1.5 in radius at x 18.7, y
+    9.3, all estimated. The standard's opening is x 15.63 to 70.16, y 3.18 to 15.24.
+  thickness: >-
+    photo-measured - PNY's top-edge photograph, scaled by the card's length (551
+    px for the shroud's 166.64, 3.31 px/mm; the aspect of the picture is not
+    known), reads 59 px from the black back to the shroud's face, 17.8, with
+    the black band 12 px, 3.6, of it. Good to about 0.5. The back is put at y
+    0.30 on this bracket, the board at CEM's y 1.27, and the shroud's face at 17.5.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-lp@1 is. The board, and its black back, are
+    at the top (small y); the cooler is below them in this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx4111a-lp@1 has them) at PB-10727 figure 3's lengths: the card
+    68.90 high from the finger datum W (at x 11.11 on this bracket, 79.20 less
+    68.09), its lower edge 13.25 above W, the key datum 58.15 behind the bracket
+    and the x8 finger tab to the standard's 39.15 past it. The hockey stick tab
+    and the step at the board's east end that figure 3 draws (detail A) are not
+    modelled. THE COVER AND SHROUD START 1.00 behind the bracket and THE BOARD 1.90
+    behind it, as nvidia/l4@1 has them (estimated).
+  body-shroud: >-
+    estimated - a champagne heat-sink shroud with a black band on the board's
+    side (the back, the board and the cover, 3.6 across in the top-edge
+    photograph) and a ribbed top and lower edge. The photograph's ribs are on a 2.17
+    pitch (7.2 px at 3.31 px/mm), which is the A100's 2.194, borrowed. The
+    colours are the renders'.
+  body-top-edge: >-
+    photo-measured - PNY's top-edge photograph, scaled as above: "A2" 4.5 behind
+    the bracket and the NVIDIA mark and wordmark from 143.7 to 158.6 behind it,
+    on the black band. Their sizes are estimated. The mark is reserved as
+    `logo-zone`.
+  body-far-end: >-
+    NOT MODELLED - the far end is drawn closed. No view shows it.
+  power: >-
+    datasheet - PB-10727 table 1: total board power 60 W default and maximum, 40
+    W minimum. The card takes no auxiliary connector; the brief names none.
+  weight: >-
+    datasheet - PB-10727 table 1: board 260 g, excluding the bracket; the full
+    height bracket with screws 14 g and the half height one 9 g.
+  memory: >-
+    datasheet - PB-10727 table 2: GDDR6, 16 GB, 128-bit, up to 200 GB/s.
+  pcie: >-
+    datasheet - PB-10727 table 1: physical x8, PCIe Gen4 x8 and x4, Gen3 x8, lane
+    and polarity reversal supported.
+  part-numbers: >-
+    datasheet - PNY's datasheet gives the part number NVA2TCGPU-KIT; the brief's
+    table 1 gives the board SKU PG179 SKU 220, NVPN 699-2G179-0220-xxx. No NVIDIA
+    order code is written.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on (needs-photo; the
+    window is estimated from a 3/4 view); (2) the full-height bracket variant,
+    which the brief dimensions and which is not modelled (needs-photo); (3) the
+    far end, the hockey stick tab and the step at the east end (needs-photo);
+    (4) the key datum 58.15 and the length 167.64, which the figure prints as
+    reference dimensions (vendor-silent on the tolerance); (5) the NVIDIA order
+    code (vendor-silent).
+  lifecycle: >-
+    No end-of-life notice for the A2 was found, and it is not on PNY's legacy
+    data-center list. The attr says `none-announced`.
+body:
+  depth: 167.64
+  color: '#2c2f33'
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [24.36, 1.27], size: [55.65, 1.57], from: 1.90, depth: 165.74,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10727 fig 3: lower edge W + 13.25, 55.65 high, to the 167.64 end; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge; the board''s start at 1.90 is estimated'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [13.25, 1.57], from: 45.95, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10727 fig 3: key datum 58.15 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [13.25, 1.57], from: 59.10, depth: 38.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10727 fig 3: the finger tab ends 39.15 past the key datum (CEM 5.0 fig 6-5, x8 DIM B), at 97.3'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 46.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 59.35, depth: 37.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x8 pad run on 1.00 pitch'}
+  - {id: backplate, at: [24.36, 0.30], size: [55.65, 0.97], from: 1.90, depth: 165.74,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'the black back the top-edge photograph shows, 0.30 to the board''s 1.27'}
+  - {id: cover, at: [24.36, 2.84], size: [55.65, 1.06], from: 1.00, depth: 166.64,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'the rest of the 3.6 black band in PNY''s top-edge photograph, after the back and the board'}
+  - {id: shroud, at: [24.36, 3.90], size: [55.65, 13.60], from: 1.00, depth: 166.64,
+     color: '#b8a68c', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'PNY top-edge photograph: the champagne part 45 px of 59, 13.6, at 3.31 px/mm; outline as the board; champagne from PNY''s renders'}
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+elements:
+  window: {at: [22.00, 4.20], size: [46.00, 10.00], class: vent}
+  screw-1: {at: [17.20, 7.80], size: [3.00, 3.00], class: screw}
+skins: [default]

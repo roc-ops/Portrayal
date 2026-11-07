@@ -1,0 +1,141 @@
+---
+manufacturer: Juniper
+model: QFX10008-REDUND
+slug: juniper-qfx10008-redund
+u_height: 13.0
+is_full_depth: true
+airflow: front-to-rear
+description: Juniper QFX10008 - the 13RU, eight-slot modular chassis of the QFX10000 family
+front_image: true
+rear_image: true
+module-bays:
+  - name: cb0
+    position: cb0
+    description: 'Accepts: qfx10000-re, qfx10000-re-cover'
+  - name: cb1
+    position: cb1
+    description: 'Accepts: qfx10000-re, qfx10000-re-cover'
+  - name: fan0
+    position: fan0
+    description: 'Accepts: qfx10008-fan, jnp10008-fan, jnp10008-fan2'
+  - name: fan1
+    position: fan1
+    description: 'Accepts: qfx10008-fan, jnp10008-fan, jnp10008-fan2'
+  - name: fpc0
+    position: fpc0
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc1
+    position: fpc1
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc2
+    position: fpc2
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc3
+    position: fpc3
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc4
+    position: fpc4
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc5
+    position: fpc5
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc6
+    position: fpc6
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: fpc7
+    position: fpc7
+    description: 'Accepts: qfx10000-lc-cover'
+  - name: psu0
+    position: psu0
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+  - name: psu1
+    position: psu1
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+  - name: psu2
+    position: psu2
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+  - name: psu3
+    position: psu3
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+  - name: psu4
+    position: psu4
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+  - name: psu5
+    position: psu5
+    description: 'Accepts: qfx10000-pwr-ac, jnp10k-pwr-ac2, qfx10000-pwr-dc, qfx10000-jnp10k-pwr-dc2,
+      qfx10000-pwr-cover'
+comments: 'Juniper QFX10008 - the 13RU, eight-slot modular chassis of the QFX10000 family. Two QFX10000-RE
+  Routing and Control Boards stack under the badge strip beside the status lamp panel. Eight full-width
+  line-card slots (0 to 7, top to bottom) fill the front below them. The rear is a six-high power supply
+  stack (PSU 0 to 5) with the earthing terminal and ESD point below it. Two tall fan trays stand beside
+  it and cover the switch interface boards. Cooling is front-to-back (port-to-FRU, airflow out). Line
+  cards are ordered separately and are not modelled here.
+
+
+  Configuration `redund`: QFX10008-REDUND (guide Table 2, datasheet): two QFX10000-RE boards, six QFX10000-PWR-AC
+  supplies, two QFX10008-FAN trays and eight line card covers; six QFX10008-SF boards inside.
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - compliance.seismic: Designed to meet GR-63 Zone 4 earthquake requirements
+
+  - environmental.altitude: up to 3,048 m (10,000 ft)
+
+  - environmental.humidity: 5 to 90 percent noncondensing operating, 5 to 95 percent nonoperating
+
+  - environmental.operating-temp: 0 C to 40 C (32 F to 104 F)
+
+  - environmental.storage-temp: -40 C to 70 C (-40 F to 158 F)
+
+  - management.console: RJ-45 console (CON) on each RCB
+
+  - management.oob: MGMT RJ-45 (em0), 10/100/1000BASE-T, and MGMT SFP (em1), on each RCB
+
+  - management.usb: one USB 2.0 port on each RCB
+
+  - performance.ports-max: 1,152 x 10GbE, 288 x 40GbE or 240 x 100GbE (datasheet Table 1, with eight 30C
+  cards)
+
+  - performance.throughput: up to 48 Tbps (datasheet Table 1; the guide gives a net switching capacity
+  of 42 Tbps with six SIBs); 7.2 Tbps per slot
+
+  - physical.weight-base-kg: 127
+
+  - physical.weight-empty-kg: 65.86
+
+  - physical.weight-redundant-kg: 146.06
+
+  - platform.cpu: Intel quad-core 2.5 GHz
+
+  - platform.fabric: six switch interface boards, five required and the sixth for n+1; midplane-less
+
+  - platform.memory: 32 GB SDRAM
+
+  - platform.storage: 50 GB onboard SSD, plus an optional SATA SSD of 50 GB or 100 GB in the RCB
+
+  - power.power-envelope: bare
+
+  - power.power-max-w: 2500
+
+  - power.power-typical-scope: datasheet - base system, line cards not included; redundant system 1,765
+  W typical and 2,877 W reserved
+
+  - power.power-typical-w: 1517
+
+  - thermal.airflow: port-to-FRU (airflow out, front-to-back); two fan trays of 1437 CFM each at full
+  speed
+
+  - thermal.heat-dissipation: 48,156 BTU/hr (14,113 W) maximum thermal output, estimated and subject to
+  change
+
+
+  Drawing version 4.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

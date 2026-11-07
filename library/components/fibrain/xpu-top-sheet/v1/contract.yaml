@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: xpu-top-sheet
-version: 1.0.0
+version: 1.0.1
 class: mechanical
 behaviour: mounts
 profile: optical
@@ -21,6 +21,11 @@ relief:
       color: '#1b1e21'
       confidence: drawing
       source: 'the front elevation draws the top sheet 0.80 thick, 0.05 to 0.85 from the top of the frame; the heights here are those above the floor, which put it there'
+    - {node: screw-1, lift: 43.10, cyl: 0.7, color: '#b8bdc2', confidence: estimated, source: 'the plan and the vendor renders show a screw over each post, 27 back from the face; a head height is on no sheet, so 0.7 is a stand-in that keeps the head inside the 43.96 of the frame'}
+    - {node: screw-2, lift: 43.10, cyl: 0.7, color: '#b8bdc2', confidence: estimated, source: 'as screw-1'}
+    - {node: screw-3, lift: 43.10, cyl: 0.7, color: '#b8bdc2', confidence: estimated, source: 'as screw-1'}
+    - {node: screw-4, lift: 43.10, cyl: 0.7, color: '#b8bdc2', confidence: estimated, source: 'as screw-1'}
+    - {node: screw-5, lift: 43.10, cyl: 0.7, color: '#b8bdc2', confidence: estimated, source: 'as screw-1'}
 provenance:
   size: >-
     drawing across - 435, the frame between its ears, off the front elevation
@@ -39,4 +44,13 @@ provenance:
     drawing - see the feature.
   color: >-
     photo - black, a fine texture on the vendor renders.
+  top-features: >-
+    what the sources show of the top, drawn: the notched outline (90 deep
+    across the middle, 115.6 at each end), the four pairs of slots about 22 x 3,
+    each now rimmed in a thin grey (#8d939a, the kit shell's dim grey) so the
+    openings read against the black sheet, and a screw head over each of the
+    five posts, raised 0.7 off the sheet. ESTIMATED: the head height, which no
+    sheet gives. NOT DRAWN, because no source shows it: any rib, emboss, fold
+    or edge flange of the sheet, and any marking on it; the vendor renders show
+    a plain black top.
 skins: [default]

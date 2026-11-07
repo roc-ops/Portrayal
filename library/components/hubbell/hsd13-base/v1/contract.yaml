@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: hsd13-base
+version: 1.0.0
+class: mechanical
+description: >-
+  The base of the Hubbell SD-Series HSD13 horizontal cable manager, seen from the front. It
+  is the plastic plate, as wide as the rack, that mounts to the rail. It is drawn as the well
+  that the two rows of fingers stand in. Its floor is the front face of the plate.
+provenance:
+  size: >-
+    datasheet - HSD13 spec sheet (hubbellcdn.com/specsheet/PREMISE_HSD13_spec.pdf),
+    dimensions table: A 1 RU, 1.6 in (41 mm), B 19 in (483 mm). The figure draws the part
+    turned on its side: A marks the short edge of the long flat face and B its length, so
+    the long flat face is the A by B face, and the slotted wall hangs from it, C deep. B is
+    taken as the 19 in, 482.6 mm, that the sheet's mm column rounds.
+  depth: >-
+    datasheet - the sheet's C, 3.2 in (81 mm), is the whole part's depth, base to cover, so
+    the plate's floor lies C less its own thickness, 78.78 mm, behind the front of the part.
+  thickness: >-
+    estimated - 2.5 mm. The sheet says "Material: Plastic" and no wall thickness; the figure
+    draws a wall thin against the 41 mm height.
+  mounting-holes: >-
+    not drawn - the sheet lists "EIA/ECA-310-E Universal Mounting Pattern" and the figure
+    draws a round hole near each end of the long flat face, with no dimension. The hole
+    positions are the standard's, not the sheet's, so none is drawn.
+  color: >-
+    estimated - the sheet states no colour; its photograph shows a dark grey plastic. Drawn
+    as '#2a2c2e', the library's plastic duct grey-black.
+size: {w: 482.6, h: 40.64, d: 78.78}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief: {wall: '#2a2c2e'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 40.64], class: bezel}
+skins: [default]

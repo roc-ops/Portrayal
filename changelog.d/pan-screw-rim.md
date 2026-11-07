@@ -1,0 +1,2 @@
+### Fixed
+- **The M5 pan-screw head reads on the FS DIN rail brackets' side plates** (#1003, `common/pan-screw-m5@1` 1.0.0 to 1.0.1, `fs/dinrail2u` and `fs/dinrail4u` 1.1.0 to 1.1.1): the black head sat on a near-identical dark plate and showed only as a thin grey ring. Its rim is now a light grey ring with a dimmer ring inside it; the fill, the 9.5 mm head, the cross recess, the 3.5 mm relief and every position are unchanged. The four DINRAIL exports change by their drawing-version line only.

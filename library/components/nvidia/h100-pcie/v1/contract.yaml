@@ -1,0 +1,485 @@
+format: 1
+kind: module
+name: h100-pcie
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA H100 PCIe GPU (80 GB HBM2e), a passive dual-slot full-height
+  full-length card. The bracket face carries one vent window and no ports.
+  Three NVLink bridge connectors sit on the top edge under removable caps. The
+  far end is open and shows the heat sink's fins edge-on. It has one 16-pin
+  12VHPWR power connector by the top edge and two bosses for an extender.
+  NVIDIA's straight or long offset extender can be fitted to the far end; the
+  `extender` field chooses it. It plugs into one riser slot and covers the one
+  beside it.
+slot-width: 2
+size: {w: 120.02, h: 41.91, d: 268.60}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. The one riser that spans,
+  dell/riser-1a-14g@2's `slot-1`, is the Dell R740xd's, and that server's
+  documents cap a double-width GPU at 300 W (spec sheet, "Accelerator options")
+  against this card's 350 W. The other Dell risers with a double-width slot
+  model it as one bay with no `span`, or only as a half-length riser, so none
+  takes a card two slots wide. A server whose documents list this card, and a
+  riser bay that spans for it, would seat it.
+attrs:
+  model: 'H100 PCIe'
+  part-numbers: 'PNY NVH100TCGPU-KIT'
+  board-sku: 'P1010 SKU 200, NVPN 699-21010-0200-xxx'
+  role: gpu
+  form-factor: 'Full-height, full-length (FHFL) 10.5 in, dual-slot'
+  pcie-connector: x16
+  pcie-generation: 5
+  pcie-height: full
+  power-draw-max-w: 350
+  power-input: 'host PCIe slot and one PCIe 16-pin (12VHPWR) auxiliary connector'
+  memory: '80 GB HBM2e, 5120-bit, 2,000 GB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'three bridge connectors on the top edge; 600 GB/s with one adjacent H100 PCIe'
+  weight-kg: 1.20
+  eol: none-announced
+fields:
+  extender:
+    label: Extender
+    type: choice
+    options: [none, straight, long-offset]
+    default: none
+    drawn-by-absence: [none]
+    description: >-
+      The bracket at the card's far end that a server's card guide holds. The
+      straight one (NVPN 682-00007-5555-001) makes the card 312 mm long. The
+      long offset one (NVPN 682-00007-5555-000) makes it 339 mm. The enhanced
+      straight extender (NVPN 151-0398-000, also 312 mm) is not drawn.
+faces:
+  rear: {ref: nvidia/h100-pcie-tail@1}
+  plan: {ref: nvidia/h100-pcie-top@1}
+provenance:
+  slot-width: >-
+    datasheet - PB-11133 table 1: form factor "Full-height, full-length (FHFL)
+    10.5', dual-slot". The face is the same one plate 36 across as the A100's
+    (`face-outline`). The card declares `slot-width: 2` as
+    docs/pcie-two-slot-bays-design.md R1 defines it.
+  sources: >-
+    NVIDIA H100 PCIe Product Brief PB-11133-001_v02, served by PNY from
+    https://www.pny.com/File%20Library/Company/Support/product-briefs/data-center-gpus/nvidia-h100-pcie-product-brief.pdf
+    (NVIDIA's own copy was not found at eight tried paths, so this is the
+    mirror). Tables 1, 2 and 6 to 8, figure 3 (card dimensions), figure 5 (NVLink
+    keep-out), figure 6 (the 16-pin connector, an end view) and the NVLink,
+    power and extender text. The H100 datasheet,
+    https://dam-cdn.nvd.orangelogic.com/AssetLink/u5hh6fv4r7564i4y673484y3m20083nj.pdf
+    (its earlier edition is .../mfj81tsm68n0ne632upmuvirso3ta3g3.pdf), and PNY's,
+    https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20Data%20Center%20GPUs/nvidia-h100-datasheet.pdf,
+    for the PNY part number. This card is built from the pilot
+    nvidia/a100-pcie-80gb@1 wherever the two cards share a part, because
+    PB-11133 figure 3 is the A100 80GB's drawing figure for figure (268.60 and
+    267.70, 59.05, 81.88 REF, 19.50 REF, 3.55 REF, 13.25, 111.15, 104.86), and
+    the provenance says where they differ. NVIDIA's brief forbids reproducing
+    its figures, so its facts are transcribed and none of its figures is copied.
+  reference-photos: >-
+    reference - PNY's product render
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/80b0c505-efb7-4af7-bb04-af2300fccbaa/images/h100-pci-e-3qtr-right-reverse.png,
+    800 x 800, a 3/4 view of the broad side and the bracket end. It is the only
+    photograph of this card held: no straight-on bracket, no side elevation, no
+    top edge. Licence not stated; facts read from it, picture not used. It shows
+    the same shroud, the same lower-edge notch and the same vent window in the
+    bracket as the A100's render does, which is what the borrowed parts below
+    rest on. NVIDIA's og image for the H100 is the SXM module and is not this
+    card.
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2,
+    PCIe CEM 5.0 figure 11-5). h is two slots: the single bracket's 21.59 plus
+    one 20.32 slot pitch, 41.91, as on the A100.
+  depth: >-
+    drawing - PB-11133 figure 3: product length 268.60 with the I/O bracket,
+    267.70 without. The card ends 268.60 behind the bracket's outer face.
+  face-outline: >-
+    borrowed - nvidia/a100-pcie-80gb@1 `face-outline`, `face-keyed-flange`,
+    `face-grille` and `face-markings`: the bracket's outline, its two retention
+    tabs, its V notch, the raised grille frame, the vent window, the four Torx
+    screws and the sixteen fins behind it, measured there from a straight-on
+    photograph of an A100 80GB. THIS CARD'S OWN BRACKET WAS NOT PHOTOGRAPHED.
+    The end view in PB-11133 figure 6 shows the same two-tab plate with the V
+    notch at its foot, and the 3/4 render shows a vent window with fins across
+    the plate; nothing contradicts it, and nothing measures it either.
+  thickness: >-
+    estimated - as nvidia/a100-pcie-80gb@1 `thickness`: 38.2, bounded by the
+    2.67 backside clearance PB-11133 prints for the NVLink bridges and the
+    bracket's far edge. PB-11133 does not state it.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and
+    the bracket's keyed side, are at the top (small y).
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them) at PB-11133 figure 3's lengths, which are
+    the A100 80GB's: the lower edge 13.25 above the finger datum W, the key
+    datum 59.05 behind the bracket, a notch 3.55 REF deep and 19.50 REF long
+    whose near end is 59.05 + 81.88 = 140.93 behind the bracket, the top edge at
+    W + 111.15. The shroud, cover and backplate follow the board's outline, as on
+    the A100 (`body-shroud`, estimated). Near the bracket the board steps down
+    toward W for about 18 mm; that step is not a box.
+  body-shroud: >-
+    borrowed - nvidia/a100-pcie-80gb@1 `body-shroud`: a champagne shroud with a
+    black cover on the board's side and a black backplate, split at the notch.
+    PNY's render of this card shows the same: a champagne broad side, a ribbed
+    top edge over a black band along it, and the notch in the lower edge. The
+    thicknesses of the black and champagne bands were measured on the A100's
+    render and not on this one.
+  body-nvlink: >-
+    estimated - three NVLink bridge connectors on the top edge, each under a
+    removable cap (PB-11133: "NVLink bridge interfaces of the H100 PCIe card
+    include removable caps"). Their places are the H100 NVL's, measured on
+    PB-11773 figure 4 (see nvidia/h100-pcie-top@1): caps 49.5 long starting
+    12.55, 69.10 and 125.45 behind the bracket and 6.6 wide from 2.2 to 8.8 across
+    the card. This brief's figure 5 is the keep-out with no dimensions, and its
+    box agrees with that span to the 3 mm the page allows. THE BOXES BELOW
+    (`nvlink-1` to `nvlink-3`) ARE THE CAPS, 0.5 proud (estimated); the
+    connectors under them are nvidia/nvlink-a100-connector@1, composed by
+    `faces.plan`, because PB-11133 says the bridge is the A100's (900-53651-0000-000).
+  body-power-connector: >-
+    estimated - PB-11133: "a PCIe 16-pin power connector on the east edge of the
+    board", and its table 7 names "PCIe CEM 5.0 16-Pin", so it is a 12VHPWR and
+    not a 12V-2x6 (which CEM 5.1 introduced; PB-11773 for the H100 NVL says so).
+    Its place and size are read on figure 6, an end view, and on PNY's
+    straight-on photograph of the L40S's east end (the same card form): the
+    housing is 19.0 along the card and 9.2 across its thickness, from the card's
+    x 104.2 to 123.2, 3.3 from the top edge, black, with 12 power contacts in
+    two rows of six and four sense contacts in a strip on the backplate side.
+    The housing's depth, 5.8 standing in the end plate, and its colour are not
+    seen. THE PORT is `aux-power` on the rear face (`faces.rear`,
+    nvidia/h100-pcie-tail@1): std/12vhpwr-header@1, which presents
+    `pcie-12vhpwr` for a 16-pin cable and which the card exports as a power
+    port. The header's own size is 20.85 x 11.7 (the plug's outline), 1.8 and
+    2.5 more than the housing measured here, so the boxes below keep the
+    measured size and are the 3D body of the port.
+  body-end: >-
+    estimated - as nvidia/a100-pcie-80gb@1 `body-end`: the black end plate
+    (backplate, board and cover) stops 0.4 short of the shroud's lip and the
+    housing and mount bosses stand 0.2 proud of it.
+  body-tail-fins: >-
+    estimated - the shroud is open at its far end and PB-11133 figure 6 shows the
+    fin stack edge-on behind it as slats on about a 5 mm pitch (see
+    nvidia/h100-pcie-tail@1 `fins`). The 18 fins at 5.0 are the A100's and are
+    not counted on this card: the drawing is a raster of a drawing, not a
+    photograph at known scale.
+  body-extender-mount: >-
+    estimated - the two bosses the extenders' thumbscrews fasten to, at the
+    card's x 35.3 and 64.1 and y 8.4, 4.0 across and 0.4 proud: the A100's
+    (`body-extender-mount`), and figure 6 shows two round bosses and a slot on
+    the end plate in the same arrangement. PB-11133 says OEMs "may design a
+    custom attach method using the extender-mounting holes on the east edge".
+  power: >-
+    datasheet - PB-11133 table 1: total board power 350 W default and maximum,
+    200 W minimum in the 450 W or 600 W power mode of the 16-pin cable;
+    310 W default and maximum in the 300 W mode. Table 7 gives the sense logic
+    and the 350 W maximum TGP at 301 W to 450 W and above, and 310 W at 151 W to
+    300 W. A card on less than 151 W does not boot. attrs carry the 350 W.
+  weight: >-
+    datasheet - PB-11133 table 1: board 1200 g ("1200g grams"), excluding the
+    bracket, extenders and bridges. The bracket with screws is 20 g, each NVLink
+    bridge 20.5 g, the enhanced straight extender 35 g, the long offset extender
+    48 g and the straight extender 32 g.
+  memory: >-
+    datasheet - PB-11133 table 2: HBM2e, 80 GB, 5,120-bit, 1,593 MHz, 2,000 GB/s.
+  pcie: >-
+    datasheet - PB-11133 table 1: PCI Express Gen5 x16, Gen5 x8 and Gen4 x16,
+    lane and polarity reversal supported.
+  part-numbers: >-
+    datasheet - PNY's H100 datasheet gives its part number NVH100TCGPU-KIT; the
+    brief's table 1 gives the board SKU P1010 SKU 200, NVPN 699-21010-0200-xxx.
+    NO NVIDIA ORDER CODE (900-...) IS GIVEN in the brief, the NVIDIA and PNY
+    datasheets or the line cards held, and none is written.
+  nvlink: >-
+    SOURCES DISAGREE - PB-11133 table 6: three bridges, 48 lanes at 100 Gbps a
+    lane each way, "600 Gbytes per second" total. Its overview says two cards
+    deliver "900 GB/s bidirectional bandwidth or 5x the bandwidth of PCIe
+    Gen5". The attr takes the table's 600. The bridge is the 2-slot bridge
+    900-53651-0000-000, "the same ... used in the NVIDIA Ampere Architecture
+    generation, including the NVIDIA A100 PCIe card".
+  extenders: >-
+    datasheet - PB-11133 "Extenders": a long offset extender (NVPN
+    682-00007-5555-000, card plus extender 339 mm, 48 g), a straight extender
+    (NVPN 682-00007-5555-001, 312 mm, 32 g) and an enhanced straight extender
+    (NVPN 151-0398-000, 312 mm, 35 g, figure 9). The long offset and straight
+    ones are the A100 80GB's by number, and their pieces below are that card's,
+    which was photographed with the straight one fitted. THE ENHANCED STRAIGHT
+    ONE IS NOT DRAWN: figure 9 is a small drawing with no dimension that was
+    read. Figure 10 draws the legacy pair.
+  body-extender-straight: >-
+    borrowed - nvidia/a100-pcie-80gb@1 `body-extender-straight`: a slotted plate
+    of four bars with three slots, an upright 1.2 thick and 15 wide that ends at
+    x 103.41, clear of the power connector (the 16-pin housing here starts at
+    104.2, 0.8 further, so the clearance is thin and estimated). Its far edge is
+    the brief's 312.
+  body-extender-long-offset: >-
+    borrowed - nvidia/a100-pcie-80gb@1 `body-extender-long-offset`. Its far edge
+    is the brief's 339; no photograph of it was found.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on, for this card
+    (needs-photo; the A100's is carried over); (2) a side elevation and a top
+    edge of this card (needs-photo; the NVLink cap places are the NVL's);
+    (3) the thickness, which no source states (vendor-silent); (4) the NVIDIA
+    order code (vendor-silent in the documents held); (5) the enhanced straight
+    extender (needs-drawing); (6) the 16-pin housing's depth and colour
+    (needs-photo); (7) NVIDIA's own copy of the brief, which is the PNY mirror
+    here.
+  lifecycle: >-
+    No end-of-life notice for the H100 PCIe was found. NVIDIA publishes no GPU
+    end-of-life list, and PNY lists the H100 under legacy data-center GPUs. The
+    attr says `none-announced`, which here means none was found.
+body:
+  depth: 268.60
+  color: '#9aa1a8'
+  plate: {at: [9.80, 4.10], size: [109.40, 35.90]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 0.90, depth: 140.03,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-11133 fig 3: lower edge W + 13.25, top edge W + 111.15, to the notch at 140.93; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge'}
+  - {id: board-notch, at: [31.96, 4.44], size: [94.35, 1.57], from: 140.93, depth: 19.50,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-11133 fig 3: the notch, 3.55 REF deep and 19.50 REF long, 59.05 + 81.88 behind the bracket'}
+  - {id: board-east, at: [28.41, 4.44], size: [97.90, 1.57], from: 160.43, depth: 107.77,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-11133 fig 3: lower edge W + 13.25 again east of the notch, to the 268.60 end less the 0.4 step (provenance body-end)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 46.90, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-11133 fig 3: key datum 59.05 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 60.00, depth: 80.93,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-11133 fig 3: the tab runs 81.88 REF past the key datum'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: backplate, at: [28.41, 1.77], size: [97.90, 2.67], from: 0.90, depth: 140.03,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'PB-11133: backside clearance 2.67 from the rear PCB surface; the A100''s backplate is black (nvidia/a100-pcie-80gb@1)'}
+  - {id: backplate-notch, at: [31.96, 1.77], size: [94.35, 2.67], from: 140.93, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the backplate, inside the PB-11133 fig 3 notch'}
+  - {id: backplate-east, at: [28.41, 1.77], size: [97.90, 2.67], from: 160.43, depth: 107.77,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the backplate, east of the notch'}
+  - {id: cover, at: [28.41, 6.01], size: [97.90, 8.39], from: 0.90, depth: 140.03,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'the A100''s black band, 32 of its card''s 98 px on PNY''s top render; this card''s render shows a black band along the top edge'}
+  - {id: cover-notch, at: [31.96, 6.01], size: [94.35, 8.39], from: 140.93, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, inside the notch'}
+  - {id: cover-east, at: [28.41, 6.01], size: [97.90, 8.39], from: 160.43, depth: 107.77,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, east of the notch'}
+  - {id: shroud, at: [28.41, 14.40], size: [97.90, 25.60], from: 0.90, depth: 140.03,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded at 38.2 (see provenance thickness); outline as the board; champagne finish from PNY''s render'}
+  - {id: shroud-notch, at: [31.96, 14.40], size: [94.35, 25.60], from: 140.93, depth: 19.50,
+     color: '#b8a68c', confidence: drawing, shows: [right, left, bottom],
+     source: 'PB-11133 fig 3 notch'}
+  - {id: shroud-east, at: [28.41, 14.40], size: [97.90, 25.60], from: 160.43, depth: 67.97,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to where the open end begins at 228.40'}
+  # THE OPEN END (provenance body-tail-fins): a rim round an opening, with the
+  # fin stack edge-on inside it, on a dark floor.
+  - {id: shroud-end-floor, at: [30.51, 14.40], size: [93.70, 23.50], from: 228.40, depth: 0.20,
+     color: '#07080a', confidence: estimated,
+     source: 'the dark floor the open end looks onto, as the A100'}
+  - {id: shroud-end-skin, at: [28.41, 37.90], size: [97.90, 2.10], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'the broad side''s wall round the opening; 2.1 thick is estimated'}
+  - {id: shroud-end-low, at: [28.41, 14.40], size: [2.10, 23.50], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [left],
+     source: 'the lower edge''s wall round the opening; 2.1 thick is estimated'}
+  - {id: shroud-end-top, at: [124.21, 14.40], size: [2.10, 23.50], from: 228.40, depth: 40.20,
+     color: '#b8a68c', confidence: estimated, shows: [right],
+     source: 'the top edge''s wall round the opening; 2.1 thick is estimated'}
+  - {id: fin-01, at: [30.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated,
+     source: 'nvidia/a100-pcie-80gb@1 fin-01: 18 fins edge-on on a 5.0 pitch, the first at x 31.25; PB-11133 fig 6 shows slats on about the same pitch; 0.8 thick and 40 deep are estimated'}
+  - {id: fin-02, at: [35.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 36.25'}
+  - {id: fin-03, at: [40.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 41.25'}
+  - {id: fin-04, at: [45.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 46.25'}
+  - {id: fin-05, at: [50.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 51.25'}
+  - {id: fin-06, at: [55.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 56.25'}
+  - {id: fin-07, at: [60.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 61.25'}
+  - {id: fin-08, at: [65.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 66.25'}
+  - {id: fin-09, at: [70.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 71.25'}
+  - {id: fin-10, at: [75.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 76.25'}
+  - {id: fin-11, at: [80.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 81.25'}
+  - {id: fin-12, at: [85.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 86.25'}
+  - {id: fin-13, at: [90.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 91.25'}
+  - {id: fin-14, at: [95.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 96.25'}
+  - {id: fin-15, at: [100.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 101.25'}
+  - {id: fin-16, at: [105.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 106.25'}
+  - {id: fin-17, at: [110.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 111.25'}
+  - {id: fin-18, at: [115.85, 14.40], size: [0.80, 23.50], from: 228.60, depth: 40.00,
+     color: '#2b2e32', confidence: estimated, source: 'as fin-01, x 116.25'}
+  - {id: nvlink-1, at: [126.31, 2.20], size: [0.50, 6.60], from: 12.55, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PB-11773 fig 4 (the H100 NVL, at 3.976 px/mm): caps 49.1 long, the first centred 37.3 behind the bracket; 0.5 proud is estimated'}
+  - {id: nvlink-2, at: [126.31, 2.20], size: [0.50, 6.60], from: 69.10, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PB-11773 fig 4: the second cap, centred 93.85'}
+  - {id: nvlink-3, at: [126.31, 2.20], size: [0.50, 6.60], from: 125.45, depth: 49.50,
+     color: '#2b2f33', confidence: estimated, shows: [right],
+     source: 'PB-11773 fig 4: the third cap, centred 150.2'}
+  # THE 16-PIN (provenance body-power-connector): a black housing with the
+  # twelve power and four sense cells, the 3D body of the tail face's
+  # `aux-power` port.
+  - {id: power-16pin, at: [104.20, 3.60], size: [19.00, 9.20], from: 262.60, depth: 5.80,
+     color: '#17191c', confidence: estimated,
+     source: 'PB-11133 fig 6 at 6.15 px/mm and PNY''s L40S east-end photograph at 2.82 px/mm: 19.0 along the card, 9.2 across, x 104.2 to 123.2, 3.3 from the top edge; the housing ends 0.2 proud of the end plate; depth is not seen'}
+  - {id: power-16pin-power-1, at: [105.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'Molex 2191140001-SD: 12 power cells in two rows of six on a 3.00 pitch, centred on the housing (x 113.7); the cell size is estimated'}
+  - {id: power-16pin-power-2, at: [108.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-3, at: [111.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-4, at: [114.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-5, at: [117.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-6, at: [120.20, 5.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-7, at: [105.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-power-8, at: [108.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-power-9, at: [111.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-power-10, at: [114.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-power-11, at: [117.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-power-12, at: [120.20, 8.90], size: [2.00, 2.00], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second row'}
+  - {id: power-16pin-sense-1, at: [110.20, 4.10], size: [1.20, 1.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'Molex 2191140001-SD: four sense cells on a 2.00 pitch, in a strip on the backplate side (PB-11133 fig 6), centred on x 113.7; the cell size is estimated'}
+  - {id: power-16pin-sense-2, at: [112.20, 4.10], size: [1.20, 1.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+  - {id: power-16pin-sense-3, at: [114.20, 4.10], size: [1.20, 1.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+  - {id: power-16pin-sense-4, at: [116.20, 4.10], size: [1.20, 1.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+  # THE EXTENDER MOUNT (provenance body-extender-mount): two bosses on the end plate
+  - {id: mount-boss-1, shape: cylinder, axis: z, at: [33.30, 6.40], size: [4.00, 4.00], from: 268.20, depth: 0.40,
+     color: '#8a9199', confidence: estimated,
+     source: 'nvidia/a100-pcie-80gb@1 mount-boss-1: the extender''s thumbscrews, 28.8 apart; 4.0 across and 0.4 proud are estimated'}
+  - {id: mount-boss-2, shape: cylinder, axis: z, at: [62.10, 6.40], size: [4.00, 4.00], from: 268.20, depth: 0.40,
+     color: '#8a9199', confidence: estimated, source: 'as mount-boss-1, the second thumbscrew'}
+  # THE BRACKET'S FOOT below the card (provenance face-outline)
+  - {id: bracket-tab-1, at: [0.00, 7.40], size: [7.27, 9.80], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0.00, 27.90], size: [7.27, 9.70], from: 0.30, depth: 0.90,
+     color: '#9aa1a8', confidence: estimated,
+     source: 'the second retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-standoff, at: [20.80, 2.00], size: [7.61, 2.40], from: 1.20, depth: 2.40,
+     color: '#26292c', confidence: estimated,
+     source: 'nvidia/a100-pcie-80gb@1 bracket-standoff: 7.6 below the lower edge, 2.4 along the card, 1.2..3.6 behind the face; not seen on this card''s render'}
+  # THE EXTENDERS, fitted by the `extender` field (provenance extenders): the
+  # A100 80GB's pieces, whose numbers and lengths are this card's.
+  - {id: ext-straight-flange, at: [28.46, 6.01], size: [42.54, 4.74], from: 268.65, depth: 1.15,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'the bent flange that bolts to the card end; size estimated. Drawn 0.05 inside the bars at the sides and back, so no face of it lies in a bar''s plane'}
+  - {id: ext-straight-bar-1, at: [60.38, 9.60], size: [10.67, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'nvidia/a100-pcie-80gb@1 ext-straight-bar-1: the top bar, x 60.38..71.05, to the upright at 297.0'}
+  - {id: ext-straight-bar-2, at: [49.69, 9.60], size: [4.50, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'as bar 1: the bar between the first and second slots, x 49.69..54.19'}
+  - {id: ext-straight-bar-3, at: [39.03, 9.60], size: [4.50, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'as bar 1: the bar between the second and third slots, x 39.03..43.53'}
+  - {id: ext-straight-bar-4, at: [28.41, 9.60], size: [4.44, 1.20], from: 268.60, depth: 28.40,
+     color: '#1c1e20', confidence: photo-measured, when: {extender: [straight]},
+     source: 'as bar 1: the bottom bar, from the card''s lower edge to 32.85'}
+  - {id: ext-straight-fillet, at: [71.05, 9.60], size: [3.55, 1.20], from: 288.00, depth: 9.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'the fillet into the upright, drawn as one step'}
+  - {id: ext-straight-upright, at: [28.41, 9.60], size: [75.00, 1.20], from: 297.00, depth: 15.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [straight]},
+     source: 'far edge at 312, PB-11133; a flat strip 1.2 thick, ending at x 103.41 clear of the 16-pin housing (x 104.2), as the A100''s'}
+  - {id: ext-long-flange, at: [28.46, 6.01], size: [42.54, 4.74], from: 268.65, depth: 1.15,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s flange'}
+  - {id: ext-long-bar-1, at: [60.38, 9.60], size: [10.67, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'the straight extender''s top bar, run out to the upright at 324.0'}
+  - {id: ext-long-bar-2, at: [49.69, 9.60], size: [4.50, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s second bar, run out to 324.0'}
+  - {id: ext-long-bar-3, at: [39.03, 9.60], size: [4.50, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s third bar, run out to 324.0'}
+  - {id: ext-long-bar-4, at: [28.41, 9.60], size: [4.44, 1.20], from: 268.60, depth: 55.40,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s bottom bar, run out to 324.0'}
+  - {id: ext-long-fillet, at: [71.05, 9.60], size: [3.55, 1.20], from: 315.00, depth: 9.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s fillet'}
+  - {id: ext-long-upright, at: [28.41, 9.60], size: [75.00, 1.20], from: 324.00, depth: 15.00,
+     color: '#1c1e20', confidence: estimated, when: {extender: [long-offset]},
+     source: 'far edge at 339, PB-11133 "card + extender"; the straight one''s upright'}
+  # THE THUMBSCREWS that fasten either extender to the mount bosses, on the
+  # flange's outer face at 269.80.
+  - {id: ext-straight-screw-1, shape: cylinder, axis: z, at: [31.80, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [straight]},
+     source: 'a knurled head about 7 across over each boss; 3.0 tall is estimated'}
+  - {id: ext-straight-screw-2, shape: cylinder, axis: z, at: [60.60, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [straight]},
+     source: 'as the first thumbscrew'}
+  - {id: ext-long-screw-1, shape: cylinder, axis: z, at: [31.80, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the straight extender''s'}
+  - {id: ext-long-screw-2, shape: cylinder, axis: z, at: [60.60, 4.90], size: [7.00, 7.00], from: 269.80, depth: 3.00,
+     color: '#a8afb5', confidence: estimated, when: {extender: [long-offset]},
+     source: 'as the first thumbscrew'}
+elements:
+  grille: {at: [29.80, 9.90], size: [79.31, 29.40], class: bezel}
+  vent: {at: [31.20, 11.80], size: [76.11, 25.80], class: vent}
+  screw-1: {at: [30.35, 10.85], size: [4.30, 4.30], class: screw}
+  screw-2: {at: [103.96, 10.85], size: [4.30, 4.30], class: screw}
+  screw-3: {at: [30.35, 33.65], size: [4.30, 4.30], class: screw}
+  screw-4: {at: [103.96, 33.65], size: [4.30, 4.30], class: screw}
+relief:
+  wall: '#8a9199'
+  features:
+  - node: grille
+    out: 0.8
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the grille frame is a separate plate on four screws, raised off the
+      bracket. Its 0.8 is nvidia/a100-pcie-80gb@1's, where it is estimated from
+      a shadow line; this card's was not measured.
+  - node: flange-fold
+    out: 9.4
+    color: '#9aa1a8'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on
+      std/pcie-bracket-fh@2. Not measured on this bracket.
+skins: [default]

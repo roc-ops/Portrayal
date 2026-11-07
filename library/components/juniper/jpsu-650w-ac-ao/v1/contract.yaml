@@ -1,0 +1,105 @@
+format: 1
+kind: module
+name: jpsu-650w-ac-ao
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-650W-AC-AO, a 650 W AC power supply with front-to-back airflow (AIR OUT). It is a
+  field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The QFX5120
+  hardware guide says the QFX5120-48T and QFX5120-48Y take it. They seat two, in slots 0 and 1 at the
+  right of the rear. The MX204 hardware guide names the same part number as the MX204's AC spare. No
+  other line is named in the guide held here. The face carries three lamps labelled AC, DC and !. It
+  also has a Juniper Gold handle, a C14 appliance inlet turned on its side and a black ejector lever.
+  The back-to-front sibling is JPSU-650W-AC-AI. AC and DC supplies, and supplies of different airflow
+  direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-650W-AC-AO
+  role: ac-power-supply
+  power-output-w: 650
+  airflow: front-to-back
+  input: 100 to 240 VAC, 50 to 60 Hz, 6 A (QFX5120-48Y, guide Table 29)
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5120-48Y, whose whole-face aspect
+    agrees with the guide's 440.9 x 43.7 mm to 0.5 percent (10.04 against 10.09), at 4.26 px/mm:
+    the module's face measures 54.6 mm across the bay and 40.2 high. No document gives the supply's
+    size in millimetres; the guide's AC supply table states only weight (2.2 lb for the 48Y).
+    juniper/mx204-psu-ac@1 is 56.6 x 40.1 from the MX204 guide's table: the width differs by 2.0 mm,
+    which a 0.25 mm pixel cannot explain, so this part is not a reuse of it (see the comparison).
+  depth: >-
+    not stated. The guide's figure is an isometric drawing with no scale and the table gives no
+    depth, so no depth is written.
+  comparison: >-
+    The MX204 component juniper/mx204-psu-ac@1 carries the same part number as its spare. Compared
+    here: same lamp legends (AC, DC, !), same vent grid at the left, an orange handle and a C14
+    inlet. Different: the width as measured (54.6 against 56.6 stated), the handle is 9.7 mm wide
+    here against 4.6 there, the inlet is turned on its side here, and the QFX5120 module has a black
+    ejector lever where the MX204 photograph shows a silver wire retainer. Whether one hardware part
+    is photographed in two chassis cannot be settled from the documents held, so this part is its
+    own component and the pair is listed for a later dedupe.
+  face: >-
+    photo - the QFX5120-48Y rear studio photograph at 8.5 px/mm on the module: the vent grid at the
+    left (a field of square holes about 3.6 mm on pitch), three lamps in a column at x 5.5 mm and y
+    21.2, 27.6 and 33.8 with the legends AC, DC and ! to their right, the handle at x 18.2 to 27.9
+    mm, the inlet centred at x 38.5, y 18.7 mm, and the ejector lever below the inlet at the right
+    edge. The lever overhangs the bay edge by about 3 mm in the photograph; only the part inside the
+    face width is drawn. A cord retainer clip is not drawn: it is cable furniture.
+  power-output-w: >-
+    datasheet - the part number and the guide's text call it a 650-W supply; the guide gives no
+    separate output rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, LEDs on the AC Power Supplies (Table 34): AC is green when the supply
+    receives power, DC is green when it sends power out correctly, and the fault lamp is amber
+    when an error is detected; each is unlit otherwise.
+  airflow: >-
+    datasheet - guide, airflow direction in AC power supplies (Table 26): JPSU-650W-AC-AO is
+    front-to-back and carries the label AIR OUT and a Juniper Gold handle.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [24.5, 8.7], rotate: 270}
+elements:
+  led-ac:
+    at: [4.4, 20.1]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [4.4, 26.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [4.4, 32.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [18.2, 0.8]
+    size: [9.7, 39.0]
+    class: latch
+  lever:
+    at: [48.8, 19.9]
+    size: [5.8, 20.3]
+    class: latch
+size:
+  w: 54.6
+  h: 40.2
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle stands proud of the face; its projection is not measured

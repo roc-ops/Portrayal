@@ -1,0 +1,1003 @@
+format: 1
+kind: device
+name: ex4400-48p
+version: 0.1.7
+maturity: modelled
+manufacturer: Juniper
+model: EX4400-48P
+portfolio: {line: EX Series, family: EX4400}
+description: >-
+  Juniper EX4400-48P campus access switch, 1RU. It has 48 10/100/1000BASE-T RJ-45 ports with IEEE 802.3bt
+  PoE of up to 90 W per port. The front also holds a USB-C console port, the chassis and port mode lamps,
+  a mode button and one extension module slot. The rear holds two 100GbE QSFP28 ports, console, management
+  and USB-A ports, two fan modules and two power supply slots. A shipped switch carries one supply, two
+  front-to-back fan modules and covers on the empty slots. The default configuration names a 1600 W AC
+  supply, and the -S spare ships with no supply and no fans.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4400 Switch Hardware Guide, Juniper Networks, PDF created 2026-07-22 (331 pages). Taken from it
+      - Table 7 and Tables 20 to 22 with Figures 25 to 28 (EX4400-48P), Table 38 to Table 40 (chassis,
+      fan and supply sizes), Tables 41 to 51 (lamps), Table 53 to Table 58 and Tables 67 and 68 (power
+      supplies and PoE budget), Table 52 (heat), Table 93 (environment), Table 105 (what ships), Table
+      114 (CLI names) and the mounting procedures. Figures 25 and 26 (g022647 and the rear render shared
+      with the 24T) are renders of the real product and are the pictures measured here. The HPE datasheet
+      a00150783enw (Juniper's own address redirects to it) was tried once and did not answer. The community
+      NetBox elevations of the EX4400-48F were used only to cross-check the rear counts and positions.
+      Juniper's image library (www.juniper.net/content/dam/www/assets/images/us/en/image-library/ex-series/)
+      answered for ex4400-24x/ex4400-24x-front-high.jpg only (a JPEG, 1500 x 236). The same pattern for
+      the 24T, 24P, 48T and 48P (front-high and rear-high, each once) and ex4400-24x rear-high all returned
+      an HTML 404 page. So there is no studio photograph of the 48P in the sources, and the guide's renders
+      are the only picture of each face. The 24X photograph confirms the colour and finish of the face,
+      the status block and the extension module cover. An end-of-life search made 2026-10-20 found no
+      end-of-life or end-of-sale notice for the EX4400 line, so the lifecycle is none-announced. The one
+      aggregator that lists the EX4400-48P shows it as supported with no date.
+  gate-1:
+    confidence: measured
+    note: >-
+      Both renders pass at low resolution. Figure 25 (g022647, 1500 x 199 px, embedded image extracted
+      from the PDF) gives a face 1298 px wide and 127.5 px tall, aspect 10.18 against the stated 441.7
+      / 43.7 = 10.11, 0.7 percent out. Scaled on the stated width it is 2.94 px per mm across and 2.92
+      down. The jack pitch then reads 13.95 mm over the 20 steps inside the blocks of one row, which is
+      the 13.97 mm of the ganged RJ45 registry entry, measured on a quantity the scale never saw. The
+      four blocks start at 106, 368, 630 and 893 px, a block step of 262.3 px or 89.26 mm. The rear render
+      (Figure 26, the image shared with the 24T and 24P, 2000 x 265 px) gives a face 1733.5 px by 168.5
+      px, aspect 10.29, 1.8 percent out the other way, 3.92 px per mm across and 3.86 down. Positions
+      are taken per axis on those scales, and each reads to about half a millimetre on the front and a
+      quarter on the rear.
+  width:
+    confidence: datasheet
+    note: >-
+      Table 38 gives the chassis 17.39 in (44.17 cm) wide, and says the outer edges of the front mounting
+      brackets extend the width to 19 in (48.2 cm). The face is the body between the folds, 441.7 mm,
+      with no ears drawn. Height is 1.72 in (4.37 cm), 1RU. Depth is 15.71 in (39.9 cm) with no supply,
+      fan module or extension module fitted, 16.93 in (43 cm) with a supply and fan modules, 17.35 in
+      (44.07 cm) with an extension module as well. The bare figure 399.0 mm is carried as the chassis
+      depth, because every module is its own part. The other two are in attrs.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 25 and Figure 27 - 48 RJ-45 ports in two rows of 24, in four blocks of six columns with a
+      gutter between them. Cells sit on the registry's 13.97 mm ganged pitch. The first cell's left edge
+      is at 7.95 mm, the block step is 89.26 mm (so a gutter of 5.44 mm), the upper cells start at 9.5
+      mm and the lower at 24.05 mm (row step 14.55 mm). Each block is a single silver plate, 87.1 mm wide,
+      5.71 mm from the left edge for the first, drawn as decor because the metal strip is panel and not
+      part. Counts confirmed by Table 21 and Table 114 (PIC 0, 48 ports).
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Figure 50 (g022608) at high zoom - under each column, one pair of printed numbers, an even number
+      with an up arrow and the next odd number with a down arrow ("0 up 1 down", "2 up 3 down" to "46
+      up 47 down" on the render). The arrows point at the port of each number, so the upper jack of a
+      column has the even number. Numbering starts at 0, as printed. CLI names (ge-0/0/0 and so on) are
+      not printed on the metal, and Table 114 gives PIC 0 as the built-in ports 0 to 47. The legend position
+      and arrow spacing are estimated from Figure 50 and the render.
+  rj45-orientation:
+    confidence: drawing
+    note: >-
+      Figure 50 - upper-row jacks have their contact comb at the bottom and their lamp windows at the
+      top corners, so they carry rotate 180. Lower-row jacks have the comb at the top and the lamps at
+      the bottom corners, the default turn of the part. This is the stacked mirror the registry describes.
+  port-leds:
+    confidence: datasheet
+    note: >-
+      Figure 50 and Table 43 and Table 44 - each jack has two lamp windows, "1 Link activity LED" at the
+      left and "2 Status LED" at the right, in both rows. The link activity lamp is green: steady for
+      link without traffic, blinking for traffic, unlit for no link. The status lamp shows one port parameter
+      at a time, chosen with the mode button: speed (SPD), duplex (DX), administrative enable (EN) or
+      PoE (POE). The jack part names its lamps led-a (left when unrotated) and led-b. The upper row is
+      rotated, so left and right swap there. A single mapping for the group would be wrong for one row,
+      so the part keeps its default vocabulary and this note holds the meaning. See the gap port-lamp-vocabulary.
+  status-block:
+    confidence: drawing
+    note: >-
+      Figure 27 callouts 2 to 5 and Figure 54 (g022614), measured on the render of Figure 25. A dark plate
+      361.2 to 439.5 across and 1.4 to 15.5 down. The model name EX4400 PoE++ is at the left (the render
+      prints PoE++ in orange). The USB-C console port is centred at 393.7, 8.3 with the USB symbol below
+      it. Two columns of lamps sit at 406.2 and 410.1 across: SYS, ALM, MST and CLD on the left with their
+      legends, and SPD, DX, EN and POE on the right. The rows are at 3.8, 6.8, 9.7 and 12.8 down; the
+      render scatters them by up to 0.5 mm and they are aligned. The mode button is a flush disc at 423.1,
+      8.6. The legends' type size is estimated.
+  extension-slot:
+    confidence: estimated
+    note: >-
+      Figure 27 callout 6. The slot is a recess 363.8 to 437.8 across and 17.7 to 41.2 down in the render
+      of Figure 25. The slot is a bay. It takes the three extension modules the guide names and ships
+      with a cover, because Table 105 lists one cover for the empty extension module slot. The modules
+      are not part of this device.
+  rear:
+    confidence: drawing
+    note: >-
+      Figure 26 and Figure 28 measured on the render, per axis, from the rear left edge (the chassis right
+      side as seen from the front). CON jack centre 18.35, 13.6; MGMT jack centre 39.6, 13.6, both with
+      the contact comb up; USB-A at 55.0, 12.5, vertical; RESET pinhole at 55.3, 24.9; ground plate 27.8
+      to 61.7 across and 27.6 to 39.7 down with two threaded holes 15.0 apart at 39.5 and 54.5; QSFP28
+      cages centred at 75.5 across and 14.5 and 28.2 down, labelled 0 and 1 to their left; two columns
+      of lamps at 89.4 and 94.3 across, two for each cage per row; ESD socket at 101.1, 36.0. Fan module
+      slots are at 108.2 and 206.0 across, and power supply slots at 255.0 and 346.4 across, each with
+      a fan or power icon and its number above the slot or beside it. All of these are estimated from
+      the render, to about 0.3 mm. The guide draws one rear for the 24T, 24P, 48T and 48P, and the callout
+      list of Figure 28 is the same as that of Figure 7.
+  rear-labels:
+    confidence: drawing
+    note: >-
+      Figure 28 callouts 1, 6, 10 and 15 are the serial number ID label, the CLEI code label, the power
+      supply rating label and the claim code label. They are stickers, not metal, so each is a named region
+      and is not drawn. The render shows them as blank plates, white for three and slate for the rating
+      label. The guide shows no content, and none is invented.
+  grounding:
+    confidence: datasheet
+    note: >-
+      Connect Earth Ground to an EX4400 Switch - a 2-hole protective grounding terminal on the rear panel,
+      used with 10-32 x 0.25 in screws and the lugs LCD10-10AF-L, LCD8-10AF-L or LCD6-10AF-L. The guide
+      gives no hole spacing. The 15.0 mm spacing is measured on the render and is estimated. The render
+      shows two bare holes, so they are drawn as dark holes on the plate and not as screws. A two-hole
+      lug is the seat of a pair of holes, and the library has no pair part for 10-32 holes at this spacing,
+      so no lug seat is offered.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md) - a belly-to-belly pair is the upper
+      cage upright and the lower turned 180, so both bails face outward. The two rear QSFP28 cages are
+      stacked this way and the render at 3.9 px per mm does not resolve which way the latches point, so
+      the rule decides and a photograph overturns it.
+  vents:
+    confidence: drawing
+    note: >-
+      The front has a hexagon punching in a band over and under the port blocks, from the logo to the
+      status block. The rear punching is two small fields above and below the QSFP28 cages. The fields
+      are drawn as a repeating pattern in simplified outlines, not hole for hole.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Median of bare face on the guide renders (#777777 at the front, #707070 at the rear), and of the
+      status plate (#50575f) and the jack plate (#cccdcf). The 24X studio photograph shows the same mid-grey
+      finish. The legends of the PoE models are gold (#e8a626) on the render.
+  power-supplies:
+    confidence: datasheet
+    note: >-
+      THE DEFAULT SUPPLY IS 1600 W, NOT 550 W. Table 20 ships the 48P with a 1600 W AC supply, the text
+      of the EX4400-48P topic says the model supports 1600 W AC and 2000 W DC supplies, and the 550 W
+      supplies are listed only for the 24T, 24X, 48T and 48F. The guide says the 48P and 48MP are not
+      supported with the 2000 W AC supply. The guide's rear render shows two supplies and does not tell
+      the ratings apart. This device ships one supply and a cover on the second slot, as Figure 28 and
+      Table 105 show. A bay cannot say that supplies of one chassis must share a rating.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Table 20 and Table 22 - the 48P ships only with front-to-back (AFO) fan modules and supply (AIR
+      OUT label, orange handle). No back-to-front 48P is listed anywhere in the guide. The -S spare ships
+      with no supply and no fan modules, and the guide says the fans to order are AFO.
+  mounting:
+    confidence: datasheet
+    note: >-
+      Mounting Options and the mounting procedures - the two-post kit EX-RMK ships in the box and mounts
+      the brackets flush with the front or along the middle of the side panels. The separately orderable
+      EX-4PST-RMK mounts the switch flush with the front posts of a four-post rack or recessed inside
+      it. EX-WMK is a wall kit. No ear distance in millimetres, no rack depth range and no bracket drawing
+      that can be measured is in the guide, so the positions are named without a number and no kit is
+      listed. The library holds no rail kit yet.
+  throughput:
+    confidence: datasheet
+    note: >-
+      Table 21 prints 324 Gbps unidirectional and 648 Gbps bidirectional for the 48P, the same figures
+      as the 24P. The 48T (Table 27) prints 348 and 696. The figures are carried as printed and not reconciled.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Table 114 - the CLI addresses the switch as FPC 0, the built-in ports as PIC 0 ports 0 to 47, the
+      two rear QSFP28 ports as PIC 1 ports 0 and 1, and the extension module as PIC 2. The names are not
+      printed on the metal, so no interfaces block is written.
+attrs:
+  physical:
+    weight: >-
+      7.22 kg with no power supply, fan module or extension module (EX4400-48P); 5.88 kg for the -S
+    depth-with-modules: 430.0 mm with power supply and fan modules; 440.7 mm with an extension module
+      as well
+    mounting: two-post kit EX-RMK in the box; four-post kit EX-4PST-RMK and wall kit EX-WMK separate
+  performance:
+    throughput: 324 Gbps unidirectional, 648 Gbps bidirectional, as printed in Table 21
+  power:
+    poe-standard: IEEE 802.3bt (PoE-bt), fast PoE and perpetual PoE, up to 90 W per port on 48 ports
+    poe-budget-1600w: 773 W at 110 V and 1310 W at 230 V with one supply, 1796 W and 2200 W with two
+    poe-budget-earlier-junos: >-
+      Junos OS 22.2R1 and earlier: 768 W at 110 V and 1290 W at 230 V with one supply. Two supplies give
+      1440 W and 1800 W.
+    power-redundancy: 1+1 with two supplies of one rating
+  thermal:
+    heat-dissipation: >-
+      456.94 BTU/hr idle and 470.58 at 100 percent traffic with a 1600 W AC supply; 6693.83 and 6707.47
+      with PoE
+  environmental: {operating-temp: 0 C to 45 C (32 F to 113 F), storage-temp: -40 C to 70 C (-40 F to 158
+      F) in the shipping container, humidity: 5 to 90 percent noncondensing, altitude: no performance
+      degradation up to 1828.8 m (6000 ft) at 40 C}
+  platform: {cpu: quad-core x86, memory: 4 GB DDR4 with ECC, storage: 20 GB eMMC}
+  features:
+    virtual-chassis: up to 10 switches over the QSFP28 ports, which are Virtual Chassis ports by default
+    macsec: >-
+      AES-256 on all RJ-45, SFP and SFP+ network ports and the SFP28 and QSFP28 extension module ports
+    optics-qsfp28: >-
+      The two rear ports take 100GbE QSFP28 or 40GbE QSFP+ transceivers (40G from Junos OS 22.1R1). Breakout
+      cables give 4x25G and 4x10G. The exact list is in the Hardware Compatibility Tool
+    qsfp28-channelization: each QSFP28 port runs as 100G, as 40G from Junos OS 22.1R1, or channelized
+    extension-slot: one slot for the EX4400-EM-4S, EX4400-EM-4Y or EX4400-EM-1C module
+  management:
+    console: USB-C on the front and RJ-45 (CON) on the rear
+    oob: MGMT RJ-45 on the rear, 10/100/1000, with link activity and status lamps
+    usb: USB-A on the rear
+    cloud: Juniper Mist Wired Assurance, and the Junos CLI and J-Web
+  compliance:
+    seismic: Tested for Zone 4 earthquake according to NEBS GR-63-CORE, Issue 5
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 441.7
+  height: 43.7
+  depth: 399.0
+  ru: 1
+  color: '#777777'
+  airflow: front-to-back
+  ears:
+    positions:
+    - {name: flush, label: flush with the front panel}
+    - {name: mid, label: along the middle of the side panels}
+    - {name: recessed, label: recessed inside a four-post rack, racks: [4-post]}
+gaps:
+- what: port-lamp-vocabulary
+  scope:
+  - rj45
+  reason: vendor-silent
+  note: >-
+    The jack part gives led-a the vocabulary link and led-b the vocabulary activity. This switch's right
+    lamp is a status lamp whose meaning follows the mode button, and the upper row is rotated so left
+    and right swap. One group mapping cannot say both.
+  wanted: A per-port states mapping that a block can carry, or the jack part split by row.
+- what: cld-lamp-states
+  scope:
+  - led-cld
+  reason: vendor-silent
+  note: >-
+    The hardware guide names the CLD lamp and sends the reader to the cloud-ready LED blink patterns,
+    which are not in this guide.
+  wanted: the cloud-ready LED blink patterns and their meanings
+- what: datasheet
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The HPE datasheet a00150783enw did not answer from this host, so no datasheet is cited and no figure
+    comes from it.
+  wanted: the HPE PSNow EX4400 datasheet, for the ordering part numbers and mounting kit codes
+- what: inlet-c16
+  scope:
+  - psu-0
+  - psu-1
+  reason: needs-drawing
+  note: >-
+    Table 53 gives the 1600 W supply a C15 coupler, which mates a C16 appliance inlet. The registry has
+    only the C14 inlet, which the supply part uses, so the C16 rim is not drawn and a C13 cord would also
+    fit the drawing.
+  wanted: a C16 inlet in the connector registry
+- what: dc-supply-face
+  scope:
+  - psu-0
+  - psu-1
+  reason: needs-photo
+  note: >-
+    The spare chassis takes the 2000 W DC supply, juniper/jpsu-2000-c-dc-afo. The guide draws its face
+    only in perspective (Figure 85), so the right half of the face is placed by eye and is estimated.
+    The guide also prints the supply's model number two ways, with and without the C, and the form with
+    the C is used.
+  wanted: a render or photograph of the 2000 W DC supply's face
+- what: fan-part-number
+  scope:
+  - fan-0
+  - fan-1
+  reason: vendor-silent
+  note: >-
+    The guide prints EX4400-FAN once, in the switch-tray assembly table, with no airflow direction. No
+    ordering code is stated for the fan modules.
+  wanted: the ordering codes of the front-to-back and back-to-front fan modules
+- what: ground-spacing
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide states the screw size and lug codes but not the spacing of the two grounding holes. The
+    15.0 mm spacing is estimated from the render. The holes are drawn as decor, so no two-hole lug can
+    be seated on them.
+  wanted: the spacing of the two-hole protective earthing terminal, and a 10-32 pair part for it
+- what: supported-optics
+  scope:
+  - qsfp28
+  - extension
+  reason: vendor-silent
+  note: >-
+    The guide sends the reader to the Hardware Compatibility Tool page for EX4400 for the transceivers
+    and cables each port takes, and holds no table of them. The port groups therefore declare no interface.
+  wanted: the EX4400 transceiver list from the Hardware Compatibility Tool
+- what: labels-not-drawn
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The ESD hazard symbol beside the ESD socket and the legends printed on the fan and power supply slot
+    plates are drawn as simple marks. The air-flow word printed on the supply fan hub in the community
+    elevation is not drawn, because no maker figure shows it.
+  wanted: a close-up of the rear panel
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g, poe: ieee-802.3bt, poe-max-w: '90'}
+    description: >-
+      48 ports, numbered 0 to 47 as printed, upper jack of each column even. Each port runs at 10, 100
+      or 1000 Mbps
+  extension: {term: Slot, role: traffic, index-origin: 0, description: 'the extension module slot, PIC
+      2 in the CLI'}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      reaching and restarting the switch - USB-C console and mode button on the front, RJ-45 console and
+      management, USB-A and the reset pinhole on the rear
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      Two rear ports numbered 0 and 1. They are Virtual Chassis ports by default and can run as network
+      ports. Each takes a 100G or a 40G transceiver
+  qsfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four lamps for each QSFP28 port, in two rows of two. Table 46 - green for 100G, amber for 40G, and
+      all four lamps show the four channels of a channelized port
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the chassis status and port mode lamps at the right of the front panel
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Cooling System and Airflow in an EX4400 Switch - "We ship EX4400 switches with two fan modules
+        (1+1 redundancy) preinstalled in the rear panel of the switch."
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Two slots, one supply shipped. The guide says a second supply gives full redundancy and that supplies
+        of different ratings must not be mixed
+  grounding: {term: Point, role: furniture, index-origin: 0, description: the rear two-hole protective
+      earthing terminal}
+  esd: {term: Point, role: furniture, index-origin: 0, description: the rear wrist-strap socket (guide
+      Figure 28 callout 11)}
+views:
+  front:
+    size: {w: 441.7, h: 43.7}
+    panel:
+      decor:
+      - {id: top-left-plate, at: [0.3, 0.3], size: [26.6, 9.3], rx: 0.8, fill: '#828282'}
+      - {id: vent-top, at: [27.0, 1.2], size: [331.0, 7.8], pattern: vent, pattern-pitch: [5.5, 5.4],
+        vent: 1.0}
+      - {id: vent-bottom, at: [3.5, 38.7], size: [356.0, 4.6], pattern: vent, pattern-pitch: [5.5, 5.4],
+        vent: 1.0}
+      - {id: plate-1, at: [5.71, 9.9], size: [87.1, 24.8], rx: 0.6, fill: '#cccdcf'}
+      - {id: plate-2, at: [94.97, 9.9], size: [87.1, 24.8], rx: 0.6, fill: '#cccdcf'}
+      - {id: plate-3, at: [184.23, 9.9], size: [87.1, 24.8], rx: 0.6, fill: '#cccdcf'}
+      - {id: plate-4, at: [273.49, 9.9], size: [87.1, 24.8], rx: 0.6, fill: '#cccdcf'}
+      - {id: status-plate, at: [361.2, 1.4], size: [78.3, 14.1], rx: 0.8, fill: '#50575f'}
+      cutouts:
+      - {id: port-0, at: [7.95, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-1, at: [7.95, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [21.92, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [21.92, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [35.89, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [35.89, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [49.86, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [49.86, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [63.83, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [63.83, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [77.8, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [77.8, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [97.21, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [97.21, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [111.18, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [111.18, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [125.15, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [125.15, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [139.12, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [139.12, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [153.09, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [153.09, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [167.06, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [167.06, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [186.47, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [186.47, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-26, at: [200.44, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-27, at: [200.44, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-28, at: [214.41, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-29, at: [214.41, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-30, at: [228.38, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-31, at: [228.38, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-32, at: [242.35, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-33, at: [242.35, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-34, at: [256.32, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-35, at: [256.32, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-36, at: [275.73, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-37, at: [275.73, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-38, at: [289.7, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-39, at: [289.7, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-40, at: [303.67, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-41, at: [303.67, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-42, at: [317.64, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-43, at: [317.64, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-44, at: [331.61, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-45, at: [331.61, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: port-46, at: [345.58, 9.5], size: [12.7, 11.0], shape: rect}
+      - {id: port-47, at: [345.58, 24.05], size: [12.7, 11.0], shape: rect}
+      - {id: usb-c, at: [389.53, 7.0], size: [8.34, 2.56], shape: rect}
+      - {id: led-sys, at: [405.2, 2.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-alm, at: [405.2, 5.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [405.2, 8.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-cld, at: [405.2, 11.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-spd, at: [409.1, 2.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-dx, at: [409.1, 5.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-en, at: [409.1, 8.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-poe, at: [409.1, 11.8], size: [2.0, 2.0], shape: circle}
+      - {id: mode-button, at: [420.4, 5.9], size: [5.4, 5.4], shape: circle}
+    silkscreen:
+    - {at: [12.0, 37.9], text: '0', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-0}
+    - {at: [16.6, 37.9], text: '1', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-1}
+    - {at: [25.97, 37.9], text: '2', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-2}
+    - {at: [30.57, 37.9], text: '3', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-3}
+    - {at: [39.94, 37.9], text: '4', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-4}
+    - {at: [44.54, 37.9], text: '5', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-5}
+    - {at: [53.91, 37.9], text: '6', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-6}
+    - {at: [58.51, 37.9], text: '7', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-7}
+    - {at: [67.88, 37.9], text: '8', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-8}
+    - {at: [72.48, 37.9], text: '9', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-9}
+    - {at: [81.85, 37.9], text: '10', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-10}
+    - {at: [86.45, 37.9], text: '11', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-11}
+    - {at: [101.26, 37.9], text: '12', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-12}
+    - {at: [105.86, 37.9], text: '13', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-13}
+    - {at: [115.23, 37.9], text: '14', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-14}
+    - {at: [119.83, 37.9], text: '15', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-15}
+    - {at: [129.2, 37.9], text: '16', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-16}
+    - {at: [133.8, 37.9], text: '17', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-17}
+    - {at: [143.17, 37.9], text: '18', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-18}
+    - {at: [147.77, 37.9], text: '19', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-19}
+    - {at: [157.14, 37.9], text: '20', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-20}
+    - {at: [161.74, 37.9], text: '21', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-21}
+    - {at: [171.11, 37.9], text: '22', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-22}
+    - {at: [175.71, 37.9], text: '23', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-23}
+    - {at: [190.52, 37.9], text: '24', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-24}
+    - {at: [195.12, 37.9], text: '25', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-25}
+    - {at: [204.49, 37.9], text: '26', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-26}
+    - {at: [209.09, 37.9], text: '27', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-27}
+    - {at: [218.46, 37.9], text: '28', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-28}
+    - {at: [223.06, 37.9], text: '29', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-29}
+    - {at: [232.43, 37.9], text: '30', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-30}
+    - {at: [237.03, 37.9], text: '31', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-31}
+    - {at: [246.4, 37.9], text: '32', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-32}
+    - {at: [251.0, 37.9], text: '33', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-33}
+    - {at: [260.37, 37.9], text: '34', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-34}
+    - {at: [264.97, 37.9], text: '35', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-35}
+    - {at: [279.78, 37.9], text: '36', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-36}
+    - {at: [284.38, 37.9], text: '37', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-37}
+    - {at: [293.75, 37.9], text: '38', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-38}
+    - {at: [298.35, 37.9], text: '39', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-39}
+    - {at: [307.72, 37.9], text: '40', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-40}
+    - {at: [312.32, 37.9], text: '41', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-41}
+    - {at: [321.69, 37.9], text: '42', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-42}
+    - {at: [326.29, 37.9], text: '43', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-43}
+    - {at: [335.66, 37.9], text: '44', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-44}
+    - {at: [340.26, 37.9], text: '45', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-45}
+    - {at: [349.63, 37.9], text: '46', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-46}
+    - {at: [354.23, 37.9], text: '47', font-size: 2.0, anchor: end, fill: '#e8a626', for: port-47}
+    - {at: [363.3, 5.3], text: EX4400, font-size: 2.8, anchor: start, fill: '#e6e8ea', for: chassis}
+    - {at: [375.8, 5.3], text: PoE++, font-size: 2.8, anchor: start, fill: '#e8a626', for: chassis}
+    - {at: [404.1, 4.4], text: SYS, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-sys}
+    - {at: [404.1, 7.4], text: ALM, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-alm}
+    - {at: [404.1, 10.3], text: MST, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-mst}
+    - {at: [404.1, 13.4], text: CLD, font-size: 1.9, anchor: end, fill: '#dfe2e6', for: led-cld}
+    - {at: [412.3, 4.4], text: SPD, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-spd}
+    - {at: [412.3, 7.4], text: DX, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-dx}
+    - {at: [412.3, 10.3], text: EN, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-en}
+    - {at: [412.3, 13.4], text: POE, font-size: 1.9, anchor: start, fill: '#dfe2e6', for: led-poe}
+    - at: [393.7, 12.4]
+      fill: '#dfe2e6'
+      for: usb-c
+      path: >-
+        M 0 1.5 L 0 -0.825 M -0.42 -0.825 L 0.42 -0.825 L 0 -1.5 Z M 0 0.15 L -0.825 -0.45 M 0 -0.15 L
+        0.825 0.3
+      stroke-width: 0.28
+    - {at: [12.8, 37.3], fill: '#e8a626', for: port-0, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [17.4, 37.3], fill: '#e8a626', for: port-1, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [26.77, 37.3], fill: '#e8a626', for: port-2, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [31.37, 37.3], fill: '#e8a626', for: port-3, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [40.74, 37.3], fill: '#e8a626', for: port-4, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [45.34, 37.3], fill: '#e8a626', for: port-5, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [54.71, 37.3], fill: '#e8a626', for: port-6, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [59.31, 37.3], fill: '#e8a626', for: port-7, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [68.68, 37.3], fill: '#e8a626', for: port-8, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [73.28, 37.3], fill: '#e8a626', for: port-9, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [82.65, 37.3], fill: '#e8a626', for: port-10, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [87.25, 37.3], fill: '#e8a626', for: port-11, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [102.06, 37.3], fill: '#e8a626', for: port-12, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [106.66, 37.3], fill: '#e8a626', for: port-13, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [116.03, 37.3], fill: '#e8a626', for: port-14, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [120.63, 37.3], fill: '#e8a626', for: port-15, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [130.0, 37.3], fill: '#e8a626', for: port-16, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [134.6, 37.3], fill: '#e8a626', for: port-17, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [143.97, 37.3], fill: '#e8a626', for: port-18, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [148.57, 37.3], fill: '#e8a626', for: port-19, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [157.94, 37.3], fill: '#e8a626', for: port-20, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [162.54, 37.3], fill: '#e8a626', for: port-21, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [171.91, 37.3], fill: '#e8a626', for: port-22, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [176.51, 37.3], fill: '#e8a626', for: port-23, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [191.32, 37.3], fill: '#e8a626', for: port-24, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [195.92, 37.3], fill: '#e8a626', for: port-25, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [205.29, 37.3], fill: '#e8a626', for: port-26, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [209.89, 37.3], fill: '#e8a626', for: port-27, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [219.26, 37.3], fill: '#e8a626', for: port-28, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [223.86, 37.3], fill: '#e8a626', for: port-29, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [233.23, 37.3], fill: '#e8a626', for: port-30, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [237.83, 37.3], fill: '#e8a626', for: port-31, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [247.2, 37.3], fill: '#e8a626', for: port-32, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [251.8, 37.3], fill: '#e8a626', for: port-33, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [261.17, 37.3], fill: '#e8a626', for: port-34, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [265.77, 37.3], fill: '#e8a626', for: port-35, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [280.58, 37.3], fill: '#e8a626', for: port-36, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [285.18, 37.3], fill: '#e8a626', for: port-37, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [294.55, 37.3], fill: '#e8a626', for: port-38, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [299.15, 37.3], fill: '#e8a626', for: port-39, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [308.52, 37.3], fill: '#e8a626', for: port-40, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [313.12, 37.3], fill: '#e8a626', for: port-41, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [322.49, 37.3], fill: '#e8a626', for: port-42, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [327.09, 37.3], fill: '#e8a626', for: port-43, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [336.46, 37.3], fill: '#e8a626', for: port-44, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [341.06, 37.3], fill: '#e8a626', for: port-45, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    - {at: [350.43, 37.3], fill: '#e8a626', for: port-46, path: M -0.55 0.48895 L 0.55 0.48895 L 0 -0.48895
+        Z, filled: true}
+    - {at: [355.03, 37.3], fill: '#e8a626', for: port-47, path: M -0.55 -0.48895 L 0.55 -0.48895 L 0 0.48895
+        Z, filled: true}
+    components:
+      bays:
+      - id: ext-module
+        at: [363.8, 17.7]
+        size: {w: 74.0, h: 23.5}
+        accepts:
+        - juniper/ex4400-em-cover@1
+        - juniper/ex4400-em-4s@1
+        - juniper/ex4400-em-4y@1
+        - juniper/ex4400-em-1c@1
+        default: juniper/ex4400-em-cover@1
+        group: extension
+        rel-pos: 2
+      placements:
+      - {ref: common/rj45-ganged-eth@1, id: port-0, at: [7.95, 9.5], rotate: 180, group: rj45, rel-pos: 0}
+      - {ref: common/rj45-ganged-eth@1, id: port-1, at: [7.95, 24.05], group: rj45, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: port-2, at: [21.92, 9.5], rotate: 180, group: rj45, rel-pos: 2}
+      - {ref: common/rj45-ganged-eth@1, id: port-3, at: [21.92, 24.05], group: rj45, rel-pos: 3}
+      - {ref: common/rj45-ganged-eth@1, id: port-4, at: [35.89, 9.5], rotate: 180, group: rj45, rel-pos: 4}
+      - {ref: common/rj45-ganged-eth@1, id: port-5, at: [35.89, 24.05], group: rj45, rel-pos: 5}
+      - {ref: common/rj45-ganged-eth@1, id: port-6, at: [49.86, 9.5], rotate: 180, group: rj45, rel-pos: 6}
+      - {ref: common/rj45-ganged-eth@1, id: port-7, at: [49.86, 24.05], group: rj45, rel-pos: 7}
+      - {ref: common/rj45-ganged-eth@1, id: port-8, at: [63.83, 9.5], rotate: 180, group: rj45, rel-pos: 8}
+      - {ref: common/rj45-ganged-eth@1, id: port-9, at: [63.83, 24.05], group: rj45, rel-pos: 9}
+      - {ref: common/rj45-ganged-eth@1, id: port-10, at: [77.8, 9.5], rotate: 180, group: rj45, rel-pos: 10}
+      - {ref: common/rj45-ganged-eth@1, id: port-11, at: [77.8, 24.05], group: rj45, rel-pos: 11}
+      - {ref: common/rj45-ganged-eth@1, id: port-12, at: [97.21, 9.5], rotate: 180, group: rj45, rel-pos: 12}
+      - {ref: common/rj45-ganged-eth@1, id: port-13, at: [97.21, 24.05], group: rj45, rel-pos: 13}
+      - {ref: common/rj45-ganged-eth@1, id: port-14, at: [111.18, 9.5], rotate: 180, group: rj45, rel-pos: 14}
+      - {ref: common/rj45-ganged-eth@1, id: port-15, at: [111.18, 24.05], group: rj45, rel-pos: 15}
+      - {ref: common/rj45-ganged-eth@1, id: port-16, at: [125.15, 9.5], rotate: 180, group: rj45, rel-pos: 16}
+      - {ref: common/rj45-ganged-eth@1, id: port-17, at: [125.15, 24.05], group: rj45, rel-pos: 17}
+      - {ref: common/rj45-ganged-eth@1, id: port-18, at: [139.12, 9.5], rotate: 180, group: rj45, rel-pos: 18}
+      - {ref: common/rj45-ganged-eth@1, id: port-19, at: [139.12, 24.05], group: rj45, rel-pos: 19}
+      - {ref: common/rj45-ganged-eth@1, id: port-20, at: [153.09, 9.5], rotate: 180, group: rj45, rel-pos: 20}
+      - {ref: common/rj45-ganged-eth@1, id: port-21, at: [153.09, 24.05], group: rj45, rel-pos: 21}
+      - {ref: common/rj45-ganged-eth@1, id: port-22, at: [167.06, 9.5], rotate: 180, group: rj45, rel-pos: 22}
+      - {ref: common/rj45-ganged-eth@1, id: port-23, at: [167.06, 24.05], group: rj45, rel-pos: 23}
+      - {ref: common/rj45-ganged-eth@1, id: port-24, at: [186.47, 9.5], rotate: 180, group: rj45, rel-pos: 24}
+      - {ref: common/rj45-ganged-eth@1, id: port-25, at: [186.47, 24.05], group: rj45, rel-pos: 25}
+      - {ref: common/rj45-ganged-eth@1, id: port-26, at: [200.44, 9.5], rotate: 180, group: rj45, rel-pos: 26}
+      - {ref: common/rj45-ganged-eth@1, id: port-27, at: [200.44, 24.05], group: rj45, rel-pos: 27}
+      - {ref: common/rj45-ganged-eth@1, id: port-28, at: [214.41, 9.5], rotate: 180, group: rj45, rel-pos: 28}
+      - {ref: common/rj45-ganged-eth@1, id: port-29, at: [214.41, 24.05], group: rj45, rel-pos: 29}
+      - {ref: common/rj45-ganged-eth@1, id: port-30, at: [228.38, 9.5], rotate: 180, group: rj45, rel-pos: 30}
+      - {ref: common/rj45-ganged-eth@1, id: port-31, at: [228.38, 24.05], group: rj45, rel-pos: 31}
+      - {ref: common/rj45-ganged-eth@1, id: port-32, at: [242.35, 9.5], rotate: 180, group: rj45, rel-pos: 32}
+      - {ref: common/rj45-ganged-eth@1, id: port-33, at: [242.35, 24.05], group: rj45, rel-pos: 33}
+      - {ref: common/rj45-ganged-eth@1, id: port-34, at: [256.32, 9.5], rotate: 180, group: rj45, rel-pos: 34}
+      - {ref: common/rj45-ganged-eth@1, id: port-35, at: [256.32, 24.05], group: rj45, rel-pos: 35}
+      - {ref: common/rj45-ganged-eth@1, id: port-36, at: [275.73, 9.5], rotate: 180, group: rj45, rel-pos: 36}
+      - {ref: common/rj45-ganged-eth@1, id: port-37, at: [275.73, 24.05], group: rj45, rel-pos: 37}
+      - {ref: common/rj45-ganged-eth@1, id: port-38, at: [289.7, 9.5], rotate: 180, group: rj45, rel-pos: 38}
+      - {ref: common/rj45-ganged-eth@1, id: port-39, at: [289.7, 24.05], group: rj45, rel-pos: 39}
+      - {ref: common/rj45-ganged-eth@1, id: port-40, at: [303.67, 9.5], rotate: 180, group: rj45, rel-pos: 40}
+      - {ref: common/rj45-ganged-eth@1, id: port-41, at: [303.67, 24.05], group: rj45, rel-pos: 41}
+      - {ref: common/rj45-ganged-eth@1, id: port-42, at: [317.64, 9.5], rotate: 180, group: rj45, rel-pos: 42}
+      - {ref: common/rj45-ganged-eth@1, id: port-43, at: [317.64, 24.05], group: rj45, rel-pos: 43}
+      - {ref: common/rj45-ganged-eth@1, id: port-44, at: [331.61, 9.5], rotate: 180, group: rj45, rel-pos: 44}
+      - {ref: common/rj45-ganged-eth@1, id: port-45, at: [331.61, 24.05], group: rj45, rel-pos: 45}
+      - {ref: common/rj45-ganged-eth@1, id: port-46, at: [345.58, 9.5], rotate: 180, group: rj45, rel-pos: 46}
+      - {ref: common/rj45-ganged-eth@1, id: port-47, at: [345.58, 24.05], group: rj45, rel-pos: 47}
+      - id: usb-c
+        ref: std/usb-c@1
+        at: [389.53, 7.0]
+        group: mgmt
+        rel-pos: 0
+        attrs: {role: console, media: usb-c}
+      - id: led-sys
+        ref: common/led-dot@1
+        at: [405.2, 2.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 0
+        states:
+        - 'off'
+        - {name: junos, color: '#22c55e'}
+        - {name: booting, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 41 - green steady: Junos OS is loaded; green blinking: the switch is booting; unlit: powered
+          off or halted
+      - id: led-alm
+        ref: common/led-dot@1
+        at: [405.2, 5.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: major, color: '#ef4444'}
+        - {name: minor, color: '#f59e0b'}
+        description: >-
+          Table 41 - red: major hardware fault and the switch is halted; amber: minor alarm; unlit: no
+          alarm or halted
+      - id: led-mst
+        ref: common/led-dot@1
+        at: [405.2, 8.7]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: primary, color: '#22c55e'}
+        - {name: backup, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 41 - standalone switch: green steady is normal, unlit is powered off or halted. Virtual
+          Chassis: green steady primary, green blinking backup, unlit linecard member
+      - id: led-cld
+        ref: common/led-dot@1
+        at: [405.2, 11.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        description: >-
+          Cloud connection lamp, enabled in Junos OS 21.2R1. The blink patterns are not in this guide
+      - id: led-spd
+        ref: common/led-dot@1
+        at: [409.1, 2.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: 1g, color: '#22c55e'}
+        - {name: 100m, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 44 - port mode lamp; lit shows the speed of the network ports: steady 1000 Mbps, blinking
+          100 Mbps, unlit 10 Mbps
+      - id: led-dx
+        ref: common/led-dot@1
+        at: [409.1, 5.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 5
+        states:
+        - 'off'
+        - {name: full-duplex, color: '#22c55e'}
+        description: Table 44 - port mode lamp; lit shows full duplex, unlit half duplex
+      - id: led-en
+        ref: common/led-dot@1
+        at: [409.1, 8.7]
+        for: chassis
+        group: status-leds
+        rel-pos: 6
+        states:
+        - 'off'
+        - {name: enabled, color: '#22c55e'}
+        description: Table 44 - port mode lamp; lit shows ports administratively enabled, unlit disabled
+      - id: led-poe
+        ref: common/led-dot@1
+        at: [409.1, 11.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 7
+        states:
+        - 'off'
+        - {name: powering, color: '#22c55e'}
+        - {name: enabled-idle, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 44 - port mode lamp; steady: PoE-bt enabled and a device draws power; blinking: enabled
+          and no power drawn; unlit: PoE not enabled
+      - id: mode-button
+        ref: juniper/ex4400-mode-button@1
+        at: [420.4, 5.9]
+        for: chassis
+        group: mgmt
+        rel-pos: 1
+        attrs: {function: factory reset and port mode}
+    regions:
+    - id: logo-zone
+      at: [2.3, 2.1]
+      size: {w: 23.7, h: 6.1}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 441.7, h: 43.7}
+    panel:
+      decor:
+      - {id: ground-plate, at: [27.8, 27.6], size: [33.9, 12.1], rx: 0.6, fill: '#666666'}
+      - {id: ground-hole-1, at: [36.7, 30.9], size: [5.6, 5.6], rx: 2.8, fill: '#0e0f10'}
+      - {id: ground-hole-2, at: [51.7, 30.9], size: [5.6, 5.6], rx: 2.8, fill: '#0e0f10'}
+      - {id: vent-rear-top, at: [62.5, 1.0], size: [26.0, 7.5], pattern: vent, pattern-pitch: [5.5, 5.4],
+        vent: 1.0}
+      - {id: vent-rear-bottom, at: [62.5, 34.0], size: [26.0, 7.0], pattern: vent, pattern-pitch: [5.5,
+          5.4], vent: 1.0}
+      cutouts:
+      - {id: con, at: [10.45, 7.0], size: [15.8, 13.2], shape: rect}
+      - {id: mgmt, at: [31.7, 7.0], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [52.75, 6.5], size: [4.5, 12.0], shape: rect}
+      - {id: reset, at: [53.3, 22.9], size: [4.0, 4.0], shape: circle}
+      - {id: qsfp-0, at: [65.5, 9.43], size: [20.0, 10.15], shape: rect}
+      - {id: qsfp-1, at: [65.5, 23.1], size: [20.0, 10.15], shape: rect}
+      - {id: led-qsfp-0-0, at: [88.4, 10.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-0-1, at: [93.3, 10.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-0-2, at: [88.4, 15.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-0-3, at: [93.3, 15.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-1-0, at: [88.4, 23.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-1-1, at: [93.3, 23.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-1-2, at: [88.4, 28.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-qsfp-1-3, at: [93.3, 28.9], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [18.35, 22.5], text: CON, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: con}
+    - {at: [39.6, 22.5], text: MGMT, font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: mgmt}
+    - at: [55.0, 21.0]
+      fill: '#e6e8ea'
+      for: usb
+      path: >-
+        M 0 1.5 L 0 -0.825 M -0.42 -0.825 L 0.42 -0.825 L 0 -1.5 Z M 0 0.15 L -0.825 -0.45 M 0 -0.15 L
+        0.825 0.3
+      stroke-width: 0.28
+    - {at: [52.6, 25.45], text: RESET, font-size: 1.8, anchor: end, fill: '#e6e8ea', for: reset}
+    - {at: [63.3, 15.1], text: '0', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: qsfp-0}
+    - {at: [63.3, 28.8], text: '1', font-size: 2.0, anchor: middle, fill: '#e6e8ea', for: qsfp-1}
+    - at: [153.1, 5.6]
+      path: >-
+        M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4
+        1.1
+      stroke-width: 0.28
+      for: fan-0
+    - {at: [153.1, 9.9], text: '0', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: fan-0}
+    - at: [202.0, 5.6]
+      path: >-
+        M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z M -1.1 -0.4 L 1.1 0.4 M -0.4 -1.1 L 0.4
+        1.1
+      stroke-width: 0.28
+      for: fan-1
+    - {at: [202.0, 9.9], text: '1', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: fan-1}
+    - {at: [250.6, 5.8], path: M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95, stroke-width: 0.28,
+      for: psu-0}
+    - {at: [250.6, 9.9], text: '0', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: psu-0}
+    - {at: [342.1, 5.9], path: M 0 -1.5 L 0 -0.2 M -0.95 -0.95 A 1.35 1.35 0 1 0 0.95 -0.95, stroke-width: 0.28,
+      for: psu-1}
+    - {at: [342.1, 10.0], text: '1', font-size: 1.8, anchor: middle, fill: '#e6e8ea', for: psu-1}
+    components:
+      bays:
+      - id: fan-0
+        at: [108.2, 0.95]
+        size: {w: 41.8, h: 41.8}
+        accepts:
+        - juniper/ex4400-fan-afo@1
+        default: juniper/ex4400-fan-afo@1
+        group: fans
+        rel-pos: 0
+      - id: fan-1
+        at: [206.0, 0.95]
+        size: {w: 41.8, h: 41.8}
+        accepts:
+        - juniper/ex4400-fan-afo@1
+        default: juniper/ex4400-fan-afo@1
+        group: fans
+        rel-pos: 1
+      - id: psu-0
+        at: [255.0, 1.65]
+        size: {w: 83.06, h: 40.39}
+        accepts:
+        - juniper/jpsu-1600-c-ac-afo@1
+        - juniper/jpsu-2000-c-dc-afo@1
+        - juniper/ex4400-psu-cover@1
+        default: juniper/jpsu-1600-c-ac-afo@1
+        group: psus
+        rel-pos: 0
+      - id: psu-1
+        at: [346.4, 1.65]
+        size: {w: 83.06, h: 40.39}
+        accepts:
+        - juniper/jpsu-1600-c-ac-afo@1
+        - juniper/jpsu-2000-c-dc-afo@1
+        - juniper/ex4400-psu-cover@1
+        default: juniper/ex4400-psu-cover@1
+        group: psus
+        rel-pos: 1
+      placements:
+      - id: con
+        ref: std/rj45@2
+        at: [10.45, 7.0]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: console}
+      - id: mgmt
+        ref: common/rj45-eth@1
+        at: [31.7, 7.0]
+        group: mgmt
+        rel-pos: 3
+        attrs: {speed: 1g, role: management}
+        description: >-
+          Table 42 - link activity lamp: steady link with no traffic, blinking traffic, unlit no link.
+          Status lamp: steady 1000 Mbps, blinking 100 Mbps, unlit 10 Mbps
+      - {id: usb, ref: std/usb-a@1, at: [49.0, 10.25], rotate: 90, group: mgmt, rel-pos: 4}
+      - id: reset
+        ref: common/reset-button@1
+        at: [53.3, 22.9]
+        for: chassis
+        group: mgmt
+        rel-pos: 5
+        attrs: {function: reset}
+      - {id: qsfp-0, ref: std/qsfp28@1, at: [65.5, 9.43], group: qsfp28, rel-pos: 0}
+      - {id: qsfp-1, ref: std/qsfp28@1, at: [65.5, 23.1], rotate: 180, group: qsfp28, rel-pos: 1}
+      - {id: led-qsfp-0-0, ref: common/led-dot@1, at: [88.4, 10.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 0}
+      - {id: led-qsfp-0-1, ref: common/led-dot@1, at: [93.3, 10.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 1}
+      - {id: led-qsfp-0-2, ref: common/led-dot@1, at: [88.4, 15.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 2}
+      - {id: led-qsfp-0-3, ref: common/led-dot@1, at: [93.3, 15.0], for: qsfp-0, group: qsfp28-leds, rel-pos: 3}
+      - {id: led-qsfp-1-0, ref: common/led-dot@1, at: [88.4, 23.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 4}
+      - {id: led-qsfp-1-1, ref: common/led-dot@1, at: [93.3, 23.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 5}
+      - {id: led-qsfp-1-2, ref: common/led-dot@1, at: [88.4, 28.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 6}
+      - {id: led-qsfp-1-3, ref: common/led-dot@1, at: [93.3, 28.9], for: qsfp-1, group: qsfp28-leds, rel-pos: 7}
+      - {id: ground-mark, ref: common/ground-symbol@1, at: [21.4, 31.0], for: chassis, group: grounding,
+        rel-pos: 0}
+      - {id: esd-jack, ref: common/esd-jack@1, at: [98.1, 33.0], for: chassis, group: esd, rel-pos: 0}
+    regions:
+    - id: label-serial
+      at: [4.0, 3.0]
+      size: {w: 5.1, h: 20.7}
+      label: Serial number ID label; not drawn
+    - id: label-claim
+      at: [4.0, 24.4]
+      size: {w: 15.1, h: 15.5}
+      label: Claim code label; not drawn
+    - id: label-clei
+      at: [98.7, 2.5]
+      size: {w: 5.1, h: 28.8}
+      label: CLEI code label; not drawn
+    - id: label-rating
+      at: [431.3, 1.7]
+      size: {w: 7.7, h: 41.5}
+      label: Power supply rating label; not drawn
+  left:
+    size: {w: 399.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures of the
+      mounting brackets (Figures 95 to 106), with screw holes that cannot be measured.
+  right:
+    size: {w: 399.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source. The guide shows the side panel only in perspective figures of the
+      mounting brackets (Figures 95 to 106), with screw holes that cannot be measured.
+  top:
+    size: {w: 441.7, h: 399.0}
+    empty: >-
+      Not drawn by any source. The guide has no figure of the top cover, and the heat and airflow figures
+      (Figures 63 to 76) are schematic section drawings.
+  bottom:
+    size: {w: 441.7, h: 399.0}
+    empty: >-
+      Not drawn by any source. The guide has no figure of the underside except the step that fits the
+      four rubber feet, which shows no position.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      One 1600 W AC supply, two front-to-back fan modules and covers on the empty slots, the switch as
+      shipped (EX4400-48P).
+    default: true
+    power: ac
+    part-numbers:
+      EX4400-48P: {}
+  s:
+    kind: orderable
+    description: >-
+      The spare chassis EX4400-48P-S. It ships with no power supply and no fan modules, and they are ordered
+      separately. The guide lists 2000 W DC as its supply and the AFO fan module.
+    bays: {fan-0: '', fan-1: '', psu-0: '', psu-1: ''}
+    part-numbers:
+      EX4400-48P-S: {}
+  em-4y:
+    kind: example
+    description: >-
+      The EX4400-48P as shipped, with an EX4400-EM-4Y extension module in the extension slot in place
+      of the cover. An illustration, not an order code.
+    power: ac
+    bays: {ext-module: juniper/ex4400-em-4y@1}
+  dual-psu:
+    kind: example
+    description: >-
+      The EX4400-48P with a second 1600 W supply in slot 1, for the 1+1 redundancy the guide describes.
+      An illustration, not an order code.
+    power: ac
+    bays: {psu-1: juniper/jpsu-1600-c-ac-afo@1}
+references:
+- title: EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22)
+  sha256: 649e4800b252e1a7f1836f4607efa2683b747bc4fef8758bf77246d74f513a4d

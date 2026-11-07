@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: qfx10000-pwr-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover for the QFX10008 and QFX10016. The base configurations ship one over each
+  supply slot they leave empty: three on the QFX10008 and five on the QFX10016. A plain panel the
+  size of a supply, with a pull at the top.
+attrs:
+  model: QFX10000 power supply cover
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an
+    opening: it has no indicator to light and no condition to report, so this part draws no
+    elements at all. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    datasheet - the size of the QFX10000-PWR-AC it stands beside, 91.4 by 88.9 mm (Table 13 of the
+    hardware guides: 3.6 in. wide, 3.5 in. high), so the cover and the supply fill a bay the same
+    way. The guides give no dimension for the cover.
+  part-number: >-
+    The QFX10008 guide's Table 2 lists "Three power supply covers" and the QFX10016 guide's Table 3
+    "Five power supply covers" and name no part number. The cover keeps a name of its own and is not
+    juniper/jnp10k-pwr-blnk@2, whose part number JNP10K-PWR-BLNK the QFX guides never print.
+  face: >-
+    estimated - no figure or photograph of the cover was obtained. The art follows the MX10000 power
+    supply cover already in the library: a plain light panel with a pull. The outline is sourced and
+    the detail is not.
+states: [absent]
+size:
+  w: 91.4
+  h: 88.9
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  Derived from the supply's own faceplate in Table 13 of the hardware guides. Nothing measured the
+  cover itself.
+skins: [default]

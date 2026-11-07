@@ -1,0 +1,60 @@
+format: 1
+kind: module
+name: ex4200-uplink-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Uplink module slot cover panel (the blanking panel) of the Juniper EX4200 switches. The
+  switch ships with a cover panel preinstalled over the front-panel uplink module slot. The
+  guide's installation procedure says to loosen the screws of the flip-up door over the slot,
+  flip it up and remove the blanking panel before an uplink module (EX-UM-4SFP, EX-UM-2X4SFP,
+  EX-UM-2X4SFP-M or EX-UM-2XFP) is slid in. A plain plate with a captive screw at each end.
+attrs:
+  model: EX4200 uplink module cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), Table 37 (packing list: "Uplink
+    module cover panel: 1", preinstalled) and Installing an Uplink Module in an EX4200 Switch,
+    step 2 ("flip the door upward, and remove the blanking panel covering the empty uplink module
+    slot"). No part number is given
+  size: >-
+    estimated - the slot's opening, 63.0 x 14.5 mm, is read off the product photographs in the
+    EX4200 datasheet (page 6) where an uplink module fills the slot: the 24-port and 48-port
+    views, the face spanning 894 px for 438.2 mm (2.04 px per mm) across and 87 px down for 44.45
+    mm (1.95 px per mm, 4.5 percent foreshortened) so the vertical figures are read on the
+    face's own height. The module faceplate is 124 px across in the 48-port view and 130 in the
+    24F view. No document dimensions the slot or the cover; good to about 1.5 mm
+  face: >-
+    estimated - no figure or photograph of the cover panel itself was found: it is drawn as a
+    plain plate with two screws at the ends. Its colour follows the chassis plate
+states: [absent]
+elements:
+  screw-left:
+    at: [1.6, 4.5]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [56.4, 4.5]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names screws; projection estimated

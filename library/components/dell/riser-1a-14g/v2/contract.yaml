@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: riser-1a-14g
-version: 2.3.0
+version: 2.4.0
 class: riser
 behaviour: fills
 profile: server
@@ -105,6 +105,24 @@ provenance:
     (nvidia/a100-pcie-80gb@1) too, a real two-slot card with the same fit and
     the same caveat: its 268.60 length and its CPU 8-pin cable are not read
     against this riser's reach or this chassis' power.
+  slot-1-gpus-the-r740xd-documents-support: >-
+    Slot 1 also names the A100 40GB (nvidia/a100-pcie-40gb@1) and the L4
+    (nvidia/l4@1), read against Dell's own documents. datasheet - PowerEdge R740xd
+    Installation and Service Manual, "Expansion card installation guidelines",
+    table 27: double-width GPUs take slot priority 1, 8, 4, and "Nvidia A16, A30,
+    A40, A100, A800" are listed in configurations 1A+2E+3B and 1A+2F+3B, slot 1
+    first. datasheet - R740xd spec sheet, "Accelerator options": up to three 300 W
+    or six 150 W GPUs. The A100 40GB draws 250 W (its brief), under that 300 W
+    ceiling, and is full-height, full-length, two slots wide, the shape slot 1
+    spans slot 2 for. The L4 is one slot wide, full height on its fitted bracket,
+    168.54 long and 72 W with no auxiliary power: inside the manual's single-width
+    GPU class and the spec sheet's 150 W, and the manual's GPU slot priority is
+    1, 8 and 4, so slot 3 stays closed to it. Table 27 does not name the L4, so
+    this is the class statement and not a qualification of that card. Table 27's
+    note says configurations 1A+2A+3A and 1A+2D+3A do not support double-width
+    A-series GPUs; the bay says what fits and the riser fitted in a chassis
+    decides the rest. The H100 PCIe (350 W), H100 NVL (400 W) and L40S (350 W) are
+    over the 300 W ceiling and are not named.
   adjacent-brackets-overlap-by-1.27-on-purpose: >-
     THE SLOT BAYS OVERLAP IN Y AND THE PARTS STILL FIT. A PCIe bracket is 21.59
     across overall on a 20.32 slot pitch, because its flange end is KEYED - the
@@ -149,7 +167,7 @@ bays:
     # A TWO-SLOT CARD HERE COVERS SLOT 2, the opening with no connector
     # behind it (provenance `a-two-slot-card-covers-slot-2`).
     span: [slot-2]
-    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, std/pcie-bracket-fh-2slot@1, nvidia/a100-pcie-80gb@1, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
+    accepts: [dell/pcie-filler-fh-14g@2, std/pcie-bracket-fh@2, std/pcie-bracket-fh-2slot@1, nvidia/a100-pcie-80gb@1, nvidia/a100-pcie-40gb@1, nvidia/l4@1, common/pcie-card-fh@2, ufispace/n3100-4c@1, nvidia/mcx4111a-fh@1, nvidia/mcx4121a-fh@1, nvidia/mcx4131a-fh@1, nvidia/mcx512a-fh@1, nvidia/mcx512f-fh@1, nvidia/mcx515a-fh@1, nvidia/mcx516a-fh@1, nvidia/mcx621102-fh@1, nvidia/mcx621202-fh@1, nvidia/mcx623102a-fh@1, nvidia/mcx623105-fh@1, nvidia/mcx623106-fh@1, nvidia/mcx713104-fh@1, nvidia/mcx713106-fh@1, nvidia/mcx713114-fh@1, nvidia/mcx715105-fh@1, nvidia/mcx75310-fh@1, nvidia/mcx75510-fh@1, nvidia/mcx755106-fh@1]
     default: dell/pcie-filler-fh-14g@2
   slot-2:
     # THE OPENING WITH NO CONNECTOR BEHIND IT. Same geometry as its neighbours -

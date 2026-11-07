@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: hm-plate-3u
+version: 1.0.0
+class: mechanical
+description: >-
+  The centre plate of a Hubbell M-Series 3 RU horizontal cable manager, seen from the
+  front. It is a steel plate as wide as the rack, with its ears in the same sheet. Four
+  tall rounded windows let a cable cross it. It is drawn as the well that the wire rings
+  stand in.
+provenance:
+  size: >-
+    datasheet - HM34C spec sheet (hubbellcdn.com/specsheet/PREMISE_HM34C_spec.pdf),
+    dimensions table: A 3 RU, 4.6 in (117 mm), B 19 in (483 mm). The figure marks A at the
+    plate's own end, so A is the plate's height, 116.84 mm, which is SHORT of the 5.25 in
+    (133.35 mm) that 3 RU is; the sheet's figure is not corrected and its A is the height
+    used. B is taken as the 19 in, 482.6 mm, that the sheet's mm column rounds. The ears
+    are the plate's ends, so the plate is drawn whole.
+  depth: >-
+    datasheet - 101.6, the sheet's C, 4 in (102 mm), the projection of the rings from the
+    plate. The well is as deep as the rings stand out, so the floor lies C behind the
+    front of the part; the rear side is the same part seen from behind, with D, the rear
+    extension, estimated at the same 101.6 (see the device's `rear-extension`).
+  windows: >-
+    estimated - four tall rounded windows, read off the sheet's figure. The figure has no
+    dimension on them; they are scaled against B along the plate (a pitch of 112 mm between
+    window centres, read on the HM14C and HM24C figures; the HM34C figure reads 117, taken
+    as the same 112) and against A across it (a window 0.75 of the plate's height, 87.6
+    mm, centred; 84 mm wide, the pitch less a 28 mm web; corner radius 15). Perspective in
+    the figure makes each reading good to a few millimetres. The sheet's "Pass through
+    holes: Standard" is these windows.
+  mounting-holes: >-
+    not drawn - the sheet lists "EIA/ECA-310-E Universal Mounting Pattern" and draws a
+    slot pair in each ear, with no dimension. The hole positions are the standard's, not
+    the sheet's, so no slot is drawn.
+  thickness: >-
+    estimated - 1.5 mm. No Hubbell sheet states a gauge for the M-Series plate.
+  color: >-
+    datasheet - "Finish: Black Powder Coated" on the sheet. Drawn as the library's black
+    steel, '#1b1d20'.
+size: {w: 482.6, h: 116.84, d: 101.6}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief: {wall: '#1b1d20'}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 116.84], class: bezel}
+skins: [default]

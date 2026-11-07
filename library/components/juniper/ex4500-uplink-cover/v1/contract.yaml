@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: ex4500-uplink-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The uplink module cover panel of the Juniper EX4500 switches. The front panel has two uplink module
+  slots, PIC 1 at the left and PIC 2 at the right. Every model ships each slot with a cover panel. A slot
+  takes one 4-port SFP+ uplink module, which is ordered separately. The panel is a plain plate with a
+  captive screw at each end. The guide gives no part number and no figure for it.
+attrs:
+  weight-note: not published
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Table 3, "Two uplink module cover
+    panels" in the shipped components of every model, and Uplink Modules in EX4500 Switches (Figures 9 and
+    10). The guide's figures of the front panel (Figures 4, 5 and 9) draw the uplink modules in place, not
+    the cover panels; no figure draws a cover panel, and the guide gives no part number, size or weight.
+    The guide's own copyright and the Juniper EULA govern it; it is read for facts only and nothing of it is
+    copied.
+  size: >-
+    drawing - the slot frame in Figure 4, rendered at 1200 dpi: 151.0 mm wide and 40.8 mm high, read at 0.0872
+    mm per pixel across and 0.0886 down against the face's 17.25 x 3.5 in. The panel takes the slot's size. It
+    is estimated to 1 mm.
+  face: >-
+    estimated - Figure 4 shows the module's screws at each end, 19.3 mm from the slot edge, and no panel.
+    The cover is a plain plate with those two screws. A photograph of the real panel would replace this.
+  depth: >-
+    estimated - not stated. No depth is written.
+states: [absent]
+elements:
+  screw-left:
+    at: [15.3, 12.1]
+    size: [8.0, 8.0]
+    class: screw
+  screw-right:
+    at: [127.7, 12.1]
+    size: [8.0, 8.0]
+    class: screw
+size:
+  w: 151.0
+  h: 40.8
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+skins: [default]

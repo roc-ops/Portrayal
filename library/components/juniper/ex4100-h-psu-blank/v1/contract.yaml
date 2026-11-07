@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: ex4100-h-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The PSU blank of the Juniper EX4100-H-24MP and EX4100-H-24F: a plain sheet-metal panel that covers the empty second
+  power supply slot, with a captive screw on a tab at each end - one low at the left, one high at the right - and a round
+  dimple in the middle. The switch ships with one supply, and this panel covers the other slot. The guide names it only
+  as a PSU blank, with no part number, and shows it in the rear panel figures of both models.
+attrs:
+  model: EX4100-H PSU blank
+  covers: power supply slot
+provenance:
+  sources: >-
+    datasheet and photo-measured - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01): Figure 4,
+    callout 4, and Figure 6, callout 2, "PSU blank", and Juniper's studio photographs of the EX4100-H-24MP and
+    EX4100-H-24F, rear. The packing lists (Tables 66 and 67) name no blank, and no part number is stated.
+  size: >-
+    estimated - the guide gives no dimension for the blank. It is read off Figure 4 (6.567 px/mm against the 439.0 mm body,
+    its height agreeing with 43.3 mm to 0.3 percent) as the panel's 173.3 by 37.1 mm, with the two tabs reaching to 194.4
+    mm overall. The EX4100-H-24F's Figure 6 draws a panel of the same kind about 1.3 mm wider, at a scale 0.8 percent
+    smaller; one size is carried for both.
+  face: >-
+    estimated - the panel's two captive screws are drawn as the photographs show them, a 6.2 mm head on the lower left tab
+    and a 6.0 mm head on the upper right one, and the dimple is 8.3 mm across at the middle of the panel. The lighter
+    grey of the photograph against the supplies is the panel's own finish.
+states: [absent]
+elements:
+  screw-left:
+    at: [0.6, 23.4]
+    size: [6.2, 6.2]
+    class: screw
+  screw-right:
+    at: [188.1, 5.6]
+    size: [6.0, 6.0]
+    class: screw
+size:
+  w: 194.4
+  h: 39.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

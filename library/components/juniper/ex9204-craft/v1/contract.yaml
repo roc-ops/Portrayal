@@ -1,0 +1,252 @@
+format: 1
+kind: module
+name: ex9204-craft
+version: 1.0.0
+class: display
+behaviour: fills
+profile: networking
+description: >-
+  Craft interface (front panel display, FPM board) of the Juniper EX9204 switch. It spans the chassis above the card
+  cage. It has the MASTER, ONLINE and OFFLINE lamps for RE0 and RE1. It has the fan tray lamps and the OK and FAIL lamps of
+  PEM 0 to PEM 3. It has a minor (yellow) and a major (red) alarm lamp and the alarm cutoff and lamp test button (ACO/LT). It
+  has the MINOR ALARM and MAJOR ALARM relay contacts (NC, C, NO). Each of the slots 0, 1|0, 1 and 2 has an OK lamp, a FAIL
+  lamp and a control button. The EX9204 model name is printed on it.
+attrs:
+  model: EX9204 Craft Interface
+  power-absent: not-published
+provenance:
+  sources: >-
+    EX9204 Switch Hardware Guide (published 2025-08-12), "Craft Interface in an EX9200 Switch": Figure 9 (the craft
+    interface of the EX9204, drawn flat, with eight callouts), Figure 12 (the alarm relay contacts), Tables 9 to 14 (the
+    lamps), and the EX9204 studio front photograph (1.65 px/mm), which shows the panel with its lamps unlit.
+  lamp-states: >-
+    The vocabularies are the guide's: Table 9 (host subsystem: MASTER green, ONLINE green, OFFLINE red), Table 10 (fan:
+    OK green, FAIL red), Table 11 (power supply: OK green, FAIL red), Table 12 (Switch Fabric module: OK green or blinking,
+    FAIL red), Table 13 (line card: OK green or blinking, FAIL red), Table 14 (alarm: major red, minor yellow). Each lamp
+    fills from the LED variable, with its drawn colour as the unlit fallback.
+  power: >-
+    NOT PUBLISHED. The guide's FRU power table (Table 24) lists the Routing Engine, the Switch Fabric modules and the line
+    cards and does not list the craft interface or the fan tray; the EX9200 datasheet (Aug 2022) Table 3 lists none either.
+    The chassis base system figure of 410 W is the guide's chassis figure.
+  size: >-
+    estimated - the panel spans 420.9 x 42.5 mm, the size the MX240 photograph (3.37 px/mm) measures for the craft panel of
+    the same sheet metal (juniper/mx240-craft size). The EX9204 photograph (1.65 px/mm) reads the panel from 10.8 to 433.3 mm
+    across the body, 422.5 mm, within two pixels of 420.9. The guide gives no dimension for it.
+  features: >-
+    photo-measured - every lamp, button, tab and relay block is placed from the EX9204 studio front photograph, read on a
+    millimetre grid at 1.645 px/mm across, from the panel's own origin at 11.0 mm across the body and 32.8 mm down. The two RE lamp
+    columns read at 99.0 and 130.5 mm; the fan lamp column at 178.6; the four PEM lamp columns at 232.2, 238.5, 244.8 and 251.1;
+    the minor alarm triangle at 295.4, the major circle at 313.3, the ACO/LT button at 332.4; the two relay blocks 346.4 to 373.2
+    and 373.6 to 399.6; the four slot tabs at 99.7, 131.3, 162.9 and 194.4, 31.6 mm apart, each with its lamp pair 3.75 mm either
+    side. The MX240 craft panel places the slot lamps 17.5 mm apart and the relay blocks 33 mm apart, so the two panels are not
+    the same layout and the MX240 places are not used. Down the panel the readings are estimated to about 1.5 mm, because the
+    photograph's two scales differ by 2 percent, and every reading down the photograph is moved 2.2 mm, the amount by which the
+    photograph's row of the first cage plate sits above the MX240's (82.4 against 84.6 mm), so that the panel and the cage keep the
+    MX240's spacing. The EX9208 photograph, which has no such offset, puts the same lamps 8.0, 13.2 and 18.4 mm below its panel top. The fan lamps carry a fan symbol at their right and the legend FAN TRAY.
+  slot-tabs: >-
+    photo - the four oval tabs under the slot lamp pairs read 0, 1|0, 1 and 2 left to right. The photograph prints tab 0 blue,
+    tab 1|0 half blue and half grey, and tabs 1 and 2 grey. Slot 1|0 is the multifunction slot, for a line card or an SF module.
+  logo-zone: >-
+    estimated - reserved, not drawn. The maker's wordmark sits at the left, about 26 x 11 mm, and the "running junos" badge at
+    the lower right, about 28 x 9 mm. The library reproduces no vendor logo.
+states: [absent]
+elements:
+  led-re0-master:
+    at: [98.1, 6.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-online:
+    at: [98.1, 11.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re0-offline:
+    at: [98.1, 16.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-re1-master:
+    at: [129.6, 6.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-online:
+    at: [129.6, 11.5]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-re1-offline:
+    at: [129.6, 16.6]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-fan-ok:
+    at: [177.7, 6.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fan-fail:
+    at: [177.7, 11.9]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem0-ok:
+    at: [231.3, 6.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem0-fail:
+    at: [231.3, 11.9]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem1-ok:
+    at: [237.6, 6.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem1-fail:
+    at: [237.6, 11.9]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem2-ok:
+    at: [243.9, 6.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem2-fail:
+    at: [243.9, 11.9]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-pem3-ok:
+    at: [250.2, 6.8]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-pem3-fail:
+    at: [250.2, 11.9]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-alarm-minor:
+    at: [291.15, 8.45]
+    size: [8.5, 7.5]
+    class: led
+    states:
+    - {name: yellow, color: '#f5a623'}
+    - 'off'
+  led-alarm-major:
+    at: [309.0, 7.9]
+    size: [8.6, 8.6]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-0-ok:
+    at: [95.05, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-0-fail:
+    at: [102.55, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-1-0-ok:
+    at: [126.65, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-1-0-fail:
+    at: [134.15, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-1-ok:
+    at: [158.25, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-1-fail:
+    at: [165.75, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  led-slot-2-ok:
+    at: [189.75, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking, behavior: blinking, color: '#39b54a'}
+    - 'off'
+  led-slot-2-fail:
+    at: [197.25, 26.3]
+    size: [1.8, 1.8]
+    class: led
+    states:
+    - {name: red, color: '#d0021b'}
+    - 'off'
+  logo-zone:
+    at: [6.5, 9.7]
+    size: [26.5, 11.0]
+    class: label
+  logo-zone-2:
+    at: [383.0, 26.9]
+    size: [27.7, 8.5]
+    class: label
+size:
+  w: 420.9
+  h: 42.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

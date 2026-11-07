@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: ex4100-h-psu-connector
+version: 1.1.0
+class: inlet
+behaviour: mounts
+profile: networking
+interface: terminal-381-5
+description: >-
+  The PSU connector of the Juniper EX4100-H-12MP: a green pluggable screw-terminal plug standing upright on the front
+  panel, with a captive screw at each end and five clamp positions on a 3.81 mm pitch between them. The switch has two,
+  labelled PSU 0 and PSU 1, and takes one external supply on each: the first and second positions are the 54 V pair, the
+  fourth and fifth the 12 V pair (the guide's interconnecting wire joins four of the five), and the middle one is not
+  labelled. The plug ships preassembled to the switch. The pole names are printed on the panel beside it, so the part
+  carries none.
+attrs:
+  media: dc-terminal
+  positions: 5
+  pitch-mm: 3.81
+provenance:
+  sources: >-
+    drawing and photo-measured - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01), Figure 1
+    (callouts 3 and 8), the connection steps for the EX4100-H-12MP and Table 65 (two PSU terminal connectors,
+    preassembled), and Juniper's studio photograph of the EX4100-H-12MP, front.
+  size: >-
+    estimated - read off Figure 1 after Gate 1 (15.085 px/mm against the 111.7 mm body, its height agreeing with
+    152.4 mm to 0.1 percent): both plugs are 8.5 mm wide and 30.5 mm high, 34.5 mm apart on the same line. The guide
+    gives no dimension for the plug.
+  the-face: >-
+    estimated - the end screws are centred 3.2 mm from each end, and the five openings are on a 3.81 mm pitch, centred
+    on the plug (7.5 to 22.7 mm from the top), as Figure 1 draws them. The photograph shows five openings in a green
+    housing with a slotted screw at each end.
+  colour: photo-measured - the housing is a bright green (#4cae4f) in the photograph.
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED FOR THE CONNECTOR. The EX4100-H Switch
+    Hardware Guide (Juniper Networks, published 2026-10-01) calls it "the PSU connector" (Figure 1, callouts 3 and 8; the
+    connection steps for the EX4100-H-12MP; Table 65, "preassembled to switch") and names no maker or part. The pitch
+    in the key's name is read off Figure 1 and is not printed in the guide; the 3.5 mm the guide prints in that step is
+    the screwdriver's.
+  roles: >-
+    guide and photo - the marks printed beside the five openings, top to bottom, for both connectors: "+" above and "-"
+    below "54V" over the first two openings, nothing beside the middle opening, "-" above and "+" below "12V" over the
+    last two (Juniper's studio photograph, front; Figure 1 for PSU 1). In Figure 1 the two marks of PSU 0's 54 V are
+    cut by the neighbouring port's outline and cannot be read; the photograph prints them as PSU 1's. So the openings
+    are 54V+, 54V-, unmarked, 12V-, 12V+. The guide's wire list for the PSU output terminal gives the same four
+    (54v+ red, 54v- black, 12v+ brown, 12v- gray) and joins four wires to the PSU connector, leaving the middle one.
+  mate: >-
+    derived - the centre of the plug, (4.25, 15.25), facing out. The wires clamp into the five openings from the
+    side and the end screws are loosened with a 2.5 mm slotted screwdriver (the guide's steps for the EX4100-H-12MP).
+    juniper/ex4100-h-psu-plug@1 is the part that mates it.
+elements:
+  body: {at: [0.0, 0.0], size: [8.5, 30.5], class: connector}
+connection-points:
+  mate: {at: [4.25, 15.25], direction: front}
+size:
+  w: 8.5
+  h: 30.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

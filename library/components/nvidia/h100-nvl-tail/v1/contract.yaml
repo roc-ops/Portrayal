@@ -1,0 +1,62 @@
+format: 1
+kind: component
+name: h100-nvl-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA H100 NVL card, seen from behind. It shows the open
+  shroud with its fin stack edge-on. The 16-pin 12V-2x6 power connector is at
+  the corner by the top edge. Two bosses take the extenders' thumbscrews. It is
+  the card's `faces.rear`.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (PB-11773 figure 5's 97.90 +/-0.20, which is the
+  board's height) and runs from the backplate's outer face to the shroud's far
+  wall, 38.23 (the card's thickness is itself estimated at 38.2, see the card's
+  `thickness`). NO DEPTH IS DECLARED: a face is a drawing of a back. SEEN FROM
+  BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' = 126.31 less the card's x (the
+  top edge at the left) and y' = the card's y less 1.77. This is the frame of
+  nvidia/a100-pcie-80gb-tail@1. The kit's rear frame measures x from the
+  bracket's tip and has no room for a card whose top edge stands past the
+  bracket's 120.02, so this face is not painted on the body's pieces; the
+  pieces are built from the same figures (the card's `body.boxes`).
+attrs: {media: gpu}
+parts:
+  # See nvidia/h100-pcie-tail@1: the header is half-turned so that its sense
+  # contacts are toward the backplate, at the top, and centred on the housing
+  # (x' 12.61, y' 6.43).
+  - {ref: std/12v-2x6-header@1, id: aux-power, at: [2.185, 0.58], rotate: 180}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  fins: >-
+    estimated - PB-11773 figure 6 is the card's east end as a line drawing and
+    shows the fin stack edge-on as horizontal slats; they are borrowed from
+    nvidia/a100-pcie-80gb-tail@1, 18 on a 5.0 pitch, 0.8 thick, and not counted
+    on this card. How far they run in is not seen: the card's body draws them
+    40 mm deep.
+  connector: >-
+    estimated - PB-11773 figure 6 puts the connector by the top edge: about 9.0
+    across the card's thickness and 18.3 along it, 3.8 from the top edge, read
+    on a raster at about 5 px/mm. The H100 PCIe's brief and PNY's photograph of
+    the L40S's east end read 8.9 and 9.1 by 19.0 and 18.9, 2.9 and 3.3 from the
+    top edge, so the shared housing is kept: 9.2 by 19.0 (see the card's
+    `power-16pin`), and the figure's reading is within the 1 mm the page
+    allows. The part is std/12v-2x6-header@1 because PB-11773 table 1 says
+    "(12v-2x6 auxiliary power connector)" and figure 7 is "per PCIe CEM 5.1".
+    Its 20.85 x 11.7 is the plug's outline, estimated.
+  mount: >-
+    borrowed - nvidia/a100-pcie-80gb-tail@1 `mount`: the extender's two
+    thumbscrew bosses at the card's x 35.3 and 64.1 and y 8.4, 4.0 across.
+    Figure 6 shows two round bosses and a slot on the end plate; their place was
+    not measured on this card.
+  not-drawn: >-
+    figure 6 shows two large windows in the end plate and a slot at its foot.
+    Nothing says what they are, and an extender hides them; they are not drawn.
+elements:
+  fins: {at: [9.66, 12.63], size: [85.8, 23.5], class: vent}
+  mount-1: {at: [89.01, 4.63], size: [4.0, 4.0], class: screw}
+  mount-2: {at: [60.21, 4.63], size: [4.0, 4.0], class: screw}
+skins: [default]

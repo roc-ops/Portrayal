@@ -1,0 +1,79 @@
+format: 1
+kind: module
+name: qfx5210-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5210-64C-FANAFO, a field-replaceable fan module with port-to-FRU (front-to-back) airflow: air
+  comes in through the vents at the port end and leaves at the fan end. It is marked AIR OUT (AFO)
+  and has a gold handle (the studio photograph shows it orange), and it is hot-removable and
+  hot-insertable. The QFX5210 hardware guide says the QFX5210-64C takes four, numbered 0 to 3 from
+  left to right. Each has a fan symbol and its number beside the slot. The back-to-front sibling is
+  QFX5210-64C-FANAFI. Fan modules of the two directions are never mixed in one chassis, and never
+  with power supplies of the other direction. The fan lamp the guide describes (Table 16) is not on
+  the module in any figure held.
+attrs:
+  model: QFX5210-64C-FANAFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    estimated - the guide's rear Figure 8 (a 1501 x 578 px raster of the FRU side, matched to the
+    table's 438.15 x 88.9 mm at 3.25 and 3.21 px/mm) and the studio photograph (qfx5210-64c-rear-high,
+    4.1 px/mm) put the grille at 60 to 62 mm across and 64 to 65 mm tall, and the fan slots on a
+    69.0 mm pitch with the latch bracket of each module filling the strip up to the next slot. The
+    69.0 x 64.3 here is that pitch and the photograph's height. No document gives the module's size.
+  depth: >-
+    not stated. Guide Figure 13 (isometric) carries no scale and Table 3 states no dimensions.
+  face: >-
+    photo-measured - the studio photograph and the guide's Figure 8 agree: a square grille of
+    staggered hexagonal holes filling the frame, one rounded handle bar across it about a third of the
+    way down, and at the right a narrow latch bracket with a captive screw above a small label chip
+    printed AIR OUT (AFO) with a fan symbol. The strip above the bracket, up to the top of the slot, is chassis
+    metal in the photograph, with the fan symbol and the slot number printed on it, so they are the
+    device's silkscreen and not this module's; the skin paints that strip grey and the device draws the
+    legend just above the slot. Positions are read at 4.1 px/mm and are estimated.
+  airflow: >-
+    datasheet - guide Table 15: QFX5210-64C-FANAFO carries the label AIR OUT, is Juniper Gold, and is
+    port-to-FRU airflow, also called front-to-back. Table 3 spells the part QFX5210-FANAFO; the
+    longer spelling of Table 15 is used.
+  colour: >-
+    photo-measured - the guide names the handle Juniper Gold; the studio photograph of the AIR OUT
+    build shows it orange, which is the value drawn (sRGB read off the photograph, not a paint
+    reference). The guide's text once says the front-to-back handle is gold and the back-to-front one
+    azure blue, and once swaps them in a sentence about "FRU-to-port airflow versions ... have a gold
+    colored handle"; Tables 15 and 17 and the photograph agree with the first, which is used.
+  power: >-
+    not published. Searched the QFX5210 hardware guide's cooling and power chapters; only whole-switch
+    figures exist. The module declares power-absent so the missing figure is a statement and not a
+    silence.
+states: [absent]
+elements:
+  screw:
+    at: [62.7, 20.6]
+    size: [4.4, 4.4]
+    class: screw
+  handle:
+    at: [2.9, 20.5]
+    size: [52.1, 4.0]
+    class: latch
+size:
+  w: 69.0
+  h: 64.3
+size-confidence: {w: estimated, h: estimated}
+size-notes: the slot pitch and the module height read off the FRU-side photograph and Figure 8; no document gives the module's own size
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: studio photograph and guide Figure 13 - the bar stands proud of the grille; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: guide Figure 13 - captive screw head, projection not measured
+skins: [default]

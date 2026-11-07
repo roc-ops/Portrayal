@@ -13,9 +13,9 @@ problem, and silence here is exactly what would let Task 3's accept list
 quietly produce nothing for a real port.
 
 L103 asks the question the other way: does a family's `interface` name a cage
-anything in the library actually IS. This is WARNING, not error, because
-`sfp-dd` genuinely has no cage in the library today and the media vocabulary
-needs the family anyway - failing the whole corpus over a registry entry that
+anything in the library actually IS. This is WARNING, not error, because a
+family can be needed by the media vocabulary ahead of its cage (`sfp-dd` was,
+until `std/sfp-dd`) - failing the whole corpus over a registry entry that
 is correct would be worse than the gap it reports.
 
 Component-scope L102 (`rate` vs `mates`) is exercised entirely with synthetic
@@ -251,26 +251,24 @@ def _families_named(warnings):
     return {FAMILY_IN_WARNING.search(w).group(1) for w in warnings}
 
 
-def test_the_real_library_warns_for_sfp_dd_and_nothing_else():
-    """sfp-dd is the one family with no cage in the library today, and the
-    brief is explicit that a warning here for any OTHER family is a genuine
-    registry/corpus disagreement to report, not to silence."""
+def test_the_real_library_warns_for_no_family():
+    """sfp-dd was the one family with no cage, and warned until `std/sfp-dd`
+    was drawn from the makers' drawings. A warning here for any family is a
+    genuine registry/corpus disagreement to report, not to silence."""
     got = run_library(LIB)
-    assert _families_named(got) == {"sfp-dd"}, got
+    assert _families_named(got) == set(), got
 
 
 def test_a_family_with_no_cage_anywhere_warns(monkeypatch):
     """Built by adding an extra family the real corpus cannot possibly
-    satisfy, so the warning is not incidentally the sfp-dd one above."""
+    satisfy, and it is the only family that warns."""
     extra = dict(L.PLUGGABLE_FAMILIES)
     extra["make-believe"] = {"interface": "make-believe-cage",
                               "rates": ["make-believe-cage"],
                               "source": "synthetic, for the test only"}
     monkeypatch.setattr(L, "PLUGGABLE_FAMILIES", extra)
     got = run_library(LIB)
-    families = _families_named(got)
-    assert "make-believe" in families, got
-    assert "sfp-dd" in families, got
+    assert _families_named(got) == {"make-believe"}, got
 
 
 def test_a_family_whose_interface_is_modelled_does_not_warn(monkeypatch):
@@ -318,7 +316,7 @@ def test_the_walk_is_libwalks(monkeypatch):
     hand-rolled `**/contract.yaml` instead - which also matched a contract at
     any depth, outside the components/<ns>/<name>/v<major>/ grammar. Proved
     by making the real walk return nothing: if the rule used its own glob,
-    the real library's interfaces would still be found and only sfp-dd would
+    the real library's interfaces would still be found and no family would
     warn."""
     monkeypatch.setattr(L.libwalk, "iter_components", lambda roots: [])
     assert _families_named(run_library(LIB)) == set(L.PLUGGABLE_FAMILIES)

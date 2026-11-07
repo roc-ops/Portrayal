@@ -1,0 +1,67 @@
+format: 1
+kind: component
+name: pr2v-finger-section-front
+version: 1.0.0
+class: mechanical
+description: >-
+  One section of front fingers of a Panduit PatchRunner 2 vertical manager (PR2VD08, PR2VD10 and
+  PR2VSD06) seen from the front - fifteen ABS fingers one rack unit apart down one side of the
+  front channel, with a gap between each pair that a patch cord is laid in through. Three a side
+  make the 45 fingers of a 45RU manager
+provenance:
+  size: >-
+    drawing - the front view of the PR2VD customer drawing (Panduit 14V455LV-DC): the fingers stand
+    in two columns, one each side of the backbone, one finger to each rack unit; the specification
+    sheet (RKSP172 and the Space-Saving bulletin RKCB46) says "individual fingers align with rack
+    spaces", and the bulletin sells a "Replacement 15-Finger Kit for PR2V/PE2V Vertical Managers,
+    one left and one right section" (PR2VRFK15), so a side is three sections of 15. The pitch is
+    the 44.45 mm [1.75 in] rack unit, the finger 33 high and 30 across, ESTIMATED: read off the
+    front view at 300 dpi, which is not dimensioned for a finger. 30 mm is a finger's reach across
+    the front, taken equal for every width and short enough to leave the four 76.2 mm holes of the
+    6 in manager clear; the calculator's channel areas grow by a constant 9.3 sq in for each inch
+    of width, which a finger of fixed length gives.
+  relief: >-
+    drawing - the plan view: each finger stands out of the backbone into the front channel. 260 mm
+    is taken, ESTIMATED: the plan draws the fingers' tips only as a frame, and 236 mm is the depth
+    that the calculator's front area per inch of width (9.3 sq in) gives for the channel. The
+    finger is a hollow loop in the maker's drawing; it is built as a solid block.
+  color: >-
+    datasheet - "Finger Material: ABS", "The manager is black" on the PR2VD10 and PR2VSD06 product
+    pages (steel backbone, ABS fingers). The shade is this library's render of black ABS.
+size: {w: 30, h: 655.3}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: ABS}
+elements:
+  f1: {at: [0.0, 0.0], size: [30, 33], class: bezel}
+  f2: {at: [0.0, 44.45], size: [30, 33], class: bezel}
+  f3: {at: [0.0, 88.9], size: [30, 33], class: bezel}
+  f4: {at: [0.0, 133.35], size: [30, 33], class: bezel}
+  f5: {at: [0.0, 177.8], size: [30, 33], class: bezel}
+  f6: {at: [0.0, 222.25], size: [30, 33], class: bezel}
+  f7: {at: [0.0, 266.7], size: [30, 33], class: bezel}
+  f8: {at: [0.0, 311.15], size: [30, 33], class: bezel}
+  f9: {at: [0.0, 355.6], size: [30, 33], class: bezel}
+  f10: {at: [0.0, 400.05], size: [30, 33], class: bezel}
+  f11: {at: [0.0, 444.5], size: [30, 33], class: bezel}
+  f12: {at: [0.0, 488.95], size: [30, 33], class: bezel}
+  f13: {at: [0.0, 533.4], size: [30, 33], class: bezel}
+  f14: {at: [0.0, 577.85], size: [30, 33], class: bezel}
+  f15: {at: [0.0, 622.3], size: [30, 33], class: bezel}
+relief:
+  features:
+    - {node: f1, out: 260, color: '#26282a', confidence: estimated, source: 'the plan view of the PR2VD drawing, a finger out of the backbone; its length is not dimensioned'}
+    - {node: f2, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f3, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f4, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f5, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f6, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f7, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f8, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f9, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f10, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f11, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f12, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f13, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f14, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+    - {node: f15, out: 260, color: '#26282a', confidence: estimated, source: 'the same view'}
+skins: [default]

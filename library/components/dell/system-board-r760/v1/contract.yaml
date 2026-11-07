@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: system-board-r760
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The R760 system board seen from above - the PCB the processors, memory, risers and fan connectors stand on, and the floor of the interior
+provenance:
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 180 (memory channels), the embedded 2233 x 1887 plan view of the board, and figure 15 (inside the system), the embedded top view of the chassis with the cover off. Plan frame as the R660's: rear wall at y=0, x from the left as the chassis is seen from above with the front at the bottom. Facts read, art not traced.
+  scale: >-
+    estimated - figure 180 carries no dimension, so its scale is anchored on the DDR5 socket pitch: the 16-socket middle group measures 633 px for 121.6 mm at 7.6 mm a socket (the pitch of the R660's sockets in Dell's service model, dell/system-board-r660@1), 5.2 px/mm. It gives the board 424.4 wide against the R660 PCB's 423.1 (0.3% apart), which is the check. Figure 15's own scale (1.965 px/mm from the 434 mm chassis width) places the DIMM rear ends 114 mm in front of the figure 180 board's top edge, and the board top edge is placed there.
+  size: >-
+    photo-measured - 424.4 x 362.9: the board from its rear 'neck' (the narrower part where the riser, OCP and rear I/O boards connect, 110 mm deep) to the fan connectors on its front edge, at plan x 5.0, y 115.4. The front edge at y 478.3 lies under the fan cage (y 423..497 in figure 15), as the fan connectors on it require.
+  not-the-whole-rear: >-
+    the 115 mm in front of the rear wall that the R660's board assembly takes in (riser, OCP, LOM and rear I/O connector boards) is not in this part: those are the modules' own plans.
+  depth: >-
+    ESTIMATED - the interior is the 86.8 lid line less the board's top at about 4.5, 82.3; the R660 model's 4.5 board-top height is the only figure held.
+  board-variants: >-
+    NOT DISTINGUISHED. ISM figure 320 (system board jumpers and connectors) draws one board; whether the Intel Xeon Max build has another is not stated.
+size: {w: 424.4, h: 362.9, d: 82.3}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [424.4, 362.9], class: bezel}
+skins: [default]

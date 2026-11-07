@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: qfx5230-jnp-3000w-dc-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JNP-3000W-DC-AFO (product number 740-073766), a 3000 W DC power supply with front-to-back airflow (AIR OUT,
+  port-to-FRU). It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares with its
+  twin; the QFX5230-64CD-D-AFO ships with two. The face carries a round fan guard with a Juniper gold handle
+  across it, a terminal block under a cover, an input current selector (a DIP switch, set to 80 A for this
+  unit), an ejector lever and one lamp. The AIR IN sibling is JNP-2400W-DC-AFI, a 2400 W unit with a green
+  handle. AC and DC supplies, and supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JNP-3000W-DC-AFO
+  role: dc-power-supply
+  power-output-w: 3000
+  airflow: front-to-back
+  inlet: dc-terminal
+  input: -40 to -72 VDC, rated -48 to -60 VDC, 90 A maximum (guide Tables 18 and 21); output 12 V at 250 A and 12 V standby at 1 A
+provenance:
+  size: >-
+    borrowed - qfx5230-jnp-3000w-ac-afo, the AC supply that stands in the same bay: the guide's figures 20 and
+    22 draw the AC and DC supplies as one outline with a different connector end, and no photograph of a DC
+    supply is held. The 74.8 by 40.2 mm face is photo-measured on the AC supply.
+  depth: >-
+    not stated. Searched the QFX5230-64CD hardware guide (figure 22, the DC power supply description and the
+    physical specifications) for the supply's depth or weight. Figure 22 is an isometric with no scale. No depth
+    is written.
+  face: >-
+    estimated - no flat figure or photograph of the DC supply is held. Figure 22 is an isometric: it shows the
+    ejector lever, the input current selector, a terminal block cover that is ridged, and a handle at the lower
+    left. The face is drawn as the AC supply's, with the inlet replaced by a ridged cover of the same size and the
+    fan guard, handle and latch as the AC supply has them. The ridges and the cover's size are drawn from the
+    isometric and the AC supply's inlet block, and are estimated.
+  power-output-w: >-
+    datasheet - the part number and guide Tables 4 and 16 (DC AFO, 3000 W; output 12 V at 250 A, 12 V standby at
+    1 A; Table 22). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5230-64CD DC Power Supply LEDs (figure 23, Table 20): solid green is output on and OK;
+    off is no DC power to any supply; a 1 Hz green blink is DC input present with only the 12 V standby on; amber
+    is a DC cord unplugged while a second supply still has input, or a critical event; a 2 Hz green blink is
+    firmware upload.
+  airflow: >-
+    datasheet - guide Tables 3, 6 and 16: JNP-3000W-DC-AFO is port-to-FRU, front-to-back, and carries a Juniper
+    gold handle.
+  input: >-
+    datasheet - guide Table 18 (AFO DC 3000 W: -40 to -72 VDC, rated -48 to -60 VDC; the rated cell of the AFO row
+    is misprinted "50-60 Hz") and Table 21 (input switch setting 80 A, maximum input current 90 A DC).
+states:
+- ok
+- fault
+- absent
+elements:
+  led-pwr:
+    at: [67.9, 31.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [1.9, 15.6]
+    size: [41.3, 8.5]
+    class: latch
+  release-latch:
+    at: [68.5, 13.6]
+    size: [6.3, 13.6]
+    class: latch
+size:
+  w: 74.8
+  h: 40.2
+size-confidence: {w: borrowed, h: borrowed}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo of the AC sibling - the handle bar stands proud of the fan guard; its projection is not measured

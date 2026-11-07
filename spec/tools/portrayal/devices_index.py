@@ -6,6 +6,7 @@ it silently went stale (and vanished entirely on a clean rebuild) - generate it
 from the manifests instead, the same way components.json is generated.
 """
 import argparse
+import functools
 import json
 from pathlib import Path
 
@@ -13,7 +14,7 @@ import yaml
 
 from portrayal import attrsections as attrs_mod
 from portrayal import capability
-from portrayal.manifest import view_parts, load_yaml, alias_names, device_options, pdu_class
+from portrayal.manifest import view_parts, load_yaml, alias_names, device_options, pdu_class, offers
 from portrayal import libwalk
 
 SCHEMAS = Path(__file__).resolve().parents[2] / "schemas"
@@ -34,7 +35,14 @@ CONTRACT = 2
 SEARCH_ATTRS = ("media", "speed", "role", "function", "type", "slot")
 
 
-def search_blob(d, listings=()):
+@functools.lru_cache(maxsize=None)
+def _candidates(roots):
+    """render's `{interface: [(ref, contract)]}` for `roots`, once per process."""
+    from portrayal.render import _pluggable_candidates
+    return _pluggable_candidates(list(roots))
+
+
+def search_blob(d, listings=(), roots=()):
     """Everything a reader might type that is not already in the index entry.
 
     The filter searched manufacturer, model, series, family and description, and
@@ -90,7 +98,9 @@ def search_blob(d, listings=()):
                 if (q.get("attrs") or {}).get(k):
                     words.append(str(q["attrs"][k]))
         for b in vp["bays"]:
-            refs.update(b.get("accepts") or [])
+            # what the bay takes (manifest.offers); the library is read only for
+            # a bay that states an `interface`
+            refs.update(offers(b, _candidates(roots) if b.get("interface") and roots else None))
     # WHO LISTS IT, AND WHAT THEY CALL IT. "arcos" used to be findable on the
     # AS7326-56X because somebody had written it into an attr; the attr moved to
     # the NOS naming, which is its right home, and the word would have gone with
@@ -122,6 +132,32 @@ def search_blob(d, listings=()):
             seen.add(w)
             out.append(w)
     return " ".join(out)
+
+
+def programmable_notes(d):
+    """The maker's names for the programmable lights of a device, sorted: `None`
+    when no lamp on any face is marked `programmable`, `[]` when some are and
+    none is named (#1271).
+
+    DERIVED, NEVER AUTHORED: the device has no key of its own for it, so "the
+    ports light up" can only be said where a face carries a lamp that says it.
+    A placement's own `programmable` wins over its group's, as the drawing
+    reads it, and a group nothing places lights nothing."""
+    groups = d.get("groups") or {}
+    notes, found = set(), False
+    for view in (d.get("views") or {}).values():
+        for q in view_parts(view or {})["placements"]:
+            g = groups.get(q.get("group")) or {}
+            if q["programmable"] if "programmable" in q else g.get("programmable"):
+                found = True
+                note = q.get("programmable-note") or g.get("programmable-note")
+                if note:
+                    notes.add(note)
+    return sorted(notes) if found else None
+
+
+def has_programmable_light(d):
+    return programmable_notes(d) is not None
 
 
 def decor_confidence(d):
@@ -241,7 +277,7 @@ def main():
                 # the library without opening every configs.json (#513).
                 "options": device_options(d),
                 # what the type-ahead filter matches on beyond the fields above
-                "search": search_blob(d, listed.get(hw, [])),
+                "search": search_blob(d, listed.get(hw, []), tuple(args.library)),
                 # WHICH NOS VENDORS LIST IT, as listings.json keys - so a picker
                 # can offer "Arrcus" without opening listings.json first
                 "listings": [ls["key"] for ls in listed.get(hw, [])],
@@ -252,6 +288,11 @@ def main():
             # Absent means public and is left out, so a public index is unchanged.
             if d.get("audience"):
                 devices[-1]["audience"] = d["audience"]
+            # "PORTS LIGHT UP" (#1271): present, and true, only where a lamp on
+            # a face is marked programmable; absent otherwise, so the entry of
+            # every other device is as it was
+            if has_programmable_light(d):
+                devices[-1]["programmable-light"] = True
     devices.sort(key=lambda x: (x["manufacturer"], x["name"]))
 
     out = Path(args.out)

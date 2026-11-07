@@ -229,6 +229,25 @@ def test_a_generated_lamp_gets_a_hole_too():
     assert lamp_cut["shape"] == "circle"
 
 
+def test_a_port_can_carry_a_pair_of_lamps_each_with_its_own_position():
+    """A face that draws two dots a port lists two `led` entries. Both are `for`
+    the port, each gets its own id and its own position in the group, because a
+    position names one member."""
+    a = {"ref": "common/led-dot@1", "id-format": "led-p{n}a", "dx": -3.0, "dy": 2.0,
+         "group": "port-leds", "rel-pos-stride": 2, "rel-pos-offset": -1}
+    b = dict(a, **{"id-format": "led-p{n}b", "dx": -1.0, "rel-pos-offset": 0})
+    block = {"id": "p", "ref": "std/qsfp-dd@1", "at": [10.0, 10.0], "count": 4,
+             "rows": 2, "row-pitch": 13.0, "pitch": {"registry": "qsfp-ganged"},
+             "cutouts": True, "number-from": 1, "led": [a, b]}
+    pl, cuts, _ = E.block_items(block, LIB, STD)
+    lamps = [p for p in pl if p["id"].startswith("led-p")]
+    assert len(lamps) == 8
+    assert sorted(p["rel-pos"] for p in lamps) == list(range(1, 9))
+    assert {p["for"] for p in lamps if p["id"].endswith("a")} == \
+        {p["for"] for p in lamps if p["id"].endswith("b")}
+    assert {c["id"] for c in cuts} >= {p["id"] for p in lamps}
+
+
 def test_a_lamp_with_several_windows_is_left_for_a_person_to_punch():
     """THE FIX FOR THE ABOVE WAS WRITTEN, RUN, AND WAS WRONG, so this holds the
     line it taught.
@@ -343,3 +362,16 @@ def test_a_block_hands_its_attrs_to_every_port_but_not_to_its_lamps():
     # each port's attrs is its own - editing one must not reach the others
     ports[0]["attrs"]["speed"] = "10g"
     assert ports[1]["attrs"]["speed"] == "25g"
+
+
+def test_attrs_by_n_adds_to_one_port_and_leaves_the_rest():
+    """A single passive-PoE-in jack among plain ones: `attrs-by-n` is keyed by the
+    port's number, adds to the block's attrs and reaches no other port."""
+    block = {"id": "ports", "ref": "std/sfp-ganged@1", "at": [0, 0], "count": 4,
+             "rows": 2, "row-pitch": 13.73, "pitch": 14.25, "number-from": 1,
+             "attrs": {"media": "sfp28"},
+             "attrs-by-n": {1: {"poe": "passive PD (in)"}}}
+    pl, _, _ = E.block_items(block, LIB, STD)
+    by_id = {p["id"]: p for p in pl}
+    assert by_id["port-1"]["attrs"] == {"media": "sfp28", "poe": "passive PD (in)"}
+    assert all(by_id[f"port-{n}"]["attrs"] == {"media": "sfp28"} for n in (2, 3, 4))

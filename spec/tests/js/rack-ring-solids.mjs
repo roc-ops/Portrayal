@@ -158,7 +158,8 @@ function approachFaults(p, t, r = r15, offs = []) {
 test('every ring is entered from an approach point, and no detour ends at the ring', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
   const [t] = S.traysOf(r, ctx);
-  let passes = 0, detoured = 0;
+  const [gap] = S.gapsOf(r, ctx);
+  let passes = 0, detoured = 0, rose = 0;
   const offs = [];
   for (const c of r.cables) {
     const p = R.routePath(r, c, ctx);
@@ -171,6 +172,9 @@ test('every ring is entered from an approach point, and no detour ends at the ri
     // and c8's from the one after ring 5 back to its panel port
     const [first, second] = p.points.filter(q => q.at === 'approach');
     for (const d of p.detours) {
+      // (a cord that rises through the gap behind the tray, #966, comes off
+      // the rise across the strip toward its ring and not straight in front of it)
+      if (d.points.every(q => q.z < gap.edge)) { rose++; continue; }
       if (d.between[0].end === 'a') assert.equal(d.points.at(-1).x, first.x, c.id);
       else assert.equal(d.points[0].x, second.x, c.id);
     }
@@ -182,7 +186,10 @@ test('every ring is entered from an approach point, and no detour ends at the ri
   // down to from over the ring with 50 mm of leg (at 25 mm it would be led
   // 65 mm back along the leaf's face to reach it); and c16's, 12.5 mm from it,
   // where the detour round the tray's edge has its room with the point 21.5
-  // mm to the ring's side of the port, and would need it 55 mm out on the other
+  // mm to the ring's side of the port, and would need it 55 mm out on the other;
+  // (and, under #966, c15's, 6.5 mm from ring 2, while the cord rose through
+  // the gap behind the tray: CHANGED, drawable geometry, owner's option A,
+  // 2026-10-22, P-0218-2; it goes round the front edge now and is not short)
   assert.equal(offs.length, 32);
   assert.deepEqual(offs.filter(v => v < 25 - 1e-6).map(v => Math.round(v * 10) / 10), [6.5, 12.5]);
   // ten detours (thirteen before #973, when five upper cords went over
@@ -190,6 +197,9 @@ test('every ring is entered from an approach point, and no detour ends at the ri
   // still goes over it); nine since #987, c8 no longer coming back round
   // the front of the tray from ring 5
   assert.equal(detoured, 9);
+  // and none of the nine rises through the gap behind the tray now (five did, #966;
+  // CHANGED, drawable geometry, owner's option A, 2026-10-22, P-0218-2)
+  assert.equal(rose, 0);
 });
 
 test('a detour that ends at the ring\'s centre, or its face, is a fault', () => {

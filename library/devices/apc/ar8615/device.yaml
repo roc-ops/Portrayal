@@ -1,0 +1,290 @@
+format: 1
+kind: device
+name: ar8615
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AR8615
+description: >-
+  Single-sided vertical cable manager, 6 in wide, APC Performance AR8615 for 2 and 4 post open frame
+  racks: a steel back plate 2134 mm tall with a column of 44 smooth plastic fingers down each side of
+  one cable channel, a finger to each rack unit, and a full-length door with two quarter-turn latches
+  that ships fitted. It stands beside the rack on three hex bolts through the upright and takes no
+  rack unit.
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: >-
+      datasheet - `rack-side`: "Mounting Mode: Not rack-mountable" on the data sheet, and the
+      instruction sheet "Vertical Cable Manager Installation for Open Frame Racks" (990-4576A-001)
+      bolts it to the side of the rack's upright with three hex bolts, nuts and washers. It occupies
+      no rack unit. `ru: 44` is the rack height it runs beside: the data sheet's 84.02 in (2134 mm)
+      is the height of the whole part, top and bottom brackets included, and the fingers are 44 rack
+      units; 44 is the height of the AR203A and one short of the AR201's 45, so one figure places it
+      beside either (lint L154 judges a part by `ru`). Which side of the rack is a lab placement to
+      say (docs/vertical-cable-managers-design.md).
+  method:
+    confidence: datasheet
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DOCUMENTS, read as data: the AR8615 product data sheet (fetched
+      from se.com), the instruction sheet 990-4576A-001 (1/2016), which covers all six parts, and the
+      brochure "Enclosure and Rack Systems, Cable Management". THE FIGURES THE DATA SHEET PRINTS (height,
+      width, depth, weight) ARE `datasheet`; EVERYTHING READ OFF THE INSTRUCTION SHEET'S FIGURES (the
+      fingers' count and size, the door, the split of the depth) IS ESTIMATED and said so in the part
+      that carries it. APC publishes no drawing or CAD for these parts: the product page lists the
+      instruction sheet, the brochure and environmental declarations only. No drawing or photograph is
+      copied.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 152 x 2134 x 360, door fitted: "Width 6.0 in (152 mm)", "Height 84.02 in (2134 mm)",
+      "Depth 14.2 in (360 mm)".
+  depth:
+    confidence: estimated
+    note: >-
+      estimated - the 360 is the data sheet's. It is drawn as a 60 back plate zone and a 300 well: the
+      double-sided AR8625 is 26.0 in (660 mm), two wells and one back plate zone, and the two figures
+      solve to 300 and 60. No view sections the part.
+  shell:
+    confidence: estimated
+    note: >-
+      estimated - A HOLLOW CHANNEL, NOT A BOX. The body is a sheet body and its six views are
+      elevations; the solid is what its parts build: the back plate as a well 300 deep, the 88 fingers
+      standing off its floor and the door over their tips, which pulls off and opens the channel.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no APC document states a gauge. 1.5 is a sheet of this kind; the parts carry their
+      own thicknesses.
+  weight:
+    confidence: datasheet
+    note: 'datasheet - "Net Weight 60.0 lb(US) (27.2 kg)"; packed 33.1 kg.'
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the working face with the door fitted: the door, and under it the back plate with
+      its 44 fingers a side in four sections of 11, centred on the height. The `duct` guide is the
+      channel between the two finger columns, run down the height: the width less the 6 mm margin and
+      22 mm finger on each side, ESTIMATED from the instruction sheet's figure.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the single-sided part is its back plate, the face that stands against the
+      rack's upright. The instruction sheet draws it slotted and punched; no document dimensions the
+      slots, so it is drawn plain (see `gaps`).
+  top:
+    confidence: estimated
+    note: >-
+      estimated - the plan, rear at y=0: the back plate zone and the two finger columns, from the finger
+      length above.
+  bottom:
+    confidence: estimated
+    note: >-
+      estimated - the top view again: the two ends of the manager are alike.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no side view of the manager without its door is dimensioned: the back plate, and the
+      finger zone along it, built from the plan and the finger columns' extent.
+  right:
+    confidence: estimated
+    note: >-
+      estimated - the left view turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the duct is the channel between the two finger columns, run down the height
+      (`run: y`). The finger pitch is the rack unit, 44.45, as the data sheet's "1U increments"; the
+      gap is the pitch less the 31 mm finger, 13.45, ESTIMATED from the finger's drawn thickness.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the AR8615 data sheet and the brochure state no cable capacity, only "high capacity".
+      None is estimated here (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the colour, the plastic fingers, the hardware (the instruction sheet's three hex
+      bolts, nuts and washers, split washers), the provided doors and installation guide, UL Listed
+      and EU RoHS compliant are the data sheet and the instruction sheet.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". Every image APC publishes of the part is a render; it is drawn black,
+      the door a shade lighter than the back plate.
+attrs:
+  physical:
+    weight-kg: 27.2
+    finger-material: plastic
+    color: Black
+    mounting-hardware: 'Hex bolt x3, nut x3, washer x6 and split washer x3 (instruction sheet)'
+  compliance:
+    rohs: EU RoHS compliant
+    ul: UL Listed
+chassis:
+  width: 152.0
+  height: 2134.0
+  depth: 360.0
+  ru: 44
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 27.2
+  color: '#232527'
+gaps:
+  - what: door-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the door "opens to left or right" on hinge pins and lifts off; the instruction sheet shows a
+      quarter-turn latch and the door swinging off the finger tips either way, but no view dimensions a
+      hinge. The door is drawn as one fitted plate that is either on or off.
+    wanted: a drawing or a close render of the door's hinge pins and latch
+  - what: tie-off-points
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      the data sheet advertises "multiple internal cable tie-off locations". The instruction sheet draws
+      the slots and punches in the back plate that they are, but dimensions none, and the format has no
+      place to state a tie point on a duct (#1009 states them only on the FS tray). They are not drawn
+      or stated.
+    wanted: the back plate's slots dimensioned, and a place in the format for a duct's tie points
+  - what: grounding-point
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the instruction sheet shows an optional grounding and bonding point, a tab with a hole bent up at the
+      foot of the back plate, "Hardware and cable not provided". No thread or hole size is stated, and a
+      grounding point in the format is a stud or screw with a thread, so none is stated.
+    wanted: the size of the hole and the screw it takes
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      APC states "high capacity" and no figure on the data sheet, the instruction sheet or the brochure,
+      so none is recorded and none is estimated.
+    wanted: a capacity figure and the cable it is stated for
+  - what: finger-shape
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the instruction sheet's isometric figure draws each finger as a smooth tongue with a rolled root.
+      It is built as an arm 12 across and a hooked tip 22 across, 31 high, 296 long; the size, the length
+      and the count (44, counted at constant pitch) are read off a figure that is not dimensioned.
+    wanted: a section through a finger and the back plate
+  - what: finger-alignment
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      where the first finger stands against the rack's units is not stated: the fingers are centred on the
+      2134 mm height, and which hole of the upright each bolt takes is not dimensioned, so whether they sit
+      on the rack's units is not known.
+    wanted: the heights of the three bolt holes against the rack's first unit
+  - what: back-plate-accessories
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      the single-sided part has a back plate that takes the AR8652 spacer bracket (a PDU bracket) and the
+      accessory brackets, sold separately; the instruction sheet draws them but they are other parts and
+      are not drawn.
+    wanted: the accessory parts, if they are modelled
+  - what: door-oval
+    scope: [front]
+    reason: needs-drawing
+    note: the door has an oval opening near its top in the instruction sheet's figure; it is not drawn.
+    wanted: its size and place
+  - what: bracket-stand-off
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      how far the manager stands from the upright when it is bolted on is not dimensioned; the part is
+      drawn alone.
+    wanted: a dimensioned drawing of the manager fitted to an upright
+groups:
+  body:
+    term: Back plate
+    role: furniture
+    index-origin: 1
+    description: the back plate and its well
+  fingers:
+    term: Finger section
+    role: furniture
+    index-origin: 1
+    description: the sections of 11 fingers, left then right, top to bottom
+  doors:
+    term: Door
+    role: furniture
+    index-origin: 1
+    description: the full-length door, shipped fitted
+views:
+  front:
+    size: {w: 152.0, h: 2134.0}
+    components:
+      placements:
+        - {ref: apc/perf-vcm-base-6@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-left-1, at: [6.0, 95.8], group: fingers, rel-pos: 1, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-left-2, at: [6.0, 584.75], group: fingers, rel-pos: 2, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-left-3, at: [6.0, 1073.7], group: fingers, rel-pos: 3, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-left-4, at: [6.0, 1562.65], group: fingers, rel-pos: 4, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-right-1, at: [124.0, 95.8], group: fingers, rel-pos: 5, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-right-2, at: [124.0, 584.75], group: fingers, rel-pos: 6, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-right-3, at: [124.0, 1073.7], group: fingers, rel-pos: 7, in: base, under: door-front}
+        - {ref: apc/perf-vcm-finger-section@1, id: fingers-right-4, at: [124.0, 1562.65], group: fingers, rel-pos: 8, in: base, under: door-front}
+        - {ref: apc/perf-vcm-door-6@1, id: door-front, at: [0.0, 49.0], group: doors, rel-pos: 1, in: base, only-in: [base]}
+    guides:
+      - {id: duct, kind: duct, at: [28.0, 0], size: [96.0, 2134.0], run: y, finger-pitch: 44.45, finger-gap: 13.45, confidence: estimated, source: 'instruction sheet 990-4576A-001, page 1 figure: the finger columns at the edges and the channel between; pitch the rack unit of the data sheet ("1U increments"), the gap the pitch less the finger drawn 31 high'}
+  rear:
+    size: {w: 152.0, h: 2134.0}
+    panel:
+      decor:
+        - {id: back-plate, at: [0, 0], size: [152.0, 2134.0], fill: '#232527', kind: base}
+  top:
+    size: {w: 152.0, h: 360.0}
+    panel:
+      decor:
+        - {id: backplate, at: [0, 0], size: [152.0, 60], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers-left, at: [6, 60], size: [22, 296], fill: '#26282a', kind: finger-wall}
+        - {id: fingers-right, at: [124, 60], size: [22, 296], fill: '#26282a', kind: finger-wall}
+  bottom:
+    size: {w: 152.0, h: 360.0}
+    panel:
+      decor:
+        - {id: backplate, at: [0, 0], size: [152.0, 60], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers-left, at: [6, 60], size: [22, 296], fill: '#26282a', kind: finger-wall}
+        - {id: fingers-right, at: [124, 60], size: [22, 296], fill: '#26282a', kind: finger-wall}
+  left:
+    size: {w: 360.0, h: 2134.0}
+    panel:
+      decor:
+        - {id: backplate, at: [0, 0], size: [60, 2134.0], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers, at: [60, 95.8], size: [296, 1942.35], fill: '#26282a', kind: finger-wall}
+  right:
+    size: {w: 360.0, h: 2134.0}
+    panel:
+      decor:
+        - {id: backplate, at: [300, 0], size: [60, 2134.0], fill: '#232527', sink: 0.05, kind: base}
+        - {id: fingers, at: [4, 95.8], size: [296, 1942.35], fill: '#26282a', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The manager as APC ships AR8615, its door fitted.'
+  doors-off:
+    kind: example
+    description: >-
+      The same manager with its door taken off, the finger columns and the channel open to lay a cable
+      in. The door comes with the manager, so this is an illustration and not a device type.
+datasheet:
+  title: 'Performance, Vertical Cable Manager for 2 & 4 Post Racks, 84"H x 6"W, Single-Sided with Door (AR8615), product data sheet'
+  url: 'https://www.se.com/us/en/product/download-pdf/AR8615?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR8615.pdf'
+  sha256: b11e803d8c76280f248852bd3899dd2c515aa417f087287637bf6225fba94cdc
+references:
+  - title: 'Vertical Cable Manager Installation for Open Frame Racks (AR8615, AR8625, AR8635, AR8645, AR8665, AR8675), instruction sheet 990-4576A-001'
+    url: 'https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=BFER-8KUN5X_R1_EN.pdf&p_Doc_Ref=SPD_BFER-8KUN5X_EN'
+    sha256: b6ceb2203d9d098287dba4b788107dbceea541aee1ba7b701c7ab937e4512cd5
+  - title: 'Enclosure and Rack Systems, Cable Management, brochure'
+    url: 'https://download.se.com/files?p_enDocType=Brochure&p_File_Name=JCOS-7H4M68_R9_EN.pdf&p_Doc_Ref=SPD_JCOS-7H4M68_EN'
+    sha256: 02469963a9f34e0aa7052010a9edef1c9a5e2c2fe5392a2a9f96ba48c5f5c501
+  - title: 'AR8615 product page'
+    url: 'https://www.se.com/us/en/product/AR8615/'

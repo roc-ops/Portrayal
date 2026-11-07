@@ -1,0 +1,122 @@
+format: 1
+kind: module
+name: qfx10002-jpsu-1600w-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-1600W-AC-AFO, the 1600 W AC power supply of the QFX10002-36Q and QFX10002-72Q,
+  with port-to-FRU (AFO, front-to-back) airflow. A 1U module with the supply fan behind an
+  orange handle at the left, a C13-coupler (C14 inlet) AC input with a cord retainer at the
+  right, an ejection lever and a bicolour power lamp. The 72Q takes four, the 36Q two with two
+  blanks. Do not mix AC and DC supplies, or supplies of different airflow, in one chassis.
+attrs:
+  role: ac-power-supply
+  power-output-w: 1600
+  airflow: front-to-back
+  input-voltage: 100-127 VAC low line, 200-240 VAC high line
+  input-frequency: 50-60 Hz
+  output: 12 VDC with a 12 VDC standby output
+  hot-swap: 'yes'
+part-numbers:
+  JPSU-1600W-AC-AFO: {part: JPSU-1600W-AC-AFO}
+provenance:
+  sources: >-
+    datasheet - QFX10002 Switch Hardware Guide (Juniper Networks, published 2026-02-11). Topic
+    QFX10002 AC Power Supply Description, Figure 28 (g050377, the isometric of the supply),
+    Tables 20 and 21, Table 27 and Figure 30 (the lamp), and Removing and Installing a Power Supply
+    in a QFX10002. Figure 4 (g050372) and Figure 5 (g050404) are flat rear elevations with the
+    supplies seated. The 36Q studio photograph of the rear shows four supplies in colour.
+  size: >-
+    drawing - measured on Figure 4 (g050372, body 1464 x 294 px against the stated 441.0 x 88.0
+    mm, 3.32 px per mm across and 3.34 down). The bay frame of one supply runs 74.1 mm across and
+    40.6 mm down, and the four bays sit at x 8.8 and 90.4 and y 1.7 and 43.5 on the rear face. The
+    photograph reads 74.4 mm across. The guide gives no dimensions for the supply itself, so the
+    bay frame is the size.
+  depth: >-
+    estimated - 185 mm. The hardware guide gives no depth for the supply, and its isometrics
+    (Figures 28 and 47) show a long body behind the face. The value only gives the 3D body a length.
+  face: >-
+    drawing - in module coordinates from Figure 4: the fan housing centred at 22.3, 19.4 with a
+    radius of about 18; corner screws at 6.8, 3.9 and 38.5, 3.9; the handle a U whose bar runs
+    x 2.5 to 42.4 and y 36.7 to 39.3, its arms rising to y 28.7; the inlet housing x 42.8 to 66.7
+    and y 2.8 to 32.9 with the inlet centred at 55.0, 18.2 and the earth pin toward the fan; the
+    cord retainer bar x 62.6 to 66.4 and y 12.2 to 30.1 with a plate to x 72.7; two round
+    fixings at 54.8, 37.1 and 67.8, 37.1.
+  hub-label: >-
+    photo - the 36Q studio photograph prints a round cyan label on the fan hub, "ACDC 1600W
+    Platinum". Figure 4 draws the hub blank. The photograph is of the real unit, so the label is
+    drawn and the Platinum line is left out because it is too small to read at 4 px per mm.
+  handle-colour: >-
+    photo-measured - Tables 20 and 24 give the handle colour as Juniper Gold and the guide
+    text says a gold handle with AIR OUT labels marks port-to-FRU airflow. The line drawings carry
+    no colour. The photograph shows an orange handle, median #f2581a on the handle pixels, and the
+    real unit wins. The finish is a field.
+  airflow: >-
+    datasheet - Table 20 and the description: the supply's fan gives port-to-FRU airflow, also
+    known as airflow out (AFO). A supply labelled AFO or with a gold handle denotes that
+    direction, and the install topic requires the direction to match the chassis.
+  inlet: >-
+    datasheet - AC Power Cord Specifications: the coupler is type C13 (IEC 60320), so the supply
+    carries a C14 appliance inlet. std/c14-inlet@1 is turned 270 degrees so that the earth pin
+    sits toward the fan as Figure 4 draws it.
+  power: >-
+    datasheet - Table 20 gives the wattage 1600 W, and the description says each supply provides
+    12 VDC output with a standby voltage of 12 VDC. That is an output figure, because a power
+    supply provides power. The guide gives no draw or loss figure for the unit. Table 21 gives the
+    chassis input current (12.9 A for the 72Q and 9.5 A for the 36Q at 100 to 120 VAC), which is a
+    chassis figure and is kept on the devices.
+  led: >-
+    datasheet - Table 27 and Figure 30: one bicolour lamp. Green and amber steady is
+    normal, slow blinking is cold standby, 2 Hz blinking is a firmware upload, amber blinking is a
+    warning event and amber steady is a cord out or a major error. Figure 28 callout 2 points at
+    the round fixing at the lower right of the face, so the lamp is drawn there. The position is
+    read off an isometric and is estimated.
+  relief: >-
+    estimated - the handle stands proud of the fan in Figures 28 and 47. Its projection is not
+    stated or measured.
+states:
+  - ok
+  - fault
+  - absent
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.0, 8.2], rotate: 270}
+elements:
+  led:
+    at: [66.8, 36.1]
+    size: [2.0, 2.0]
+    class: led
+    states:
+      - 'off'
+      - {name: ok, color: '#22c55e'}
+      - {name: standby, color: '#22c55e', behavior: blinking}
+      - {name: warning, color: '#f59e0b', behavior: blinking}
+      - {name: fault, color: '#f59e0b'}
+  handle: {at: [2.5, 28.7], size: [39.9, 10.6], class: handle}
+  latch: {at: [62.6, 12.2], size: [10.1, 17.9], class: latch}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#f2581a'}
+size: {w: 74.1, h: 40.6, d: 185.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+relief:
+  features:
+    - node: handle
+      out: 6.0
+      confidence: estimated
+      source: >-
+        qfx10002-jpsu-1600w-ac-afo@1 provenance.relief - the handle stands proud of the fan in
+        Figure 28 (g050377). The projection is not stated or measured.
+    - node: latch
+      out: 1.4
+      color: '#9a9b9d'
+      confidence: estimated
+      source: >-
+        qfx10002-jpsu-1600w-ac-afo@1 provenance.relief - the ejection lever stands proud of the face
+        in Figure 28. The projection is not stated or measured.
+connection-points:
+  power: {at: [55.0, 18.2], direction: rear}
+body:
+  depth: 185.0
+  color: '#b9bec4'
+skins: [default]

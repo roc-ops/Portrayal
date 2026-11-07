@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: ex4300-48mp-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module EX4300-48MP-FAN for the Juniper EX4300-48MP, labelled AIR OUT (AFO): front-to-back
+  airflow, the air leaving through this face. Two seat in the rear panel, in slots 0 and 1, with the
+  four QSFP+ ports between them; hot-insertable and hot-removable, and both must be installed for the
+  switch to cool as designed. A square face with a honeycomb grille above and below a central loop
+  handle that carries the AIR OUT chip, and a captive screw at the top left. The fan status LED is on
+  the chassis beside each slot, not on the module.
+attrs:
+  model: EX4300-48MP-FAN
+  part-number: EX4300-48MP-FAN
+  role: fan-module
+  airflow: front-to-back
+  airflow-label: AIR OUT (AFO)
+  weight-kg: 0.15
+provenance:
+  part-number: >-
+    datasheet - EX4300 Line of Ethernet Switches Datasheet (PDF created 2022-07-25), Ordering
+    Information, Fans: EX4300-48MP-FAN, "Spare fan with front-to-back airflow for EX4300-48MP",
+    beside EX4300-FAN and EX4300-FAN-AFI for the other models. The EX4300 Switch Hardware Guide
+    (published 2025-08-12) draws this module apart from the others: Figure 103 (g022459) shows the
+    48MP fan module as a different, squarer body from Figure 102 (g022101), and the 48MP rear figure
+    (Figure 15, g022450) shows a 41.5 mm face against the 48.6 mm face of the other models. The
+    guide's Table 27 lists only EX4300-FAN and EX4300-FAN-AFI and does not name this part, so the
+    juniper/ex4300-fan-afo component, whose part number is EX4300-FAN, was not reused
+  airflow: >-
+    datasheet - the datasheet orders it as the front-to-back fan; Figure 15 prints AIR OUT beside a fan
+    symbol on the chip. The 48MP takes no back-to-front fan: guide Power Supplies, "EX4300-48MP and
+    EX4300-48MP-S switches support only AC power supplies with front-to-back airflow", and the datasheet's
+    spare-chassis matrix marks both AFI power supplies unsupported for the EX4300-48MP-S
+  weight: >-
+    datasheet - guide Table 10 and the datasheet physical specifications: fan module 0.33 lb (0.15 kg),
+    stated once for the line and not per model
+  size: >-
+    drawing - the visible face, 41.5 x 42.0 mm, read off the guide's 48MP rear figure (Figure 15, g022450,
+    1501 x 440 px): the chassis outline is 1404.5 px across for the stated 441.0 mm (3.185 px per mm) and
+    139.4 px down for 43.7 mm (aspect 10.07 against 10.09), so the figure carries geometry. Slot 0 reads
+    41.7 mm across and slot 1 reads 41.2 mm, and the faces stand 42.2 mm tall. No document gives the module's
+    own width, height or depth, so the module is the aperture the figure shows and the depth is left unstated
+  face: >-
+    estimated - the art follows Figure 15's flat view of the face: a honeycomb grille above and below a
+    central loop handle that carries a grey AIR OUT chip with a fan symbol, a captive screw at the top left
+    and a latch clip at each side. The figure is a line drawing without colour, so the tones are the 4300
+    family's fan tones. Handle colour: the guide states none (searched for orange, blue and handle), so the
+    handle is drawn dark and the module does not claim a colour
+  states: >-
+    datasheet - no lamp on this part. The guide's Table 29 (Fan Module Status LED) puts the status LED on the
+    chassis rear panel beside each slot, so the chassis draws it
+  power-draw: >-
+    NOT STATED - searched the guide for a per-module wattage (the power tables give the whole switch's PoE
+    budget and the supplies' output only) and the datasheet for fan power; neither carries one. L27 stands on
+    purpose
+states: [absent]
+elements:
+  screw:
+    at: [1.6, 1.6]
+    size: [4.8, 4.8]
+    class: screw
+  handle:
+    at: [1.0, 14.4]
+    size: [39.5, 12.4]
+    class: latch
+size:
+  w: 41.5
+  h: 42.0
+size-confidence: {w: drawing, h: drawing}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2b2e35'
+    confidence: estimated
+    source: guide Figure 15 and Figure 103 - the loop handle stands proud of the grille face; projection not measured
+  - node: screw
+    cyl: 2.4
+    knurl: true
+    confidence: estimated
+    source: guide Figure 15 - captive screw, projection estimated

@@ -1,0 +1,37 @@
+format: 1
+kind: module
+name: ex6200-blnk-pwr-3u
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200-BLNK-PWR-3U, the power supply cover panel for the 5000 W AC power supply (about 3 U high).
+  It closes a power supply slot that holds no supply. The guide says to use the right cover for the supply
+  fitted, to keep the airflow of the supplies. Two captive screws hold it at the top.
+attrs:
+  role: slot-blank
+part-numbers:
+  EX6200-BLNK-PWR-3U: {part: EX6200-BLNK-PWR-3U}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Table 21 (EX6200-BLNK-PWR-3U, "Height -
+    Approximately 3 U", for the 5000 W AC supply), Figure 20 (isometric, g021273) and the note that an upgrade from
+    2500 W to 5000 W supplies needs the 3U covers ordered separately. Tables 5 and 51: three 5000 W covers ship
+    with the 5000 W order.
+  size: >-
+    estimated - the slot, not the part. The 2U cover is 100.7 x 101.8 mm (juniper/ex6200-blnk-pwr-2u@1). The
+    guide gives only "approximately 3 U" and "approximately 2 U", so the 3U height is 1.5 times the 2U height,
+    152.7 mm. Figure 20 draws the 3U cover 1.4 times the height of the 2U one. The width is the supply's.
+  face: >-
+    estimated - as the 2U cover: a plain plate with two captive screws near the top corners (Figure 20) and no
+    printing.
+states: [absent]
+elements:
+  screw-left: {at: [9.2, 3.4], size: [3.6, 3.6], class: screw}
+  screw-right: {at: [85.8, 3.4], size: [3.6, 3.6], class: screw}
+size:
+  w: 100.7
+  h: 152.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

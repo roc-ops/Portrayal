@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sr-7-psf-safety-panel
-version: 1.0.0
+version: 1.0.1
 class: bezel
 behaviour: mounts
 profile: networking
@@ -47,13 +47,17 @@ provenance:
     drawing - only the ESS-7 view (Fig 7) draws the panel; the SR-7 view (Fig 6) shows the bare
     filters. Table 3 key 4 describes both, so it is optional on either chassis.
   colour: 'estimated - line art only and no photograph; drawn in the front charcoal. A gap'
+  fasteners: >-
+    datasheet - SR7 Table 48 p108 gives a torque for the panel's screws and Table 66 p147 step 1
+    removes the panel to reach the filters. The screws hold the panel on; no cable lands on them,
+    so the two elements are class `fastener`, not `screw` (a place a lug lands).
   relief: 'estimated - the vent depth is not dimensioned'
   lifecycle: 'searched only the staged corpus; not listed as a separately orderable item'
 elements:
   vent-left: {at: [17.9, 13.5], size: [187.1, 57.1], class: vent}
   vent-right: {at: [235.9, 13.5], size: [187.1, 57.1], class: vent}
-  screw-left: {at: [8.45, 1.15], size: [10.7, 10.7], class: screw}
-  screw-right: {at: [425.35, 1.15], size: [10.7, 10.7], class: screw}
+  screw-left: {at: [8.45, 1.15], size: [10.7, 10.7], class: fastener}
+  screw-right: {at: [425.35, 1.15], size: [10.7, 10.7], class: fastener}
 relief:
   features:
     - {node: vent-left-holes, vent: 15.0, confidence: estimated, source: 'the filters stand behind the cover (SR7 Fig 6 vs Fig 7); the gap is not dimensioned'}

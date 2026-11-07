@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: ex3300-rear-grille
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: networking
+description: >-
+  Round honeycomb grille over the built-in rear fan of the Juniper EX3300 switches, the "air exhaust
+  with fan" of the rear panel. The fan is built into the chassis and is not a field-replaceable unit.
+  It exhausts air on the front-to-back models and draws it in on the back-to-front EX3300-48T-BF.
+size: {w: 27.7, h: 30.6, d: 6.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+provenance:
+  existence: >-
+    datasheet - EX3300 Switch Hardware Guide (published 2020-12-15), EX3300 Cooling System: two fans,
+    one along the rear of the chassis and another along the left side; Power Supply and Fan Tray rows
+    of Table 4 call the fan tray built in. Figures 3 and 4 draw the rear grille as "Air exhaust with
+    fan"
+  size: >-
+    estimated - read off the vector drawing of Figure 3, which is flat. The rear figure is scaled so
+    that its face is 444.5 mm wide, 0.735 pt/mm; the grille is 27.7 mm across and 30.6 mm high. The face
+    height reads 43.4 mm against the table's 44.5, so the vertical figure is good to about 3 percent,
+    and the drawing clips the honeycomb at the left and right, so the true grille is probably round
+    at about 30 mm. The guide gives no dimension for it
+  depth: >-
+    estimated. The drawing is a front view; 6.0 is what the relief builds, not a figure from any source
+elements:
+  grille: {at: [0.0, 0.0], size: [27.7, 30.6], class: vent}
+skins: [default]

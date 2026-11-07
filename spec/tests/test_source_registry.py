@@ -63,6 +63,7 @@ def _entries():
                 yield slug, r
 
 
+@pytest.mark.heavy
 def test_every_device_registers_at_least_one_source():
     """The census #274 closed. It may only stay at zero."""
     silent = [f"{p.parts[-3]}/{p.parts[-2]}" for p, d in _devices()
@@ -72,12 +73,14 @@ def test_every_device_registers_at_least_one_source():
         f"was built from one: {silent}")
 
 
+@pytest.mark.heavy
 def test_every_entry_has_a_title():
     """A url or a hash without a title is a citation a reader cannot look up."""
     bad = [(s, e) for s, e in _entries() if not (e.get("title") or "").strip()]
     assert not bad, bad
 
 
+@pytest.mark.heavy
 def test_archive_is_gone():
     """It was in the schema from the start, no entry ever used it and no tool
     ever read it. Removed in #274; this catches one coming back by copy-paste."""

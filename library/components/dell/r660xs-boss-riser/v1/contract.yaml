@@ -1,0 +1,48 @@
+format: 1
+kind: module
+name: r660xs-boss-riser
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  The M.2 BOSS riser of the PowerEdge R660xs - the vented bracket between riser 1 and riser 2 at the rear, in which the BOSS-N1 card (two M.2 NVMe SSDs, cold-swap) stands
+attrs:
+  power-absent: not-published
+provenance:
+  identity: >-
+    datasheet - R660xs ISM table 7 item 2 'BOSS riser: enables you to connect
+    BOSS card' and 'M.2 SSD module' (figures 106 to 111): the riser plugs into
+    the system board and carries the BOSS card, which carries the M.2 SSDs; THE
+    RISER IS LIFTED OUT FROM INSIDE (from the riser connector), unlike the R660's BOSS-N1, a hot-plug module drawn at the rear's far left
+    (dell/boss-n1-module-1u@1), so that part is not seated here. The technical
+    guide's BOSS-N1 section (figure 11) says 'Internal ... Cold-swap for 4 x
+    3.5-inch, 8 x 2.5-inch, 10 x 2.5-inch configurations'.
+  sources: >-
+    drawing - the ISM's figure 7 'Rear view of the system' (1650 x 344 px,
+    Dell's render), read as dell/r660xs-riser-1-cage@1 reads it. Facts read,
+    art not traced.
+  size: >-
+    drawing - 42.0 x 22.0 at rear-face x 87.3, y 1.5: the bracket's left edge
+    is figure x 397; its right end is bounded by a hex screw and a latch the
+    figure draws at x 515..545, so the width is the bracket without them, to
+    129.3. The height runs to the USB stack's top.
+  holes: >-
+    drawing - thirteen square openings, 3.6 mm, in three rows on a 5.5 pitch
+    from x 3.1, y 4.7: five, five and three. The figure draws them
+    irregularly - narrow slots, round ones and half-hidden ones among them,
+    stamped on a bracket seen at 3.3 px/mm - and this part draws a regular grid
+    of the squares; the irregularity is not drawn.
+  empty-position: >-
+    NOT KNOWN - the figure shows the riser fitted. No document draws the
+    position without it (the ISM's riser configuration tables list the BOSS N1
+    module as an option in every configuration), so the bay's default is this
+    part, as the figure draws it, and there is no blank.
+  depth: >-
+    NOT KNOWN; drawn as a plate.
+  power: >-
+    NOT PUBLISHED - the R660xs ISM, technical guide and spec sheet give no
+    wattage for the BOSS riser or the BOSS-N1 card.
+size: {w: 42.0, h: 22.0}
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

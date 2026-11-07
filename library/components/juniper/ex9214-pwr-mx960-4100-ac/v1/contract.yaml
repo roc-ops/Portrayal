@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: ex9214-pwr-mx960-4100-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper 4100 W AC power supply (PWR-MX960-4100-AC) of the EX9214. It is the high-capacity AC supply of the MX960. It stands
+  upright in PEM0 to PEM3 at the rear. Its appliance inlet and input switch are at the top. It has four lamps (AC-1 OK, AC-2 OK,
+  DC OK, PS FAIL), an UP label, a vertical handle and an internal fan. It takes 200 to 240 V AC. The second feed, AC-2, enters
+  at the chassis inlet strip above the supplies. The supplies work in two zones. PEM0 and PEM2 feed one zone, and PEM1 and PEM3
+  feed the other.
+part-numbers:
+  PWR-MX960-4100-AC-S: {part: PWR-MX960-4100-AC-S}
+attrs:
+  power-output-w: 4100
+  power-output-one-feed-w: 1700
+  input-voltage: 200-240 VAC
+  redundancy: 1+1 per zone
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "PWR-MX960-4100-AC-S 4100 W AC Power Supply for EX9214, spare
+    (Note: AC power cords are sold separately)". The MX960 guide lists PWR-MX960-4100-AC as "AC 4.1kW Power Entry Module". The MX960 device on main
+    seats `juniper/mx960-psu-ac`, a 1700 W normal-capacity supply, which is a different part and is not reused.
+  power: >-
+    guide - EX9214 Switch Hardware Guide (2025-07-28), AC power supply specifications: output 4100 W in two-feed mode and 1700 W in one-feed mode, input 200 to 240 VAC.
+    The EX9200 datasheet (Aug 2022) Table 4 gives 8,200 W for the chassis on a 200 to 240 V AC input.
+  size: >-
+    estimated - the face is 101.6 mm wide and 368.3 mm tall. The EX9214 rear photograph, read on a millimetre grid, shows the four faces 102 mm wide on a
+    105.2 mm pitch and 368 mm tall. Table 7 gives the AC supply 1.75 x 14.5 x 6.85 in (44.5 x 368.3 x 174.0 mm) as height, width and depth, and its 14.5 in
+    agrees with the 368 mm of the face; the table does not say which edge of the module is which, so 101.6 (4 in, the EX9204 supply's face width) is the width carried.
+  face: >-
+    photo - the EX9214 studio rear photograph (about 1.33 px/mm across, 1.36 down), one supply read on a millimetre grid from its upper left corner:
+    the angled appliance inlet at 0 to 41 mm across and 7 to 42 mm down, the input switch at 45 to 63 mm across and 7 to 39 mm down, the UP label at 47 to
+    61 mm across and 46 to 66 mm down, four lamps in a column at 11 mm across and 67 to 85 mm down with their legends on a white label, a small tab at 4 to 14
+    mm across and 90 to 121 mm down, a vertical handle at 47 to 57 mm across and 135 to 246 mm down, and screws along the foot. Every place is estimated to
+    1.5 mm.
+  leds: >-
+    guide, AC power supply LED table: AC-1 OK and AC-2 OK green (input present and in range), DC OK green (output in range), PS FAIL red; each off when not lit.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-ac1-ok: {at: [9.7, 66.2], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-ac2-ok: {at: [9.7, 72.4], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-dc-ok: {at: [9.7, 78.5], size: [2.2, 2.2], class: led, states: [{name: green, color: '#39b54a'}, 'off']}
+  led-ps-fail: {at: [9.7, 83.9], size: [2.2, 2.2], class: led, states: [{name: red, color: '#d0021b'}, 'off']}
+  switch: {at: [45.0, 7.5], size: [16.0, 31.0], class: switch}
+  handle: {at: [46.6, 135.0], size: [10.2, 111.0], class: latch}
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [4.3, 12.55], attrs: {function: AC-1 inlet}}
+size:
+  w: 101.6
+  h: 368.3
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 2.4
+    color: '#9aa0a6'
+    confidence: estimated
+    source: photo - the vertical pull handle stands proud of the face
+  - node: switch
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: photo - the input switch projects
+skins: [default]

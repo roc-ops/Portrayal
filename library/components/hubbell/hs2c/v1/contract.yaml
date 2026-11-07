@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: hs2c
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The lift-off cover of the Hubbell S-Series 2 RU cable manager, catalogue HS2C. The HS23C
+  sheet lists it as the replacement cover. It is a steel panel across the front of the
+  fingers. It lifts off, so patch cords can be added.
+provenance:
+  size: >-
+    datasheet - the HS23C sheet lists "Replacement Cover, 2U HS2C" and draws the cover the
+    width of the manager, B, 19 in (483 mm), and as tall as the plate, A, 3.5 in (89 mm). Its
+    thickness is the sheet's "Gauge 14", 1.9 mm.
+  relief: >-
+    estimated - a flat panel 1.9 mm thick at the very front of the manager, in front of the
+    tabs. The rolled top edge and the two slot marks near the ends that the figure shows
+    are drawn in the face only (see `face`), not in the 3D section, which no sheet
+    dimensions.
+  face: >-
+    estimated - STAND-IN. The figure shows a rolled top edge, two slot marks near the ends
+    and the name plate at the middle. None is dimensioned. The face draws the roll as a
+    band 6 mm high along the top, a slot 14 by 4 mm at each end, 12 mm in from it and
+    centred on the height, and the name plate as a blank panel in its reserved box; the
+    roll's width and the slot's size and place are stand-ins, not the maker's. The roll
+    and plate are in a lighter steel tone than the panel so they read on both stages.
+    No mark is drawn on the plate.
+  lid: >-
+    datasheet - "Cover: Included, Lift off" on the sheet, and "Door is removeable to allow for
+    easy addition of patch cords" in its features; the figure draws the cover lifted clear of
+    the manager. It opens over the plate's windows, so it is a lid (`lid: true`) and the
+    windows beneath it may be declared pass-throughs.
+  color: >-
+    datasheet - "Finish: Black Powder Coated", the sheet's, for the whole manager.
+  logo-zone: >-
+    reserved, not drawn, estimated - the figure shows the maker's name plate at the middle of
+    the cover, about 45 mm wide and 25 mm high read against the cover's length, and a pair of
+    small plates near the ends. The library reproduces no vendor logo.
+size: {w: 482.6, h: 88.9}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 88.9], class: bezel}
+  roll-top: {at: [0.0, 0.0], size: [482.6, 6.0], class: bezel}
+  slot-left: {at: [12.0, 42.45], size: [14.0, 4.0], class: bezel}
+  slot-right: {at: [456.6, 42.45], size: [14.0, 4.0], class: bezel}
+  name-plate: {at: [218.8, 31.95], size: [45.0, 25.0], class: label}
+  logo-zone: {at: [218.8, 31.95], size: [45.0, 25.0], class: label}
+relief:
+  features:
+    - node: plate
+      lift: 72.4
+      out: 74.3
+      color: '#2a2d31'
+      confidence: estimated
+      source: the sheet's gauge 14 for the thickness; the figure draws the cover at the front of the manager
+skins: [default]

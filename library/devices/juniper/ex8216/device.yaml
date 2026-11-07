@@ -1,0 +1,566 @@
+format: 1
+kind: device
+name: ex8216
+version: 0.1.1
+maturity: modelled
+manufacturer: Juniper
+model: EX8216
+portfolio: {line: EX Series, family: EX8200}
+description: >-
+  Juniper EX8216, the 21 U end-of-life modular Ethernet switch of the EX8200 family. The front has two Routing Engine
+  slots (RE0, RE1) and sixteen horizontal line card slots (0 to 15) in two banks of nine, each bank beside one of the two
+  vertical fan trays on the left, which carry the slot labels; six power supply slots (PSU 0 to PSU 5) run across the bottom
+  and the LCD panel, its Menu and Enter buttons, the ALM, SYS and MST lamps and the ESD point are in a header plate across
+  the top. The rear carries the eight Switch Fabric (SF) modules in slots SF7 to SF0 and exhausts the supplies' air at the
+  bottom. Cooling is side to side and front to side. The base order ships one RE module, the eight SF modules, two 3000 W AC
+  supplies and the cover panels; the redundant orders two RE modules and six AC supplies or four DC supplies. Line cards are
+  ordered separately and are not modelled here: every line card slot shows its cover panel.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper, EX8216 Switch Hardware Guide (PDF title "EX8216 Switch Hardware Guide", created 2020-12-16, 405 pages),
+      https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/ex-series/ex8200/ex8216.pdf:
+      Table 5 (the orders), Table 7 (the chassis), Tables 8 to 13 (the FRUs and the slot numbers), Figures 1 to 7 (the front
+      and rear, flat in Figures 5 to 7), Figures 8 to 11 (the LCD panel and lamps), Figures 12 to 24 (the fan tray, supplies and
+      modules), Tables 17, 25, 31, 37 and 38 (the lamps) and Table 60 (power). Juniper, EX8216 Ethernet Switch Datasheet
+      (1000283-021-EN, June 2015), https://www.juniper.net/assets/us/en/local/pdf/datasheets/1000283-en.pdf: the ordering table
+      and the specifications. Juniper's end-of-life notice (PSN TSB17106, listed in
+      https://www.juniper.net/support/pdf/eol/lod-q22017.pdf, 2017-11-09): the EX8200 line is replaced by the EX9200. The guide's
+      own address in the task (.../ex-series/ex8216/ex8216.pdf) answered 404; the address above, in the ex8200 folder, is the one
+      used, and the archive zip was not needed. Terms: the documents are Juniper's, published for customers, read here for facts
+      only; nothing is copied into the library and every skin is drawn new. No photograph of the EX8216 was reachable and no held
+      intake folder, Visio stencil or 3D model exists for this account, so the guide's figures are the only geometry.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 7: 36.5 in (92.7 cm) high, 17.3 in (43.9 cm) wide - "the outer edges of the front-mounting brackets extend the
+      width to 19 in. (48.3 cm)" - and 26.5 in (67.3 cm) deep without any FRU installed, 29 in (74 cm) with them. The datasheet
+      gives 17.3 x 36.5 x 26.5 in and "28.2 in / 71.6 cm depth including all hardware"; the depth without FRUs, where both agree,
+      is carried (gap chassis-size). 21 U (guide, "21 rack units (1/2 rack)"); 21 U is 933.5 mm. Ears are NOT MODELLED by project
+      convention.
+  gate-1:
+    confidence: estimated
+    note: >-
+      THE FRONT FIGURE CANNOT BE PROVED. Figure 5 (g020603, flat) is a composite that draws the front twice, one copy beside each
+      fan tray's label column, and is cropped above the supply row, so its aspect against the 36.5 in height cannot be measured. Its
+      width passes: the frame with brackets is 1320 px at 450 dpi, 2.735 px/mm on the 482.6 mm, and the body 2.753 px/mm on the
+      17.3 in. Down the figure the line card pitch reads 108.8 px, which is 39.5 mm at that scale and 38.2 mm if the cards are the
+      EX8208's (Figure 3 of the EX8208 guide, whose aspect is proved at 0.4 percent, and the same line cards). The EX8208's
+      38.2 mm is carried, because one chassis' 18 slots at 39.5 mm would need 39.1 + 711 mm and leave less than the supply row
+      and rim: 39.1 + 18 x 38.2 + 43.4 (the gap between the banks) + 42 + 104 + 9 comes to the guide's 927.1. The gap between the
+      banks is derived from the height, not read off a figure.
+  slots:
+    confidence: estimated
+    note: >-
+      Figure 5, read at 2.753 px/mm across and 2.852 down (the second from the pitch above), and the fan tray (Figure 12): the first
+      slot (RE0) starts 39.1 mm down; the nine slots of the top bank (RE0, RE1 and line cards 0 to 6) and the nine of the bottom
+      bank (line cards 7 to 15) sit on a 38.2 mm pitch, the bottom bank starting 426.3 mm down, which is 39.1 mm under the second tray's
+      top (387.2 mm). Each is a 386.9 mm wide bay from 46.1 mm across (the trays' right edge) to the header plate's right edge, 35.0
+      mm high. Guide Table 11 numbers them RE0, RE1 and 0 to 15 down the front. The RE plate reads shorter than the line card
+      plate in Figure 5 (about 32.6 against 35.8 mm); one slot height is carried.
+  psu-row:
+    confidence: estimated
+    note: >-
+      Figure 6 (g020641, the same drawing as the EX8208 guide's Figure 4) and the EX8208's Figure 3: six supplies 70.1 mm wide on a
+      71.0 mm pitch from 9.5 mm across, 104.0 mm high from 814.1 mm down (the chassis bottom less the same 8.95 mm rim), PSU 0 to
+      PSU 5 left to right, with a perforated band below. The guide says the air intake for the middle of the chassis is "just below the
+      slots for the power supplies" and not to block it.
+  header:
+    confidence: estimated
+    note: >-
+      Figure 5 at 2.753 px/mm across and 2.852 down: LCD window 248.8 to 312.4 mm across and 12.6 to 28.0 down (the EX8216 figure draws it
+      larger than the EX8208's, 63.6 against 38.9 mm; each figure is followed); Menu and Enter buttons centred at 327.3 mm across and 17.5
+      and 24.9 down; ALM, SYS and MST lamps at 340.3 mm across and 10.9, 18.9 and 26.3 down; the ESD label 356.0 to 378.5 mm across and 13.0
+      to 28.8 down; the ESD point centred at 385.4 and 20.3; "EX8216" centred at 407.4. The registry's lamp and button sizes are used on
+      the figure's centres.
+  rear:
+    confidence: estimated
+    note: >-
+      Figure 7 (flat, g020604) at 3.437 px/mm on the 17.3 in body: eight SF slots 40.7 mm apart, SF7 at 21.2 mm from the left (seen from
+      the rear), a label strip 85.5 to 102.4 mm down printing SF7 to SF0, and the cards from 105.3 mm down. Each card's length (614.0 mm)
+      and the lower vent panel, which Figure 4 shows under the cards and the guide names as the supplies' exhaust "on the rear of the
+      chassis at the bottom", are fractions of the isometric Figure 4 and good to about 15 mm. The protective earthing terminal pair and the ESD
+      point are placed at the rear left from Figure 4's callouts (an isometric, good to about 15 mm); Figure 7 also shows three unlabelled round
+      fittings right of SF0 near the top, which are not drawn.
+  right-side:
+    confidence: estimated
+    note: >-
+      Figures 1 and 2 (isometric, no scale) show the right wall perforated in three panels, and the lift handles low on both side walls,
+      which are not drawn. The two protective earthing terminals Figure 1 calls out are at the top rear corner of the right wall; the
+      guide gives no spacing for the EX8216, so the 15.86 mm of the EX8208's inserts is carried. These are fractions of an isometric,
+      estimated to about 15 mm; the inserts are drawn as two plain heads, and not as the library's stud-pair part. On this face x = 0 is the front.
+  color:
+    confidence: estimated
+    note: >-
+      The guide's figures are black and white line drawings and no photograph was found, so the chassis is drawn in the EX8208's neutral
+      light grey; no colour is stated by a source.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 60 gives each FRU's draw (carried on the components). No chassis total is stated; the datasheet gives the system capacity
+      and no power figure.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      Juniper's end-of-life notice (PSN TSB17106, https://www.juniper.net/support/pdf/eol/lod-q22017.pdf, 2017-11-09) lists the EX8200-family
+      XRE200 with a last order date of 2017-06-15 and names the EX9200 as the replacement for the EX8200 line. The EX8216 chassis's own
+      dates were not readable (Juniper's end-of-life table is script-rendered); none is stated.
+attrs:
+  physical:
+    weight-chassis-kg: 73
+    weight-base-kg: 123
+    weight-redundant-kg: 126
+    weight-max-kg: 220
+    weight-note: >-
+      Guide Table 7: chassis with midplane and cover panels 160 lb (73 kg), base configuration 270 lb (123 kg), redundant configuration 278
+      lb (126 kg), fully loaded 486 lb (220 kg), the last with the heaviest line cards in all sixteen slots. The datasheet gives 142 lb (64 kg),
+      270 lb (122.5 kg), 318 lb (144 kg) and 422 lb (191 kg); the guide's table is carried (gap weights).
+  environmental:
+    operating-temp: 0 C to 40 C
+    humidity: 10-85 percent noncondensing
+    altitude-max: 10,000 ft (3048 m)
+  lifecycle:
+    eol: announced
+    eol-announcement: https://www.juniper.net/support/pdf/eol/lod-q22017.pdf
+chassis:
+  width: 439.42
+  height: 927.1
+  depth: 673.1
+  ru: 21
+  color: '#b3b7bb'
+  airflow: side
+gaps:
+  - what: chassis-size
+    scope: [front, right]
+    reason: sources-disagree
+    note: >-
+      Depth with the FRUs fitted: guide Table 7 gives 29 in (74 cm), the datasheet 28.2 in (71.6 cm); both give 26.5 in without them,
+      which is carried. Height and width agree (36.5 in, 17.3 in).
+    wanted: a mechanical drawing saying which depth includes the handles and the supplies
+  - what: weights
+    scope: [weight-note]
+    reason: sources-disagree
+    note: >-
+      Chassis with midplane 160 lb (guide) against 142 lb (datasheet); base 270 against 270; redundant 278 against 318; fully loaded 486
+      against 422. The guide is the newer document (2020-12-16 against June 2015) and is carried.
+    wanted: a shipping-weight statement that names the configuration
+  - what: slot-pitch
+    scope: [slots, res]
+    reason: needs-drawing
+    note: >-
+      The only flat front figure (Figure 5) is a composite cropped above the supplies, so the slot pitch is not proved against the height; the
+      EX8208's 38.2 mm is carried and the gap between the two banks is derived from the 36.5 in height (see provenance gate-1).
+    wanted: a flat drawing of the whole front, or a photograph, to measure the pitch and the gap between the banks
+  - what: line-cards
+    scope: [slots]
+    reason: needs-drawing
+    note: >-
+      Left out on purpose: the twelve EX8200 line cards (EX8200-8XS, -8XS-ES, -40XS, -40XS-ES, -2XS-40P, -2XS-40T, -48PL, -48TL, -48T,
+      -48T-ES, -48F, -48F-ES) are a family of their own. Each slot shows its cover panel.
+    wanted: the EX8200 line card family, modelled as its own slice
+  - what: dc-supply-face
+    scope: [psus]
+    reason: needs-drawing
+    note: >-
+      The DC supply is drawn only in isometric Figures 18 and 19; the DC face is built from fractions of an angled view.
+    wanted: a flat drawing or photograph of the EX8200-PWR-DC3KR face
+  - what: rear-lower-half
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      Figure 7 draws only the top of the rear flat; the SF cards' length, the lower vent panel and the earthing and ESD points come from the
+      isometric Figure 4 and are good to about 15 mm.
+    wanted: a flat drawing or photograph of the whole rear
+  - what: sides-top-bottom
+    scope: [left, top, bottom]
+    reason: needs-drawing
+    note: >-
+      No figure of the guide shows the left wall, the top or the bottom flat; the right wall is only the isometric Figures 1 and 2.
+    wanted: flat drawings or photographs of the side walls and the top
+  - what: cover-parts
+    scope: [slots, res, psus]
+    reason: vendor-silent
+    note: >-
+      The guide lists the line card, RE module and power supply cover panels in Table 5 and draws none, and gives no part number for any; the
+      covers are drawn as plain plates at the bays' own size.
+    wanted: the cover panels' part numbers and a photograph
+groups:
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: line card slots 0 to 15 in two banks of nine (with RE0 and RE1 at the top of the first); line cards are not modelled
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: the Routing Engine slots RE0 and RE1, one RE module in the base order and two in the redundant orders
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - guide, "Understanding EX8216 Switch Component and Functionality Redundancy": one or two RE modules; with two, one is primary and the other backup, and the Routing Engine and system control are redundant'
+  sfs:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: the eight Switch Fabric slots SF7 to SF0 at the rear, left to right as seen from the rear
+    attrs:
+      redundancy: '7+1'
+      redundancy-note: '7+1 - guide, "Switch Fabric (SF) Modules in an EX8216 Switch": all eight SF modules are active at once and are recommended for normal operation; "if one SF module fails, the remaining seven SF modules still have sufficient switching capacity to maintain continuous switch operation at full wire-rate performance" with line cards of the 8-port SFP+ kind in every slot'
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: the top and bottom fan trays, identical and interchangeable; only the top tray cools the SF modules
+    attrs:
+      redundancy: '2+0'
+      redundancy-note: '2+0 - guide, Cooling System and Fan Tray: both trays are needed and "the switch continues to operate for a limited time (2 minutes) after a fan tray has been removed"; within a tray the fans continue to cool "even when a single fan fails", so the redundancy is among the nine fans of each tray and not between the trays'
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: six power supply slots PSU 0 to PSU 5, any slot in any order, all AC or all DC
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 is required; n+n for dual feeds (guide, "N+1 Redundancy Configuration of AC Power Supplies"); the DC supplies carry two feeds each'
+  lcd-buttons:
+    term: Button
+    role: management
+    index-origin: 0
+    description: the LCD panel's Menu and Enter buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the chassis status lamps ALM, SYS and MST right of the LCD panel
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD points, front and rear
+views:
+  front:
+    size:
+      w: 439.42
+      h: 927.1
+    panel:
+      decor:
+        - {id: lcd, kind: display, at: [248.8, 12.6], size: [63.6, 15.4], rx: 0.6, fill: '#404c40', confidence: estimated,
+           source: 'Figure 5 at 2.753 px/mm; two lines of 16 characters (guide, LCD Panel in an EX8200 Switch)'}
+        - {id: esd-label, kind: label-plate, at: [356.0, 13.0], size: [22.5, 15.8], rx: 0.4, fill: '#e4e6e8', confidence: estimated,
+           source: 'Figure 5, the ESD caution label'}
+        - {at: [9.5, 919.6], size: [425.1, 6.0], pattern: vent, vent: 1.0, confidence: estimated,
+           source: 'Figure 6, the perforated band under the supply row (the air intake below the supplies); extent read off the figure'}
+      cutouts:
+        - {id: btn-menu, at: [324.1, 14.3], size: [6.4, 6.4], shape: circle}
+        - {id: btn-enter, at: [324.1, 21.7], size: [6.4, 6.4], shape: circle}
+        - {id: led-alm, at: [339.3, 9.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-sys, at: [339.3, 17.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-mst, at: [339.3, 25.3], size: [2.0, 2.0], shape: circle}
+        - {id: esd-front, at: [383.4, 18.3], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [342.6, 11.46], text: ALM, font-size: 1.8, anchor: start, fill: '#2b2f33', for: led-alm}
+      - {at: [342.6, 19.46], text: SYS, font-size: 1.8, anchor: start, fill: '#2b2f33', for: led-sys}
+      - {at: [342.6, 26.86], text: MST, font-size: 1.8, anchor: start, fill: '#2b2f33', for: led-mst}
+      - {at: [407.4, 28.4], text: EX8216, font-size: 6.0, anchor: middle, fill: '#2b2f33', for: chassis}
+      - {at: [65.0, 812.1], text: PSU 0, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu0}
+      - {at: [136.0, 812.1], text: PSU 1, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu1}
+      - {at: [207.0, 812.1], text: PSU 2, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu2}
+      - {at: [278.0, 812.1], text: PSU 3, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu3}
+      - {at: [349.0, 812.1], text: PSU 4, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu4}
+      - {at: [420.0, 812.1], text: PSU 5, font-size: 2.2, anchor: middle, fill: '#2b2f33', for: psu5}
+    components:
+      bays:
+        - {id: fan0, at: [0.0, 0.0], size: {w: 46.1, h: 387.2},
+           accepts: [juniper/ex8216-fan@1], default: juniper/ex8216-fan@1, group: cooling, rel-pos: 0}
+        - {id: fan1, at: [0.0, 387.2], size: {w: 46.1, h: 387.2},
+           accepts: [juniper/ex8216-fan@1], default: juniper/ex8216-fan@1, group: cooling, rel-pos: 1}
+        - {id: re0, at: [46.1, 39.1], size: {w: 386.9, h: 35.0}, opening: {w: 366.0, h: 32.0},
+           accepts: [juniper/ex8216-re320@1, juniper/ex8216-re-cover@1], default: juniper/ex8216-re320@1, group: res, rel-pos: 0}
+        - {id: re1, at: [46.1, 77.3], size: {w: 386.9, h: 35.0}, opening: {w: 366.0, h: 32.0},
+           accepts: [juniper/ex8216-re320@1, juniper/ex8216-re-cover@1], default: juniper/ex8216-re320@1, group: res, rel-pos: 1}
+        - {id: lc0, at: [46.1, 115.5], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 0}
+        - {id: lc1, at: [46.1, 153.7], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 1}
+        - {id: lc2, at: [46.1, 191.9], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 2}
+        - {id: lc3, at: [46.1, 230.1], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 3}
+        - {id: lc4, at: [46.1, 268.3], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 4}
+        - {id: lc5, at: [46.1, 306.5], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 5}
+        - {id: lc6, at: [46.1, 344.7], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 6}
+        - {id: lc7, at: [46.1, 426.3], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 7}
+        - {id: lc8, at: [46.1, 464.5], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 8}
+        - {id: lc9, at: [46.1, 502.7], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 9}
+        - {id: lc10, at: [46.1, 540.9], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 10}
+        - {id: lc11, at: [46.1, 579.1], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 11}
+        - {id: lc12, at: [46.1, 617.3], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 12}
+        - {id: lc13, at: [46.1, 655.5], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 13}
+        - {id: lc14, at: [46.1, 693.7], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 14}
+        - {id: lc15, at: [46.1, 731.9], size: {w: 386.9, h: 35.0},
+           accepts: [juniper/ex8216-lc-cover@1], default: juniper/ex8216-lc-cover@1, group: slots, rel-pos: 15}
+        - {id: psu0, at: [9.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 0}
+        - {id: psu1, at: [80.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 1}
+        - {id: psu2, at: [151.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 2}
+        - {id: psu3, at: [222.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 3}
+        - {id: psu4, at: [293.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 4}
+        - {id: psu5, at: [364.5, 814.1], size: {w: 70.1, h: 104.0},
+           accepts: [juniper/ex8200-pwr-ac2k@1, juniper/ex8200-pwr-ac3k@1, juniper/ex8200-pwr-dc3kr@1, juniper/ex8200-psu-cover@1],
+           default: juniper/ex8200-pwr-ac3k@1, group: psus, rel-pos: 5}
+      placements:
+        - {id: btn-menu, ref: juniper/ex8200-lcd-button@1, skin: menu, at: [324.1, 14.3], for: chassis, group: lcd-buttons, rel-pos: 0,
+           attrs: {function: LCD menu}}
+        - {id: btn-enter, ref: juniper/ex8200-lcd-button@1, skin: enter, at: [324.1, 21.7], for: chassis, group: lcd-buttons, rel-pos: 1,
+           attrs: {function: LCD enter}}
+        - {id: led-alm, ref: common/led-dot@1, at: [339.3, 9.9], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#eab308'}],
+           description: 'Table 17 - ALM: red major alarm, yellow minor alarm, unlit no alarm'}
+        - {id: led-sys, ref: common/led-dot@1, at: [339.3, 17.9], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: operating, color: '#22c55e'}, {name: failure, color: '#eab308'}],
+           description: 'Table 17 - SYS: green, the switch is operating normally; yellow, one or more component failures are generating alarms; unlit, powered off'}
+        - {id: led-mst, ref: common/led-dot@1, at: [339.3, 25.3], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: primary, color: '#22c55e'}],
+           description: 'Table 17 - MST: green, the primary Routing Engine is operational; unlit, powered off'}
+        - {id: esd-label-mark, ref: common/esd-warning@1, at: [363.4, 17.4], for: chassis, group: esd, rel-pos: 0}
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [382.4, 17.3], for: chassis, group: esd, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [53.4, 10.2], size: {w: 71.2, h: 17.5}, label: 'Vendor logo; not drawn'}
+  rear:
+    size:
+      w: 439.42
+      h: 927.1
+    panel:
+      decor:
+        - {at: [10.0, 745.0], size: [419.4, 165.0], pattern: vent, vent: 1.0, confidence: estimated,
+           source: 'Figure 4 (isometric) and Cooling System: the supplies exhaust at the bottom of the rear; extent a fraction of the figure, about 15 mm'}
+        - {at: [5.5, 626.0], size: [7.0, 7.0], rx: 3.5, fill: '#55585b', confidence: estimated,
+           source: 'Figure 4, the protective earthing terminal callout (two points, rear left); position a fraction of an isometric, about 15 mm'}
+        - {at: [5.5, 641.86], size: [7.0, 7.0], rx: 3.5, fill: '#55585b', confidence: estimated,
+           source: 'as the first earthing terminal; spacing carried from the EX8208 guide (0.625 in, 15.86 mm)'}
+      cutouts:
+        - {id: esd-rear, at: [7.0, 679.0], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+      - {at: [41.2, 97.5], text: SF7, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf7}
+      - {at: [81.9, 97.5], text: SF6, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf6}
+      - {at: [122.6, 97.5], text: SF5, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf5}
+      - {at: [163.3, 97.5], text: SF4, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf4}
+      - {at: [204.0, 97.5], text: SF3, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf3}
+      - {at: [244.7, 97.5], text: SF2, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf2}
+      - {at: [285.4, 97.5], text: SF1, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf1}
+      - {at: [326.1, 97.5], text: SF0, font-size: 4.0, anchor: middle, fill: '#2b2f33', for: sf0}
+    components:
+      bays:
+        - {id: sf7, at: [21.2, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 7}
+        - {id: sf6, at: [61.9, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 6}
+        - {id: sf5, at: [102.6, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 5}
+        - {id: sf4, at: [143.3, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 4}
+        - {id: sf3, at: [184.0, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 3}
+        - {id: sf2, at: [224.7, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 2}
+        - {id: sf1, at: [265.4, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 1}
+        - {id: sf0, at: [306.1, 105.3], size: {w: 40.0, h: 614.0},
+           accepts: [juniper/ex8216-sf320@1], default: juniper/ex8216-sf320@1, group: sfs, rel-pos: 0}
+      placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [6.0, 678.0], for: chassis, group: esd, rel-pos: 2}
+    regions:
+      - {id: logo-zone, at: [336.0, 21.0], size: {w: 81.0, h: 20.0}, label: 'Vendor logo; not drawn'}
+  top:
+    size:
+      w: 439.42
+      h: 673.1
+    empty: Not drawn by any source held. The guide's figures show no top face.
+  bottom:
+    size:
+      w: 439.42
+      h: 673.1
+    empty: Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size:
+      w: 673.1
+      h: 927.1
+    empty: >-
+      Not drawn by any source held. The guide says hot air leaves through the left side, past the fan trays, and draws no figure of the
+      left wall.
+  right:
+    size:
+      w: 673.1
+      h: 927.1
+    panel:
+      decor:
+        - {at: [40.0, 40.0], size: [590.0, 840.0], pattern: vent, vent: 1.0, confidence: estimated,
+           source: 'Figures 1 and 2 (isometric): the right wall is perforated for the air intake in three panels; extent estimated to about 15 mm'}
+        - {at: [636.5, 22.0], size: [7.0, 7.0], rx: 3.5, fill: '#55585b', confidence: estimated,
+           source: 'Figure 1, the protective earthing terminal callout (two points at the top rear corner of the right wall); position estimated'}
+        - {at: [636.5, 37.86], size: [7.0, 7.0], rx: 3.5, fill: '#55585b', confidence: estimated,
+           source: 'as the first earthing terminal; spacing carried from the EX8208 guide (0.625 in, 15.86 mm)'}
+configurations:
+  base:
+    kind: base
+    default: true
+    source: >-
+      vendor - Juniper ships the base configuration (AC) as EX8216-BASE-AC (guide, Table 5): the chassis with midplane, two fan trays,
+      one RE module, eight SF modules, two 3000 W AC supplies with power cords, one RE module cover panel, sixteen line card cover panels
+      and four power supply cover panels.
+    description: >-
+      The chassis as the base AC order ships it: one RE module in RE0 with its cover over RE1, the eight SF modules, both fan trays, two
+      3000 W AC supplies in PSU 0 and PSU 1 with a cover over each of the other four, and a cover in each of the sixteen line card slots.
+      Line cards are ordered separately. Side-to-side airflow.
+    power: ac
+    bays:
+      lc0: juniper/ex8216-lc-cover@1
+      lc1: juniper/ex8216-lc-cover@1
+      lc2: juniper/ex8216-lc-cover@1
+      lc3: juniper/ex8216-lc-cover@1
+      lc4: juniper/ex8216-lc-cover@1
+      lc5: juniper/ex8216-lc-cover@1
+      lc6: juniper/ex8216-lc-cover@1
+      lc7: juniper/ex8216-lc-cover@1
+      lc8: juniper/ex8216-lc-cover@1
+      lc9: juniper/ex8216-lc-cover@1
+      lc10: juniper/ex8216-lc-cover@1
+      lc11: juniper/ex8216-lc-cover@1
+      lc12: juniper/ex8216-lc-cover@1
+      lc13: juniper/ex8216-lc-cover@1
+      lc14: juniper/ex8216-lc-cover@1
+      lc15: juniper/ex8216-lc-cover@1
+      re1: juniper/ex8216-re-cover@1
+      psu2: juniper/ex8200-psu-cover@1
+      psu3: juniper/ex8200-psu-cover@1
+      psu4: juniper/ex8200-psu-cover@1
+      psu5: juniper/ex8200-psu-cover@1
+  base-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX8216-BASE-AC: the base AC order with two 3000 W AC power supplies (EX8200-PWR-AC3K), one RE module (EX8216-RE320) with a cover over
+      the second slot, the eight SF modules (EX8216-SF320-S), both fan trays, the line card covers and four power supply covers.
+    bays:
+      re1: juniper/ex8216-re-cover@1
+      psu2: juniper/ex8200-psu-cover@1
+      psu3: juniper/ex8200-psu-cover@1
+      psu4: juniper/ex8200-psu-cover@1
+      psu5: juniper/ex8200-psu-cover@1
+    part-numbers:
+      EX8216-BASE-AC: {}
+  redundant-ac:
+    kind: orderable
+    power: ac
+    description: >-
+      EX8216-REDUND-AC: the redundant AC order, with two RE modules (RE0 and RE1), the eight SF modules and six 3000 W AC power supplies
+      (EX8200-PWR-AC3K) filling every supply slot; otherwise as the base order.
+    part-numbers:
+      EX8216-REDUND-AC: {}
+  redundant-ac2:
+    kind: orderable
+    power: ac
+    description: >-
+      EX8216-REDUND-AC2: the redundant order with six 2000 W AC power supplies (EX8200-PWR-AC2K) in place of the 3000 W ones; otherwise as
+      EX8216-REDUND-AC.
+    bays:
+      psu0: juniper/ex8200-pwr-ac2k@1
+      psu1: juniper/ex8200-pwr-ac2k@1
+      psu2: juniper/ex8200-pwr-ac2k@1
+      psu3: juniper/ex8200-pwr-ac2k@1
+      psu4: juniper/ex8200-pwr-ac2k@1
+      psu5: juniper/ex8200-pwr-ac2k@1
+    part-numbers:
+      EX8216-REDUND-AC2: {}
+  redundant-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX8216-REDUND-DC: the redundant DC order, with two RE modules, the eight SF modules and four 3000 W DC power supplies
+      (EX8200-PWR-DC3KR) in PSU 0 to PSU 3. The datasheet adds "all necessary blank panels" and the guide's list names none for the DC order,
+      so a cover is drawn over each of the two other supply slots.
+    bays:
+      psu0: juniper/ex8200-pwr-dc3kr@1
+      psu1: juniper/ex8200-pwr-dc3kr@1
+      psu2: juniper/ex8200-pwr-dc3kr@1
+      psu3: juniper/ex8200-pwr-dc3kr@1
+      psu4: juniper/ex8200-psu-cover@1
+      psu5: juniper/ex8200-psu-cover@1
+    part-numbers:
+      EX8216-REDUND-DC: {}
+  chas:
+    kind: orderable
+    power: [ac, dc]
+    description: >-
+      EX8216-CHAS-S, the spare chassis with midplane (datasheet ordering table). It ships without RE modules, SF modules, fan trays or
+      supplies, which are ordered separately and may be all AC or all DC; every bay is shown open.
+    bays:
+      re0: ''
+      re1: ''
+      lc0: ''
+      lc1: ''
+      lc2: ''
+      lc3: ''
+      lc4: ''
+      lc5: ''
+      lc6: ''
+      lc7: ''
+      lc8: ''
+      lc9: ''
+      lc10: ''
+      lc11: ''
+      lc12: ''
+      lc13: ''
+      lc14: ''
+      lc15: ''
+      fan0: ''
+      fan1: ''
+      psu0: ''
+      psu1: ''
+      psu2: ''
+      psu3: ''
+      psu4: ''
+      psu5: ''
+      sf0: ''
+      sf1: ''
+      sf2: ''
+      sf3: ''
+      sf4: ''
+      sf5: ''
+      sf6: ''
+      sf7: ''
+    part-numbers:
+      EX8216-CHAS-S: {}
+datasheet:
+  title: Juniper EX8216 Ethernet Switch Datasheet (1000283-021-EN, June 2015)
+  url: https://www.juniper.net/assets/us/en/local/pdf/datasheets/1000283-en.pdf
+  sha256: 5a48ccddde3f5497464eebb694960e63021cfed8d1cad9c74bf5dfb8a0ab184c
+references:
+  - title: Juniper EX8216 Switch Hardware Guide (PDF created 2020-12-16)
+    url: https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/ex-series/ex8200/ex8216.pdf
+    sha256: ecafea3d282bb2112edcec316475f4d4d35e4a8b7bdb8c64339ae2aefa44387e
+  - title: Juniper end-of-life notice list lod-q22017 (PSN TSB17106, 2017-11-09)
+    url: https://www.juniper.net/support/pdf/eol/lod-q22017.pdf
+    sha256: e9db82f4aff9c10cb60b87c8f67580d8cad5e24a8cfbe0717044b294e8aa65c7

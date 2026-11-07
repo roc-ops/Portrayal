@@ -1,0 +1,617 @@
+format: 1
+kind: device
+name: qfx5240-64qd
+version: 0.1.0
+maturity: modelled
+manufacturer: Juniper
+model: QFX5240-64QD
+portfolio: {line: QFX Series, family: QFX5240}
+description: >-
+  Juniper QFX5240-64QD, a 2RU 800G data-centre spine switch running Junos OS Evolved. It has 64 QSFP-DD ports
+  (800 GbE) in sixteen columns of four, two stacked pairs to a column, and two SFP+ ports (10 GbE), with a lamp
+  beside each network port. The port side also carries the RJ-45 management, console and time-of-day ports, a
+  USB port, the reset button, the three chassis lamps, the 1 PPS and 10 MHz connectors. The rear carries two
+  3000 W AC power supplies stacked at the left and four front-to-back fan modules. It ships as one front panel in
+  one AC airflow-out build, and as a spare chassis with no supplies and no fan modules. Its sibling with OSFP
+  cages is the QFX5240-64OD.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX5240 Switch Hardware Guide, published 2026-07-10, 147 pages (Juniper Networks, copyright 2026), from
+      https://www.juniper.net/documentation/us/en/hardware/qfx5240/qfx5240.pdf: the front and rear figures 2 to 5, the
+      port panel figures 6 to 13 and Tables 8 and 9 (lamps), Table 3 (hardware models), Tables 4 to 6 and 13
+      (power and cooling) and Table 7 (physical specifications). The QFX5240 line of Switches datasheet, a00150802ENW
+      Rev. 2, 12 pages (Juniper Networks, published 2026-03; HPE document), from
+      https://www.hpe.com/psnow/doc/a00150802enw: Table 2 (system capacity and dimensions), the power table and the
+      ordering information. Juniper's studio photographs of the 64QD, front and rear (qfx5240-64qd-front-high.jpg,
+      2100 x 735 px, and qfx5240-64qd-rear-high.jpg, from juniper.net's image library). The documents and the
+      photographs are the maker's and public; the guide and datasheet carry a copyright notice and no terms of use
+      beyond it, so only facts are transcribed. No Visio stencil, 3D model or mechanical drawing is held for the
+      QFX5240. The guide's figures are half-tone thumbnails of the same photographs.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet Table 2: 17.26 x 3.46 x 25.52 in (43.8 x 8.8 x 64.8 cm), 2RU, 22 kg (48.50 lb) fully loaded without
+      optics. The inch figures are used. The guide's Table 7 prints the same height and weight and a width of
+      19.03 in (48.33 cm) and a depth of 25.51 in (65 cm); 19.03 in is the width over the front brackets, which is
+      the rack-face width the datasheet's 17.26 in leaves out, so the datasheet's body width is used and brackets
+      are not modelled. The depth differs by 0.01 in; the datasheet's 25.52 in is used.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      The front photograph's body, between the left and right edges, is 1893 px wide and 375 px from the top edge
+      to the bottom lip, an aspect of 5.05 against the datasheet's 438.4 / 87.9 = 4.99 (1 percent out). Scale
+      4.318 px/mm across, used on both axes with the origin at the left edge (x 115 px) and the top edge (y 192
+      px). The rear photograph's body is 1895 px wide, 4.323 px/mm. The guide's figures 2 to 5 are half-tone
+      thumbnails and are used only to count and read. Had 19.03 in been the body width the scale would be 3.92 px/mm
+      and the cages 26.5 mm apart.
+  ports:
+    confidence: photo-measured
+    note: >-
+      Front photograph: 64 QSFP-DD openings, sixteen columns of four on a 103.7 px pitch, 24.01 mm, each opening
+      80 px (18.5 mm) wide; the cage cell is the registry's 19.0 mm, set so the opening centres agree, and the first
+      cell starts at 11.35 mm. A column holds two stacked pairs, one above the other, with a gap between them
+      (figures 4 and 7). The two SFP+ cages stand to the right of the last column, stacked, one above the other
+      (callout 2, 14.5 mm wide).
+  row-pitch:
+    confidence: photo-measured
+    note: >-
+      Down column 5 the four openings centre at 18.5, 35.9, 52.1 and 69.5 mm: 17.4 mm between the two cages of a
+      pair, 16.2 mm from a pair to the next, so the rows are laid on 17.4 mm inside each band, the upper band
+      13.5 mm and the lower 47.1 mm from the top. The registry gives no belly-to-belly pitch for a QSFP-DD cage.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The photograph shows the grey latch mesh between the two cages of every pair, so both lips face the band
+      between them: the upper cage upright and the lower one turned 180, the library's stack convention. The
+      convention is applied, not observed. The SFP+ pair is the same.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Printed on a strip above the upper band and a strip below the lower band, read off the photograph: over
+      each column "N up-arrow ... down-arrow N+1" with N a multiple of four, and under each column the same with
+      N+2. So a column holds ports 4c to 4c+3 from the top, the upper band's pair first; the SFP+ pair prints "64
+      up-arrow" and "down-arrow 65" under it. The guide's Tables 6 and 7 name them network ports and SFP28
+      ports (callouts 1 and 2), and its text names the SFP+ ports 10 GbE. Interface names are not printed and none
+      is stated in the guide, so they are not recorded.
+  port-lamps:
+    confidence: photo-measured
+    note: >-
+      Each network port has a single RGB lamp (guide, QFX5240 Network Port LEDs, Table 8): in the photograph a
+      dot 2.0 mm across at the left of each cage, at the height of the cage's centre, 1.85 mm left of the cell. The
+      lamps are unlit. The SFP+ ports show no lamp and the guide describes none.
+  mgmt-panel:
+    confidence: photo-measured
+    note: >-
+      Right of the last column, from the top: the model name under the maker's logo, the RJ-45 management port
+      with a USB-A port under it in one shield (MGMT, and the USB 3 symbol), the stacked SFP+ pair with 64 and 65
+      below it, a strip with the legends ID, SYS and ALM above three lamps and the RST pinhole, the 1PPS and 10MHz
+      coaxial jacks, the RJ-45 console (CON) and time-of-day (TOD) jacks stacked in one shield, and a green
+      serial-number tab at the foot (guide figure 7 callouts 1 to 9). The USB tongue is blue in the photograph,
+      which is the USB-IF colour of a 3.0 port; the guide says "USB port" only.
+  vents:
+    confidence: estimated
+    note: >-
+      Hexagonal holes in the sheet: a band along the top above the cages, a band along the bottom, a column at the
+      left edge, a column at the right edge and a field under the clock connectors. Drawn as vent decor in those
+      positions, pitched to the photograph and estimated.
+  front-green-tab:
+    confidence: photo-measured
+    note: >-
+      The green tab at the foot of the management panel, 17.0 mm wide and 2.7 mm tall, is the chassis serial number
+      pull-out (callout 8 of figure 7). It is drawn as decor, because it is a label card and not a part the library
+      models.
+  logo:
+    confidence: photo-measured
+    note: >-
+      The maker's logo and its lockup are printed at the upper right of the face, above the model name
+      QFX5240-64QD. The logo is not drawn: a logo-zone region is reserved where it stands, and the model name is
+      drawn as plain text.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      Rear photograph at 4.323 px/mm, checked against the guide's figure 5: two supplies stacked at the left end,
+      supply 0 above supply 1, an earthing pad with two studs and the ground symbol under them, then four fan
+      modules numbered 0 to 3 from the left on an 85.7 mm pitch. A fan symbol, the module number and an arrow are
+      printed beside each fan opening, and a power symbol with the supply number beside each supply. The fan
+      plates measure 80.3 mm wide and 80.0 mm high; the supplies 73.7 mm wide and 39.5 mm high.
+  earthing:
+    confidence: photo-measured
+    note: >-
+      Two threaded studs 15.5 mm apart on a pad at the left of the rear, under the ground symbol, 6.4 mm from the
+      left edge. The guide's grounding section (figure 1 and Ground the QFX5240 Switch) calls for two M6 screws with
+      star washers and a Panduit LCDXN2-14AF-E lug, which is a two-hole lug on 5/8 in centres; the 15.5 mm pitch of
+      the photograph agrees. The guide's text puts the terminal "on the side of the chassis" and "through the
+      left-front mounting bracket"; the photograph and the guide's figure 1 show it on the rear panel, and the
+      photograph is followed.
+  drawing-vs-photo:
+    confidence: photo-measured
+    note: >-
+      The guide's figures 4 and 5 are the same studio photographs at reduced size and agree with them. The guide
+      calls the SFP pair "SFP28 ports" in its callouts and the text and the datasheet say SFP+ 10 GbE; the group is
+      stated at 10g. The photograph shows the supplies' hubs carrying the supply maker's name; it is a third
+      party's logo and is not drawn.
+  modules:
+    confidence: datasheet
+    note: >-
+      The four fan modules (QFX5240-2U-FANAO) and the two power supplies (QFX5240-PWR-AC-AO) are field-replaceable
+      units in bays, each its own component (guide Table 6). Nothing on this chassis is a built-in unit that is not
+      a bay. Each supply carries its own small fan inside.
+  variants:
+    confidence: datasheet
+    note: >-
+      Guide Table 3 and datasheet ordering information: QFX5240-64QD-AO (AC, airflow out) and the spare
+      QFX5240-64QD-CHAS, "Spare chassis without PSU and fans". Both share this front panel and the rear bays, so
+      each is a configuration of this device. NOT MODELLED: the QFX5241-64QD (-AO, -DO, -DO-T2, -CHAS, -TCHAS), a
+      sibling the guide's note and the datasheet name with its own part numbers and a DC supply, which has its own
+      hardware guide and is left to its own slice; and the DC supply the datasheet lists for the series
+      (QFX5241-PWR-DC-AO), which the QFX5240 guide does not describe.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide names the rack mount kit QFX5240-2U-4PRMK (a four-post tool-less kit, Table 6 and the
+      datasheet's ordering table). The library holds no contract for it and none is written here, so `chassis.ears`
+      and `chassis.kits` are left out and a gap says so. The modelled body is the 438.4 mm chassis, without
+      brackets.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 13: typical 616 W and maximum 2258 W at 220 to 240 V for the QFX5240-64QD. The datasheet's power
+      table says typical 616 W and maximum 2242 W (maximum measured at 40 C with DR optics, typical at 25 C with DACs
+      at 50 percent load, excluding transceivers). The maxima differ (2258 and 2242 W); the guide's is used. AC
+      input: guide Table 4 says 200 to 240 VAC at 16 A maximum, guide Table 13 says 200 to 277 VAC with 6 A at 200
+      VAC and 3.8 A at 240 VAC, and the datasheet says 180 to 264 VAC.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The front plate samples #6b7480 (a bare patch near the foot) and the rear panel #646d79. The chassis colour is
+      the front's. The photographs are lit warmly and these are their values, not a paint reference.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life announcement. The guide, published 2026-07-10, and the datasheet, March 2026, state
+      none and no Juniper notice was found in the intake. The device states none announced. Estimated, because
+      absence in the documents is not a notice from the maker.
+attrs:
+  physical:
+    weight-note: 22 kg (48.50 lb) fully loaded without optics (guide Table 7, datasheet Table 2)
+  performance:
+    throughput: 51.2 Tbps unidirectional and 102.4 Tbps bidirectional (datasheet Table 2)
+    forwarding-capacity: 21.2 billion packets per second (datasheet Table 2)
+    packet-buffer: 165 MB (datasheet Table 2)
+    breakout-ports: 64 x 800 GbE, 128 x 400 GbE, 256 x 200 GbE, 320 x 100 GbE or 256 x 50 GbE; up to 320 ports at mixed speeds (datasheet Table 2)
+    qsfpdd-speeds: 800 GbE; 400 GbE and lower with breakout (datasheet Table 2)
+  power:
+    power-typical-w: 616
+    power-max-w: 2258
+    power-envelope: as-tested
+    power-measurement-note: >-
+      Maximum at 40 C ambient with SR optics (datasheet: DR optics) at 100 percent load with IMIX traffic; typical at
+      25 C with DACs at 50 percent load with IMIX traffic, excluding transceivers (guide Table 13, datasheet)
+    power-input-ac: 200 to 240 VAC, 50 to 60 Hz, 16 A maximum (guide Table 4); 200 to 277 VAC (guide Table 13); 180 to 264 VAC (datasheet)
+    redundancy-note: two supplies, 1+1, hot-removable and hot-insertable (guide, Component Redundancy)
+  thermal:
+    fans: four fan modules of two rotors, N+1 at rotor level; front-to-back only
+    airflow-note: AO is front-to-back (port-to-FRU, airflow out); the guide describes no back-to-front module
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F) (guide Table 17)
+    storage-temp: -40 to 70 C (-40 to 158 F) in the shipping container
+    humidity: 5 to 90 percent noncondensing, operating
+    altitude: no performance degradation to 1828.8 m (6000 ft) at 0 to 40 C with DAC cables; sea level with optics (guide Table 17)
+  platform:
+    cpu: Intel Ice Lake, 4 cores, 2.2 GHz
+    memory: 32 GB (16 GB x 2) DDR4
+    storage: two internal 480 GB NVMe SSDs
+    switch-chip: Broadcom Tomahawk 5 (BCM78900)
+    software: Junos OS Evolved
+  features:
+    optics-qsfp-dd: 800 GbE QSFP-DD; ports 1, 2, 5, 6, 9, 10 and so on in the two middle rows take high power optics such as 800G-ZR and ZR+ (guide, Port Panel note)
+    optics-sfp-plus: two 10 GbE ports
+  management:
+    oob: one RJ-45 management port
+    console: one RJ-45 console port
+    tod: one RJ-45 time-of-day port
+    usb: one USB port
+    timing-outputs: 1 PPS and 10 MHz clock connectors
+  compliance:
+    safety: UL 60950-1:2007 R10.14; CAN/CSA-C22.2 No. 60950-1-07 Amd 1:2011 Amd 2:2014; IEC 62368-1:2014 and 2018; EN 62368-1:2014+A11:2017; UL/CSA 62368-1:2019; IEC/EN 60825-1 (datasheet)
+    emc: FCC 47 CFR Part 15; ICES-003; BS EN 55032; BS EN 55035; EN 300 386; CISPR 32; CISPR 35; IEC/EN 61000 series; VCCI-CISPR 32; BSMI CNS 15936 (datasheet)
+    nebs: designed to comply with Zone 4 earthquake requirements of NEBS GR-63-CORE, Issue 3 (guide Table 17)
+    substances: RoHS; TSCA; POPs; WEEE; REACH; SCIP (datasheet)
+  lifecycle:
+    eol: none-announced
+chassis: {width: 438.4, height: 87.9, depth: 648.2, ru: 2, weight-kg: 22, color: '#6b7480', airflow: front-to-back, power: ac}
+gaps:
+- what: module-depths
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The depth of the fan module and of the power supplies. The guide's figures 15, 16, 18 and 19 carry no scale and
+    its tables state weights only for the whole chassis.
+- what: chassis-width
+  scope: [front, rear]
+  reason: sources-disagree
+  wanted: >-
+    The chassis width. The datasheet's Table 2 says 17.26 in (43.8 cm); the guide's Table 7 says 19.03 in (48.33 cm),
+    which is 17.26 in plus the front brackets (the rack-requirements table states 19 in over the brackets). The
+    datasheet's 17.26 in is used because the photograph's scale is consistent with it; the depth differs by 0.01 in
+    (25.52 against 25.51), and the datasheet's is used.
+- what: maximum-power
+  scope: [power]
+  reason: sources-disagree
+  wanted: >-
+    The maximum power of the QFX5240-64QD. Guide Table 13 says 2258 W; the datasheet says 2242 W. Same measure and
+    same scope (maximum, 40 C, IMIX traffic). The guide's 2258 W is used.
+- what: ac-input
+  scope: [power]
+  reason: sources-disagree
+  wanted: >-
+    The AC input of the supply. Guide Table 4 says 200 to 240 VAC at 16 A maximum; guide Table 13 says an operating
+    range of 200 to 277 VAC and 6 A at 200 VAC, 3.8 A at 240 VAC; the datasheet says 180 to 264 VAC. Table 4's
+    range is carried on the supply and every reading is kept in the device's `power-input-ac`.
+- what: sfp-port-type
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    The type of the two small cages. The guide's callout 2 calls them "SFP28 ports" and its text and the datasheet
+    call them "2 x 10-Gbps SFP+ ports". They are modelled as SFP+ at 10 Gbps.
+- what: high-power-optics
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    Which ports take high power optics. The guide's note says that only the front-panel ports in the middle rows
+    support them and lists 1, 2, 5, 6, 9, 10 and so on to 61 and 62, which are ports of the second and third rows in
+    a column of four, counting from 0. The note is carried in `features.optics-qsfp-dd` and the face does not mark
+    those ports, because the metal does not.
+- what: dc-supply
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The DC supply. The datasheet's ordering table lists QFX5241-PWR-DC-AO as "QFX5240 Series-2RU DC PSU, Air Out";
+    the QFX5240 hardware guide describes AC supplies only and no photograph of a DC build is held.
+- what: management-lamps
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The lamps of the management jack. Guide figure 14 and Table 10 describe lamps on the management port; the
+    photograph shows them at the corners of the upper jack. The jack is drawn with the library's lamped jack.
+- what: clock-connector-type
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The connector type of the 1PPS and 10MHz jacks. The guide calls them "clock input and output connectors"; the
+    photograph shows gold coaxial jacks 6 mm across, drawn as the library's SMA jack. Estimated.
+- what: rating-labels
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    The rating label of each supply and the serial number labels (figures 45 to 48). Not drawn.
+- what: ears-and-kits
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The rack ears' positions and the rack kit's contract. The guide names QFX5240-2U-4PRMK and no kit contract exists
+    in the library; none is written here.
+groups:
+  qsfpdd-800g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp-dd, speed: 800g}
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: Ports 64 and 65 as printed, rel-pos carrying the printed number, since the origin token cannot express a block that starts at 64.
+  qsfpdd-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: fault, color: '#f59e0b'}, {name: hardware-failure, color: '#ef4444'}]
+    description: One RGB lamp per network port, left of each cage (guide Table 8).
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the out-of-band cluster at the right of the port side - an RJ-45 console port, an RJ-45 management port, an RJ-45
+      time-of-day port, a USB port and the recessed reset button. Five kinds, one purpose: reaching, timing and
+      recovering the switch when the data plane cannot.
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the 1 PPS and 10 MHz connectors, a pair of coaxial jacks for the switch's timing references
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The three chassis lamps ID, SYS and ALM (guide Table 9).
+  grounding:
+    term: Stud
+    role: furniture
+    index-origin: 0
+    description: the protective earthing terminal, a pad with two M6 studs at the left of the rear (guide, Ground the QFX5240 Switch)
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '3+1'
+      redundancy-note: >-
+        QFX5240 hardware guide, Component Redundancy: four fan modules of two rotors each, N+1 redundancy at rotor
+        level; the fan modules are hot-insertable and hot-removable
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: two supplies, 1+1; hot-removable and hot-insertable without shutting the switch down (guide, Component Redundancy)
+views:
+  front:
+    size: {w: 438.4, h: 87.9}
+    panel:
+      decor:
+      - {id: vent-top, at: [12.0, 3.0], size: [393.5, 6.4], pattern: vent, pattern-pitch: [2.9, 1.6], vent: 1}
+      - {id: vent-bottom, at: [12.0, 79.0], size: [393.5, 7.6], pattern: vent, pattern-pitch: [2.9, 1.6], vent: 1}
+      - {id: vent-left, at: [0.8, 6.0], size: [4.6, 72.0], pattern: vent, pattern-pitch: [2.0, 1.6], vent: 1}
+      - {id: vent-right, at: [434.1, 13.4], size: [4.2, 66.5], pattern: vent, pattern-pitch: [2.0, 1.6], vent: 1}
+      - {id: vent-clock, at: [395.7, 57.0], size: [8.6, 23.0], pattern: vent, pattern-pitch: [2.9, 1.6], vent: 1}
+      - {id: tab-serial, at: [405.4, 83.3], size: [17.0, 2.7], fill: '#6ea301'}
+      cutouts:
+      - {block: qsfpdd-800g}
+      - {id: port-64, at: [397.7, 15.1], size: [14.5, 10.0]}
+      - {id: port-65, at: [397.7, 30.9], size: [14.5, 10.0]}
+      - {id: led-id, at: [398.2, 47.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [404.0, 47.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-alm, at: [410.2, 47.0], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt, at: [415.0, 20.4], size: [15.8, 13.2]}
+      - {id: usb, at: [416.9, 34.9], size: [12.0, 4.5]}
+      - {id: console, at: [415.0, 52.2], size: [15.8, 13.2]}
+      - {id: tod, at: [415.0, 67.4], size: [15.8, 13.2]}
+      - {id: reset-btn, at: [397.2, 49.2], size: [4.0, 4.0], shape: circle}
+      - {id: out-1pps, at: [406.0, 53.5], size: [6.35, 6.35], shape: circle}
+      - {id: out-10m, at: [406.0, 61.9], size: [6.35, 6.35], shape: circle}
+    silkscreen:
+    - {block: qsfpdd-800g}
+    - {id: silk-arrow-0, at: [16.15, 11.1], mark: arrow-up, size: 2.0, fill: &ink '#e6e8ec', for: port-0}
+    - {id: silk-arrow-1, at: [26.95, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-1}
+    - {id: silk-arrow-2, at: [16.15, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-2}
+    - {id: silk-arrow-3, at: [26.95, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-3}
+    - {id: silk-arrow-4, at: [40.16, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-4}
+    - {id: silk-arrow-5, at: [50.96, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-5}
+    - {id: silk-arrow-6, at: [40.16, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-6}
+    - {id: silk-arrow-7, at: [50.96, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-7}
+    - {id: silk-arrow-8, at: [64.17, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-8}
+    - {id: silk-arrow-9, at: [74.97, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-9}
+    - {id: silk-arrow-10, at: [64.17, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-10}
+    - {id: silk-arrow-11, at: [74.97, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-11}
+    - {id: silk-arrow-12, at: [88.18, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-12}
+    - {id: silk-arrow-13, at: [98.98, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-13}
+    - {id: silk-arrow-14, at: [88.18, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-14}
+    - {id: silk-arrow-15, at: [98.98, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-15}
+    - {id: silk-arrow-16, at: [112.19, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-16}
+    - {id: silk-arrow-17, at: [122.99, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-17}
+    - {id: silk-arrow-18, at: [112.19, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-18}
+    - {id: silk-arrow-19, at: [122.99, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-19}
+    - {id: silk-arrow-20, at: [136.20, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-20}
+    - {id: silk-arrow-21, at: [147.00, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-21}
+    - {id: silk-arrow-22, at: [136.20, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-22}
+    - {id: silk-arrow-23, at: [147.00, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-23}
+    - {id: silk-arrow-24, at: [160.21, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-24}
+    - {id: silk-arrow-25, at: [171.01, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-25}
+    - {id: silk-arrow-26, at: [160.21, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-26}
+    - {id: silk-arrow-27, at: [171.01, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-27}
+    - {id: silk-arrow-28, at: [184.22, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-28}
+    - {id: silk-arrow-29, at: [195.02, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-29}
+    - {id: silk-arrow-30, at: [184.22, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-30}
+    - {id: silk-arrow-31, at: [195.02, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-31}
+    - {id: silk-arrow-32, at: [208.23, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-32}
+    - {id: silk-arrow-33, at: [219.03, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-33}
+    - {id: silk-arrow-34, at: [208.23, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-34}
+    - {id: silk-arrow-35, at: [219.03, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-35}
+    - {id: silk-arrow-36, at: [232.24, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-36}
+    - {id: silk-arrow-37, at: [243.04, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-37}
+    - {id: silk-arrow-38, at: [232.24, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-38}
+    - {id: silk-arrow-39, at: [243.04, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-39}
+    - {id: silk-arrow-40, at: [256.25, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-40}
+    - {id: silk-arrow-41, at: [267.05, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-41}
+    - {id: silk-arrow-42, at: [256.25, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-42}
+    - {id: silk-arrow-43, at: [267.05, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-43}
+    - {id: silk-arrow-44, at: [280.26, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-44}
+    - {id: silk-arrow-45, at: [291.06, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-45}
+    - {id: silk-arrow-46, at: [280.26, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-46}
+    - {id: silk-arrow-47, at: [291.06, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-47}
+    - {id: silk-arrow-48, at: [304.27, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-48}
+    - {id: silk-arrow-49, at: [315.07, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-49}
+    - {id: silk-arrow-50, at: [304.27, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-50}
+    - {id: silk-arrow-51, at: [315.07, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-51}
+    - {id: silk-arrow-52, at: [328.28, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-52}
+    - {id: silk-arrow-53, at: [339.08, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-53}
+    - {id: silk-arrow-54, at: [328.28, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-54}
+    - {id: silk-arrow-55, at: [339.08, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-55}
+    - {id: silk-arrow-56, at: [352.29, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-56}
+    - {id: silk-arrow-57, at: [363.09, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-57}
+    - {id: silk-arrow-58, at: [352.29, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-58}
+    - {id: silk-arrow-59, at: [363.09, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-59}
+    - {id: silk-arrow-60, at: [376.30, 11.1], mark: arrow-up, size: 2.0, fill: *ink, for: port-60}
+    - {id: silk-arrow-61, at: [387.10, 11.1], mark: arrow-down, size: 2.0, fill: *ink, for: port-61}
+    - {id: silk-arrow-62, at: [376.30, 76.5], mark: arrow-up, size: 2.0, fill: *ink, for: port-62}
+    - {id: silk-arrow-63, at: [387.10, 76.5], mark: arrow-down, size: 2.0, fill: *ink, for: port-63}
+    - {id: silk-n64, at: [400.0, 44.2], text: '64', font-size: 2.0, anchor: end, fill: *ink, for: port-64}
+    - {id: silk-arrow-64, at: [401.8, 43.3], mark: arrow-up, size: 2.0, fill: *ink, for: port-64}
+    - {id: silk-arrow-65, at: [407.2, 43.3], mark: arrow-down, size: 2.0, fill: *ink, for: port-65}
+    - {id: silk-n65, at: [408.9, 44.2], text: '65', font-size: 2.0, anchor: start, fill: *ink, for: port-65}
+    - {id: silk-id, at: [399.2, 46.2], text: ID, font-size: 1.5, anchor: middle, fill: *ink, for: led-id}
+    - {id: silk-sys, at: [405.0, 46.2], text: SYS, font-size: 1.5, anchor: middle, fill: *ink, for: led-sys}
+    - {id: silk-alm, at: [411.2, 46.2], text: ALM, font-size: 1.5, anchor: middle, fill: *ink, for: led-alm}
+    - {id: silk-rst, at: [399.2, 54.4], text: RST, font-size: 1.5, anchor: middle, fill: *ink, for: reset-btn}
+    - {id: silk-mgmt, at: [422.9,18.8], text: MGMT, font-size: 1.8, anchor: middle, fill: *ink, for: mgmt}
+    - {id: silk-usb-mark, at: [422.9,43.0], mark: usb, size: 3.0, fill: *ink, for: usb}
+    - {id: silk-1pps, at: [409.2, 52.5], text: 1PPS, font-size: 1.8, anchor: middle, fill: *ink, for: out-1pps}
+    - {id: silk-10m, at: [409.2, 71.0], text: 10MHz, font-size: 1.8, anchor: middle, fill: *ink, for: out-10m}
+    - {id: silk-con, at: [422.9,52.0], text: CON, font-size: 1.8, anchor: middle, fill: *ink, for: console}
+    - {id: silk-tod, at: [422.9, 82.4], text: TOD, font-size: 1.8, anchor: middle, fill: *ink, for: tod}
+    - {id: silk-model, at: [422.9,10.6], text: QFX5240-64QD, font-size: 2.6, anchor: middle, fill: *ink, for: chassis}
+    components:
+      blocks:
+      - &band1
+        id: qsfpdd-800g
+        ref: std/qsfp-dd@1
+        at: [11.35, 13.5]
+        count: 2
+        rows: 2
+        pitch: 24.01
+        row-pitch: 17.4
+        number-from: 0
+        cutouts: true
+        rotate: {bottom: 180}
+        numerals: {dx-by-row: [3.0, 17.5], anchor-by-row: [end, start], dy-top: -1.4, dy-bottom: -18.8, font-size: 2.6, fill: *ink}
+        led: {ref: common/led-dot@1, id-format: 'led-port-{n}', dx: -2.85, dy: 4.0, group: qsfpdd-leds}
+      - &band2
+        <<: *band1
+        at: [11.35, 47.1]
+        number-from: 2
+        numerals: {dx-by-row: [3.0, 17.5], anchor-by-row: [end, start], dy-top: 30.4, dy-bottom: 13.0, font-size: 2.6, fill: *ink}
+      - {<<: *band1, at: [35.36, 13.5], number-from: 4}
+      - {<<: *band2, at: [35.36, 47.1], number-from: 6}
+      - {<<: *band1, at: [59.37, 13.5], number-from: 8}
+      - {<<: *band2, at: [59.37, 47.1], number-from: 10}
+      - {<<: *band1, at: [83.38, 13.5], number-from: 12}
+      - {<<: *band2, at: [83.38, 47.1], number-from: 14}
+      - {<<: *band1, at: [107.39, 13.5], number-from: 16}
+      - {<<: *band2, at: [107.39, 47.1], number-from: 18}
+      - {<<: *band1, at: [131.4, 13.5], number-from: 20}
+      - {<<: *band2, at: [131.4, 47.1], number-from: 22}
+      - {<<: *band1, at: [155.41, 13.5], number-from: 24}
+      - {<<: *band2, at: [155.41, 47.1], number-from: 26}
+      - {<<: *band1, at: [179.42, 13.5], number-from: 28}
+      - {<<: *band2, at: [179.42, 47.1], number-from: 30}
+      - {<<: *band1, at: [203.43, 13.5], number-from: 32}
+      - {<<: *band2, at: [203.43, 47.1], number-from: 34}
+      - {<<: *band1, at: [227.44, 13.5], number-from: 36}
+      - {<<: *band2, at: [227.44, 47.1], number-from: 38}
+      - {<<: *band1, at: [251.45, 13.5], number-from: 40}
+      - {<<: *band2, at: [251.45, 47.1], number-from: 42}
+      - {<<: *band1, at: [275.46, 13.5], number-from: 44}
+      - {<<: *band2, at: [275.46, 47.1], number-from: 46}
+      - {<<: *band1, at: [299.47, 13.5], number-from: 48}
+      - {<<: *band2, at: [299.47, 47.1], number-from: 50}
+      - {<<: *band1, at: [323.48, 13.5], number-from: 52}
+      - {<<: *band2, at: [323.48, 47.1], number-from: 54}
+      - {<<: *band1, at: [347.49, 13.5], number-from: 56}
+      - {<<: *band2, at: [347.49, 47.1], number-from: 58}
+      - {<<: *band1, at: [371.5, 13.5], number-from: 60}
+      - {<<: *band2, at: [371.5, 47.1], number-from: 62}
+      placements:
+      - {block: qsfpdd-800g}
+      - {ref: std/sfp@1, id: port-64, at: [397.7, 15.1], group: sfp-plus, rel-pos: 64}
+      - {ref: std/sfp@1, id: port-65, at: [397.7, 30.9], rotate: 180, group: sfp-plus, rel-pos: 65}
+      - {ref: common/led-dot@1, id: led-id, at: [398.2, 47.0], group: status-leds, rel-pos: 0, for: chassis,
+         states: ['off', {name: beacon, color: '#3b82f6', behavior: blinking}],
+         description: 'Table 9 - the beacon (identification) lamp'}
+      - {ref: common/led-dot@1, id: led-sys, at: [404.0, 47.0], group: status-leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: junos, color: '#22c55e'}],
+         description: 'Table 9 - the system status lamp'}
+      - {ref: common/led-dot@1, id: led-alm, at: [410.2, 47.0], group: status-leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'}],
+         description: 'Table 9 - the chassis alarm or fault lamp'}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [415.0, 20.4], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/usb-a@1, id: usb, at: [416.9, 34.9], group: mgmt, rel-pos: 4, attrs: {media: usb-a, usb: '3.0'}}
+      - {ref: std/rj45@2, id: console, at: [415.0, 52.2], group: mgmt, rel-pos: 0,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/rj45@2, id: tod, at: [415.0, 67.4], group: mgmt, rel-pos: 2,
+         attrs: {media: rj45-tod, role: time-of-day}}
+      - {ref: common/reset-button@1, id: reset-btn, at: [397.2, 49.2], group: mgmt, rel-pos: 3, for: chassis,
+         attrs: {function: reset}}
+      - {ref: std/sma@1, id: out-1pps, at: [406.0, 53.5], group: timing, rel-pos: 0, attrs: {media: coax-sma, role: timing-out}}
+      - {ref: std/sma@1, id: out-10m, at: [406.0, 61.9], group: timing, rel-pos: 1, attrs: {media: coax-sma, role: timing-out}}
+    regions:
+    - {id: logo-zone, at: [411.9, 1.6], size: {w: 21.8, h: 7.2}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 438.4, h: 87.9}
+    silkscreen:
+    - {id: silk-psu-mark-0, at: [4.1, 6.2], mark: arrow-up, size: 2.0, fill: *ink, for: psu-0}
+    - {id: silk-psu-0-power, at: [7.6, 6.2], path: 'M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2', fill: *ink, for: psu-0}
+    - {id: silk-psu-0, at: [10.8, 7.2], text: '0', font-size: 2.6, anchor: middle, fill: *ink, for: psu-0}
+    - {id: silk-psu-mark-1, at: [4.1, 10.6], mark: arrow-down, size: 2.0, fill: *ink, for: psu-1}
+    - {id: silk-psu-1-power, at: [7.6, 10.6], path: 'M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2', fill: *ink, for: psu-1}
+    - {id: silk-psu-1, at: [10.8, 11.6], text: '1', font-size: 2.6, anchor: middle, fill: *ink, for: psu-1}
+    - {id: silk-ground, at: [6.4, 24.5], mark: ground, size: 4.0, fill: *ink, for: ground-pad}
+    - {id: silk-fan-0-mark, at: [91.9, 36.6], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: *ink, for: fan-0}
+    - {id: silk-fan-0, at: [91.9, 41.4], text: '0', font-size: 2.6, anchor: middle, fill: *ink, for: fan-0}
+    - {id: silk-fan-0-arrow, at: [91.9, 44.8], mark: arrow-right, size: 1.8, fill: *ink, for: fan-0}
+    - {id: silk-fan-1-mark, at: [177.6, 36.6], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: *ink, for: fan-1}
+    - {id: silk-fan-1, at: [177.6, 41.4], text: '1', font-size: 2.6, anchor: middle, fill: *ink, for: fan-1}
+    - {id: silk-fan-1-arrow, at: [177.6, 44.8], mark: arrow-right, size: 1.8, fill: *ink, for: fan-1}
+    - {id: silk-fan-2-mark, at: [263.3, 36.6], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: *ink, for: fan-2}
+    - {id: silk-fan-2, at: [263.3, 41.4], text: '2', font-size: 2.6, anchor: middle, fill: *ink, for: fan-2}
+    - {id: silk-fan-2-arrow, at: [263.3, 44.8], mark: arrow-right, size: 1.8, fill: *ink, for: fan-2}
+    - {id: silk-fan-3-mark, at: [349.0, 36.6], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: *ink, for: fan-3}
+    - {id: silk-fan-3, at: [349.0, 41.4], text: '3', font-size: 2.6, anchor: middle, fill: *ink, for: fan-3}
+    - {id: silk-fan-3-arrow, at: [349.0, 44.8], mark: arrow-right, size: 1.8, fill: *ink, for: fan-3}
+    components:
+      bays:
+      - {id: psu-0, at: [15.0, 2.9], size: {w: 73.7, h: 39.5}, group: psus, rel-pos: 0,
+         accepts: ['juniper/qfx5240-pwr-ac-ao@1'], default: 'juniper/qfx5240-pwr-ac-ao@1'}
+      - {id: psu-1, at: [15.0, 45.7], size: {w: 73.7, h: 39.5}, group: psus, rel-pos: 1,
+         accepts: ['juniper/qfx5240-pwr-ac-ao@1'], default: 'juniper/qfx5240-pwr-ac-ao@1'}
+      - {id: fan-0, at: [94.9, 5.3], size: {w: 80.3, h: 80.0}, group: fans, rel-pos: 0,
+         accepts: ['juniper/qfx5240-2u-fanao@1'], default: 'juniper/qfx5240-2u-fanao@1'}
+      - {id: fan-1, at: [180.6, 5.3], size: {w: 80.3, h: 80.0}, group: fans, rel-pos: 1,
+         accepts: ['juniper/qfx5240-2u-fanao@1'], default: 'juniper/qfx5240-2u-fanao@1'}
+      - {id: fan-2, at: [266.3, 5.3], size: {w: 80.3, h: 80.0}, group: fans, rel-pos: 2,
+         accepts: ['juniper/qfx5240-2u-fanao@1'], default: 'juniper/qfx5240-2u-fanao@1'}
+      - {id: fan-3, at: [352.0, 5.3], size: {w: 80.3, h: 80.0}, group: fans, rel-pos: 3,
+         accepts: ['juniper/qfx5240-2u-fanao@1'], default: 'juniper/qfx5240-2u-fanao@1'}
+      placements:
+      - {ref: common/ground-stud-pair-5-8-m6@1, id: ground-pad, at: [-7.5, 41.25], rotate: 90, for: chassis, group: grounding, rel-pos: 0}
+  top:
+    size: {w: 438.4, h: 648.2}
+    empty: >-
+      Not drawn by any source held. The guide gives no figure of the lid, and the photographs are straight-on of the
+      front and rear only.
+  bottom:
+    size: {w: 438.4, h: 648.2}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no underside, and the photographs are of the front and
+      rear only.
+  left:
+    size: {w: 648.2, h: 87.9}
+    empty: >-
+      Not drawn by any source held. The mounting figures show the brackets on a side wall in perspective only, with
+      no scale from which a hole could be placed.
+  right:
+    size: {w: 648.2, h: 87.9}
+    empty: >-
+      Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  ac-f2b:
+    kind: orderable
+    default: true
+    description: >-
+      QFX5240-64QD-AO: two 3000 W AC supplies (QFX5240-PWR-AC-AO) and four front-to-back fan modules
+      (QFX5240-2U-FANAO), airflow out (guide Tables 3 and 6).
+    part-numbers:
+      QFX5240-64QD-AO: {}
+  chas:
+    kind: orderable
+    description: >-
+      QFX5240-64QD-CHAS, the spare chassis, shipped without power supplies or fan modules ("Spare chassis without PSU
+      and fans"). The supply and fan bays are shown open.
+    bays: {psu-0: '', psu-1: '', fan-0: '', fan-1: '', fan-2: '', fan-3: ''}
+    part-numbers:
+      QFX5240-64QD-CHAS: {}
+datasheet:
+  title: 'Juniper QFX5240 line of Switches datasheet (a00150802ENW, Rev. 2, March 2026)'
+  url: https://www.hpe.com/psnow/doc/a00150802enw
+  sha256: 9afbc6d84c19d850651c41a13d881971676c550f1ee4d60a4eb8e71223e09de1
+references:
+- title: 'QFX5240 Switch Hardware Guide (published 2026-07-10)'
+  url: https://www.juniper.net/documentation/us/en/hardware/qfx5240/qfx5240.pdf
+  sha256: 966c5ffe869762814de2507c99f8eddae1f27351a5eb766e43b06c9b247172d5

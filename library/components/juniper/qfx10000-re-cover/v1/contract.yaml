@@ -1,0 +1,40 @@
+format: 1
+kind: module
+name: qfx10000-re-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Routing and control board slot cover for the QFX10008 and QFX10016, the "RCB cover" or
+  "RCB/SSD cover" of the configuration tables. The base configuration ships one over the second
+  slot. A plain horizontal panel with a pull at each end.
+attrs:
+  model: QFX10000 RCB cover
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an
+    opening: it has no indicator to light and no condition to report, so this part draws no
+    elements at all. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    borrowed - fills the 389.0 by 38.1 mm RCB aperture the devices declare, which is the aperture
+    juniper/jnp10k-re1@2 occupies on the MX10008 and MX10016. The QFX guides give no dimension for
+    the RCB or its cover.
+  part-number: >-
+    The QFX10008 guide's Table 2 lists "One RCB/SSD cover" (QFX10008-BASE), "One RCB/SSD covers"
+    (BASE-H) and "Two RCB/SSD cover" (REDUND-H); the QFX10016 guide's Table 3 lists "One RCB cover, SDD
+    cover". None prints a part number, so the cover keeps a name of its own and is not
+    juniper/jnp10k-re-blnk@1.
+  face: >-
+    estimated - no figure or photograph of the cover was obtained. The art follows the MX10000 RCB
+    cover already in the library: a plain light panel with a pull at each end, at the aperture's own
+    size. The outline is sourced and the detail is not.
+states: [absent]
+size:
+  w: 389.0
+  h: 38.1
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  The RCB bay these chassis declare, borrowed from juniper/mx10008 and juniper/mx10016. Nothing
+  measured the cover.
+skins: [default]

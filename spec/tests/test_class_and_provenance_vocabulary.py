@@ -39,10 +39,19 @@ MERGED = {"cooling": "fan", "fastener": "screw", "panel": "display",
           "connector": "inlet"}
 
 
+def read_contracts(library=LIB):
+    """Every PLACED component and module. A `kind: kit` (#905) is a set a device
+    names from `chassis.kits`: it has no `class`, so it is not in this census (its
+    own census is test_kit_census.py). A contract of any other kind with no
+    `class` still reads as `None` here and fails the sweeps below."""
+    docs = {f"{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}": yaml.safe_load(c.read_text()) or {}
+            for c in sorted(pathlib.Path(library).glob("components/*/*/v*/contract.yaml"))}
+    return {ref: d for ref, d in docs.items() if d.get("kind") != "kit"}
+
+
 @pytest.fixture(scope="module")
 def contracts():
-    return {f"{c.parts[-4]}/{c.parts[-3]}@{c.parts[-2][1:]}": yaml.safe_load(c.read_text()) or {}
-            for c in sorted(LIB.glob("components/*/*/v*/contract.yaml"))}
+    return read_contracts()
 
 
 @pytest.fixture(scope="module")

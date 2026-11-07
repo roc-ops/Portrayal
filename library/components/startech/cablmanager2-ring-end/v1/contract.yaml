@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: cablmanager2-ring-end
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  A removable ABS D-ring of the StarTech.com CABLMANAGER2 1U manager seen from the front, one of
+  the two at the ends of the panel - a loop 40 mm across that stands 76.6 mm out of its seat
+  with its plane across the panel, as the drawing draws it, so a bundle runs up and down
+  through it. It ships fitted and comes off
+provenance:
+  size: >-
+    drawing - CABLMANAGER2_Diagram.pdf (StarTech.com, a raster of 967 x 681 px): the two end
+    rings are drawn in the plan view face-on, 38.7 mm across the panel and 76 mm out of it,
+    with the loop's tip curled into a hook, and in the front view as slots 40.6 by 10 mm.
+    Scaled at 2.586 px/mm against the 482.6; the 76.6 is the end view's dimension. The 40 by 10
+    here is the slot, and the ring's loop is as wide as its seat. Estimated, bar the 76.6.
+  turned: >-
+    drawing - the datasheet says "the hook on either end of the panel can be turned 90 to
+    accommodate horizontal or vertical rack cabling". The drawing draws the three middle rings
+    edge-on and the two end rings face-on, a quarter turn apart, so the end rings are drawn as the
+    drawing shows them and the other turn is not drawn. The format cannot turn a ring, so the
+    turn is a gap.
+  relief: >-
+    drawing - the plan view: the loop stands 76.6 mm out of the plate's back face, so 75.4 out of
+    its front face with a 1.2 mm sheet (estimated). Built as a frame of plates with square
+    corners where the real loop is rounded: a bar down each side, a base 3.0 mm thick on the
+    seat and the closed end at the tip, so the hooked tip's gap is not drawn. The wall is 3.0
+    mm, estimated.
+  guide: >-
+    estimated - the clear opening inside the frame, seen looking up the panel, which is the run
+    for these two rings: 34.0 mm across the panel (the 40.0 less a 3.0 bar each side) and 69.4
+    mm out of it (the 75.4 less the 3.0 base and the 3.0 end).
+  guide-depth: >-
+    estimated - the loop is 10.0 mm along the run, the slot's width in the front view.
+  removable: >-
+    datasheet - "5 removable ABS plastic D-Ring hooks" (cablmanager2_datasheet.pdf). The part
+    is a `mounts` part, so the explorer pulls it off its seat; the rings ship fitted.
+  color: >-
+    datasheet - "Color: Black", and ABS for the hooks. The drawing is line work, so the shade is
+    this library's render, a lighter value than the panel so the ring reads against it.
+size: {w: 40.0, h: 10.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: ABS}
+guide: {kind: ring, aperture: {w: 34.0, h: 69.4}, run: y, depth: 10.0}
+elements:
+  back: {at: [0.0, 0.0], size: [40.0, 10.0], class: bezel}
+  bar-left: {at: [0.0, 0.0], size: [3.0, 10.0], class: bezel}
+  bar-right: {at: [37.0, 0.0], size: [3.0, 10.0], class: bezel}
+  tip: {at: [0.0, 0.0], size: [40.0, 10.0], class: bezel}
+relief:
+  features:
+    - {node: back, out: 3.0, color: '#111315', confidence: estimated, source: 'the plan view of the CABLMANAGER2 drawing, the loop standing on its seat; the thickness is estimated'}
+    - {node: bar-left, out: 75.4, color: '#111315', confidence: drawing, source: 'the same view, the loop 76.6 mm out of the plate back face'}
+    - {node: bar-right, out: 75.4, color: '#0d0f10', confidence: drawing, source: 'the same view'}
+    - {node: tip, lift: 72.4, out: 75.4, color: '#101214', confidence: estimated, source: 'the same view, the closed end of the loop; the hook at its tip is not drawn'}
+skins: [default]

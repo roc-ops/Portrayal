@@ -1,0 +1,96 @@
+format: 1
+kind: module
+name: jpsu-850w-ac-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-850W-AC-AFO, an 850 W AC power supply with front-to-back airflow (AIR OUT). It is a
+  field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The QFX5120
+  hardware guide says the QFX5120-48YM takes it. It seats two, in slots 0 and 1 at the right of the
+  rear. The 48T takes 850 W supplies only in a high-voltage form, which is a different part. The face
+  carries three lamps labelled AC, DC and !. It also has a Juniper Gold handle and a black ejector
+  lever. Its C14 appliance inlet is turned on its side, with a wire power cord retainer over it. The
+  back-to-front sibling is JPSU-850W-AC-AFI. AC and DC supplies, and supplies of different airflow
+  direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-850W-AC-AFO
+  role: ac-power-supply
+  power-output-w: 850
+  airflow: front-to-back
+  input: 100 to 240 VAC, 50 to 60 Hz, 7.5 A at 100 VAC or 3 A at 240 VAC (QFX5120-48YM, guide Table 30)
+provenance:
+  size: >-
+    estimated - the guide's AC supply table gives this supply a weight (2.3 lb) and no size, and no
+    photograph of the AC unit was found: the studio photograph of the QFX5120-48YM shows
+    DC supplies. The bay it seats in measures 54.8 mm across on that photograph (3.24 px/mm, so
+    about 0.3 mm a pixel), which agrees with the 650 W supply's 54.6 mm in the 48Y; the 40.2 mm
+    height is that supply's. Both are the bay's, not a measurement of this module.
+  depth: >-
+    not stated; the guide's figure is an isometric drawing with no scale.
+  face: >-
+    drawing - the guide's straight-on figure of this supply's LEDs shows the same arrangement as the
+    650 W supply: a vent grid at the left, three lamps in a column labelled AC, DC and !, a tall
+    handle beside them, the inlet turned on its side and a lever at the lower right, with a wire
+    cord retainer looped over the inlet that the 650 W supply lacks. The positions are those of
+    juniper/jpsu-650w-ac-ao@1, carried over because the figure is schematic; the retainer is drawn
+    as a loop over the inlet's upper part.
+  power-output-w: >-
+    datasheet - the part number and the guide's text call it an 850-W supply; the guide gives no
+    separate output rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, LEDs on the AC Power Supplies (Table 34), which covers the 48YM supply: AC
+    green when the supply receives power, DC green when it sends power out correctly, the fault
+    lamp amber on an error.
+  airflow: >-
+    datasheet - guide, airflow direction in AC power supplies (Table 26): JPSU-850W-AC-AFO is
+    front-to-back and carries the label AIR OUT and a Juniper Gold handle.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [24.5, 8.7], rotate: 270}
+elements:
+  led-ac:
+    at: [4.4, 20.1]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [4.4, 26.5]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [4.4, 32.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [18.2, 0.8]
+    size: [9.7, 39.0]
+    class: latch
+  lever:
+    at: [49.0, 19.9]
+    size: [5.8, 20.3]
+    class: latch
+size:
+  w: 54.8
+  h: 40.2
+size-confidence: {w: estimated, h: estimated}
+size-notes: the bay's width on the 48YM photograph (3.24 px/mm) and the 650 W supply's height; no document or photograph gives this module's own size
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#e8731f'
+    confidence: estimated
+    source: photo of the 650 W sibling - the handle stands proud of the face; not measured

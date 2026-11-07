@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: r6615-riser-3a
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 3A of the PowerEdge R6615 - slot 3 on dell/riser-3-lp-cage-16g@1, fitted in riser configurations 1 and 8
+attrs:
+  riser: '3A'
+  appears-in: 'riser configurations 1 and 8'
+  power-absent: not-published
+  slot-3: 'x16, low profile, half length, processor 1, PCIe Gen4'
+provenance:
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT (ISM figure 119, 'Riser 3A',
+    slot 3), so it is a module with `bays`.
+  slots: >-
+    datasheet - R6615 ISM table 16 and table 97: slot 3 low profile, half
+    length, x16 (Gen4), processor 1 - the R660's riser 3A is wired to processor
+    2, which this one-socket server does not have. Table 17 (technical guide
+    table 11) lists the riser in configurations 1 and 8.
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R6615 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  face: >-
+    borrowed - composed from dell/riser-3-lp-cage-16g@1, the metal of the
+    R660's riser 3A.
+  size: >-
+    borrowed - the cage's extent, 92.00 x 19.80.
+  seating: >-
+    borrowed - the slot bay is dell/riser-3a-16g@1's.
+  body: >-
+    borrowed - the board and connector are dell/riser-3a-16g@1's.
+  plan: >-
+    borrowed - dell/riser-3-plan-16g@1, the R660's riser 3 outline, which lands
+    on the R6615's figure 11 at matched scale (x 141 to 288 against the figure's
+    140 to 290 px at 0.8 of 2.195 px/mm).
+size: {w: 92.00, h: 19.80, d: 219.8}
+size-confidence: {w: borrowed, h: borrowed, d: borrowed}
+body:
+  depth: 219.8
+  color: '#4a5057'
+  boxes:
+  - {id: pcb, at: [4.00, -0.30], size: [1.60, 33.20],
+     from: 21.6, depth: 198.2, color: '#1f5138',
+     confidence: borrowed, source: "borrowed from dell/riser-3a-16g@1 (Dell's R660 service model, PE_R660_L_Riser_3A Assembly Body_2_58, 1.6 x 33.2 x 198.2)"}
+  - {id: slot-3-connector, at: [6.20, 0.40], size: [10.00, 8.70],
+     from: 44.2, depth: 89.0, color: '#15171b',
+     confidence: borrowed, source: "borrowed from dell/riser-3a-16g@1 (Dell's R660 service model, Body_1_76, 10.0 x 8.7 x 89.0 - high, on the board's right face)"}
+plan: {ref: dell/riser-3-plan-16g@1}
+parts:
+  - {ref: dell/riser-3-lp-cage-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-3:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
+    plan: {at: [14.90, 0.00]}
+    behind: true
+    at: [-2.10, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: ex8200-pwr-ac3k
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8200-PWR-AC3K, the 3000 W AC power supply of the EX8200 chassis. It delivers 3000 W from a
+  high-voltage line only (200 to 240 VAC), at 52 VDC; the low-voltage line is not supported. The face is the
+  2000 W supply's: a C19 appliance inlet, an ENABLE switch, the INPUT OK, OUTPUT OK and FAIL lamps, a vent field, a
+  handle and a captive screw. Up to six fit an EX8208 or EX8216, in slots PSU 0 to PSU 5. Each has its own fan and
+  a dedicated AC feed, and is hot-insertable and hot-removable. Never mix them with DC supplies.
+attrs:
+  role: ac-power-supply
+  power-output-w: 3000
+  airflow: front-to-back
+  input: 200 to 240 VAC (16 A), 50 to 60 Hz; output 52 VDC; low-voltage line not supported
+part-numbers:
+  EX8200-PWR-AC3K: {part: EX8200-PWR-AC3K}
+provenance:
+  sources: >-
+    datasheet - EX8208 Switch Hardware Guide (PDF dated 2020-12-16): AC Power Supply Description, Figures 10 to 12,
+    Table 25 (the lamps) and Table 27 (the electrical figures). EX8208 Ethernet Switch Datasheet (1000261-022-EN,
+    June 2015) and EX8216 Ethernet Switch Datasheet (1000283-021-EN, June 2015): "EX8200-PWR-AC3K, AC power
+    supply, 3000 W at 220 V, redundant (AC power cords sold separately)". The guide's CLI name is EX8200-AC3K; the
+    datasheet's is carried.
+  size: >-
+    estimated - the 2000 W supply's, 70.1 x 104.0 mm: the guide draws one supply figure for both ratings (Figures
+    10 to 12 are captioned "AC Power Supply") and the slot is the same. No document dimensions either supply.
+  face: >-
+    estimated - as the EX8200-PWR-AC2K, read off Figure 3 of the EX8208 guide at 3.479 px/mm. The guide draws no
+    separate 3000 W face, so the two are drawn alike; this is not a reading of a 3000 W unit.
+  inlet: >-
+    datasheet - AC Power Cord Specifications: the coupler is C19 (IEC 60320), so the appliance inlet is the
+    registry's C20 (std/c20-inlet). Each inlet is 16 A rated.
+  power-output-w: >-
+    datasheet - guide Tables 4 and 27: 3000 W from a high-voltage line, 200 to 240 VAC; low-voltage input is
+    not supported. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 25: INPUT OK green on a high-voltage line (its yellow low-voltage state "applies only
+    to 2000 W AC power supplies"); OUTPUT OK green in range, yellow when the system has disabled the supply; FAIL
+    yellow steady for a failed supply, blinking when demand exceeds the supply.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [4.8, 11.3], attrs: {function: AC input}}
+elements:
+  switch:
+    at: [46.3, 12.4]
+    size: [10.9, 15.0]
+    class: switch
+  led-input-ok:
+    at: [43.3, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: high-line, color: '#22c55e'}]
+  led-output-ok:
+    at: [49.6, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: disabled, color: '#eab308'}]
+  led-fail:
+    at: [55.9, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: failed, color: '#eab308'}, {name: overloaded, color: '#eab308', behavior: blinking}]
+  handle:
+    at: [8.0, 94.5]
+    size: [22.0, 6.0]
+    class: latch
+  screw:
+    at: [44.0, 89.7]
+    size: [5.2, 5.2]
+    class: screw
+size:
+  w: 70.1
+  h: 104.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

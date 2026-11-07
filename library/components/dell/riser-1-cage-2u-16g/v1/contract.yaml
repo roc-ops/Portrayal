@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: riser-1-cage-2u-16g
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 1 cage of a 16th-generation 2U PowerEdge (R760) - two stacked full-height windows, a left lug with its blue thumbscrew; shared by risers 1B, 1P, 1Q and 1R
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - sheet metal; the riser that composes it carries the power record.
+  why-this-is-its-own-part: >-
+    THE METAL IS SHARED AND THE WIRING IS NOT. Risers 1B, 1P, 1Q and 1R (R760 ISM figures 208-213) differ in which PCIe generation and width each slot carries (ISM table 153) and, for 1P, in having one slot; none of that shows on the rear, so the face is drawn once here and each riser composes it. Authored for the R760 as the batch's shared 2U 16G part; the R660's riser cages (dell/riser-2-lp-cage-16g, dell/riser-1-fh-cage-16g) are 1U and are not reusable.
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 10, rear view of the system, the embedded 1529 x 528 image, read at 3.36 px/mm (the 434 body against the figure's width, and the height 86.8 against 291 px; the figure is not strictly orthographic - its aspect is about 2% out - so positions carry about 1.5 mm). Facts read, art not traced.
+  size: >-
+    photo-measured - 125.0 x 44.0 from rear-face x 0, y 1.0: the riser's extent from the left wall to the BOSS bay, from the lid edge to the top of the PSU bay (y 45.0).
+  windows: >-
+    photo-measured - the two windows 84.2 wide at x 26.8..111.0 and 11.3 tall at y 6.1..17.4 and 26.7..37.7 (rear-face y 7.1..18.4 and 27.7..38.7). Each is the visible part of a full-height bracket's vent field (dell/pcie-filler-fh-16g@1: vents from 27.08 to about 110, centred 68.5 in the bracket), so a bracket sits behind the cage with its centre line on the window's.
+  lug: >-
+    photo-measured - the left lug x 0..12.0 carries the blue thumbscrew that holds the riser; its knob is centred 5.5 from the wall and its diameter (about 8.0) is an estimate, the knob being foreshortened in the figure.
+  numerals: >-
+    NONE PRINTED IN THE FIGURE. ISM figure 10 resolves no slot numeral on riser 1 at 3.36 px/mm (a 3 mm glyph would span 10 px); slots are numbered by the ISM's tables (slot 1 lower, slot 2 upper, read from figures 208-211), not by anything drawn here.
+size: {w: 125.0, h: 44.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: plate
+    out: 1.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the cage's plate is the rear wall's own sheet metal. The R760 ISM's table 10 (chassis dimensions, PDF page 34) puts the rear wall at Zb, 700.7 mm ear to rear wall, and nothing but the supplies' handles past it (Zc, 736.29 mm ear to PSU handle); no ISM figure gives the cage's depth. The first pass drew the plate 20.0 proud by analogy with the 1U R660 risers' cages, which stood the cages 20 mm outside the chassis; Dell's R760 service model (r760.glb, `R760_ ExpansionCardRiser1`) is held but the depth was not read from it. Its windows are cut through it, so a bracket's face is seen down them.
+  - node: flange-cover
+    out: 19.3
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - carried from Dell's R660 service model (r660.glb), which has the pieces of the low-profile risers' cages over their flange ends reach 19.2 to 19.8 past the plane the supplies' faces sit in (see dell/riser-2-lp-cage-16g@1). Dell's R760 service model (r760.glb) is held but poses its risers out of the chassis, so it gives no reach to read: its supply runs z 490.5 to 861.8, so the wall is at 861.8 less the handle's 35.59, 826.2, and its riser 1 ends at 762.2 to 769.5, short of it. 19.3, riser 2A's lower figure, is drawn. This is the way dell/r740xd draws its riser's outer skin: dell/riser-1-shroud-14g@1 stands 17.76 proud of the panel plane, measured from the service model because the assembly has to stand off far enough to contain the L of a PCIe bracket's flange, and the cards and fillers sit behind it; the rest of the riser stays at the plate. Here too the plate stays 1.0 and the cover is the cage's plain metal from the windows' end to the outer face of the flanges' folds, the whole height of the cage. A filler's bracket gets it as a card's does, because it is the riser's metal and not the occupant's. The bracket's return flange, std/pcie-bracket-fh@2's 9.40 (PCIe CEM 5.0 figure 11-5), is inside it. This replaces an estimate of 10.26, the flange and one 0.86 sheet.
+skins: [default]

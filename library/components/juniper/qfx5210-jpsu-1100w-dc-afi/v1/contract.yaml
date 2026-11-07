@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: qfx5210-jpsu-1100w-dc-afi
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-1100W-DC-AFI, a 1100 W DC power supply with dual feeds and FRU-to-port (back-to-front) airflow (AIR
+  IN). It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The
+  QFX5210 hardware guide says the QFX5210-64C with DC supplies takes two, in slots 0 and 1 at the two ends
+  of the FRU panel. The face is that of the front-to-back DC supply with an azure blue handle. It has a
+  three-terminal block (the V+ terminals are shunted internally, as are the V-), one round bi-colour
+  lamp and a black ejector lever. The front-to-back sibling is JPSU-1100W-DC-AFO. AC and DC supplies, and
+  supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-1100W-DC-AFI
+  role: dc-power-supply
+  inlet: dc-terminal
+  power-output-w: 1100
+  airflow: back-to-front
+  input: rated -48 to -60 VDC, operating range -40 to -72 VDC, 25 A maximum (guide Table 21)
+provenance:
+  size: >-
+    estimated - the same bay as the AC supply (52.0 x 41.8 mm), read off the FRU-side photograph and Figure
+    8. No document gives a size.
+  depth: >-
+    not stated. Guide Figures 16 and 18 are isometric drawings with no scale.
+  face: >-
+    borrowed - juniper/qfx5210-jpsu-1100w-dc-afo@1, whose positions were read from the guide's Figure 19.
+    The guide's figures do not tell the two directions apart except by handle colour and label, and no
+    photograph of a DC build was held.
+  power-output-w: >-
+    datasheet - the guide's text says "the DC power supply in QFX5210 is 1100 W with dual feeds". An OUTPUT,
+    since a supply provides power.
+  leds: >-
+    datasheet - guide Table 23: blue blinking in standby, blue steady when the supply is sending out power
+    correctly, red steady on an error, alternating red and blue on a warning.
+  airflow: >-
+    datasheet - guide Table 3: JPSU-1100W-DC-AFI is FRUs-to-ports (back-to-front) airflow, CLI "DC AFI
+    11000W PSU", a misprint of 1100.
+  colour: >-
+    estimated - the guide says the supplies are colour-coded by airflow, all azure blue for AIR IN; no
+    photograph of this build was held, so a plain azure is drawn, not a paint reference.
+  connector: >-
+    the supply composes juniper/qfx5210-dc-header@1 as `dc-header`, the three-position DC power header of
+    the QFX5210 Switch Hardware Guide (Juniper Networks), Figure 19 (flat faceplate, "Terminal block") and Figure 32,
+    at the box of the `terminals` element. The guide names no maker or part number for it, so the part is a
+    declared stand-in (its own provenance). juniper/qfx5210-dc-plug@1, a stand-in for the cable connector that no
+    figure draws, mates it. The supply's own skin is not edited: it still draws the block, the shroud, the cells and
+    the numbers 1, 2 and 3, and the part draws the same shapes over them.
+  roles: >-
+    guide - Figures 19 and 32 print only the numbers 1, 2 and 3 beside the cells, top to bottom. NO POLE IS
+    PRINTED AT ANY CELL: the guide says the V+ terminals are shunted internally together, as are the V- terminals,
+    and calls V+ the return and V- the input, and does not say which cell is which. Table 21 gives a rated range
+    and no nominal.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. No cell has a printed role, and a port whose poles are a
+    connector's contacts is offered only where that path's part is itself the connector. A later change can state
+    the port once a document prints the roles; it is a minor on the devices that seat this supply.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-power:
+    at: [40.2, 35.2]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: blue, color: '#3b82f6'}
+    - {name: red, color: '#e5484d'}
+    - 'off'
+  latch:
+    at: [30.0, 1.8]
+    size: [7.0, 36.0]
+    class: latch
+  lever:
+    at: [46.4, 18.0]
+    size: [5.6, 20.1]
+    class: latch
+  terminals:
+    at: [6.8, 4.4]
+    size: [10.9, 29.9]
+    class: terminal
+parts:
+- {ref: juniper/qfx5210-dc-header@1, id: dc-header, at: [6.8, 4.4]}
+size:
+  w: 52.0
+  h: 41.8
+size-confidence: {w: estimated, h: estimated}
+size-notes: the bay's size on the FRU-side photograph and Figure 8; no document gives the module's own size
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8fd6'
+    confidence: estimated
+    source: carried from the AIR OUT supply - the handle stands proud of the face; its projection is not measured
+  - node: terminals
+    out: 2.2
+    color: '#111316'
+    confidence: estimated
+    source: guide Figure 19 - the terminal block stands proud of the face; not dimensioned
+  - node: stud-0
+    cyl: 3.0
+    thread: 0.8
+    lift: 2.2
+    confidence: estimated
+    source: guide Figure 19 - terminal screws; height not dimensioned
+  - node: stud-1
+    cyl: 3.0
+    thread: 0.8
+    lift: 2.2
+    confidence: estimated
+    source: guide Figure 19 - as stud-0
+  - node: stud-2
+    cyl: 3.0
+    thread: 0.8
+    lift: 2.2
+    confidence: estimated
+    source: guide Figure 19 - as stud-0
+skins: [default]

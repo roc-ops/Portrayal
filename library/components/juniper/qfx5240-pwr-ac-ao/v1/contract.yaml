@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: qfx5240-pwr-ac-ao
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  QFX5240-PWR-AC-AO, the 3000 W AC power supply of the QFX5240-64OD and QFX5240-64QD, with front-to-back airflow
+  (AIR OUT, port-to-FRU, also written AFO). It is a field-replaceable unit, hot-removable and hot-insertable, in
+  a 1+1 pair; the switch ships with two. The face carries a square fan guard with a black pull handle, a C20
+  appliance inlet, a black release latch and one lamp. The guide's AC power cords end in a C19 coupler, so the
+  inlet is the library's C20. The datasheet also lists a DC supply for the series (QFX5241-PWR-DC-AO) that the
+  hardware guide does not describe.
+attrs:
+  model: QFX5240-PWR-AC-AO
+  role: ac-power-supply
+  power-output-w: 3000
+  airflow: front-to-back
+  input: 200 to 240 VAC, 50 to 60 Hz (guide Table 4); the guide's Table 13 gives an operating range of 200 to 277 VAC and the datasheet 180 to 264 VAC
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5240-64OD (2100 x 692 px, the body 1895 px wide,
+    which is the datasheet's 17.26 in at 4.323 px/mm): the first supply measures 73.7 mm across and 39.5 mm high,
+    the second 73.7 by 39.0; the pitch is 42.8 mm. No document gives the supply's size in millimetres; the guide's
+    figures 15 and 16 carry no scale.
+  depth: >-
+    not stated. Searched the QFX5240 hardware guide (figure 16, the AC power supply description and the physical
+    specifications) and the datasheet for the supply's depth or weight. No depth is written.
+  face: >-
+    photo - the studio rear photograph at 2.4 times zoom: a square fan guard of ribs round a round hub printed
+    with the rating, two screws at its upper corners, a black pull handle along its foot, the inlet block, a
+    release latch at the right edge and a small round lamp at the lower right. The hub also carries the supply
+    maker's name; it is a third party's logo and is not drawn. Positions are read off the photograph and
+    estimated to about 0.4 mm.
+  power-output-w: >-
+    datasheet - the part number, guide Tables 4 and 13 (QFX5240-PWR-AC-AO, 3000 W maximum output power) and the
+    datasheet's hardware table (3000 W AC). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5240 AC Power Supply Module LED (figure 17, Table 14): the single lamp on the module
+    faceplate shows the supply's state.
+  airflow: >-
+    datasheet - guide Tables 3, 4 and 6: QFX5240-PWR-AC-AO is airflow out, ports-to-FRUs, front-to-back.
+  input: >-
+    datasheet - guide Table 4 (200 to 240 VAC, 50/60 Hz, 16 A maximum). Guide Table 13 says 200 to 277 VAC, 6 A at
+    200 VAC and 3.8 A at 240 VAC; the datasheet's hardware table says 180 to 264 VAC. The three disagree and
+    Table 4's range is used.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [38.0, 5.5], rotate: 90}
+elements:
+  led-pwr:
+    at: [67.6, 33.7]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [0.0, 29.5]
+    size: [40.5, 10.0]
+    class: latch
+  release-latch:
+    at: [66.5, 11.1]
+    size: [6.8, 17.8]
+    class: latch
+size:
+  w: 73.7
+  h: 39.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#1a1b1e'
+    confidence: estimated
+    source: photo - the pull handle stands proud of the fan guard; its projection is not measured

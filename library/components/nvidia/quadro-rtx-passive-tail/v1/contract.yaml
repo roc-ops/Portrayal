@@ -1,0 +1,63 @@
+format: 1
+kind: component
+name: quadro-rtx-passive-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA Quadro RTX 8000 and Quadro RTX 6000 passive server
+  cards, seen from behind. It shows the open shroud with its fin stack edge-on.
+  The CPU 8-pin power connector sits on the board's side, a little below the top
+  edge. It is the `faces.rear` of both cards.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height on the product briefs'
+  figure 4, 28.41 to 126.31 on the card) and runs from the backplate's outer
+  face to the shroud's far wall, 38.23 (the card's thickness is itself
+  estimated at 38.2, see the cards' `thickness`). NO DEPTH IS DECLARED: a face
+  is a drawing of a back. SEEN FROM BEHIND WITH THE BOARD'S SIDE AT THE TOP, so
+  x' = 126.31 less the card's x (the top edge at the left) and y' = the card's y
+  less 1.77. This is the frame of nvidia/a100-pcie-80gb-tail@1. The kit's rear
+  frame measures x from the bracket's tip and has no room for a card whose top
+  edge stands past the bracket's 120.02, so this face is not painted on the
+  body's pieces; the pieces are built from the same figures (the cards'
+  `body.boxes`).
+attrs: {media: gpu}
+parts:
+  # The header is 12.6 x 18.0 upright. Turned 270 about its centre it is 18.0
+  # across and 12.6 down, centred on the housing's centre (x' 20.8, y' 7.16),
+  # with its latch ramp toward the shroud, at the bottom.
+  - {ref: std/eps12v-header@1, id: aux-power, at: [14.50, -1.84], rotate: 270}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  connector: >-
+    drawing - PB-09763-001 and PB-09762-001 figure 7, the end view with the CPU
+    8-pin circled. The figure's own scale is the bracket plate, 120.02 long, which
+    runs 730 px of the figure's 735 (6.08 px/mm), and the card's top edge to the
+    bracket's tip, 126.31, which is 731 px (5.79 px/mm); the 4.2 cell pitch gives
+    6.0. The housing is read at 5.79: 17.6 along the card, from 12.0 to 29.6 below
+    the top edge (the card's x 96.7 to 114.3), and 11.2 across the card, standing
+    on the board's component face. THIS IS 9.7 mm FURTHER FROM THE TOP EDGE THAN
+    THE A100's (nvidia/a100-pcie-80gb-tail@1, 2.3 from it), which is why the two
+    cards do not share a tail face. Readings are good to about 1 mm: the figure is
+    a 735 px raster of a line drawing. The part is std/eps12v-header@1 because
+    the brief names a "CPU 8-pin" connector; its own size is 12.6 x 18.0, which
+    this face draws, and the card's 3D housing keeps the figure's 17.6.
+  fins: >-
+    estimated - the figure draws the fin stack as horizontal slats and its
+    pitch cannot be read from them. The 14 slots on the broad side
+    (`body-broad-slots` on the cards) are on a pitch of 5.24, and the fins are
+    taken to match: 17 fins on that pitch, the first at the card's x 30.85 as on
+    the A100, 0.8 thick. The wall round the opening (2.1) is the A100's. How far
+    the fins run in is not seen: the cards' body draws them 40 mm deep.
+  backplate: >-
+    estimated - the black band along the board, 12.63 deep, is the A100's:
+    backplate, board and cover. Neither figure shows the card's back.
+  not-drawn: >-
+    figure 7 shows the end plate's structure behind the connector and two small
+    posts on the board's edge. Nothing says what they are; they are not drawn.
+elements:
+  fins: {at: [10.82, 12.63], size: [84.64, 23.5], class: vent}
+skins: [default]

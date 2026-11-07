@@ -1,0 +1,1510 @@
+format: 1
+kind: device
+name: qfx5200-48y
+version: 0.1.1
+maturity: modelled
+manufacturer: Juniper
+model: QFX5200-48Y
+portfolio: {line: QFX Series, family: QFX5200}
+description: >-
+  Juniper QFX5200-48Y, a 1RU data-centre leaf switch running Junos OS. It has 48 SFP28 ports (10 GbE by
+  default, 25 GbE in groups of four) numbered 0 to 47, and six QSFP28 ports (100 or 40 GbE) numbered 48
+  to 53. The port side also carries the RJ45 management port and console, a USB port, the reset button
+  and the five chassis status lamps. The FRU side carries six fan modules between two power supplies.
+  It ships as one front panel with AC or DC supplies, front-to-back (AIR OUT) or back-to-front (AIR IN).
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper QFX5200 Switch Hardware Guide, published 2026-03-09, 236 pages (copyright 2026 Juniper Networks):
+      the port panel figures 13, 16, 17, 18 and 21, the management and status figures 22 and 24, the FRU
+      panel figure 26, the fan and power supply figures 28, 35, 38 and 40 to 44, the specification tables
+      3, 8 to 10, 13, 14, 16, 17, 19, 20, 24, 25, 30 and 31 and the mounting chapter. Juniper's studio
+      photographs of the 48Y, front and rear, 2100 x 464 and 2100 x 424 px (image library, qfx5200-48y-front-high
+      and -rear-high). THE HPE DATASHEET (a00150814enw) DID NOT ANSWER, a transport error on the one attempt,
+      so no datasheet figure is used. No mechanical drawing and no 3D model were found. The held intake
+      folders (SOURCES.md, COVERAGE.md) are on another machine and could not be read from this one, so
+      no held photograph, stencil or model was available to use.
+  chassis:
+    confidence: datasheet
+    note: >-
+      guide Table 31: 1.71 in (4.34 cm) high, 17.25 in (43.81 cm) wide, 20.27 in (51.48 cm) deep, 30.00
+      lb (13.60 kg). The inch figures are converted (43.43, 438.15 and 514.86 mm). The width is the body
+      between the ear folds; the guide says the outer edges of the brackets make 19 in, so the brackets
+      are not modelled. THE WEIGHT CONFLICTS with the installation safety text, which says the 48Y weighs
+      20.78 to 21.16 lb (9.43 to 9.6 kg) with the power supplies and fans installed; Table 31 is used
+      and the conflict is a gap. The 32C's two sources agree at 23.5 lb.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      Figure 16 (a 3000 x 868 px raster of the port side) is orthographic enough to measure: its outline
+      measures 2853 px between stroke centres (x 23.5 to 2876.5) and 282 px (y 288.5 to 570.5), an aspect
+      of 10.12 against the table's 438.15 / 43.43 = 10.09, at 6.51 px/mm. The studio photograph agrees
+      (body 62 to 2018 px, 4.467 px/mm, 43 mm high). The rear figure 26 (1501 x 319 px) reads 1426.5 x
+      142 px, 10.05, at 3.256 px/mm, and the rear photograph 1948 x 192 px, 10.1, at 4.446 px/mm.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 16, 48 SFP28 cages in two rows of 24 columns, in three gangs of eight columns on the registry's
+      14.25 mm pitch (a gang measures 742 px, 114.0 mm), 3.1 mm apart; the first gang starts 14.7 mm from
+      the left and the QSFP28 block 365.2 mm. The rows are 14.6 mm apart (cells from 2.6 and 17.2 mm down);
+      the photograph's cage openings are about 8 mm high with a metal lamp tray 8.6 mm tall between them,
+      narrower than the registry's 10.4 mm cell, so THE CELLS ARE THE REGISTRY'S AND THE OPENINGS ARE
+      ESTIMATED. The six QSFP28 cages are two columns on the registry's 19.0 pitch in THREE rows: a stacked
+      pair with a lamp band between them (centres 7.5 and 23.6 mm down, ports 48 and 49 on the left, 51
+      and 52 on the right) and a single cage below each (36.5 mm, ports 50 and 53), which figure 16 shows
+      as callouts 2 (four cages) and 5 (two cages).
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention: an upper cage upright over a lower one turned 180, so both lips
+      face the band between the rows. The photograph's cages are too dark to confirm it at the SFP28 rows,
+      so the rule decides and a photograph overturns it. The single QSFP28 cages in the third row are
+      upright.
+  port-numbering:
+    confidence: photo-measured
+    note: >-
+      Printed on the metal and read off the photograph and figure 16: the SFP28 ports run 0 to 47, even
+      above odd, as "0 up-arrow, down-arrow 1" legends under each column (the arrows point at the lamps
+      between the rows); the QSFP28 ports print 48 and 49, 51 and 52 under the stacked pairs and 50 and
+      53 in lane-legend boxes at the lower right. Interface names are not printed and are not written.
+      The 12 port groups of four SFP28 ports (Table 8) are not printed.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      One lamp a SFP28 port, an up arrow for the even port and a down arrow for the odd one, between the
+      rows (figure 18, Table 10: amber steady for link, amber blinking for activity). THE FIRST THREE
+      COLUMNS ARE DIFFERENT: the photograph prints PS0, PS1, Diag, Fan and Loc under their lamps, and
+      guide Table 16 lists five chassis status LEDs on the port side, so those five are drawn as the chassis
+      lamps and the sixth (under port 5) as port 5's lamp, which the guide does not name. Each QSFP28
+      column has a band of four lamps (arrow, two rings, arrow); the guide says only that the QSFP28 ports
+      have four blue and amber lamps, that only the first is used, and that the arrow lamps of 48, 49,
+      51 and 52 are not used. The mapping of the rings to ports and the two lamps in each lower cage are
+      READ OFF THE PHOTOGRAPH AND ESTIMATED.
+  chassis-lamps:
+    confidence: datasheet
+    note: >-
+      Table 16: PS1 and PS2 (green working, amber faulty, unlit absent), Diag (always green), FAN (green
+      normal, amber faulty, unlit powered off) and LOC (amber flashing on a remote command). The photograph
+      prints them as PS0 and PS1, Diag, Fan and Loc, so those legends are drawn.
+  vents:
+    confidence: photo-measured
+    note: >-
+      Hexagonal perforations: a column at the left end (3 to 36 mm down), a band along the foot (37.6
+      to 42.6 mm, interrupted by the USB port and the QSFP28 cages) and a column at the right end. A dark
+      label plate runs under the SFP28 block. Positions are read at 4.467 px/mm and are estimated.
+  mgmt-panel:
+    confidence: photo-measured
+    note: >-
+      At the right, in a silver housing: the RJ45 management port above (Mgmt) and the RJ45 console below
+      (Console), with the legend "Mgmt up-arrow, down-arrow Console" and "RUNNING JUNOS" under them; the
+      guide's callouts 3 and 4 do not say which is which and the photograph's legend settles it. They
+      are 12.7 mm cells, 14.0 apart, mirrored (the upper has its contacts at the foot). The USB port is
+      under the SFP28 block at 326.9 mm (figure 16, callout 6) and the reset pinhole at 51.7 mm with its
+      legend (callout 7 is the lamp row).
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      Rear photograph at 4.446 px/mm and figure 26 at 3.256 px/mm: a power supply at each end (frame 50.4
+      mm wide, its red latch overhanging the frame by 3.9 mm on the left), six fan modules between them
+      on a 48.6 mm pitch (face 39.9 mm wide from 77.6 mm, with an 8.3 mm flange carrying the captive screw
+      to its left), and a ground screw at each end of the panel. The photograph and the figure agree to
+      1 mm everywhere both can be measured except the latch (the photograph magnifies the proud latch).
+      The panel carries no connectors and no lamps: the 48Y has no fan lamps (guide) and its power supplies
+      carry their own.
+  rear-photo-vs-drawing:
+    confidence: photo-measured
+    note: >-
+      The photograph shows front-to-back (AIR OUT) fan modules with red handles lettered F2B. Table 17
+      gives the label as AIR OUT; the photograph wins for that module. The guide's flat figure 26 draws
+      the modules without labels.
+  modules:
+    confidence: datasheet
+    note: >-
+      The fan modules (QFX520048Y-FAN-AO and -AI) and the power supplies (QFX520048Y-APSU-AO and -AI)
+      are field-replaceable units in bays, each its own component of this family. The 48Y's supplies are
+      NOT the JPSU-650W-AC-AO and -AI of the QFX5120: different part number, one lamp and not three, a
+      different face (guide figures 35 and 38 against the QFX5120's). Nothing on this chassis is a built-in
+      unit that is not a bay.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      The guide mounts the 48Y flush with the front of a four-post 19 in rack with the standard brackets
+      (recessed mounting is named for the 32C only). One flush position is written, with no kit. The rack
+      mount kit is NOT MODELLED and is not in `chassis.kits`: QFX520048Y-RMKT (front mounting brackets,
+      rear mounting brackets, flat-head M4 x 6 mm and washer-head screws), also the spare's order number.
+      Rack rail spacing 23.5 to 30.6 in.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 20 (AC): 382 W typical and 430 W maximum, input 100 to 240 VAC at 7.8 A (100 to 120 V) or
+      3.8 A (200 to 240 V). Table 25 (DC): 315 W typical and 470 W maximum, -48 to -60 VDC rated, 21 A.
+      The AC pair is filed as the device's, since AC is the default build.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The front plate samples #696769 on the top-left corner and #6d6c6f at the right end; the chassis
+      colour is #6b6d71. The rear panel samples #666465. The photographs are lit warmly and these are
+      their values, not a paint reference.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life announcement. No Juniper notice was found and the guide states none,
+      so the device states none announced. Estimated, because no maker page was searched beyond the guide.
+attrs:
+  physical:
+    weight-note: >-
+      30.00 lb (13.60 kg) in Table 31; the installation safety text says 20.78 to 21.16 lb (9.43 to 9.6
+      kg) with supplies and fans
+  performance:
+    aggregate-throughput: 3.6 Tbps, full duplex (guide)
+    sfp28-speeds: 10 GbE by default; 25 GbE in groups of four ports (12 groups)
+    qsfp28-speeds: 100 or 40 GbE, auto-detected from the optic; channelizes to 4 x 10 GbE at 40 GbE
+  power:
+    power-typical-w: 382
+    power-max-w: 430
+    power-envelope: unstated
+    power-dc-typical-w: 315
+    power-dc-max-w: 470
+    power-input-ac: 100 to 240 VAC, 50 to 60 Hz, 7.8 A at 100 to 120 VAC or 3.8 A at 200 to 240 VAC
+    power-input-dc: rated -48 to -60 VDC, 21 A (25 A to 11 A across -36 to -72 VDC)
+    redundancy-note: two supplies, load-sharing; AC and DC of one airflow may be mixed in the 48Y
+  thermal:
+    fans: >-
+      six fan modules; the switch runs 30 seconds without thermal shutdown while one is replaced
+  environmental:
+    operating-temp: 0 to 45 C for airflow-out models, 0 to 40 C for airflow-in models
+    storage-temp: -40 to 70 C in the shipping container
+    humidity: 5 to 93 percent noncondensing for airflow out, 10 to 93 percent for airflow in
+    altitude: no performance degradation to 3962 m (13000 ft)
+  platform: {cpu: 2.2 GHz quad-core Intel, memory: 16 GB, storage: 32 GB SSD, software: 'Junos OS, first
+      release 18.1R1'}
+  features:
+    virtual-chassis: not supported (standalone only)
+    optics-sfp28: 25 GbE SFP28 and 10 GbE SFP+ transceivers and DAC cables; 25 GbE AOC on the QSFP28 side
+    optics-qsfp28: 100 GbE QSFP28, 40 GbE QSFP+, AOC and DACBO (40 GbE to 4 x 10 GbE)
+  management: {oob: 'one RJ-45 management port (Mgmt, 10/100/1000 BASE-T)', console: RJ-45 console port,
+    usb: one USB port}
+  compliance:
+    seismic: >-
+      Designed to comply with Zone 4 earthquake requirements per NEBS GR-63-CORE, Issue 3 (Table 30 wording)
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 438.1
+  height: 43.4
+  depth: 514.9
+  ru: 1
+  weight-kg: 13.6
+  color: '#6b6d71'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+gaps:
+- what: weight
+  scope:
+  - weight-note
+  reason: sources-disagree
+  wanted: >-
+    The 48Y's weight. Table 31 gives 30.00 lb (13.60 kg); the installation safety text gives 20.78 to
+    21.16 lb (9.43 to 9.6 kg) with the power supplies and fans installed. Same measure and scope as far
+    as either says, so it is a conflict; Table 31's figure is used.
+- what: chassis-lamp-5
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    What the lamp under the unlabelled sixth position (port 5's down arrow) is. The photograph prints
+    PS0, PS1, Diag, Fan and Loc under five lamps and nothing under the sixth; it is drawn as port 5's
+    lamp.
+- what: qsfp28-lamp-mapping
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    Which port each of the four lamps in a QSFP28 column band, and the two lamps in each lower cage, belongs
+    to. The guide says four blue and amber lamps a port and that only the first is used.
+- what: lane-legend-boxes
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The coloured boxes and brackets of the lane legends under SFP28 ports 16 to 39 and the 50 and 53 boxes
+    under ports 46 and 47; only their numerals are drawn, and the guide does not say what they mean.
+- what: usb-generation
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: The USB revision. The guide names one USB port and gives no generation.
+- what: module-depths
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The depth of the fan module and of the power supplies. The guide's figures are isometric and carry
+    no scale and its tables state weights only.
+groups:
+  sfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp28, speed: 25g}
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      Ports 48 to 53 as printed, rel-pos carrying the printed number, since the origin token cannot express
+      a block that starts at 48.
+  sfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states:
+    - 'off'
+    - {name: link, color: '#f59e0b'}
+    - {name: activity, color: '#f59e0b', behavior: blinking}
+    description: >-
+      One lamp per SFP28 port, between the rows - amber steady for a link at 10 or 25 Gbps, amber blinking
+      for activity (guide Table 10).
+  qsfp28-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states:
+    - 'off'
+    - {name: link, color: '#22c55e'}
+    - {name: activity, color: '#22c55e', behavior: blinking}
+    description: >-
+      The first lamp of each QSFP28 port - green steady for a link at 40 or 100 Gbps, blinking for activity
+      (guide Table 10); the arrow lamps of 48, 49, 51 and 52 are not used.
+  qsfp28-channel-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states:
+    - 'off'
+    - {name: link, color: '#22c55e'}
+    - {name: activity, color: '#22c55e', behavior: blinking}
+    description: The other lamps of a QSFP28 port; the guide says only the first is used (Table 9).
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The five chassis lamps PS0, PS1, Diag, Fan and Loc (guide Table 16).
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the out-of-band cluster at the right of the port side - an RJ-45 management port, an RJ-45 console
+      port, a USB port and the recessed reset button. Four kinds, one purpose: reaching and recovering
+      the switch when the data plane cannot.
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    description: >-
+      QFX5200 hardware guide, Component Redundancy: the 48Y has six fan modules in the FRU panel, slots
+      0 to 5 left to right; all must be installed for optimal operation. The guide states no spare-fan
+      form (N+1) for them.
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: 1+1
+      redundancy-note: two supplies, load-sharing; one may be removed at a time while the switch runs
+  grounding:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: >-
+      the protective earthing screws at the two ends of the FRU panel (guide, Connect the QFX5200 to Earth
+      Ground)
+views:
+  front:
+    size: {w: 438.1, h: 43.4}
+    panel:
+      decor:
+      - {id: vent-left, at: [1.6, 3.0], size: [8.0, 33.0], pattern: vent, pattern-pitch: [3.0, 2.6], vent: 1}
+      - {id: vent-foot, at: [14.0, 37.8], size: [52.0, 4.8], pattern: vent, pattern-pitch: [3.4, 2.4],
+        vent: 1}
+      - {id: pull-tab, at: [68.0, 38.8], size: [32.0, 2.6], fill: '#3d3f43'}
+      - {id: vent-foot-mid, at: [102.0, 37.8], size: [224.0, 4.8], pattern: vent, pattern-pitch: [3.4,
+          2.4], vent: 1}
+      - {id: vent-foot-right, at: [338.0, 37.8], size: [22.0, 4.8], pattern: vent, pattern-pitch: [3.4,
+          2.4], vent: 1}
+      - {id: vent-right, at: [428.2, 3.0], size: [8.4, 33.0], pattern: vent, pattern-pitch: [3.0, 2.6],
+        vent: 1}
+      - {id: label-plate, at: [9.5, 28.0], size: [350.5, 8.6], fill: '#55585c'}
+      - {id: mgmt-housing, at: [407.6, 1.8], size: [18.2, 27.0], fill: '#b5b8bc'}
+      cutouts:
+      - {id: port-0, at: [14.7, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-1, at: [14.7, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: port-2, at: [28.95, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-3, at: [28.95, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: port-4, at: [43.2, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: port-5, at: [43.2, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-ps0, at: [18.8, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: led-ps1, at: [22.6, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: led-diag, at: [33.1, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: led-fan, at: [36.9, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: led-loc, at: [47.3, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: led-port-5, at: [51.1, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-6, at: [57.45, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-6, at: [61.55, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-7, at: [57.45, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-7, at: [65.35, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-8, at: [71.7, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-8, at: [75.8, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-9, at: [71.7, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-9, at: [79.6, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-10, at: [85.95, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-10, at: [90.05, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-11, at: [85.95, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-11, at: [93.85, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-12, at: [100.2, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-12, at: [104.3, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-13, at: [100.2, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-13, at: [108.1, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-14, at: [114.45, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-14, at: [118.55, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-15, at: [114.45, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-15, at: [122.35, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-16, at: [131.8, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-16, at: [135.9, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-17, at: [131.8, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-17, at: [139.7, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-18, at: [146.05, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-18, at: [150.15, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-19, at: [146.05, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-19, at: [153.95, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-20, at: [160.3, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-20, at: [164.4, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-21, at: [160.3, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-21, at: [168.2, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-22, at: [174.55, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-22, at: [178.65, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-23, at: [174.55, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-23, at: [182.45, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-24, at: [188.8, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-24, at: [192.9, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-25, at: [188.8, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-25, at: [196.7, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-26, at: [203.05, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-26, at: [207.15, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-27, at: [203.05, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-27, at: [210.95, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-28, at: [217.3, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-28, at: [221.4, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-29, at: [217.3, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-29, at: [225.2, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-30, at: [231.55, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-30, at: [235.65, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-31, at: [231.55, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-31, at: [239.45, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-32, at: [248.9, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-32, at: [253.0, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-33, at: [248.9, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-33, at: [256.8, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-34, at: [263.15, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-34, at: [267.25, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-35, at: [263.15, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-35, at: [271.05, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-36, at: [277.4, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-36, at: [281.5, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-37, at: [277.4, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-37, at: [285.3, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-38, at: [291.65, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-38, at: [295.75, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-39, at: [291.65, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-39, at: [299.55, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-40, at: [305.9, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-40, at: [310.0, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-41, at: [305.9, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-41, at: [313.8, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-42, at: [320.15, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-42, at: [324.25, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-43, at: [320.15, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-43, at: [328.05, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-44, at: [334.4, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-44, at: [338.5, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-45, at: [334.4, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-45, at: [342.3, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-46, at: [348.65, 2.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-46, at: [352.75, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-47, at: [348.65, 17.2], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-47, at: [356.55, 13.7], size: [2.25, 2.0], shape: circle}
+      - {id: port-48, at: [365.2, 2.7], size: [18.5, 9.58], shape: rect}
+      - {id: port-49, at: [365.2, 18.8], size: [18.5, 9.58], shape: rect}
+      - {id: port-50, at: [365.2, 31.7], size: [18.5, 9.58], shape: rect}
+      - {id: port-51, at: [384.2, 2.7], size: [18.5, 9.58], shape: rect}
+      - {id: port-52, at: [384.2, 18.8], size: [18.5, 9.58], shape: rect}
+      - {id: port-53, at: [384.2, 31.7], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-48, at: [368.2, 14.6], size: [2.25, 2.0], shape: circle}
+      - {id: led-port-48-lane-2, at: [371.25, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49-lane-2, at: [375.35, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-49, at: [378.1, 14.6], size: [2.25, 2.0], shape: circle}
+      - {id: led-port-51, at: [387.2, 14.6], size: [2.25, 2.0], shape: circle}
+      - {id: led-port-51-lane-2, at: [390.25, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52-lane-2, at: [394.35, 14.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-52, at: [397.1, 14.6], size: [2.25, 2.0], shape: circle}
+      - {id: mgmt, at: [409.2, 2.85], size: [12.7, 11.0], shape: rect}
+      - {id: console, at: [409.2, 16.85], size: [12.7, 11.0], shape: rect}
+      - {id: usb, at: [320.9, 33.45], size: [12.0, 4.5], shape: rect}
+      - {id: reset-btn, at: [49.7, 31.4], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [19.92, 30.3], text: '0', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-0}
+    - {at: [23.73, 30.3], text: '1', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-1}
+    - {at: [34.17, 30.3], text: '2', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-2}
+    - {at: [37.98, 30.3], text: '3', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-3}
+    - {at: [48.43, 30.3], text: '4', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-4}
+    - {at: [52.23, 30.3], text: '5', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-5}
+    - {at: [62.68, 30.3], text: '6', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-6}
+    - {at: [66.48, 30.3], text: '7', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-7}
+    - {at: [76.92, 30.3], text: '8', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-8}
+    - {at: [80.73, 30.3], text: '9', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-9}
+    - {at: [91.17, 30.3], text: '10', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-10}
+    - {at: [94.98, 30.3], text: '11', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-11}
+    - {at: [105.42, 30.3], text: '12', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-12}
+    - {at: [109.23, 30.3], text: '13', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-13}
+    - {at: [119.67, 30.3], text: '14', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-14}
+    - {at: [123.48, 30.3], text: '15', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-15}
+    - {at: [137.03, 30.3], text: '16', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-16}
+    - {at: [140.83, 30.3], text: '17', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-17}
+    - {at: [151.28, 30.3], text: '18', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-18}
+    - {at: [155.08, 30.3], text: '19', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-19}
+    - {at: [165.53, 30.3], text: '20', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-20}
+    - {at: [169.33, 30.3], text: '21', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-21}
+    - {at: [179.78, 30.3], text: '22', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-22}
+    - {at: [183.58, 30.3], text: '23', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-23}
+    - {at: [194.03, 30.3], text: '24', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-24}
+    - {at: [197.83, 30.3], text: '25', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-25}
+    - {at: [208.28, 30.3], text: '26', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-26}
+    - {at: [212.08, 30.3], text: '27', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-27}
+    - {at: [222.53, 30.3], text: '28', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-28}
+    - {at: [226.33, 30.3], text: '29', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-29}
+    - {at: [236.78, 30.3], text: '30', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-30}
+    - {at: [240.58, 30.3], text: '31', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-31}
+    - {at: [254.12, 30.3], text: '32', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-32}
+    - {at: [257.93, 30.3], text: '33', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-33}
+    - {at: [268.38, 30.3], text: '34', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-34}
+    - {at: [272.17, 30.3], text: '35', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-35}
+    - {at: [282.62, 30.3], text: '36', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-36}
+    - {at: [286.42, 30.3], text: '37', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-37}
+    - {at: [296.88, 30.3], text: '38', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-38}
+    - {at: [300.67, 30.3], text: '39', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-39}
+    - {at: [311.12, 30.3], text: '40', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-40}
+    - {at: [314.92, 30.3], text: '41', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-41}
+    - {at: [325.38, 30.3], text: '42', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-42}
+    - {at: [329.17, 30.3], text: '43', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-43}
+    - {at: [339.62, 30.3], text: '44', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-44}
+    - {at: [343.42, 30.3], text: '45', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-45}
+    - {at: [353.88, 30.3], text: '46', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-46}
+    - {at: [357.67, 30.3], text: '47', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-47}
+    - id: silk-arrows-0
+      at: [21.82, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-0
+      - port-1
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-2
+      at: [36.08, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-2
+      - port-3
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-4
+      at: [50.33, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-4
+      - port-5
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-6
+      at: [64.58, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-6
+      - port-7
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-8
+      at: [78.83, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-8
+      - port-9
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-10
+      at: [93.08, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-10
+      - port-11
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-12
+      at: [107.33, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-12
+      - port-13
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-14
+      at: [121.58, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-14
+      - port-15
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-16
+      at: [138.92, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-16
+      - port-17
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-18
+      at: [153.17, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-18
+      - port-19
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-20
+      at: [167.42, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-20
+      - port-21
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-22
+      at: [181.67, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-22
+      - port-23
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-24
+      at: [195.92, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-24
+      - port-25
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-26
+      at: [210.17, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-26
+      - port-27
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-28
+      at: [224.42, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-28
+      - port-29
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-30
+      at: [238.67, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-30
+      - port-31
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-32
+      at: [256.02, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-32
+      - port-33
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-34
+      at: [270.27, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-34
+      - port-35
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-36
+      at: [284.52, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-36
+      - port-37
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-38
+      at: [298.77, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-38
+      - port-39
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-40
+      at: [313.02, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-40
+      - port-41
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-42
+      at: [327.27, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-42
+      - port-43
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-44
+      at: [341.52, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-44
+      - port-45
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-46
+      at: [355.77, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-46
+      - port-47
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - id: silk-arrows-48
+      at: [374.45, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-48
+      - port-49
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - {id: silk-48, at: [372.55, 30.3], text: '48', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-48}
+    - {id: silk-49, at: [376.35, 30.3], text: '49', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-49}
+    - id: silk-arrows-51
+      at: [393.45, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - port-51
+      - port-52
+      path: >-
+        M -1.55 0.57785 L -0.25 0.57785 L -0.9 -0.57785 Z M 0.25 -0.57785 L 1.55 -0.57785 L 0.9 0.57785
+        Z
+      filled: true
+    - {id: silk-51, at: [391.55, 30.3], text: '51', font-size: 2.0, anchor: end, fill: '#f4f5f7', for: port-51}
+    - {id: silk-52, at: [395.35, 30.3], text: '52', font-size: 2.0, anchor: start, fill: '#f4f5f7', for: port-52}
+    - {id: silk-50, at: [352.0, 33.6], text: '50', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: port-50}
+    - {id: silk-53, at: [358.5, 33.6], text: '53', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: port-53}
+    - {id: silk-ps0, at: [19.93, 32.6], text: PS0, font-size: 1.7, anchor: middle, fill: '#f4f5f7', for: led-ps0}
+    - {id: silk-ps1, at: [25.9, 32.6], text: PS1, font-size: 1.7, anchor: middle, fill: '#f4f5f7', for: led-ps1}
+    - {id: silk-diag, at: [31.4, 32.6], text: Diag, font-size: 1.7, anchor: middle, fill: '#f4f5f7', for: led-diag}
+    - {id: silk-fan, at: [38.02, 32.6], text: Fan, font-size: 1.7, anchor: middle, fill: '#f4f5f7', for: led-fan}
+    - {id: silk-loc, at: [43.4, 32.6], text: Loc, font-size: 1.7, anchor: middle, fill: '#f4f5f7', for: led-loc}
+    - {id: silk-reset, at: [54.5, 34.0], text: Reset, font-size: 1.8, anchor: start, fill: '#f4f5f7',
+      for: reset-btn}
+    - {id: silk-model, at: [86.1, 34.1], text: QFX5200-48Y, font-size: 2.4, anchor: middle, fill: '#f4f5f7',
+      for: chassis}
+    - {id: silk-mgmt, at: [413.0, 30.3], text: Mgmt, font-size: 1.6, anchor: end, fill: '#f4f5f7', for: mgmt}
+    - id: silk-mgmt-arrows
+      at: [415.0, 29.6]
+      fill: '#f4f5f7'
+      for:
+      - mgmt
+      - console
+      path: >-
+        M -1.3 0.48895 L -0.2 0.48895 L -0.75 -0.48895 Z M 0.2 -0.48895 L 1.3 -0.48895 L 0.75 0.48895
+        Z
+      filled: true
+    - {id: silk-console, at: [417.0, 30.3], text: Console, font-size: 1.6, anchor: start, fill: '#f4f5f7',
+      for: console}
+    - {id: silk-os, at: [414.4, 33.8], text: RUNNING JUNOS, font-size: 2.2, anchor: middle, fill: '#f4f5f7',
+      for: chassis}
+    - id: silk-usb-mark
+      at: [336.8, 35.7]
+      fill: '#f4f5f7'
+      for: usb
+      path: >-
+        M 0 1.5 L 0 -0.825 M -0.42 -0.825 L 0.42 -0.825 L 0 -1.5 Z M 0 0.15 L -0.825 -0.45 M 0 -0.15 L
+        0.825 0.3
+      stroke-width: 0.28
+    - {at: [139.3, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [143.8, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [148.3, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [152.8, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [146.05, 36.4], text: '48', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [167.8, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [172.3, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [176.8, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [181.3, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [174.55, 36.4], text: '49', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [196.3, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [200.8, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [205.3, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [209.8, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [203.05, 36.4], text: '50', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [224.8, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [229.3, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [233.8, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [238.3, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [231.55, 36.4], text: '51', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [256.4, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [260.9, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [265.4, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [269.9, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [263.15, 36.4], text: '52', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [284.9, 33.6], text: '0', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [289.4, 33.6], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [293.9, 33.6], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [298.4, 33.6], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    - {at: [291.65, 36.4], text: '53', font-size: 1.5, anchor: middle, fill: '#f4f5f7', for: chassis}
+    components:
+      placements:
+      - {ref: std/sfp-ganged@1, id: port-0, at: [14.7, 2.6], group: sfp28, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: port-1, at: [14.7, 17.2], rotate: 180, group: sfp28, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [28.95, 2.6], group: sfp28, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [28.95, 17.2], rotate: 180, group: sfp28, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [43.2, 2.6], group: sfp28, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [43.2, 17.2], rotate: 180, group: sfp28, rel-pos: 5}
+      - ref: common/led-arrow-sm@1
+        id: led-ps0
+        at: [18.8, 13.7]
+        skin: up
+        for: chassis
+        group: status-leds
+        rel-pos: 0
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+        description: >-
+          Table 16 - PS0 (the guide calls it PS1): green when the supply is working correctly, amber when
+          it is present and faulty, unlit when it is not present
+      - ref: common/led-arrow-sm@1
+        id: led-ps1
+        at: [22.6, 13.7]
+        skin: down
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+        description: >-
+          Table 16 - PS1 (the guide calls it PS2): green when the supply is working correctly, amber when
+          it is present and faulty, unlit when it is not present
+      - ref: common/led-arrow-sm@1
+        id: led-diag
+        at: [33.1, 13.7]
+        skin: up
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        description: 'Table 16 - Diag: always green, and can be ignored'
+      - ref: common/led-arrow-sm@1
+        id: led-fan
+        at: [36.9, 13.7]
+        skin: down
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+        description: >-
+          Table 16 - FAN: green when the fans operate normally, amber when a fan is present and faulty,
+          unlit when the switch is powered off
+      - ref: common/led-arrow-sm@1
+        id: led-loc
+        at: [47.3, 13.7]
+        skin: up
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: locate, color: '#f59e0b', behavior: blinking}
+        description: >-
+          Table 16 - LOC: amber flashing on a remote management command, to find the switch in the rack;
+          unlit otherwise
+      - {ref: common/led-arrow-sm@1, id: led-port-5, at: [51.1, 13.7], skin: down, for: port-5, group: sfp28-leds,
+        rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [57.45, 2.6], group: sfp28, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [57.45, 17.2], rotate: 180, group: sfp28, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [71.7, 2.6], group: sfp28, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [71.7, 17.2], rotate: 180, group: sfp28, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [85.95, 2.6], group: sfp28, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [85.95, 17.2], rotate: 180, group: sfp28, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [100.2, 2.6], group: sfp28, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [100.2, 17.2], rotate: 180, group: sfp28, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [114.45, 2.6], group: sfp28, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [114.45, 17.2], rotate: 180, group: sfp28, rel-pos: 15}
+      - ref: common/led-arrow-sm@1
+        id: led-port-6
+        at: [61.55, 13.7]
+        skin: up
+        states: &id001
+        - 'off'
+        - {name: link, color: '#f59e0b'}
+        - {name: activity, color: '#f59e0b', behavior: blinking}
+        for: port-6
+        group: sfp28-leds
+        rel-pos: 6
+      - ref: common/led-arrow-sm@1
+        id: led-port-7
+        at: [65.35, 13.7]
+        skin: down
+        states: *id001
+        for: port-7
+        group: sfp28-leds
+        rel-pos: 7
+      - ref: common/led-arrow-sm@1
+        id: led-port-8
+        at: [75.8, 13.7]
+        skin: up
+        states: *id001
+        for: port-8
+        group: sfp28-leds
+        rel-pos: 8
+      - ref: common/led-arrow-sm@1
+        id: led-port-9
+        at: [79.6, 13.7]
+        skin: down
+        states: *id001
+        for: port-9
+        group: sfp28-leds
+        rel-pos: 9
+      - ref: common/led-arrow-sm@1
+        id: led-port-10
+        at: [90.05, 13.7]
+        skin: up
+        states: *id001
+        for: port-10
+        group: sfp28-leds
+        rel-pos: 10
+      - ref: common/led-arrow-sm@1
+        id: led-port-11
+        at: [93.85, 13.7]
+        skin: down
+        states: *id001
+        for: port-11
+        group: sfp28-leds
+        rel-pos: 11
+      - ref: common/led-arrow-sm@1
+        id: led-port-12
+        at: [104.3, 13.7]
+        skin: up
+        states: *id001
+        for: port-12
+        group: sfp28-leds
+        rel-pos: 12
+      - ref: common/led-arrow-sm@1
+        id: led-port-13
+        at: [108.1, 13.7]
+        skin: down
+        states: *id001
+        for: port-13
+        group: sfp28-leds
+        rel-pos: 13
+      - ref: common/led-arrow-sm@1
+        id: led-port-14
+        at: [118.55, 13.7]
+        skin: up
+        states: *id001
+        for: port-14
+        group: sfp28-leds
+        rel-pos: 14
+      - ref: common/led-arrow-sm@1
+        id: led-port-15
+        at: [122.35, 13.7]
+        skin: down
+        states: *id001
+        for: port-15
+        group: sfp28-leds
+        rel-pos: 15
+      - {ref: std/sfp-ganged@1, id: port-16, at: [131.8, 2.6], group: sfp28, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [131.8, 17.2], rotate: 180, group: sfp28, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [146.05, 2.6], group: sfp28, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [146.05, 17.2], rotate: 180, group: sfp28, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [160.3, 2.6], group: sfp28, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [160.3, 17.2], rotate: 180, group: sfp28, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [174.55, 2.6], group: sfp28, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [174.55, 17.2], rotate: 180, group: sfp28, rel-pos: 23}
+      - {ref: std/sfp-ganged@1, id: port-24, at: [188.8, 2.6], group: sfp28, rel-pos: 24}
+      - {ref: std/sfp-ganged@1, id: port-25, at: [188.8, 17.2], rotate: 180, group: sfp28, rel-pos: 25}
+      - {ref: std/sfp-ganged@1, id: port-26, at: [203.05, 2.6], group: sfp28, rel-pos: 26}
+      - {ref: std/sfp-ganged@1, id: port-27, at: [203.05, 17.2], rotate: 180, group: sfp28, rel-pos: 27}
+      - {ref: std/sfp-ganged@1, id: port-28, at: [217.3, 2.6], group: sfp28, rel-pos: 28}
+      - {ref: std/sfp-ganged@1, id: port-29, at: [217.3, 17.2], rotate: 180, group: sfp28, rel-pos: 29}
+      - {ref: std/sfp-ganged@1, id: port-30, at: [231.55, 2.6], group: sfp28, rel-pos: 30}
+      - {ref: std/sfp-ganged@1, id: port-31, at: [231.55, 17.2], rotate: 180, group: sfp28, rel-pos: 31}
+      - ref: common/led-arrow-sm@1
+        id: led-port-16
+        at: [135.9, 13.7]
+        skin: up
+        states: &id002
+        - 'off'
+        - {name: link, color: '#f59e0b'}
+        - {name: activity, color: '#f59e0b', behavior: blinking}
+        for: port-16
+        group: sfp28-leds
+        rel-pos: 16
+      - ref: common/led-arrow-sm@1
+        id: led-port-17
+        at: [139.7, 13.7]
+        skin: down
+        states: *id002
+        for: port-17
+        group: sfp28-leds
+        rel-pos: 17
+      - ref: common/led-arrow-sm@1
+        id: led-port-18
+        at: [150.15, 13.7]
+        skin: up
+        states: *id002
+        for: port-18
+        group: sfp28-leds
+        rel-pos: 18
+      - ref: common/led-arrow-sm@1
+        id: led-port-19
+        at: [153.95, 13.7]
+        skin: down
+        states: *id002
+        for: port-19
+        group: sfp28-leds
+        rel-pos: 19
+      - ref: common/led-arrow-sm@1
+        id: led-port-20
+        at: [164.4, 13.7]
+        skin: up
+        states: *id002
+        for: port-20
+        group: sfp28-leds
+        rel-pos: 20
+      - ref: common/led-arrow-sm@1
+        id: led-port-21
+        at: [168.2, 13.7]
+        skin: down
+        states: *id002
+        for: port-21
+        group: sfp28-leds
+        rel-pos: 21
+      - ref: common/led-arrow-sm@1
+        id: led-port-22
+        at: [178.65, 13.7]
+        skin: up
+        states: *id002
+        for: port-22
+        group: sfp28-leds
+        rel-pos: 22
+      - ref: common/led-arrow-sm@1
+        id: led-port-23
+        at: [182.45, 13.7]
+        skin: down
+        states: *id002
+        for: port-23
+        group: sfp28-leds
+        rel-pos: 23
+      - ref: common/led-arrow-sm@1
+        id: led-port-24
+        at: [192.9, 13.7]
+        skin: up
+        states: *id002
+        for: port-24
+        group: sfp28-leds
+        rel-pos: 24
+      - ref: common/led-arrow-sm@1
+        id: led-port-25
+        at: [196.7, 13.7]
+        skin: down
+        states: *id002
+        for: port-25
+        group: sfp28-leds
+        rel-pos: 25
+      - ref: common/led-arrow-sm@1
+        id: led-port-26
+        at: [207.15, 13.7]
+        skin: up
+        states: *id002
+        for: port-26
+        group: sfp28-leds
+        rel-pos: 26
+      - ref: common/led-arrow-sm@1
+        id: led-port-27
+        at: [210.95, 13.7]
+        skin: down
+        states: *id002
+        for: port-27
+        group: sfp28-leds
+        rel-pos: 27
+      - ref: common/led-arrow-sm@1
+        id: led-port-28
+        at: [221.4, 13.7]
+        skin: up
+        states: *id002
+        for: port-28
+        group: sfp28-leds
+        rel-pos: 28
+      - ref: common/led-arrow-sm@1
+        id: led-port-29
+        at: [225.2, 13.7]
+        skin: down
+        states: *id002
+        for: port-29
+        group: sfp28-leds
+        rel-pos: 29
+      - ref: common/led-arrow-sm@1
+        id: led-port-30
+        at: [235.65, 13.7]
+        skin: up
+        states: *id002
+        for: port-30
+        group: sfp28-leds
+        rel-pos: 30
+      - ref: common/led-arrow-sm@1
+        id: led-port-31
+        at: [239.45, 13.7]
+        skin: down
+        states: *id002
+        for: port-31
+        group: sfp28-leds
+        rel-pos: 31
+      - {ref: std/sfp-ganged@1, id: port-32, at: [248.9, 2.6], group: sfp28, rel-pos: 32}
+      - {ref: std/sfp-ganged@1, id: port-33, at: [248.9, 17.2], rotate: 180, group: sfp28, rel-pos: 33}
+      - {ref: std/sfp-ganged@1, id: port-34, at: [263.15, 2.6], group: sfp28, rel-pos: 34}
+      - {ref: std/sfp-ganged@1, id: port-35, at: [263.15, 17.2], rotate: 180, group: sfp28, rel-pos: 35}
+      - {ref: std/sfp-ganged@1, id: port-36, at: [277.4, 2.6], group: sfp28, rel-pos: 36}
+      - {ref: std/sfp-ganged@1, id: port-37, at: [277.4, 17.2], rotate: 180, group: sfp28, rel-pos: 37}
+      - {ref: std/sfp-ganged@1, id: port-38, at: [291.65, 2.6], group: sfp28, rel-pos: 38}
+      - {ref: std/sfp-ganged@1, id: port-39, at: [291.65, 17.2], rotate: 180, group: sfp28, rel-pos: 39}
+      - {ref: std/sfp-ganged@1, id: port-40, at: [305.9, 2.6], group: sfp28, rel-pos: 40}
+      - {ref: std/sfp-ganged@1, id: port-41, at: [305.9, 17.2], rotate: 180, group: sfp28, rel-pos: 41}
+      - {ref: std/sfp-ganged@1, id: port-42, at: [320.15, 2.6], group: sfp28, rel-pos: 42}
+      - {ref: std/sfp-ganged@1, id: port-43, at: [320.15, 17.2], rotate: 180, group: sfp28, rel-pos: 43}
+      - {ref: std/sfp-ganged@1, id: port-44, at: [334.4, 2.6], group: sfp28, rel-pos: 44}
+      - {ref: std/sfp-ganged@1, id: port-45, at: [334.4, 17.2], rotate: 180, group: sfp28, rel-pos: 45}
+      - {ref: std/sfp-ganged@1, id: port-46, at: [348.65, 2.6], group: sfp28, rel-pos: 46}
+      - {ref: std/sfp-ganged@1, id: port-47, at: [348.65, 17.2], rotate: 180, group: sfp28, rel-pos: 47}
+      - ref: common/led-arrow-sm@1
+        id: led-port-32
+        at: [253.0, 13.7]
+        skin: up
+        states: &id003
+        - 'off'
+        - {name: link, color: '#f59e0b'}
+        - {name: activity, color: '#f59e0b', behavior: blinking}
+        for: port-32
+        group: sfp28-leds
+        rel-pos: 32
+      - ref: common/led-arrow-sm@1
+        id: led-port-33
+        at: [256.8, 13.7]
+        skin: down
+        states: *id003
+        for: port-33
+        group: sfp28-leds
+        rel-pos: 33
+      - ref: common/led-arrow-sm@1
+        id: led-port-34
+        at: [267.25, 13.7]
+        skin: up
+        states: *id003
+        for: port-34
+        group: sfp28-leds
+        rel-pos: 34
+      - ref: common/led-arrow-sm@1
+        id: led-port-35
+        at: [271.05, 13.7]
+        skin: down
+        states: *id003
+        for: port-35
+        group: sfp28-leds
+        rel-pos: 35
+      - ref: common/led-arrow-sm@1
+        id: led-port-36
+        at: [281.5, 13.7]
+        skin: up
+        states: *id003
+        for: port-36
+        group: sfp28-leds
+        rel-pos: 36
+      - ref: common/led-arrow-sm@1
+        id: led-port-37
+        at: [285.3, 13.7]
+        skin: down
+        states: *id003
+        for: port-37
+        group: sfp28-leds
+        rel-pos: 37
+      - ref: common/led-arrow-sm@1
+        id: led-port-38
+        at: [295.75, 13.7]
+        skin: up
+        states: *id003
+        for: port-38
+        group: sfp28-leds
+        rel-pos: 38
+      - ref: common/led-arrow-sm@1
+        id: led-port-39
+        at: [299.55, 13.7]
+        skin: down
+        states: *id003
+        for: port-39
+        group: sfp28-leds
+        rel-pos: 39
+      - ref: common/led-arrow-sm@1
+        id: led-port-40
+        at: [310.0, 13.7]
+        skin: up
+        states: *id003
+        for: port-40
+        group: sfp28-leds
+        rel-pos: 40
+      - ref: common/led-arrow-sm@1
+        id: led-port-41
+        at: [313.8, 13.7]
+        skin: down
+        states: *id003
+        for: port-41
+        group: sfp28-leds
+        rel-pos: 41
+      - ref: common/led-arrow-sm@1
+        id: led-port-42
+        at: [324.25, 13.7]
+        skin: up
+        states: *id003
+        for: port-42
+        group: sfp28-leds
+        rel-pos: 42
+      - ref: common/led-arrow-sm@1
+        id: led-port-43
+        at: [328.05, 13.7]
+        skin: down
+        states: *id003
+        for: port-43
+        group: sfp28-leds
+        rel-pos: 43
+      - ref: common/led-arrow-sm@1
+        id: led-port-44
+        at: [338.5, 13.7]
+        skin: up
+        states: *id003
+        for: port-44
+        group: sfp28-leds
+        rel-pos: 44
+      - ref: common/led-arrow-sm@1
+        id: led-port-45
+        at: [342.3, 13.7]
+        skin: down
+        states: *id003
+        for: port-45
+        group: sfp28-leds
+        rel-pos: 45
+      - ref: common/led-arrow-sm@1
+        id: led-port-46
+        at: [352.75, 13.7]
+        skin: up
+        states: *id003
+        for: port-46
+        group: sfp28-leds
+        rel-pos: 46
+      - ref: common/led-arrow-sm@1
+        id: led-port-47
+        at: [356.55, 13.7]
+        skin: down
+        states: *id003
+        for: port-47
+        group: sfp28-leds
+        rel-pos: 47
+      - {ref: std/qsfp-ganged@1, id: port-48, at: [365.2, 2.7], group: qsfp28, rel-pos: 48}
+      - {ref: std/qsfp-ganged@1, id: port-49, at: [365.2, 18.8], rotate: 180, group: qsfp28, rel-pos: 49}
+      - {ref: std/qsfp-ganged@1, id: port-50, at: [365.2, 31.7], group: qsfp28, rel-pos: 50}
+      - {ref: std/qsfp-ganged@1, id: port-51, at: [384.2, 2.7], group: qsfp28, rel-pos: 51}
+      - {ref: std/qsfp-ganged@1, id: port-52, at: [384.2, 18.8], rotate: 180, group: qsfp28, rel-pos: 52}
+      - {ref: std/qsfp-ganged@1, id: port-53, at: [384.2, 31.7], group: qsfp28, rel-pos: 53}
+      - {ref: common/led-arrow-sm@1, id: led-port-48, at: [368.2, 14.6], skin: up, for: port-48, group: qsfp28-leds,
+        rel-pos: 48}
+      - {ref: common/led-dot@1, id: led-port-48-lane-2, at: [371.25, 14.6], for: port-48, group: qsfp28-channel-leds,
+        rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-port-49-lane-2, at: [375.35, 14.6], for: port-49, group: qsfp28-channel-leds,
+        rel-pos: 1}
+      - {ref: common/led-arrow-sm@1, id: led-port-49, at: [378.1, 14.6], skin: down, for: port-49, group: qsfp28-leds,
+        rel-pos: 49}
+      - {ref: common/led-arrow-sm@1, id: led-port-51, at: [387.2, 14.6], skin: up, for: port-51, group: qsfp28-leds,
+        rel-pos: 51}
+      - {ref: common/led-dot@1, id: led-port-51-lane-2, at: [390.25, 14.6], for: port-51, group: qsfp28-channel-leds,
+        rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-port-52-lane-2, at: [394.35, 14.6], for: port-52, group: qsfp28-channel-leds,
+        rel-pos: 3}
+      - {ref: common/led-arrow-sm@1, id: led-port-52, at: [397.1, 14.6], skin: down, for: port-52, group: qsfp28-leds,
+        rel-pos: 52}
+      - {ref: common/led-dot@1, id: led-port-50, at: [376.0, 37.6], for: port-50, group: qsfp28-leds,
+        rel-pos: 50}
+      - {ref: common/led-dot@1, id: led-port-50-lane-2, at: [380.6, 37.6], for: port-50, group: qsfp28-channel-leds,
+        rel-pos: 4}
+      - {ref: common/led-dot@1, id: led-port-53, at: [394.7, 37.6], for: port-53, group: qsfp28-leds,
+        rel-pos: 53}
+      - {ref: common/led-dot@1, id: led-port-53-lane-2, at: [399.3, 37.6], for: port-53, group: qsfp28-channel-leds,
+        rel-pos: 5}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt
+        at: [409.2, 2.85]
+        rotate: 180
+        group: mgmt
+        rel-pos: 0
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+        states:
+          led-a:
+          - 'off'
+          - {name: up, color: '#22c55e'}
+          led-b:
+          - 'off'
+          - {name: activity, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 13 - the status lamp is green when the link is up and unlit when it is down; the link
+          activity lamp is green steady with a link and blinking with traffic
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [409.2, 16.85]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/usb-a@1
+        id: usb
+        at: [320.9, 33.45]
+        skin: usb2
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: usb-a}
+      - ref: common/reset-button@1
+        id: reset-btn
+        at: [49.7, 31.4]
+        group: mgmt
+        rel-pos: 3
+        for: chassis
+        attrs: {function: reset}
+    regions:
+    - id: logo-zone
+      at: [60.7, 30.6]
+      size: {w: 14.0, h: 4.4}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 438.1, h: 43.4}
+    panel: {decor: []}
+    components:
+      bays:
+      - id: fan-0
+        at: [69.3, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 0
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: fan-1
+        at: [117.9, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: fan-2
+        at: [166.5, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: fan-3
+        at: [215.1, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: fan-4
+        at: [263.7, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: fan-5
+        at: [312.3, 0.8]
+        size: {w: 48.1, h: 40.6}
+        group: fans
+        rel-pos: 5
+        accepts:
+        - juniper/qfx5200-48y-fan-afo@1
+        - juniper/qfx5200-48y-fan-afi@1
+        default: juniper/qfx5200-48y-fan-afo@1
+      - id: psu-0
+        at: [11.6, 2.0]
+        size: {w: 54.4, h: 39.7}
+        group: psus
+        rel-pos: 0
+        accepts:
+        - juniper/qfx5200-48y-apsu-ao@1
+        - juniper/qfx5200-48y-apsu-ai@1
+        - juniper/qfx5200-48y-dpsu-ao@1
+        - juniper/qfx5200-48y-dpsu-ai@1
+        default: juniper/qfx5200-48y-apsu-ao@1
+      - id: psu-1
+        at: [367.9, 2.0]
+        size: {w: 54.4, h: 39.7}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - juniper/qfx5200-48y-apsu-ao@1
+        - juniper/qfx5200-48y-apsu-ai@1
+        - juniper/qfx5200-48y-dpsu-ao@1
+        - juniper/qfx5200-48y-dpsu-ai@1
+        default: juniper/qfx5200-48y-apsu-ao@1
+      placements:
+      - {ref: common/ground-screw-m4@1, id: ground-0, at: [3.5, 31.4], group: grounding, rel-pos: 0}
+      - {ref: common/ground-screw-m4@1, id: ground-1, at: [425.6, 31.4], group: grounding, rel-pos: 1}
+  top:
+    size: {w: 438.1, h: 514.9}
+    empty: Not drawn by any source held. The guide shows no figure of the lid.
+  bottom:
+    size: {w: 438.1, h: 514.9}
+    empty: Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size: {w: 514.9, h: 43.4}
+    empty: >-
+      Not drawn by any source held. The mounting figures show the brackets on a side wall in three-quarter
+      view only, with no scale from which a hole could be placed.
+  right:
+    size: {w: 514.9, h: 43.4}
+    empty: Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  ac-afo:
+    kind: orderable
+    default: true
+    description: >-
+      QFX5200-48Y: two 650 W AC supplies (QFX520048Y-APSU-AO) and six front-to-back fan modules (QFX520048Y-FAN-AO).
+      All carry the guide's red colour for airflow out (Tables 17 and 19). The guide names no chassis
+      part number for the other builds, so they are examples.
+    part-numbers:
+      QFX5200-48Y: {}
+  ac-afi:
+    kind: example
+    airflow: back-to-front
+    description: >-
+      Two 650 W AC supplies (QFX520048Y-APSU-AI) and six back-to-front fan modules (QFX520048Y-FAN-AI),
+      blue for airflow in (guide Tables 17 and 19). The guide names these modules but no chassis part
+      number for the build.
+    bays: {psu-0: juniper/qfx5200-48y-apsu-ai@1, psu-1: juniper/qfx5200-48y-apsu-ai@1, fan-0: juniper/qfx5200-48y-fan-afi@1,
+      fan-1: juniper/qfx5200-48y-fan-afi@1, fan-2: juniper/qfx5200-48y-fan-afi@1, fan-3: juniper/qfx5200-48y-fan-afi@1,
+      fan-4: juniper/qfx5200-48y-fan-afi@1, fan-5: juniper/qfx5200-48y-fan-afi@1}
+  dc-afo:
+    kind: example
+    power: dc
+    description: >-
+      Two 650 W DC supplies (QFX520048Y-DPSU-AO) and six front-to-back fan modules (QFX520048Y-FAN-AO).
+      The guide names these modules but no chassis part number for the build. AC and DC supplies of one
+      airflow may be mixed in the 48Y.
+    bays: {psu-0: juniper/qfx5200-48y-dpsu-ao@1, psu-1: juniper/qfx5200-48y-dpsu-ao@1}
+  dc-afi:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Two 650 W DC supplies (QFX520048Y-DPSU-AI) and six back-to-front fan modules (QFX520048Y-FAN-AI).
+      The guide names these modules but no chassis part number for the build.
+    bays: {psu-0: juniper/qfx5200-48y-dpsu-ai@1, psu-1: juniper/qfx5200-48y-dpsu-ai@1, fan-0: juniper/qfx5200-48y-fan-afi@1,
+      fan-1: juniper/qfx5200-48y-fan-afi@1, fan-2: juniper/qfx5200-48y-fan-afi@1, fan-3: juniper/qfx5200-48y-fan-afi@1,
+      fan-4: juniper/qfx5200-48y-fan-afi@1, fan-5: juniper/qfx5200-48y-fan-afi@1}
+references:
+- title: Juniper QFX5200 Switch Hardware Guide (published 2026-03-09)
+  sha256: d9e19fcf398d2af27fd19e04c16a7108690773bce66f3690fa3324e5d24624fa

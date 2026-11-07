@@ -447,7 +447,7 @@ test('a rack with no cables gets a header and no rows', () => {
 
 // ── what a DCIM stores: the limits (Phase 2c fix round) ─────────────────
 test('the limits are one table', () => {
-  assert.deepEqual(D.DCIM_LIMITS, {deviceName: 64, rackName: 100, cableLabel: 100, cableDescription: 200, netboxLengthBelow: 1000000, nautobotLengthMax: 32767});
+  assert.deepEqual(D.DCIM_LIMITS, {deviceName: 64, rackName: 100, cableBundleName: 100, cableLabel: 100, cableDescription: 200, netboxLengthBelow: 1000000, nautobotLengthMax: 32767});
   assert.equal(D.DCIM_LIMITS, X.DCIM_LIMITS);
 });
 
@@ -547,6 +547,202 @@ test("a bundle's name leads its members' NetBox descriptions; Nautobot's notes l
   assert.ok(nt.notes.includes("Nautobot's cables have no description or bundle, so this file does not say which bundle a cable is in: " +
     "Bundle 2 holds A1 and c2. The cable schedule lists each cable's bundle."), nt.notes);
   assert.ok(!run({...rack, bundles: []}, 'nautobot').notes.some(n => /bundle/i.test(n)));
+});
+
+// ── NetBox's own cable bundles (#945): the option "NetBox 4.6 or later" ──
+// NetBox v4.7.2 (251458b8): CableBundle.name is a CharField(max_length=100,
+// unique=True) (dcim/models/cables.py); CableBundleImportForm takes name,
+// description, owner, comments and tags; the cable import's `bundle` column is
+// a CSVModelChoiceField on CableBundle by `name` (dcim/forms/bulk_import.py).
+const LABELLED = [
+  {id: 'b1', number: 1, label: '', members: [{cable: 'c1'}, {cable: 'c2'}], route: []},
+  {id: 'b2', number: 2, label: 'uplinks', members: [{cable: 'c3'}], route: []}];
+const BUNDLED = {...RACK, name: 'Rack A', bundles: LABELLED};
+const SITE = {site: 'Lab 1', role: 'Router'}, ON = {...SITE, netbox: '4.6'};
+const withOption = (rack, dcim, target = 'netbox', more = {}) => D.cableImportRows({rack, target, names: NAMES, kept: ALL, resolve,
+  ends: landed(rack.cables), dcim, ...more});
+const csvOf = got => X.toCsv(got.columns, got.rows);
+
+// What the kit wrote before the option existed, for BUNDLED with a site: the cables file and the README.
+const TODAY_CABLES = [
+  'side_a_device,side_a_type,side_a_name,side_b_device,side_b_type,side_b_name,type,status,label,color,length,length_unit,description',
+  'leaf-1,dcim.interface,port-1,core-1,dcim.interface,slot-2/p0,smf-os2,planned,A1,,2,m,Bundle 1. uplink',
+  'leaf-1,dcim.interface,mgmt-eth,demarc-i3,dcim.interface,port-2-1,cat6a,planned,c2,,,,Bundle 1. management',
+  'leaf-1,dcim.interface,port-2,demarc-i4,dcim.interface,port-2-1,smf-os2,planned,c3,,,,uplinks. uplink',
+  ''].join('\r\n');
+const readmeOf = (dcim, got, rows) => D.kitReadme({target: 'netbox', rack: README_RACK, date: DAY, dcim, typeFiles: 2, manufacturers: ['Cisco'],
+  rows: {rack: 1, devices: 4, modules: 1, cables: 3, ...rows}, left: got.left, notes: got.notes, ...WHOLE}).text;
+const TODAY_README = [
+  'NetBox import kit for Cable test, from Portrayal, 2026-10-04.',
+  '',
+  'Before you import, NetBox must already have:',
+  '- the site "Lab 1"',
+  '- the device role "Router"',
+  '- these manufacturers: Cisco',
+  '',
+  'Import in this order. NetBox takes each CSV file whole or not at all: one refused row refuses the file.',
+  'Step 1: types/device-types/, then types/module-types/ (2 files): Device Types > Import and Module Types > Import, format YAML, one file at a time. The module types must be in before step 4.',
+  'Step 2: 1-rack.csv (1 row): Racks > Import. Creates the rack "Cable test", 24U, numbered from the bottom.',
+  'Step 3: 2-devices.csv (4 rows): Devices > Import. Every device is planned.',
+  "Step 4: 3-modules.csv (1 row): Modules > Import. This creates each card's ports, so it comes before the cables.",
+  'Step 5: 4-cables.csv (3 rows): Cables > Import.',
+  '',
+  'If NetBox is not empty:',
+  '- If the rack "Cable test" is already in that site, skip step 2 and check that it is 24U, numbered from the bottom. Step 3 puts the devices in it.',
+  '- Steps 4 and 5 find a device by its name in every site, and step 4 finds a module type by its model in every manufacturer: a name NetBox already has twice is refused as not unique.',
+  '',
+  'Not in this kit:',
+  '- Nothing: every device, card and cable in this rack is in the files.',
+  '',
+  'Notes:',
+  "- Each cable in a bundle names its bundle first in its description. NetBox 4.6 and later also has cable bundles of its own, which must be made before a cable can name one, so this file does not fill a cable's bundle field.",
+  ''].join('\n');
+
+test('with the option off, the NetBox files and the README are what they were', () => {
+  const off = withOption(BUNDLED, SITE);
+  assert.equal(csvOf(off), TODAY_CABLES);
+  assert.equal(readmeOf(SITE, off), TODAY_README);
+  assert.ok(off.notes.includes("Each cable in a bundle names its bundle first in its description. NetBox 4.6 and later also has cable bundles of its own, which must be made before a cable can name one, so this file does not fill a cable's bundle field."), off.notes);
+  assert.ok(!('bundleFile' in off));
+  // An option left out, blank, or naming an older NetBox is off, and gives the same answer.
+  for (const netbox of [undefined, '', '4.5', '4.5.9', '3.7', 'soon', 4.6, null]) {
+    const got = withOption(BUNDLED, {...SITE, netbox});
+    assert.deepEqual(got, off, String(netbox));
+    assert.equal(readmeOf({...SITE, netbox}, got), TODAY_README, String(netbox));
+  }
+  assert.deepEqual(withOption(BUNDLED, undefined), withOption(BUNDLED, {}));
+  assert.deepEqual(D.KIT_FILES.netbox, {rack: '1-rack.csv', devices: '2-devices.csv', modules: '3-modules.csv', cables: '4-cables.csv'});
+  assert.equal(D.netboxFiles(SITE), D.KIT_FILES.netbox);
+  // The rack, devices and modules files do not read the option at all.
+  const items = ITEMS.map(i => ({...i}));
+  const types = new Map(items.map(i => [i.id, {manufacturer: 'M', model: 'T', isFullDepth: false}]));
+  const files = dcim => [csvOf(X.rackImportRows({rack: BUNDLED, dcim})), csvOf(X.deviceImportRows({rack: BUNDLED, items, types, dcim})),
+    csvOf(D.moduleImportRows({target: 'netbox', parts: PARTS, names: NAMES, kept: ALL, deviceOf: id => DEVICE[id], moduleOf}))];
+  assert.deepEqual(files(ON), files(SITE));
+});
+
+test('the option names NetBox 4.6 or later, by its version', () => {
+  for (const v of ['4.6', '4.6.0', '4.7.2', ' 4.6 ', 'v4.7', '5.0', '10.1']) assert.equal(D.netboxHasBundles({netbox: v}), true, v);
+  for (const v of ['4.5', '4.5.9', '', '4', 'x', '3.9', undefined, null, 4.6, {}]) assert.equal(D.netboxHasBundles({netbox: v}), false, String(v));
+  assert.equal(D.netboxHasBundles(undefined), false);
+  // M.dcimOf keeps it only where the rack has it, so a rack without it reads as it did.
+  assert.deepEqual(M.dcimOf({dcim: {site: 'S', role: 'R', netbox: ' 4.6 '}}), {site: 'S', role: 'R', netbox: '4.6'});
+  assert.deepEqual(M.dcimOf({dcim: {site: 'S'}}), {site: 'S', role: ''});
+  assert.deepEqual(M.dcimOf({dcim: {netbox: 7}}), {site: '', role: '', netbox: ''});
+  assert.deepEqual(M.withDcim({dcim: {site: 'S'}}, {netbox: '4.6'}).dcim, {site: 'S', netbox: '4.6'});
+  assert.equal(M.withDcim({name: 'R'}, {netbox: ''}).dcim, undefined);
+});
+
+test('with the option on, a bundles file comes first, the cables file names each bundle, and the description keeps it', () => {
+  const on = withOption(BUNDLED, ON);
+  assert.deepEqual(on.bundleFile.columns, ['name']);
+  assert.deepEqual(on.bundleFile.rows, [{name: 'Lab 1 Rack A Bundle 1'}, {name: 'Lab 1 Rack A uplinks'}]);
+  assert.equal(csvOf(on.bundleFile), 'name\r\nLab 1 Rack A Bundle 1\r\nLab 1 Rack A uplinks\r\n');
+  assert.deepEqual(on.columns, [...D.CABLE_IMPORT_COLUMNS.netbox, 'bundle']);
+  assert.deepEqual(on.rows.map(r => r.bundle), ['Lab 1 Rack A Bundle 1', 'Lab 1 Rack A Bundle 1', 'Lab 1 Rack A uplinks']);
+  // The description prefix is kept either way; every other cell is as it was.
+  const off = withOption(BUNDLED, SITE);
+  assert.deepEqual(on.rows.map(({bundle, ...r}) => r), off.rows);
+  assert.deepEqual(on.rows.map(r => r.description), ['Bundle 1. uplink', 'Bundle 1. management', 'uplinks. uplink']);
+  // The old note, that the file leaves the field out, is gone; the new one says where the bundles are.
+  assert.ok(!on.notes.some(n => /does not fill/.test(n)), on.notes);
+  assert.ok(on.notes.includes('Each cable in a bundle names its bundle first in its description, and fills the bundle column of this file with the name of its cable bundle, which 4-bundles.csv makes first.'), on.notes);
+  // File order: the bundles file is step 5, before the cables file, which moves to step 6.
+  assert.deepEqual(D.netboxFiles(ON), {rack: '1-rack.csv', devices: '2-devices.csv', modules: '3-modules.csv', bundles: '4-bundles.csv', cables: '5-cables.csv'});
+  const text = readmeOf(ON, on, {bundles: 2}).split('\n');
+  const i = text.findIndex(l => l.startsWith('Step 5:'));
+  assert.ok(text[i].startsWith('Step 5: 4-bundles.csv (2 rows): '), text[i]);
+  assert.ok(text[i + 1].startsWith('Step 6: 5-cables.csv (3 rows): Cables > Import.'), text[i + 1]);
+  assert.ok(!text.some(l => /4-cables\.csv/.test(l)));
+  assert.ok(text.some(l => /^- Steps 4 and 6 find a device by its name/.test(l)), text.join('\n'));
+  // Nothing the kit cannot see is promised.
+  assert.ok(text.some(l => /cannot see the cable bundles an instance already has/.test(l) && /refuses the whole of 4-bundles\.csv/.test(l) && /remove the rows/.test(l) && /skip 4-bundles\.csv/.test(l)), text.join('\n'));
+});
+
+test('two racks whose bundles share a name get bundles that differ, by site and rack', () => {
+  const b = withOption({...BUNDLED, name: 'Rack B'}, ON), a = withOption(BUNDLED, ON);
+  assert.deepEqual(b.bundleFile.rows, [{name: 'Lab 1 Rack B Bundle 1'}, {name: 'Lab 1 Rack B uplinks'}]);
+  const all = [...a.bundleFile.rows, ...b.bundleFile.rows].map(r => r.name);
+  assert.equal(new Set(all).size, 4, all.join(' | '));
+  // Another site separates them too.
+  assert.deepEqual(withOption(BUNDLED, {...ON, site: 'Lab 2'}).bundleFile.rows[0], {name: 'Lab 2 Rack A Bundle 1'});
+  // A control character in a name is a space, so a row is one line.
+  assert.deepEqual(withOption({...BUNDLED, bundles: [{...LABELLED[1], label: 'up\nlinks'}]}, ON).bundleFile.rows, [{name: 'Lab 1 Rack A up links'}]);
+});
+
+test('with no site, the option writes no bundles file and no bundle column, and says why', () => {
+  for (const dcim of [{role: 'Router', netbox: '4.6'}, {site: '   ', netbox: '4.6'}, {netbox: '4.6'}]) {
+    const got = withOption(BUNDLED, dcim);
+    assert.ok(!('bundleFile' in got));
+    assert.deepEqual(got.columns, D.CABLE_IMPORT_COLUMNS.netbox);
+    assert.ok(got.rows.every(r => !('bundle' in r)));
+    assert.deepEqual(got.rows.map(r => r.description), ['Bundle 1. uplink', 'Bundle 1. management', 'uplinks. uplink']);
+    assert.equal(D.netboxFiles(dcim), D.KIT_FILES.netbox);
+    const note = 'The option for NetBox 4.6 or later is on, but no site is set, so a bundle cannot be given a name that is unique in a NetBox instance: this kit has no bundles file and the cables file has no bundle column. Each cable still names its bundle first in its description. Set the site and export again.';
+    assert.ok(got.notes.includes(note), got.notes);
+    assert.ok(!got.notes.some(n => /does not fill/.test(n)), got.notes);
+    // The README the kit writes carries it, as a note, and keeps the steps it had.
+    const text = readmeOf(dcim, got);
+    assert.ok(text.includes(`- ${note}`), text);
+    assert.ok(text.includes('Step 5: 4-cables.csv (3 rows): Cables > Import.'), text);
+  }
+  // No bundle, nothing to say.
+  assert.ok(!withOption({...BUNDLED, bundles: []}, {netbox: '4.6'}).notes.some(n => /bundle/i.test(n)));
+});
+
+test("a bundle whose NetBox name is over 100 characters is left out, with the reason; a name at 100 stays", () => {
+  const fit = 'Lab 1 Rack A '.length;                 // site, rack and a space each
+  const at = withOption({...BUNDLED, bundles: [{...LABELLED[1], label: 'n'.repeat(100 - fit)}]}, ON);
+  assert.equal(at.bundleFile.rows[0].name.length, 100);
+  assert.deepEqual(at.left, []);
+  const label = 'n'.repeat(101 - fit);
+  const over = withOption({...BUNDLED, bundles: [LABELLED[0], {...LABELLED[1], label}]}, ON);
+  // out of the bundles file and out of the cables file's column; the other bundle stays
+  assert.deepEqual(over.bundleFile.rows, [{name: 'Lab 1 Rack A Bundle 1'}]);
+  assert.deepEqual(over.rows.map(r => r.bundle), ['Lab 1 Rack A Bundle 1', 'Lab 1 Rack A Bundle 1', '']);
+  // never cut short, and the description still names it
+  assert.ok(over.rows[2].description.startsWith(label), over.rows[2].description);
+  assert.deepEqual(over.left, [`Bundle ${label.slice(0, 24)}... is not in the bundles file: its NetBox name, site, rack and bundle together, is 101 characters, and NetBox allows 100. The name is never shortened: two shortened names could be the same. Its cables are in the cables file with no bundle, and their descriptions still name it. Shorten the site, the rack or the bundle's name and export again.`]);
+  // counted in characters, not UTF-16 units
+  const astral = withOption({...BUNDLED, bundles: [{...LABELLED[1], label: '\u{1F600}'.repeat(100 - fit)}]}, ON);
+  assert.equal(astral.bundleFile.rows.length, 1);
+  assert.equal(D.DCIM_LIMITS.cableBundleName, 100);
+  // two bundles of one rack with the same name are both left out: NetBox needs each name once
+  const twin = withOption({...BUNDLED, bundles: [{...LABELLED[0], label: 'x'}, {...LABELLED[1], label: 'x'}]}, ON);
+  assert.deepEqual(twin.bundleFile.rows, []);
+  assert.deepEqual(twin.rows.map(r => r.bundle), ['', '', '']);
+  assert.equal(twin.left.length, 2);
+  assert.match(twin.left[0], /^Bundle x is not in the bundles file: another bundle of this rack is also named "Lab 1 Rack A x"/);
+});
+
+test('a bundle with no cable written is not in the bundles file', () => {
+  // c1 and c2 go with a device left out of the devices file; only the bundle of c3 has a cable in the file.
+  const kept = new Set(['i2', 'i4']);
+  const got = withOption(BUNDLED, ON, 'netbox', {kept});
+  assert.deepEqual(got.rows.map(r => r.label), ['c3']);
+  assert.deepEqual(got.bundleFile.rows, [{name: 'Lab 1 Rack A uplinks'}]);
+  assert.ok(got.notes.some(n => /names its bundle first/.test(n)));
+  // a bundle with no member cable at all, and one with only a missing cable
+  const empty = withOption({...BUNDLED, bundles: [{...LABELLED[0], members: []}, {id: 'b3', number: 3, label: '', members: [{cable: 'gone'}], route: []}]}, ON);
+  assert.deepEqual(empty.bundleFile, {columns: ['name'], rows: []});
+  assert.ok(!empty.notes.some(n => /bundle/i.test(n)), empty.notes);
+  // no bundles and the option on: an empty file with its header, the column blank
+  const none = withOption({...BUNDLED, bundles: []}, ON);
+  assert.equal(csvOf(none.bundleFile), 'name\r\n');
+  assert.ok(none.rows.every(r => r.bundle === ''));
+});
+
+test('Nautobot is unchanged by the option', () => {
+  const off = withOption(BUNDLED, SITE, 'nautobot'), on = withOption(BUNDLED, ON, 'nautobot');
+  assert.deepEqual(on, off);
+  assert.deepEqual(on.columns, D.CABLE_IMPORT_COLUMNS.nautobot);
+  assert.ok(!('bundleFile' in on));
+  assert.ok(on.notes.some(n => /Nautobot's cables have no description or bundle/.test(n)));
+  assert.deepEqual(withOption(BUNDLED, {netbox: '4.6'}, 'nautobot'), withOption(BUNDLED, {}, 'nautobot'));
+  // the README: the same files and steps
+  const args = {target: 'nautobot', rack: README_RACK, date: DAY, typeFiles: 2, manufacturers: ['Cisco'], rows: {devices: 4, modules: 1, cables: 3}, left: off.left, notes: off.notes, ...WHOLE};
+  assert.equal(D.kitReadme({...args, dcim: ON}).text, D.kitReadme({...args, dcim: SITE}).text);
+  assert.deepEqual(D.KIT_FILES.nautobot, {devices: '1-devices.csv', modules: '2-modules.csv', cables: '3-cables.csv'});
 });
 
 test('a length too large for the target is written as none, and said', () => {

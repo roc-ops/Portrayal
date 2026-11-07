@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: h100-nvl-top
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The top edge of the NVIDIA H100 NVL card seen from outside, with the three
+  NVLink bridge connectors that sit under its removable caps. It is the card's
+  `faces.plan`, and it composes the connectors the bridge mates.
+size: {w: 38.23, h: 268.60}
+size-confidence: {w: estimated, h: drawing}
+size-notes: >-
+  THE TOP EDGE SEEN FROM OUTSIDE, as nvidia/a100-pcie-80gb-top@1 draws it: the
+  card's top edge is the one 126.31 from the bracket's tip, and the drawing runs
+  268.60 behind the bracket's outer face (y' = mm behind it) and 38.23 across
+  the card's thickness (x' = the card's y less 1.77, so the backplate is at the
+  left, as the rear face has it). The thickness is the card's estimated 38.2;
+  PB-11773 figure 4 measures 38.7 (see the card's `thickness`).
+attrs: {media: gpu}
+parts:
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-1, at: [0.43, 12.55]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-2, at: [0.43, 69.10]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-3, at: [0.43, 125.45]}
+provenance:
+  size: >-
+    drawing - the length is PB-11773 figure 5's 266.70 from the inside of the PCB
+    outline plus its 1.00 and 0.90 at the bracket end, 268.60; the width is the
+    card's estimated thickness, see size-notes.
+  connectors: >-
+    drawing - PB-11773 figure 4 is the top edge of the card as an orthographic
+    line drawing with the three caps, each labelled NVLINK, and the NVIDIA mark.
+    Read on the 1122 px page, with the bracket's face at x 50.5 and the card's end
+    at x 1118.5 as 268.60 (3.976 px/mm), the caps run 12.83 to 61.87, 69.30 to
+    118.40 and 125.60 to 174.80 behind the bracket's outer face: 49.0 to 49.2
+    long, on a pitch of 56.5 and 56.3, and 6.5 wide (26 px). The connector part
+    is nvidia/nvlink-a100-connector@1, 49.5 long, so each starts where the
+    cap's centre puts it: 12.55, 69.10 and 125.45, at 2.2 to 8.8 across the card
+    (x' 0.43 to 7.03). The A100's caps start 13.5, 70.7 and 126.1 and are 49.5
+    long (PNY render), so the two cards' spans agree to 1.4. PB-11773 says the
+    NVL's bridge is the part the H100 PCIe and the A100 use, 900-53651-0000-000,
+    which is why the A100's connector is composed.
+  bands: >-
+    estimated - the edge's four bands, left to right: the black backplate, the
+    board's edge, the black cover and the champagne shroud, at the card's `body`
+    boxes. On figure 4 the black band is 13.1 across (52 rows at 3.976 px/mm)
+    where 12.63 is drawn; the 0.5 is a line's width. The ribs, the lettering and
+    the open end are the card's own side drawings, not drawn here.
+skins: [default]

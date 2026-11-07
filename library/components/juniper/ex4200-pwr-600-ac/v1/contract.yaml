@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: ex4200-pwr-600-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-PWR-600-AC, the 600 W AC power supply of the EX4200-24P. It seats in power supply
+  slot 0 or 1 at the rear and extends 2.25 in (57.2 mm) out of the chassis, with the cord
+  retainer clip a further 3 in beyond the supply. Hot-insertable and hot-removable; AC OK and DC
+  OK lamps, a locking lever at the left, a round fan exhaust, a loop handle along the bottom and
+  an appliance inlet that takes a C13 cord. It looks the same as the 930 W supplies. The
+  EX4200-24PX and -48PX do not accept it.
+attrs:
+  part-number: EX-PWR-600-AC
+  role: ac-power-supply
+  power-output-w: 600
+  input-voltage: 100-240 VAC, 50-60 Hz
+  input-current: 7 A (guide Table 12, switches with 24 PoE ports)
+  weight-kg: 1.4
+  depth-beyond-chassis-mm: 57.15
+part-numbers:
+  EX-PWR-600-AC: {part: EX-PWR-600-AC}
+provenance:
+  part-number: >-
+    datasheet - EX4200 Ethernet Switch datasheet (Juniper Networks, 1000215-026-EN, Feb 2019),
+    ordering information, Power Supplies: EX-PWR-600-AC, "600 W AC Power Supply Unit (PSU)"
+  power-output-w: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), Table 1 (600 W minimum supply
+    of the EX4200-24P), Table 9 (600 W rating, 410 W PoE budget) and Table 12 (100 through 240 VAC,
+    50 through 60 Hz). An output, because a supply provides power
+  weight: >-
+    datasheet - guide Table 3: the 600 W and 930 W AC supplies weigh 3.1 lb (1.4 kg)
+  depth: >-
+    datasheet - guide Table 3 and Rear Panel of an EX4200 Switch: with a 600 W or 930 W supply the
+    chassis is 19.25 in (48.9 cm) deep; "extend out of the chassis by 2.25 in. Power cord retainer
+    clips extend out of the power supply by 3 in". The device's modelled depth is the 17 in chassis
+    and this part carries the 2.25 in as an attr
+  size: >-
+    estimated - 90.0 x 41.5 mm, the slot width and height read off the rear callout figure
+    (Figure 4, g020084; 609 x 252 px, whose chassis outline is 557 px for 438.2 mm, 1.271 px per
+    mm, and 5 percent foreshortened vertically). The guide gives no supply dimension and draws
+    the 600 W and 930 W supplies only in isometric (Figure 18). Good to about 2 mm
+  inlet: >-
+    datasheet - guide, AC Power Cord Specifications: the coupler is type C13 (IEC 60320), so the
+    supply carries the registry's C14 appliance inlet
+  face: >-
+    drawing - guide Figure 18 (600 W and 930 W AC Power Supplies, g020065): locking lever at the
+    left, AC and DC lamps above the inlet, the inlet, a round fan exhaust at the right and a loop
+    handle along the bottom. "The exterior of the 600 W model is identical in appearance to that
+    of the 930 W model." See the 320 W supply's note on the handle position: the text of the
+    installation procedure and the figures disagree and the figures are followed. No photograph of
+    the supply is held, so its colour is estimated
+  leds: >-
+    datasheet - guide Table 10: AC OK is on when power is coming into the supply; DC OK is on when
+    the supply is sending out power correctly; each is off otherwise
+  power-draw: >-
+    NOT APPLICABLE - a supply states its output
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [11.5, 14.5]}
+elements:
+  led-ac-ok:
+    at: [15.6, 8.8]
+    size: [3.2, 1.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc-ok:
+    at: [24.4, 8.8]
+    size: [3.2, 1.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  latch:
+    at: [1.5, 3.0]
+    size: [8.2, 9.6]
+    class: latch
+  handle:
+    at: [29.5, 35.7]
+    size: [55.0, 4.8]
+    class: latch
+size:
+  w: 90.0
+  h: 41.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: latch
+    out: 2.0
+    color: '#9ba0a6'
+    confidence: estimated
+    source: guide Figure 18 - the locking lever stands proud of the face; projection not measured
+  - node: handle
+    out: 3.0
+    color: '#c9ccd0'
+    confidence: estimated
+    source: guide Figure 18 - the loop handle stands proud of the face; projection not measured

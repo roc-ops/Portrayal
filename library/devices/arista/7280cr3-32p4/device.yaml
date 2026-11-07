@@ -1,0 +1,2055 @@
+format: 1
+kind: device
+name: 7280cr3-32p4
+version: 0.1.1
+maturity: modelled
+manufacturer: Arista
+model: 7280CR3-32P4
+aliases:
+- {name: DCS-7280CR3-32P4, kind: marketing}
+portfolio: {line: 7000 Series, family: 7280CR3}
+description: >-
+  Arista 7280CR3-32P4 - a fixed 1RU data-centre switch router with 32 x 100G QSFP ports and 4 x 400G OSFP
+  ports, running EOS. The front carries the 100G cages in two stacked rows, the odd number on top, in
+  two blocks of eight columns, with a status lamp group of four above each upper cage and below each lower
+  one. The four 400G OSFP cages are two stacked columns between the blocks. Four system lamps (system,
+  fan, PS1, PS2) are at the right. The rear carries two hot-swap power supplies at the ends and three
+  hot-swap fan modules, with the RJ-45 management port, the USB port and the RJ-45 console port between
+  the left supply and the first fan. The same panel is ordered with front-to-rear air (-F) or rear-to-front
+  air (-R). It is sold as the 7280CR3-32P4, as the 7280CR3K-32P4 with more memory and routes, and as the
+  7280CR3K-32P4A with an eight-core CPU.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      7280R3 Series Quick Start Guide, Arista Networks, document DOC-07041-01, 63 pages, PDF created 2025-05-16
+      (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7280R3.pdf): Table 1 (dimensions and weights),
+      Table 2 (operating and storage), Table 3 (power input), Table 4 (power draw and supported supplies),
+      section 2.1 (airflow orientation, handle colour), Table 5 (grounding), section 4.5 (serial and management
+      cables), Appendix A (status indicators, Tables 9 to 13), Appendix C (Figure C-3, the front panel
+      of the DCS-7280CR3-32P4, 7280CR3K-32P4 and 7280CR3K-32P4A), Appendix D (Figure D-2, the rear panel
+      with three fan modules), Appendix E (field replacement). 7280 Data Center Switches Quick Start Guide,
+      Arista Networks, 58 pages, PDF created 2022-06-03 (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7280_1RU_Gen3.pdf):
+      Figure 49 (DCS-7280CR3-32P4 and 7280CR3K-32P4), the cross-check of Figure C-3. 7280R3 Series Data
+      Center Switch Router Data Sheet, Arista Networks, 03-0045-59, dated August 11th, 2025 (https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Data-Sheet.pdf):
+      the model comparison of the 7280CR3-32P4, CR3K-32P4 and CR3K-32P4A, the power supply specifications
+      and the ordering information. Held and checked first: intake COVERAGE.md and SOURCES.md, which list
+      no photograph, Visio stencil, 3D model or CAD file for this model (Arista publishes none; the stencil
+      zip could not be fetched). The data sheet's picture of the face is a thumbnail. No drawing, photograph
+      or logo is copied into the library, only transcribed facts and new drawings.
+  gate-1-front:
+    confidence: estimated
+    note: >-
+      Figure C-3 passes. The raster is 574 x 116 pixels; the body measures 561 px wide and 56 px tall
+      (aspect 10.0), against the data sheet's 440.0 / 43.7 = 10.07, so the figure is near-orthographic
+      and carries geometry at 1.273 px/mm (the 440 mm body is the scale anchor, its left edge read at
+      8.7 px as for the sibling 7280CR3-32D4 face). One pixel is 0.8 mm, so every position is good to
+      about 0.8 mm, and every one is `estimated` because it is read off a picture and no dimension states
+      it. The old guide's Figure 49 is the same 574 x 116 raster, compared pixel for pixel (no pixel differs),
+      so it is a repeat of the source and not a second reading. The status lamps are read from the green
+      pixels of the lamps (550 px), which put them about 5 mm left of where the sibling 7280CR3-32D4 file
+      puts its lamps.
+  gate-1-rear:
+    confidence: estimated
+    note: >-
+      Figure D-2 is a 552 x 126 px raster whose chassis is 544 px between its edges and 52 px tall (aspect
+      10.5; the 3 percent excess is the cut-off bottom edge), 1.239 px/mm over the 440 mm body; positions
+      are good to about 0.8 mm. The guide draws the rear generically (D-1 to D-4) and does not say which
+      model uses which. The 7280CR3-32P4 is mapped to D-2 by its three fan modules (data sheet: "Hot-swappable
+      Fans 3 (N+1 redundant)"), its 1RU height, its two power supplies and its management ports at the
+      rear (Figure C-3 has none at the front). THE MAPPING IS ESTIMATED. The positions are the 7280CR3-32D4's,
+      which is mapped to the same figure.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 1: 48.3 x 4.4 x 55.8 cm (19 x 1.75 x 22.0 in), 12.3 kg (27.0 lbs), the same for the
+      7280CR3-32P4, 7280CR3K-32P4 and 7280CR3K-32P4A. Data sheet: 43.99 x 4.37 x 55.83 cm (17.3 x 1.72
+      x 22.0 in), 27 lbs (12.27 kg). The width: 48.3 cm is over the mounting ears, so the body between
+      them, which is what is modelled, is the data sheet's 43.99 cm (440.0 here), a 21.5 mm ear each side.
+      The height is the data sheet's 43.7 (the guide rounds it to 4.4 cm). The depth is the data sheet's
+      558.3 (the guide's 55.8 cm is the same figure rounded). 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide's Chapter 3 mounts the switch with the accessory-kit brackets and shows
+      them in isometric drawings of a different switch ("Illustrations in this chapter depict the mounting
+      of a DCS-7050QX-32S switch") that carry no measure. The data sheet lists the spares KIT-7001, KIT-2POST-1U-NT,
+      KIT-4POST-NT, KIT-7001-4POST-L, KIT-7101-D, KIT-7101-RK, KIT-7101-LD-RK, KIT-ADJ-RLR and KIT-GND-EXT-1RU.
+      No figure measures a bracket position, and the kit guides are not held, so no ear position is written
+      and no rail kit is listed in chassis.kits. Recorded in the gap rack-ears.
+  front-ports:
+    confidence: estimated
+    note: >-
+      Figure C-3 at 1.273 px/mm, read in a ten-times enlargement. Thirty-two QSFP100 cages in two stacked
+      rows (ports 1 to 32), in eight-column blocks of two groups of four columns: the column centres read
+      18.8, 37.8, 56.8 and 75.8 mm, then 107.9 to 164.9 for ports 9 to 16, then 261.3 to 318.3 for ports
+      17 to 24 and 350.8 to 407.8 for ports 25 to 32. The column pitch inside a group is 19.0 (the registry's
+      ganged-QSFP pitch) and the gap between groups is 13.3 mm wider than a column. The row centres read
+      from the white number tabs at 14.7 and 30.4 mm down, a row pitch of 15.7. Four OSFP cages (33 over
+      34 at 200.5 mm, 35 over 36 at 227.0 mm) sit between the blocks in yellow boxes 4.3 to 20.8 and 24.4
+      to 40.5 mm down, so their centres are 12.55 and 32.45 mm down. std/osfp@1 (23.1 x 13.5) is seated.
+      The belly-to-belly orientation of the QSFP cages is the library's convention (upper cage upright,
+      lower turned 180); the OSFP cages sit the same way up, which is the library's convention for stacked
+      OSFP cages (lint L108). The figure is too small to show the latch side.
+  port-numbering:
+    confidence: estimated
+    note: >-
+      Figure C-3 (callout 5, "Port numbers") prints 1 over 2, 3 over 4, and so on down each column and
+      across, 1 to 32 in the two blocks, then 33 over 34 and 35 over 36 in the OSFP columns, which sit
+      between ports 16 and 17 in space but are numbered after 32. The odd number is the upper cage. The
+      figure prints each number on a white tab over the cage opening; a seated cage hides what is painted
+      under it, so the numerals are set in the band between the two rows, the odd number left of its column
+      centre and the even one right of it. EOS interface names are not printed on the metal and are not
+      modelled.
+  port-lamps:
+    confidence: estimated
+    note: >-
+      Guide Appendix A.1.2, Table 10: "Port LEDs near their corresponding ports provide a link and operational
+      status": off the link is down, green link up, yellow software disabled, flashing yellow failed diagnostics.
+      Figure C-3 draws a row of four dark dots above each upper QSFP column and four below each lower
+      one (the guide's Figure A-3 captions four dots "Port 4 LEDs"). FOUR LAMPS A QSFP PORT are modelled,
+      a to d, 4.0 mm apart and centred on the column (the dots read 3.9 mm apart at 7.5 mm down above
+      the upper cage and 37.3 mm down below the lower one). Table 10 gives one set of states, so all four
+      carry it; what each of the four means is the gap port-lamp-count. The OSFP cages carry no lamp the
+      figure shows (white light-pipe bars only).
+  speed-strips:
+    confidence: estimated
+    note: >-
+      Guide Figure C-3 callout 6, "Port-speed group": a thin grey band between the two rows carries small
+      legends at each pair of columns (read as "A8" and "M*" style marks) and the OSFP columns sit on
+      a grey plate with two screws at each end. The legends are unreadable at 85 ppi and are not drawn;
+      the plate and the four screws are drawn.
+  status-lamps:
+    confidence: estimated
+    note: >-
+      Guide Appendix A.1.1, Table 9 and Figure C-3 callouts 1 to 4: a system status lamp (blinking green
+      on power-up, green normal, blue locator, amber for two or more failed fans), a fan status lamp (green,
+      amber for one module removed or failed, red for two or more) and a status lamp for each of the two
+      power supplies (green operating, off removed or faulty). Four lamps in a column at 425.6 mm, 3.2
+      mm apart from 5.2 mm down. The printed glyphs beside them are a system symbol, a fan symbol and
+      two small legends read as PS1 and PS2.
+  front-legend:
+    confidence: estimated
+    note: >-
+      The vertical legend up the left plate reads the maker's wordmark above the model "7280CR3-32P4"
+      (read at 574 px; the print is small). THE WORDMARK IS NOT DRAWN: a logo-zone region is reserved
+      over it and the plain model text is set. The figure's small print is not legible, so the text is
+      as the guide's caption names the model.
+  vents:
+    confidence: estimated
+    note: >-
+      The figure shows a perforated strip along the top (0.4 to 5.5 mm down), grids of dark squares in
+      the gaps between the port groups (86.9 to 96.9, 177.4 to 186.9, 240.5 to 250.0 and 329.5 to 339.5
+      mm across, 7.5 to 39.5 down), a grid left of port 1, and a ribbed strip of vertical slits along
+      the bottom lip (39.3 to 43.2 mm down). Each is drawn as a vent field in its measured extent; the
+      individual squares are not drawn one by one.
+  rear:
+    confidence: estimated
+    note: >-
+      Figure D-2 at 1.239 px/mm, the rear seen from behind with x = 0 at the left of the drawing. PS1
+      is the left and PS2 the right (callouts 1 and 10). Each power supply module is 73.5 mm wide (the
+      data sheet's "73.5MM") at 4.0 and 362.3 mm across and 1.85 mm down. The management block is a grey
+      plate 83.0 to 101.0 mm across with the Ethernet management port, the USB port and the RJ-45 console
+      port stacked in it, in the order the library draws other Arista management stacks. Three fan modules
+      78.6 mm wide at 107.7, 191.0 and 274.3 mm across (an 83.3 mm pitch) and 2.55 mm down.
+  rear-fan:
+    confidence: datasheet
+    note: >-
+      Data sheet: "Hot-swappable Fans 3 (N+1 redundant)", "Fan Tray FAN-7011H", FAN-7011H-F (front-to-rear)
+      and FAN-7011H-R (rear-to-front) as spares. Guide section 2.1: a red handle is an air-exit module
+      and a blue handle an air-inlet one, and every module must have the same direction. The three fan
+      modules are bays that accept FAN-7011H-F or -R; the -R configurations seat the blue modules.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Guide Appendix E (E.2 power supplies, E.3 fan modules) gives removal and installation procedures,
+      and the data sheet calls the supplies "1+1 hot-swappable" and the fans "hot-swap". SO THE TWO POWER
+      SUPPLIES AND THE THREE FAN MODULES ARE BAYS. Nothing on this chassis is a built-in unit. The management
+      block, the USB port and the console port are part of the chassis and are placements.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 4: typical / maximum 535 W / 851 W for the 7280CR3-32P4, the 7280CR3K-32P4 and the 7280CR3K-32P4A
+      (unlike the 32D4A, the 32P4A draws the same), each with PWR-1011-AC or PWR-1011-DC. The data sheet's
+      comparison table gives the K-32P4A 543 W / 865 W (gap `size-conflict`); the guide's Table 4 is used,
+      and the data sheet's typical is "measured at 25C ambient with 50% load on all ports".
+  environment:
+    confidence: datasheet
+    note: >-
+      Guide Table 2: operating 0 to 40 C, storage -25 to 70 C, altitude 0 to 3,000 m, humidity 5 to 90
+      percent non-condensing. Data sheet: operating 0 to 40 C, storage -40 to 70 C, humidity 5 to 95 percent,
+      altitude 0 to 3,000 m. Storage temperature and humidity differ: gap `environment`, the guide's used.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Data sheet ordering information: DCS-7280CR3-32P4-F and -R, DCS-7280CR3K-32P4-F and -R, and DCS-7280CR3K-32P4A-F
+      and -R ("front to rear air, 2 x AC" and "rear to front air, 2 x AC"). The "#" SKUs ("configurable
+      fans and psu") and the "-M#" memory-expansion order are orders of parts, not part numbers a DCIM
+      can hold, and are not listed. The data sheet lists no DC build of the switch: the PWR-1011-DC-RED
+      and -BLUE supplies are spares, so the DC configurations are examples with no part number. The K
+      and K-A builds share the base model's size, weight, figure and supplies and differ in memory, CPU
+      and routes; each is a configuration with its own part numbers, and its `attrs` state its own memory,
+      CPU, storage and minimum EOS. There is no empty-bay (-S) configuration: no -S suffix exists in this
+      family and the guide draws no blank for a power supply or fan module.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. EOS names ports Ethernet1 to Ethernet36 and Management1; this is the
+      vendor's convention and no held document prints it.
+  colour:
+    confidence: estimated
+    note: >-
+      The front plate is the 7280CR3-32D4's #aaabad, read there as the median of bare-plate pixels in
+      the guide's figure of the same family.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched 2026-10-23 (web searches of Arista's end-of-sale notices) for a notice for the 7280CR3-32P4,
+      7280CR3K-32P4 and 7280CR3K-32P4A: none found. The notices the searches returned were for older 7280
+      models (which name the 32P4 as a replacement) and for the 7280SR3K-48YC8 (notice 23789) and 7280CR3K-36S
+      (notice 23790) series, not for this one.
+  other-faces:
+    confidence: datasheet
+    note: >-
+      No source draws the top, bottom or sides flat. The guide's installation figures are isometric. Each
+      carries an `empty` sentence. The 1RU grounding point is on the bottom of the chassis (guide section
+      4.2, Table 5, KIT-GND-EXT-1RU, Figure 4-1 shows the 7280CR3-32P4); no figure measures it.
+attrs:
+  physical:
+    weight: >-
+      12.3 kg (27.0 lbs) for the 7280CR3-32P4, 7280CR3K-32P4 and 7280CR3K-32P4A (guide Table 1, data sheet)
+    size-over-ears: 48.3 x 4.4 x 55.8 cm (19 x 1.75 x 22.0 in) with the mounting ears (guide Table 1)
+  performance:
+    throughput: 4.8 (9.6) Tbps
+    packets-per-second: 2 Bpps
+    latency: from 3.8 microseconds
+    packet-buffer: 8 GB
+    ports-max-speed: >-
+      four ports of 400 Gbps; 48 of 100 Gbps; 96 of 50 Gbps; 36 of 40 Gbps; 96 of 25 or 10 Gbps
+    interfaces-max: 96
+  power:
+    power-typical-w: 535
+    power-max-w: 851
+    power-envelope: as-tested
+    power-measure: typical at 25 C ambient with 50 percent load on all ports (data sheet)
+    psu-redundancy: 1+1
+    input-ac: 100 - 240 VAC (PWR-1011-AC), IEC 60320 C14
+    input-dc: -48 to -60 VDC (PWR-1011-DC)
+    efficiency: 93 percent (Platinum) AC, 94 percent DC (data sheet)
+  thermal:
+    airflow: front-to-rear or rear-to-front, set by the fan modules and supplies fitted
+    fan-redundancy: 3 hot-swap fan modules, N+1
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -25 to 70 C (guide Table 2); the data sheet says -40 to 70 C
+    humidity: 5 to 90 percent non-condensing (guide Table 2); the data sheet says 5 to 95 percent
+    altitude: 0 to 3,000 m (10,000 ft) operating
+  platform:
+    cpu: Quad-Core x86 (7280CR3-32P4 and 7280CR3K-32P4); Eight-Core x86 (7280CR3K-32P4A)
+    memory: 8 GB, 64 GB optional (7280CR3-32P4); 64 GB (7280CR3K-32P4 and -32P4A)
+    storage: 8 GB flash (not on the 7280CR3K-32P4A), 120 GB SSD (data sheet)
+  features:
+    optics-qsfp28: 100G, 50G, 40G, 25G and 10G with breakout, in the 32 QSFP cages (data sheet)
+    optics-osfp: 400G and 100G, in the four OSFP cages (data sheet)
+    eos-license: >-
+      license group G3; minimum EOS 4.22.1 (7280CR3-32P4, 7280CR3K-32P4), 4.27.2 (7280CR3K-32P4A)
+  management:
+    console: RJ-45 RS-232 serial on the rear, 9600 baud 8N1, no flow control
+    oob: one 10/100/1000 management port on the rear
+    usb: one USB port on the rear, for software or configuration updates
+  compliance:
+    emc: >-
+      FCC Class A, ICES-003, EN 55032, EN IEC 61000-3-2:2019, EN 61000-3-3, EN 55035, EN 300 386
+    safety: EN 62368-1, IEC 62368-1, CSA/UL 62368-1
+    certifications: BSMI, CE, KCC, NRTL, RCM, UKCA, VCCI, TEC, ANATEL, ICASA (data sheet)
+    rohs: RoHS 2011/65/EU and 2015/863/EU (data sheet, Directives)
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 43.7, depth: 558.3, ru: 1, color: '#aaabad', airflow: front-to-back, power: ac}
+gaps:
+- what: size-conflict
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    The 7280CR3K-32P4A draws 535 W typical and 851 W maximum in the guide's Table 4 and 543 W / 865 W
+    in the data sheet's comparison table (the figures the guide gives the 32D4A). The guide's Table 4
+    is used for the device.
+  wanted: the maker's statement of which is current.
+- what: environment
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  note: >-
+    Storage temperature -25 to 70 C (guide Table 2) against -40 to 70 C (data sheet), and relative humidity
+    5 to 90 percent against 5 to 95 percent. The guide's, the older document by three months, are in attrs.
+  wanted: the maker's statement of which is current.
+- what: dc-input-voltage
+  scope:
+  - rear
+  reason: sources-disagree
+  note: >-
+    The PWR-1011-DC input is "-40 to -60 VDC, 30 A" in guide Table 3 and "-48 to -60V DC" in the data
+    sheet's power supply table. The guide's is in the component, the data sheet's in its provenance.
+  wanted: the maker's statement of which is current.
+- what: rack-ears
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The guide's Figures 3-1 to 3-4 are isometric drawings of another switch and carry no measure, and
+    the kit guides for KIT-7001, KIT-7101-D and the other spares are not held, so no ear position or rail
+    kit is written.
+  wanted: a dimensioned drawing of the mounting bracket position, and the kit guides.
+- what: port-lamp-count
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    Figure C-3 draws four dots a QSFP port, but Table 10 describes one port LED and does not say what
+    each of the four shows. All four are given Table 10's states.
+  wanted: the guide's account of the port lamps, or a photograph of the lit face.
+- what: front-legends
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    The port-speed band's legends, the small print over each cage, the system and fan lamp glyphs and
+    the PS1 and PS2 legends are unreadable in the 574 px figure. The glyphs and the two PS legends are
+    drawn as read; the band and cage legends are not drawn.
+  wanted: a photograph of the face.
+- what: cage-orientation
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    Which side the latches of the stacked cages face is not visible in the figure. The library's convention
+    is used for each cage type (QSFP upper cage upright, lower turned 180; OSFP both rows the same way
+    up).
+  wanted: a photograph of the stacked cages.
+- what: rear-mgmt-block
+  scope:
+  - rear
+  reason: needs-photo
+  note: >-
+    The management block's arrow marks and its console symbol are drawn as the 7280CR3-32D4 draws them;
+    the order of the three ports follows the datasheet's rear view and the library's other Arista stacks,
+    and the figure's 1.24 px/mm resolves it only as three stacked ports.
+  wanted: a photograph of the rear management block.
+- what: psu-dc-face
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The PWR-1011-DC supplies are drawn as the AC supply's housing with a plain two-pole terminal block.
+    The guide shows a DC supply only in isometric figures; the real terminal arrangement is not drawn.
+  wanted: a flat drawing or photograph of the PWR-1011-DC.
+- what: module-power
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The guide's power tables and the data sheet give whole-switch figures only; the fan modules' missing
+    power figure (lint L27) stands. The supplies state their output.
+  wanted: FAN-7011H power draw.
+- what: grounding
+  scope:
+  - bottom
+  reason: needs-drawing
+  note: >-
+    The 1RU grounding point is on the bottom of the chassis for KIT-GND-EXT-1RU (guide section 4.2, Table
+    5, Figure 4-2). No flat figure measures it, so it is not placed.
+  wanted: a flat drawing of the bottom with the grounding bracket holes.
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+    description: The 32 100G QSFP ports, numbered 1 to 32 as printed; the odd numbers are the upper cages
+  osfp-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: osfp, speed: 400g}
+    description: The four 400G OSFP ports, numbered 33 to 36 as printed; 33 and 35 are the upper cages
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: four status lamps for each QSFP port, above an upper cage and below a lower one
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system, fan and two power supply lamps at the right of the front
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      how the switch is reached out of band - the 10/100/1000 management port, the USB port and the RS-232
+      console port, stacked in one block at the left of the rear panel
+  psu-bays:
+    term: Bay
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 1+1
+      redundancy-note: >-
+        Data sheet: "Hot-swap Power Supplies 2 (1+1 redundant)". Guide section 4.4: at least one supply
+        must connect to a power source
+    description: the two hot-swap power supplies, 1+1 redundant
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs: {redundancy: n+1, redundancy-note: 'Data sheet: "Hot-swappable Fans 3 (N+1 redundant)"'}
+    description: the three hot-swap fan modules
+views:
+  front:
+    size: {w: 440.0, h: 43.7}
+    panel:
+      decor:
+      - {id: plate-left, kind: label-plate, at: [0.4, 3.0], size: [5.6, 37.5], rx: 0.8, fill: '#9ea2a6'}
+      - {id: osfp-plate, kind: label-plate, at: [180.0, 19.4], size: [70.5, 4.6], rx: 0.5, fill: '#9ea2a6'}
+      - {id: osfp-screw-1, at: [182.6, 19.0], size: [2.4, 2.4], rx: 1.2, fill: '#2b2f36'}
+      - {id: osfp-screw-2, at: [182.6, 24.4], size: [2.4, 2.4], rx: 1.2, fill: '#2b2f36'}
+      - {id: osfp-screw-3, at: [245.6, 19.0], size: [2.4, 2.4], rx: 1.2, fill: '#2b2f36'}
+      - {id: osfp-screw-4, at: [245.6, 24.4], size: [2.4, 2.4], rx: 1.2, fill: '#2b2f36'}
+      - {id: led-plate, kind: label-plate, at: [423.5, 1.8], size: [12.2, 16.2], rx: 2.0, fill: '#8d9196'}
+      - {at: [10.0, 0.6], size: [412.0, 4.6], pattern: vent, vent: 1.0}
+      - {at: [7.6, 7.0], size: [3.2, 33.0], pattern: vent, vent: 1.0}
+      - {at: [86.9, 7.5], size: [10.0, 32.0], pattern: vent, vent: 1.0}
+      - {at: [177.4, 7.5], size: [9.5, 32.0], pattern: vent, vent: 1.0}
+      - {at: [240.5, 7.5], size: [9.5, 32.0], pattern: vent, vent: 1.0}
+      - {at: [329.5, 7.5], size: [10.0, 32.0], pattern: vent, vent: 1.0}
+      - {at: [10.0, 40.0], size: [412.0, 3.2], pattern: vent, vent: 1.0}
+      cutouts:
+      - {id: port-1, at: [9.55, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-1a, at: [11.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1b, at: [15.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1c, at: [19.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1d, at: [23.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-2, at: [9.55, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-2a, at: [11.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2b, at: [15.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2c, at: [19.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2d, at: [23.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-3, at: [28.55, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-3a, at: [30.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3b, at: [34.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3c, at: [38.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3d, at: [42.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-4, at: [28.55, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-4a, at: [30.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4b, at: [34.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4c, at: [38.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4d, at: [42.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-5, at: [47.55, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-5a, at: [49.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5b, at: [53.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5c, at: [57.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5d, at: [61.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-6, at: [47.55, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-6a, at: [49.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6b, at: [53.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6c, at: [57.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6d, at: [61.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-7, at: [66.55, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-7a, at: [68.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7b, at: [72.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7c, at: [76.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7d, at: [80.8, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-8, at: [66.55, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-8a, at: [68.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8b, at: [72.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8c, at: [76.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8d, at: [80.8, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-9, at: [98.85, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-9a, at: [101.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9b, at: [105.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9c, at: [109.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9d, at: [113.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-10, at: [98.85, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-10a, at: [101.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10b, at: [105.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10c, at: [109.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10d, at: [113.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-11, at: [117.85, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-11a, at: [120.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11b, at: [124.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11c, at: [128.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11d, at: [132.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-12, at: [117.85, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-12a, at: [120.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12b, at: [124.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12c, at: [128.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12d, at: [132.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-13, at: [136.85, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-13a, at: [139.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13b, at: [143.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13c, at: [147.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13d, at: [151.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-14, at: [136.85, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-14a, at: [139.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14b, at: [143.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14c, at: [147.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14d, at: [151.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-15, at: [155.85, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-15a, at: [158.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15b, at: [162.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15c, at: [166.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15d, at: [170.1, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-16, at: [155.85, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-16a, at: [158.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16b, at: [162.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16c, at: [166.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16d, at: [170.1, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-17, at: [252.05, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-17a, at: [254.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17b, at: [258.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17c, at: [262.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17d, at: [266.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-18, at: [252.05, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-18a, at: [254.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18b, at: [258.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18c, at: [262.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18d, at: [266.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-19, at: [271.05, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-19a, at: [273.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19b, at: [277.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19c, at: [281.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19d, at: [285.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-20, at: [271.05, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-20a, at: [273.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20b, at: [277.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20c, at: [281.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20d, at: [285.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-21, at: [290.05, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-21a, at: [292.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21b, at: [296.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21c, at: [300.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21d, at: [304.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-22, at: [290.05, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-22a, at: [292.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22b, at: [296.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22c, at: [300.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22d, at: [304.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-23, at: [309.05, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-23a, at: [311.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23b, at: [315.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23c, at: [319.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23d, at: [323.3, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-24, at: [309.05, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-24a, at: [311.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24b, at: [315.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24c, at: [319.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24d, at: [323.3, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-25, at: [341.35, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-25a, at: [343.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25b, at: [347.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25c, at: [351.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-25d, at: [355.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-26, at: [341.35, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-26a, at: [343.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26b, at: [347.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26c, at: [351.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-26d, at: [355.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-27, at: [360.35, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-27a, at: [362.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27b, at: [366.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27c, at: [370.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-27d, at: [374.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-28, at: [360.35, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-28a, at: [362.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28b, at: [366.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28c, at: [370.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-28d, at: [374.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-29, at: [379.35, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-29a, at: [381.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29b, at: [385.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29c, at: [389.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-29d, at: [393.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-30, at: [379.35, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-30a, at: [381.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30b, at: [385.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30c, at: [389.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-30d, at: [393.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-31, at: [398.35, 9.9], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-31a, at: [400.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31b, at: [404.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31c, at: [408.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-31d, at: [412.6, 6.5], size: [2.0, 2.0], shape: circle}
+      - {id: port-32, at: [398.35, 25.6], size: [18.5, 9.58], shape: rect}
+      - {id: led-port-32a, at: [400.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32b, at: [404.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32c, at: [408.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-32d, at: [412.6, 36.3], size: [2.0, 2.0], shape: circle}
+      - {id: port-33, at: [188.9, 5.8], size: [23.1, 13.5], shape: rect}
+      - {id: port-34, at: [188.9, 25.7], size: [23.1, 13.5], shape: rect}
+      - {id: port-35, at: [215.4, 5.8], size: [23.1, 13.5], shape: rect}
+      - {id: port-36, at: [215.4, 25.7], size: [23.1, 13.5], shape: rect}
+      - {id: led-system, at: [424.6, 4.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [424.6, 7.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps1, at: [424.6, 10.6], size: [2.0, 2.0], shape: circle}
+      - {id: led-ps2, at: [424.6, 13.8], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {at: [14.8, 23.8], text: '1', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-1}
+    - {at: [22.8, 23.8], text: '2', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-2}
+    - {at: [33.8, 23.8], text: '3', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-3}
+    - {at: [41.8, 23.8], text: '4', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-4}
+    - {at: [52.8, 23.8], text: '5', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-5}
+    - {at: [60.8, 23.8], text: '6', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-6}
+    - {at: [71.8, 23.8], text: '7', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-7}
+    - {at: [79.8, 23.8], text: '8', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-8}
+    - {at: [104.1, 23.8], text: '9', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-9}
+    - {at: [112.1, 23.8], text: '10', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-10}
+    - {at: [123.1, 23.8], text: '11', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-11}
+    - {at: [131.1, 23.8], text: '12', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-12}
+    - {at: [142.1, 23.8], text: '13', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-13}
+    - {at: [150.1, 23.8], text: '14', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-14}
+    - {at: [161.1, 23.8], text: '15', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-15}
+    - {at: [169.1, 23.8], text: '16', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-16}
+    - {at: [257.3, 23.8], text: '17', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-17}
+    - {at: [265.3, 23.8], text: '18', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-18}
+    - {at: [276.3, 23.8], text: '19', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-19}
+    - {at: [284.3, 23.8], text: '20', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-20}
+    - {at: [295.3, 23.8], text: '21', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-21}
+    - {at: [303.3, 23.8], text: '22', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-22}
+    - {at: [314.3, 23.8], text: '23', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-23}
+    - {at: [322.3, 23.8], text: '24', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-24}
+    - {at: [346.6, 23.8], text: '25', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-25}
+    - {at: [354.6, 23.8], text: '26', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-26}
+    - {at: [365.6, 23.8], text: '27', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-27}
+    - {at: [373.6, 23.8], text: '28', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-28}
+    - {at: [384.6, 23.8], text: '29', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-29}
+    - {at: [392.6, 23.8], text: '30', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-30}
+    - {at: [403.6, 23.8], text: '31', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-31}
+    - {at: [411.6, 23.8], text: '32', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-32}
+    - {at: [3.4, 31.0], text: 7280CR3-32P4, font-size: 2.4, anchor: middle, rotate: -90, fill: '#1f3a6e',
+      for: chassis}
+    - {at: [196.45, 23.4], text: '33', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-33}
+    - {at: [204.45, 23.4], text: '34', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-34}
+    - {at: [222.95, 23.4], text: '35', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-35}
+    - {at: [230.95, 23.4], text: '36', font-size: 1.6, anchor: middle, fill: '#23262b', for: port-36}
+    - at: [431.2, 5.2]
+      path: >-
+        M -1.1 0 a 1.1 1.1 0 1 0 2.2 0 a 1.1 1.1 0 1 0 -2.2 0 M -0.4 0 a 0.4 0.4 0 1 0 0.8 0 a 0.4 0.4
+        0 1 0 -0.8 0
+      stroke-width: 0.26
+      fill: '#1f3a6e'
+      for: led-system
+    - {at: [431.2, 8.4], path: M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1, stroke-width: 0.5, fill: '#1f3a6e',
+      for: led-fan}
+    - {at: [431.2, 12.06], text: PS1, font-size: 1.5, anchor: middle, fill: '#1f3a6e', for: led-ps1}
+    - {at: [431.2, 15.26], text: PS2, font-size: 1.5, anchor: middle, fill: '#1f3a6e', for: led-ps2}
+    components:
+      placements:
+      - ref: std/qsfp-ganged@1
+        id: port-1
+        at: [9.55, 9.9]
+        group: qsfp28
+        rel-pos: 1
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-2
+        at: [9.55, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 2
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-3
+        at: [28.55, 9.9]
+        group: qsfp28
+        rel-pos: 3
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-4
+        at: [28.55, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 4
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-5
+        at: [47.55, 9.9]
+        group: qsfp28
+        rel-pos: 5
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-6
+        at: [47.55, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 6
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-7
+        at: [66.55, 9.9]
+        group: qsfp28
+        rel-pos: 7
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-8
+        at: [66.55, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 8
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-9
+        at: [98.85, 9.9]
+        group: qsfp28
+        rel-pos: 9
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-10
+        at: [98.85, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 10
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-11
+        at: [117.85, 9.9]
+        group: qsfp28
+        rel-pos: 11
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-12
+        at: [117.85, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 12
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-13
+        at: [136.85, 9.9]
+        group: qsfp28
+        rel-pos: 13
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-14
+        at: [136.85, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 14
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-15
+        at: [155.85, 9.9]
+        group: qsfp28
+        rel-pos: 15
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-16
+        at: [155.85, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 16
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: common/led-dot@1
+        id: led-port-1a
+        at: [11.8, 6.5]
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-1
+        group: port-leds
+        rel-pos: 1
+      - ref: common/led-dot@1
+        id: led-port-1b
+        at: [15.8, 6.5]
+        states: &id002
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-1
+        group: port-leds
+        rel-pos: 2
+      - ref: common/led-dot@1
+        id: led-port-1c
+        at: [19.8, 6.5]
+        states: &id003
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-1
+        group: port-leds
+        rel-pos: 3
+      - ref: common/led-dot@1
+        id: led-port-1d
+        at: [23.8, 6.5]
+        states: &id004
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-1
+        group: port-leds
+        rel-pos: 4
+      - ref: common/led-dot@1
+        id: led-port-2a
+        at: [11.8, 36.3]
+        states: *id001
+        for: port-2
+        group: port-leds
+        rel-pos: 5
+      - ref: common/led-dot@1
+        id: led-port-2b
+        at: [15.8, 36.3]
+        states: *id002
+        for: port-2
+        group: port-leds
+        rel-pos: 6
+      - ref: common/led-dot@1
+        id: led-port-2c
+        at: [19.8, 36.3]
+        states: *id003
+        for: port-2
+        group: port-leds
+        rel-pos: 7
+      - ref: common/led-dot@1
+        id: led-port-2d
+        at: [23.8, 36.3]
+        states: *id004
+        for: port-2
+        group: port-leds
+        rel-pos: 8
+      - ref: common/led-dot@1
+        id: led-port-3a
+        at: [30.8, 6.5]
+        states: *id001
+        for: port-3
+        group: port-leds
+        rel-pos: 9
+      - ref: common/led-dot@1
+        id: led-port-3b
+        at: [34.8, 6.5]
+        states: *id002
+        for: port-3
+        group: port-leds
+        rel-pos: 10
+      - ref: common/led-dot@1
+        id: led-port-3c
+        at: [38.8, 6.5]
+        states: *id003
+        for: port-3
+        group: port-leds
+        rel-pos: 11
+      - ref: common/led-dot@1
+        id: led-port-3d
+        at: [42.8, 6.5]
+        states: *id004
+        for: port-3
+        group: port-leds
+        rel-pos: 12
+      - ref: common/led-dot@1
+        id: led-port-4a
+        at: [30.8, 36.3]
+        states: *id001
+        for: port-4
+        group: port-leds
+        rel-pos: 13
+      - ref: common/led-dot@1
+        id: led-port-4b
+        at: [34.8, 36.3]
+        states: *id002
+        for: port-4
+        group: port-leds
+        rel-pos: 14
+      - ref: common/led-dot@1
+        id: led-port-4c
+        at: [38.8, 36.3]
+        states: *id003
+        for: port-4
+        group: port-leds
+        rel-pos: 15
+      - ref: common/led-dot@1
+        id: led-port-4d
+        at: [42.8, 36.3]
+        states: *id004
+        for: port-4
+        group: port-leds
+        rel-pos: 16
+      - ref: common/led-dot@1
+        id: led-port-5a
+        at: [49.8, 6.5]
+        states: *id001
+        for: port-5
+        group: port-leds
+        rel-pos: 17
+      - ref: common/led-dot@1
+        id: led-port-5b
+        at: [53.8, 6.5]
+        states: *id002
+        for: port-5
+        group: port-leds
+        rel-pos: 18
+      - ref: common/led-dot@1
+        id: led-port-5c
+        at: [57.8, 6.5]
+        states: *id003
+        for: port-5
+        group: port-leds
+        rel-pos: 19
+      - ref: common/led-dot@1
+        id: led-port-5d
+        at: [61.8, 6.5]
+        states: *id004
+        for: port-5
+        group: port-leds
+        rel-pos: 20
+      - ref: common/led-dot@1
+        id: led-port-6a
+        at: [49.8, 36.3]
+        states: *id001
+        for: port-6
+        group: port-leds
+        rel-pos: 21
+      - ref: common/led-dot@1
+        id: led-port-6b
+        at: [53.8, 36.3]
+        states: *id002
+        for: port-6
+        group: port-leds
+        rel-pos: 22
+      - ref: common/led-dot@1
+        id: led-port-6c
+        at: [57.8, 36.3]
+        states: *id003
+        for: port-6
+        group: port-leds
+        rel-pos: 23
+      - ref: common/led-dot@1
+        id: led-port-6d
+        at: [61.8, 36.3]
+        states: *id004
+        for: port-6
+        group: port-leds
+        rel-pos: 24
+      - ref: common/led-dot@1
+        id: led-port-7a
+        at: [68.8, 6.5]
+        states: *id001
+        for: port-7
+        group: port-leds
+        rel-pos: 25
+      - ref: common/led-dot@1
+        id: led-port-7b
+        at: [72.8, 6.5]
+        states: *id002
+        for: port-7
+        group: port-leds
+        rel-pos: 26
+      - ref: common/led-dot@1
+        id: led-port-7c
+        at: [76.8, 6.5]
+        states: *id003
+        for: port-7
+        group: port-leds
+        rel-pos: 27
+      - ref: common/led-dot@1
+        id: led-port-7d
+        at: [80.8, 6.5]
+        states: *id004
+        for: port-7
+        group: port-leds
+        rel-pos: 28
+      - ref: common/led-dot@1
+        id: led-port-8a
+        at: [68.8, 36.3]
+        states: *id001
+        for: port-8
+        group: port-leds
+        rel-pos: 29
+      - ref: common/led-dot@1
+        id: led-port-8b
+        at: [72.8, 36.3]
+        states: *id002
+        for: port-8
+        group: port-leds
+        rel-pos: 30
+      - ref: common/led-dot@1
+        id: led-port-8c
+        at: [76.8, 36.3]
+        states: *id003
+        for: port-8
+        group: port-leds
+        rel-pos: 31
+      - ref: common/led-dot@1
+        id: led-port-8d
+        at: [80.8, 36.3]
+        states: *id004
+        for: port-8
+        group: port-leds
+        rel-pos: 32
+      - ref: common/led-dot@1
+        id: led-port-9a
+        at: [101.1, 6.5]
+        states: *id001
+        for: port-9
+        group: port-leds
+        rel-pos: 33
+      - ref: common/led-dot@1
+        id: led-port-9b
+        at: [105.1, 6.5]
+        states: *id002
+        for: port-9
+        group: port-leds
+        rel-pos: 34
+      - ref: common/led-dot@1
+        id: led-port-9c
+        at: [109.1, 6.5]
+        states: *id003
+        for: port-9
+        group: port-leds
+        rel-pos: 35
+      - ref: common/led-dot@1
+        id: led-port-9d
+        at: [113.1, 6.5]
+        states: *id004
+        for: port-9
+        group: port-leds
+        rel-pos: 36
+      - ref: common/led-dot@1
+        id: led-port-10a
+        at: [101.1, 36.3]
+        states: *id001
+        for: port-10
+        group: port-leds
+        rel-pos: 37
+      - ref: common/led-dot@1
+        id: led-port-10b
+        at: [105.1, 36.3]
+        states: *id002
+        for: port-10
+        group: port-leds
+        rel-pos: 38
+      - ref: common/led-dot@1
+        id: led-port-10c
+        at: [109.1, 36.3]
+        states: *id003
+        for: port-10
+        group: port-leds
+        rel-pos: 39
+      - ref: common/led-dot@1
+        id: led-port-10d
+        at: [113.1, 36.3]
+        states: *id004
+        for: port-10
+        group: port-leds
+        rel-pos: 40
+      - ref: common/led-dot@1
+        id: led-port-11a
+        at: [120.1, 6.5]
+        states: *id001
+        for: port-11
+        group: port-leds
+        rel-pos: 41
+      - ref: common/led-dot@1
+        id: led-port-11b
+        at: [124.1, 6.5]
+        states: *id002
+        for: port-11
+        group: port-leds
+        rel-pos: 42
+      - ref: common/led-dot@1
+        id: led-port-11c
+        at: [128.1, 6.5]
+        states: *id003
+        for: port-11
+        group: port-leds
+        rel-pos: 43
+      - ref: common/led-dot@1
+        id: led-port-11d
+        at: [132.1, 6.5]
+        states: *id004
+        for: port-11
+        group: port-leds
+        rel-pos: 44
+      - ref: common/led-dot@1
+        id: led-port-12a
+        at: [120.1, 36.3]
+        states: *id001
+        for: port-12
+        group: port-leds
+        rel-pos: 45
+      - ref: common/led-dot@1
+        id: led-port-12b
+        at: [124.1, 36.3]
+        states: *id002
+        for: port-12
+        group: port-leds
+        rel-pos: 46
+      - ref: common/led-dot@1
+        id: led-port-12c
+        at: [128.1, 36.3]
+        states: *id003
+        for: port-12
+        group: port-leds
+        rel-pos: 47
+      - ref: common/led-dot@1
+        id: led-port-12d
+        at: [132.1, 36.3]
+        states: *id004
+        for: port-12
+        group: port-leds
+        rel-pos: 48
+      - ref: common/led-dot@1
+        id: led-port-13a
+        at: [139.1, 6.5]
+        states: *id001
+        for: port-13
+        group: port-leds
+        rel-pos: 49
+      - ref: common/led-dot@1
+        id: led-port-13b
+        at: [143.1, 6.5]
+        states: *id002
+        for: port-13
+        group: port-leds
+        rel-pos: 50
+      - ref: common/led-dot@1
+        id: led-port-13c
+        at: [147.1, 6.5]
+        states: *id003
+        for: port-13
+        group: port-leds
+        rel-pos: 51
+      - ref: common/led-dot@1
+        id: led-port-13d
+        at: [151.1, 6.5]
+        states: *id004
+        for: port-13
+        group: port-leds
+        rel-pos: 52
+      - ref: common/led-dot@1
+        id: led-port-14a
+        at: [139.1, 36.3]
+        states: *id001
+        for: port-14
+        group: port-leds
+        rel-pos: 53
+      - ref: common/led-dot@1
+        id: led-port-14b
+        at: [143.1, 36.3]
+        states: *id002
+        for: port-14
+        group: port-leds
+        rel-pos: 54
+      - ref: common/led-dot@1
+        id: led-port-14c
+        at: [147.1, 36.3]
+        states: *id003
+        for: port-14
+        group: port-leds
+        rel-pos: 55
+      - ref: common/led-dot@1
+        id: led-port-14d
+        at: [151.1, 36.3]
+        states: *id004
+        for: port-14
+        group: port-leds
+        rel-pos: 56
+      - ref: common/led-dot@1
+        id: led-port-15a
+        at: [158.1, 6.5]
+        states: *id001
+        for: port-15
+        group: port-leds
+        rel-pos: 57
+      - ref: common/led-dot@1
+        id: led-port-15b
+        at: [162.1, 6.5]
+        states: *id002
+        for: port-15
+        group: port-leds
+        rel-pos: 58
+      - ref: common/led-dot@1
+        id: led-port-15c
+        at: [166.1, 6.5]
+        states: *id003
+        for: port-15
+        group: port-leds
+        rel-pos: 59
+      - ref: common/led-dot@1
+        id: led-port-15d
+        at: [170.1, 6.5]
+        states: *id004
+        for: port-15
+        group: port-leds
+        rel-pos: 60
+      - ref: common/led-dot@1
+        id: led-port-16a
+        at: [158.1, 36.3]
+        states: *id001
+        for: port-16
+        group: port-leds
+        rel-pos: 61
+      - ref: common/led-dot@1
+        id: led-port-16b
+        at: [162.1, 36.3]
+        states: *id002
+        for: port-16
+        group: port-leds
+        rel-pos: 62
+      - ref: common/led-dot@1
+        id: led-port-16c
+        at: [166.1, 36.3]
+        states: *id003
+        for: port-16
+        group: port-leds
+        rel-pos: 63
+      - ref: common/led-dot@1
+        id: led-port-16d
+        at: [170.1, 36.3]
+        states: *id004
+        for: port-16
+        group: port-leds
+        rel-pos: 64
+      - ref: std/qsfp-ganged@1
+        id: port-17
+        at: [252.05, 9.9]
+        group: qsfp28
+        rel-pos: 17
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-18
+        at: [252.05, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 18
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-19
+        at: [271.05, 9.9]
+        group: qsfp28
+        rel-pos: 19
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-20
+        at: [271.05, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 20
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-21
+        at: [290.05, 9.9]
+        group: qsfp28
+        rel-pos: 21
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-22
+        at: [290.05, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 22
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-23
+        at: [309.05, 9.9]
+        group: qsfp28
+        rel-pos: 23
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-24
+        at: [309.05, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 24
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-25
+        at: [341.35, 9.9]
+        group: qsfp28
+        rel-pos: 25
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-26
+        at: [341.35, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 26
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-27
+        at: [360.35, 9.9]
+        group: qsfp28
+        rel-pos: 27
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-28
+        at: [360.35, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 28
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-29
+        at: [379.35, 9.9]
+        group: qsfp28
+        rel-pos: 29
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-30
+        at: [379.35, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 30
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-31
+        at: [398.35, 9.9]
+        group: qsfp28
+        rel-pos: 31
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: std/qsfp-ganged@1
+        id: port-32
+        at: [398.35, 25.6]
+        rotate: 180
+        group: qsfp28
+        rel-pos: 32
+        attrs: {media: qsfp28, speed: 100g}
+      - ref: common/led-dot@1
+        id: led-port-17a
+        at: [254.3, 6.5]
+        states: &id005
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-17
+        group: port-leds
+        rel-pos: 65
+      - ref: common/led-dot@1
+        id: led-port-17b
+        at: [258.3, 6.5]
+        states: &id006
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-17
+        group: port-leds
+        rel-pos: 66
+      - ref: common/led-dot@1
+        id: led-port-17c
+        at: [262.3, 6.5]
+        states: &id007
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-17
+        group: port-leds
+        rel-pos: 67
+      - ref: common/led-dot@1
+        id: led-port-17d
+        at: [266.3, 6.5]
+        states: &id008
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: disabled, color: '#eab308'}
+        - {name: failed, color: '#eab308', behavior: blinking}
+        for: port-17
+        group: port-leds
+        rel-pos: 68
+      - ref: common/led-dot@1
+        id: led-port-18a
+        at: [254.3, 36.3]
+        states: *id005
+        for: port-18
+        group: port-leds
+        rel-pos: 69
+      - ref: common/led-dot@1
+        id: led-port-18b
+        at: [258.3, 36.3]
+        states: *id006
+        for: port-18
+        group: port-leds
+        rel-pos: 70
+      - ref: common/led-dot@1
+        id: led-port-18c
+        at: [262.3, 36.3]
+        states: *id007
+        for: port-18
+        group: port-leds
+        rel-pos: 71
+      - ref: common/led-dot@1
+        id: led-port-18d
+        at: [266.3, 36.3]
+        states: *id008
+        for: port-18
+        group: port-leds
+        rel-pos: 72
+      - ref: common/led-dot@1
+        id: led-port-19a
+        at: [273.3, 6.5]
+        states: *id005
+        for: port-19
+        group: port-leds
+        rel-pos: 73
+      - ref: common/led-dot@1
+        id: led-port-19b
+        at: [277.3, 6.5]
+        states: *id006
+        for: port-19
+        group: port-leds
+        rel-pos: 74
+      - ref: common/led-dot@1
+        id: led-port-19c
+        at: [281.3, 6.5]
+        states: *id007
+        for: port-19
+        group: port-leds
+        rel-pos: 75
+      - ref: common/led-dot@1
+        id: led-port-19d
+        at: [285.3, 6.5]
+        states: *id008
+        for: port-19
+        group: port-leds
+        rel-pos: 76
+      - ref: common/led-dot@1
+        id: led-port-20a
+        at: [273.3, 36.3]
+        states: *id005
+        for: port-20
+        group: port-leds
+        rel-pos: 77
+      - ref: common/led-dot@1
+        id: led-port-20b
+        at: [277.3, 36.3]
+        states: *id006
+        for: port-20
+        group: port-leds
+        rel-pos: 78
+      - ref: common/led-dot@1
+        id: led-port-20c
+        at: [281.3, 36.3]
+        states: *id007
+        for: port-20
+        group: port-leds
+        rel-pos: 79
+      - ref: common/led-dot@1
+        id: led-port-20d
+        at: [285.3, 36.3]
+        states: *id008
+        for: port-20
+        group: port-leds
+        rel-pos: 80
+      - ref: common/led-dot@1
+        id: led-port-21a
+        at: [292.3, 6.5]
+        states: *id005
+        for: port-21
+        group: port-leds
+        rel-pos: 81
+      - ref: common/led-dot@1
+        id: led-port-21b
+        at: [296.3, 6.5]
+        states: *id006
+        for: port-21
+        group: port-leds
+        rel-pos: 82
+      - ref: common/led-dot@1
+        id: led-port-21c
+        at: [300.3, 6.5]
+        states: *id007
+        for: port-21
+        group: port-leds
+        rel-pos: 83
+      - ref: common/led-dot@1
+        id: led-port-21d
+        at: [304.3, 6.5]
+        states: *id008
+        for: port-21
+        group: port-leds
+        rel-pos: 84
+      - ref: common/led-dot@1
+        id: led-port-22a
+        at: [292.3, 36.3]
+        states: *id005
+        for: port-22
+        group: port-leds
+        rel-pos: 85
+      - ref: common/led-dot@1
+        id: led-port-22b
+        at: [296.3, 36.3]
+        states: *id006
+        for: port-22
+        group: port-leds
+        rel-pos: 86
+      - ref: common/led-dot@1
+        id: led-port-22c
+        at: [300.3, 36.3]
+        states: *id007
+        for: port-22
+        group: port-leds
+        rel-pos: 87
+      - ref: common/led-dot@1
+        id: led-port-22d
+        at: [304.3, 36.3]
+        states: *id008
+        for: port-22
+        group: port-leds
+        rel-pos: 88
+      - ref: common/led-dot@1
+        id: led-port-23a
+        at: [311.3, 6.5]
+        states: *id005
+        for: port-23
+        group: port-leds
+        rel-pos: 89
+      - ref: common/led-dot@1
+        id: led-port-23b
+        at: [315.3, 6.5]
+        states: *id006
+        for: port-23
+        group: port-leds
+        rel-pos: 90
+      - ref: common/led-dot@1
+        id: led-port-23c
+        at: [319.3, 6.5]
+        states: *id007
+        for: port-23
+        group: port-leds
+        rel-pos: 91
+      - ref: common/led-dot@1
+        id: led-port-23d
+        at: [323.3, 6.5]
+        states: *id008
+        for: port-23
+        group: port-leds
+        rel-pos: 92
+      - ref: common/led-dot@1
+        id: led-port-24a
+        at: [311.3, 36.3]
+        states: *id005
+        for: port-24
+        group: port-leds
+        rel-pos: 93
+      - ref: common/led-dot@1
+        id: led-port-24b
+        at: [315.3, 36.3]
+        states: *id006
+        for: port-24
+        group: port-leds
+        rel-pos: 94
+      - ref: common/led-dot@1
+        id: led-port-24c
+        at: [319.3, 36.3]
+        states: *id007
+        for: port-24
+        group: port-leds
+        rel-pos: 95
+      - ref: common/led-dot@1
+        id: led-port-24d
+        at: [323.3, 36.3]
+        states: *id008
+        for: port-24
+        group: port-leds
+        rel-pos: 96
+      - ref: common/led-dot@1
+        id: led-port-25a
+        at: [343.6, 6.5]
+        states: *id005
+        for: port-25
+        group: port-leds
+        rel-pos: 97
+      - ref: common/led-dot@1
+        id: led-port-25b
+        at: [347.6, 6.5]
+        states: *id006
+        for: port-25
+        group: port-leds
+        rel-pos: 98
+      - ref: common/led-dot@1
+        id: led-port-25c
+        at: [351.6, 6.5]
+        states: *id007
+        for: port-25
+        group: port-leds
+        rel-pos: 99
+      - ref: common/led-dot@1
+        id: led-port-25d
+        at: [355.6, 6.5]
+        states: *id008
+        for: port-25
+        group: port-leds
+        rel-pos: 100
+      - ref: common/led-dot@1
+        id: led-port-26a
+        at: [343.6, 36.3]
+        states: *id005
+        for: port-26
+        group: port-leds
+        rel-pos: 101
+      - ref: common/led-dot@1
+        id: led-port-26b
+        at: [347.6, 36.3]
+        states: *id006
+        for: port-26
+        group: port-leds
+        rel-pos: 102
+      - ref: common/led-dot@1
+        id: led-port-26c
+        at: [351.6, 36.3]
+        states: *id007
+        for: port-26
+        group: port-leds
+        rel-pos: 103
+      - ref: common/led-dot@1
+        id: led-port-26d
+        at: [355.6, 36.3]
+        states: *id008
+        for: port-26
+        group: port-leds
+        rel-pos: 104
+      - ref: common/led-dot@1
+        id: led-port-27a
+        at: [362.6, 6.5]
+        states: *id005
+        for: port-27
+        group: port-leds
+        rel-pos: 105
+      - ref: common/led-dot@1
+        id: led-port-27b
+        at: [366.6, 6.5]
+        states: *id006
+        for: port-27
+        group: port-leds
+        rel-pos: 106
+      - ref: common/led-dot@1
+        id: led-port-27c
+        at: [370.6, 6.5]
+        states: *id007
+        for: port-27
+        group: port-leds
+        rel-pos: 107
+      - ref: common/led-dot@1
+        id: led-port-27d
+        at: [374.6, 6.5]
+        states: *id008
+        for: port-27
+        group: port-leds
+        rel-pos: 108
+      - ref: common/led-dot@1
+        id: led-port-28a
+        at: [362.6, 36.3]
+        states: *id005
+        for: port-28
+        group: port-leds
+        rel-pos: 109
+      - ref: common/led-dot@1
+        id: led-port-28b
+        at: [366.6, 36.3]
+        states: *id006
+        for: port-28
+        group: port-leds
+        rel-pos: 110
+      - ref: common/led-dot@1
+        id: led-port-28c
+        at: [370.6, 36.3]
+        states: *id007
+        for: port-28
+        group: port-leds
+        rel-pos: 111
+      - ref: common/led-dot@1
+        id: led-port-28d
+        at: [374.6, 36.3]
+        states: *id008
+        for: port-28
+        group: port-leds
+        rel-pos: 112
+      - ref: common/led-dot@1
+        id: led-port-29a
+        at: [381.6, 6.5]
+        states: *id005
+        for: port-29
+        group: port-leds
+        rel-pos: 113
+      - ref: common/led-dot@1
+        id: led-port-29b
+        at: [385.6, 6.5]
+        states: *id006
+        for: port-29
+        group: port-leds
+        rel-pos: 114
+      - ref: common/led-dot@1
+        id: led-port-29c
+        at: [389.6, 6.5]
+        states: *id007
+        for: port-29
+        group: port-leds
+        rel-pos: 115
+      - ref: common/led-dot@1
+        id: led-port-29d
+        at: [393.6, 6.5]
+        states: *id008
+        for: port-29
+        group: port-leds
+        rel-pos: 116
+      - ref: common/led-dot@1
+        id: led-port-30a
+        at: [381.6, 36.3]
+        states: *id005
+        for: port-30
+        group: port-leds
+        rel-pos: 117
+      - ref: common/led-dot@1
+        id: led-port-30b
+        at: [385.6, 36.3]
+        states: *id006
+        for: port-30
+        group: port-leds
+        rel-pos: 118
+      - ref: common/led-dot@1
+        id: led-port-30c
+        at: [389.6, 36.3]
+        states: *id007
+        for: port-30
+        group: port-leds
+        rel-pos: 119
+      - ref: common/led-dot@1
+        id: led-port-30d
+        at: [393.6, 36.3]
+        states: *id008
+        for: port-30
+        group: port-leds
+        rel-pos: 120
+      - ref: common/led-dot@1
+        id: led-port-31a
+        at: [400.6, 6.5]
+        states: *id005
+        for: port-31
+        group: port-leds
+        rel-pos: 121
+      - ref: common/led-dot@1
+        id: led-port-31b
+        at: [404.6, 6.5]
+        states: *id006
+        for: port-31
+        group: port-leds
+        rel-pos: 122
+      - ref: common/led-dot@1
+        id: led-port-31c
+        at: [408.6, 6.5]
+        states: *id007
+        for: port-31
+        group: port-leds
+        rel-pos: 123
+      - ref: common/led-dot@1
+        id: led-port-31d
+        at: [412.6, 6.5]
+        states: *id008
+        for: port-31
+        group: port-leds
+        rel-pos: 124
+      - ref: common/led-dot@1
+        id: led-port-32a
+        at: [400.6, 36.3]
+        states: *id005
+        for: port-32
+        group: port-leds
+        rel-pos: 125
+      - ref: common/led-dot@1
+        id: led-port-32b
+        at: [404.6, 36.3]
+        states: *id006
+        for: port-32
+        group: port-leds
+        rel-pos: 126
+      - ref: common/led-dot@1
+        id: led-port-32c
+        at: [408.6, 36.3]
+        states: *id007
+        for: port-32
+        group: port-leds
+        rel-pos: 127
+      - ref: common/led-dot@1
+        id: led-port-32d
+        at: [412.6, 36.3]
+        states: *id008
+        for: port-32
+        group: port-leds
+        rel-pos: 128
+      - {ref: std/osfp@1, id: port-33, at: [188.9, 5.8], group: osfp-400g, rel-pos: 33}
+      - {ref: std/osfp@1, id: port-34, at: [188.9, 25.7], group: osfp-400g, rel-pos: 34}
+      - {ref: std/osfp@1, id: port-35, at: [215.4, 5.8], group: osfp-400g, rel-pos: 35}
+      - {ref: std/osfp@1, id: port-36, at: [215.4, 25.7], group: osfp-400g, rel-pos: 36}
+      - ref: common/led-dot@1
+        id: led-system
+        at: [424.6, 4.2]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: powering-up, color: '#22c55e', behavior: blinking}
+        - {name: ok, color: '#22c55e'}
+        - {name: locator, color: '#3b82f6'}
+        - {name: fault, color: '#f59e0b'}
+        description: >-
+          Table 9 - System Status: blinking green powering up; green normal operations; blue the locator
+          function is active; amber two or more fans disconnected or malfunctioning
+      - ref: common/led-dot@1
+        id: led-fan
+        at: [424.6, 7.4]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: degraded, color: '#f59e0b'}
+        - {name: fault, color: '#ef4444'}
+        description: >-
+          Table 9 - Fan Status: green all fan and power modules operating normally; amber single fan module
+          removed or malfunctioning; red two or more fans disconnected or malfunctioning
+      - ref: common/led-dot@1
+        id: led-ps1
+        at: [424.6, 10.6]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        description: >-
+          Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating
+          properly
+      - ref: common/led-dot@1
+        id: led-ps2
+        at: [424.6, 13.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 4
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        description: >-
+          Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating
+          properly
+    regions:
+    - id: logo-zone
+      at: [0.8, 3.6]
+      size: {w: 4.4, h: 17.8}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 440.0, h: 43.7}
+    panel:
+      decor:
+      - {id: mgmt-plate, kind: label-plate, at: [83.0, 4.9], size: [18.0, 34.0], rx: 0.8, fill: '#b4b8bc'}
+      cutouts:
+      - {id: mgmt, at: [84.1, 5.6], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [85.2, 19.6], size: [12.0, 4.5], shape: rect}
+      - {id: console, at: [84.1, 24.3], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - at: [92.0, 41.0]
+      path: M -2.6 -1.1 H 2.6 V 1.1 H -2.6 Z M -1.3 -0.5 V 0.5 M 0 -0.5 V 0.5 M 1.3 -0.5 V 0.5
+      stroke-width: 0.3
+      fill: '#1f3a6e'
+      for: console
+    components:
+      bays:
+      - id: psu-1
+        at: [4.0, 1.85]
+        size: {w: 73.5, h: 40.0}
+        group: psu-bays
+        rel-pos: 1
+        accepts:
+        - arista/7280cr3-pwr-1000-ac@1
+        - arista/7280cr3-pwr-1000-ac-rev@1
+        - arista/7280cr3-pwr-1000-dc@1
+        - arista/7280cr3-pwr-1000-dc-rev@1
+        default: arista/7280cr3-pwr-1000-ac@1
+      - id: psu-2
+        at: [362.3, 1.85]
+        size: {w: 73.5, h: 40.0}
+        group: psu-bays
+        rel-pos: 2
+        accepts:
+        - arista/7280cr3-pwr-1000-ac@1
+        - arista/7280cr3-pwr-1000-ac-rev@1
+        - arista/7280cr3-pwr-1000-dc@1
+        - arista/7280cr3-pwr-1000-dc-rev@1
+        default: arista/7280cr3-pwr-1000-ac@1
+      - id: fan-1
+        at: [107.7, 2.55]
+        size: {w: 78.6, h: 38.6}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - arista/7280cr3-fan@1
+        - arista/7280cr3-fan-rev@1
+        default: arista/7280cr3-fan@1
+      - id: fan-2
+        at: [191.0, 2.55]
+        size: {w: 78.6, h: 38.6}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - arista/7280cr3-fan@1
+        - arista/7280cr3-fan-rev@1
+        default: arista/7280cr3-fan@1
+      - id: fan-3
+        at: [274.3, 2.55]
+        size: {w: 78.6, h: 38.6}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - arista/7280cr3-fan@1
+        - arista/7280cr3-fan-rev@1
+        default: arista/7280cr3-fan@1
+      placements:
+      - ref: common/rj45-eth@1
+        id: mgmt
+        at: [84.1, 5.6]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {speed: 1g, role: mgmt}
+      - {ref: std/usb-a@1, id: usb, at: [85.2, 19.6], group: mgmt, rel-pos: 2}
+      - ref: std/rj45@2
+        id: console
+        at: [84.1, 24.3]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: rj45-serial, role: console}
+  top:
+    size: {w: 440.0, h: 558.3}
+    empty: >-
+      Not drawn flat by any source held. The guide shows the lid only in isometric installation figures
+      (Figures 3-1 to 3-4, of another switch); nothing there can be measured.
+  bottom:
+    size: {w: 440.0, h: 558.3}
+    empty: >-
+      Not drawn flat by any source held. The guide's Figure 4-2 shows the underside with the grounding
+      bracket in an exploded isometric view and carries no measure.
+  left:
+    size: {w: 558.3, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+  right:
+    size: {w: 558.3, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis with two AC supplies and three fan modules fitted, front-to-rear air, before any part
+      number: the shape every build below starts from.
+  f:
+    kind: orderable
+    description: >-
+      The 7280CR3-32P4 with two AC supplies and front-to-rear air: PWR-1011-AC-RED supplies and FAN-7011H-F
+      fan modules, all with red handles. Ordered as DCS-7280CR3-32P4-F.
+    part-numbers:
+      DCS-7280CR3-32P4-F: {}
+  r:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      The 7280CR3-32P4 with two AC supplies and rear-to-front air: PWR-1011-AC-BLUE supplies and FAN-7011H-R
+      fan modules, all with blue handles. Ordered as DCS-7280CR3-32P4-R.
+    bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
+      fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    part-numbers:
+      DCS-7280CR3-32P4-R: {}
+  k-f:
+    kind: orderable
+    description: >-
+      The 7280CR3K-32P4, the same hardware with 64 GB of memory and the large-routes licence, with front-to-rear
+      air. Ordered as DCS-7280CR3K-32P4-F.
+    export-description: >-
+      Arista 7280CR3K-32P4 - the large-routes build of the 7280CR3-32P4, a fixed 1RU data-centre switch
+      router with 32 x 100G QSFP and 4 x 400G OSFP ports and 64 GB of memory, running EOS
+    attrs:
+      platform: {cpu: Quad-Core x86, memory: 64 GB, storage: 8 GB flash; 120 GB SSD}
+      features: {eos-license: license group G3; minimum EOS 4.22.1}
+    part-numbers:
+      DCS-7280CR3K-32P4-F: {}
+  k-r:
+    kind: orderable
+    airflow: back-to-front
+    description: The 7280CR3K-32P4 with rear-to-front air. Ordered as DCS-7280CR3K-32P4-R.
+    bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
+      fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    export-description: >-
+      Arista 7280CR3K-32P4 - the large-routes build of the 7280CR3-32P4, a fixed 1RU data-centre switch
+      router with 32 x 100G QSFP and 4 x 400G OSFP ports and 64 GB of memory, running EOS
+    attrs:
+      platform: {cpu: Quad-Core x86, memory: 64 GB, storage: 8 GB flash; 120 GB SSD}
+      features: {eos-license: license group G3; minimum EOS 4.22.1}
+    part-numbers:
+      DCS-7280CR3K-32P4-R: {}
+  k-a-f:
+    kind: orderable
+    description: >-
+      The 7280CR3K-32P4A, the K build with an eight-core CPU, with front-to-rear air. The guide's Table
+      4 gives it 535 W typical and 851 W maximum, the same as the other builds (the data sheet says 543
+      W / 865 W). Ordered as DCS-7280CR3K-32P4A-F.
+    export-description: >-
+      Arista 7280CR3K-32P4A - the large-routes, eight-core build of the 7280CR3-32P4 with 64 GB of memory,
+      a fixed 1RU data-centre switch router with 32 x 100G QSFP and 4 x 400G OSFP ports, running EOS
+    attrs:
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
+    part-numbers:
+      DCS-7280CR3K-32P4A-F: {}
+  k-a-r:
+    kind: orderable
+    airflow: back-to-front
+    description: The 7280CR3K-32P4A with rear-to-front air. Ordered as DCS-7280CR3K-32P4A-R.
+    bays: {psu-1: arista/7280cr3-pwr-1000-ac-rev@1, psu-2: arista/7280cr3-pwr-1000-ac-rev@1, fan-1: arista/7280cr3-fan-rev@1,
+      fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+    export-description: >-
+      Arista 7280CR3K-32P4A - the large-routes, eight-core build of the 7280CR3-32P4 with 64 GB of memory,
+      a fixed 1RU data-centre switch router with 32 x 100G QSFP and 4 x 400G OSFP ports, running EOS
+    attrs:
+      platform: {cpu: Eight-Core x86, memory: 64 GB, storage: 120 GB SSD (no flash storage)}
+      features: {eos-license: license group G3; minimum EOS 4.27.2}
+    part-numbers:
+      DCS-7280CR3K-32P4A-R: {}
+  dc-f:
+    kind: example
+    power: dc
+    description: >-
+      Two DC supplies and front-to-rear air: PWR-1011-DC-RED supplies and FAN-7011H-F fan modules. The
+      data sheet lists no DC part number for the switch; the supplies are spares, and a DC build is ordered
+      through the "#" configurable SKUs.
+    bays: {psu-1: arista/7280cr3-pwr-1000-dc@1, psu-2: arista/7280cr3-pwr-1000-dc@1}
+  dc-r:
+    kind: example
+    power: dc
+    airflow: back-to-front
+    description: >-
+      Two DC supplies and rear-to-front air: PWR-1011-DC-BLUE supplies and FAN-7011H-R fan modules. No
+      DC part number is listed for the switch.
+    bays: {psu-1: arista/7280cr3-pwr-1000-dc-rev@1, psu-2: arista/7280cr3-pwr-1000-dc-rev@1, fan-1: arista/7280cr3-fan-rev@1,
+      fan-2: arista/7280cr3-fan-rev@1, fan-3: arista/7280cr3-fan-rev@1}
+datasheet:
+  title: >-
+    7280R3 Series Data Center Switch Router Data Sheet (Arista Networks, 03-0045-59, August 11th, 2025)
+  url: https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Data-Sheet.pdf
+  sha256: 0ab322bb7fe6e35bab5b85ec3e79ff5cd83b7101e686fcd5b34928fcd15e94a6
+references:
+- title: 7280R3 Series Quick Start Guide (Arista Networks, DOC-07041-01, PDF created 2025-05-16)
+  sha256: 5b9e67b8829236b3ff8e9f65ba2a00685d87e5d855d25751f36b2492ee8bd28c
+- title: 7280 Data Center Switches Quick Start Guide (Arista Networks, PDF created 2022-06-03)
+  sha256: f152c6eaae95ad9a1853a9cb6014832dc1721f9f1d762d3b3225a8c629d93a96

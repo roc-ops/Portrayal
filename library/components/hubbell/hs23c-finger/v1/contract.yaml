@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: hs23c-finger
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+description: >-
+  One steel finger of the Hubbell S-Series HS23C horizontal cable manager, seen from the
+  front. It is a 14 gauge flat tab folded forward from the top edge of the plate, between
+  two windows. It keeps the cables laid in the manager from rising out of it.
+provenance:
+  size: >-
+    datasheet - 14 gauge, 1.9 mm thick (the sheet's "Gauge 14"; 1.897 mm by the standard
+    gauge). Its width, 24 mm, is estimated: read off the figure against B, where a finger
+    is about a quarter of the pitch between two.
+  relief: >-
+    estimated - a flat tab 72.4 mm long, from the plate forward to the cover, drawn square
+    in 3D where the figure shows a rounded tip with the edge folded down; the device's top
+    view draws the rounded tip and the folded edge (see `profile`). Five of them stand along
+    the top, one at each web between windows and one at each end, as the figure draws them.
+  profile: >-
+    estimated - STAND-IN. The figure shows each finger with a rounded tip and its edge
+    folded down, and dimensions neither. The top view draws the tip rounded to a radius of
+    6 mm (a quarter of the finger's width) and the fold as a rim one sheet thickness, 1.9
+    mm, wide along each side; the radius is a stand-in, not the maker's, and the fold's
+    depth is not drawn at all because a part may not outgrow its size (the device's
+    `finger-geometry` gap says so). The 3D tongue stays a flat box.
+  face: >-
+    estimated - STAND-IN. The sheet states a black powder coat, which on a near-black plate
+    leaves a finger invisible. It is drawn in a mid steel tone with a dark outline and a
+    highlight along it, so it reads on both the dark and the light stage; the tone is not
+    the maker's.
+  guide: >-
+    estimated - the five fingers' pitch, 104 mm, and the gap between two, 80 mm, are the
+    device's `duct` guide: the figure draws the fingers over the web between each pair of
+    windows. "Cable fingers align with patch panel adaptors to prevent patch cord kinks"
+    is the sheet's claim and is checked there against a patch panel, not stated here.
+  color: >-
+    datasheet - "Finish: Black Powder Coated" on the sheet.
+size: {w: 24.0, h: 1.9}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Steel}
+elements:
+  finger: {at: [0.0, 0.0], size: [24.0, 1.9], class: bezel}
+relief:
+  features:
+    - node: finger
+      out: 72.4
+      color: '#8b949e'
+      confidence: estimated
+      source: the figure draws each finger the manager's whole depth, C, 3 in (76 mm), less the plate and the cover
+skins: [default]

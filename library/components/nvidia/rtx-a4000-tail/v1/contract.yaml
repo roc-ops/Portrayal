@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: rtx-a4000-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA RTX A4000 card, seen from behind. It is a closed
+  black end plate. The 6-pin PCIe power connector at the corner by the top edge
+  is not composed: the library has no 6-pin interface. It is the card's
+  `faces.rear`.
+size: {w: 97.90, h: 16.04}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (the board's height from the A100 80GB's
+  PB-10577 figure 3, 28.41 to 126.31 on the card, which the RTX A4000's photographed
+  side agrees with: 275 px at 2.80 px/mm is 98.2) and runs from the board's rear
+  face to the shroud's far wall, 16.04 (the card's thickness is itself estimated,
+  see the card's `thickness`). NO DEPTH IS DECLARED: a face is a drawing of a
+  back. SEEN FROM BEHIND WITH THE BOARD'S SIDE AT THE TOP, so x' = 126.31 less the
+  card's x (the top edge at the left) and y' = the card's y less 4.44. This is
+  the frame of nvidia/a10-tail@1, which has no backplate either.
+attrs: {media: gpu}
+provenance:
+  size: >-
+    estimated - see size-notes.
+  connector: >-
+    NOT DRAWN, AND NO PORT - the datasheet says "Power connector 1x 6-pin PCIe" and
+    NVIDIA's power guide DA-07261 table 1 says "PCIe 6-pin", 140 W. The Ampere
+    quick-start guide says "The RTX A4000 uses a PCI Express 6-pin cable" and
+    draws a two-by-three housing at the end face's corner by the top edge. The
+    library registers no 6-pin interface (spec/schemas/connectors.yaml: "The
+    6-pin PCIe connector is not registered"; docs/connectors-gpu-design.md section
+    7 leaves it to a later task), so no header is composed here and the card
+    exports no power port. The card's 3D body draws the housing as a plain box
+    (the card's `body-power-connector`). A later task that registers `pcie-6pin`
+    adds the header to this face's `parts`.
+  end-plate: >-
+    estimated - a closed black end plate over the full 97.9 x 16.04. The quick-start
+    figure draws a plain end face with two small round holes; they are not drawn.
+elements: {}
+skins: [default]

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="161.66mm" height="16.04mm" viewBox="0.9 1.27 161.66 16.04">
+  <!-- nvidia/rtx-a1000: THE TOP EDGE, the body's right side seen from outside.
+       Across: mm behind the bracket's outer face (0.9 to 162.56). Down: the face's
+       y (1.27 the board's outer face, 17.31 the shroud's). Every piece whose right
+       side is the card's top edge `shows: [right]` and carries its patch of this.
+       The shroud's top is a grey frame around a long flat lid that runs from the
+       shroud's near end nearly to the far end, darker at the near end and lighter
+       toward the blower, as PNY's 3/4 view lights it, with a black pocket past the
+       lid's rounded end. There is no champagne heat-sink strip on this card. The
+       lid's places are fractions read off a 3/4 view and are estimated (provenance
+       body-top-edge). -->
+  <defs>
+    <linearGradient id="lid" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#222223"/>
+      <stop offset="0.6" stop-color="#4d4d50"/>
+      <stop offset="1" stop-color="#6a6a6e"/>
+    </linearGradient>
+  </defs>
+  <!-- the board's edge and the frame's top -->
+  <rect x="0.9" y="1.27" width="161.66" height="1.57" fill="#1d2420"/>
+  <rect x="0.9" y="2.84" width="161.66" height="14.47" fill="#4a4a4d"/>
+  <!-- the pocket past the lid: black, 141 to 161 behind the bracket -->
+  <rect id="pocket" x="141.0" y="5.2" width="20.0" height="10.4" fill="#0b0b0b"/>
+  <!-- the lid, 45.5 to 147 behind the bracket, 5.2 to 15.6 across, its far end rounded -->
+  <path id="lid-top" d="M45.5 5.2 H141 Q147 5.2 147 10.4 Q147 15.6 141 15.6 H45.5 Z" fill="url(#lid)"/>
+  <!-- the mark is reserved, not drawn (L172): on the frame beside the pocket -->
+  <rect id="logo-zone" x="141.0" y="2.95" width="17.0" height="2.0" fill="none"/>
+  <g id="silkscreen">
+    <text x="47.0" y="4.3" font-family="Arial" font-weight="bold" font-size="1.7" fill="#2f2f33">RTX A1000</text>
+  </g>
+</svg>

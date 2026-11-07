@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: air-shroud-2u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The processor air shroud of a 16th-generation 2U PowerEdge (R760) seen from above - the dark moulding over the processors and the memory, between the risers and the fans, with three wings over the DIMM groups
+provenance:
+  sources: >-
+    Dell's R760 service model, working/intake/dell/3d-models/r760.glb (Dell's own CAD, read with glbparts.py, not committed), the un-exploded assembly node `Main Assembly (1)`, `R760_ AirShroud` > `PEr760_ Airshroud_ Assembly-1.001`, mapped to the plan with the rear wall at cad z 736.1 (plan y = 736.1 - cad z1) and plan x = 209.0 - cad x1. The R760 Installation and Service Manual (ISM) figure 15 (inside the system), callout 4 'Air shroud', the embedded top view at 1.965 px/mm (about 2%), for the wings; ISM figures 43 and 44 (removing and installing the air shroud) and the technical guide's thermal notes for what it is. The GPU air shroud (figures 16 and 45 to 50) is a different part and is not modelled.
+  size: >-
+    measured - r760.glb `Body_1_163.001`: 434.4 wide x 187.7 deep (cad x -225.5..208.9, z 307.3..495.0), at plan x 0.1, y 241.1..428.8, and 56.9 tall (cad y 37.3..94.2). SOURCES DISAGREE on the depth: the ISM's figure 15 was read 430.0 x 166.0 at plan x 3.0, y 250.0..416.0 (the figure is a perspective render, about 2%); the model is drawn and the figure's reading is recorded in the device's `air-shroud-depth` gap. The width is the model's 434.4, 0.4 over the ISM's 434.0 body.
+  wings: >-
+    photo-measured - the model gives the shroud's bounding box only, so the three wings stay as the ISM's figure 15 shows them, over the DIMM groups: x 2.5..76.3 (the left group), 152.7..280.0 (the middle 16) and 356.0..430.0 (the right group), 8 deep at the rear edge. They match the DIMM groups of the board figure (ISM figure 180: 11.4..71.5, 157.5..279.1 and 362.3..421.9) to the wing widths. The figure's frame is the model's to about 4 mm in x, so the wings' x are kept as read, and they are drawn from the model's rear edge.
+  required: >-
+    TG thermal notes: the CPU air shroud is required in every air-cooled build.
+size: {w: 434.4, h: 187.7}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 0.5
+    color: '#1b1e21'
+    confidence: estimated
+    source: a moulded cover; drawn as a surface over what it covers (the model's body is 56.9 tall; the relief is a surface, not that height)
+elements:
+  shroud: {at: [0.0, 0.0], size: [434.4, 187.7], class: bezel}
+skins: [default]

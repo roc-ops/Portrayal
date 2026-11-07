@@ -1,0 +1,47 @@
+format: 1
+kind: module
+name: r960-psu-adapter-60mm
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  The 26 mm power supply unit adapter of the PowerEdge R960 - the carrier that lets one of Dell's
+  60 mm supplies (1100 W, 1400 W) stand in a bay cut for the 86 mm form factor
+attrs:
+  power-absent: not-applicable
+  inlet: none
+  form-factor: 86mm bay, 60mm supply
+provenance:
+  sources: >-
+    R960 ISM table 11 note ("When installing a 60 mm PSU, a 26 mm PSU adapter is required") and
+    its "Removing / Installing a power supply unit adapter" procedures (figures 199, 200: the
+    adapter is screwed into the bay and is removed when an 86 mm supply is fitted). No R960
+    figure shows an adapter fitted from behind.
+  size: >-
+    photo-measured - the bay is 86.0 x 40.1 (dell/r960-psu-2800w-ac@1 gives the figure's reading):
+    the adapter plus a 60 mm supply fill it.
+  face: >-
+    ESTIMATED. A 26 mm plate beside a 59.8 mm supply fills the 86.0 mm bay exactly (59.8 + 26.0 =
+    85.8). WHICH SIDE THE ADAPTER IS ON IS NOT STATED: it is drawn at the left (the fan side of an
+    86 mm supply), the supply at the right, so the supply's inlet and latch stand where an 86 mm
+    supply's do. The plate's vents are drawn, not measured.
+  slot: >-
+    the bay is the 60 mm supply's whole faceplate, 59.8 x 40.1 (dell/psu-1400w-ac-60mm@1,
+    measured off Dell's R660 service model; ISM table 11 names the same 60 mm form factor for the
+    R660 and the R960).
+  power: >-
+    NOT APPLICABLE - sheet metal; the supply seated in it carries the figure.
+size: {w: 86.0, h: 40.1, d: 222.0}
+plan: {ref: dell/r960-psu-plan@1}
+size-confidence: {w: photo-measured, h: borrowed, d: estimated}
+body:
+  depth: 222.0
+  color: '#b9bec4'
+bays:
+  psu:
+    at: [26.2, 0.0]
+    size: [59.8, 40.1]
+    accepts: [dell/psu-1100w-ac-60mm@1, dell/psu-1400w-ac-60mm@1]
+    default: dell/psu-1400w-ac-60mm@1
+skins: [default]

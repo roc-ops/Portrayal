@@ -1,0 +1,418 @@
+format: 1
+kind: device
+name: nsc-t48s
+version: 0.1.0
+maturity: modelled
+manufacturer: ZPE Systems
+model: NSC-T48S
+aliases:
+- {name: Nodegrid Serial Console S, kind: marketing}
+- {name: NSC-T48S-STND-DAC-B-SFP, kind: variant}
+portfolio: {line: Nodegrid, family: Serial Console, series: Serial Console S}
+description: >-
+  48-port auto-sensing serial console server, 1RU, with 14 USB-A serial ports. The data sheet's
+  Front carries HDMI, a USB-A port, two lamps and a reset button. It also has two fan modules
+  and twelve USB-A ports in six stacked pairs. The Rear carries the 48 RJ45 serial ports in
+  two rows of 24, in three blocks of eight columns, odd numbers above even. It also has two
+  SFP cages, the console RJ45 with a USB-A port beneath it, and two AC inlets each with a
+  rocker switch. Modelled as the dual-AC, SFP build, NSC-T48S-STND-DAC-B-SFP, the one the held
+  photographs show.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Three documents and two photographs. ZPE Systems, Datasheet: Nodegrid Serial Console - S
+      Series, April 15, 2026, page 2 (specifications, power), page 3 (interfaces, physical,
+      ordering table, the Front and Rear figures); the same data sheet's page 1 (14 USB serial
+      ports). ZPE Systems, Fixed Rail Mounting Kit For 4-Post Racks (RAIL-180-395), November 18,
+      2024. ZPE Systems, the end-of-life notice for selected rails, which carries the older rail
+      ranges. Photographs from the maker's pages: the T48S front (T48S-4.jpg) and the T48S dual-AC
+      rear with SFP (T48S-DAC-SFP-2.jpg), each 1024 px wide. No installation guide, drawing,
+      CAD model or stencil is held.
+  face-names:
+    confidence: datasheet
+    note: >-
+      THE DATA SHEET'S WORDS ARE KEPT. Page 3 captions the face with HDMI, one USB-A port, two
+      lamps, a reset button and the fan modules "Front", and the face with the 48 RJ45 ports, the inlets and the
+      SFP cages "Rear". The ports are on the Rear, as on the maker's other serial consoles.
+  size:
+    confidence: datasheet
+    note: >-
+      Page 3, "Size (L X W X H): 443 X 312 X 43 mm", 1U. The labels read length, width, height,
+      and 443 is plainly the body's width and 312 its depth. 443 is the body between the ears: the photographs show no
+      ears. Weight 4.9 kg, "depending on options".
+  scale:
+    confidence: photo-measured
+    note: >-
+      EVERY POSITION IS READ OFF A 1024 PX PHOTOGRAPH, and the face is 857 px wide in each, so
+      about 1.93 px per mm and a reading good to about 0.5 mm in the best case and 1 mm in
+      most. The photographs are slightly off square: the rear's RJ45 pitch reads 14.16 mm
+      (27.4 px) where the registry's ganged-jack pitch is 13.97. The registry value is used in
+      the block and the block starts and gutters are fitted to the measured block edges, so
+      the sum agrees with the photograph to 1 mm and the interior of a block to half a column.
+  serial-ports:
+    confidence: photo-measured
+    note: >-
+      Rear photograph and data sheet page 3: 48 RJ45 serial ports, numbered 1 to 48, odd above
+      even, the numeral printed above the top row and below the bottom row, in three blocks of
+      eight columns, with a printed gap between blocks (230.5 px, or 119.2 mm, from one block start to the
+      next; eight pitches are 111.8 mm, so the gutter is 7.4). Each jack shows a yellow and a green lamp
+      in its corners. The photograph does not name what the lamps mean and the data sheet has no LED
+      table, so the lamps are drawn as the lamped jack part gives them and no meaning is stated.
+  usb:
+    confidence: datasheet
+    note: >-
+      Data sheet page 3: "1X USB 3.0 Host & 13 USB 2.0 Hosts on Type A connector", and page 1
+      "14X USB serial ports". The photographs show one blue USB-A on the Rear (USB 3.0, by the
+      blue tongue), and on the Front one lone USB-A and twelve in six stacked pairs: 13 white
+      ports, the 13 USB 2.0. The datasheet does not say which port is the 3.0 one; the colour
+      is the reading, and the stacked pairs' own numbering is not printed.
+  power:
+    confidence: datasheet
+    note: >-
+      Page 2: "Power consumption 45 W typical", "Single or Dual AC: 100-240 VAC, 50/60 Hz",
+      "40V-63 VDC dual power input (redundant)". The Rear photograph's inlets are two IEC C14,
+      turned a quarter turn (earth pin to the left), each with a rocker switch above it. The data
+      sheet states no maximum draw and no fuse or current rating.
+  gate-1:
+    confidence: photo-measured
+    note: >-
+      Both photographs pass at low resolution: the front 854 px for 443 mm, 84 px tall for 43,
+      aspect 10.2 against 10.3; the rear 857 by 84 px, 10.2. They show perspective at the edges. The
+      Rear's SFP pair steps 15.1 mm and the registry says 15.0, which is the cross-check used.
+  fans:
+    confidence: photo-measured
+    note: >-
+      Two fan modules on the Front, in both photographs (the T48S photograph and the data sheet's
+      Front figure). The data sheet's ordering table says "Fanless" on both SKU rows and "z-Fan
+      Configuration" on the SFP row; the photograph and the Front figure show the fans. The
+      two modules are drawn seated and the disagreement is a gap. Their size is read off the photograph.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The face is the median of bare plate in each photograph, #44606c (front) and #44606b
+      (rear), a slate blue-grey. Lettering is white.
+  console-usb-bezel:
+    confidence: photo-measured
+    note: >-
+      The console RJ45 and the USB-A port beneath it sit in one bright metal frame, 16.7 by 21.0 mm.
+      The jack's lamps are at its top, so the jack is turned 180 as the top row of the serial block is.
+attrs:
+  physical:
+    weight-kg: 4.9
+    weight-note: '4.9 kg (10.8 lb), depending on options'
+    shipping-weight-kg: 7.65
+    shipping-dimensions-mm: '600 x 440 x 210'
+  performance:
+    serial-ports-max: 48
+    serial-rate: 'RS-232 on RJ45, 230,400 bps max per port'
+    serial-rate-usb: '921,600 bps max per port on USB-A'
+    pinout: 'auto-sensing and auto-switching, Cisco or legacy'
+  power:
+    power-typical-w: 45
+    power-input-ac: '100-240 VAC, 50/60 Hz'
+    power-input-dc: '40-63 VDC dual (redundant) input, on the DC builds'
+  environmental:
+    operating-temp: '0 to 50 C (32 to 122 F), 5-95% RH, non-condensing'
+    storage-temp: '-20 to 67 C (-4 to 153 F), 5-95% RH, non-condensing'
+  platform:
+    processor: 'Intel x86_64 dual core'
+    memory: '4GB DDR3'
+    storage: '32GB flash (mSATA SSD)'
+  compliance:
+    safety: 'UL 62368-1, CSA C22.2 No. 62368-1, EN 62368-1:2014, IEC 62368-1, CB, EAC/Customs Union, KCC, BSMI, CCC'
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 443
+  height: 43
+  depth: 312
+  ru: 1
+  weight-kg: 4.9
+  color: '#44606c'
+  power: ac
+  kits:
+  - {ref: zpe/rail-180-395@1, supply: optional}
+gaps:
+- what: rack-ears
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The rack ears and their positions. The data sheet says only "Front-Rear mounting brackets",
+    and the rail kit sheet that "This kit replaces the Rack Mount Ears that are provided with each
+    unit". No S document dimensions an ear or says where it bolts. The rear photograph on the rail sheet shows the ears folded
+    back at the Rear, not measurable. `chassis.ears` is left out.
+- what: other-skus
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A Rear photograph of the single-AC and dual-DC builds and of the builds without SFP (two RJ45
+    Ethernet, ETH0 and ETH1, are named by the maker's text and drawn by no held figure). The 16 and
+    32-port builds have no photograph at all. The device is modelled as the one build the photographs show,
+    and each other build is a configuration to add when its face is held.
+- what: fanless-or-fans
+  scope: [front]
+  reason: sources-disagree
+  wanted: >-
+    The data sheet's ordering rows say "Fanless", the SFP row also "z-Fan Configuration", and the
+    Front figure and the photograph show two fan modules. Which builds carry the modules, and whether they can
+    be absent, is not stated.
+- what: dots-above-columns
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    A small black dot is printed or set above and left of each odd-numbered column, 24 in all. The
+    photograph is too small to say if it is a lamp, a hole or a mark, and no document names it.
+    Drawn as a dot of decor, with no meaning.
+- what: jack-lamps
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the yellow and the green lamp of each serial jack and of the console jack show. The data sheet has
+    no LED table; no guide is held.
+- what: front-lamps-and-reset
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The colours and meaning of PWR and SYS, and the reset button's behaviour. The Front figure
+    prints the legends PWR, SYS and RST and nothing else.
+- what: screw-above-hdmi
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    A cross-head screw stands above the HDMI port. It is drawn as a screw head; no document names it.
+- what: usb-numbering
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    How the 13 USB-A ports on the Front are numbered, which is the data sheet's "USB serial
+    ports". No numeral is printed; the ports are counted in reading order, left to right, upper
+    before lower.
+- what: usb-orientation
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    Which way the lower USB-A port of each stacked pair faces. The photograph's lower ports look
+    flipped; at 165 px tall it cannot be settled, so all twelve are drawn alike.
+- what: sides-and-top
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    Any photograph or drawing of the lid, the base and the sides. None is held.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  sfp-plus:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the console RJ45 and the USB 3.0 Host beside it on the Rear
+  usb-front:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '2.0'}
+  video: {term: Port, role: management, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+  fans:
+    term: Fan module
+    role: service
+    index-origin: 1
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 443, h: 43}
+    panel:
+      cutouts:
+      - {id: hdmi, at: [6.3, 28.0], size: [16.4, 7.4], shape: rect}
+      - {id: usb-1, at: [28.9, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-2, at: [271.0, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-3, at: [271.0, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-4, at: [291.35, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-5, at: [291.35, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-6, at: [311.7, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-7, at: [311.7, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-8, at: [332.05, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-9, at: [332.05, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-10, at: [352.4, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-11, at: [352.4, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: usb-12, at: [372.75, 20.05], size: [12.0, 4.5], shape: rect}
+      - {id: usb-13, at: [372.75, 28.55], size: [12.0, 4.5], shape: rect}
+      - {id: led-pwr, at: [47.4, 31.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [60.0, 31.1], size: [2.0, 2.0], shape: circle}
+      - {id: reset, at: [71.0, 29.2], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {id: silk-hdmi, at: [14.5, 41.0], text: HDMI, font-size: 2.0, anchor: middle, fill: '#e8edef', for: hdmi}
+    - {id: silk-usb-1, at: [34.9, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-1}
+    - {id: silk-pwr, at: [48.4, 41.0], text: PWR, font-size: 2.0, anchor: middle, fill: '#e8edef', for: led-pwr}
+    - {id: silk-sys, at: [61.0, 41.0], text: SYS, font-size: 2.0, anchor: middle, fill: '#e8edef', for: led-sys}
+    - {id: silk-rst, at: [73.0, 41.0], text: RST, font-size: 2.0, anchor: middle, fill: '#e8edef', for: reset}
+    - {id: silk-usb-2, at: [277.0, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-2}
+    - {id: silk-usb-3, at: [277.0, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-3}
+    - {id: silk-usb-4, at: [297.35, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-4}
+    - {id: silk-usb-5, at: [297.35, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-5}
+    - {id: silk-usb-6, at: [317.7, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-6}
+    - {id: silk-usb-7, at: [317.7, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-7}
+    - {id: silk-usb-8, at: [338.05, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-8}
+    - {id: silk-usb-9, at: [338.05, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-9}
+    - {id: silk-usb-10, at: [358.4, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-10}
+    - {id: silk-usb-11, at: [358.4, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-11}
+    - {id: silk-usb-12, at: [378.75, 15.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-12}
+    - {id: silk-usb-13, at: [378.75, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-13}
+    - {id: silk-series, at: [420.5, 18.9], text: serial console, font-size: 1.5, anchor: middle, fill: '#e8edef', for: chassis}
+    - {id: silk-model, at: [420.5, 23.4], text: NODEGRID T48S, font-size: 4.3, anchor: middle, fill: '#f2f5f6', for: chassis}
+    components:
+      bays:
+      - {id: fan-1, at: [111.4, 0.25], size: {w: 68.4, h: 42.5}, group: fans, rel-pos: 1,
+         accepts: ['zpe/nsc-fan-module@1'], default: 'zpe/nsc-fan-module@1'}
+      - {id: fan-2, at: [185.9, 0.25], size: {w: 68.4, h: 42.5}, group: fans, rel-pos: 2,
+         accepts: ['zpe/nsc-fan-module@1'], default: 'zpe/nsc-fan-module@1'}
+      placements:
+      - {ref: zpe/nsc-hdmi@1, id: hdmi, at: [6.3, 28.0], group: video, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-1, at: [28.9, 28.55], skin: usb2, group: usb-front, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-pwr, at: [47.4, 31.1], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-sys, at: [60.0, 31.1], group: leds, rel-pos: 2, for: chassis,
+         states: ['off', 'on']}
+      - {ref: common/reset-button@1, id: reset, at: [71.0, 29.2], group: mgmt, rel-pos: 3, for: chassis}
+      - {ref: common/screw-head@1, id: face-screw-1, at: [12.7, 20.9], group: furniture, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [271.0, 20.05], skin: usb2, group: usb-front, rel-pos: 2}
+      - {ref: std/usb-a@1, id: usb-3, at: [271.0, 28.55], skin: usb2, group: usb-front, rel-pos: 3}
+      - {ref: std/usb-a@1, id: usb-4, at: [291.35, 20.05], skin: usb2, group: usb-front, rel-pos: 4}
+      - {ref: std/usb-a@1, id: usb-5, at: [291.35, 28.55], skin: usb2, group: usb-front, rel-pos: 5}
+      - {ref: std/usb-a@1, id: usb-6, at: [311.7, 20.05], skin: usb2, group: usb-front, rel-pos: 6}
+      - {ref: std/usb-a@1, id: usb-7, at: [311.7, 28.55], skin: usb2, group: usb-front, rel-pos: 7}
+      - {ref: std/usb-a@1, id: usb-8, at: [332.05, 20.05], skin: usb2, group: usb-front, rel-pos: 8}
+      - {ref: std/usb-a@1, id: usb-9, at: [332.05, 28.55], skin: usb2, group: usb-front, rel-pos: 9}
+      - {ref: std/usb-a@1, id: usb-10, at: [352.4, 20.05], skin: usb2, group: usb-front, rel-pos: 10}
+      - {ref: std/usb-a@1, id: usb-11, at: [352.4, 28.55], skin: usb2, group: usb-front, rel-pos: 11}
+      - {ref: std/usb-a@1, id: usb-12, at: [372.75, 20.05], skin: usb2, group: usb-front, rel-pos: 12}
+      - {ref: std/usb-a@1, id: usb-13, at: [372.75, 28.55], skin: usb2, group: usb-front, rel-pos: 13}
+    regions:
+    - {id: logo-zone, at: [404.0, 7.0], size: {w: 36.0, h: 9.0}, label: 'zpe logo; not drawn'}
+  rear:
+    size: {w: 443, h: 43}
+    panel:
+      decor:
+      - {id: psu-plate-1, at: [0.4, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      - {id: psu-plate-2, at: [23.2, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      - {id: console-bezel, at: [424.9, 14.4], size: [16.7, 21.0], fill: '#b9bdc1', rx: 0.5, kind: port-bezel}
+      - {id: dot-1, at: [47.20, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-2, at: [61.17, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-3, at: [75.14, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-4, at: [89.11, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-5, at: [103.08, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-6, at: [117.05, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-7, at: [131.02, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-8, at: [144.99, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-9, at: [166.36, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-10, at: [180.33, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-11, at: [194.30, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-12, at: [208.27, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-13, at: [222.24, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-14, at: [236.21, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-15, at: [250.18, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-16, at: [264.15, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-17, at: [285.52, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-18, at: [299.49, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-19, at: [313.46, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-20, at: [327.43, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-21, at: [341.40, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-22, at: [355.37, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-23, at: [369.34, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      - {id: dot-24, at: [383.31, 3.5], size: [1.4, 1.4], fill: '#0f1214', rx: 0.7, kind: unnamed-dot}
+      cutouts:
+      - {block: serial}
+      - {block: sfp-plus}
+      - {id: console, at: [426.5, 14.7], size: [12.7, 11.0], shape: rect}
+      - {id: usb-rear, at: [427.0, 29.45], size: [12.0, 4.5], shape: rect}
+      - {id: inlet-1, at: [1.4, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: inlet-2, at: [24.0, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: switch-1, at: [3.65, 2.8], size: [15.5, 6.0], shape: rect}
+      - {id: switch-2, at: [26.25, 2.8], size: [15.5, 6.0], shape: rect}
+    silkscreen:
+    - {block: serial}
+    - {block: sfp-plus}
+    - {id: silk-sfp-0, at: [413.1, 5.6], text: Fiber SFP 0, font-size: 2.2, anchor: middle, fill: '#e8edef', for: uplink-0}
+    - {id: silk-sfp-1, at: [413.1, 41.0], text: Fiber SFP 1, font-size: 2.2, anchor: middle, fill: '#e8edef', for: uplink-1}
+    - {id: silk-console, at: [432.85, 11.8], text: CONSOLE, font-size: 2.4, anchor: middle, fill: '#e8edef', for: console}
+    - {id: silk-usb-rear, at: [433.0, 40.2], text: USB, font-size: 2.4, anchor: middle, fill: '#e8edef', for: usb-rear}
+    components:
+      blocks:
+      - id: serial
+        ref: common/rj45-ganged-lamped@1
+        at: [49.2, 10.2]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.2
+        gang: 8
+        gutter: 7.4
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx: 6.35, dy-top: -2.9, dy-bottom: 16.8, font-size: 4.0, anchor: middle, fill: '#f2f5f6'}
+      - id: sfp-plus
+        ref: std/sfp-ganged@1
+        at: [406.0, 9.5]
+        count: 2
+        rows: 2
+        pitch: registry
+        row-pitch: registry
+        number-from: 0
+        id-format: 'uplink-{n}'
+        cutouts: true
+        rotate: {bottom: 180}
+      placements:
+      - {block: serial}
+      - {block: sfp-plus}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [426.5, 14.7], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb-rear, at: [427.0, 29.45], group: mgmt, rel-pos: 2,
+         attrs: {usb: '3.0', role: storage}}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [-2.6, 16.9], rotate: 270, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [20.0, 16.9], rotate: 270, group: inlets, rel-pos: 2}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-1, at: [3.65, 2.8], group: switches, rel-pos: 1, for: inlet-1}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-2, at: [26.25, 2.8], group: switches, rel-pos: 2, for: inlet-2}
+  top:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the lid. The data sheet's two figures are the Front and the Rear.
+  bottom:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the underside: the data sheet's two figures are the Front and the
+      Rear, and the rail kit sheet's photograph shows the Rear in a rack.
+  left:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows a side wall, and the rail kit sheet's photograph shows the ears only
+      from the Rear.
+  right:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows this side wall: the data sheet's two figures are the Front and the
+      Rear, and the rail kit sheet's photograph shows the Rear in a rack.
+configurations:
+  dac-sfp:
+    kind: base
+    part-numbers:
+      NSC-T48S-STND-DAC-B-SFP: {}
+    description: >-
+      NSC-T48S-STND-DAC-B-SFP, the dual-AC build with two fibre SFP cages, as the Rear photograph
+      shows it, with the two fan modules the Front photograph shows
+    default: true
+references:
+- {title: 'Datasheet: Nodegrid Serial Console - S Series (ZPE Systems, April 15, 2026)'}
+- {title: 'Fixed Rail Mounting Kit For 4-Post Racks, RAIL-180-395 (ZPE Systems, November 18, 2024)'}

@@ -112,6 +112,12 @@ class Dist:
         number from a chassis one."""
         out = set()
         for c in self.modules():
+            # A contract with `part-numbers` is known by each of its keys, and
+            # by none of its other names (dcim_export.module_names).
+            pns = c.get("part-numbers")
+            if isinstance(pns, dict) and pns:
+                out.update(str(k) for k in pns)
+                continue
             m = str((c.get("attrs") or {}).get("model") or c.get("name") or "")
             if m:
                 out.add(m)

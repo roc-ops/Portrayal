@@ -1,0 +1,103 @@
+format: 1
+kind: component
+name: 49253-2cv
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+description: >-
+  The Leviton 49253-2CV 2RU metal cover for the 49253 five-ring horizontal managers, seen
+  from the front - a plate 442.7 mm wide whose two ends fold back into pockets that hook
+  over the outer two rings and slide down until the cover is seated. Sold separately from
+  the manager.
+provenance:
+  size: >-
+    drawing - Leviton's 49253-2CV dimensional drawing (DXF, linked on the product page as
+    49253-2CV.DXF): 17.4296 in [442.7mm] wide by 3.47 in [88.1mm] high, the specification
+    sheet's page 2 giving the same 442.7 mm [17.43 in] and 88.1 mm [3.47 in]. It is as tall
+    as the 2RU panel and 1.8 mm narrower than the 444.5 between the panel's folds.
+  relief: >-
+    drawing - the top view and right-end view of the same drawing, read at millimetres: the
+    plate is 1.22 mm thick (the arcs' 1.98 and 0.76 radii) and stands 6.24 mm [0.2456 in]
+    deep with its ends. Each end folds back over a rectangle 37.0 mm long and 65.0 mm high
+    (61.2 to 126.2 on the drawing), centred on the height, into a pocket 3.81 mm across
+    between the plate and a back tab 1.22 thick. A ring's leg 3.175 thick fits that pocket,
+    and the instruction sheet (Horizontal Patch Cord Organizers and Covers, step 3) says to
+    "align left and right side of the covers to outside split rings and slide downward
+    until cover is fully seated". The pocket's ends are drawn as square folds where the
+    drawing shows a radius, and the small notches in the tab's edge are not drawn.
+  front: >-
+    drawing - the front view of the 49253-2CV drawing: the plate between 2.004 and 19.278 in
+    [438.76mm] wide and 88.1 high, its four corners arcs of 0.125 in [3.175mm], and at each
+    end a strip 1.98 mm [0.078 in] wide and 65.0 high, centred on the height, standing out
+    beyond the plate's edge: the fold that wraps round it (the top view's outer arc, 1.98
+    mm radius, meeting the plate at 2.004 in). Between the strips the 17.430 in [442.7mm]
+    overall is the plate and the two strips. Nothing else is drawn on the face but the
+    maker's printed mark near the bottom right, which this library never draws, so the
+    face is plain by the drawing and not by omission. The drawing also shows four small
+    notches along each back tab's edge, which are not drawn.
+  placement: >-
+    estimated - the reference of this part is the back of the tab. A placement lifts it by
+    the ring depth of its manager less 6.25, so the plate's front face is flush with the
+    ring tips and the manager's own depth holds. The drawing does not dimension how the
+    pocket sits on a ring leg, and a plate in front of the tips would stand 1.22 mm
+    outside the manager's envelope; this keeps the cover inside it, which puts the plate
+    1.22 mm nearer the panel than that. The plate and the end strips are built 0.1 mm
+    proud of that (an estimate, and the only one here): with the plate exactly flush the
+    rings' front legs, which stand in the same 1.22 mm, share the plate's front plane and
+    show through it in 3D. The plate keeps its 1.22 mm thickness.
+  color: >-
+    datasheet - "16-gauge steel with a black powder-coat finish" for the managers and "Metal
+    covers" in the same sheet. The drawing is line work, so the shade is this library's
+    render, a little lighter than the manager so the two read apart.
+size: {w: 442.7, h: 88.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel, finish: black powder coat}
+elements:
+  hook-left: {at: [0.0, 11.55], size: [37.03, 65.0], class: bezel}
+  hook-right: {at: [405.67, 11.55], size: [37.03, 65.0], class: bezel}
+  fold-left: {at: [0.0, 11.55], size: [1.22, 65.0], class: bezel}
+  fold-right: {at: [441.48, 11.55], size: [1.22, 65.0], class: bezel}
+  lip-left: {at: [0.0, 11.55], size: [1.98, 65.0], class: bezel}
+  lip-right: {at: [440.72, 11.55], size: [1.98, 65.0], class: bezel}
+  plate: {at: [1.98, 0.0], size: [438.74, 88.1], class: bezel}
+relief:
+  features:
+    - node: lip-left
+      lift: 5.13
+      out: 6.35
+      color: '#3a3d42'
+      confidence: drawing
+      source: the front and top views of the 49253-2CV drawing, the plate wrapping out round the fold's arc, 1.98 mm outside the plate's edge
+    - node: lip-right
+      lift: 5.13
+      out: 6.35
+      color: '#3a3d42'
+      confidence: drawing
+      source: the same view, the other end
+    - node: hook-left
+      out: 1.22
+      color: '#25272a'
+      confidence: drawing
+      source: the top view of the 49253-2CV drawing, the back tab 1.22 thick at the far side of the pocket
+    - node: hook-right
+      out: 1.22
+      color: '#25272a'
+      confidence: drawing
+      source: the top view of the 49253-2CV drawing, the same tab at the other end
+    - node: fold-left
+      out: 5.13
+      color: '#25272a'
+      confidence: drawing
+      source: the top view of the 49253-2CV drawing, the end fold joining plate and tab, 6.24 mm overall with the wrapped plate in front of it
+    - node: fold-right
+      out: 5.13
+      color: '#25272a'
+      confidence: drawing
+      source: the top view of the 49253-2CV drawing, the same fold at the other end
+    - node: plate
+      lift: 5.13
+      out: 6.35
+      color: '#2a2c2f'
+      confidence: drawing
+      source: the top view of the 49253-2CV drawing, the plate 1.22 thick with its back face 3.81 in front of the tab
+skins: [default]

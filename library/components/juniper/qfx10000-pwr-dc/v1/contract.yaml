@@ -1,0 +1,145 @@
+format: 1
+kind: module
+name: qfx10000-pwr-dc
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX10000-PWR-DC, the 2500 W DC power supply of the QFX10008 and QFX10016 modular
+  chassis, shipped only in the redundant DC build. Two independent pairs of DC input lugs run down
+  the left of the face, INPUT 1 and INPUT 2, each with a return and a -48/-60 V lug. A vertical
+  column of INP1, INP2, PWR OK and FAULT lamps sits beside a two-way enable DIP switch. A grab
+  handle, the captive screw and the power rocker complete the face. Airflow is port-to-FRU
+  (front-to-back), from an internal fan.
+attrs:
+  model: QFX10000-PWR-DC
+  role: dc-power-supply
+  power-output-w: 2500
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-voltage: -40 to -72 VDC, -48 VDC nominal
+  input-current-a: 60
+  output: 12 VDC
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11): Table 1,
+    Table 24 and Table 25, Figure 11 and Figure 34 (isometrics), Figure 36 (g050572, the flat
+    faceplate with the four lamps numbered) and Table 29. The QFX10016 Switch Hardware Guide
+    (published 2025-12-11) carries the same part under Table 2 and Figure 12.
+  size: >-
+    datasheet - Table 25 gives 3.5 in. high by 3.6 in. wide, so 88.9 by 91.4 mm. Figure 36 measures
+    480 by 457 px at the body, an aspect of 1.050 against the table's 1.029, 2.1 percent out, so the
+    fractions are taken at 5.25 px per mm across and 5.14 down and the part sizes are the table's.
+  depth: >-
+    datasheet - Table 25: 14.4 in. (36.58 cm), 365.8 mm; inches and centimetres agree.
+  power: >-
+    datasheet - Table 24 and Table 1: output power 2500 W. That is an output figure, so it is carried
+    as power-output-w. The guide gives no draw or loss figure for the supply.
+  face: >-
+    drawing - module coordinates read off Figure 36 (g050572): the lug block x 1.9 to 24.4 and y 1.4 to
+    87.0 with four lug barrels centred at x 15.4 and y 19.8, 36.4, 52.9 and 69.5; the lamp column at
+    x 56.6 and y 43.8, 50.4, 57.0 and 63.8 (INP1, INP2, PWR OK, FAULT, top to bottom) with the legends
+    turned beside them; the DIP switch box x 45.7 to 52.6 and y 51.0 to 61.1; the grab handle x 41.9 to
+    85.7 and y 34.0 to 40.3; the captive screw centred at 54.3, 76.7; the rocker bezel x 63.6 to 76.8 and
+    y 64.0 to 82.1, printed | over a power symbol.
+  lugs: >-
+    datasheet - the description says each supply has two independent pairs of DC input lugs, Input 1
+    and Input 2, each carrying RTN and -48V/-60V. The figure draws four barrels behind a cover, and the
+    skin draws them as the barrels the figure shows.
+  seats: >-
+    A DECLARED STAND-IN. Each of the four poles is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in.
+    (15.875) centres that one two-hole lug lands across, centred on the barrel the skin draws for it
+    (x 15.4; y 19.8, 36.4, 52.9 and 69.5). THE LUG'S PITCH IS PRINTED AND THE STUDS' IS NOT: the QFX10008
+    and QFX10016 Switch Hardware Guides (Juniper Networks, published 2025-12-11), "How to Install a
+    QFX10000-PWR-DC Power Supply", step 8, read "dual, 1/4 in. spaced 5/8 in. apart", and the packing
+    list names "DC terminal lugs, 2-hole, 10-32, 4 AWG". No document held dimensions the studs, and the
+    studs are common/terminal-screw-34@1, which claims no thread. THE PAIR'S AXIS IS NOT THE FACE'S:
+    Figures 140 and 142 of the QFX10008 guide (138 and 140 of the QFX10016 guide) draw each pair of studs
+    standing out of the top of the supply with the lug lying across it, so the two studs of a pole stand one behind the other along the depth and the faceplate
+    drawing shows one barrel for the pair. A part on the face cannot stand along the depth, so each pair
+    is laid across its barrel, side by side, and its right stud's head overhangs the lug block the skin
+    draws by 0.6 mm.
+  poles: >-
+    datasheet - "two independent pairs of DC input lugs (Input 1, RTN, -48V/-60V and Input 2, RTN,
+    -48V/-60V)" and those two figures, whose cover prints INPUT 1 and INPUT 2 over two channels each,
+    RTN then -48V/-60V from the left. Those figures are drawn from above and the faceplate drawing is
+    turned a quarter from them (the lug block is at the left of the face and the rocker at its lower
+    right, where the cover is at the top of the isometric and the rocker at its lower left), so the
+    isometric's left to right is the face's bottom to top. The face prints no mark at the lug block, so
+    which barrel is which pole is READ FROM THE FIGURES and is not printed. The roles are what the cover
+    prints: `batt` for -48V/-60V (spec/schemas/dc.yaml writes `batt` as negative (battery)) and `rtn`
+    for RTN; each input is a port of two poles.
+  voltage: >-
+    datasheet - Table 24 "Power Specifications for the QFX10000-PWR-DC Power Supply" in both guides:
+    "Nominal operating voltage: -48 VDC" and "Operating voltage range: -40 VDC through -72 VDC".
+  rating: >-
+    datasheet - Table 24 in both guides: "DC input current rating | 60 A maximum at nominal operating
+    voltage (-48 VDC) for each input terminal", and each feed takes a breaker sized for 60 A. One figure
+    in each guide, so each port states 60. The 60A/50A printed on the cover is not read as a second
+    figure: the table's 60 A is the rating at -48 V.
+  awg: >-
+    NOT STATED. The guides print two sizes: the packing list names the lugs "2-hole, 10-32, 4 AWG", step 8
+    asks for a lug "for 4 AWG wire", and the cabling text says the cables "must be 6 AWG" when every supply
+    in the chassis is a QFX10000-PWR-DC. A port states one size, so it states none.
+  colour: >-
+    borrowed - the guide's line drawings carry no colour and no photograph of this supply was
+    obtained. The dark grey finish of juniper/jnp10k-pwr-ac2@2, which stands in the same bay of the
+    same chassis, is used so the two sit together.
+  lamps: >-
+    datasheet - Table 29: INP1 and INP2 are green within -40 to -72 VDC and yellow blinking when out
+    of range; PWR OK is green when the output is in range and yellow blinking when it is out of limits;
+    FAULT is red when the supply has failed.
+states:
+  - ok
+  - fault
+  - absent
+elements:
+  led-inp1:
+    at: [55.1, 42.3]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-inp2:
+    at: [55.1, 48.9]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-pwr-ok:
+    at: [55.1, 55.5]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b', behavior: blinking}]
+  led-fault:
+    at: [55.1, 62.3]
+    size: [3.0, 3.0]
+    class: led
+    states: ['off', {name: fault, color: '#ef4444'}]
+  handle: {at: [41.9, 34.0], size: [43.8, 6.3], class: handle}
+size: {w: 91.4, h: 88.9, d: 365.8}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-1-rtn, at: [5.7625, 67.8]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-1-batt, at: [5.7625, 51.2]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-2-rtn, at: [5.7625, 34.7]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-2-batt, at: [5.7625, 18.1]}
+dc:
+  ports:
+    - id: input-1
+      direction: input
+      voltage: {nominal: -48, range: [-40, -72]}
+      rating-a: 60
+      poles:
+        - {role: rtn, slot: pole-1-rtn}
+        - {role: batt, slot: pole-1-batt}
+      source: {poles: poles, voltage: voltage, rating-a: rating}
+    - id: input-2
+      direction: input
+      voltage: {nominal: -48, range: [-40, -72]}
+      rating-a: 60
+      poles:
+        - {role: rtn, slot: pole-2-rtn}
+        - {role: batt, slot: pole-2-batt}
+      source: {poles: poles, voltage: voltage, rating-a: rating}
+skins: [default]

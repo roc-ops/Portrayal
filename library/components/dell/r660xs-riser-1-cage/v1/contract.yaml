@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: r660xs-riser-1-cage
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 1 cage of the PowerEdge R660xs - one low-profile window between a plain left end and a latch strip at the right; shared by risers 1a and 1b
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - sheet metal; the riser that composes it carries the power
+    record.
+  why-this-is-its-own-part: >-
+    THE METAL IS SHARED AND THE WIRING IS NOT. Risers 1a and 1b (ISM table 95)
+    differ in electrical width (x16 and x8) and not in anything the rear face
+    shows, so the face is drawn once, here, and each variant composes it.
+  sources: >-
+    drawing - the PowerEdge R660xs Installation and Service Manual, figure 7
+    'Rear view of the system' (1650 x 344 px, Dell's render): its 434 body is
+    1416 px across (x 112..1528), so x is read at 3.263 px/mm; y is read against
+    the 42.8 height at 3.41 px/mm, which the render does not hold to better than
+    4 percent against x (its 149 px of height would be 3.48), and every y here is
+    therefore rounded to the R660's riser row (2.2 to 22.0), which the figure
+    agrees with to 1.5 mm. Facts read, art not traced.
+  size: >-
+    drawing - 84.5 x 19.8 from rear-face x 1.5, y 2.2: the riser 1 plate runs
+    from the chassis's left end (figure x 117) to the BOSS riser's bracket
+    (figure x 392), the same 19.8 band as the R660's risers.
+  window: >-
+    drawing - one window 64.6 wide (rear-face x 13.5..78.1, figure x 156..367),
+    the opening in which the slot's bracket shows; it runs to the plate's lower
+    edge as the R660's cages' windows do. The vent field in it is the bracket's
+    (dell/pcie-filler-lp-16g@1 draws nine columns of two; the figure shows nine
+    columns of two).
+  latch: >-
+    drawing - the strip at the right end, 4.0 wide, as the R660's riser cages
+    carry theirs; the figure shows a tab there and its size is read by eye.
+  numerals: >-
+    drawing - THE FIGURE PRINTS NO SLOT NUMBER on this cage, so none is drawn.
+    The R660's cages print theirs; Dell's R660xs render does not, at its
+    resolution (3.3 px/mm; the PSU 1 mark, 2.6 mm, resolves in the same figure).
+size: {w: 84.5, h: 19.8}
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: pr2hf-fingers
+version: 1.0.0
+class: mechanical
+description: >-
+  One wall of fingers of a Panduit PatchRunner 2 horizontal manager (PR2HF3 and PR2HF4) seen
+  from the front - the row along the top or the bottom edge of the channel, seven inset fingers
+  end-on, a wide opening between each pair that a patch cord is laid in through
+provenance:
+  size: >-
+    drawing - the front view of the PR2HF customer drawing (Panduit 00224EAE-DC), read at 300 dpi
+    against its 177.0 [6.97 in] height (2.955 px/mm) and 483.9 [19.05 in] width: seven fingers a row, centred on
+    the middle and 72.8 mm apart (the pitch measured 215 to 225 px, 72.8 to 76.2 mm, between
+    neighbours; the end ones 23.1 mm from the plate's edge), each 15 mm across. THE COUNT, THE
+    PITCH AND THE WIDTH ARE READ OFF A PICTURE AND ARE ESTIMATED: no view dimensions them.
+    The opening between two fingers is the pitch less the width, 57.8 mm; the specification
+    sheet (RKSP188) says only that "wide front finger openings easily accommodate Category 6A
+    and Category 6 copper cables". The row is 15 high, estimated.
+  relief: >-
+    drawing - the front view: each finger stands out of the plate; the channel's depth is the 148
+    that Panduit's calculator area for the PR2HF4 (33.6 sq in) divides into over its 147 clear
+    height, so the fingers are taken 150 out of the plate, ESTIMATED. Built as plates with
+    square corners where the finger is a curved hook.
+  color: >-
+    datasheet - "Finger Material: ABS", "The manager is white" on the PR2HF3WH and PR2HF4WH product
+    pages. The shade is this library's render of white ABS.
+size: {w: 483.9, h: 15}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: ABS}
+elements:
+  f1: {at: [16.05, 0.0], size: [15, 15], class: bezel}
+  f2: {at: [88.85, 0.0], size: [15, 15], class: bezel}
+  f3: {at: [161.65, 0.0], size: [15, 15], class: bezel}
+  f4: {at: [234.45, 0.0], size: [15, 15], class: bezel}
+  f5: {at: [307.25, 0.0], size: [15, 15], class: bezel}
+  f6: {at: [380.05, 0.0], size: [15, 15], class: bezel}
+  f7: {at: [452.85, 0.0], size: [15, 15], class: bezel}
+relief:
+  features:
+    - {node: f1, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the front view of the PR2HF drawing, fingers standing out of the plate; their length is not dimensioned'}
+    - {node: f2, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+    - {node: f3, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+    - {node: f4, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+    - {node: f5, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+    - {node: f6, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+    - {node: f7, out: 150, color: '#d9dcdd', confidence: estimated, source: 'the same view'}
+skins: [default]

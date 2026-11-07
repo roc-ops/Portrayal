@@ -1,0 +1,587 @@
+format: 1
+kind: device
+name: ex6210
+version: 0.2.1
+maturity: modelled
+manufacturer: Juniper
+model: EX6210
+portfolio: {line: EX Series, family: EX6200}
+description: >-
+  Juniper EX6210, a 14 U modular campus and data center access switch that runs Junos OS. The front has ten
+  horizontal slots: eight take line cards only, and slots 4 and 5 take a Switch Fabric and Routing Engine (SRE)
+  module or a line card. Four power supply slots, PSU 0 to PSU 3, sit under them. A single fan tray at the rear
+  cools the chassis from front to back. Every shipping order includes one SRE module, one power supply and
+  the cover panels. The line cards are a family of their own and are not modelled: their slots show cover panels.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper EX6210 Switch Hardware Guide, published 2020-12-15, 365 pages (Juniper Networks, copyright 2020),
+      https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/ex-series/ex6200/ex6210.pdf.
+      The address in the task, .../ex-series/ex6210/ex6210.pdf, answered 404; the archive zip
+      https://www.juniper.net/documentation/en_US/release-independent/downloads/ex-series/ex-series-doc-archives.zip
+      was downloaded and holds no EX6210 or EX6200 guide (ex2200, ex3300, ex4200, ex4550 and the RPS only), so the
+      guide at the ex6200/ address, which a search found, is the one read. Taken from it: Tables 3 to 11 (line
+      cards, supplies, the four shipping configurations, CLI names, chassis size, FRUs, slot numbering), Figures 1 and 2
+      (the front and rear, isometric), Figure 4 (the slots, drawn flat), Figure 5 (the supply slots, drawn flat), the
+      SRE, LCD, lamp and grounding sections, the cooling and power chapters (Figures 14 to 24, Tables 20 to 35), the line
+      card chapter (Tables 36 to 40), the site chapter (Tables 42 to 45, Figures 31 and 32), the rack-mounting
+      topics (Figures 37 to 46), Table 51 (parts list) and Figures 64 to 71. EX6200 Line of Ethernet Switches datasheet,
+      1000390-002-EN, Aug 2011, a copy of Juniper's own datasheet hosted at
+      https://cdn.blueally.com/networkscreen/datasheets/ex-series/ex6200_ethernet_switch_ds.pdf, because Juniper's own
+      address no longer serves it: the specifications, the system capacity and the ordering table (EX6210-CHAS, EX6210-FAN
+      and EX6210-FLTR are named there only). Juniper's EX end-of-life table,
+      https://support.juniper.net/support/eol/product/ex_series/, read 2026-10-23. Terms: the documents are Juniper's, read
+      here for facts only, and nothing of them is copied into the library; no drawing or photograph is reproduced.
+      No photograph of the EX6210 was reachable: the task named Juniper's image library, and a search found no photograph
+      there or in the guide. No held intake folder, Visio stencil or 3D model could be read: the path named in the task
+      for held material answered permission denied on one account's home and does not exist on this one.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 7 and Figure 32: 24.3 in (61.1 cm) high, 17.3 in (43.9 cm) wide and 15.5 in (39.3 cm) deep, 19 in
+      (48.3 cm) wide with the front-mounting brackets, which come installed on the chassis; 125 lb (57 kg) with the
+      backplane only, 159 lb (72 kg) as the standard system ships, 215 lb (98 kg) fully loaded. The guide (its overview and
+      its rack-mounting topic) and the datasheet all say 14 U, so the device is 14 U, not the 9 U in the task; 14 U is
+      622.3 mm. Ears are NOT MODELLED by project convention. The datasheet (Aug 2011) gives 17.3 x 24.3 x 15.5 in
+      (43.9 x 61.6 x 39.3 cm); the guide's 61.1 cm and 24.3 in disagree with each other (24.3 in is 617 mm, 61.7 cm) and the
+      datasheet's 61.6 cm agrees with the inches, so 24.3 in is carried: 439.4 x 617.2 x 393.7 mm. See the gap named chassis-size.
+  gate-1:
+    confidence: estimated
+    note: >-
+      Figure 4 (the ten slots) and Figure 5 (the supply slots) are flat elevations of the front, drawn at 600 dpi and read as
+      pixels. Figure 4: the outline with its brackets is 1919 px across and the body between the bracket fold lines 1743 px,
+      a ratio of 0.908 against 439.4 / 482.6 = 0.9105 (0.3 percent out), so it is read at 3.967 px/mm on the body width. Figure 5:
+      the four supplies and their margins sum to the body's 2094 px, which gives 4.766 px/mm. The two figures overlap on slot 9,
+      which is 38.1 mm high in Figure 4 (151 px at 3.967) and 37.8 mm in Figure 5 (180 px at 4.766), and stack to 452.2 mm to the foot of
+      slot 9 plus 164.1 mm below it, 616.3 mm against the table's 617.2 mm (0.15 percent). They carry geometry on both axes.
+      Figure 7 (the SRE module) is drawn flat but its plate is 2272 x 320 px, an aspect of 7.1 against 6.9 for the slot, so
+      only fractions of the height are taken from it. Figures 1, 2, 14, 17 and 23 are isometric or three-quarter views and give
+      fractions only.
+  slots:
+    confidence: estimated
+    note: >-
+      Figure 4 at 3.967 px/mm, from the top of the face: the header band 18.5 mm; four line card slots 38.1 mm high on a 39.75 mm
+      pitch from 18.5 mm down (slots 0 to 3); two SRE-or-line-card slots 56.7 mm high from 177.5 and 236.7 mm; four more line card
+      slots from 295.2 mm (slots 6 to 9), the last ending at 452.6 mm. Every plate runs from 1.1 to 393.2 mm across, 392.1 mm. The
+      slot numbers 0 to 9 count from the top and are printed on a step at the lower right of each plate; they are drawn just
+      outside the plate, at 395 mm across, because a legend under a module is hidden. Figure 1 shows the air intake as a perforated
+      strip right of the plates; Figure 4 draws it blank, and the strip is placed from 403 to 436 mm across by eye from Figure 71.
+  psus:
+    confidence: estimated
+    note: >-
+      Figure 5 at 4.766 px/mm: four supply slots 100.7 mm wide on a 108.5 mm pitch from 7.3 mm across, 101.8 mm high, the top 2.3 mm
+      under slot 9, at 454.5 mm down. The power supply blank shelf runs below them to the foot of the face (60.9 mm) and carries
+      the slot labels PSU0 to PSU3 in its lower row, so those are the shelf's own printing (component juniper/ex6200-psu-shelf@1).
+      The guide gives the 5000 W supply and its cover as "approximately 3 U" against "approximately 2 U" and says the shelf comes
+      out before 5000 W supplies go in (Figure 64 and the installation topic). The 3U slot is therefore 152.7 mm (1.5 times the 2U
+      slot, an estimate) and exists only in the build that seats 5000 W supplies (see configurations). No flat drawing of
+      a 5000 W or a DC supply is held; both are drawn from isometrics, as fractions.
+  fans:
+    confidence: estimated
+    note: >-
+      Figure 2 (isometric, rear) and Figure 14: the fan tray fills the right of the rear as the viewer faces it, from about 55 to
+      100 percent of the width and from the top almost to the supply exhaust band: 195.0 x 514.0 mm at 241.0 mm across and 6.0 mm
+      down. The guide says "right side on the rear of the chassis". Fractions off an isometric; estimated to about 5 mm.
+  rear:
+    confidence: estimated
+    note: >-
+      Figure 2 (isometric, g021101), read as fractions of the rear face. Left of the fan tray is a plain plate with one rectangular
+      opening (100 x 67 mm at 108.5 across and 427 down) that no text names; across the foot is the exhaust band of the supplies
+      ("exhaust ... on the rear of the chassis at the bottom", guide), drawn as vent from 76 mm across, with the protective earthing
+      terminal (two threaded inserts) and the ESD point at its left end. Estimated to about 5 mm. The guide gives the earthing
+      terminal as a pair of PEM nuts for UNC 1/4-20 screws spaced 0.625 in (15.86 mm), and one lug (Panduit LCD2-14A-L; the DC
+      parts list gives LCD2-14A-Q) with two 1/4-20 x 0.5 screws.
+  front-header:
+    confidence: estimated
+    note: >-
+      Figure 4 at 3.967 px/mm: the header band holds the maker's mark at the left (0.9 to 40.5 mm across), the model name EX6210
+      at 53.1 mm, the Junos OS mark at 349.8 to 386.3 mm, the ESD warning label at 393.0 to 413.2 mm and the front ESD point,
+      a 10 mm ring centred 425.7 mm across and 8.3 mm down. The marks are not drawn: logo-zone regions reserve them. The ESD
+      jack is the library's 6 mm part on that centre.
+  esd:
+    confidence: estimated
+    note: >-
+      Figure 4 and Figure 2: an ESD point at the front top right and one at the rear lower left, each with the ESD mark. The guide's
+      first installation step for every FRU is to connect the strap to "the ESD point on the chassis".
+  airflow:
+    confidence: datasheet
+    note: >-
+      Guide, Airflow Direction in the EX6210 Switch Chassis and Figure 15: air enters at the front right side, passes through the line
+      card cage and leaves at the rear left, pulled by the fan tray; each supply has its own fan and draws from the front of the
+      supply and exhausts at the rear bottom. Front-to-back only. There is no back-to-front build, so no airflow variant is written
+      and no handle colour follows from it.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      Guide, Mounting an EX6210 Switch on a Rack or Cabinet and Figures 40 to 42: the switch ships with front-mounting brackets
+      installed on the chassis and mounts flush, front brackets bolted to the rack rails with 24 screws, in a two-post or four-post
+      19 in rack or cabinet (800 mm cabinet, minimum depth 36 in). The one ear position is flush, 0 mm, by that text and Figure 4. The
+      optional adjustable mounting brackets (a four-piece set that adjusts to 600, 762 and 800 mm racks, four-post only) and the optional power cord
+      tray (1 U, so 15 U in all, which also takes the front edge of the chassis in a two-post rack) are named without part numbers.
+      Juniper's partner price list of September 2019 lists "EX-MOD-RMK-4POST, EX modular rack mount kit for EX6200 and EX8200, spare". Rack
+      kits go in provenance only, so chassis.kits is not written.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Guide Table 5 lists four shipping configurations (EX6210-S64-96T-A25, EX6210-S64-96P-A25, EX6210-S64-96P-A50 and EX6210-S64-96T-D21),
+      each a chassis with backplane, one fan tray, one SRE module and its cover panel, two 48-port line cards, one power supply and
+      the covers; the datasheet (Aug 2011) adds EX6210-CHAS, the spare chassis with backplane. The same front panel serves all of them,
+      so they are configurations of one device. The two line cards each order includes are not modelled (see gaps), and the guide
+      says which slots they take nowhere, so every configuration shows its line card slots covered. The 5000 W order is the one that
+      changes the supply slots (a taller supply and no shelf), which `only-in` expresses.
+  covers:
+    confidence: datasheet
+    note: >-
+      Guide Tables 5 and 51: six line card cover panels, one SRE module cover panel (one line card cover panel and one SRE module filler
+      panel, Figures 71 and 73) and three supply cover panels ship with every system. Table 21 names the supply covers EX6200-BLNK-PWR-2U
+      (2500 W AC) and EX6200-BLNK-PWR-3U (5000 W AC). Juniper's end-of-life table also lists EX6200-BLNK-LC, EX6200-BLNK-SRE-LC and
+      EX6200-BLNK-PWR-1U with no description; the guide gives the line card and SRE covers no number, so none is attached to them. Table
+      5 gives the DC order three 2500 W AC covers and Table 51 three 2100 W DC covers; the 2U cover is seated.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Tables 31 and 32: fan tray 300 W, SRE module 100 W, 48-port RJ-45 line card 150 W, 48-port PoE+ line card 220 W base plus up to
+      1440 W of PoE+, 48-port SFP line card 250 W, under typical voltage conditions; the chassis base power budget is 500 W (fan tray and two
+      SRE modules, the same with one). The guide's per-configuration maximums (Table 33) and its supply counts (Tables 22, 23, 27, 28 and 34)
+      are not carried. The datasheet gives the 2500 W AC supply as 1250 W at 110 V and 2500 W at 220 V, the 5000 W as 2500 W and 5000 W
+      (marked "Roadmap" in 2011), and the DC supply 2100 W; the guide agrees. Up to 10,000 W, 20,000 W or 8,400 W with four supplies.
+  environment:
+    confidence: datasheet
+    note: >-
+      Guide Table 42, EX6210 row: 0 to 40 C, 10 to 85 percent noncondensing, no degradation up to 10,000 ft (3048 m), Zone 4 earthquake
+      (GR-63, Issue 4). The datasheet (Aug 2011) gives 0 to 45 C, 5 to 90 percent and 13,000 ft (3,964 m); the newer guide is carried. The
+      datasheet alone gives storage -40 to 70 C and acoustic noise 52 dBA with AC and 54 dBA with DC supplies at 27 C.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      Juniper's EX end-of-life table (read 2026-10-23): EX6210-CHAS, the SRE module, the 2500 W AC and 2100 W DC supplies and the 48-port cards
+      were announced end of life 2015-11-01, last order 2016-05-01, end of hardware failure analysis 2017-05-01, end of engineering 2018-05-01
+      and end of support 2022-12-31; the fan tray, filter, covers, the 2500 W and 5000 W bundles and the EX6210-S64 systems have the same first
+      four dates and end of support 2021-05-01, and EX6200-PWR-AC5000 end of support 2020-03-31. The table's column headings are EOL Announced,
+      Last Order, End of Hardware Failure Analysis, End of Engineering, Last Software Version and End of Support. The Juniper bulletin
+      itself was not opened.
+  colour:
+    confidence: estimated
+    note: >-
+      No photograph is held and the guide's figures are line drawings. The chassis is drawn the neutral grey of the EX9253, #8b8e94: a
+      relative, and not a reading of this chassis.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Guide Table 6: FPC n is the line card in slot n (0 to 9) and, in slot 4 or 5, the SRE module's uplink ports; the SRE modules are CB 0
+      and CB 1; PSU n is the supply in slot n; the fan tray is FTC 0; PIC n is always 0. None is printed on the metal, so no port carries
+      a Junos name.
+attrs:
+  physical:
+    weight-empty-kg: 57
+    weight-base-kg: 72
+    weight-max-kg: 98
+    weight-note: >-
+      125 lb (57 kg) with the backplane only, 159 lb (72 kg) as the standard system ships, 215 lb (98 kg) fully loaded (guide Table 7);
+      213 to 215 lb (97 to 98 kg) with other line cards or supplies
+    width-note: 17.3 in (43.9 cm) body; 19 in (48.3 cm) with the front-mounting brackets (guide Table 7)
+    depth-note: 15.5 in (39.3 cm) (guide Table 7 and the datasheet)
+  performance:
+    backplane-capacity: 4.4 Tbps maximum (datasheet, Aug 2011)
+    system-throughput: 690 Mpps maximum (datasheet, Aug 2011)
+    fabric-bandwidth: >-
+      64 Gbps full duplex per line card slot with one SRE module, 128 Gbps with two (guide); 720 Gbps of switching capacity per SRE module
+      (datasheet)
+    port-density: >-
+      up to 384 10/100/1000BASE-T ports with two SRE modules and eight line cards, up to 432 with one SRE module and nine line cards (guide,
+      datasheet)
+    line-cards: >-
+      EX6200-48T, EX6200-48P and EX6200-48F; not modelled (see gaps)
+  power:
+    base-power-budget-w: 500
+    power-envelope: unstated
+    base-power-budget-note: >-
+      the maximum draw of the fan tray (300 W) and two SRE modules (100 W each); the same with one (guide, Calculating the Chassis Base
+      Power Budget)
+    psu-types: 2500 W AC, 5000 W AC or 2100 W DC; do not mix types, wattages or low-line and high-line feeds in one chassis
+    redundancy-note: >-
+      up to four supplies; N+1 is the default and N+N (2+2) can be configured; a shipping order includes one supply
+  thermal:
+    airflow-note: front to back; intake at the front right, exhaust at the rear left; each supply has its own fan
+    thermal-output-note: 3.41 BTU/hr per watt of maximum system power (guide, Table 35)
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F) (guide Table 42); 0 to 45 C in the 2011 datasheet
+    storage-temp: -40 to 70 C (-40 to 158 F) (datasheet)
+    humidity: 10 to 85 percent noncondensing (guide Table 42); 5 to 90 percent in the 2011 datasheet
+    altitude: no performance degradation up to 10,000 ft (3048 m) (guide Table 42)
+  platform:
+    cpu: 1.2 GHz dual-core on each SRE module (datasheet)
+    memory: 2 GB DRAM and 2 GB flash on each SRE module (datasheet)
+    software: Junos OS Release 11.3R2 or later (guide)
+  features:
+    redundancy: >-
+      one or two SRE modules with graceful Routing Engine switchover; the fan tray, supplies and SRE modules are field-replaceable
+    sre-slots: >-
+      slots 4 and 5 take an SRE module or a line card; at least one SRE module is required; with one, the guide recommends slot 4
+  management:
+    oob: one 10/100/1000BASE-T and one Gigabit Ethernet SFP management port on each SRE module (one works at a time)
+    console: RJ-45 serial console on each SRE module
+    usb: one USB port on each SRE module
+    lcd: two-line, 16-character LCD with Menu and Enter buttons on each SRE module
+  compliance:
+    acoustic: 52 dBA with AC supplies, 54 dBA with DC supplies, at 27 C, ISO 7779 (datasheet, bystander position at the front)
+    seismic: Complies with Zone 4 earthquake requirements as per GR-63, Issue 4 (guide Table 42)
+    nebs: >-
+      GR-63-Core, GR-1089-Core and SR-3580 NEBS Criteria Levels (Level 3) are listed under the customer-specific requirements of the
+      2011 datasheet, which marks the NEBS environmental standard in its feature table "Roadmap"
+    safety: CAN/CSA-C22.2 No. 60950-1, UL 60950-1, EN 60950-1, IEC 60950-1, EN 60825-1 (datasheet)
+    emc: FCC Part 15 Class A, EN 55022 Class A, VCCI Class A, CISPR 22 Class A, AS/NZS CISPR 22 Class A (datasheet)
+    materials: RoHS 5/6 (datasheet)
+  lifecycle:
+    eol: announced
+    eol-announcement: https://support.juniper.net/support/eol/product/ex_series/
+    end-of-sale: '2016-05-01'
+    end-of-support: '2022-12-31'
+chassis:
+  width: 439.4
+  height: 617.2
+  depth: 393.7
+  ru: 14
+  color: '#8b8e94'
+  airflow: front-to-back
+  power: ac
+  ears:
+    positions:
+    - {name: flush, at: 0, default: true}
+gaps:
+- what: chassis-size
+  scope: [front, rear]
+  reason: sources-disagree
+  note: >-
+    Height: 24.3 in in the guide's Table 7, which is 617.2 mm, and 61.1 cm in the same row; the datasheet gives 24.3 in and 61.6 cm.
+    Width: 17.3 in (43.9 cm) and 19 in (48.3 cm) with the brackets in both. Depth: 15.5 in (39.3 cm) in both. The task gave 9 U; the guide
+    and the datasheet give 14 U, and 24.3 in is 13.9 U. The inch figures are carried: 439.4 x 617.2 x 393.7 mm.
+  wanted: a mechanical drawing of the chassis, or Juniper's confirmation of the height in centimetres
+- what: line-cards
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    The EX6200-48T (48-port RJ-45), EX6200-48P (48-port PoE+) and EX6200-48F (48-port SFP) line cards (guide Tables 3 and 36 to 40, Figures
+    25 to 30). Each has 48 ports in a block, two lamps per port and the ON, ST and (for the PoE card) PoE lamps. A line card family is a
+    separate piece of work. The two cards each shipping order includes are not shown; every line card slot shows its cover panel, and the
+    guide says which slots the cards take nowhere.
+- what: cover-part-numbers
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The part numbers of the line card cover panel and the SRE module cover panel. Juniper's end-of-life table lists EX6200-BLNK-LC and
+    EX6200-BLNK-SRE-LC without descriptions and the guide gives the panels no number, so none is written. EX6200-BLNK-PWR-1U is listed there
+    too and the guide's Table 21 has no 1U cover.
+- what: dc-cover-panel
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    Table 5 lists three 2500 W AC power supply cover panels for the DC order and Table 51 three 2100 W DC power supply cover panels; Table 21
+    names a cover for the two AC supplies only. The 2U cover (EX6200-BLNK-PWR-2U) is seated over the DC slots.
+  wanted: the cover panel part number for the 2100 W DC supply
+- what: psu-faces
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A flat drawing or photograph of the 5000 W AC and the 2100 W DC supply faces. The guide draws both only in isometric (Figures 17, 23, 24, 66
+    and 68), so their lamps, switch, handle and terminals are fractions, and the 5000 W supply's 3U height is the guide's "approximately 3 U".
+    The DC supply is drawn with two positive and two negative studs as Figure 23 shows; the text names one pair of input lugs.
+- what: psu-population
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    Which power supply slot the single shipped supply takes. Every figure draws four supplies (Figure 5) and the guide says power supplies
+    need not be installed in serial order, so PSU 0 is shown seated and PSU 1 to PSU 3 covered.
+- what: rear-face
+  scope: [rear]
+  reason: needs-photo
+  wanted: >-
+    A straight-on drawing or photograph of the rear. Figure 2 is an isometric, so the fan tray, the rectangular opening in the plate, the exhaust
+    band and the two earthing and ESD points are fractions of it; the opening's purpose is not stated.
+- what: side-faces
+  scope: [left, right, top, bottom]
+  reason: needs-drawing
+  wanted: >-
+    The sides, top and bottom. Figures 1 and 2 show the sides in isometric with rows of screws, the bracket and a handle plate and no dimension;
+    no flat figure of any of them exists.
+- what: air-filter
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    The optional air filter (EX6210-FLTR, six captive screws over the intake strip at the front right; the datasheet lists it as a spare and the
+    guide does not ship it). It bolts onto the front and is drawn in no flat figure, so it is not drawn.
+- what: earthing-terminal
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    The protective earthing terminal as a part that seats a ring lug. The guide gives a pair of threaded inserts for UNC 1/4-20
+    screws, 0.625 in (15.86 mm) apart, and a lug (Panduit LCD2-14A-L) with two screws, but draws them only in isometric (Figures 2 and
+    13). The pair is drawn as two plain insert heads, not as the library's stud-pair part: that part presents lug seats, which the library's
+    pinned census of default lug turns (spec/tests/test_occupant_turn.py) counts, and an open pull request edits that test.
+- what: photo-view
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A straight-on photograph of the front and the rear. Every position comes from the guide's drawings and none from a photograph, so the colour
+    and finish are not known.
+groups:
+  slots:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: >-
+      The eight line card only slots on the front, numbered 0 to 3 and 6 to 9 from the top (guide Table 10 and Figure 4)
+  sre-slots:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: >-
+      The two slots numbered 4 and 5, which take an SRE module or a line card (guide Table 10 and Figure 4)
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        1+1 for the SRE modules: one is the primary and the other the backup; at least one is required (guide,
+        Understanding EX6210 Switch Component and Functionality Redundancy)
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: the four power supply slots PSU 0 to PSU 3 at the foot of the front (guide Table 11 and Figure 5)
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: >-
+        n+1 by default and n+n (2+2) by configuration (guide, Understanding EX6210 Switch Component and Functionality Redundancy); a shipping
+        order has one supply
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: the single vertical fan tray at the rear (guide, EX6210 Switch Cooling System)
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD points, one at the front top right and one at the rear lower left (guide Figures 1 and 2)
+views:
+  front:
+    size: {w: 439.4, h: 617.2}
+    panel:
+      decor:
+      - {at: [403.0, 18.5], size: [33.0, 433.9], pattern: vent, vent: 1.0, confidence: estimated,
+         source: 'guide Figure 1 shows the air intake as a perforated strip right of the line cards; Figure 71 shows its extent; placed by eye, see provenance slots'}
+      - {at: [393.0, 2.1], size: [20.2, 13.4], rx: 0.6, fill: '#e8e9eb', confidence: estimated,
+         source: 'guide Figure 4 - the ESD warning label, its outline read at 3.967 px/mm'}
+      cutouts:
+      - {id: esd-front-jack, at: [422.7, 5.3], size: [6.0, 6.0], shape: circle}
+    silkscreen:
+    - {id: silk-model, at: [53.1, 11.0], text: EX6210, font-size: 9.0, anchor: start, fill: '#1a1d1f', for: chassis}
+    - {id: silk-slot-0-mark, at: [395.0, 55.4], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-0}
+    - {id: silk-slot-0, at: [398.8,55.4], text: '0', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-0}
+    - {id: silk-slot-1-mark, at: [395.0, 95.15], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-1}
+    - {id: silk-slot-1, at: [398.8,95.15], text: '1', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-1}
+    - {id: silk-slot-2-mark, at: [395.0, 134.9], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-2}
+    - {id: silk-slot-2, at: [398.8,134.9], text: '2', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-2}
+    - {id: silk-slot-3-mark, at: [395.0, 174.65], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-3}
+    - {id: silk-slot-3, at: [398.8,174.65], text: '3', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-3}
+    - {id: silk-slot-4-mark, at: [395.0, 233.0], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-4}
+    - {id: silk-slot-4, at: [398.8,233.0], text: '4', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-4}
+    - {id: silk-slot-5-mark, at: [395.0, 292.2], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-5}
+    - {id: silk-slot-5, at: [398.8,292.2], text: '5', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-5}
+    - {id: silk-slot-6-mark, at: [395.0, 332.1], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-6}
+    - {id: silk-slot-6, at: [398.8,332.1], text: '6', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-6}
+    - {id: silk-slot-7-mark, at: [395.0, 371.85], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-7}
+    - {id: silk-slot-7, at: [398.8,371.85], text: '7', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-7}
+    - {id: silk-slot-8-mark, at: [395.0, 411.6], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-8}
+    - {id: silk-slot-8, at: [398.8,411.6], text: '8', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-8}
+    - {id: silk-slot-9-mark, at: [395.0, 451.35], path: 'M 0 0 L 1.5 -2.7 L 3.0 0 Z', fill: '#1a1d1f', for: slot-9}
+    - {id: silk-slot-9, at: [398.8,451.35], text: '9', font-size: 3.2, anchor: start, fill: '#1a1d1f', for: slot-9}
+    components:
+      bays:
+      - {id: slot-0, at: [1.1, 18.5], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 0}
+      - {id: slot-1, at: [1.1, 58.25], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 1}
+      - {id: slot-2, at: [1.1, 98.0], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 2}
+      - {id: slot-3, at: [1.1, 137.75], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 3}
+      - {id: slot-4, at: [1.1, 177.5], size: {w: 392.1, h: 56.7}, accepts: [juniper/ex6200-sre64-4xs@1, juniper/ex6200-sre-cover@1],
+         default: juniper/ex6200-sre64-4xs@1, group: sre-slots, rel-pos: 4}
+      - {id: slot-5, at: [1.1, 236.7], size: {w: 392.1, h: 56.7}, accepts: [juniper/ex6200-sre64-4xs@1, juniper/ex6200-sre-cover@1],
+         default: juniper/ex6200-sre-cover@1, group: sre-slots, rel-pos: 5}
+      - {id: slot-6, at: [1.1, 295.2], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 6}
+      - {id: slot-7, at: [1.1, 334.95], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 7}
+      - {id: slot-8, at: [1.1, 374.7], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 8}
+      - {id: slot-9, at: [1.1, 414.45], size: {w: 392.1, h: 38.1}, accepts: [juniper/ex6200-lc-cover@1],
+         default: juniper/ex6200-lc-cover@1, group: slots, rel-pos: 9}
+      - {id: psu-0, at: [7.3, 454.5], size: {w: 100.7, h: 101.8},
+         accepts: [juniper/ex6200-pwr-ac2500@1, juniper/ex6200-pwr-dc2100@1, juniper/ex6200-blnk-pwr-2u@1],
+         default: juniper/ex6200-pwr-ac2500@1, group: psus, rel-pos: 0,
+         only-in: [base, redundant, ac-2500-t, ac-2500-p, dc-2100-t, chassis]}
+      - {id: psu-1, at: [115.8, 454.5], size: {w: 100.7, h: 101.8},
+         accepts: [juniper/ex6200-pwr-ac2500@1, juniper/ex6200-pwr-dc2100@1, juniper/ex6200-blnk-pwr-2u@1],
+         default: juniper/ex6200-blnk-pwr-2u@1, group: psus, rel-pos: 1,
+         only-in: [base, redundant, ac-2500-t, ac-2500-p, dc-2100-t, chassis]}
+      - {id: psu-2, at: [224.3, 454.5], size: {w: 100.7, h: 101.8},
+         accepts: [juniper/ex6200-pwr-ac2500@1, juniper/ex6200-pwr-dc2100@1, juniper/ex6200-blnk-pwr-2u@1],
+         default: juniper/ex6200-blnk-pwr-2u@1, group: psus, rel-pos: 2,
+         only-in: [base, redundant, ac-2500-t, ac-2500-p, dc-2100-t, chassis]}
+      - {id: psu-3, at: [332.8, 454.5], size: {w: 100.7, h: 101.8},
+         accepts: [juniper/ex6200-pwr-ac2500@1, juniper/ex6200-pwr-dc2100@1, juniper/ex6200-blnk-pwr-2u@1],
+         default: juniper/ex6200-blnk-pwr-2u@1, group: psus, rel-pos: 3,
+         only-in: [base, redundant, ac-2500-t, ac-2500-p, dc-2100-t, chassis]}
+      - {id: psu-0-3u, at: [7.3, 454.5], size: {w: 100.7, h: 152.7},
+         accepts: [juniper/ex6200-pwr-ac5000@1, juniper/ex6200-blnk-pwr-3u@1],
+         default: juniper/ex6200-pwr-ac5000@1, group: psus, rel-pos: 0, only-in: [ac-5000-p]}
+      - {id: psu-1-3u, at: [115.8, 454.5], size: {w: 100.7, h: 152.7},
+         accepts: [juniper/ex6200-pwr-ac5000@1, juniper/ex6200-blnk-pwr-3u@1],
+         default: juniper/ex6200-blnk-pwr-3u@1, group: psus, rel-pos: 1, only-in: [ac-5000-p]}
+      - {id: psu-2-3u, at: [224.3, 454.5], size: {w: 100.7, h: 152.7},
+         accepts: [juniper/ex6200-pwr-ac5000@1, juniper/ex6200-blnk-pwr-3u@1],
+         default: juniper/ex6200-blnk-pwr-3u@1, group: psus, rel-pos: 2, only-in: [ac-5000-p]}
+      - {id: psu-3-3u, at: [332.8, 454.5], size: {w: 100.7, h: 152.7},
+         accepts: [juniper/ex6200-pwr-ac5000@1, juniper/ex6200-blnk-pwr-3u@1],
+         default: juniper/ex6200-blnk-pwr-3u@1, group: psus, rel-pos: 3, only-in: [ac-5000-p]}
+      placements:
+      - {id: esd-front-jack, ref: common/esd-jack@1, at: [422.7, 5.3], for: chassis, group: esd, rel-pos: 0}
+      - {id: esd-label, ref: common/esd-warning@1, at: [399.25, 4.55], for: chassis, group: esd, rel-pos: 1}
+      - {id: psu-shelf, ref: juniper/ex6200-psu-shelf@1, at: [0.0, 556.3], for: chassis, group: psus, rel-pos: 4,
+         only-in: [base, redundant, ac-2500-t, ac-2500-p, dc-2100-t, chassis]}
+    regions:
+    - id: logo-zone
+      at: [0.9, 3.4]
+      size: {w: 39.6, h: 11.3}
+      label: Vendor logo; not drawn
+    - id: logo-zone-2
+      at: [349.8, 0.8]
+      size: {w: 36.5, h: 13.9}
+      label: Junos OS mark; not drawn
+  rear:
+    size: {w: 439.4, h: 617.2}
+    panel:
+      decor:
+      - {at: [108.5, 427.0], size: [100.2, 67.0], rx: 1.0, fill: '#2b2e32', confidence: estimated,
+         source: 'guide Figure 2 (isometric) - a rectangular opening in the rear plate that no text names; fractions of the rear face, see provenance rear'}
+      - {at: [76.0, 526.0], size: [358.0, 88.0], pattern: vent, vent: 1.0, confidence: estimated,
+         source: 'guide Figure 2 and Figure 15 - the exhaust band of the supplies at the foot of the rear; fractions of an isometric'}
+      - {at: [34.1, 537.5], size: [7.0, 7.0], rx: 3.5, fill: '#aeb2b7', confidence: estimated,
+         source: 'guide Figure 2 and the grounding section - one of the two threaded inserts (PEM nuts) of the protective earthing terminal, 15.86 mm from its pair; fractions of an isometric'}
+      - {at: [49.9, 537.5], size: [7.0, 7.0], rx: 3.5, fill: '#aeb2b7', confidence: estimated,
+         source: 'guide Figure 2 and the grounding section - the second threaded insert of the protective earthing terminal'}
+      cutouts:
+      - {id: esd-rear-jack, at: [16.6, 572.0], size: [6.0, 6.0], shape: circle}
+    components:
+      bays:
+      - {id: fan-0, at: [241.0, 6.0], size: {w: 195.0, h: 514.0}, accepts: [juniper/ex6210-fan@1],
+         default: juniper/ex6210-fan@1, group: cooling, rel-pos: 0}
+      placements:
+      - {id: esd-rear-jack, ref: common/esd-jack@1, at: [16.6, 572.0], for: chassis, group: esd, rel-pos: 1}
+  left:
+    size: {w: 393.7, h: 617.2}
+    empty: >-
+      Not drawn flat by any source held. Figures 1 and 2 show the sides only in isometric views with rows of fasteners, a bracket and a
+      handle plate and no dimension; the guide has no side elevation.
+  right:
+    size: {w: 393.7, h: 617.2}
+    empty: >-
+      Not drawn flat by any source held. Figures 1 and 2 show the sides only in isometric views with rows of fasteners, a bracket and a
+      handle plate and no dimension; the guide has no side elevation.
+  top:
+    size: {w: 439.4, h: 393.7}
+    empty: >-
+      Not drawn by any source held. Figure 32 shows the footprint of the chassis from above as an outline with its width and depth and
+      the bracket, and no feature.
+  bottom:
+    size: {w: 439.4, h: 393.7}
+    empty: Not drawn by any source held. The guide's figures show no underside.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The switch as every shipping order is built, less the line cards: one SRE module in slot 4 and its cover panel over slot 5, one
+      2500 W AC power supply in PSU 0 with covers over PSU 1 to PSU 3 and the blank shelf, the fan tray, and a cover panel in each line
+      card slot. Line cards are ordered separately.
+    bays:
+      slot-0: juniper/ex6200-lc-cover@1
+      slot-1: juniper/ex6200-lc-cover@1
+      slot-2: juniper/ex6200-lc-cover@1
+      slot-3: juniper/ex6200-lc-cover@1
+      slot-6: juniper/ex6200-lc-cover@1
+      slot-7: juniper/ex6200-lc-cover@1
+      slot-8: juniper/ex6200-lc-cover@1
+      slot-9: juniper/ex6200-lc-cover@1
+  redundant:
+    kind: example
+    description: >-
+      The base build with a second SRE module in slot 5, as the guide describes the redundant configuration (one SRE module is the primary and
+      the other the backup). An illustration, not an order code: the guide gives the second module no bundle.
+    bays:
+      slot-5: juniper/ex6200-sre64-4xs@1
+  ac-2500-t:
+    kind: orderable
+    description: >-
+      EX6210-S64-96T-A25: the 96-port RJ-45 system with a 2500 W AC power supply. It ships with two 48-port RJ-45 line cards
+      (EX6200-48T), which are not modelled, so every line card slot shows its cover panel.
+    part-numbers:
+      EX6210-S64-96T-A25: {}
+  ac-2500-p:
+    kind: orderable
+    description: >-
+      EX6210-S64-96P-A25: the 96-port PoE+ system with a 2500 W AC power supply. It ships with two 48-port PoE+ line cards
+      (EX6200-48P), which are not modelled, so every line card slot shows its cover panel.
+    part-numbers:
+      EX6210-S64-96P-A25: {}
+  ac-5000-p:
+    kind: orderable
+    description: >-
+      EX6210-S64-96P-A50: the 96-port PoE+ system with a 5000 W AC power supply, which has two inlets and is about 3 U high.
+      The shelf is left out and the slots are the 3U ones. It ships with two 48-port PoE+ line cards, which are not modelled.
+    part-numbers:
+      EX6210-S64-96P-A50: {}
+  dc-2100-t:
+    kind: orderable
+    power: dc
+    description: >-
+      EX6210-S64-96T-D21: the 96-port RJ-45 system with a 2100 W DC power supply and two DC lugs (Panduit LCD4-14A-L). It ships
+      with two 48-port RJ-45 line cards, which are not modelled.
+    bays:
+      psu-0: juniper/ex6200-pwr-dc2100@1
+    part-numbers:
+      EX6210-S64-96T-D21: {}
+  chassis:
+    kind: orderable
+    description: >-
+      EX6210-CHAS, the spare chassis with backplane (datasheet ordering table). It ships without an SRE module, line cards, supplies or
+      fan tray, which are ordered separately; the bays are shown open.
+    bays:
+      slot-0: ''
+      slot-1: ''
+      slot-2: ''
+      slot-3: ''
+      slot-4: ''
+      slot-5: ''
+      slot-6: ''
+      slot-7: ''
+      slot-8: ''
+      slot-9: ''
+      psu-0: ''
+      psu-1: ''
+      psu-2: ''
+      psu-3: ''
+      fan-0: ''
+    part-numbers:
+      EX6210-CHAS: {}
+datasheet:
+  title: Juniper EX6200 Line of Ethernet Switches datasheet (1000390-002-EN, Aug 2011)
+  url: https://cdn.blueally.com/networkscreen/datasheets/ex-series/ex6200_ethernet_switch_ds.pdf
+  sha256: 649620bbaa31426f6ef16321778530e223dbc6ae16cf5ee8899b58310c006d63
+references:
+- title: Juniper EX6210 Switch Hardware Guide (published 2020-12-15)
+  url: https://www.juniper.net/documentation/en_US/release-independent/junos/information-products/pathway-pages/ex-series/ex6200/ex6210.pdf
+  sha256: 1e67362085a7a99f9e2c61b03081bba799b17e7dda7e3e92090683e999673bf2

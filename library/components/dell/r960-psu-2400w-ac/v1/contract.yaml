@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: r960-psu-2400w-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  2400 W Platinum AC/HVDC hot-plug power supply in Dell's 86 mm form factor, as fitted to the
+  PowerEdge R960 - the 2800 W supply's face with a C20 inlet (for the C19 cord) and a 2400W label
+attrs:
+  power-output-w: 2400
+  form-factor: 86mm
+  inlet: c20
+  input: 100-240 V AC or 240 V DC
+  efficiency: platinum
+fields:
+  watts:
+    label: Wattage
+    type: text
+    default: '2400W'
+    pattern: '^\\d+W$'
+    description: what the handle label prints; the sum reads power-output-w, not this
+provenance:
+  sources: >-
+    The face is dell/r960-psu-2800w-ac@1's, read off R960 ISM figure 10 and the technical guide's
+    figures 7-9, which show 2800 W supplies. NO R960 DOCUMENT PHOTOGRAPHS A 2400 W SUPPLY: ISM
+    table 11 says the 86 mm form factor carries both ratings (C19 and C21 cords), the ISM's PSU
+    procedures draw one 86 mm supply for both, and this part is drawn as that supply with its own
+    label and a C19 socket. The two sockets differ by a notch the photograph cannot resolve.
+  size: >-
+    photo-measured, as dell/r960-psu-2800w-ac@1: ISM figure 10, 86.0 x 40.5 mm plate; the height 40.1 and the
+    depth are measured off Dell's R960 service model, working/intake/dell/3d-models/r960.glb, whose one 86 mm supply
+    is not told apart by wattage (see that part): the can runs 233.5 into the chassis from the face and the handle
+    stands 33.5 proud of it.
+  power: >-
+    power-output-w 2400 is the rating in ISM table 10: 2400 W Platinum at 100-240 V AC (1400 W
+    at 100-120 V) or 240 V DC. A rating, not a draw.
+size: {w: 86.0, h: 40.1, d: 233.5}
+plan: {ref: dell/r960-psu-plan@1}
+size-confidence: {w: photo-measured, h: measured, d: measured}
+body:
+  depth: 233.5
+  color: '#b9bec4'
+relief:
+  wall: '#3a4045'
+  features:
+  - node: grip
+    uhandle: 2.6
+    color: '#e9ecef'
+    confidence: measured
+    source: >-
+      r960.glb `Body_2_5.005`, the handle, as dell/r960-psu-2800w-ac@1: 2.6 past the rear wall, the face being
+      recessed 30.9 inside it and drawn at the wall
+  - node: latch
+    out: 1.0
+    color: '#d9661a'
+    confidence: estimated
+    source: as dell/r960-psu-2800w-ac@1's latch, a 1.0 tab on the face the wall plane stands in for
+elements:
+  grip:
+    at: [43.0, 4.5]
+    size: [14.8, 35.0]
+    class: led
+    states: ['off',
+             {name: 'ok', color: '#22c55e'},
+             {name: fault, color: '#eab308', behavior: {mode: blinking, rate: 1}},
+             {name: updating, color: '#22c55e',
+              behavior: {mode: blinking, rate: 1}},
+             {name: mismatch,
+              behavior: {mode: sequence,
+                         phases: [{color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 0.125},
+                                  {color: '#22c55e', seconds: 0.125},
+                                  {seconds: 2.0}]}}]
+    description: >-
+      The translucent handle, lit from within. R960 ISM table 108: green - operational; blinking
+      amber - a problem; not illuminated - no power; blinking green - firmware being updated; five
+      green blinks at 4 Hz then off - a mismatch with the other supply.
+  label:
+    at: [37.6, 6.0]
+    size: [4.4, 15.7]
+    class: label
+    description: the wattage label on the handle's left edge, printed downwards
+  inlet-bezel:
+    at: [52.5, 3.3]
+    size: [27.5, 35.7]
+    class: inlet
+    description: the recess the C19 inlet sits in
+  latch:
+    at: [78.8, 14.3]
+    size: [6.9, 15.0]
+    class: latch
+    description: the orange release latch, pressed to withdraw the supply
+skins: [default]

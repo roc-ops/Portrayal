@@ -1,0 +1,701 @@
+format: 1
+kind: device
+name: 7280dr3a-36
+version: 0.1.2
+maturity: modelled
+manufacturer: Arista
+model: 7280DR3A-36
+aliases:
+- {name: DCS-7280DR3A-36, kind: marketing}
+portfolio: {line: 7000 Series, family: 7280DR3A}
+description: >-
+  Arista 7280DR3A-36 - a fixed 2RU data-centre router switch with 36 400G QSFP-DD ports in two
+  stacked rows of eighteen columns (the odd number on the upper cage), numbered 1 to 36 in an orange
+  strip between the rows, and two OSFP line-system ports (OSFP-LS, 37 and 38) for 400G-ZR optics
+  at the upper right. Beside the line-system ports are four status lamps (system, fan, power supply
+  1, power supply 2), an RJ-45 console, a USB port and an RJ-45 management port; at the far right
+  stand a Time-of-Day connector (USB-C) and two clock connectors (1PPS and 10 MHz). The rear carries
+  four hot-swap fan modules and two hot-swap 2400 W power supplies, AC or DC, one above the other
+  at the right, with a grounding pad between fans 1 and 2. The same front panel is sold as the
+  DR3A-36, the DR3AM-36 (TunnelSec) and the DR3AK-36 (large routes and TunnelSec), and the
+  DR3AK-36S (the K with secure boot enabled); they differ in software licence, encryption and
+  secure boot, not in the metal.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      7280R3A Series Quick Start Guide, Arista Networks, DOC-07042-01, 59 pages, PDF created
+      2025-05-16 (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7280R3A.pdf): Table 1
+      (dimensions and weights), Table 2 (operating and storage environment), Table 3 (power input),
+      Table 4 (power draw and supported supplies), Table 6 (grounding of the 2RU switches),
+      section 2.1 (airflow orientation), sections 4.4 and 4.5 (power and serial cables), Appendix A
+      (status indicators, figures A-1 and A-2, tables 9 to 13), Appendix B (parts list), Appendix C
+      (front panel, figure C-2: DCS-7280DR3A-36, DCS-7280DR3AK-36 and DCS-7280DR3AM-36), Appendix D
+      (rear panels, figures D-1 to D-4) and Appendix E (power supplies and fan modules, "all fans and
+      power supplies are hot swappable"). 7280R3A Series Data Sheet, Arista Networks, 04-0040-26,
+      27 pages, dated April 15th, 2025 (https://www.arista.com/assets/data/pdf/Datasheets/7280R3A-Datasheet.pdf):
+      the 7280DR3A-36 model comparison table, power supply specifications, ordering information and
+      the platform overview. No 3D model, no CAD drawing, no studio photograph and no Visio stencil
+      is held (intake SOURCES.md and COVERAGE.md read first); the data sheet's only picture of the
+      face is a 400 px thumbnail, so figure C-2 is the instrument.
+  gate-1:
+    confidence: estimated
+    note: >-
+      Figure C-2 is a 872 x 344 px raster (PDF image, 129 ppi). The chassis in it spans 823 px
+      (x 2 to 825) and 161 px (y 105 to 266, with a ribbed lower lip) - aspect 5.12, against 5.005
+      for the data sheet's 43.99 x 8.79 cm body (4.4 percent out) and 5.49 for a 48.3 cm face over
+      the ears, so the figure shows the body with no ears. 4.4 percent is at the edge of what the
+      method allows. THE X AXIS IS TAKEN (1.873 px/mm on the 440 mm body) AND THE Y AXIS IS THE SAME
+      SCALE, not its own: the row pitch measured 26.5 px is 14.15 mm on the x scale against
+      14.2 to 14.3 for stacked QSFP-DD cages elsewhere in the library, while the y scale
+      (1.832 px/mm) would make it 14.5. The figure is cut about 2 mm short at the bottom. Every
+      front position below is therefore a reading good to about one pixel, 0.55 mm, and is estimated.
+      The rear figure D-3 is a 565 x 197 px raster whose chassis is 525 px (x 2 to 527) by 105.5 px
+      (y 47 to 152.5): aspect 4.98 against 5.005, 0.6 percent out, so it passes, at 1.193 px/mm. One
+      pixel is 0.84 mm there.
+  port-wall:
+    confidence: estimated
+    note: >-
+      THIRTY-SIX QSFP-DD CAGES IN EIGHTEEN COLUMNS OF TWO. The white number boxes of figure C-2 were
+      found as connected components (12 px, 6.4 mm, squares) and their centres fitted: column
+      centres 39.0, 82.0, 125.0, 169.0, 212.0, 254.0, 298.0, 340.5, 384.0, 427.0, 471.0, 514.0,
+      557.0, 600.0, 643.0, 686.0, 730.0 and 773.0 px, a pitch of 43.18 px (734 px over 17
+      intervals) = 23.05 mm, the first at 19.75 mm ((39 - 2) / 1.873). The rows centre at 191.5 and
+      218.0 px, 46.2 and 60.3 mm below the top, a row pitch of 14.15 mm; 14.2 is used. The cages
+      are std/qsfp-dd@1 (registry 19.0 x 10.0 mm); the figure draws them 20.6 wide with their
+      bezel, which is the strip width below.
+  numbering:
+    confidence: estimated
+    note: >-
+      THE NUMBERS ARE PRINTED TWICE ON THE FIGURE and the model follows the second. A white box
+      with a large numeral sits over each cage in figure C-2, and the orange strip between the
+      two rows prints a small `N-up-arrow` at its left end and `down-arrow-N+1` at its right, per
+      column: 1 over 2, 3 over 4, ... 35 over 36. A seated cage hides anything painted under it, so
+      the model prints the strip legends (which show in every render) and not the boxes. The strip
+      legends were read on a eight-times enlargement of columns 1 to 4 (1 up, 2 down; 3, 4; 5, 6;
+      7, 8) and the callout 12 "Port numbers" of the guide covers both. Numbering starts at 1. The
+      lower cage of each column is the even number, so the stack is column-major: port n is in
+      column ceil(n/2), the upper row when n is odd. Interface names (Ethernet1 ... Ethernet36 and
+      their breakouts) are EOS names and are not printed on the metal; they are not modelled.
+  stack-orientation:
+    confidence: estimated
+    note: >-
+      The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is the upper
+      cage upright (rotate 0) over the lower turned 180, so both cage lips face the band between the
+      two cages and both bails face outward. Decided by the rule, not an observation, so a photograph
+      of the stack overturns it: the 18 QSFP-DD pairs (port-1/port-2 to port-35/port-36).
+  port-lamps:
+    confidence: estimated
+    note: >-
+      ONE LAMP PER PORT, in the orange strip: the upper cage's lamp near the strip's top, about 4.3
+      mm left of the column centre, and the lower cage's near its bottom, 4.3 mm right of it (figure
+      C-2, eight-times enlargement of columns 1 to 4; two green dots a pixel or two across per
+      column). The guide's Appendix A.1.2 says port LEDs are "located in the vicinity of their
+      corresponding ports" and table 10 gives the states: off link down, green link up, yellow
+      software-disabled, flashing yellow failed diagnostics. The guide's figure A-3 is of another
+      switch (the DCS-7050QX-32S) and shows four lamps a port; this face shows one.
+  line-system-ports:
+    confidence: estimated
+    note: >-
+      TWO OSFP CAGES at the upper right, "Line system port (OSFP)" 1 and 2 in the figure's callout
+      table and "2 x OSFP-LS ports for dense 400G-ZR deployment" in the data sheet. A green strip
+      under them prints "37" with an up triangle at its left end, LINE (read as LINE; the print is
+      three pixels high) in the middle and "38" with an up triangle at its right: the two cages are
+      numbered 37 and 38 as the fine print of the figure reads. Cage centres 307.7 and 337.9 mm from
+      the left and 14.2 mm down, measured on the cage bezels (555 to 602 and 612 to 658 px, 118 to
+      145 px), a pitch of 30.2 mm. std/osfp@1 (23.1 x 13.5 mm) is seated; the figure draws the
+      bezels 25 mm wide.
+  status-block:
+    confidence: estimated
+    note: >-
+      FOUR LAMPS beside the line-system ports, 4.8 mm apart at y 20.0 mm: system status, fan status,
+      power supply 1 status and power supply 2 status (figure C-2 callouts 3 to 6; guide Appendix
+      A.1.1, figures A-1 and A-2: "labeled either as in Figure A-1 or as in Figure A-2"). The two
+      right-hand lamps are printed PS1 and PS2 and the two left-hand lamps carry a symbol (a circle
+      with a mark, a fan) instead of a word. The symbols are not drawn: their strokes are two pixels
+      wide and resolve to a blob (see gaps). States are table 9's: the system lamp blinking green
+      (powering up), green, blue (beacon) or amber; the fan lamp green, amber or red; the supply
+      lamps green or off.
+  management-ports:
+    confidence: estimated
+    note: >-
+      A row of three at the right of the upper edge: console (callout 7, RJ-45 serial) at 381.7 mm,
+      USB (callout 8, vertical, Type A) at 397.7 mm, Ethernet management (callout 9, RJ-45 with the
+      two lamps drawn in its top corners) at 413.0 mm, all about 14.7 mm below the top. The guide's
+      section 4.5 lists the cables: RJ-45 to DB-9 serial adapter and an RJ-45 Ethernet cable; the
+      data sheet gives "RS-232 Serial Ports 1 (RJ-45)", "USB Ports 1" and "100/1000 Mgmt Ports 1"
+      (as printed). The management jack is taken as 10/100/1000 (guide section 4.5: "Connect to
+      10/100/1000 management network") and so `1g`, where the data sheet's line reads "100/1000".
+  timing:
+    confidence: estimated
+    note: >-
+      ToD AND TWO CLOCK CONNECTORS in the narrow strip at the right edge (callouts 10 and 11). The
+      ToD connector is a vertical slot with a screw at each end; the data sheet's accessory
+      "CAB-SYNCE-RJ  Spare Time of Day adapter cable (USB-C to 2 x RJ-45)" says its mate is USB-C, so
+      std/usb-c@1 is turned a quarter at 429.3, 45.3 mm. Under it are two gold coax jacks, labelled
+      PPS (upper) and 10MHz (lower) in the figure, at 59.3 and 67.1 mm. The data sheet's timing line
+      reads "PTP and SyncE with OCXO and PPS/10M/ToD inputs". The coax type is not stated: std/smb@1
+      is seated because the jacks measure about 5.3 mm across their flange, which is nearer the SMB
+      (4.83) than the SMA (6.35) in the registry, and the choice is estimated (see gaps).
+  vents:
+    confidence: estimated
+    note: >-
+      Two square-hole fields, each four rows deep, above and below the port wall (figure C-2: holes
+      about 2.2 mm square on a 3.65 mm pitch, 6.85 px). Upper field y 25.1 to 38.4, lower y 67.8 to
+      81.2, both from x 5.9 to 423.3. The library's pattern for square openings is its grille tile,
+      whose opening is 85 percent of the pitch where the hardware's is 60, so the holes read larger
+      than the figure's, and four whole tiles need 14.6 mm where the figure's four holes span 13.3:
+      the fields are drawn 14.6 tall (y 24.4 and 67.2) and 416.1 wide (114 tiles). A ribbed lip runs
+      under the lower field (y 83.0 to 85.9).
+  nameplate:
+    confidence: estimated
+    note: >-
+      A grey plate at the upper left, 32.1 x 11.3 mm, carries the maker's wordmark over the model
+      line. The wordmark is not drawn; its box is the `logo-zone` region. The model line is plain
+      text and is drawn: figure C-2 prints "7280DR3AM-36" because it is a picture of the DR3AM-36,
+      the encryption variant of this chassis, and the guide's one figure serves the DR3A-36, the
+      DR3AK-36 and the DR3AM-36. The line here reads 7280DR3A-36, the plate of the device this
+      file is named for; the K and M variants print their own (see gaps).
+  rear-layout:
+    confidence: estimated
+    note: >-
+      FIGURE D-3, the rear with a grounding point, 2RU: four fan modules left of the middle and two
+      power supplies stacked at the right. The guide draws four generic rear panels (D-1 to D-4) and
+      does not say which model uses which. D-1 and D-2 are 1RU. Of the 2RU pair, D-3 has an "Earth
+      grounding pad" (callout 7) and D-4 has a plain separation between fans 1 and 2 with no ground.
+      Table 6 of the guide says the DR3A-54 grounds with the KIT-GND-EXT-2RU side kit and the
+      DR3A-36 "Attach directly - right angle lug recommended", the grounding location being "on the
+      back for those supporting direct attach", so the DR3A-36 is mapped to D-3. THE MAPPING IS
+      ESTIMATED: it follows from fan count (four), height (2RU), supply count (two) and table 6, not
+      from a caption. The data sheet's rear thumbnail of the 7280R3A 2RU views shows the same
+      four-fan, two-supply layout with a ground pad.
+      MEASURED at 1.193 px/mm on the red fan frames: four modules 79.6 wide on 98.0, 85.5 and
+      85.5 mm steps (the first step spans the ground strip), x 5.9, 103.9, 189.4 and 274.9;
+      supplies at x 361 (73.5 wide), top at 2.0 and 45.0 mm.
+  ground-pad:
+    confidence: estimated
+    note: >-
+      A grey strip 15.0 mm wide between fans 1 and 2 (x 87.2 to 102.2) holds two black holes 19.2
+      mm apart (y 13.0 and 32.2), a ground symbol between them and, below, three printed symbols
+      (a warning triangle, a box, a person-and-bar) too small to read. The holes are the "Earth
+      grounding pad" of figure D-3. The guide's section 4.1 says the grounding lugs are M4 x 0.7
+      and are not supplied, so two common/ground-screw-m4@1 stand for the tapped holes; the library's
+      two-hole lug pair is 5/8 inch (15.9 mm) and these measure 19.2, so the pair part is not used.
+  field-replaceable-units:
+    confidence: datasheet
+    note: >-
+      EVERY FAN MODULE AND POWER SUPPLY IS A BAY. The guide's appendix E: "All fans and power supplies
+      are hot swappable" and "all slots must be filled or covered with a blank for operation". The
+      data sheet's comparison table: "Hot-swap Power Supplies 2 (1+1 redundant)", "Hot-swappable
+      Fans 4 (N+1 redundant)", "Fan Tray FAN-7012H" and "Power Supplies PWR-2411 (AC or DC)". Nothing
+      in the held documents draws a blank for either bay, so none is modelled. The supply and fan
+      the DR3A-36 takes are front-to-rear (red) only: the data sheet lists "Airflow Direction: Front
+      to Rear" and only the RED spares (PWR-2411-AC-RED, PWR-2411-DC-RED, FAN-7012H-RED). The guide's
+      section 2.1 says a red handle is an air-exit module and a blue one an air-inlet module, so
+      this switch is wholly red and has no airflow configuration.
+  configurations:
+    confidence: datasheet
+    note: >-
+      FOUR ORDERABLE CONFIGURATIONS OF ONE FACE. The data sheet's ordering information for the
+      7280DR3A-36 lists DCS-7280DR3A-36-F ("front to rear air, 2 x AC"), DCS-7280DR3AM-36-F
+      ("TunnelSec"), DCS-7280DR3AK-36-F ("large routes and TunnelSec") and DCS-7280DR3AK-36S-F ("large
+      routes and TunnelSec, secure boot enabled"), and the same four ending "#" ("configurable fans
+      and psu"). The F orders are the only part numbers with a fixed build, so they are the orderable
+      configurations. The "#" orders take their supplies and fans to order, which is how a DC build
+      is bought (PWR-2411-DC-RED is a listed spare and table 4 lists PWR-2411-DC); there is no DC
+      part number, so the DC build is a `kind: example` configuration, shown but not exported. Table
+      4 of the guide gives one figure (643 W typical, 1283 W maximum) for the DR3A-36, DR3AM-36 and
+      DR3AK-36, so no configuration states a power of its own. The guide's Table 1 gives all three
+      one size and weight; the data sheet's model comparison table differs only in the Encryption
+      row (none, all ports, all ports).
+  environment:
+    confidence: datasheet
+    note: >-
+      Guide Table 2: operating 0 to 40 C, storage -25 to 70 C, 0 to 3,000 m, 5 to 90 percent
+      non-condensing. The data sheet's environmental table gives the same operating and altitude
+      figures and humidity, and a storage range of -40 to 70 C. The guide (the newer, 2025-05-16
+      against 2025-04-15) is used for storage; the data sheet's is in `other` as written.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-sale notice for the 7280DR3A-36 (2026-10-22, a web search for
+      "Arista 7280DR3A-36 end of sale announcement"): none found for this family. The notices that
+      exist are for other 7280 models (the DCS-7280CR3K-36S, advisory 23790, and the older
+      7280QR-C36 and QR-C72), so the field reads none-announced.
+  weight:
+    confidence: datasheet
+    note: >-
+      24.1 kg (53.1 lbs) in the guide's Table 1; the data sheet's comparison table prints "53.1 lbs
+      (24.09 kg)". The same figure to rounding; 24.1 is used.
+attrs:
+  physical:
+    weight-note: '24.1 kg (53.1 lbs) per Table 1 of the guide; "53.1 lbs (24.09 kg)" per the data sheet'
+    size-over-ears: '48.3 x 8.8 x 61.2 cm (19 x 3.50 x 24.1 inches) per Table 1 of the guide, which includes the rack ears; the data sheet gives 43.99 x 8.79 x 61.18 cm "inc. handles"'
+  performance:
+    throughput: '14.4 (28.8) Tbps full duplex'
+    packets-per-second: '5.4 Bpps'
+    latency: 'from 3.8 us'
+    packet-buffer: '16 GB'
+    max-400g-ports: 36
+    max-100g-ports: 144
+    max-50g-ports: 232
+    max-40g-ports: 36
+    max-25-10g-ports: 232
+    max-total-interfaces: 232
+  power:
+    power-draw-typical-w: 643
+    power-draw-max-w: 1283
+    power-draw-note: 'Table 4 of the guide: "643 W / 1283 W" for the DR3A-36, DR3AM-36 and DR3AK-36; the data sheet measures the typical at 25 C ambient with 50 percent load on all ports, excluding transceivers'
+  thermal:
+    airflow: front-to-back
+  environmental:
+    operating-temp: '0 to 40 C (32 to 104 F)'
+    storage-temp: '-25 to 70 C (-13 to 158 F)'
+    storage-temp-datasheet: '-40 to 70 C (-40 to 158 F), per the data sheet'
+    altitude: '0 to 3,000 m (0 to 10,000 ft)'
+    humidity: '5 to 90 percent, non-condensing'
+  platform:
+    cpu: 'Eight-core x86'
+    system-memory: '64 GB'
+    ssd-storage: '480 GB'
+    software: 'EOS; minimum release 4.30.0 per the data sheet'
+    feature-license: 'EOS Feature Licenses Group 5'
+  features:
+    optics-qsfp-dd: >-
+      datasheet: each QSFP-DD port runs 400G, or 200G, 100G, 50G, 40G (QSFP+) and 25/10G modes by
+      breakout; maximum values are uni-dimensional and may need breakout cables or transceivers.
+    optics-osfp: >-
+      datasheet: the two OSFP-LS (line-system) ports are "for dense 400G-ZR deployment", and "Arista's
+      R3A platforms are optimized to support high power 400ZR OSFP and QSFP-DD optical modules".
+    osfp-ls: '2 x OSFP-LS ports for dense 400G-ZR deployment'
+    precision-timing: 'PTP and SyncE with OCXO and PPS/10M/ToD inputs'
+    encryption: 'none on the DR3A-36; all ports (MACsec and TunnelSec) on the DR3AM-36 and DR3AK-36'
+  management:
+    console: 'RJ-45 serial (RS-232), 9600 baud, 8 data bits, no parity, 1 stop bit, no flow control'
+    oob: '10/100/1000 Ethernet management port'
+  compliance:
+    safety: 'EN 62368-1:2020+A11:2020, IEC 62368-1:2018, CSA/UL 62368-1:2019, AS/NZS 62368.1:2022'
+    emissions: 'FCC Class A, ICES-003 Issue 7, EN 55032:2015, VCCI-CISPR 32:2016, AS/NZS CISPR 32:2015'
+    regulatory-model-number: 'AN1760 (DCS-7280DR3A-36, DCS-7280DR3AM-36, DCS-7280DR3AK-36), guide Table 14'
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 87.9, depth: 611.8, ru: 2, weight-kg: 24.1, color: '#bcbdc0',
+  airflow: front-to-back, power: ac,
+  ears: {positions: [{name: flush, label: flush with the front and rear panels, racks: [4-post]}]}}
+gaps:
+- what: front-faces-of-the-variants
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    A FIGURE OF THE DR3A-36 AND THE DR3AK-36 FRONT. Figure C-2 is captioned for all three
+    models but prints the plate "7280DR3AM-36", so it is a picture of the DR3AM-36. The model
+    plate of the other two is not shown, and this file prints "7280DR3A-36" on every configuration.
+    A photograph of each plate closes it.
+- what: number-boxes
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    THE WHITE NUMBER TABS OVER THE CAGES. Figure C-2 draws a white square with a large numeral over
+    the centre of each cage. A seated cage hides what is painted under it and the library has no
+    layer above a cage for printed matter, so the numbers are modelled as the strip legends only.
+    A drawing that says whether the tab is a sticker on the cage or part of it closes it.
+- what: strip-legend-400g
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    A LEGEND IN THE MIDDLE OF THE FIRST STRIP. Column 1's strip reads something like "400G" between
+    its arrows in the eight-times enlargement and no other column's does. At 1.87 px/mm the glyphs
+    are three pixels high and resolve to a smear; the numerals and arrows beside it resolve, so
+    the strip is readable and this text is the unresolved thing. It is not drawn.
+- what: status-lamp-symbols
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    THE SYMBOLS OVER THE SYSTEM AND FAN LAMPS, and the small legends over the console and
+    management jacks. They are printed in blue at about two pixels' height and are not legible
+    in the figure; PS1 and PS2 are. Guide figures A-1 and A-2 say the lamps are labelled in one of
+    two ways and the held figure does not say which this chassis uses.
+- what: tod-lamp-and-symbol
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    A LAMP AND A BLUE SYMBOL ABOVE THE ToD CONNECTOR (about 428.9 and 434.8 mm, 34.3 mm down).
+    Figure C-2 draws them and no callout or table names them. They are not modelled.
+- what: clock-connector-type
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    WHETHER THE PPS AND 10MHZ JACKS ARE SMB OR SMA. The guide calls them "E-Sync clock connectors"
+    and the data sheet "PPS/10M/ToD inputs"; neither names the connector. They are seated as
+    std/smb@1 from their drawn size and their direction (input or output) is not stated either.
+- what: usb-generation
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    THE USB GENERATION. The guide says "USB port" and the data sheet "USB Ports 1"; neither gives
+    a generation, and figure C-2 draws a gold tongue, which is neither USB-IF colour. The port is
+    seated with the `usb2` (white) skin as the one that claims least; a data sheet line giving the
+    generation closes it.
+- what: round-hole-at-left
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    A BLACK ROUND HOLE at the left end, 4.8 mm from the edge and 53.4 mm down, in line with the
+    strips. Figure C-2 draws it and nothing names it (an ESD socket is a candidate on other
+    switches). It is drawn as a hole in decor and carries no part.
+- what: rear-legends
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    THE PRINTING AT THE REAR. The ground strip prints three symbols and the rear carries the
+    airflow marks, but the guide's rear panel figure is 1.19 px/mm and its labels are unreadable.
+    The supplies and fans print no numbers that resolve. A rear photograph closes it.
+- what: dc-terminals
+  scope: [rear]
+  reason: needs-drawing
+  wanted: >-
+    THE PWR-2411-DC FACE. The guide shows the PWR-1900-DC and PWR-500-DC (figure 4-5) and no
+    PWR-2411-DC. Table 7 note 2 says its terminals are "twin #10 studs spaced for dual-hole lug
+    with 5/8 inch hole spacing"; the supply here is the AC housing with a plain two-pole block, and
+    the protective earth terminal "on the opposite side" is not drawn. The data sheet reads
+    "AWG #6 Max" for the DC input connector and table 7 reads 2 to 4 AWG; the larger conductor
+    (the guide's) is the one a lug takes.
+- what: rack-ears-and-kits
+  scope: [front]
+  reason: needs-drawing
+  wanted: >-
+    THE KITS, AND THE EAR POSITION THAT IS NOT FLUSH. `chassis.ears` states the one position the
+    guide names for a 2RU switch: section 3.5 says the bracket sits "either flush with the front
+    and rear panels, or not flush with the panels", and section 3.4 gives no two-post mounting for
+    the 2RU switches, so the position is `4-post` only. It has no `at` (the guide's mounting
+    figures are isometric drawings of other switches, the 7050 and the 7050SX-128), no `default`
+    (no figure shows the ears as shipped) and the "not flush" case is left out because the guide
+    does not say which way it sits. The data sheet's ordering information lists KIT-7202 (spare
+    tool-free accessory kit v2 for 2RU, 4-post mount, 2x C19-C20) and KIT-7004-2UL (extended
+    tool-free 4-post kit for 2-4RU) for the DR3A-36. Guide appendix B.1 gives KIT-7202 "rack
+    depths of twenty two to thirty two inches" (558.8 to 812.8 mm) and its parts (ASY-06132 rack
+    ear, ASY-03765 front rail, ASY-03767 rear sliding rail, two of each), but no document
+    dimensions any of those parts, and none gives KIT-7004-2UL a range or a parts list. A kit
+    contract needs its parts as components with a size, so neither kit is modelled and
+    `chassis.kits` is left out.
+- what: fan-and-supply-power
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    THE POWER DRAW OF FAN-7012H. Neither the guide nor the data sheet gives it. The supplies' own
+    output (2400 W) is stated and is written.
+- what: model-plates-of-the-variants
+  scope: [front]
+  reason: vendor-silent
+  wanted: >-
+    The K and M variants print their own model line on the plate. This file prints one line.
+groups:
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the thirty-six 400G QSFP-DD ports in EIGHTEEN COLUMNS OF TWO on a 23.05 mm pitch, numbered
+      1 to 36 down each column from 1 at the top left, with `N up-arrow` and `down-arrow N+1`
+      printed in the orange strip between the two cages of each column.
+    attrs: {media: qsfp-dd, speed: 400g}
+  osfp-ls-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: >-
+      the two OSFP line-system ports, printed 37 and 38 (their ids are port-37 and port-38) and
+      counted 1 and 2 here as the guide's callout table does ("Line system port (OSFP)" 1 and 2),
+      beside the status lamps. The data sheet
+      calls them OSFP-LS and says they are for dense 400G-ZR deployment.
+    attrs: {media: osfp, speed: 400g}
+  port-leds: {term: LED, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the machine's management interfaces: an RJ-45 serial console, a USB port for software and
+      configuration updates, and a 10/100/1000 RJ-45 Ethernet management port, in a row at the
+      upper right (guide section 4.5: "For most models, the front panel contains the console,
+      management, and USB ports").
+  timing:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the precision-timing connectors at the right edge: a Time-of-Day connector (USB-C, the mate
+      of CAB-SYNCE-RJ) and two coax clock connectors, 1PPS and 10MHz, which the guide calls
+      "E-Sync clock connectors". The data sheet's "PPS/10M/ToD inputs".
+  grounding: {term: Point, role: service, index-origin: 1}
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        datasheet: "Hot-swap Power Supplies 2 (1+1 redundant)"; guide section 4.4: "The switch operates
+        with two installed power supplies. At least one power supply must connect to a power source."
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: >-
+        datasheet: "Hot-swappable Fans 4 (N+1 redundant)"
+views:
+  front:
+    size: {w: 440.0, h: 87.9}
+    panel:
+      decor:
+      - {id: nameplate, at: [1.4, 2.3], size: [32.1, 11.3], rx: 0.5, fill: '#9b9d9e'}
+      - {id: vent-upper, at: [5.9, 24.4], size: [416.1, 14.6], pattern: grille, pattern-pitch: [3.65, 3.65], vent: 1}
+      - {id: vent-lower, at: [5.9, 67.2], size: [416.1, 14.6], pattern: grille, pattern-pitch: [3.65, 3.65], vent: 1}
+      - {id: lip-ribs, at: [5.9, 83.0], size: [417.4, 2.9], rx: 0.3, fill: '#747577'}
+      - {id: line-strip, at: [295.2, 21.9], size: [55.0, 3.2], rx: 0.3, fill: '#95c93d'}
+      - {id: chassis-hole, at: [2.9, 51.5], size: [3.8, 3.8], rx: 1.9, fill: '#0d0d0d'}
+      - {id: tod-screw-1, at: [427.5, 37.2], size: [2.4, 2.4], rx: 1.2, fill: '#1a1a1a'}
+      - {id: tod-screw-2, at: [427.5, 51.0], size: [2.4, 2.4], rx: 1.2, fill: '#1a1a1a'}
+      - {id: strip-1, at: [9.45, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-2, at: [32.50, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-3, at: [55.55, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-4, at: [78.60, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-5, at: [101.65, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-6, at: [124.70, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-7, at: [147.75, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-8, at: [170.80, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-9, at: [193.85, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-10, at: [216.90, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-11, at: [239.95, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-12, at: [263.00, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-13, at: [286.05, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-14, at: [309.10, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-15, at: [332.15, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-16, at: [355.20, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-17, at: [378.25, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      - {id: strip-18, at: [401.30, 51.55], size: [20.6, 3.55], rx: 0.3, fill: '#f6b334'}
+      cutouts:
+      - {block: qsfpdd-400g}
+      - {id: port-37, at: [296.15, 7.45], size: [23.1, 13.5], shape: rect}
+      - {id: port-38, at: [326.35, 7.45], size: [23.1, 13.5], shape: rect}
+      - {id: console, at: [373.8, 8.1], size: [15.8, 13.2], shape: rect}
+      - {id: usb, at: [395.45, 8.7], size: [4.5, 12.0], shape: rect}
+      - {id: mgmt, at: [405.1, 8.1], size: [15.8, 13.2], shape: rect}
+      - {id: tod, at: [428.02, 41.13], size: [2.56, 8.34], shape: rect}
+      - {id: pps, at: [426.485, 56.885], size: [4.83, 4.83], shape: circle}
+      - {id: clk-10mhz, at: [426.485, 64.685], size: [4.83, 4.83], shape: circle}
+      - {id: led-sys, at: [352.8, 19.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [357.7, 19.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-psu1, at: [362.5, 19.0], size: [2.0, 2.0], shape: circle}
+      - {id: led-psu2, at: [367.3, 19.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {block: qsfpdd-400g}
+    - {id: model-text, at: [17.45, 11.6], text: '7280DR3A-36', font-size: 2.3, anchor: middle, fill: '#26324f', for: chassis}
+    - {id: label-37, at: [303.2, 24.2], text: '37', font-size: 1.7, anchor: middle, fill: '#26324f', for: port-37}
+    - {id: label-line, at: [322.7, 24.2], text: 'LINE', font-size: 1.7, anchor: middle, fill: '#26324f', for: chassis}
+    - {id: label-38, at: [337.9, 24.2], text: '38', font-size: 1.7, anchor: middle, fill: '#26324f', for: port-38}
+    - {id: up-37, at: [305.3, 23.5], mark: arrow-up, size: 1.3, fill: '#26324f', for: port-37}
+    - {id: up-38, at: [340.1, 23.5], mark: arrow-up, size: 1.3, fill: '#26324f', for: port-38}
+    - {id: label-psu1, at: [363.5, 17.6], text: 'PS1', font-size: 1.6, anchor: middle, fill: '#26324f', for: led-psu1}
+    - {id: label-psu2, at: [368.3, 17.6], text: 'PS2', font-size: 1.6, anchor: middle, fill: '#26324f', for: led-psu2}
+    - {id: label-pps, at: [431.9, 62.6], text: 'PPS', font-size: 1.5, anchor: start, fill: '#26324f', for: pps}
+    - {id: label-10mhz, at: [433.4, 72.6], text: '10MHz', font-size: 1.5, anchor: middle, fill: '#26324f', for: clk-10mhz}
+    - {id: up-1, at: [12.75, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-1}
+    - {id: down-2, at: [26.75, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-2}
+    - {id: up-3, at: [35.80, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-3}
+    - {id: down-4, at: [49.80, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-4}
+    - {id: up-5, at: [58.85, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-5}
+    - {id: down-6, at: [72.85, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-6}
+    - {id: up-7, at: [81.90, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-7}
+    - {id: down-8, at: [95.90, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-8}
+    - {id: up-9, at: [104.95, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-9}
+    - {id: down-10, at: [118.95, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-10}
+    - {id: up-11, at: [128.00, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-11}
+    - {id: down-12, at: [142.00, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-12}
+    - {id: up-13, at: [151.05, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-13}
+    - {id: down-14, at: [165.05, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-14}
+    - {id: up-15, at: [174.10, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-15}
+    - {id: down-16, at: [188.10, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-16}
+    - {id: up-17, at: [197.15, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-17}
+    - {id: down-18, at: [211.15, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-18}
+    - {id: up-19, at: [220.20, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-19}
+    - {id: down-20, at: [234.20, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-20}
+    - {id: up-21, at: [243.25, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-21}
+    - {id: down-22, at: [257.25, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-22}
+    - {id: up-23, at: [266.30, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-23}
+    - {id: down-24, at: [280.30, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-24}
+    - {id: up-25, at: [289.35, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-25}
+    - {id: down-26, at: [303.35, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-26}
+    - {id: up-27, at: [312.40, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-27}
+    - {id: down-28, at: [326.40, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-28}
+    - {id: up-29, at: [335.45, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-29}
+    - {id: down-30, at: [349.45, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-30}
+    - {id: up-31, at: [358.50, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-31}
+    - {id: down-32, at: [372.50, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-32}
+    - {id: up-33, at: [381.55, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-33}
+    - {id: down-34, at: [395.55, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-34}
+    - {id: up-35, at: [404.60, 53.35], mark: arrow-up, size: 1.3, fill: '#2b2f36', for: port-35}
+    - {id: down-36, at: [418.60, 53.35], mark: arrow-down, size: 1.3, fill: '#2b2f36', for: port-36}
+    components:
+      blocks:
+      - id: qsfpdd-400g
+        ref: std/qsfp-dd@1
+        at: [10.25, 41.2]
+        count: 36
+        rows: 2
+        pitch: 23.05
+        row-pitch: 14.2
+        rotate: {bottom: 180}
+        number-from: 1
+        id-format: 'port-{n}'
+        cutouts: true
+        numerals: {dx: 9.5, dx-by-row: [-8.8, 8.8], dy-top: 12.8, dy-bottom: -1.4,
+          font-size: 1.6, anchor: middle, fill: '#2b2f36'}
+        led:
+          ref: common/led-dot@1
+          id-format: 'led-port-{n}'
+          group: port-leds
+          dx-by-row: [4.2, 12.8]
+          dy-top: 10.1
+          dy-bottom: -2.1
+          states: ['off', {name: link, color: '#22c55e'}, {name: disabled, color: '#eab308'}, {name: failed-diagnostics, color: '#eab308'}]
+      placements:
+      - {block: qsfpdd-400g}
+      - {ref: std/osfp@1, id: port-37, at: [296.15, 7.45], group: osfp-ls-400g, rel-pos: 1, attrs: {media: osfp, speed: 400g, role: line-system}}
+      - {ref: std/osfp@1, id: port-38, at: [326.35, 7.45], group: osfp-ls-400g, rel-pos: 2, attrs: {media: osfp, speed: 400g, role: line-system}}
+      - {ref: std/rj45@2, id: console, at: [373.8, 8.1], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb, at: [391.7, 12.45], rotate: 90, skin: usb2, group: mgmt, rel-pos: 2,
+         attrs: {media: usb-a, role: storage}}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [405.1, 8.1], group: mgmt, rel-pos: 3,
+         attrs: {media: rj45, speed: 1g, role: out-of-band}}
+      - {ref: std/usb-c@1, id: tod, at: [425.13, 44.02], rotate: 90, group: timing, rel-pos: 1,
+         attrs: {media: usb-c, role: time-of-day}}
+      - {ref: std/smb@1, id: pps, at: [426.485, 56.885], group: timing, rel-pos: 2,
+         attrs: {media: coax-smb, role: timing, signal: 1PPS}}
+      - {ref: std/smb@1, id: clk-10mhz, at: [426.485, 64.685], group: timing, rel-pos: 3,
+         attrs: {media: coax-smb, role: timing, signal: 10 MHz}}
+      - {ref: common/led-dot@1, id: led-sys, at: [352.8, 19.0], group: leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: booting, color: '#22c55e'}, {name: ok, color: '#22c55e'}, {name: beacon, color: '#3b82f6'}, {name: fault, color: '#f59e0b'}]}
+      - {ref: common/led-dot@1, id: led-fan, at: [357.7, 19.0], group: leds, rel-pos: 2,
+         for: [rear/fan-1, rear/fan-2, rear/fan-3, rear/fan-4],
+         states: ['off', {name: ok, color: '#22c55e'}, {name: degraded, color: '#f59e0b'}, {name: fault, color: '#ef4444'}]}
+      - {ref: common/led-dot@1, id: led-psu1, at: [362.5, 19.0], group: leds, rel-pos: 3, for: rear/psu-1,
+         states: ['off', {name: ok, color: '#22c55e'}]}
+      - {ref: common/led-dot@1, id: led-psu2, at: [367.3, 19.0], group: leds, rel-pos: 4, for: rear/psu-2,
+         states: ['off', {name: ok, color: '#22c55e'}]}
+    regions:
+    - {id: logo-zone, at: [6.3, 3.5], size: {w: 22.7, h: 4.2}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 440.0, h: 87.9}
+    panel:
+      decor:
+      - {id: ground-strip, at: [87.2, 3.2], size: [15.0, 81.5], rx: 0.5, fill: '#acadad'}
+    silkscreen:
+    - {id: ground-symbol, at: [94.7, 22.6], mark: ground, size: 3.4, fill: '#26324f', for: ground-1}
+    components:
+      bays:
+      - {id: psu-1, at: [361.0, 2.0], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 1,
+         accepts: [arista/7280dr3a-pwr-2400-ac@1, arista/7280dr3a-pwr-2400-dc@1],
+         default: arista/7280dr3a-pwr-2400-ac@1}
+      - {id: psu-2, at: [361.0, 45.0], size: {w: 73.5, h: 40.0}, group: psus, rel-pos: 2,
+         accepts: [arista/7280dr3a-pwr-2400-ac@1, arista/7280dr3a-pwr-2400-dc@1],
+         default: arista/7280dr3a-pwr-2400-ac@1}
+      - {id: fan-1, at: [5.9, 3.2], size: {w: 79.6, h: 81.5}, group: fans, rel-pos: 1,
+         accepts: [arista/7280dr3a-fan@1], default: arista/7280dr3a-fan@1}
+      - {id: fan-2, at: [103.9, 3.2], size: {w: 79.6, h: 81.5}, group: fans, rel-pos: 2,
+         accepts: [arista/7280dr3a-fan@1], default: arista/7280dr3a-fan@1}
+      - {id: fan-3, at: [189.4, 3.2], size: {w: 79.6, h: 81.5}, group: fans, rel-pos: 3,
+         accepts: [arista/7280dr3a-fan@1], default: arista/7280dr3a-fan@1}
+      - {id: fan-4, at: [274.9, 3.2], size: {w: 79.6, h: 81.5}, group: fans, rel-pos: 4,
+         accepts: [arista/7280dr3a-fan@1], default: arista/7280dr3a-fan@1}
+      placements:
+      - {ref: common/ground-screw-m4@1, id: ground-1, at: [90.7, 9.0], group: grounding, rel-pos: 1}
+      - {ref: common/ground-screw-m4@1, id: ground-2, at: [90.7, 28.2], group: grounding, rel-pos: 2}
+  top:
+    size: {w: 440.0, h: 611.8}
+    empty: >-
+      Not drawn by either held document. The guide's chapter 3 shows the chassis from above only
+      in isometric drawings of a different switch (the DCS-7050QX-32S), and the data sheet shows
+      no top view.
+  bottom:
+    size: {w: 440.0, h: 611.8}
+    empty: >-
+      Not drawn by either held document. The guide's section 4.2 names a grounding location on
+      the bottom of the 1RU switches that take KIT-GND-EXT-1RU; table 6 puts the 2RU switches' on
+      the side or the rear.
+  left:
+    size: {w: 611.8, h: 87.9}
+    empty: >-
+      Not drawn by either held document. Table 6 puts the KIT-GND-EXT-2RU attachment of the
+      DR3A-54 on a side; the DR3A-36 attaches directly at the rear.
+  right:
+    size: {w: 611.8, h: 87.9}
+    empty: >-
+      Not drawn by either held document, and the guide's table 6 says nothing of the DR3A-36's side
+      walls: the other side of the chassis, as the left.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis as it ships: two AC supplies and four fans in, all thirty-six QSFP-DD and both OSFP
+      cages empty. The orderable builds below are this chassis with a licence and encryption variant.
+  ac:
+    kind: orderable
+    description: >-
+      The base switch with two AC supplies and four fans, front-to-rear air: DCS-7280DR3A-36-F ("2 x
+      AC"). Spares: PWR-2411-AC-RED, FAN-7012H-RED.
+    part-numbers:
+      DCS-7280DR3A-36-F: {}
+    bays:
+      psu-1: arista/7280dr3a-pwr-2400-ac@1
+      psu-2: arista/7280dr3a-pwr-2400-ac@1
+  ac-m:
+    kind: orderable
+    description: >-
+      The DR3AM-36 with TunnelSec: DCS-7280DR3AM-36-F, the same face, supplies and fans as the
+      base switch. Table 4 gives it the base switch's power draw.
+    part-numbers:
+      DCS-7280DR3AM-36-F: {}
+    bays:
+      psu-1: arista/7280dr3a-pwr-2400-ac@1
+      psu-2: arista/7280dr3a-pwr-2400-ac@1
+  ac-k:
+    kind: orderable
+    description: >-
+      The DR3AK-36 with large routes and TunnelSec: DCS-7280DR3AK-36-F, the same face, supplies and
+      fans as the base switch. Table 4 gives it the base switch's power draw.
+    part-numbers:
+      DCS-7280DR3AK-36-F: {}
+    bays:
+      psu-1: arista/7280dr3a-pwr-2400-ac@1
+      psu-2: arista/7280dr3a-pwr-2400-ac@1
+  ac-k-s:
+    kind: orderable
+    description: >-
+      The DR3AK-36 with secure boot enabled: DCS-7280DR3AK-36S-F ("large routes and TunnelSec, front
+      to rear air, 2 x AC, secure boot enabled"), the same face, supplies and fans as the K.
+    part-numbers:
+      DCS-7280DR3AK-36S-F: {}
+    bays:
+      psu-1: arista/7280dr3a-pwr-2400-ac@1
+      psu-2: arista/7280dr3a-pwr-2400-ac@1
+  dc:
+    kind: example
+    description: >-
+      Two DC supplies in place of the AC ones, front-to-rear air: what a "DCS-7280DR3A-36#" order
+      (configurable fans and psu) with PWR-2411-DC-RED gives. The data sheet lists no DC part number
+      of its own, so this is a worked build and not an orderable one.
+    power: dc
+    bays:
+      psu-1: arista/7280dr3a-pwr-2400-dc@1
+      psu-2: arista/7280dr3a-pwr-2400-dc@1
+datasheet:
+  title: '7280R3A Series Data Center Switch Router - Data Sheet (04-0040-26, April 15th, 2025)'
+  sha256: aaee1a9e4a1d0ae0f9fcabbeaf2734bff93bf8eda19a9e7edb7e0e29548ca053
+references:
+- {title: '7280R3A Series Quick Start Guide (DOC-07042-01, PDF created 2025-05-16)', sha256: ab17e22fc2c02dff788181350e797dad0d4b1b08581cd5a6fb86027704b04db4}

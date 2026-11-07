@@ -1,0 +1,101 @@
+format: 1
+kind: component
+name: 49253-lpm-ring
+version: 1.0.1
+class: mechanical
+description: >-
+  A steel distribution ring of the Leviton 49253-LPM 1RU five-ring manager seen from the
+  front - a flat-bar loop welded to the panel that stands 4 in out of it, 9.5 mm across,
+  its front end two overlapping legs that leave a 9.5 mm slit a patch cord is laid in
+  through
+provenance:
+  edge: >-
+    drawing - the front view of the 49253-LPM drawing outlines each bar 9.5 mm across with
+    its corners rounded 1.17 mm [0.046 in], a flat face 7.19 mm across inside that outline,
+    and a line across the face 5.59 mm [0.22 in] in from each end. The skin draws the radii,
+    the 1.17 mm edge band and the two seam lines over the legs. The break the drawing shows
+    across the face near the upper leg is not drawn: the side view puts the legs' overlap
+    elsewhere and the two do not agree on where the legs part.
+  face-colour: >-
+    estimated - the face is drawn a lighter value than the panel so the ring reads against it
+    in 2D. Satin black powder coat catches the light the panel does not; no document states
+    a reflectance, so the shade is a render choice and not a measured one.
+  size: >-
+    drawing - the front view of Leviton's 49253-LPM dimensional drawing (DXF): each ring is
+    a band 9.5 mm across (x 21.35 to 30.85 for the first) and 38.1 mm [1.50 in] high, from
+    2.8 to 40.9 mm up the 43.7 plate, centred on it. The five stand 107.6 mm apart, the
+    middle one on the centre line of the 482.6 plate.
+  relief: >-
+    drawing - the side view of the same drawing (the 4.0 in and 3.5 in dimensions) read at
+    millimetres: the loop is a bar 3.175 mm [1/8 in] thick bent to a rectangle 101.6 mm out
+    of the plate and 38.1 high. Its back leg stands on the plate (3.175 deep); its top bar
+    runs out 88.9 mm to the inner leg, which hangs from it 3.5 in [88.9mm] out, 25.4 mm
+    down (z 85.7 to 88.9); its bottom bar runs the full 101.6 and turns up into the outer
+    leg at the front, 25.4 mm up (z 98.4 to 101.6). The two legs overlap over 12.7 mm of the
+    height with 9.5 mm between them. Built as plates with square corners where the real
+    bar is bent to a radius.
+  slit: >-
+    drawing - the 9.5 mm between the inner leg's outer face (12.7 mm from the front) and
+    the outer leg's inner face (3.175 mm) in the side view, over the 12.7 mm where the
+    legs overlap in height. A cord is laid in through it and not routed along it. The
+    specification sheet's page 2 labels the inner leg's position "76.2 mm [3.50 in]", which
+    is 3.00 in; the drawing's dimension reads 3.50 in and the leg is 88.9 mm from the
+    plate, which is what is taken.
+  guide: >-
+    drawing - the clear opening inside the loop on the side view: 31.75 mm [1.25 in] high
+    between the bars, and 82.55 mm [3.25 in] deep, from the back leg's inner face (3.175
+    mm) to the inner leg's inner face (85.7 mm). Leviton's application note
+    (Maximum Cable Fill Ratios in Cable Managers, page 11 and page 10) gives the same:
+    "the usable area of the ring for cables is 1.25 in x 3.25 in", 4.0 sq in. Seen looking
+    along the panel, which is the run: `w` is the height and `h` the depth out of the
+    panel. The slit is not counted as opening.
+  guide-depth: >-
+    drawing - the ring is a band 9.5 mm across along the run, the width the front view
+    draws and the plan's 21.35 to 30.85. A cable enters and leaves the ring that far apart.
+  material: >-
+    datasheet - "16-gauge steel, black powder coated" on the specification sheet, which
+    also says the rings are "radius-edged to protect cable from nicks or wear"; the drawing
+    shows the bar's edges rounded, which the plates here do not.
+  color: >-
+    datasheet - "Color: Black" on the product page, "black powder-coat finish" on the
+    specification sheet. The drawing is line work, so the shade is this library's render.
+size: {w: 9.5, h: 38.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel, finish: black powder coat}
+guide: {kind: ring, aperture: {w: 31.75, h: 82.55}, run: x, depth: 9.5}
+elements:
+  back: {at: [0.0, 0.0], size: [9.5, 38.1], class: bezel}
+  bar-top: {at: [0.0, 0.0], size: [9.5, 3.175], class: bezel}
+  bar-bottom: {at: [0.0, 34.925], size: [9.5, 3.175], class: bezel}
+  leg-inner: {at: [0.0, 0.0], size: [9.5, 25.4], class: bezel}
+  leg-outer: {at: [0.0, 12.7], size: [9.5, 25.4], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 3.175
+      color: '#111315'
+      confidence: drawing
+      source: the side view of the 49253-LPM drawing, the back leg 3.175 mm thick against the plate
+    - node: bar-top
+      out: 88.9
+      color: '#111315'
+      confidence: drawing
+      source: the same view, the top bar running 88.9 mm out of the plate to the inner leg
+    - node: bar-bottom
+      out: 101.6
+      color: '#0d0f10'
+      confidence: drawing
+      source: the same view, the bottom bar running the 4.0 in [101.6mm] to the front
+    - node: leg-inner
+      lift: 85.725
+      out: 88.9
+      color: '#0d0f10'
+      confidence: drawing
+      source: the same view, the inner leg 3.175 thick, 3.5 in [88.9mm] out, hanging 25.4 from the top bar
+    - node: leg-outer
+      lift: 98.425
+      out: 101.6
+      color: '#101214'
+      confidence: drawing
+      source: the same view, the outer leg at the front, 3.175 thick, rising 25.4 from the bottom bar
+skins: [default]

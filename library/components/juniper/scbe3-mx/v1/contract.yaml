@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: scbe3-mx
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX Series Enhanced Switch Control Board 3 (SCBE3-MX) - the ZF-based fabric and control carrier
+  for the MX240, MX480 and MX960 (CLI name SCBE3-MX-S, Junos 18.4R1 and later). It seats in the same SCB
+  slots as the SCB-MX, SCBE and SCBE2-MX. The face carries the OK/FAIL, FABRIC ACTIVE and FABRIC ONLY
+  lamps at the left end, a blank Routing Engine slot, two SFP+ XGE cages with LINK lamps, the GPS lamp,
+  the RJ-45 EXT CLK jack and an ejector lever at each end. Its Routing Engine slot holds nothing in this
+  library (RE-S-1800 and RE-S-X6 are not modelled).
+attrs:
+  model: SCBE3-MX
+  power-draw-max-w: 425
+  fabric-bandwidth: up to 1 Tbps per slot (four fabric planes), 1.5 Tbps per slot with all six planes
+    (MPC10E line cards)
+  generation: 3rd
+  sfp-plus: 2
+provenance:
+  size: >-
+    estimated - the bay envelope, carried as juniper/scb-mx@3 carries it: 413.5 x 29.5, the lever-tip
+    envelope of Juniper's stencil and the plate height (plate 396.0 between the levers). It is the SCB
+    bays' size and not this board's: the MX960 Hardware Guide (PDF dated 2025-08-19), SCBE3-MX Weights and
+    Dimensions (PDF p220, printed 200), prints width 15.7 in (39.87 cm), depth 21.2 in (53.85 cm), height
+    1.2 in (3.05 cm) and 13.6 lb (6.2 kg). 15.7 in is 398.8 mm against the 396.0 plate (2.8 mm) and 1.2
+    in is 30.5 mm against 29.5 (1.0 mm); the bays are not moved, resized or retyped for the difference.
+    The guide figures are not carried as `datasheet` because the envelope is not theirs
+  weight: guide - 13.6 lb (6.2 kg), Weights and Dimensions; shipping box 19.9 lb (9.03 kg)
+  software: >-
+    guide - MX960 Hardware Guide, SCBE3-MX Description (printed p200): Junos OS Release 18.4R1 and later;
+    name in CLI SCBE3-MX-S. Orderable name SCBE3-MX-BB (MX family data sheet) is a note only: no
+    configuration is added
+  power: >-
+    EVERY PRINTED FIGURE, WITH ITS PAGE (max / 40 C / 25 C, watts). MX960 guide, SCBE3-MX Maximum Power
+    Consumption Per Ambient Temperature and CB slot (printed p204): MX960 SCB 0, SCB 1, SCB 2 425 / 400 /
+    385 at 55 / 40 / 25 C; MX480 SCB 0 (Primary) 295 / 280 / 265 and SCB 1 (Backup) 295 / 280 / 265; MX240
+    SCB 0 (Primary) 275 / 260 / 245 and SCB 1 (Backup) 295 / 280 / 265. The same guide's Power Requirements
+    for Switch Control Boards table (printed p198) gives 275 / 260 / 245 for SCBE3-MX in all of MX240,
+    MX480 and MX960, and the MX480 guide's table of the same name gives 295 W for SCB 0 and 425 W for SCB 1
+    (the note there says SCB 0 uses two of the four fabric planes). THE GUIDES DISAGREE: the per-slot table
+    is the more specific and the summary table the less, so this is two scopes and not an error. The
+    highest, 425 W, is carried as power-draw-max-w, as cisco/a99-sfc3 carries the larger of its two
+    chassis scopes; a build from it is conservative in the MX240 and MX480. The guide states no typical.
+    The figures are for the board only and do not include re-allocated power
+  fabric: >-
+    guide - SCBE3-MX description (printed p199): up to 1 Tbps per slot in the redundant configuration and
+    four fabric planes; 1.5 Tbps per slot with all six planes (MPC10E line cards). MX480 guide capacity
+    table agrees (non-redundant 1.5 Tbps with MPC10E, redundant 1 Tbps)
+  re-bay: >-
+    NO BAY. The guide's SCBE3-MX Interoperability with Routing Engines table (printed p205) supports
+    RE-S-1800 (all variants) and RE-S-X6 (all variants) and not RE-S-1300 or RE-S-2000, and neither
+    RE-S-1800 nor RE-S-X6 is modelled (both are not in the library), so the slot is drawn and holds nothing. juniper/re-s-1300 and
+    juniper/re-s-2000 are never accepted in it
+  face: >-
+    drawing, ESTIMATED - Figure 49 of the MX960 guide (PDF p218) is a straight vertical line drawing of
+    the whole board with two magnified insets, turned here as scb-mx@3 is turned (top of the drawing at
+    the left). Positions were read off the figure's pixels and fitted so the board body is the 29.5 plate
+    height: the upper-end inset at about 3.3 px/mm and the lower end at about 2.95 px/mm. They are good to
+    about 2 mm along the card and 1.5 mm across, and the two ends are not on one scale to better than
+    that. Lamps at card x 35.2 (OK/FAIL) and 48.5 (FABRIC ACTIVE, FABRIC ONLY), y 23.5 and 17.5; the lamp
+    pair's legends stack ACTIVE over ONLY and which lamp each reads is estimated. Cages at card x 338.9
+    and 353.8, the GPS lamp at 364.3 and the jack at 375.9 (y 17.6, 14.9, 15.9). The two plus screws
+    (card x 48.5 and 331.2, y 7.5), the levers and the blank Routing Engine slot between x 62 and 318 are estimated. The label printed on
+    the blank panel in the figure is not drawn
+  levers: >-
+    drawing, estimated - Figure 49 shows a winged lever with a captive screw at each end, about 24-28 mm
+    long and 9-12 across; drawn 24.0 x 9.0 with the tips at the envelope edge. scb-mx@3's photo-measured
+    29 x 7.4 is the neighbour's, not this board's reading
+  ports: >-
+    guide - SCBE3-MX Components and Features (printed p201): two 10 GE/1 GE SFP+ XGE ports, connected to
+    the Ethernet control switch; one RJ-45 GPS external clock interface that receives GPS and PPS timing.
+    The registry cages std/sfp@1 and std/rj45@2 are reused. The jack carries media rj45-tod because the
+    guide describes GPS and PPS timing
+  leds: >-
+    guide LED table (printed p200): OK/FAIL green board OK, red failed, unlit offline; FABRIC ACTIVE green
+    fabric active; FABRIC ONLY green fabric-only mode and in slot 8 (the shared slot); XGE port LINK per
+    SFP+ interface; GPS EXT CLK green link OK, blinking amber clock activity (the same page also says red
+    means no clock is present and green active, which the two sentences do not reconcile)
+  logo-zone: >-
+    reserved - Figure 49 prints no vendor mark on the board; the zone is kept clear as the neighbours do
+    and no logo or wordmark is drawn
+states:
+- ok
+- fail
+- absent
+groups:
+  xge:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the two SFP+ XGE ports, joined to the Ethernet control switch
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 GPS external clock interface
+parts:
+- {ref: std/sfp@1, id: xge-0, group: xge, at: [331.65, 12.6], attrs: {function: XGE port 0}}
+- {ref: std/sfp@1, id: xge-1, group: xge, at: [346.55, 12.6], attrs: {function: XGE port 1}}
+- {ref: std/rj45@2, id: ext-clk, group: timing, at: [368.0, 9.3], rotate: 180, attrs: {media: rj45-tod, function: GPS external clock}}
+elements:
+  lever-left:
+    at: [0.0, 10.25]
+    size: [24.0, 9.0]
+    class: latch
+  lever-right:
+    at: [389.5, 10.25]
+    size: [24.0, 9.0]
+    class: latch
+  logo-zone:
+    at: [60.0, 5.0]
+    size: [24.0, 8.0]
+    class: label
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the SCB bays that take this board, as juniper/scb-mx@3
+  carries them (its size-notes say how they were found). They are not the guide's 15.7 x 1.2 in.
+size-confidence: {w: drawing, h: estimated}

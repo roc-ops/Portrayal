@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: ex4500-fan-tray-fb
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan tray of the Juniper EX4500 switches with front-to-back airflow. It is one field-replaceable
+  unit with five fans, installed horizontally in the rear of the chassis, with a handle at each end.
+  It is hot-removable and hot-insertable, and the switch runs 30 seconds while it is replaced. A green
+  EXHAUST label shows through the vents. Its colour must match the green ejector lever of the power
+  supplies. A single fan cannot be replaced. The guide gives no part number for it.
+attrs:
+  role: chassis-fan
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Cooling System and Airflow in an EX4500
+    Switch (Figure 18, the tray, an isometric drawing; Tables 3 and 15; Figures 19 and 20) and Figure 6, the
+    flat rear panel. The guide's own copyright and the Juniper EULA govern it; it is read for facts only and
+    nothing of it is copied. The guide prints no part number for the tray; the CLI calls it "Fan tray,
+    front-to-back airflow" (Table 4).
+  size: >-
+    drawing - Figure 6, rendered at 1200 dpi: the tray spans the lower 63 mm of the face from 84.7 mm to
+    the right edge, 352.5 mm wide. The figure reads at 0.227 mm per display pixel across and 0.234 down,
+    an aspect error of 3 percent, so the size is estimated to 1.5 mm.
+  depth: >-
+    estimated - not stated. Searched the guide for the tray's dimensions and weight: no figure is given.
+    No depth is written.
+  face: >-
+    drawing - Figure 6: a perforated field of small hexagons between two end handles, each handle with a
+    captive screw at the top and the bottom, and the numerals 1 and 0 printed at the left. The label colour
+    is the only mark that differs between the two airflows.
+  label: >-
+    datasheet - Back-to-Front Airflow: each tray carries a coloured intake or exhaust label that shows
+    through the vents; the INTAKE label is orange and the EXHAUST label is green. Where it sits behind the
+    perforation is not drawn in any figure held, so the label strip is placed at the middle of the tray and
+    is estimated.
+  power: >-
+    estimated - not published. The guide's power tables leave "Power required by fans" blank. The module
+    declares power-absent so that the missing figure is a statement.
+states: [absent]
+elements:
+  handle-left:
+    at: [7.0, 0.8]
+    size: [12.0, 61.5]
+    class: latch
+  handle-right:
+    at: [333.5, 0.8]
+    size: [12.0, 61.5]
+    class: latch
+size:
+  w: 352.5
+  h: 63.1
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle-left
+    out: 3.0
+    confidence: estimated
+    source: figure - the handles stand proud of the perforated field; the projection is not measured
+  - node: handle-right
+    out: 3.0
+    confidence: estimated
+    source: figure - the handles stand proud of the perforated field; the projection is not measured
+skins: [default]

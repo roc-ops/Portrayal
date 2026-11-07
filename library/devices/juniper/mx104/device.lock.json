@@ -69,12 +69,13 @@
    "juniper/mx104-re@1"
   ]
  },
- "composed": "b98104a4369c9488",
+ "composed": "28ce0c3a7d0d405d",
  "composed-refs": {
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-eth@1": "1.2.0+eb66828d7adf1ae4",
-  "juniper/mic-3d-16che1-t1-ce@2": "2.0.0+345083146b195b9e",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/mic-3d-16che1-t1-ce@2": "2.1.0+f1d7d55f906ec4ad",
   "juniper/mic-3d-1oc192-xfp@2": "2.0.0+22310d2eef4222b0",
   "juniper/mic-3d-20ge-sfp@2": "2.0.0+a654658cc43eb761",
   "juniper/mic-3d-2xge-xfp@2": "2.0.0+6b9df5b35bd1ab47",
@@ -88,7 +89,7 @@
   "juniper/mx-ground-stud-pair-5-8@1": "1.0.0+c975dff16d7abae3",
   "juniper/mx-ground-stud@1": "1.0.1+23a05a5129dadc5b",
   "juniper/mx-mic-blank@2": "2.0.0+afcfbd9d9ffa9522",
-  "juniper/mx104-psu-dc@1": "1.1.0+e515d3e17a76fe32",
+  "juniper/mx104-psu-dc@1": "1.2.0+b5bc0f392ddbffaa",
   "juniper/mx104-re@1": "1.2.0+3ed2775fbf4dda76",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
   "std/rj45@2": "2.1.0+2c8fec73bdc493fb",
@@ -101,6 +102,54 @@
  "configs": [
   "base"
  ],
+ "dc-ports": {
+  "pem0/module/input": {
+   "juniper/mx104-psu-dc@1": {
+    "awg": null,
+    "configs": [
+     "base"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "pem0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "pem0/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "pem1/module/input": {
+   "juniper/mx104-psu-dc@1": {
+    "awg": null,
+    "configs": [
+     "base"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "pem1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "pem1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "3b369320ee90266d",
  "groups": [
@@ -215,6 +264,6 @@
  },
  "placement-surface": "b307b9bf11180c01",
  "shape": "5a3d2c847f80bcf5",
- "surface": "050186ff1b46e2ce",
- "version": "5.0.0"
+ "surface": "849cc63ec6ed07f9",
+ "version": "5.1.1"
 }

@@ -70,6 +70,7 @@ Four components replace nine.
 | `common/rj45-ganged-eth@1` | `std/rj45-ganged@2` plus two lamps in the outer corners | `led-a`, `led-b` | every Ethernet jack in a ganged block |
 | `common/rj45-ganged-link@1` | `std/rj45-ganged@2` plus ONE lamp, at `led-a`'s corner | `led-a` | a ganged Ethernet jack whose housing has a single LINK/ACT window - added for the AurCore AIS non-PoE builds, whose PoE siblings carry the second (PoE) lamp (#738) |
 | `common/rj45-ganged-lamped@1` | `std/rj45-ganged@2` plus two lamps in the outer corners, exactly where `-eth` puts them, and no Ethernet claim | `led-a`, `led-b` | a ganged jack that is NOT Ethernet but has two integrated corner lamps: a BITS or ToD jack on a timing panel (#370). The placement's role, media and group say what the jack is for; the type export does not read the part as Ethernet |
+| `common/rj45-ganged-eth-plain@1` | `std/rj45-ganged@2` with an Ethernet claim and no lamps; its skin is the bare cell's housing outline, so the drawing is the bare cell's | none | a ganged Ethernet jack whose housing has no lamps; the Fibrain HD modules (#1041). L76 accepts an Ethernet jack on it without lamps; the export types it as an interface (1000base-t, the family's default for an Ethernet cell; a datasheet's cable category is not a speed) |
 | `common/rj45-eth-pinside@1` | `std/rj45@2` plus two lamps in the side walls at the PIN end, away from the keyway | `led-a`, `led-b` | a single Ethernet jack whose lamps are opposite the latch - added for three HPE 10GBASE-T FlexibleLOM adapters (#777); see the addendum |
 
 `dell/rj45-port-14g@1` stays. It draws nothing and exists to attach ISM table 11's
@@ -82,7 +83,9 @@ T1, E1, DS1 or RJ48 - a channelized card numbers its RJ48c jacks `port-*` like a
 other card, and they carry DS1, not Ethernet. Everything else that carries Ethernet
 takes the lamped one. A timing jack whose housing really has the two corner lamps
 takes `common/rj45-ganged-lamped@1` and L76 accepts it there, but L76 sends an
-Ethernet jack on that part to `-eth`. This is the same test `sweep_jack_lamps.py` already applies to
+Ethernet jack on that part to `-eth`. An Ethernet jack whose housing has no lamps
+takes `common/rj45-ganged-eth-plain@1`, not the bare cell: the bare cell is read as
+a console or timing jack by the export. This is the same test `sweep_jack_lamps.py` already applies to
 decide where a lamp belongs.
 
 ### Geometry and sources

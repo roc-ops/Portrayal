@@ -1,0 +1,88 @@
+format: 1
+kind: component
+name: saddle-ring
+version: 1.0.0
+class: mechanical
+description: >-
+  A saddle ring of the Belden 9510-1901, 9511-1903 and 9511-1904 horizontal cable managers seen from
+  the front. A steel strap is bent into an open loop, screwed to the plate, and stands 74.7 mm out of
+  it. Its bottom bar ends in an upturned hook that leaves the slit a cable is laid in through.
+provenance:
+  size: >-
+    estimated - the 9510-1901 technical data sheet (revision 0.57, 05-31-2024) carries a photograph of
+    the part with its six rings, and its Product Description counts them: "Saddle Rings (6)". No Belden
+    document dimensions a ring. The strap is taken as 10.0 wide along the run and the ring as 40.0 high,
+    read as proportions of the 41.91 face on that photograph, where the ring reaches a little further than
+    the plate at each edge; it is held inside the face here. The 9511-1903 and 9511-1904 thumbnails draw
+    rings of the same shape, seen face-on at their ends, and the part is taken to be the same ring on
+    all three: nothing states it.
+  relief: >-
+    estimated - the 9510-1901, 9511-1903 and 9511-1904 data sheets give the overall depth, 3.0 in
+    (76.2 mm), which is the ring's projection from the rail face; less an estimated 1.5 of plate that
+    leaves the ring standing 74.7 out of the plate's face. Read off the photograph, the loop is a strap
+    3.0 thick: a back leg screwed to the plate, a top bar running out to a front leg, and a bottom bar
+    running back from the front leg 56.7 to an upturned hook 3.0 thick and 8.0 high, 18 from the plate,
+    which leaves a 15.0 slit between the hook and the back leg. Built as plates with square corners
+    where the real strap is bent to a radius.
+  slit: >-
+    estimated - the gap between the hook and the back leg, 15.0 wide, read off the photograph. A cable is
+    laid in through it, or threaded through the loop along the run.
+  guide: >-
+    estimated - the clear opening inside the loop: 34.0 high between the bars (40.0 less the two 3.0
+    straps) and 68.7 deep between the back leg and the front leg. Seen looking along the plate, which is
+    the run: `w` is the height and `h` the depth out of the plate. The slit is not counted as opening.
+  guide-depth: >-
+    estimated - the ring is a strap 10.0 wide along the run, as above.
+  liner: >-
+    not drawn - the photograph shows a light strip along the inside of the top bar of the middle rings,
+    which may be a liner or a pad. No Belden document names it, so it is not drawn.
+  screw: >-
+    not drawn - the photograph shows a screw head on the plate behind each ring. It is a fixing, not a
+    part of the ring, and no document gives it a size.
+  material: >-
+    datasheet - "Material: Steel" and "Black Powdercoat Finish" on the 9510-1901 data sheet.
+  shading: >-
+    estimated - the ring is drawn a lighter value than the plate, with a lit rim, so it reads against
+    the plate in 2D on the light stage and on the dark one: a black ring on a black plate reads as a
+    faint bar. The rim is semi-transparent white over the fill; no document gives a reflectance.
+size: {w: 10.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: steel, finish: black powder coat}
+guide: {kind: ring, aperture: {w: 34.0, h: 68.7}, run: x, depth: 10.0}
+elements:
+  back: {at: [0.0, 0.0], size: [10.0, 40.0], class: bezel}
+  top: {at: [0.0, 0.0], size: [10.0, 3.0], class: bezel}
+  bottom: {at: [0.0, 37.0], size: [10.0, 3.0], class: bezel}
+  front: {at: [0.0, 0.0], size: [10.0, 40.0], class: bezel}
+  hook: {at: [0.0, 29.0], size: [10.0, 8.0], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 3.0
+      color: '#4a5058'
+      confidence: estimated
+      source: the strap read off the 9510-1901 data sheet photograph, 3.0 mm thick
+    - node: top
+      out: 74.7
+      color: '#59606a'
+      confidence: estimated
+      source: the top bar running out to the front leg, read off the same photograph
+    - node: bottom
+      lift: 18.0
+      out: 74.7
+      color: '#3f444b'
+      confidence: estimated
+      source: the bottom bar running back from the front leg to its hook, read off the same photograph
+    - node: front
+      lift: 71.7
+      out: 74.7
+      color: '#59606a'
+      confidence: estimated
+      source: the front leg at the 3.0 in overall depth less the plate, read off the same photograph
+    - node: hook
+      lift: 18.0
+      out: 21.0
+      color: '#4a5058'
+      confidence: estimated
+      source: the upturned hook that ends the bottom bar, leaving the slit, read off the same photograph
+skins: [default]

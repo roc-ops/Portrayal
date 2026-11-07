@@ -25,6 +25,8 @@ def _rows():
     """ref -> (fits, devices, in parts), read off the generated page."""
     rows = {}
     for line in cat.build(LIB).splitlines():
+        if line.startswith("## Rail kits"):
+            break   # the kits' table (#905) has other columns and no entry in components.json
         if not line.startswith("| `"):
             continue
         cells = [c.strip() for c in line.strip("|").split(" | ")]

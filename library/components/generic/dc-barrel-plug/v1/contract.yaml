@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dc-barrel-plug
-version: 1.0.0
+version: 1.0.1
 class: port
 mates: dc-barrel
 conforms: barrel-plug
@@ -16,7 +16,7 @@ description: >-
   voltage and no current.
 size: {w: 8.2, h: 8.2}
 size-confidence: {w: drawing, h: drawing}
-size-notes: both figures are the 8.2 diameter of the grip on the Same Sky PP3-002A drawing, a plug chosen to stand for the class; no device that places the jack states the size of its own plug
+size-notes: both figures are the 8.2 diameter of the grip on the Same Sky PP3-002A drawing, a plug chosen to stand for the class; of the six devices that place the jack, only the CSS326-24G-2S+RM quick guide states a barrel size (5.5 outside, 2 inside), and the plug is not that device's
 attrs: {media: barrel, connector: dc-barrel}
 fields:
   cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 4.0}
@@ -30,9 +30,12 @@ provenance:
   nominal: >-
     A NOMINAL SIZE CHOSEN FOR THE LIBRARY, NOT A FIGURE FROM ANY PLACING
     DEVICE. The library treats the DC barrel jack as one connector,
-    `dc-barrel`; barrel diameters vary by product and no document held for
-    any of the four devices that place common/dc-barrel@1 states one. This
-    plug is drawn at the common 5.5 mm barrel with a 2.1 bore, from one
+    `dc-barrel`; barrel diameters vary by product, and of the six devices
+    that place common/dc-barrel@1 (halny/hlx-tgv, nokia/xs-010x-r,
+    nokia/xs-010xr-p, telco-systems/tm-280,
+    mikrotik/crs326-24g-2s-plus-rm, mikrotik/css326-24g-2s-plus-rm) only the
+    CSS326-24G-2S+RM quick guide states one, 5.5 mm outside and 2 mm inside.
+    This plug is drawn at the common 5.5 mm barrel with a 2.1 bore, from one
     manufacturer's drawing. Every figure below is that drawing's. THAT THIS IS
     THE RIGHT PLUG FOR A GIVEN DEVICE IS NOT CLAIMED.
   media: >-

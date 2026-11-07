@@ -232,6 +232,7 @@ def real(tmp_path_factory):
     return out, state, sizes
 
 
+@pytest.mark.heavy
 def test_every_library_rack_has_its_package(real):
     _, state, sizes = real
     racks = json.loads((DIST / "rack-products.json").read_text())["racks"]
@@ -242,6 +243,7 @@ def test_every_library_rack_has_its_package(real):
         assert sizes[pkg] < P.LIMIT_MB * 1e6
 
 
+@pytest.mark.heavy
 def test_the_real_ar203a_is_readable_from_its_tarball(real):
     out, _, _ = real
     ball = _pack(out / "out" / "racks-apc-ar203a", out / "packed")

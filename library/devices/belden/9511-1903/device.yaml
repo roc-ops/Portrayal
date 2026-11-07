@@ -1,0 +1,265 @@
+format: 1
+kind: device
+name: 9511-1903
+version: 0.1.0
+maturity: modelled
+manufacturer: Belden
+model: 9511-1903
+description: >-
+  3U horizontal ring-style cable manager with saddle rings, Belden 9511-1903. A flat black steel
+  panel the full 19 in width bolts to the rack rails. Steel saddle rings are screwed to it. Each ring
+  is a strap bent into an open loop that stands 3.0 in out of the panel. A slit in its bottom bar lets
+  a cable be laid in. The data sheet's thumbnail shows eight rings, two stacked at each end and four
+  across the middle.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      FIGURES FROM A DATA SHEET TABLE AND FROM A THUMBNAIL. The 9511-1903 technical data sheet (revision
+      0.27, 05-31-2024) states the rack units, the overall width and depth, the weight, the material and
+      the finish, and carries one 430 px thumbnail of the part, a CAD render in grey. It states TWO
+      HEIGHTS and NO COUNT OF RINGS. NO BELDEN DOCUMENT HOLDS A DIMENSIONED DRAWING: the manufacturer's
+      product page returned a Cloudflare challenge (403) to the one request made for the family, and
+      the catalog page is a script shell with no content, so the product photographs were not reached.
+      Every figure below that is not the data sheet's table is read off the thumbnail and is
+      `estimated`, with how. Nothing was copied from it; the figures are transcribed. The data sheet's
+      footer ("Although Belden makes every reasonable effort ... provided on an AS IS basis") grants no
+      licence to reuse its artwork, so only its figures are used.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 3U, 19 in wide and 3.0 in (76.2 mm) deep; THE HEIGHT IS A CONFLICT, SETTLED. The
+      Construction and Dimensions table says "Overall Height 3.0 in" and the Variants table 5.25 in. The
+      3.0 in is the depth repeated in the height row; the 3U of the data sheet's own rack units is 5.25 in
+      (133.35 mm), the Variants table agrees, and the maker's BHH193UR 3U sheet states 5.25 in. So 5.25
+      in is taken. The width is the 482.6 of 19 in, ears included, as a rack-face part is its ears and
+      what hangs off them. The depth is the maker's overall projection from the rail face, rings
+      included, and not a body depth. The data sheet's Mount Type is "19 in".
+  mount:
+    confidence: estimated
+    note: >-
+      estimated - the data sheet says the part is a 19 in mount and shows no figure of how it bolts. The
+      rings stand 3.0 in out of the plate, so it bolts to the rail face at a rack unit and stands out
+      from it: a `rack-face` part, as the FS FHD-CMP5DR and the Chatsworth Evolution managers are.
+      Whether the line is `rack-face` or `rack` is a choice the pull request asks the owner to accept.
+  ears:
+    confidence: estimated
+    note: >-
+      estimated - the ears are the flat ends of the panel and are drawn with it, with no holes: no
+      document gives their size or place.
+  shell:
+    confidence: estimated
+    note: >-
+      estimated - A SHEET BODY, NOT A BOX: the panel as a well 74.7 deep, the rings standing in it. The
+      data sheet says "Steel" and nothing of the panel's construction.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 1.5, a stand-in; no Belden document states a gauge.
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - 4.5 lb in the data sheet's Weight row and Variants table, 2.04 kg. The data sheet does
+      not say whether it is a net or a shipping weight; it is stated as the weight.
+  rings:
+    confidence: estimated
+    note: >-
+      estimated - EIGHT RINGS, A COUNT NO DATA SHEET STATES. The 9511-1903 thumbnail shows two rings
+      stacked at each end of the panel and four more between them, one in each column, eight in all; the
+      9511-1904 thumbnail draws the same eight on its taller panel. The count is read off a 430 px render
+      and may be wrong; the part's name gives none, where the 9510-1901's states "(6)". The ring is the
+      9510-1901's saddle ring (`belden/saddle-ring`), which the thumbnails draw in the same shape; nothing
+      states it. The six columns are taken as evenly spaced and symmetric, 80.0 apart, the first centred
+      41.3 from the left end; the stacked pair is centred a quarter and three quarters of the way up the
+      face, and a single ring is centred on it. The pull request asks the owner to accept the count.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the eight rings on their screws, end-on: each ring's front leg, 10.0 wide and 40.0
+      high. A vendor mark is never drawn.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the panel, plain. No Belden document shows the back of the part.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation: the plate's edge at the rear and the top bar of the highest ring of each
+      of the six columns from above, running out the full 74.7. The bottom is the same from underneath,
+      where each bottom bar of the lowest ring stops at its hook.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - an elevation: the plate's edge and the profiles of the two rings nearest, stacked,
+      read off the thumbnail. The right is the same, turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the eight rings are the guides: each a component with a `ring` guide (see its
+      contract), cables passing along the panel through each in turn. The opening is 34.0 high by 68.7
+      deep.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - none is stated. The data sheet's overview says only that the managers "help to
+      maintain proper bend radius"; it gives no bend radius, no cable capacity and no fill ratio, so
+      none is recorded and none is estimated.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, the colour and the finish are the data sheet's table. It lists no
+      mounting hardware for this part and no environmental space.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Black Powdercoat Finish" and "Color: Black". The thumbnail is a grey CAD render, so
+      the shade is this library's render of black, lightened a little so it reads on a dark stage.
+attrs:
+  physical:
+    weight-kg: 2.04
+    material: Steel
+    finish: Black Powdercoat Finish
+    color: Black
+chassis:
+  width: 482.6
+  height: 133.35
+  depth: 76.2
+  ru: 3
+  mount: rack-face
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 2.04
+  color: '#3c3f43'
+gaps:
+  - what: ring-count
+    scope: [front, top, bottom, left, right]
+    reason: vendor-silent
+    note: >-
+      the data sheet gives no count of rings, and its thumbnail, a small render, shows eight; the count
+      is an estimate.
+    wanted: the number of rings in the data sheet's description or a larger picture
+  - what: height-conflict
+    scope: [front, rear, left, right]
+    reason: sources-disagree
+    note: >-
+      "Overall Height 3.0 in" in the Construction and Dimensions table against 5.25 in in the Variants
+      table. 5.25 in (133.35 mm) is used, the 3U of the data sheet's own rack units; 3.0 in is the depth
+      repeated.
+    wanted: the maker's drawing or product page
+  - what: ear-holes
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no document gives the mounting holes' count or positions, or the ears' width.
+    wanted: a dimensioned drawing of the panel
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the data sheet states no cable capacity and no fill ratio, so none is recorded or estimated.
+    wanted: a fill table for the manager
+  - what: bend-radius
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the data sheet says the managers help "maintain proper bend radius" and gives no figure, so none
+      is recorded.
+    wanted: the bend radius the rings maintain
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the flat steel panel with its ears
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: eight steel saddle rings, two stacked at each end and four across the middle, cables passing through along the panel
+views:
+  front:
+    size: {w: 482.6, h: 133.35}
+    components:
+      placements:
+        - {ref: belden/9511-1903-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: belden/saddle-ring@1, id: guide-1, at: [36.3, 13.3], group: guides, rel-pos: 1, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-2, at: [36.3, 80.0], group: guides, rel-pos: 2, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-3, at: [116.3, 46.7], group: guides, rel-pos: 3, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-4, at: [196.3, 46.7], group: guides, rel-pos: 4, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-5, at: [276.3, 46.7], group: guides, rel-pos: 5, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-6, at: [356.3, 46.7], group: guides, rel-pos: 6, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-7, at: [436.3, 13.3], group: guides, rel-pos: 7, in: panel}
+        - {ref: belden/saddle-ring@1, id: guide-8, at: [436.3, 80.0], group: guides, rel-pos: 8, in: panel}
+  rear:
+    size: {w: 482.6, h: 133.35}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [482.6, 133.35], fill: '#3c3f43', kind: panel}
+  top:
+    size: {w: 482.6, h: 76.2}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', kind: panel}
+        - {id: guide-1-top, at: [36.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+        - {id: guide-3-top, at: [116.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+        - {id: guide-4-top, at: [196.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+        - {id: guide-5-top, at: [276.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+        - {id: guide-6-top, at: [356.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+        - {id: guide-7-top, at: [436.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
+  bottom:
+    size: {w: 482.6, h: 76.2}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', kind: panel}
+        - {id: guide-2-bottom, at: [36.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-3-bottom, at: [116.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-4-bottom, at: [196.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-5-bottom, at: [276.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-6-bottom, at: [356.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-8-bottom, at: [436.3, 19.5], size: [10, 56.7], rx: 1, fill: '#3f444b', kind: ring}
+        - {id: guide-2-hook, at: [36.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+        - {id: guide-3-hook, at: [116.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+        - {id: guide-4-hook, at: [196.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+        - {id: guide-5-hook, at: [276.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+        - {id: guide-6-hook, at: [356.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+        - {id: guide-8-hook, at: [436.3, 19.5], size: [10, 3], fill: '#59606a', kind: ring}
+  left:
+    size: {w: 76.2, h: 133.35}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [1.5, 133.35], fill: '#3c3f43', kind: panel}
+        - {id: ring-1-back, at: [1.5, 13.3], size: [3, 40], fill: '#4a5058', kind: ring}
+        - {id: ring-1-top, at: [1.5, 13.3], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-1-bottom, at: [19.5, 50.3], size: [56.7, 3], fill: '#3f444b', kind: ring}
+        - {id: ring-1-front, at: [73.2, 13.3], size: [3, 40], fill: '#59606a', kind: ring}
+        - {id: ring-1-hook, at: [19.5, 42.3], size: [3, 8], fill: '#4a5058', kind: ring}
+        - {id: ring-2-back, at: [1.5, 80.0], size: [3, 40], fill: '#4a5058', kind: ring}
+        - {id: ring-2-top, at: [1.5, 80.0], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-2-bottom, at: [19.5, 117.0], size: [56.7, 3], fill: '#3f444b', kind: ring}
+        - {id: ring-2-front, at: [73.2, 80.0], size: [3, 40], fill: '#59606a', kind: ring}
+        - {id: ring-2-hook, at: [19.5, 109.0], size: [3, 8], fill: '#4a5058', kind: ring}
+  right:
+    size: {w: 76.2, h: 133.35}
+    panel:
+      decor:
+        - {id: plate-edge, at: [74.7, 0], size: [1.5, 133.35], fill: '#3c3f43', kind: panel}
+        - {id: ring-1-back, at: [71.7, 13.3], size: [3, 40], fill: '#4a5058', kind: ring}
+        - {id: ring-1-top, at: [0, 13.3], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-1-bottom, at: [0, 50.3], size: [56.7, 3], fill: '#3f444b', kind: ring}
+        - {id: ring-1-front, at: [0, 13.3], size: [3, 40], fill: '#59606a', kind: ring}
+        - {id: ring-1-hook, at: [53.7, 42.3], size: [3, 8], fill: '#4a5058', kind: ring}
+        - {id: ring-2-back, at: [71.7, 80.0], size: [3, 40], fill: '#4a5058', kind: ring}
+        - {id: ring-2-top, at: [0, 80.0], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-2-bottom, at: [0, 117.0], size: [56.7, 3], fill: '#3f444b', kind: ring}
+        - {id: ring-2-front, at: [0, 80.0], size: [3, 40], fill: '#59606a', kind: ring}
+        - {id: ring-2-hook, at: [53.7, 109.0], size: [3, 8], fill: '#4a5058', kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The ring manager as Belden ships 9511-1903, eight rings fitted.'
+datasheet:
+  title: 'Belden 9511-1903 technical data sheet (Horizontal Ring Style Cable Manager with Saddle Rings), revision 0.27, 05-31-2024'
+  url: https://catalog.belden.com/techdata/EN/9511-1903_techdata.pdf
+  sha256: 7fe47b9dfed272a09f92f0f30f196063f1f72aff6a0d13d4fd8cb2a3351f21c6

@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: h100-pcie-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA H100 PCIe card, seen from behind. It shows the open
+  shroud with its fin stack edge-on. The 16-pin 12VHPWR power connector is at
+  the corner by the top edge. Two bosses take the extenders' thumbscrews. It is
+  the card's `faces.rear`.
+size: {w: 97.90, h: 38.23}
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  The end face is 97.9 across (PB-11133 figure 3's 28.41 to 126.31) and runs from
+  the backplate's outer face to the shroud's far wall, 38.23 (the card's
+  thickness is itself estimated at 38.2, see the card's `thickness`). NO DEPTH IS
+  DECLARED: a face is a drawing of a back. SEEN FROM BEHIND WITH THE BOARD'S SIDE
+  AT THE TOP, so x' = 126.31 less the card's x (the top edge at the left) and y'
+  = the card's y less 1.77. This is the frame of nvidia/a100-pcie-80gb-tail@1.
+  The kit's rear frame measures x from the bracket's tip and has no room for a
+  card whose top edge stands past the bracket's 120.02, so this face is not
+  painted on the body's pieces; the pieces are built from the same figures (the
+  card's `body.boxes`) and each is named here.
+attrs: {media: gpu}
+parts:
+  # The header is 20.85 across and 11.7 down. The photographs put the housing's
+  # long side along the card, so it is not turned, only half-turned so that the
+  # four sense contacts, which sit below the power contacts in the part's own
+  # drawing, are at the top, toward the backplate, where the figure has them.
+  # Its centre is the housing's: x' 12.61, y' 6.43.
+  - {ref: std/12vhpwr-header@1, id: aux-power, at: [2.185, 0.58], rotate: 180}
+provenance:
+  size: >-
+    drawing - see size-notes.
+  fins: >-
+    estimated - PB-11133 figure 6 is the card's east end as a line drawing, and
+    shows the fin stack edge-on as horizontal slats on a pitch of about 30 px at
+    6.15 px/mm (the 235 px across the card's thickness over the 38.23), which is
+    4.9 to 5.0. That is the 5.0 of the A100 80GB's tail (nvidia/a100-pcie-80gb-tail@1)
+    and the A100's window fins, so the 18 fins, 0.8 thick, are borrowed from it
+    and not counted on this card. How far they run in is not seen: the card's
+    body draws them 40 mm deep, as the 80GB card does.
+  connector: >-
+    estimated - the connector's place and size are read on figure 6 of
+    PB-11133, a raster of a drawing whose aspect was not proven, at 6.15 px/mm: about 8.9 across the card's
+    thickness and 19.0 along the card, 2.9 from the top edge and 2.3 from the
+    backplate's outer face, with the four sense contacts in a strip on the
+    backplate side. The same housing on PNY's straight-on photograph of the
+    L40S's east end, 2.82 px/mm, which is the same card form, reads 9.1 by 18.9,
+    3.3 from the top edge (nvidia/l40s-tail@1). The card's `power-16pin` box
+    keeps 9.2 by 19.0, 0.1 more than that photograph in each. The part is std/12vhpwr-header@1, 20.85 x 11.7 (the plug's outline,
+    estimated), which is larger than the housing measured here, so this face
+    draws the header's own size and the card's 3D housing keeps the measured one;
+    the two differ by 1.9 across the thickness and 1.8 along the card. The
+    connector is a 12VHPWR because PB-11133 table 7 names "PCIe CEM 5.0 16-Pin".
+  mount: >-
+    borrowed - nvidia/a100-pcie-80gb-tail@1 `mount`: the extender's two
+    thumbscrew bosses at the card's x 35.3 and 64.1 and y 8.4, 4.0 across.
+    Figure 6 shows two round bosses on the end plate and a slot below the
+    lower one; their place was not measured on this card.
+  not-drawn: >-
+    figure 6 shows two large windows in the end plate, through which the board's
+    power stage can be seen (about 34 and 24 mm long at 6.15 px/mm), and a slot
+    at its foot. Nothing says what they are, and an extender hides them; they
+    are not drawn.
+elements:
+  fins: {at: [9.66, 12.63], size: [85.8, 23.5], class: vent}
+  mount-1: {at: [89.01, 4.63], size: [4.0, 4.0], class: screw}
+  mount-2: {at: [60.21, 4.63], size: [4.0, 4.0], class: screw}
+skins: [default]

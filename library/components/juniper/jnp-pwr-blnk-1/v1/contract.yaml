@@ -1,0 +1,38 @@
+format: 1
+kind: module
+name: jnp-pwr-blnk-1
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP-PWR-BLNK-1, the EX9251 power supply slot blank panel. The guide lists it as a spare
+  part and recommends cover panels in unused power supply slots. It is a flat metal plate that
+  fills an empty supply slot to keep the airflow through the chassis.
+attrs:
+  role: slot-blank
+part-numbers:
+  JNP-PWR-BLNK-1 (EX9251): {part: JNP-PWR-BLNK-1}
+provenance:
+  sources: >-
+    datasheet - EX9251 Switch Hardware Guide (published 2022-11-30), Table 3 (spare parts and blank
+    panels: JNP-PWR-BLNK-1, "EX9251 power supply slot blank panel") and the mounting section, which
+    recommends cover panels in unused power supply slots. The datasheet's ordering table says the
+    system ships with "all necessary blank panels". The key of part-numbers carries the suffix
+    (EX9251) so that its DCIM module type does not share a file with the same part number in another
+    line's slice.
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an
+    opening, so this part draws no elements. `absent` stays, because an empty slot is a real thing to
+    draw.
+  size: >-
+    estimated - a chassis slot opening, not the part. The guide names the panel and gives no figure
+    or dimension for it; it takes the size of the supply it replaces (54.7 x 40.5 mm, the
+    juniper/ex4600-jpsu-650-ac-afo@1 face that the EX9251's supply bay seats). The face is plain
+    metal, drawn as a flat plate with a stiffener, as juniper/jnp-pwr-blnk-3@1 is.
+states: [absent]
+size:
+  w: 54.7
+  h: 40.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

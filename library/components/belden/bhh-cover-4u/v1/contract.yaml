@@ -1,0 +1,65 @@
+format: 1
+kind: component
+name: bhh-cover-4u
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinging cover of the Belden BHH194UR 4U horizontal manager, seen from the front. A steel
+  front panel spans the manager. A return along its top and bottom edges closes over the finger
+  heads. It ships fitted and swings or lifts open to lay cable in.
+provenance:
+  size: >-
+    estimated - the cover closes the front between the ears: 450.0 wide, the 482.6 of the data sheet's
+    19.0 in overall width less an estimated 16.3 of ear each end (half the 32.6 between the 450.0
+    EIA-310 clear opening between the rails, 17.72 in, and the 482.6), and 177.8 high, the data
+    sheet's 7.0 in. The BHH194UR thumbnail is too small to show the cover's edges; the 2U and 3U
+    thumbnails show one panel the full height of the manager. No Belden document dimensions it.
+  relief: >-
+    estimated - the cover stands at the front of the 183.4 overall depth: a plate 2.0 thick (179.9 to
+    181.9 above the back plate's face) and returns 13.9 deep along its top and bottom edges, 1.5 thick,
+    that close over the finger heads. No Belden document gives the cover's section; the thumbnails show
+    a thin steel panel.
+  lid: >-
+    datasheet - the BHH194UR technical data sheet's Product Description, "Horizontal Manager with
+    Molded Fingers and Hinging Cover, 4RU". The cover is its own part, fitted as shipped, so a drawing
+    can take it off and show the fingers. The data sheet does not say it comes off its hinge: it opens,
+    and that opening is the lid (`lid: true`). The format has no hinge, so which edge it swings on is a
+    gap on the device.
+  contour: >-
+    estimated - STAND-INS, NOT MEASUREMENTS. The 2U and 3U thumbnails show a ridge rolled along the face
+    a little below its middle, a rolled lower edge and a label plate; the ridge is drawn as a lit and a
+    shaded band over the fill, 2.0 wide, and the rest as plain panel. The label plate is a vendor mark
+    and is never drawn.
+  shading: >-
+    estimated - the bands are semi-transparent white and black over the fill, so the cover reads on the
+    light stage and on the dark one. The data sheet states "Black Powdercoat Finish".
+size: {w: 450.0, h: 177.8}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [450.0, 177.8], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [450.0, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 176.3], size: [450.0, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 179.9
+      out: 181.9
+      color: '#4a4f55'
+      confidence: estimated
+      source: no Belden document dimensions the cover section; a thin steel panel in the data sheet thumbnails
+    - node: lip-top
+      lift: 168.0
+      out: 181.9
+      color: '#565b61'
+      confidence: estimated
+      source: the cover closes over the finger heads; the 13.9 mm return is read off the data sheet thumbnails
+    - node: lip-bottom
+      lift: 168.0
+      out: 181.9
+      color: '#3a3e43'
+      confidence: estimated
+      source: as lip-top
+skins: [default]

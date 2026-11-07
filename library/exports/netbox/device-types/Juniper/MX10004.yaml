@@ -28,31 +28,28 @@ module-bays:
     description: 'Accepts: jnp10k-lc9600, jnp10k-lc480, jnp10k-lc-blank'
   - name: psu0
     position: psu0
-    description: 'Accepts: jnp10k-pwr-ac2'
+    description: 'Accepts: jnp10k-pwr-ac2, jnp10k-pwr-blnk'
   - name: psu1
     position: psu1
-    description: 'Accepts: jnp10k-pwr-ac2'
+    description: 'Accepts: jnp10k-pwr-ac2, jnp10k-pwr-blnk'
   - name: psu2
     position: psu2
-    description: 'Accepts: jnp10k-pwr-ac2'
+    description: 'Accepts: jnp10k-pwr-ac2, jnp10k-pwr-blnk'
   - name: re0
     position: re0
-    description: 'Accepts: jnp10k-re1'
+    description: 'Accepts: jnp10k-re1, jnp10k-re-blnk'
   - name: re1
     position: re1
-    description: 'Accepts: jnp10k-re1'
+    description: 'Accepts: jnp10k-re1, jnp10k-re-blnk'
 comments: 'Juniper MX10004 - the 7RU, four-slot member of the MX10000 family. Two slim Routing and Control
   Boards stack under the badge strip beside the system status lamp panel; four full-width horizontal line-card
   slots (FPC 0-3) fill the lower front. The rear is a three-high PSU stack (PSU 0-2) beside two large
   fan trays whose removal exposes the six Switch Fabric Boards.
 
 
-  Configuration `base`: Chassis only - what you spec before deciding what goes in it. The 4 slot bays
-  are EMPTY; cooling, psus, res are populated. Enough to power on and reach the box, which is the question
-  most people ask first and the one `default` used to answer with whatever the drawing happened to be
-  populated with. The line-card slots are drawn EMPTY rather than blanked, which is not the intent: no
-  MX10000-series line-card blank is modelled, and none is named in the staged guides - they document power-supply
-  cover panels only. Every other chassis in the library seats a blank here.
+  Configuration `base`: The chassis as Juniper ships MX10004-BASE. One routing and control board with
+  a cover over the second slot. Two power supplies with a cover over the third, fans, and a cover in each
+  of the four line-card slots. Line cards are ordered separately.
 
 
   Facts carried in the model that this schema has no field for:
@@ -69,7 +66,7 @@ comments: 'Juniper MX10004 - the 7RU, four-slot member of the MX10000 family. Tw
   - power.power-typical-w: 7500
 
 
-  Drawing version 2.0.6. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 4.0.3. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

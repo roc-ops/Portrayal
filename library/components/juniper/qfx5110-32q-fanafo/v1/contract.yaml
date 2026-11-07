@@ -1,0 +1,63 @@
+format: 1
+kind: module
+name: qfx5110-32q-fanafo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5110-32Q-FANAFO, the field-replaceable fan module of the QFX5110-32Q with front-to-back airflow.
+  Air comes in through the vents at the port side and leaves at the fan end. It is marked AIR OUT
+  on a Juniper Gold handle. The switch seats five, in slots 0 to 4 left to right. The back-to-front
+  sibling is QFX5110-32Q-FANAFI. The QFX5110 hardware guide says to use only the fan module designed
+  for the product number, so the QFX5110-48S has its own part. The two airflows are never mixed in
+  one chassis, and never with power supplies of the other direction.
+attrs:
+  model: QFX5110-32Q-FANAFO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    borrowed - the body, drawing and colours are those of juniper/qfx5110-fanafo@1, the module the
+    QFX5120 devices seat. The QFX5110 guide gives this model's module its own part number and no
+    size, and its Figure 24 is an unscaled drawing. No measurement of this part exists.
+  depth: >-
+    not stated. The guide's module figure is an isometric drawing with no scale.
+  face: >-
+    borrowed - the drawing is that of juniper/qfx5110-fanafo@1: screw at the top left, a hex grille
+    above and below a handle band, a grey AIR OUT chip on the band.
+  airflow: >-
+    datasheet - QFX5110 Switch Hardware Guide, Table 11 (pp. 40-41), QFX5110-32Q-FANAFO: label AIR
+    OUT, colour Juniper Gold, port-to-FRU airflow (front-to-back).
+  part-number: >-
+    datasheet - QFX5110 Switch Hardware Guide, Table 11 (pp. 40-41), and p. 44: "Only use the
+    replacement fan modules that are designed for use with your product number."
+  power: >-
+    not published. Table 11 and the fan module section of the guide print no per-module wattage.
+states: [absent]
+elements:
+  screw:
+    at: [1.7, 1.9]
+    size: [6.0, 6.0]
+    class: screw
+  handle:
+    at: [1.2, 12.6]
+    size: [38.5, 16.4]
+    class: latch
+size:
+  w: 40.9
+  h: 41.6
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: borrowed from juniper/qfx5110-fanafo@1, the same face under a different part number
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo of the shared module - the handle band stands proud of the grilles; not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo of the shared module - black captive screw head, projection not measured

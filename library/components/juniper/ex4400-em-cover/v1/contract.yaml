@@ -1,0 +1,65 @@
+format: 1
+kind: module
+name: ex4400-em-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Extension module slot cover panel of the Juniper EX4400 switches. Each
+  switch ships with one cover on the empty extension module slot, which sits
+  at the front right. A flat panel with a captive screw at each top corner and
+  two small ring holes below each screw. The guide names no model number for
+  it.
+attrs:
+  role: extension-slot-cover
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Table
+    105, Inventory of Components Provided with an EX4400 Switch - one extension module slot cover
+    panel. Figures 6, 11, 27 and 34 draw the front panel with the cover on the slot. The guide
+    gives the cover no model number and no dimensions.
+  states: >-
+    datasheet - a cover has no lamp and no health state, so the part draws no elements. The
+    absent state stays, because an empty slot is a real thing to draw.
+  size: >-
+    estimated - taken as the recess in the front panel that the extension module fills, 74.0 x
+    23.5 mm. Read off the front render of the EX4400-48P (Figure 25, g022647, 1500 x 199 px, the
+    chassis 441.7 mm across at 2.94 px/mm and 43.7 mm tall at 2.92 px/mm). The recess is 363.8 to
+    437.8 across and 17.7 to 41.2 down. The guide states no dimension of the cover or of the
+    module face.
+  face: >-
+    drawing - Figure 54 (g022614), the port mode lamps close-up with the cover below them. Two
+    captive screws at the top corners, and two small ring holes below each. The screws are 4.4 mm
+    in from each side edge and 6.0 mm down. The ring holes are 3.0 mm in and 12.8 and 18.6 mm down,
+    read off the front render with the scale above. The screw head is about 5.8 mm across. The
+    colour of the panel is estimated.
+states: [absent]
+elements:
+  screw-left:
+    at: [1.5, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+  screw-right:
+    at: [66.7, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+size:
+  w: 74.0
+  h: 23.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the cover in the guide's front render. The projection
+      is not stated or measured.
+  - node: screw-right
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the cover in the guide's front render. The projection
+      is not stated or measured.
+skins: [default]

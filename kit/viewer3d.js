@@ -28,7 +28,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
          setNodeStates, nodeStates, clearLampBindings, lampBindings, setNodeFields, setNodeDisplays, restyleText,
          applyNodeAdjustments,
          setNodeLampColors, nodeLampColors, markHex,
-         setPulled as setReliefPulled, pulledPaths,
+         setPulled as setReliefPulled, pulledPaths, hidePulled,
          buildFaceRelief, bodyBoxes, pieceMesh, pieceArt, pieceFitted, shownOptions,
          applyNodeFields, fruFor,
          nodeTools, tiltOf, tiltTools, tiltGroupIn, unproject, openFrameFaces, sheetShell,
@@ -36,9 +36,11 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
+import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
 import { createLamps } from './lamps.js';
+import { openingView } from './camera-fit.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -117,7 +119,18 @@ export function createViewer(container, opts = {}) {
   // what the device HAS and have never known what a viewer has removed from it.
   // Held here so a rebuild - a config change, a swap, turning the chassis around -
   // does not quietly bolt every cover back on.
-  let PULLED = new Set();
+  // Each is {path, view}: `view` is null for a part taken off on every face that
+  // has it, and the face's name for one taken off on that face alone.
+  let PULLED = new Map();
+  const pulledKey = (view, path) => `${view ?? ''}\0${path}`;
+  const pushPulledToRelief = () => setReliefPulled([...PULLED.values()].map(x => x.path), SCOPE,
+                                                   [...PULLED.values()].map(x => x.view));
+  // is `path`, in the face `view`, off: by name for every face, or for this one?
+  const isOffOn = (path, view) => {
+    for (const {path: p, view: v} of PULLED.values())
+      if ((v == null || v === view) && (path === p || path.startsWith(p + '/'))) return true;
+    return false;
+  };
   // How to redraw each texture that came from a node's own art, collected during
   // the build. Emptied on every rebuild: the materials it points at are disposed.
   let RESTYLE = [];
@@ -549,7 +562,7 @@ export function createViewer(container, opts = {}) {
     setNodeStates(STATES, SCOPE);
     // and what is off stays off, for the same reason and at the same moment: the
     // faces and the relief are both cut from a document that already knows
-    setReliefPulled(PULLED, SCOPE);
+    pushPulledToRelief();
     // and what is written on parts (#850). setFields before the first scene has
     // nothing to repaint and returns before it reaches the registry, so a host
     // that hands its fields over as it creates the viewer - a link's latch
@@ -676,6 +689,32 @@ export function createViewer(container, opts = {}) {
           return m;
         });
     }
+    // THE PIECES' ART IS RESOLVED BEFORE THE SWAP. A shown drawing is an image
+    // load, and awaited between disposing the old body and adding the new it
+    // left a frame with neither.
+    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
+    let bodyBox = null;
+    if (bx && bx.length) {
+      bodyBox = new THREE.Group();
+      const pieceTex = new Map();   // one texture per drawing, for this build
+      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
+      // own face, with what the host has written on it, says which of its
+      // options it shows. The part alone is keyed by its own path, its name.
+      let shown = {};
+      if (bx.some(b => b.when)) {
+        const doc = new DOMParser().parseFromString(
+          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
+        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
+      }
+      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
+        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
+        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
+                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
+        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
+                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
+        bodyBox.add(m);
+      }
+    }
     // the old scene stayed up while the new one was rasterising; swap it now
     clearHighlight();
     if (box) {
@@ -689,8 +728,7 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
-    const bx = COMP && COMP_ENTRY.body && COMP_ENTRY.body.boxes;
-    if (bx && bx.length) {
+    if (bodyBox) {
       // A BODY IN PIECES: the face on a thin plate and each box behind it
       // where the part says it is - the riser alone shows its PCB and its
       // connectors standing off the plate, as it does in the chassis.
@@ -714,25 +752,6 @@ export function createViewer(container, opts = {}) {
       box = new THREE.Mesh(new THREE.BoxGeometry(pl.size[0], pl.size[1], 1.2), plateMats);
       box.position.set(pl.at[0] + pl.size[0] / 2 - W / 2,
                        H / 2 - (pl.at[1] + pl.size[1] / 2), D / 2 - 0.6);
-      const bodyBox = new THREE.Group();
-      const pieceTex = new Map();   // one texture per drawing, for this build
-      // A FITTED PIECE FOLLOWS THE DRAWING (relief.js pieceFitted): the part's
-      // own face, with what the host has written on it, says which of its
-      // options it shows. The part alone is keyed by its own path, its name.
-      let shown = {};
-      if (COMP_ENTRY.body.boxes.some(b => b.when)) {
-        const doc = new DOMParser().parseFromString(
-          await svgSource(distAt(COMP_ENTRY.files[cfg]), SCOPE), 'image/svg+xml');
-        shown = shownOptions(applyNodeFields(doc.documentElement, SCOPE));
-      }
-      for (const b of bodyBoxes(COMP_ENTRY.body, W, H)) {
-        if (!pieceFitted(b, shown[COMP_ENTRY.name])) continue;
-        const m = pieceMesh(b, b.w, b.h, b.z1 - b.z0,
-                            await pieceArt(COMP_ENTRY.body, b, distAt, SCOPE, pieceTex));
-        m.position.set(b.x + b.w / 2 - W / 2, H / 2 - (b.y + b.h / 2),
-                       D / 2 - b.z0 - (b.z1 - b.z0) / 2);
-        bodyBox.add(m);
-      }
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
@@ -939,6 +958,7 @@ export function createViewer(container, opts = {}) {
   const hitIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
   const pathIndex = Object.fromEntries(ALL_VIEWS.map(v => [v, []]));
   async function buildHitIndex(cfg) {
+    const projections = [];
     for (const view of ALL_VIEWS) {
       hitIndex[view] = []; pathIndex[view] = [];
       const text = await svgSource(distAt(faceFile(devIndex, cfg, view)), SCOPE);
@@ -966,12 +986,12 @@ export function createViewer(container, opts = {}) {
         const r = TT.tiltRec(t);
         return r ? r.tilt : null;
       };
-      const rec = el => {
+      const rec = (el, path = el.dataset.path) => {
         const b = el.getBBox();
         const m = inv.multiply(el.getScreenCTM());
         const pts = [[b.x, b.y], [b.x + b.width, b.y + b.height]]
           .map(([x, y]) => ({x: m.a * x + m.c * y + m.e, y: m.b * x + m.d * y + m.f}));
-        const r = {path: el.dataset.path, cls: el.dataset.class || '',
+        const r = {path, cls: el.dataset.class || '',
                 model: el.dataset.model || '', x0: Math.min(pts[0].x, pts[1].x), y0: Math.min(pts[0].y, pts[1].y),
                 x1: Math.max(pts[0].x, pts[1].x), y1: Math.max(pts[0].y, pts[1].y)};
         const tilt = tiltAt(el);
@@ -980,13 +1000,20 @@ export function createViewer(container, opts = {}) {
       };
       hitIndex[view] = [...svg.children]
         .filter(el => el.dataset && el.dataset.path && el.dataset.class !== 'region')
-        .map(rec);
+        .map(el => rec(el));
       // hover keeps the page's shallow index (top-level children only, smallest
       // box wins); select() needs every addressable path, because the host's tree
       // has rows for parts nested inside a module
-      pathIndex[view] = [...svg.querySelectorAll('[data-path]')].map(rec);
+      pathIndex[view] = [...svg.querySelectorAll('[data-path]')].map(el => rec(el));
+      // a projection is kept aside until every face is read: it is indexed only
+      // for a path no face draws as a part (path-index.js). The wrapper carries
+      // `data-projection`; the parts inside it carry only `data-of`
+      for (const el of svg.querySelectorAll('[data-of]'))
+        projections.push({view, proj: true, ...rec(el, el.dataset.of)});
       div.remove();
     }
+    const real = new Set(ALL_VIEWS.flatMap(v => pathIndex[v].map(e => e.path)));
+    for (const {view, ...r} of projectionRecords(real, projections)) pathIndex[view].push(r);
   }
 
   // --- picking ----------------------------------------------------------------
@@ -1129,7 +1156,10 @@ export function createViewer(container, opts = {}) {
     const {view, c, exact} = found;
     const grp = faceGroups[view];
     if (!grp) return null;
-    const w = Math.max(c.x1 - c.x0, 0.4), h = Math.max(c.y1 - c.y0, 0.4);
+    // a projection of a fibre is a point a fraction of a millimetre across: its
+    // halo gets a floor the eye can find, as 2D pads the far ring by screen px
+    const floor = c.proj ? 2.4 : 0.4;
+    const w = Math.max(c.x1 - c.x0, floor), h = Math.max(c.y1 - c.y0, floor);
     // Local x=0 is the centre of the face the relief was built on, which for a
     // rack face is the 482.6 mm plate. Centring on the 434 mm body put the
     // halo 24.3 mm to the right of everything on the front - one ear.
@@ -1141,7 +1171,12 @@ export function createViewer(container, opts = {}) {
     // A PART ON A FACET: the halo takes the part's true box and stands in its
     // tilt frame - inside the owning FRU's group when that is tilted already,
     // so it rides the optic out. The frame below keeps the front-view centre.
-    const owner = FRU_GROUPS[fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k))];
+    // Only an owner that stands on the face the part was found on: a rear
+    // fibre's owning cassette is a front FRU, and its group's frame is the
+    // front's - a halo parented there lands on the front, mirrored.
+    const ownerPath = fruFor(path, k => Object.prototype.hasOwnProperty.call(FRU_GROUPS, k));
+    const ownerView = ownerPath && FRU_META[ownerPath] && FRU_META[ownerPath].view;
+    const owner = ownerPath && (!ownerView || ownerView === view) ? FRU_GROUPS[ownerPath] : undefined;
     let into = owner || grp, hw = w, hh = h, hx = lx, hy = ly;
     if (c.tilt) {
       const u = unproject({x: c.x0, y: c.y0, w, h}, c.tilt);
@@ -1266,6 +1301,18 @@ export function createViewer(container, opts = {}) {
 
   // --- loading ----------------------------------------------------------------
 
+  // THE OPENING VIEW, FITTED (camera-fit.js says why a multiple of the span is
+  // not enough). The limits that follow the camera move with it: a 7 ft manager
+  // sits 2500+ mm out, past the dolly limit and the far plane a 1U box needs.
+  function openOn(w, h, d, span) {
+    const v = openingView({W: w, H: h, D: d, fov: camera.fov, aspect: camera.aspect, span});
+    controls.maxDistance = v.maxDistance;
+    camera.far = v.far;
+    camera.updateProjectionMatrix();
+    camera.position.set(...v.position);
+    controls.target.set(0, 0, 0);
+  }
+
   // The component index does NOT depend on the device, so loading it does not
   // belong behind either mode's "did the subject change" guard - that is what
   // made every device switch pull 2 MB of device-independent data down again.
@@ -1301,9 +1348,7 @@ export function createViewer(container, opts = {}) {
       // The span is stable: every device now opens at about 22 degrees.
       // The same framing the component path below already uses, rather than a
       // third set of constants: one opening view, two callers.
-      const span = Math.max(W, H, D);
-      camera.position.set(span * 0.9, span * 0.8, span * 1.6);
-      controls.target.set(0, 0, 0);
+      openOn(W, H, D);
     }
     CFG = config || devIndex.default;
     await build(CFG);
@@ -1320,10 +1365,8 @@ export function createViewer(container, opts = {}) {
       if (!COMP_ENTRY) throw new Error(`unknown component ${COMP}`);
       W = COMP_ENTRY.size.w; H = COMP_ENTRY.size.h;
       D = COMP_ENTRY.body ? COMP_ENTRY.body.depth : Math.max(COMP_ENTRY.size.d || 2, 2);
-      const span = Math.max(W, H);
-      camera.position.set(span * 0.9, span * 0.8, span * 1.6);
-      camera.near = 5; camera.updateProjectionMatrix();
-      controls.target.set(0, 0, 0);
+      camera.near = 5;
+      openOn(W, H, D, Math.max(W, H));   // a component's span has never counted its depth
     }
     CFG = skin || COMP_ENTRY.skins[0];
     await build(CFG);
@@ -1486,26 +1529,35 @@ export function createViewer(container, opts = {}) {
   // 1.0-1.4 s rebuild. What it cannot do is un-extrude relief that was already
   // built, so anything with a body gets hidden in the scene as well - and on the
   // NEXT rebuild it is dropped at extraction and the geometry never exists.
-  async function applyPulledNow(paths) {
-    const next = new Set();
-    for (const p of paths || []) if (p) next.add(String(p));
+  //
+  // `views` is optional and sits beside `paths`: the view each path is off on, or
+  // one view for all of them. Two views can place one id, and a path with a view
+  // is hidden on that face alone; one with none is hidden on every face that has
+  // it, as it was before the argument existed.
+  async function applyPulledNow({paths, views}) {
+    const next = new Map();
+    (paths || []).forEach((p, i) => {
+      if (!p) return;
+      const v = Array.isArray(views) ? views[i] : views;
+      const view = v == null ? null : String(v);
+      next.set(pulledKey(view, String(p)), {path: String(p), view});
+    });
     const changed = new Set();
-    for (const p of new Set([...PULLED, ...next]))
-      if (PULLED.has(p) !== next.has(p)) changed.add(p);
+    for (const k of new Set([...PULLED.keys(), ...next.keys()]))
+      if (PULLED.has(k) !== next.has(k)) changed.add((PULLED.get(k) || next.get(k)).path);
     PULLED = next;
     if (!changed.size || !box) return 0;
-    setReliefPulled(PULLED, SCOPE);
-    const isOff = path => {
-      for (const p of PULLED) if (path === p || path.startsWith(p + "/")) return true;
-      return false;
-    };
+    pushPulledToRelief();
+    const isOff = isOffOn;
     // geometry first: a body that was extruded before the part came off is still
     // in the scene, and no amount of repainting a texture removes it
     // A FRU group is keyed by its BAY - 'mid-sff-0' - and the tree pulls the
     // MODULE in it - 'mid-sff-0/module'. The prefix test runs the other way, so
     // an unseated drive kept its body in the scene and the control did nothing.
-    for (const [path, g] of Object.entries(FRU_GROUPS))
-      g.visible = !isOff(path) && !isOff(path + '/module');
+    for (const [path, g] of Object.entries(FRU_GROUPS)) {
+      const view = FRU_META[path] && FRU_META[path].view;
+      g.visible = !isOff(path, view) && !isOff(path + '/module', view);
+    }
     // AND THE RELIEF OF EVERYTHING THAT IS NOT A FRU, which is where this used
     // to stop. Only modules get a subgroup of their own, because only a module
     // leaves a bay behind it; a bolted-on cover is merged into the shared relief
@@ -1519,21 +1571,20 @@ export function createViewer(container, opts = {}) {
     // a pulled cover only LOOKED gone because its top texture repainted
     // transparent, and its 1 mm of sides stayed. A pulled tray kept its dark
     // back plane and walls, which read as a slab over the board. Walk both.
-    for (const root of [box, reliefGroup]) if (root) root.traverse(o => {
-      const p = o.userData && o.userData.portrayalPath;
-      if (p) o.visible = !isOff(p);
-    });
+    // A mesh is on the face whose group it hangs under, and a part pulled on one
+    // face stays on the other (relief.js hidePulled).
+    for (const root of [box, reliefGroup]) if (root) hidePulled(root, SCOPE);
     // a texture is only touched if the change is actually in it
     const touches = text => [...changed].some(p => text.includes(`data-path="${p}"`));
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE, e.view)); n++; }
       catch (err) { console.warn('[portrayal] pull repaint failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.svgText = restyleText(rec.svgText, SCOPE, rec.key);
       rec.rev++;
       await refineFace(rec, rec.level);
       n++;
@@ -1559,7 +1610,7 @@ export function createViewer(container, opts = {}) {
       catch (err) { console.warn(`[portrayal] 3D ${kind} sync failed`, err); return 0; }
     }));
   }
-  const setPulled = paths => coalesce('pulled', paths, applyPulledNow);
+  const setPulled = (paths, views) => coalesce('pulled', {paths, views}, applyPulledNow);
   const setStates = map => coalesce('states', map, applyStatesNow);
   const setFields = map => coalesce('fields', map, applyFieldsNow);   // same queue: latest wins
   const setLampColors = map => coalesce('lamps', map, applyLampColorsNow);
@@ -1584,12 +1635,12 @@ export function createViewer(container, opts = {}) {
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE, e.view)); n++; }
       catch (err) { console.warn('[portrayal] display repaint failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.svgText = restyleText(rec.svgText, SCOPE, rec.key);
       rec.rev++;
       await refineFace(rec, rec.level);
       n++;
@@ -1617,12 +1668,12 @@ export function createViewer(container, opts = {}) {
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE, e.view)); n++; }
       catch (err) { console.warn('[portrayal] restyle failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.svgText = restyleText(rec.svgText, SCOPE, rec.key);
       rec.rev++;
       await refineFace(rec, rec.level);
       n++;
@@ -1633,14 +1684,10 @@ export function createViewer(container, opts = {}) {
 
   async function syncLamps(changed) {
     if (!box) return;
-    const isOff = path => {
-      for (const p of PULLED) if (path === p || path.startsWith(p + '/')) return true;
-      return false;
-    };
     try {
       await LAMPS.sync({faces: LOD, entries: RESTYLE, faceGroups, fruGroups: FRU_GROUPS,
                         faceFlip: FACE_FLIP, pxmm: Math.max(PXMM, 16),
-                        restyle: t => restyleText(t, SCOPE), changed, isOff,
+                        restyle: (t, view) => restyleText(t, SCOPE, view), changed, isOff: isOffOn,
                         tint: rec => FACE_TINT[rec.matIndex] ?? 1});
     } catch (err) { console.warn('[portrayal] lamp animation sync failed', err); }
   }
@@ -1666,12 +1713,12 @@ export function createViewer(container, opts = {}) {
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE, e.view)); n++; }
       catch (err) { console.warn('[portrayal] restyle failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.svgText = restyleText(rec.svgText, SCOPE, rec.key);
       rec.rev++;
       await refineFace(rec, rec.level);
       n++;
@@ -1731,12 +1778,12 @@ export function createViewer(container, opts = {}) {
     let n = 0;
     for (const e of RESTYLE) {
       if (!touches(e.svgText)) continue;
-      try { await e.run(restyleText(e.svgText, SCOPE)); n++; }
+      try { await e.run(restyleText(e.svgText, SCOPE, e.view)); n++; }
       catch (err) { console.warn('[portrayal] field repaint failed', err); }
     }
     for (const rec of LOD) {
       if (!touches(rec.svgText)) continue;
-      rec.svgText = restyleText(rec.svgText, SCOPE);
+      rec.svgText = restyleText(rec.svgText, SCOPE, rec.key);
       // the same revision bump the state and pull setters use: a refine already
       // in flight captured the old text, and must not land over this one
       rec.rev++;
@@ -1759,7 +1806,7 @@ export function createViewer(container, opts = {}) {
     setBackground: c => { scene.background = new THREE.Color(c); },
     states: () => ({...STATES}),
     setPulled,
-    pulled: () => new Set(PULLED),
+    pulled: () => new Set([...PULLED.values()].map(x => x.path)),
     // the generic rack ears (#909): on or off, and the plan drawn (null when
     // they are off or the device gets none - see relief.js genericEars)
     setEars, ears: () => (earPlan ? JSON.parse(JSON.stringify(earPlan)) : null),

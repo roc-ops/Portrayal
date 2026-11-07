@@ -1,0 +1,118 @@
+format: 1
+kind: module
+name: ex4600-jpsu-650-ac-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-650W-AC-AFI, a 650 W AC power supply with FRU-to-port airflow (AFI), which the guide
+  also calls back-to-front. It is a field-replaceable unit, hot-removable and hot-insertable while
+  the second supply runs. The EX4600 hardware guide lists it for the EX4600-40F-AFI. The EX4600 seats
+  two, in slots 0 and 1 at the right of the rear. The same supply is used in the QFX5100 switches.
+  The face has three lamps labelled AC, DC and !. It also has a blue handle with the label AFI, a C14
+  appliance inlet turned on its side and a black ejector lever. Never mix it with AFO supplies, DC
+  supplies or AIR OUT fan modules. The older part number is QFXC01-PWRACI-650A.
+attrs:
+  role: ac-power-supply
+  power-output-w: 650
+  airflow: back-to-front
+  input: 100 to 240 VAC, 50 to 60 Hz (guide Table 16)
+part-numbers:
+  JPSU-650W-AC-AFI (EX4600): {part: JPSU-650W-AC-AFI}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): AC Power Supply in an EX4600
+    Switch, Table 14 (JPSU-650W-AC-AFI, also QFXC01-PWRACI-650A, FRU-to-port airflow, blue handle),
+    Figure 21 (an isometric drawing), Figure 22 (the handle), Figure 23 and Table 15 (the lamps) and
+    Table 16 (the AC power figures). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021),
+    ordering table: JPSU-650W-AC-AFI, AC 650 W PSU, back-to-front airflow. The key of part-numbers
+    carries the suffix (EX4600) so that its DCIM module type does not share a file with the same part
+    number in another line's slice.
+  size: >-
+    photo-measured - Juniper's EX4600 rear studio photograph (ex4600-rear-high.jpg, 1500 x 151 px),
+    which shows one of these supplies in slot 0. The whole body measures 1454 x 145 px, an aspect of
+    10.03 against the guide's 10.09 (0.6 percent out), read at 3.298 px/mm across and 3.318 down. The
+    supply's dark face runs from 1062.5 to 1243 px: 54.7 mm. The slot opening is 5.5 to 144 px, 41.7
+    mm, and the face fills it less a frame; 40.5 mm is written, which is the height Figure 25 (the DC
+    faceplate drawn flat, aspect 1.35 at 54.7 mm wide) gives for the same slot.
+    juniper/jpsu-650w-ac-ai@1 measures 54.6 x 40.2 on a QFX5120 photograph.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide for the supply's dimensions and weight: Figure
+    21 is an isometric drawing with no scale and no table gives a size. No depth is written.
+  face: >-
+    photo-measured - the same photograph, read at 23.1 px/mm: a vent field of three columns of two
+    black cells at the left, three lamps in a column with the legends AC, DC and ! to their right, a
+    vertical handle strip carrying the label AFI, the C14 inlet turned on its side, and the ejector
+    lever at the lower right. The sticker with the serial number and its bar code, and the cord
+    retainer wire, are not drawn: the first is a label and the second is cable furniture. The inlet
+    placement is that of the QFX5100 supply (32.4, 7.4, turned 270) moved left 5.9 mm and down 4.2
+    mm, to centre it at 40.5 mm across and 21.6 mm down as the photograph shows; the QFX5100
+    placement overran this 54.7 mm face.
+  drawing-vs-photo: >-
+    photo-measured - the guide's Table 14 gives the handle of this supply as blue and of the AFO
+    supply as orange ("either a power supply has the label AFI or a blue handle"). The photograph
+    shows this supply with a dark handle strip carrying the white label AFI and no blue. The table is
+    followed and the label is drawn too; a dark handle with a label is also a shipped build. The
+    colour is the field handle-finish.
+  handle: >-
+    estimated - the blue is the median of the fan module faces in the same photograph, #88bcda,
+    because the guide states the colour as blue and no photograph shows a blue supply handle.
+  power-output-w: >-
+    datasheet - guide, AC Power Supply in an EX4600 Switch: the AC power supply is 650 W. An OUTPUT,
+    since a supply provides power.
+  leds: >-
+    datasheet - guide, Table 15: AC OK is green when power comes into the supply, DC OK is green when
+    it sends power out correctly, and the Fault lamp is amber on an error; each is unlit otherwise.
+  airflow: >-
+    datasheet - guide, Table 14: JPSU-650W-AC-AFI is FRU-to-port airflow with a blue handle. The
+    datasheet calls it back-to-front.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [26.5, 11.6], rotate: 270}
+elements:
+  led-ac:
+    at: [4.8, 21.7]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-dc:
+    at: [4.8, 28.4]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [4.8, 35.7]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [23.1, 1.3]
+    size: [6.9, 39.0]
+    class: latch
+  lever:
+    at: [48.8, 20.5]
+    size: [5.9, 19.5]
+    class: latch
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#88bcda'}
+size:
+  w: 54.7
+  h: 40.5
+size-confidence: {w: photo-measured, h: drawing}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    confidence: estimated
+    source: photo - the handle stands proud of the face; its projection is not measured
+skins: [default]

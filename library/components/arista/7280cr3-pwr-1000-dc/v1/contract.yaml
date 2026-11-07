@@ -1,0 +1,82 @@
+format: 1
+kind: module
+name: 7280cr3-pwr-1000-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1000 W DC power supply of the Arista 7280CR3-32D4, PWR-1011-DC-RED (forward airflow, red
+  handle). It is a 1RU module, 73.5 mm wide, with the fan guard and red diagonal handle of the AC
+  supply and a terminal block in place of its inlet. The block has the two poles the guide's
+  section 4.4.2.2 names, negative (-48V) and positive (RTN). The protective earth terminal is on
+  the other side of the module and is not drawn.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1011-DC-RED: {part: PWR-1011-DC-RED}
+attrs:
+  power-output-w: 1000
+  input: dc
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-note: '-40 to -60 VDC, 30 A'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height, as arista/7280cr3-pwr-1000-ac: the data
+    sheet (03-0045-59) describes the part as "PWR-1011-DC-RED  Arista PSU, 1RU, DC/DC, 1000W,
+    FORWARD, 73.5MM".
+  part-number: >-
+    datasheet - ordering information for the 7280CR3-32D4: "PWR-1011-DC-RED  Arista PSU, 1RU,
+    DC/DC, 1000W, FORWARD, 73.5MM". The data sheet lists no DCS-7280CR3-32D4 SKU for a DC build
+    (the "-F" and "-R" SKUs are "2 x AC"): the DC supply is a spare, and the "#" configurable orders
+    take it. The quick start guide's table 3 lists PWR-1011-DC and table 4 gives it as a supported
+    supply of the CR3-32D4.
+  power-output: >-
+    datasheet - the "1000W" of the ordering description, and "Output Power 1000W" in the data
+    sheet's power supply table. An output.
+  input: >-
+    datasheet - quick start guide table 3: PWR-1011-DC "-40 to -60 VDC, 30 A". The data sheet's
+    power supply table gives "-48 to -60V DC", 94 percent efficiency and an "AWG #6 Max" input;
+    the guide's table 7 gives the wire as 6 to 8 AWG (16.0 to 10.0 mm2) and the tightening torque
+    as 2.7 N-m (24 in-lbs). The two documents state the input voltage differently (-40 against
+    -48 at the low end); the guide's is written, and the data sheet's is in this note.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. The guide holds no flat picture of a PWR-1011-DC. Its
+    figure 4-7 is an isometric drawing of a DC supply with a red terminal cover and two wires,
+    which carries no measure. The guard, handle, latch and lamp are drawn as the AC supply's
+    (figure D-2, the AC module of the same housing), and the terminal block is a plain two-pole
+    block following figure 4-7's -48V and RTN terminals. The real arrangement (table 7 note 2:
+    "twin #10 studs spaced for dual-hole lug with 5/8 inch hole spacing") is not drawn and is a gap
+    on the device.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow.
+  handle-finish: >-
+    As the AC supply: a field, `handle-finish`, default `#a32a38`.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [49.5, 12.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [49.5, 27.1]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

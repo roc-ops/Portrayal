@@ -25,13 +25,13 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
-from portrayal.manifest import load_yaml
+from portrayal.manifest import load_yaml, offers
 
 from portrayal.faces import BODY_SIDES, DIRECTIONS, face_ref, side_viewbox  # noqa: E402
 from portrayal.render import (SVG_NS, STATE_CSS, Library, instance_group,  # noqa: E402
                     seq_css_name, state_rule, component_cages, component_presents,
                     _pluggable_families, _pluggable_candidates,
-                    _connector_registry, display_elements)
+                    _connector_registry, display_elements, component_dc_ports)
 from portrayal import libwalk  # noqa: E402
 from portrayal import redirects  # noqa: E402
 from portrayal import optical, optical_ports  # noqa: E402
@@ -253,9 +253,13 @@ def seated_in_bays(roots):
     told instead, gathered the way named_as_faces gathers faces.
     """
     found = set()
+    candidates = []
 
     def take(bay):
-        found.update(r for r in bay.get("accepts") or [] if isinstance(r, str))
+        if bay.get("interface") and not candidates:
+            candidates.append(_pluggable_candidates(roots))
+        found.update(r for r in offers(bay, candidates[0] if candidates else None)
+                     if isinstance(r, str))
         if isinstance(bay.get("default"), str):
             found.add(bay["default"])
 
@@ -398,6 +402,11 @@ def main():
                 "size-confidence": data.get("size-confidence") or {},
                 "size-notes": data.get("size-notes", ""),
                 "attrs": data.get("attrs") or {},
+                # THE ORDER CODES A MODULE IS SOLD UNDER (#70), in the order the
+                # contract writes them: one DCIM module type per key. Left out of
+                # an entry whose contract has none, so every other row is
+                # unchanged.
+                **({"part-numbers": data["part-numbers"]} if data.get("part-numbers") else {}),
                 # what a form can change on it - see the schema's `fields`
                 "fields": data.get("fields") or {},
                 "skins": data.get("skins", ["default"]),
@@ -431,7 +440,11 @@ def main():
                 "bays": {bid: {"at": b.get("at"),
                                "size": dict(zip(("w", "h"), b.get("size") or []))
                                if isinstance(b.get("size"), list) else b.get("size"),
-                               "accepts": b.get("accepts") or [],
+                               # EVERY REF THE BAY TAKES (manifest.offers): the
+                               # list it states and, for a bay that states an
+                               # `interface`, every part that mates it and fits
+                               "accepts": offers(b, candidates),
+                               **({"interface": b["interface"]} if b.get("interface") else {}),
                                **({"default": b["default"]} if "default" in b else {}),
                                # A TURNED SLOT - riser 3a's two carry `rotate: 180`,
                                # the card upside down in them - is placed turned by the
@@ -505,6 +518,15 @@ def main():
                                     face=ref in faces_named, module=ref in in_bays)
             if cages:
                 entry["cages"] = cages
+            # ITS DC PORTS (docs/dc-power-design.md 5.2), in the order the
+            # contract states them and in the part's own frame: a path is the
+            # port's id, under the part. A device's configs.json carries the same
+            # ports with the placement's override applied and a path a
+            # drawing addresses. Omitted when the contract states none, like
+            # `cages`.
+            ports = component_dc_ports(data)
+            if ports:
+                entry["dc-ports"] = ports
             # WHAT IT PRESENTS WHEN SEATED (#611): a plug's boot point, a
             # single-bore optic's bore - the slot at its own key that the build
             # seats a chained tier in. Omitted when it presents nothing.

@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: hsd13-finger
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One plastic finger of the Hubbell SD-Series HSD13 horizontal cable manager, seen from the
+  front. It is a finger of the slotted wall and stands from the base to the cover. It can
+  be taken out where a cable needs to enter the manager.
+provenance:
+  size: >-
+    estimated - 11.32 mm wide and 2.5 mm thick. The figure draws a row of 23 slots along the
+    long wall, 20.32 mm apart (0.8 in): counted on the figure, whose slots are 22 pitches
+    across a wall that runs the 19 in, so the pitch is read against B. The slot is taken 9.0
+    mm wide, a little under half the pitch as the figure draws it, so a finger is the pitch
+    less the slot, 11.32 mm. The sheet dimensions none of this.
+  relief: >-
+    estimated - a finger stands from the base to the cover, 76.78 mm (the sheet's C, 3.2 in,
+    less the base and the cover, 2.5 and 2.0 mm). The figure shows a bridge across each slot
+    about half way up, and slots that open at the far end; neither is drawn.
+  removable: >-
+    datasheet - "Plastic fingers can be removed where needed for cable entrance" in the
+    sheet's features. Each finger is its own part, so a finger can be taken out in the
+    explorer; the format has no way to say in a rack file which finger of a duct is gone.
+  color: >-
+    estimated - the sheet states no colour; its photograph shows a dark grey plastic.
+size: {w: 11.32, h: 2.5}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  finger: {at: [0.0, 0.0], size: [11.32, 2.5], class: bezel}
+relief:
+  features:
+    - node: finger
+      out: 76.78
+      color: '#3d4044'
+      confidence: estimated
+      source: the sheet's C, 3.2 in (81 mm), less the base and the cover; the figure draws the finger the whole depth
+skins: [default]

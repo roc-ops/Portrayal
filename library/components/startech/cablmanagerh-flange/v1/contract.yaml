@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: cablmanagerh-flange
+version: 1.0.0
+class: mechanical
+description: >-
+  The top or bottom flange of a StarTech.com CABLMANAGERH 1U manager seen from above or below -
+  the panel's edge folded back behind the rack rails between the ears, drawn as the well that
+  builds it one sheet in from the top or bottom of the envelope
+provenance:
+  size: >-
+    drawing - CABLMANAGERH_Diagram.pdf (StarTech.com, third angle projection): the side view
+    draws the ears' line and, between the ears, a second line 6.21 behind it, the dimension the
+    drawing gives. The fold is 7.41 deep from the panel's front face to its back edge: the 6.21
+    and the 1.2 mm sheet (estimated). It runs between the ears, 420.6 long: the ears measure 31.0
+    each in the side view, scaled at 2.58 px/mm against the 482.60, and are estimated.
+  depth: >-
+    estimated - 1.2 mm, the sheet. No CABLMANAGERH document states a gauge; the maker's
+    CMBRUSH1U section states t=1.2 for its panel.
+  color: >-
+    datasheet - "Color: Black", "Steel construction". The drawing is line work, so the shade is
+    this library's render of black steel.
+size: {w: 420.6, h: 7.41, d: 1.2}
+size-confidence: {w: estimated, h: drawing, d: estimated}
+relief: {wall: '#1b1d20'}
+elements:
+  flange: {at: [0.0, 0.0], size: [420.6, 7.41], class: bezel}
+skins: [default]

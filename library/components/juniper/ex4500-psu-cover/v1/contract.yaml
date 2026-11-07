@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: ex4500-psu-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The power supply cover panel of the Juniper EX4500 switches. Every model ships with one supply and a
+  cover panel in the second supply slot. The panel is a plain grey plate with a captive screw at each
+  end. The guide gives no part number and no figure for it.
+attrs:
+  weight-note: not published
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Table 3, "One power supply cover
+    panel" in the shipped components of every model, and DC Power Supply in EX4500 Switches ("A cover
+    panel is installed in the second power supply slot"). The guide draws no cover panel in any figure,
+    gives no part number, no size and no weight. The guide's own copyright and the Juniper EULA govern it;
+    it is read for facts only and nothing of it is copied.
+  size: >-
+    estimated - the panel is drawn at the size of the supply it replaces, 76.0 x 39.8 mm, because it fills
+    the same bay.
+  face: >-
+    estimated - no figure draws the panel, so it is a plain plate with a captive screw at each end. A
+    photograph or a drawing of the real panel would replace this.
+  depth: >-
+    estimated - not stated. No depth is written.
+states: [absent]
+elements:
+  screw-left:
+    at: [3.2, 16.4]
+    size: [7.0, 7.0]
+    class: screw
+  screw-right:
+    at: [65.8, 16.4]
+    size: [7.0, 7.0]
+    class: screw
+size:
+  w: 76.0
+  h: 39.8
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the cover screws stand proud of the panel; the projection is not measured
+skins: [default]

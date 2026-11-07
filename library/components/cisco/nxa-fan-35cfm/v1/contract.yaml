@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: nxa-fan-35cfm
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan module of the Cisco Nexus 93180YC-FX3 and 93180YC-FX3S fixed switches, ordered as
+  NXA-FAN-35CFM-PI (port-side intake, burgundy) or NXA-FAN-35CFM-PE (port-side exhaust,
+  blue). It has two rotors behind a honeycomb grille, two coloured squeeze latches across its
+  middle and a status lamp in the upper left corner.
+size: {w: 39.9, h: 39.3}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'NXA-FAN-35CFM'
+  power-absent: not-published
+  rotors: 2
+  weight-kg: 0.12
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - the Cisco N93180YC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2021-02-16, Last Modified 2026-07-27), Overview: "Port-side exhaust fan module
+    with blue coloring (NXA-FAN-35CFM-PE)" and "Port-side intake fan module with burgundy
+    coloring (NXA-FAN-35CFM-PI)", and "Each fan module has two rotors". The N93180YC-FX3S
+    guide (First Published 2020-07-22, Last Modified 2026-07-27) says the same. THE AIRFLOW
+    SUFFIX IS DROPPED from the model, as on cisco/nxa-fan-30cfm@1: the two differ in the
+    latch colour, which is the `latch-finish` field. The weight is the guide's weights
+    table, 0.26 lb (0.12 kg), the same in both guides. This is NOT the NXA-SFAN-35CFM of the
+    93108TC-FX3 guide, which that guide gives 0.28 lb (0.13 kg).
+  power: >-
+    NOT PUBLISHED. Searched both guides' specification appendices (Switch Power Input
+    Requirements, the three supply tables) for a per-module fan figure; they give only the
+    whole switch (375 W typical, 600 W maximum). L29 stands on it at the chassis.
+  size: >-
+    estimated - no guide states a fan module dimension. Read off the guide's rear figure
+    (the 502823 artwork, 1291 x 549 px in the converted set, the switch body 1257 px across
+    for the guide's 439.4 mm, 2.861 px per mm, and 126 px down for 43.7 mm, 2.883 px per
+    mm): the frame of fan 1 runs 114.1 px across and 113.3 px down, 39.9 by 39.3 mm. The
+    pitch is the better number, 130 px, 45.4 mm between modules. The sibling
+    cisco/nxa-fan-30cfm@1 reads 40.6 by 38.4 off a stencil, so the two disagree by 0.7 and
+    0.9 mm, three pixels in each axis; the guide figure is followed for this part and the
+    sibling is not edited.
+  elements: >-
+    estimated - the grille, the two latches and the hub are laid out as the guide's rear
+    figure shows them: a honeycomb disc above and another below a middle band, a latch at
+    each end of the band with a square hub between, and a small ringed mark in the upper
+    left corner. Their sizes are the sibling cisco/nxa-fan-30cfm@1's, rescaled to this
+    part's envelope; the figure is too coarse (a 40 mm module is 114 px) to read more.
+  lamp: >-
+    datasheet for the states - the guides' appendix, "Fan Module LEDs": Status green (the
+    fan module is operational), red (not operational, "fan is probably not functional"), off
+    (not receiving power). THE LAMP POSITION IS THE FIGURE'S RINGED MARK in the upper left
+    corner; the guide does not say where it is.
+  latch-colour: >-
+    datasheet for the convention - the guides' Overview: burgundy for port-side intake, blue
+    for port-side exhaust. The default burgundy and the blue a port-side-exhaust
+    configuration sets are the values cisco/nxa-fan-30cfm@1 carries; this part reads no
+    colour off any picture.
+  depth: >-
+    estimated - not stated. A dual-rotor module of this class is taken as 100 mm deep, the
+    sibling's figure, and nothing here measures it.
+states: [absent]
+elements:
+  status: {at: [3.2, 2.9], size: [2.2, 2.2], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  grille: {at: [2.4, 1.4], size: [35.1, 36.5], class: rotor}
+  latch-left: {at: [0.4, 12.7], size: [12.7, 13.6], class: latch}
+  latch-right: {at: [26.8, 12.7], size: [12.7, 13.6], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#ac2f54'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#6e1c2c'
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 26
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-35cfm@1's own elements key - the honeycomb's extent is read off the
+        guide's rear figure and the depth behind it is not stated.
+    - node: latch-left
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-35cfm@1's own elements key - the latches stand proud of the grille in
+        every picture of the family and how far is not stated; 6 mm is the sibling's figure.
+    - node: latch-right
+      out: 6.0
+      confidence: estimated
+      source: >-
+        cisco/nxa-fan-35cfm@1's own elements key - as latch-left.
+skins: [default]
+body:
+  depth: 100
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [39.9, 39.3]}

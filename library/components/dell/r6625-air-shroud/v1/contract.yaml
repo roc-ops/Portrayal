@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: r6625-air-shroud
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The air shroud of the R6625 seen from above - the black plastic band across the chassis between the fan modules and the memory
+provenance:
+  sources: >-
+    Dell's R6625 Installation and Service Manual: figure 10, whose callout 3 is
+    the air shroud, and figure 41 ("Removing the air shroud"), which shows it
+    lifting out as one long band across the chassis; and Dell's R6625 Technical
+    Guide, the interior render of its chassis-views section (figure 9), which
+    draws the shroud fitted. Each is read at about 2 px/mm from the 434.0 body
+    width and placed on the fan modules, whose housings ISM figure 11 puts at
+    plan y 471.8 to 558.
+  size: >-
+    estimated - 428.0 x 57.8 at plan x 3.5, y 420.7: the band reaches from the
+    heatsinks' front edge (plan y 420.6, ISM figure 11) back over the rear
+    edge of the fan housings (471.8), as the technical guide's render draws it
+    - it overlaps the housings by about 7 - and spans the chassis interior.
+    The outline of the real moulding is not a plain rectangle (figure 41 shows
+    steps and a raised centre) and is not resolvable here; this is the
+    bounding band, good to about 3 mm: the render's band begins at about 418,
+    which is inside that reading error of the heatsinks' 420.6 where this part
+    starts so as not to overlap them. ISM figure 11 shows the same place bare,
+    which is why the part is a removable `mounts`.
+  required: >-
+    ISM figure 41: "The air-shroud is needed for all air-cool configuration" and
+    "Never operate your system with the air shroud removed."
+size: {w: 428.0, h: 57.8}
+size-confidence: {w: estimated, h: estimated}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 0.5
+    color: '#1b1e21'
+    confidence: estimated
+    source: a moulded cover; drawn as a surface over what it covers, as dell/air-shroud-1u-16g@1 is
+elements:
+  shroud: {at: [0.0, 0.0], size: [428.0, 57.8], class: bezel}
+skins: [default]

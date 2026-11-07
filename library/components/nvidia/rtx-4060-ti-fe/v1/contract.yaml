@@ -1,0 +1,236 @@
+format: 1
+kind: module
+name: rtx-4060-ti-fe
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA GeForce RTX 4060 Ti Founders Edition, a dual-axial-fan Founders
+  Edition card that is two slots wide. The bracket face carries three
+  DisplayPort and one HDMI receptacle on the board's side, with four vent
+  panes below them. The shroud is the X-shaped Founders Edition design. Its
+  fan pocket is at the far end and its model name is printed on the other
+  pocket. The heat sink's fins show along the top edge. Its power connector is
+  a 16-pin (12VHPWR) receptacle in a notch in the top edge. It plugs into one
+  riser slot and covers the one beside it.
+slot-width: 2
+size: {w: 120.02, h: 41.91, d: 244}
+size-confidence: {w: registry, h: registry, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card in `accepts`, and no bay states `interface: pcie-fh`. The card
+  does not state `mates: pcie-fh`: the library has not begun that migration (spec/tests/test_cards_by_interface.py
+  holds it at no part until it does). No document held says any server takes a consumer card.
+attrs:
+  model: 'RTX 4060 Ti'
+  edition: 'Founders Edition'
+  role: gpu
+  form-factor: 'Full-height, two-slot, 244 mm x 112 mm'
+  pcie-connector: x16
+  pcie-height: full
+  power-draw-max-w: 165
+  power-input: 'host PCIe slot and one 16-pin 12VHPWR connector; an adapter from one PCIe 8-pin cable is in the box'
+  memory: '8 GB or 16 GB GDDR6, 128-bit (NVIDIA does not say which size the Founders Edition is)'
+  display-ports: '3 x DisplayPort and 1 x HDMI on the bracket'
+  cooling: active
+  airflow: 'axial fan on the broad side; a flow-through heat sink exhausts through the second side and the top edge'
+faces:
+  rear: {ref: nvidia/rtx-4070-fe-tail@1}
+  plan: {ref: nvidia/rtx-4070-fe-top@1}
+provenance:
+  slot-width: >-
+    datasheet - NVIDIA's RTX 4060 family page prints 2-Slot for the 4060 Ti and the user guide's step 2 says 'Remove two
+    adjacent slot covers'. The face is one plate about 41 across. The card declares `slot-width: 2` as
+    docs/pcie-two-slot-bays-design.md R1 defines it. docs/cards-by-interface-design.md (#1171) adds `mates: pcie-fh` for a
+    card; the mechanism is in the tools but a test holds every part to no `mates: pcie-fh` until the migration runs, so this
+    card does not state it.
+  sources: >-
+    NVIDIA GeForce RTX 4060 Ti Founders Edition - NVIDIA's GeForce RTX 4060 family page (fetched 2026-10-07),
+    https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4060-4060ti/ ; NVIDIA GeForce RTX 4060 Ti user guide,
+    Rev1 (vector), https://www.nvidia.com/content/geforce-gtx/GEFORCE_RTX_4060_Ti_User_Guide_Rev1.pdf ; NVIDIA's compare page,
+    https://www.nvidia.com/en-us/geforce/graphics-cards/compare/ ; NVIDIA's case-clearance diagram for this card (the
+    'case-size', 'slots' and 16-pin panels of the 'Prepare your system' section of the family page); the 3/4 pictures
+    geforce-rtx-4060-ti-hero-350-p@2x.jpg (1280 x 700), geforce-rtx-4060-ti-hero-100vp-d@2x.jpg (5120 x 2880) and
+    geforce-rtx-4060-ti-og-1200x630.jpg, all under https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ada/rtx-4060-4060ti/ ;
+    the RTX 4070 SUPER user guide, Rev1 (vector), https://www.nvidia.com/content/geforce-gtx/GEFORCE_RTX_4070_SUPER_User_Guide_Rev1.pdf
+    and NVIDIA's straight-on elevation of the RTX 4070 SUPER (1-nvidia-gf-rtx-4070-super-founders-edition-1920x1080.png under
+    https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/news/small-form-factor-sff-ready/), for the shell the two cards
+    share; PCI Express CEM 5.0 via the library's standards registry. NVIDIA publishes no dimensioned drawing of any GeForce
+    card. The pictures are NVIDIA's; their licence is not stated, so facts were read from them and no picture is copied. No 3D
+    reference is held for this card.
+  reference-images: >-
+    estimated (the broad side, borrowed from the RTX 4070 SUPER's elevation), checked on a RECTIFIED 3/4: the 5120 x 2880
+    hero is a 3/4 view, not straight-on, so nothing was scaled from it directly. The broad face is a plane, and it was
+    rectified: the four corners of the rim's outer outline (corner points found by extending the four straight rim edges,
+    because the corners are rounded) were taken in the hero at px (2760, 790), (4013, 1116), (4113, 1745) and (2790, 1867),
+    and mapped to a 244 mm by 100.3 mm rectangle (NVIDIA's stated 244 mm length; the 100.3 mm height is the 4070 SUPER
+    elevation's reading of the same shroud, NOT a figure stated for this card). In the source the face is 5.3 px per mm along
+    its top edge, 5.4 along its bottom, and 6.3 and 10.7 down its right and left edges (the near end is 1.7 times taller);
+    the output is 6.049 px per mm (0.1653 mm per pixel), the 4070 SUPER elevation's scale. The aspect was checked by the fan:
+    the fan hub reads round on the rectified face (its inner cap about 185 by 192 px, its outer rim about 221 by 217, within 4
+    percent), which it would not if 100.3 were far wrong. The rectified hero was then laid 50/50 over the 4070 SUPER's elevation: the X waist (centre at output x about
+    740 against 750), the two pockets' rims, the notch in the top edge, the fan ring (left edge at output x 862 against 878)
+    and the name's place coincide to about 15 output px, which is 2.5 mm; the hub's centre sits 34 px (5.6 mm) nearer the
+    bracket in the hero because it stands proud of the plane and is seen at an angle. THE RECTIFICATION IS A CHECK, NOT A MEASUREMENT: no figure of the skin is read from it, its error is about 3 percent
+    and it cannot see the card's thickness. The guide's page 5 is the 4070 SUPER's drawing: of the 4060 Ti page's 883 vector
+    paths all 883 are on the 4070 SUPER page (which has 7 more, the 'RTX 4070' mark by the fan).
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2, PCIe CEM 5.0 figure 11-5). h is two slots: the
+    single bracket's 21.59 plus one 20.32 slot pitch, 41.91.
+  depth: >-
+    datasheet - NVIDIA's page prints the length as 244 mm, taken from the bracket's outer face as nvidia/a100-pcie-40gb@1
+    reads the same kind of figure. The guide's clearance box agrees ('244 mm (L) x 112 mm (W) x 41 mm (H) card').
+  face-outline: >-
+    estimated - the plate is std/pcie-bracket-fh@2's as nvidia/rtx-4070-super-fe@1 draws it, with its far edge at 41.2: 120.02
+    long, the 0.8 fold at the flange end, ten-wide retention tabs on the 20.32 slot pitch with the 4.1 board-side step and the
+    V notches between them. No straight-on view of any GeForce bracket exists. The guide shows 2 tabs and a hook-shaped flange
+    that this skin does not draw. The bracket is taken to be the same part as the 4070 SUPER's (the two pages draw it with
+    identical vector paths).
+  face-ports: >-
+    drawing - the port places are read on the VECTOR figure of NVIDIA's guide for this card (page 5), from the four black
+    filled receptacle shapes and not the callout dots (the dots sit off the shapes' centres). The shapes run, in page y (pt):
+    the first DisplayPort 189.1 to 205.4 (its flange end is hidden behind the bracket's hook, so it is taken as long as the
+    next two, 20.6 pt, centre 195.1), the second 206.2 to 226.8 (centre 216.5), the third 228.4 to 249.0 (centre 238.7) and the
+    HDMI 253.4 to 270.2 (centre 261.8). On this page the flange end and tab tips fix a linear map from page y to millimetres
+    from the tab tips: 102.7 - 0.877 x (y - 199.7). The three DisplayPort receptacles are centred 106.7, 88.0 and 68.5 from the
+    tip and the HDMI receptacle 48.2. Each is good to about 2 mm (the view is oblique). The shells keep the estimated sizes
+    below, which leaves 2.3, 3.1 and 4.9 mm between them: no two touch. (The drawn shapes are 20.6 pt long, 18 mm on this
+    mapping, against 15.8 mm for the same receptacle on the 4080 SUPER page; the lengths are not taken from it.) It reads up to
+    4.0 mm from the RTX 4070 SUPER contract (batch 1) for the same drawing, because that contract took the mean of two cards'
+    pages and read the HDMI at the dot. A DisplayPort shell is drawn 16.4 long and 7.1
+    across and an HDMI shell 14.5 by 6.0: those sizes are estimated (as the RTX A6000's photographed shells). THE LIBRARY HAS NO
+    DISPLAYPORT OR HDMI PART OR INTERFACE, so each receptacle is an element of class `connector` painted in the skin and not a
+    seated part. NO STRAIGHT-ON VIEW OF ANY GEFORCE BRACKET EXISTS, so this face is the least certain part of the card.
+  face-vent: >-
+    estimated - the guide's drawing shows four grilles in a row below the ports with narrow bars between them and TWO screws at
+    the tab end, one on each slot's centre line (the RTX 4070 SUPER contract draws one: the same drawing shows two). Places are
+    read as fractions of the plate's length on the same page: the four panes from about 25 to 111 along, each 20.2 long with 1.5
+    bars, and the screws at x 17 and y 12.4 and 32.7. No hole is drawn at the flange.
+  face-markings: >-
+    estimated - the guide draws no lamp, label or printing on the bracket and no straight-on picture exists to resolve any (no
+    control in the same image can be named, so this is a gap, not a reading).
+  thickness: >-
+    datasheet - the guide prints 'x 41mm (H) card'. The shroud's far face is put at y 41.0 from the bracket's board-side datum
+    (the two-slot envelope is 41.91). Whether the 41 includes the backplate is not stated; the backplate is not drawn.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and the bracket's keyed side, are at the top (small
+    y), which is where the DisplayPorts are. The broad side drawn is the face NVIDIA's elevation of the 4070 SUPER shows and the
+    4060 Ti hero shows (model name on the left pocket, fan at the right); the guide's oblique drawing puts the fan beside the
+    bracket, which is the card's other face or the other end, and which end of the hero is the bracket's was not settled.
+  body: >-
+    estimated - the board and its edge follow PCIe CEM 5.0 (figures 6-5 and 11-3). The shroud is the 4070 SUPER's, which is the
+    photograph's and not CEM's board size: 100.34 high, x 26.73 to 127.07 anchored on the finger edge. The board box runs
+    149.1 behind the bracket, hidden by the shroud. The rectified hero agrees with that outline (provenance reference-images).
+  body-shroud: >-
+    estimated - one dark slab from the board's component face (y 6.01) to the far face (41.0), in three boxes split at the top
+    edge's notch so that the notch is a real step in 3D. Its broad side is painted as the 4070 SUPER's elevation, with
+    pockets darker than that elevation's (the hero's are near black), the model name 'RTX 4060 Ti' as plain text placed
+    where the rectified hero has it (the text starts 30.6 mm behind the bracket and runs 51 mm, baseline 38.7 from the finger
+    edge) and the maker's mark reserved as a logo-zone. The BACK of the card (its backplate and any second fan) is shown in
+    no picture and is not drawn.
+  body-fan: >-
+    estimated - the fan in the far pocket is the 4070 SUPER's: ring 90.9 mm, hub 33.1 mm, 9 blades. The hero's fan is in motion
+    blur and its blades cannot be counted; the ring agrees with the rectified hero to 2.5 mm and the hub to 5.6 mm
+    (provenance reference-images).
+  body-top-edge: >-
+    estimated - the 4070 SUPER's: dark grey end caps and, between them from 87 to 155 behind the bracket, the heat sink's fins,
+    one every 1.6 mm. The hero shows the notch in the top edge at the same place relative to the X waist as the elevation. The
+    lettering on the far cap is a maker's wordmark and is reserved as `logo-zone` in skins/body-right.svg, not drawn.
+  body-power-connector: >-
+    estimated - NVIDIA's page says 'Supplementary Power Connectors: 1x PCIe 8-pin cables (adapter in box) OR 300 W or greater
+    PCIe Gen 5 cable' and the guide's callout reads 'PCIe Gen5 16-pin Power Connector' on the TOP of the card in a notch midway
+    along it. It is the 12VHPWR receptacle. The card composes std/12vhpwr-header@1 as `aux-power` on its top face
+    (`faces.plan`, nvidia/rtx-4070-fe-top@1, the 4070 pair's, the same drawing). DCIM exports no power port for it for now: the
+    owner chose (decided 2026-10-26) to keep the header on the top face, at its true position, and the exporter reads only
+    `faces.rear`. The 3D body draws the housing in the notch (20.85 x 11.7, 9.0 deep); the notch (centred 145 behind the
+    bracket, 24 long, 4.5 deep) is the 4070 SUPER's, a guess.
+  body-end: >-
+    estimated - a closed dark end plate 1.0 thick at the far end. No photograph shows the end. The rear face (`faces.rear`,
+    nvidia/rtx-4070-fe-tail@1, the 4070 pair's) is a plain plate.
+  power: >-
+    datasheet - NVIDIA's page: 'Total Graphics Power (W) 165 or 160' for the 4060 Ti. It gives ONE figure for the family and
+    does not say which memory size the Founders Edition is, so the card is modelled once: `power-draw-max-w` is the higher, 165.
+    The page's 550 W is the required system power.
+  memory: >-
+    datasheet - '16 GB GDDR6 or 8 GB GDDR6', 128-bit. NVIDIA's family page, Memory Specs, does not say which the Founders Edition
+    is, so the attr names both and the card is modelled once.
+  part-numbers: >-
+    not stated - no document held gives an order code or part number for this Founders Edition card.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) a straight-on view of the I/O bracket (needs-photo; the whole face is estimated from
+    NVIDIA's guide drawing and the standard); (2) a straight-on view of the broad side, the top edge and the far end
+    (needs-photo; the shroud is borrowed from the 4070 SUPER's elevation and checked on a rectified 3/4); (3) the DisplayPort and
+    HDMI parts and interfaces, which the library lacks (painted, not seated); (4) the card's back and any second fan (needs-photo);
+    (5) a weight and an order code (vendor-silent); (6) PCIe generation, which no page table held states (vendor-silent); (7)
+    the lifecycle, which was not searched; (8) the dimensioned FE board outline, which NVIDIA does not publish; (9) which memory
+    size and which of 165 W or 160 W the Founders Edition is (vendor-silent: the page gives both); (10) no 3D reference is held.
+  conflicts: >-
+    CONFLICTS SETTLED: (a) NVIDIA's 165 or 160 W: the higher is filed as the maximum; (b) 8 GB or 16 GB: both are named, nothing
+    is drawn that differs; (c) the guide's page 5 is the 4070 SUPER's drawing without the 'RTX 4070' mark: its bracket and shroud
+    are the same shell and the text of the same guide is the 4060 Ti's (244 x 112 x 41, two covers); (d) the guide names the
+    connector 'PCIe Gen5 16-pin'; std/12vhpwr-header@1 is composed because the guide does not name 12V-2x6; (e) the rectified hero
+    puts the fan hub 5.6 mm nearer the bracket than the elevation does: the elevation's is kept (the hub stands proud and
+    the hero is oblique).
+body:
+  depth: 244
+  color: '#1b1b1c'
+  plate: {at: [9.80, 4.10], size: [109.40, 37.1]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.9, 1.57], from: 0.9, depth: 149.1,
+     color: '#1d2420', confidence: estimated, shows: [right],
+     source: 'CEM 5.0 board (1.57 thick, lower edge W + 13.25, top edge W + 111.15), run only as far behind the bracket as the 4070 SUPER elevation shows the board past the shroud (provenance body)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45, depth: 11.2,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key datum 57.15 behind the bracket, tab 13.25 deep, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.1, depth: 80.93,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0: the tab runs 81.88 past the key datum, to 139.03'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3, 1.67], from: 45.35, depth: 10.6,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3, 1.67], from: 58.35, depth: 70.6,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0: the x16 pad run on 1.00 pitch'}
+  - {id: shroud-a, at: [26.73, 6.01], size: [100.34, 34.99], from: 0.9, depth: 132.1,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'borrowed from the RTX 4070 SUPER contract: one slab, bracket end to the notch (provenance body-shroud); thickness stated (provenance thickness)'}
+  - {id: shroud-notch, at: [26.73, 6.01], size: [95.84, 34.99], from: 133, depth: 24,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, under the connector''s notch (4.5 deep), borrowed from the RTX 4070 SUPER contract'}
+  - {id: shroud-b, at: [26.73, 6.01], size: [100.34, 34.99], from: 157, depth: 86,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, from the notch to the end plate, borrowed from the RTX 4070 SUPER contract'}
+  - {id: end-plate, at: [26.73, 6.01], size: [100.34, 34.99], from: 243, depth: 1,
+     color: '#16171a', confidence: estimated,
+     source: 'a closed dark end plate (provenance body-end)'}
+  - {id: power-16pin, at: [113.52, 8.15], size: [9, 11.7], from: 134.57, depth: 20.85,
+     color: '#17191c', confidence: estimated,
+     source: 'std/12vhpwr-header@1''s 20.85 x 11.7 opening and 9.0 depth, in the top-edge notch (provenance body-power-connector)'}
+  - {id: bracket-tab-1, at: [0, 7.4], size: [7.27, 9.95], from: 0.3, depth: 0.9,
+     color: '#b9bcbf', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0, 27.72], size: [7.27, 9.95], from: 0.3, depth: 0.9,
+     color: '#b9bcbf', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+elements:
+  display-port-1: {at: [98.5, 6.10], size: [16.40, 7.10], class: connector}
+  display-port-2: {at: [79.8, 6.10], size: [16.40, 7.10], class: connector}
+  display-port-3: {at: [60.3, 6.10], size: [16.40, 7.10], class: connector}
+  hdmi: {at: [40.95, 6.40], size: [14.50, 6.00], class: connector}
+  vent-1: {at: [25, 15.30], size: [20.20, 23.4], class: vent}
+  vent-2: {at: [46.7, 15.30], size: [20.20, 23.4], class: vent}
+  vent-3: {at: [68.4, 15.30], size: [20.20, 23.4], class: vent}
+  vent-4: {at: [90.1, 15.30], size: [20.20, 23.4], class: vent}
+  screw-1: {at: [14.6, 10.0], size: [4.80, 4.80], class: screw}
+  screw-2: {at: [14.6, 30.3], size: [4.80, 4.80], class: screw}
+relief:
+  wall: '#b9bcbf'
+  features:
+  - node: flange-fold
+    out: 9.4
+    color: '#b9bcbf'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on std/pcie-bracket-fh@2. Not measured on this
+      bracket.
+skins: [default]

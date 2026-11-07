@@ -133,8 +133,22 @@ def test_the_accessor_answers_for_every_part_that_names_a_plan():
              if F.face_ref(yaml.safe_load(p.read_text()) or {}, "plan")]
     # 86 since the Fibrain XCU10's drawer, seen from above under the shell top.
     # 87 since the NVIDIA A100 80GB PCIe, whose plan face is its top edge.
-    assert len(named) == 87, \
-        f"expected 87 parts naming a plan drawing, found {len(named)}"
+    # 92 since the R660xs's five risers (1a, 1b, 2a, 2d, 2e) name plans
+    # 95 since the R6615's eight risers (r6615-riser-1q, -2a, -2t, -2u, -3a, -3p, -3s, -4p).
+    # 108 since the Dell R760's eleven 2U risers, BOSS-N1 module and 86 mm supply name plans.
+    # 113 with the R660xs's five risers counted on top of the R6615's and the R760's.
+    # 127 since the Dell R960's fourteen: its 2400 W and 2800 W supplies and the adapter, the rear I/O board, ten risers.
+    # 131 since the A100 40GB, H100 PCIe, H100 NVL and L4 cards.
+    # 134 since the A10, A2 and T4 cards.
+    # 135 since the RTX A4000.
+    # 139 since the V100 PCIe, P100 PCIe, P40 and P4 cards.
+    # 141 since the RTX A1000 and A400.
+    # 146 since the five GeForce Founders Edition cards.
+    # 147 since the RTX 4000 Ada.
+    # 148 since the RTX PRO 4000 Blackwell.
+    # 152 since the RTX 4080 SUPER, 4080, 4060 Ti and 3090 Founders Edition cards.
+    assert len(named) == 152, \
+        f"expected 152 parts naming a plan drawing, found {len(named)}"
 
 
 def run83(doc, path="t/contract.yaml", name="t/thing@1", lib=LIB):
@@ -260,9 +274,23 @@ def test_the_index_carries_a_parts_other_faces():
     # 141 since its ten LC holders and six multimode SC ones, each with a rear;
     # 142 since the FHD RJ45 module's punch-down rear;
     # 143 since nvidia/a100-pcie-80gb@1 declares its far end as a rear face.
+    # 164 since the Dell R760's eleven 2U risers, BOSS-N1 module and 86 mm supply name plans.
     with_faces = [e for e in entries if e.get("faces")]
-    assert len(with_faces) == 143, \
-        f"expected exactly 143 of {len(entries)} entries to carry a faces " \
+    # 148 since the R660xs's five risers
+    # 151 since the R6615's eight risers each carry the plan of the R660 riser they match.
+    # 169 with the R660xs's five risers counted on top of the R6615's and the R760's.
+    # 183 since the Dell R960's fourteen modules that name a plan (see the count above).
+    # 188 since the A100 40GB, H100 PCIe, H100 NVL, L40S and L4 cards.
+    # 194 since the L40, A30, A10, A2, T4 and H200 NVL cards.
+    # 199 since the Quadro RTX 8000 and 6000 passive, RTX A6000, A5000 and A4000 cards.
+    # 203 since the V100 PCIe, P100 PCIe, P40 and P4 cards.
+    # 207 since the RTX A5500 and A4500 (a rear face each) and the RTX A1000 and A400 (a plan each).
+    # 212 since the five GeForce Founders Edition cards.
+    # 216 since the RTX 6000, 5000, 4500 and 4000 Ada cards (the RTX 2000 Ada has none).
+    # 218 since the RTX PRO 5000 and RTX PRO 4000 Blackwell (a rear face each, and a plan for the 4000).
+    # 222 since the RTX 4080 SUPER, 4080, 4060 Ti and 3090 Founders Edition cards.
+    assert len(with_faces) == 222, \
+        f"expected exactly 222 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

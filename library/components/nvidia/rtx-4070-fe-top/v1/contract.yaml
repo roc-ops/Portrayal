@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: rtx-4070-fe-top
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The top edge of the RTX 4070 and RTX 4070 SUPER Founders Edition cards, seen from outside. The 16-pin power connector
+  is in its notch. This is the card's `faces.plan`. It composes the connector that the
+  adapter's plug mates.
+size: {w: 39.23, h: 244}
+size-confidence: {w: estimated, h: datasheet}
+size-notes: >-
+  THE TOP EDGE SEEN FROM OUTSIDE, which is the side the connector faces. The drawing runs the card's length behind the
+  bracket's outer face (y' = mm behind it) and the card's estimated thickness across (x' = the card's y less 1.77, so the
+  backplate is at the left, as nvidia/a100-pcie-80gb-top@1 has it). It follows that part in using `faces.plan` for the top
+  edge, which docs/connectors-gpu-design.md section 7 names as the place for a connector off the bracket.
+attrs: {media: gpu}
+parts:
+  - {ref: std/12vhpwr-header@1, id: aux-power, at: [1.8, 139.15], rotate: 90}
+provenance:
+  size: >-
+    datasheet - the length is the card's stated length; the width is the
+    card's estimated thickness, see size-notes.
+  connector: >-
+    estimated - NVIDIA's guide figure draws the 16-pin receptacle on the top
+    of the card, in a notch about midway along it, and gives no dimension. The
+    notch's place is read on the 3/4 pictures (4070 SUPER) or scaled from it
+    (4090); the connector's centre is put 145 behind the bracket and 14.0 from
+    the board's back face, turned so its 20.85 side runs along the card.
+    std/12vhpwr-header@1 presents pcie-12vhpwr, which generic/pcie-16pin-
+    plug@1 mates. CEM 5.1 cards would use std/12v-2x6-header@1; NVIDIA's guide
+    for these cards says PCIe Gen5 16-pin and the 12VHPWR drawing.
+elements: {}
+skins: [default]

@@ -1,0 +1,91 @@
+format: 1
+kind: module
+name: ex8200-pwr-ac2k
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8200-PWR-AC2K, the 2000 W AC power supply of the EX8200 chassis. It delivers 2000 W from a
+  high-voltage line (200 to 240 VAC) and 1200 W from a low-voltage line (100 to 120 VAC), at 52 VDC. The face has
+  a C19 appliance inlet at the upper left, an ENABLE switch, the INPUT OK, OUTPUT OK and FAIL lamps, a vent field,
+  a handle and a captive screw. Up to six fit an EX8208 or EX8216, in slots PSU 0 to PSU 5, any slot in any
+  order. Each has its own fan and a dedicated AC feed, and is hot-insertable and hot-removable. Never mix them
+  with DC supplies.
+attrs:
+  role: ac-power-supply
+  power-output-w: 2000
+  power-output-low-line-w: 1200
+  airflow: front-to-back
+  input: 100 to 120 VAC (13.8 A, 1200 W) or 200 to 240 VAC (12 A, 2000 W), 50 to 60 Hz; output 52 VDC
+part-numbers:
+  EX8200-PWR-AC2K: {part: EX8200-PWR-AC2K}
+provenance:
+  sources: >-
+    datasheet - EX8208 Switch Hardware Guide (PDF dated 2020-12-16): AC Power Supply Description, Figures 10 to 12,
+    Table 25 (the lamps) and Table 26 (the electrical figures); the face drawn flat in Figure 3 and Figure 4.
+    EX8208 Ethernet Switch Datasheet (1000261-022-EN, June 2015): the ordering table names EX8200-PWR-AC2K,
+    "AC power supply, 2000 W at 220 V (1200 W at 110 V), redundant (AC power cords sold separately)". The guide's
+    CLI name is EX8200-AC2K; the datasheet's is carried, since it is what is ordered.
+  size: >-
+    estimated - read off Figure 3 of the EX8208 guide (flat, 3.479 px/mm anchored on the 17.25 in body, which
+    passes the aspect gate at 0.4 percent): a supply slot is 70.1 mm wide on a 71.0 mm pitch and 104.0 mm high.
+    The guide dimensions no supply (Table 7 gives the chassis only and no supply table gives a size).
+  face: >-
+    estimated - Figure 3 read at 3.479 px/mm: the inlet box 29.3 x 25.0 mm with its centre 21.0 mm across and
+    23.5 down, the ENABLE switch 10.9 x 15.0 mm at 46.3, 12.4, the three lamps at 44.3, 50.6 and 56.9 mm across and
+    32.0 down, the vent field 4.6 to 63.5 mm across and 41.0 to 83.1 down, the captive screw at 46.6, 92.3. About 1
+    mm. Figures 10 to 12 are isometric and are used for the names only.
+  inlet: >-
+    datasheet - AC Power Cord Specifications: "The coupler type is C19 as described by IEC 60320", so the
+    appliance inlet is the registry's C20 (std/c20-inlet), which mates a C19 coupler. Each inlet is 16 A rated.
+  power-output-w: >-
+    datasheet - guide Tables 4 and 26 and the datasheet: 2000 W from a high-voltage line, 1200 W from a low-voltage
+    line, which is the second rating. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 25: INPUT OK is green on a high-voltage line and yellow on a low-voltage line (2000 W
+    supplies only), unlit with no input; OUTPUT OK is green when the output is in range and yellow when the system
+    has disabled the supply; FAIL is yellow on steadily for a failed supply and blinking when demand exceeds the
+    supply, unlit when it is working.
+  legends: >-
+    drawing - Figure 12 prints INPUT OK, OUTPUT OK and FAIL under the lamps and ENABLE beside the switch; the
+    text is too small to place, so each legend is centred under its lamp.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [4.8, 11.3], attrs: {function: AC input}}
+elements:
+  switch:
+    at: [46.3, 12.4]
+    size: [10.9, 15.0]
+    class: switch
+  led-input-ok:
+    at: [43.3, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: high-line, color: '#22c55e'}, {name: low-line, color: '#eab308'}]
+  led-output-ok:
+    at: [49.6, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: disabled, color: '#eab308'}]
+  led-fail:
+    at: [55.9, 31.0]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: failed, color: '#eab308'}, {name: overloaded, color: '#eab308', behavior: blinking}]
+  handle:
+    at: [8.0, 94.5]
+    size: [22.0, 6.0]
+    class: latch
+  screw:
+    at: [44.0, 89.7]
+    size: [5.2, 5.2]
+    class: screw
+size:
+  w: 70.1
+  h: 104.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

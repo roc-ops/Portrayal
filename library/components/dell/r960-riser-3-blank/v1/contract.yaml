@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: r960-riser-3-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  The riser 3 blank of the PowerEdge R960 - the vented plate across riser 3's place where no riser 3 is
+  fitted (the basic entry configurations)
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - a plate.
+  sources: >-
+    photo-measured - the R960 technical guide's figure 7 (rear view of the basic configuration, R1C + R4C,
+    600 ppi, not orthographic - read for shape only) shows the plate; ISM figure 11's table calls the
+    position "riser 3" and the ISM has no separate blank procedure for it.
+  size: >-
+    photo-measured - riser 3's extent on ISM figure 10, 104.3 x 84.0 (see dell/r960-riser-3b-cage@1).
+  vents: >-
+    estimated - a regular grid of 18 columns by 15 rows of 3.4 mm openings on a 5.3 x 5.0 pitch, counted off
+    figure 7 (eighteen across, about fifteen down); the figure's resolution does not give a pitch to
+    better than 0.3 mm.
+size: {w: 104.3, h: 84.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [104.3, 84.0]
+    class: bezel
+    description: the vented plate over riser 3's empty place
+skins: [default]

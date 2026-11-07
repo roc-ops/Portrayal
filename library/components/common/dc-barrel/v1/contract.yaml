@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: dc-barrel
-version: 1.0.1
+version: 1.0.2
 class: inlet
 interface: dc-barrel
 description: DC barrel power inlet
@@ -11,8 +11,10 @@ provenance:
   size: photo-measured (HLX-TGV rear panel)
   interface: >-
     A RULING, NOT A READING. The library treats the DC barrel jack as ONE nominal connector,
-    `dc-barrel`: barrel diameters vary by product, and no document held for any of the four
-    devices that place this part states one. The interface is presented at a `mate` point
+    `dc-barrel`: barrel diameters vary by product, and of the six devices that place this part
+    (halny/hlx-tgv, nokia/xs-010x-r, nokia/xs-010xr-p, telco-systems/tm-280,
+    mikrotik/crs326-24g-2s-plus-rm, mikrotik/css326-24g-2s-plus-rm) only the CSS326-24G-2S+RM
+    quick guide states one, 5.5 mm outside and 2 mm inside. The interface is presented at a `mate` point
     at the coordinates of the existing `power` point, the centre of the bore; `power` is
     kept. (Lint L11 asks a part that states an interface for a point named `mate`, so
     `interface-at: power` alone is refused.) The voltage and the

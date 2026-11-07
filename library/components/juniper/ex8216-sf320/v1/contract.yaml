@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: ex8216-sf320
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8216-SF320, the Switch Fabric (SF) module of the EX8216: a tall vertical card that goes in the rear, in one
+  of the eight slots SF7 to SF0 from the left. All eight are active at once and every shipping order includes all eight;
+  if one fails its traffic is spread over the others. The face has two lamps (ST and SF) near the top, the EX8216 SF320
+  legend, a long ejector lever, a handle at mid height and a captive screw. It is hot-insertable and hot-removable, and is
+  taken offline first.
+attrs:
+  role: switch-fabric
+  power-draw-max-w: 75
+part-numbers:
+  EX8216-SF320-S: {part: EX8216-SF320-S}
+provenance:
+  sources: >-
+    datasheet - EX8216 Switch Hardware Guide (PDF dated 2020-12-16): Switch Fabric (SF) Modules in an EX8216 Switch, Figures
+    23 and 24, Table 38 (the lamps), Table 60 (power), Table 6 (CLI name EX8216-SF320) and Figure 7 (the slots, drawn flat at
+    the top of the rear). EX8216 Ethernet Switch Datasheet (1000283-021-EN, June 2015): "EX8216-SF320-S, Switch Fabric module
+    for EX8216, spare".
+  size: >-
+    estimated - 40.0 mm wide on the slots' 40.7 mm pitch, read off Figure 7 (flat, 3.437 px/mm anchored on the 17.3 in body);
+    the length, 614.0 mm, is a fraction (11.5 to 77.7 percent of the height) of the isometric Figure 4 and is good to about 15
+    mm. No document dimensions the card.
+  face: >-
+    estimated - Figure 7 from the module's own origin at 3.437 px/mm: lamps at 18.6 and 26.8 mm across and 35.8 down with their
+    legends 3.5 mm below; the two-line legend centred at 18.0 mm across and 49.5 and 53.8 down; the captive screw at 22.4,
+    4.4 and two round holes at 12.2 and 22.1, 13.4; the ejector lever 6.0 mm wide at 30.5 mm across from 10.2 down. The handle
+    is a fraction of Figure 4 and Figure 23. About 1 mm for the top and 15 mm for the lower parts.
+  lamps: >-
+    datasheet - guide Table 38: ST green steady when the module is operating and blinking in standby, yellow when failed,
+    unlit when offline; SF green steady when its switch fabric is normal and blinking when offline, yellow when failed, unlit
+    when powered off.
+  power: >-
+    datasheet - guide Table 60: Switch Fabric (SF) module 75 W. A draw, since a card consumes power.
+states:
+- ok
+- fail
+- absent
+elements:
+  led-st:
+    at: [17.6, 34.8]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: standby, color: '#22c55e', behavior: blinking}, {name: failed, color: '#eab308'}]
+  led-sf:
+    at: [25.8, 34.8]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: offline, color: '#22c55e', behavior: blinking}, {name: failed, color: '#eab308'}]
+  lever:
+    at: [30.5, 10.2]
+    size: [6.0, 119.0]
+    class: latch
+  handle:
+    at: [4.0, 245.0]
+    size: [6.0, 135.0]
+    class: latch
+size:
+  w: 40.0
+  h: 614.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

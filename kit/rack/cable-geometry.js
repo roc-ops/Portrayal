@@ -29,17 +29,27 @@ export function hexColor(v) {
   return `#${h.toLowerCase()}`;
 }
 
+// The multimode aqua: OM3 and OM4 jackets.
+const MULTIMODE = '#2bb3c8';
+// An AOC's is the same family, a deeper teal, so that an AOC and an OM4 lead
+// can be told apart on a drawing (#1028): 20 CIE76 and more from every other
+// entry here, and 3:1 and more on both the dark stage (#101214) and white.
+const AOC_TEAL = '#08788a';
+
 // OS2 jackets are yellow; copper is coloured by what it is for.
 export const COLORS = {os2: '#e8c547', copper: {server: '#5aa7ff', management: '#9aa3ad'},
   // The Rack Builder's media (cable-rules.js MEDIA), beside the showcase's
-  // two: OM3 and OM4 aqua, OM5 lime green, Cat 6 and 6A blue, a DAC black, an
-  // AOC dark grey, and a neutral grey for a cable whose media is not set.
-  om3: '#2bb3c8', om4: '#2bb3c8', om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff',
-  dac: '#15171a', aoc: '#3a3f45', unset: '#9aa3ad',
+  // two: OM3 and OM4 aqua, an AOC a deeper teal, OM5 lime green, Cat 6 and 6A
+  // blue, a DAC black, and a neutral grey for a cable whose media is not set.
+  om3: MULTIMODE, om4: MULTIMODE, om5: '#9acd32', cat6: '#5aa7ff', cat6a: '#5aa7ff',
+  dac: '#15171a', aoc: AOC_TEAL, unset: '#9aa3ad',
   // A power cable is the black every cord end of the library is drawn in
   // (`jacket-color`, #1c1c1c), so the cable carries on from its plug's stub.
   // A ground wire is green; the shade is an estimate, no source is held.
-  power: '#1c1c1c', ground: '#3f9b4b'};
+  // A stack cable is orange, a USB cable purple and a console cable pink: each
+  // shade is an estimate chosen to read apart from every other media's on the
+  // dark stage and on white, and states nothing of any maker's cable.
+  power: '#1c1c1c', ground: '#3f9b4b', stack: '#d9702a', usb: '#8e6bd1', console: '#c9588a'};
 // Own keys only: a hand-edited media or purpose named like something every
 // object has (toString, constructor, __proto__) is unknown, not a colour.
 const own = (o, k) => (Object.hasOwn(o, k) ? o[k] : undefined);
@@ -90,10 +100,8 @@ export function bundleColor(colors) {
 // whose links name a jacket and no media: multimode fibre, single-mode, a
 // twinax DAC, a copper patch lead. Each is an entry of `COLORS` and no colour
 // is written here, so the two cannot drift.
-// AN OPEN QUESTION, NOT SETTLED HERE: the hero draws an AOC with the `mm`
-// jacket, aqua, as multimode fibre; `COLORS` draws the media `aoc` dark grey.
-// Both are drawn as they were. A reading that an AOC is aqua belongs in
-// `COLORS.aoc`, and changes every drawing of one.
+// The hero draws an AOC with the `mm` jacket, the multimode aqua; `COLORS.aoc`
+// is the deeper teal of the same family (decided on #1028).
 export const JACKETS = {mm: COLORS.om4, sm: COLORS.os2, dac: COLORS.dac, cu: COLORS.copper.server};
 export const colorOfJacket = j => JACKETS[j] || JACKETS.sm;
 

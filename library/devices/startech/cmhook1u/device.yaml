@@ -1,0 +1,206 @@
+format: 1
+kind: device
+name: cmhook1u
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: CMHOOK1U
+description: >-
+  1U vertical D-ring hook, StarTech.com CMHOOK1U: a steel strip that bolts to the face of one rack
+  rail through its two slots, carrying a flat loop 57 mm across that stands 101.3 mm out of the
+  rail. The loop has an 8 mm opening in its far end that a bundle is slipped in through, and a
+  cable runs up and down the rail through it. It takes no rack unit of its own.
+profile: passive
+provenance:
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-face`. The datasheet says the hook "mounts vertically to 2-post and
+      4-post racks and supports both 10-inch and 19-inch rack systems", and the drawing's plate
+      is a 44.6 mm strip ("1.0 U") with two slots 32.0 apart, the spacing of two rack holes in
+      one unit. It bolts to the face of one rail at a rack unit, stands out of it, and is
+      narrower than the opening, so a lab places it with a `side`
+      (docs/vertical-cable-managers-design.md section 3.4); a hook on each rail of one unit do not
+      conflict. `ru: 1` is the unit its 44.6 spans.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING. StarTech.com publishes CMHOOK1U_Diagram.pdf (third
+      angle projection, millimetres, 6/15/2022): a plan, a side view, a front view and an
+      isometric, with the dimensions 101.3, 57.0, 8.0, 3.2, 2.3, 44.6, 10.0, 32.0, 19.0, 15.8
+      and "2-phi6.0x12.0". The datasheet (cmhook1u_datasheet.pdf) lists "Product Length 4.0 in
+      [10.1 cm]", "Product Width 2.2 in [57.0 mm]", "Product Height 1.8 in [44.6 mm]", "Internal
+      Width 2.0 in [50.6 mm]" and "Internal Depth 3.6 in [92.6 mm]"; the drawing's figures agree.
+      Every figure here is a dimension of the drawing, bar the plate's place under the ring, which
+      is the 15.8 from the ring's end to the slots' middle.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 57.0 x 44.6 x 101.3: the ring's width across the rail, the plate's height and the
+      projection from the rail's face. The datasheet's "Length" is the 101.3 and its "Width" the
+      57.0.
+  thickness:
+    confidence: drawing
+    note: >-
+      drawing - 2.3, the plate on the side view; the ring's wall is 3.2 on the plan.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight of Product 2.8 oz [78.0 g]" (cmhook1u_datasheet.pdf).
+  hand:
+    confidence: drawing
+    note: >-
+      drawing - the front view draws the plate 6.1 mm in from the ring's right end, so the loop
+      stands mostly to the left of the plate, 38 mm past its inner edge. The drawing does not say
+      which rail it is drawn for. The hook is drawn as that view draws it, with the plate on the
+      right, which is how a part stands on the left rail (as `fs/cmv-5u3w` is drawn); on the right
+      rail the kit turns it end over end (kit/rack/solids.js and route.js mirror a narrow
+      rack-face part there). The drawing does not say whether the loop stands inboard or outboard
+      of the rail.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view: the loop's far end, 10.0 high, in two pieces with the 8.0 opening
+      between them in the middle of its 57.0, and the plate behind it, 19.0 wide, with its two
+      slots.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate, the face that lies on the rail, with the two slots, and the
+      loop's closed end showing past it.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top: the plate 2.3 thick and the loop's outline, a wall
+      3.2 thick all round, open by 8.0 in the middle of its far end. The bottom is the same.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the side view: the plate and the loop's 10.0 high band standing out of it. The
+      right is the same, turned round.
+  rings:
+    confidence: drawing
+    note: >-
+      drawing - the loop is the ring: a component with a `ring` guide whose opening is the
+      datasheet's 50.6 by 92.6 (see its contract), cables passing up and down the rail through it.
+  capacity:
+    confidence: estimated
+    note: >-
+      no document states a cable capacity: the datasheet and the drawing are silent, so none is
+      stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material (steel), colour, the standard (EIA/ECA-310-E) and the racks it
+      fits (2-post and 4-post, 10 in and 19 in) are the datasheet's; the 2-year warranty is its
+      text.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The drawing is line work, so the shades are this library's
+      render of black steel, the ring a little lighter than the plate.
+attrs:
+  physical:
+    weight-kg: 0.078
+    material: Steel
+    color: Black
+  features:
+    standards: EIA/ECA-310-E
+    racks: 2-post and 4-post racks, 10 in and 19 in (datasheet)
+chassis:
+  width: 57.0
+  height: 44.6
+  depth: 101.3
+  ru: 1
+  mount: rack-face
+  shell: sheet
+  thickness: 2.3
+  weight-kg: 0.078
+  color: '#232527'
+gaps:
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the datasheet and the drawing state no cable capacity, no fill and no cable count.
+    wanted: a cable capacity table, or a stated fill, for the hook
+  - what: hook-opening
+    scope: [front, top, bottom]
+    reason: needs-drawing
+    note: >-
+      the 8.0 gap in the far end of the loop is the "wide front opening for quick cable
+      insertion", drawn in the relief; the format's ring `slit` is a range of height along a leg
+      and cannot state a gap across the far bar, so the ring is declared with its clear opening
+      and no slit, and a route is not told the loop can be entered through its end.
+    wanted: a format key for a gap in a ring's far end, or a route kit that reads the opening
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the steel strip that bolts to the rail
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: the flat steel loop, a cable running up and down the rail through it
+views:
+  front:
+    size: {w: 57.0, h: 44.6}
+    components:
+      placements:
+        - {ref: startech/cmhook-plate@1, id: plate, at: [31.7, 0.0], group: body, rel-pos: 1}
+        - {ref: startech/cmhook1u-ring@1, id: guide-1, at: [0.0, 17.3], group: guides, rel-pos: 1, in: plate}
+  rear:
+    size: {w: 57.0, h: 44.6}
+    panel:
+      decor:
+        - {id: ring-back, at: [0, 17.3], size: [57.0, 10.0], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: plate-back, at: [6.3, 0], size: [19.0, 44.6], rx: 0, fill: '#232527', kind: base}
+        - {id: slot-1, at: [12.8, 0.3], size: [6.0, 12.0], rx: 3.0, fill: '#0a0b0c', kind: hole}
+        - {id: slot-2, at: [12.8, 32.3], size: [6.0, 12.0], rx: 3.0, fill: '#0a0b0c', kind: hole}
+  top:
+    size: {w: 57.0, h: 101.3}
+    panel:
+      decor:
+        - {id: plate, at: [31.7, 0], size: [19.0, 2.3], rx: 0, fill: '#232527', kind: base}
+        - {id: guide-1-wall-left, at: [0, 2.3], size: [3.2, 99.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-wall-right, at: [53.8, 2.3], size: [3.2, 99.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-near, at: [3.2, 2.3], size: [50.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far-left, at: [3.2, 98.1], size: [21.3, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far-right, at: [32.5, 98.1], size: [21.3, 3.2], rx: 0, fill: '#40454c', kind: ring}
+  bottom:
+    size: {w: 57.0, h: 101.3}
+    panel:
+      decor:
+        - {id: plate, at: [31.7, 0], size: [19.0, 2.3], rx: 0, fill: '#232527', kind: base}
+        - {id: guide-1-wall-left, at: [0, 2.3], size: [3.2, 99.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-wall-right, at: [53.8, 2.3], size: [3.2, 99.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-near, at: [3.2, 2.3], size: [50.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far-left, at: [3.2, 98.1], size: [21.3, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far-right, at: [32.5, 98.1], size: [21.3, 3.2], rx: 0, fill: '#40454c', kind: ring}
+  left:
+    size: {w: 101.3, h: 44.6}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [2.3, 44.6], rx: 0, fill: '#232527', kind: base}
+        - {id: ring-band, at: [2.3, 17.3], size: [99.0, 10.0], rx: 0, fill: '#40454c', kind: ring}
+  right:
+    size: {w: 101.3, h: 44.6}
+    panel:
+      decor:
+        - {id: plate, at: [99.0, 0], size: [2.3, 44.6], rx: 0, fill: '#232527', kind: base}
+        - {id: ring-band, at: [0, 17.3], size: [99.0, 10.0], rx: 0, fill: '#40454c', kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The hook as StarTech.com ships CMHOOK1U.'
+datasheet:
+  title: 'CMHOOK1U data sheet: 1U Vertical 2.2 x 3.9in (5.7 x 10cm) Server Rack Cable Management D-Ring Hook'
+  url: https://media.startech.com/cms/pdfs/cmhook1u_datasheet.pdf
+  sha256: ab88d15223f50c44012871ee72f4bbba477476e0e76d6092c5e44f910caea98e
+references:
+  - title: 'CMHOOK1U_Diagram.pdf: product drawing, third angle projection, 6/15/2022'
+    url: https://media.startech.com/downloads/image/CMHOOK1U_Diagram.pdf
+    sha256: 495004cfae4eda331b0f003a64a0a046b61502192e7ab441214ae614643ee5b4
+  - title: 'CMHOOK1U product page'
+    url: https://www.startech.com/en-us/server-management/cmhook1u

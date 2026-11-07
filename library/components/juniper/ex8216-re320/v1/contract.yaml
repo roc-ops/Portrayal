@@ -1,0 +1,99 @@
+format: 1
+kind: module
+name: ex8216-re320
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8216-RE320, the Routing Engine (RE) module of the EX8216: a horizontal card with four lamps (ON, MS, ST,
+  SF) at the left, a recessed RESET, a USB port, the AUX, CONSOLE and MGMT RJ-45 jacks, two ejector levers and captive
+  screws. It goes in RE0 or RE1 at the top of the front; the base order ships one (best in RE0) and the redundant
+  orders two, one primary and one backup. It is hot-insertable and hot-removable, and is taken offline first. The AUX
+  port is not enabled. The switching is in the eight SF modules at the rear, not on this card.
+attrs:
+  role: routing-engine
+  power-draw-max-w: 100
+part-numbers:
+  EX8216-RE320: {part: EX8216-RE320}
+provenance:
+  sources: >-
+    datasheet - EX8216 Switch Hardware Guide (PDF dated 2020-12-16): Routing Engine (RE) Module in an EX8216 Switch,
+    Figures 21 and 22 (isometric), Table 37 (the lamps), Table 60 (power), Table 6 (CLI name EX8216-RE320) and Figure 5
+    (the module drawn flat in its slot). EX8216 Ethernet Switch Datasheet (1000283-021-EN, June 2015): "EX8216-RE320,
+    Routing Engine for EX8216, redundant".
+  size: >-
+    estimated - the slot opening, 386.9 x 35.0 mm, as the line card cover; the card plate is about 366 mm wide and
+    32.6 mm high. Read off Figure 5 (flat, 2.753 px/mm across anchored on the 17.3 in body; the figure ends above the
+    supply row, so its height cannot be checked against the 36.5 in and 2.852 px/mm down is taken from the line card
+    pitch, 38.2 mm as in the EX8208). No document dimensions the card.
+  face: >-
+    estimated - Figure 5 from the module's own origin: lamps in two columns at 23.2 and 28.7 mm across and two rows at
+    18.2 and 23.1 mm down; RESET at 115.1, 21.4; USB at 134.4, 21.4; the AUX, CONSOLE and MGMT jacks centred at 154.5,
+    177.2 and 200.2 mm across and 18.8 down; the two ejector levers below the plate. About 1.5 mm. The jacks are the
+    registry's housing, larger than the 17 mm boxes drawn.
+  lamps: >-
+    datasheet - guide Table 37: ON green when powered; ST green steady when operating and blinking when booting, yellow
+    when failed; MS green steady when primary and blinking when in standby; SF green steady when the switch fabric of the SF
+    modules is normal, yellow when one or more has failed; each is unlit when the module is off.
+  lamp-legend: >-
+    drawing - Figure 5 prints the legends as ON MS over ST SF; the lamps are taken to follow them (ON and MS in the upper
+    row, ST and SF in the lower). The EX8208's SRE module prints ST MS over ON SF.
+  jacks: >-
+    drawing - as the EX8208's SRE module: std/rj45@2 for AUX and CONSOLE, common/rj45-eth@1 for MGMT. The guide says the
+    management port runs full duplex at a set 100 Mbps, so no speed is stated. AUX "is not enabled on EX8200 switches. It is
+    reserved for future use."
+  power: >-
+    datasheet - guide Table 60: Routing Engine (RE) module 100 W. A draw, since a card consumes power.
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the RE module's management cluster: an out-of-band Ethernet jack, an RJ-45 serial console, an auxiliary serial
+      port (not enabled) and a USB port. Four kinds, one job: reaching and disciplining the switch.
+parts:
+- {ref: common/reset-button@1, id: reset, group: mgmt, at: [113.1, 19.4], attrs: {function: power-cycles the module}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [128.4, 19.15], attrs: {function: USB port for installing Junos OS, media: usb-a}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [146.6, 12.2], attrs: {media: rj45-serial, function: auxiliary port, note: not enabled; reserved for future use}}
+- {ref: std/rj45@2, id: con, group: mgmt, at: [169.3, 12.2], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [192.3, 12.2], attrs: {media: rj45, function: out-of-band management}}
+elements:
+  led-on:
+    at: [22.2, 17.2]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: powered, color: '#22c55e'}]
+  led-ms:
+    at: [27.7, 17.2]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: primary, color: '#22c55e'}, {name: standby, color: '#22c55e', behavior: blinking}]
+  led-st:
+    at: [22.2, 22.1]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}, {name: failed, color: '#eab308'}]
+  led-sf:
+    at: [27.7, 22.1]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: failed, color: '#eab308'}]
+  lever-left:
+    at: [8.4, 28.0]
+    size: [114.4, 4.0]
+    class: latch
+  lever-right:
+    at: [268.0, 28.0]
+    size: [114.0, 4.0]
+    class: latch
+size:
+  w: 386.9
+  h: 35.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

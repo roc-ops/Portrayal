@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: riser-4-cage-2u-16g
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 4 cage of a 16th-generation 2U PowerEdge (R760) - two stacked full-height windows at the right of the rear, the blue thumbscrew on its left lug and the mini service tag area at the right; shared by risers 4B, 4P, 4Q and 4R
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - sheet metal; the riser that composes it carries the power record.
+  why-this-is-its-own-part: >-
+    THE METAL IS SHARED AND THE WIRING IS NOT: risers 4B, 4P, 4Q and 4R (R760 ISM figures 218-222) differ in slots, generation and width (table 153), not in the rear face. Authored for the R760 as the batch's shared 2U 16G part.
+  sources: >-
+    photo-measured - R760 ISM figure 10 (rear view), the embedded 1529 x 528 image at 3.36 px/mm; see dell/riser-1-cage-2u-16g@1/provenance/sources for the scale and its 1.5 mm tolerance. Facts read, art not traced.
+  size: >-
+    photo-measured - 137.3 x 44.0 from rear-face x 296.7, y 1.0 to the right wall: the left lug with the thumbscrew that holds risers 3 and 4, the cage, and the right lug with Dell's mini service tag area (MEST, printed vertically). It begins where riser 3's cage ends (dell/riser-3-cage-2u-16g@1, 168.0 + 128.7), so the two bays do not overlap.
+  windows: >-
+    photo-measured - 84.5 wide at rear x 324.0..408.5 (module-local 27.3..111.8), 11.3 tall at y 7.1..18.4 and 27.7..38.7. The figure's windows are 2 mm further right than riser 1's mirrored (323..407); 1.5 mm is the figure's tolerance and the two are read as the mirror image. A bracket sits behind with its tip at the right (rotate 180), its far end at the wall.
+  lug-and-tag: >-
+    photo-measured - the left lug 0..25.3 carries the blue thumbscrew, centred at rear x 299.0, local x 2.3, y 15.7 (diameter about 8, an estimate, so the knob is clipped 1.7 at the module's edge); the right lug 125.3..137.3 prints MEST vertically (ISM figure 10 callout area). The glyphs are drawn as text and their size is an estimate.
+  numerals: >-
+    NONE PRINTED IN THE FIGURE - see dell/riser-1-cage-2u-16g@1/provenance/numerals. Slot 7 is the lower and slot 8 the upper (ISM figures 220 and 221 point slot 8 at the upper connector).
+size: {w: 137.3, h: 44.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: plate
+    out: 1.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the cage's plate is the rear wall's own sheet metal. The R760 ISM's table 10 (chassis dimensions, PDF page 34) puts the rear wall at Zb, 700.7 mm ear to rear wall, and nothing but the supplies' handles past it (Zc, 736.29 mm ear to PSU handle); no ISM figure gives the cage's depth. The first pass drew the plate 20.0 proud by analogy with the 1U R660 risers' cages, which stood the cages 20 mm outside the chassis; Dell's R760 service model (r760.glb, `R760_ ExpansionCardRiser4`) is held but the depth was not read from it.
+  - node: flange-cover
+    out: 19.3
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - carried from Dell's R660 service model (r660.glb), which has the pieces of the low-profile risers' cages over their flange ends reach 19.2 to 19.8 past the plane the supplies' faces sit in (see dell/riser-2-lp-cage-16g@1). Dell's R760 service model (r760.glb) is held but poses its risers out of the chassis, so it gives no reach to read: its supply runs z 490.5 to 861.8, so the wall is at 861.8 less the handle's 35.59, 826.2, and its riser 4 ends at 758.6, short of it. 19.3, riser 2A's lower figure, is drawn. This is the way dell/r740xd draws its riser's outer skin: dell/riser-1-shroud-14g@1 stands 17.76 proud of the panel plane, measured from the service model because the assembly has to stand off far enough to contain the L of a PCIe bracket's flange, and the cards and fillers sit behind it; the rest of the riser stays at the plate. Here too the plate stays 1.0 and the cover is the cage's plain metal from the flanges' folds to the windows' end, the whole height of the cage. A filler's bracket gets it as a card's does, because it is the riser's metal and not the occupant's. The bracket's return flange, std/pcie-bracket-fh@2's 9.40 (PCIe CEM 5.0 figure 11-5), is inside it. This replaces an estimate of 10.26, the flange and one 0.86 sheet.
+skins: [default]

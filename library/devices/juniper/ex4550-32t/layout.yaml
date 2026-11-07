@@ -1,0 +1,531 @@
+format: 1
+kind: device
+name: ex4550-32t
+version: 0.3.0
+maturity: modelled
+manufacturer: Juniper
+model: EX4550-32T
+portfolio: {line: EX Series, family: EX4550}
+description: >-
+  Juniper EX4550-32T, a 1RU 10 GbE aggregation and data-centre top-of-rack switch that runs Junos OS.
+  The port side has 32 RJ-45 10GBASE-T ports in two rows, each running at 10 GbE, 1 GbE or 100 Mbps.
+  It also has a module slot with a cover panel. The LCD panel has two buttons and three lamps. There
+  are a management port and two console ports. The other side carries a second module slot, three
+  fan modules and two power supply slots. One panel serves four models, with an AC or DC supply and
+  air in or air out.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Juniper EX4550 Switch Hardware Guide, published 2020-12-15, 333 pages (Juniper Networks,
+      copyright 2020; the PDF is the EX4550 guide of the EX Series documentation archive): Table 3
+      (the modules), Table 4 (the models), Table 6 (the chassis), Figures 2, 3, 5 and 6 (the panels), the
+      lamp Tables 11 to 16, Table 17 (the fan modules), Tables 18 to 26 (the airflow, the supplies
+      and their power). No datasheet of the EX4550 is held; the product page is retired. The held
+      intake folders for the EX and QFX lines were read: they hold no studio photograph, stencil or 3D
+      model of the EX4550, and the guide's figures are the only drawings. Terms: the document is Juniper's,
+      read here for facts only, and nothing of it is copied into the library.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 6, one table for both base models: 1.72 in (4.37 cm) high, 17.35 in (44.07 cm) wide, 18.50
+      in (46.99 cm) deep, 19.4 lb (8.8 kg) with one power supply, 2.4 lb a supply, 0.9 lb a 10GBASE-T module.
+      So the height is 43.7 mm, the width 440.7 mm and the depth 469.9 mm. The width is the body: the
+      front mount brackets extend it to 19 in, so they are not modelled.
+  gate-1:
+    confidence: drawing
+    note: >-
+      Figure 5 (the flat front drawing of the 32T) was rendered at 1200 dpi. Its body measures 4866 px wide
+      and 488 px high, an aspect of 9.97 against the table's 10.08, 1.1 percent out, so it is read as
+      orthographic at 0.0906 mm per pixel across and 0.0896 down. The callout bracket under the ports is not
+      part of the body. Figure 6 (the rear, shared with the 32F) measures 5197 x 526 px, 9.88, 2 percent
+      out, read at 0.0848 across and 0.0831 down. No photograph is held. Every position read off a figure
+      is estimated, to about 0.3 mm on the front and 0.5 mm on the rear.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 5, callout 10: 32 RJ-45 jacks in four blocks of four columns, each column a stacked pair. The
+      jacks measure 148.7 px, 13.47 mm, apart, which is 3.6 percent under the registry's 13.97 mm pitch for a
+      ganged jack, so the measured pitch of 13.5 mm is used and is estimated. The blocks start 707 px apart:
+      the first jacks start at 106.4, 170.5, 234.5 and 298.6 mm, a stride of 64.06 mm, so the gutter is 64.06
+      - 4 x 13.5 = 10.06 mm. The jack rows are 14.5 mm apart at their centres (15.0 and 29.5 mm down) and the
+      cells use the registry's aperture, 12.7 x 11.0, from 9.5 mm.
+  jack-orientation:
+    confidence: drawing
+    note: >-
+      Figure 5 shows the upper jack with its latch notch at the top and its contacts at the foot, and the lower
+      jack the other way up. That is the library's stacked-jack convention: the upper row is the part turned
+      180 and the lower row as drawn.
+  port-numbering:
+    confidence: drawing
+    note: >-
+      Printed on the metal and read off Figure 5: the numerals sit below the lower jack, the even numeral of
+      the upper port at the left and the odd numeral of the lower port at the right of each column, 5.2 mm
+      apart and 37.9 and 39.7 mm down. They stand on a 14.3 mm pitch, 0.8 mm wider than the jacks, so the
+      offset from each jack changes along a block. The ports are 0 to 31 as printed. Interface names are not
+      printed. The guide's default configuration names the network ports xe-0/0/0 to xe-0/0/31 and the
+      expansion module ports xe-0/1/0 to xe-0/1/7, xe-0/2/0 to xe-0/2/7 and et-0/1/0 to et-0/2/1; they go
+      here and not in the manifest.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      Figure 5, Figure 19 and Table 14: each 10GBASE-T port has one link and activity lamp and no status
+      lamp. A triangle sits at each top corner of a column: an up-pointing one at the left for the upper port
+      and a down-pointing one at the right for the lower. The figure draws them at 11.6 mm down, inside the
+      top rim of the upper jack, with a centre 1.6 and 11.4 mm from the column edge. They are drawn 3.4
+      mm higher, at 8.2 mm, because a lamp over another port's cell is an overlap that the model cannot say.
+  vents:
+    confidence: drawing
+    note: >-
+      Figure 5: a honeycomb band along the top from 127.0 to 355.0 mm, a column of five hexagons at each end
+      of the port field and a row of small hexagons over the management jacks, as on the 32F. They are
+      declared vents. The top band is drawn 5.9 mm deep and the figure's runs to 8.5 mm, so that the lamps,
+      which are drawn 3.4 mm above the figure, do not print on it.
+  front-controls:
+    confidence: drawing
+    note: >-
+      Figure 5, callouts 2 to 9: the same LCD panel, buttons, lamps, management port, RJ-45 console, USB port
+      and mini-USB console port as the 32F, at the same positions: the plate 360.4 to 435.9 mm, the window
+      372.5 to 409.0 mm, the buttons at 417.3 mm, the lamps at 424.2 mm, and below the plate the jacks at
+      371.7, 393.4, 414.0 and 428.5 mm. The guide says the mini-USB console port is the active one and the
+      RJ-45 console is passive on the EX4550.
+  junos-mark:
+    confidence: drawing
+    note: >-
+      Figure 5 prints a logo of the Junos operating system on the LCD plate and the maker's mark above the
+      port field. Neither is drawn: the maker's mark has a reserved logo zone, the Junos mark has a region,
+      and the plain model name EX4550 is drawn as text.
+  module-slots:
+    confidence: drawing
+    note: >-
+      Figures 2, 3 and 6: two module slots, one on the front panel at the left and one on the rear panel.
+      Table 3 lists the four modules each takes, EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and
+      EX4550-VC-128G. Every model ships with a cover panel in each slot. THE MODULES ARE NOT MODELLED: each
+      slot is a bay that accepts the cover panel alone, and the four modules are named here and in a gap.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      Figure 6, the rear of the EX4550 in both base models (the guide draws one rear), read at 0.0848 mm
+      across: power supply slot 0 at the left with its legend 0, slot 1 with its cover panel, the plate with
+      the ESD point, the slot 1 legend, the rating label and the ESD warning mark, the rear module slot with
+      its cover panel, then three fan slots numbered 1 to 3 from left to right, each preceded by a strip with
+      its fan symbol, number and status lamp. The positions are those of the 32F rear.
+  fans-and-supplies:
+    confidence: datasheet
+    note: >-
+      The three fan modules (EX4550-FAN-AFO and EX4550-FAN-AFI, Table 17) and the two supply slots
+      (JPSU-650W-AC-AFO and -AFI, Table 20; JPSU-650W-DC-AFO and -AFI, Table 24) are field-replaceable units
+      in bays. They are the same components as the 32F takes, and the supplies are the EX4600's by part
+      number. Nothing on this chassis is a built-in unit that is not a bay.
+  airflow-colours:
+    confidence: estimated
+    note: >-
+      Tables 17, 20 and 24 give the label of each unit and the guide gives no handle colour for the EX4550.
+      The reused supplies carry the orange and blue of the EX4600 guide, and the fan modules take the same two
+      for the same airflow.
+  variants:
+    confidence: datasheet
+    note: >-
+      Table 4: one front panel serves EX4550-32T-AFI, -AFO, -DC-AFI and -DC-AFO, so each is an orderable
+      configuration. The guide lists no spare chassis of the 32T. Each ships with one supply in slot 0, a
+      cover panel in slot 1 and three fan modules.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 22 (AC): 100 to 120 VAC and 200 to 240 VAC, 7.8 A and 3.8 A, 650 W output; the system maximum of an
+      EX4550-32T with two EX4550-EM-8XT modules is 403 W and 1375 BTU an hour. That is the fully configured
+      scope. Table 26 (DC): -36 to -72 VDC, 7 A at -48 VDC, 650 W output. The guide gives no typical figure.
+  environment:
+    confidence: datasheet
+    note: >-
+      Table 28: 0 to 40 C (32 to 104 F) for the 32T, up to 10,000 ft (3,048 m), 10 to 85 percent humidity
+      noncondensing, GR-63 Zone 4.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide describes the front mount brackets (Table 6) and prints no part number for the
+      mounting kit. The library holds no contract for it, so chassis.ears and chassis.kits are left out and a
+      gap says so.
+  colour:
+    confidence: estimated
+    note: >-
+      The figures are line drawings and no photograph is held, so the chassis colour is a mid grey. It is not a
+      paint reference.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life notice. Juniper's own page was not reached and the guide, dated
+      2020-12-15, states none. A reseller notice of 2019-03-08 gives 2019-06-30 as the last order date of
+      the EX4550, and a third-party tracker (endoflife.ai) gives 2024-06-30 as the end of life. Both are
+      estimated.
+attrs:
+  physical:
+    weight-note: 19.4 lb (8.8 kg) with one power supply (Table 6)
+    depth-note: 18.50 in (46.99 cm) (Table 6)
+  performance:
+    rj45-speeds: 10 GbE, 1 GbE or 100 Mbps on each fixed port
+    expansion-ports: up to 48 ports with two 8-port modules, or 2 x 40 GbE with a QSFP+ module
+  power:
+    power-max-w: 403
+    power-envelope: fully-configured
+    power-input-ac: 100 to 120 VAC and 200 to 240 VAC, 50 to 60 Hz; 7.8 A and 3.8 A
+    power-input-dc: operating range -36 to -72 VDC, nominal -48 VDC, 7 A maximum
+    redundancy-note: two supplies, load sharing; do not mix AC and DC, or AFI and AFO
+  thermal:
+    fans: three fan modules and a fan in each supply; the switch runs 30 seconds while one fan module is replaced
+    heat-btu-h: 1375 BTU an hour at the maximum system power (Table 22)
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    humidity: 10 to 85 percent noncondensing
+    altitude: no loss of performance to 10,000 ft (3,048 m)
+  platform:
+    software: Junos OS, first release 12.2R4
+  features:
+    virtual-chassis: up to 10 switches, mixed with EX4200 and EX4500; a 10GBASE-T port joins only EX4550 switches
+    expansion: two module slots (front and rear), EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and EX4550-VC-128G
+  management:
+    oob: one RJ-45 management port with link and status lamps
+    console: mini-USB console port (active) and RJ-45 console port (passive)
+    usb: one USB port
+  compliance:
+    seismic: GR-63, Issue 4, Zone 4 (guide Table 28)
+  lifecycle:
+    eol: announced
+    eol-announcement: https://www.nomios.com/news-blog/juniper-announces-end-of-life-of-popular-ex-switches/
+    end-of-sale: '2019-06-30'
+    end-of-life: '2024-06-30'
+chassis: {width: 440.7, height: 43.7, depth: 469.9, ru: 1, weight-kg: 8.8, color: '#a3a7ac', airflow: front-to-back, power: ac}
+gaps:
+- what: ears-and-kits
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The part number of the mounting kit and the ear positions. The guide describes the front mount
+    brackets and prints no part number for them.
+- what: expansion-modules
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    The four modules a slot takes (EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and EX4550-VC-128G) are
+    not modelled. Each slot accepts its cover panel only.
+- what: datasheet
+  scope: [front, rear]
+  reason: vendor-silent
+  wanted: >-
+    The datasheet of the EX4550. The product page is retired and none is held, so the throughput, the
+    typical power and the compliance list are not stated.
+- what: handle-colour
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The handle colour of the fan modules and supplies. The guide's Tables 17, 20 and 24 give the labels only.
+    The orange and blue of the EX4600 guide are used.
+- what: ac-input-rating
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    The rating label in Figure 6 prints an AC input of 3 A (100-240V, 60-50Hz). Table 22 gives 7.8 A at the
+    low line and 3.8 A at the high line. The label is drawn as printed and the attribute carries Table 22.
+  wanted: which figure the real label prints, from a photograph of the rear plate
+- what: jack-pitch
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The registry's ganged-jack pitch is 13.97 mm; Figure 5 measures 13.47 mm. The figure's reading is used
+    and is estimated.
+  wanted: the pitch of the jacks from Juniper, or a photograph at a known scale
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The three round holes and the slot at the left end of the rear, the small lamp hole over the rating
+    label and the captive screw in each fan strip. The guide's figure draws them and names none.
+- what: usb-generation
+  scope: [front]
+  reason: vendor-silent
+  wanted: The USB revision. The guide names one USB port. It is drawn with the neutral usb2 skin.
+- what: labels-not-drawn
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    The serial number label and the hazard marks, which the figures do not draw. The ESD warning mark is
+    drawn as an outline of its triangle.
+- what: four-faces
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 10g}
+    description: Ports 0 to 31 as printed, the even ports on the upper row. Each runs at 10 GbE, 1 GbE or 100 Mbps.
+  rj45-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The link and activity lamp of each 10GBASE-T port, a triangle at the corner of its column (guide Table 14)
+  expansion:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: >-
+      The two module slots. Slot 1 is on the front panel (PIC 1) and slot 2 on the rear panel (PIC 2)
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the management cluster at the right of the front: an RJ-45 management port, an RJ-45 console, a
+      mini-USB console and a USB port. Four kinds, one purpose: reaching and recovering the switch
+      when the data plane cannot.
+  lcd-buttons:
+    term: Button
+    role: management
+    index-origin: 0
+    description: the LCD panel's Menu and Enter buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: The three chassis lamps ALM, SYS and MST (guide Table 11)
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy-note: >-
+        Three fan modules in slots 1 to 3 from left to right. The guide says all three must be installed
+        for optimal functioning, and the switch runs 30 seconds while one is replaced
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      The status lamp (ST) in the strip at the left of each fan slot: green when the module works,
+      unlit when it is absent or failed (guide Table 19)
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Two supply slots; the switch ships with one supply and a cover panel in slot 1. Do not mix AC and
+        DC supplies, or supplies of different airflow
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD point on the rear panel (guide Figure 6, callout 3)
+views:
+  front:
+    size: {w: 440.7, h: 43.7}
+    panel:
+      decor:
+      - {id: vent-top, at: [127.0, 0.7], size: [228.0, 5.9], pattern: vent, vent: 1}
+      - {id: vent-left, at: [95.7, 10.9], size: [5.0, 24.6], pattern: vent, vent: 1}
+      - {id: vent-right, at: [355.8, 10.9], size: [4.6, 24.6], pattern: vent, vent: 1}
+      - {id: vent-mgmt, at: [362.0, 24.3], size: [70.5, 2.2], pattern: vent, vent: 1}
+      - {id: lcd-plate, at: [360.4, 3.3], size: [75.5, 21.2], rx: 1.0, fill: '#b4b8bd'}
+      - {id: lcd, kind: display, at: [372.5, 9.4], size: [36.5, 10.5], rx: 0.6, fill: '#404c40'}
+      cutouts:
+      - {block: rj45}
+      - {id: btn-menu, at: [414.25, 8.05], size: [6.1, 6.1], shape: circle}
+      - {id: btn-enter, at: [414.25, 17.05], size: [6.1, 6.1], shape: circle}
+      - {id: led-alm, at: [423.2, 7.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [423.2, 11.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-mst, at: [423.2, 15.5], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt, at: [363.8, 26.9], size: [15.8, 13.2]}
+      - {id: console, at: [385.5, 26.9], size: [15.8, 13.2]}
+      - {id: usb, at: [408.0, 29.05], size: [12.0, 4.5]}
+      - {id: console-mini, at: [424.5, 30.9], size: [7.9, 4.6]}
+    silkscreen:
+    - {block: rj45}
+    - {id: silk-model, at: [372.4, 8.2], text: EX4550, font-size: 3.9, anchor: start, fill: '#f0f2f3', for: chassis}
+    - {id: silk-alm, at: [427.6, 9.77], text: ALM, font-size: 2.8, anchor: start, fill: '#e6e8ea', for: led-alm}
+    - {id: silk-sys, at: [427.6, 13.67], text: SYS, font-size: 2.8, anchor: start, fill: '#e6e8ea', for: led-sys}
+    - {id: silk-mst, at: [427.6, 17.37], text: MST, font-size: 2.8, anchor: start, fill: '#e6e8ea', for: led-mst}
+    - {id: silk-mgmt-m1, at: [382.3, 30.1], text: M, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt}
+    - {id: silk-mgmt-g, at: [382.3, 32.6], text: G, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt}
+    - {id: silk-mgmt-m2, at: [382.3, 35.1], text: M, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt}
+    - {id: silk-mgmt-t, at: [382.3, 37.6], text: T, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: mgmt}
+    - {id: silk-con-c, at: [403.9, 30.4], text: C, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: console}
+    - {id: silk-con-o, at: [403.9, 33.3], text: O, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: console}
+    - {id: silk-con-n, at: [403.9, 36.2], text: N, font-size: 2.2, anchor: middle, fill: '#e6e8ea', for: console}
+    - {id: silk-usb-mark, at: [414.0, 37.2], mark: usb, size: 3.0, fill: '#e6e8ea', for: usb}
+    - {id: silk-con-mini, at: [428.45, 38.4], text: CON, font-size: 1.9, anchor: middle, fill: '#e6e8ea', for: console-mini}
+    components:
+      blocks:
+      - id: rj45
+        ref: common/rj45-ganged-eth-plain@1
+        at: [106.4, 9.5]
+        count: 32
+        rows: 2
+        pitch: 13.5
+        row-pitch: 14.5
+        gang: 4
+        gutter: 10.06
+        number-from: 0
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx-by-col: [1.9, 3.2, 3.7, 4.4], dx-by-row: [0.0, 5.2], dy-top: 29.1, dy-bottom: 16.4, font-size: 3.2, anchor: middle, fill: '#e1e3e5'}
+        led:
+          ref: common/led-arrow-sm@1
+          id-format: 'led-port-{n}'
+          dx-by-row: [0.5, 10.3]
+          dy-top: -2.3
+          dy-bottom: -16.8
+          skin-top: up
+          skin-bottom: down
+          group: rj45-leds
+          states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+      bays:
+      - {id: em-1, at: [2.5, 1.35], size: {w: 86.5, h: 41.0}, group: expansion, rel-pos: 0,
+         accepts: ['juniper/ex4550-em-cover@1'], default: 'juniper/ex4550-em-cover@1'}
+      placements:
+      - {block: rj45}
+      - {ref: juniper/ex4300-lcd-button@1, id: btn-menu, skin: menu, at: [414.25, 8.05], for: chassis, group: lcd-buttons, rel-pos: 0,
+         attrs: {function: LCD menu}}
+      - {ref: juniper/ex4300-lcd-button@1, id: btn-enter, skin: enter, at: [414.25, 17.05], for: chassis, group: lcd-buttons, rel-pos: 1,
+         attrs: {function: LCD enter}}
+      - {ref: common/led-dot@1, id: led-alm, at: [423.2, 7.9], group: status-leds, rel-pos: 0, for: chassis,
+         states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#eab308'}],
+         description: 'Table 11 - red: major alarm; yellow: minor alarm; unlit: no alarm or the switch is halted'}
+      - {ref: common/led-dot@1, id: led-sys, at: [423.2, 11.8], group: status-leds, rel-pos: 1, for: chassis,
+         states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+         description: 'Table 11 - green steady: Junos OS loaded; green blinking: the switch is booting; unlit: off or halted'}
+      - {ref: common/led-dot@1, id: led-mst, at: [423.2, 15.5], group: status-leds, rel-pos: 2, for: chassis,
+         states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+         description: 'Table 11 - standalone: green steady when working; Virtual Chassis: green steady primary, blinking backup, unlit line card'}
+      - {ref: common/rj45-eth@1, id: mgmt, at: [363.8, 26.9], group: mgmt, rel-pos: 0,
+         attrs: {media: rj45, speed: 1g, role: mgmt},
+         states: {led-a: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}],
+                  led-b: ['off', {name: 1000m, color: '#22c55e', behavior: blinking}]},
+         description: 'Tables 12 and 13 - the link and activity lamp is green steady with a link and blinking with traffic; the status lamp blinks once a second at 10 Mbps, twice at 100 Mbps and three times at 1000 Mbps'}
+      - {ref: std/rj45@2, id: console, at: [385.5, 26.9], group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console},
+         description: 'the RJ-45 console port; on the EX4550 it is passive and the mini-USB console port is the active one (guide, Console Port Connector Pinout Information)'}
+      - {ref: std/usb-a@1, id: usb, at: [408.0, 29.05], skin: usb2, group: mgmt, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: juniper/ex4300-console-usb-mini@1, id: console-mini, at: [424.5, 30.9], group: mgmt, rel-pos: 3}
+    regions:
+    - {id: logo-zone, at: [98.3, 1.5], size: {w: 24.9, h: 5.0}, label: 'Vendor logo; not drawn'}
+    - {id: mark-junos, at: [395.0, 4.5], size: {w: 15.0, h: 4.2}, label: 'Operating system mark; not drawn'}
+  rear:
+    size: {w: 440.7, h: 43.7}
+    panel:
+      decor: []
+      cutouts:
+      - {id: esd-rear, at: [150.1, 23.4], size: [6.0, 6.0], shape: circle}
+      - {id: led-fan-1, at: [282.1, 33.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-2, at: [335.8, 33.1], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan-3, at: [389.7, 33.1], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-psu-0, at: [9.0, 23.8], text: '0', font-size: 4.0, anchor: middle, fill: '#e6e8ea', for: psu-0}
+    - {id: silk-psu-0-mark, at: [5.4, 22.6], path: 'M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2', fill: '#e6e8ea', for: psu-0}
+    - {id: silk-psu-1, at: [136.6, 23.8], text: '1', font-size: 4.0, anchor: middle, fill: '#e6e8ea', for: psu-1}
+    - {id: silk-psu-1-mark, at: [133.0, 22.6], path: 'M -1.2 -0.4 A 1.4 1.4 0 1 0 1.2 -0.4 M 0 -1.8 V 0.2', fill: '#e6e8ea', for: psu-1}
+    - {id: silk-rating-ac, at: [129.7, 14.0], text: 'AC INPUT: 100-240V – 60-50Hz 3A', font-size: 2.5, anchor: start, fill: '#d8dcdf', for: chassis}
+    - {id: silk-rating-dc, at: [129.7, 17.3], text: 'DC INPUT: -48V TO -60V 7A', font-size: 2.5, anchor: start, fill: '#d8dcdf', for: chassis}
+    - {id: silk-esd-triangle, at: [166.5, 26.4], path: 'M 0 -5.8 L 7.8 5.8 L -7.8 5.8 Z', fill: '#e6e8ea', stroke-width: 0.4, for: esd-rear}
+    - {id: silk-fan-1, at: [283.6, 24.3], text: '1', font-size: 4.0, anchor: middle, fill: '#e6e8ea', for: fan-1}
+    - {id: silk-fan-2, at: [337.5, 24.3], text: '2', font-size: 4.0, anchor: middle, fill: '#e6e8ea', for: fan-2}
+    - {id: silk-fan-3, at: [392.5, 24.3], text: '3', font-size: 4.0, anchor: middle, fill: '#e6e8ea', for: fan-3}
+    - {id: silk-fan-1-mark, at: [279.4, 23.0], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: '#e6e8ea', for: fan-1}
+    - {id: silk-fan-2-mark, at: [333.3, 23.0], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: '#e6e8ea', for: fan-2}
+    - {id: silk-fan-3-mark, at: [388.3, 23.0], path: 'M 0 -1.5 A 1.5 1.5 0 1 0 0.01 -1.5 Z M -1.5 0 H 1.5 M 0 -1.5 V 1.5', fill: '#e6e8ea', for: fan-3}
+    components:
+      bays:
+      - {id: psu-0, at: [11.0, 1.9], size: {w: 54.7, h: 40.5}, group: psus, rel-pos: 0,
+         accepts: ['juniper/ex4600-jpsu-650-ac-afo@1', 'juniper/ex4600-jpsu-650-ac-afi@1', 'juniper/ex4600-jpsu-650-dc-afo@1', 'juniper/ex4600-jpsu-650-dc-afi@1', 'juniper/ex4550-psu-cover@1'],
+         default: 'juniper/ex4600-jpsu-650-ac-afo@1'}
+      - {id: psu-1, at: [74.5, 1.9], size: {w: 54.7, h: 40.5}, group: psus, rel-pos: 1,
+         accepts: ['juniper/ex4600-jpsu-650-ac-afo@1', 'juniper/ex4600-jpsu-650-ac-afi@1', 'juniper/ex4600-jpsu-650-dc-afo@1', 'juniper/ex4600-jpsu-650-dc-afi@1', 'juniper/ex4550-psu-cover@1'],
+         default: 'juniper/ex4550-psu-cover@1'}
+      - {id: em-2, at: [178.2, 1.85], size: {w: 86.5, h: 41.0}, group: expansion, rel-pos: 1,
+         accepts: ['juniper/ex4550-em-cover@1'], default: 'juniper/ex4550-em-cover@1'}
+      - {id: fan-1, at: [286.9, 1.9], size: {w: 41.6, h: 40.0}, group: fans, rel-pos: 0,
+         accepts: ['juniper/ex4550-fan-afo@1', 'juniper/ex4550-fan-afi@1'], default: 'juniper/ex4550-fan-afo@1'}
+      - {id: fan-2, at: [342.0, 1.9], size: {w: 41.6, h: 40.0}, group: fans, rel-pos: 1,
+         accepts: ['juniper/ex4550-fan-afo@1', 'juniper/ex4550-fan-afi@1'], default: 'juniper/ex4550-fan-afo@1'}
+      - {id: fan-3, at: [397.0, 1.9], size: {w: 41.6, h: 40.0}, group: fans, rel-pos: 2,
+         accepts: ['juniper/ex4550-fan-afo@1', 'juniper/ex4550-fan-afi@1'], default: 'juniper/ex4550-fan-afo@1'}
+      placements:
+      - {ref: common/esd-jack@1, id: esd-rear, at: [150.1, 23.4], for: chassis, group: esd, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-fan-1, at: [282.1, 33.1], for: fan-1, group: fan-leds, rel-pos: 0}
+      - {ref: common/led-dot@1, id: led-fan-2, at: [335.8, 33.1], for: fan-2, group: fan-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-fan-3, at: [389.7, 33.1], for: fan-3, group: fan-leds, rel-pos: 2}
+  top:
+    size: {w: 440.7, h: 469.9}
+    empty: >-
+      Not drawn by any source held. The guide shows no flat figure of the lid and no photograph is held.
+  bottom:
+    size: {w: 440.7, h: 469.9}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no underside and no photograph is held.
+  left:
+    size: {w: 469.9, h: 43.7}
+    empty: >-
+      Not drawn by any source held. The guide names the protective earthing terminal on the left side and
+      draws no flat side wall.
+  right:
+    size: {w: 469.9, h: 43.7}
+    empty: >-
+      Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  ac-f2b:
+    kind: orderable
+    default: true
+    description: >-
+      EX4550-32T-AFO: one AC supply (JPSU-650W-AC-AFO) in slot 0, a cover panel in slot 1 and three
+      front-to-back fan modules (EX4550-FAN-AFO). The labels are AFO and AIR OUT (guide Table 4).
+    part-numbers:
+      EX4550-32T-AFO: {}
+  ac-b2f:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      EX4550-32T-AFI: one AC supply (JPSU-650W-AC-AFI) in slot 0, a cover panel in slot 1 and three
+      back-to-front fan modules (EX4550-FAN-AFI). The labels are AFI and AIR IN.
+    bays:
+      psu-0: juniper/ex4600-jpsu-650-ac-afi@1
+      fan-1: juniper/ex4550-fan-afi@1
+      fan-2: juniper/ex4550-fan-afi@1
+      fan-3: juniper/ex4550-fan-afi@1
+    part-numbers:
+      EX4550-32T-AFI: {}
+  dc-f2b:
+    kind: orderable
+    power: dc
+    description: >-
+      EX4550-32T-DC-AFO: one DC supply (JPSU-650W-DC-AFO) in slot 0, a cover panel in slot 1 and three
+      front-to-back fan modules (EX4550-FAN-AFO).
+    bays:
+      psu-0: juniper/ex4600-jpsu-650-dc-afo@1
+    part-numbers:
+      EX4550-32T-DC-AFO: {}
+  dc-b2f:
+    kind: orderable
+    power: dc
+    airflow: back-to-front
+    description: >-
+      EX4550-32T-DC-AFI: one DC supply (JPSU-650W-DC-AFI) in slot 0, a cover panel in slot 1 and three
+      back-to-front fan modules (EX4550-FAN-AFI).
+    bays:
+      psu-0: juniper/ex4600-jpsu-650-dc-afi@1
+      fan-1: juniper/ex4550-fan-afi@1
+      fan-2: juniper/ex4550-fan-afi@1
+      fan-3: juniper/ex4550-fan-afi@1
+    part-numbers:
+      EX4550-32T-DC-AFI: {}
+  two-psu:
+    kind: example
+    description: >-
+      The EX4550-32T-AFO with a second AC supply in slot 1, as the guide allows. An illustration, not an
+      order code.
+    bays:
+      psu-1: juniper/ex4600-jpsu-650-ac-afo@1
+references:
+- {title: 'Juniper EX4550 Switch Hardware Guide (published 2020-12-15), from the EX Series documentation archive', url: 'https://www.juniper.net/documentation/en_US/release-independent/downloads/ex-series/ex-series-doc-archives.zip', sha256: 9e06c214c24f165ba939c87923a428ad79e4922591dae4aa198bf1d9fd29b545}

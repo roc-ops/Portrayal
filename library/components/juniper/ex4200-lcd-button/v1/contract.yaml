@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: ex4200-lcd-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  LCD panel navigation button of the Juniper EX4200 switches: a round black pushbutton to the
+  right of the LCD panel. Two of them, Menu and Enter, are on the front panel; Menu cycles
+  between the LCD menus and Enter steps through the options of the menu shown. The `menu` skin
+  carries the list icon and the `enter` skin the return-arrow icon.
+size: {w: 6.1, h: 6.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {role: lcd-navigation}
+provenance:
+  existence: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), LCD Panel in EX4200 Switches
+    (Figure 5): "There are two navigation buttons - Menu and Enter - to the right of the LCD
+    panel."
+  size: >-
+    estimated - read off the product photograph in the EX4200 datasheet (page 6, the 48-port and
+    24-port views): each button is about 13 px across at 2.04 px per mm, 6.1 mm, good to about half
+    a millimetre. No document dimensions the button
+  icons: >-
+    estimated - the guide's Figure 5 draws a list icon in the upper button and a return arrow in
+    the lower; the photograph shows two dark round buttons whose icons it cannot resolve. They are
+    drawn as the guide draws them
+  colour: >-
+    photo-measured - the datasheet photograph shows the buttons black with a thin grey rim, not
+    the light caps of the EX4300
+elements:
+  cap: {at: [0.6, 0.6], size: [4.9, 4.9], class: button}
+relief:
+  features:
+  - node: cap
+    out: 0.6
+    color: '#2a2d34'
+    confidence: estimated
+    source: photo - the button cap stands slightly proud of the plate; projection not measured
+skins: [menu, enter]

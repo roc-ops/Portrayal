@@ -1,0 +1,34 @@
+format: 1
+kind: module
+name: psu-adapter-60mm-2u-16g
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: server
+description: >-
+  The power supply unit adapter of a 16th-generation 2U PowerEdge (R760) - a spacer that narrows its 86 mm supply bay so a 60 mm supply (700 to 1800 W) seats in it
+attrs:
+  form-factor: 86mm-bay-adapter
+  inlet: none
+provenance:
+  sources: >-
+    R760 Installation and Service Manual (ISM) 'Removing a power supply unit adapter' and 'Installing a power supply unit adapter' (figures 299 and 300): 'Remove the PSU adapter, when installing PSU with 86 mm wide form factor', secured by one Phillips #1 screw; ISM table 16 for which supplies are 60 mm (700, 800, 1100, 1400 and 1800 W) and which 86 mm (2400, 2800 and 3200 W). The figures are isometric views of the adapter beside the bay, not a rear elevation.
+  size: >-
+    estimated - 86.3 x 41.0, the bay's extent (dell/psu-2400w-ac-86mm@1). The adapter is the 26.3 mm by which the bay exceeds a 60 mm supply; no figure dimensions it.
+  seating: >-
+    estimated - the supply sits at the right of the adapter, x 26.5, so the spacer is at the bay's left in both bays. That reproduces the 1U R660's two supplies (dell/psu-1400w-ac-60mm@1 at rear x 33.06 and 367.91 within 434: the same 26.5 to 26.8 offset from each bay's left edge, 59.8 wide to the bay's right edge) and is read from them; the R760's own figure shows 86 mm supplies and no 60 mm one.
+  face: >-
+    estimated - a plain perforated plate: the figures show a sheet-metal box with holes in its end, and no rear view of it fitted.
+  inlet: >-
+    NONE - the adapter is sheet metal; the C13 or C15 inlet is the seated 60 mm supply's, on its own face.
+  power: >-
+    NOT APPLICABLE - sheet metal.
+size: {w: 86.3, h: 41.0}
+size-confidence: {w: estimated, h: estimated}
+bays:
+  psu:
+    at: [26.5, 0.45]
+    size: [59.8, 40.1]
+    accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1]
+    default: dell/psu-1400w-ac-60mm@1
+skins: [default]

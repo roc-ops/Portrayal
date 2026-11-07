@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: r660xs-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: server
+description: >-
+  Hot-plug cooling fan of the PowerEdge R660xs seen from above - one 40 mm fan in a dark housing with a yellow caution label at its rear end and an orange handle at its front end; seven fit
+provenance:
+  sources: >-
+    drawing - the R660xs Installation and Service Manual, figure 8 'Inside the
+    system' (1207 x 1450 px, Dell's render from above, with the cover off), read
+    at 1.802 px/mm: the chassis's side walls are 782 px apart (x 207..989) for
+    the 434 body. The seven modules stand in two groups, four at the left and
+    three at the right, with the chassis's gap between. ISM 'Cooling fan
+    specifications' and figures 19 and 20: 'up to seven, hot-swappable Standard
+    fans (STD) and High performance (HPR) gold grade fans'.
+  size: >-
+    drawing - 42.5 x 81.0: each module is 77 px across (figure x 365..440,
+    440..519, 519..597, 597..670, 733..808, 808..885, 885..960, a 42.7 pitch) and
+    146 px from the yellow label's top to the handle's lower edge (figure y
+    811..957). Whether the housing is the 66 mm the figure's shading suggests,
+    with 15 of handle, is read by eye.
+  depth: >-
+    NOT MEASURED - the figure is a plan.
+  standard-and-gold: >-
+    NOT DISTINGUISHED - the ISM draws both modules (figures 19 and 20) and the
+    thermal tables name the gold one HPR; this part draws one, the standard
+    module's housing and handle as figure 8 shows them.
+  five-fan-builds: >-
+    NOT MODELLED - the thermal tables say '5x fans is required for 1xProcessor
+    without rear drive configuration' and '7xfans is required for 2xProcessors
+    configuration and 1xProcessor with rear drive configuration'. Every build
+    here seats all seven.
+  power: >-
+    NOT STATED in the R660xs documents held.
+size: {w: 42.5, h: 81.0, d: 40.0}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+elements:
+  body: {at: [0.0, 0.0], size: [42.5, 81.0], class: bezel}
+skins: [default]

@@ -1,0 +1,85 @@
+format: 1
+kind: component
+name: hm-ring-2u
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+description: >-
+  One wire ring of a Hubbell M-Series 2 RU horizontal cable manager, seen from the front.
+  It is a rectangular loop of 0.225 in steel wire that stands out of the centre plate.
+  A top wire, a bottom wire and a post at the free end hold the cables laid along the manager,
+  and a root wire along the plate joins the two wires to it.
+provenance:
+  size: >-
+    datasheet - the sheet's "Wire Diameter 0.225 in", 5.715 mm: the loop seen end-on is a
+    band that wide. Its height is the plate's, A, 3.5 in (89 mm), because the figure draws
+    the top wire at the top of the plate and the bottom wire at its foot.
+  relief: >-
+    estimated - the loop stands C, 4 in (102 mm), out of the plate (the sheet's C): a wire
+    along the top, one along the bottom, a post joining them at the free end and a root
+    wire joining them at the plate, each round wire of the sheet's 5.715 mm diameter (the
+    root and the post lie on the plate's floor and at the free end). The loop is closed
+    and fixed to the plate on all four sides, as the figure draws it. The 3D loop keeps
+    square corners; the left and right views draw it with the corners rounded (see
+    `corner`).
+  corner: >-
+    estimated - STAND-IN. The figure shows the wire bent round where it leaves the plate
+    and at the free end, and gives no radius. A bend radius of two wire diameters, 11.43
+    mm, is drawn in the side views so the loop reads as a bent wire; the figure is not
+    dimensioned, so the radius is not the maker's. The device's `ring-bend` gap names it.
+  face: >-
+    estimated - STAND-IN. Seen from the front the loop is end-on: a post the height of the
+    plate with the two wires ending in it as discs. The post is drawn lighter than the
+    black plate (a mid steel, with a highlight along it) so a wire catches the light and
+    reads on both the dark and the light stage; the finish itself is black powder coat.
+    The sheet states no tone.
+  guide: >-
+    estimated - the clear opening inside the loop, looking along the manager, which is the
+    run: `w` the height of the opening, A less a wire at the top and one at the bottom
+    (88.9 - 11.43 = 77.47), and `h` the depth, C less the post and the plate-side wire (101.6
+    - 11.43 = 90.17). The wire diameter is the sheet's; the loop's proportions are read on
+    the figure.
+  guide-depth: >-
+    datasheet - the band of the loop along the run is the wire's diameter, 5.715 mm, so a
+    cable passing it enters and leaves that far apart.
+  not-drawn: >-
+    known-wrong - the figure and the photograph show the posts of alternate rings with a
+    hook, which is not drawn (no dimension); the 3D loop is square where the real one is
+    bent (the side views round it, see `corner`).
+  material: >-
+    datasheet - "Material: Steel", "Finish: Black Powder Coated".
+  color: >-
+    datasheet - "Finish: Black Powder Coated"; drawn as the library's black steel.
+size: {w: 5.715, h: 88.9}
+size-confidence: {w: datasheet, h: datasheet}
+attrs: {material: Steel}
+guide: {kind: ring, aperture: {w: 77.47, h: 90.17}, run: x, depth: 5.715}
+elements:
+  root: {at: [0.0, 0.0], size: [5.715, 88.9], class: bezel}
+  top: {at: [0.0, 0.0], size: [5.715, 5.715], class: bezel}
+  bottom: {at: [0.0, 83.185], size: [5.715, 5.715], class: bezel}
+  post: {at: [0.0, 0.0], size: [5.715, 88.9], class: bezel}
+relief:
+  features:
+    - node: top
+      cyl: 101.6
+      color: '#59616a'
+      confidence: estimated
+      source: the loop stands C, 4 in (102 mm), out of the plate (HM24C sheet, dimension C); the figure draws the top wire the full length, a wire of the sheet's 0.225 in
+    - node: bottom
+      cyl: 101.6
+      color: '#59616a'
+      confidence: estimated
+      source: the loop stands C, 4 in (102 mm), out of the plate (HM24C sheet, dimension C); the figure draws the bottom wire the full length, a wire of the sheet's 0.225 in
+    - node: root
+      bar: 5.715
+      color: '#4b525a'
+      confidence: estimated
+      source: the figure draws each wire leaving the plate and the loop fixed to it; the wire of the sheet's 0.225 in lying along the plate
+    - node: post
+      bar: 5.715
+      lift: 95.885
+      color: '#59616a'
+      confidence: estimated
+      source: the figure draws a post at the free end joining the two wires, one wire thick
+skins: [default]

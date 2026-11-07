@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: perf-vcm-base-6
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the 6 in wide APC Performance vertical cable manager (AR8615 and AR8625) seen
+  from the working face, the full width and the full 2134 mm height of the part - drawn as the well
+  the finger columns stand in, its floor the plate a cable lies against
+provenance:
+  size: >-
+    datasheet - the AR8615 and AR8625 product data sheets: height 84.02 in (2134 mm), width 6.0 in
+    (152 mm). The plate runs the whole of both, as the instruction sheet's figure (990-4576A-001,
+    page 1) draws it: a tall flat plate with the fingers standing off its two edges.
+  depth: >-
+    estimated - 300. The data sheets give 14.2 in (360 mm) overall for the single-sided parts and
+    26.0 in (660 mm) for the double-sided ones, which is a well and a back plate and two wells and a
+    back plate: solving the two gives a well of 300 and a back plate zone of 60. No view sections the
+    part, so the split is a derivation, not a reading.
+  color: >-
+    datasheet - "Color: Black" on the data sheet. The shade is this library's render of black
+    powder-coated steel.
+size: {w: 152, h: 2134, d: 300}
+size-confidence: {w: datasheet, h: datasheet, d: estimated}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [152, 2134], class: bezel}
+skins: [default]

@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: rtx-3090-fe-tail
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The far end of the NVIDIA RTX 3090 Founders Edition, seen from behind. It is a closed dark end plate: the
+  power connector is on the top edge and not on this face. It is the card's `faces.rear`.
+size: {w: 126.02, h: 55.86}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The end face is the shroud's width across (126.02) and runs from the board's rear face to the
+  shroud's far wall (55.86). NO DEPTH IS DECLARED: a face is a drawing of a back. SEEN FROM BEHIND WITH THE
+  BOARD'S SIDE AT THE TOP, so x' is the shroud's top-edge x less the card's x (the top edge at the left)
+  and y' is the card's y less 4.44, the frame of nvidia/a10-tail@1.
+attrs: {media: gpu}
+provenance:
+  size: >-
+    estimated - see size-notes. The shroud's width is the 4090's 125.02 plus 1.0 for the 3090's 138 mm against the 4090's 137
+    (NVIDIA's pages); the far wall is the estimated thickness (3 slots less 1.9, as nvidia/a100-pcie-80gb@1 does). No
+    photograph of the card's end is held that is square on: the gallery picture of its far end is a 3/4.
+  connector: >-
+    The 12-pin connector of this card sits on the TOP EDGE in a notch (NVIDIA's guide: '12-pin Power Connector', drawn on the
+    top of the card), so it is a plain housing in the 3D body (the registry has no 12-pin interface) and nothing is on the end.
+  end-plate: >-
+    estimated - a closed dark end plate over the full width and height. The far end carries the 'GEFORCE RTX' lettering on its
+    cap in the 3/4 gallery picture; it is a maker's wordmark and is not drawn.
+elements: {}
+skins: [default]

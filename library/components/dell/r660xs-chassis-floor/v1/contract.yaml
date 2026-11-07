@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: r660xs-chassis-floor
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The floor of the PowerEdge R660xs chassis seen from above - the light grey sheet metal round the system board, the fans and the supplies, with the cover off; the open interior the other parts stand in
+provenance:
+  sources: >-
+    drawing - the R660xs Installation and Service Manual, figure 8 'Inside the
+    system' (Dell's render from above, cover off), in which the floor round the
+    parts is light grey. Facts read, art not traced.
+  size: >-
+    drawing - the chassis's own footprint, 434.0 wide between the side walls and
+    699.1 from the rear wall to the front (dell/r660xs, chassis.depth).
+  depth: >-
+    ESTIMATED - 40.3, 2.0 deeper than the system board's well (38.3,
+    dell/r660xs-system-board@1), so the chassis sheet lies beneath the PCB and
+    the 3D viewer paints the board over it; at the same depth the floor painted
+    over the board. No R660xs figure gives either height.
+  why-this-is-a-part: >-
+    THE TOP VIEW'S FLOOR WAS A DECOR RECTANGLE, and a decor rectangle is part of
+    the top face the 3D viewer paints, so it stood over the whole chassis as an
+    opaque white lid with only the system board's cut-out open. As a part with
+    an interior it is a well instead: the top face is open over it and the
+    parts stand in it, as they do in the board's own well. No cover is drawn
+    over it because no figure draws the R660xs's cover from above (see the
+    device's air-shroud-covers-backplane-in-top-view gap).
+size: {w: 434.0, h: 699.1, d: 40.3}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  floor: {at: [0.0, 0.0], size: [434.0, 699.1], class: bezel}
+skins: [default]

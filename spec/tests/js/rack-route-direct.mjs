@@ -87,10 +87,17 @@ const mm = l => Math.round(l.measured * 10000) / 10;
 const OWNER = {
   c1: [[4], 514.2, 1], c2: [[4], 499.8, 0.5], c3: [[4], 502.7, 0.5], c4: [[4], 491.4, 0.5],
   c5: [[4], 522, 1], c6: [[4], 515, 1], c7: [[4], 505.8, 0.5], c8: [[4], 547, 1],
+  // c9 to c12 and c15 rose through the gap behind the tray under #966 (485.5, 490.8, 486.8,
+  // 497.7 and 450 mm, 0.5 m cords). CHANGED, drawable geometry, owner's option A,
+  // 2026-10-22, P-0218-2: the rise cannot be drawn (9.8 mm for a bend of 25), so they go
+  // round the front edge again, 125.7, 122.4, 129.3, 125.7 and 198 mm longer, 1 m cords
   c9: [[3], 611.2, 1], c10: [[3], 613.2, 1], c11: [[3], 616.1, 1], c12: [[3], 623.4, 1],
   c13: [[4], 645.5, 1], c14: [[4], 616.9, 1], c15: [[4], 648, 1], c16: [[4], 576.3, 1],
 };
 const LOWER = ['c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16'];
+// The lower leaf's cords that rise through the gap behind the tray (#966): none now
+// (see OWNER above); five did
+const RISE = [];
 
 test('the reference rack of #949: each cord runs along the lacer through a ring, with no lane', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
@@ -102,14 +109,15 @@ test('the reference rack of #949: each cord runs along the lacer through a ring,
   assert.deepEqual(got, want);
   // nothing reaches a gutter
   assert.equal(r.cables.flatMap(c => R.autoRoute(r, c, ctx)).filter(w => w.lane).length, 0);
-  // no route is direct, and every cord but c2, c3, c4 and c7 passes the 0.5 m
+  // no route is direct, and every cord but c2, c3, c4, c7 and the five that
+  // rise through the gap behind the tray (#966) passes the 0.5 m
   // stock break (all but c2 and c4 before the 10 mm break tolerance of
   // version 4; fifteen before the lacer stood centred in its unit, the lower
   // leaf's eight before #973, fifteen before #962's end allowance, thirteen
   // before #968)
   assert.equal(r.cables.filter(c => !R.autoRoute(r, c, ctx).length).length, 0);
   assert.deepEqual(r.cables.filter(c => R.routedLength(r, c, ctx).value > 0.5).map(c => c.id),
-    r.cables.map(c => c.id).filter(id => !['c2', 'c3', 'c4', 'c7'].includes(id)));
+    r.cables.map(c => c.id).filter(id => !['c2', 'c3', 'c4', 'c7', ...RISE].includes(id)));
   // and no corner of any is short of its 25 mm (#973)
   assert.deepEqual(r.cables.flatMap(c => R.routePath(r, c, ctx).bends), []);
   // every ring taken is passed, and none holds a cord that does not turn in it
@@ -151,6 +159,11 @@ test('the reference rack of #949: no ring is entered and left by one face, and n
     }
     assert.equal(p.detours.length, 1, c.id);
     assert.deepEqual(p.detours[0].between[0], {end: 'a'}, c.id);
+    if (RISE.includes(c.id)) {
+      // up through the gap between the strip's back edge (48.8 from the rail) and the rail
+      assert.ok(p.detours[0].points.every(q => q.z > 0 && q.z < 48.8), `${c.id}: behind the strip`);
+      continue;
+    }
     assert.ok(p.detours[0].points.every(q => q.z > 110), `${c.id}: in front of the tray's front edge`);
     // and it ends straight in front of the approach point, not the ring
     assert.equal(p.detours[0].points.at(-1).x, ap.x, c.id);
@@ -288,8 +301,15 @@ test('ends on two managers still take the lane; on opposite sides, the shorter s
   // OM4 cord, not 150: 73.8 shorter each, and the left still the shorter;
   // 1913.1 and 2120 before its turns were given room, #973: 13.4 and 70.3
   // longer, the right by more for the wider turn it makes to end a's ring;
-  // 1926.5 and 2190.3 before the lacer stood centred in its unit, 0.225 mm up)
+  // 1926.5 and 2190.3 before the lacer stood centred in its unit, 0.225 mm up;
+  // 1926.6 and 2190.2 before the automatic left rose through the gap behind
+  // the tray into its first ring, #966: 125.7 mm shorter than round the front
+  // edge. `len` writes the route by hand, and a hand-edited route never uses
+  // the gap, so it measures the front edge, 1926.6; the cable itself, on its
+  // own route, rose: 1800.9. CHANGED, drawable geometry, owner's option A,
+  // 2026-10-22, P-0218-2: the rise cannot be drawn, so it is the front edge, 1926.6)
   assert.deepEqual([len(left), len(right)], [1926.6, 2190.2]);
+  assert.equal(mm(R.routedLength(r, c, ctx)), 1926.6);
   // written the other way round, the same side
   const back = {...c, a: c.b, b: c.a};
   assert.deepEqual(R.autoRoute(r, back, ctx), left.toReversed());

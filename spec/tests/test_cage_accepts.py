@@ -88,7 +88,8 @@ def test_an_sfp28_cage_accepts_exactly_the_sfp_generics(tmp_path):
     # would hide) fails loudly here.
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
                                "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
-                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1",
+                               "wetatronics/conx-sfp@1"]
 
 
 CSR180 = LIB / "devices/edgecore/csr180/device.yaml"
@@ -105,7 +106,7 @@ def test_the_rate_ceiling_keeps_a_10g_dac_out_of_a_1g_sfp_cage(tmp_path):
     assert cage["media"] == "sfp"
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
                                "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
-                               "generic/sfp-sc@1"]
+                               "generic/sfp-sc@1", "wetatronics/conx-sfp@1"]
 
 
 def test_the_rate_ceiling_offers_a_10g_dac_in_a_10g_sfp_cage(tmp_path):
@@ -193,6 +194,7 @@ def test_a_family_with_nothing_to_seat_says_so_explicitly():
     assert pool.get("cfp2"), "the cached pool was edited"
 
 
+@pytest.mark.heavy
 def test_a_cage_entry_carries_the_documented_shape(tmp_path):
     idx = _build(CSR310, tmp_path)
     cage = _cage(idx, "front", "m1-0")
@@ -240,7 +242,8 @@ def test_a_group_with_no_media_has_no_ceiling(tmp_path):
     assert cage["media"] is None
     assert cage["accepts"] == ["generic/sfp-cable@1", "generic/sfp-lc-simplex@2", "generic/sfp-lc@1",
                                "generic/sfp-rj45@1", "generic/sfp-sc-key-up@1",
-                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1"]
+                               "generic/sfp-sc@1", "molex/sfp-plus-passive-dac@1",
+                               "wetatronics/conx-sfp@1"]
 
 
 # --- the configured occupant, read from the manifest, not hardcoded ------
@@ -302,6 +305,7 @@ def test_a_non_default_configurations_occupants_reach_configs(tmp_path):
     assert _cage(idx, "front", "port-4")["occupant"] is None
 
 
+@pytest.mark.heavy
 def test_no_shipped_device_seats_an_occupant():
     """The corpus-wide fact `test_a_cage_entry_carries_the_documented_shape`
     pins one example of: after spec A, `occupants:` is empty on every
@@ -562,6 +566,7 @@ def _seat_and_build(src, tmp_path, port, occ, drop_group=False):
     return idx, dict(tag.attrib)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("src, port, occ", [
     (SFP_SRC, "port-0", "generic/qsfp-lc@1"),   # upright, qsfpdd-400g
     (SFP_SRC, "port-2", "generic/qsfp-lc@1"),   # rotate 180, qsfp28
@@ -597,12 +602,29 @@ def test_a_group_description_reaches_the_occupant(tmp_path):
 
 
 def _ref(device, view_name, placement_id):
-    """The ref of the placement `cage_entries` made an entry for."""
-    return next(q["ref"] for q in
-                render_mod.view_parts(device["views"][view_name] or {})["placements"]
-                if q.get("id") == placement_id)
+    """The ref of the placement `cage_entries` made an entry for; of the composed part, for a
+    seat listed under `<placement>/<part>` (nested_seat_entries)."""
+    head, _, part = placement_id.partition("/")
+    ref = next(q["ref"] for q in
+               render_mod.view_parts(device["views"][view_name] or {})["placements"]
+               if q.get("id") == head)
+    if not part:
+        return ref
+    host = render_mod.Library([str(LIB)]).resolve(ref)[0]
+    return next(p["ref"] for p in host["parts"] if p["id"] == part)
 
 
+def _part_lift(device, view_name, placement_id):
+    """How far the composed part stands off its host, for a seat listed under `<placement>/<part>`; 0 otherwise."""
+    head, _, part = placement_id.partition("/")
+    if not part:
+        return 0.0
+    ref = _ref(device, view_name, head)
+    host = render_mod.Library([str(LIB)]).resolve(ref)[0]
+    return float(next(p for p in host["parts"] if p["id"] == part).get("lift") or 0.0)
+
+
+@pytest.mark.heavy
 def test_the_lift_census():
     """RECORDS the published lift across every slot in the library, computed
     by the same `cage_entries` main() writes. No PLUGGABLES CAGE presents a
@@ -667,7 +689,9 @@ def test_the_lift_census():
                 if c["lift"]:
                     nonzero += 1
                     lifted_cages += c["kind"] == "cage"
-                    if c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
+                    # A SEAT OF A PLACED PART (`<placement>/<part>`, nested_seat_entries) is
+                    # lifted by the composed part's own `lift:` too, whatever its interface
+                    if "/" in c["id"] or c["interface"] in ("bnc", "din-1-0-2-3", "f-type",
                                           "terminal-508-5", "terminal-508-2",
                                           "terminal-stud", "p40",
                                           # a pair of studs a two-hole lug spans
@@ -676,8 +700,18 @@ def test_the_lift_census():
                                           "stud-pair-1"):
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
-                            doc, lambda r: lib.resolve(r)[0])[2]
+                            doc, lambda r: lib.resolve(r)[0])[2] + _part_lift(d, v, c["id"])
                         assert c["lift"] == pytest.approx(want), (c["id"], c["lift"], want)
+                        continue
+                    if c["interface"] == "pdu-button":
+                        # A KEYHOLE CUT IN A SHEET (#939): the FS-PDUBK's keyholes are
+                        # placed `in:` the well that builds the plate, so each slot is
+                        # published at the plate's floor, as far below the face as the
+                        # well is deep - the sheet's own depth, not a figure of the part
+                        placed = {p["id"]: p for p in ((d["views"][v].get("components") or {})
+                                                       .get("placements") or [])}
+                        host = placed[placed[c["id"]]["in"]]
+                        assert c["lift"] == -lib.resolve(host["ref"])[0]["size"]["d"], (c["id"], c["lift"])
                         continue
                     assert c["interface"] == "lc-duplex", (c["id"], c["lift"])
                     bezel = {f["node"]: f.get("out") for f in

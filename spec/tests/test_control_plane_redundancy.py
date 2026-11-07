@@ -18,6 +18,7 @@ import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 from portrayal import lint
+import pytest
 
 LIB = ROOT / "library"
 
@@ -111,6 +112,7 @@ def test_bays_are_counted_across_views():
 
 # ---- what the library actually says -----------------------------------------
 
+@pytest.mark.heavy
 def test_every_multi_bay_control_plane_or_fabric_group_in_the_library_is_stated():
     """The rollout. No deliberate holdouts: every such group in the library has a
     per-model guide behind it. If this list grows, the new device either needs its
@@ -126,6 +128,7 @@ def test_every_multi_bay_control_plane_or_fabric_group_in_the_library_is_stated(
     assert unstated == [], unstated
 
 
+@pytest.mark.heavy
 def test_a_stated_form_is_one_the_vendors_actually_use():
     """`N+M` with `n` allowed on either side: 4+2, 5+3 and 6+1 are all real vendor
     notation, and so are n+1 and n+n where the guide declines to spell the n."""
@@ -139,6 +142,7 @@ def test_a_stated_form_is_one_the_vendors_actually_use():
     assert not bad, bad
 
 
+@pytest.mark.heavy
 def test_a_stated_group_carries_the_sentence_it_was_read_from():
     """The form collapses detail the note keeps - active/active versus standby,
     and, on the ASR 9910 and the MX960, why the form does not match the bay
@@ -152,6 +156,7 @@ def test_a_stated_group_carries_the_sentence_it_was_read_from():
     assert not thin, thin
 
 
+@pytest.mark.heavy
 def test_the_notes_on_control_plane_and_fabric_groups_name_their_document():
     """Not "the datasheet". A note that cannot be checked against a named guide
     and section is a claim, not a citation."""

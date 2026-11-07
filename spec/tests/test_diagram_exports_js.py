@@ -263,10 +263,11 @@ def test_numbered_and_stub_ids_never_collide_with_another_cable(out):
 def test_cable_style_is_the_callers(out):
     c = out["cables"]
     assert c["styleFn"] == ["#ABCDEF"]
-    # a map merges over the default palette; an unknown media is the default grey
-    assert dict(c["styleMap"]) == {"cable-c1": "#4D4D4D", "cable-c2-a": "#D4A017",
-                                   "cable-c-6": "#123456", "cable-c-6-2": "#808080",
-                                   "cable-c2-b": "#D4A017"}
+    # a map is read ahead of the kit's colours (#1028), which draw a media it
+    # does not name, an unknown one included, as the explorer does
+    assert dict(c["styleMap"]) == {"cable-c1": "#15171a", "cable-c2-a": "#e8c547",
+                                   "cable-c-6": "#123456", "cable-c-6-2": "#e8c547",
+                                   "cable-c2-b": "#e8c547"}
 
 
 def test_cables_are_byte_stable_and_absent_cables_change_nothing(out):

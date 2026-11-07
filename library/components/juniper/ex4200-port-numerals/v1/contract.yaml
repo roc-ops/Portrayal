@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: ex4200-port-numerals
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: networking
+description: >-
+  The numerals 0 to 7 above the first four columns of jacks on the front of the Juniper EX4200-24T
+  and -48T. The `poe` skin prints them in orange, as the AC builds with their eight PoE ports do;
+  the `plain` skin prints them in white, as the -DC builds, which provide no PoE, are drawn. Numerals
+  8 and up are chassis silkscreen and are the same on every build.
+attrs: {model: 'Port numerals 0 to 7'}
+size: {w: 50.0, h: 3.6}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  poe: >-
+    datasheet - EX4200 Ethernet Switch with Virtual Chassis Technology Datasheet (1000215-026-EN),
+    page 6, the 24-port view prints the numerals of ports 0 to 7 in orange and the others in
+    white. Table 1 gives the AC 24T and 48T 8 PoE ports.
+  plain: >-
+    inferred - the datasheet Table 1 gives the DC models 0 PoE ports and hardware guide Table 1
+    (pp. 4-5) states that "EX4200 switches with a DC power supply installed do not provide PoE", so
+    there is no PoE colouring to print. No source shows the -DC face; the numerals are drawn white
+    like the rest.
+  size: >-
+    estimated - the box that holds eight numerals at the positions of the jack columns, which are
+    the same as for the numerals 8 and up, read off the photograph.
+skins: [poe, plain]

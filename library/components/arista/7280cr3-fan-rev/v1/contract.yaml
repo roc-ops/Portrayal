@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: 7280cr3-fan-rev
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The 1RU high-speed hot-swap fan module of the Arista 7280CR3-32D4 for rear-to-front air, spare
+  FAN-7011H-R (reverse airflow, blue). It is the FAN-7011H-F housing with the rotor turned the
+  other way. The module has a blue frame and a honeycomb grille. A grey release rail with a
+  slider runs down the middle, with a blue label tab at its top. A status lamp is at the bottom
+  centre. Three of them fill the rear between the management ports and the right power supply.
+  The module is hot-swappable, and its release is the slider.
+size: {w: 78.6, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  FAN-7011H-R: {part: FAN-7011H-R}
+attrs:
+  airflow: back-to-front
+  role: fan
+provenance:
+  size: >-
+    estimated, as arista/7280cr3-fan: the guide's figure D-2 draws the red module, and the blue
+    one is the same housing.
+  part-number: >-
+    datasheet - the 7280R3 Series Data Sheet (03-0045-59, August 11th, 2025), ordering
+    information for the 7280CR3-32D4: "FAN-7011H-R  Spare fan module for Arista 7000 Series 1RU
+    High Speed Fan (rear-to-front airflow)". Its note 4 on the model comparison says rear-to-front
+    air "is subject to 35C max ambient temperature and transceiver power restrictions, requires
+    EOS 4.29.1 and High Speed fans (FAN-7011H-R)" (the note sits under the 7280CR3-36S table; the
+    CR3-32D4 table lists "Front to rear and Rear to front" without it).
+  airflow: >-
+    datasheet - the part number's "rear-to-front airflow". The guide, section 2.1, says a blue
+    handle marks an air-inlet module.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a FAN-7011H-R is held. Figure D-2 draws the
+    red module, and the blue one is drawn as the same module with the frame and tab changed,
+    which is what the guide's note "Handle or bezel color indicates airflow direction" describes.
+    The lamp, states and positions are as arista/7280cr3-fan.
+  handle-finish: >-
+    The blue of the frame is a field, `handle-finish`, default `#3d7bd6`, the library's blue for a
+    back-to-front handle.
+  power: >-
+    NOT STATED. Neither the quick start guide nor the data sheet gives a power draw for the
+    FAN-7011H, so none is written and the lint warning for a fan without one stands.
+states: [absent]
+elements:
+  grille: {at: [3.0, 3.2], size: [72.6, 29.4], class: vent}
+  handle: {at: [32.4, 0.4], size: [13.8, 33.4], class: handle}
+  status: {at: [36.6, 32.4], size: [5.2, 5.2], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#3d7bd6'}
+relief:
+  wall: '#3a3a36'
+  features:
+    - node: grille
+      vent: 14
+      confidence: estimated
+      source: >-
+        The grille is open and the rotor is not drawn, but no document gives a depth. 14 is the
+        order of what this library gives other 1RU fan modules.
+    - node: handle
+      bar: 3.0
+      confidence: estimated
+      source: >-
+        The release rail stands off the grille along its length; how far is not dimensioned
+        anywhere, so 3.0 is the rail's own drawn width.
+skins: [default]
+body:
+  depth: 190
+  color: '#2e2b26'
+  footprint: {at: [0, 0], size: [78.6, 38.6]}

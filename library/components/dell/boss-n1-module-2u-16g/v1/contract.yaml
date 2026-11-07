@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: boss-n1-module-2u-16g
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  Dell BOSS-N1 boot module in its 2U rear-accessible form (R760) - two hot-swap M.2 NVMe carriers standing side by side beside the module's blue thumbscrew
+attrs:
+  form-factor: 2u-rear
+  raid: hardware RAID 1 across two M.2 NVMe
+provenance:
+  sources: >-
+    photo-measured - R760 Installation and Service Manual (ISM) figure 10 (rear view, callout 2 'BOSS module') at 3.36 px/mm, see dell/riser-1-cage-2u-16g@1/provenance/sources for the scale and tolerance; ISM figures 275 to 286 (removing and installing the BOSS-N1 card carrier and module) for what the parts are. The same two-carrier module as dell/boss-n1-module-1u@1 on a taller bracket.
+  size: >-
+    photo-measured - 39.0 x 44.0 from rear-face x 127.4, y 1.0: the module's bracket between riser 1 and riser 3, with its thumbscrew.
+  carriers: >-
+    photo-measured - two carriers standing side by side, centred at module-local x 9.45 and 23.2 and y 24.0 (figure 10: px 463..501 and 510..546 across, 150..260 down at 3.36 px/mm). They read 11 mm wide and 33 tall against dell/boss-n1-m2-carrier@1's 10.0 x 26.0. The bays reserve the part's own 10.0 x 26.0 (one piece of metal, one footprint wherever it seats, as the 1U module's bays do), centred on the figure's carriers; either the 2U bracket's windows are larger than the carrier or the figure exaggerates them, and the figure has no scale to say which. Carrier 0 is on the left with its orange tab at the bottom and carrier 1 on the right with its tab at the top, as the figure shows and as ISM figure 25 of the R660 numbers them; the R760 service label was not read for its own.
+  thumbscrew: >-
+    photo-measured - the blue thumbscrew at module-local (35.5, 22.5), diameter about 10.3, and a round hole below it at (35.7, 32.4), diameter about 6.
+  default-carriers: >-
+    EACH BAY SEATS A CARRIER, because a BOSS-N1 is ordered with its M.2 drives. The ISM also has a 'BOSS-N1 card carrier blank' for an empty slot (figures 281 and 282); no image held shows one, so it is not modelled and the bays accept only the carrier.
+  power: >-
+    NOT STATED in the R760 technical guide or ISM.
+size: {w: 39.0, h: 44.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+plan: {ref: dell/boss-n1-plan@1}
+bays:
+  carrier-0:
+    at: [4.45, 11.0]
+    size: [10.0, 26.0]
+    rotate: 270
+    accepts: [dell/boss-n1-m2-carrier@1]
+    default: dell/boss-n1-m2-carrier@1
+  carrier-1:
+    at: [18.2, 11.0]
+    size: [10.0, 26.0]
+    rotate: 90
+    accepts: [dell/boss-n1-m2-carrier@1]
+    default: dell/boss-n1-m2-carrier@1
+skins: [default]

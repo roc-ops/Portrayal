@@ -1,0 +1,323 @@
+format: 1
+kind: device
+name: cablmanager2
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: CABLMANAGER2
+description: >-
+  1U five-ring horizontal cable manager, StarTech.com CABLMANAGER2: a flat black steel panel the
+  full width of the rack with five removable ABS D-ring hooks, each 3 in (76 mm) tall, that
+  stand out of it. The three in the middle are 105 mm apart and take a bundle along the panel;
+  the two at the ends take one up and down it. Each ring ships fitted and comes off its seat.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The ears are the
+      flat ends of the panel, so the ear plane is the panel's back face, and the rings stand 76.6
+      mm in front of it (the end view, "76.6 +/-0.2"); `at` is 76.6. Of the 88.6 depth, 12.0
+      stands behind the rail (the plan view's "12 +/-0.2"). This states a placement; no
+      dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the rings stand 76.6 mm in front of the panel and its folded edges
+      reach only 12 behind it, so the rear face of its rack unit stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING, A RASTER. StarTech.com publishes
+      CABLMANAGER2_Diagram.pdf (uploaded 12/01/2021): one 967 x 681 px image with an isometric,
+      a front view, a plan and an end view, and the dimensions 482.6 +/-0.3, 465.3 +/-0.3, 434
+      +/-0.3, 43.5 +/-0.2, 31.7, 76.6 +/-0.2, 12 +/-0.2, 10.3 and 5.8. It is a raster, so
+      everything that is not one of those dimensions is scaled off it at 2.586 px/mm against its
+      482.6 and is good to about 1 mm: estimated. THE DEPTH: the datasheet's "Product Length 3.5
+      in [88.6 mm]" and the drawing's 76.6 are both right. The end view's 76.6 is the ring from the
+      plate's back face, where the ears bolt, and the plan view puts the folded body 12 behind
+      that face; 76.6 + 12 = 88.6. So the projection in front of the rail is 76.6, and the
+      envelope the datasheet states is 88.6. The datasheet (cablmanager2_datasheet.pdf) also
+      gives "Product Width 19.0 in [48.3 cm]" and "Product Height 1.7 in [43.5 mm]".
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 482.6 x 43.5 x 88.6. The panel is the whole width of the rack, its two ends the
+      ears, so the face is drawn whole with its four slots (L43 stands down above 480 mm); its
+      top and bottom edges fold back 12 between the ears, 434 wide, 24.3 in from each end.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no CABLMANAGER2 document states a gauge. 1.2 mm, the maker's own CMBRUSH1U
+      section (t=1.2 mm, "spcc/hc"), is taken for the panel.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight of Product 13.3 oz [378.1 g]" (cablmanager2_datasheet.pdf).
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the front view: the panel and its five rings end-on, at the places scaled
+      off the raster's front view (see the panel contract): the three in the middle 105.2 apart
+      with the middle one on the centre line, the two at the ends 184.0 from it. The datasheet
+      says the rings are "spaced 4in (105mm) apart"; the drawing puts the ends 78.9 from their
+      neighbours, so that holds for the middle three (see the gap).
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the panel: the ear slots and the five ring seats, open, with the
+      folded edges end-on. The drawing has no rear view; the seats are the front view's.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear at the top of the drawing: the folded edge behind the panel
+      and the five rings from above. The three middle rings are narrow bars, edge-on, and the two
+      at the ends are loops face-on, as the plan view draws them. The bottom is the same from
+      underneath.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - the end view: the folded edges behind the panel and the ring's profile in
+      front of it, a frame 40 high with a base, two bars and a closed end; the end ring is the
+      band across it. The right is the same, turned round.
+  rings:
+    confidence: estimated
+    note: >-
+      estimated - see the contracts. The datasheet says the end hooks "can be turned 90"; the
+      drawing draws them a quarter turn from the middle three, so they are drawn so and the
+      other turn is a gap. Their curled tips, which leave a slit, are not drawn.
+  removable:
+    confidence: datasheet
+    note: >-
+      datasheet - "5 removable ABS plastic D-Ring hooks". Each ring is a `mounts` part: the
+      explorer pulls it off its seat. They ship fitted, and the `rings-off` configuration shows
+      the panel without them, its five seats open.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the five rings are the guides: each a component with a `ring` guide (see its
+      contract). The three in the middle run along the panel; the two at the ends run up and
+      down it.
+  capacity:
+    confidence: estimated
+    note: >-
+      no document states a cable capacity: the datasheet and the drawing are silent, so none is
+      stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the steel panel, the ABS hooks, "TAA compliant", the colour and the standard
+      are the datasheet's; the 2-year warranty is its text.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The drawing is line work, so the shades are this library's
+      render of black, the rings a little lighter than the panel.
+attrs:
+  physical:
+    weight-kg: 0.3781
+    material: Steel
+    ring-material: ABS
+    color: Black
+  compliance:
+    taa: TAA compliant
+chassis:
+  width: 482.6
+  height: 43.5
+  depth: 88.6
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 76.6, default: true}
+  shell: sheet
+  thickness: 1.2
+  weight-kg: 0.3781
+  color: '#1b1d20'
+gaps:
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the datasheet and the drawing state no cable capacity, no fill and no cable count.
+    wanted: a cable capacity table, or a stated fill, for the D-ring panel
+  - what: ring-turn
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the datasheet says "the hook on either end of the panel can be turned 90 to accommodate
+      horizontal or vertical rack cabling". The format has no key that turns a ring on its seat,
+      so the end rings are drawn as the plan view draws them, a quarter turn from the middle
+      three, and the other turn is not drawn or declared.
+    wanted: a format key for a ring that can be seated in either of two turns, and a view that
+      shows which turn the plan draws
+  - what: ring-pitch
+    scope: [front]
+    reason: sources-disagree
+    note: >-
+      the datasheet gives the rings as "spaced 4in (105mm) apart", and 4 in is 101.6; the drawing
+      is not dimensioned, and scaled it puts the three middle rings 105.2 apart and the end rings
+      78.9 from their neighbours, 184.0 from the middle. The scaled places are drawn.
+    wanted: a dimensioned front view of the panel
+  - what: ring-slit
+    scope: [top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the plan view draws each end ring's tip curled into a hook that stops short of the loop,
+      which leaves a slit; the three middle rings are drawn edge-on, so none is seen. No view
+      dimensions it, so the loops are drawn closed.
+    wanted: a dimensioned view of a ring with its slit
+groups:
+  body:
+    term: Panel
+    role: furniture
+    index-origin: 1
+    description: the flat steel panel and its folded edges
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: five removable ABS D-ring hooks, the middle three along the panel and the two at the ends up and down it
+views:
+  front:
+    size: {w: 482.6, h: 43.5}
+    components:
+      placements:
+        - {ref: startech/cablmanager2-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: startech/cablmanager2-ring-end@1, id: guide-1, at: [37.3, 16.75], group: guides, rel-pos: 1, in: panel, only-in: [base]}
+        - {ref: startech/cablmanager2-ring@1, id: guide-2, at: [131.1, 1.75], group: guides, rel-pos: 2, in: panel, only-in: [base]}
+        - {ref: startech/cablmanager2-ring@1, id: guide-3, at: [236.1, 1.75], group: guides, rel-pos: 3, in: panel, only-in: [base]}
+        - {ref: startech/cablmanager2-ring@1, id: guide-4, at: [341.1, 1.75], group: guides, rel-pos: 4, in: panel, only-in: [base]}
+        - {ref: startech/cablmanager2-ring-end@1, id: guide-5, at: [405.3, 16.75], group: guides, rel-pos: 5, in: panel, only-in: [base]}
+  rear:
+    size: {w: 482.6, h: 43.5}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [482.6, 43.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: fold-top, at: [24.3, 0], size: [434.0, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: fold-bottom, at: [24.3, 42.3], size: [434.0, 1.2], rx: 0, fill: '#232528', kind: flange}
+        - {id: ear-slot-1, at: [4.0, 2.8], size: [9.3, 6.2], rx: 3.1, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-2, at: [4.0, 34.5], size: [9.3, 6.2], rx: 3.1, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-3, at: [469.3, 2.8], size: [9.3, 6.2], rx: 3.1, fill: '#0a0b0c', kind: hole}
+        - {id: ear-slot-4, at: [469.3, 34.5], size: [9.3, 6.2], rx: 3.1, fill: '#0a0b0c', kind: hole}
+        - {id: seat-1, at: [37.3, 16.75], size: [40.0, 10.0], rx: 0, fill: '#0a0b0c', kind: hole}
+        - {id: seat-2, at: [131.1, 1.05], size: [10.4, 41.4], rx: 0, fill: '#0a0b0c', kind: hole}
+        - {id: seat-3, at: [236.1, 1.05], size: [10.4, 41.4], rx: 0, fill: '#0a0b0c', kind: hole}
+        - {id: seat-4, at: [341.1, 1.05], size: [10.4, 41.4], rx: 0, fill: '#0a0b0c', kind: hole}
+        - {id: seat-5, at: [405.3, 16.75], size: [40.0, 10.0], rx: 0, fill: '#0a0b0c', kind: hole}
+  top:
+    size: {w: 482.6, h: 88.6}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 12.0], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-left, at: [37.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-right, at: [74.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-base, at: [37.3, 13.2], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-tip, at: [37.3, 85.6], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-2-top, at: [131.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-3-top, at: [236.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-4-top, at: [341.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-5-left, at: [405.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-right, at: [442.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-base, at: [405.3, 13.2], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-tip, at: [405.3, 85.6], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+    components:
+      placements:
+        - {ref: startech/cablmanager2-flange@1, id: flange-top, at: [24.3, 0.0], group: body, rel-pos: 2}
+  bottom:
+    size: {w: 482.6, h: 88.6}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 12.0], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-left, at: [37.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-right, at: [74.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-base, at: [37.3, 13.2], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-tip, at: [37.3, 85.6], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-2-bottom, at: [131.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-3-bottom, at: [236.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-4-bottom, at: [341.1, 13.2], size: [10.4, 75.4], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: guide-5-left, at: [405.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-right, at: [442.3, 13.2], size: [3.0, 75.4], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-base, at: [405.3, 13.2], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-5-tip, at: [405.3, 85.6], size: [40.0, 3.0], rx: 0, fill: '#40454c', kind: ring}
+    components:
+      placements:
+        - {ref: startech/cablmanager2-flange@1, id: flange-bottom, at: [24.3, 0.0], group: body, rel-pos: 3}
+  left:
+    size: {w: 88.6, h: 43.5}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.3], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [12.0, 0], size: [1.2, 43.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [13.2, 1.75], size: [3.0, 40.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-top, at: [13.2, 1.75], size: [75.4, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-bottom, at: [13.2, 38.75], size: [75.4, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-tip, at: [85.6, 1.75], size: [3.0, 40.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-end-band, at: [13.2, 16.75], size: [75.4, 10.0], rx: 0, fill: '#4a5058', kind: ring}
+  right:
+    size: {w: 88.6, h: 43.5}
+    panel:
+      decor:
+        - {id: fold-top, at: [75.4, 0], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [75.4, 42.3], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [75.4, 0], size: [1.2, 43.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [72.4, 1.75], size: [3.0, 40.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-top, at: [0, 1.75], size: [75.4, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-bottom, at: [0, 38.75], size: [75.4, 3.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-tip, at: [0, 1.75], size: [3.0, 40.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-end-band, at: [0, 16.75], size: [75.4, 10.0], rx: 0, fill: '#4a5058', kind: ring}
+  top-off:
+    face: top
+    size: {w: 482.6, h: 88.6}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 12.0], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+    components:
+      placements:
+        - {ref: startech/cablmanager2-flange@1, id: flange-top-off, at: [24.3, 0.0], group: body, rel-pos: 4}
+  bottom-off:
+    face: bottom
+    size: {w: 482.6, h: 88.6}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 12.0], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+    components:
+      placements:
+        - {ref: startech/cablmanager2-flange@1, id: flange-bottom-off, at: [24.3, 0.0], group: body, rel-pos: 5}
+  left-off:
+    face: left
+    size: {w: 88.6, h: 43.5}
+    panel:
+      decor:
+        - {id: fold-top, at: [0, 0], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [0, 42.3], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [12.0, 0], size: [1.2, 43.5], rx: 0, fill: '#1b1d20', kind: panel}
+  right-off:
+    face: right
+    size: {w: 88.6, h: 43.5}
+    panel:
+      decor:
+        - {id: fold-top, at: [75.4, 0], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: fold-bottom, at: [75.4, 42.3], size: [13.2, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
+        - {id: plate-edge, at: [75.4, 0], size: [1.2, 43.5], rx: 0, fill: '#1b1d20', kind: panel}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable manager as StarTech.com ships CABLMANAGER2, five rings fitted.'
+  rings-off:
+    kind: example
+    description: >-
+      The same manager with its five removable rings taken off their seats, the panel and its
+      open seats showing. The rings come with the panel, so this is an illustration and not a
+      device type.
+    views: {top: top-off, bottom: bottom-off, left: left-off, right: right-off}
+datasheet:
+  title: 'CABLMANAGER2 data sheet: 1U 19in Metal Rackmount Cable Management Panel - TAA'
+  url: https://media.startech.com/cms/pdfs/cablmanager2_datasheet.pdf
+  sha256: e438a87fb59a6134d8562e03286139a58f2c8b7f15556a4533c39efc8e0e2b30
+references:
+  - title: 'CABLMANAGER2_Diagram.pdf: product drawing, uploaded 12/01/2021 (a raster)'
+    url: https://media.startech.com/downloads/image/CABLMANAGER2_Diagram.pdf
+    sha256: b892c01ebcc7564a24ef5cd17e971c41a7fc3623a2b4da74dc1ad9831f1ee3f5
+  - title: 'CABLMANAGER2 product page'
+    url: https://www.startech.com/en-us/server-management/cablmanager2

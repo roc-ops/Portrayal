@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: ex4300-48mp-mode-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  Factory Reset/Mode button of the Juniper EX4300-48MP, at the right end of the status block beside the port mode
+  lamps. A round dark-grey button with a light-blue list symbol on its face. The guide says the button toggles the
+  port Status lamps to show the speed, duplex, administrative status and PoE state of the network ports, and calls it
+  the Factory Reset/Mode button.
+attrs:
+  function: factory reset and port mode
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Figure 12 callout 5, Factory Reset/Mode button, and
+    Table 25: use the button on the far right side of the front panel to toggle the Status lamps, the lamp lit among SPD, DX,
+    EN and POE being the parameter shown. The guide describes no reset action beyond the name.
+  size: >-
+    photo-measured - read off Juniper's straight-on studio photograph of the EX4300-48MP front (ex4300-48mp-front-high.jpg,
+    1500 x 206 px, 3.279 px per mm from the 441.0 mm face): the disc is about 15.5 px, 4.7 mm, across. It is drawn 4.8 mm. The
+    library's EX4100 mode button is a 5.4 mm light-blue disc of a different appearance, so it was not reused.
+  face: >-
+    photo-measured - a dark-grey disc with the list symbol on the button itself, as the photograph shows it: three light-blue
+    bars. Colours are sampled by eye from the photograph and are estimated.
+size:
+  w: 4.8
+  h: 4.8
+size-confidence: {w: photo-measured, h: photo-measured}
+skins: [default]

@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: ex6200-lc-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200 line card cover panel. It closes a line card slot that holds no card, so that air
+  follows its path through the chassis. Every shipping order of the EX6210 includes six of them, and
+  another one forms part of the SRE module cover panel. It is a flat plate with a captive screw at
+  each end.
+attrs:
+  role: slot-blank
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): Table 5 and Table 51 (six line card
+    cover panels in every shipping configuration; the SRE module cover panel is one line card cover panel
+    and one SRE module filler panel), Figure 71 (the cover panels installed in the SRE slot, drawn flat,
+    g021221) and Figure 4 (the slots). The guide gives the panel no model number, so no part number is
+    written.
+  size: >-
+    estimated - the slot, not the part. The guide gives no dimension. Figure 4 (flat, 3.967 px/mm on the
+    17.3 in body width) puts a line card plate at 392.1 mm across and 38.1 mm high; the slots are on a
+    39.75 mm pitch.
+  face: >-
+    estimated - Figure 4 and Figure 71 draw a plain plate with a captive screw at each end, centred
+    vertically (8.6 mm and 386.9 mm across, 20.2 mm down, read at 3.967 px/mm). The step at the lower
+    left and right of each plate, where the slot number is printed on the chassis, is not drawn. No
+    photograph is held, so the finish is not known.
+states: [absent]
+elements:
+  screw-left: {at: [6.4, 18.0], size: [4.4, 4.4], class: screw}
+  screw-right: {at: [384.7, 18.0], size: [4.4, 4.4], class: screw}
+size:
+  w: 392.1
+  h: 38.1
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

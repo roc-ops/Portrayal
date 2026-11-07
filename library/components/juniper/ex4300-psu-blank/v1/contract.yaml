@@ -1,0 +1,59 @@
+format: 1
+kind: module
+name: ex4300-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover panel for the Juniper EX4300 switches. The guide's inventory table lists
+  a power supply cover panel with every switch, for the slot that a second power supply does not
+  fill, and says to leave it on to keep dust out and the chassis cooled. A plain metal plate held by
+  captive screws, the width of a supply.
+attrs:
+  model: EX4300 power supply cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. A slot cover is sheet metal that fills an
+    opening, so the part draws no element that can light or fault. `absent` stays, because an empty
+    slot is a real thing to draw
+  existence: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 68 "Inventory of
+    Components Provided with an EX4300 Switch": "Cover panels for slots without preinstalled
+    components" are an uplink module slot cover panel and a power supply cover panel, one of each.
+    The installation sections say to install a cover panel in an empty power supply slot "to prevent
+    chassis overheating and dust" and to loosen its captive screws to remove it. No part number is
+    given for the cover
+  size: >-
+    estimated - the slot's aperture, 84.0 x 42.0 mm, the size of the supplies that fill it; no
+    document gives the cover's own size
+  face: >-
+    estimated - no figure or photograph of the cover panel was found in the guide, the datasheet or
+    the maker's image library. It is drawn as a plain plate with two captive screws, which is all the
+    installation text says of it
+states: [absent]
+elements:
+  screw-left:
+    at: [3.0, 17.5]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [76.0, 17.5]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 84.0
+  h: 42.0
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated

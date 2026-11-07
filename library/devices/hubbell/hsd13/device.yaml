@@ -1,0 +1,307 @@
+format: 1
+kind: device
+name: hsd13
+version: 0.1.0
+maturity: modelled
+manufacturer: Hubbell
+model: HSD13
+aliases:
+  - {name: '662620249902', kind: vendor}
+description: >-
+  1 RU SD-Series horizontal cable manager, catalogue HSD13, UPC 662620249902. It is a plastic
+  finger duct that mounts straight to the rail, 3.2 in (81 mm) deep. It has a plastic base,
+  two walls of 22 fingers between 23 slots, and a press-on cover that comes off to add patch
+  cords. A finger can be taken out where a cable needs to enter.
+profile: passive
+provenance:
+  method:
+    confidence: datasheet
+    note: >-
+      FIGURES FROM THE MAKER'S OWN SPEC SHEET. Hubbell publishes one PDF per catalogue number,
+      PREMISE_HSD13_spec.pdf on hubbellcdn.com (sha256 below): a features list, an ordering
+      table, specifications, characteristics, accessories and a dimensions table, A 1 RU,
+      1.6 in (41), B 19 in (483), C 3.2 in (81), beside one isometric figure that marks A,
+      B and C. The sheet's "Customer Use Drawing" link points at ecatalog.hubbell-premise.com,
+      which does not resolve (checked 2026-10-18), so no dimensioned drawing was read: the
+      figure is a line drawing without a scale, and everything read off it is `estimated`,
+      with how. The sheet lists no pass-through holes, no replacement cover and no finish.
+  ears:
+    confidence: datasheet
+    note: >-
+      datasheet - `positions` states where the part bolts, for the Rack Builder. "Mount
+      directly to rail" is the sheet's feature: the base is the part's own ears and stands at
+      the back, so the rail plane is the back of the base and the whole depth, C, 81.28,
+      stands in front of it: `at` is 81.28. The sheet's accessories list hook-and-loop ties
+      only and no rail kit, so `kits` is not stated.
+  full-depth:
+    confidence: datasheet
+    note: >-
+      `full-depth: false` - nothing of the part stands behind the rail; it reaches 81.28 in
+      front of it, so the rack unit's rear face is free.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 482.6 x 40.64 x 81.28. Width is B, 19 in; height is A, 1.6 in (41 mm, a
+      little under the 1.75 in of 1 RU), the sheet's figure; ru is the sheet's 1 RU; depth is
+      C, 3.2 in, base to cover. The sheet's own "Depth 3 in" ordering figure is the rounded
+      value of C and is not used.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 2.5 mm. The sheet says "Material: Plastic" and no wall thickness.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the front: the base, the two rows of fingers and the cover, which is drawn
+      fitted; the `cover-off` configuration leaves it off and shows the fingers. The slots are
+      read off the figure: 23 of them, 20.32 mm apart, centred on the 482.6, 9.0 mm wide,
+      against B (see the finger's `size`). A row is two end blocks and 22 fingers, between
+      the slots; the figure draws the far wall slotted as well, so the lower row is the
+      upper's.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the base, a plain plate. The figure draws a round hole near
+      each end of the long face, not drawn here (see the base's `mounting-holes`).
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear at y=0: the base's edge, the finger wall and its 23 slots.
+      The cover's edge is not drawn: the configuration with it off draws the same plan. The
+      bottom is the same.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear on the left: the base's edge and the two finger walls
+      running forward from it. The right is the same, turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the `duct` guide is the channel between the two finger walls, the width of
+      the part, its run along the rack: 35.64 mm high, the 40.64 less a wall at the top and
+      one at the bottom. `finger-pitch` is the 20.32 mm between slots counted on the figure
+      and `finger-gap` the 9.0 mm slot.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - material is the sheet's specification table; the cover and the
+      corresponding vertical manager are its characteristics table; the UPC is its ordering
+      table.
+  cable-capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the sheet states no cable capacity, so none is stated here and none is
+      estimated.
+attrs:
+  physical:
+    material: Plastic
+  features:
+    cover: Press on
+    removable-fingers: Plastic fingers can be removed where needed for cable entrance
+    vertical-manager: VSD Series
+chassis:
+  width: 482.6
+  height: 40.64
+  depth: 81.28
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 81.28, default: true}
+  shell: sheet
+  thickness: 2.5
+  color: '#2a2c2e'
+gaps:
+  - what: finger-geometry
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the sheet's figure draws 23 slots in the wall and its table gives A, B and C only. The
+      slot pitch and width, the finger and end block widths and the wall's thickness are read
+      off the figure against B.
+    wanted: the dimensioned customer drawing
+  - what: finger-removal
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the sheet says "Plastic fingers can be removed where needed for cable entrance". Each
+      finger is its own part, so the explorer can take one out; a rack file has no way to say
+      which finger of a duct is gone, so the rack kit lets a cable enter through any finger
+      gap whether the finger there is out or not.
+    wanted: a rack-file key for a finger taken out
+  - what: cover-colour
+    scope: [front]
+    reason: vendor-silent
+    note: the sheet states no colour; the photograph shows a dark grey plastic.
+    wanted: the part's colour
+  - what: cable-capacity
+    scope: [front]
+    reason: vendor-silent
+    note: the sheet states no count of cables, nor a basis for one.
+    wanted: a maker's figure with its basis
+  - what: weight
+    scope: [front]
+    reason: vendor-silent
+    note: the sheet states no weight.
+    wanted: the part's weight
+groups:
+  body:
+    term: Base
+    role: furniture
+    index-origin: 1
+    description: the plastic base plate
+  fingers:
+    term: Finger
+    role: furniture
+    index-origin: 1
+    description: the two rows of 22 fingers and two end blocks, upper row first, left to right
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the press-on cover across the fingers
+views:
+  front:
+    size: {w: 482.6, h: 40.64}
+    components:
+      placements:
+        - {ref: hubbell/hsd13-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: hubbell/hsd13-end@1, id: finger-upper-1, at: [0.0, 0.0], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-2, at: [22.28, 0.0], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-3, at: [42.6, 0.0], group: fingers, rel-pos: 3, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-4, at: [62.92, 0.0], group: fingers, rel-pos: 4, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-5, at: [83.24, 0.0], group: fingers, rel-pos: 5, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-6, at: [103.56, 0.0], group: fingers, rel-pos: 6, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-7, at: [123.88, 0.0], group: fingers, rel-pos: 7, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-8, at: [144.2, 0.0], group: fingers, rel-pos: 8, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-9, at: [164.52, 0.0], group: fingers, rel-pos: 9, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-10, at: [184.84, 0.0], group: fingers, rel-pos: 10, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-11, at: [205.16, 0.0], group: fingers, rel-pos: 11, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-12, at: [225.48, 0.0], group: fingers, rel-pos: 12, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-13, at: [245.8, 0.0], group: fingers, rel-pos: 13, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-14, at: [266.12, 0.0], group: fingers, rel-pos: 14, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-15, at: [286.44, 0.0], group: fingers, rel-pos: 15, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-16, at: [306.76, 0.0], group: fingers, rel-pos: 16, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-17, at: [327.08, 0.0], group: fingers, rel-pos: 17, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-18, at: [347.4, 0.0], group: fingers, rel-pos: 18, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-19, at: [367.72, 0.0], group: fingers, rel-pos: 19, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-20, at: [388.04, 0.0], group: fingers, rel-pos: 20, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-21, at: [408.36, 0.0], group: fingers, rel-pos: 21, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-22, at: [428.68, 0.0], group: fingers, rel-pos: 22, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-upper-23, at: [449.0, 0.0], group: fingers, rel-pos: 23, in: base, under: cover}
+        - {ref: hubbell/hsd13-end@1, id: finger-upper-24, at: [469.32, 0.0], group: fingers, rel-pos: 24, in: base, under: cover}
+        - {ref: hubbell/hsd13-end@1, id: finger-lower-1, at: [0.0, 38.14], group: fingers, rel-pos: 25, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-2, at: [22.28, 38.14], group: fingers, rel-pos: 26, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-3, at: [42.6, 38.14], group: fingers, rel-pos: 27, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-4, at: [62.92, 38.14], group: fingers, rel-pos: 28, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-5, at: [83.24, 38.14], group: fingers, rel-pos: 29, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-6, at: [103.56, 38.14], group: fingers, rel-pos: 30, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-7, at: [123.88, 38.14], group: fingers, rel-pos: 31, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-8, at: [144.2, 38.14], group: fingers, rel-pos: 32, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-9, at: [164.52, 38.14], group: fingers, rel-pos: 33, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-10, at: [184.84, 38.14], group: fingers, rel-pos: 34, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-11, at: [205.16, 38.14], group: fingers, rel-pos: 35, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-12, at: [225.48, 38.14], group: fingers, rel-pos: 36, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-13, at: [245.8, 38.14], group: fingers, rel-pos: 37, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-14, at: [266.12, 38.14], group: fingers, rel-pos: 38, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-15, at: [286.44, 38.14], group: fingers, rel-pos: 39, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-16, at: [306.76, 38.14], group: fingers, rel-pos: 40, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-17, at: [327.08, 38.14], group: fingers, rel-pos: 41, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-18, at: [347.4, 38.14], group: fingers, rel-pos: 42, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-19, at: [367.72, 38.14], group: fingers, rel-pos: 43, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-20, at: [388.04, 38.14], group: fingers, rel-pos: 44, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-21, at: [408.36, 38.14], group: fingers, rel-pos: 45, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-22, at: [428.68, 38.14], group: fingers, rel-pos: 46, in: base, under: cover}
+        - {ref: hubbell/hsd13-finger@1, id: finger-lower-23, at: [449.0, 38.14], group: fingers, rel-pos: 47, in: base, under: cover}
+        - {ref: hubbell/hsd13-end@1, id: finger-lower-24, at: [469.32, 38.14], group: fingers, rel-pos: 48, in: base, under: cover}
+        - {ref: hubbell/hsd13-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+    guides:
+      - {id: duct, kind: duct, at: [0, 2.5], size: [482.6, 35.64], run: x, finger-pitch: 20.32, finger-gap: 9.0, confidence: estimated, source: 'HSD13 spec sheet figure: 23 slots counted and read against B (19 in); the wall thickness is estimated'}
+  rear:
+    size: {w: 482.6, h: 40.64}
+    panel:
+      decor:
+        - {id: back, at: [0, 0], size: [482.6, 40.64], fill: '#2a2c2e', kind: base}
+  top:
+    size: {w: 482.6, h: 81.28}
+    panel:
+      decor:
+        - {id: base-edge, at: [0, 0], size: [482.6, 2.5], fill: '#2a2c2e', kind: base}
+        - {id: wall, at: [0, 2.5], size: [482.6, 76.78], fill: '#34373a', kind: finger-wall}
+        - {id: slot-1, at: [13.28, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [33.6, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [53.92, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [74.24, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [94.56, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [114.88, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [135.2, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [155.52, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [175.84, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10, at: [196.16, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11, at: [216.48, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12, at: [236.8, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-13, at: [257.12, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-14, at: [277.44, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-15, at: [297.76, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-16, at: [318.08, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-17, at: [338.4, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-18, at: [358.72, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-19, at: [379.04, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-20, at: [399.36, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-21, at: [419.68, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-22, at: [440.0, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-23, at: [460.32, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+  bottom:
+    size: {w: 482.6, h: 81.28}
+    panel:
+      decor:
+        - {id: base-edge, at: [0, 0], size: [482.6, 2.5], fill: '#2a2c2e', kind: base}
+        - {id: wall, at: [0, 2.5], size: [482.6, 76.78], fill: '#34373a', kind: finger-wall}
+        - {id: slot-1, at: [13.28, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [33.6, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [53.92, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [74.24, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [94.56, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [114.88, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [135.2, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [155.52, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [175.84, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-10, at: [196.16, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-11, at: [216.48, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-12, at: [236.8, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-13, at: [257.12, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-14, at: [277.44, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-15, at: [297.76, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-16, at: [318.08, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-17, at: [338.4, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-18, at: [358.72, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-19, at: [379.04, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-20, at: [399.36, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-21, at: [419.68, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-22, at: [440.0, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-23, at: [460.32, 14.0], size: [9.0, 65.28], fill: '#0a0b0c', kind: finger-gap}
+  left:
+    size: {w: 81.28, h: 40.64}
+    panel:
+      decor:
+        - {id: base-edge, at: [0, 0], size: [2.5, 40.64], fill: '#2a2c2e', kind: base}
+        - {id: wall-upper, at: [2.5, 0], size: [76.78, 2.5], fill: '#34373a', kind: finger-wall}
+        - {id: wall-lower, at: [2.5, 38.14], size: [76.78, 2.5], fill: '#34373a', kind: finger-wall}
+  right:
+    size: {w: 81.28, h: 40.64}
+    panel:
+      decor:
+        - {id: base-edge, at: [78.78, 0], size: [2.5, 40.64], fill: '#2a2c2e', kind: base}
+        - {id: wall-upper, at: [0, 0], size: [76.78, 2.5], fill: '#34373a', kind: finger-wall}
+        - {id: wall-lower, at: [0, 38.14], size: [76.78, 2.5], fill: '#34373a', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as Hubbell ships HSD13, the cover fitted.'
+  cover-off:
+    kind: example
+    description: 'The same duct with the cover taken off, the two rows of fingers in view.'
+datasheet:
+  title: 'Hubbell Premise Wiring SD-Series Rail Mounted horizontal cable manager, HSD13 spec sheet'
+  sha256: c98f7744e54811f0aaa107da0082363aac5cfb60a30951c109720d7b6e2a1176

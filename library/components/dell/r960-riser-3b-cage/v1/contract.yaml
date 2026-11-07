@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: r960-riser-3b-cage
+version: 1.0.0
+class: riser
+profile: server
+description: >-
+  the riser 3B cage of the PowerEdge R960 - four full-height windows, slot numbers printed as
+  pairs at the cage's right edge (5 over 6, 7 over 8); shared by the two wirings of riser 3B
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - sheet metal and print; the riser that composes it carries the power record.
+  why-this-is-its-own-part: >-
+    THE METAL IS SHARED AND THE WIRING IS NOT. ISM table 88 gives riser 3B slots 5-8 different
+    controlling processors in configuration 1 (scale out: 4, 2, 3, 1) and configuration 2 (maximum
+    I/O: 4, 4, 3, 3), and table 13 prints both ("Riser 3B (In scale out configuration)"). Nothing
+    the rear face shows differs, so the face is drawn once, here.
+  sources: >-
+    photo-measured - R960 ISM figure 10 and the technical guide's figures 8 and 9 (riser 3B in
+    configurations 1 and 2), read as dell/r960-riser-1b@1 reads figure 10.
+  size: >-
+    photo-measured - 104.3 x 84.0 from rear-face x 176.4, y 9.0: the cage's extent on figure 10
+    (px 618..970 across, 140..418 down at 3.374 and 3.333 px/mm).
+  features: >-
+    photo-measured - windows 90.0 wide from 3.5 (rear-face 179.9), at slot centres 18.8, 38.9, 59.2
+    and 79.3 down (a 20.2 pitch); the printed pairs at the right edge, 5 over 6 between the first
+    and second windows and 7 over 8 between the third and fourth, each beside a triangle pointing
+    at its window - the figure's glyphs, set in sans-serif here. The cage also prints GEN (the
+    start of "GEN5") at its lower right, cut off by the cage edge on the figure; it is not drawn.
+size: {w: 104.3, h: 84.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: plate
+    out: 1.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the cage's plate is the rear wall's own sheet metal, and ISM table 7 puts nothing but the supplies'
+      handles past the wall; no R960 model or side figure is held. The first pass drew it 20.0 proud by analogy with the
+      R660's riser cages (dell/riser-1-fh-cage-16g@1), which stood the cages outside the 866.74 chassis
+skins: [default]

@@ -1,0 +1,75 @@
+format: 1
+kind: module
+name: 7280r3-pwr-1500-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1500 W DC power supply of the Arista 7280PR3-24 and 7280DR3-24, PWR-1511-DC-RED (forward
+  airflow, red handle). It is a 1RU module, 73.5 mm wide, with a red diagonal handle on the fan
+  guard and a terminal block in place of an inlet. The block has the two poles the guide's section
+  4.4.2.2 names, negative (-48V) and positive (RTN). The protective earth terminal is on the other
+  side of the module and is not drawn.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1511-DC-RED: {part: PWR-1511-DC-RED}
+attrs:
+  power-output-w: 1500
+  input: dc
+  inlet: dc-terminal
+  airflow: front-to-back
+  input-note: '-48 to -60 VDC, 39.5 A'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height, as arista/7280r3-pwr-1500-ac: the data
+    sheet (03-0045-59, August 11th, 2025) describes the part as "PWR-1511-DC-RED  Arista PSU, 1RU,
+    DC/DC, 1500W, FORWARD, 73.5MM".
+  part-number: >-
+    datasheet - ordering information for the 7280PR3-24 and 7280DR3-24: "PWR-1511-DC-RED  Arista
+    PSU, 1RU, DC/DC, 1500W, FORWARD, 73.5MM". It is a spare: the "-F" SKUs are "2 x AC".
+  power-output: >-
+    datasheet - the "1500W" of the ordering description and the "Output Power 1500W" row of the
+    data sheet's power supply table. An output.
+  input: >-
+    datasheet - guide table 3: PWR-1511-DC "-48 to -60 VDC, 39.5 A"; the data sheet's power supply
+    table gives -48 to -60 V DC, 35.2 A max at -48 V, 92 percent efficiency and an AWG #6 maximum
+    input connector. The two currents (39.5 A and 35.2 A) are a rating and a maximum input at
+    -48 V.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. The guide holds no flat picture of a PWR-1511-DC. It is
+    drawn as the library's other DC supplies (arista/7280cr3-pwr-1000-dc): the AC supply's housing
+    with a plain two-pole terminal block in place of the inlet.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; the guide's section 2.1 gives red as
+    the colour of an air-exit module.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [49.5, 12.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [49.5, 27.1]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: ex8208-sf320
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8208-SF320, the Switch Fabric (SF) module of the EX8208: one third of the switch fabric on a horizontal
+  card with two lamps (ST and SF) at the left, two ejector levers and a captive screw at each end. It goes in the
+  slot labelled SF, between SRE0 and SRE1, and is keyed so that it fits nowhere else. Every shipping order includes
+  one; in the base order it works with the single SRE module and in the redundant orders it provides the redundant
+  switching plane. It is hot-insertable and hot-removable in a redundant chassis; in a base chassis it is taken
+  offline first.
+attrs:
+  role: switch-fabric
+  power-draw-max-w: 100
+part-numbers:
+  EX8208-SF320-S: {part: EX8208-SF320-S}
+provenance:
+  sources: >-
+    datasheet - EX8208 Switch Hardware Guide (PDF dated 2020-12-16): Switch Fabric (SF) Module in an EX8208 Switch,
+    Figures 18 and 19 (isometric), Table 35 (the lamps), Table 57 (power), Table 6 (CLI name EX8208-SF320) and Figure 3
+    (the module drawn flat in its slot). EX8208 Ethernet Switch Datasheet (1000261-022-EN, June 2015): "EX8208-SF320-S,
+    Switch Fabric module for EX8208, spare". The part number carried is the datasheet's orderable spare; the guide's CLI
+    name is EX8208-SF320, which is what the card prints.
+  size: >-
+    estimated - the slot opening, 395.3 x 36.0 mm, as the other EX8208 cards; the card plate is 374.2 mm wide (10.4 to
+    384.6 mm). Read off Figure 3 (flat, 3.479 px/mm, 0.4 percent aspect). No document dimensions the card.
+  face: >-
+    estimated - Figure 3 at 3.479 px/mm across and 3.445 down: two lamps in one column at 26.0 mm across and 12.2 and
+    16.6 down, the legend "EX8208 SF320" at 48.0 mm across and 21.2 down, the screws and the two levers. About 1 mm.
+    The card has no ports.
+  lamps: >-
+    datasheet - guide Table 35: ST green steady when operating and blinking while waiting to be configured by the
+    primary SRE module, yellow when failed, unlit when offline; SF green steady when the fabric is normal and blinking
+    when it is offline, yellow when it has failed, unlit when powered off. Figure 3 prints the lower lamp's legend as ON,
+    where Table 35, Figure 19 and the EX8216's SF module all say SF; the table's SF is carried and printed.
+  power: >-
+    datasheet - guide Table 57: SF module 100 W. A draw, since a card consumes power.
+states:
+- ok
+- fail
+- absent
+elements:
+  led-st:
+    at: [25.0, 11.2]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: waiting, color: '#22c55e', behavior: blinking}, {name: failed, color: '#eab308'}]
+  led-sf:
+    at: [25.0, 15.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: ok, color: '#22c55e'}, {name: offline, color: '#22c55e', behavior: blinking}, {name: failed, color: '#eab308'}]
+  lever-left:
+    at: [7.2, 28.8]
+    size: [117.8, 3.5]
+    class: latch
+  lever-right:
+    at: [270.3, 28.8]
+    size: [117.8, 3.5]
+    class: latch
+size:
+  w: 395.3
+  h: 36.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

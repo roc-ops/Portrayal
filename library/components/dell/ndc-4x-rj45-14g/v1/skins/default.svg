@@ -2,11 +2,19 @@
   <!-- Network daughter card, four RJ45. THE JACKS ARE NOT DRAWN HERE:
        four dell/rj45-port-14g are composed in the contract, centred on
        the bezels Dell's 2x10gb-bt-2x1gb-ndc stencil master drew. WHAT IS
-       LEFT HERE IS THE PLATE AND NOTHING ELSE.
+       LEFT HERE IS THE PLATE AND ITS TWO SPEED LABELS.
        The eight lamps used to be drawn here, vertically, because a bare
        modular jack has none and `parts:` could not say what a composed
        lamp means. Neither is true any more: the lamps are in the port,
        horizontal, with ISM table 11 attached.
        Pitch 22.2 from ISM figure 8. -->
   <rect x="0.15" y="0.15" width="90.00" height="14.20" rx="0.6" fill="#8d949c" stroke="#5f666d" stroke-width="0.3"/>
+  <!-- The faceplate lettering, turned to read bottom to top: the gap between two
+       jacks is 6.4 wide and the plate 14.5 tall. x is the BASELINE (the capitals
+       rise to its left at -90), so the ink centres 1.1 left of it: 21.7 and 65.8,
+       the midpoints of the 10G pair and the 1G pair, at the plate's mid-height. -->
+  <g id="silkscreen">
+    <text x="22.82" y="7.25" transform="rotate(-90 22.82 7.25)" text-anchor="middle" font-family="sans-serif" font-size="3.1" font-weight="bold" fill="#333333">10Gb</text>
+    <text x="66.92" y="7.25" transform="rotate(-90 66.92 7.25)" text-anchor="middle" font-family="sans-serif" font-size="3.1" font-weight="bold" fill="#333333">1Gb</text>
+  </g>
 </svg>

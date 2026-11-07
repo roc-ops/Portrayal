@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: 7280dr3a-pwr-3000-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 3000 W AC power supply of the Arista 7280DR3A-54, PWR-3001-AC-RED (forward airflow, red
+  handle). It is a 1RU module, 73.5 mm wide, with a round fan guard and a red diagonal handle
+  across it at the left. A Saf-D-Grid inlet and a latch are at the right, with a status lamp at the
+  top right. Two seat at the right of the rear, one above the other; 1+1 redundant and
+  hot-swappable.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-3001-AC-RED: {part: PWR-3001-AC-RED}
+attrs:
+  power-output-w: 3000
+  input: ac
+  inlet: other
+  airflow: front-to-back
+  input-note: '200 - 240 VAC, 17 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height. The 7280R3A data sheet (04-0040-26)
+    describes the part as "PWR-3001-AC-RED  Arista PSU, 1RU, AC/DC, 3000W, FORWARD, 73.5MM":
+    73.5 is its width and it is a 1RU module. The height is taken from the 1RU, as the
+    2400 W supply of the 7280DR3A-36 (arista/7280dr3a-pwr-2400-ac), whose housing the guide
+    draws the same: figure D-4 of the quick start guide (DOC-07042-01), a 571 px raster, shows
+    two modules stacked at the right of a 2RU chassis, each about half its height.
+  part-number: >-
+    datasheet - ordering information for the 7280DR3A-54: "PWR-3001-AC-RED  Arista PSU, 1RU,
+    AC/DC, 3000W, FORWARD, 73.5MM". The quick start guide's table 3 lists the supply as
+    PWR-3001-AC and table 4 gives it as the supported AC supply of the DR3A-54, DR3AM-54 and
+    DR3AK-54.
+  power-output: >-
+    datasheet - the "3000W" of the ordering description, and "Output Power 3000 W" in the power
+    supply table. An output, because a supply provides power. Table 4 of the guide gives the
+    switch's own draw (933 W typical, 1715 W maximum) and is the switch's figure, not this one.
+  input: >-
+    datasheet and guide agree. Guide table 3: PWR-3001-AC "200 - 240 VAC 17 A 50/60 Hz"; the data
+    sheet's power supply table: 200-240 VAC, 17 A, 50/60 Hz, 94 percent efficiency (Platinum).
+  inlet: >-
+    datasheet - the power supply table's "Input Connector  SAF-D" for PWR-3001 AC (the 2400 W
+    supply above it reads IEC 60320 C20), and the ordering information's "KIT-7203 ... (2x
+    SAF-D-C20, 2m)" cords for the 7280DR3A-54. std/saf-d-grid@1 is seated; `attrs.inlet` reads
+    `other` because the attribute's vocabulary (c14, c20, dc-terminal, other, none) has no
+    Saf-D-Grid entry. THE TURN IS ESTIMATED:
+    the guide's figure shows a vertical inlet well, so the part is turned a quarter, which puts
+    the ground blade on the side of the well; the figure is too small to read which side.
+  face: >-
+    estimated - figure D-4 (and D-3, which draws the same two modules) of the guide: a round fan
+    guard in the left 41.5 mm with four corner screws and a red handle across it from lower left
+    to upper right, two black holes and a green lamp along the top of the right part, the inlet
+    well below them, and a grey latch at its side. THE GUIDE'S FIGURES ARE GENERIC ("Depending on
+    the installed power supply module, the appearance could be different from those shown"), and
+    the module drawn is the one of the 2400 W supply's housing: no document draws the PWR-3001
+    on its own, so this face is that art with the datasheet's inlet in it. The lamp is the
+    module's status lamp (guide figure A-5 and table 12).
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; the guide's section 2.1 gives red
+    as the colour of an air-exit module. The data sheet lists no blue (reverse) PWR-3001, so only
+    this build is modelled.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`, read off the figure.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [67.0, 10.4], size: [5.6, 12.8], class: latch}
+  status: {at: [67.2, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [41.2, 12.85], rotate: 90}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

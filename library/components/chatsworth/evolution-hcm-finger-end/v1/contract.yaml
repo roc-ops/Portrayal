@@ -1,0 +1,54 @@
+format: 1
+kind: component
+name: evolution-hcm-finger-end
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+description: >-
+  The end finger of a row of the Chatsworth Evolution horizontal cable manager, seen end-on
+  from the front, drawn for the left end and turned half a revolution for the right - the
+  finger of the row beside the rack's own opening, whose outer side is the frame and not a
+  slot
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#1b1c1e'
+provenance:
+  size: >-
+    estimated - as evolution-hcm-finger, one 45.0 pitch wide and 11.4 high: the end finger
+    of a row of ten stands in the outer 33.0 of its pitch, its outer 12.0 being the plate's
+    own edge where the other fingers have half a slot. No document dimensions a finger;
+    see the contract of evolution-hcm-finger for how the pitch, the body and the 11.4 were
+    read.
+  relief: >-
+    estimated - the same depths as evolution-hcm-finger: root 20 mm, body to 184, head from
+    184 to 190 under the door. The head runs to the plate's edge on the outer side.
+  finish: >-
+    estimated - as evolution-hcm-finger.
+  shading: >-
+    estimated - as evolution-hcm-finger: a lit rim on the head and the slot beside it shaded, a
+    stand-in so a black finger reads against the black plate.
+size: {w: 45.0, h: 11.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [45.0, 11.4], class: bezel}
+  stem: {at: [0.0, 0.0], size: [33.0, 11.4], class: bezel}
+  tip: {at: [0.0, 0.0], size: [41.0, 11.4], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 20.0
+      confidence: estimated
+      source: as evolution-hcm-finger, read off the data sheet pictures against the 165 mm interior depth of the cable fill table
+    - node: stem
+      out: 184.0
+      confidence: estimated
+      source: as evolution-hcm-finger
+    - node: tip
+      lift: 184.0
+      out: 190.0
+      confidence: estimated
+      source: as evolution-hcm-finger
+skins: [default]

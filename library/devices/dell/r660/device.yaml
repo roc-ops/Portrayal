@@ -25,7 +25,7 @@
 format: 1
 kind: device
 name: r660
-version: 5.1.1
+version: 5.2.2
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R660
@@ -352,6 +352,22 @@ gaps:
     wanted: >-
       a straight-on photograph of a single-slot E3.S blank, or of an R660 E3.S
       front with empty slots
+  - what: card-bracket-flange-past-the-wall
+    scope: [rear, risers]
+    reason: needs-drawing
+    note: >-
+      the risers' cage plates are drawn 1.0 proud of the rear wall (the ISM's table 12, PDF page 27, puts nothing but
+      the supplies' handles past it), and a seated card's bracket flange stands past the wall with the part of the riser
+      that covers it. The flange is the bracket's own 9.4 return flange (std/pcie-bracket-lp@1, PCIe CEM 5.0 figure
+      11-9) and the cover is each cage's `flange-cover` node, a column the flange ends sit behind, as the R740xd draws
+      its riser shroud. A rear bay cannot recess its occupant, so the flange stands 9.4 past the wall in a
+      configuration with such a card seated, and a filler's bracket gets the cover as a card's does. The ISM gives no
+      depth for either. The cover's reach is Dell's service model's: the pieces over riser 2A's flange ends reach 19.8
+      and 19.3 and over riser 3A's 19.2 (the cages drawn at 19.3 and 19.2), against its low-profile brackets' 8.2 to
+      9.2; the other risers' cages carry those figures as estimates. The model's meshes are compressed, so only boxes
+      were read and the covers' outlines are the skins', not the model's.
+    wanted: >-
+      the model's meshes decoded, for the covers' outlines, and the models of risers 2Q and 2S
 
 groups:
   drives:
@@ -655,6 +671,7 @@ views:
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9],
            group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
@@ -824,6 +841,7 @@ views:
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
            for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7],
            group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
@@ -1305,6 +1323,7 @@ views:
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
            for: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15, vga, mark-vga, centre-vent],
+           hides: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-14, e3s-15],
            group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led
@@ -1418,6 +1437,7 @@ views:
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
            for: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13, e3s-filler-14, vga, mark-vga, centre-vent],
+           hides: [e3s-0, e3s-1, e3s-2, e3s-3, e3s-4, e3s-5, e3s-6, e3s-7, e3s-8, e3s-9, e3s-10, e3s-11, e3s-12, e3s-13],
            group: covers, rel-pos: 3}
         - ref: common/led-dot@1
           id: idrac-direct-led

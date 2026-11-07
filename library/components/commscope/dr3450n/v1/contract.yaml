@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dr3450n
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -36,9 +36,14 @@ provenance:
     four lamps at 19.9 across on a 4.5 pitch from 77.0, numbered 1 to 4 and joined to the
     button by a printed bracket; and the test point centred 13.1, 104.4, about 15.6 across.
   test-point: >-
-    datasheet - "RF Output Test Point (selectable for each input port): G-type connector
-    (front panel, -20 dB)". No registry entry exists for a G-type connector, so it is drawn
-    as an element, as on the AR3002E and AR3044H.
+    datasheet - CommScope DR3450N data sheet 87-10924 Rev T (6-2022), "RF Output Test Point
+    (selectable for each input port)": "G-type male connector (front panel, -20 dB)". The
+    earlier Rev P (10/2019) prints "G-type female connector" for the same test point. The two
+    sheets disagree and this contract follows the later one, Rev T, so the part is male. The
+    panel connector is the composed common/g-type-male-port@1,
+    which presents the registered interface g-type; the knurled body round it stays drawn
+    in the skin, declared as class bezel (ids, positions and the skin are unchanged), and
+    the part's size is an estimate, said in the part.
   lamps: >-
     the Status lenses read green, yellow and red on the photograph; the data sheet gives no
     colour or meaning for any lamp, so they carry their legend's function and no colour.
@@ -51,7 +56,7 @@ elements:
   vent-lower-mid-top: {at: [11.7, 70.8], size: [2.50, 5.80], class: vent}
   vent-lower-mid-bottom: {at: [11.7, 86.6], size: [2.50, 8.50], class: vent}
   select-button: {at: [11.6, 81.7], size: [3.0, 3.0], class: button}
-  test-point: {at: [5.3, 96.6], size: [15.6, 15.6], class: port}
+  test-point: {at: [5.3, 96.6], size: [15.6, 15.6], class: bezel}
   screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
 parts:
   - {ref: common/led-dot@1, id: led-status-1, at: [11.88, 31.70], attrs: {function: status}}
@@ -63,6 +68,7 @@ parts:
   - {ref: common/led-dot@1, id: led-tp-2, at: [18.9, 80.50], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-3, at: [18.9, 85.00], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-4, at: [18.9, 89.50], attrs: {function: test-point-select}}
+  - {ref: common/g-type-male-port@1, id: rf-tp, at: [9.600, 100.900]}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

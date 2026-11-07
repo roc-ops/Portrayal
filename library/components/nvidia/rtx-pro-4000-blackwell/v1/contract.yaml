@@ -1,0 +1,343 @@
+format: 1
+kind: module
+name: rtx-pro-4000-blackwell
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA RTX PRO 4000 Blackwell (24 GB GDDR7), an actively cooled single-slot
+  full-height workstation card with a blower. The bracket face is silver with four
+  DisplayPort connectors on the board's side and a column of square vent holes
+  beside them. The shroud is dark grey with a field of long vent slits near the
+  bracket. The blower's opening is on its broad side, and the backplate is black.
+  It has one 16-pin PCIe CEM5 power connector at the far end by the top edge. It
+  plugs into one riser slot and covers none beside it.
+size: {w: 120.02, h: 21.59, d: 241.30}
+size-confidence: {w: registry, h: registry, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. A riser bay names each card
+  it takes by hand (docs/cards-by-interface-design.md, status proposed: no
+  interface or mates field exists on a card or a bay today), and no document held
+  says any server takes a workstation card, so none was added and seating it
+  would be an edit to an existing component that this change does not make.
+attrs:
+  model: 'RTX PRO 4000 Blackwell'
+  part-numbers: 'PNY VCNRTXPRO4000B-PB (retail), VCNRTXPRO4000B-BLK (bulk); NVIDIA 900-5G147-2270-000'
+  role: gpu
+  form-factor: 'Full-height, full-length (FHFL) 4.4 in x 9.5 in, single slot'
+  pcie-connector: x16
+  pcie-generation: 5
+  pcie-height: full
+  power-draw-max-w: 145
+  power-input: 'host PCIe slot and one PCIe CEM5 16-pin (12VHPWR) auxiliary connector; a 1x PCIe 8-pin to 1x PCIe Gen5 16-pin adapter is in the box'
+  memory: '24 GB GDDR7 with ECC, 192-bit, 672 GB/s'
+  display-ports: '4 x DisplayPort 2.1b on the bracket'
+  cooling: active
+  airflow: 'blower; it draws air from the card''s broad side and exhausts toward the bracket'
+  nvlink: 'none listed'
+  eol: none-announced
+faces:
+  rear: {ref: nvidia/rtx-pro-4000-blackwell-tail@1}
+  plan:
+    ref: common/pcie-card-plan@1
+provenance:
+  slot-width: >-
+    datasheet - NVIDIA's RTX PRO 4000 Blackwell datasheet: "Form Factor 4.4' x 9.5'
+    L, single slot, full height"; the RTX PRO Blackwell quick-start guide (r18) says
+    the RTX PRO 4000 "is a single slot card and will only require a single slot".
+    The face is one bracket one slot across, so the card states no `slot-width`.
+  sources: >-
+    NVIDIA RTX PRO 4000 Blackwell datasheet (the "web" print), served by nvidia.com
+    at
+    https://www.nvidia.com/content/dam/en-zz/Solutions/products/workstations/professional-desktop-gpus/rtx-pro-4000/workstation-datasheet-rtx-pro-4000-nvidia-us-web.pdf.
+    PNY's print of NVIDIA's datasheet,
+    https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20RTX/English/NVIDIA-RTX-PRO-4000-Blackwell.pdf,
+    and PNY's NVIDIA Professional Graphics line card (REV. 09.14.26),
+    https://www.pny.com/File%20Library/Company/Support/linecards/pro-viz-gpus/NVIDIA-Professional-Graphics-Linecard.pdf,
+    for the order codes. NVIDIA's RTX PRO Blackwell online quick-start guide (r18,
+    17 March 2026),
+    https://images.nvidia.com/aem-dam/Solutions/design-visualization/quadro-product-literature/rtx-pro-blackwell-online-qsg-210x148mm-20260317-r18.pdf:
+    the box contents, the single-slot statement and the 16-pin connector "on the east
+    edge". NVIDIA publishes no dimensioned drawing of this card and the power guide
+    DA-07261 stops at the Ada generation: the geometry is measured on PNY's
+    photographs (below) and carried over from the standards. The photographs are
+    named by their files and licence is not stated; facts read from them, pictures
+    not used.
+  reference-photos: >-
+    reference - PNY's product images for the RTX PRO 4000 Blackwell, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/dc90291f-6d1f-416d-8c4c-b2a4011f1bcb/images/
+    (PNG with alpha, 800 x 800): 7-rtx-pro-4000-blackwell-left.png (the bracket
+    straight on, 126 x 720 px, its tip at the bottom),
+    2-rtx-pro-4000-blackwell-front.png (the broad side straight on, 720 x 356 px),
+    6-rtx-pro-4000-blackwell-back.png (the backplate straight on, 722 x 359 px) and
+    rtx4000-3qtr-top-left.png, a 3/4 view from above (the other 3/4 views were looked
+    at and not scaled). Each picture was checked to be this card: four DisplayPorts
+    beside a column of square vent holes on a one-slot bracket, a slit field near
+    the bracket and a small blower on the broad side, the same card in every view.
+    MM PER PIXEL: bracket photograph 0.1757 (5.69 px/mm) both ways; broad-side
+    photograph 0.351 along the card (2.851 px/mm) and 0.355 across it (2.819
+    px/mm), 1.1 percent apart; back photograph 0.351 along (2.847 px/mm) and 0.357
+    across (2.80 px/mm), 1.7 percent apart. All are set out under `face-bracket`,
+    `body-fan`, `body-slits` and `body-backplate`. NO STRAIGHT-ON VIEW OF THE TOP
+    EDGE OR THE FAR END EXISTS.
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59 (PCIe CEM 5.0
+    figure 11-5), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    datasheet - 9.5 in, exactly 241.30, from the bracket's outer face as
+    nvidia/rtx-a4000@1 reads the same figure. On the broad-side photograph the card
+    runs 688 px from the bracket's outer face (column 72) to the far end (column 759),
+    which at 2.851 px/mm is 241.3 (the scale along is set by that length), and the
+    shroud's 276 px (rows 223 to 498) at 2.819 px/mm are 97.9 across, the board's
+    height. The tip of the bracket is 355 px (rows 223 to 577) below the top edge,
+    126.0 at that scale against CEM's 126.31.
+  face-bracket: >-
+    photo-measured - the bracket is std/pcie-bracket-fh@2, so the outline, the tip's
+    retention tab and the keyed flange are CEM's. The bracket photograph agrees: its
+    scale is the plate itself, the 683 px from the tip (row 759) to the flange's fold
+    (row 76, below the curl of the retention tab) over the standard's 120.02, so
+    5.69 px/mm; the tab is 59 px wide, 10.4 against CEM's 10.2 (2 percent); the
+    silver plate is 99 px across, 17.4 against the standard's 18.42, the same
+    narrowing the RTX A4000's photograph shows, and THE STANDARD'S OUTLINE IS USED.
+    The first reading of the plate's edges is good to about 0.5 mm.
+  face-displayports: >-
+    photo-measured - four DisplayPort receptacles along the board's side, at the
+    same scale, the photograph turned a quarter into this frame (tip at the left, the
+    board's side at the top). Each shell is 18.4 long and 7.1 across (y 5.5 to 12.6), with
+    the D shape's chamfer (3.7 by 3.0) at the flange end on the BOARD's side. Their
+    centres along the bracket are 41.5, 62.6, 83.7 and 104.8, a pitch of 21.1 (shell
+    centres 119 to 121.5 px apart: 41.4, 62.8, 83.8 and 104.8 as read). The photograph
+    prints the port numbers 1 to 4 above each shell's flange end, 2.0 high; they are
+    drawn. Readings are good to about 0.5 mm. THE LIBRARY HAS NO DISPLAYPORT PART OR
+    INTERFACE, so each is an element of class `connector` painted in the skin and not a
+    seated part; nothing mates it and the module type carries no port for them (the
+    `display-ports` attr says 4 x DisplayPort 2.1b, the datasheet's words). The pins
+    are drawn as two rows of dashes, not counted.
+  face-grille: >-
+    photo-measured - one column of 18 square vent holes beside the DisplayPorts, each
+    3.0 along and 3.1 across (18 by 19 px) on a pitch of 4.365 (24.8 px) along the
+    bracket, from x 35.3 to 112.5, y 15.0 to 18.1; and a Torx screw at each end of the
+    column, at x 31.5 and 116.7 and y 16.2, heads 4.9 across (28 px). There is no
+    raised frame and no other opening.
+  face-markings: >-
+    photo-measured - the bracket carries no lamp and no label; its only printing is
+    the port numbers 1 to 4 named above.
+  thickness: >-
+    estimated - nothing held states the card's thickness. The single-slot component
+    envelope on the component side of a PCIe card is 14.47 (PCIe CEM 5.0), so the
+    shroud's far face is put at y 20.48, 14.47 above the 6.01 board surface, as
+    nvidia/a10@1 and nvidia/rtx-a4000@1 do, and the backplate's outer face at 1.77, the
+    CEM rear envelope's 2.67 behind the board.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and the
+    bracket's keyed side, are at the top (small y), which is where the DisplayPorts
+    are.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3, as
+    nvidia/mcx755106-fh@1 has them): the card height 111.15, the lower edge 13.25
+    above the finger datum W and the key datum 57.15 behind the bracket, so the top
+    edge is at x 126.31. NVIDIA prints no figure for this card. The broad-side
+    photograph agrees on the height (276 px at 2.819 px/mm, 97.9). The photograph's
+    gold run ends at 130.1 behind the bracket's outer face against CEM's 128.95 (1
+    percent, the pad end in perspective): the body keeps CEM's. The lower edge has a
+    notch at 143.1 to 159.6 behind the bracket, 3.2 deep (9 px; the shroud's lower
+    edge is row 498 and the notch's floor row 489), with a vertical wall at the
+    bracket end and a ramp at the far end: it is drawn as one box 16.5 long.
+  body-shroud: >-
+    photo-measured - the shroud is dark grey, one slab from the board's component
+    face (y 6.01) to the far face (20.48), the outline of the board, split at the
+    notch as the board is. Its broad side shades from lighter at the top edge to
+    darker at the lower edge; it is painted, not drawn as a change of height.
+  body-slits: >-
+    photo-measured - 25 horizontal vent slits on the broad side near the bracket, black
+    on dark grey and resolved (brightness 0 against about 40 around them): their
+    centres are 236 to 485 px down the photograph, on a pitch of 10.38 px (3.68 mm),
+    about 1.0 thick, the first 4.6 below the top edge and the last 92.9, and they run
+    from 101 to 211 px along it, 10.2 to 48.8 behind the bracket's outer face. Painted
+    on the broad side, not openings in the 3D body.
+  body-backplate: >-
+    photo-measured - the back photograph shows a flat matte black plate over the
+    board's whole rear, on the board's outline, with ten small screws: four on the
+    lower edge's side (x 32.05) and four on the top edge's side (x 122.7), each at 18.2,
+    56.9, 122.5 and 222.6 behind the bracket's outer face, two on the far edge at x
+    53.8 and 100.8, 3.4 from the end, and three on the blower's round cover. It has an
+    opening over the blower: a ring 58.8 across centred 194.2 behind the bracket (47.1
+    from the far end) at x 80.95, whose swept blades show as a C round a round hub 37.2
+    across on the ring's centre, the blade zone 18.6 to 26.3 from the centre with
+    round ends, closed by the plate over the sector between its ends. The pose is set
+    by 6-rtx-pro-4000-blackwell-back.png turned bracket-down (a turn, not a mirror):
+    the C runs from the lower right round the bottom and the lower edge's side to the
+    far end, and the plate closes the far-end and top-edge side. The outline of the C
+    and its ends is ESTIMATED, read off the photograph by eye. Its thickness
+    is the CEM rear envelope's 2.67, estimated. The photograph also shows a small
+    connector-like notch at the far end near the top edge and two tiny printed
+    corner marks by the bracket end; none is drawn.
+  body-fan: >-
+    photo-measured - the blower's opening on the broad side. In PNY's side photograph
+    (720 x 356 px) its outer ring is 167 px across, centred at px (624.4, 351.1). At
+    2.851 px/mm along the card and 2.819 across, the ring is 59.1 across, its centre
+    47.2 from the far end and 45.4 below the top edge. The flat hub is 89 px, 31.5
+    across, inside a blade zone 53.2 across. About 36 blades are counted along the
+    upper half of the ring, so 72 are drawn; they sweep strongly and the lean drawn
+    (28 degrees) is schematic. Painted on the broad side, not an opening in the 3D
+    body.
+  body-top-edge: >-
+    estimated - PNY's 3/4 view from above shows the top edge dark with the model name
+    in gold at the bracket end, two connectors (STEREO and SYNC) beside it, a band of
+    fine cross slits along most of its length and the maker's mark at the far end. It
+    is a 3/4 view and cannot be scaled, so every place here is estimated: the slit band
+    from 62 to 232 behind the bracket and 8.0 to 18.5 across, on a 1.6 pitch, and
+    "RTX PRO 4000" at 3.0 behind it, 2.2 tall. THE STEREO AND SYNC CONNECTORS ARE NOT
+    DRAWN: no straight-on view shows them at scale and the library has no part (gaps).
+    THE MARK IS NOT DRAWN: its box (213 to 235 behind the bracket, 9.9 to 14.5 across)
+    is reserved as `logo-zone` in `skins/body-right.svg`, estimated.
+  body-power-connector: >-
+    estimated - the datasheet says "Power connector 1x PCIe CEM5 16-pin"; the RTX PRO
+    Blackwell quick-start guide says the 16-pin PCIe Gen5 connector is "on the east
+    edge" of this card and puts a 1x PCIe 8-pin to 1x PCIe Gen5 16-pin adapter in its
+    box (the Polish text of the same table says two 8-pin cables for this card; the
+    English text and its box table say one, and one is used). The housing is drawn
+    at nvidia/l40s@1's place for its 12VHPWR (104.1 to 123.0 on the card's x, 9.1
+    across the board's component face), black, with twelve power cells in two columns
+    of six on a 3.0 pitch and four sense cells; that is the L40S housing measured on a
+    photograph of that card, and no photograph of this card's end is held. THE PORT
+    is `aux-power` on the rear face (`faces.rear`, nvidia/rtx-pro-4000-blackwell-tail@1):
+    std/12vhpwr-header@1, which presents `pcie-12vhpwr` for a 16-pin cable and which
+    the card exports as a power port. The datasheet's words are CEM5, the 12VHPWR of CEM
+    5.0; a 2025 board may carry the 12V-2x6 revision (CEM 5.1), which no document says,
+    and the two take one plug.
+  body-end: >-
+    estimated - a closed black end plate 1.0 thick, 1.4 inside the card's length, and
+    the connector housing standing 0.2 proud of it, as nvidia/a10@1 has it. No
+    photograph shows the end.
+  power: >-
+    datasheet - total board power 145 W in NVIDIA's own datasheet. THE FIGURES
+    DISAGREE: PNY's print of the datasheet and its line card say 140 W. The same
+    measure (total board power) and the same scope, so it is a conflict: NVIDIA's own
+    145 W is used (`power-draw-max-w`), the 140 W is recorded here. DA-07261 does not
+    list this card.
+  memory: >-
+    datasheet - 24 GB GDDR7 with ECC, 192-bit, 672 GB/s.
+  pcie: >-
+    datasheet - PCIe 5.0 x16.
+  nvlink: >-
+    datasheet - the datasheet does not list NVLink and the card's top edge in PNY's 3/4
+    view shows no connector for one. The attr says `none listed`.
+  part-numbers: >-
+    datasheet - PNY's line card (REV. 09.14.26): "NVIDIA RTX PRO 4000 Blackwell
+    VCNRTXPRO4000B-PB VCNRTXPRO4000B-BLK 900-5G147-2270-000, 24GB". NVIDIA's own
+    datasheet gives none.
+  weight: >-
+    not stated - no datasheet held gives a weight for the card.
+  lifecycle: >-
+    PNY's line card of September 2026 lists the card as a current part and no
+    end-of-life notice was found in the documents held. The attr says `none-announced`.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) a straight-on view of the top edge and the far end
+    (needs-photo; the top edge's slit band is estimated from a 3/4 view, the STEREO and
+    SYNC connectors are not drawn and the end is a schematic); (2) the DisplayPort part
+    and interface, which the library lacks (the four are painted, not seated); (3) the
+    thickness, which no source states (vendor-silent); (4) the connector's own
+    photograph and whether it is 12VHPWR or 12V-2x6 (the housing is the L40S's); (5) a
+    weight (vendor-silent in the documents held); (6) no dimensioned drawing of any
+    active workstation card (the intake's handoff list, item 1); (7) the power guide
+    DA-07261 stops at the Ada generation, so the connector rests on the quick-start
+    guide; (8) the board power, on which NVIDIA and PNY disagree (settled above).
+body:
+  depth: 241.30
+  color: '#9aa1a8'
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 0.90, depth: 142.20,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge, lower edge W + 13.25, top edge W + 111.15; to the notch at 143.1 read on the broad-side photograph'}
+  - {id: board-notch, at: [31.61, 4.44], size: [94.70, 1.57], from: 143.10, depth: 16.50,
+     color: '#1d2420', confidence: photo-measured, shows: [right],
+     source: 'the broad-side photograph at 2.819 px/mm: the lower edge steps up 3.2 (9 px) from 143.1 behind the bracket and returns by 159.6'}
+  - {id: board-east, at: [28.41, 4.44], size: [97.90, 1.57], from: 159.60, depth: 81.30,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'the lower edge again east of the notch, to the 241.30 end less the 0.4 step (provenance body-end)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45.00, depth: 11.20,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key datum 57.15 behind the bracket, tab 13.25 deep, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.10, depth: 80.93,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0: the tab runs 81.88 past the key datum, to 139.03'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 45.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 58.35, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0: the x16 pad run on 1.00 pitch'}
+  - {id: backplate, at: [28.41, 1.77], size: [97.90, 2.67], from: 0.90, depth: 142.20,
+     color: '#232325', confidence: photo-measured, shows: [top, right],
+     source: 'the back photograph: a flat matte black plate over the board''s rear; 2.67 is the CEM rear envelope, estimated'}
+  - {id: backplate-notch, at: [31.61, 1.77], size: [94.70, 2.67], from: 143.10, depth: 16.50,
+     color: '#232325', confidence: photo-measured, shows: [top, right],
+     source: 'as the backplate, inside the notch'}
+  - {id: backplate-east, at: [28.41, 1.77], size: [97.90, 2.67], from: 159.60, depth: 81.30,
+     color: '#232325', confidence: photo-measured, shows: [top, right],
+     source: 'as the backplate, east of the notch'}
+  - {id: shroud, at: [28.41, 6.01], size: [97.90, 14.47], from: 0.90, depth: 142.20,
+     color: '#2c2c2e', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'the broad-side photograph: one dark grey slab; thickness bounded by the CEM single-slot component height 14.47 (provenance thickness)'}
+  - {id: shroud-notch, at: [31.61, 6.01], size: [94.70, 14.47], from: 143.10, depth: 16.50,
+     color: '#2c2c2e', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the board''s notch'}
+  - {id: shroud-east, at: [28.41, 6.01], size: [97.90, 14.47], from: 159.60, depth: 80.30,
+     color: '#2c2c2e', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to the end plate at 239.90'}
+  - {id: end-plate, at: [28.41, 6.01], size: [97.90, 14.47], from: 239.90, depth: 1.00,
+     color: '#18181a', confidence: estimated,
+     source: 'a closed black end plate (provenance body-end)'}
+  # THE 16-PIN (provenance body-power-connector): a black housing with the twelve
+  # power and four sense cells, the 3D body of the tail face's `aux-power` port.
+  - {id: power-16pin, at: [104.10, 6.06], size: [18.90, 9.10], from: 235.30, depth: 5.80,
+     color: '#17191c', confidence: estimated,
+     source: 'nvidia/l40s@1''s housing (measured on that card), set on this card''s component face by the top edge; it ends 0.2 beyond the end plate'}
+  - {id: power-16pin-power-1, at: [105.10, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'nvidia/l40s@1''s cells: 12 power cells in two columns of six on a 3.0 pitch; the cell size is estimated'}
+  - {id: power-16pin-power-2, at: [108.10, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-3, at: [111.00, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-4, at: [114.00, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-5, at: [117.10, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-6, at: [120.20, 9.26], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell'}
+  - {id: power-16pin-power-7, at: [105.10, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-power-8, at: [108.10, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-power-9, at: [111.00, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-power-10, at: [114.00, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-power-11, at: [117.10, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-power-12, at: [120.20, 12.16], size: [2.00, 2.00], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first power cell, the second column'}
+  - {id: power-16pin-sense-1, at: [110.00, 7.06], size: [1.20, 1.20], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'a strip of four sense contacts on the board side, as nvidia/l40s@1; Molex 2191140001-SD''s 2.00 pitch and an estimated size'}
+  - {id: power-16pin-sense-2, at: [112.00, 7.06], size: [1.20, 1.20], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+  - {id: power-16pin-sense-3, at: [114.00, 7.06], size: [1.20, 1.20], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+  - {id: power-16pin-sense-4, at: [116.00, 7.06], size: [1.20, 1.20], from: 241.10, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as the first sense cell'}
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+elements:
+  display-port-1: {at: [95.60, 5.50], size: [18.40, 7.10], class: connector}
+  display-port-2: {at: [74.50, 5.50], size: [18.40, 7.10], class: connector}
+  display-port-3: {at: [53.40, 5.50], size: [18.40, 7.10], class: connector}
+  display-port-4: {at: [32.30, 5.50], size: [18.40, 7.10], class: connector}
+  vent: {at: [35.30, 15.00], size: [77.20, 3.10], class: vent}
+  screw-1: {at: [114.25, 13.75], size: [4.90, 4.90], class: screw}
+  screw-2: {at: [29.05, 13.75], size: [4.90, 4.90], class: screw}
+skins: [default]

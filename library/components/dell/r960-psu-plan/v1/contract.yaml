@@ -1,0 +1,22 @@
+format: 1
+kind: component
+name: r960-psu-plan
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  an 86 mm power supply bay of the PowerEdge R960 seen from above - the can a supply (or a 60 mm supply in its adapter) runs
+  into the chassis as
+provenance:
+  size: >-
+    measured - Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: the can of each
+    `R960_ PSU Prefab` in the `Main Assembly` node (`Body_5_2.005`) is 86.3 x 233.5, from the face at cad z 853.0 to 619.5, at plan
+    x 346.3 and 11.8 and y 30.9 (plan x = 228.0 - cad x1, plan y = 883.94 - cad z1). The first pass had 86.0 x 217.0, the width the bay's
+    (ISM figure 10) and the length the compartment's in ISM figure 15 (px 215 to 420 down at 1.863 px/mm), 16.5 short;
+    the width stays the model's 86.3, 0.3 over the bay's 86.0 the ISM states. The handle stands a further 33.5 behind
+    the can's face to 2.6 past the rear wall; this plan part is the can alone.
+  is-a-plan: >-
+    A plan part: what the top view draws where the rear bay projects the supply.
+size: {w: 86.3, h: 233.5}
+size-confidence: {w: measured, h: measured}
+skins: [default]

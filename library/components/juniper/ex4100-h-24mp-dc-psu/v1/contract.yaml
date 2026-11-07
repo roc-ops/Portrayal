@@ -1,0 +1,96 @@
+format: 1
+kind: module
+name: ex4100-h-24mp-dc-psu
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+unmated: the 340 W DC supply of the EX4100-H-24MP as drawn from the rear of the switch; its DC wires do not land on it but on the power input terminals under the terminal door on the front of the switch, in the section for the slot it is in (EX4100-H Switch Hardware Guide, "Connect Power to an EX4100-H-24MP or EX4100-H-24F Switch"), so this part has no inlet, terminal or lug for a cable to land on
+description: >-
+  Juniper EX4100-H-24MP-DC-PSU, the 340 W DC field-replaceable power supply of the EX4100-H-24MP. The switch ships with
+  one in a rear slot and takes a second, which the guide lists as N+1 redundant and hot swappable. The face is the AC
+  supply's - a finned fanless body with a green release handle, a retaining thumbscrew on a tab and the OUT_OK lamp over
+  a hot-surface mark - with a DC INPUT label. The wires do not land here: the DC+, DC- and G terminals are on the front of
+  the switch, under the terminal door, in the section for the slot the supply is in. The supply has no fan and cools by
+  convection, so it has no airflow direction. The switch with a DC supply is a centimetre deeper than with an AC one.
+attrs:
+  role: dc-power-supply
+  power-output-w: 340
+  input: 20.4 through 72 VDC at the terminal block, nominal +24, -48 or -60 VDC
+  input-current: 5.5 A at +24 V, 5.75 A at -48 V and 2.2 A at -60 V, as printed on the label
+  inlet: none
+  cooling: fanless, convection cooled
+  weight-kg: 1.45
+part-numbers:
+  EX4100-H-24MP-DC-PSU: {part: EX4100-H-24MP-DC-PSU}
+provenance:
+  sources: >-
+    datasheet and drawing - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01): Table 10 (the
+    shipped components), Table 15 (the weight), Tables 34 and 36 (the model number and the specification), Table 30
+    (the budget), Table 41 (the lamp), Figures 4, 29 and 32 and the installation steps. Figure 29, the 340 W FRU DC
+    supply, is the drawing of this face. No photograph of the DC supply seated in the EX4100-H-24MP is held.
+  size: >-
+    estimated - the guide gives no dimension for the supply. It is drawn at the AC supply's module size, 183.5 by
+    39.5 mm, measured off Figure 4 (see juniper/ex4100-h-jpsu-340w-ac@1), because Figure 29 shows the same face and the
+    same slot. The depth is not stated; Table 11 gives the chassis 15.35 in (38.99 cm) deep with this supply against
+    14.96 in (37.99 cm) with the AC one, which is 10 mm.
+  power-output-w: >-
+    datasheet - Tables 10, 30 and 41 and the model's section name a 340 W FRU DC supply. An output figure. The guide
+    gives no draw or loss figure for the unit.
+  input: >-
+    datasheet - Table 36 gives the range at the terminal block, 20.4 VDC to 72 VDC, nominal +24, -48 and -60 VDC, in two
+    rows, the 12MP's external supply and the 24F's FRU supply; it has no row for this supply by name, and the two rows
+    agree, so the range is carried. Figure 29 prints +24V 5.5A, -48V 5.75A and -60V 2.2A on the label.
+  face: >-
+    drawing - the label block, fins, handle and lamp plate are the AC supply's, and the label text is Figure 29's. The
+    guide's Figure 25, captioned as the AC supply, in fact shows this DC face. The lamp legend sits below the lamp as in
+    the studio photograph of the AC supply seated in the same chassis; Figure 29 draws the same plate.
+  airflow: >-
+    datasheet - Tables 8, 10 and 12 give "NA. Fanless model. Convection cooled." The handle is green in the photographs
+    of the AC supply; no photograph of this one is held, so its handle is drawn the same.
+  leds: >-
+    datasheet - Table 41: OUT_OK is green when the 54 V or 12 V output is OK, amber for a fault condition even though
+    there is power, and off with no input.
+  depth: >-
+    estimated - THE GUIDE STATES NO DEPTH FOR THE SUPPLY, and no document held does. The 3D body is carried as 210 mm behind the face: the AC supply's
+    200 mm (itself an estimate, see juniper/ex4100-h-jpsu-340w-ac@1) and the 10 mm by which Table 11 makes the chassis deeper with this supply.
+  flank: >-
+    drawn - the strip of the face to the left of the slot's lip, 12.0 mm wide, is painted in the chassis colour (#6a727f) so that the part's own tab reads
+    against metal and not against the dark opening a 183.5 mm bay would otherwise show beside it; the real slot opening starts 11.6 mm in.
+  relief: >-
+    estimated - the handle stands proud of the face in the studio photograph of the AC supply. Its projection is not
+    stated or measured.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit itself draws.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-out-ok:
+    at: [168.5, 6.1]
+    size: [5.0, 5.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [78.8, 0.9]
+    size: [40.2, 37.7]
+    class: latch
+size:
+  w: 183.5
+  h: 39.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 1.6
+    color: '#a2dd35'
+    confidence: estimated
+    source: photo of the AC supply - the green handle stands proud; projection not measured
+body:
+  depth: 210.0
+  color: '#5b626e'
+skins: [default]

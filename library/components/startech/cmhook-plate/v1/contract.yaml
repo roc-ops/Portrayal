@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: cmhook-plate
+version: 1.0.0
+class: mechanical
+description: >-
+  The mounting plate of a StarTech.com CMHOOK1U or CMHOOK1UN 1U D-ring hook seen from the front -
+  a steel strip 19 mm wide and one rack unit high with two vertical slots, bolted to the face
+  of one rail - drawn as the well the ring stands in, its floor the front face of the plate
+provenance:
+  size: >-
+    drawing - CMHOOK1U_Diagram.pdf and CMHOOK1UN_Diagram.pdf (StarTech.com, third angle
+    projection, millimetres, 6/15/2022): the plate is 19.0 wide and 44.6 high ("1.0 U" on the
+    drawing), 2.3 thick, with two slots "2-phi6.0x12.0", 32.0 apart. The two drawings draw the
+    same plate, so one part serves both hooks.
+  slots: >-
+    drawing - 6.0 wide and 12.0 long, vertical, centred on the plate's width and 32.0 apart, so
+    16.0 either side of the middle of its height. The datasheet's "44.6 mm" height is the 1U
+    the drawing marks.
+  depth: >-
+    drawing - 99.0. The drawing's side view puts the part 101.3 out of the rail and the plate
+    2.3 thick, so the ring stands 99.0 out of the plate's front face.
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmhook1u_datasheet.pdf). The drawing is line
+    work, so the shade is this library's render of black steel.
+size: {w: 19.0, h: 44.6, d: 99.0}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {material: steel}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [19.0, 44.6], class: bezel}
+skins: [default]

@@ -1,0 +1,63 @@
+format: 1
+kind: component
+name: 9512-1901-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The cover of the Belden 9512-1901 1U horizontal manager, seen from the front. A long steel channel
+  spans the manager. Its face closes the front and its two returns clip over the tips of the finger
+  stock. It ships with the manager and lifts off to lay cable in.
+provenance:
+  size: >-
+    estimated - the cover closes the front between the ears: 450.0 wide, the 482.6 of the data sheet's
+    19 in overall width less an estimated 16.3 of ear each end (half the 32.6 between the 450.0 EIA-310
+    clear opening between the rails, 17.72 in, and the 482.6), and 38.1 high, the data sheet's 1.5 in.
+    The photograph lays the cover beside the panel, a long shallow channel about as long as the panel;
+    no Belden document dimensions it.
+  relief: >-
+    estimated - the cover stands at the front of the 50.8 overall depth: a plate 2.0 thick (47.3 to 49.3
+    above the back plate's face) and returns 8.0 deep along its top and bottom edges, 1.0 thick, that
+    close over the finger tips. No Belden document gives the cover's section; the photograph shows a
+    thin steel channel with a rolled lip.
+  lid: >-
+    datasheet - the 9512-1901 technical data sheet's Product Description, "Horizontal Manager with
+    Finger Stock and Cover", and its photograph, which lays the cover detached beside the panel. The
+    cover is its own part, fitted as shipped, so a drawing can take it off and show the fingers. It
+    comes off, so it is a lid (`lid: true`). The data sheet does not say how it is held.
+  contour: >-
+    estimated - STAND-INS, NOT MEASUREMENTS. The photograph shows a row of ribs along the cover's
+    inside, which are not drawn, and a plain outer face with a rolled lip; the lip is drawn as a lit
+    band along the top edge and a shaded one along the bottom.
+  shading: >-
+    estimated - the bands are semi-transparent white and black over the fill, so the cover reads on the
+    light stage and on the dark one. The data sheet states "Black Powdercoat Finish".
+size: {w: 450.0, h: 38.1}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [450.0, 38.1], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [450.0, 1.0], class: bezel}
+  lip-bottom: {at: [0.0, 37.1], size: [450.0, 1.0], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 47.3
+      out: 49.3
+      color: '#4a4f55'
+      confidence: estimated
+      source: no Belden document dimensions the cover section; a thin steel channel in the data sheet photograph
+    - node: lip-top
+      lift: 41.3
+      out: 49.3
+      color: '#565b61'
+      confidence: estimated
+      source: the cover closes over the finger tips; the 8.0 mm return is read off the data sheet photograph
+    - node: lip-bottom
+      lift: 41.3
+      out: 49.3
+      color: '#3a3e43'
+      confidence: estimated
+      source: as lip-top
+skins: [default]

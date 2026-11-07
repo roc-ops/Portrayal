@@ -1,0 +1,107 @@
+format: 1
+kind: module
+name: n9k-puv-1200w
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1200 W HVAC/HVDC power supply of the Cisco Nexus 9300 fixed switches, N9K-PUV-1200W.
+  One part serves both airflow directions and has a white latch. It has a round fan grille, a
+  FAIL and an OK lamp, a pull handle, an Anderson Saf-D-Grid inlet and a release latch. No
+  picture of this supply is held. The face is drawn from its AC sibling with the inlet the
+  guide names.
+size: {w: 96.8, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: 'N9K-PUV-1200W'
+  power-output-w: 1230
+  input: hvac-hvdc
+  inlet: other
+  input-voltage: '100-240 Vac (range 90-264 Vac); 200-277 Vac (range 180-305 Vac); 240-380 Vdc'
+  input-current-max: '10 A at 100 Vac'
+  efficiency: 'Climate Savers Platinum Efficiency (80Plus Platinum certified)'
+  airflow: dual-direction
+provenance:
+  model: >-
+    datasheet - the Cisco N93180YC-FX3 NX-OS Mode Switch Hardware Installation Guide (First
+    Published 2021-02-16, Last Modified 2026-07-27), Overview: "1200-W HVAC/HVDCpowersupply
+    with dual-direction airflow white coloring (N9K-PUV-1200W)", and the weights table:
+    "1200-W HVAC/HVDC dual-direction (white) (N9K-PUV-1200W)". The N93180YC-FX3S guide and
+    the N93108TC-FX3 guide (Last Modified 2026-07-16) say the same. The part has no airflow
+    suffix: one supply serves both directions, and the guide says "All fan modules and
+    power supplies must use the same airflow direction", so it is seated with either set of
+    fans.
+  power: >-
+    datasheet - appendix B, "1200-W HVAC/HVDC Power Supply Specifications": "Maximum output
+    Watts - For 200 to 277 VAC - For 192 to 400 VDC: Per power supply - 1230W - 1230W", a
+    12 Vdc output at 100 A, standby 12 V at 2.5 A, form factor RSP1. THE NAME SAYS 1200 W
+    AND THE TABLE SAYS 1230 W; the table is carried as `power-output-w` and no document
+    gives the output at 100 to 240 Vac, so no lower figure is stated. THE DC INPUT RANGE IS
+    PRINTED "Range: 1204-400 Vdc", which cannot be right beside "192 to 400 VDC" in the
+    same table, and is not carried; the nominal range, 240-380 Vdc, is. NO WEIGHT IS CARRIED:
+    the guides' weights tables give 2.42 lb (1.1 kg) only against the AC supply rows, and
+    none has a row for this supply.
+  size: >-
+    estimated - THE GUIDES STATE NO DIMENSION, only "Form factor RSP1", which they print for
+    this supply, the 650 W AC supply and the 930 W DC supply alike. The size is
+    cisco/nxa-pac-650w@1's, the only RSP1 supply any of them draws.
+  elements: >-
+    estimated - NO PICTURE OF THIS SUPPLY IS HELD. The guides' figures show AC supplies
+    only, and the replacement chapters of the three guides carry no figure. The housing,
+    fan, lamps and handle are cisco/nxa-pac-650w@1's arrangement. The inlet is the
+    std/saf-d-grid@1 part because the installation chapter says "Insert the power supply
+    cord Anderson SAF-D-Grid connector into the power supply inlet" and "pressing the tab of
+    the Anderson Power SAF-D-Grid connector"; where the inlet sits on the face and how it is
+    turned are not pictured, and it is drawn in the AC supply's place, on its side. The
+    input symbol ring is left empty because the marking this supply prints is not pictured.
+  lamps: >-
+    datasheet - the guides' appendix C, "Power Supply LEDs", one table for every supply.
+  latch-colour: >-
+    datasheet - the guide's Overview gives "white coloring" for this supply. The values
+    #e6e8ea and #9aa1a8 are chosen by eye as a white and its edge; no picture is sampled.
+  depth: >-
+    estimated - not stated. 185 mm is cisco/nxa-pac-650w@1's round figure.
+states: [absent]
+elements:
+  fail: {at: [2.5, 11.8], size: [2.8, 2.8], class: led, states: ['off', {name: fault, color: '#f59e0b'}]}
+  ok: {at: [2.5, 27.9], size: [2.8, 2.8], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  fan: {at: [11.6, 0.7], size: [37.2, 37.2], class: rotor}
+  handle: {at: [56.1, 1.9], size: [5.9, 35.6], class: handle}
+  latch: {at: [87.6, 9.8], size: [6.8, 19.5], class: latch}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#e6e8ea'
+  latch-edge:
+    label: Latch edge colour
+    type: text
+    default: '#9aa1a8'
+parts:
+  - {ref: std/saf-d-grid@1, id: inlet, at: [63.5, 8.85], rotate: 90}
+relief:
+  wall: '#3a3e43'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/n9k-puv-1200w@1's own elements key - the grille is cisco/nxa-pac-650w@1's.
+    - node: handle
+      uhandle: 20.0
+      color: '#1b1d20'
+      confidence: estimated
+      source: >-
+        Not stated in any guide held; cisco/nxa-pac-650w@1's figure carried across.
+    - node: latch
+      out: 3.0
+      confidence: estimated
+      source: >-
+        cisco/n9k-puv-1200w@1's own elements key - the latch stands proud in every picture
+        of the family and how far is not stated.
+skins: [default]
+body:
+  depth: 185
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [96.8, 38.6]}

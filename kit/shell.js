@@ -403,6 +403,7 @@ export function createShell(opts = {}) {
     'sfp-plus': 'SFP+', 'qsfp-dd': 'QSFP-DD', 'rj45-serial': 'RJ45 serial',
     'coax-sma': 'SMA', 'coax-smb': 'SMB', 'coax-bnc': 'BNC',
     'coax-din-1-0-2-3': '1.0/2.3', 'coax-f': 'F', 'coax-mcx': 'MCX',
+    'coax-g': 'G-type',
     'micro-usb-b': 'micro-USB B',
     'usb-a': 'USB-A', 'usb-c': 'USB-C', 'sc-apc': 'SC/APC', 'fiber': 'fibre',
     'coax': 'coax', 'ac': 'AC',
@@ -608,10 +609,12 @@ export function createShell(opts = {}) {
     if (state.autoPulled) state.autoPulled.clear();
     for (const r of el.tree.querySelectorAll('.node.pulled')) r.classList.remove('pulled');
     refreshPulled();
-    emit('pulled', {paths: []});
+    emit('pulled', manyViews() ? {paths: [], views: []} : {paths: []});
   }
 
-  function renderTree(roots, {clear = true, heading = null} = {}) {
+  // `view` is the face these roots were read from: each row says which, so the
+  // same id on two faces is two rows that can be told apart
+  function renderTree(roots, {clear = true, heading = null, view = null} = {}) {
     const box = el.tree;
     if (clear) box.innerHTML = '';
     // a face's section in a merged tree: a fold row like a group's, so the six
@@ -655,6 +658,7 @@ export function createShell(opts = {}) {
           continue;
         }
         row.dataset.path = n.path;
+        if (view != null && manyViews()) row.dataset.view = view;
         const cls = n.el.dataset.class || '';
         const isBay = cls === 'bay';
         const occupied = isBay ? !!n.el.querySelector('[data-ref]') : true;
@@ -689,16 +693,18 @@ export function createShell(opts = {}) {
             // `in:` this one (render.py emits it as data-in) is carried by it -
             // the mid tray's four drives lift out with the tray - so they go
             // off and come back with it, in the drawing and in the tree.
-            for (const w of state.svg.querySelectorAll(`[data-in="${CSS.escape(n.path)}"]`)) {
+            // - on the face the part is on, which is not always the mounted one
+            const face = docOf(view) || state.svg;
+            for (const w of face.querySelectorAll(`[data-in="${CSS.escape(n.path)}"]`)) {
               if (off) w.setAttribute('data-portrayal-pulled', '');
               else w.removeAttribute('data-portrayal-pulled');
-              const wr = el.tree.querySelector(`.node[data-path="${CSS.escape(w.dataset.path)}"]`);
+              const wr = rowOf(w.dataset.path, view);
               if (wr) wr.classList.toggle('pulled', off);
             }
             refreshPulled();
             // a host driving a 3D scene needs the whole set, not this one part:
             // viewer3d's setPulled takes what should be off, so a reset is []
-            emit('pulled', {paths: pulledPaths()});
+            emit('pulled', pulledEvent());
           };
           row.querySelector('.cls').before(pull);
         }
@@ -714,7 +720,8 @@ export function createShell(opts = {}) {
             row.querySelector('.tw').textContent = kids.classList.contains('hid') ? '▸' : '▾';
           };
         }
-        row.onclick = () => select(n.path === state.sel ? null : n.path, true);
+        row.onclick = () => select(n.path === state.sel && (view ?? state.selView) === state.selView
+                                     ? null : n.path, true, view ?? undefined);
         // a page decorates its own rows here - state chips, mark counts - rather
         // than re-walking the tree afterwards and guessing which row is which
         emit('row', row, n);
@@ -800,11 +807,39 @@ export function createShell(opts = {}) {
     return [state.svg, ...Object.values(state.faces || {})]
       .filter((d, i, a) => d && a.indexOf(d) === i);
   }
-  function elOf(path) {
+  // A PART IS (VIEW, ID), NOT ID. A device's views each place their own parts, and
+  // two views can place one id (the DIN rail's left and right both place
+  // `screw-upper`), so a bare path names a part on every face that has it.
+  // `view` is optional everywhere it is taken: left off, a path means the first
+  // face that draws it, as it always has.
+  function faceViews() {
+    const out = Object.entries(state.faces || {}).filter(([, d]) => d);
+    if (state.svg && !out.some(([, d]) => d === state.svg)) out.unshift([state.view, state.svg]);
+    return out;
+  }
+  const docOf = view => (view == null ? null : faceViews().find(([v]) => v === view)?.[1] || null);
+  const viewOf = e => (e ? faceViews().find(([, d]) => d === e || d.contains(e))?.[0] ?? null : null);
+  // a view is only worth saying when it tells two parts apart
+  const manyViews = () => faceViews().length > 1 || (state.meta?.views || []).length > 1;
+  const sayView = view => (view != null && manyViews() ? view : undefined);
+  function elIn(path, view) {
+    return docOf(view)?.querySelector(`[data-path="${CSS.escape(path)}"]`) || null;
+  }
+  function elOf(path, view) {
     const q = `[data-path="${CSS.escape(path)}"]`;
+    const own = elIn(path, view);
+    if (own) return own;
     for (const d of faceDocs()) { const e = d.querySelector(q); if (e) return e; }
     return null;
   }
+  // the row a (view, path) is, in whichever tree is drawn; a row that names no
+  // view (a one-view tree) answers to any, and a call that names none takes the first
+  const rowMatches = (r, path, view) => r.dataset.path === path
+    && (view == null || !r.dataset.view || r.dataset.view === view);
+  const rowOf = (path, view) => [...el.tree.querySelectorAll('.node')]
+    .find(r => rowMatches(r, path, view)) || null;
+  // `views` as a call takes it: one view for every path, a list beside the paths, or none
+  const viewAt = (views, i) => (Array.isArray(views) ? views[i] : views) ?? null;
   // THE MODULE A PATH IS IN, as components.json knows it. The front draws it
   // with its ref; the rear draws only a projection, whose ref sits on the
   // cutout it is seen through (render.py `data-rear-ref`, kept by swaps).
@@ -818,8 +853,27 @@ export function createShell(opts = {}) {
     return ref ? compByRef(ref) : null;
   }
   function pulledEls() { return faceDocs().flatMap(d => [...d.querySelectorAll('[data-portrayal-pulled]')]); }
-  function pulledPaths() { return pulledEls().map(e => e.dataset.path).filter(Boolean); }
-  function isPulled(path) { return !!elOf(path)?.hasAttribute('data-portrayal-pulled'); }
+  // what is off, each with the view it is off on
+  function pulledParts() {
+    return faceViews().flatMap(([view, d]) => [...d.querySelectorAll('[data-portrayal-pulled]')]
+      .filter(e => e.dataset.path).map(e => ({path: e.dataset.path, view})));
+  }
+  // `view` narrows it to one face; left off, every path that is off, as ever
+  function pulledPaths(view) {
+    return pulledParts().filter(p => view == null || p.view === view).map(p => p.path);
+  }
+  // beside pulledPaths(): the view of each path in it, in the same order; null
+  // for each on a device with one view, where a path names a part by itself
+  function pulledViews() { return pulledParts().map(p => (manyViews() ? p.view : null)); }
+  // what the `pulled` event carries: the paths as ever, and on a device with
+  // more than one view the view of each, so a scene hides the part on its own face
+  function pulledEvent() {
+    const parts = pulledParts();
+    const ev = {paths: parts.map(p => p.path)};
+    if (manyViews()) ev.views = parts.map(p => p.view);
+    return ev;
+  }
+  function isPulled(path, view) { return !!elOf(path, view)?.hasAttribute('data-portrayal-pulled'); }
 
   // WHAT LIES OVER A PART, from two things the drawing DECLARES and nothing it
   // does not. `data-under` on a part is the schema's `under:` - the ids that
@@ -828,16 +882,29 @@ export function createShell(opts = {}) {
   // transitively, so a heatsink under a shroud under a lid names both. Boxes
   // are not consulted: two parts whose boxes overlap are not thereby stacked,
   // and guessing that once turned every click on the front into "bezel".
-  function over(path) {
-    const out = new Set(), seen = new Set();
+  //
+  // OF THE VIEW IT IS ON. What lies over a part lies over it on its own face:
+  // the left bracket's screws are not the right bracket's, though they share
+  // ids. `view` names the face; left off, the first face that draws the path.
+  // `overIn` answers with each cover's view, `over` with the bare ids it always has.
+  function over(path, view) { return overIn(path, view).map(o => o.path); }
+  function overIn(path, view) {
+    const out = new Map(), seen = new Set();
+    view = view ?? viewOf(elOf(path));
+    // a cover is looked for on the part's own face first, anywhere after
+    const find = p => elOf(p, view);
     // ONLY WHAT THE TREE WOULD LET YOU PULL is taken off. The system board is
     // walked THROUGH - what is over it is over the DIMMs seated in it - but a
     // board is not a cover and hiding it would be a hole, not a reveal.
-    const found = o => { if (elOf(o)?.dataset.behaviour) out.add(o); visit(o); };
+    const found = o => {
+      const e = find(o);
+      if (e?.dataset.behaviour) out.set(`${viewOf(e)}\0${o}`, {path: o, view: viewOf(e)});
+      visit(o);
+    };
     const visit = p => {
       if (!p || seen.has(p)) return;
       seen.add(p);
-      const e = elOf(p);
+      const e = find(p);
       if (!e) return;
       // declared on the part: the ids that lie over it (schema `under:`)
       for (const o of (e.dataset.under || '').split(/\s+/).filter(Boolean)) found(o);
@@ -847,7 +914,7 @@ export function createShell(opts = {}) {
       // Reading it as "over the contents" pulled heatsink-2 to reveal
       // heatsink-1. What lies over a part is what the PART declares.
       // declared on a cover: what it hides (the bezel and its drives)
-      const doc = e.ownerSVGElement || e.closest('svg');
+      const doc = docOf(viewOf(e)) || e.ownerSVGElement || e.closest('svg');
       // - and NOT an occupant, which is `for` its host too but sits in it,
       // not over it (see liesOver in swap.js)
       for (const c of doc.querySelectorAll('[data-behaviour][data-for]'))
@@ -855,24 +922,27 @@ export function createShell(opts = {}) {
     };
     visit(path);
     if (path.includes('/')) visit(path.split('/')[0]);   // a port is under what its module is under
-    out.delete(path);
-    return [...out];
+    return [...out.values()].filter(o => o.path !== path);
   }
 
   // Take parts off or put them back by path, the way the tree's control does,
-  // so a host driving a scene hears about it the same way.
-  function setPulled(paths, on) {
+  // so a host driving a scene hears about it the same way. `views` is optional:
+  // one view for every path, or a list beside `paths`; a path with no view is
+  // taken on the first face that draws it, as it always was.
+  function setPulled(paths, on, views) {
     let changed = false;
-    for (const p of paths) {
-      const e = elOf(p);
-      if (!e || e.hasAttribute('data-portrayal-pulled') === on) continue;
+    paths.forEach((p, i) => {
+      const view = viewAt(views, i);
+      // a view that was named is the face the part is on: not found there, not touched
+      const e = view != null && docOf(view) ? elIn(p, view) : elOf(p);
+      if (!e || e.hasAttribute('data-portrayal-pulled') === on) return;
       if (on) e.setAttribute('data-portrayal-pulled', ''); else e.removeAttribute('data-portrayal-pulled');
-      el.tree.querySelector(`.node[data-path="${CSS.escape(p)}"]`)?.classList.toggle('pulled', on);
+      rowOf(p, viewOf(e))?.classList.toggle('pulled', on);
       changed = true;
-    }
+    });
     if (!changed) return;
     refreshPulled();
-    emit('pulled', {paths: pulledPaths()});
+    emit('pulled', pulledEvent());
   }
 
   // REVEAL WHAT YOU SELECTED. Selecting a DIMM under the lid and being shown
@@ -880,25 +950,36 @@ export function createShell(opts = {}) {
   // the selection comes off, and goes back when the selection moves on. Only
   // covers this took off are put back: one the reader pulled by hand stays
   // off, because that was their decision and not this function's.
-  function reveal(path) {
-    state.autoPulled = state.autoPulled || new Set();
+  //
+  // OF THE FACE THE SELECTION IS ON. `view` is the selection's view (left off, the
+  // first face that draws the path), and what comes off or goes back is that
+  // face's: the cover of the same id on another face stays as it is.
+  function reveal(path, view) {
+    view = path ? (view ?? viewOf(elOf(path))) : null;
+    // what this took off, by the view and the path it was taken off on
+    state.autoPulled = state.autoPulled || new Map();
+    const keyOf = (v, p) => `${v}\0${p}`;
+    const setParts = (parts, on) => setPulled(parts.map(x => x.path), on, parts.map(x => x.view));
     // AND THE PART ITSELF IS SHOWN. Selecting something you took off - the lid,
     // a module, a port on a pulled module - is a selection of a thing that is
     // not drawn, which is nothing to look at. So a pulled selection, or a
     // pulled ancestor of it, goes back on. That includes one pulled by hand:
     // the reader's later decision was to select it.
     if (path) {
-      const back = pulledEls().map(e => e.dataset.path)
-        .filter(p => p && (path === p || path.startsWith(p + '/')));
-      if (back.length) { for (const p of back) state.autoPulled.delete(p); setPulled(back, false); }
+      const back = pulledParts().filter(x => (view == null || x.view === view)
+        && (path === x.path || path.startsWith(x.path + '/')));
+      if (back.length) {
+        for (const x of back) state.autoPulled.delete(keyOf(x.view, x.path));
+        setParts(back, false);
+      }
     }
-    const need = new Set(path ? over(path) : []);
-    const back = [...state.autoPulled].filter(p => !need.has(p));
-    const off = [...need].filter(p => !state.autoPulled.has(p) && !isPulled(p));
-    for (const p of back) state.autoPulled.delete(p);
-    for (const p of off) state.autoPulled.add(p);
-    if (back.length) setPulled(back, false);
-    if (off.length) setPulled(off, true);
+    const need = new Map((path ? overIn(path, view) : []).map(x => [keyOf(x.view, x.path), x]));
+    const back = [...state.autoPulled].filter(([k]) => !need.has(k));
+    const off = [...need].filter(([k, x]) => !state.autoPulled.has(k) && !isPulled(x.path, x.view));
+    for (const [k] of back) state.autoPulled.delete(k);
+    for (const [k, x] of off) state.autoPulled.set(k, x);
+    if (back.length) setParts(back.map(([, x]) => x), false);
+    if (off.length) setParts(off.map(([, x]) => x), true);
   }
 
   // A BOX AROUND A PART, in the mounted drawing's root coordinates. getBBox is
@@ -968,8 +1049,11 @@ export function createShell(opts = {}) {
   // which is how a 2D to 3D switch used to lose both highlights.
   function markRows({open = false} = {}) {
     const far = state.far || [];
+    // ONE ROW IS THE SELECTION: the part on its own view, where the tree lists
+    // the same id once for each view that places it
+    const selRow = state.sel != null ? rowOf(state.sel, state.selView) : null;
     for (const r of el.tree.querySelectorAll('.node')) {
-      const sel = state.sel != null && r.dataset.path === state.sel;
+      const sel = r === selRow;
       const lit = far.includes(r.dataset.path);
       r.classList.toggle('sel', sel);
       r.classList.toggle('linked', lit);
@@ -977,16 +1061,22 @@ export function createShell(opts = {}) {
     }
   }
 
-  function select(path, fromTree) {
+  // `view` is optional: the view the part is on, for a device whose views place
+  // the same id. Left off it is the first face that draws the path, as it was.
+  function select(path, fromTree, view) {
+    view = path == null ? null : (view ?? viewOf(elOf(path)));
     state.sel = path;
-    reveal(path);
-    for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('sel', r.dataset.path === path);
+    state.selView = view;
+    reveal(path, view);
+    const selRow = path == null ? null : rowOf(path, view);
+    for (const r of el.tree.querySelectorAll('.node')) r.classList.toggle('sel', r === selRow);
     const q = `[data-path="${CSS.escape(path)}"]`;
     const qo = `[data-of="${CSS.escape(path)}"]`;
     // the part where it is drawn as a part; failing that, as a projection - a
     // cassette's rear MTP is drawn nowhere else, and is still something to point at
     const target = path == null ? null
-      : (state.svg?.querySelector(q)
+      : (elIn(path, view)
+         || state.svg?.querySelector(q)
          || Object.values(state.faces || {}).map(f => f.querySelector(q)).find(Boolean)
          || state.svg?.querySelector(qo)
          || Object.values(state.faces || {}).map(f => f.querySelector(qo)).find(Boolean)
@@ -1045,14 +1135,14 @@ export function createShell(opts = {}) {
       padFarRings();
     }
     if (!fromTree) {
-      const row = [...el.tree.querySelectorAll('.node')].find(r => r.dataset.path === path);
+      const row = rowOf(path, view);
       if (row) {
         openRow(row);
         row.scrollIntoView({block: 'center'});
       }
     }
     inspect(path, target);
-    emit('select', path, target, fromTree);
+    emit('select', path, target, fromTree, sayView(view));
   }
 
   // ---------------------------------------------------------------- inspector
@@ -1765,10 +1855,10 @@ export function createShell(opts = {}) {
       for (const view of views) {
         const svg = state.faces?.[view];
         if (!svg) continue;
-        renderTree(buildTree(svg), {clear: false, heading: view});
+        renderTree(buildTree(svg), {clear: false, heading: view, view});
       }
     } else {
-      renderTree(buildTree(state.svg));
+      renderTree(buildTree(state.svg), {view: state.view});
     }
     // a fresh tree (a 2D/3D switch) opens onto the selection and its far
     // rows; redrawTree then puts the reader's own folds back over this
@@ -1837,7 +1927,7 @@ export function createShell(opts = {}) {
     // anything a load since then mounted is not this one's to keep
     el.svgHost.replaceChildren(svg);
     state.svg = svg;
-    state.sel = null;
+    state.sel = null; state.selView = null;
     state.far = [];
     farHalos = [];        // they were drawn in the drawing just replaced
     // THE OTHER FACES ARE STILL THE SAME DEVICE. In 2D one view is on screen
@@ -1862,7 +1952,10 @@ export function createShell(opts = {}) {
       // in its rear cutout) is nearer than that part, so it wins; the old test
       // read the containment backwards and selected the cutout.
       const path = ownerPath(ev.target);
-      select(path && path !== state.sel ? path : null, false);
+      // the view it is on is the one drawn here, when this face draws it as a part
+      const here = path && elIn(path, state.view) ? state.view : undefined;
+      select(path && !(path === state.sel && (here ?? state.selView) === state.selView)
+               ? path : null, false, here);
     });
     fit();
     refreshTree();
@@ -2272,7 +2365,7 @@ export function createShell(opts = {}) {
     // a seated lug's turn (#829): set one, apply a link's, the URL's delta,
     // and the whole state the 3D scene seats with
     turnCage, applyTurns, turnDelta, turnsNow: () => ({...state.cfgTurns}),
-    over, setPulled, pulledPaths,
+    over, setPulled, pulledPaths, pulledViews,
     compByRef, devices: () => DEVICES, components: () => COMPONENTS,
     device: () => DEVICES.find(d => d.name === state.device),
     // the chosen NOS vendor's listing, whole, or null (#709)

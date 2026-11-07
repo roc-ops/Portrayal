@@ -1,0 +1,25 @@
+format: 1
+kind: component
+name: ex4200-poe-plate
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: networking
+description: >-
+  The "8PoE" line of the model plate on the front of the Juniper EX4200-24T and -48T, printed in
+  orange beside the white "EX4200". It is a part of its own so that the -DC builds, which the
+  hardware guide says "do not provide PoE", can leave it off with `only-in`.
+attrs: {model: 'Model plate PoE legend'}
+size: {w: 10.0, h: 4.1}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - EX4200 Ethernet Switch with Virtual Chassis Technology Datasheet (1000215-026-EN),
+    page 6, the 24-port and 48-port views: the model plate reads "EX4200" in white and the PoE
+    count in orange. Table 1 gives the AC 24T and 48T 8 PoE ports.
+  absence-on-dc: >-
+    datasheet - Table 1 gives the DC models 0 PoE ports; hardware guide, Table 1 (pp. 4-5) lists
+    no PoE-enabled ports for them and states that "EX4200 switches with a DC power supply
+    installed do not provide PoE".
+  size: estimated - the legend box around 2.2 mm type, read off the photograph
+skins: [default]

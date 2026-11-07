@@ -1,0 +1,547 @@
+format: 1
+kind: device
+name: qfx10016
+version: 2.1.0
+maturity: modelled
+manufacturer: Juniper
+model: QFX10016
+portfolio:
+  line: QFX Series
+  family: QFX10000
+description: >-
+  Juniper QFX10016 - the 21RU, sixteen-slot modular chassis of the QFX10000 family. Two QFX10000-RE
+  Routing and Control Boards stack under the badge strip beside the status lamp panel. Sixteen
+  full-width line-card slots (0 to 15, top to bottom) fill the front below them in four banks of
+  four. The rear is a ten-high power supply stack (PSU 0 to 9) with the earthing terminal and ESD
+  point below it. Two full-height fan trays stand beside it and cover the switch interface boards.
+  Cooling is front-to-back (port-to-FRU, airflow out). Line cards are ordered separately and are
+  not modelled here.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      QFX10016 Switch Hardware Guide (Juniper Networks, published 2025-12-11), Figures 2 and 3 (g050700
+      and g050702), Figure 95 (g050741), Figure 85, Table 3, Table 4, Table 63 and Table 64, with the
+      QFX10008 Switch Hardware Guide (published 2025-12-11) for the topics the two guides share (the
+      status panel Figure 13, g050550, and the fan tray lamps Figure 23, g050590); the QFX10000 Modular
+      Ethernet Switches datasheet page on juniper.net (Tables 1 to 4 and ordering information; the PDF at
+      the datasheet address did not download, so the HTML page is the datasheet cited). No studio
+      photograph of the QFX10016 was obtained, so every colour is borrowed from the MX10016 and every
+      position is read off a guide figure. The guide's isometric figures carry fractions only
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet-table - Table 63: 36.6 x 17.4 x 35 in (929.6 x 442 x 889 mm chassis only), 21U; "the outer
+      edges of the mounting-bracket flange extend the width to 19 in". Ears NOT MODELLED by convention. The
+      datasheet's Table 2 prints 17.4 x 36.65 x 35 in; the hardware guide's 36.6 in. is used, the difference
+      being 1 mm
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the front is the same arrangement as juniper/mx10016, whose positions were read off a
+      photograph, and Figure 2 (g050700) of this guide, an isometric whose fractions agree: a badge strip
+      about 14 mm tall, two RCBs, the status panel at their right, then sixteen cards in four banks of four
+      with a divider between the banks. The line-card slot is 1.89 in. (48.0 mm) by 17.2 in. (437 mm) in
+      Table 63, so the slot size is sourced and the 48.4 mm pitch, the banks and the y of each slot are
+      borrowed from the MX10016. Figure 2 is isometric, so no measure was taken from it
+  slot-numbering:
+    confidence: datasheet
+    note: >-
+      guide - Figure 2 callouts 1 and 5: RCB slots 0 and 1 and line card slots 0 to 15, "numbered top to
+      bottom"; CLI names CB 0 and 1 and FPC 0 to 15 (Table 4). No slot number is legible on any figure
+  badge:
+    confidence: drawing
+    note: >-
+      drawing - the badge strip above the RCBs carries the Juniper mark and the model name QFX10016
+      (Figure 2, g050700; Figure 95, g050741). The model is printed as plain text and the mark is reserved
+      as a logo-zone, as the EX4400 does. Nothing is drawn for the Junos badge at the top of the status
+      panel
+  status-panel:
+    confidence: drawing
+    note: >-
+      drawing - Figure 13 of the QFX10008 guide (g050550, shared by the family: "the status panel of the
+      QFX10008 and QFX10016") is a flat figure of the panel: five bi-colour lamps one under another, POWER
+      SUPPLIES, FANS, SIBS, LINE CARDS, CONTROL BOARDS, three alarm marks to their left. Its aspect, 0.71
+      against the 47.0 x 76.2 mm panel's 0.62, is 15 percent out, so only fractions per axis are taken (the
+      lamps at 0.38 of the width and at 0.37, 0.43, 0.49, 0.56 and 0.62 of the height, the marks at 0.21 of
+      the width). The panel itself (47.0 x 76.2 mm, the height of the two RCBs) is borrowed from the MX10016.
+      The enhanced power bus line (Figure 14) is not drawn: the guide names no SKU for it
+  esd-front:
+    confidence: drawing
+    note: >-
+      drawing - Figure 95 (g050741) marks the ESD point of the front at the right of the status panel, a
+      round point with the ESD symbol beside it. The position is read off an isometric and is estimated
+  mounting-holes:
+    confidence: estimated
+    note: >-
+      drawing - Figure 2 callout 4: installation holes for the front panel (the EMI door), in the band below
+      the RCBs, in the band under the status panel and in the foot of the chassis. They are drawn as plain
+      holes at positions read off the isometric, estimated
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - Figure 3 (g050702, isometric): one ten-high stack of power supply bays at the left and two
+      full-height fan trays right, with the ESD point (3) and the protective earthing terminal (4) under the
+      stack. The bays are sized from the module tables: a supply is 3.6 in. wide by 3.5 in. high (91.4 x 88.9
+      mm, Tables 13, 16, 25), a fan tray 6.6 in. wide by 36.6 in. high (168 x 929.6 mm, Table 8). Ten
+      supplies on an 88.9 mm pitch end at 892 mm, which leaves the lower 38 mm of the 929.6 mm height for the
+      earthing terminal, as Figure 3 draws it
+  rear-fit:
+    confidence: estimated
+    note: >-
+      The JNP10K-PWR-AC2 is drawn here as juniper/jnp10k-pwr-ac2@2, to the guides' 3.6 x 3.5 in. (Table 16)
+      and so it fills the 91.4 x 88.9 mm bays exactly. It was juniper/jnp10k-pwr-ac2@1 until that major, drawn
+      84.0 x 97.0 mm from a photograph, was retired. No MX10016 fan
+      tray is accepted: the QFX10016 guide names JNP10008-FAN2 in its Table 4, which is the QFX10008's row
+      repeated, and no JNP10016 fan tray
+  grounding:
+    confidence: datasheet
+    note: >-
+      guide - "Two threaded inserts (PEM nuts) are provided on the lower rear of the chassis ... spaced at
+      0.63 in. (16 mm) centers", Panduit LCD6-10A-L lug, 10-32 screws, next to PSU 9 on the QFX10016
+      (Grounding Cable and Lug Specifications; Connect to Earth Ground). No registered pair interface has a
+      16 mm pitch, so the two holes are drawn as holes and the lug is not seatable (see gaps). Their x is
+      read off Figure 85 (g050729) of the QFX10008 guide as fractions of the supply width; the y is estimated
+  fan-trays-internal:
+    confidence: datasheet
+    note: >-
+      The two QFX10016-FAN-CTRL fan tray controllers and the six QFX10016-SF switch interface boards (16
+      connectors each, Figure 7) sit inside the chassis behind the fan trays and are not visible from
+      outside, so no bay is drawn for them
+  other-faces:
+    confidence: estimated
+    note: >-
+      near-blank by evidence - the sides carry a rail band and a handle in the guide figures, drawn as
+      estimated decor as the MX10016 does; axis conventions per viewer3d.js as the siblings
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet - Table 4 of the datasheet page: base system 3,989 W typical and 5,815 W reserved,
+      redundant system 4,618 W typical and 6,630 W reserved, "line cards not included"; maximum thermal
+      output 91,729 BTU/hour (26,883 W), "estimated, subject to change". The guide's per-FRU figures
+      (Table 64) are on the modules
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet-table - Table 63: spare chassis 220 lb (99.79 kg), base AC 522 lb (236.78 kg), redundant AC
+      596 lb (270.34 kg), redundant DC 591 lb (268.07 kg). The datasheet's Table 2 gives the base as 491 lb
+      (223 kg), the redundant as 596 lb (270 kg) and fully loaded as 938 lb (425 kg). The redundant figures
+      agree; the base figures conflict (see gaps) and the hardware guide's 522 lb is used
+  rack-kits:
+    confidence: datasheet
+    note: >-
+      guide - Installing the Mounting Hardware for a QFX10000: the chassis comes with a four-piece set of
+      mounting brackets, the rack mount kit EX-MOD-RMK-4POST (also orderable as a spare), and
+      JNP-MOD-RMK-4PST is available by separate order for a solid-shelf rack; two-post racks are not
+      supported; a chassis lift is advised. Kept in provenance only, as the task states
+
+attrs:
+  physical:
+    weight-empty-kg: 99.79
+    weight-base-kg: 236.78
+    weight-redundant-kg: 270.34
+  performance:
+    throughput: >-
+      up to 96 Tbps (datasheet Table 1; the guide gives a net switching capacity of 96 Tbps with six SIBs);
+      7.2 Tbps per slot
+    ports-max: 2,304 x 10GbE, 576 x 40GbE or 480 x 100GbE (datasheet Table 1, with sixteen 30C cards)
+  power:
+    power-typical-w: 3989
+    power-max-w: 5815
+    power-envelope: bare
+    power-typical-scope: datasheet - base system, line cards not included; redundant system 4,618 W
+      typical and 6,630 W reserved
+  thermal:
+    heat-dissipation: 91,729 BTU/hr (26,883 W) maximum thermal output, estimated and subject to change
+    airflow: port-to-FRU (airflow out, front-to-back); two fan trays of 21 fans each
+  environmental:
+    operating-temp: 0 C to 40 C (32 F to 104 F)
+    storage-temp: -40 C to 70 C (-40 F to 158 F)
+    humidity: 5 to 90 percent noncondensing operating, 5 to 95 percent nonoperating
+    altitude: up to 3,048 m (10,000 ft)
+  platform:
+    cpu: Intel quad-core 2.5 GHz
+    memory: 32 GB SDRAM
+    storage: 50 GB onboard SSD, plus an optional SATA SSD of 50 GB or 100 GB in the RCB
+    fabric: six switch interface boards, five required and the sixth for n+1; midplane-less
+  management:
+    oob: MGMT RJ-45 (em0), 10/100/1000BASE-T, and MGMT SFP (em1), on each RCB
+    console: RJ-45 console (CON) on each RCB
+    usb: one USB 2.0 port on each RCB
+  compliance:
+    seismic: Designed to meet GR-63 Zone 4 earthquake requirements
+chassis:
+  width: 442.0
+  height: 929.6
+  depth: 889.0
+  ru: 21
+  color: '#565b61'
+  airflow: front-to-back
+gaps:
+  - what: line-cards
+    scope: [fpcs]
+    reason: needs-photo
+    wanted: >-
+      the QFX line cards are a family of their own and are left out: QFX10000-36Q, QFX10000-30C,
+      QFX10000-30C-M, QFX10000-60S-6Q and QFX10K-12C-DWDM (built on JNP10K-LC1104 hardware, which is not
+      in the library). None is the part number of a JNP10K card already in the library
+      (JNP10K-LC2101, -LC480 and -LC9600 are named by the MX guides, not by this one), so the slots
+      accept the cover only
+  - what: no-photograph
+    scope: [front, rear]
+    reason: needs-photo
+    wanted: >-
+      a studio photograph of the QFX10016 front and rear, for the colour of the chassis, the supplies and
+      the fan trays
+  - what: psu-ac2-face
+    scope: [psus]
+    reason: needs-photo
+    wanted: >-
+      a flat figure or photograph of the JNP10K-PWR-AC2 face as seated in this chassis; the guide gives only
+      its outer size (Table 16) and isometric drawings, so juniper/jnp10k-pwr-ac2@2 refits the MX10008
+      unit's arrangement to 91.4 x 88.9 mm by estimate
+  - what: rcb-dimensions
+    scope: [res]
+    reason: vendor-silent
+    wanted: >-
+      a dimension for the RCB or its slot - Table 63 lists the chassis and the line cards and nothing for
+      the RCB; the 389.0 x 38.1 mm aperture is borrowed from the MX10016
+  - what: earthing-terminal
+    scope: [rear]
+    reason: vendor-silent
+    wanted: >-
+      a registered two-hole lug interface at 16 mm (0.63 in.) centres on 10-32 screws, so a lug can be
+      seated; the library has stud pairs at 5/8 in. (15.875 mm) on M4, M6 and 1/4-20 screws and the
+      MX204's own plate at 3/4 in. The two holes are drawn as holes
+  - what: sib-and-ftc
+    reason: needs-photo
+    wanted: >-
+      the QFX10016-SF switch interface boards and the QFX10016-FAN-CTRL fan tray controllers sit inside the
+      chassis behind the fan trays, where no face shows them. Five boards and one cover on the base, six
+      boards on the redundant configurations; two controllers on all. None is drawn
+  - what: ears-and-kits
+    scope: [front]
+    reason: vendor-silent
+    wanted: >-
+      ear positions: the guide names the bracket kits (EX-MOD-RMK-4POST, JNP-MOD-RMK-4PST) and says the
+      outer edges of the mounting-bracket flange extend the width to 19 in., and draws no ear position or
+      kit range, so neither `ears` nor `kits` is written
+  - what: lifecycle
+    reason: vendor-silent
+    wanted: >-
+      the end-of-sale and end-of-support dates of the QFX10016; Juniper's QFX Series milestones page is
+      rendered by script and the search for an announcement returned no date
+  - what: sources-disagree-weight
+    reason: sources-disagree
+    wanted: >-
+      the base configuration weighs 522 lb (236.78 kg) in Table 63 of the hardware guide and 491 lb (223 kg)
+      in Table 2 of the datasheet; the guide's figure is carried
+  - what: sources-disagree-psu-fan
+    scope: [psus, cooling]
+    reason: sources-disagree
+    wanted: >-
+      Table 13 of the guide gives the QFX10000-PWR-AC depth as 14.4 in. (6.53 cm), and 14.4 in. is 36.6 cm;
+      Table 28 gives the JNP10K-PWR-DC2 width as 3.6 in. (1.63 cm), which is 9.14 cm. The inch figures are
+      used on both. The guide's CLI Table 4 says the PSU number is "0-5" on a chassis that has ten slots
+      (PSU 0 to 9); the ten slots are used
+groups:
+  res:
+    term: Slot
+    role: service
+    index-origin: 0
+    description: Routing and Control Board slots CB0 and CB1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - QFX10016 hardware guide, "QFX10000 Component Redundancy": one RCB in the base configuration, two in the redundant one; with two fitted one is primary and the other backup, and the backup takes over if the primary or any part of it fails. The RCB consolidates the Routing Engine function with the control plane function in a single unit'
+  fpcs:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: line-card slots 0 to 15, numbered top to bottom
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: ten power supply slots, PSU 0 to 9, one full-height stack at the rear left (five populated in the base configuration)
+    attrs:
+      redundancy: 'n+1'
+      redundancy-note: 'n+1 - the QFX10000 requires three power supplies for minimum operation (two RCBs, two fan trays, six SIBs and no line cards); additional supplies give n+1 redundancy, and the QFX10000 supports 2n source redundancy on the feeds'
+  cooling:
+    term: Tray
+    role: service
+    index-origin: 0
+    description: two full-height fan trays, with redundant fans; the switch interface boards sit behind them
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: '1+1 - QFX10016 hardware guide, Fan Tray QFX10016-FAN: the switch keeps running for a limited time on a single operating fan tray without a thermal alarm, so only one tray is removed at a time; the datasheet calls them dual hot-swappable fan trays with redundant fans'
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the chassis status lamp panel beside the RCBs
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+    description: the wrist-strap ESD points, one on the front status panel and one at the rear left
+views:
+  front:
+    size:
+      w: 442.0
+      h: 929.6
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [442.0, 14.0], fill: '#44484d'}
+        - {at: [392.5, 14.0], size: [47.0, 76.2], fill: '#4a4f55'}
+        - {at: [0.0, 90.2], size: [442.0, 20.0], fill: '#50555b'}
+        - {at: [0.0, 303.8], size: [442.0, 7.0], fill: '#50555b'}
+        - {at: [0.0, 504.4], size: [442.0, 7.0], fill: '#50555b'}
+        - {at: [0.0, 705.0], size: [442.0, 7.0], fill: '#50555b'}
+        - {at: [0.0, 905.6], size: [442.0, 24.0], fill: '#50555b'}
+        - {at: [9.0, 98.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole, Figure 2 callout 4; position estimated'}
+        - {at: [26.0, 98.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole, Figure 2 callout 4; position estimated'}
+        - {at: [410.0, 98.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole, Figure 2 callout 4; position estimated'}
+        - {at: [429.0, 98.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole, Figure 2 callout 4; position estimated'}
+        - {at: [60.0, 914.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole in the foot of the chassis, Figure 2 callout 4; position estimated'}
+        - {at: [74.0, 914.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole in the foot of the chassis, Figure 2 callout 4; position estimated'}
+        - {at: [352.0, 914.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole in the foot of the chassis, Figure 2 callout 4; position estimated'}
+        - {at: [366.0, 914.0], size: [4.4, 4.4], shape: circle, fill: '#15171a', confidence: estimated, source: 'front-panel installation hole in the foot of the chassis, Figure 2 callout 4; position estimated'}
+      cutouts:
+        - {id: led-psus, at: [409.3, 41.3], size: [2.0, 2.0], shape: circle}
+        - {id: led-fans, at: [409.3, 46.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-sibs, at: [409.3, 50.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-lcs, at: [409.3, 55.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-cbs, at: [409.3, 60.7], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [46.0, 10.0], text: QFX10016, font-size: 4.0, anchor: start, fill: '#c7ccd1', for: chassis}
+      - {at: [413.0, 42.64], text: POWER SUPPLIES, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-psus}
+      - {at: [413.0, 47.44], text: FANS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-fans}
+      - {at: [413.0, 52.24], text: SIBS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-sibs}
+      - {at: [413.0, 57.24], text: LINE CARDS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-lcs}
+      - {at: [413.0, 62.04], text: CONTROL BOARDS, font-size: 1.1, anchor: start, fill: '#e8eaec', for: led-cbs}
+      - {at: [402.4, 47.6], path: 'M 0 -2.0 L 2.0 1.6 L -2.0 1.6 Z M 0 -0.8 V 0.6 M 0 1.0 V 1.1', for: chassis}
+      - {at: [402.4, 52.8], path: 'M -1.3 1.2 H 1.3 M -1.0 1.2 C -1.0 -1.8 1.0 -1.8 1.0 1.2 M 0 -1.9 V -1.5 M -0.5 1.7 H 0.5', for: chassis}
+      - {at: [402.4, 57.8], path: 'M 0 -1.9 A 1.9 1.9 0 1 0 0.01 -1.9 Z M 0 -1.0 V 0.4 M 0 0.9 V 1.0', for: chassis}
+    components:
+      bays:
+        - {id: cb0, at: [2.5, 14.0], size: {w: 389.0, h: 38.1},
+           accepts: [juniper/qfx10000-re@1, juniper/qfx10000-re-cover@1], default: juniper/qfx10000-re@1,
+           group: res, rel-pos: 0}
+        - {id: cb1, at: [2.5, 52.1], size: {w: 389.0, h: 38.1},
+           accepts: [juniper/qfx10000-re@1, juniper/qfx10000-re-cover@1], default: juniper/qfx10000-re@1,
+           group: res, rel-pos: 1}
+        - {id: fpc0, at: [2.5, 110.2], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 0}
+        - {id: fpc1, at: [2.5, 158.6], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 1}
+        - {id: fpc2, at: [2.5, 207.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 2}
+        - {id: fpc3, at: [2.5, 255.4], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 3}
+        - {id: fpc4, at: [2.5, 310.8], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 4}
+        - {id: fpc5, at: [2.5, 359.2], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 5}
+        - {id: fpc6, at: [2.5, 407.6], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 6}
+        - {id: fpc7, at: [2.5, 456.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 7}
+        - {id: fpc8, at: [2.5, 511.4], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 8}
+        - {id: fpc9, at: [2.5, 559.8], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 9}
+        - {id: fpc10, at: [2.5, 608.2], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 10}
+        - {id: fpc11, at: [2.5, 656.6], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 11}
+        - {id: fpc12, at: [2.5, 712.0], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 12}
+        - {id: fpc13, at: [2.5, 760.4], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 13}
+        - {id: fpc14, at: [2.5, 808.8], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 14}
+        - {id: fpc15, at: [2.5, 857.2], size: {w: 437.0, h: 48.0},
+           accepts: [juniper/qfx10000-lc-cover@1], default: juniper/qfx10000-lc-cover@1, group: fpcs, rel-pos: 15}
+      placements:
+        - {id: led-psus, ref: common/led-dot@1, at: [409.3, 41.3], for: chassis,
+           group: status-leds, rel-pos: 0,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {id: led-fans, ref: common/led-dot@1, at: [409.3, 46.1], for: chassis,
+           group: status-leds, rel-pos: 1,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {id: led-sibs, ref: common/led-dot@1, at: [409.3, 50.9], for: chassis,
+           group: status-leds, rel-pos: 2,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {id: led-lcs, ref: common/led-dot@1, at: [409.3, 55.9], for: chassis,
+           group: status-leds, rel-pos: 3,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {id: led-cbs, ref: common/led-dot@1, at: [409.3, 60.7], for: chassis,
+           group: status-leds, rel-pos: 4,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+        - {id: esd-front-jack, ref: common/esd-jack@1, at: [429.5, 16.5], for: chassis, group: esd, rel-pos: 0}
+    regions:
+      - {id: logo-zone, at: [10.0, 2.5], size: {w: 32.0, h: 8.5}, label: 'Vendor logo; not drawn'}
+  rear:
+    size:
+      w: 442.0
+      h: 929.6
+    panel:
+      decor:
+        - {at: [14.1, 905.0], size: [5.0, 5.0], shape: circle, fill: '#15171a', confidence: datasheet, source: 'protective earthing terminal, one of two PEM nut holes on 16 mm centres (Grounding Cable and Lug Specifications); x read off Figure 85, y estimated'}
+        - {at: [30.1, 905.0], size: [5.0, 5.0], shape: circle, fill: '#15171a', confidence: datasheet, source: 'protective earthing terminal, one of two PEM nut holes on 16 mm centres (Grounding Cable and Lug Specifications); x read off Figure 85, y estimated'}
+    silkscreen:
+      - {at: [24.1, 920.0], path: 'M 0 -4.6 A 4.6 4.6 0 1 0 0.01 -4.6 Z M -2.6 -1.2 H 2.6 M -1.7 0.6 H 1.7 M -0.8 2.4 H 0.8', for: chassis}
+    components:
+      bays:
+        - {id: psu0, at: [3.0, 3.0], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 0}
+        - {id: psu1, at: [3.0, 91.9], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 1}
+        - {id: psu2, at: [3.0, 180.8], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 2}
+        - {id: psu3, at: [3.0, 269.7], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 3}
+        - {id: psu4, at: [3.0, 358.6], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 4}
+        - {id: psu5, at: [3.0, 447.5], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 5}
+        - {id: psu6, at: [3.0, 536.4], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 6}
+        - {id: psu7, at: [3.0, 625.3], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 7}
+        - {id: psu8, at: [3.0, 714.2], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 8}
+        - {id: psu9, at: [3.0, 803.1], size: {w: 91.4, h: 88.9},
+           accepts: [juniper/qfx10000-pwr-ac@1, juniper/jnp10k-pwr-ac2@2, juniper/qfx10000-pwr-dc@1, juniper/qfx10000-jnp10k-pwr-dc2@1, juniper/qfx10000-pwr-cover@1],
+           default: juniper/qfx10000-pwr-ac@1, group: psus, rel-pos: 9}
+        - {id: fan0, at: [96.0, 0.0], size: {w: 168.0, h: 929.6},
+           accepts: [juniper/qfx10016-fan@1], default: juniper/qfx10016-fan@1,
+           group: cooling, rel-pos: 0}
+        - {id: fan1, at: [268.0, 0.0], size: {w: 168.0, h: 929.6},
+           accepts: [juniper/qfx10016-fan@1], default: juniper/qfx10016-fan@1,
+           group: cooling, rel-pos: 1}
+      placements:
+        - {id: esd-rear-jack, ref: common/esd-jack@1, at: [72.0, 903.5], for: chassis, group: esd, rel-pos: 1}
+  left:
+    size:
+      w: 889.0
+      h: 929.6
+    panel:
+      decor:
+        - {at: [0.0, 450.0], size: [889.0, 30.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band and side handle (Figure 2 callout 3); estimated'}
+  right:
+    size:
+      w: 889.0
+      h: 929.6
+    panel:
+      decor:
+        - {at: [0.0, 450.0], size: [889.0, 30.0], fill: '#4a4f55', confidence: estimated,
+           source: 'rail band and side handle (Figure 2 callout 3); estimated'}
+  top:
+    size:
+      w: 442.0
+      h: 889.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 889.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [6.0, 889.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+  bottom:
+    size:
+      w: 442.0
+      h: 889.0
+    panel:
+      decor:
+        - {at: [0.0, 0.0], size: [6.0, 889.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+        - {at: [436.0, 0.0], size: [6.0, 889.0], fill: '#4a4f55', confidence: estimated,
+           source: 'side edge; estimated'}
+configurations:
+  base:
+    kind: base
+    default: true
+    power: ac
+    source: >-
+      vendor - Juniper publishes this as an orderable bundle, QFX10016-BASE. The hardware guide's Table 3
+      lists the chassis with its power bus, one RCB with one RCB cover and SSD cover, two fan tray
+      controllers, two fan trays, five QFX10000-PWR-AC supplies with five power supply covers, five SIBs
+      with one SIB cover, sixteen line card covers and a front panel, over the note that line cards, the
+      cable management system and the SATA SSD are not part of the base or redundant configurations. This
+      base draws exactly that: one board in RCB slot 0 and a cover in slot 1, five supplies in slots 0 to
+      4 and a cover in each of the other five, and a cover in each of the sixteen line-card slots; the
+      controllers and boards are inside and not drawn
+    description: >-
+      QFX10016-BASE (guide Table 3, datasheet ordering information). One QFX10000-RE with its RCB cover
+      over the second slot. Five QFX10000-PWR-AC supplies, with a cover over each of the other five
+      supply slots. Two QFX10016-FAN trays and sixteen line card covers. Two fan tray controllers
+      and five QFX10016-SF boards sit inside. Line cards and cable management are ordered separately.
+    bays:
+      cb1: juniper/qfx10000-re-cover@1
+      psu5: juniper/qfx10000-pwr-cover@1
+      psu6: juniper/qfx10000-pwr-cover@1
+      psu7: juniper/qfx10000-pwr-cover@1
+      psu8: juniper/qfx10000-pwr-cover@1
+      psu9: juniper/qfx10000-pwr-cover@1
+      fpc0: juniper/qfx10000-lc-cover@1
+      fpc1: juniper/qfx10000-lc-cover@1
+      fpc2: juniper/qfx10000-lc-cover@1
+      fpc3: juniper/qfx10000-lc-cover@1
+      fpc4: juniper/qfx10000-lc-cover@1
+      fpc5: juniper/qfx10000-lc-cover@1
+      fpc6: juniper/qfx10000-lc-cover@1
+      fpc7: juniper/qfx10000-lc-cover@1
+      fpc8: juniper/qfx10000-lc-cover@1
+      fpc9: juniper/qfx10000-lc-cover@1
+      fpc10: juniper/qfx10000-lc-cover@1
+      fpc11: juniper/qfx10000-lc-cover@1
+      fpc12: juniper/qfx10000-lc-cover@1
+      fpc13: juniper/qfx10000-lc-cover@1
+      fpc14: juniper/qfx10000-lc-cover@1
+      fpc15: juniper/qfx10000-lc-cover@1
+    part-numbers:
+      QFX10016-BASE: {}
+  redund:
+    kind: orderable
+    power: ac
+    description: >-
+      QFX10016-REDUND (guide Table 3, datasheet): two QFX10000-RE boards, ten QFX10000-PWR-AC supplies,
+      two QFX10016-FAN trays and sixteen line card covers; six QFX10016-SF boards inside.
+    part-numbers:
+      QFX10016-REDUND: {}
+  redund-dc:
+    kind: orderable
+    power: dc
+    description: >-
+      QFX10016-REDUND-DC (guide Table 3, datasheet): the redundant build with ten QFX10000-PWR-DC
+      supplies, 2,500 W each, shipped only in the redundant configuration.
+    bays:
+      psu0: juniper/qfx10000-pwr-dc@1
+      psu1: juniper/qfx10000-pwr-dc@1
+      psu2: juniper/qfx10000-pwr-dc@1
+      psu3: juniper/qfx10000-pwr-dc@1
+      psu4: juniper/qfx10000-pwr-dc@1
+      psu5: juniper/qfx10000-pwr-dc@1
+      psu6: juniper/qfx10000-pwr-dc@1
+      psu7: juniper/qfx10000-pwr-dc@1
+      psu8: juniper/qfx10000-pwr-dc@1
+      psu9: juniper/qfx10000-pwr-dc@1
+    part-numbers:
+      QFX10016-REDUND-DC: {}
+datasheet:
+  title: 'QFX10000 Modular Ethernet Switches datasheet (Juniper Networks, juniper.net product page, retrieved 2026-10-23)'
+  sha256: 10885fc30e9c86e0aea95d207e410aadcdb21c8f0145d0efc93703c4f922146f
+references:
+  - {title: 'QFX10016 Switch Hardware Guide (Juniper Networks, published 2025-12-11)', sha256: 2ab6136fb1c66a368b45410c00b971086b171e411336a5b3c9e4e40fa850d53c}
+  - {title: 'QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11)', sha256: 88f0df38ffe8cd9f1052241aa04bf0234e83455eaf8b6cf26f7bf9d2b9427f60}

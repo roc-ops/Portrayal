@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: 7280cr3-pwr-1000-dc-rev
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1000 W DC power supply of the Arista 7280CR3-32D4 for rear-to-front air, PWR-1011-DC-BLUE
+  (reverse airflow, blue handle). It is the PWR-1011-DC-RED housing with the fan turned the other
+  way. It is a 1RU module, 73.5 mm wide, with a blue diagonal handle on the fan guard and a
+  terminal block in place of an inlet. The block has the two poles the guide's section 4.4.2.2
+  names, negative (-48V) and positive (RTN). The protective earth terminal is on the other side
+  of the module and is not drawn.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1011-DC-BLUE: {part: PWR-1011-DC-BLUE}
+attrs:
+  power-output-w: 1000
+  input: dc
+  inlet: dc-terminal
+  airflow: back-to-front
+  input-note: '-40 to -60 VDC, 30 A'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height, as arista/7280cr3-pwr-1000-ac: the data
+    sheet (03-0045-59) describes the part as "PWR-1011-DC-BLUE  Arista PSU, 1RU, DC/DC, 1000W,
+    REVERSE, 73.5MM".
+  part-number: >-
+    datasheet - ordering information for the 7280CR3-32D4: "PWR-1011-DC-BLUE  Arista PSU, 1RU,
+    DC/DC, 1000W, REVERSE, 73.5MM". It is a spare: the "-R" SKUs are "2 x AC".
+  power-output: >-
+    datasheet - the "1000W" of the ordering description. An output.
+  input: >-
+    datasheet - as arista/7280cr3-pwr-1000-dc: guide table 3 and the data sheet's power supply
+    table, which lists one PWR-1011 DC column for both airflow builds.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a PWR-1011-DC-BLUE is held. It is drawn as
+    arista/7280cr3-pwr-1000-dc with the handle blue, which is what the guide's note "Handle or
+    bezel color indicates airflow direction" describes.
+  airflow: >-
+    datasheet - the part number's BLUE and "REVERSE" airflow. The guide's section 2.1 says a blue
+    handle marks an air-inlet module.
+  handle-finish: >-
+    The blue of the handle is a field, `handle-finish`, default `#3d7bd6`, the library's blue for a
+    back-to-front handle.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#3d7bd6'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [49.5, 12.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [49.5, 27.1]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

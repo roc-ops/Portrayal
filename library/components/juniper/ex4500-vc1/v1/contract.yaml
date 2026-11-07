@@ -1,0 +1,88 @@
+format: 1
+kind: module
+name: ex4500-vc1
+version: 1.1.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  The Virtual Chassis module of the Juniper EX4500 switches, printed EX4500-40F-VC1-128G. It sits in the
+  same rear strip as the intraconnect module and replaces it. It has two dedicated Virtual Chassis ports,
+  VCP-0 and VCP-1, that join the switch to an EX4200 or EX4500 switch. It is an offline field-replaceable
+  unit. Two lamps, ST and VC MODE, show its state. Three of the eight models ship with it. The guide
+  gives no Juniper part number for it.
+attrs:
+  role: virtual-chassis-module
+  power-absent: not-published
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Virtual Chassis Module in EX4500
+    Switches (Figures 12 and 13, Table 9) and Figure 7, the rear panel with the module, both isometric
+    drawings. The guide's own copyright and the Juniper EULA govern it; it is read for facts only and
+    nothing of it is copied. The model name is printed on the module, and the guide prints no part number.
+  size: >-
+    estimated - Figures 12 and 7 are isometric with no scale. The module takes the intraconnect module's
+    strip, 345.9 x 21.7 mm, since it fills the same rear slot (juniper/ex4500-lb@1).
+  face: >-
+    estimated - read as fractions of the isometric Figure 12: a screw at each end, two lamps at the left,
+    two connector openings in the left half and the model name at the lower right. Every position is
+    estimated; the two connectors are the EX4200's port part (see ports). The maker's mark is a logo and
+    is not drawn.
+  ports: >-
+    borrowed - juniper/ex4200-vcp-port@1, on the guide's own words. EX4500 Switch Hardware Guide: the
+    module's two dedicated VCPs interconnect the switch "with EX4200 switches, EX4500 switches, or EX4550
+    switches" (PDF p.27); "EX4500 switches use a 68-pin connector cable to interconnect switches to form a
+    Virtual Chassis" (PDF p.129); and the 0.5-meter Virtual Chassis cable, which "is supplied with an
+    EX4200", joins EX4200, EX4500 and EX4550 switches through their VCPs (PDF p.137, Table 58). One cable
+    fits both, so it is one connector and one part. Each port keeps the centre the isometric art gave
+    (98.0, 11.4 and 162.0, 11.4) and is drawn at the part's 36.2 x 8.3, where the art was 24.0 x 8.0, an
+    estimate off Figure 12.
+  led: >-
+    datasheet - Table 9: ST is green when the module works. VC MODE is green when the module and its ports
+    are active, and unlit when the module works as an intraconnect module and the ports are not active.
+  depth: >-
+    estimated - not stated. No depth is written.
+  power: >-
+    estimated - not published. The module declares power-absent so that the missing figure is a statement.
+states: [absent]
+elements:
+  led-status:
+    at: [36.9, 13.3]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-vc-mode:
+    at: [56.9, 13.3]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  screw-left:
+    at: [2.8, 10.3]
+    size: [8.0, 8.0]
+    class: screw
+  screw-right:
+    at: [333.1, 10.3]
+    size: [8.0, 8.0]
+    class: screw
+parts:
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-0, at: [79.9, 7.25]}
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-1, at: [143.9, 7.25]}
+size:
+  w: 345.9
+  h: 21.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the captive screws stand proud of the faceplate; the projection is not measured
+  - node: screw-right
+    cyl: 1.2
+    confidence: estimated
+    source: figure - the captive screws stand proud of the faceplate; the projection is not measured
+skins: [default]

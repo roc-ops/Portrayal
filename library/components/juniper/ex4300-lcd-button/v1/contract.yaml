@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: ex4300-lcd-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  LCD panel navigation button of the Juniper EX4300 24-port and 48-port switches: a round pushbutton
+  to the right of the LCD panel. Two of them, Menu and Enter, are on the front panel; Menu cycles
+  between the Idle, Status and Maintenance menus and Enter steps through the options of the menu
+  shown. The `menu` skin carries the list icon and the `enter` skin the return-arrow icon.
+size: {w: 6.1, h: 6.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {role: lcd-navigation}
+provenance:
+  existence: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), LCD Panel in EX4300 Switches
+    (Figure 16): "There are two navigation buttons - Menu and Enter - to the right of the LCD
+    panel." The Menu button toggles between the LCD menus and the Enter button navigates the options
+    (Table 11)
+  size: >-
+    estimated - read off Juniper's straight-on studio photograph of the EX4300-48P front
+    (ex4300-48p-front-high.jpg): each button is about 20 px across at 3.29 px per mm, 6.1 mm, good to
+    about half a millimetre. No document dimensions the button
+  icons: >-
+    photo-measured - the photograph shows a circular button with a grey rim; the upper carries a list
+    icon (a bullet and three lines) and the lower a return arrow. The guide's figures are too small
+    to resolve them. The guide labels the buttons Menu and Enter in text and does not describe the
+    icons
+elements:
+  cap: {at: [0.6, 0.6], size: [4.9, 4.9], class: button}
+relief:
+  features:
+  - node: cap
+    out: 0.6
+    color: '#c9ccd0'
+    confidence: estimated
+    source: photo - the button cap stands slightly proud of the plate; projection not measured
+skins: [menu, enter]

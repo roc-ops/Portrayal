@@ -249,6 +249,24 @@ The rest earns its place:
   `docs/tilted-facets-design.md`.
 - `fields` for what varies without the shape changing: a supply's wattage, a
   drive's capacity. Do not make a new skin per wattage.
+- `part-numbers` for a module that is ordered under a code, the way a device
+  configuration's is: `{<model>: {part: <part number>}}`, with no `power-cord`.
+  Each key is one DCIM module type, named by the key, with `part_number` from
+  `part`, and one contract with two keys is two module types with the same
+  ports: Casa's BDM2m is `BDM2M-W` (Open) and `BDM2M-N` (No Licenses), one
+  drawing and two things to buy. Use it, and not `attrs.model`, when the
+  vendor's ordering information names the module; a contract states one or
+  the other, and the schema refuses both, so the name has one source. A module
+  with neither is exported under its contract `name`. Take the keys from the
+  vendor's ordering table exactly as printed and cite the sheet and its page in
+  `provenance`. Do not list a licence, a cable or a kit as a module: only what
+  the contract draws. A bay's `Accepts:` line names components and not
+  codes, so it does not change. The rack kit cannot tell which code was
+  bought from a bay that accepts the component, so it opens the type file of the
+  first key in sorted order (`partNumber` in `kit/rack/export-data.js`); the
+  two files carry the same ports, so the choice changes no cable. Adding the key, or moving a
+  module from `attrs.model` to it, renames module types that a DCIM may already
+  hold, so it is announced as **BREAKING for DCIM data already imported**.
 - `states` for lamps, named as tokens (`link`, `activity`, `fault`), with the
   behaviour in `behaviour`.
 - `characters` for a `class: display` element - how many character cells it
@@ -294,8 +312,12 @@ places. It lives under the vendor namespace like any other contract
 same versions and devicelock. The design, and the sources it was drawn from,
 are in [docs/rack-mounting-design.md](../../docs/rack-mounting-design.md).
 
-The library holds no kit yet. This is an example of the shape, under the
-made-up namespace `acme`:
+The library holds four kits, `cisco/69-2037`, `cisco/n9k-c9500-rmk`,
+`cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`. Three devices list kits:
+the Nexus 93180YC-FX3 lists `cisco/nxk-acc-kit-1ru`, and the 93180YC-FX3S and
+93108TC-FX3 list both `cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`.
+`cisco/69-2037` and `cisco/n9k-c9500-rmk` are listed by no device yet. This is an example of the shape, under the made-up
+namespace `acme`:
 
 ```yaml
 format: 1
@@ -402,7 +424,7 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
 
   ```yaml
   component-attrs:
-    fan-module: {handle-finish: '#3d7bd6', airflow-legend: B2F}
+    fan-module: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
   ```
 
   A skin per colour also has to be CHOSEN, once per placement, which is how the
@@ -461,6 +483,57 @@ A skin is a hand-written SVG at `skins/<name>.svg`, drawn in millimetres:
   `<rect id="logo-zone" fill="none"/>` over the box the mark covers. A device
   reserves the same box as a region `logo-zone` with `at` and `size`. Nothing
   named for a logo paints (L172); a product name in plain text is fine.
+
+
+## Airflow
+
+`attrs.airflow` is the convention by which a `class: fan` or `class: psu`
+contract states which way the unit moves air. `attrs` is free-form and nothing
+validates the key. Of the 437 fans and supplies in the library, 258 state one
+and 179 state none. Cards (`nvidia/*`) write `bidirectional` and blower prose
+under the same key; they are neither fans nor supplies and this section does
+not cover them.
+
+**The two values a tool compares** are `front-to-back` and `back-to-front`, the
+same two words a configuration's `airflow` takes. A new part uses them wherever
+the vendor's direction is one of the two. A part that states nothing is
+allowed: the direction of the unit in a picture is still there, as the build's
+`data-config-airflow` (below).
+
+**Restating it for one build.** A configuration that recolours a shared part
+sets `airflow` in that part's `component-attrs` entry (a bay's own, in
+`bay-attrs`), as the Edgecore, Cisco and UfiSpace builds do. The value replaces
+the part's own on that instance only; the part is not edited, and the value is
+the airflow the configuration already states.
+
+**The vendor words** a fan or supply uses, and what each shows. Where the
+library's own builds pair a word with the same direction everywhere and the
+part's provenance says why, the word is mapped; the rest are kept as written.
+
+| word | parts | maps to | why |
+|---|---|---|---|
+| `front-to-back`, `back-to-front` | 155, 59 | themselves | the two values above |
+| `exhaust` | 22 (`ufispace` 19, `nokia` 3) | on a rear-face unit, `front-to-back` - but see below | the UfiSpace rear modules say `exhaust` in the default build and their back-to-front builds restate `intake` in `component-attrs`; the `nokia/sr-e-psu-ac` and `-dc` provenance has the rear PSU shelf exhaust the air. `nokia/sr-7-fan-tray` also says `exhaust`, but its provenance has the chassis take air in at the right side, so the word gives no front or back direction there: not mapped, kept as written |
+| `intake` | 2 (`ufispace/psu-102-ac`, `-dc`) and the restatements in UfiSpace back-to-front builds | on a rear-face unit, `back-to-front`; on a front-face unit, `front-to-back` | the word is about the module's own face. The restatements are on rear fans, where intake at the rear is back-to-front. The two PSU-102 supplies sit on the front of `ufispace/s9620-40dg`, whose configurations are front-to-back, so their `intake` is front-to-back |
+| `port-side intake` | 9, all `cisco` Nexus 9500 | `front-to-back` | every build that seats them is front-to-back; air enters at the port side |
+| `side-to-side` | 5 (`edgecore` 2, `juniper` 3) | not mapped | not a front-or-back word; the builds that seat them are `side`, bar the two of `edgecore/csr440-fan` that say `front-to-back` |
+| `side-to-rear` | 1 (`juniper/ex4200-fan-tray`) | not mapped | not a front-or-back word; its builds are `side` |
+| `dual-direction` | 1 (`cisco/n9k-puv-1200w`) | not mapped | one supply for both directions: it is seated in front-to-back and in back-to-front builds alike |
+| a sentence | 4 (`juniper`) | not mapped | begins `front-to-back (...)` or `side-to-side (...)` and qualifies the word; kept as written |
+
+So `exhaust` and `intake` read relative to the module's face: on a fan or
+supply on the rear, `exhaust` is `front-to-back` and `intake` is
+`back-to-front`, and a module on another face reads the other way. The PSU-102
+is the library's one example. Read a vendor word through this table, and where
+it says not mapped, read the build's direction instead.
+
+**What the build writes.** The root `<svg>` of a compiled face carries
+`data-airflow`, the configuration's airflow. Every fan and supply `<g>` in it
+carries `data-config-airflow`, the same value, and nothing where the
+configuration states none; it may also carry `data-airflow`, the part's own
+word as the build leaves it. To learn the direction of a drawn unit, read
+`data-config-airflow`; to learn what the part says, read `data-airflow` and map
+it with the table.
 
 
 ## Adding an optic

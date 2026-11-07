@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: n9k-sup-a
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 Supervisor A (N9K-SUP-A): four cores, four executable threads, 16 GB of memory and a 64
+  GB SSD. A horizontal card with an ejector lever at each end, a console port, a 10/100/1000 management
+  Ethernet port (MGMT ETH) with link and activity lamps above it, two USB ports and the BCN, STS and ACT
+  lamps at the lower left. One or two go in slots SUP 1 and SUP 2 (modules 27 and 28); a pair must be the
+  same type. The Nexus 9504, 9508 and 9516 take the same part.
+size: {w: 203.2, h: 44.45, d: 525.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-SUP-A'
+  role: 'supervisor'
+  cpu: '4 cores, 4 threads'
+  memory: '16 GB'
+  storage: '64 GB SSD'
+  power-draw-typical-w: 69
+  power-draw-max-w: 90
+  hot-swappable: true
+  eol: 'end-of-sale'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (printed p113, PDF p119), "Supervisor modules": width 7.0 in (17.78 cm) without mounting brackets and
+    8.0 in (20.32 cm) with them, height 1.75 in (4.4 cm). The module is drawn at the width with brackets,
+    203.2 mm, the extent of the faceplate. The same row appears in the Nexus 9504 and 9516 guides.
+  depth: >-
+    datasheet - the same row: 20.67 in (52.5 cm) inside the chassis, ejector levers outside it 0.75 in
+    (1.9 cm). The depth inside the chassis, 525.0 mm, is used.
+  power: >-
+    datasheet - the guide's "Planning for Power Requirements" table (printed p11, PDF p17): typical 69 W,
+    maximum 90 W. The Nexus 9504 and 9516 guides print the same figures.
+  spec: >-
+    install guide - "Overview of Supervisor Modules": Supervisor A (N9K-SUP-A) with four cores, 4 executable
+    threads, 16 GB of memory and 64 GB of SSD.
+  lamps: >-
+    install guide - "Supervisor Module LEDs": BCN, STS and ACT "on the lower left front of the supervisor
+    module"; the management port LINK and ACT lamps "immediately above the port". Positions estimated.
+  ports: >-
+    install guide - "Connecting a Console to the Switch" (RJ-45 rollover cable to the console port),
+    "Connecting the Management Interface" (MGMT ETH, 10/100/1000, RJ-45) and "Installing or Replacing a
+    Supervisor Module" ("USB ports", no count given). The skin draws two USB ports, as the figure on PDF
+    p81 does; the count and every port position are estimated, the guide dimensions none.
+  skin: >-
+    estimated - the ejector levers and the captive screws are named in the installation procedure ("two
+    captive screws"); nothing dimensions them.
+  lifecycle: >-
+    end-of-sale - Cisco's end-of-sale notice for the Nexus 9500 supervisor, per the intake's end-of-life
+    index.
+groups:
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: console and out-of-band management jacks plus two USB ports, which together let an operator reach the module
+elements:
+  bcn:
+    at: [14.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, lower left.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [20.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp, lower left.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - 'off'
+  act:
+    at: [26.0, 31.0]
+    size: [3.0, 3.0]
+    class: led
+    description: ACT lamp, lower left. Green when active, amber when standby.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  mgmt-link:
+    at: [118.0, 8.0]
+    size: [3.0, 3.0]
+    class: led
+    description: Management port LINK lamp, above the port.
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  mgmt-act:
+    at: [124.0, 8.0]
+    size: [3.0, 3.0]
+    class: led
+    description: Management port ACT lamp, above the port.
+    states:
+    - {name: green, color: '#39b54a', behavior: blinking}
+    - 'off'
+parts:
+  - {ref: std/rj45-ganged@2, id: console, at: [74.0, 16.0], group: ports}
+  - {ref: common/rj45-ganged-eth@1, id: mgmt-eth, at: [116.0, 16.0], group: ports}
+  - {ref: std/usb-a@1, id: usb-1, at: [150.0, 12.0], group: ports}
+  - {ref: std/usb-a@1, id: usb-2, at: [150.0, 24.0], group: ports}
+skins: [default]

@@ -1,0 +1,78 @@
+format: 1
+kind: module
+name: 7280cr3a-pwr-1511-ac-rev
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1500 W AC power supply of the Arista 7280CR3A-24D12 for rear-to-front air, PWR-1511-AC-BLUE
+  (reverse airflow, blue handle). It is the PWR-1511-AC-RED housing with the fan turned the other way.
+  It is a 1RU module, 73.5 mm wide. A round fan guard with a blue diagonal handle is at the left. An
+  IEC C14 inlet, a latch and a status lamp are at the right.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1511-AC-BLUE: {part: PWR-1511-AC-BLUE}
+attrs:
+  power-output-w: 1500
+  input: ac
+  inlet: c14
+  airflow: back-to-front
+  input-note: '200 - 240 VAC, 9.6 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height: the 7280R3A Series Data Sheet (04-0040-26,
+    April 15th, 2025) lists "PWR-1511-AC-BLUE  Arista PSU, 1RU, AC/DC, 1500W, REVERSE, 73.5MM" among
+    the 7280CR3A-24D12 spares. The height is the red module's (arista/7280r3-pwr-1500-ac).
+  part-number: >-
+    datasheet - ordering information for the 7280CR3A-24D12: "PWR-1511-AC-BLUE", fitted to the -R
+    (rear to front air, 2 x AC) part numbers. The 7280R3 data sheet lists no blue PWR-1511, which is
+    why arista/7280r3-pwr-1500-ac has none.
+  power-output: >-
+    datasheet - the "1500W" of the ordering description and "Output Power 1500 W" in the power
+    supply table (the "PWR-1512 and 1511 AC" column). An output.
+  input: >-
+    datasheet - the power supply table, "PWR-1512 and 1511 AC": 200-240 VAC, 9.6 A, 50/60 Hz, 93
+    percent Platinum, IEC 60320 C14. Guide table 3 gives PWR-1511-AC "200 - 240 VAC 9.6 A 50/60 Hz".
+  airflow: >-
+    datasheet - the part number's BLUE and "REVERSE". The guide's section 2.1 says a blue handle is an
+    air inlet module and its appendix D that "Handle or bezel color indicates airflow direction"; the
+    library's convention (red air exit, blue air inlet) is as arista/7050x4-pwr-1500-ac-rev.
+  inlet: >-
+    datasheet - "Input Connector IEC 60320 C14" for the PWR-1512 and 1511 AC column.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a blue PWR-1511 is held. It is drawn as the
+    PWR-1512-AC-BLUE (arista/7050x4-pwr-1500-ac-rev), the same 73.5 mm 1RU housing in the guide's
+    figure D-2. The data sheet's rear views are red and are a few pixels across.
+  handle-finish: >-
+    The blue of the handle is a field, `handle-finish`, default `#3d7bd6`, the library's blue for a
+    back-to-front handle.
+  power: >-
+    No supply figure other than the rating is stated; nothing is written for the supply's own loss.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#3d7bd6'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.85, 14.3], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: qfx5230-jnp-2400w-dc-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JNP-2400W-DC-AFI (product number 740-155850), a 2400 W DC power supply with back-to-front airflow (AIR IN,
+  FRU-to-port). It is a field-replaceable unit, hot-removable and hot-insertable, and load-shares with its
+  twin; the QFX5230-64CD-D-AFI ships with two. The face carries a round fan guard with a green handle across
+  it, a terminal block under a cover, an input current selector (a DIP switch, set to 60 A for this unit), an
+  ejector lever and one lamp. The front-to-back sibling is JNP-3000W-DC-AFO, a 3000 W unit with a Juniper gold
+  handle. AC and DC supplies, and supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JNP-2400W-DC-AFI
+  role: dc-power-supply
+  power-output-w: 2400
+  airflow: back-to-front
+  inlet: dc-terminal
+  input: -40 to -72 VDC, rated -48 to -60 VDC, 60 A maximum (guide Tables 18 and 21); output 12 V at 200 A and 12 V standby at 1 A
+provenance:
+  size: >-
+    borrowed - qfx5230-jnp-3000w-ac-afo, the AC supply that stands in the same bay: the guide draws the AC and DC
+    supplies as one outline with a different connector end (figures 20 and 22), and no photograph of a DC supply
+    is held. The 74.8 by 40.2 mm face is photo-measured on the AC supply.
+  depth: >-
+    not stated. Searched the QFX5230-64CD hardware guide (figure 22, the DC power supply description and the
+    physical specifications). No depth is written.
+  face: >-
+    estimated - no flat figure or photograph of the AIR IN DC supply is held. It is drawn as the 3000 W DC supply
+    is (the guide's figure 22 isometric, estimated), with the handle in the guide's green (Tables 3, 6 and 16).
+  power-output-w: >-
+    datasheet - the part number and guide Tables 4 and 16 (DC AFI, 2400 W; output 12 V at 200 A, 12 V standby at
+    1 A). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5230-64CD DC Power Supply LEDs (figure 23, Table 20): solid green is output on and OK;
+    off is no DC power to any supply; amber is a DC cord unplugged while a second supply still has input, or a
+    critical event.
+  airflow: >-
+    datasheet - guide Tables 3, 6 and 16: JNP-2400W-DC-AFI is FRU-to-port, back-to-front, and carries a green
+    handle.
+  input: >-
+    datasheet - guide Table 18 (AFI DC 2400 W: -40 to -72 VDC, rated -48 to -60 VDC) and Table 21 (input switch
+    setting 60 A, maximum input current 60 A DC).
+states:
+- ok
+- fault
+- absent
+elements:
+  led-pwr:
+    at: [67.9, 31.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [1.9, 15.6]
+    size: [41.3, 8.5]
+    class: latch
+  release-latch:
+    at: [68.5, 13.6]
+    size: [6.3, 13.6]
+    class: latch
+size:
+  w: 74.8
+  h: 40.2
+size-confidence: {w: borrowed, h: borrowed}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#6ea301'
+    confidence: estimated
+    source: photo of the AC AIR OUT sibling - the handle bar stands proud of the fan guard; its projection is not measured

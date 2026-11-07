@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: qfx5230-64cd-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5230-64CD-FANAO, the field-replaceable fan module of the QFX5230-64CD with front-to-back airflow (AIR
+  OUT, port-to-FRU). Air comes in at the port side and leaves at the back. It is marked AIR OUT on a grey chip
+  on its Juniper gold handle. It holds two counter-rotating 80 mm by 86 mm rotors and is hot-removable and
+  hot-insertable. The switch takes four, in slots 0 to 3 from left to right, and tolerates the failure of one
+  rotor. The back-to-front sibling is QFX5230-64CD-FANAI. The two are never mixed in one chassis, and never
+  with power supplies of the other airflow direction.
+attrs:
+  model: QFX5230-64CD-FANAO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5230-64CD (2100 x 765 px; the body is 1829 px
+    wide, which is the guide's 17.4 in at 4.138 px/mm): the dark module frame measures 335 px by 331 px, 80.9
+    by 80.0 mm, on a 358.8 px pitch, 86.7 mm. No document states the module's size in millimetres: the guide's
+    figure 15 is a half-tone photograph and its tables give no dimensions.
+  depth: >-
+    not stated. Searched the QFX5230-64CD hardware guide (figure 15, the cooling system and fan module
+    sections, and the physical specifications) for the module's depth. No depth is written rather than a
+    guessed one.
+  face: >-
+    photo - the studio rear photograph at 2.6 times zoom: a hex grille across the whole opening, a captive screw
+    at the top left, and a sloping handle band that crosses the grille from the left edge to the right, with a
+    grey AIR OUT chip and a fan symbol at its middle, two slots either side of the chip and a clip at each end.
+    Positions are read off the photograph and estimated to about 0.4 mm. The handle colour is the guide's
+    Juniper gold (Tables 5, 6 and 11), drawn with the orange the photograph shows.
+  airflow: >-
+    datasheet - guide Tables 3, 5, 6 and 11: QFX5230-64CD-FANAO is AIR OUT, port-to-FRU, front-to-back, with a
+    Juniper gold handle; QFX5230-64CD-FANAI is AIR IN, FRU-to-port, back-to-front, with a green handle. The
+    photograph shows the AIR OUT module.
+  power: >-
+    not published. Searched the QFX5230-64CD hardware guide (the cooling and power sections, Tables 11, 12 and
+    13) for a figure per module: only whole-switch figures exist. The module declares power-absent so the
+    missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [3.6, 3.6]
+    size: [5.0, 5.0]
+    class: screw
+  handle:
+    at: [0.0, 28.7]
+    size: [79.6, 23.6]
+    class: latch
+size:
+  w: 80.9
+  h: 80.0
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle band stands proud of the grille; its projection is not measured
+  - node: screw
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: photo - captive screw head, projection not measured

@@ -47,7 +47,7 @@ from portrayal.manifest import (view_parts, targets, split_target, presented_int
                       spanning_axis, _turn,
                       occupant_spec, seated_ref, slot_width, span_covers, span_clashes,
                       PANEL_KEY_ORDER, COMPONENT_KEY_ORDER, config_power, OFFERED_KINDS,
-                      resolve_views)
+                      config_airflow, resolve_views)
 from jsonschema import Draft202012Validator
 
 SEGMENT = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
@@ -133,7 +133,7 @@ RULES = {
     "L10": ("component",  "composed parts resolve, ids are unique, composition does not cycle (depth <= 4), and neither a part nor a bay's `default` or `accepts` is a `kind: kit`", "fix the `parts:` refs; a part must not compose itself; a kit is named from a device's `chassis.kits`, never composed or seated",
             "A composition that names a missing part, repeats an id or loops back on itself cannot be drawn, and a kit composed as a part offers something no configuration can hold.",
             ERROR),
-    "L11": ("component",  "interface/mates declarations carry a `mate` connection point, and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper",
+    "L11": ("component",  "interface/mates declarations carry a `mate` connection point (a `mates` on a part with `behaviour: fills` is exempt: its bay places it), and a wrapper keeps the interface of what it composes", "add `connection-points.mate`; do not change the interface in a wrapper",
             "A receptacle or plug with no mate point has nothing to align to, so it cannot be seated, and a wrapper that changes its interface lets parts pass the fit check against something they do not really mate.",
             ERROR),
     "L12": ("device",     "mate-to resolves to a receptacle whose interface the occupant mates; a seated part's `rate` is at or below its cage's media", "point `mate-to` at the receptacle id; check `interface` and `mates` agree; seat a part the cage offers",
@@ -313,8 +313,8 @@ RULES = {
     "L70": ("device",     "a `fact:` gap names a real fact and does not contradict the device", "fix the gap's scope or remove it",
             "A gap scoped to a misspelt fact leaves the comparison showing a bare blank although the search was done, and a device that states a figure while calling the vendor silent on it shows a number and a retraction at once.",
             ERROR),
-    "L71": ("component",  "a body box reaches no further than the part says it is deep, unless it is a fitted option (`when`); a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face, and one that shows a side shows a patch inside that side's `skins/body-<side>.svg`, whose width and height are its viewBox's in mm", "shrink the body box or raise `body.depth`; state `axis`/`wall` or square the envelope; declare the face, draw the side, widen its viewBox or drop `shows`",
-            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, a round piece with no axis or a non-square section builds as an oval in 3D, and a side patch outside its drawing is smeared with the drawing's edge.",
+    "L71": ("component",  "a body box reaches no further than the part says it is deep, unless it is a fitted option (`when`); a round one states its axis (a ring its wall) and is square across it; one that `shows` a drawing is a box of a part declaring that face, and one that shows a drawing shows a patch inside it - a side's `skins/body-<side>.svg`, whose width and height are its viewBox's in mm, or the size of the `plan` or `rear` part", "shrink the body box or raise `body.depth`; state `axis`/`wall` (x, y or z) or square the envelope; declare the face, draw the side, widen the drawing, move the piece or drop `shows`",
+            "A body box deeper than the part gives the wrong bay hole, pull distance and fit checks, a round piece with no axis or a non-square section builds as an oval in 3D, and a patch outside its drawing is smeared with the drawing's edge or tiled from the other one.",
             MIXED),
     "L72": ("device",     "a bay's `plan:` or `rear:` lands in a view that exists, inside the chassis", "fix the plan view name or the coordinates",
             "A bay projected into a view or neighbour that does not exist draws nothing and raises nothing, so the plan or rear view silently loses the part.",
@@ -328,7 +328,7 @@ RULES = {
     "L75": ("component",  "a slot's structured facts agree with its prose, and lanes fit the connector", "fix `lanes`/`connector` or the description",
             "A slot's prose and its structured facts would drift apart, so a reader and the card-fit check would see different slots, and a lane count wider than the connector is a typo, not a slot.",
             ERROR),
-    "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps, and the lamped cell that makes no Ethernet claim holds no Ethernet jack", "put an Ethernet jack on common/rj45-eth@1 or common/rj45-ganged-eth@1; a console or timing jack takes std/rj45@2 or std/rj45-ganged@2, or common/rj45-ganged-lamped@1 when its housing shows lamps",
+    "L76": ("device",     "the RJ45 census: every Ethernet jack says whether it has lamps, and the lamped cell that makes no Ethernet claim holds no Ethernet jack", "put an Ethernet jack on common/rj45-eth@1 or common/rj45-ganged-eth@1, or on common/rj45-ganged-eth-plain@1 when its housing has no lamps; a console or timing jack takes std/rj45@2 or std/rj45-ganged@2, or common/rj45-ganged-lamped@1 when its housing shows lamps",
             "Every Ethernet jack has to answer whether it has link lamps the same way, or a drawing can leave out lamps the hardware has, or add them to a console jack, and the viewer cannot light them consistently. The lamped cell that claims no media suits a timing jack with lamps and would call an Ethernet jack something the part does not say.",
             WARNING),
     "L77": ("component",  "a `sink` sits in a cavity, because that is what it measures from", "use `pocket` for a recess in an otherwise solid face",
@@ -367,7 +367,7 @@ RULES = {
     "L88": ("component",  "a fibre face with more than one row of connectors states its own front numbering", "add `optical.front-order` listing the fibre part ids in the vendor's printed order",
             "On a face with more than one row of connectors, numbering by position alone guesses the vendor's printed order, so DCIM front ports could be numbered differently from the silkscreen.",
             ERROR),
-    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing",
+    "L89": ("library",    "every component major is reachable from a device, or says why it is not", "seat it in a device or in a seated part's bay, or add `unplaced:` saying what would seat it and what is missing; a major that a live major supersedes is marked `superseded-by: <the live ref>` to keep it for outside manifests that pin it, or its directory is deleted",
             "A part nothing seats would look in the catalogue exactly like one in use, so a reader could choose a part no drawing has ever shown in place.",
             ERROR),
     "L90": ("device",     "a manifest's top-level keys read in the canonical order", "reorder them; the message prints the order, and docs/device-template.yaml is written in it",
@@ -475,7 +475,7 @@ RULES = {
     "L123": ("library",    "one module, one bay size - every bay that accepts a module, in any device or carrier, reserves the same size for it, to within a millimetre", "reserve one figure everywhere - the module's own `insert` or `size`; a difference that is real stays in the baseline, with the reason in the provenance of the chassis that reserves more (the warning is filed on the module, so a chassis `lint.waive` cannot clear it)",
              "A module is the same metal in every chassis, so two bays reserving different sizes for it show the card not fitting its slot in one of them.",
              WARNING),
-    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
+    "L125": ("device",     "a device says how it is installed - a rack device (the default `mount`), a `rack-face` part or a `rack-side` part states `ru` (warning), and a device whose `chassis.mount` is `din-rail`, `wall`, `ceiling` or `desktop` states none (error); `chassis.full-depth`, `chassis.overhang`, `chassis.ears` and `chassis.kits` appear only on a rack device (error)", "give a rack device its `ru` from the datasheet; for a box that is not racked, state `chassis.mount` and drop `ru`, so its DCIM export says `u_height: 0` rather than an invented rack unit",
              "Without a stated mount, a wall-mounted or desktop box exports as a 1U rack device, and someone planning a rack makes room for equipment that never goes in it.",
              MIXED),
     "L126": ("device",     "a bevelled chassis is a solid the box can have - every edge named by two faces that meet, none bevelled twice, no face cut away and no bevel swallowed by its neighbours - its face drawings are the chassis's own size, and every part, bay and cutout on a face lies on the flat face rather than on a bevel", "name edges as two adjacent faces (`front-left`), shrink a bevel that cuts too much, drop a view `size` that differs from the chassis on a bevelled face, or move the part onto the flat face - spec/tools/portrayal/bevel.py says where it is",
@@ -655,7 +655,7 @@ RULES = {
     "L184": ("component",  "a `supersedes` lists removed component majors: each entry names an `ns/name@major` that is not the part itself and is not in the library any more, carries a `sha256:` signature and the commit it was taken from, and no ref is listed twice", "fix the ref or the signature; remove the entry when the old major is still in the library (it says `superseded-by` instead)",
              "A redirect is read by a saved rack, so a ref that is still published, a self-pointer or a signature that is not one would send a swap to a part that is not what the rack named, or never fire.",
              ERROR),
-    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180) with no gap wider than a bay and no step sideways; a bay that accepts a part `n` slots wide names at least `n - 1` of them; and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
+    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
              "A card two slots wide is drawn across its bay and the next one and covers that one, so a span that names the wrong bay, a bay in the wrong place or none at all puts the card over the wrong opening or offers it where it cannot go.",
              ERROR),
     "L186": ("component, device", "a card wider than one slot and a bay it covers are never both filled - by a configuration, or by what the bays ship", "empty the covered bay (`<carrier>/<bay>: \"\"` in the configuration), or seat a one-slot part; a component does not ship a two-slot default over a bay that ships one too",
@@ -682,6 +682,24 @@ RULES = {
     "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
              "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth; a stand-in that is not declared reads as a printed figure.",
              ERROR),
+    "L194": ("component", "a bay that states an `interface` does not also list, in `accepts`, a part that mates it and is wide enough for the bay", "delete the entry from `accepts`: the bay takes it through its `interface` already; keep in `accepts` only the parts that do not mate it, such as a vendor blank",
+             "A list kept beside the interface it was written for goes on asserting what the interface already says, and the next card added to the library is then named by hand in one riser and by its interface in the others.",
+             WARNING),
+    "L195": ("listing, device", "every `interfaces[].breakout.modes` entry is `<count>x<speed>`: a count of one or more with no leading zero, the letter `x`, and a speed from the closed set in spec/schemas/speeds.yaml, in lower case", "write the mode as `4x25g`, never `4 x 25GE` or `4x25`; spell the speed from spec/schemas/speeds.yaml (`1x400g`, `8x50g`)",
+             "A filter for ports that break out reads the count in front of the `x`, and a mode in any other spelling is one it cannot read or compare.",
+             ERROR),
+    "L196": ("device", "every id in a placement's `hides` names another placement or a bay on the same face, and the cover's box overlaps that part's box (error)", "name the part by its id on this face, or move the cover over it; a part on another face is that face's cover to name",
+             "`hides` becomes `data-hides`, which a consumer reads as \"remove this cover to see these\". An id that names nothing, or a part elsewhere on the face, makes the consumer hide a part the cover does not cover.",
+             ERROR),
+    "L197": ("device", "a device's decor `kind` does not name a connector: the names are the list in spec/schemas/connector-decor-names.yaml (a floor of names, not a proof) (warning)", "model the connector as a part that presents its interface; a decor that is not a connector is renamed for what it is, such as `case-screw` for `earth-screw`",
+             "A connector drawn as panel decor is a picture of a port that nothing can plug into, so a cable laid to the device has no end to land on and a reader takes the port for a usable one.",
+             WARNING),
+    "L198": ("device", "a configuration's airflow agrees with the fans and supplies it seats - a `front-to-back` build over a `back-to-front` fan is a contradiction; a part that states a vendor word or nothing is not compared - warning at `modelled`, error at `verified`", "correct the configuration's `airflow`, seat the part for this direction, or state the part's direction for this build in `component-attrs`",
+             "A build whose label says one way while its fans or supplies blow the other misleads anyone choosing a swap part or planning hot and cold aisles.",
+             AT_VERIFIED),
+    "L199": ("device", "a powered device's PoE keys agree: `poe-pd-standard-min` is stated only with `poe-pd-standard` and is lower than it (error); `poe-pd-class` is stated only with `poe-pd-standard` (error); `poe-pd-max-w` is stated only with `poe-pd-standard` (warning), is at least `power-self-max-w` plus `poe-budget-w` where both are numbers (warning), and is stated by a device that states `poe-budget-w` and `poe-pd-standard` (warning)", "state the standard the maker names for the PoE input; write `poe-pd-max-w` as the whole intake, the figure printed 'excluding PoE output' plus what the device hands on, with the sum in the provenance",
+             "A powered device's draw with no standard cannot be checked against the port that feeds it, and a figure printed 'excluding PoE output' read as the whole intake is a number short of what the port has to supply.",
+             MIXED),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -1564,7 +1582,12 @@ def resolve_component(ref, lib_roots):
 def lint_component_mating(path, data, lib_roots):
     """L11: mating declarations must be usable and must survive composition."""
     cps = data.get("connection-points") or {}
+    # A PART THAT FILLS A BAY IS NOT ASKED FOR A `mate` POINT FOR ITS `mates`:
+    # the bay places it by `at`, so there is nothing to align (cards by
+    # interface: a card says which slot form it fits, a riser bay says the same).
     for key in ("interface", "mates"):
+        if key == "mates" and data.get("behaviour") == "fills":
+            continue
         if data.get(key) and "mate" not in cps:
             err(path, "L11", f"{key}: {data[key]!r} declared but no 'mate' "
                              "connection-point - nothing to align to")
@@ -1869,6 +1892,23 @@ def _load_port_speeds(schemas):
 
 
 PORT_SPEEDS = _load_port_speeds(Path(__file__).resolve().parents[2] / "schemas")
+
+
+def _load_connector_decor_names(schemas):
+    """The decor kinds L197 reads as a connector, {name: reason}, or {} if the
+    checkout has no list. Loaded at import like the registries above; an empty
+    list makes L197 say nothing, which is the quiet way to be wrong, so the
+    names file has a test that holds its shape."""
+    path = Path(schemas) / "connector-decor-names.yaml"
+    try:
+        doc = yaml.safe_load(path.read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        return {}
+    return {str(k): str(v) for k, v in (doc.get("names") or {}).items()}
+
+
+CONNECTOR_DECOR_NAMES = _load_connector_decor_names(
+    Path(__file__).resolve().parents[2] / "schemas")
 # THE LIBRARY A RULE RESOLVES REFS IN when its caller names none - a test that
 # hands a rule one document, as test_power_outlet_lint does.
 DEFAULT_LIBRARY = Path(__file__).resolve().parents[3] / "library"
@@ -1935,6 +1975,10 @@ AMBIGUOUS_POWER_KEYS = {
     "power-min-w": "that spelling belongs to the whole device",
     "power-max-ac-w": "that spelling belongs to the whole device",
     "power-max-dc-w": "that spelling belongs to the whole device",
+    "poe-pd-standard": "a PoE input is the whole device's",
+    "poe-pd-standard-min": "a PoE input is the whole device's",
+    "poe-pd-class": "a PoE input is the whole device's",
+    "poe-pd-max-w": "a PoE input is the whole device's",
 }
 
 
@@ -2781,7 +2825,7 @@ def _lights_up(path, data, lib_roots, seen):
     return False
 
 
-def lint_component_body_boxes(path, data, _lib_roots=None):
+def lint_component_body_boxes(path, data, lib_roots=None):
     """L71: a body box reaches no further than the part says it is deep.
 
     `size.d` is the part's reach into the chassis, and it is what the bay
@@ -2790,8 +2834,10 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
     a 170.9 reach and a PCB starting 13.9 behind the plate and running 170.9,
     which is 184.8. The number the part states has to contain its own body.
     A box with no `confidence` is counted, once per file, as L35 counts.
-    A piece that `shows` a side shows a patch of the part's own
-    body-<side>.svg that lies inside that drawing (faces.side_patch).
+    A piece that `shows` a drawing shows a patch of it that lies inside that
+    drawing (faces.side_patch): of the part's own body-<side>.svg for a side,
+    of the `faces.plan` or `faces.rear` part's size for those, where the library
+    is at hand to read it.
     """
     body = data.get("body") or {}
     boxes = body.get("boxes") or []
@@ -2827,6 +2873,9 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
             if not axis:
                 err(path, "L71", f"body box {name} is a {shape} and states no `axis` - "
                                  f"y for one standing up the face, z for one seen face-on")
+            elif axis not in ("x", "y", "z"):
+                err(path, "L71", f"body box {name} is a {shape} on axis {axis!r} - `axis` is "
+                                 f"x, y or z")
             else:
                 w, h = (float(v) for v in b["size"])
                 a, c = {"y": (w, float(b["depth"])), "z": (w, h),
@@ -2895,6 +2944,19 @@ def lint_component_body_boxes(path, data, _lib_roots=None):
             elif not face_ref(data, which):
                 err(path, "L71", f"body box {name} shows the part's `{which}` drawing and "
                                  f"the part declares no `faces.{which}`")
+            elif which in ("plan", "rear") and lib_roots:
+                # THE PATCH IS READ FROM THE FACE'S OWN DRAWING, which starts at
+                # its origin and is as big as that part's `size`: a crop that
+                # reaches past it is read off the edge, and tiles or smears.
+                dw_dh = _instance_size(face_ref(data, which), lib_roots)
+                if dw_dh:
+                    x0, y0, x1, y1 = side_patch(b, which, float((data.get("size") or {}).get("w") or 0),
+                                                float(body.get("depth") or 0))
+                    dw, dh = float(dw_dh[0]), float(dw_dh[1])
+                    if x0 < -0.05 or y0 < -0.05 or x1 > dw + 0.05 or y1 > dh + 0.05:
+                        err(path, "L71", f"body box {name} shows {x0:g}..{x1:g} x {y0:g}..{y1:g} of "
+                                         f"the part's `{which}` drawing, which covers 0..{dw:g} x "
+                                         f"0..{dh:g} - move or shrink the piece, or drop `{which}`")
     if unmarked:
         warn(path, "L71", f"{unmarked} of {len(boxes)} body boxes carry no confidence")
     for a, b, axis, at in coplanar_box_faces(boxes):
@@ -4851,6 +4913,26 @@ def lint_component_span(path, data, lib_roots):
         if width > own:
             err(path, "L185", f"parts/{q.get('id')}: composes {q['ref']}, which is {width} "
                 f"slots wide, and this part says it is {own} - give it `slot-width: {width}`")
+
+
+def lint_component_bay_interface(path, data, lib_roots):
+    """L194: an `accepts` entry that the bay's `interface` already takes.
+
+    The union (manifest.takes) keeps a vendor blank in `accepts`, where it is a
+    positive claim no `mates` makes. A card that mates the interface and is wide
+    enough is taken without the list, so naming it there is the list the
+    interface came to replace."""
+    for bid, b in sorted((data.get("bays") or {}).items()):
+        if not isinstance(b, dict) or not b.get("interface"):
+            continue
+        for ref in b.get("accepts") or []:
+            q = resolve_component(ref, lib_roots)
+            c = (load_yaml(q) or {}) if q else None
+            # takes() is True for a listed ref, so ask the interface half alone
+            if c and _manifest.takes({**b, "accepts": []}, ref, c):
+                warn(path, "L194", f"bays/{bid}: accepts {ref}, which mates "
+                     f"{b['interface']!r} and fits, so the interface takes it - drop it "
+                     "from the list")
 
 
 def lint_component_span_exclusion(path, data, lib_roots):
@@ -6949,6 +7031,69 @@ def lint_device_overhang(path, data, lib_roots):
                                "The figure is stale or overstated")
 
 
+def lint_device_hides(path, data, lib_roots):
+    """L196: a cover's `hides` names parts on its own face that it lies over.
+
+    `hides` is written as `data-hides` on the cover's group, and a consumer
+    that lifts the cover off shows what the list names. An id that names
+    nothing, or a part on another face, would show a part the cover never
+    covered, and a part the cover does not overlap is not behind it. The
+    ids are the face's own placements and bays; a part on another face is
+    that face's cover to name, so it is reported as such.
+    """
+    views = data.get("views") or {}
+    ids = {vn: {x.get("id") for k in ("placements", "bays") for x in view_parts(v)[k]}
+           for vn, v in views.items()}
+    for vname, view in views.items():
+        vp = view_parts(view or {})
+        boxes = {}
+        for q in vp["placements"]:
+            sz = contract_size(q["ref"], lib_roots) if q.get("ref") else None
+            if q.get("at") and sz and "w" in sz and "h" in sz:
+                x, y, w, h = q["at"][0], q["at"][1], float(sz["w"]), float(sz["h"])
+                if q.get("rotate") in (90, 270, -90):
+                    cx, cy = x + w / 2, y + h / 2
+                    x, y, w, h = cx - h / 2, cy - w / 2, h, w
+                boxes[q["id"]] = (x, y, x + w, y + h)
+        for b in vp["bays"]:
+            if _decor_box(b):
+                boxes[b["id"]] = _decor_box(b)
+        for q in vp["placements"]:
+            for hid in q.get("hides") or []:
+                where = f"{vname}: {q['id']} hides {hid!r}"
+                if hid == q["id"] or hid not in ids[vname]:
+                    elsewhere = sorted(vn for vn, s in ids.items() if vn != vname and hid in s)
+                    err(path, "L196", f"{where}, which is "
+                        + ("itself" if hid == q["id"] else
+                           f"on {', '.join(elsewhere)}, not on this face; that face's "
+                           "cover names it" if elsewhere else
+                           "not a placement or a bay on this face"))
+                elif q["id"] in boxes and hid in boxes:
+                    ox, oy = _box_overlap(boxes[q["id"]], boxes[hid])
+                    if ox <= 0 or oy <= 0:
+                        err(path, "L196", f"{where}, which the cover does not overlap; "
+                            "move the cover over it or drop the id")
+
+
+def lint_device_connector_decor(path, data):
+    """L197: a decor `kind` does not name a connector (a warning).
+
+    Anything that takes a cable, cord, plug, lug or pluggable is a part that
+    presents an interface; a decor entry is a drawing, and a drawing has no
+    mate. The names are CONNECTOR_DECOR_NAMES, a floor and not a proof: decor
+    kinds are free text, so this finds names and not things. A decor that only
+    frames a part placed beside it is not on the list, and a decor that is not
+    a connector but has a listed name is renamed for what it is.
+    """
+    for vname, view in (data.get("views") or {}).items():
+        for i, d in enumerate(view_parts(view or {})["decor"]):
+            kind = d.get("kind") if isinstance(d, dict) else None
+            if kind in CONNECTOR_DECOR_NAMES:
+                warn(path, "L197", f"{vname}: decor {d.get('id') or i!r} has kind {kind!r}, "
+                     f"which names a connector ({CONNECTOR_DECOR_NAMES[kind]}). Model it as a "
+                     "part that presents its interface, or rename the decor for what it is")
+
+
 def _decor_box(d):
     at, sz = d.get("at"), d.get("size")
     if not at or not sz:
@@ -7815,7 +7960,8 @@ def lint_part_number_keys(path, data):
       vendor that really prints one can be waived with its reason.
 
     Configurations' keys in a device and in a listing are both read, and the
-    top level too, though L59 already says nothing reads it.
+    top level too, though L59 already says nothing reads it. A component's
+    `part-numbers` is read the same way: its keys are module type file names.
     """
     maps = [("part-numbers", data.get("part-numbers"))]
     for cname, cfg in (data.get("configurations") or {}).items():
@@ -7996,6 +8142,7 @@ def lint_listing(path, data, roots):
     claim and the only question is whether the registry and the hardware agree.
     """
     path = Path(path)
+    lint_breakout_modes(path, data)
     ns = path.parent.parent.name
     entry = VENDORS.get(ns)
     roles = vendor_roles(entry)
@@ -8053,6 +8200,27 @@ def lint_listing(path, data, roots):
                 "place. A component the NOS reports has to land on something drawn - map "
                 "it to `chassis`, a `region:`, or the id the hardware uses")
             break
+
+
+def lint_breakout_modes(path, data):
+    """L195: a breakout mode is `<count>x<speed>`, the speed from speeds.yaml.
+
+    Read from `interfaces[].breakout.modes` of a listing and of a device alike
+    (docs/breakout-design.md, "The shape", 3). The set is the one L110 reads, so
+    a speed added there is a speed allowed here. A schema fault in `interfaces`
+    is L1's to report; this rule skips what is not a rule with a list of modes.
+    """
+    for i, rule in enumerate(data.get("interfaces") or []):
+        modes = ((rule or {}).get("breakout") or {}).get("modes") if isinstance(rule, dict) else None
+        if not isinstance(modes, list):
+            continue
+        for mode in modes:
+            m = re.fullmatch(r"([1-9][0-9]*)x(.+)", mode) if isinstance(mode, str) else None
+            if not m or m.group(2) not in PORT_SPEEDS:
+                err(path, "L195", f"interfaces[{i}].breakout.modes: {mode!r} is not "
+                    "`<count>x<speed>` with a count from 1 up and a speed from the closed set "
+                    f"({' '.join(PORT_SPEEDS) or 'spec/schemas/speeds.yaml loaded nothing'}). "
+                    "Write it as `4x25g`, not `4 x 25GE` or `4x25`")
 
 
 # THE LAB CODES. The rules are in labs.py, because labs_index.py has to resolve
@@ -8421,13 +8589,31 @@ def lint_unplaced_majors(root):
             if oname == name and int(omajor) > int(major):
                 live_successor[ref] = other
 
+    # RETIRED AND STILL SHIPPED IS NOT DEAD (#448). Once a manifest outside the
+    # library can pin `name@2`, deleting it breaks that manifest, so a retired
+    # major may stay on one condition: its contract says `superseded-by: <ref>`
+    # and the ref is a different major that exists. The key is the one the
+    # schema already has, and the successor is what a consumer is told to pin
+    # instead. A marker that names nothing real (L101 reports that, and this
+    # does not read the key as an answer) or the part itself does not count.
+    # A package at 0.x may still delete; from 1.0 the marker is kept for at
+    # least one release before the directory goes.
+    def ships_retired(ref):
+        marker = (load_yaml(contracts[ref]) or {}).get("superseded-by")
+        return (isinstance(marker, str) and marker != ref and marker in contracts)
+
     for ref in sorted(contracts):
+        if ref not in seated and ref in live_successor and ships_retired(ref):
+            continue
         if (ref not in seated and ref in live_successor and ref not in mentions):
             err(contracts[ref], "L89",
                 f"{ref} is superseded by {live_successor[ref]}, is reachable from no "
-                "device, and is named nowhere. #172 kept the `v<major>` level on the "
-                "terms that a dead major goes: delete the directory rather than "
-                "describing it in `unplaced:`")
+                "device, is named nowhere, and says nothing. #172 kept the "
+                "`v<major>` level on the terms that a dead major goes: mark it "
+                f"`superseded-by: {live_successor[ref]}` to keep it for outside "
+                "manifests that pin it (from 1.0, for at least one release before "
+                "it is removed), or delete the directory rather than describing it "
+                "in `unplaced:`")
             continue
         if ref not in justified:
             err(contracts[ref], "L89",
@@ -8589,7 +8775,7 @@ def lint_device_mount(path, data):
     elif bolts_to_rack and "ru" not in ch:
         warn(path, "L125", "a rack device states `ru`. If this box is not racked, "
                           "say how it is installed with `chassis.mount` "
-                          "(`din-rail`, `wall`, `desktop`)")
+                          "(`din-rail`, `wall`, `ceiling`, `desktop`)")
     elif not bolts_to_rack and "ru" in ch:
         err(path, "L125", f"`chassis.mount` is {mount!r}, so `ru` {ch['ru']!r} "
                           "describes a rack this box is not in - drop it")
@@ -8608,6 +8794,43 @@ def lint_device_mount(path, data):
         if key in ch and mount != "rack":
             err(path, "L125", f"`chassis.{key}` is for a rack device, and this one "
                               f"mounts {mount!r}; drop it")
+
+
+def lint_device_poe_pd(path, data):
+    """L199: the keys a powered device states for its PoE input agree.
+
+    The schema checks each `poe-pd-*` key alone (its type, its enum, its range);
+    this relates them. Whether a class fits a standard is not checked: that needs
+    the table in IEEE 802.3, which the library does not hold.
+    """
+    power = (data.get("attrs") or {}).get("power") or {}
+    standard, floor = power.get("poe-pd-standard"), power.get("poe-pd-standard-min")
+    order = {"802.3af": 1, "802.3at": 2, "802.3bt": 3}
+    if floor is not None:
+        if standard is None:
+            err(path, "L199", "`poe-pd-standard-min` is stated with no `poe-pd-standard`: it is the "
+                              "lowest standard the maker names, below the one the device needs")
+        elif order.get(floor, 0) >= order.get(standard, 0):
+            err(path, "L199", f"`poe-pd-standard-min` {floor!r} is not below `poe-pd-standard` "
+                              f"{standard!r}; state it only where the maker names a lower standard "
+                              "the device runs reduced on")
+    if "poe-pd-class" in power and standard is None:
+        err(path, "L199", "`poe-pd-class` is stated with no `poe-pd-standard`")
+    if "poe-pd-max-w" in power and standard is None:
+        warn(path, "L199", "`poe-pd-max-w` is stated with no `poe-pd-standard`: a draw with no "
+                           "standard cannot be checked against the port that feeds it")
+
+    def number(key):
+        value = power.get(key)
+        return value if isinstance(value, (int, float)) and not isinstance(value, bool) else None
+    own, handed, intake = number("power-self-max-w"), number("poe-budget-w"), number("poe-pd-max-w")
+    if own is not None and handed is not None and intake is not None and intake < own + handed - 1e-9:
+        warn(path, "L199", f"`poe-pd-max-w` {intake:g} W is below `power-self-max-w` {own:g} W plus "
+                           f"`poe-budget-w` {handed:g} W: it is the whole intake, so a figure printed "
+                           "'excluding PoE output' belongs in `power-self-max-w` and the sum here")
+    if "poe-budget-w" in power and standard is not None and "poe-pd-max-w" not in power:
+        warn(path, "L199", "this device hands on PoE and takes PoE but states no `poe-pd-max-w`: its own "
+                           "draw is not its intake")
 
 
 def _is_kit(ref, lib_roots):
@@ -9781,7 +10004,7 @@ def lint_device_bevel(path, data, lib_roots):
     are held to the flat for the same reason.
     """
     ch = data.get("chassis") or {}
-    if not ch.get("bevel"):
+    if not (ch.get("bevel") or ch.get("rounded")):
         return
     try:
         bevels = bevel_mod.parse(ch)
@@ -9908,6 +10131,92 @@ def lint_device_power_stated(path, data):
             loud(path, "L120", f"configuration {n!r} says power {sorted(power)} and "
                  f"seats {', '.join(wrong)}. Correct `power`, or seat the supply "
                  "this build ships with")
+
+
+_DIRECTIONS = ("front-to-back", "back-to-front")
+_AIRFLOW_UNSTATED = object()
+
+
+def _seated_air_parts(data, cfg):
+    """{bay id: component ref} for every fan or supply this build seats.
+
+    A supply is found as `_seated_supplies` finds it; a fan by `fan` in the ref
+    or the bay id."""
+    out = {}
+
+    def walk(items):
+        for b in items or []:
+            if not isinstance(b, dict):
+                continue
+            bid = b.get("id")
+            if isinstance(bid, str):
+                ref = ((cfg or {}).get("bays") or {}).get(bid, b.get("default"))
+                if isinstance(ref, str) and (
+                        re.search(r"psu|pem|power|supply|fan", ref, re.I)
+                        or re.search(r"fan", bid, re.I)):
+                    out[bid] = ref
+            walk(b.get("bays"))
+    for view in (data.get("views") or {}).values():
+        walk(view_parts(view)["bays"])
+    return out
+
+
+def _airflow_stated_by_build(cfg, bid, ref):
+    """What the configuration says of this bay's airflow, or _AIRFLOW_UNSTATED.
+
+    `bay-attrs` reaches the occupant of one bay, `component-attrs` a bay id or
+    every instance of a component; the narrower one is read first."""
+    comp_attrs = (cfg or {}).get("component-attrs") or {}
+    name = ref.split(":")[0].split("/")[-1].split("@")[0]
+    for src in (((cfg or {}).get("bay-attrs") or {}).get(bid),
+                comp_attrs.get(bid), comp_attrs.get(name)):
+        if isinstance(src, dict) and "airflow" in src:
+            return src["airflow"]
+    return _AIRFLOW_UNSTATED
+
+
+def air_part_words(data, cfg, lib_roots):
+    """[(bay id, ref, the word the build gives that part)] for one configuration.
+
+    The word is the configuration's own where it states one for the bay, else
+    the contract's `attrs.airflow`; None where neither does."""
+    out = []
+    for bid, ref in sorted(_seated_air_parts(data, cfg).items()):
+        word = _airflow_stated_by_build(cfg, bid, ref)
+        if word is _AIRFLOW_UNSTATED:
+            word = (_contract(ref, lib_roots).get("attrs") or {}).get("airflow")
+        out.append((bid, ref, word))
+    return out
+
+
+def lint_device_airflow_agrees(path, data, lib_roots):
+    """L198: a build's airflow agrees with the fans and supplies it seats.
+
+    The airflow of a build is the configuration's own, else the chassis's
+    (`config_airflow`, the value the drawing's `data-airflow` carries). A fan or
+    supply may state `attrs.airflow`, and the configuration may restate it for
+    one bay in `component-attrs`. A `front-to-back` build seating a
+    `back-to-front` fan is a contradiction the picture does not show.
+
+    THE RULE NEVER MAPS A WORD TO A DIRECTION. It speaks only when both sides
+    say `front-to-back` or `back-to-front` and they differ. `exhaust`,
+    `intake`, `side-to-side` and the sentences some parts carry, a part that
+    states nothing, and a build that is `side`, `passive` or silent are all
+    skipped: whether `exhaust` means front-to-back is a design question, not
+    this rule's to settle. A warning at `modelled` and an error at `verified`,
+    as L120 is, so that a waiver can carry the honest case.
+    """
+    loud = err if data.get("maturity") == "verified" else warn
+    for n, c in (data.get("configurations") or {}).items():
+        build = config_airflow(data, c)
+        if build not in _DIRECTIONS:
+            continue
+        for bid, ref, word in air_part_words(data, c, lib_roots):
+            if word in _DIRECTIONS and word != build:
+                loud(path, "L198", f"configuration {n!r} is {build} and seats {ref} in "
+                     f"{bid}, which is {word}. Correct the configuration's `airflow`, "
+                     "seat the part for this direction, or state the part's direction "
+                     "for this build in `component-attrs`")
 
 
 def lint_device_provenance_confidence(path, data):
@@ -12131,6 +12440,12 @@ RJ45_BARE_REFS = {"std/rj45@2", "std/rj45-ganged@2"}
 # that takes the bare part's roles, and an Ethernet jack on it is sent to
 # common/rj45-ganged-eth@1, which says what the jack is.
 RJ45_NEUTRAL_REFS = {"common/rj45-ganged-lamped@1"}
+# The ganged cell with the Ethernet claim and NO lamps: an Ethernet jack whose
+# housing really has none (the Fibrain HD modules). It is not "an Ethernet jack
+# on a part with no lamps" in the census's sense - that count is for the bare
+# cell, which says nothing about Ethernet and leaves the lamps undecided - so an
+# Ethernet jack on it is accepted without lamps.
+RJ45_PLAIN_ETH_REFS = {"common/rj45-ganged-eth-plain@1"}
 # A carrier that draws nothing and exists to attach one vendor's meanings
 # (dell/rj45-port-14g) is the family member it composes, for census purposes;
 # and the family's own members compose each other by definition, so a contract
@@ -12140,15 +12455,18 @@ RJ45_FAMILY_DIRS = {("std", "rj45"), ("std", "rj45-ganged"),
                     ("common", "rj45-ganged-eth"),
                     ("common", "rj45-ganged-link"),
                     ("common", "rj45-ganged-lamped"),
+                    ("common", "rj45-ganged-eth-plain"),
                     ("dell", "rj45-port-14g")}
 
 
 def rj45_class(ref, lib_roots, depth=0):
-    """'lamped', 'neutral', 'bare' or 'retired' for an RJ45-ish ref, following one carrier."""
+    """'lamped', 'neutral', 'plain-eth', 'bare' or 'retired' for an RJ45-ish ref, following one carrier."""
     if ref in RJ45_LAMPED_REFS:
         return "lamped"
     if ref in RJ45_NEUTRAL_REFS:
         return "neutral"
+    if ref in RJ45_PLAIN_ETH_REFS:
+        return "plain-eth"
     if ref in RJ45_BARE_REFS:
         return "bare"
     if depth > 2:
@@ -12238,7 +12556,7 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
         if rj45_wants_lamps(q, groups, name):
             if cls == "neutral":
                 neutral_eth += 1
-            elif cls != "lamped" and str(q.get("id")) not in lamped_for:
+            elif cls not in ("lamped", "plain-eth") and str(q.get("id")) not in lamped_for:
                 unlamped_eth += 1
         elif cls == "lamped":
             lamped_bare += 1
@@ -12247,6 +12565,7 @@ def _rj45_census(placements, groups, lib_roots, name=None, elsewhere=(), view=No
 
 RJ45_CENSUS_MSG = ("An Ethernet jack is common/rj45-eth@1 or common/rj45-ganged-eth@1 "
                    "(common/rj45-ganged-link@1 where it has one lamp, "
+                   "common/rj45-ganged-eth-plain@1 where its housing has none, "
                    "common/rj45-eth-pinside@1 where the lamps are opposite the keyway); "
                    "a console or timing jack is std/rj45@2 or std/rj45-ganged@2, or "
                    "common/rj45-ganged-lamped@1 where its housing shows lamps "
@@ -13093,6 +13412,7 @@ def lint_device(path, validator, lib_roots):
     lint_device_rel_pos(path, data)
     lint_device_group_names(path, data)
     lint_device_speed_vocabulary(path, data)
+    lint_breakout_modes(path, data)
     lint_device_port_rate(path, data, lib_roots)
     lint_device_port_optics(path, data, lib_roots)
     lint_device_pluggable_media(path, data)
@@ -13105,6 +13425,8 @@ def lint_device(path, validator, lib_roots):
     lint_device_kits(path, data, lib_roots)
     lint_device_ear_span(path, data)
     lint_device_overhang(path, data, lib_roots)
+    lint_device_hides(path, data, lib_roots)
+    lint_device_connector_decor(path, data)
     lint_device_bay_pitch(path, data)
     lint_device_empty_views(path, data)
     lint_device_occupants(path, data, lib_roots)
@@ -13224,8 +13546,10 @@ def lint_device(path, validator, lib_roots):
                 err(path, "L5", f"{vname}/{b['id']}: default {b['default']} is a "
                     "`kind: kit` - a bay seats modules; a device names a kit under "
                     "`chassis.kits`")
-            if b.get("default") and b["default"] not in (b.get("accepts") or []):
-                err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts")
+            if b.get("default") and not _bay_takes(b, b["default"], lib_roots):
+                err(path, "L6", f"bay {b['id']} default {b['default']} not in accepts"
+                    + (f" and does not fit interface {b['interface']}"
+                       if b.get("interface") else ""))
             # A BAY NOTHING EVER FILLS RENDERS AS A HOLE, and the modelling skill
             # has
             # said so for a while - "no module means no lamp, so nothing in it is
@@ -13248,7 +13572,16 @@ def lint_device(path, validator, lib_roots):
             # A warning, because "what is normally fitted here" is a modelling
             # decision with a source behind it, and a linter guessing it would be
             # worse than the hole.
-            if not b.get("default") and b["id"] not in cfg_filled:
+            #
+            # A BAY THAT NAMES ITS INTERFACE AND HAS NO PART TO SEAT IS EMPTY
+            # BECAUSE THE LIBRARY HAS NO MODULE FOR IT YET, not because nobody
+            # chose one: nothing mates the interface and `accepts` lists nothing,
+            # so no default exists to name. The bay stays a stated fact (what the
+            # opening takes) and the module's absence is the device's own gap.
+            has_part = bool(_manifest.offers(
+                b, _slot_core(lib_roots)[4] if b.get("interface") else None))
+            if (not b.get("default") and b["id"] not in cfg_filled
+                    and not (b.get("interface") and not has_part)):
                 warn(path, "L6", f"bay {b['id']} names no default and no "
                                  "configuration fills it, so it draws as an empty "
                                  "frame in every drawing of this device")
@@ -13498,7 +13831,7 @@ def lint_device(path, validator, lib_roots):
             if not gdef.get("role"):
                 (err if maturity == "verified" else warn)(
                     path, "L37", f"group {gid} does not say what it is for. Add "
-                    "role: traffic|fabric|management|service|indicator|furniture - a PSU "
+                    "role: traffic|fabric|management|service|indicator|furniture|stack-control - a PSU "
                     "bay and a line-card bay are the same class, so this is the "
                     "only thing that can rank them")
             # A GROUP NOTHING JOINS IS A CATEGORY THE DRAWING PROMISES AND DOES
@@ -13588,6 +13921,15 @@ def lint_device(path, validator, lib_roots):
     return data
 
 
+def _bay_takes(bay, ref, lib_roots):
+    """manifest.takes for `ref`, resolving its contract only when the bay states
+    an `interface` and the list does not already name it."""
+    if ref in (bay.get("accepts") or []) or not bay.get("interface"):
+        return ref in (bay.get("accepts") or [])
+    cp = resolve_component(ref, lib_roots)
+    return _manifest.takes(bay, ref, (load_yaml(cp) or {}) if cp else None)
+
+
 def lint_device_configuration_bays(path, data, lib_roots):
     """L8: a configuration seats what its bays accept.
 
@@ -13607,12 +13949,23 @@ def lint_device_configuration_bays(path, data, lib_roots):
     is enough. A nested key is scoped by its head: a component's bays carry no
     `only-in`, because a configuration varies a chassis and not a card.
     """
+    # THE BAYS, NOT THEIR LISTS: a bay that states an `interface` takes what
+    # mates it as well (manifest.takes), so L8 asks each bay, not a list.
     bay_accepts = {}
     bay_scopes = {}
     for view in (data.get("views") or {}).values():
         for b in view_parts(view)["bays"]:
-            bay_accepts[b["id"]] = b.get("accepts") or []
+            bay_accepts[b["id"]] = [b]
             bay_scopes.setdefault(b["id"], []).append(b.get("only-in"))
+
+    def modules_of(bays):
+        """The module refs a head bay names, plus the library parts that mate its
+        `interface` (render's candidates), for the nested walk."""
+        refs = []
+        for bay in bays:
+            refs += _manifest.offers(
+                bay, _slot_core(lib_roots)[4] if bay.get("interface") else None)
+        return refs
 
     def scoped_out(bid, cname):
         scopes = bay_scopes.get(bid.split("/")[0])
@@ -13621,22 +13974,24 @@ def lint_device_configuration_bays(path, data, lib_roots):
         return sorted({c for s in scopes for c in s})
 
     def nested_accepts(key):
+        """The bays a nested key can name: every module the head bay seats, each
+        one's bay called by the next segment. None when there is none."""
         head, *rest = key.split("/")
-        accepts = bay_accepts.get(head)
-        if accepts is None:
+        bays = bay_accepts.get(head)
+        if bays is None:
             return None
         for seg in rest:
             found = None
-            for mref in accepts:
+            for mref in modules_of(bays):
                 cp = resolve_component(mref, lib_roots)
                 c = (load_yaml(cp) or {}) if cp else {}
                 b = (c.get("bays") or {}).get(seg)
                 if isinstance(b, dict):
-                    found = (found or []) + list(b.get("accepts") or [])
+                    found = (found or []) + [b]
             if found is None:
                 return None
-            accepts = found
-        return accepts
+            bays = found
+        return bays
     for cname, cfg in (data.get("configurations") or {}).items():
         for bid, ref in (cfg.get("bays") or {}).items():
             # an empty string seats nothing, so scoping the bay out of the
@@ -13652,7 +14007,7 @@ def lint_device_configuration_bays(path, data, lib_roots):
                 acc = nested_accepts(bid)
                 if acc is None:
                     err(path, "L8", f"config {cname}: unknown nested bay {bid}")
-                elif ref and ref not in acc:
+                elif ref and not any(_bay_takes(b, ref, lib_roots) for b in acc):
                     err(path, "L8", f"config {cname}: {bid} does not accept {ref}")
                 continue
             if bid not in bay_accepts:
@@ -13667,7 +14022,7 @@ def lint_device_configuration_bays(path, data, lib_roots):
                 # had never met the case and rejected the emptiest possible ref
                 # for not being a module the bay accepts.
                 continue
-            elif ref not in bay_accepts[bid]:
+            elif not any(_bay_takes(b, ref, lib_roots) for b in bay_accepts[bid]):
                 err(path, "L8", f"config {cname}: bay {bid} ref {ref!r} not in accepts")
 
 
@@ -14256,6 +14611,9 @@ def main():
                     help="with --list-rules: the table docs/lint-rules.md is generated from")
     ap.add_argument("--json", action="store_true",
                     help="with --list-rules: the table as data, lint-rules.json in the dist")
+    ap.add_argument("--out", metavar="PATH",
+                    help="with --list-rules: write the listing to this file, creating its folder, "
+                         "instead of standard output; the bytes are the same")
     ap.add_argument("--schemas")
     ap.add_argument("--library", action="append")
     # LINT ONE DEVICE WHILE YOU ARE WORKING ON IT. A full pass reads every
@@ -14305,11 +14663,19 @@ def main():
                     help="allow an `audience` other than `public` (L192 is off); "
                          "for a library of private entries")
     args = ap.parse_args()
+    if args.out and not args.list_rules:
+        ap.error("--out goes with --list-rules")
     if args.list_rules:
         if args.json:
-            sys.stdout.write(json.dumps(rules_json(), indent=1, ensure_ascii=False) + "\n")
+            text = json.dumps(rules_json(), indent=1, ensure_ascii=False) + "\n"
         else:
-            sys.stdout.write(rules_text(markdown=args.markdown) + ("" if args.markdown else "\n"))
+            text = rules_text(markdown=args.markdown) + ("" if args.markdown else "\n")
+        if args.out:
+            out = Path(args.out)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(text, encoding="utf-8")
+        else:
+            sys.stdout.write(text)
         return 0
     if not args.schemas or not args.library:
         ap.error("--schemas and --library are required (or use --list-rules)")
@@ -14325,6 +14691,9 @@ def main():
     if (schemas / "speeds.yaml").exists():
         global PORT_SPEEDS
         PORT_SPEEDS = _load_port_speeds(schemas)
+    if (schemas / "connector-decor-names.yaml").exists():
+        global CONNECTOR_DECOR_NAMES
+        CONNECTOR_DECOR_NAMES = _load_connector_decor_names(schemas)
     # the schemas are YAML too where they are YAML, and a duplicate in the
     # registry would be as silent there as anywhere else
     for f in sorted(schemas.glob("*.yaml")):
@@ -14383,6 +14752,7 @@ def main():
             if d is not None:
                 comp_matrix.append((f, d))
                 lint_attrs_null(f, d)
+                lint_part_number_keys(f, d)
                 _skin_checks(f, d)
                 lint_component_parts(f, d, args.library)
                 lint_component_bay_kits(f, d, args.library)
@@ -14411,7 +14781,7 @@ def main():
                 lint_component_spanned_geometry(f, d, args.library)
                 lint_component_spanned_exclusion(f, d, args.library)
                 lint_component_relief_confidence(f, d, args.library)
-                lint_component_body_boxes(f, d)
+                lint_component_body_boxes(f, d, args.library)
                 lint_component_fitted_pieces(f, d)
                 lint_component_faces_once(f, d)
                 # L83 IS HANDED THE PART'S OWN REF, so it can catch a contract
@@ -14448,6 +14818,7 @@ def main():
                 lint_component_slots(f, d)
                 lint_component_span(f, d, args.library)
                 lint_component_span_exclusion(f, d, args.library)
+                lint_component_bay_interface(f, d, args.library)
                 lint_component_rj45_lamps(f, d, args.library)
                 lint_component_groups(f, d, args.library)
                 lint_component_part_interfaces(f, d, args.library)
@@ -14481,6 +14852,7 @@ def main():
                 lint_device_airflow_home(f, d)
                 lint_device_power_home(f, d)
                 lint_device_mount(f, d)
+                lint_device_poe_pd(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)
@@ -14489,6 +14861,7 @@ def main():
                 lint_device_input_rating(f, d)
                 lint_device_lines(f, d, args.library)
                 lint_device_power_stated(f, d)
+                lint_device_airflow_agrees(f, d, args.library)
                 lint_device_provenance_confidence(f, d)
                 lint_quoted_prose(f, d)
                 lint_device_component_attrs_resolve(f, d)

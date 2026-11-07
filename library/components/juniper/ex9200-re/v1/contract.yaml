@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: ex9200-re
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9200-RE Routing Engine module (CLI name RE-S-EX9200-1800X4), the original Routing Engine of the EX9200
+  line. It has a four-core 1.73 GHz processor and 16 GB of memory. It seats in the Routing Engine bay of an EX9200-SF,
+  -SF2 or -SF3 Switch Fabric module. The face has the AUX, CONSOLE and ETHERNET jacks, one USB port, the RESET pinhole
+  and the ONLINE/OFFLINE button. It has the MASTER, ONLINE, OK/FAIL and STORAGE lamps and two SATA SSD slots.
+attrs:
+  model: EX9200-RE
+  power-draw-max-w: 90
+  power-draw-typical-w: 90
+  cpu: 4 cores, 1.73 GHz (RE-S-EX9200-1800X4)
+  memory: 16 GB
+  storage: 32-GB hard disk, 4-GB CompactFlash card
+provenance:
+  sources: >-
+    EX9204 Switch Hardware Guide (published 2025-08-12), "Routing Engine Module in an EX9200 Switch", Figure 22 (an
+    isometric drawing of the module, with callouts), Tables 25 and 26 (the specification and the lamps); the same
+    figure and tables are in the EX9208 and EX9214 guides (published 2025-07-28). The EX9204 and EX9208 studio front
+    photographs show the module seated in an EX9200-SF.
+  size: >-
+    estimated - the plate is 271.9 x 27.5 mm, the Routing Engine bay the MX SCB photographs measure (see
+    juniper/ex9200-re2 size). Table 7 gives the module 1.25 x 11 x 7.75 in.
+  face: >-
+    photo-measured - read off the EX9208 studio front photograph (body 583 px across for 444.5 mm, 1.31 px/mm,
+    cropped and enlarged 2.75 times), SF1 slot. From the plate's left edge: left captive screw 5.4 mm, AUX centre 48.0,
+    CONSOLE 65.7, ETHERNET 83.8 (jack pitch 17.8 mm), USB port centre 110.8, RESET 132.6, ONLINE/OFFLINE button 137.3,
+    the SATA SSD plate 116.2 to 252.4, the STORAGE lamp 232.0 and the right captive screw 266.2. y is read against the
+    plate's 27.5 mm; at 1.31 px/mm the photograph resolves 0.8 mm, so every figure is estimated to about 1 mm. Figure 22
+    gives the same order of parts and no dimension.
+  leds: >-
+    guide Table 26: MASTER blue (primary), STORAGE green (blinking is SSD activity), ONLINE green (steady is normal,
+    blinking is coming online or going offline), OK/FAIL red (failed).
+  power: >-
+    guide Table 24 (EX9200 Switch Component Power Requirements): Routing Engine module 90 W typical and 90 W
+    reserved, one row for both Routing Engine modules. The EX9200 datasheet (Aug 2022), Table 3, repeats 90 W for
+    the EX9200 Routing Engine.
+  eol: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022): "Last order date for EX9200-RE was March 31, 2022".
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45 serial ports and the USB
+      service port. One job (reaching and disciplining the box), several media
+parts:
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [40.1, 8.4], attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [57.8, 8.4], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: ethernet, group: mgmt, at: [75.9, 8.4], attrs: {media: rj45, function: out-of-band management}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [104.8, 15.95], attrs: {function: USB service port}}
+elements:
+  latch-left:
+    at: [10.9, 19.3]
+    size: [32.7, 7.0]
+    class: latch
+  latch-right:
+    at: [227.7, 19.3]
+    size: [32.0, 7.0]
+    class: latch
+size:
+  w: 271.9
+  h: 27.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

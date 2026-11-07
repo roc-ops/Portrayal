@@ -1,0 +1,60 @@
+format: 1
+kind: component
+name: pr2hf-cover-3ru
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The dual-hinged magnetic cover of a Panduit PatchRunner 2 PR2HF3 3RU horizontal manager seen
+  from the front - an ABS plate across the finger tips with a lip along its top and bottom edge,
+  held shut by magnets. It ships fitted and opens 190 degrees up or down
+provenance:
+  size: >-
+    drawing - the table of the PR2HF customer drawing (Panduit 00224EAE-DC): PR2HF3 overall cover
+    height 134.8 [5.41 in] against the manager's 132.6, "ABS, NEODYMIUM MAGNETS, STEEL PINS", and
+    "PART INCLUDES: 1- MANAGER 1- COVER". The cover is drawn at the manager's 132.6; its extra 2.2
+    over the lips is not drawn (see `gaps:` of the device). Its width is the 419.9 between the
+    plate's ear areas, ESTIMATED: the side view draws the cover as a plate at the front and no view
+    dimensions its width.
+  relief: >-
+    drawing - the cover is the front 16.4 mm of the side view. Its plate and lips are 3.5 and
+    1.5 thick, ESTIMATED: no view sections the cover. The reference of this part is the front of
+    the manager: the plate stands from 177.9 to 181.4 above the well's floor and the lips from 165.
+  lid: >-
+    datasheet - the PatchRunner 2 Horizontal Cable Managers specification sheet (RKSP188):
+    "Magnetic, dual-hinged covers shall allow access to the cable pathway", "Molded plastic cover
+    opens 190 degrees to the top or bottom to provide complete access to the horizontal pathway
+    without having to remove the cover". It opens over the channel, so it is a lid (`lid: true`). The
+    format has no hinge, so the cover is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: ABS", "The manager is white" on the PR2HF3WH product page. The shade
+    is this library's render, a little lighter than the manager so the two read apart.
+size: {w: 419.9, h: 132.6}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: ABS}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [419.9, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 131.1], size: [419.9, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [419.9, 132.6], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 165
+      out: 181.4
+      color: '#e4e6e7'
+      confidence: estimated
+      source: the side view of the PR2HF drawing, the cover over the front 16.4 mm; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      lift: 165
+      out: 181.4
+      color: '#e4e6e7'
+      confidence: estimated
+      source: the side view of the PR2HF drawing, the cover over the front 16.4 mm; the lip's thickness is not dimensioned
+    - node: plate
+      lift: 177.9
+      out: 181.4
+      color: '#e4e6e7'
+      confidence: estimated
+      source: the side view of the PR2HF drawing; the plate's thickness is not dimensioned
+skins: [default]

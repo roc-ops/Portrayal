@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="267.6mm" height="16.04mm" viewBox="1.0 4.44 267.6 16.04">
+  <!-- nvidia/a10: THE TOP EDGE, the body's right side seen from outside. Across:
+       mm behind the bracket's outer face (1.0 to 268.6, the shroud's length).
+       Down: the face's y (4.44 the board's outer face, 20.48 the shroud's).
+       Every piece whose right side is the card's top edge `shows: [right]` and
+       carries its patch of this. The ribs are the A100's (nvidia/a100-pcie-80gb@1
+       `body-ribs`, borrowed). The printing's places are the A100's, not measured
+       here: "A10" 2.9 behind the bracket, the NVIDIA wordmark where the A100's
+       is (provenance body-top-edge). -->
+  <defs>
+    <pattern id="ribs" patternUnits="userSpaceOnUse" x="1.0" y="9.63" width="2.194" height="10.85">
+      <rect x="0" y="0" width="2.194" height="10.85" fill="#cdbca5"/>
+      <rect x="0.25" y="0" width="0.55" height="10.85" fill="#e2d5c2"/>
+      <rect x="1.80" y="0" width="0.394" height="10.85" fill="#8f7d67"/>
+    </pattern>
+  </defs>
+  <!-- the black band: board edge and cover -->
+  <rect x="1.0" y="4.44" width="267.6" height="5.19" fill="#24262a"/>
+  <rect x="1.9" y="4.44" width="266.7" height="1.57" fill="#1d2420"/>
+  <!-- the shroud's top edge -->
+  <rect x="1.0" y="9.63" width="267.6" height="10.85" fill="url(#ribs)"/>
+  <!-- the NVIDIA mark is reserved, not drawn (L172) -->
+  <rect id="logo-zone" x="230.5" y="5.35" width="4.4" height="2.8" fill="none"/>
+  <g id="silkscreen">
+    <text x="2.9" y="8.8" font-family="Arial" font-weight="bold" font-size="2.0" fill="#ddd7c5">A10</text>
+    <text x="236.0" y="8.9" font-family="Arial" font-weight="bold" font-size="2.2" fill="#ddd7c5" textLength="10.3" lengthAdjust="spacingAndGlyphs">NVIDIA</text>
+  </g>
+</svg>

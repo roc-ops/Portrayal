@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: r660xs-riser-1a
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 1a of the PowerEdge R660xs - slot 1, low profile, half length, x16, on dell/r660xs-riser-1-cage@1, fitted in riser configurations 1 to 5
+attrs:
+  riser: '1a'
+  appears-in: 'riser configurations 1, 2, 3, 4 and 5'
+  power-absent: not-published
+  slot-1: 'x16, low profile, half length, processor 1'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R660xs
+    ISM, technical guide and spec sheet were searched for 'riser' beside a
+    wattage and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOT, which is why it is a module
+    with `bays`: the slot is the riser's, as on the R660's risers (see
+    dell/riser-2a-16g@1). ISM figure 76 'Riser 1a' and the removal procedure
+    (figure 82).
+  slots: >-
+    datasheet - ISM table 95 'Expansion card riser configurations': R1a is slot
+    1, controlled by processor 1, low profile, half length, x16 (ISM table 14
+    and technical guide table 25 agree). The mechanical connector is taken as
+    x16 to match the electrical width; the ISM states a width and no connector.
+    NO PCIe GENERATION IS STATED for this slot in table 95, so none is claimed;
+    the spec sheet's PCIe row gives a Gen4 x16 slot in its one-processor and
+    two-processor lines but does not tie it to a riser.
+  face: >-
+    drawing - composed from dell/r660xs-riser-1-cage@1. The slot bay sits on its
+    window.
+  size: >-
+    drawing - the cage's extent, 84.50 x 19.80.
+  seating: >-
+    estimated - THE SLOT TAKES CARDS, the brackets and cards the R660's risers
+    take at the same heights. The bay is the whole bracket (79.20 low-profile)
+    `behind` the cage, tip left as dell/pcie-filler-lp-16g@1 draws it, placed so
+    the filler's vent field (nine columns centred 42.74 from the tip) lands where
+    Dell's rear render has it, centred at rear-face x 46.1 (figure x 262): the
+    bracket then starts at rear-face x 3.4. WHICH WAY THE TIP POINTS is not
+    shown by the render, which shows fillers only.
+  plan: >-
+    seen from above, the riser is dell/r660xs-riser-1-plan@1 - its cage roof.
+size: {w: 84.5, h: 19.8}
+size-confidence: {w: drawing, h: drawing}
+plan: {ref: dell/r660xs-riser-1-plan@1}
+parts:
+  - {ref: dell/r660xs-riser-1-cage@1, id: plate, at: [0, 0]}
+bays:
+  slot-1:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1}
+    plan: {at: [3.40, 0.00]}
+    behind: true
+    at: [1.90, 1.92]
+    size: [79.20, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

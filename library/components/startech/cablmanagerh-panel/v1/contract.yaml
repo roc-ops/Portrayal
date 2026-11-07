@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: cablmanagerh-panel
+version: 1.0.0
+class: mechanical
+description: >-
+  The steel panel of the StarTech.com CABLMANAGERH 1U five-ring manager seen from the front -
+  one sheet the full width of the rack, its two ends the ears with a pair of slots each, and
+  four round pass-through holes between the rings - drawn as the well the five rings stand in,
+  its floor the front face of the panel
+provenance:
+  size: >-
+    drawing - CABLMANAGERH_Diagram.pdf (StarTech.com, third angle projection, uploaded
+    11/23/2023): the plate from the front is 43.69 high, the ear slots 465.00 apart (8.8 from each
+    end) and 32.00 between a pair, "phi 6.50", and the overall length 482.60. The plate is the
+    whole width of the rack, so the ears are the ends of the sheet.
+  holes: >-
+    drawing - four holes, "phi 29.00", between the rings: centred 91.3, 191.3, 291.3 and 391.3
+    from the left end, on the panel's middle line. The positions are scaled off the front view
+    at 2.454 px/mm against its 465.00 (100.0 apart, midway between the rings) and are
+    estimated; the diameter is the drawing's dimension. The datasheet says the holes have "inner
+    and outer diameters of 1.14/1.26in [29/32mm]", so the 32 is a lip round the 29 hole: it is
+    drawn on the rear, and the hole is 29.
+  depth: >-
+    drawing - 87.59. The side view dimensions 95.00 from the ring tips to the back of the panel's
+    folded edges and 6.21 between the plate's back face and the folds' edge, so the plate's
+    back face, where the ears bolt, is 88.79 from the tips; the sheet is taken as 1.2 mm
+    (estimated: the maker's CMBRUSH1U section gives its panel as t=1.2, and no CABLMANAGERH
+    document states a gauge), so the well, from the tips to the plate's front face, is 87.59.
+  color: >-
+    datasheet - "Color: Black", "Steel construction" (cablmanagerh_datasheet.pdf). The drawing
+    is line work, so the shade is this library's render of black steel.
+size: {w: 482.6, h: 43.69, d: 87.59}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {material: steel}
+relief: {wall: '#1b1d20'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 43.69], class: bezel}
+skins: [default]

@@ -243,7 +243,53 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     assert "edgecore/cor580" in unstated and "edgecore/dcs510" in unstated
     assert {"cisco/asr-9901", "cisco/asr-9902", "cisco/asr-9903"} <= set(unstated)
     assert "cisco/n9k-c93180yc-ex" in unstated
-    assert len(unstated) == 28, unstated
+    # 29 since the Dell R660xs, whose documents say 'hot-plug redundant cooling' and no scheme
+    # THE FOUR JUNIPER EX3400 MADE IT THIRTY-THREE: the guide says both fan modules must be installed
+    # and working, and names no N+1 form, so each group quotes the sentence and states no form.
+    assert {"juniper/ex3400-24t", "juniper/ex3400-24p", "juniper/ex3400-48t",
+            "juniper/ex3400-48p"} <= set(unstated)
+    # THE JUNIPER QFX5200-32C AND -48Y MADE IT THIRTY-FIVE: the guide says every fan module must be
+    # installed for optimal operation and that the switch runs 30 seconds without thermal shutdown
+    # while one is replaced, and names no N+1 form, so each group quotes that and states no form.
+    assert {"juniper/qfx5200-32c", "juniper/qfx5200-48y"} <= set(unstated)
+    # THE JUNIPER QFX10002-36Q AND -72Q MADE IT THIRTY-SEVEN: the guide calls each fan module a
+    # redundant unit of two fans, says all three must be fitted, and gives how long the switch
+    # runs with one out but not how many it can lose, so each group quotes the sentences and
+    # states no form.
+    assert {"juniper/qfx10002-36q", "juniper/qfx10002-72q"} <= set(unstated)
+    # THE JUNIPER EX9253 MADE IT THIRTY-EIGHT: the guide says a fully configured switch needs all four
+    # fan trays and that a failed tray must be replaced at once, and names no N+1 form, so its group
+    # says so in a description and states no form.
+    assert "juniper/ex9253" in unstated
+    # THE JUNIPER QFX3500-48S4Q AND QFX3600-16Q MADE IT FORTY: each guide gives the fan trays
+    # (two, with two more fan modules on the QFX3500's management board; three on the QFX3600) and says
+    # a failed tray must be replaced within a minute, and neither names how many the switch can lose,
+    # so each group states no form.
+    assert {"juniper/qfx3500-48s4q", "juniper/qfx3600-16q"} <= set(unstated)
+    # THE JUNIPER QFX5210-64C MADE IT FORTY-ONE: the guide says the switch has four fan modules and
+    # that an unrecoverable failure raises chassis alarms and can shut it down, gives the time it runs
+    # with one module out, and names no N+1 form, so the group states none.
+    assert "juniper/qfx5210-64c" in unstated
+    # THE JUNIPER EX4550-32F AND -32T MADE IT FORTY-THREE: the guide says all three fan modules must
+    # be installed for optimal functioning and that the switch runs 30 seconds without thermal
+    # shutdown while one is replaced, and names no N+1 form, so each group quotes that and states no
+    # form. The EX4500-40F has one fan tray in one bay, so its group is not counted here at all.
+    assert {"juniper/ex4550-32f", "juniper/ex4550-32t"} <= set(unstated)
+    # THE JUNIPER QFX10002-60C MADE IT FORTY-FOUR: it has the family's cooling text (each fan module a
+    # redundant unit of two fans, all three fitted, a time with one out) and no N+1 form, so its group
+    # quotes the sentences and states none.
+    assert "juniper/qfx10002-60c" in unstated
+    # THE JUNIPER QFX5130-48C MADE IT FORTY-FIVE: the guide gives six fan modules and redundancy only
+    # at the rotor level (one failed rotor tolerated), which is not a count of modules the switch can
+    # lose, so the group quotes that and states no form.
+    assert "juniper/qfx5130-48c" in unstated
+    # THE CISCO NEXUS 9336C-FX2-E MADE IT FORTY-SIX: six fan modules and redundancy only at the rotor
+    # level (one failed rotor in any one module tolerated), no count of modules, so the group says
+    # so in its note and states no form.
+    assert "cisco/n9k-c9336c-fx2-e" in unstated
+    # THE ZPE NSC-T48S MADE IT FORTY-SEVEN: the data sheet says "Fanless" and the front figure shows two fan modules, so its group quotes both and states no form.
+    assert "zpe/nsc-t48s" in unstated
+    assert len(unstated) == 47, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
@@ -549,7 +595,132 @@ def test_the_comparison_layer_can_now_reach_them():
     its User Guide's fan mode behaviour (the redundant fan kit adds one fan, and
     in redundant mode one rotor failure leaves the system running). Its bays are
     in the top view too.
+
+    EIGHTY-FOUR IS THE DELL R6615, n+1 over the same four dual-rotor modules, from
+    its technical guide's thermal section.
+
+    EIGHTY-FIVE TO EIGHTY-EIGHT ARE THE JUNIPER EX4400-24T, -24P, -48T AND -48P, 1+1
+    over two module bays each, from the hardware guide's Cooling System and Airflow
+    topic ("We ship EX4400 switches with two fan modules (1+1 redundancy) preinstalled
+    in the rear panel of the switch"). The four share one fan part, and the bays are
+    on the rear face, numbered 0 and 1. The sentence is quoted in each device's fans
+    group.
+
+    EIGHTY-NINE IS THE DELL R6625, n+1 over four dual-rotor modules, from its
+    technical guide's thermal features ("The PowerEdge R6625 allows N+1 fan
+    redundancy").
+
+    NINETY AND NINETY-ONE ARE THE JUNIPER QFX5120-48Y AND QFX5120-48YM,
+    4+1 over five rear bays: the hardware guide ships both with "five fan modules
+    (4+1 redundancy)" and numbers the slots 0 to 4. The two share one fan module
+    pair (QFX5110-FANAFO and -FANAFI, by airflow), so this is two devices on one
+    cooling part, counted twice because the guide states it for both.
+
+    NINETY-TWO IS THE DELL R760, n+1 over six fan modules, from its technical
+    guide's thermal features ("The R760 allows N+1 fan redundancy, allowing
+    continuous operation with one fan failure in the system"). Its six bays are in
+    the top view, as the R660's four are.
+
+    NINETY-THREE TO NINETY-SIX ARE THE JUNIPER EX4300-24T, -24P, -48T AND -48P, n+0
+    over two fan modules each, from the hardware guide's Fan Modules section ("Both the
+    fan modules must be installed for optimal functioning of the switch"; the switch runs
+    30 seconds without thermal shutdown while one is replaced). The guide states no N+1
+    form, so the figure says that no spare fan is claimed.
+
+    NINETY-SEVEN IS THE DELL R960, N+1 over six dual-rotor modules (technical guide, thermal
+    features).
+
+    NINETY-EIGHT IS THE ARISTA 7010TX-48, n+0 over its one reversible fan module of two inline
+    fans: the quick start guide (Appendix E) says the switch shuts down if the module is
+    disconnected for more than a minute and names no spare fan. The data sheet's "Redundant &
+    hot-swappable fans" and "Redundant and reversible dual inline fan module" mean the two inline
+    fans inside the one module; the module itself is a single point, so no spare module is claimed.
+
+    ONE HUNDRED AND ONE AND ONE HUNDRED AND TWO ARE THE JUNIPER QFX5100-48S AND QFX5100-48T,
+    N+1 over five rear fan modules, from the QFX5100 datasheet (July 2024): "Redundant (N+1)
+    and hot-pluggable fan modules". The hardware guide gives the five slots.
+
+    ONE HUNDRED AND EIGHT IS THE JUNIPER EX4600-40F, 4+1 over five rear bays: the datasheet lists
+    "Redundant (N+1) and hot-pluggable fan modules" and the hardware guide ships five fan
+    modules numbered 0 to 4. The guide states no form of its own, so N is the five less one.
+
+    ONE HUNDRED AND NINE IS THE JUNIPER EX4650-48Y, 4+1 over five rear fan modules: the hardware
+    guide (published 2025-07-16) says the switch ships with "five fan modules (4+1 redundancy)".
+
+    ONE HUNDRED AND SIXTEEN AND ONE HUNDRED AND SEVENTEEN ARE THE JUNIPER QFX5110-48S AND QFX5110-32Q,
+    N+0 over five rear fan modules, from the QFX5110 hardware guide (2026-09-24): "All fan modules must
+    be installed for optimal operation of the switch", and the switch runs 30 seconds without
+    thermal shutdown while one is replaced. The guide states no N+1 form, so no spare fan is claimed.
+
+    ONE HUNDRED AND TWENTY AND ONE HUNDRED AND TWENTY-ONE ARE THE JUNIPER QFX10008 AND QFX10016, 1+1 over
+    two rear fan trays each. The hardware guides (2025-12-11) say the switch keeps running for a limited
+    time on one tray without a thermal alarm, and the datasheet calls them dual hot-swappable fan trays
+    with redundant fans; the fans inside a tray speed up when one fails.
+
+    ONE HUNDRED AND THIRTY-THREE AND ONE HUNDRED AND THIRTY-FOUR ARE THE JUNIPER QFX5100-24Q AND
+    QFX5100-96S, N+1 over five and over three rear fan modules, from the same QFX5100 datasheet
+    sentence. The hardware guide gives the slots, 0 to 4 on the 1RU models and 0 to 2 on the 96S.
     """
     from portrayal import comparable as C
     n = sum(1 for _, d in devices() if C.resolve(d).get("fan-redundancy"))
-    assert n == 83, n
+    # 97 since the Dell R960: N+1 over six dual-rotor modules (technical guide, thermal features)
+    # 98 since the Arista 7010TX-48: n+0 over one module of two inline fans
+    # 99 since the Arista 7280DR3A-36: n+1 over four fan modules (data sheet, "Hot-swappable Fans 4")
+    # 100 since the Arista 7280CR3-32D4: N+1 over three fan modules (data sheet, comparison table)
+    # 102 with the Juniper QFX5100-48S and -48T: N+1 over five modules (datasheet, "Redundant (N+1)")
+    # 103 with the Juniper QFX5130-32CD: 5+1 over six rear fan modules (hardware guide, QFX5130
+    # Component Redundancy: "can operate with one fan module not in operation (5+1 redundancy)")
+    # 107 since the Juniper EX4100-24T, -24P, -48T and -48P: 1+1 over two fan modules each (hardware guide)
+    # 108 since the Juniper EX4600-40F: 4+1 over five rear fan modules (datasheet, hardware guide)
+    # 109 since the Juniper EX4650-48Y: 4+1 over five rear fan modules (hardware guide, EX4650 Switch First View)
+    # 111 with the Juniper QFX5220-32CD (5+1 over six rear fan modules) and QFX5220-128C ((5x2+1)+1 over
+    # six two-fan modules; hardware guide, QFX5220 Component Redundancy)
+    # 115 since the Juniper EX4400-24X, -48F, -24MP and -48MP: 1+1 over two fan modules each (hardware
+    # guide, Cooling System and Airflow: "two fan modules (1+1 redundancy)")
+    # 117 with the Juniper QFX5110-48S and -32Q: n+0 over five modules (hardware guide, Cooling System)
+    # 119 with the Juniper QFX5120-32C (5+1 over six rear fan modules) and QFX5120-48T (4+1 over five),
+    # from the QFX5120 hardware guide, Fan Modules for QFX5120 Switches
+    # 122 since the Juniper QFX5230-64CD, QFX5240-64OD and QFX5240-64QD: N+1 over four fan modules of two rotors each
+    # (hardware guides, Component Redundancy)
+    # 123 since the Juniper EX9251: 2+1 over three fan trays (hardware guide, Component Redundancy)
+    # 125 with the Juniper EX4300-32F and EX4300-48MP: n+0 over two fan modules each (hardware guide, Fan Modules)
+    # 132 with the seven Arista 7280R3 models (#1204): N+1 over three fan modules on the PR3-24, DR3-24 and
+    # CR3-32P4, 1+1 over two on the CR3-36S, N+1 over two on the SR3-48YC8 and SR3-40YC6, and N+1 over four on
+    # the CR3-96 (data sheet, "Hot-swappable Fans" row of each model comparison table)
+    # 134 since the Juniper QFX5100-24Q and -96S: N+1 over five and over three rear fan modules (datasheet)
+    # 139 with the five Arista 7050X4 devices: N+1 over three fan modules (DX4-32S, PX4-32S, CX4-24D8,
+    # X4-48Y-4DF) or four (CX4M-48D8) (data sheet, model comparison, "Hot-swappable Fans")
+    # 140 since the Arista 7280DR3A-54: n+1 over four fan modules (data sheet, "Hot-swappable Fans 4")
+    # 147 since the seven Juniper EX4200 models: n+0 over the one three-fan tray (hardware guide)
+    # 148 with the Juniper QFX5700: n+1 over two fan trays of four fans each (datasheet, "N+1 fan rotor
+    # redundancy at chassis level")
+    # 150 with the Juniper QFX10008 and QFX10016: 1+1 over two fan trays each (hardware guides, Fan Trays)
+    # 153 with the Arista 7280CR3A-24D12 (N+1 over three fan modules), -48D6 and -72 (N+1 over four): data sheet, "Hot-swappable Fans"
+    # 154 with the Juniper EX8216: 2+0 over two nine-fan trays (hardware guide, Cooling System and Fan Tray: the
+    # switch runs only 2 minutes with a tray out; each tray keeps cooling with a single fan failed)
+    # 157 with the Juniper QFX5241-32OD (N+1 over seven fan modules of two rotors each) and QFX5241-64OD and
+    # QFX5241-64QD (N+1 over four): hardware guides, Component Redundancy
+    # 160 since the Juniper EX9204, EX9208 and EX9214: one fan tray each (hardware guides, Cooling System)
+    # 161 with the Arista 7280TR3-40C6: N+1 over two fan modules (data sheet, "Hot-swappable Fans 2 (N+1 redundant)")
+    # 162 with the Arista 7050SDX4-48D8: N+1 over three fan modules (data sheet, "Hot-swappable Fans")
+    # 163 with the Cisco Nexus 9508: 2+1 over three fan trays (hardware guide, Replacing a Fan Tray)
+    # 165 with the Cisco NCS 5001 and NCS 5002: 1+1 over two fan modules each (NCS 5000 hardware installation
+    # guide, Fan Modules: "slots for two 1+1 redundant fan modules")
+    # 168 with the Cisco Nexus 93180YC-FX3, 93180YC-FX3S and 93108TC-FX3: n+1 over four fan modules (installation
+    # guides, Overview), the last as 3+1 (its guide: powers down with fewer than 3 fans operational)
+    # 170 with the Cisco C9300-48P and C9300-48T: 2+1 over three fan modules (hardware installation guide, Fan Module)
+    # 171 with the Cisco Nexus 9504: 2+1 over three fan trays (hardware guide, PDF p96, printed 90)
+    # 172 with the Cisco Nexus 9516: 2+1 over three fan trays (hardware guide, PDF p89, printed 83)
+    # 174 with the Cisco Nexus 93108TC-FX3P (3+1 over four fan modules) and 9348GC-FX3 (2+1 over three):
+    # installation guides, Overview
+    # 177 with the Cisco C9300-24P, C9300-24U and C9300-48U, the same 2+1 over three fan modules
+    # 179 with the Cisco Nexus 9348GC-FX3PH and 92348GC-FX3 (2+1 over three fan modules each): installation
+    # guides, Overview
+    # 180 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
+    # 183 with the Cisco NCS 5011 (3+1 over four fan modules; the NCS 5000 guide, Fan Modules) and the
+    # NCS-57C3-MOD-S and -MOD-HX (n+1 over six fan trays; the NCS 5700 guide, Fan Modules and Fan Trays)
+    # 187 with the Juniper EX3200-24T, -48T, -24P and -48P: n+0 over one fan tray (hardware guide, Cooling System)
+    # 187 with the Arista 7050CX3-32S, 7050SX3-48YC12, 7050SX3-48YC8 and 7050TX3-48C8: four and two fan modules
+    # (data sheet, model tables)
+    assert n == 191, n

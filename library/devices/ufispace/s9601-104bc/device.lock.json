@@ -14,26 +14,30 @@
   ],
   "rear/bays/psu-0": [
    "ufispace/psu-132-crps-ac@1",
-   "ufispace/psu-132-crps-dc@1"
+   "ufispace/psu-132-crps-dc@1",
+   "ufispace/psu-132-crps-dc@2"
   ],
   "rear/bays/psu-1": [
    "ufispace/psu-132-crps-ac@1",
-   "ufispace/psu-132-crps-dc@1"
+   "ufispace/psu-132-crps-dc@1",
+   "ufispace/psu-132-crps-dc@2"
   ]
  },
- "composed": "22c08b520f99eda2",
+ "composed": "51abb1bd695dd6e6",
  "composed-refs": {
   "common/compliance-sticker@1": "1.0.0+6b3c51b31c446689",
   "common/ground-screw-m4@1": "1.0.1+4793ba55a2d2f342",
   "common/ground-stud-pair-5-8-m4@1": "1.0.0+7c98b156dd47d5f3",
-  "common/ground-symbol@1": "1.0.0+938c617ba0a96a89",
+  "common/ground-symbol@1": "1.0.1+0018bfdfc1559185",
   "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
   "common/led-dot@1": "1.1.0+f09babec64cd84f9",
   "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
   "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
-  "common/screw-head@1": "1.1.0+0f38d482bcc27ec9",
+  "common/screw-head@1": "1.1.1+8a666fa2a2c92044",
   "common/sma-jack@1": "1.0.1+dde698c727778ba3",
   "common/smb-jack@1": "1.0.0+d68248050fc18e92",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/mx240-dc-pole@1": "1.0.0+f7799a0f22b3f76c",
   "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
   "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
   "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
@@ -45,12 +49,61 @@
   "ufispace/fan-808012@1": "1.0.0+90a5595c03389564",
   "ufispace/lane-led-quad@1": "1.0.0+32cf79ec07a4520b",
   "ufispace/psu-132-crps-ac@1": "1.0.0+0f1cf0562e6ec20f",
-  "ufispace/psu-132-crps-dc@1": "1.0.2+d907c5a9e4761920"
+  "ufispace/psu-132-crps-dc@1": "1.0.3+a38f92a925586da0",
+  "ufispace/psu-132-crps-dc@2": "2.0.0+043ea9698b81a129"
  },
  "configs": [
   "ac",
   "dc"
  ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "ufispace/psu-132-crps-dc@2": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     }
+    ],
+    "rating-a": 37,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "ufispace/psu-132-crps-dc@2": {
+    "awg": null,
+    "configs": [
+     "dc"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     },
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     }
+    ],
+    "rating-a": 37,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
  "format": 1,
  "gaps": "882aa4f38db0b2ce",
  "groups": [
@@ -313,7 +366,7 @@
   "top/placements/screw-t6",
   "top/placements/screw-t7"
  ],
- "names": "8018e6bd08c1036b",
+ "names": "0cae6eef55df4e5f",
  "placement-addressing": {
   "for": {
    "front/placements/led-fan": [
@@ -1159,6 +1212,6 @@
  },
  "placement-surface": "a64bf69c171fc9fb",
  "shape": "649efa235590b94c",
- "surface": "e05afd0c74ed46d3",
- "version": "4.0.1"
+ "surface": "57e9556c09a67b26",
+ "version": "4.1.0"
 }

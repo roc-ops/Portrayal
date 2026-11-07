@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: r960-air-shroud-top-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The air shroud top cover of the PowerEdge R960 seen from above - the black moulded plate between the fan cage
+  and the support bar, with the Dell mark and two raised ribs
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: `R960_
+    AirShroudTopCover` in the `Main Assembly` node (the un-exploded assembly). R960 ISM figure 12 (callout 3,
+    "Air shroud top cover") and the "Removing the air shroud top cover" procedure (figure 46): it comes off first,
+    under the support bar and the fan cage, to reach the processors and memory.
+  size: >-
+    measured - r960.glb, the node box 434.9 x 173.8 at plan (4.6, 362.3) (plan x = 228.0 - cad x1, plan y = 883.94
+    - cad z1). The first pass read 436.0 x 142.0 at y 405.0 off ISM figure 12 (px 220..1020 across at 1.813; 880..1145
+    down at 1.863), which agrees across to 1.1 mm and is 31.8 short and 42.7 forward in depth: the 15% stretch down
+    the figure's axis the device's top-view provenance records.
+  height: >-
+    measured - r960.glb, 80.7 (cad y 92.6 to 173.3). The first pass drew it as a 0.5 surface.
+  required: >-
+    ISM thermal notes: the air shroud is required in every air-cooled configuration.
+size: {w: 434.9, h: 173.8}
+size-confidence: {w: measured, h: measured}
+relief:
+  wall: '#15181b'
+  features:
+  - node: shroud
+    out: 80.7
+    color: '#1b1e21'
+    confidence: measured
+    source: r960.glb `R960_ AirShroudTopCover`, cad y 92.6 to 173.3
+elements:
+  shroud: {at: [0.0, 0.0], size: [434.9, 173.8], class: bezel}
+skins: [default]

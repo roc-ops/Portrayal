@@ -1,0 +1,131 @@
+format: 1
+kind: module
+name: qfx5700-rcb
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX5700-RCB, the Routing and Control Board of the QFX5700: one board that holds the Routing Engine
+  and the control board. Its faceplate carries the SSD0 and SSD1 lamps and the online button at the left, the
+  PPS and 10MHz SMB connectors in and out, the BITS RJ-45 jack with the four system lamps and the reset pinhole
+  after it, the CON console jack, the MGMT jack and the USB port, and a label at the right end. It is hot-pluggable
+  (install a second one before removing a failing one). The chassis has two slots, RCB 0 and RCB 1, and takes one
+  board; the board and the forwarding engine board go in the same slot number.
+attrs:
+  role: routing-engine
+  power-draw-max-w: 80
+part-numbers:
+  QFX5700-RCB: {part: QFX5700-RCB}
+provenance:
+  sources: >-
+    datasheet and drawing - QFX5700 Switch Hardware Guide (Juniper Networks, PDF created 2026-09-30, 241 pages):
+    Routing and Control Board (figures 10 to 12, g101417 in figure 37, Table 13 physical specifications, Table 14 lamps)
+    and the front panel callouts of figure 37; photograph g101491 in figure 8 for what is printed.
+  size: >-
+    datasheet - Table 13 gives the board 2.99 cm high, 19.88 cm wide and 20.44 cm deep, and Table 5 gives the same
+    board 3.1 cm high, 21.4 cm wide and 23.5 cm long. The two tables disagree on width and depth. The flat chassis
+    figure (figure 16, g101401) measures each board's face 200 mm across at 2.99 px/mm, so Table 13's width is taken:
+    198.8 mm. The height is 30.8 mm: Table 5's 3.1 cm, since the figure's face with its ejector strip along the top
+    edge is 31.8 mm and Table 13's 2.99 cm is the face without the strip.
+  depth: >-
+    datasheet - Table 13 gives 20.44 cm and Table 5 gives 23.5 cm (they disagree). No depth is written, because the
+    figures only show the face; both are kept here.
+  face: >-
+    drawing - figure 37 (g101417, 1500 px wide) with the face 1097 px across for 198.8 mm, 5.52 px/mm both ways. Each
+    position is read off it and is estimated to about 0.7 mm: SSD0 lamp (21.4, 8.5), SSD1 lamp (21.4, 13.4), online
+    button (35.0, 8.5); SMB OUT row y 8.5 and IN row y 17.4 at x 48.7 (PPS) and 59.6 (10MHz); BITS jack centre (73.8,
+    7.2); the four lamps along y 2.4 at x 86.4, 94.4, 100.5 and 106.3 and the reset pinhole at 113.6; CON jack centre
+    (126.1, 7.2); MGMT jack centre (146.7, 10.4); USB port centre (178.3, 12.7); label plate right end. The ejector
+    strips along the top edge are drawn as two bars. The vents are drawn as hexagon fields around the parts, simplified.
+  drawing-vs-photo: >-
+    sources-disagree and the photograph of the real board wins for what is printed. Figure 37 prints PWR, STS, ALM and MST
+    over the lamps and QFX5700-RCB on the label; the photograph (figure 8, g101491) prints OK/FAIL, ON/OFF, ALM and MST
+    over them, an RST mark over the pinhole after them, and JNP5700-RCB on the label. The legends below are the
+    photograph's. The element ids keep the guide's lamp names (Table 14: PWR, STS, ALM, MST, SSD0, SSD1) and no
+    document says which of PWR and STS is OK/FAIL and which ON/OFF, so the pairing is by position only: PWR first.
+  jacks: >-
+    drawing - the BITS and CON jacks are drawn with the contact comb at the bottom of the opening, so each is turned 180;
+    the MGMT jack is drawn with the comb at the top. MGMT is an autosensing RJ-45 for 10, 100 or 1000 Mb/s with a
+    link lamp (green at 1000, orange at 10/100) and an activity lamp (guide, front panel); it is carried as 1g. The
+    guide gives BITS no rate or framing, so BITS takes no speed. USB is one port, "USB 2.0/3.0 compatible", for
+    installing or recovering Junos OS Evolved.
+  power: >-
+    datasheet - Table 13: power requirement 80 W. A draw, since a board consumes power. The guide does not say
+    whether it is typical or maximum, so it is filed as the maximum.
+  leds: >-
+    datasheet - Table 14: PWR green steady is online and correct, green blinking is the beacon; STS green steady is
+    online, green blinking is the beacon, yellow steady is booting, yellow blinking is an error; ALM unlit is none,
+    red steady is a major fault, yellow steady is a minor alarm, red and yellow blinking is major and minor together;
+    MST green steady is the primary; SSD0 and SSD1 green steady is a drive detected and green blinking is active.
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the Routing Engine's management cluster: an out-of-band Ethernet jack, an RJ-45 serial console and a USB port.
+      Three kinds, one job: reaching and disciplining the switch.
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the timing block: the BITS RJ-45 jack beside the 10MHz and PPS SMB connectors, in and out. One job: taking a
+      clock in and giving one out.
+parts:
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [172.3, 10.45], rotate: 90, attrs: {function: USB port for installing Junos OS Evolved, media: usb-a}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [138.8, 3.8], attrs: {speed: 1g, media: rj45, function: out-of-band management}}
+- {ref: std/rj45@2, id: con, group: mgmt, at: [118.2, 0.6], rotate: 180, attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [65.9, 0.6], rotate: 180, attrs: {media: rj48, function: BITS clocking}}
+- {ref: std/smb@1, id: pps-out, group: timing, at: [46.3, 6.1], attrs: {function: PPS out}}
+- {ref: std/smb@1, id: mhz-out, group: timing, at: [57.2, 6.1], attrs: {function: 10MHz out}}
+- {ref: std/smb@1, id: pps-in, group: timing, at: [46.3, 15.0], attrs: {function: PPS in}}
+- {ref: std/smb@1, id: mhz-in, group: timing, at: [57.2, 15.0], attrs: {function: 10MHz in}}
+elements:
+  led-ssd0:
+    at: [20.4, 7.5]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: detected, color: '#22c55e'}, {name: active, color: '#22c55e', behavior: blinking}]
+  led-ssd1:
+    at: [20.4, 12.4]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: detected, color: '#22c55e'}, {name: active, color: '#22c55e', behavior: blinking}]
+  led-pwr:
+    at: [85.4, 1.4]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: online, color: '#22c55e'}, {name: beacon, color: '#22c55e', behavior: blinking}]
+  led-sts:
+    at: [93.4, 1.4]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: online, color: '#22c55e'}, {name: beacon, color: '#22c55e', behavior: blinking}, {name: booting, color: '#f59e0b'}, {name: error, color: '#f59e0b', behavior: blinking}]
+  led-alm:
+    at: [99.5, 1.4]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: major, color: '#ef4444'}, {name: major-and-minor, color: '#ef4444', behavior: blinking}, {name: minor, color: '#f59e0b'}]
+  led-mst:
+    at: [105.3, 1.4]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: primary, color: '#22c55e'}]
+  reset:
+    at: [112.8, 1.6]
+    size: [1.6, 1.6]
+    class: button
+  online:
+    at: [33.5, 7.0]
+    size: [3.0, 3.0]
+    class: button
+size:
+  w: 198.8
+  h: 30.8
+size-confidence: {w: datasheet, h: datasheet}

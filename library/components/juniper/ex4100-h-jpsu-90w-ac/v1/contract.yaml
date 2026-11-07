@@ -1,0 +1,103 @@
+format: 1
+kind: module
+name: ex4100-h-jpsu-90w-ac
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+unmated: the 90 W AC supply of the EX4100-H-24F as drawn from the rear of the switch; its AC wires do not land on it but on the power input terminals under the terminal door on the front of the switch, in the section for the slot it is in (EX4100-H Switch Hardware Guide, "Connect Power to an EX4100-H-24MP or EX4100-H-24F Switch"), so this part has no inlet, terminal or lug for a cable to land on
+description: >-
+  Juniper JPSU-H-90W-AC, the 90 W AC field-replaceable power supply of the EX4100-H-24F. The switch ships with one in a
+  rear slot and takes a second, which the guide lists as N+1 redundant and hot swappable. The face is a finned fanless
+  body with a green release handle, a retaining thumbscrew on a tab at one end and, at the other, the OUT_OK lamp with
+  its legend above and a hot-surface mark below. The AC cord does not land here: the input terminals are on the front of
+  the switch, under the terminal door, in the section for the slot the supply is in. The supply has no fan and cools by
+  convection, so it has no airflow direction.
+attrs:
+  role: ac-power-supply
+  power-output-w: 90
+  input: 100 through 240 VAC, 50 or 60 Hz
+  input-current: 1.5 to 0.6 A, as printed on the label
+  inlet: none
+  cooling: fanless, convection cooled
+  weight-kg: 1.13
+part-numbers:
+  JPSU-H-90W-AC: {part: JPSU-H-90W-AC}
+provenance:
+  sources: >-
+    datasheet and photo-measured - EX4100-H Switch Hardware Guide (Juniper Networks, published 2026-10-01): Table 12
+    (the shipped components), Table 15 (the weight), Tables 25 and 28 (the model number and the specification), Table 42
+    (the lamp), Figures 6, 26 and 32 (the supply in the slot, the supply and the lamp position) and the installation
+    steps; and Juniper's studio photograph of the EX4100-H-24F, rear, which shows this supply seated.
+  size: >-
+    estimated - the guide gives no dimension for the supply. The module is read off Figure 6 (the rear of the EX4100-H-24F,
+    3000 px wide with the body 2860 px across at the 6.567 px/mm the other figures have; the rear figure's body reads 3.3 mm
+    short of the 439.0 mm table width and its height agrees with the 43.3 mm figure to 0.5 percent) from the left edge of
+    the retaining tab to the far end of the bay: 184.9 mm, 39.5 mm high between the slot's lips. The depth is not stated;
+    the chassis depth with this supply is Table 13's 14.96 in (37.99 cm).
+  power-output-w: >-
+    datasheet - Table 28: output power 90 W. An output figure, because a supply provides power. The guide gives no draw or
+    loss figure for the unit.
+  input: >-
+    datasheet - Table 28: 100 to 240 V, 50 to 60 Hz. The label in the studio photograph prints 100-240V~, 1.5-0.6A and
+    50-60Hz, as Figure 26 does.
+  drawing-vs-photo: >-
+    the photograph and Figure 26 agree on the AC label. Figure 6, the rear of the EX4100-H-24F, draws a DC supply in the
+    slot (DC INPUT, +24V 5.5A, -48V 2.75A, -60V 2.2A) where the photograph shows this AC one; the faces are the same
+    outline.
+  airflow: >-
+    datasheet - Tables 8, 10 and 12 give "NA. Fanless model. Convection cooled." The handle is green in the photograph;
+    the guide gives no colour convention for it, since there is no airflow direction to mark.
+  leds: >-
+    datasheet - Table 42: OUT_OK is green when the 54 V or 12 V output is OK, amber for a fault condition even though there
+    is power (12V OVP, OTP, OCP, PRI OTP and AMB OTP), and off with no input. The legend is above the lamp on this supply, as
+    Figure 6 and the photograph have it.
+  face: >-
+    estimated - positions are read off Figure 6 and cross-checked against the photograph, with the left edge of the tab as
+    origin: the thumbscrew centre 7.1, 26.0; the label block 15.8 to 39.9 across and 2.2 to 33.0 down; eleven fins to the
+    left of the handle, 6.9 mm apart and 1.7 wide, and none to its right; the handle plate 120.5 to 158.0 across with the
+    loop under it to 38.0 down; the lamp plate 163.6 to 178.9 with the lamp centred 174.6, 16.8. The hot-surface mark and
+    the legends are the photograph's.
+  depth: >-
+    estimated - THE GUIDE STATES NO DEPTH FOR THE SUPPLY, and no document held does. The 3D body is carried as 200 mm behind the face, a figure chosen
+    to sit inside the 379.9 mm chassis and to match the 340 W supply's estimate (juniper/ex4100-h-jpsu-340w-ac@1), since the two faces are the same
+    outline; it is not a reading.
+  flank: >-
+    drawn - the strip of the face to the left of the slot's lip, 12.9 mm wide, is painted in the chassis colour (#6a727f) so that the part's own tab reads
+    against metal and not against the dark opening a 184.9 mm bay would otherwise show beside it; the real slot opening starts 12.5 mm in.
+  relief: >-
+    estimated - the handle stands proud of the face in the studio photograph. Its projection is not stated or measured.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit itself draws.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-out-ok:
+    at: [172.1, 14.3]
+    size: [5.0, 5.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [118.5, 0.0]
+    size: [41.4, 38.0]
+    class: latch
+size:
+  w: 184.9
+  h: 39.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: handle
+    out: 1.6
+    color: '#a2dd35'
+    confidence: estimated
+    source: photo - the green handle stands proud; projection not measured
+body:
+  depth: 200.0
+  color: '#5b626e'
+skins: [default]

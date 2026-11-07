@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: 7050x4-fan-7012h-rev
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The 2RU high-speed hot-swap fan module of the Arista 7050CX4M-48D8 for rear-to-front air, spare
+  FAN-7012H-BLUE (reverse airflow, blue). It is the FAN-7012H-RED housing with the rotor turned the other
+  way. A blue-framed module with a honeycomb grille, a grey release rail running down its middle with a
+  slider and a blue tab at its top, and a status lamp in its lower right corner. Four of them fill the
+  2RU rear beside the two power supplies.
+size: {w: 79.6, h: 81.5}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  FAN-7012H-BLUE: {part: FAN-7012H-BLUE}
+attrs:
+  airflow: back-to-front
+  role: fan
+provenance:
+  size: >-
+    estimated, as arista/7280dr3a-fan: figure D-2 of the 7050X4 Quick Start Guide (DOC-06569-02), a
+    565 px raster at 1.19 px/mm (the 525 px between the chassis edges over the 440 mm body), draws the
+    same four-fan 2RU rear as the 7280R3A guide's figure D-3; its four frames measure 97 px wide on a
+    102 px pitch, 81 mm on an 85.5 mm pitch, and 96 to 99 px tall. No document dimensions the module.
+  part-number: >-
+    datasheet - the 7050X4 Series Data Sheet (03-0057-27, Aug 27th, 2025), optional components and
+    spares: "FAN-7012H-BLUE  Spare fan module for Arista 7000 Series 2RU High Speed Fan (rear-to-front
+    airflow)", and the model comparison's "Fan Tray" row for the 7050CX4M-48D8 ("FAN-7012H-RED /
+    FAN-7012H-BLUE"). The 7280R3A data sheet lists the same spare.
+  airflow: >-
+    datasheet - the part number's BLUE and "rear-to-front airflow". The guide's appendix D says handle
+    or bezel colour indicates airflow direction; the library's blue marks an air-inlet module.
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a FAN-7012H-BLUE is held; figure D-2 draws the
+    red module and the blue one is the same housing with the frame and tab changed. The lamp and
+    positions are arista/7280dr3a-fan's (guide figure A-3, table 11).
+  handle-finish: >-
+    The blue of the frame is a field, `handle-finish`, default `#3d7bd6`.
+  power: >-
+    NOT STATED. Neither the guide nor the datasheet gives a power draw for the FAN-7012H, so none is
+    written and the lint warning for a fan without one stands.
+states: [absent]
+elements:
+  grille: {at: [3.6, 3.8], size: [72.4, 73.7], class: vent}
+  handle: {at: [33.5, 0.4], size: [13.0, 77.1], class: handle}
+  status: {at: [70.9, 76.1], size: [1.8, 1.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#3d7bd6'}
+relief:
+  wall: '#3a3a36'
+  features:
+    - node: grille
+      vent: 16
+      confidence: estimated
+      source: >-
+        The grille is open and the rotor is not drawn, but no document gives a depth. 16 matches what
+        this library gives other 2RU fan modules.
+    - node: handle
+      bar: 3.0
+      confidence: estimated
+      source: >-
+        The release rail stands off the grille along its whole length; how far is not dimensioned
+        anywhere, so 3.0 is the rail's own drawn width.
+skins: [default]
+body:
+  depth: 190
+  color: '#2e2b26'
+  footprint: {at: [0, 0], size: [79.6, 81.5]}

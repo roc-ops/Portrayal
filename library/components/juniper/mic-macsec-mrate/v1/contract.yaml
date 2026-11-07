@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-macsec-mrate
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -10,7 +10,16 @@ description: >-
 attrs:
   model: MIC-MACSEC-MRATE
   power-draw-max-w: 110
+  qsfp: 12
 provenance:
+  qsfp-rate: >-
+    module reference, 'Multi-Rate Ethernet MIC' (p369), MIC-MACSEC-MRATE and its Table 41: 'Twelve Gigabit
+    Ethernet QSFP+ ports, each of which can be configured as a 40Gigabit Ethernet port or as four
+    10-Gigabit Ethernet ports'. THE 100G RATE DEPENDS ON THE CARRIER, so every port is counted at the 40G
+    it always runs: 'Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports'
+    (Table 41: ports 4, 5, 10 and 11 'no'), and 'When used in MP8CE: Four ports out of the total twelve
+    ports support 100-Gigabit Ethernet speed' (four ports the book does not name). The placements are
+    left as they were. This is not the JNP-MIC1 count: that MIC's Table 40 gives all twelve ports 100G.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
     drawn on its side a pair sits left and right, the left cage 270 beside the right 90,

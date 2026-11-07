@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: ex4100-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module, airflow in (AFI), EX4100-FAN-AFI, for the Juniper EX4100. It is the back-to-front twin of
+  EX4100-FAN-AFO. Two sit side by side on the rear panel, in slots 0 and 1, and the EX4100-48T-AFI ships
+  with a pair. Each is hot-removable and hot-insertable. The face has a blue handle across a honeycomb
+  grille with a grey AIR IN (AFI) chip and a captive screw at the top left. Air enters the chassis at
+  this face, back to front. Do not mix it with a power supply or a fan module of the other direction.
+attrs:
+  cli-name: Fan Module, Airflow In (AFI)
+  airflow: back-to-front
+  handle-colour: blue
+  weight-kg: 0.073
+part-numbers:
+  EX4100-FAN-AFI: {part: EX4100-FAN-AFI}
+provenance:
+  size: >-
+    datasheet and measured - the same module envelope as EX4100-FAN-AFO. EX4100 Switch Hardware Guide
+    (Juniper Networks, PDF created 2026-10-01), Table 20 note: fan module width 1.9 in. (4.8 cm), height
+    1.65 in. (4.18 cm), depth 4.41 in. (11.2 cm), one set for both fan modules. The face is drawn 41.9 by
+    41.8 mm; see juniper/ex4100-fan-afo@1 for why the width is 41.9 and not 48.0. Depth is carried as
+    112.0 mm. No render of the AFI module is held and Figure 34 draws it the same size as Figure 33.
+  weight: >-
+    datasheet - Table 20 gives the AFI fan weight only in the EX4100-48T row, as 73 g.
+  part-number: >-
+    datasheet - Table 26, Fan Modules: model EX4100-FAN-AFI, back-to-front airflow, label AIR IN and blue
+    handle.
+  airflow: >-
+    datasheet - Table 26 and Table 27: back to front, label AIR IN, blue handle. Figure 34 draws the
+    label AIR IN (AFI). The guide lists the AFI module with the EX4100-48T-AFI only.
+  face: >-
+    drawing - Figure 34 (g022738), the line drawing of the rear face, which is the AFO face of Figure 33
+    with the label AIR IN. The grille and handle are drawn as in juniper/ex4100-fan-afo@1. No photograph
+    of an AFI module is held.
+  handle-colour: >-
+    datasheet - Table 26: the back-to-front module is indicated by the label AIR IN and a blue handle.
+    The shade, #3d7bd6 on #234b8c, is the library's own blue handle finish (edgecore/as5912-54x), since
+    the guide's figures are line art and state no shade.
+  power: >-
+    NOT STATED. The guide gives no per-fan power figure, so L27 stands.
+states: [absent]
+elements:
+  screw:
+    at: [2.0, 2.0]
+    size: [4.8, 4.8]
+    class: screw
+  handle:
+    at: [1.0, 14.4]
+    size: [39.9, 12.4]
+    class: latch
+size:
+  w: 41.9
+  h: 41.8
+  d: 112.0
+size-confidence: {w: photo-measured, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#3d7bd6'
+    confidence: estimated
+    source: figure - the handle stands proud of the grilles; the projection is not stated or measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: figure - black captive screw, projection estimated
+skins: [default]

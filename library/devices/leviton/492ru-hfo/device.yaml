@@ -1,0 +1,403 @@
+format: 1
+kind: device
+name: 492ru-hfo
+version: 1.0.0
+maturity: modelled
+manufacturer: Leviton
+model: 492RU-HFO
+description: >-
+  2RU front-only horizontal slotted duct, Leviton VERSI-DUCT 492RU-HFO: a PVC mounting plate on
+  the rack rails with a 3 in by 3 in channel standing out of it, a wall of ten fingers along
+  its top and another along its bottom, nine slots in each a patch cord is laid in
+  through, and a snap-on cover across the finger tips that ships fitted and is pushed
+  down and rotated off.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The ears are the
+      flat ends of the mounting plate at the back of the duct: the top view of the 492RU-HFO
+      dimensional drawing dimensions 3.325 in [84.46mm] from the front of the cover to the back
+      of the plate, which is the whole depth, so `at` is 84.46 and nothing stands behind the
+      rail. This states a placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the duct stands wholly in front of the rail, 84.46 mm, and the
+      rear face of its rack units stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DIMENSIONAL DRAWING. Leviton publishes the 492RU-HFO drawing as
+      DXF and DWG on its product page; the DXF is vector CAD in inches, five views (front,
+      top, bottom, side and isometric), with the dimensions 3.475 in, 3.325 in and 19.0054
+      in. The assembly in the drawing includes the cover ("w/ cover"). Every figure here is
+      read from its line work at 25.4 mm to the inch. The specification sheet (Versi-Duct
+      Horizontal Cable Management System, revised June 2022) draws the 2RU duct's side view
+      and top view with the cover on, and gives part numbers and sizes.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 444.5 x 88.3 x 84.46. The plate is 19.0054 in [482.74mm] wide over its ears, 3.475
+      in [88.27mm] high, and its top and bottom edges fold back from 19.15 to 463.65 on the top
+      view, so the flat ends outside the folds are the ears, which this library does not
+      draw, and the body is the 444.5 (17.50 in on the specification sheet's top view).
+  thickness:
+    confidence: drawing
+    note: >-
+      drawing - the walls of the fingers are 2.54 mm [0.1 in] on the side view and the plate
+      3.04, from its two faces 81.41 and 84.45 mm from the front on the 492RU-HFR's.
+  weight:
+    confidence: estimated
+    note: >-
+      no document states a weight: the specification sheet, the product page and the
+      instruction sheet are silent. `weight-kg` is left out and a gap says so.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front channel with its cover fitted: the side view's outline is 3.38 in
+      [85.9mm] over the cover and the finger tips, 3.0 in [76.2mm] over the walls (6.03 to
+      82.23). The two walls stand 6.04 mm in from the top and bottom of the plate; the
+      channel's clear size is 2.75 in x 3.00 in [69.85 x 76.2mm], 8.25 sq in, in Leviton's
+      application note. The cover is the 17.5 in [444.5mm] one the specification sheet
+      names.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate, plain. The isometric shows it as one flat sheet with
+      the ear slots at each end, which are not drawn.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top of the drawing: the plate, then the finger wall with
+      nine slots 22.45 wide on a 49.375 pitch, each running from the finger tips 24.15 mm
+      from the front back to the plate, and the cover over the front 22.8 mm. The bottom is
+      the same from underneath.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, the drawing's side view: the plate, the two finger walls 6.04 mm
+      in from its top and bottom edges, and the cover's plate and lips over their tips. The
+      right is the same, turned round.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - the duct is the channel between the two finger walls, run across the rack; its
+      finger pitch (49.375) and slot gap (22.45) are the top view figures above, and its
+      size the 69.85 mm of clear height Leviton's application note gives.
+  cover:
+    confidence: datasheet
+    note: >-
+      datasheet - the cover ships fitted: the specification sheet lists the duct "with black
+      covers" and calls it a "snap-on duct cover"; the instruction sheet (Versi-Duct Slotted
+      Duct System, horizontal slotted duct, step 2) says to "fit the cover over the top of
+      duct fingers. Push down and rotate the cover to the other side until it snaps into
+      place." It is drawn fitted in `base` and absent in `cover-off`. A hinge for it
+      (49265-HNG, "Duct Cover Hinge") is a separate accessory.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - Leviton's application note "Maximum Cable Fill Ratios in Cable Managers"
+      (NS-AN-23-006-05-30-23, 5/30/2023), page 15, "VERSI-DUCT Horizontal Cable Managers Front
+      Channel Capacities": "2RU Horizontal Cable Manager 8.25 sq.in. (492RU-HFR, -HFO)" and, for
+      the 6AS10 patch cord (0.240 in), 91 cords at 50 percent fill, 54 at 30 percent, 45 at 25
+      percent. It states 30 percent as the "recommended practical maximum" for patch cords in
+      front managers. It names the cord by Leviton part number and not by category, so no
+      `cable-capacity-media` is stated.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material (PVC rated UL 94V-0), the standards (ANSI/TIA 568, cULus
+      listed), the covers and the accessories are the specification sheet's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - the specification sheet sells the ducts "with black covers" and names no
+      colour for the duct; every drawing is line work, so the whole is this library's render
+      of black PVC. The product page states no colour.
+attrs:
+  physical:
+    material: PVC rated UL 94V-0
+    color: Black covers
+  performance:
+    cable-capacity: 54
+    cable-capacity-basis: >-
+      6AS10 patch cords (0.240 in OD) at the 30 percent recommended practical maximum fill
+      of the front channel's 8.25 sq in usable area (2.75 x 3.00 in); 91 at 50 percent and 45
+      at 25 percent - Leviton application note NS-AN-23-006-05-30-23, page 15
+  features:
+    standards: ANSI/TIA 568, cULus Listed
+chassis:
+  width: 444.5
+  height: 88.3
+  depth: 84.46
+  ru: 2
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 84.46, default: true}
+  shell: sheet
+  thickness: 2.54
+  color: '#1b1d20'
+gaps:
+  - what: weight
+    scope: [front, rear, top, bottom, left, right]
+    reason: vendor-silent
+    note: >-
+      the specification sheet, the product page and the instruction sheet state no weight.
+    wanted: a shipping weight on the product page or the specification sheet
+  - what: cover-hinge
+    scope: [front, top, left, right]
+    reason: vendor-silent
+    note: >-
+      the cover is snap-on and ships without a hinge; the Duct Cover Hinge (49265-HNG) is a
+      separate accessory, at least two to a cover, and no view draws it. The format has no
+      hinge, so the cover is either on or off.
+    wanted: a drawing of the hinge fitted
+  - what: designer-cover-section
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the designer cover's section on the specification sheet's page 2 is a C-shaped profile whose
+      plate is dished and whose lips end in barbs, with its depth dimensioned and no thickness. The
+      cover is drawn with a flat plate and lips 2.0 mm thick, an estimate, and no barbs.
+    wanted: a dimensioned section through a designer cover and a finger tip
+  - what: bend-radius-router
+    scope: [front, top]
+    reason: needs-drawing
+    note: >-
+      the specification sheet's page 2 draws a "Bend Radius Compliant Router (included with
+      Horizontal Slotted Duct)", 3.74 in wide and 1.75 in and 1.45 in on its views, which
+      snaps onto the fingers where cords enter and leave. The 492RU-HFO dimensional
+      drawing does not include it, so it is not drawn.
+    wanted: a drawing of the router on the fingers
+  - what: cover-section
+    scope: [front, top, left, right]
+    reason: needs-drawing
+    note: >-
+      the cover is drawn from the outline of the side view and the top view's front 22.8 mm;
+      the thickness of its plate and lips is not dimensioned, and the lips' is estimated.
+    wanted: a section through the cover and a finger tip
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the PVC mounting plate between the rack ears
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the two walls of fingers along the top and bottom of the front channel
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the snap-on cover across the finger tips, shipped fitted
+views:
+  front:
+    size: {w: 444.5, h: 88.3}
+    components:
+      placements:
+        - {ref: leviton/versi-duct-front-base-2ru@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: leviton/versi-duct-front-fingers@1, id: fingers-upper, at: [0.0, 6.04], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: leviton/versi-duct-front-fingers@1, id: fingers-lower, at: [0.0, 79.7], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: leviton/versi-duct-front-cover-2ru@1, id: cover, at: [0.0, 1.2], group: cover, rel-pos: 1, in: base, lift: 58.6, only-in: [base]}
+        - {ref: leviton/49265-dc2@1, id: cover-designer, at: [0.0, 1.1], group: cover, rel-pos: 2, in: base, lift: 56.25, only-in: [designer-cover]}
+    guides:
+      - {id: duct, kind: duct, at: [0, 9.225], size: [444.5, 69.85], run: x, finger-pitch: 49.375, finger-gap: 22.45, confidence: drawing, source: 'Leviton 492RU-HFO drawing, top view slots; application note page 7, front channel 2.75 in'}
+  rear:
+    size: {w: 444.5, h: 88.3}
+    panel:
+      decor:
+        - {id: plate-back, at: [0, 0], size: [444.5, 88.3], rx: 0, fill: '#232527', kind: base}
+  top:
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0, 61.66], size: [444.5, 22.8], rx: 0, fill: '#303336', kind: cover}
+  bottom:
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0, 61.66], size: [444.5, 22.8], rx: 0, fill: '#303336', kind: cover}
+  left:
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [3.06, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [3.06, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [80.81, 1.2], size: [3.65, 85.9], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-upper, at: [61.66, 1.2], size: [22.8, 1.5], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-lower, at: [61.66, 85.6], size: [22.8, 1.5], rx: 0, fill: '#303336', kind: cover}
+  right:
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [81.4, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [24.15, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [24.15, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [0, 1.2], size: [3.65, 85.9], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-upper, at: [0, 1.2], size: [22.8, 1.5], rx: 0, fill: '#303336', kind: cover}
+        - {id: cover-lip-lower, at: [0, 85.6], size: [22.8, 1.5], rx: 0, fill: '#303336', kind: cover}
+  top-open:
+    face: top
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+  bottom-open:
+    face: bottom
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+  left-open:
+    face: left
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [3.06, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [3.06, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+  right-open:
+    face: right
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [81.4, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [24.15, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [24.15, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+  top-designer:
+    face: top
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0.0, 59.31], size: [444.5, 25.15], rx: 0, fill: '#8d9095', kind: cover}
+  bottom-designer:
+    face: bottom
+    size: {w: 444.5, h: 84.46}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.5, 3.06], rx: 0, fill: '#232527', kind: base}
+        - {id: wall, at: [0, 3.06], size: [444.5, 57.25], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: slot-1, at: [13.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-2, at: [62.875, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-3, at: [112.25, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-4, at: [161.625, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-5, at: [211.0, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-6, at: [260.375, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-7, at: [309.75, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-8, at: [359.125, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-9, at: [408.5, 5.06], size: [22.45, 55.25], rx: 11.2, fill: '#0a0b0c', kind: finger-gap}
+        - {id: cover, at: [0.0, 59.31], size: [444.5, 25.15], rx: 0, fill: '#8d9095', kind: cover}
+  left-designer:
+    face: left
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [3.06, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [3.06, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [82.46, 1.1], size: [2.0, 86.1], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: cover-lip-upper, at: [59.31, 1.1], size: [25.15, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: cover-lip-lower, at: [59.31, 85.2], size: [25.15, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+  right-designer:
+    face: right
+    size: {w: 84.46, h: 88.3}
+    panel:
+      decor:
+        - {id: plate, at: [81.4, 0], size: [3.06, 88.3], rx: 0, fill: '#232527', kind: base}
+        - {id: wall-upper, at: [24.15, 6.04], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [24.15, 79.7], size: [57.25, 2.54], rx: 0, fill: '#26282a', kind: finger-wall}
+        - {id: cover-plate, at: [0.0, 1.1], size: [2.0, 86.1], rx: 0, fill: '#8d9095', kind: cover}
+        - {id: cover-lip-upper, at: [0.0, 1.1], size: [25.15, 2.0], rx: 0, fill: '#9a9da2', kind: cover}
+        - {id: cover-lip-lower, at: [0.0, 85.2], size: [25.15, 2.0], rx: 0, fill: '#7d8084', kind: cover}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The finger duct as Leviton ships 492RU-HFO, cover fitted.'
+  cover-off:
+    kind: example
+    description: >-
+      The same duct with its snap-on cover taken off, the finger walls and their slots open to
+      lay a cord in. The cover comes with the duct, so this is an illustration and not a
+      device type.
+    views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+  designer-cover:
+    kind: example
+    description: >-
+      The same duct with the separately sold gray 49265-DC2 designer cover snapped on in place of
+      the black cover. The cover is a second purchase, so this is an illustration and not a
+      device type.
+    views: {top: top-designer, bottom: bottom-designer, left: left-designer, right: right-designer}
+datasheet:
+  title: 'Product Specifications 491RU-HFx, 492RU-HFx, 49265-xxx - Versi-Duct Horizontal Cable Management System'
+  url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/product_specification/Leviton_491RU-HFx_492RU-HFx_49265-xxx_Versi-Duct_Horizontal_Cable_Management_System.pdf
+  sha256: ef0d83f7442ec21bbab974b63d9d1e10f2bbd271f93c051244fbe7ad0a1a5d76
+references:
+  - title: '492RU-HFO dimensional drawing (DXF)'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/dimensional_drawing/492RU-HFO.dxf
+    sha256: 16956008ce5043d523adc07bdb740583705b9adb0920f3c70bcd4d11434309b7
+  - title: 'Installation Instructions 491RU-HF*, 492RU-HF*, 4980L-VF*, 4940L-VF* - Versi-Duct Slotted Duct System'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/instruction_sheet/Leviton_IST_49xRU-HFx_49x0L-VFx_VersiDuct_System.pdf
+    sha256: 86460b7250c992cc279476b0a5b73052147967bfcec3282bc1b22ae114571644
+  - title: 'Application Note - Maximum Cable Fill Ratios in Cable Managers (NS-AN-23-006-05-30-23)'
+    url: https://leviton.com/content/dam/leviton/network-solutions/product_documents/application_note/Leviton_AppNote_MaxCableFillRatiosinCableManagers.pdf
+    sha256: 291159dbd2621e6a61a0ee449aeb8d9e4f18d3889e9f5439176c2f5bfb5132b7

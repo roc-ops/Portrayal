@@ -1,0 +1,243 @@
+format: 1
+kind: device
+name: cmhookmw
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: CMHOOKMW
+description: >-
+  1.5U multi-directional vertical D-ring hook, StarTech.com CMHOOKMW: a right-angled steel bracket
+  with two sets of mounting holes that bolts to a rack rail, carrying a flat loop 64 mm across
+  that stands 102 mm out of it. A bundle is slipped in through a 14.5 mm opening in one side
+  of the loop, and a cable runs up and down the rail through it. It takes no rack unit of its
+  own.
+profile: passive
+provenance:
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-face`. The datasheet says the hook "mounts vertically to 2-post and 4-post
+      racks and supports both 10-inch and 19-inch rack systems" and that its "right-angled
+      mounting bracket with 2 sets of mounting holes" lets the ring face inward or outward. The
+      plate drawn here is the 55 mm leg, flat on the face of one rail with its two slots 44.5
+      apart, the spacing of two rack holes a unit apart. It is
+      narrower than the opening, so a lab places it with a `side`
+      (docs/vertical-cable-managers-design.md section 3.4).
+  ru:
+    confidence: datasheet
+    note: >-
+      datasheet - "U Height 1.5U". `chassis.ru` is a number and the rack kit counts half units
+      (`unitsOf` rounds a stated `ru` up to the next half), so the part states `ru: 1.5` as its
+      maker does and claims a unit and a half on its rail. The plate is 70.1 mm high, 1.58 U, and
+      its two slots are 44.5 apart, one unit's hole pitch. `chassis.height` is the 70.1 the
+      drawing gives. The format is not changed.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING. StarTech.com publishes CMHOOKMW_Diagram.pdf (third
+      angle projection, millimetres, 6/15/2022): a plan, a front view, a side view and an
+      isometric, with the dimensions 15.0, 102.0, 111.0, 64.0, 14.5, 85.5, 70.1, 44.5, 25.5, 55.0,
+      32.7, 11.2, 7.0, "45 deg" and "2-phi6.0x10.0". The datasheet (cmhookmw_datasheet.pdf) lists
+      "Product Length 4.0 in [10.2 cm]", "Product Width 2.8 in [70.1 mm]" and "Product Height 4.4
+      in [11.1 cm]": the 102, the plate's 70.1 and the 111.0 across the bracket and the loop. The
+      drawing's views are read as the bracket seen along the rail (the 55 mm leg with the ring end
+      on), across it, and from above.
+  chassis:
+    confidence: estimated
+    note: >-
+      estimated - 111.0 x 70.1 x 117.0. The 111.0 is the drawing's overall extent across the rail
+      (the 55.0 plate and the 64.0 loop, 8.5 mm of them overlapping), the 70.1 the plate's
+      height, and the 117.0 the loop's 102.0 out of a neck 15.0 from the plate, which is how the
+      plan reads: 15.0 and 102.0 dimensioned side by side. The datasheet's "Length 4.0 in" is the
+      loop's 102.0 alone, so the depth is 15 mm more than the datasheet says; whether the 15.0 is a
+      joggle between the plate and the loop is read, not stated (the device's `joggle` gap).
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no CMHOOKMW document states a gauge. 2.3 mm, the maker's CMHOOK1U plate, is taken.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Weight of Product 6.3 oz [178.0 g]" (cmhookmw_datasheet.pdf).
+  hand:
+    confidence: drawing
+    note: >-
+      drawing - the front view draws the loop on the right of the plate, 8.5 mm of it overlapping
+      the plate's tab. The drawing does not say which rail it is drawn for. It is drawn as that
+      view draws it, the plate on the left, which is how a part stands on the left rail (as
+      `fs/cmv-5u3w` is drawn); on the right rail the kit turns it end over end (kit/rack/solids.js
+      and route.js mirror a narrow rack-face part there).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the side view: the plate with its 45 degree cuts and two slots, and the loop's far
+      end, 25.5 high and 64 wide, on its tab.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate, the face that lies on the rail, mirrored, with its two slots
+      and the loop's closed end showing past it. The 45 degree cuts are drawn as two steps in 2D.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - an elevation, rear at the top: the plate 2.3 thick, the neck to the loop, and the
+      loop's outline, a wall 3.2 mm thick (estimated), its side wall beside the plate open for 14.5
+      mm. The bottom is the same.
+  left:
+    confidence: drawing
+    note: >-
+      drawing - the front view of the drawing: the plate, the neck and the loop's 25.5 high band
+      standing out of it. The right is the same, turned round.
+  rings:
+    confidence: estimated
+    note: >-
+      estimated - the loop is the ring: a component with a `ring` guide whose opening is the 57.6 by
+      95.6 left inside a 3.2 wall (see its contract), cables passing up and down the rail
+      through it.
+  capacity:
+    confidence: estimated
+    note: >-
+      no document states a cable capacity: the datasheet and the drawing are silent, so none is
+      stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material (steel), colour, the standard (EIA RS310-D) and the racks it fits are
+      the datasheet's. Its box is stated twice: "Rev 01 of this product includes ... 2 10/32
+      screws, 2 12/24 screws, 2 24/24 cage nuts" under Special Notes and "2 M5 screws, 2 M5 cage
+      nuts" under Packaging; both are in `mounting-hardware`.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The drawing is line work, so the shades are this library's
+      render of black steel, the ring a little lighter than the plate.
+attrs:
+  physical:
+    weight-kg: 0.178
+    material: Steel
+    color: Black
+    mounting-hardware: 2 M5 screws and 2 M5 cage nuts (Packaging); Rev 01 lists 2 10/32 and 2 12/24 screws and 2 cage nuts (Special Notes)
+  features:
+    standards: EIA RS310-D
+    racks: 2-post and 4-post racks, 10 in and 19 in (datasheet)
+chassis:
+  width: 111.0
+  height: 70.1
+  depth: 117.0
+  ru: 1.5
+  mount: rack-face
+  shell: sheet
+  thickness: 2.3
+  weight-kg: 0.178
+  color: '#232527'
+gaps:
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the datasheet and the drawing state no cable capacity, no fill and no cable count.
+    wanted: a cable capacity table, or a stated fill, for the hook
+  - what: hook-facing
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the datasheet says the bracket's two sets of mounting holes let the ring face inward or
+      outward. The plate drawn is one leg, with the loop standing out of the rail; the other
+      leg (15.0 wide, with its own two slots 7.0 from its edge) and the loop's position when it
+      is bolted through, facing along the rail, are not drawn, and the format has no key that
+      turns a part on its rail into a second facing.
+    wanted: a drawing of the hook bolted through its other leg, and a placement key that selects the facing
+  - what: hook-opening
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the 14.5 mm opening in the side wall of the loop beside the plate is the "wide front
+      opening for quick cable insertion", drawn in the relief; the format's ring `slit` is a range of
+      height along a leg and cannot state a gap along a side wall, so the ring is declared with its
+      clear opening and no slit.
+    wanted: a format key for a gap in a ring's side wall, or a route kit that reads the opening
+  - what: joggle
+    scope: [top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the plan dimensions 15.0 between the plate and the loop and the isometric draws a bend
+      there; no view says how the bracket is bent, so a straight neck 8.5 mm across and the loop's
+      25.5 high joins them (estimated).
+    wanted: a dimensioned view of the bracket from above, showing the bend
+groups:
+  body:
+    term: Bracket
+    role: furniture
+    index-origin: 1
+    description: the steel plate that bolts to the rail
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: the flat steel loop, a cable running up and down the rail through it
+views:
+  front:
+    size: {w: 111.0, h: 70.1}
+    components:
+      placements:
+        - {ref: startech/cmhookmw-plate@1, id: plate, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: startech/cmhookmw-ring@1, id: guide-1, at: [46.5, 22.3], group: guides, rel-pos: 1, in: plate}
+  rear:
+    size: {w: 111.0, h: 70.1}
+    panel:
+      decor:
+        - {id: ring-back, at: [0.5, 22.3], size: [64.0, 25.5], rx: 1.2, fill: '#40454c', kind: ring}
+        - {id: plate-back, at: [78.3, 0], size: [32.7, 70.1], rx: 0, fill: '#232527', kind: base}
+        - {id: plate-back-step, at: [67.15, 11.15], size: [11.15, 47.8], rx: 0, fill: '#232527', kind: base}
+        - {id: plate-back-tab, at: [56.0, 22.3], size: [11.15, 25.5], rx: 0, fill: '#232527', kind: base}
+        - {id: slot-1, at: [96.8, 10.8], size: [6.0, 10.0], rx: 3.0, fill: '#0a0b0c', kind: hole}
+        - {id: slot-2, at: [96.8, 55.3], size: [6.0, 10.0], rx: 3.0, fill: '#0a0b0c', kind: hole}
+  top:
+    size: {w: 111.0, h: 117.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [55.0, 2.3], rx: 0, fill: '#232527', kind: base}
+        - {id: neck, at: [46.5, 2.3], size: [8.5, 12.7], rx: 0, fill: '#232527', kind: base}
+        - {id: guide-1-wall-left, at: [46.5, 29.5], size: [3.2, 87.5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-wall-right, at: [107.3, 15.0], size: [3.2, 102.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-near, at: [49.7, 15.0], size: [57.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-corner, at: [46.5, 15.0], size: [3.2, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far, at: [49.7, 113.8], size: [57.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+  bottom:
+    size: {w: 111.0, h: 117.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [55.0, 2.3], rx: 0, fill: '#232527', kind: base}
+        - {id: neck, at: [46.5, 2.3], size: [8.5, 12.7], rx: 0, fill: '#232527', kind: base}
+        - {id: guide-1-wall-left, at: [46.5, 29.5], size: [3.2, 87.5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-wall-right, at: [107.3, 15.0], size: [3.2, 102.0], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-near, at: [49.7, 15.0], size: [57.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-corner, at: [46.5, 15.0], size: [3.2, 3.2], rx: 0, fill: '#40454c', kind: ring}
+        - {id: guide-1-far, at: [49.7, 113.8], size: [57.6, 3.2], rx: 0, fill: '#40454c', kind: ring}
+  left:
+    size: {w: 117.0, h: 70.1}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [2.3, 70.1], rx: 0, fill: '#232527', kind: base}
+        - {id: neck, at: [2.3, 22.3], size: [12.7, 25.5], rx: 0, fill: '#232527', kind: base}
+        - {id: ring-band, at: [15.0, 22.3], size: [102.0, 25.5], rx: 0, fill: '#40454c', kind: ring}
+  right:
+    size: {w: 117.0, h: 70.1}
+    panel:
+      decor:
+        - {id: plate, at: [114.7, 0], size: [2.3, 70.1], rx: 0, fill: '#232527', kind: base}
+        - {id: neck, at: [102.0, 22.3], size: [12.7, 25.5], rx: 0, fill: '#232527', kind: base}
+        - {id: ring-band, at: [0, 22.3], size: [102.0, 25.5], rx: 0, fill: '#40454c', kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The hook as StarTech.com ships CMHOOKMW.'
+datasheet:
+  title: 'CMHOOKMW data sheet: 1.5U Multi-Directional Vertical 2.4 x 3.9in (6 x 10cm) Server Rack Cable Management D-Ring Hook'
+  url: https://media.startech.com/cms/pdfs/cmhookmw_datasheet.pdf
+  sha256: 3c2c415653c95ee1326d1eb4b352967cf41301dee250b9230c4df91607b54396
+references:
+  - title: 'CMHOOKMW_Diagram.pdf: product drawing, third angle projection, 6/15/2022'
+    url: https://media.startech.com/downloads/image/CMHOOKMW_Diagram.pdf
+    sha256: 8059d1b5543e019269949edb97a3ef3c485241066724d050543d07c19d374970
+  - title: 'CMHOOKMW product page'
+    url: https://www.startech.com/en-us/server-management/cmhookmw

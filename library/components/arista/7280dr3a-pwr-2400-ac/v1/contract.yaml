@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: 7280dr3a-pwr-2400-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 2400 W AC power supply of the Arista 7280DR3A-36, PWR-2411-AC-RED (forward airflow, red
+  handle): a 1RU, 73.5 mm wide module with a round fan guard and a red diagonal handle across
+  it at the left, an IEC C20 inlet at the right, a latch beside the inlet, and a status lamp
+  at its top right. Two seat at the right of the rear, one above the other; 1+1 redundant and
+  hot-swappable.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-2411-AC-RED: {part: PWR-2411-AC-RED}
+attrs:
+  power-output-w: 2400
+  input: ac
+  inlet: c20
+  airflow: front-to-back
+  input-note: '200 - 240 VAC, 14 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height. The 7280R3A data sheet (04-0040-26)
+    describes the part as "PWR-2411-AC-RED  Arista PSU, 1RU, AC/DC, 2400W, FORWARD, 73.5MM":
+    73.5 is its width. The figure D-3 of the quick start guide (DOC-07042-01), a 565 px
+    raster at 1.193 px/mm, draws the module 90 px wide (75 mm, 2.6 percent over the 73.5) and
+    two modules 49 to 50 px (41 to 42 mm) tall in a 105 px chassis, which is the 1RU module's
+    40 mm to within a pixel; 40.0 is taken from the 1RU in the description.
+  part-number: >-
+    datasheet - ordering information for the 7280DR3A-36: "PWR-2411-AC-RED  Arista PSU, 1RU,
+    AC/DC, 2400W, FORWARD, 73.5MM". The quick start guide's table 3 lists the supply as
+    PWR-2411-AC and table 4 gives it as the supported supply of the DR3A-36 (and of its K and M
+    forms).
+  power-output: >-
+    datasheet - the "2400W" of the ordering description above. An output, because a supply
+    provides power. Table 4 of the guide gives the switch's own draw (643 W typical, 1283 W
+    maximum) and is the switch's figure, not this one.
+  input: >-
+    datasheet - quick start guide table 3: PWR-2411-AC "200 - 240 VAC 14 A 50/60 Hz".
+    The guide's section 4.4 lists PWR-2411-AC among the AC supplies it supports.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; the guide's section 2.1 gives red
+    as the colour of an air-exit module. The data sheet lists no blue (reverse) PWR-2411, so
+    only this build is modelled.
+  inlet: >-
+    estimated - a C20 appliance inlet, because the 7280DR3A-36 ships "2x C19-C20, 2m" cords
+    (data sheet, KIT-7202 and its note, and guide appendix B.2, "IEC-320/C19-C20, 16 A, 250 V"):
+    the C20 end is the module's. The figure shows a three-pole inlet with the earth pole at the
+    side, which is a C20 turned a quarter; the turn is read off the figure, which is 565 px
+    wide, so it is a reading.
+  face: >-
+    estimated - figure D-3 read at 8.6 px/mm in a seven-times enlargement: a round fan guard
+    in the left 41.5 mm with four corner screws and a red handle across it from lower left to
+    upper right, two black holes and a green lamp along the top of the right part, the inlet
+    well below them, and a grey latch at its side. The lamp is the module's status lamp (guide
+    figure A-5 and table 12: green normal; yellow for a fault, which the guide gives for the
+    PWR-500AC, PWR-745AC and PWR-747AC and not for this one). The two black holes are not named
+    by any document and are drawn as holes.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`, read off the figure.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [67.0, 10.4], size: [5.6, 12.8], class: latch}
+  status: {at: [67.2, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [38.4, 10.6], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

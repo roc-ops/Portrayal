@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: ex9200-re2
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9200-RE2 Routing Engine module (CLI name RE-S-EX9200-2X00x6). It has a six-core 2 GHz processor and 64 GB
+  of memory. It seats in the Routing Engine bay of an EX9200-SF2 or EX9200-SF3 Switch Fabric module. The face has the
+  AUX, CONSOLE and MGMT jacks, two USB ports and the RESET pinhole. It has the ONLINE, OK/FAIL, MASTER, DISK1 and DISK2
+  lamps and the ONLINE/OFFLINE button. The SSD cage holds two slots.
+attrs:
+  model: EX9200-RE2
+  power-draw-max-w: 90
+  power-draw-typical-w: 90
+  cpu: 6 cores, 2 GHz (RE-S-EX9200-2X00x6)
+  memory: 64 GB
+  storage: 50-GB SSD x 2
+provenance:
+  sources: >-
+    EX9204 Switch Hardware Guide (published 2025-08-12), "Routing Engine Module in an EX9200 Switch", Figure 23
+    (the face, drawn flat, with ten callouts), Tables 25 and 27 (the specification and the lamps); the same figure
+    and tables are in the EX9208 and EX9214 guides (published 2025-07-28).
+  size: >-
+    estimated - the plate is 271.9 x 27.5 mm, the Routing Engine bay the MX SCB photographs measure (the juniper/scb-mx
+    re-bay and juniper/re-s-1300 width notes, 3.37 and 3.23 px/mm photographs). The guide's Table 7 gives the module
+    1.25 x 11 x 7.75 in (31.75 x 279.4 x 196.9 mm), whose 11 in is the board and not the plate. The EX9208 studio
+    photograph reads the seated Routing Engine 272.6 mm wide at 1.31 px/mm, within one pixel (0.8 mm) of the bay.
+  face: >-
+    drawing - Figure 23 is drawn flat. Its plate is 955 x 103 px, an aspect of 9.3 against 9.9 for 271.9 x 27.5, so
+    it is not orthographic (6 percent out in aspect); only fractions of the width are taken from it, and the
+    heights are fractions of the plate height. Fractions of the width (px from the plate's left edge, 955 across):
+    left captive screw 35, AUX 165, CONSOLE 236, MGMT 307, lamp column 382, ONLINE/OFFLINE button 409, DISK lamps
+    432, USB1 461, USB2 492, RESET 528, SSD cage 543 to 903, right screw 923. Every x here is estimated to about
+    2 mm; every y is estimated to about 1.5 mm.
+  leds: >-
+    guide Table 27: MASTER blue (primary), ONLINE green (steady is Junos booted, blinking is coming online or going
+    offline, unlit is powered off), OK/FAIL red (failed), DISK1 and DISK2 green (blinking is SSD activity).
+  power: >-
+    guide Table 24 (EX9200 Switch Component Power Requirements): Routing Engine module 90 W typical and 90 W
+    reserved, one row for both Routing Engine modules. The EX9200 datasheet (Aug 2022), Table 3, repeats 90 W for
+    the EX9200 Routing Engine-2.
+  states-note: >-
+    the lamps carry the guide's colours. The seated module draws its lamps unlit.
+states:
+- ok
+- fail
+- absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45 serial ports and the USB
+      service ports. One job (reaching and disciplining the box), several media
+parts:
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [39.1, 8.4], attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [59.3, 8.4], attrs: {media: rj45-serial, function: serial console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [79.5, 8.4], attrs: {media: rj45, function: out-of-band management}}
+- {ref: std/usb-a@1, id: usb1, group: mgmt, at: [125.3, 14.35], rotate: 90, attrs: {function: USB service port 1}}
+- {ref: std/usb-a@1, id: usb2, group: mgmt, at: [134.1, 14.35], rotate: 90, attrs: {function: USB service port 2}}
+elements:
+  latch-left:
+    at: [1.0, 8.0]
+    size: [5.0, 12.0]
+    class: latch
+  latch-right:
+    at: [265.9, 8.0]
+    size: [5.0, 12.0]
+    class: latch
+size:
+  w: 271.9
+  h: 27.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

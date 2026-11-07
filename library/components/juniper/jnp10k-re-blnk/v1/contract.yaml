@@ -1,0 +1,46 @@
+format: 1
+kind: module
+name: jnp10k-re-blnk
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Routing and control board slot cover for the MX10000 series. The MX10004,
+  MX10008 and MX10016 open one 389.0 x 38.1 mm aperture, so they share one cover.
+  A plain horizontal panel with a pull at each end.
+attrs:
+  model: JNP10K-RE-BLNK
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so this part draws no elements at all. `absent` stays, because an empty slot is a
+    real thing to draw.
+  size: >-
+    derived - fills the 389.0 x 38.1 mm RCB aperture, the aperture the JNP10K-RE1
+    occupies and is identical across the MX10004, MX10008 and MX10016 in this
+    library. A cover is the shape of the hole it covers, so this is read off the bay
+    rather than being a new claim about the hardware. No vendor drawing of the
+    cover is in the corpus.
+  part-number: >-
+    vendor - JNP10K-RE-BLNK, named as the "RCB cover" in the MX10004 hardware
+    guide's configuration table (MX10004-BASE and MX10004-3F-BASE, one RCB plus
+    one cover). The MX10008 guide's table ships "One Routing Control Board cover"
+    in its base configurations without a part number; the RCB is the same family
+    across the three chassis, so the one part number is carried to it as an
+    inference, not a vendor statement. The MX10016 guide's table lists no RCB
+    cover at all.
+  face: >-
+    estimated - no photograph or drawing of this cover is in the intake. The art
+    follows the MX10000 line-card cover already in the library: a plain light
+    panel with a pull at each end, at the aperture's own size. The OUTLINE is
+    sourced and the DETAIL is not, which is the honest split.
+states: [absent]
+size:
+  w: 389.0
+  h: 38.1
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  Both are the RCB bay these three chassis declare, as for the JNP10K-RE1 that fills it.
+  Nothing measured the cover.

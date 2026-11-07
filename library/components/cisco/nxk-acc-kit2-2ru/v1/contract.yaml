@@ -1,0 +1,49 @@
+format: 1
+kind: kit
+name: nxk-acc-kit2-2ru
+version: 1.0.0
+description: >-
+  The Cisco NXK-ACC-KIT2-2RU rack-mount kit. It holds two inner rails that screw to the
+  chassis side, two outer rails that latch to the front and rear posts, and flat-head screws.
+  The chassis slides onto the outer rails.
+motion: fixed
+parts:
+  - {ref: cisco/nxk-acc-kit2-2ru-inner-rail@1, id: inner-rail, count: 2}
+  - {ref: cisco/nxk-acc-kit2-2ru-outer-rail@1, id: outer-rail, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]
+    parts: [inner-rail, outer-rail]
+    depth: [609.6, 812.8]
+provenance:
+  contents: >-
+    "Installing the Switch using the NXK-ACC-KIT2-2RU Rack-Mount Kit" in the Cisco
+    N93180YC-FX3S NX-OS Mode Switch Hardware Installation Guide (First Published 2020-07-22,
+    Last Modified 2026-07-27) and in the Cisco N93108TC-FX3 guide (First Published 2023-12-14,
+    Last Modified 2026-07-16): "Rack-mount inner rails (2)", "Rack-mount outer rails (2)",
+    "Flat head screws (12)". Neither guide has a contents table or a picture of the kit.
+  depth: >-
+    THE GUIDES GIVE THIS KIT NO RANGE. 609.6 to 812.8 mm is the guides' general four-post
+    statement that the depth must be "24 to 32 inches (61.0 to 81.3 cm)" between the front and
+    rear mounting rails, for the bottom-support brackets or "other mounting hardware". It is
+    not this kit's own figure. It is carried because a configuration needs a range and nothing else is
+    stated. The guides' other figure, 23.0 to 30.0 inches outside face to outside face "to
+    allow for rear-bracket installation", is about the brackets of cisco/nxk-acc-kit-1ru@1.
+    Checked against these two guides only; no rail document is held.
+  motion: >-
+    fixed - the guides' procedure extends the outer rails to the rear posts, fastens them, and
+    slides the chassis in "until the front panel is flush with the front of the rack". Nothing
+    describes the chassis sliding out for service, and no travel is stated.
+gaps:
+  - what: depth
+    scope: [four-post]
+    reason: vendor-silent
+    wanted: >-
+      The rack depth range of the kit itself. The guides give none; the range is their
+      general four-post figure.
+  - what: part-dimensions
+    scope: [inner-rail, outer-rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of each rail. The guides dimension neither; the parts carry
+      placeholder envelopes.

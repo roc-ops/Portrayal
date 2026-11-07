@@ -1,0 +1,29 @@
+format: 1
+kind: module
+name: ex8208-lc-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Line card cover panel of the Juniper EX8208: a plain horizontal plate that fills one of the eight line card
+  slots (0 to 7) when no line card is fitted. The base and redundant orders ship eight of them and no line cards.
+states: [absent]
+size:
+  w: 395.3
+  h: 36.0
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  sources: >-
+    datasheet - EX8208 Switch Hardware Guide (PDF dated 2020-12-16), Table 5: every shipping order lists
+    "Eight line card cover panels", and the note under it says line cards are not part of the base or
+    redundant configurations and must be ordered separately. The guide names no part number for the cover and
+    draws none: Figure 3 shows the slots with line cards in them.
+  size: >-
+    estimated - a cover is the shape of the opening it closes, so it is the bay's own size: the slot opening
+    is 395.3 mm wide (from the fan tray's right edge to the body's right edge) and 36.0 mm of the 38.2 mm slot
+    pitch, both read off Figure 3 (flat, 3.479 px/mm, anchored on the 17.25 in body). No document dimensions
+    the cover.
+  face: >-
+    estimated - no photograph or drawing of the cover is held. It is drawn as a plain plate with a pull at
+    each end, as the other Juniper chassis covers are; the outline is sourced and the detail is not.

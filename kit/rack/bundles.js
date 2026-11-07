@@ -14,16 +14,12 @@ import {bundlesOf, bundleName, isWaypoint, uLabel, withoutMembers, endHostOf} fr
 import {ownRoute, resolveRoute, trunkRoute, trunkMeasures, pointOf, routePath, routeText, DIAMETERS} from './route.js';
 import {traysOf} from './solids.js';
 import {bendOf, bendIsDefault, defaultBecause} from './resting.js';
-import {elementsOf, elementText, waypointKey, followTrunk, andList} from './bundle-route.js';
+import {elementsOf, elementText, waypointKey, followTrunk, andList, bundleDiameter} from './bundle-route.js';
 import {zeroUOnLane, carriesLane} from './zero-u.js';
 import {cornersOf, STRAIGHT_DEG} from './route-path.js';
 
 export {bundlesOf, bundleName, settleBundles} from './model.js';
-export {deriveTrunk, followTrunk, elementsOf} from './bundle-route.js';
-
-// The share of a bundle's circle its cables fill: tightly combed, a little
-// tighter than a perfect hexagonal pack of equal round cables (7/9 to 37/49).
-export const BUNDLE_PACK = 0.8;
+export {deriveTrunk, followTrunk, elementsOf, BUNDLE_PACK, bundleDiameter} from './bundle-route.js';
 // The largest a bundle may be across anywhere: 2.5 in.
 export const MAX_BUNDLE_MM = 63.5;
 // A strap's width along the run, for keeping straps off rings: a drawing figure.
@@ -224,7 +220,6 @@ function diameter(cable, ctx) {
   const m = typeof cable?.media === 'string' && Object.hasOwn(DIAMETERS, cable.media) ? DIAMETERS[cable.media] : null;
   return m ? [m, true] : [UNSET_D, false];
 }
-export const bundleDiameter = ds => Math.sqrt(ds.reduce((a, d) => a + d * d, 0) / BUNDLE_PACK);
 
 // THE CHECKS FOR ONE BUNDLE. Warn, never refuse (decision 2). Returns
 //   {checked, size: {max_mm, at, limit_mm, limitBy, estimated} | null,

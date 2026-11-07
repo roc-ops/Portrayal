@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: r960-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  The power supply unit blank of the PowerEdge R960 - the plate that fills an empty supply bay
+  in a non-redundant build
+attrs:
+  power-absent: not-applicable
+provenance:
+  sources: >-
+    R960 ISM "Removing a power supply unit blank" and figures 197 and 198: "To ensure proper
+    system cooling, the PSU blank must be installed in the empty PSU bay in a non-redundant
+    configuration." No R960 figure shows a blank from behind, so the face is ESTIMATED as a plain
+    vented plate the size of the bay (86.0 x 40.1, dell/r960-psu-2800w-ac@1's face).
+  size: >-
+    photo-measured - the bay it fills, 86.0 x 40.1, read off ISM figure 10 (see
+    dell/r960-psu-2800w-ac@1).
+  power: >-
+    NOT APPLICABLE - a plate.
+size: {w: 86.0, h: 40.1}
+size-confidence: {w: photo-measured, h: borrowed}
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [86.0, 40.1]
+    class: bezel
+    description: the blank plate over an empty supply bay
+skins: [default]

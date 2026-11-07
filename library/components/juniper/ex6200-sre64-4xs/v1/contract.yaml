@@ -1,0 +1,142 @@
+format: 1
+kind: module
+name: ex6200-sre64-4xs
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX6200-SRE64-4XS, the Switch Fabric and Routing Engine (SRE) module of the EX6210. It holds the
+  Routing Engine, the switch fabric and the chassis control and management circuits. The faceplate has
+  four SFP+ uplink ports (0 to 3), a Gigabit Ethernet SFP management port, a 10/100/1000BASE-T management
+  port, an RJ-45 console port, a USB port, a recessed reset button, a two-line LCD panel with its Menu and
+  Enter buttons and the ALM, SYS and MST lamps, with an ejector lever and a captive screw at each end. It
+  seats in chassis slot 4 or 5 (a line card may take either slot instead). One module is the minimum; with
+  two, one is the primary and the other the backup, and the uplink ports of the backup stay active.
+attrs:
+  role: routing-engine
+  power-draw-max-w: 100
+part-numbers:
+  EX6200-SRE64-4XS: {part: EX6200-SRE64-4XS}
+provenance:
+  sources: >-
+    datasheet - EX6210 Switch Hardware Guide (published 2020-12-15): "Switch Fabric and Routing Engine
+    (SRE) Module in an EX6200 Switch" (Figure 7, the module drawn flat, g021118), the three lamp sections
+    (Figures 8 to 12 and Tables 13 to 19), the LCD panel section (Figure 6, Tables 12), Table 6 (the CLI
+    name), Table 31 (power) and Table 3. EX6200 datasheet 1000390-002-EN (Aug 2011), ordering table:
+    EX6200-SRE64-4XS, "Switch and Routing Engine including 4x 10GbE SFP+ uplinks (optics not included)".
+  size: >-
+    estimated - the faceplate takes the size of the chassis slot it fills (a bay of 392.1 x 56.7 mm, read
+    off the flat front elevation, Figure 4 of the guide, scaled by the guide's 17.3 in body width). No
+    document dimensions the module. Figure 7's plate is 2272 x 320 px, an aspect of 7.1, against 6.9 for the
+    slot, so the height is taken from the slot and the positions on it are fractions of that height.
+  face: >-
+    estimated - Figure 7 read at 5.794 px/mm across (the plate 2272 px on 392.1 mm); heights are fractions of
+    the plate's 320 px taken on the 56.7 mm slot. Uplink cage block 95.9 to 152.9 mm across, centre 47.6 mm
+    down, on the registry's 14.25 pitch (the figure's cells measure 14.4); the management SFP centred
+    165.6; the management RJ-45 188.6; the console RJ-45 214.3; the USB port 258.4; the reset pinhole 274.0
+    (all 46 to 47 mm down); the LCD 287.4 to 327.4 across and 32.5 to 46.7 down; the Menu and Enter buttons
+    at 333.9 across and 36.6 and 44.0 down; the ALM, SYS and MST lamps at 341.4 across and 33.5, 37.5 and
+    41.6 down. Every position is estimated to about 1 mm. The figure draws the cage cells 16.7 mm high; the
+    registry's 10.4 mm opening is centred on the same line.
+  levers: >-
+    estimated - the ejector levers lie along the bottom edge of Figure 7 and run past the plate at both ends;
+    only the part inside the slot is drawn.
+  leds: >-
+    datasheet - guide Tables 13 to 19 and Figures 8 to 12. Each uplink and management port has two lamps,
+    Link/Activity on the left (green: steady for a link with no traffic, blinking for traffic, off for no
+    link) and Status on the right (green steady for an enabled port; off for disabled); on the uplink ports
+    the Status lamp also shows the speed, duplex, PoE or administrative state the LCD selects. ALM is red for
+    a major alarm and yellow for a minor one, SYS yellow for a component failure and green once Junos OS has
+    loaded (blinking while it boots), MST green steady for the primary and blinking for the backup.
+  power: >-
+    datasheet - guide Tables 31 and 32: a Switch Fabric and Routing Engine module draws a maximum of 100 W
+    under typical voltage conditions; no typical figure and no ambient is stated. A draw, since a module
+    consumes power.
+  interface-names: >-
+    datasheet - guide Table 6: the uplink ports belong to FPC 4 or FPC 5, the slot the module sits in, and
+    PIC 0; the CLI names are not printed on the metal and are not written on the ports.
+  supported-optics: >-
+    vendor-silent - the guide refers to Juniper's Hardware Compatibility Tool for the SFP and SFP+
+    transceivers the uplink and management ports take.
+states:
+- ok
+- fault
+- absent
+groups:
+  uplink:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four SFP+ uplink ports, labelled 0 to 3 from left to right
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the management cluster of the module: a Gigabit Ethernet SFP port and a 10/100/1000BASE-T port for
+      out-of-band management (only one works at a time: the copper port stops when an SFP is seated), an
+      RJ-45 serial console and a USB port. One job: reaching and disciplining the switch.
+parts:
+- {ref: std/sfp-ganged@1, id: uplink-0, group: uplink, at: [95.9, 42.4], attrs: {function: uplink port 0}}
+- {ref: std/sfp-ganged@1, id: uplink-1, group: uplink, at: [110.15, 42.4], attrs: {function: uplink port 1}}
+- {ref: std/sfp-ganged@1, id: uplink-2, group: uplink, at: [124.4, 42.4], attrs: {function: uplink port 2}}
+- {ref: std/sfp-ganged@1, id: uplink-3, group: uplink, at: [138.65, 42.4], attrs: {function: uplink port 3}}
+- {ref: std/sfp@1, id: mgmt-sfp, group: mgmt, at: [158.35, 42.3], attrs: {media: sfp, speed: 1g, function: out-of-band management}}
+- {ref: common/rj45-eth@1, id: mgmt-rj45, group: mgmt, at: [180.7, 39.8], rotate: 180, attrs: {media: rj45, speed: 1g, function: out-of-band management}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [206.4, 39.8], attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [252.4, 44.15], attrs: {media: usb-a, function: USB port for installing Junos OS or a configuration}}
+- {ref: common/reset-button@1, id: reset, at: [272.0, 43.8]}
+elements:
+  led-uplink-0-link: {at: [98.5, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  led-uplink-0-status: {at: [104.4, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: enabled, color: '#22c55e'}]}
+  led-uplink-1-link: {at: [112.8, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  led-uplink-1-status: {at: [118.6, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: enabled, color: '#22c55e'}]}
+  led-uplink-2-link: {at: [126.9, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  led-uplink-2-status: {at: [132.8, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: enabled, color: '#22c55e'}]}
+  led-uplink-3-link: {at: [141.3, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  led-uplink-3-status: {at: [147.1, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: enabled, color: '#22c55e'}]}
+  led-mgmt-sfp-link: {at: [160.5, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]}
+  led-mgmt-sfp-status: {at: [166.4, 34.4], size: [2.0, 2.0], class: led, states: ['off', {name: enabled, color: '#22c55e'}]}
+  led-alm:
+    at: [340.4, 32.5]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#f59e0b'}]
+  led-sys:
+    at: [340.4, 36.5]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: fault, color: '#f59e0b'}, {name: running, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}]
+  led-mst:
+    at: [340.4, 40.6]
+    size: [2.0, 2.0]
+    class: led
+    states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}]
+  lcd:
+    at: [287.4, 32.5]
+    size: [40.0, 14.2]
+    class: display
+    characters: 16
+  btn-menu:
+    at: [330.5, 33.2]
+    size: [6.8, 6.8]
+    class: button
+  btn-enter:
+    at: [330.5, 40.6]
+    size: [6.8, 6.8]
+    class: button
+  lever-left:
+    at: [0.0, 49.5]
+    size: [17.6, 5.2]
+    class: latch
+  lever-right:
+    at: [374.5, 49.5]
+    size: [17.6, 5.2]
+    class: latch
+size:
+  w: 392.1
+  h: 56.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

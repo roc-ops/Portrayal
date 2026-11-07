@@ -1,0 +1,53 @@
+format: 1
+kind: module
+name: ex8216-fan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX8216 fan tray (EX8216-FAN-S as a spare, EX8216-FT in the CLI): one vertical tray of nine fans and two fan tray
+  controllers at the left of the front; the chassis takes two, one above the other, and they are identical and
+  interchangeable. The face carries two columns of slot labels for the nine slots beside it - read the inner column (RE0,
+  RE1, 0 to 6) on the top tray and the outer column (7 to 15) on the bottom tray - a handle, a screw and a spring-loaded
+  latch, under the EX8216 FAN legend and a warning mark. Cooling is side to side and front to side; only the top tray cools
+  the SF modules at the rear. Hot-insertable and hot-removable.
+attrs:
+  role: fan-tray
+  power-draw-max-w: 800
+  power-draw-typical-w: 190
+  airflow: side-to-side
+  fans: 9
+part-numbers:
+  EX8216-FAN-S: {part: EX8216-FAN-S}
+provenance:
+  sources: >-
+    datasheet - EX8216 Switch Hardware Guide (PDF dated 2020-12-16): Cooling System, Fan Tray (Figure 12, isometric), Table 11
+    and Figure 5 (the slot labels), Table 60 (power), Table 6 (CLI name EX8216-FT). EX8216 Ethernet Switch Datasheet
+    (1000283-021-EN, June 2015): "EX8216-FAN-S, EX8216 fan tray, spare".
+  size: >-
+    estimated - 46.1 mm wide (the strip between the chassis edge and the header plate, Figure 5 at 2.753 px/mm) and 387.2 mm
+    long: the two trays are identical and share the 774.4 mm they take, each carrying 9 slots on the 38.2 mm pitch under a 39.1
+    mm head and a 4.3 mm foot. The length is derived from the chassis height (36.5 in) less the supply row, not read off a
+    figure; Figure 5 is cropped above the supplies. No document dimensions the tray.
+  face: >-
+    estimated - Figure 5 and Figure 12: nine label rows on the slots' 38.2 mm pitch from 39.1 mm down, in two columns (outer
+    21.8 to 33.4 mm across, inner 33.4 to 46.1); the handle is a fraction of Figure 12 (7 x 147 mm at 3.0 across and 128 down);
+    the screw and latch at the foot. About 2 mm.
+  power: >-
+    datasheet - guide Table 60: each fan tray 190 W at normal fan speed and 800 W at maximum fan speed. The maximum is
+    carried as the draw and the normal figure as the typical.
+  airflow: >-
+    datasheet - Cooling System: "side-to-side chassis cooling and front-to-side cooling"; the intake and exhaust sides are
+    drawn in Figures 13 and 14, which are isometric. The guide has no other direction, so no handle colour is stated or drawn.
+states: [absent]
+elements:
+  handle:
+    at: [3.0, 128.0]
+    size: [7.0, 147.0]
+    class: latch
+size:
+  w: 46.1
+  h: 387.2
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

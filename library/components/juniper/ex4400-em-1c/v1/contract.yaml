@@ -1,0 +1,104 @@
+format: 1
+kind: module
+name: ex4400-em-1c
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX4400-EM-1C, the 1x100GbE QSFP28 extension module of the EX4400
+  switches. The guide lists it for every EX4400 model, and from Junos OS
+  24.2R1-S1 for the EX4400-48XP and -48MXP as well. It seats horizontally in
+  the extension module slot at the front right. It has one QSFP28 cage,
+  numbered 0, with four lamps above it, and two captive screws. It takes one
+  100GbE QSFP28 or one 40GbE QSFP+ transceiver, and a breakout cable gives
+  4x25G or 4x10G channels. It supports MACsec with AES-256. The switch needs
+  System CPLD Firmware 1.0 (0.6 on the EX4400-24X) or later to support it.
+attrs:
+  model: EX4400-EM-1C
+  weight-kg: 0.12
+  first-junos-release: 23.1R1
+  macsec: AES-256
+  ports-note: one QSFP28 port at 100 Gbps by default, 40 Gbps with a QSFP+ transceiver, or channelized to 4x25G or 4x10G
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic
+    Extension Modules in EX4400 Switches - Table 5 and Figure 1 (g022890) describe and draw the
+    1x100GbE QSFP28 module, model number EX4400-EM-1C, first supported in Junos OS 23.1R1, with
+    the CPLD firmware note. Figure 59 (g022891) and Table 48 describe its lamps. Table 12 and
+    its siblings give the module weight, 0.26 lb (0.12 kg). The note under Table 5 says all
+    extension modules are supported on the EX4400-48XP and -48MXP from Junos OS 24.2R1-S1.
+  size: >-
+    estimated - the guide gives no dimension for the module face. It is taken as the front-panel
+    recess the module fills, 74.0 x 23.5 mm, read off the front render of the EX4400-48P
+    (Figure 25, g022647). Figure 1 measures 802 x 257 px, aspect 3.12 against 3.15 for that
+    recess, so the figure fits it. The module's depth is not stated.
+  elements: >-
+    drawing - Figure 1 (g022890) at 10.84 px/mm, anchored to the 74.0 mm width. The QSFP28 cage
+    is 14.3 to 32.0 across and 9.2 to 17.8 down (the registry cage is 20.0 x 10.15, centred on
+    the same point 23.15, 13.5). The four lamps are 17.3, 21.2, 25.1 and 28.8 across and 5.5
+    down. The port number 0 is printed 19.8 mm down. The screws and ring holes are those of the
+    render of the four-cage module, 4.4 and 3.0 in from the edge, which Figure 1 agrees with to
+    1.5 mm between screw and hole.
+  led: >-
+    datasheet - Figure 59 and Table 48. The lamp at the extreme left shows the link in green
+    for 100 Gbps (steady without traffic, blinking with traffic) and in amber for 40 Gbps. When
+    the port is channelized all four lamps show the four channels - green for 4x25 Gbps and
+    amber for 4x10 Gbps. Unlit means there is no link.
+  power: >-
+    NO FIGURE IS PUBLISHED - the guide gives the module weight and no draw. Searched the guide
+    text for the extension modules near watt and current figures. The missing-power warning
+    stands, as the record that the figure is missing.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four lamps above the port. The leftmost shows the link of a 100G or 40G port. All four
+      show the channels of a channelized port
+parts:
+- {ref: std/qsfp28@1, id: port-0, at: [13.15, 8.4], group: qsfp28, attrs: {media: qsfp28}}
+- {ref: common/led-dot@1, id: led-0, at: [16.3, 4.5], group: port-leds}
+- {ref: common/led-dot@1, id: led-1, at: [20.2, 4.5], group: port-leds}
+- {ref: common/led-dot@1, id: led-2, at: [24.1, 4.5], group: port-leds}
+- {ref: common/led-dot@1, id: led-3, at: [27.8, 4.5], group: port-leds}
+elements:
+  screw-left:
+    at: [1.5, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+  screw-right:
+    at: [66.7, 3.1]
+    size: [5.8, 5.8]
+    class: screw
+size:
+  w: 74.0
+  h: 23.5
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the module face in the guide's front render. The
+      projection is not stated or measured.
+  - node: screw-right
+    cyl: 1.5
+    confidence: estimated
+    source: >-
+      The captive screws stand proud of the module face in the guide's front render. The
+      projection is not stated or measured.
+skins: [default]

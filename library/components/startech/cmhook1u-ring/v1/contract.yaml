@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: cmhook1u-ring
+version: 1.0.0
+class: mechanical
+description: >-
+  The D-ring of the StarTech.com CMHOOK1U hook seen from the front - a flat steel loop 57.0 mm
+  across and 10.0 mm high that stands 99.0 mm out of its plate, closed at the plate and open by
+  8.0 mm in the middle of its far end, the front opening a bundle is slipped in through, with a
+  cable running up and down through it
+provenance:
+  size: >-
+    drawing - CMHOOK1U_Diagram.pdf (StarTech.com, third angle projection, millimetres,
+    6/15/2022): the ring is 57.0 [2.24"] across, 101.3 [3.99"] out of the rail, 10.0 high and its
+    wall 3.2 thick, with an 8.0 opening in the middle of its far end. The datasheet gives the
+    inside as 50.6 wide and 92.6 deep (2.0 and 3.6 in), which the drawing's walls agree with: 57.0
+    less two 3.2 is 50.6, and the 99.0 of loop out of the plate less a 3.2 wall at each end is
+    92.6.
+  relief: >-
+    drawing - the plan view: a rounded rectangle of 3.2 mm wall, built as plates with square
+    corners where the real loop is radiused: a wall down each side, one across the plate end and
+    one across the far end in two pieces 21.3 wide with the 8.0 gap between them, centred. The
+    ring is 10.0 high (the front and side views). It is as long as the 101.3 less the plate's
+    2.3, 99.0.
+  opening: >-
+    drawing - the 8.0 gap in the far end, the plan view's "8.0", is drawn in the relief and is
+    the datasheet's "wide front opening for quick cable insertion" and "flexible opening for easy
+    insertion of bundled cables". The format's ring `slit` is a range of height along a leg, not a
+    gap across the far bar, so the gap cannot be declared as the ring's slit; it is drawn and the
+    ring is left open to a route (the device's `hook-opening` gap).
+  guide: >-
+    drawing - the clear opening of the loop, which the datasheet gives as "Internal Width 2.0 in
+    [50.6 mm]" and "Internal Depth 3.6 in [92.6 mm]". The loop lies flat, so the run is up and
+    down the rail: `w` is the 50.6 across the part and `h` the 92.6 out of it.
+  guide-depth: >-
+    drawing - the loop is 10.0 mm high along the run, the front and side views' "10.0".
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmhook1u_datasheet.pdf). The drawing is line
+    work, so the shade is this library's render, a lighter value than the plate so the ring
+    reads against it.
+size: {w: 57.0, h: 10.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel}
+guide: {kind: ring, aperture: {w: 50.6, h: 92.6}, run: y, depth: 10.0}
+elements:
+  near: {at: [3.2, 0.0], size: [50.6, 10.0], class: bezel}
+  wall-left: {at: [0.0, 0.0], size: [3.2, 10.0], class: bezel}
+  wall-right: {at: [53.8, 0.0], size: [3.2, 10.0], class: bezel}
+  far-left: {at: [3.2, 0.0], size: [21.3, 10.0], class: bezel}
+  far-right: {at: [32.5, 0.0], size: [21.3, 10.0], class: bezel}
+relief:
+  features:
+    - {node: near, out: 3.2, color: '#111315', confidence: drawing, source: 'the plan view of the CMHOOK1U drawing, the loop closed at the plate end, a 3.2 mm wall'}
+    - {node: wall-left, out: 99.0, color: '#111315', confidence: drawing, source: 'the same view, a side wall running the 101.3 less the plate'}
+    - {node: wall-right, out: 99.0, color: '#0d0f10', confidence: drawing, source: 'the same view'}
+    - {node: far-left, lift: 95.8, out: 99.0, color: '#101214', confidence: drawing, source: 'the same view, the far end 3.2 thick, in two pieces with the 8.0 opening between them'}
+    - {node: far-right, lift: 95.8, out: 99.0, color: '#101214', confidence: drawing, source: 'the same view'}
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp10k-lc9600
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,7 +12,13 @@ attrs:
   model: MX10K-LC9600
   power-draw-typical-w: 1655
   power-draw-max-w: 1770
+  qsfp-dd: 24
 provenance:
+  qsfp-dd-rate: >-
+    MX10008 hardware guide, line-card overview (p19) and 'MX10K-LC9600' (p143): a fixed-configuration
+    24-port line card with a line rate throughput of 9.6 Tbps. 'The line card has
+    twenty-four QSFP-DD ports, each capable of supporting a maximum speed of 400 Gbps.' The MX10004 guide's
+    'MX10K-LC9600' (p137) says the same with 'twenty-four QSFP ports'. Nothing new was measured.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

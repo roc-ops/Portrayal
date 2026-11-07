@@ -1,0 +1,261 @@
+format: 1
+kind: device
+name: ncmhf2
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: NCMHF2
+description: >-
+  2RU front-only horizontal cable manager, Panduit NetManager NCMHF2: a polycarbonate moulding
+  on the rack rails with a channel 82 mm deep standing out of its front, a wall of twelve
+  fingers along its top and another along its bottom, and a hinged cover across the finger tips
+  that ships fitted. Two windows in the plate behind the channel pass cable to the back of the
+  rack. The single-sided 3.7 in sibling of the NCMH2.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The NCMHF2 drawing
+      (Panduit 00787-10) dimensions the plan "3.74 REF [95.10]" overall and the front section "3.24
+      REF [82.40]"; the NCMH2 drawing's front section is 82.27, and the two manager share one
+      front moulding, so `at` is 82.27 as on the NCMH2 and the plate and flange are the 12.83 behind.
+      This states a placement; the 0.13 between the two drawings is taken as drawing error.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the part is 95.1 deep and 82.27 of it stands in front of the rails, so
+      the rear face of its rack units stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DRAWING, read as the NCMH2's are (see ncmh2): the NCMHF2 customer
+      drawing (PDF 00787-10), the NetManager Horizontal Cable Managers specification sheet RKSP225
+      and the Cable Capacity Calculator. The parts are the NCMH2's front moulding.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 444.83 x 88.14 x 95.1. The NCMHF2 drawing dimensions 482.59 [19.00 in] over the
+      ears, 465.07 [18.31 in] between the fixing holes, 88.14 [3.47 in] high, 444.83 [17.51 in]
+      across the body between the ears and 95.10 [3.74 in] deep (RKSP225 says 95.3). The ears are
+      not drawn.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW CHANNEL, NOT A BOX (see ncmh2): the plate on the front view as a well 82.27
+      deep with two open windows, the two walls of fingers standing in it, the cover across their
+      tips and the back of the plate standing 12.83 proud of the rear face.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no Panduit document states a wall gauge for the polycarbonate moulding. 2.5 is a
+      moulded wall of this size; the parts carry their own thicknesses.
+  weight:
+    confidence: drawing
+    note: >-
+      drawing - 381.02 g [0.84 lb], the weight table of the NCMHF2 customer drawing (00787-10).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front with the hinged cover fitted, as the NCMH2's: the NCMHF2 drawing's front
+      view shows the cover removed, the two rows of twelve arched fingers and the two windows.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate with its two windows, from the front view, which draws them
+      through the channel; five plates round them, sunk 0.05 inside the rear face. The windows are
+      open.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan view, rear at y=0: the plate and flange 12.83 deep, then the twelve fingers
+      70 mm long. Read at 300 dpi; the fingers' lengths are estimated.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the front view draws the same finger arches along the bottom as along the top; the
+      bottom is the top again.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no side view is drawn; built from the plan view and the front view.
+  right:
+    confidence: estimated
+    note: >-
+      estimated - the left view turned round.
+  guides:
+    confidence: drawing
+    note: >-
+      drawing - the duct is the channel between the two finger rows, run across the rack, pitch
+      34.925 and gap 9.5 as on the NCMH2.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - Panduit's Cable Capacity Calculator (V14) gives the NCMHF2's front usable area as 6
+      sq in and, for its entered cable (0.185 in, 4.70 mm, Cat 6A 28 AWG) at the 30 per cent
+      recommended fill, 66 (111 at the 50 per cent maximum).
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, colour, standards and what is in the box are the NCMHF2 product page
+      and the specification sheet (RKSP225); the screws are the drawing's note 2.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "The manager is black" on the product page. Every image Panduit publishes of the
+      part is a render; the cover is drawn a shade lighter than the moulding.
+attrs:
+  physical:
+    weight-kg: 0.381
+    material: polycarbonate
+    cover-material: polycarbonate
+    color: Black
+    mounting-hardware: 'four 12-24 x 1 in screws'
+  performance:
+    cable-capacity: 66
+    cable-capacity-basis: >-
+      front channel: 0.185 in (4.70 mm, Cat 6A 28 AWG) cable at the 30% recommended fill of its
+      6 sq in usable area; 111 at the 50% maximum fill - Panduit Cable Capacity Calculator V14
+  features:
+    bend-radius-front: '1/2 in (12.7 mm) at the front fingers, transitions and pass-throughs'
+    finger-spacing: '3/8 in (9.5 mm)'
+    standards: 'RoHS Compliant, UL 2416, CSA C22.2'
+chassis:
+  width: 444.83
+  height: 88.14
+  depth: 95.1
+  ru: 2
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 82.27, default: true}
+  shell: sheet
+  thickness: 2.5
+  weight-kg: 0.381
+  color: '#2a2c2e'
+gaps:
+  - what: cover-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the specification sheet says the hinged front cover opens 180 degrees up or down; no view
+      draws a hinge, and the cover is drawn as one fitted plate that is either on or off.
+    wanted: a drawing or a close render of the cover's hinge
+  - what: cover-section
+    scope: [top, left, right]
+    reason: needs-drawing
+    note: >-
+      no view sections the cover or the fingers: their thickness is estimated and the elevations
+      draw the body without the cover's edge.
+    wanted: a section through a cover and a finger tip
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the moulded plate and channel between the ears
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the two walls of twelve fingers, upper first
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the hinged cover across the finger tips, shipped fitted
+views:
+  front:
+    size: {w: 444.83, h: 88.14}
+    components:
+      placements:
+        - {ref: panduit/ncmh2-base@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: panduit/ncmh2-fingers@1, id: fingers-upper, at: [0.0, 0.0], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: panduit/ncmh2-fingers@1, id: fingers-lower, at: [0.0, 74.07], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: panduit/ncmh2-cover@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [63.45, 25.07], size: [98.5, 38.0], shape: rect, cover: open}
+      - {id: pass-through-2, at: [282.85, 25.07], size: [98.5, 38.0], shape: rect, cover: open}
+    guides:
+      - {id: duct, kind: duct, at: [0, 14.07], size: [444.83, 60.0], run: x, finger-pitch: 34.925, finger-gap: 9.5, confidence: drawing, source: 'NetManager Horizontal Cable Managers specification sheet RKSP225, finger spacing 3/8 in, and the NCMHF2 drawing front view, 34.9 mm pitch'}
+  rear:
+    size: {w: 444.83, h: 88.14}
+    panel:
+      decor:
+        - {id: back-top, at: [0, 0], size: [444.83, 25.07], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-bottom, at: [0, 63.07], size: [444.83, 25.07], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-left, at: [0, 25.07], size: [63.45, 38], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-middle, at: [161.95, 25.07], size: [120.9, 38], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-right, at: [381.35, 25.07], size: [63.48, 38], fill: '#232527', sink: 0.05, kind: base}
+  top:
+    size: {w: 444.83, h: 95.1}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.83, 12.83], fill: '#232527', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 12.23], size: [444.83, 0.6], fill: '#121315', kind: fold}
+        - {id: finger-1, at: [17.63, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-2, at: [52.55, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-3, at: [87.48, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-4, at: [122.4, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-5, at: [157.33, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-6, at: [192.25, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-7, at: [227.18, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-8, at: [262.1, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-9, at: [297.03, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-10, at: [331.95, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-11, at: [366.88, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-12, at: [401.8, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+  bottom:
+    size: {w: 444.83, h: 95.1}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.83, 12.83], fill: '#232527', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 12.23], size: [444.83, 0.6], fill: '#121315', kind: fold}
+        - {id: finger-1, at: [17.63, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-2, at: [52.55, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-3, at: [87.48, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-4, at: [122.4, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-5, at: [157.33, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-6, at: [192.25, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-7, at: [227.18, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-8, at: [262.1, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-9, at: [297.03, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-10, at: [331.95, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-11, at: [366.88, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+        - {id: finger-12, at: [401.8, 12.83], size: [25.4, 70], fill: '#26282a', kind: finger-wall}
+  left:
+    size: {w: 95.1, h: 88.14}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [12.83, 88.14], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [12.83, 0], size: [70, 14.07], fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [12.83, 74.07], size: [70, 14.07], fill: '#26282a', kind: finger-wall}
+  right:
+    size: {w: 95.1, h: 88.14}
+    panel:
+      decor:
+        - {id: plate, at: [82.27, 0], size: [12.83, 88.14], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [12.27, 0], size: [70, 14.07], fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [12.27, 74.07], size: [70, 14.07], fill: '#26282a', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The manager as Panduit ships NCMHF2, cover fitted.'
+  cover-off:
+    kind: example
+    description: >-
+      The same manager with its cover opened, the finger walls and the channel open to lay a
+      cable in. The cover comes with the manager, so this is an illustration and not a device
+      type.
+datasheet:
+  title: 'NetManager Horizontal Cable Managers Specification Sheet RKSP225'
+  url: https://www.panduit.com/content/dam/panduit/en/products/media/2/22/622/9622/111759622.pdf
+  sha256: e5a6db121ba01a4fdf15b72d71294b517bb36ac6c11ed5955e2573d6deaf320c
+references:
+  - title: 'Part Drawings - PDF - NCMHF2 (00787-10)'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/5/05/005/0005/10005.pdf
+    sha256: 165076897de6b84a9b879edaee4087e446e85f1a0a5fd9ebd32ea7a8cfe8ebad
+  - title: 'Cable Capacity Calculator Web V14'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/2/62/062/6062/111776062.xlsx
+    sha256: 947390141fb2a12d3c24a89edeebb6024795965032b91d722c6b90df2a3b8eb7

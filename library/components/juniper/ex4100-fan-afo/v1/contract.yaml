@@ -1,0 +1,78 @@
+format: 1
+kind: module
+name: ex4100-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module, airflow out (AFO), EX4100-FAN-AFO, for the Juniper EX4100. Two sit side by side on the
+  rear panel, in slots numbered 0 and 1, and every EX4100 shipped front to back carries a pair. Each
+  is hot-removable and hot-insertable. The face has an orange handle across a honeycomb grille with a
+  grey AIR OUT (AFO) chip and a captive screw at the top left. Air leaves the chassis at this face,
+  front to back. Do not mix it with a power supply or a fan module of the other direction.
+attrs:
+  cli-name: Fan Module, Airflow Out (AFO)
+  airflow: front-to-back
+  handle-colour: orange
+  weight-kg: 0.072
+part-numbers:
+  EX4100-FAN-AFO: {part: EX4100-FAN-AFO}
+provenance:
+  size: >-
+    datasheet and measured - EX4100 Switch Hardware Guide (Juniper Networks, PDF created 2026-10-01),
+    Table 20 note: fan module width 1.9 in. (4.8 cm), height 1.65 in. (4.18 cm), depth 4.41 in. (11.2
+    cm). The face is drawn 41.9 by 41.8 mm. Its height is the guide's 4.18 cm. Its width is read off
+    Figure 2, the rear render of the EX4100-24P (orange face 124 px at 2.957 px/mm, taken from the
+    441.0 mm body) and it disagrees with the guide's 4.8 cm width, which is 6 mm wider than the face
+    and is taken to count the web between the two bays. The render wins for the face and the guide for
+    the height and the depth. Depth is carried as 112.0 mm.
+  part-number: >-
+    datasheet - Table 26, Fan Modules: model EX4100-FAN-AFO, front-to-back airflow, label AIR OUT and
+    orange handle. Table 56, for the ORv3 switch tray, names EX4100-FAN-AFO2, a different part that
+    this component does not model.
+  airflow: >-
+    datasheet - Table 26 and Table 27: front to back, label AIR OUT, orange handle. Figure 33 draws
+    the label AIR OUT (AFO).
+  face: >-
+    drawing - Figure 33 (g022737), the line drawing of the rear face: honeycomb grille above and below
+    a central handle with the AIR OUT (AFO) chip, a captive screw top left, and a latch clip at each
+    side. Fractions of the 370 px face are carried to millimetres. The honeycomb is drawn as twelve
+    columns of hexagons, a simplification of the figure's.
+  handle-colour: >-
+    datasheet - Table 26: the front-to-back module is indicated by the label AIR OUT and an orange
+    handle. The rear render shows the same orange, sampled as #ee6a1f.
+  status-lamp: >-
+    datasheet - Table 28 and Figure 41: each fan module has a status lamp, green when the module works
+    and unlit when it is absent, failed or of the wrong direction. The lamp is a small slot beside each
+    bay on the chassis rear (Figure 41), so it is not part of this face and is not drawn here.
+  power: >-
+    NOT STATED. The guide gives no per-fan power figure, so L27 stands.
+states: [absent]
+elements:
+  screw:
+    at: [2.0, 2.0]
+    size: [4.8, 4.8]
+    class: screw
+  handle:
+    at: [1.0, 14.4]
+    size: [39.9, 12.4]
+    class: latch
+size:
+  w: 41.9
+  h: 41.8
+  d: 112.0
+size-confidence: {w: photo-measured, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#ee6a1f'
+    confidence: estimated
+    source: render - the handle stands proud of the grilles; the projection is not stated or measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: render - black captive screw, projection estimated
+skins: [default]

@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: r960-riser-3b-scale-out
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 3B of the PowerEdge R960 as wired in the scale-out configuration - the same four
+  full-height PCIe Gen5 x16 slots, 5 to 8, controlled by processors 4, 2, 3 and 1
+attrs:
+  riser: '3B (scale out)'
+  appears-in: 'riser configuration 1'
+  power-absent: not-published
+  slot-5: 'x16, full height, half length, processor 4, PCIe Gen5'
+  slot-6: 'x16, full height, half length, processor 2, PCIe Gen5'
+  slot-7: 'x16, full height, half length, processor 3, PCIe Gen5'
+  slot-8: 'x16, full height, half length, processor 1, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R960 ISM, technical guide
+    and spec sheet were searched for 'riser' beside a wattage and none gives one.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS, as dell/r960-riser-3b@1; ISM table 13 lists
+    it as "Riser 3B (In scale out configuration)" with its own processor column.
+  slots: >-
+    datasheet - R960 ISM table 13 and table 88 configuration 1: slot 5 processor 4, slot 6
+    processor 2, slot 7 processor 3, slot 8 processor 1; the technical guide's table 15 agrees.
+    THE SAME RISER NAME AS THE MAXIMUM I/O CONFIGURATION'S (slots 5 and 6 on processor 4, 7 and 8
+    on processor 3): ISM table 13 prints both rows. It is drawn as its own part because the ISM
+    wires it differently; whether Dell has two riser cards or one card with a cable is not stated.
+  face: >-
+    photo-measured - composed from dell/r960-riser-3b-cage@1, the technical guide's figure 8 showing
+    configuration 1 with the same cage.
+  size: >-
+    photo-measured - the cage's extent, 104.3 x 84.0.
+  depth: >-
+    estimated - 356.3 as dell/r960-riser-3a@1, the riser 3 Dell's R960 service model holds (r960.glb); 3B is not in the model.
+size: {w: 104.3, h: 84.0, d: 356.3}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+body:
+  depth: 356.3
+  color: '#4a5057'
+plan: {ref: dell/r960-riser-3-plan@1}
+parts:
+  - {ref: dell/r960-riser-3b-cage@1, id: plate, at: [0, 0]}
+bays:
+  slot-5:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 4, generation: 5}
+    behind: true
+    at: [3.5, 0.59]
+    size: [90.0, 18.42]
+    accepts: [dell/r960-pcie-filler-fh@1]
+    default: dell/r960-pcie-filler-fh@1
+  slot-6:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 2, generation: 5}
+    behind: true
+    at: [3.5, 20.69]
+    size: [90.0, 18.42]
+    accepts: [dell/r960-pcie-filler-fh@1]
+    default: dell/r960-pcie-filler-fh@1
+  slot-7:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 3, generation: 5}
+    behind: true
+    at: [3.5, 40.99]
+    size: [90.0, 18.42]
+    accepts: [dell/r960-pcie-filler-fh@1]
+    default: dell/r960-pcie-filler-fh@1
+  slot-8:
+    slot: {connector: x16, lanes: 16, height: full, length: half, processor: 1, generation: 5}
+    behind: true
+    at: [3.5, 61.09]
+    size: [90.0, 18.42]
+    accepts: [dell/r960-pcie-filler-fh@1]
+    default: dell/r960-pcie-filler-fh@1
+skins: [default]

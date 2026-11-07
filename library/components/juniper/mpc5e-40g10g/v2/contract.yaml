@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc5e-40g10g
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,7 +12,18 @@ attrs:
   model: MPC5E-40G10G
   power-draw-max-w: 607
   model-variants: MPC5EQ-40G10G
+  qsfp: 6
+  sfp-plus: 24
 provenance:
+  qsfp-rate: >-
+    module reference, '6x40GE + 24x10GE MPC5E' (p182): 'Fixed-port MPC with six 40-Gigabit Ethernet ports
+    and twenty-four 10-Gigabit Ethernet ports', the 40G ports labelled 2/0 through 2/2 and 3/0 through
+    3/2. The six cages are placed with `media: qsfp-plus` already. Nothing new was measured.
+  sfp-plus-rate: >-
+    the same section (p182): 'Fixed-port MPC with six 40-Gigabit Ethernet ports and twenty-four
+    10-Gigabit Ethernet ports', the 10G ports labelled 0/0 through 0/11 and 1/0 through 1/11. The source
+    also lists the combinations the card supports (six 40G, twenty-four 10G, or three 40G and twelve
+    10G); the count here is the ports that exist.
   stack-orientation: >-
     The library's stack convention (docs/pluggables-3d-design.md, S1-S4): a row pair is
     the upper cage upright (rotate 0) over the lower turned 180, so both cage lips face

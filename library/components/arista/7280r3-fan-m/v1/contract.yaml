@@ -1,0 +1,77 @@
+format: 1
+kind: module
+name: 7280r3-fan-m
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The 1RU enhanced-speed hot-swap fan module of the Arista 7280R3 small chassis, FAN-7011M-F
+  (front-to-rear airflow, red). The module has a red frame and a honeycomb grille. A grey release
+  rail with a slider runs down the middle, with a red label tab at its top. A status lamp is at
+  the bottom centre. Two of them fill the rear between the management ports and the right power
+  supply. The module is hot-swappable, and its release is the slider.
+size: {w: 78.6, h: 38.6}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  FAN-7011M-F: {part: FAN-7011M-F}
+attrs:
+  airflow: front-to-back
+  role: fan
+provenance:
+  size: >-
+    estimated - read off the rear panel figure D-1 of the 7280R3 Series Quick Start Guide
+    (DOC-07041-01), a 553 px raster whose chassis is 551 px between its edges (1.252 px/mm over the
+    440 mm body, which the data sheet gives as 43.99 cm). The two red frames measure about 100 px
+    wide (79.6 mm) and 53 px tall. One pixel is 0.8 mm. 78.6 by 38.6 is the library's size for the
+    FAN-7011H module (arista/7280cr3-fan), the same housing in the guide's generic figure. No
+    document dimensions the module.
+  part-number: >-
+    datasheet - the 7280R3 Series Data Sheet (03-0045-59, August 11th, 2025), ordering
+    information for the 7280SR3-48YC8, 7280SR3-40YC6 and 7280CR3-36S: "FAN-7011M-F  Spare fan
+    module for Arista 7000 Series 1RU Enhanced Fan Speed (front-to-rear airflow)", and "Fan Tray
+    FAN-7011M" in the model comparison tables, with "Hot-swappable Fans 2 (N+1 redundant)" (the
+    7280CR3-36S table says 1+1).
+  airflow: >-
+    datasheet - the part number's "front-to-rear airflow". The guide, section 2.1, says a red
+    handle marks an air-exit module and a blue handle an air-inlet one. The reverse module is the
+    separate component arista/7280r3-fan-m-rev (FAN-7011M-R).
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a FAN-7011M is held. Figure D-1 draws a
+    generic fan module, and the guide says "Depending on the installed power supply module, the
+    appearance could differ"; this module is drawn as arista/7280cr3-fan (FAN-7011H-F), the housing
+    the figure shows: a red frame, a honeycomb grille, a grey rail with a slider and a lamp at the
+    bottom centre. The guide's Appendix A (figure A-4, table 11) names the lamp the fan module
+    status LED: off (not detected), green (normal), red (failed). The label tab is drawn blank.
+  handle-finish: >-
+    The red of the frame is a field, `handle-finish`, default `#e0332e`, read off the figure.
+  power: >-
+    NOT STATED. Neither the quick start guide nor the data sheet gives a power draw for the
+    FAN-7011M, so none is written and the lint warning for a fan without one stands.
+states: [absent]
+elements:
+  grille: {at: [3.0, 3.2], size: [72.6, 29.4], class: vent}
+  handle: {at: [32.4, 0.4], size: [13.8, 33.4], class: handle}
+  status: {at: [36.6, 32.4], size: [5.2, 5.2], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#e0332e'}
+relief:
+  wall: '#3a3a36'
+  features:
+    - node: grille
+      vent: 14
+      confidence: estimated
+      source: >-
+        The grille is open and the rotor is not drawn, but no document gives a depth. 14 is the
+        order of what this library gives other 1RU fan modules.
+    - node: handle
+      bar: 3.0
+      confidence: estimated
+      source: >-
+        The release rail stands off the grille along its length; how far is not dimensioned
+        anywhere, so 3.0 is the rail's own drawn width.
+skins: [default]
+body:
+  depth: 190
+  color: '#2e2b26'
+  footprint: {at: [0, 0], size: [78.6, 38.6]}

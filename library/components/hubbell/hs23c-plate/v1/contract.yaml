@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: hs23c-plate
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the Hubbell S-Series HS23C horizontal cable manager, seen from the front.
+  It is a 14 gauge steel plate as wide as the rack, with its ears in the same sheet. Four
+  rounded windows let a cable cross it. It is drawn as the well that the fingers, floor and
+  tabs stand in.
+provenance:
+  size: >-
+    datasheet - HS23C spec sheet (hubbellcdn.com/specsheet/PREMISE_HS23C_spec.pdf),
+    dimensions table: A 2 RU, 3.5 in (89 mm), B 19 in (483 mm). The figure marks A at the
+    plate's own end and B along its top edge, so the plate is A high and B wide; B is taken as
+    the 19 in, 482.6 mm, that the sheet's mm column rounds. The ears are the plate's ends,
+    so the plate is drawn whole.
+  depth: >-
+    datasheet - the sheet's C, 3 in (76 mm), is the whole part's depth, front of the cover to
+    the back of the plate, so the plate's floor lies C less its own thickness, 74.3 mm, behind
+    the front of the part.
+  thickness: >-
+    datasheet - "Gauge 14" on the sheet. Standard steel sheet gauge 14 is 0.0747 in, 1.897 mm,
+    taken as 1.9 mm; the sheet itself gives only the gauge.
+  windows: >-
+    estimated - four rounded windows, read off the sheet's figure. The figure has no
+    dimension on them; they are scaled against B along the plate (a pitch of 104 mm between
+    window centres, read on the figure between the five fingers, symmetric about the middle)
+    and against A across it (a window 0.8 of the plate's height, 71.1 mm, centred; 80 mm
+    wide, the pitch less a 24 mm web; corner radius 8). Perspective in the figure makes
+    each reading good to a few millimetres. The sheet's "Pass through holes: Standard" is
+    these windows: the one opening in the plate a cable crosses by.
+  mounting-holes: >-
+    not drawn - the sheet lists "EIA/ECA-310-E Universal Mounting Pattern" and draws a hole
+    in each ear, top and bottom, with no dimension. The hole positions are the standard's,
+    not the sheet's, so none is drawn.
+  color: >-
+    datasheet - "Finish: Black Powder Coated" on the sheet. Drawn as the library's black
+    steel, '#1b1d20'.
+size: {w: 482.6, h: 88.9, d: 74.3}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief: {wall: '#1b1d20'}
+elements:
+  plate: {at: [0.0, 0.0], size: [482.6, 88.9], class: bezel}
+skins: [default]

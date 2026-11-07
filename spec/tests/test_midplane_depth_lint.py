@@ -13,12 +13,15 @@ Seen from behind, column N sits at x = 100 - 25*N, so `rear-4` is drawn at the
 LEFT of the rear view and is the same column as `slot-4` at the right of the
 front: a rule that forgot to mirror would pair it with `slot-1`.
 """
+import copy
 import pathlib
 
 import pytest
+import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 from portrayal import lint as L
+from portrayal import manifest
 
 
 @pytest.fixture
@@ -163,7 +166,10 @@ def test_the_real_ch3000_seats_front_and_rear_in_shared_columns():
     pairs CH3000 bays at all. Seat a full-depth receiver in front of a rear bay
     and give the rear bay the depth of a front module: that must be caught."""
     path = ROOT / "library/devices/commscope/ch3000/device.yaml"
-    doc = L.load_yaml(path)
+    # A COPY: load_yaml hands every caller in the process the same dict, and an
+    # edit to it is seen by every later test that reads this device - the stub
+    # dist test among them, which then found ar3002e-x14's bays differ from the build's
+    doc = copy.deepcopy(L.load_yaml(path))
     for b in doc["views"]["rear"]["components"]["bays"]:
         if b["id"] == "rear-3":
             b["accepts"] = b["accepts"] + ["commscope/ar3002e@1"]
@@ -171,3 +177,14 @@ def test_the_real_ch3000_seats_front_and_rear_in_shared_columns():
     hits = run(doc, [str(ROOT / "library")])
     assert len(hits) == 1, hits
     assert "ar3002e-x14" in hits[0] and "slot-3" in hits[0] and "rear-3" in hits[0]
+
+
+def test_the_guard_leaves_the_shared_parse_as_the_file_says():
+    """The guard above edits a device to see the rule catch it. The parse
+    `load_yaml` returns is shared by the whole process, so that edit has to
+    stay on a copy: run it, then the cached manifest must equal a fresh parse."""
+    path = ROOT / "library/devices/commscope/ch3000/device.yaml"
+    test_the_real_ch3000_seats_front_and_rear_in_shared_columns()
+    with path.open("rb") as fh:
+        fresh = yaml.load(fh, Loader=manifest._Loader)
+    assert L.load_yaml(path) == fresh

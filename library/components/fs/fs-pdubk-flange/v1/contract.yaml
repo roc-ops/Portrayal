@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: fs-pdubk-flange
+version: 1.0.0
+class: mechanical
+description: >-
+  The flange of the FS FS-PDUBK PDU bracket seen face-on. It is the foot that lies against a rack
+  post, 30 across and 88.4 high, with four bolt holes up its middle. It is drawn as the well the
+  plate stands out of, its floor the sheet itself.
+provenance:
+  size: >-
+    datasheet and drawing - FS's product page gives the bracket 30 x 135 x 88.4 mm (H x W x D as it
+    prints them, the part lying as its photographs lay it); the dimensioned drawing gives the plate
+    135 and 88.4 and no view dimensions the third, so the 30 is the flange's reach from the
+    plate, its width across the rack's face, and its 88.4 the plate's height.
+  holes: >-
+    estimated - four bolt holes for the M6 cup screws, two round between two slotted, in a column
+    up the flange's middle. The product page's photographs draw them with the inner pair about
+    one rack-hole gap apart and the outer ones one rack-hole pitch beyond; they are laid on the
+    EIA-310 pattern (15.875, 12.7, 15.875 up the post, 44.45 from end to end), centred on the 88.4.
+    Round holes 6.6 across and slots 6.6 by 10.5 are scaled off the photographs and the screw size.
+  depth: >-
+    estimated - 133: the flange is sheet, and the sheet body builds a well no deeper than 2 mm
+    short of the far face (docs/cable-managers-design.md section 4), so the 135 mm depth gives a
+    floor 2 thick. FS states the material (SPCC) and not the gauge.
+size: {w: 30, h: 88.4, d: 133}
+size-confidence: {w: datasheet, h: drawing, d: estimated}
+relief: {wall: '#1b1d20'}
+elements:
+  floor: {at: [0.0, 0.0], size: [30, 88.4], class: bezel}
+skins: [default]

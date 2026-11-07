@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: ex9200-sf2
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX9200-SF2 Switch Fabric module (from Junos OS Release 14.1), the high-speed Switch Fabric of the EX9200
+  line (CLI name EX9200-SF2). It carries the Routing Engine in its own bay and supports all EX9200 line cards. The left
+  end has the OK/FAIL, FABRIC ACTIVE and FABRIC ONLY lamps. The right end has one SFP+ XGE port, the BITS, GPS and UTI
+  lamps and the RJ-45 external clock port. An ejector lever sits at each end.
+attrs:
+  model: EX9200-SF2
+  power-draw-max-w: 155
+  power-draw-typical-w: 155
+provenance:
+  sources: >-
+    EX9204 Switch Hardware Guide (published 2025-08-12), "Switch Fabric Module in an EX9200 Switch", Figure 25 (an
+    isometric drawing with two circled close-ups; it repeats Figure 24, the EX9200-SF) and Table 28; the same text is
+    in the EX9208 and EX9214 guides (published 2025-07-28). The EX9204, EX9208 and EX9214 studio photographs show the
+    EX9200-SF, whose face is the same drawing; the SF2 is printed EX9200-SF2.
+  size: >-
+    estimated - the plate is 396.0 x 29.5 mm in the 413.5 envelope (see juniper/ex9200-lc-sf-blank). Table 7 gives every
+    Switch Fabric module (EX9200-SF and EX9200-SF2) 1.25 x 17 x 22 in.
+  re-bay: >-
+    photo-measured - the Routing Engine bay spans card x 51.4 to 323.3, 271.9 mm. It is read off the EX9208 studio front
+    photograph (body 583 px for 444.5 mm, 1.31 px/mm, SF1 slot enlarged 2.75 times): the seated Routing Engine's plate runs
+    80.1 to 352.7 mm across the chassis, 272.6 mm, and its edges sit 42.6 and 81.3 mm from the SF plate's ends. At 1.31
+    px/mm the photograph resolves 0.8 mm. "Each Routing Engine must be installed directly into an SF module" (guide).
+  face: >-
+    photo-measured - EX9208 studio front photograph, same enlargement. Left end: the lever (28.8 mm long), the OK/FAIL,
+    FABRIC ACTIVE and FABRIC ONLY lamps with their legends printed up the plate, and one captive screw. Right end, from the
+    Routing Engine's right edge: a captive screw, one SFP+ port (XGE) at card x 338.2 to 354.5, the BITS, GPS and UTI lamp
+    column at about 359, the RJ-45 EXT CLK port at 365.4 to 381.8 and the lever. Every place is read at 0.8 mm resolution
+    and is estimated. The guide's Figure 24 and Figure 25 are isometric and give the same arrangement without a scale.
+  leds: >-
+    guide Table 28: FABRIC ACTIVE green (active), FABRIC ONLY green (fabric-only mode), OK/FAIL green (online) or red
+    (failed). The guide says the BITS, GPS and UTI lamps beside the EXT CLK port show the state of their clocking interfaces and
+    are not supported. They are drawn and have no states.
+  power: >-
+    guide Table 24 (EX9200 Switch Component Power Requirements): EX9200-SF2 Switch Fabric module 155 W typical and 155 W
+    reserved; the EX9200 datasheet (Aug 2022), Table 3, gives "Switch Fabric-2" 155 W typical and 155 W maximum.
+states:
+- ok
+- fail
+- absent
+elements:
+  lever-left:
+    at: [0.0, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+  lever-right:
+    at: [384.5, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+bays:
+  re:
+    at: [51.4, 1.0]
+    size: [271.9, 27.5]
+    accepts: [juniper/ex9200-re2@1, juniper/ex9200-re@1]
+    default: juniper/ex9200-re2@1
+groups:
+  xge:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the SFP+ XGE port, which connects to the chassis Ethernet control switch and not to the switching fabric
+  clock:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 external clock (BITS and GPS) interface
+parts:
+- {ref: std/sfp@1, id: xge-0, group: xge, at: [338.5, 9.2], attrs: {function: XGE port}}
+- {ref: std/rj45@2, id: ext-clk, group: clock, at: [365.6, 8.15], attrs: {media: rj45, function: external clock}}
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the card every EX9200 and MX240, MX480 and MX960 slot takes (see
+  juniper/scb-mx size-notes).
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

@@ -439,7 +439,8 @@ def test_the_built_configs_json_carries_slots_and_states():
     assert not any(k.startswith("outlet-") for k in evmi["configs"][0]["states"])
     # and the key stays small enough to fetch with the parts list
     biggest = max(len(json.dumps(c["states"])) for f in files for c in json.loads(f.read_text())["configs"])
-    assert biggest < 30_000, biggest
+    # 50k since the Juniper QFX5220-128C: 128 ports with four stateful lamps each is 640 entries, 46k
+    assert biggest < 50_000, biggest
 
 
 def _face(*rows):

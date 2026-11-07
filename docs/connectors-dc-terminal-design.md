@@ -165,14 +165,15 @@ is read again when one changes. No header's geometry is changed.
 ## 9. The DC barrel jack
 
 **Ruling: the library treats the DC barrel jack as one nominal connector, `dc-barrel`.**
-Barrel diameters vary by product. `common/dc-barrel@1` is placed on four devices and no
-document held for any of them states the size of its jack, so the interface claims no
-diameter, and one plug stands for the class.
+Barrel diameters vary by product. `common/dc-barrel@1` is placed on six devices and the
+document held for only one of them, the CSS326-24G-2S+RM quick guide, states the size of its
+jack (5.5 mm outside, 2 mm inside, pin positive), so the interface claims no diameter, and
+one plug stands for the class.
 
 - **The jack** (1.0.1) gains `interface: dc-barrel` and a `mate` point at the coordinates
   of its existing `power` point, the centre of the bore. `power` is kept. Lint L11 asks a
   part that states an interface for a point named `mate`, so presenting at `power` alone is
-  refused. Its drawing and size are unchanged; the four devices take a patch.
+  refused. Its drawing and size are unchanged; the devices that placed it then took a patch.
 - **The rating is on the placement, not the part.** Each placement of the jack states
   `input-voltage` and `current-max-a`, the two names a DC power entry module in the
   library already used, from that device's own documents:
@@ -183,6 +184,8 @@ diameter, and one plug stands for the class.
   | `nokia/xs-010x-r` | 12 VDC | 1.0 | product guide, Table 2-2 |
   | `nokia/xs-010xr-p` | 12 VDC | 1.0 | product guide, Table 4-2 |
   | `telco-systems/tm-280` | 5 VDC | 3.0 | data sheet, "5VDC @3A (max)" |
+  | `mikrotik/crs326-24g-2s-plus-rm` | 10-28 VDC | 1.2 | rear legend "DC 10-28V"; brochure, Included, 24 V 1.2 A adapter |
+  | `mikrotik/css326-24g-2s-plus-rm` | 8-30 VDC | 1.2 | rear legend "DC 8 - 30V"; brochure, Included, 24 V 1.2 A adapter |
 
   Neither the interface nor the plug states a voltage or a current. The DCIM exports do
   not read the two attributes; each device's export changes in its drawing version line
@@ -209,7 +212,7 @@ diameter, and one plug stands for the class.
 - **The default cable** is 4.0, the plug's cable entry and so the largest it takes; no
   cable data sheet is held.
 
-`spec/tests/test_dc_barrel_plug.py` holds the ruling's wording in the registry, the four
+`spec/tests/test_dc_barrel_plug.py` holds the ruling's wording in the registry, the six
 placements and their ratings, the slot on each device, the plug's shape, a seat on two
 devices and a `cable-od` from a placement.
 

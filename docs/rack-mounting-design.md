@@ -14,9 +14,13 @@ Tracked in #904. Follows #865, which added `chassis.ears: behind` and
 | the move off `common/rack-ear@1` (#910) | open: 36 devices still place it |
 | the worked examples (#912 to #915) | not built |
 
-**No kit is in the library yet,** and no device lists one. Every kit and every
-kit ref in this note is an example. The examples use the made-up namespace
-`acme`, as [format-stability.md](format-stability.md) does. Four devices state
+**The library holds four kits,** `cisco/69-2037`, `cisco/n9k-c9500-rmk`,
+`cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`. Three devices list kits:
+the Nexus 93180YC-FX3 lists `cisco/nxk-acc-kit-1ru`, and the 93180YC-FX3S and
+93108TC-FX3 list both `cisco/nxk-acc-kit-1ru` and `cisco/nxk-acc-kit2-2ru`.
+`cisco/69-2037` and `cisco/n9k-c9500-rmk` are listed by no device yet. Every other kit and kit ref in this note is an
+example. The examples use the made-up namespace `acme`, as
+[format-stability.md](format-stability.md) does. Four devices state
 `chassis.ears`.
 
 The Rack Builder of the site is the first reader. When this was drawn up it
@@ -134,6 +138,23 @@ gets no generic ear, so it would have no use for `h`, `y` or `color`.)
   L43 stands down for `{behind: true}` as it does for the string.
   `fs/uscmh-sfdabsb2u` now writes the object, `behind: true` with a `proud`
   position, because a bare string cannot hold a position.
+- **`rolled`** is a list of the brackets that hold the device when a rack file
+  rolls it a quarter turn (`roll: 90` or `270`), which the rack elevation draws
+  and nothing else reads. Each is `{id, side, bar-h, length, ear-h, ear-w}` and
+  an optional `color`, in millimetres: a bar across the rack against the turned
+  body's lower (`below`) or upper (`above`) edge, and an ear on each post
+  standing on the bar's lower edge, `length` apart end to end. The 7360 ISAM
+  FX-8 shelf states two, read from its vertical mount kit's data sheet and
+  installation figure. The brackets are the rack's, so they are drawn alike at
+  90 and at 270. A new key, so a reader that does not know it draws a quarter
+  turn without them.
+- **`none`** says the part has no ears: no flange and no bolt to a post, because
+  it stands between the posts on another part's brackets. The tray and the top
+  baffle of the 7360 ISAM FX-8 vertical mount kit state it, as the installation
+  manual's Figure 84 draws them. The elevation then draws no generic ear and no
+  screw heads for it, and the 3D scene no generic ear. `behind` could not say this:
+  it describes a face as wide as the rack, and the elevation still draws screws
+  for it. A device that states none draws as before.
 - `ears` and `kits` are for a `rack` device only (L125).
 
 The [rack products note](rack-products-design.md) (section 7.1) proposes one

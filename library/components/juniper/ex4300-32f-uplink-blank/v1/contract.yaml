@@ -1,0 +1,58 @@
+format: 1
+kind: module
+name: ex4300-32f-uplink-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Uplink module slot cover panel for the Juniper EX4300-32F. The guide's inventory table lists an
+  uplink module slot cover panel with every switch, for the front panel slot that no uplink module
+  fills, and says to keep it installed in an empty slot to prevent overheating and dust. On the 32-port
+  switches the slot is the large opening at the left end of the front panel, 87 mm wide, taking the
+  EX-UM-2QSFP or the EX-UM-8X8SFP module. A plain plate held by two captive screws.
+attrs:
+  model: EX4300-32F uplink module slot cover panel
+provenance:
+  states: >-
+    datasheet - NO LAMP AND NO HEALTH ON A COVER PANEL. `absent` stays, because an empty slot is a
+    real thing to draw
+  existence: >-
+    datasheet - EX4300 Switch Hardware Guide (published 2025-08-12), Table 68: an uplink module slot
+    cover panel is provided with every switch, and Figure 10 (g022130) callout 1 is the "Cover panel for
+    uplink module slot" on the 32-port front panel. No part number is given
+  size: >-
+    estimated - read off Figure 10 (g022130), the flat front of the 32-port switch, a 609 x 158 px raster.
+    The chassis outline is 568 px across for the stated 441.0 mm (1.288 px per mm) and 56 px down for 43.7 mm
+    (aspect 10.1 against 10.09), so the figure carries proportions. The cover spans 10 to 122 px, 86.8 mm,
+    and 54 to 106 px down, 40.7 mm. One pixel is 0.8 mm, so each figure is good to about 1 mm. No photograph
+    of the 32-port front exists in the maker's image library
+  face: >-
+    estimated - a plain plate with two captive screws near the ends, as the figure draws it; two further
+    small tabs along the bottom edge are not drawn. Its colour follows the chassis plate
+states: [absent]
+elements:
+  screw-left:
+    at: [2.6, 16.9]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [79.4, 16.9]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 87.0
+  h: 40.7
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated

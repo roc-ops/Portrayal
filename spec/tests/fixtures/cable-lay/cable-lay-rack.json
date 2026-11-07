@@ -1,0 +1,35 @@
+{
+ "_source": "Copied unchanged, bar this key, from portrayal-site tests/rack/fixtures/cable-lay-rack.json at branch claude/q-s0066-revendor, head a6421f79 (the site's cable-lay demo rack, where P-0218 found cords c9-c12 through a tray's floor).",
+ "_note": "The structure of a cable-lay rack (Portrayal #949): two AS7326-56X leaves either side of an FHD-1UFCE panel with an FHD-CMP5DR lacer hosted on it, sixteen OM4 cords from leaf ports 49-56 to panel bays 2-4. Items, frame and cable ends only: every route here is the automatic one, with no lengths and no bundles.",
+ "id": "r1",
+ "name": "Cable lay",
+ "frame": {"kind": "four-post", "heightRU": 42, "numbering": "bottom-up", "holes": {"style": "square", "thread": null}, "railDepth": 740, "usableDepth": 1000, "ref": null},
+ "items": [
+  {"id": "i1", "ref": "as7326-56x", "cfg": "ac-f2b", "label": "LEAF-A", "ru": 42, "face": "front", "turned": false,
+   "swaps": {"port-49": "generic/qsfp-lc@2", "port-50": "generic/qsfp-lc@2", "port-51": "generic/qsfp-lc@2", "port-52": "generic/qsfp-lc@2", "port-53": "generic/qsfp-lc@2", "port-54": "generic/qsfp-lc@2", "port-55": "generic/qsfp-lc@2", "port-56": "generic/qsfp-lc@2"}, "fields": {}},
+  {"id": "i2", "ref": "fhd-1ufce", "cfg": "populated", "label": "PP-01", "ru": 41, "face": "front", "turned": false,
+   "swaps": {"bay-1": "fs/fhd-1mtp6lcd-om4-a@2", "bay-2": "fs/fhd-1mtp6lcd-om4-a@2", "bay-3": "fs/fhd-1mtp6lcd-om4-a@2", "bay-4": "fs/fhd-1mtp6lcd-om4-a@2"}, "fields": {}},
+  {"id": "i3", "ref": "as7326-56x", "cfg": "ac-f2b", "label": "LEAF-B", "ru": 40, "face": "front", "turned": false,
+   "swaps": {"port-49": "generic/qsfp-lc@2", "port-50": "generic/qsfp-lc@2", "port-51": "generic/qsfp-lc@2", "port-52": "generic/qsfp-lc@2", "port-53": "generic/qsfp-lc@2", "port-54": "generic/qsfp-lc@2", "port-55": "generic/qsfp-lc@2", "port-56": "generic/qsfp-lc@2"}, "fields": {}},
+  {"id": "i4", "ref": "fhd-cmp5dr", "cfg": "base", "label": "CM-01", "ru": 41, "face": "front", "turned": false, "swaps": {}, "fields": {}, "on": "i2", "unit": 1}
+ ],
+ "zeroU": [],
+ "cables": [
+  {"id": "c1", "a": {"item": "i1", "path": "port-49", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc5", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c2", "a": {"item": "i1", "path": "port-50", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc6", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c3", "a": {"item": "i1", "path": "port-51", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc1", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c4", "a": {"item": "i1", "path": "port-52", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc2", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c5", "a": {"item": "i1", "path": "port-53", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc3", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c6", "a": {"item": "i1", "path": "port-54", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc4", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c7", "a": {"item": "i1", "path": "port-55", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc5", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c8", "a": {"item": "i1", "path": "port-56", "view": "front"}, "b": {"item": "i2", "path": "bay-4/module/lc6", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c9", "a": {"item": "i3", "path": "port-49", "view": "front"}, "b": {"item": "i2", "path": "bay-2/module/lc3", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c10", "a": {"item": "i3", "path": "port-50", "view": "front"}, "b": {"item": "i2", "path": "bay-2/module/lc4", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c11", "a": {"item": "i3", "path": "port-51", "view": "front"}, "b": {"item": "i2", "path": "bay-2/module/lc5", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c12", "a": {"item": "i3", "path": "port-52", "view": "front"}, "b": {"item": "i2", "path": "bay-2/module/lc6", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c13", "a": {"item": "i3", "path": "port-53", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc1", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c14", "a": {"item": "i3", "path": "port-54", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc2", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c15", "a": {"item": "i3", "path": "port-55", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc3", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []},
+  {"id": "c16", "a": {"item": "i3", "path": "port-56", "view": "front"}, "b": {"item": "i2", "path": "bay-3/module/lc4", "view": "front"}, "media": "om4", "purpose": "uplink", "label": "", "route": []}
+ ]
+}

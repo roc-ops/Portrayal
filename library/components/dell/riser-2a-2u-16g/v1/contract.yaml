@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: riser-2a-2u-16g
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 2A of the PowerEdge R760 - slot 3 and slot 6 on dell/riser-2-cage-2u-16g@1, two low-profile PCIe Gen4 x16 slots side by side, slot 3 on processor 1 and slot 6 on processor 2; fitted in every riser configuration but 0
+attrs:
+  riser: '2A'
+  appears-in: 'riser configurations 1 to 11 and 13 (every one but 0)'
+  power-absent: not-published
+  slot-3: 'x16, low profile, half length, processor 1, PCIe Gen4'
+  slot-6: 'x16, low profile, half length, processor 2, PCIe Gen4'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors. The R760 ISM,
+    technical guide and spec sheet were searched for 'riser' beside a wattage
+    and none gives one.
+  slots: >-
+    datasheet - R760 ISM table 153: R2A carries slot 3 (low profile, Gen4 x16, processor 1) and slot 6 (low profile, Gen4 x16, processor 2); table 18 gives both half length. In the single-processor configurations (8, 9, 10-1, 13) slot 6's lanes belong to processor 2, which is absent; table 153 lists slot 6 only for configurations 1 to 6, 11 and 12, and the module keeps both bays. Which is left of which is not stated: slot 3 is on processor 1, the left-hand socket from the rear, and is drawn left.
+  face: >-
+    photo-measured - composed from dell/riser-2-cage-2u-16g@1.
+  seating: >-
+    estimated - low-profile brackets (79.2 x 18.42) behind the cage, tip at the left, their vent fields' centre lines on the windows': x 20.9 and 93.6, y 3.85. They overlap by 6.5 as the R660's riser 2A's do; the 1U R660 risers' brackets are the same 79.2 mm part.
+  size: >-
+    photo-measured - the cage's extent, 244.7 x 23.2.
+size: {w: 244.7, h: 23.2, d: 246.9}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+plan: {ref: dell/riser-2-plan-2u-16g@1}
+parts:
+  - {ref: dell/riser-2-cage-2u-16g@1, id: plate, at: [0, 0]}
+bays:
+  slot-3:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 1, generation: 4}
+    behind: true
+    at: [20.9, 3.85]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+  slot-6:
+    slot: {connector: x16, lanes: 16, height: low, length: half, processor: 2, generation: 4}
+    behind: true
+    at: [93.6, 3.85]
+    size: [79.2, 18.42]
+    accepts: [dell/pcie-filler-lp-16g@1, std/pcie-bracket-lp@1, common/pcie-card-lp@1, nvidia/mcx4111a-lp@1, nvidia/mcx4121a-lp@1, nvidia/mcx4131a-lp@1, nvidia/mcx512a-lp@1, nvidia/mcx512f-lp@1, nvidia/mcx515a-lp@1, nvidia/mcx516a-lp@1, nvidia/mcx621102-lp@1, nvidia/mcx621202-lp@1, nvidia/mcx623102a-lp@1, nvidia/mcx623105-lp@1, nvidia/mcx623106-lp@1, nvidia/mcx713106-lp@1, nvidia/mcx715105-lp@1, nvidia/mcx75310-lp@1, nvidia/mcx75510-lp@1, nvidia/mcx755106-lp@1]
+    default: dell/pcie-filler-lp-16g@1
+skins: [default]

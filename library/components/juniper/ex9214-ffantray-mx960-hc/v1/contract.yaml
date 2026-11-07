@@ -1,0 +1,39 @@
+format: 1
+kind: module
+name: ex9214-ffantray-mx960-hc
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper high-capacity fan tray of the EX9214 (FFANTRAY-MX960-HC), the same tray as the MX960's. The EX9214 has two, one
+  above the card cage and one below it, and both are this part. A tray holds six fans. It slides in horizontally from the
+  front behind a dark bezel. The bezel has a fan symbol at the left and the part name at the right. The lamps for the trays
+  are on the craft interface.
+part-numbers:
+  FFANTRAY-MX960-HC-S: {part: FFANTRAY-MX960-HC-S}
+attrs:
+  fans: 6
+  airflow: front-to-back (air enters at the front below the lower tray, rises through the card slots and leaves through the upper tray and the rear)
+provenance:
+  part-numbers: >-
+    datasheet - EX9200 Ethernet Switch Datasheet (1000432-022-EN, Aug 2022), ordering information: "FFANTRAY-MX960-HC-S EX9216 fan tray (upper or
+    lower), spare". The datasheet names an EX9216, which the EX9200 line does not have; the EX9214 guide lists two fan trays, upper and lower, and the part is read as theirs. The EX9214 studio front photograph
+    prints FFANTRAY-MX960-HC on both bezels, and the MX960 guide names FFANTRAY-MX960-HC in its component table. The MX960 device on main draws its
+    fan trays as plain bezels and has no fan tray component, so none is reused.
+  size: >-
+    estimated - 423.4 x 33.6 mm, read off the EX9214 front photograph on a millimetre grid: the upper tray's bezel is 36.7 mm tall and the lower one's
+    30.5 mm, and 33.6 is their mean, so one part serves both bays. Table 7 gives the fan tray 1.4 x 16.9 x 20.6 in (35.6 x 429.3 x 523.2 mm), whose 1.4 in
+    is the tray's height and 16.9 in its width, which agree with the bezel to a few millimetres.
+  face: >-
+    photo - EX9214 front photograph: a dark bezel with a slotted grille line across its upper part, a fan symbol at the left, hairline joints between
+    six cells, and FFANTRAY-MX960-HC at the right in light letters. The bezel's two screws sit at its upper corners. Every place is estimated to 1.5 mm.
+  power: >-
+    NOT PUBLISHED per tray. The guide's FRU power table (Table 24) lists no fan tray, and the EX9214 base system figure (1290 W typical, 1670 W reserved)
+    is the chassis's.
+states: [absent]
+size:
+  w: 423.4
+  h: 33.6
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

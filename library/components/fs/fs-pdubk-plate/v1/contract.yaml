@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: fs-pdubk-plate
+version: 1.0.0
+class: mechanical
+description: >-
+  The plate of the FS FS-PDUBK PDU bracket seen from its side, 135 along the depth of the rack and
+  88.4 high. It has three keyholes and two rows of four square holes. It is drawn as the well the
+  flange stands against, its floor the sheet itself. The skin says which end the flange is at.
+provenance:
+  size: >-
+    drawing - the FS-PDUBK product page's dimensioned drawing (a render of the plate face-on, its flange at the left)
+    dimensions 5.3 in [135 mm] across and 3.5 in [88.4 mm] high, and the keyhole and square-hole
+    pitch 1.2 in [31.5 mm]. The two scales it gives disagree by 6 per cent (6.25 px/mm along the
+    plate, 6.66 across it), so the render carries a little perspective and a position is read
+    on the axis it lies along, as a fraction of that axis' own dimension.
+  holes: >-
+    estimated - positions scaled off that drawing on the axis each lies along: the keyholes
+    centred 38.4, 69.9 and 101.4 from the flange end (the pitch is dimensioned, the first is
+    scaled), their openings centred up the plate; the four columns of square holes 22.9, 54.4,
+    85.9 and 117.4 from the same end, half a pitch off the keyholes, in two rows centred 10.3 from
+    the top and from the bottom. Each square is about 9, scaled. The far end of the plate turns
+    back into a short lip in every photograph and no view dimensions it, so it is not drawn.
+  depth: >-
+    estimated - 28: the plate is sheet, and the sheet body builds a well no deeper than 2 mm short
+    of the far face (docs/cable-managers-design.md section 4), so the 30 mm envelope across the
+    rack gives a floor 2 thick. FS states the material (SPCC) and not the gauge.
+size: {w: 135, h: 88.4, d: 28}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+relief: {wall: '#1b1d20'}
+elements:
+  floor: {at: [0.0, 0.0], size: [135, 88.4], class: bezel}
+skins: [flange-left, flange-right]

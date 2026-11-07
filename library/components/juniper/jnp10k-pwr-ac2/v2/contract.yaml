@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: jnp10k-pwr-ac2
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JNP10K-PWR-AC2 power supply as the guides size it, 3.6 x 3.5 in. It supplies 5 kW on one
+  feed or 5.5 kW on two. Two C20 feeds (INP1/INP2) sit beside the exhaust field, with the FAULT,
+  PWR OK and INP lamps, the red feed-setting DIP and the power rocker. Version 1 draws the same
+  part number 84.0 x 97.0 mm from a photograph.
+attrs:
+  model: JNP10K-PWR-AC2
+  role: ac-power-supply
+  power-output-w: 5500
+provenance:
+  sources: >-
+    datasheet - QFX10008 Switch Hardware Guide (Juniper Networks, published 2025-12-11): the JNP10K-PWR-AC2
+    Power Supply topic, Table 14, Table 15, Table 16 and Figure 10 (isometric) and Figure 27, the
+    comparison with the QFX10000-PWR-AC. MX10008 Router Hardware Guide (Juniper Networks): Table 55,
+    Physical Specifications for a JNP10K-PWR-AC2 Power Supply.
+  size: >-
+    datasheet - the QFX10008 guide's Table 16 and the MX10008 guide's Table 55 give the same figures, 3.5 in.
+    high (8.89 cm), 3.6 in. wide (9.14 cm) and 15.1 in. deep (38.35 cm), so 88.9 x 91.4 x 383.5 mm. The
+    QFX10008 guide says the supply "fits into the standard power supply bay" and "protrudes from the bay
+    when fully inserted", so the face is the bay's size and the extra length is behind the face. Version 1
+    drew 84.0 x 97.0 mm from an MX10008 photograph, which neither guide supports.
+  power-output: >-
+    datasheet - Table 15 and the topic text: 12.3 V DC, 5000 W with a single feed and 5500 W with a
+    dual feed (the MX10008 guide's Table 54 says the same). The larger figure is carried, as version 1 does.
+  face: >-
+    estimated - no flat figure of this supply is held (Figure 10 and Figure 27 are isometric). The
+    arrangement is that of version 1 (two inlets in one column beside the exhaust field, a lamp row,
+    the DIP, the handle and the rocker), refitted by hand to the 91.4 x 88.9 mm face so that nothing
+    overlaps. Positions are estimated, not measured.
+  colour: >-
+    borrowed - the dark grey finish of version 1; the guides' line drawings carry no colour.
+  positions: >-
+    FIELDS, since 1.1.0 of version 1 (docs/switch-positions-design.md, #808): `state`, each
+    `off` or `on`. The rocker is a see-saw with I at the left and O at the right; OFF raises the I end
+    and ON the O end. The heights are those of version 1 and are estimated. The skin
+    draws OFF; nothing held says how a unit ships.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inp2, at: [46.0, 4.0], attrs: {function: feed INP2}}
+- {ref: std/c20-inlet@1, id: inp1, at: [46.0, 50.0], attrs: {function: feed INP1}}
+size:
+  w: 91.4
+  h: 88.9
+  d: 383.5
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+fields:
+  state: {label: State, type: choice, options: ['off', 'on'], default: 'off'}
+relief:
+  features:
+  - {node: rocker-off, out: 2.5, profile: [[0, 2.5], [13.0, 1.1]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
+  - {node: rocker-on, out: 2.5, profile: [[0, 1.1], [13.0, 2.5]], confidence: estimated, source: 'the tilt of a see-saw rocker: the raised end at the part''s own estimated rocker height, the low end at 0.45 of it, the ratio the GL-12xB GLB rocker shows (common/rocker-switch@1); no source gives this part''s; the rocker''s 2.5 is assumed'}
+skins: [default]

@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: r6615-heatsink
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The processor heatsink of the PowerEdge R6615 seen from above - one finned block over the single AMD EPYC socket
+provenance:
+  sources: >-
+    Dell's R6615 Installation and Service Manual, figure 10 'Inside the system
+    without Risers' (page 16), read at 2.195 px/mm (the 482 mm front flange is
+    1058 px across it).
+  size: >-
+    drawing - 91.6 x 144.9: the bright block runs 201 px across and 318 px down
+    the figure, along a row and a column through its middle. The plate at the
+    rear end is 55.3 deep and the fins follow.
+  fins: >-
+    drawn from the bright bands the same column shows, 5.5 mm bands at 67.0,
+    89.3, 110.7, 118.9 and 139.9 from the rear edge. The fins between them are
+    not counted, so the drawing is a reading of the bands and not of every fin.
+  height: >-
+    NOT MEASURED. ISM figure 103 shows the heatsink in an isometric without a
+    scale; the 33.1 below is borrowed.
+  why-this-is-not-dell/heatsink-1u-16g: >-
+    THE R660 PART IS THE 82.1 x 119.1 INTEL SOCKET PLATE AND THIS IS THE AMD
+    EPYC HEATSINK: wider, longer and a single one.
+size: {w: 91.6, h: 144.9}
+size-confidence: {w: drawing, h: drawing}
+relief:
+  wall: '#6d737a'
+  features:
+  - node: block
+    out: 33.1
+    color: '#8a9096'
+    confidence: estimated
+    source: >-
+      borrowed from dell/heatsink-1u-16g@1, which borrows it from the 14th
+      generation 1U heatsink (Dell's R740xd service model measures 33.1). Both
+      are 1U heatsinks under a lid at the same height; no R6615 document gives
+      a height.
+elements:
+  block: {at: [0.0, 0.0], size: [91.6, 144.9], class: bezel}
+skins: [default]

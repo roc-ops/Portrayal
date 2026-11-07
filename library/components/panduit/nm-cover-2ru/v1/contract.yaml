@@ -1,0 +1,159 @@
+format: 1
+kind: component
+name: nm-cover-2ru
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged cover of a Panduit NetManager High Capacity 2RU horizontal manager (NM2 and NMF2)
+  seen from the front - a PVC plate across the finger tips, sunk inside a raised rim, with a
+  lip along its top and bottom edge and a row of hinge knuckles along each. It ships fitted on
+  the front of the manager and on the rear of a front-and-rear one, and opens up or down 110
+  degrees
+provenance:
+  size: >-
+    drawing - the plan view of the NMF2 and NM2 customer drawings (Panduit 10404-16 and 10404-20):
+    the cover is the thin bar along the front edge of the finger zone, as wide as the body,
+    and the parts list says "1- 2RU 19" COVER" (NMF2) and "2- 2RU 19" COVERS" (NM2), "2RU COVER:
+    PVC". 444.83 wide as the body (see nm-base-2ru) and 88 high.
+  relief: >-
+    drawing - the cover is the front 12.6 mm of the plan (the bar along the top of the
+    view, measured at 300 dpi). Its plate and lips are 3.5 and 1.5 thick, ESTIMATED: no view
+    sections the cover. The reference of this part is the front of the manager, so a placement
+    lifts nothing: the plate stands from 136.2 to 139.7 above the well's floor and the lips
+    from 127.1.
+  detail: >-
+    estimated - THE PLATE IS NOT ONE SLAB. A moulded cover of this kind is a plate with a
+    stiffening rim and, because it is hinged, knuckles along the edge it turns on, and the
+    customer drawings show only the cover's outline in the plan. So the centre panel is taken
+    2.0 thick (it stands to 138.2) inside a rim 4.0 wide up each end that stands the whole 3.5,
+    and each of the top and bottom edges carries five knuckles 44.0 wide and 5.0 high, one to a
+    fifth of the width, standing the whole 3.5 with the panel's level between them. The rim's
+    width, the panel's thickness and the knuckles' count, width and height are STAND-INS read
+    off no document: no Panduit view draws the cover's section or its hinge (the NM2 and NMF2
+    declare both as gaps). The knuckles stand for the hinge the specification sheet states (see
+    `lid`), and are drawn on both edges because the cover turns on the top one or the bottom one.
+  lid: >-
+    datasheet - the NetManager High Capacity specification sheet (RKSP237): "Dual hinged
+    covers shall allow access to the cable pathway", "Opens 110 degrees to the top or bottom
+    to provide complete access to the horizontal pathway without having to remove the
+    cover". It opens over the channel, so it is a lid (`lid: true`), and the pass-through windows
+    in the plate beneath it may be declared. The format has no hinge, so the cover is on or
+    off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: PVC", "The manager is black" on the product pages. The shade
+    is this library's render, a little lighter than the manager so the two read apart; the
+    panel is a step darker than the rim and knuckles so the rim reads.
+size: {w: 444.83, h: 88}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: PVC}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 86.5], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 88], class: bezel}
+  rim-left: {at: [0.0, 1.5], size: [4.0, 85.0], class: bezel}
+  rim-right: {at: [440.83, 1.5], size: [4.0, 85.0], class: bezel}
+  knuckle-top-1: {at: [22.48, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-2: {at: [111.45, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-3: {at: [200.41, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-4: {at: [289.38, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-5: {at: [378.35, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-1: {at: [22.48, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-2: {at: [111.45, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-3: {at: [200.41, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-4: {at: [289.38, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-5: {at: [378.35, 81.5], size: [44.0, 5.0], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 127.1
+      out: 139.7
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NetManager drawings, the cover over the front 12.6 mm; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      lift: 127.1
+      out: 139.7
+      color: '#333639'
+      confidence: estimated
+      source: the plan view of the NetManager drawings, the cover over the front 12.6 mm; the lip's thickness is not dimensioned
+    - node: plate
+      lift: 136.2
+      out: 138.2
+      color: '#2d3033'
+      confidence: estimated
+      source: the plan view of the NetManager drawings; the panel's thickness is a stand-in, no view sections the cover
+    - node: rim-left
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: a stand-in for the cover's stiffening rim; no Panduit view draws it, the width is not dimensioned
+    - node: rim-right
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: a stand-in for the cover's stiffening rim; no Panduit view draws it, the width is not dimensioned
+    - node: knuckle-top-1
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: a stand-in for the hinge RKSP237 states; no view draws it, the count and size are not dimensioned
+    - node: knuckle-top-2
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-3
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-4
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-5
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-1
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: a stand-in for the hinge RKSP237 states; no view draws it, the count and size are not dimensioned
+    - node: knuckle-bottom-2
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-3
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-4
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-5
+      lift: 136.2
+      out: 139.7
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+skins: [default]

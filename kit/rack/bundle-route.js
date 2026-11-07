@@ -14,6 +14,13 @@
 
 import {isWaypoint, uLabel} from './model.js';
 
+// The share of a bundle's circle its cables fill: tightly combed, a little
+// tighter than a perfect hexagonal pack of equal round cables (7/9 to 37/49).
+export const BUNDLE_PACK = 0.8;
+// A bundle's outside diameter in mm, from its members' (the diameter a tray's
+// gap is held to, route.js, as well as the size check, bundles.js).
+export const bundleDiameter = ds => Math.sqrt(ds.reduce((a, d) => a + d * d, 0) / BUNDLE_PACK);
+
 const key = w => (w.lane ? `n|${w.lane}|${w.ru}` : `p|${w.item}|${w.via}`);
 export const waypointKey = w => (isWaypoint(w) ? key(w) : null);
 

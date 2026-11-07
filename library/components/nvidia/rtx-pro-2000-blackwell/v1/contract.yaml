@@ -1,0 +1,301 @@
+format: 1
+kind: module
+name: rtx-pro-2000-blackwell
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA RTX PRO 2000 Blackwell (16 GB GDDR7), an actively cooled low-profile
+  dual-slot workstation card with a small blower. It takes no auxiliary power. It
+  ships on a low-profile bracket, with a full-height support bracket in the box.
+  The face drawn here is the full-height bracket, the only one PNY photographs.
+  It is a silver plate two slots across. It has four mini DisplayPort connectors
+  on the board's side, with a latch slot beside each. A grid of square vent holes
+  sits in a pressed panel held by two Torx screws. The shroud is dark grey with the
+  blower's opening on its broad side and a black backplate. It plugs into one
+  riser slot and covers the one beside it.
+slot-width: 2
+size: {w: 120.02, h: 41.91, d: 167.64}
+size-confidence: {w: registry, h: registry, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. A riser bay that takes a low
+  profile card names each card by hand (docs/cards-by-interface-design.md, status
+  proposed: no interface or mates field exists on a card or a bay today), and no
+  document held says any server takes a workstation card, so none was added.
+attrs:
+  model: 'RTX PRO 2000 Blackwell'
+  part-numbers: 'PNY VCNRTXPRO2000B-PB (retail); NVIDIA 900-5G195-2250-000'
+  role: gpu
+  form-factor: 'Low profile, 2.7 in x 6.6 in, dual slot; shipped on a low profile bracket, with a full-height support bracket in the box'
+  pcie-connector: x16
+  pcie-generation: 5
+  pcie-lanes: 8
+  pcie-height: low
+  power-draw-max-w: 70
+  power-input: 'host PCIe slot only'
+  memory: '16 GB GDDR7 with ECC, 128-bit, 288 GB/s'
+  display-ports: '4 x mini DisplayPort 2.1b on the bracket; a mini DisplayPort to DisplayPort adapter is in the box'
+  cooling: active
+  airflow: 'blower; it draws air from the card''s broad side and exhausts toward the bracket'
+  nvlink: 'none listed'
+  eol: none-announced
+provenance:
+  slot-width: >-
+    datasheet - NVIDIA's RTX PRO 2000 datasheet (4016661): "Form Factor 2.7' H x
+    6.6' L, dual slot"; the RTX PRO Blackwell quick-start guide (r18) lists the RTX
+    PRO 2000 among the "dual-slot GPUs" that "require removing two adjacent slot
+    covers". The face is one plate about 38 across (`face-outline`). The card
+    declares `slot-width: 2` as docs/pcie-two-slot-bays-design.md R1 defines it.
+  face-bracket-choice: >-
+    THE FACE IS THE FULL-HEIGHT SUPPORT BRACKET. The datasheet and PNY's line card
+    ("LP | DS") describe a low-profile card, and the quick-start guide puts a "Support
+    Full Height Bracket" in the box. PNY's only straight-on bracket picture shows the
+    full-height one fitted (120.02 long, the lower part shaped as a low-profile
+    bracket), and its 3/4 view shows the same. No picture of the low-profile bracket
+    this card ships on is held and no part number is stated for either, so the
+    low-profile face is not drawn (a gap) and the card is 120.02 wide. The board then
+    sits as it does on a full-height bracket: its lower edge at x 28.41 and its top
+    edge at 84.06, the CEM full-height figures, which the photograph agrees with (the
+    top edge is 83.1 above the tip; on a low-profile bracket it would be 80.0).
+  sources: >-
+    NVIDIA RTX PRO 2000 Blackwell datasheet (4016661),
+    https://www.nvidia.com/content/dam/en-zz/Solutions/products/workstations/professional-desktop-gpus/rtx-pro-2000/workstation-datasheet-blackwell-rtx-pro-2000-nvidia-us-4016661.pdf.
+    PNY's print of it,
+    https://www.pny.com/File%20Library/Company/Support/Product%20Brochures/NVIDIA%20RTX/English/NVIDIA-RTX-PRO-2000-Blackwell-Datasheet.pdf,
+    and PNY's NVIDIA Professional Graphics line card (REV. 09.14.26),
+    https://www.pny.com/File%20Library/Company/Support/linecards/pro-viz-gpus/NVIDIA-Professional-Graphics-Linecard.pdf,
+    for the order codes. NVIDIA's RTX PRO Blackwell online quick-start guide (r18,
+    17 March 2026),
+    https://images.nvidia.com/aem-dam/Solutions/design-visualization/quadro-product-literature/rtx-pro-blackwell-online-qsg-210x148mm-20260317-r18.pdf:
+    the box contents (a mini DisplayPort to DisplayPort adapter and a support
+    full-height bracket), the dual-slot statement and that the card does not use a
+    power cable. NVIDIA publishes no dimensioned drawing of this card: the geometry
+    is measured on PNY's photographs (below) and carried over from the standards. The
+    photographs are named by their files and licence is not stated; facts read from
+    them, pictures not used.
+  reference-photos: >-
+    reference - PNY's product images for the RTX PRO 2000, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/9f04eab8-06c8-4fbf-831e-b33600bffb83/images/
+    (PNG with alpha, 800 x 800): rtx-pro-2000-left.png (the full-height bracket
+    straight on, 248 x 720 px, its tip at the bottom), rtx-pro-2000-front.png (the
+    broad side straight on, 720 x 484 px), rtx-pro-2000-back.png (the backplate
+    straight on, 720 x 478 px) and rtx-pro-2000-3qtr-left.png, a 3/4 view from below
+    (not scaled). Each picture was checked to be this card: four mini DisplayPorts
+    with a latch slot beside each, a 4 by 12 vent grid in a pressed panel with two
+    screws, a small blower on the broad side and the stepped lower edge, the same card
+    in all four; none is byte-identical to a picture of another card (the grid and
+    blower match the RTX PRO 4000 SFF's, which is the same board family, and the SFF's
+    bracket is a different one). MM PER PIXEL: bracket photograph 0.1679 (5.955
+    px/mm; the two tabs' centres 121 px apart over the 20.32 slot pitch; the plate's
+    own 120.02 over 715 px agrees); broad-side photograph 0.2521 along the card (3.967
+    px/mm) and 0.2500 across it (4.0 px/mm); back photograph 0.2513 along (3.98 px/mm)
+    and 0.2532 across (3.95 px/mm). All are set out under `face-outline`, `body-fan`
+    and `body-backplate`. NO STRAIGHT-ON VIEW OF THE TOP EDGE OR THE FAR END EXISTS.
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2, PCIe CEM
+    5.0 figure 11-5), the bracket the photograph shows; h is two slots, 41.91.
+    std/pcie-bracket-fh@2 is a one-slot plate 18.42 across and cannot be composed for
+    a bracket that is two slots across, so the plate is drawn here, as
+    nvidia/rtx-pro-5000-blackwell@1 draws its own.
+  depth: >-
+    datasheet - 6.6 in, exactly 167.64, from the bracket's outer face as
+    nvidia/rtx-a2000@1 reads the same figure. On the broad-side photograph the card
+    runs 665 px from the bracket's outer face (column 94) to the far end (column 759),
+    which at 3.967 px/mm is 167.6 (the scale along is set by that length), and the
+    shroud's 223 px (rows 307 to 530) at 4.0 px/mm are 55.65 across, the low profile
+    board's height.
+  face-outline: >-
+    photo-measured - the bracket photograph turned a quarter turn into this frame,
+    tip at the left and the board's side at the top. Its scale is the two retention
+    tabs, whose centres are 121 px apart (345.5 and 466.5), the 20.32 slot pitch, so
+    5.955 px/mm (0.1679 mm/px); the tabs are 57 and 59 px wide, 9.6 and 9.9 against
+    CEM's 10.2 (drawn 10.0). The plate's own length checks it: the tip is row 759 and
+    the flange end row 44, 715 px, 120.0 at that scale. The first tab's centre is put at y
+    12.38, where std/pcie-bracket-fh@2 puts its own. Read that way the plate's
+    board-side edge is at y 3.9 (it reads 3.6 below x 26 and 4.7 above, which the
+    outline averages) and its far edge at 41.9 (41.4 above a step at x 111.8), 38.0
+    across, inside the 41.91 envelope. The tabs are 6.5 long, reached by 45 degree
+    chamfers to the body at x 10.0 and 10.7; the V notch between them runs to 11.0
+    from the tip. The plate above the card is blank. Readings are good to about 0.5
+    mm.
+  face-displayports: >-
+    photo-measured - four mini DisplayPort receptacles along the board's side, at the
+    same scale. Each shell is 8.6 along the bracket and 6.0 across (y 7.5 to 13.5).
+    Their centres along the bracket are 34.3, 46.9, 59.3 and 71.9, a pitch of 12.5 (74.5
+    px). The photograph prints the port numbers 1 to 4 on the plate beyond each
+    receptacle's tip end, 2.2 high; they are drawn. THE LIBRARY HAS NO DISPLAYPORT PART
+    OR INTERFACE, and none for a mini DisplayPort, so each is an element of class
+    `connector` painted in the skin and not a seated part; nothing mates it and the
+    module type carries no port for them (the `display-ports` attr says 4 x mini
+    DisplayPort 2.1b, the datasheet's words).
+  face-latches: >-
+    photo-measured - beside each receptacle, on the grid's side, a dark slot 5.6 by
+    2.1 (y 14.6 to 16.7), centred on the receptacle, and between each pair a small
+    square 1.7 by 1.7 (y 14.75 to 16.45) at x 65.9, 53.4 and 40.9. The squares have no
+    stated purpose and are drawn as dark squares.
+  face-grille: >-
+    photo-measured - a grid of square vent holes beside the receptacles: 4 columns
+    across and 12 rows along the bracket. Each hole is 3.1 square (18.5 px) on a pitch
+    of 3.9 (23.3 px) both ways, the columns at y 19.35, 23.25, 27.15 and 31.05 and the
+    rows from x 32.4 to 78.4. In the first and last row the fourth hole is replaced by
+    the screw and the third is narrow (1.7 across). The grid sits in a pressed panel
+    whose raised edge is drawn as a line (x 29.6 to 81.1, y 17.8 to 35.4).
+  face-screws: >-
+    photo-measured - two Torx screws in the grid's two end corners, at x 77.6 and 32.8
+    and y 32.7 and 32.4, heads 4.8 across. The recess is drawn as a plain dark circle,
+    not a six-lobe star.
+  thickness: >-
+    estimated - the datasheet states no thickness. The shroud's far face is put at y
+    40.0, as the full-height two-slot cards have it, and the backplate's outer face at
+    1.77, the CEM rear envelope's 2.67 behind the board. The bracket photograph's plate
+    is 38.0 across, which bounds a dual-slot card at 41.91.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 is. The board, and the bracket's keyed
+    side, are at the top (small y), which is where the receptacles are.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 on a full-height bracket
+    (figures 6-5 and 11-3, as nvidia/rtx-pro-5000-blackwell@1 has them), with the low
+    profile board's height: the lower edge 13.25 above the finger datum W (at x 15.16),
+    so at 28.41, the card 55.65 high to a top edge at 84.06, the key datum 57.15 behind
+    the bracket and the x16 finger tab to the standard's 81.88 past it. NVIDIA prints no
+    figure for this card. The broad-side photograph agrees on the height (223 px at 4.0
+    px/mm, 55.65) and on the fingers (44.9 to 128.1 behind the bracket against CEM's
+    45.35 to 128.95). The lower edge has a step near the far end from 141.6 to 159.9
+    behind the bracket, 4.0 deep (the same columns as the RTX PRO 4000 SFF's), with a
+    vertical wall at the bracket end and a ramp at the far end: it is drawn as one box
+    18.3 long. THE BOARD STARTS 0.90 behind the bracket, as nvidia/a10@1 has it
+    (estimated).
+  body-shroud: >-
+    photo-measured - the shroud is dark grey, one slab from the board's component face
+    (y 6.01) to the far face (40.0), the outline of the board, split at the step as the
+    board is. Its broad side shades from darker at the bracket end to lighter at the
+    far end, a smooth ramp, painted as a gradient.
+  body-backplate: >-
+    photo-measured - the back photograph shows a flat matte black plate over the
+    board's whole rear, on the board's outline, with eight small screws: four on the
+    lower edge's side (x 32.5) at 15.6, 37.2, 129.4 and 163.3 behind the bracket's outer
+    face and four on the top edge's side (x 80.3) at 15.3, 49.5, 113.6 and 163.3. It
+    has no opening for the blower. Its thickness is the CEM rear envelope's 2.67,
+    estimated. The photograph's two small printed corner marks are not drawn. Screw
+    places are read to about 1 mm.
+  body-fan: >-
+    photo-measured - the blower's opening on the broad side, from PNY's photograph at
+    3.967 px/mm along and 4.0 across. It is the RTX PRO 4000 SFF's blower at the same
+    place: a ring 39.7 across centred 38.5 from the far end and 23.1 below the top edge,
+    a flat hub 17.5 across inside a blade zone 35.1 across, and about 54 swept blades; the
+    lean drawn (30 degrees) is schematic. The SFF's figures were read on a picture
+    4.0 px/mm and the same here, and the two pictures' rings land on the same columns.
+    Painted on the broad side, not an opening in the 3D body.
+  body-top-edge: >-
+    estimated - no photograph shows this edge: PNY's 3/4 view looks up at the card
+    from below. The edge is drawn plain, dark and flat, with no printing, strip or
+    connector, and the maker's mark is not drawn and not reserved (nothing is known of
+    where it is, if there is one).
+  body-end: >-
+    estimated - a closed dark end plate 1.0 thick, 0.4 inside the card's length, as
+    nvidia/a10@1 has it. No photograph shows the end.
+  power: >-
+    datasheet - maximum power consumption 70 W in NVIDIA's datasheet and PNY's print and
+    line card ("70W Active"); no auxiliary connector (the quick-start guide: the RTX PRO
+    2000 does not use a power cable). The sources agree.
+  memory: >-
+    datasheet - 16 GB GDDR7 with ECC, 128-bit, 288 GB/s.
+  pcie: >-
+    datasheet - PCIe 5.0 x8 in a full-length (x16) connector: the datasheet's footnote 3
+    says "Uses full-length PCIe interface". The attrs say x16 for the connector and 8
+    lanes.
+  nvlink: >-
+    datasheet - the datasheet does not list NVLink and the card has no connector for
+    one on any photograph held. The attr says `none listed`.
+  part-numbers: >-
+    datasheet - PNY's line card (REV. 09.14.26): "NVIDIA RTX PRO 2000 Blackwell
+    VCNRTXPRO2000B-PB 900-5G195-2250-000, 16GB". NVIDIA's own datasheet gives none.
+  weight: >-
+    not stated - no datasheet held gives a weight for the card.
+  lifecycle: >-
+    PNY's line card of September 2026 lists the card as a current part and no
+    end-of-life notice was found in the documents held. The attr says `none-announced`.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the low-profile bracket the card ships on, which no
+    straight-on picture or part number covers (needs-photo; the face is the full-height
+    support bracket); (2) a view of the top edge and the far end (needs-photo; the edge is
+    drawn plain); (3) the DisplayPort part and interface, which the library lacks, and a
+    mini DisplayPort one (the four are painted, not seated); (4) the thickness, which no
+    source states (vendor-silent); (5) a weight (vendor-silent in the documents held); (6)
+    a two-slot bracket in the registry (std/pcie-bracket-fh@2 is a one-slot plate), so the
+    plate is photo-measured only; (7) no dimensioned drawing of any active workstation
+    card (the intake's handoff list, item 1).
+body:
+  depth: 167.64
+  color: '#a3a6a9'
+  plate: {at: [10.00, 3.90], size: [109.20, 38.00]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [55.65, 1.57], from: 0.90, depth: 140.70,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge, lower edge W + 13.25, 55.65 high; to the step at 141.6 read on the broad-side photograph'}
+  - {id: board-notch, at: [32.41, 4.44], size: [51.65, 1.57], from: 141.60, depth: 18.30,
+     color: '#1d2420', confidence: photo-measured, shows: [right],
+     source: 'the broad-side photograph at 4.0 px/mm: the lower edge steps up 4.0 (16 px) from 141.6 behind the bracket and returns by 159.9'}
+  - {id: board-east, at: [28.41, 4.44], size: [55.65, 1.57], from: 159.90, depth: 7.34,
+     color: '#1d2420', confidence: registry, shows: [right],
+     source: 'the lower edge again east of the step, to the 167.64 end less the 0.4 step (provenance body-end)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45.00, depth: 11.20,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key datum 57.15 behind the bracket, tab 13.25 deep, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.10, depth: 80.93,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0: the tab runs 81.88 past the key datum, to 139.03'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 45.35, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 58.35, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0: the x16 pad run on 1.00 pitch'}
+  - {id: backplate, at: [28.41, 1.77], size: [55.65, 2.67], from: 0.90, depth: 140.70,
+     color: '#222224', confidence: photo-measured, shows: [top, right],
+     source: 'the back photograph: a flat matte black plate over the board''s rear; 2.67 is the CEM rear envelope, estimated'}
+  - {id: backplate-notch, at: [32.41, 1.77], size: [51.65, 2.67], from: 141.60, depth: 18.30,
+     color: '#222224', confidence: photo-measured, shows: [top, right],
+     source: 'as the backplate, inside the step'}
+  - {id: backplate-east, at: [28.41, 1.77], size: [55.65, 2.67], from: 159.90, depth: 7.34,
+     color: '#222224', confidence: photo-measured, shows: [top, right],
+     source: 'as the backplate, east of the step'}
+  - {id: shroud, at: [28.41, 6.01], size: [55.65, 33.99], from: 0.90, depth: 140.70,
+     color: '#262627', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'the broad-side photograph: one dark slab; thickness estimated at 40.0 (provenance thickness)'}
+  - {id: shroud-notch, at: [32.41, 6.01], size: [51.65, 33.99], from: 141.60, depth: 18.30,
+     color: '#262627', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the board''s step'}
+  - {id: shroud-east, at: [28.41, 6.01], size: [55.65, 33.99], from: 159.90, depth: 6.34,
+     color: '#262627', confidence: photo-measured, shows: [right, left, bottom],
+     source: 'as the shroud, east of the step, to the end plate at 166.24'}
+  - {id: end-plate, at: [28.41, 6.01], size: [55.65, 33.99], from: 166.24, depth: 1.00,
+     color: '#262627', confidence: estimated,
+     source: 'a closed dark end plate (provenance body-end)'}
+  # THE BRACKET'S FOOT below the card
+  - {id: bracket-tab-1, at: [0.00, 7.38], size: [6.50, 10.00], from: 0.30, depth: 0.90,
+     color: '#a3a6a9', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0.00, 27.70], size: [6.50, 10.00], from: 0.30, depth: 0.90,
+     color: '#a3a6a9', confidence: estimated,
+     source: 'the second retention tab of skins/default.svg; 0.9 thick, estimated'}
+elements:
+  display-port-1: {at: [67.60, 7.50], size: [8.60, 6.00], class: connector}
+  display-port-2: {at: [55.00, 7.50], size: [8.60, 6.00], class: connector}
+  display-port-3: {at: [42.60, 7.50], size: [8.60, 6.00], class: connector}
+  display-port-4: {at: [30.00, 7.50], size: [8.60, 6.00], class: connector}
+  vent: {at: [32.40, 19.35], size: [46.00, 14.80], class: vent}
+  screw-1: {at: [75.20, 30.30], size: [4.80, 4.80], class: screw}
+  screw-2: {at: [30.40, 30.00], size: [4.80, 4.80], class: screw}
+relief:
+  wall: '#8a9199'
+  features:
+  - node: flange-fold
+    out: 9.4
+    color: '#a3a6a9'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on
+      std/pcie-bracket-fh@2. Not measured on this bracket.
+skins: [default]

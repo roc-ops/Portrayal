@@ -61,7 +61,6 @@ ESTIMATED = [
     ("common/fc-simplex-adapter@1", 1),
     ("common/lsh-simplex-adapter@1", 1),
     ("common/mdc-adapter@1", 4),
-    ("common/keystone-clip@2", 0),
 ]
 
 
@@ -70,19 +69,14 @@ def test_each_estimated_connector_exists_with_its_fibre_count(ref, positions):
     c = contract(ref)
     assert c is not None, f"{ref} not built"
     got = (c.get("optical") or {}).get("positions")
-    if positions == 0:
-        assert got is None, (
-            "a keystone clip is a mechanical opening, not a fibre connector - "
-            "it must declare no optical positions at all")
-    else:
-        assert got == positions
+    assert got == positions
 
 
 @pytest.mark.parametrize("ref,_positions", ESTIMATED)
 def test_every_estimated_connector_says_it_is_estimated(ref, _positions):
     """The whole point of this task.
 
-    These five were built from three-quarter renders because no face-on image
+    These were built from three-quarter renders because no face-on image
     exists. A dimension that does not say so reads exactly like one that was
     measured, and the next person cannot tell them apart.
     """

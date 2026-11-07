@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: versi-duct-rear-cover-2ru
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  The snap-on cover of the rear channel of the Leviton 492RU-HFR 2RU front-and-rear VERSI-DUCT,
+  seen from behind - a PVC plate across the channel with a lip along its top and bottom that
+  fits over the tips of the fingers. It ships fitted ("with black covers") and is pushed
+  down and rotated off.
+provenance:
+  size: >-
+    drawing - Leviton's 492RU-HFR dimensional drawing (DXF): the side view's outline is 2.38 in
+    [60.6mm] high at the rear cover and the finger tips it clips to (14.0 to 74.6 at 224 to
+    240 from the front), the specification sheet's page 2 labels the same "2.38"", and the
+    drawing's rear elevation dimensions 2.39 in; and 17.5 in [444.5mm] wide.
+  relief: >-
+    drawing - the top view: the rear cover covers the rear 23.1 mm of the duct (horizontal
+    lines at 231.5 and 254.65 from the front), the front cover's 22.8 within a millimetre,
+    and is taken as the front cover's section: 3.65 mm plate, 1.5 mm lips, 22.8 deep, the
+    lips' thickness estimated. The reference of this part is the cover's rear edge, so a
+    placement lifts it by the well's depth less 22.8.
+  fitting: >-
+    datasheet - Leviton's instruction sheet (Versi-Duct Slotted Duct System): the cover is
+    fitted over the top of the duct fingers, pushed down and rotated until it snaps into
+    place; the specification sheet calls it a "snap-on duct cover" and the ducts come "with
+    black covers". A hinge, 49265-HNG, is a separate accessory.
+  color: >-
+    datasheet - the ducts are sold "with black covers". The drawing is line work, so the shade
+    is this library's render, a little lighter than the duct so the two read apart.
+size: {w: 444.5, h: 60.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PVC, flammability: UL 94V-0}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.5, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 59.1], size: [444.5, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.5, 60.6], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      out: 22.8
+      color: '#303336'
+      confidence: estimated
+      source: the top view of the 492RU-HFR drawing, the rear cover over the rear 23.1 mm; the lip's thickness is not dimensioned
+    - node: lip-bottom
+      out: 22.8
+      color: '#303336'
+      confidence: estimated
+      source: the top view of the 492RU-HFR drawing, the rear cover over the rear 23.1 mm; the lip's thickness is not dimensioned
+    - node: plate
+      lift: 19.15
+      out: 22.8
+      color: '#303336'
+      confidence: estimated
+      source: taken as the front cover's 3.65 mm plate; the rear cover's own thickness is not dimensioned
+skins: [default]

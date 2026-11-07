@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9902
-version: 1.0.4
+version: 2.0.3
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9902
@@ -118,9 +118,24 @@ provenance:
       over a standard that does not vary. The likeliest reading is that one body
       outline was drawn for one of the two chassis and reused for the other, and
       that the ASR 9903's ports are drawn about 0.8 percent wide as a result.
-      NOTHING IS CHANGED ON THE STRENGTH OF THAT HERE. It is a measurement of
-      this master, recorded where it was made; re-reading the ASR 9903 against
-      it is roc-ops/Portrayal#374.
+      THE ASR 9903 WAS THEN RE-READ AGAINST IT (#374): its width is the guide's
+      439.9 and every x on its two faces was rescaled by 0.99108, which puts the
+      A99-RP-F slots there on a 209.55 mm pitch beside this chassis' 209.58.
+  supply-width:
+    confidence: estimated
+    note: >-
+      THE POWER MODULE IS 74.94 MM WIDE HERE AND ON THE ASR 9903, AND THAT IS AN
+      ESTIMATE. This chassis' rear master reads the PWR-1.6KW supply 74.94 mm wide
+      in its pm-0 and pm-1 bays, and the bays carry that figure. The ASR 9903's
+      master read the same part 74.69 at its old scale and reads 74.02 once that
+      chassis is rescaled, so the two chassis' drawings differ by 0.92 mm on one
+      part. A search online and in the document set on 2026-10-18 found no source
+      that gives the supply's width, so cisco/pwr-1p6kw-ac@2 and
+      cisco/pwr-1p6kw-dc@2 carry 74.94 marked estimated and both chassis seat
+      them. The bay height here, 40.91, is also not the part's 40.2 (the ASR
+      9903's reading); that disagreement is open. What would settle the width is
+      a Cisco power-module table or a straight-on rear photograph with the
+      supplies seated.
   rp-slots:
     confidence: drawing
     note: >-
@@ -354,6 +369,20 @@ chassis:
   color: '#c8cacc'
   silk: '#231f20'
 gaps:
+- what: supply-width-estimated
+  scope: [rear, power-modules]
+  reason: needs-photo
+  note: >-
+    The PWR-1.6KW supply is 74.94 mm wide in this chassis' rear master and in its two bays,
+    and that is an estimate: the ASR 9903's master reads the same part 74.02 once rescaled,
+    and a search online and in the document set on 2026-10-18 found no source that gives the
+    module's width. Both chassis seat cisco/pwr-1p6kw-ac@2 and cisco/pwr-1p6kw-dc@2 at
+    74.94. See provenance.supply-width.
+  wanted: >-
+    A Cisco site-planning or spares document with a power-module table, or a straight-on
+    rear photograph of an ASR 9902 or ASR 9903 with the supplies seated, resolving at least
+    2 px/mm across the body.
+  blocks: []
 - what: fan-bay-labels-sit-on-the-tray-flange
   scope: [rear, fan-trays]
   reason: needs-drawing
@@ -831,8 +860,8 @@ views:
       - {at: [267.91, 40.63], text: 'FT2', font-size: 2.6, anchor: start, rotate: -90, for: ft-2}
     components:
       bays:
-        - {id: pm-0, at: [4.14, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@1', 'cisco/pwr-1p6kw-dc@1'], default: cisco/pwr-1p6kw-ac@1, group: power-modules, rel-pos: 0}
-        - {id: pm-1, at: [359.53, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@1', 'cisco/pwr-1p6kw-dc@1'], default: cisco/pwr-1p6kw-ac@1, group: power-modules, rel-pos: 1}
+        - {id: pm-0, at: [4.14, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@2', 'cisco/pwr-1p6kw-dc@2'], default: cisco/pwr-1p6kw-ac@2, group: power-modules, rel-pos: 0}
+        - {id: pm-1, at: [359.53, 44.64], size: {w: 74.94, h: 40.91}, accepts: ['cisco/pwr-1p6kw-ac@2', 'cisco/pwr-1p6kw-dc@2'], default: cisco/pwr-1p6kw-ac@2, group: power-modules, rel-pos: 1}
         - {id: ft-0, at: [82.99, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 0}
         - {id: ft-1, at: [175.37, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 1}
         - {id: ft-2, at: [267.75, 3.85], size: {w: 88.58, h: 82.18}, accepts: ['cisco/asr-9902-fan@1'], default: cisco/asr-9902-fan@1, group: fan-trays, rel-pos: 2}
@@ -904,8 +933,8 @@ configurations:
       ASR 9902 Router, AC supplies:
         part: ASR-9902
     bays:
-      pm-0: cisco/pwr-1p6kw-ac@1
-      pm-1: cisco/pwr-1p6kw-ac@1
+      pm-0: cisco/pwr-1p6kw-ac@2
+      pm-1: cisco/pwr-1p6kw-ac@2
   dc:
     kind: orderable
     description: >-
@@ -917,8 +946,8 @@ configurations:
       ASR 9902 Router, DC supplies:
         part: ASR-9902
     bays:
-      pm-0: cisco/pwr-1p6kw-dc@1
-      pm-1: cisco/pwr-1p6kw-dc@1
+      pm-0: cisco/pwr-1p6kw-dc@2
+      pm-1: cisco/pwr-1p6kw-dc@2
 references:
   - {title: 'Cisco ASR 9902 Compact High-Performance Router Data Sheet (c78-744663, 2021)', sha256: 8fae913bff35f1b4347e69a258ed7d89879093ce1d6f6d41ee71de1d304c623a}
   - {title: 'Cisco ASR 9000 Series Fixed-Port Routers Hardware Installation Guide (2021-07-30)', sha256: 8b539355306e5bd2cfd9293a07dfe3acc95cb6aa95435537225b667901ac9d13}

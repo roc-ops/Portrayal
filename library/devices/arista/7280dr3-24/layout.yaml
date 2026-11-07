@@ -1,0 +1,528 @@
+format: 1
+kind: device
+name: 7280dr3-24
+version: 0.1.1
+maturity: modelled
+manufacturer: Arista
+model: 7280DR3-24
+aliases:
+  - {name: DCS-7280DR3-24, kind: marketing}
+portfolio: {line: 7000 Series, family: 7280R3}
+description: >-
+  Arista 7280DR3-24 - a fixed 1RU data-centre switch router with 24 x 400G QSFP-DD ports, running EOS. The
+  front carries the QSFP-DD cages in two stacked rows of twelve columns, the odd number on top. Four
+  system lamps (system, fan, PS1, PS2) are at the right. The rear carries two hot-swap 1500 W power
+  supplies at the ends and three hot-swap fan modules, with the RJ-45 management port, the USB port and
+  the RJ-45 console port between the left supply and the first fan. Air flows front to rear. It is sold
+  as the 7280DR3-24 and, with more memory and routes, as the 7280DR3K-24.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      7280R3 Series Quick Start Guide, Arista Networks, document DOC-07041-01, 63 pages, PDF created
+      2025-05-16 (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7280R3.pdf): Table 1
+      (dimensions and weights), Table 2 (operating and storage), Table 3 (power input), Table 4 (power
+      draw and supported supplies), section 2.1 (airflow orientation, handle colour), Table 5
+      (grounding), section 4.5 (serial and management cables), Appendix A (status indicators, Tables 9
+      to 13), Appendix C (Figure C-2, the front panel of the DCS-7280DR3-24 and DCS-7280DR3K-24),
+      Appendix D (Figure D-2, the rear panel with three fan modules), Appendix E (field replacement).
+      7280 Data Center Switches Quick Start Guide, Arista Networks, 58 pages, PDF created 2022-06-03
+      (https://www.arista.com/assets/data/pdf/qsg/qsg-books/QS_7280_1RU_Gen3.pdf): Figure 50
+      (DCS-7280DR3-24 and 7280DR3K-24), the cross-check of Figure C-2. 7280R3 Series Data Center Switch
+      Router Data Sheet, Arista Networks, 03-0045-59, dated August 11th, 2025
+      (https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Data-Sheet.pdf): the model comparison
+      of the 7280PR3-24, PR3K-24, DR3-24 and DR3K-24, the power supply specifications and the ordering
+      information. Held and checked first: intake COVERAGE.md and SOURCES.md, which list no photograph,
+      Visio stencil, 3D model or CAD file for this model (Arista publishes none; the stencil zip could
+      not be fetched). The data sheet's picture of the face is a thumbnail. No drawing, photograph or
+      logo is copied into the library, only transcribed facts and new drawings.
+  gate-1-front:
+    confidence: estimated
+    note: >-
+      Figure C-2 passes. The raster is 576 x 117 pixels; the body measures 561 px wide and 57 px tall
+      (aspect 9.8), against the data sheet's 440.0 / 43.7 = 10.07, so the figure is near-orthographic
+      and carries geometry at 1.273 px/mm (the 440 mm body is the scale anchor, its left edge read at
+      8.7 px as for the sibling 7280CR3-32D4 face). One pixel is 0.8 mm, so every position is good to
+      about 0.8 mm, and every one is `estimated` because it is read off a picture and no dimension
+      states it. The old guide's Figure 50 is the same 576 x 117 raster, compared pixel for
+      pixel (no pixel differs), so it is a repeat of the source and not a second reading. The status lamps are read
+      from the green pixels of the lamps (550 px, 42 to 54 px down), which put them about 5 mm
+      left of where the sibling 7280CR3-32D4 file puts its lamps (a reading of the same figure style).
+  gate-1-rear:
+    confidence: estimated
+    note: >-
+      Figure D-2 is a 552 x 126 px raster whose chassis is 544 px between its edges and 52 px tall
+      (aspect 10.5; the 3 percent excess is the cut-off bottom edge), 1.239 px/mm over the 440 mm body;
+      positions are good to about 0.8 mm. The guide draws the rear generically (D-1 to D-4) and does not
+      say which model uses which. The 7280DR3-24 is mapped to D-2 by its three fan modules (data sheet:
+      "Hot-swappable Fans 3 (N+1 redundant)"), its 1RU height, its two power supplies and its
+      management ports at the rear (Figure C-2 has none at the front). THE MAPPING IS ESTIMATED. The
+      positions are the 7280CR3-32D4's, which is mapped to the same figure.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 1: 48.3 x 4.4 x 57.4 cm (19 x 1.75 x 22.6 in), 13.1 kg (29.0 lbs) for the 7280DR3-24 and
+      the 7280DR3K-24. Data sheet: 43.99 x 4.37 x 57.4 cm, 28 lbs (12.7 kg), in cells it merges across the PR3
+      and the DR3 columns. The width: 48.3 cm is over the mounting ears, so the body between them, which is
+      what is modelled, is the data sheet's 43.99 cm (440.0 here), a 21.5 mm ear each side. The height is
+      the data sheet's 43.7. The depth is 574.0, the figure both documents give. The weight differs (gap
+      `size-conflict`; the guide's per-model figure is in attrs). 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide's Chapter 3 mounts the switch with the accessory-kit brackets and shows them in
+      isometric drawings of a different switch ("Illustrations in this chapter depict the mounting of a
+      DCS-7050QX-32S switch") that carry no measure. The data sheet lists the spares KIT-7001,
+      KIT-2POST-1U-NT, KIT-4POST-NT, KIT-7001-4POST-L and KIT-GND-EXT-1RU. No figure measures a bracket
+      position, and the kit guides are not held, so no ear position is written and no rail kit is listed
+      in chassis.kits. Recorded in the gap rack-ears.
+  front-ports:
+    confidence: estimated
+    note: >-
+      Figure C-2 at 1.273 px/mm. Twenty-four QSFP-DD cages in two stacked rows of twelve columns (ports 1 to
+      24), the yellow boxes of the figure enclosing each column. The boxes' left edges sit on a 34.5 mm
+      pitch, the first cage column centred 23.7 mm from the left. The rows read from the yellow boxes at
+      4.7 to 21.2 and 22.8 to 40.1 mm down, so the cage centres are 13.0 and 31.5 mm down and the row
+      pitch is 18.5 mm. std/qsfp-dd@1 (registry 19.0 x 10.0 mm) is seated; the figure draws each box 24.4
+      mm wide with its bezel. The belly-to-belly orientation is the library's convention (upper cage
+      upright, lower turned 180); the figure is too small to show the latch side.
+  port-numbering:
+    confidence: estimated
+    note: >-
+      Figure C-2 (callout 5, "Port numbers") prints 1 over 2, 3 over 4, and so on, 1 to 24 from the left,
+      the odd number on the upper cage. The figure prints each number on a white tab over the cage
+      opening; a seated cage hides what is painted under it, so the numerals are set in the band between
+      the two rows, the odd number under its upper cage and the even above its lower one. EOS interface
+      names (Ethernet1 to Ethernet24 and their breakouts) are not printed on the metal and are not
+      modelled.
+  port-lamps:
+    confidence: estimated
+    note: >-
+      NOT MODELLED. Guide Appendix A.1.2, Table 10 says port LEDs sit near their ports (off link down,
+      green link up, yellow software disabled, flashing yellow failed diagnostics), but Figure C-2 draws
+      only white light-pipe bars on each cage and no lamp a reader can count. Recorded in the gap
+      port-lamps.
+  speed-strips:
+    confidence: estimated
+    note: >-
+      Guide Figure C-2 callout 6, "Port-speed group": a thin grey band between the two rows carries a
+      small legend at each column's left and right ends. The legends are unreadable at 85 ppi and are not
+      drawn. The figure also prints a small orange tag on the band between columns 13 and 14, unreadable.
+  status-lamps:
+    confidence: estimated
+    note: >-
+      Guide Appendix A.1.1, Table 9 and Figure C-2 callouts 1 to 4: a system status lamp (blinking green
+      on power-up, green normal, blue locator, amber for two or more failed fans), a fan status lamp
+      (green, amber for one module removed or failed, red for two or more) and a status lamp for each of
+      the two power supplies (green operating, off removed or faulty). Four lamps in a column at 425.6 mm,
+      about 3.2 mm apart from 8.1 mm down. The printed glyphs beside them are a system symbol, a fan
+      symbol and two small legends read as PS1 and PS2.
+  front-legend:
+    confidence: estimated
+    note: >-
+      The vertical model legend reads "7280DR3-24" up the left plate. THE MAKER'S WORDMARK ABOVE THE FIRST
+      COLUMN IS NOT DRAWN: a logo-zone region is reserved over it and the plain model text is set. The
+      figure's small print is not legible, so the text is as the guide's caption names the model.
+  vents:
+    confidence: estimated
+    note: >-
+      The figure shows a perforated strip along the top (1.0 to 4.6 mm down, across nearly the whole
+      width), a small grid of dark squares in each gap between two cage columns, two grids at the left
+      of the first column and a three-by-three grid right of the last, and a ribbed strip along the
+      bottom lip. Each is drawn as a vent field in its measured extent, not square by square.
+  rear:
+    confidence: estimated
+    note: >-
+      Figure D-2 at 1.239 px/mm, the rear seen from behind with x = 0 at the left of the drawing. PS1 is
+      the left and PS2 the right (callouts 1 and 10). Each power supply module is 73.5 mm wide (the data
+      sheet's "73.5MM") at 4.0 and 362.3 mm across and 1.85 mm down. The management block is a grey plate
+      83.0 to 101.0 mm across with the Ethernet management port, the USB port and the RJ-45 console port
+      stacked in it, in the order the library draws other Arista management stacks. Three fan modules
+      78.6 mm wide at 107.7, 191.0 and 274.3 mm across (an 83.3 mm pitch) and 2.55 mm down.
+  rear-fan:
+    confidence: datasheet
+    note: >-
+      Data sheet: "Hot-swappable Fans 3 (N+1 redundant)", "Fan Tray FAN-7011H" and the spare FAN-7011H-F
+      (front-to-rear airflow). The data sheet gives the DR3 front-to-rear airflow only and lists no
+      FAN-7011H-R for it. Guide section 2.1: a red handle is an air-exit module. The three fan modules
+      are bays that accept the FAN-7011H-F.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Guide Appendix E (E.2 power supplies, E.3 fan modules) gives removal and installation procedures,
+      and the data sheet calls the supplies "1+1 hot-swappable" and the fans "hot-swap". SO THE TWO POWER
+      SUPPLIES AND THE THREE FAN MODULES ARE BAYS. Nothing on this chassis is a built-in unit. The
+      management block, the USB port and the console port are part of the chassis and are placements.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 4: typical / maximum 560 W / 1110 W for the 7280DR3-24 and the 7280DR3K-24, each with
+      PWR-1511-AC or PWR-1511-DC. The data sheet gives 650 W / 1100 W for the DR3 columns, the same cell
+      it gives the PR3 (gap `size-conflict`). The guide's per-model figure is used; the data sheet's typical
+      is "measured at 25C ambient with 50% load on all ports".
+  environment:
+    confidence: datasheet
+    note: >-
+      Guide Table 2: operating 0 to 40 C, storage -25 to 70 C, altitude 0 to 3,000 m, humidity 5 to 90
+      percent non-condensing. Data sheet: operating 0 to 40 C, storage -40 to 70 C, humidity 5 to 95
+      percent, altitude 0 to 3,000 m. Storage temperature and humidity differ: gap `environment`, the
+      guide's used.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Data sheet ordering information: DCS-7280DR3-24-F ("front to rear air, 2 x AC") and DCS-7280DR3K-24-F
+      ("large routes, front to rear air, 2 x AC"). The "#" SKUs ("configurable fans and psu") and the
+      "-M#" memory-expansion orders are orders of parts, not part numbers a DCIM can hold, and are not
+      listed. The DR3K has 64 GB of memory and the large-routes licence and the same face, supplies and
+      power draw, so it is a configuration with its own part number. The data sheet lists no DC build:
+      the PWR-1511-DC-RED supply is a spare, so the DC configuration is an example with no part number.
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. EOS names ports Ethernet1 to Ethernet24 and Management1; this is the
+      vendor's convention and no held document prints it.
+  colour:
+    confidence: estimated
+    note: >-
+      The front plate is the 7280CR3-32D4's #aaabad, read there as the median of bare-plate pixels in the
+      guide's figure of the same family.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched 2026-10-23 (web searches of Arista's end-of-sale notices) for a notice for the 7280DR3-24 and
+      7280DR3K-24: none found. The notices the searches returned were for older 7280 models and for the
+      7280SR3K-48YC8 (notice 23789) and 7280CR3K-36S (notice 23790) series, not for this one.
+  other-faces:
+    confidence: datasheet
+    note: >-
+      No source draws the top, bottom or sides flat. The guide's installation figures are isometric. Each
+      carries an `empty` sentence. The 1RU grounding point is on the bottom of the chassis (guide section
+      4.2, Table 5, KIT-GND-EXT-1RU); no figure measures it.
+attrs:
+  physical:
+    weight: 13.1 kg (29.0 lbs) for the 7280DR3-24 and the 7280DR3K-24 (guide Table 1); the data sheet says 12.7 kg (28 lbs)
+    size-over-ears: 48.3 x 4.4 x 57.4 cm (19 x 1.75 x 22.6 in) with the mounting ears (guide Table 1)
+  performance:
+    throughput: 9.6 (19.2) Tbps
+    packets-per-second: 4 Bpps
+    latency: from 3.8 microseconds
+    packet-buffer: 16 GB
+    ports-max-speed: 24 ports of 400 Gbps; 96 of 100 Gbps; 192 of 50 Gbps; 24 of 40 Gbps; 192 of 25 or 10 Gbps
+    interfaces-max: 192
+  power:
+    power-typical-w: 560
+    power-max-w: 1110
+    power-envelope: as-tested
+    power-measure: guide Table 4 typical and maximum; the data sheet says typical is measured at 25 C ambient with 50 percent load on all ports
+    psu-redundancy: 1+1
+    input-ac: 200 - 240 VAC (PWR-1511-AC), IEC 60320 C14
+    input-dc: -48 to -60 VDC (PWR-1511-DC)
+    efficiency: 93 percent (Platinum) AC, 92 percent DC (data sheet)
+  thermal:
+    airflow: front-to-rear, set by the fan modules and supplies fitted
+    fan-redundancy: 3 hot-swap fan modules, N+1
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -25 to 70 C (guide Table 2); the data sheet says -40 to 70 C
+    humidity: 5 to 90 percent non-condensing (guide Table 2); the data sheet says 5 to 95 percent
+    altitude: 0 to 3,000 m (10,000 ft) operating
+  platform:
+    cpu: Quad-Core x86
+    memory: 8 GB, 64 GB optional (7280DR3-24); 64 GB (7280DR3K-24)
+    storage: 8 GB flash; 120 GB SSD (with the 64 GB system memory option, and on the 7280DR3K-24)
+  features:
+    optics-qsfp-dd: 400G, 200G, 100G, 50G and 25G with breakout, in the 24 QSFP-DD cages (data sheet)
+    eos-license: license group G4; minimum EOS 4.23.1
+  management:
+    console: RJ-45 RS-232 serial on the rear, 9600 baud 8N1, no flow control
+    oob: one 10/100/1000 management port on the rear
+    usb: one USB port on the rear, for software or configuration updates
+  compliance:
+    emc: FCC Class A, ICES-003, EN 55032, EN IEC 61000-3-2:2019, EN 61000-3-3, EN 55035, EN 300 386
+    safety: EN 62368-1, IEC 62368-1, CSA/UL 62368-1
+    certifications: BSMI, CE, KCC, NRTL, RCM, UKCA, VCCI, TEC, ANATEL, ICASA (data sheet)
+    rohs: RoHS 2011/65/EU and 2015/863/EU (data sheet, Directives)
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440.0
+  height: 43.7
+  depth: 574.0
+  ru: 1
+  color: '#aaabad'
+  airflow: front-to-back
+  power: ac
+gaps:
+  - what: size-conflict
+    scope: [front, rear]
+    reason: sources-disagree
+    note: >-
+      Weight 13.1 kg (guide Table 1, 7280DR3-24 and DR3K-24) against 12.7 kg (data sheet), and typical / maximum
+      power 560 W / 1110 W (guide Table 4) against 650 W / 1100 W (data sheet, the same cell as the PR3). The data
+      sheet merges the PR3 and DR3 columns in these rows; the guide's per-model rows are used.
+    wanted: the maker's statement of which is current.
+  - what: environment
+    scope: [front, rear]
+    reason: sources-disagree
+    note: >-
+      Storage temperature -25 to 70 C (guide Table 2) against -40 to 70 C (data sheet), and relative humidity 5
+      to 90 percent against 5 to 95 percent. The guide's, the older document by three months, are in attrs.
+    wanted: the maker's statement of which is current.
+  - what: rack-ears
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      The guide's Figures 3-1 to 3-4 are isometric drawings of another switch and carry no measure, and the kit
+      guides for KIT-7001 and the other spares are not held, so no ear position or rail kit is written.
+    wanted: a dimensioned drawing of the mounting bracket position, and the kit guides.
+  - what: port-lamps
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      Guide table 10 describes port LEDs near the ports and Figure C-2 draws white light-pipe bars on each
+      cage but no lamp whose count or place can be read. No port lamp is modelled.
+    wanted: a photograph of the lit face, or a larger figure.
+  - what: front-legends
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      The port-speed band's legends, the small print at the cages, the system and fan lamp glyphs and the PS1
+      and PS2 legends are unreadable in the 576 px figure. The glyphs and the two PS legends are drawn as read;
+      the band and cage legends are not drawn.
+    wanted: a photograph of the face.
+  - what: cage-orientation
+    scope: [front]
+    reason: needs-photo
+    note: >-
+      Which side the latches of the stacked cages face is not visible in the figure. The library's belly-to-belly
+      convention is used (upper cage upright, lower turned 180).
+    wanted: a photograph of the stacked cages.
+  - what: rear-mgmt-block
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      The management block's arrow marks and its console symbol are drawn as the 7280CR3-32D4 draws them; the order
+      of the three ports follows the datasheet's rear view and the library's other Arista stacks, and the
+      figure's 1.24 px/mm resolves it only as three stacked ports.
+    wanted: a photograph of the rear management block.
+  - what: psu-dc-face
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      The PWR-1511-DC supplies are drawn as the AC supply's housing with a plain two-pole terminal block. The guide
+      shows a DC supply only in isometric figures; the real terminal arrangement is not drawn.
+    wanted: a flat drawing or photograph of the PWR-1511-DC.
+  - what: module-power
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      The guide's power tables and the data sheet give whole-switch figures only; the fan modules' missing power
+      figure (lint L27) stands. The supplies state their output.
+    wanted: FAN-7011H power draw.
+  - what: grounding
+    scope: [bottom]
+    reason: needs-drawing
+    note: >-
+      The 1RU grounding point is on the bottom of the chassis for KIT-GND-EXT-1RU (guide section 4.2, Table 5,
+      Figure 4-2). No flat figure measures it, so it is not placed.
+    wanted: a flat drawing of the bottom with the grounding bracket holes.
+groups:
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp-dd, speed: 400g}
+    description: >-
+      The 24 400G QSFP-DD ports, numbered 1 to 24 as printed; the odd numbers are the upper cages
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the system, fan and two power supply lamps at the right of the front
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      how the switch is reached out of band - the 10/100/1000 management port, the USB port and the RS-232
+      console port, stacked in one block at the left of the rear panel
+  psu-bays:
+    term: Bay
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        Data sheet: "Hot-swap Power Supplies 2 (1+1 redundant)". Guide section 4.4: at least one supply must connect to a power source
+    description: the two hot-swap power supplies, 1+1 redundant
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    attrs:
+      redundancy: n+1
+      redundancy-note: >-
+        Data sheet: "Hot-swappable Fans 3 (N+1 redundant)"
+    description: the three hot-swap fan modules
+views:
+  front:
+    size: {w: 440.0, h: 43.7}
+    panel:
+      decor:
+        - {id: plate-left, kind: label-plate, at: [0.6, 11.0], size: [6.3, 28.0], rx: 0.8, fill: '#9ea2a6'}
+        - {id: led-plate, kind: label-plate, at: [423.5, 3.6], size: [12.2, 17.0], rx: 2.0, fill: '#8d9196'}
+        - {at: [4.5, 1.0], size: [428.0, 3.6], pattern: vent, vent: 1.0}
+        - {at: [7.6, 11.4], size: [4.0, 6.4], pattern: vent, vent: 1.0}
+        - {at: [7.6, 31.4], size: [4.0, 6.4], pattern: vent, vent: 1.0}
+        - {at: [38.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [73.15, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [107.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [142.15, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [176.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [211.15, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [245.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [280.15, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [314.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [349.15, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [383.65, 8.0], size: [4.6, 28.0], pattern: vent, vent: 1.0}
+        - {at: [415.6, 27.0], size: [6.8, 11.2], pattern: vent, vent: 1.0}
+        - {at: [9.0, 42.3], size: [420.0, 1.2], pattern: vent, vent: 1.0}
+      cutouts:
+        - {block: qsfpdd-400g}
+        - {id: led-system, at: [424.6, 7.1], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan, at: [424.6, 10.3], size: [2.0, 2.0], shape: circle}
+        - {id: led-ps1, at: [424.6, 13.5], size: [2.0, 2.0], shape: circle}
+        - {id: led-ps2, at: [424.6, 16.7], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {block: qsfpdd-400g}
+      - {at: [4.6, 25.1], text: 7280DR3-24, font-size: 2.6, anchor: middle, rotate: -90, fill: '#1f3a6e', for: chassis}
+      - {at: [431.2, 8.1], path: 'M -1.1 0 a 1.1 1.1 0 1 0 2.2 0 a 1.1 1.1 0 1 0 -2.2 0 M -0.4 0 a 0.4 0.4 0 1 0 0.8 0 a 0.4 0.4 0 1 0 -0.8 0', stroke-width: 0.26, fill: '#1f3a6e', for: led-system}
+      - {at: [431.2, 11.3], path: 'M -1.1 -1.1 L 1.1 1.1 M 1.1 -1.1 L -1.1 1.1', stroke-width: 0.5, fill: '#1f3a6e', for: led-fan}
+      - {at: [431.2, 14.96], text: PS1, font-size: 1.5, anchor: middle, fill: '#1f3a6e', for: led-ps1}
+      - {at: [431.2, 18.16], text: PS2, font-size: 1.5, anchor: middle, fill: '#1f3a6e', for: led-ps2}
+    components:
+      blocks:
+        - id: qsfpdd-400g
+          ref: std/qsfp-dd@1
+          at: [14.2, 7.95]
+          count: 24
+          rows: 2
+          pitch: 34.5
+          row-pitch: 18.5
+          number-from: 1
+          cutouts: true
+          rotate: {bottom: 180}
+          attrs: {media: qsfp-dd, speed: 400g}
+          numerals: {dx: 9.5, dy-top: 12.4, dy-bottom: -1.9, font-size: 1.6, anchor: middle, fill: '#23262b'}
+      placements:
+        - {block: qsfpdd-400g}
+        - {ref: common/led-dot@1, id: led-system, at: [424.6, 7.1], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: powering-up, color: '#22c55e', behavior: blinking}, {name: ok, color: '#22c55e'}, {name: locator, color: '#3b82f6'}, {name: fault, color: '#f59e0b'}],
+           description: 'Table 9 - System Status: blinking green powering up; green normal operations; blue the locator function is active; amber two or more fans disconnected or malfunctioning'}
+        - {ref: common/led-dot@1, id: led-fan, at: [424.6, 10.3], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: ok, color: '#22c55e'}, {name: degraded, color: '#f59e0b'}, {name: fault, color: '#ef4444'}],
+           description: 'Table 9 - Fan Status: green all fan and power modules operating normally; amber single fan module removed or malfunctioning; red two or more fans disconnected or malfunctioning'}
+        - {ref: common/led-dot@1, id: led-ps1, at: [424.6, 13.5], for: chassis, group: status-leds, rel-pos: 3,
+           states: ['off', {name: ok, color: '#22c55e'}],
+           description: 'Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating properly'}
+        - {ref: common/led-dot@1, id: led-ps2, at: [424.6, 16.7], for: chassis, group: status-leds, rel-pos: 4,
+           states: ['off', {name: ok, color: '#22c55e'}],
+           description: 'Table 9 - PSU Status: green PSU functioning and fully operational; off PSU removed or not operating properly'}
+    regions:
+      - {id: logo-zone, at: [1.4, 6.8], size: {w: 11.0, h: 2.8}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 440.0, h: 43.7}
+    panel:
+      decor:
+        - {id: mgmt-plate, kind: label-plate, at: [83.0, 4.9], size: [18.0, 34.0], rx: 0.8, fill: '#b4b8bc'}
+      cutouts:
+        - {id: mgmt, at: [84.1, 5.6], size: [15.8, 13.2], shape: rect}
+        - {id: usb, at: [85.2, 19.6], size: [12.0, 4.5], shape: rect}
+        - {id: console, at: [84.1, 24.3], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+      - {at: [92.0, 41.0], path: 'M -2.6 -1.1 H 2.6 V 1.1 H -2.6 Z M -1.3 -0.5 V 0.5 M 0 -0.5 V 0.5 M 1.3 -0.5 V 0.5', stroke-width: 0.3, fill: '#1f3a6e', for: console}
+    components:
+      bays:
+        - {id: psu-1, at: [4.0, 1.85], size: {w: 73.5, h: 40.0}, group: psu-bays, rel-pos: 1,
+           accepts: [arista/7280r3-pwr-1500-ac@1, arista/7280r3-pwr-1500-dc@1],
+           default: arista/7280r3-pwr-1500-ac@1}
+        - {id: psu-2, at: [362.3, 1.85], size: {w: 73.5, h: 40.0}, group: psu-bays, rel-pos: 2,
+           accepts: [arista/7280r3-pwr-1500-ac@1, arista/7280r3-pwr-1500-dc@1],
+           default: arista/7280r3-pwr-1500-ac@1}
+        - {id: fan-1, at: [107.7, 2.55], size: {w: 78.6, h: 38.6}, group: fans, rel-pos: 1,
+           accepts: [arista/7280cr3-fan@1], default: arista/7280cr3-fan@1}
+        - {id: fan-2, at: [191.0, 2.55], size: {w: 78.6, h: 38.6}, group: fans, rel-pos: 2,
+           accepts: [arista/7280cr3-fan@1], default: arista/7280cr3-fan@1}
+        - {id: fan-3, at: [274.3, 2.55], size: {w: 78.6, h: 38.6}, group: fans, rel-pos: 3,
+           accepts: [arista/7280cr3-fan@1], default: arista/7280cr3-fan@1}
+      placements:
+        - {ref: common/rj45-eth@1, id: mgmt, at: [84.1, 5.6], rotate: 180, group: mgmt, rel-pos: 1,
+           attrs: {speed: 1g, role: mgmt}}
+        - {ref: std/usb-a@1, id: usb, at: [85.2, 19.6], group: mgmt, rel-pos: 2}
+        - {ref: std/rj45@2, id: console, at: [84.1, 24.3], group: mgmt, rel-pos: 3,
+           attrs: {media: rj45-serial, role: console}}
+  top:
+    size: {w: 440.0, h: 574.0}
+    empty: >-
+      Not drawn flat by any source held. The guide shows the lid only in isometric installation figures
+      (Figures 3-1 to 3-4, of another switch); nothing there can be measured.
+  bottom:
+    size: {w: 440.0, h: 574.0}
+    empty: >-
+      Not drawn flat by any source held. The guide's Figure 4-2 shows the underside with the grounding
+      bracket in an exploded isometric view and carries no measure.
+  left:
+    size: {w: 574.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+  right:
+    size: {w: 574.0, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the side wall with the bracket
+      holes and nothing that can be measured.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The chassis with two AC supplies and three fan modules fitted, front-to-rear air, before any part number: the
+      shape every build below starts from.
+  f:
+    kind: orderable
+    description: >-
+      The 7280DR3-24 with two AC supplies and front-to-rear air: PWR-1511-AC-RED supplies and FAN-7011H-F fan
+      modules, all with red handles. Ordered as DCS-7280DR3-24-F.
+    part-numbers:
+      DCS-7280DR3-24-F: {}
+  k-f:
+    kind: orderable
+    description: >-
+      The 7280DR3K-24, the same hardware with 64 GB of memory and the large-routes licence, with front-to-rear
+      air. Ordered as DCS-7280DR3K-24-F.
+    export-description: >-
+      Arista 7280DR3K-24 - the large-routes build of the 7280DR3-24 with 64 GB of memory, a fixed 1RU data-centre
+      switch router with 24 x 400G QSFP-DD ports, running EOS
+    attrs:
+      platform:
+        memory: 64 GB
+        storage: 8 GB flash; 120 GB SSD
+    part-numbers:
+      DCS-7280DR3K-24-F: {}
+  dc-f:
+    kind: example
+    power: dc
+    description: >-
+      Two DC supplies and front-to-rear air: PWR-1511-DC-RED supplies and FAN-7011H-F fan modules. The data sheet
+      lists no DC part number for the switch; the supplies are spares, and a DC build is ordered through the "#"
+      configurable SKUs.
+    bays:
+      psu-1: arista/7280r3-pwr-1500-dc@1
+      psu-2: arista/7280r3-pwr-1500-dc@1
+datasheet:
+  title: '7280R3 Series Data Center Switch Router Data Sheet (Arista Networks, 03-0045-59, August 11th, 2025)'
+  url: https://www.arista.com/assets/data/pdf/Datasheets/7280R3-Data-Sheet.pdf
+  sha256: 0ab322bb7fe6e35bab5b85ec3e79ff5cd83b7101e686fcd5b34928fcd15e94a6
+references:
+  - {title: '7280R3 Series Quick Start Guide (Arista Networks, DOC-07041-01, PDF created 2025-05-16)', sha256: 5b9e67b8829236b3ff8e9f65ba2a00685d87e5d855d25751f36b2492ee8bd28c}
+  - {title: '7280 Data Center Switches Quick Start Guide (Arista Networks, PDF created 2022-06-03)', sha256: f152c6eaae95ad9a1853a9cb6014832dc1721f9f1d762d3b3225a8c629d93a96}

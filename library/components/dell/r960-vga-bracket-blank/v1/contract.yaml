@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: r960-vga-bracket-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: server
+description: >-
+  The VGA bracket blank of the PowerEdge R960 - the vented plate above riser 2 where the optional rear VGA
+  (liquid-cooled builds) and Serial COM port bracket fits
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - a plate.
+  sources: >-
+    R960 ISM table 5 item 7 ("VGA bracket blank - enables you to add VGA port (only in direct liquid cooled
+    configuration) and Serial COM port"), figures 113 and 120 (removing and installing the VGA bracket) and
+    ISM figure 10, where it is the large vented plate between riser 3's place and riser 2. The serial and
+    DLC VGA brackets are not modelled: the ISM's table 6 figure (rear with liquid cooling) shows them
+    with coolant tubes over them and no straight-on view of either.
+  size: >-
+    photo-measured - ISM figure 10 at 3.374 px/mm across and 3.333 px/mm down: the plate 119.0..283.0 across and
+    102.6..132.0 down in rear-face millimetres (164.0 x 29.4).
+  vents: >-
+    estimated - four rows of 31 openings of 3.2 x 3.4 on a 5.0 x 5.8 pitch, counted off ISM figure 10.
+size: {w: 164.0, h: 29.4}
+size-confidence: {w: photo-measured, h: photo-measured}
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [164.0, 29.4]
+    class: bezel
+    description: the vented plate where the VGA / serial bracket would fit
+skins: [default]

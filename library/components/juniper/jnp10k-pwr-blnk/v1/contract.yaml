@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: jnp10k-pwr-blnk
+version: 1.0.1
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover for the MX10000 series. The MX10004, MX10008 and
+  MX10016 ship one in each supply slot they leave unfilled. A plain panel the width
+  of a supply, with a pull at the top.
+superseded-by: juniper/jnp10k-pwr-blnk@2
+unplaced: no device seats this major any more; juniper/jnp10k-pwr-blnk@2 replaced it at the size of the supply it covers for, 91.4 x 88.9 mm (juniper/jnp10k-pwr-ac2@2), where this one took the 84.0 x 97.0 mm of juniper/jnp10k-pwr-ac2@1, and this one is kept so a saved rack or a contract that names @1 still resolves
+attrs:
+  model: JNP10K-PWR-BLNK
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so this part draws no elements at all. `absent` stays, because an empty slot is a
+    real thing to draw.
+  size: >-
+    derived - the size of the JNP10K-PWR-AC2 it stands beside, 84.0 x 97.0 mm,
+    so the cover and the supply fill a bay the same way. The three chassis open
+    slightly different apertures in this library (84.0 x 97.0 mm on the MX10004,
+    84.0 x 93.5 mm on the MX10008, 84.0 x 91.0 mm on the MX10016), each read from
+    a photograph or drawing and none measured. The supply is drawn at its own size,
+    centred in the bay, so in the two shorter bays it stands proud of the opening
+    by the same amount top and bottom; the cover does exactly that, which leaves no
+    dark band showing and no overhang beyond the supply's. Juniper's hardware
+    guides list the supply's physical specifications and ship the cover in the
+    configuration tables, but give no dimensions for the cover, so there is no
+    vendor figure to use.
+  part-number: >-
+    vendor - JNP10K-PWR-BLNK, named as the "power supply blank cover panel" in the
+    MX10004 hardware guide's configuration table (MX10004-BASE and
+    MX10004-3F-BASE, two supplies plus one cover). The MX10008 and MX10016
+    guides' tables ship power supply covers - three on the MX10008 base, five on
+    the MX10016 base - without a part number; the supply slots are the same
+    JNP10K-PWR family across the three chassis, so the one part number is
+    carried to them as an inference, not a vendor statement.
+  face: >-
+    estimated - no photograph or drawing of this cover is in the intake. The art
+    follows the MX10000 line-card cover already in the library: a plain light
+    panel with a pull, turned to the supply's upright shape. The OUTLINE is
+    sourced and the DETAIL is not, which is the honest split.
+states: [absent]
+size:
+  w: 84.0
+  h: 97.0
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  Derived, not measured: no vendor drawing or dimension of the cover is held. It takes the
+  JNP10K-PWR-AC2's own 84.0 x 97.0 mm, so it fills a bay exactly as the supply does,
+  centred, and in the 93.5 and 91.0 mm bays stands proud of the opening by the
+  same amount the supply does.

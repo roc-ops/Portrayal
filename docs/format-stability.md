@@ -158,9 +158,11 @@ also draws is that part's row. Each row may carry:
 | `media`, `speed`, `group`, `group-role`, `rel-pos` | the `data-` attribute of the same name | string |
 | `speeds` | `data-speeds` | list: every native rate of a multi-rate cage, ascending, ending at `speed` (`["1g","10g","25g"]`); absent on a single-rate port. Written per group from the vendor's figure; native rates only, no breakout |
 | `states` | `data-states` | list: the lamp vocabulary |
+| `programmable`, `programmable-note` | `data-programmable`, `data-programmable-note` | `true` on a lamp the maker lets the user colour, and the maker's own name for it as a string; both absent on every other row ([A port light the user can colour](#a-port-light-the-user-can-colour)) |
 | `for` | `data-for` | list: the owners, local paths or device-absolute `/<view>/<path>` |
 | `inner` | `data-inner` | `true` for a port inside another port's housing |
 | `covered-by` | `data-covered-by` | on a bay a card wider than one slot covers: the path of the bay the card is seated in ([pcie-two-slot-bays-design.md](pcie-two-slot-bays-design.md)) |
+| `hides` | `data-hides` | list: on a cover, the paths of the placements and bays on this face that it hides; a row with it is a cover. Written from the placement's `hides:` and checked by L196 |
 | `connection-points` | `data-cp`, `data-cp-at`, `data-cp-dir`, `data-cp-on` on the part's markers | `{name: {at, face, dir?, on?}}`: `at` as written, in the part's own frame; `face`, the same point in the face's frame |
 | `seat` | the path | the bay or cage this row's part is seated in, innermost first; absent on the chassis's own rows |
 | `moves-with`, `moves-by` | `data-moves-with`, `data-moves-by` on the row's element, or on the nearest element it sits inside | the adjustment that moves this row's box, and `[dx, dy, dz]`: the mm it moves for each mm of position (see [A part that slides](#a-part-that-slides)); absent on a row nothing moves |
@@ -300,6 +302,12 @@ reader that does not know it finds every field it read before.
   a bay the configuration has, which then holds its `default`, and may name
   one it lacks.) The kit reads it so (`slotEnv`, `holdsAt`). Additive:
   `contract` is still 2.
+- **A slot `id` of the form `<placement id>/<part id>`** in `cages[view][]`
+  of `<device>.configs.json` (#1382): a part placed on a face that composes
+  two or more connector parts gives one entry for each of them, such as
+  `ground-studs-rear/stud-tr`. Until then a slot's `id` was always a
+  placement id, so a reader that takes an `id` for a placement id should
+  allow the `/`. Additive: `contract` is still 2.
 - **`configs[].names`** beside it: the name a DCIM knows each of those parts
   by, `{"outlet-a1": "A1"}`, where that is not the placement id. It is read
   from the device's own `interfaces:` through the function that names the
@@ -310,6 +318,19 @@ reader that does not know it finds every field it read before.
   `input-wiring`, `input-voltage-v`, `input-current-a`, `plug-rating-a` and
   `capacity-kw`; attrs are flattened to `data-*` on every drawing, so these
   names are held as attribute names too.
+- **`attrs.power`** gains `poe-pd-standard` and `poe-pd-standard-min` (`802.3af`,
+  `802.3at` or `802.3bt`), `poe-pd-class` (an integer from 0 to 8) and `poe-pd-max-w` (a
+  number above 0), all optional and all about a device's own PoE input. `poe-pd-max-w`
+  is the whole intake, what the device hands on included, so a figure printed
+  'excluding PoE output' stays in `power-self-max-w`. Every file valid before stays
+  valid and `format` is still 1. From the first device on `main` that states them, the
+  names, the three spellings and the meaning of `poe-pd-max-w` cannot change without a
+  format change, and neither can the `mount` value `ceiling`. The served copy of the
+  device schema is republished in the same release as the first device that states
+  `ceiling`, or a reader validating against the older copy refuses that device.
+- **The DCIM export** of a device that states `poe-pd-standard` gains one sentence in the
+  comments: `PoE powered device: 802.3at (runs on 802.3af), at most 25 W at the PD
+  input.` A device with a `ceiling` mount reads `Ceiling-mounted; not rack-mounted.`
 - **The DCIM export** writes the input rating on the input power port's
   `description` and in the comments, with the derived class; an outlet's
   description names the breaker it runs `through` and its `lines`
@@ -343,6 +364,79 @@ manifest keys: stating either is a minor version of the device, and changing
 one a major. `pdu-button` is a mounting interface in
 `spec/schemas/connectors.yaml`; a slot that presents it and the fit check are
 #939's and #935's.
+
+## DC ports
+
+A part that takes or hands on direct current states its DC ports in a `dc`
+block ([`dc-power-design.md`](dc-power-design.md) section 5.2), and a device
+placement may override what differs. The build publishes them under one key,
+`dc-ports`, in two files. It is a new key and did not raise `contract`, which
+is still 2: a reader that does not know it finds every field it read before.
+No library part states a port yet, so today no published file carries the key.
+
+**`dc-ports` in `components.json`**, on the component's entry beside `cages`: a
+list with one entry per port, in the order the part states them. Omitted when
+the part states none. It is the part as it is stated, in the part's own frame.
+
+**`configs[].dc-ports` in `<device>.configs.json`**: the ports one
+configuration presents, ascending by `path`, with each placement's `dc`
+override applied. Omitted on a configuration that presents none, and so absent
+from the whole file for a device with none. It is not a view-level list like
+`cages`: a part in a bay is in the configurations that seat it and in no other,
+so a list on the file or on a view would be true of one build and false of
+another. A reader holding a configuration reads that configuration's list, as
+it reads `slots` and `states`. A part in a bay's nested bay is found the same
+way; the placement override applies to a placed part and not to a bay's
+occupant, which is what lint reads.
+
+Both lists hold the same entry:
+
+| key | holds |
+|---|---|
+| `id` | the port's id on its part (`input`) |
+| `path` | the end a feed lands on. Always `<part path>/<port id>`, whether the part has one port or several, so a port added later moves no other's path. In `components.json` the part is the frame, so the path is the id alone (`input`); in `configs.json` it is the path the drawing gives the part with the id after it: the placement id (`feed-a/input`) or `<bay>/module` for a part in a bay (`psu-0/module/input`) |
+| `ref` | `configs.json` only: the component that presents it, so a reader can fetch its entry |
+| `direction` | `input` or `output` |
+| `voltage` | `{nominal, range?}`, signed (a -48 V plant is `-48`), or `null` where neither the part nor the placement states one |
+| `rating-a` | amperes, or `null` |
+| `awg` | the conductor sizes the end takes, a list, or `null` |
+| `side` | `a` or `b`, or `null` |
+| `poles` | one per conductor, in the order the cable lists its conductors: `{role, slot}`, and `stand-in` (`{order}`) where the part states one |
+
+A pole's `role` is one of the closed list in `spec/schemas/dc.yaml`, or
+`unstated` where no source says; an `unstated` pole is published as it is and
+never as a guess. A pole's `slot` is what the conductor lands on: in
+`components.json` its id inside the part (`terminal-48v`), in `configs.json`
+the full path (`psu-0/module/terminal-48v`). It is always under the part, not
+under the port, so a feed to one conductor addresses the pole's slot. A figure
+the part and the placement leave unstated is `null`, not absent, so "the part
+does not say" can be told from a key that is not a question the entry answers.
+The part's `source`, which names a `provenance` note, is not published: the
+note is in `components-detail.json`, no check reads where a figure came from,
+and a key added later is additive where one removed is not.
+
+**What is promised, and what a change costs.** Renaming `dc-ports`, a key of an
+entry, or a role, or changing what a `path` or a `slot` refers to, is a format
+change, and so is moving the poles' order. Adding a key to an entry is not.
+The lock reads a published port as an export fact, as it reads `fed-by` and
+`through`, because whatever lands a feed on it holds what is above:
+
+- a device that **gains** a port, or whose port reaches another configuration,
+  is a minor;
+- a port that **goes**, or loses a configuration, or whose `id` (and so its
+  `path`), `direction`, poles, a pole's `slot` or `role` change, is a major.
+  A second port on a part that had one is only a minor: the first port's path
+  is the part's and its id, and does not move;
+- a figure (`voltage`, `rating-a`, `awg`, `side`) stated where there was none
+  is a minor, and one that is changed or dropped is a major. The figures are
+  what a feed is judged by, and the placement `dc` override that sets the same
+  four already takes a major to change. Choosing the strict side is deliberate:
+  a major can be relaxed to a minor for one figure later, and a promise a
+  consumer holds cannot be tightened;
+- a device that presents no port records nothing: no key is added to its lock,
+  and a lock written before the field existed reads as presenting none, so the
+  first port a device gains is a minor and no device is reported for the lock
+  learning the key.
 
 ## The kits file
 
@@ -401,12 +495,16 @@ object.
 chassis:
   ears:
     behind: true            # optional; the same statement as the bare string
+    none: true              # optional; a part with no ears at all
     h: 43.5                 # optional; mm the ears span, when not the chassis height
     y: 0.15                 # optional; mm from the bottom of the chassis to the ears
     color: "#1b1e21"        # optional; the ears' colour, when they are not silver
     positions:
       - {name: flush, at: 0, default: true}
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
+    rolled:                 # optional; the brackets that hold it rolled a quarter turn
+      - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0,
+         color: "#c8cacc"}  # `color` optional
   kits:
     - {ref: acme/slide@1, supply: in-box,
        depth: {config: four-post, range: {square: [685, 868]}}}
@@ -419,6 +517,26 @@ chassis:
   when a source gives it. At most one position is `default` (L160). `racks`
   takes the words a kit configuration's `racks` takes. `part` names a kit the
   device lists and the `id` of one of that kit's parts (L162).
+- `rolled` is **one-way** (a new optional key, added with the drawing of a
+  quarter turn in the rack elevation). Each entry is a bracket that holds the
+  device when a rack file rolls it `90` or `270`: `side` (`below` or `above`)
+  says which edge of the turned body its bar lies against, `bar-h` is the bar's
+  height, `length` its span from the outer edge of one ear to the other (at
+  least the distance between the rail hole columns, 465.1 mm, to reach both
+  posts), `ear-h` the height of each ear standing on the bar's lower edge,
+  `ear-w` how far an ear stands in from the end, and `color` its fill. All
+  lengths are millimetres. Only the rack elevation reads it; an older reader
+  ignores the key and draws a quarter turn as before. The brackets are the
+  rack's: they are drawn alike at 90 and at 270 and a device that states none
+  draws none.
+- `none` is **one-way** (a new optional boolean, added beside `rolled`). `none: true`
+  says the part has no ears: it is not bolted to the posts and carries no flange,
+  because it stands between them on another part's brackets, as the tray and the
+  top baffle of a vertical shelf mount kit do. The rack elevation and the 3D
+  scene then draw no generic ear for it, and the elevation draws no screw heads at
+  the rails. Absent or `false`, the device draws as before. Unlike `behind`, it
+  does not say the face is as wide as the rack. An older reader ignores the key
+  and draws the generic ear as before.
 - A kit entry's `ref` is a `kind: kit` (L161), listed once. `supply` is
   `in-box` or `optional`, and `variant: reversed` marks a reverse-mount kit.
   `depth` replaces the `depth` of one configuration of the kit for this device:
@@ -498,8 +616,9 @@ states neither (#907):
 
 - **`ears` is an object, always.** The bare string `ears: behind` is
   published as `{"behind": true}`; an object is published with the keys it
-  states (`behind`, `h`, `y`, `color`, `positions`) and no others, so a reader
-  asks `ears.behind === true` and reads `ears.positions || []`. `color` is the
+  states (`behind`, `none`, `h`, `y`, `color`, `positions`, `rolled`) and no others, so a reader
+  asks `ears.behind === true` and reads `ears.positions || []`. `rolled` is the
+  list the manifest writes, its lengths floats. `color` is the
   string the manifest writes, and absent means silver. `h`, `y` and each
   position's `at` are floats. A position keeps every key the manifest writes.
   From #865 to #907 the bare string was published as the string, on main
@@ -606,6 +725,15 @@ or a new optional key and nothing that was valid reads differently
 A device's `attrs.performance.cable-capacity-media` does not take the two new
 words: a capacity is a count of data cords.
 
+Three more values of a cable's `media` are added the same way (no new key, no
+raised version): `stack`, the cable between two switches' stacking ports;
+`usb`; and `console`. A cable of a StackPower or redundant-power link is `power`,
+a type of it. A reader that does not know one of the three keeps it, and draws
+the cable as one with no media, as for any media it does not know.
+`cable-capacity-media` does not take them. The DCIM cables file writes the three
+with a blank `CABLE_TYPE`, and its generic note for a blank type says so ("its
+media (stack) has no ... cable type, so its type is blank").
+
 ## The cable types file
 
 `cable-types.json` names the cable types a rack tool can lay: each one's
@@ -632,14 +760,15 @@ type or a changed id is a major.
 Each type, keyed by its `id`, always carries:
 
 - `id`, `label`, and `media`: the Rack Builder cable media it is a kind of.
-  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac` and `aoc` are
-  those media values themselves, so a rack cable's media names its type. A
-  refinement (`cat6a-ftp`, `os2-g657a2`, `dac-26awg`) has its own id and
-  names the media it refines. `power` is the media of the power cords, and
-  since kit 0.30.0 a Rack Builder media too; it has no bare type, so a cable
-  of media `power` that names no type is drawn and measured as the
-  `power-c13` cord.
-- `family`: `fiber`, `copper`, `dac`, `aoc` or `power`.
+  The bare ids `os2`, `om3`, `om4`, `om5`, `cat6`, `cat6a`, `dac`, `aoc`,
+  `ground`, `stack`, `usb` and `console` are those media values themselves, so
+  a rack cable's media names its type. A refinement (`cat6a-ftp`,
+  `os2-g657a2`, `dac-26awg`, `ground-12awg`) has its own id and names the media
+  it refines. `power` is the media of the power cords, and since kit 0.30.0 a
+  Rack Builder media too; it has no bare type, so a cable of media `power` that
+  names no type is drawn and measured as the `power-c13` cord.
+- `family`: `fiber`, `copper`, `dac`, `aoc`, `power`, `ground`, `stack`, `usb`
+  or `console`.
 - `od_mm` and `od_sources`: a typical outside diameter, a sketch and not a
   measurement of any one cable.
 - `min_bend_radius`: `{installed, loaded}`. Installed is the radius once the
@@ -662,9 +791,26 @@ A type may also carry `fiber` (`mode`, `grade`, `core_um`, and for a named
 class `class` and its own `min_bend`), `shield` or `awg`. A `power` type
 always carries `conductor`, the cord it is made of (`H05VV-F 3G1.0`), so the
 same connector pair on another cord (a North American SJT) is a type of its
-own. A fibre type's installed radius is the cord's cable rule;
-`fiber.min_bend` is the fibre class's macrobend test radius, kept as data
-for a consumer that knows the cord allows the tighter figure.
+own; a DC feed carries `conductors` instead. A fibre type's installed radius is
+the cord's cable rule; `fiber.min_bend` is the fibre class's macrobend test
+radius, kept as data for a consumer that knows the cord allows the tighter
+figure.
+
+A type may carry `sources` (table version 1.2.0): the documents that name the
+cable, as keys of `sources`. It says nothing of a figure, which has its own
+sources. A type may carry `note`, which says what is not known of it.
+
+A DC feed (table version 1.2.0) is a `power` type with three more keys. `dc`
+is `true`. `conductors` lists the conductors in the order they land on a
+port's poles, each `{role, awg}`: `role` is a role of `dc.yaml` (`unstated`
+where no source gives a polarity, and never `gnd`), `awg` a positive number.
+`ampacity-a` is the current in amperes the conductors carry, with
+`ampacity-sources` beside it, keys of `sources`; where it is Portrayal's own
+estimate the source is `portrayal-estimate` and the type states
+`unverified: true`. A reader that does not know a key ignores it. The build
+refuses a `dc` that is not a boolean, a `conductors` that is not a list of
+mappings or whose role is not `dc.yaml`'s, an `ampacity-a` that is not a
+positive number, and a DC feed that lacks `conductors` or `ampacity-a`.
 
 The kit's `rack/cable-types.js` reads it: `radiusMm(type)` turns a radius into
 millimetres, `bendLookup(types)` gives a cable's installed radius from its
@@ -729,7 +875,7 @@ configuration's front, rear and top views.
 
 `format` is 1. Each device, keyed by `name`, always carries `manufacturer`,
 `model`, `family`, `ru`, `h`, `w`, `d`, `airflow`, `default`, `configs`
-(the names of its configurations) and `kind`. Seven keys appear only when the
+(the names of its configurations) and `kind`. Eight keys appear only when the
 device has them:
 
 - `ears`: `{"default": {"name", "at"}}`, the default position of
@@ -738,7 +884,24 @@ device has them:
   section 3). The kit's `setbackOf` stands the part `at` mm in front of the
   rail. A device whose default position states no `at`, or that has none,
   has no `ears` key, and the kit places its front on the rail.
-- `mount`: the device's `chassis.mount`, present only when it is not `rack`.
+- `kit`: `{"ref", "motion", "depth"?, "preset"?}`, the kit the site defaults
+  to, so a rack tool need not open the device's `configs.json`. It is the
+  `in-box` kit of `chassis.kits`, else the first listed (docs/rack-mounting-design.md
+  section 5), read from the row `configs.json` resolves inline. `ref` is the
+  kit's ref and `motion` is `fixed`, `telescoping`, `sliding` or `shelf`.
+  `depth` is the rack depth the kit fits, front flange to rear flange in mm,
+  and `preset` its factory setting, each written as the kit's configuration
+  writes it, with the device's own `depth` override applied: `depth` is one
+  `[min, max]` or one range for each hole type the source gives, and is absent
+  where the configuration states none (a `preset` and no range: factory
+  setting known, range unknown), never `null` and never `[preset, preset]`. A
+  kit with more than one configuration has no default one, so its entry has
+  `ref` and `motion` and neither `depth` nor `preset`. A device that lists no
+  kit, or whose default kit does not resolve, has no `kit` key. A reader that
+  does not know `kit` is unaffected, and `format` is still 1.
+- `mount`: the device's `chassis.mount`, present only when it is not `rack`. It can be
+  `ceiling`, added to the schema's values without moving `format`; a reader that does not
+  know a value treats the device as not racked, as it does any other.
 - `shell`: `chassis.shell`, `sheet` for a body that is a sheet and not a box.
 - `capacity`: `{"count", "basis", "media"}`, the cable capacity the vendor
   states. `media` is the kind of cable the count is of, in a rack file's
@@ -797,6 +960,84 @@ change, so a reader should not treat the list above as closed.
 profiles in `spec/schemas/profiles.yaml` and follows that file. It is a new
 field, so `contract` stays 2: a reader that does not know it still finds every
 field it read before.
+
+### A port light the user can colour
+
+A lamp can be marked as a light whose colour the user chooses: `programmable:
+true` on a device's group or placement (a placement's own word wins over its
+group's), with `programmable-note` naming the maker's own feature as text.
+**One-way once a release carries it:** from that release the two key names, the
+boolean and the note's being text cannot change without a format change.
+Adding an optional key raises none of the three numbers (the rule under
+"What is a breaking change" above: "Adding an **optional** key does not raise
+`format`", and for the published build "A new field does not raise it"), so
+`format` is still 1, the elements file's `contract` and the device index's
+`CONTRACT` stay 2, and a reader that ignores the keys finds everything it read
+before.
+
+- **A compiled face** draws a `rect` with `data-class="programmable-ring"`,
+  `data-programmable="true"` and `data-ring-of="<placement id>"` round each port
+  a marked lamp's `for` names (round the lamp itself when it names none on the
+  face), in `#9aa0a8`, drawn before the port so it covers none of its parts. It
+  has no `data-path`, so it is no row of the elements file. The marked
+  placement's own element gains `data-programmable="true"` and, when a note
+  is stated, `data-programmable-note`. A face with no mark is drawn as before.
+- **The elements file**: the row of a marked placement gains `programmable:
+  true` and `programmable-note` (a string); both are absent on every other row.
+- **`devices.json`**: an entry gains `programmable-light: true` when any lamp on
+  any face of the device is marked; the build derives it, no manifest states it,
+  and the key is absent otherwise.
+- **The DCIM export**: the comments of such a device gain one sentence,
+  `Lamps with a programmable colour, set by the user (Etherlighting).`, with the
+  notes the model states in the brackets and no brackets when it states none.
+
+### What a compiled face says about airflow
+
+A page that filters by airflow reads these attributes of the compiled faces, so
+they are part of the format too:
+
+- The root `<svg>` carries `data-airflow`, the configuration's airflow, where
+  the configuration states one (`configs[].airflow` is the same value).
+- A fan or supply `<g>` (`data-class` `fan` or `psu`) carries `data-airflow`
+  when the part or the build states one: the part's own word, which a
+  configuration's `component-attrs` can restate for that build. The word may be
+  a vendor's (`exhaust`, `intake`); `library/components/README.md`, "Airflow",
+  says how to read them.
+- The same `<g>` carries `data-config-airflow`, always the configuration's
+  airflow, and nothing where the configuration states none. Nothing else
+  carries it.
+
+`data-config-airflow` is a new field, so `contract` stays 2: a reader that does
+not know it still finds every field it read before. It says what the
+configuration is, not that a unit's art was checked: a build that draws like
+its default carries the default's art, with the gap its device declares.
+
+### What a configuration can state of its own
+
+A configuration takes two optional keys beside `power`:
+
+- `attrs`: the device's own sections and types (`attrs` at the top of the
+  manifest), holding only what this build states differently. A key it names
+  wins; the rest of its section, and every section it does not name, stays the
+  device's; it cannot remove a key the device states. `manifest.config_attrs`
+  is the one answer, and the DCIM export's list of facts in `comments` reads it.
+- `export-description`: a string of at most 200 characters, the description a
+  DCIM shows for that build's device type in place of the first sentence of the
+  device's. 200 is the exporter's own limit, so it is never cut.
+
+Neither is legal on a configuration whose `kind` is `example`, which never
+exports. A manifest without them is valid as it was, resolves to the device's
+`attrs` and exports the description it always did, so adding the keys to the
+format moves no existing export. They are new optional keys, so `format` is not
+raised.
+
+`configs[].attrs` in `<device>.configs.json` publishes a configuration's own
+keys, always an object and `{}` where it has none. The device's `attrs` stay at
+the top of the file for the rest. The drawing does not read it: a face is shared
+by every configuration that draws it, so a face's `data-*` values stay the
+device's. `configs[].attrs` is a new field, so `contract` stays 2: a reader that
+does not know it still finds every field it read before. `devices.json` and the
+comparable facts read the device only.
 
 ### What a compiled face says about rings and trays
 
@@ -925,10 +1166,12 @@ package is at 0.x, a superseded major may be removed, and every removal is
 listed in `CHANGELOG.md` with the ref that replaces it. From 1.0, a retired
 major is deprecated for at least one release before it is removed. The
 deprecation is the `superseded-by:` key the schema already has, on the
-retired major's contract, naming the ref that replaces it. L89 telling a
-superseded major that still ships from a dead one is pending
-(roc-ops/Portrayal#448). The whole mechanism is required before 1.0: the
-marker, a stated support window, and the L89 distinction.
+retired major's contract, naming the ref that replaces it. L89 now tells a
+superseded major that still ships (it says `superseded-by:` with a ref that
+exists) from a dead one (it says nothing, and fails). The whole mechanism is
+required before 1.0: the marker, a stated support window, and the L89
+distinction; the marker and the distinction are in place, and the window, at
+least one release, is not yet a number of releases or a date.
 DESIGN §9 has the reasoning.
 
 **A removed ref that a saved rack names** (#1049). A rack file names parts by
@@ -944,6 +1187,20 @@ the redirect when it reads a swap (kit 0.32.0, `kit/redirects.js`), never
 rewrites a file on load, and writes the new ref only when the rack is saved
 after an edit. A removed ref with no redirect is reported as no longer in the
 library and kept as written.
+
+**A card seats by its interface** ([`cards-by-interface-design.md`](cards-by-interface-design.md)).
+A component bay may state `interface`, beside `accepts` or instead of it, and a
+card states `mates`; the two interface keys `pcie-fh` and `pcie-lp` are in
+`spec/schemas/connectors.yaml`. These are held as format, because a contract
+outside the library writes them and a rename breaks it: the two spellings; the
+union (a bay that states both takes the list and every part that mates the
+interface); the width rule (a part `slot-width: n` is taken through an
+interface only by a bay whose `span` names at least `n - 1` bays); and that a
+part that fills a bay is not asked for a `mate` point for its `mates` (L11).
+The published `accepts` of a bay in `components.json` and `<device>.configs.json`
+is every ref the bay takes, and an `interface` is published beside it; for a bay
+that states none it is the list the contract states, as it was. `contract` does
+not rise, since both are additive. No library part states either key yet.
 
 **A lint code.** A device manifest waives a rule by its code (`lint.waive`),
 so lint codes are never renumbered or reused. A rule that is deleted keeps its
@@ -961,6 +1218,20 @@ DCIM data already imported**, with what it renames. From 1.0 it is treated as
 a `contract` change is. Which NetBox and Nautobot the exports need, and which
 features need NetBox 4.6 or later, is in
 [`library/README.md`](../library/README.md#which-netbox-and-nautobot-the-exports-need).
+
+**A component's `part-numbers`.** A component contract may carry the map a
+device configuration carries, `{<model>: {part: <part number>}}` with no
+`power-cord`, and it is an optional key, so it does not raise `format`. Each key
+is one exported module type, named by the key, with `part_number` from `part`;
+a contract with two keys exports two module types with the same ports, and one
+without the key exports under `attrs.model` or its `name` as before. The schema
+refuses a contract that carries both `part-numbers` and `attrs.model`, so the
+name has one source. The build publishes the map on the contract's
+`components.json` entry as `part-numbers`, with its keys sorted like every key
+in that file, and leaves the key out of every entry that has none. The rack kit
+opens the module type file of the first key in sorted order. Moving a module from `attrs.model` to
+`part-numbers` renames its module type, which is a DCIM-data change in the
+sense above.
 
 ## What is promised before 1.0
 

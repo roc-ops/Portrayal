@@ -1,0 +1,100 @@
+format: 1
+kind: module
+name: qfx5130-jpsu-1600-ac-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-1600W-1UACAFI, a 1600 W AC power supply with back-to-front airflow (AIR IN, FRU-to-port). It is a
+  field-replaceable unit, hot-removable and hot-insertable, installed at the factory, and load-shares with
+  its twin. The QFX5130 hardware guide says the QFX5130-32CD, QFX5130-48C and QFX5130-48CM take it; the
+  switch ships with two. The face carries three lamps labelled AC, DC and !, a Juniper azure blue handle,
+  an appliance inlet and a black release latch. The inlet takes the C15 coupler of the guide's power
+  cords, so it is a C16 inlet; it is drawn with the library's C14 inlet, which has the same pins and
+  differs by a keying notch. The AIR OUT sibling is JPSU-1600W-1UACAFO. AC and DC supplies, and supplies
+  of different airflow direction, are never mixed in one chassis. The datasheet lists the part as the
+  "QFX5220-32CD 1600W 1U AC PSU AFI".
+attrs:
+  model: JPSU-1600W-1UACAFI
+  role: ac-power-supply
+  power-output-w: 1600
+  airflow: back-to-front
+  input: 100 to 127 VAC 12 A, 200 to 240 VAC 8 A (QFX5130-32CD) or 9 A (QFX5130-48C and -48CM), 50 to 60 Hz (guide Tables 19, 20)
+provenance:
+  size: >-
+    photo-measured, from the AIR OUT sibling - qfx5130-jpsu-1600-ac-afo: no photograph of the AIR IN supply
+    is held, and the guide's table lists the two as one 1600 W unit that differs in airflow and handle
+    colour, so the body is the same size, 55.0 by 41.1 mm. No document gives the supply's size in
+    millimetres.
+  depth: >-
+    not stated. The guide's figure 43 is an isometric with no scale, and neither the guide nor the
+    datasheet gives a depth or weight for the supply. No depth is written.
+  face: >-
+    sibling - drawn as the AIR OUT supply with the handle colour changed to the Juniper azure blue of
+    Table 24 (the guide's figure 104 shows an AIR IN module beside a DC supply). The blue is the QFX5110
+    fan component's colour and is estimated, since no photograph of the blue supply is held. Positions are
+    estimated to about 0.3 mm.
+  power-output-w: >-
+    datasheet - the part number and the guide's text call it a 1600-W supply ("All power supplies for
+    QFX5130 are 1600 watt"). An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide, QFX5130 AC Power Supply LEDs (Table 23, figure 44): Input OK is green when power
+    comes in and amber when only one of the two supplies is powered; Output OK is green when the supply
+    sends out power and blinks green when it is disabled; Fault is amber on an error and blinks when the
+    supply is an invalid model.
+  airflow: >-
+    datasheet - guide Tables 3 and 4 and Table 17: JPSU-1600W-1UACAFI is FRU-to-port, back-to-front, and
+    carries a Juniper azure blue handle.
+  input: >-
+    datasheet - guide Table 19 (QFX5130-32CD: 100 to 240 VAC, 12 A at 100 to 127 VAC and 8 A at 200 to 240
+    VAC) and Table 20 (QFX5130-48C and -48CM: 12 A and 9 A). The datasheet's hardware table prints the
+    32CD's lower range as 115 to 127 VAC; the guide's 100 to 127 is used.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [24.3, 7.7], rotate: 90}
+elements:
+  led-ac:
+    at: [6.0, 13.7]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  led-dc:
+    at: [6.0, 19.1]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [6.0, 25.3]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [12.0, 1.2]
+    size: [9.0, 38.7]
+    class: latch
+  release-latch:
+    at: [44.9, 19.8]
+    size: [8.9, 21.0]
+    class: latch
+size:
+  w: 55.0
+  h: 41.1
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8bd8'
+    confidence: estimated
+    source: photo - the handle stands proud of the face; its projection is not measured

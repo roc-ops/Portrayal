@@ -15,6 +15,19 @@
    "interface"
   ]
  },
+ "not": {
+  "required": [
+   "part-numbers",
+   "attrs"
+  ],
+  "properties": {
+   "attrs": {
+    "required": [
+     "model"
+    ]
+   }
+  }
+ },
  "$comment": "A KIT IS THE THIRD KIND (roc-ops/Portrayal#905, docs/rack-mounting-design.md section 4): a rail, bracket or slide kit, a set of ordinary components a device names from `chassis.kits` and never places. It has no `class` and no `size` - its parts carry both - and admits only the kit keys. A component or a module still requires `class` and `size` and takes none of the kit keys.",
  "if": {
   "required": [
@@ -161,7 +174,7 @@
      "items": {"$ref": "#/$defs/segment"}
     }
    ],
-   "description": "this component mates INTO a receptacle presenting this interface. Requires a `mate` connection-point, which is what aligns it to its host. ONE INTERFACE, OR A LIST OF THEM for a part that seats in more than one kind of receptacle: a NEMA 5-15P goes into a 5-15R and into a 5-20R, a C14 plug into a C13 outlet and an Eaton C39. Each receptacle keeps its own interface because what each accepts differs, so the part names every one it seats in and is offered by a slot presenting any of them. A single interface and a one-item list say the same thing; write the single interface. One `mate` point serves every interface listed."
+   "description": "this component mates INTO a receptacle presenting this interface. Requires a `mate` connection-point, which is what aligns a part to its host, unless the part has `behaviour: fills`: a card that FILLS a bay (a riser slot) is placed by the bay's `at`, so its `mates` names the slot form and aligns nothing. ONE INTERFACE, OR A LIST OF THEM for a part that seats in more than one kind of receptacle: a NEMA 5-15P goes into a 5-15R and into a 5-20R, a C14 plug into a C13 outlet and an Eaton C39. Each receptacle keeps its own interface because what each accepts differs, so the part names every one it seats in and is offered by a slot presenting any of them. A single interface and a one-item list say the same thing; write the single interface. One `mate` point serves every interface listed."
   },
   "optical": {
    "type": "object",
@@ -626,6 +639,32 @@
    "minLength": 40,
    "description": "WHY NOTHING SEATS THIS PART. A component nothing references is either work in progress or dead weight, and from the outside the two look identical. Saying which, here, is what lets L89 fail on an unreferenced part that carries no `unplaced`. The sentence is for a reader who has just found the part and is deciding whether to use it, extend it or delete it: say what would seat it and what is missing, and name the issue if the work is tracked. Not a waiver and not a silence - a part that IS seated must not carry this."
   },
+  "unmated": {
+   "type": "string",
+   "minLength": 40,
+   "description": "WHY NOTHING PLUGS INTO THIS PART. A drawn inlet, terminal, stud or port is a place a cable, cord, lug or plug could go, and the port checks (C19, C20 and C22) ask of each one that it presents a registered connector interface and that the library holds something that mates it. A part that is only a marking, such as a printed earth symbol or a port the source draws and says nothing more about, answers those checks with this sentence instead: say what the part is and why no cable, cord or lug can land on it. A reader who finds the part later should learn from the sentence whether to model a connector or leave it. Not a waiver and not a silence - a part that takes a cable, cord, plug, lug or pluggable must not carry this; it presents an interface and the library holds its mate."
+  },
+  "part-numbers": {
+   "type": "object",
+   "minProperties": 1,
+   "propertyNames": {
+    "pattern": "^\\S(.*\\S)?$"
+   },
+   "description": "THE ORDER CODES THIS MODULE IS SOLD UNDER, the shape of a device configuration's `part-numbers` without a power cord: model -> {part}. Each key is one exported DCIM module type, named by the key, with `part_number` from `part`, so one drawing with two order codes (Casa's BDM2m, `BDM2M-W` Open and `BDM2M-N` No Licenses) is two module types with the same ports. A contract states this OR `attrs.model`, never both, so the name has one source; one with neither is exported under its `name`. Take the keys from the vendor's ordering table as printed and cite the sheet and page in `provenance`. The rack kit opens the type file of the first key in sorted order. Adding it to a module that was named by `attrs.model` renames its module type in a DCIM that already holds it.",
+   "additionalProperties": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+     "part"
+    ],
+    "properties": {
+     "part": {
+      "type": "string",
+      "minLength": 1
+     }
+    }
+   }
+  },
   "superseded-by": {
    "type": "string",
    "pattern": "^[a-z0-9-]+/[a-z0-9-]+@\\d+$",
@@ -679,7 +718,7 @@
       "properties": {
        "id": {
         "$ref": "#/$defs/segment",
-        "description": "the name of the end. With one port on a part its path is the part's own; with several, the part's path and this id."
+        "description": "the name of the end. A port's path is the part's path and this id, whether the part has one port or several, so a port added later moves no other's path."
        },
        "direction": {
         "enum": ["input", "output"],
@@ -1441,14 +1480,21 @@
     "type": "object",
     "required": [
      "at",
-     "size",
-     "accepts"
+     "size"
+    ],
+    "anyOf": [
+     {"required": ["accepts"]},
+     {"required": ["interface"]}
     ],
     "additionalProperties": false,
     "properties": {
      "at": {
       "$ref": "#/$defs/xy",
       "description": "mm offset from the carrier's origin (top-left, y-down)"
+     },
+     "interface": {
+      "$ref": "#/$defs/segment",
+      "description": "THE INTERFACE THIS SLOT PRESENTS, as on a device's bay: a part is seated here when its `mates` names it and it is wide enough (its `slot-width` is at most 1 plus the number of bays in this bay's `span`). With `accepts` stated as well the bay takes the UNION: every ref in the list, and every part that mates the interface. A bay with no `interface` takes its `accepts` list and nothing else. Electrical detail (generation, lane width) belongs in `attrs` and the bay's `slot`, not in the key."
      },
      "size": {
       "$ref": "#/$defs/xy",
@@ -1460,7 +1506,7 @@
        "type": "string"
       },
       "minItems": 1,
-      "description": "component refs this bay takes. Required, as on a device: a bay that names nothing offers nothing"
+      "description": "component refs this bay takes. A bay states this or `interface`, as on a device: a bay that names nothing offers nothing"
      },
      "default": {
       "type": [
@@ -1632,9 +1678,10 @@
       "management",
       "service",
       "indicator",
-      "furniture"
+      "furniture",
+      "stack-control"
      ],
-     "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a bucket of its own, so that a tree ordered by role never puts a console socket among the traffic ports. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. A control-plane card is not `traffic`, which a base configuration empties, and an RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37 checks it."
+     "description": "what this block is FOR - the one thing the drawing cannot work out for itself. A PSU bay, a fan bay and a line-card bay are all data-class `bay`, the same hole with a module in it, so anything ranking the tree by class cannot tell which of them is why the box exists and which two keep it alive. Only the group knows. `traffic` is the work the device is bought to do - line-card slots and the ports that carry user traffic. `fabric` is the cell or chassis interconnect of a distributed chassis - the ports on a DDC or VDR line-card box that lead to its fabric boxes, and every port on the fabric box itself. PORTS ONLY: it is not a customer port, which is `traffic`, and it is not a fabric CARD, which is a control-plane board in `service` below; an exporter still lists these ports as interfaces, because they are cabled like any other. It is its own bucket so that a filter on `traffic` means the ports a customer plugs into, and so that one on `fabric` finds the interconnect on every such box, whatever the vendor called the bank. `management` is how you reach and discipline it - the OOB jack, the console, the craft port, the timing and sync interfaces; a bucket of its own, so that a tree ordered by role never puts a console socket among the traffic ports. `service` is what keeps it running - PSUs, fans, filters, power shelves, AND THE CONTROL-PLANE CARDS: routing engines, route processors, supervisors, fabric and switch-control boards. A control-plane card is not `traffic`, which a base configuration empties, and an RE is not `management`: that bucket is jacks and ports, the things you plug into, not the cards behind them. `stack-control` is the control and sync links between the units of a stack, never user traffic - a stack-control RJ-45, a stack-sync RJ-45. It is its own bucket so that a filter on `traffic` counts only the ports user traffic can use, and a filter on `management` only the ways in to the box; the data ports of a stack, such as the QSFP28 cages that carry its data path, stay `traffic`. `indicator` is what you read - LEDs, displays. `furniture` is what you neither connect to nor read - ears, rivets, labels, grounding points, doors. Ordering WITHIN a role stays document order, which already reads correctly; this only says which bucket the block falls in. Lint L37 checks it."
     },
     "physical-context": {
      "type": "string",
@@ -1684,6 +1731,14 @@
        }
       }
      ]
+    },
+    "programmable": {
+     "type": "boolean",
+     "description": "true when the user chooses the colour of these lamps (per port, per VLAN, per speed), not only a fixed link and activity colour. It says the light is programmable, never which colours it takes; those stay in `states` where the maker lists them. The drawing rings the port each lamp belongs to in a neutral grey, and the device index and the DCIM export say the device's ports light up. Draw it only where the maker's figure shows a light round or beside the port. A placement's own `programmable` wins over its group's"
+    },
+    "programmable-note": {
+     "type": "string",
+     "description": "the maker's own name for the programmable light, as text only - for example Ubiquiti's Etherlighting - so other makers' versions fit the one mark. Read beside `programmable`; it is never a colour or a figure"
     },
     "description": {
      "type": "string",

@@ -1,0 +1,86 @@
+format: 1
+kind: module
+name: qfx5210-jpsu-1100w-ac-afi
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-1100W-AC-AFI, a 1100 W AC power supply with FRU-to-port (back-to-front) airflow (AIR IN). It is
+  a field-replaceable unit, hot-removable and hot-insertable, with a 12 V output and a 12 V standby, and
+  it load-shares with its twin (2N). The QFX5210 hardware guide says the QFX5210-64C-AFI takes two, in
+  slots 0 and 1 at the two ends of the FRU panel. The face is that of the front-to-back supply with an
+  azure blue handle. It has an appliance inlet turned on its side with a cord retainer over it, one
+  round bi-colour lamp and a black ejector lever. The guide's cords end in a C15 coupler, and the drawn
+  opening is the registry's closest shape. The front-to-back sibling is JPSU-1100W-AC-AFO. AC and DC
+  supplies, and supplies of different airflow direction, are never mixed in one chassis.
+attrs:
+  model: JPSU-1100W-AC-AFI
+  role: ac-power-supply
+  power-output-w: 1100
+  airflow: back-to-front
+  input: 90 to 264 VAC, 50 to 60 Hz, 12 A at 100 VAC or 6 A at 240 VAC (guide Table 18)
+provenance:
+  size: >-
+    estimated - the same bay as the AIR OUT supply (52.0 x 41.8 mm, read off its photograph and Figure
+    8): the two fill one slot. No document gives a size.
+  depth: >-
+    not stated. Guide Figures 16 and 18 are isometric drawings with no scale.
+  face: >-
+    borrowed - juniper/qfx5210-jpsu-1100w-ac-afo@1, whose positions were read from the guide's Figure 17
+    and the AIR OUT photograph. The guide's figures do not tell the two directions apart except by
+    handle colour and label, and no photograph of the AIR IN build was held.
+  inlet: >-
+    estimated - guide Tables 19 and 20 ship only "C14 to C15" cords and the text says "The coupler is type
+    C15 as described by IEC 60320", so the supply's inlet is the C15-mating type, not a C14. The registry
+    has no such inlet, so the drawn opening is std/c14-inlet@1, the closest available shape; the real
+    opening may differ and no document held gives its size.
+  power-output-w: >-
+    datasheet - the part number and the guide's text ("each of the 1100-W power supplies has a single AC
+    input and a 12-VDC output") say 1100 W. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 22: one bi-colour lamp; green flashing when AC is present and the supply is in
+    standby, green steady when DC output is present and the supply is working, red flashing when the
+    supply has failed, and green and red alternating for a warning.
+  airflow: >-
+    datasheet - guide Table 17: JPSU-1100W-AC-AFI is FRU-to-port (back-to-front) airflow, Juniper Azure
+    Blue handle.
+  colour: >-
+    estimated - the guide names the handle Juniper Azure Blue and no photograph of this build was held;
+    a plain azure is drawn, not a paint reference.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c14-inlet@1, id: inlet, at: [4.7, 9.1], rotate: 270}
+elements:
+  led-power:
+    at: [39.0, 34.1]
+    size: [2.4, 2.4]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#e5484d'}
+    - 'off'
+  latch:
+    at: [30.0, 1.8]
+    size: [7.0, 36.0]
+    class: latch
+  lever:
+    at: [46.4, 18.0]
+    size: [5.6, 20.1]
+    class: latch
+size:
+  w: 52.0
+  h: 41.8
+size-confidence: {w: estimated, h: estimated}
+size-notes: the bay's size on the FRU-side photograph and Figure 8; no document gives the module's own size
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8fd6'
+    confidence: estimated
+    source: carried from the AIR OUT supply - the handle stands proud of the face; its projection is not measured
+skins: [default]

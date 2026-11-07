@@ -20,7 +20,9 @@ const QSFP_LC = 20.0 + R.PLUG_REACH.om4;
 const optics = ctx => ({...ctx, plugReachOf: e => (e.item === 'i2' ? null : QSFP_LC)});
 
 test('the defaults are the library\'s plug and boot, per media', () => {
-  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0});
+  assert.deepEqual(R.PLUG_REACH, {os2: 27.6, om3: 27.6, om4: 27.6, om5: 27.6, cat6: 39.4, cat6a: 39.4, dac: 64.8, aoc: 64.8, power: 77.0,
+    // no plug of these is modelled in the library: each takes the copper figure, an estimate, and says so by having its own row
+    ground: 39.4, stack: 39.4, usb: 39.4, console: 39.4});
   // the reach of end a, read off routePath: its reach point's distance out
   // of the face, or 0 when it has none
   const r = F.rack(), base = F.ctxOf(r), c1 = r.cables[0];
@@ -31,6 +33,7 @@ test('the defaults are the library\'s plug and boot, per media', () => {
   assert.equal(reachOf(c1), 27.6);
   assert.equal(reachOf({...c1, media: 'cat6a'}), 39.4);
   assert.equal(reachOf({...c1, media: 'dac'}), 64.8);
+  for (const media of ['stack', 'usb', 'console']) assert.equal(reachOf({...c1, media}), R.PLUG_REACH[media], media);
   // no media, or one named like something every object has: the copper figure
   for (const media of [undefined, 'constructor', '__proto__', 'nope']) assert.equal(reachOf({...c1, media}), 39.4, String(media));
   // the page's own figure wins, 0 included; one it cannot give falls back
@@ -91,7 +94,9 @@ test('the reach point is out of the face the port is seen from: +z at the front,
 // figure a routed length was before, for every media, at every length to 5 m.
 test('the table is the plug inside the port alone; the short tolerance and the end play are their own', () => {
   assert.deepEqual(R.END_ALLOWANCE_BY_MEDIA, {os2: 0.0131, om3: 0.0131, om4: 0.0131, om5: 0.0131,
-    cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0});
+    cat6: 0.0095, cat6a: 0.0095, dac: 0, aoc: 0.0524, power: 0.017, ground: 0,
+    // stack, usb and console: no maker's figure is held, so each takes the copper cord's, an estimate
+    stack: 0.0095, usb: 0.0095, console: 0.0095});
   assert.deepEqual([R.END_PLAY_M, R.BREAK_TOL_M, R.UNPLACED_WARN_M], [0.1, 0.01, 0.3]);
   const r = F.rack(), ctx = F.ctxOf(r), c1 = r.cables[0];
   const per = media => {
@@ -173,13 +178,20 @@ test('the reach is in the length once, as path, and the end allowance is the OM4
 // 546.9 and 552.6 before), and still a 1 m cord.
 // (c9 611.1, c13 645.7, c14 617.4, c15 648.2 and c16 575.8 before the lacer
 // stood centred in its unit, 0.225 mm up: fit.js itemBox)
+// THE GAP BEHIND THE TRAY (#966) was taken by c10, c11 and c12 (with the optic's
+// plug), 506.4, 502 and 519.5 mm. CHANGED: drawable geometry, owner's option A,
+// 2026-10-22 (P-0218-2). Their plug leaves 9.8 mm for a bend of 25 before the
+// rise, which cannot be drawn, so they go round the front edge again, as
+// before #966: 613.2, 616.1 and 623.4 mm, and a 1 m cord.
 const OVER_THE_EDGE = {c9: 611.2, c10: 613.2, c11: 616.1, c12: 623.4, c13: 645.5, c14: 616.9, c15: 648, c16: 576.3};
+const THROUGH_THE_GAP = {};
 
 test('a cord that must clear its plug goes round the tray\'s front edge, and is measured that way', () => {
   const r = F.rack(), ctx = optics(F.ctxOf(r));
   const got = Object.fromEntries(r.cables.map(c => [c.id, R.routePath(r, c, ctx)]));
   const lower = Object.keys(OVER_THE_EDGE);
   assert.deepEqual(Object.fromEntries(lower.map(id => [id, mm(R.pathLength(got[id]))])), OVER_THE_EDGE);
+  assert.deepEqual(Object.fromEntries(Object.keys(THROUGH_THE_GAP).map(id => [id, mm(R.pathLength(got[id]))])), THROUGH_THE_GAP);
   assert.ok(lower.every(id => R.pathLength(got[id]).value === 1));
   for (const id of lower) {
     const p = got[id];
@@ -200,6 +212,14 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
     const face = R.routePath(r, r.cables.find(c => c.id === id), {...ctx, plugReachOf: () => 0});
     assert.equal(face.detours.length, 1, id);
     assert.deepEqual(face.crossings, [], id);
+  }
+  // the three through the gap: one detour too, behind the strip (the front
+  // edge is 110 out, the detour's plane stands behind it), clear of every solid
+  for (const id of Object.keys(THROUGH_THE_GAP)) {
+    const p = got[id];
+    assert.equal(p.detours.length, 1, id);
+    assert.ok(p.detours[0].points.every(q => q.z < 110), id);
+    assert.deepEqual([p.crossings, p.bends], [[], []], id);
   }
   // the upper leaf's cords drop onto the tray from above. Since each ring is
   // solid (#968), those whose ring stands past their port along the run went
@@ -242,8 +262,8 @@ test('a cord that must clear its plug goes round the tray\'s front edge, and is 
 test('the drawn path is the measured one: nothing to go round again, and each detour is the kit\'s rule', () => {
   const r = F.rack();
   for (const [name, ctx] of [['default', F.ctxOf(r)], ['optics', optics(F.ctxOf(r))]]) {
-    const solids = S.solidsOf(r, ctx);
-    let detoured = 0, legs = 0;
+    const solids = S.solidsOf(r, ctx), gaps = S.gapsOf(r, ctx);
+    let detoured = 0, legs = 0, gapped = 0;
     for (const c of r.cables) {
       const p = R.routePath(r, c, ctx);
       // the kit's points, sag and all: nothing left for a drawing to go round
@@ -251,20 +271,31 @@ test('the drawn path is the measured one: nothing to go round again, and each de
         assert.deepEqual(S.detour(p.points[k - 1], p.points[k], solids, {diameter: 3}), [], `${name} ${c.id} leg ${k}`);
       // the stops, and the detours the rule gives between them
       const taut = p.points.filter(q => q.at !== 'rest'), stops = taut.filter(q => q.at !== 'detour');
-      const built = [stops[0]];
-      for (let k = 1; k < stops.length; k++) {
-        const round = S.detour(stops[k - 1], stops[k], solids, {diameter: 3, room: 2 * 25});
-        if (round.length) detoured++;
-        legs++;
-        built.push(...round, stops[k]);
-      }
+      // (a cord is laid with the tray's gap offered, or without it, whichever
+      // is the better lay, #966: it is built both ways, and is one of them)
+      const build = (open, how) => {
+        const built = [stops[0]];
+        let n = 0;
+        for (let k = 1; k < stops.length; k++) {
+          const round = S.detour(stops[k - 1], stops[k], solids, {diameter: 3, room: 2 * 25, gaps: open ? gaps : [], rear: how === 1, loose: how === 2});
+          if (round.length) n++;
+          built.push(...round, stops[k]);
+        }
+        return {built, n, open};
+      };
       const xyz = pts => pts.map(q => [q.x, q.y, q.z].map(v => Math.round(v * 1000) / 1000));
-      assert.deepEqual(xyz(built), xyz(taut), `${name} ${c.id}`);
+      const tries = [build(false, 0), ...[0, 1, 2].map(h => build(true, h))];
+      const got = tries.find(t => JSON.stringify(xyz(t.built)) === JSON.stringify(xyz(taut))) ?? tries[0];
+      if (got.open && JSON.stringify(xyz(got.built)) !== JSON.stringify(xyz(tries[0].built))) gapped++;
+      legs += stops.length - 1;
+      detoured += got.n;
+      assert.deepEqual(xyz(got.built), xyz(taut), `${name} ${c.id}`);
       assert.equal(p.detours.reduce((n, d) => n + d.points.length, 0), taut.length - stops.length, `${name} ${c.id}`);
     }
-    // it looked: the lower leaf's eight go round the tray's front edge, and
-    // c7 over ring 4 (c8 too, back to its panel port from ring 5, until #987)
+    // it looked: the lower leaf's eight go round the tray's front edge (none
+    // up through its gap now: owner's option A, 2026-10-22), and c7 over ring 4 (c8 too, back to its panel port from ring 5, until #987)
     assert.equal(detoured, 8 + 1, name);
+    assert.equal(gapped, 0, name);
     assert.ok(legs > 100, `${name}: ${legs} legs`);
   }
 });

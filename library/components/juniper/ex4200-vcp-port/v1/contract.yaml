@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: ex4200-vcp-port
+version: 1.1.0
+class: port
+profile: networking
+interface: ex4200-vcp
+description: >-
+  Virtual Chassis port (VCP) of the Juniper EX4200 switches: a wide flat 68-pin receptacle on the
+  rear panel. Two of them, VCP-0 and VCP-1, join up to ten switches over the 128 Gbps Virtual
+  Chassis backplane with the Virtual Chassis cable that ships with the switch.
+attrs: {role: virtual-chassis-port, pins: 68}
+provenance:
+  existence: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), Rear Panel of an EX4200
+    Switch (Figure 4: "Virtual chassis ports") and Virtual Chassis Ports Connector Pinout
+    Information for EX4200 Switches: "EX4200 switches use a 68-pin connector cable to
+    interconnect switches to form a Virtual Chassis"
+  size: >-
+    estimated - 36.2 x 8.3 mm, read off the rear callout figure (Figure 4, g020084; 609 x 252 px,
+    whose chassis outline is 557 px for 438.2 mm, 1.271 px per mm across and 5 percent
+    foreshortened vertically). The guide gives no connector dimension. The library's VHDCI
+    receptacle (40.4 x 5.2) is a 68-position connector of another shape and is not used because the
+    drawn opening is 11 percent narrower and 60 percent taller than it. Good to about 2 mm
+  face: >-
+    drawing - Figure 4 draws a long rounded-rectangle shroud with a smaller rectangle inside and
+    the legend VCP-0 or VCP-1 under it; no photograph of the rear is held
+  interface: >-
+    datasheet - the `ex4200-vcp` key of spec/schemas/connectors.yaml. EX4200 Switch Hardware
+    Guide, Connecting a Virtual Chassis Cable to an EX4200 Switch and Figure 68: the cable
+    connector is placed in the port and slid in until it is fully seated, and a retainer is
+    slid over it and screwed down. The mate point is the centre of the opening, facing out.
+size: {w: 36.2, h: 8.3}
+size-confidence: {w: estimated, h: estimated}
+elements:
+  opening: {at: [1.6, 1.4], size: [33.0, 5.5], class: window}
+connection-points:
+  mate: {at: [18.1, 4.15], direction: front}
+relief:
+  wall: '#6b7078'
+  features:
+  - node: collar
+    out: 1.0
+    color: '#9ba0a6'
+    confidence: estimated
+    source: guide Figure 4 - the shroud stands slightly out of the plate; projection not measured
+skins: [default]

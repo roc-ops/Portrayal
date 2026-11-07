@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: qfx5130-48c-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX5130-48C-FANAO, the field-replaceable fan module of the QFX5130-48C and QFX5130-48CM with
+  front-to-back airflow (AIR OUT, port-to-FRU). Cold air comes in at the port side and hot air leaves at
+  the back. It is marked AIR OUT on a grey chip on its Juniper gold handle band. It is hot-removable and
+  hot-insertable. The chassis takes six, in slots 0 to 5 from the left, and, unlike the QFX5130-32CD, it
+  cannot run on five: its redundancy is at the rotor level, so one rotor of a module may fail. The
+  back-to-front sibling is QFX5130-48C-FANAI. The two are never mixed in one chassis, and never with
+  supplies of the other direction. The datasheet orders it as QFX5130-48C-FANAO; the hardware guide's
+  Tables 4 and 17 print the same module as QFX5130-48C-FANAFO. The status lamp is on the module, at the
+  lower right of its face.
+attrs:
+  model: QFX5130-48C-FANAO
+  role: chassis-fan
+  airflow: front-to-back
+  hot-swap: 'yes'
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - the Juniper studio rear photograph of the QFX5130-48CM (2100 x 523 px, the body
+    1860 px wide, which is the guide's 17.28 in at 4.238 px/mm): the orange face measures 172 px by 173
+    px, 40.7 by 40.8 mm, on a 186.6 px pitch, 44.0 mm. No document states the module's size in
+    millimetres: the guide's figure 34 is an isometric drawing with no scale and its tables give no
+    dimensions. The QFX5130-32CD's module (41.1 by 41.5) is a different part and is not reused.
+  depth: >-
+    not stated. Searched the guide (figure 34 and the fan sections) and the datasheet for the module's
+    depth: the figure is an isometric with no scale. No depth is written rather than a guessed one.
+  face: >-
+    photo - the 48CM rear photograph at 25.4 px/mm (a 6 times crop of one face), checked against the
+    flat drawing in figure 40: a captive screw at the top left, one large hex grille above the handle
+    band with its upper corners cut, two small windows and a lower grille either side of and below an
+    AIR OUT chip, and a round status lamp at the lower right. The grille is drawn as a repeating hex
+    pattern, not cell by cell, on a 3.9 mm cell. Positions are read off the crop and are estimated to
+    about 0.3 mm; the colour is the photograph's orange, sampled.
+  airflow: >-
+    datasheet - guide Table 17: QFX5130-48C-FANAFO is AIR OUT, Juniper gold, port-to-FRU (front-to-back);
+    the AIR IN module is Juniper azure blue, FRU-to-port (back-to-front). Table 4 and the datasheet
+    ordering table agree on the airflow and differ on the spelling of the code (FANAFO, FANAO).
+  lamp: >-
+    datasheet - guide, QFX5130 Fan Module LED (figure 40, Table 18): on the 48C the lamp is on the fan
+    module. Green is steady when the module works; amber is steady when an error is detected or the
+    module is seated wrongly.
+  power: >-
+    not published. Searched the QFX5130 hardware guide and datasheet near the cooling sections and the
+    power tables: only whole-switch figures exist (Tables 20, 27 and datasheet Table 4). The module
+    declares power-absent so the missing figure is a statement and not a silence.
+states: [ok, fault, absent]
+elements:
+  screw:
+    at: [2.6, 3.2]
+    size: [6.2, 6.2]
+    class: screw
+  handle:
+    at: [0.8, 21.6]
+    size: [39.1, 9.6]
+    class: latch
+  led:
+    at: [34.6, 35.6]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+size:
+  w: 40.7
+  h: 40.8
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#e8731f'
+    confidence: estimated
+    source: photo - the handle band stands proud of the grilles; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw head, projection not measured
+skins: [default]

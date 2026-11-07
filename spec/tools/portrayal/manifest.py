@@ -281,6 +281,50 @@ def mates_of(contract):
     return [m] if isinstance(m, str) else [x for x in m if x]
 
 
+def takes(bay, ref, contract=None):
+    """Does `bay` take the part `ref`? THE ONE PREDICATE every reader of a
+    bay's contents asks (L6, L8, the nested-bay check, the build's published
+    lists), for the reason `_mate_check` gives: a second copy would be one bad
+    afternoon away from disagreeing with the first.
+
+    A ref is taken when the bay's `accepts` names it, OR when the bay states an
+    `interface` that the part's `mates` names and the part is wide enough. A bay
+    with both takes the UNION; a bay with no `interface` stays a closed list.
+    `contract` is the part's own contract (None when it does not resolve, which
+    only an explicit `accepts` entry can then satisfy). A part that is
+    `superseded-by` another is never offered by its `mates`, as a cage never
+    offers it.
+
+    WIDE ENOUGH: a part `slot-width: n` is taken through the interface only by
+    a bay whose `span` names at least `n - 1` bays. The covered bays are not
+    consulted, as in docs/pcie-two-slot-bays-design.md."""
+    if ref in (bay.get("accepts") or []):
+        return True
+    iface = bay.get("interface")
+    if not iface or not contract or contract.get("superseded-by"):
+        return False
+    if iface not in mates_of(contract):
+        return False
+    return len(bay.get("span") or []) >= int(contract.get("slot-width") or 1) - 1
+
+
+def offers(bay, candidates):
+    """Every ref `bay` takes, as the list the build publishes as `accepts`: the
+    bay's own `accepts` as authored (so a bay with no `interface` publishes the
+    list it states, byte for byte), then every other part that mates its
+    `interface` and fits it (`takes`), sorted. `candidates` is
+    render.`_pluggable_candidates`'s `{interface: [(ref, contract), ...]}`; it is
+    not read for a bay with no `interface`."""
+    listed = list(bay.get("accepts") or [])
+    iface = bay.get("interface")
+    if not iface:
+        return listed
+    have = set(listed)
+    extra = sorted({r for r, c in (candidates or {}).get(iface, [])
+                    if r not in have and takes(bay, r, c)})
+    return listed + extra
+
+
 def presented_interface(contract, resolve):
     """What a receptacle presents to a module, and where the module mates into it.
 
@@ -691,6 +735,28 @@ def config_power(device, cfg):
     if not v:
         return []
     return sorted({v} if isinstance(v, str) else set(v))
+
+
+def config_attrs(device, cfg):
+    """The device's `attrs` as one configuration states them, section by section.
+
+    `configurations.<name>.attrs` takes the device's own sections, and only what
+    the build states differently: a key it names wins, the rest of that section
+    stays the device's, and a section it does not name is untouched. Nothing
+    here removes a device key (a null is not a legal `attrs` value). Absent, or
+    empty, it is the device's `attrs` exactly, which is what keeps every
+    existing export as it was. The DCIM export's facts list reads it; the
+    drawing does not, because a face is shared by every configuration that draws
+    it. A fresh dict each time, so a caller may edit what it gets.
+    """
+    out = {s: dict(v) if isinstance(v, dict) else v
+           for s, v in ((device or {}).get("attrs") or {}).items()}
+    for s, v in ((cfg or {}).get("attrs") or {}).items():
+        if isinstance(v, dict) and isinstance(out.get(s), dict):
+            out[s].update(v)
+        else:
+            out[s] = dict(v) if isinstance(v, dict) else v
+    return out
 
 
 # THE CONFIGURATIONS A BUYER CAN ACTUALLY GET. An `example` is somebody's

@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: ex8200-lcd-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  LCD panel navigation button of the Juniper EX8200 chassis (EX8208 and EX8216): a round pushbutton to the right
+  of the LCD panel. Two of them, Menu and Enter, are on the front: Menu toggles between the LCD menus and Enter
+  steps through the options of the menu shown. They are disabled while the LCD shows a custom message. The `menu`
+  skin is the upper button and the `enter` skin the lower.
+size: {w: 6.4, h: 6.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {role: lcd-navigation}
+provenance:
+  existence: >-
+    datasheet - EX8208 and EX8216 Switch Hardware Guides (PDFs dated 2020-12-16), LCD Panel in an EX8200 Switch
+    (Figure 5 of the EX8208 guide, Figure 8 of the EX8216's): "There are two navigation buttons - Menu and Enter -
+    to the right of the LCD panel."
+  size: >-
+    estimated - the two round buttons in Figure 3 of the EX8208 guide are about 26 px across at 3.479 px/mm, 7.5
+    mm wide and 6.3 mm high (the drawing's ovals are a little flat); the EX8216's Figure 5 draws them 6.4 mm
+    across at 2.753 px/mm. 6.4 mm is carried. No document dimensions the button.
+  icons: >-
+    drawing - Figure 5 of the EX8208 guide marks the upper button with a list icon and the lower with a return
+    arrow; the guide labels them Menu and Enter in text and does not describe the icons.
+elements:
+  cap: {at: [0.6, 0.6], size: [5.2, 5.2], class: button}
+skins: [menu, enter]

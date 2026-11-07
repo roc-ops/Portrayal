@@ -1,0 +1,133 @@
+format: 1
+kind: module
+name: jpsu-2000-c-dc-afo
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper JPSU-2000-C-DC-AFO, the 2000 W DC power supply of the EX4400
+  switches, front-to-back airflow (AFO). The guide takes it for the PoE
+  models: the EX4400-24P, -24MP, -48P, -48MP, -48XP and -48MXP, and orders it
+  with their -S spare chassis. Up to two fit in the rear slots 0 and 1. The
+  face has the supply fan with an orange handle across it, a DC OK lamp, a
+  high-current DC input and an ejector lever. The guide draws the face only in
+  perspective, so the layout of the right half is estimated. Do not mix
+  supplies of different ratings or airflow in one chassis.
+attrs:
+  role: dc-power-supply
+  power-output-w: 2000
+  airflow: front-to-back
+  input-voltage: -48 VDC to -60 VDC rated operating voltage
+  input-current: 53 A
+  inlet: other
+  input-connector: D-sub, for the cable CBL-PWR-2K-DSUB4 (6 AWG) - -48 VDC input (V-), return (V+), and a middle ground pin
+  weight-kg: 0.93
+  hot-swap: 'yes'
+part-numbers:
+  JPSU-2000-C-DC-AFO: {part: JPSU-2000-C-DC-AFO}
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic DC
+    Power Supply in EX4400 Switches. Figure 85 (g023291) draws this unit in perspective. Table 75
+    gives the model number and the DC.OK lamp, Table 78 the electrical specification, Table 81
+    the DC power cable, Table 82 the airflow and Table 114 the CLI name. The spare chassis
+    EX4400-24P-S and -48P-S list it as their supply in Tables 10 and 22.
+  part-number-disagree: >-
+    sources-disagree - Table 75 prints the model number as JPSU-2000-DC-AFO, with no C. Table 82
+    (airflow) and Table 114 (CLI names) print JPSU-2000-C-DC-AFO, the same form as the other
+    JPSU parts, and so does the brief for this part. The form with the C is used, as the
+    majority and the CLI's own name.
+  size: >-
+    datasheet - Table 40, Physical Specifications of the EX4400 PSUs - width 3.27 in (8.3 cm),
+    height 1.59 in (4.04 cm), depth 8.88 in (22.56 cm), one set of figures for the AC and DC
+    units. Carried as 83.06 x 40.39 x 225.55 mm. Figure 85 draws the same case as Figures 80 to
+    84.
+  depth: >-
+    datasheet - Table 40, depth 8.88 in (22.56 cm), carried as 225.55 mm.
+  power-output-w: >-
+    datasheet - Table 78, 2000-W DC power supplies - output power 2000 W. An output figure,
+    because a power supply provides power. The guide gives no draw or loss figure for the unit.
+    The PoE budgets (Tables 83 to 88 and 91) state what the switch can deliver to powered devices
+    and are kept on the devices.
+  input: >-
+    datasheet - Table 78 gives the rated operating voltage -48 VDC through -60 VDC and the input
+    current rating 53 A. Table 81 gives the cable CBL-PWR-2K-DSUB4 (6 AWG, 3.9 m) with -48 VDC
+    input (V-) and return (V+), and its note says the connector has 3 pins with the middle one the
+    ground. The connector is drawn in the skin, because the library has no D-sub power part.
+  elements: >-
+    estimated - the guide gives this face only in perspective (Figure 85, g023291), so nothing is
+    measured. The fan, handle and screws are those of the 550 W units, which share the case. The
+    figure shows two small round bosses in a column beside the fan, a tall connector window at
+    the right with the ejector lever lying across it, and no hex standoffs. The boss and window
+    positions here are placed by eye at the proportions of that figure and are estimated. A
+    render or photograph of the face would replace them.
+  colour: >-
+    estimated - the handle takes the orange of the 550 W DC unit's render. The 2000 W DC unit is
+    not rendered in the guide.
+  airflow: >-
+    datasheet - Table 82. JPSU-2000-C-DC-AFO is front-to-back. Cold air enters through the vents
+    on the front panel and hot air leaves through the vents on the rear panel.
+  led: >-
+    datasheet - Table 75 names the lamp DC.OK. Table 89 and Figure 93 give its states. Steady
+    green means the supply receives input and gives proper output. Blinking green means the
+    supply fan failed or its internal communication failed. Unlit means the cable is loose, the
+    input is wrong, the supply is in standby, the ambient is too hot or the supply failed.
+  relief: >-
+    estimated - the handle stands proud of the fan in Figure 85. Its projection is not measured
+    in any source. The value only makes it read as a handle in 3D.
+  power: >-
+    datasheet - see power-output-w. No source in the guide states a figure for what the unit
+    itself draws.
+states:
+- ok
+- fault
+- absent
+elements:
+  led:
+    at: [49.8, 11.4]
+    size: [5.2, 5.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: blinking-green, color: '#39b54a', behavior: blinking}
+    - 'off'
+  handle:
+    at: [0.3, 17.9]
+    size: [43.3, 5.4]
+    class: handle
+  dc-input:
+    at: [60.0, 3.0]
+    size: [11.5, 34.4]
+    class: inlet
+  latch:
+    at: [71.8, 9.3]
+    size: [10.7, 17.9]
+    class: latch
+size:
+  w: 83.06
+  h: 40.39
+  d: 225.55
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 6.0
+    color: '#ef7e2d'
+    confidence: estimated
+    source: >-
+      The orange handle bar stands proud of the supply fan in Figure 85 (g023291). The
+      projection is not stated or measured.
+  - node: latch
+    out: 1.4
+    color: '#9a9b9d'
+    confidence: estimated
+    source: >-
+      The ejector lever stands proud of the face in Figure 85. The projection is not stated or
+      measured.
+connection-points:
+  power: {at: [65.7, 20.2], direction: rear}
+body:
+  depth: 225.55
+  color: '#b9bec4'
+skins: [default]

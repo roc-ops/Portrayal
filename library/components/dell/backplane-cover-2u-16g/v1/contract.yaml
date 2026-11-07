@@ -1,0 +1,21 @@
+format: 1
+kind: component
+name: backplane-cover-2u-16g
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+profile: server
+description: >-
+  The drive backplane cover of a 16th-generation 2U PowerEdge (R760) - the removable panel over the drive backplane, ahead of the system cover
+provenance:
+  sources: >-
+    Dell's R760 service model, working/intake/dell/3d-models/r760.glb (Dell's own CAD, read with glbparts.py, not committed), the un-exploded assembly node `Main Assembly (1)`, `R760_ BackplaneCover` > `PEr760_ DriveBackPlane_ Cover_ Assembly-1.001`, mapped to plan coordinates (rear at y=0: plan y = 736.1 - cad z1, the rear wall at cad z 736.1; plan x = 209.0 - cad x1). The R760 Installation and Service Manual (ISM) 'Removing the drive backplane cover' and 'Installing the drive backplane cover' (figures 41 and 42) and figure 15 (inside the system), whose top view shows the cage's top plate. `mounts`: the ISM has its own removal procedure, and the system cover's front edge tucks under it.
+  size: >-
+    measured (the depth) and datasheet (the width) - r760.glb `Body_1_5.001`: 444.0 x 54.0 (cad x -230.0..214.0, z 138.7..192.7), 10.0 tall with its flanges, at plan y 543.4..597.4, over the backplane (cad z 137.9..186.6). It is 10.0 wider than the ISM's 434.0 body, as the system cover is, and is drawn at the body's 434.0 as the system cover is (the device's `system-cover-width` gap).
+  extent: >-
+    SOURCES DISAGREE - the ISM's figure 15 shows one plate from the backplane to the chassis front, read 129.1 deep, and this part was first drawn at that size. The model has the removable cover only 54.0 deep; the plate in front of it is the shell's own fixed cage top (`PEr760_ Shell_ Top_-1.001`, 129.8 deep), which the top view draws as its own panel decor. See the device's `backplane-cover-extent` gap.
+size: {w: 434.0, h: 54.0}
+size-confidence: {w: datasheet, h: measured}
+elements:
+  plate: {at: [0.0, 0.0], size: [434.0, 54.0], class: bezel}
+skins: [default]

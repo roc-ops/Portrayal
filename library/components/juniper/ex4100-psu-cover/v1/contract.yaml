@@ -1,0 +1,44 @@
+format: 1
+kind: module
+name: ex4100-psu-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Cover panel for an empty power supply slot on the Juniper EX4100. The switch ships with one power supply, and
+  this panel covers the second slot. It is a dark grey plate with a captive screw at each side, drawn here as a
+  finger grip at each end. The guide asks for it to stay in an empty slot to prevent the chassis overheating,
+  and names it only as a cover panel, with no part number.
+attrs:
+  model: EX4100 power supply cover panel
+  covers: power supply slot
+provenance:
+  size: >-
+    estimated - the guide gives no dimension for the cover. It is modelled at the power supply face size, 73.0 by
+    40.0 mm (EX4100 Switch Hardware Guide, Juniper Networks, PDF created 2026-10-01, Table 20 note), so that it
+    fills the bay a supply fills.
+  guide: >-
+    datasheet - EX4100 Switch Hardware Guide, Figures 4, 11, 13 and 17, callout "Empty slot for power supply", and the
+    replacement procedures for an AC and a DC power supply. They say to loosen the captive screws of a cover panel on
+    the slot, to save the panel, and to install it over the slot when no supply replaces the one removed, so as to prevent
+    the chassis overheating. The packing list (Table 53) names no cover panel.
+  face: >-
+    drawing - the empty slot in Figure 4 is drawn as a plate with a loop at each end. It is read as a finger grip at
+    each end and drawn like the library's other Juniper power supply covers; no photograph of the EX4100 cover is
+    held, and the captive screws are not drawn. The grip positions are estimated.
+states: [absent]
+elements:
+  grip-left:
+    at: [2.0, 6.0]
+    size: [20.0, 28.0]
+    class: latch
+  grip-right:
+    at: [51.0, 6.0]
+    size: [20.0, 28.0]
+    class: latch
+size:
+  w: 73.0
+  h: 40.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

@@ -129,7 +129,10 @@ test('the reference rack\'s c9 as an AOC (rack-bend-room.mjs pins it whole): rig
 test('the issue\'s count of corners that depend on the plug being a leg, on the reference rack\'s sixteen cords', () => {
   // forcing a rigid plug of the LC reach on each cord's reach points: corners
   // that have the room they need only because the plug is a leg. 24 on the
-  // sixteen cords today (the issue counted 23 when it was written)
+  // sixteen cords today (the issue counted 23 when it was written; 29 while
+  // five of the lower leaf's cords rose through the tray's gap, #966, whose
+  // turn is set back from the plug as the others are: CHANGED, drawable
+  // geometry, owner's option A, 2026-10-22, P-0218-2: none does now)
   const r = F.rack(), ctx = F.ctxOf(r);
   let depend = 0;
   const cables = new Set();
@@ -142,8 +145,13 @@ test('the issue\'s count of corners that depend on the plug being a leg, on the 
   assert.deepEqual([depend, cables.size], [24, 16]);
 });
 
-test('the reference rack of #949 is unchanged: its sixteen LC cords, their corners and the five that turn 90 degrees where the plug ends', () => {
+test('the reference rack of #949: its sixteen LC cords, their corners and the five that turn 90 degrees where the plug ends', () => {
   const r = F.rack(), ctx = F.ctxOf(r);
+  // c9, c10, c11, c12 and c15 rose through the tray's gap under #966 (485.5,
+  // 490.8, 486.8, 497.7 and 450 mm). CHANGED, drawable geometry, owner's option
+  // A, 2026-10-22 (P-0218-2): the rise cannot be drawn (9.8 mm for a bend of
+  // 25), so they go round the front edge, as before #966: 611.2, 613.2,
+  // 616.1, 623.4 and 648 mm, as c13, c14 and c16 always did
   const LENGTHS = {c1: 514.2, c2: 499.8, c3: 502.7, c4: 491.4, c5: 522, c6: 515, c7: 505.8, c8: 547, c9: 611.2, c10: 613.2, c11: 616.1, c12: 623.4,
     c13: 645.5, c14: 616.9, c15: 648, c16: 576.3};
   let corners = 0, atPlug = 0;

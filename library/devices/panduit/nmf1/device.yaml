@@ -1,0 +1,307 @@
+format: 1
+kind: device
+name: nmf1
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: NMF1
+aliases:
+  - {name: NMF1WH, kind: vendor}
+description: >-
+  1RU front-only horizontal cable manager, Panduit NetManager High Capacity NMF1: an ABS
+  moulding on the rack rails with a channel 140 mm deep standing out of its front, a wall of
+  twelve T-shaped inset fingers along its top and another along its bottom, and a hinged PVC
+  cover across the finger tips that ships fitted. Two windows in the plate behind the channel
+  pass cable to the back of the rack.
+profile: passive
+provenance:
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - `positions` states where the ears bolt, for the Rack Builder. The NMF1 customer
+      drawing (Panduit 10404-15) dimensions the channel "5.5 REF [140]" from the front of the
+      cover to the end of the finger zone and the whole manager "6.2 REF [157]"; the mounting
+      plate and its flange are the 17.3 behind. `at` is 139.7, so the ears bolt to the front face
+      of the plate. This states a placement; no dimension changed.
+  full-depth:
+    confidence: drawing
+    note: >-
+      `full-depth: false` - the part is 157 deep and 139.7 of it stands in front of the rails, so
+      the rear face of its rack unit stays free for another part.
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S OWN DOCUMENTS, read as the NMF2's are (see nmf2): the customer
+      drawing (PDF 10404-15, with a DXF and a DWG that hold only a trimetric projection, so no
+      measurement), the NetManager High Capacity specification sheet RKSP237, the product page,
+      the Space-Saving bulletin RKCB46 and the Cable Capacity Calculator. THE FIGURES THE DRAWING
+      DIMENSIONS ARE `drawing`; EVERYTHING READ OFF THE PICTURE (the finger count and pitch, the
+      crossbar, the windows) IS ESTIMATED and said so in the part that carries it.
+  chassis:
+    confidence: estimated
+    note: >-
+      estimated - 444.83 x 44 x 157. The drawing dimensions 482 [19.0 in] over the ears, 465 [18.3
+      in] between the fixing holes, 44 [1.7 in] high and 157 [6.2 in] deep; the body between the
+      ears is the NCMH2 drawing's 444.83 [17.51 in] for the same moulding, which this drawing does
+      not give. The ears are not drawn.
+  shell:
+    confidence: drawing
+    note: >-
+      drawing - A HOLLOW CHANNEL, NOT A BOX (see nmf2): the plate on the front view as a well
+      139.7 deep with two open windows, the two walls of fingers standing in it, the cover across
+      their tips and the back of the plate standing 17.3 proud of the rear face.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no Panduit document states a wall gauge for the ABS moulding. 2.5 is a
+      moulded wall of this size; the parts carry their own thicknesses.
+  weight:
+    confidence: drawing
+    note: >-
+      drawing - 513 g [1.1 lb], the weight table of the NMF1 customer drawing (10404-15).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front with the cover fitted: the cover, and under it the two rows of T
+      fingers end-on, the channel between them (24 high on the 44, estimated) and the two windows
+      in the plate at the back of it, two stadiums 17 high.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the back of the plate with its two windows; five plates round them, sunk 0.05
+      inside the rear face. The windows are open; the blanking panel NM1B is a separate accessory.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan view, rear at y=0: the plate and flange 17.3 deep, twelve stems 100 mm
+      long with a crossbar on each tip, and the cover over the front 12.6 mm.
+  bottom:
+    confidence: drawing
+    note: >-
+      drawing - the front view draws the same finger tips along the bottom as along the top;
+      the bottom is the top again.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - no side view is drawn; built from the plan view and the front view.
+  right:
+    confidence: estimated
+    note: >-
+      estimated - the left view turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the duct is the channel between the two finger rows, run across the rack; pitch
+      34.925 and gap 5.4 as on the NMF2.
+  capacity:
+    confidence: datasheet
+    note: >-
+      datasheet - the Cable Capacity Charts of the Space-Saving bulletin (RKCB46) give the NMF1
+      per cable at 30 per cent recommended fill and 50 per cent maximum; the figure stated is the
+      Cat 6 24 AWG 0.235 in (5.97 mm) column at 30 per cent, 22 (38 at 50 per cent). The Cable
+      Capacity Calculator gives the usable area, 3.3 sq in.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, colour, standards and what is in the box are the NMF1 product page
+      and the specification sheet (RKSP237); the temperatures are the customer drawing's.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "The manager is black" on the product page. Every image Panduit publishes of the
+      part is a render; the cover is drawn a shade lighter than the moulding.
+attrs:
+  physical:
+    weight-kg: 0.513
+    material: ABS
+    cover-material: PVC
+    color: Black
+    mounting-hardware: '#12-24 mounting screws, as shipped with the cover'
+  performance:
+    cable-capacity: 22
+    cable-capacity-basis: >-
+      Cat 6 24 AWG, 0.235 in (5.97 mm), at the 30% recommended fill of the front channel's
+      3.3 sq in usable area; 38 at the 50% maximum fill - Panduit Space-Saving Cable
+      Management Rack Systems bulletin RKCB46, Cable Capacity Charts
+    cable-capacity-media: cat6
+  environmental:
+    operating-temp: '60 C maximum'
+    storage-temp: '65 C maximum'
+  compliance:
+    rohs: RoHS Compliant
+    ul: UL 2416
+    csa: CSA C22.2
+chassis:
+  width: 444.83
+  height: 44.0
+  depth: 157.0
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 139.7, default: true}
+  shell: sheet
+  thickness: 2.5
+  weight-kg: 0.513
+  color: '#2a2c2e'
+gaps:
+  - what: cover-hinge
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the specification sheet says the dual hinged cover opens 110 degrees to the top or bottom
+      without being removed; no view draws a hinge, and the cover is drawn as one fitted plate
+      that is either on or off.
+    wanted: a drawing or a close render of the cover's hinge
+  - what: blanking-panel
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      the NM1B front-to-rear pass-through blanking panel is a separate accessory that closes the
+      two windows; it is not drawn and the windows are open.
+    wanted: a drawing of the blanking panel fitted
+  - what: cover-section
+    scope: [top, left, right]
+    reason: needs-drawing
+    note: >-
+      no view sections the cover or the fingers: their thickness is estimated and the elevations
+      draw the body without the cover's edge.
+    wanted: a section through a cover and a finger tip
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the moulded plate and channel between the ears
+  fingers:
+    term: Finger wall
+    role: furniture
+    index-origin: 1
+    description: the two walls of twelve T fingers, upper first
+  cover:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: the hinged cover across the finger tips, shipped fitted
+views:
+  front:
+    size: {w: 444.83, h: 44.0}
+    components:
+      placements:
+        - {ref: panduit/nm-base-1ru@1, id: base, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: panduit/nm-fingers@1, id: fingers-upper, at: [0.0, 0.0], group: fingers, rel-pos: 1, in: base, under: cover}
+        - {ref: panduit/nm-fingers@1, id: fingers-lower, at: [0.0, 34.0], group: fingers, rel-pos: 2, in: base, under: cover}
+        - {ref: panduit/nm-cover-1ru@1, id: cover, at: [0.0, 0.0], group: cover, rel-pos: 1, in: base, only-in: [base]}
+    passes:
+      - {id: pass-through-1, at: [63.45, 13.5], size: [98.5, 17.0], shape: obround, cover: open}
+      - {id: pass-through-2, at: [282.85, 13.5], size: [98.5, 17.0], shape: obround, cover: open}
+    guides:
+      - {id: duct, kind: duct, at: [0, 10.0], size: [444.83, 24.0], run: x, finger-pitch: 34.925, finger-gap: 5.4, confidence: estimated, source: 'NMF1 customer drawing plan view: twelve fingers on the pitch of the NCMH2 specification sheet, the slot between crossbar tips read off the picture'}
+  rear:
+    size: {w: 444.83, h: 44.0}
+    panel:
+      decor:
+        - {id: back-top, at: [0, 0], size: [444.83, 13.5], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-bottom, at: [0, 30.5], size: [444.83, 13.5], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-left, at: [0, 13.5], size: [63.45, 17], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-middle, at: [161.95, 13.5], size: [120.9, 17], fill: '#232527', sink: 0.05, kind: base}
+        - {id: back-right, at: [381.35, 13.5], size: [63.48, 17], fill: '#232527', sink: 0.05, kind: base}
+  top:
+    size: {w: 444.83, h: 157.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.83, 17.3], fill: '#232527', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 16.7], size: [444.83, 0.6], fill: '#121315', kind: fold}
+        - {id: stem-1, at: [27.81, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-2, at: [62.74, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-3, at: [97.66, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-4, at: [132.59, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-5, at: [167.51, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-6, at: [202.44, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-7, at: [237.36, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-8, at: [272.29, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-9, at: [307.21, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-10, at: [342.14, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-11, at: [377.06, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-12, at: [411.99, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: bar-1, at: [15.56, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-2, at: [50.49, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-3, at: [85.41, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-4, at: [120.34, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-5, at: [155.26, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-6, at: [190.19, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-7, at: [225.11, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-8, at: [260.04, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-9, at: [294.96, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-10, at: [329.89, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-11, at: [364.81, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-12, at: [399.74, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+  bottom:
+    size: {w: 444.83, h: 157.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [444.83, 17.3], fill: '#232527', sink: 0.05, kind: base}
+        - {id: ear-plane, at: [0, 16.7], size: [444.83, 0.6], fill: '#121315', kind: fold}
+        - {id: stem-1, at: [27.81, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-2, at: [62.74, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-3, at: [97.66, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-4, at: [132.59, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-5, at: [167.51, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-6, at: [202.44, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-7, at: [237.36, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-8, at: [272.29, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-9, at: [307.21, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-10, at: [342.14, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-11, at: [377.06, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: stem-12, at: [411.99, 17.3], size: [5, 100], fill: '#26282a', kind: finger-wall}
+        - {id: bar-1, at: [15.56, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-2, at: [50.49, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-3, at: [85.41, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-4, at: [120.34, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-5, at: [155.26, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-6, at: [190.19, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-7, at: [225.11, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-8, at: [260.04, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-9, at: [294.96, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-10, at: [329.89, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-11, at: [364.81, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+        - {id: bar-12, at: [399.74, 117.3], size: [29.5, 6], fill: '#2c2f31', kind: finger-wall}
+  left:
+    size: {w: 157.0, h: 44.0}
+    panel:
+      decor:
+        - {id: plate, at: [0, 0], size: [17.3, 44], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [17.3, 0], size: [106, 10], fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [17.3, 34], size: [106, 10], fill: '#26282a', kind: finger-wall}
+  right:
+    size: {w: 157.0, h: 44.0}
+    panel:
+      decor:
+        - {id: plate, at: [139.7, 0], size: [17.3, 44], fill: '#232527', sink: 0.05, kind: base}
+        - {id: wall-upper, at: [33.7, 0], size: [106, 10], fill: '#26282a', kind: finger-wall}
+        - {id: wall-lower, at: [33.7, 34], size: [106, 10], fill: '#26282a', kind: finger-wall}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The manager as Panduit ships NMF1, cover fitted.'
+  cover-off:
+    kind: example
+    description: >-
+      The same manager with its cover opened, the finger walls and the channel open to lay a
+      cable in. The cover comes with the manager, so this is an illustration and not a device
+      type.
+datasheet:
+  title: 'NetManager High Capacity Horizontal Cable Managers Specification Sheet RKSP237'
+  url: https://www.panduit.com/content/dam/panduit/en/products/media/2/92/892/1892/111711892.pdf
+  sha256: c5d5a4f37c4f51b11cb661a664b613679de6f6b78b2b33854b5a8ef795fd6f24
+references:
+  - title: 'NMF1 Cable Manager 10404-15'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/8/28/828/2828/111552828.pdf
+    sha256: 0d058dca0109471d16d5a5149ddf808bba6e0b93fcbe50a7aa67cd4708b2bfd6
+  - title: 'Space-Saving Cable Management Rack Systems Product Bulletin RKCB46'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/7/97/597/2597/110822597.pdf
+    sha256: 36490936d97dc281c4b7162ed94c406a1021ec612594f2aa002ba6b4e8e62fcf
+  - title: 'Cable Capacity Calculator Web V14'
+    url: https://www.panduit.com/content/dam/panduit/en/products/media/2/62/062/6062/111776062.xlsx
+    sha256: 947390141fb2a12d3c24a89edeebb6024795965032b91d722c6b90df2a3b8eb7

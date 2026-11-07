@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: r960-pem-board
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The PowerEdge R960 processor expansion module (PEM) board seen from above - the second PCB, stacked over the
+  system board, that processors 3 and 4 and their 32 memory sockets stand on
+provenance:
+  sources: >-
+    R960 ISM figures 14, 96 and 100 (the PEM board from above and its riser connectors) and figure 12; "Removing the
+    processor expansion module" (the PEM is removed to reach the system board's memory, ISM "Removing a memory
+    module" step 8). ESTIMATED GEOMETRY for the reasons dell/r960-system-board@1 gives.
+  size: >-
+    estimated - 424.0 x 230.0, the PEM outline in ISM figure 14 (a wide board across the processors and memory
+    with narrow lugs at the rear) as a rectangle in plan millimetres.
+  depth: >-
+    estimated - stacked over the system board's DIMM sockets, 40.0 above them (a socket and its DIMM stand about
+    35 above the board); no R960 document gives the PEM's height.
+size: {w: 424.0, h: 230.0, d: 40.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+relief:
+  wall: '#1e2226'
+  walls: inside
+elements:
+  board: {at: [0.0, 0.0], size: [424.0, 230.0], class: bezel}
+skins: [default]

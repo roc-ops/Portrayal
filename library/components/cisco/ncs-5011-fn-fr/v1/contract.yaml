@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: ncs-5011-fn-fr
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The one-rack-unit fan module of the Cisco NCS 5011, ordered as NCS-5011-FN-FR: front-to-back airflow, which
+  the guide calls port-side intake. A dark honeycomb grille filling the face with a pull handle across its
+  middle. Hot-swappable; the router has four, works on three of them (3+1) and survives a single fan failure.
+  The back-to-front twin is NCS-5011-FN-BK.
+size: {w: 52.0, h: 40.0}
+size-confidence: {w: estimated, h: estimated}
+part-numbers:
+  NCS-5011-FN-FR: {part: NCS-5011-FN-FR}
+attrs:
+  airflow: front-to-back
+  hot-swappable: 'yes'
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5000 Series Routers (first published 2015-12-23, last
+    modified 2019-01-31), Table 7: NCS-5011-FN-FR "Cisco NCS 5011 Router Fan Front to Back Airflow", with a spare
+    NCS-5011-FN-FR= that is the same part. The guide says the 5011 has "slots for four 3+1 redundant fan modules",
+    "hot-swappable", and "The system can work with a single fan failure."
+  power: >-
+    NOT STATED. Searched the guide for the fan module's watts, amps and CFM: Appendix C gives power-supply figures
+    only. No power figure is written, and lint's missing-power warning stands.
+  size: >-
+    estimated - NO HELD DOCUMENT STATES THE MODULE'S DIMENSIONS. Width is a fraction of the rear face in Figure 5
+    (the four fan modules together take about half of the face width), height is the one-rack-unit slot. Figure 5
+    is a three-quarter view, so the width is an estimate to roughly ten percent.
+  elements: >-
+    estimated - Figure 5 shows a dark mesh face with a handle across it; no figure is flat. The guide's LED
+    appendix names no fan-module lamp, so none is drawn. The handle is drawn as a plain bar: the figure shows a
+    slanted lever whose shape cannot be read at its size.
+  latch-colour: >-
+    NOT STATED. The guide gives no handle colour for either airflow, and its fan figures are greyscale.
+  depth: >-
+    estimated - not stated in any held document; 100 mm is a round figure for a fan module of this class.
+states: [absent]
+elements:
+  grille: {at: [2.0, 2.0], size: [48.0, 36.0], class: rotor}
+  handle: {at: [6.0, 15.0], size: [40.0, 10.0], class: handle}
+relief:
+  wall: '#15181b'
+  features:
+    - node: grille
+      vent: 24
+      confidence: estimated
+      source: the grille's extent is read off Figure 5; the cavity behind it is not stated.
+    - node: handle
+      uhandle: 12.0
+      color: '#4a4f55'
+      confidence: estimated
+      source: Figure 5 shows the handle standing clear of the face; 12 mm is a reading of its proportions.
+skins: [default]
+body:
+  depth: 100
+  color: '#26292d'
+  footprint: {at: [0, 0], size: [52.0, 40.0]}

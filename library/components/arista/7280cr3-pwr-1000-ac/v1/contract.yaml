@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: 7280cr3-pwr-1000-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1000 W AC power supply of the Arista 7280CR3-32D4, PWR-1011-AC-RED (forward airflow, red
+  handle). It is a 1RU module, 73.5 mm wide. A round fan guard with a red diagonal handle is at the
+  left. An IEC C14 inlet, a latch and a status lamp are at the right. Two seat at the ends of the
+  rear. The pair is 1+1 redundant and hot-swappable.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1011-AC-RED: {part: PWR-1011-AC-RED}
+attrs:
+  power-output-w: 1000
+  input: ac
+  inlet: c14
+  airflow: front-to-back
+  input-note: '100 - 120 / 200 - 240 VAC, 12 / 6 A, 50/60 Hz'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height. The 7280R3 Series Data Sheet (03-0045-59,
+    August 11th, 2025) describes the part as "PWR-1011-AC-RED  Arista PSU, 1RU, AC/DC, 1000W,
+    FORWARD, 73.5MM": 73.5 is its width. Figure D-2 of the 7280R3 Series Quick Start Guide
+    (DOC-07041-01), a 552 px raster at 1.24 px/mm, draws the module about 95 px (77 mm) wide
+    including its latch, and 52 px (42 mm) tall in a 55 px chassis, so the height is the 1RU
+    module's 40 mm to within a pixel (0.8 mm); 40.0 is taken from the 1RU.
+  part-number: >-
+    datasheet - ordering information for the 7280CR3-32D4: "PWR-1011-AC-RED  Arista PSU, 1RU,
+    AC/DC, 1000W, FORWARD, 73.5MM". The quick start guide's table 3 lists the supply as
+    PWR-1011-AC and table 4 gives it as the supported AC supply of the CR3-32D4, CR3K-32D4 and
+    CR3K-32D4A.
+  power-output: >-
+    datasheet - the "1000W" of the ordering description, and the "Output Power 1000W" row of the
+    data sheet's power supply table. An output, because a supply provides power. Table 4 of the
+    guide gives the switch's own draw (535 W typical, 851 W maximum) and is the switch's figure,
+    not this one.
+  input: >-
+    datasheet - quick start guide table 3: PWR-1011-AC "100 - 120 / 200 - 240 VAC 12 / 6 A
+    50/60 Hz"; the data sheet's power supply table gives 100-240 V AC, typical input current
+    12.0 - 6.0 A, 93 percent efficiency (Platinum) and an IEC 60320 C14 input connector.
+  airflow: >-
+    datasheet - the part number's RED and "FORWARD" airflow; the guide's section 2.1 gives red as
+    the colour of an air-exit module. The reverse build is the separate component
+    arista/7280cr3-pwr-1000-ac-rev (PWR-1011-AC-BLUE).
+  inlet: >-
+    datasheet - the data sheet's "Input Connector IEC 60320 C14" for the PWR-1011 AC supply, and
+    the guide's appendix B kits for the "IEC-320/C13-C14, 13 A, 250 V, 2 meter" cords. Figure D-2
+    draws the inlet with its three poles read across, which is a C14 turned a quarter; the turn is
+    read off a 552 px figure, so it is a reading.
+  face: >-
+    estimated - figure D-2 read at 1.24 px/mm in a three-times enlargement: a round fan guard in
+    the left 42 mm with four corner screws and a red handle across it from lower left to upper
+    right, a black hole, a blue disc and a status lamp along the top of the right part, the inlet
+    well below them, and a grey latch at its edge. The lamp is the module's status lamp (guide
+    figure A-5 and table 12: green normal; yellow for a fault, which the guide gives for the
+    PWR-500AC, PWR-745AC and PWR-747AC and not for this one). The black hole and the blue disc are
+    not named by any document and are drawn as a hole and a disc.
+  handle-finish: >-
+    The red of the handle is a field, `handle-finish`, default `#a32a38`, read off the figure.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#a32a38'}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.85, 14.3], rotate: 270}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

@@ -1,0 +1,70 @@
+format: 1
+kind: module
+name: 7050x4-pwr-1500-dc-rev
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1500 W DC power supply of the Arista 7050DX4-32S, 7050PX4-32S and 7050CX4M-48D8 for rear-to-front
+  air, PWR-1511-DC-BLUE (reverse airflow, blue handle). It is the PWR-1511-DC-RED housing with the fan
+  turned the other way, with a blue diagonal handle and the same two-pole terminal block.
+size: {w: 73.5, h: 40.0}
+size-confidence: {w: datasheet, h: estimated}
+part-numbers:
+  PWR-1511-DC-BLUE: {part: PWR-1511-DC-BLUE}
+attrs:
+  power-output-w: 1500
+  input: dc
+  inlet: dc-terminal
+  airflow: back-to-front
+  input-note: '-48 to -60 VDC, 38.0 A'
+provenance:
+  size: >-
+    datasheet for the width, estimated for the height, as arista/7280r3-pwr-1500-dc (the same part number's red module): the 7050X4 Series
+    Data Sheet (03-0057-27) lists "PWR-1511-DC-BLUE  Arista PSU, 1RU, DC/DC, 1500W, REVERSE, 73.5MM".
+  part-number: >-
+    datasheet - optional components and spares, as above. The datasheet lists no DC SKU of the switch;
+    the supply is a spare and the "#" configurable orders take it.
+  power-output: >-
+    datasheet - the "1500W" of the ordering description. An output.
+  input: >-
+    datasheet - the 7050X4 guide, where arista/7280r3-pwr-1500-dc (the red module) carries the 7280R3
+    guide's current: guide table 3, "-48 to -60 VDC, 38.0 A", and the power
+    supply table's "35.2A Max (-48V)".
+  face: >-
+    estimated, AND NOT FROM THIS MODULE. No picture of a blue PWR-1511-DC is held. It is the red module
+    with the handle and the centre disc changed, as arista/7280cr3-pwr-1000-dc-rev draws its own.
+  airflow: >-
+    datasheet - the part number's BLUE and "REVERSE".
+  handle-finish: >-
+    A field, `handle-finish`, default `#3d7bd6`.
+  power: >-
+    No supply figure other than the rating is stated; nothing is written.
+skins: [default]
+states: [absent]
+elements:
+  handle: {at: [1.0, 1.0], size: [41.0, 38.0], class: handle}
+  latch: {at: [68.0, 10.4], size: [5.0, 12.8], class: latch}
+  status: {at: [66.4, 2.6], size: [4.8, 4.8], class: led, states: ['off', 'ok', 'fault']}
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#3d7bd6'}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-neg, at: [49.5, 12.3]}
+  - {ref: common/terminal-screw-34@1, id: pole-pos, at: [49.5, 27.1]}
+relief:
+  features:
+    - node: handle
+      bar: 5.0
+      confidence: estimated
+      source: >-
+        A diagonal bar across the fan guard, anchored at both ends. How far it stands off the
+        module is not dimensioned; 5.0 is its drawn width.
+    - node: latch
+      out: 1.2
+      confidence: estimated
+      source: 'As the library''s other supply latches: drawn, not dimensioned.'
+body:
+  depth: 210
+  color: '#8c8f94'
+  footprint: {at: [0, 0], size: [73.5, 40.0]}

@@ -1,0 +1,169 @@
+---
+manufacturer: Juniper
+model: EX4400-24X-AFI
+slug: juniper-ex4400-24x-afi
+u_height: 1.0
+is_full_depth: true
+airflow: rear-to-front
+description: Juniper EX4400-24X campus and distribution switch, 1RU
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+  - name: Console (USB-C)
+    type: usb-c
+interfaces:
+  - name: mgmt
+    type: 1000base-t
+    mgmt_only: true
+  - name: port-0
+    type: 10gbase-x-sfpp
+  - name: uplink-0
+    type: 100gbase-x-qsfp28
+  - name: port-1
+    type: 10gbase-x-sfpp
+  - name: uplink-1
+    type: 100gbase-x-qsfp28
+  - name: port-2
+    type: 10gbase-x-sfpp
+  - name: port-3
+    type: 10gbase-x-sfpp
+  - name: port-4
+    type: 10gbase-x-sfpp
+  - name: port-5
+    type: 10gbase-x-sfpp
+  - name: port-6
+    type: 10gbase-x-sfpp
+  - name: port-7
+    type: 10gbase-x-sfpp
+  - name: port-8
+    type: 10gbase-x-sfpp
+  - name: port-9
+    type: 10gbase-x-sfpp
+  - name: port-10
+    type: 10gbase-x-sfpp
+  - name: port-11
+    type: 10gbase-x-sfpp
+  - name: port-12
+    type: 10gbase-x-sfpp
+  - name: port-13
+    type: 10gbase-x-sfpp
+  - name: port-14
+    type: 10gbase-x-sfpp
+  - name: port-15
+    type: 10gbase-x-sfpp
+  - name: port-16
+    type: 10gbase-x-sfpp
+  - name: port-17
+    type: 10gbase-x-sfpp
+  - name: port-18
+    type: 10gbase-x-sfpp
+  - name: port-19
+    type: 10gbase-x-sfpp
+  - name: port-20
+    type: 10gbase-x-sfpp
+  - name: port-21
+    type: 10gbase-x-sfpp
+  - name: port-22
+    type: 10gbase-x-sfpp
+  - name: port-23
+    type: 10gbase-x-sfpp
+module-bays:
+  - name: Fan 0
+    position: fan-0
+    description: 'Accepts: ex4400-fan-afo, ex4400-fan-afi'
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: ex4400-fan-afo, ex4400-fan-afi'
+  - name: PSU 0
+    position: psu-0
+    description: 'Accepts: jpsu-550-c-ac-afo, jpsu-550-c-ac-afi, jpsu-550-c-dc-afo, jpsu-550-c-dc-afi,
+      ex4400-psu-cover'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: jpsu-550-c-ac-afo, jpsu-550-c-ac-afi, jpsu-550-c-dc-afo, jpsu-550-c-dc-afi,
+      ex4400-psu-cover'
+  - name: ext-module
+    position: ext-module
+    description: 'Accepts: ex4400-em-cover, ex4400-em-4s, ex4400-em-4y, ex4400-em-1c'
+comments: 'Juniper EX4400-24X campus and distribution switch, 1RU. It has 24 SFP/SFP+ ports that take
+  1GbE or 10GbE optics, in 12 columns of two cages. The front also holds two 100GbE QSFP28 ports and the
+  console, management and USB-A ports. It has a USB-C console port, the chassis and port mode lamps, a
+  mode button and one extension module slot. The rear holds two fan modules and two power supply slots.
+  A shipped switch carries one 550 W supply, two fan modules and covers on the empty slots. The configurations
+  give the supply type and the airflow.
+
+
+  Configuration `afi`: One 550 W AC supply and two fan modules with back-to-front airflow (AIR IN label,
+  blue handle) and covers on the empty slots (EX4400-24X-AFI).
+
+
+  Rack mounting positions: flush ("flush with the front panel"), mid ("along the middle of the side panels"),
+  recessed ("recessed inside a four-post rack"; 4-post only).
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - compliance.seismic: Tested for Zone 4 earthquake according to NEBS GR-63-CORE, Issue 5
+
+  - environmental.acoustic-noise: 42.71 dB(A) typical with one 550 W AC supply and front-to-back airflow
+  (Table 115)
+
+  - environmental.altitude: no performance degradation up to 1828.8 m (6000 ft) at 40 C
+
+  - environmental.humidity: 5 to 90 percent noncondensing
+
+  - environmental.operating-temp: 0 C to 45 C (32 F to 113 F)
+
+  - environmental.storage-temp: -40 C to 70 C (-40 F to 158 F) in the shipping container
+
+  - features.extension-slot: one slot for the EX4400-EM-4S, EX4400-EM-4Y or EX4400-EM-1C module
+
+  - features.macsec: AES-256 on all SFP and SFP+ network ports, on the native QSFP28 ports and on the
+  extension module ports
+
+  - features.optics-qsfp28: The two front ports take 100GbE QSFP28 or 40GbE QSFP+ transceivers (40G from
+  Junos OS 22.1R1). Breakout cables give 4x25G and 4x10G. The exact list is in the Hardware Compatibility
+  Tool
+
+  - features.optics-sfp-plus: 10 GbE SFP+ and 1 GbE SFP transceivers; the exact list is in the Hardware
+  Compatibility Tool
+
+  - features.virtual-chassis: up to 10 switches; the front QSFP28 ports are Virtual Chassis ports only
+  after request virtual-chassis mode hgoe
+
+  - lifecycle.eol: none-announced
+
+  - management.cloud: Juniper Mist Wired Assurance, and the Junos CLI and J-Web
+
+  - management.console: USB-C and RJ-45 (CON), both on the front
+
+  - management.oob: MGMT RJ-45 on the front, 10/100/1000, with link activity and status lamps
+
+  - management.usb: USB-A on the front
+
+  - performance.throughput: 540 Gbps unidirectional, 1080 Gbps bidirectional
+
+  - physical.depth-with-modules: 430.0 mm with power supply and fan modules; 440.7 mm with an extension
+  module as well
+
+  - physical.mounting: two-post kit EX-RMK in the box; four-post kit EX-4PST-RMK and wall kit EX-WMK separate
+
+  - physical.weight: 6.7 kg with no power supply, fan module or extension module (EX4400-24X and -24X-AFI);
+  6.65 kg for the -DC builds
+
+  - platform.cpu: quad-core x86
+
+  - platform.memory: 4 GB DDR4 with ECC
+
+  - platform.storage: 20 GB eMMC
+
+  - thermal.heat-dissipation: 422.84 BTU/hr idle and 470.58 at 100 percent traffic with a 550 W AC supply;
+  463.76 and 497.86 with a 550 W DC supply
+
+
+  Drawing version 0.1.2. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

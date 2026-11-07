@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: tripplite-duct-1uhd-base
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the Tripp Lite SmartRack SRCABLEDUCT1UHD high capacity finger duct seen from
+  the front, with the ears that are its two ends - drawn as the well the two finger walls stand
+  in, its floor the front face of the steel plate
+provenance:
+  size: >-
+    datasheet for the overall, estimated for the rest - the spec sheet states the unit as 2.040 x
+    19.000 x 4.660 in (hwd): 19.000 in is 482.6 mm, the rack face over the ears, and 2.040 in is
+    51.82 mm. (Its centimetre figures, 4.45 x 48.26 x 12.26, disagree on height and depth; the
+    inch figures are taken and the conflict is the device's `size-conflict`.) No document
+    states where the ears end, so the plate is drawn that whole face.
+  size-holes: >-
+    estimated - no document draws the ears. The slots stand where an EIA-310 ear's holes stand,
+    465 mm between hole centres (8.8 mm from the end) and 32 mm apart, at the 12 x 6 mm the
+    SRCABLEDUCT1U's drawing gives its own; the rounding of the plate's corners, 3 mm, is
+    estimated.
+  depth: >-
+    datasheet for the overall - 4.660 in, 118.36 mm. The back plate is taken to stand 5.0 mm
+    behind the plane of the ears and the well to run from the front to 0.2 mm in front of the
+    plate's face: 118.36 less 5.2, 113.16 (estimated, as the SRCABLEDUCT1U's drawing gives for
+    its own plate: no document states it for this part).
+  color: >-
+    datasheet - "Cold rolled steel with black finish" (the spec sheet's Highlights). The
+    shade is this library's render of black steel, lifted enough to read on the explorer's
+    dark stage as well as on a white one.
+size: {w: 482.6, h: 51.82, d: 113.16}
+size-confidence: {w: datasheet, h: datasheet, d: estimated}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#3a3d41'
+relief: {wall: '#3a3d41'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 51.82], class: bezel}
+skins: [default]

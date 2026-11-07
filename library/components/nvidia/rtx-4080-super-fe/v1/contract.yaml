@@ -1,0 +1,239 @@
+format: 1
+kind: module
+name: rtx-4080-super-fe
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA GeForce RTX 4080 SUPER Founders Edition, a dual-axial-fan Founders
+  Edition card that is three slots wide. The bracket face carries three
+  DisplayPort and one HDMI receptacle on the board's side, with four vent
+  panes below them. The shroud is the X-shaped Founders Edition design. Its
+  fan pocket is at the far end and its model name is printed on the other
+  pocket. The heat sink's fins show along the top edge. Its power connector is
+  a 16-pin (12VHPWR) receptacle in a notch in the top edge. It plugs into one
+  riser slot and covers the two beside it.
+slot-width: 3
+size: {w: 120.02, h: 62.23, d: 304}
+size-confidence: {w: registry, h: registry, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card in `accepts`, and no bay states `interface: pcie-fh`. The card
+  does not state `mates: pcie-fh`: the library has not begun that migration (spec/tests/test_cards_by_interface.py
+  holds it at no part until it does). No document held says any server takes a consumer card.
+attrs:
+  model: 'RTX 4080 SUPER'
+  edition: 'Founders Edition'
+  role: gpu
+  form-factor: 'Full-height, three-slot (61 mm), 304 mm x 137 mm'
+  pcie-connector: x16
+  pcie-height: full
+  power-draw-max-w: 320
+  power-input: 'host PCIe slot and one 16-pin 12VHPWR connector; an adapter from three PCIe 8-pin cables is in the box'
+  memory: '16 GB GDDR6X, 256-bit'
+  display-ports: '3 x DisplayPort and 1 x HDMI on the bracket'
+  cooling: active
+  airflow: 'axial fan on the broad side; a flow-through heat sink exhausts through the second side and the top edge'
+faces:
+  rear: {ref: nvidia/rtx-4090-fe-tail@1}
+  plan: {ref: nvidia/rtx-4090-fe-top@1}
+provenance:
+  slot-width: >-
+    datasheet - NVIDIA's RTX 4080 family page prints 3-Slot for the 4080 SUPER, the user guide's clearance box reads
+    'Must have space for 304mm (L) x 137mm (W) x 61mm (H) card' and its step 2 says 'Remove three adjacent slot
+    covers'. The card declares `slot-width: 3` as the RTX 4090 does (docs/pcie-two-slot-bays-design.md leaves room for a
+    three-slot card). The face is one plate three slot pitches across, the 4090's outline.
+  sources: >-
+    NVIDIA GeForce RTX 4080 SUPER Founders Edition - NVIDIA's GeForce RTX 4080 family page (fetched 2026-10-07),
+    https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4080-family/ ; NVIDIA GeForce RTX 4080 SUPER user
+    guide, Rev1 (vector), https://www.nvidia.com/content/geforce-gtx/GEFORCE_RTX_4080_SUPER_User_Guide_Rev1.pdf ; NVIDIA's
+    compare page, https://www.nvidia.com/en-us/geforce/graphics-cards/compare/ ; NVIDIA's case-clearance diagram for this
+    card (the 'case-size', 'slots' and 16-pin panels of the 'Prepare your system' section of the family page); the 3/4
+    pictures geforce-rtx-4080-super-og-1200x630.jpg and geforce-rtx-4080-super-100vp-d@2x.jpg (5119 x 2880), both under
+    https://www.nvidia.com/content/dam/en-zz/Solutions/geforce/ada/rtx-4080/ ; PCI Express CEM 5.0 via the library's standards
+    registry. NVIDIA publishes no dimensioned drawing of any GeForce card. The pictures are NVIDIA's; their licence is not
+    stated, so facts were read from them and no picture is copied. The 3D reference survey holds one RTX 4080 SUPER model
+    (Sketchfab, no licence stated, not downloadable) and it was not used.
+  reference-images: >-
+    estimated - NO STRAIGHT-ON PICTURE OF THE RTX 4080 SUPER EXISTS in the intake (0 of 24 GeForce boards have one of the
+    bracket; only the 3080 and 4070 SUPER have a broad-side elevation). What is held: the og picture (1200 x 630) and the
+    5119 px hero (both 3/4 views of the broad side from a low angle, the near end about 1.7 times taller than the far end),
+    and the user guide's vector page 5. THE 3/4 PICTURES ARE NOT SCALED: no mm per pixel is stated for either, because the
+    face is not square-on. A rectification of the hero's broad face was tried (the same method that worked on the RTX 4060 Ti's
+    hero) and NOT accepted: the card's corner radii and the left end's curve leave the corners placeable to only about 3
+    percent, so no figure is taken from it. The broad side is the RTX 4090 skin's, which is the 4070 SUPER's elevation
+    scaled by 1.246, and was checked by eye against the hero: the model name on the left pocket, the 'SUPER' on the same
+    line, the X waist between the two pockets, the fan pocket at the far end, the notch in the top edge. The guide page's drawing is the RTX 4090's artwork (it prints 'RTX 4090' beside the fan) and has the same
+    1064 of 1068 vector paths as the RTX 4080 guide's page 5 and the 4090's: the 4080 SUPER, 4080 and 4090 share one shell.
+  size: >-
+    registry - w is the full-height bracket's 120.02 (std/pcie-bracket-fh@2, PCIe CEM 5.0 figure 11-5). h is three slots:
+    the single bracket's 21.59 plus two 20.32 slot pitches, 62.23.
+  depth: >-
+    datasheet - NVIDIA's page prints the length as 304 mm, taken from the bracket's outer face as nvidia/rtx-4090-fe@1
+    reads the same figure. The guide's clearance box agrees (304 mm (L) x 137 mm (W) x 61 mm (H)).
+  face-outline: >-
+    estimated - the plate is the RTX 4090's (std/pcie-bracket-fh@2's outline with a third tab and a far edge at 61.5):
+    120.02 long, the 0.8 fold at the flange end, ten-wide retention tabs on the 20.32 slot pitch with the 4.1 board-side
+    step and the V notches between them. The guide shows 3 tabs and a hook-shaped flange that this skin does not draw. No
+    straight-on view of any GeForce bracket exists. This bracket is taken to be the same part as the 4090's.
+  face-ports: >-
+    drawing - the port places and the shells' lengths are read on the VECTOR figure of NVIDIA's own guide for this card (page
+    5), from the four black filled receptacle shapes themselves, not the callout dots. The shapes run, in page y (pt): the
+    first DisplayPort 195.3 to 208.1 (its flange end is hidden behind the bracket's hook, so it is taken as long as the next
+    two, to 191.7), the second 209.3 to 225.7, the third 226.9 to 243.3 and the HDMI 246.9 to 260.2. The page's bracket
+    drawing is the 4090's (same vector paths), so the 4090 mapping of page y to the plate was used: millimetres from the tab
+    tips = 105.0 - 0.965 x (y - 199.7). That puts the three DisplayPort shells at 96.9 to 112.7, 80.0 to 95.8 and 62.4 to 78.2
+    from the tip (15.8 long each, as drawn) and the HDMI shell at 45.6 to 58.5 (12.9 long, as drawn). The gaps between shells
+    are 1.1, 1.8 and 3.9 mm: no two touch. The order, flange end to tab end, is DisplayPort, DisplayPort, DisplayPort, HDMI,
+    as the guide names them. Each place is good to about 2 mm (the view is oblique) but the gaps are read inside one drawing.
+    A shell is drawn 7.1 across for a DisplayPort and 6.0 for the HDMI: those depths are estimated (as the RTX A6000's
+    photographed shells). THE LIBRARY HAS NO DISPLAYPORT OR HDMI PART OR INTERFACE, so each receptacle is an element of class
+    `connector` painted in the skin and not a seated part. NO STRAIGHT-ON VIEW OF ANY GEFORCE BRACKET EXISTS, so this face is
+    the least certain part of the card. It reads differently from the RTX 4090 contract (batch 1), which places its shells
+    from the callout dots and not from the shapes. The 4090 contract was not edited.
+  face-vent: >-
+    estimated - the guide's drawing shows four grilles in a row below the ports with narrow bars between them and three
+    screws at the tab end, one on each slot's centre line (the 3-slot guide draws three). Places are read as fractions of the
+    plate's length on the same page: the four panes from about 25 to 111 along, each 20.2 long with 1.5 bars, and the screws
+    at x 17 and y 12.4, 32.7 and 53.0 (the slot centres), at the tab end of the vent column. No hole is drawn at the flange.
+  face-markings: >-
+    estimated - the guide draws no lamp, label or printing on the bracket and no straight-on picture exists to resolve any
+    (no control in the same image can be named, so this is a gap, not a reading).
+  thickness: >-
+    datasheet - NVIDIA prints 3-Slot and the guide 'x 61mm (H) card'. The shroud's far face is put at y 61.0 from the
+    bracket's board-side datum (the envelope is 62.23). Whether NVIDIA's 61 includes the backplate is not stated; the
+    backplate is not drawn.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and the bracket's keyed side, are at the top (small
+    y), which is where the DisplayPorts are. The broad side drawn is the face that NVIDIA's own elevations of the 3080 and the
+    4070 SUPER show (name pocket toward the bracket, fan at the far end); the guide's oblique drawing and the hero show the
+    card from the other side or end and put the fan beside the bracket, and which face the picture shows was not settled.
+  body: >-
+    estimated - the board and its edge follow PCIe CEM 5.0. The shroud is the RTX 4090's, which is the 4070 SUPER's scaled to
+    the stated 137 mm total height (the finger edge to the shroud's far edge, 136.6 here): x 26.73 to 151.75, 125.0 high.
+    The board box runs 159.1 behind the bracket and is hidden. No document gives a shroud height of this card.
+  body-shroud: >-
+    estimated - one dark slab from the board's component face (y 6.01) to the far face (61.0), in three boxes split at the top
+    edge's notch (provenance body-power-connector) so that the notch is a real step in 3D. Its broad side is painted: the
+    X-shaped waist, the two pockets with their bright rims, the louvres beside the fan pocket and the printed model name
+    ('RTX 4080' in bold and 'SUPER' smaller, lighter and in a thin outline, both plain text centred on the pocket's centre line
+    across and along; the maker's mark is a logo-zone). The shroud's outline, pockets and fan are borrowed from the 4090's skin
+    (itself the 4070 SUPER's elevation scaled) and are not a measurement of this card: THE GUIDE'S VECTOR SHROUD CANNOT SETTLE
+    THEM, because page 5 of the 4080 SUPER guide is path for path the 4090 guide's (1095 of 1095 paths but the HDMI callout) and
+    prints no model name or SUPER mark, so every shroud dimension stays `estimated` at the 4090's. The name's size, weight and
+    centring are read on NVIDIA's og picture of the 4080 SUPER (3/4 view, not scaled: the name block sits in the middle of the
+    pocket, 'SUPER' in a smaller, lighter outlined box after 'RTX 4080'); the lengths of the two words are a guess. The BACK of the card (its backplate and the second
+    fan) is shown in no picture at its scale and is not drawn.
+  body-fan: >-
+    estimated - the fan in the far pocket is the 4090 skin's: ring about 113 mm, hub 41 mm, 11 blades. The 3/4 pictures show
+    the fan in motion blur, so no blade can be counted in them; the guide's drawing shows about 10 to 12 blades and 11 is
+    drawn (the same count the 4090 contract gives).
+  body-top-edge: >-
+    estimated - the top edge is seen only in 3/4 views and the guide's oblique drawing. What is drawn: the shroud's end caps in
+    a dark grey (the hero shows a dark top edge; the colour is a reading by eye) and, between them from 108 to 193 behind the
+    bracket, the heat sink's fins, one every 1.6 mm (the 4090's run). The lettering on the far cap is a maker's wordmark and is
+    reserved as `logo-zone` in skins/body-right.svg, not drawn.
+  body-power-connector: >-
+    estimated - NVIDIA's page says 'Supplementary Power Connectors: 3x PCIe 8-pin cables (adapter in box) OR 1x 450 W or
+    greater PCIe Gen 5 cable' and the guide's callout reads 'PCIe Gen5 16-pin Power Connector', drawn on the TOP of the card in
+    a notch midway along it ('power receptacle on the top of the graphics card'). It is the 12VHPWR receptacle. The card
+    composes std/12vhpwr-header@1 as `aux-power` on its top face (`faces.plan`, nvidia/rtx-4090-fe-top@1, the 4090's: the guide
+    drawings are the same). DCIM exports no power port for it for now: the owner chose (decided 2026-10-26) to keep the header
+    on the top face, at its true position, and the exporter reads only `faces.rear`. The 3D body draws the housing in the notch
+    (20.85 x 11.7, 9.0 deep). The notch's place (about midway along the card) is read on the guide's oblique drawing and its
+    size is a guess: centred 180.7 behind the bracket, 28 long, 4.5 deep (the 4090's). A 1.4 in cable clearance above the
+    connector is in NVIDIA's case diagram and is not drawn.
+  body-end: >-
+    estimated - a closed dark end plate 1.0 thick at the far end. No photograph shows the end. The rear face
+    (`faces.rear`, nvidia/rtx-4090-fe-tail@1, the 4090's, the same shell) is a plain plate.
+  power: >-
+    datasheet - NVIDIA's page: 'Total Graphics Power (W) 320' for both the 4080 SUPER and the 4080. The figure is the board's
+    total, filed as the maximum. 750 W is NVIDIA's required system power.
+  memory: >-
+    datasheet - 16 GB GDDR6X, 256-bit. NVIDIA's family page, Memory Specs.
+  part-numbers: >-
+    not stated - no document held gives an order code or part number for this Founders Edition card (NVIDIA sells it direct
+    and prints none on the pages held).
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) a straight-on view of the I/O bracket (needs-photo; the whole face is estimated from
+    NVIDIA's guide drawing and the standard); (2) a straight-on view of the broad side, the top edge and the far end
+    (needs-photo; the whole shroud is borrowed from the 4090's skin, and the fin run, the caps, the wordmark and the notch
+    are read from 3/4 views); (3) the DisplayPort and HDMI parts and interfaces, which the library lacks (painted, not
+    seated); (4) the card's back, its backplate and the second fan (needs-photo); (5) a weight and an order code
+    (vendor-silent in the documents held); (6) PCIe generation, which no document held states in a table (vendor-silent);
+    (7) the lifecycle, which was not searched; (8) the dimensioned FE board outline and bracket drawing, which NVIDIA does not
+    publish; (9) the 3D reference: the survey holds a Sketchfab model with no licence, not downloadable, not used.
+  conflicts: >-
+    CONFLICTS SETTLED: (a) the case diagram's inch figures read 304.8 x 137.2 mm against the page's 304 x 137: the page's are
+    used; (b) the guide's page 5 is the RTX 4090's artwork ('RTX 4090' is printed on it): its bracket and shroud are taken
+    because the text of the same guide is the 4080 SUPER's (304 x 137 x 61, three covers); (c) the guide names the connector
+    'PCIe Gen5 16-pin'; the CEM calls it 12VHPWR (5.0) or 12V-2x6 (5.1): std/12vhpwr-header@1 is composed because the guide
+    does not name 5.1; (d) the 4080 SUPER guide's HDMI callout sits at y 253.8 and the 4080 and 4090 guides' at 258.8 on one
+    drawing: the shells are placed from the receptacle shapes, which are the same in all three guides.
+body:
+  depth: 304
+  color: '#1b1b1c'
+  plate: {at: [9.80, 4.10], size: [109.40, 57.42]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.9, 1.57], from: 0.9, depth: 159.1,
+     color: '#1d2420', confidence: estimated, shows: [right],
+     source: 'CEM 5.0 board (1.57 thick, lower edge W + 13.25, top edge W + 111.15), run only as far behind the bracket as the 4090 skin shows the board past the shroud (provenance body)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 45, depth: 11.2,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: key datum 57.15 behind the bracket, tab 13.25 deep, 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 58.1, depth: 80.93,
+     color: '#1d2420', confidence: registry,
+     source: 'CEM 5.0: the tab runs 81.88 past the key datum, to 139.03'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3, 1.67], from: 45.35, depth: 10.6,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3, 1.67], from: 58.35, depth: 70.6,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0: the x16 pad run on 1.00 pitch'}
+  - {id: shroud-a, at: [26.73, 6.01], size: [125.02, 54.99], from: 0.9, depth: 165.8,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'borrowed from the RTX 4090 contract: one slab, bracket end to the notch (provenance body-shroud); thickness stated (provenance thickness)'}
+  - {id: shroud-notch, at: [26.73, 6.01], size: [120.52, 54.99], from: 166.7, depth: 28,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, under the connector''s notch (4.5 deep), borrowed from the RTX 4090 contract'}
+  - {id: shroud-b, at: [26.73, 6.01], size: [125.02, 54.99], from: 194.7, depth: 108.3,
+     color: '#1b1b1c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, from the notch to the end plate, borrowed from the RTX 4090 contract'}
+  - {id: end-plate, at: [26.73, 6.01], size: [125.02, 54.99], from: 303, depth: 1,
+     color: '#16171a', confidence: estimated,
+     source: 'a closed dark end plate (provenance body-end)'}
+  - {id: power-16pin, at: [138.2, 8.15], size: [9, 11.7], from: 170.27, depth: 20.85,
+     color: '#17191c', confidence: estimated,
+     source: 'std/12vhpwr-header@1''s 20.85 x 11.7 opening and 9.0 depth, in the top-edge notch (provenance body-power-connector)'}
+  - {id: bracket-tab-1, at: [0, 7.4], size: [7.27, 9.95], from: 0.3, depth: 0.9,
+     color: '#b9bcbf', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-2, at: [0, 27.72], size: [7.27, 9.95], from: 0.3, depth: 0.9,
+     color: '#b9bcbf', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+  - {id: bracket-tab-3, at: [0, 48.04], size: [7.27, 9.95], from: 0.3, depth: 0.9,
+     color: '#b9bcbf', confidence: estimated,
+     source: 'the retention tab of skins/default.svg; 0.9 thick, estimated'}
+elements:
+  display-port-1: {at: [96.9, 6.10], size: [15.80, 7.10], class: connector}
+  display-port-2: {at: [80.0, 6.10], size: [15.80, 7.10], class: connector}
+  display-port-3: {at: [62.4, 6.10], size: [15.80, 7.10], class: connector}
+  hdmi: {at: [45.6, 6.40], size: [12.90, 6.00], class: connector}
+  vent-1: {at: [25, 15.30], size: [20.20, 44], class: vent}
+  vent-2: {at: [46.7, 15.30], size: [20.20, 44], class: vent}
+  vent-3: {at: [68.4, 15.30], size: [20.20, 44], class: vent}
+  vent-4: {at: [90.1, 15.30], size: [20.20, 44], class: vent}
+  screw-1: {at: [14.6, 10.0], size: [4.80, 4.80], class: screw}
+  screw-2: {at: [14.6, 30.3], size: [4.80, 4.80], class: screw}
+  screw-3: {at: [14.6, 50.6], size: [4.80, 4.80], class: screw}
+relief:
+  wall: '#b9bcbf'
+  features:
+  - node: flange-fold
+    out: 9.4
+    color: '#b9bcbf'
+    confidence: estimated
+    source: >-
+      the fold at the flange end, PCIe CEM 5.0 figure 11-5's 9.40, drawn as on std/pcie-bracket-fh@2. Not measured on this
+      bracket.
+skins: [default]

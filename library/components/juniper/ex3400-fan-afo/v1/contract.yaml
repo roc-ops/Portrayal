@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: ex3400-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module, airflow out (AFO), for the Juniper EX3400. Two sit side by side on the rear panel,
+  numbered 0 and 1. Each is hot-removable and hot-insertable. The face has an orange handle with a
+  grey AIR OUT chip. A honeycomb grille sits above and below the handle, and a captive screw at the
+  top left. Air leaves the chassis at this face, front to back.
+attrs:
+  cli-name: Fan Module, Airflow Out (AFO)
+  airflow: front-to-back
+  weight-kg: 0.72
+part-numbers:
+  EX3400-FAN-AFO2: {part: EX3400-FAN-AFO2}
+provenance:
+  size: >-
+    photo-measured - Juniper image-library EX3400-48P rear studio photograph (ex3400-48p-rear-high),
+    body width 441.0 mm over 1467 px (3.327 px/mm, height agrees to 1 percent): the orange face
+    measures 136 by 138 px, 40.8 by 41.6 mm, and the two faces stand 48.4 mm apart. The guide
+    gives no fan module dimension, only its weight, 1.59 lb (0.72 kg), Table 3. The depth is not
+    stated anywhere in the guide, so the contract carries none.
+  part-number: >-
+    datasheet - EX3400 Switch Hardware Guide (published 2026-01-09), Table 38, the ORv3 switch-tray
+    assembly, names the fan EX3400-FAN-AFO2. The guide never ties that number to the standard 1U
+    models and names none for them; the CLI term is Fan Module, Airflow Out (AFO) (Table 2). The
+    photograph of the EX3400-48P shows the same orange AIR OUT module.
+  face: >-
+    photo-measured - the grille and handle positions are fractions of the 136 by 138 px face in the
+    EX3400-48P rear photograph; the honeycomb is simplified to a few hexagons per column. The handle is
+    orange for airflow out, as photographed. The guide states no handle colour.
+  power: >-
+    NOT STATED. The guide's power chapter (Tables 11, 12, 15 and 19) gives whole-chassis and
+    power supply figures only. No per-fan figure appears in it, so L27 stands.
+states: [absent]
+elements:
+  screw:
+    at: [2.0, 2.0]
+    size: [4.8, 4.8]
+    class: screw
+  handle:
+    at: [1.0, 14.6]
+    size: [38.8, 12.2]
+    class: latch
+size:
+  w: 40.8
+  h: 41.6
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#ee6a1f'
+    confidence: estimated
+    source: photo - the handle stands proud of the grilles; the projection is not measured. The guide says the fan module handle extends 1.2 in. (3 cm) out of the chassis
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw, projection estimated
+size-confidence: {w: photo-measured, h: photo-measured}
+skins: [default]

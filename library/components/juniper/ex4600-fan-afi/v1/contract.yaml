@@ -1,0 +1,85 @@
+format: 1
+kind: module
+name: ex4600-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Juniper QFX5100-FAN-AFI, the field-replaceable fan module with back-to-front airflow (AIR IN) that
+  the EX4600 hardware guide lists for the EX4600 switch. Air enters at the rear and leaves at the
+  port panel. The module has a blue handle band, a grey AIR IN chip and a captive screw at the top
+  left. The EX4600 seats five of them, in rear slots 0 to 4 from left to right. They are hot-removable
+  and hot-insertable. The same module is used in the QFX5100 switches. Never mix it with AIR OUT fan
+  modules or with power supplies that carry the AFO label.
+attrs:
+  role: chassis-fan
+  airflow: back-to-front
+  power-absent: not-published
+part-numbers:
+  QFX5100-FAN-AFI (EX4600): {part: QFX5100-FAN-AFI}
+provenance:
+  sources: >-
+    datasheet - EX4600 Switch Hardware Guide (published 2025-08-12): Fan Modules, Table 11 (the two
+    fan module part numbers, labels, colours and airflow) and Figure 17 (the module, an isometric
+    drawing with the AIR IN legend). EX4600 Ethernet Switch Datasheet (1000511-016-EN, Sep 2021),
+    ordering table: QFX5100-FAN-AFI, back-to-front airflow fan module for the EX4600. The key of
+    part-numbers carries the suffix (EX4600) so that its DCIM module type does not share a file with
+    the same part number in another line's slice.
+  size: >-
+    photo-measured - Juniper's EX4600 rear studio photograph (ex4600-rear-high.jpg, 1500 x 151 px),
+    which shows five of these modules. The whole body there measures 1454 x 145 px, an aspect of
+    10.03 against the guide's 440.9 / 43.7 = 10.09 (0.6 percent out), so it is read at 3.298 px/mm
+    across and 3.318 down. The modules start at 259, 422, 584, 746 and 909 px; the first measures 135
+    px wide and 138 px high, 40.9 x 41.5 mm. No document states the module's size in millimetres.
+  depth: >-
+    estimated - not stated. Searched the EX4600 guide for the module's dimensions and weight: Figure
+    17 is an isometric drawing with no scale and Table 11 gives no size. No depth is written.
+  face: >-
+    photo-measured - the same photograph, read at 26.4 px/mm on one module: a captive screw at the top
+    left, a hexagonal grille above the handle band and another below it, a grey chip with a fan
+    symbol and the legend AIR IN in the middle of the band, and a ribbed grip either side of the
+    band. Figure 17 draws the same legend on the same band. Positions and the grille extents are read
+    off that module.
+  handle: >-
+    photo-measured - Table 11 gives the colour of this module as blue. The shade is the median of
+    10261 blue pixels in the five modules of the rear photograph, #88bcda. The colour is the field
+    handle-finish.
+  airflow: >-
+    datasheet - Table 11: QFX5100-FAN-AFI is labelled AIR IN, blue, FRU-to-port airflow, also called
+    back-to-front. A power supply of this chassis must carry the AFI label or be blue.
+  power: >-
+    estimated - not published. Searched the EX4600 guide for a per-module wattage near its fan
+    sections and its power tables, and the datasheet's power table: only whole-switch figures exist.
+    The module declares power-absent so that the missing figure is a statement.
+  led: >-
+    datasheet - the status lamp (ST) of a fan module is on the chassis strip at the left of its slot,
+    not on the module (Fan Module Status, Table 12, Figure 20), so it is a placement of the device.
+states: [absent]
+elements:
+  screw:
+    at: [1.6, 0.8]
+    size: [6.2, 6.2]
+    class: screw
+  handle:
+    at: [0.5, 14.8]
+    size: [39.9, 12.0]
+    class: latch
+fields:
+  handle-finish: {label: Handle colour, type: text, default: '#88bcda'}
+size:
+  w: 40.9
+  h: 41.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    confidence: estimated
+    source: photo - the handle band stands proud of the grilles; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - black captive screw head, projection not measured
+skins: [default]

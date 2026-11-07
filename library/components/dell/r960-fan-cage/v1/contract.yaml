@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: r960-fan-cage
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The fan cage assembly of the PowerEdge R960 seen from above - the frame across the chassis that holds the six
+  fan modules, with its warning labels along the front edge
+provenance:
+  sources: >-
+    Dell's R960 service model, working/intake/dell/3d-models/r960.glb, read with glbparts.py: the
+    `PEr960_ CoolingFan_ Assembly` node under `R960_ CoolingFan` in the `Main Assembly` node (the un-exploded
+    assembly), whose children are the six modules, `Cooling Fan Cage` and `PEr960_ CoolingFan_ Cage_ Handle`.
+    R960 ISM figure 12 (callout 2, the cooling fans, and the cage's two printed warnings "Heavy fan cage - handle
+    with care" and "When removed from the system, lay the fan cage on its front") and "Removing the cooling fan
+    cage assembly".
+  size: >-
+    measured - r960.glb, the assembly box 426.6 x 117.5 at plan (8.7, 546.8) (plan x = 228.0 - cad x1, plan y =
+    883.94 - cad z1). It is the cage proper (418.1 x 103.7, at plan x 13.0) and the handle bar across its front
+    (426.6 x 88.9, 37.7 tall, from plan y 575.3). The first pass read 425.0 x 114.0 off ISM figure 12, which
+    agrees to 1.6 and 3.5 mm.
+  depth: >-
+    measured - r960.glb, 156.5 tall (cad y 15.4 to 171.9), 3.0 above the 153.2 modules it frames.
+size: {w: 426.6, h: 117.5, d: 156.5}
+size-confidence: {w: measured, h: measured, d: measured}
+relief:
+  wall: '#2b3035'
+elements:
+  frame: {at: [0.0, 0.0], size: [426.6, 117.5], class: bezel}
+skins: [default]

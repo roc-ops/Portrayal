@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: h100-pcie-top
+version: 1.0.0
+class: mechanical
+profile: server
+description: >-
+  The top edge of the NVIDIA H100 PCIe card seen from outside, with the three
+  NVLink bridge connectors that sit under its removable caps. It is the card's
+  `faces.plan`, and it composes the connectors the bridge mates.
+size: {w: 38.23, h: 268.60}
+size-confidence: {w: estimated, h: drawing}
+size-notes: >-
+  THE TOP EDGE SEEN FROM OUTSIDE, as nvidia/a100-pcie-80gb-top@1 draws it: the
+  card's top edge is the one 126.31 from the bracket's tip, and the drawing runs
+  268.60 behind the bracket's outer face (y' = mm behind it) and 38.23 across
+  the card's thickness (x' = the card's y less 1.77, so the backplate is at the
+  left, as the rear face has it). The thickness is the card's estimated 38.2.
+attrs: {media: gpu}
+parts:
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-1, at: [0.43, 12.55]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-2, at: [0.43, 69.10]}
+  - {ref: nvidia/nvlink-a100-connector@1, id: nvlink-3, at: [0.43, 125.45]}
+provenance:
+  size: >-
+    drawing - the length is PB-11133 figure 3's 268.60 with the I/O bracket; the
+    width is the card's estimated thickness, see size-notes.
+  connectors: >-
+    estimated - PB-11133 says the card takes three NVLink bridges "the same as
+    the bridges used with NVIDIA A100 PCIe cards" (900-53651-0000-000), so the
+    connector is nvidia/nvlink-a100-connector@1. The brief's top-edge figure
+    (figure 5) is the keep-out zone with no dimensions: its box is 625 px of a
+    1036 px page, which at the A100 brief's figure 5 scale (618 px for the
+    162.1 between the first connector's start and the last one's end) is about
+    164. THE PLACES ARE THE H100 NVL'S, measured on that brief's figure 4
+    (nvidia/h100-nvl-top@1): starts 12.55, 69.10 and 125.45. This card's own
+    caps were never drawn to a scale; the span agrees, so they are taken to be
+    where the NVL's are.
+  bands: >-
+    estimated - the edge's four bands, left to right: the black backplate, the
+    board's edge, the black cover and the champagne shroud, at the card's `body`
+    boxes. The ribs, the lettering and the open end are the card's own side
+    drawings, not drawn here.
+skins: [default]

@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: bezel-2u-16g
+version: 1.0.0
+class: bezel
+behaviour: mounts
+profile: server
+description: >-
+  The optional security bezel for a 16th-generation 2U PowerEdge (R760) - a honeycomb of hexagonal openings between two end plates, a keylock and a release button at the left end. Open in the hexagons, so the drives show through. Unbranded
+attrs:
+  power-absent: not-applicable
+provenance:
+  power: >-
+    NOT APPLICABLE - a metal cover with no electronics; the LCD bezel, which has some, is not this part. The R760 ISM and technical guide give no figure for either.
+  sources: >-
+    Dell's R760 service model, working/intake/dell/3d-models/r760.glb (Dell's own CAD, read with glbparts.py, not committed), the un-exploded assembly node `Main Assembly (1)`, node `R760_ FrontBezel` > `PEr760_ Front Bezel_ Assembly-1.001`; and the R760 Installation and Service Manual (ISM) 'Removing the front bezel' and 'Installing the front bezel' (figures 37 and 38, an isometric view of the bezel with the LCD panel being taken off, which has no scale) and chassis dimensions table 10. Face frame: face x = 232.7 - cad x (the left control panel's outer edge), face y = 95.7 - cad y (the chassis top); the model's face is 481.7 wide against the ISM's 482.0 across the ears.
+  size: >-
+    measured - r760.glb `PEr760_ FrontBezel_-1.001`, body `Body_1_33.001`: 430.7 wide x 81.0 tall, at face x 25.4..456.1 and y 2.6..83.6 (the ISM's 434.0 between the ears leaves 1.7 clear at each side). The earlier estimate was 433.35 x 82.4.
+  depth: >-
+    measured - r760.glb `Body_1_33.001`: cad z 0.3..19.9, so 19.7 deep, its back 0.4 behind the drive carriers' front face (the carriers begin at z 19.5); the whole node is 20.2 deep because the three small LED-number bodies (`Body_6.006`, `Body_7.006`, `Body_8.006`, 6.3 x 4.9) stand 0.6 further forward. SOURCES DISAGREE: the ISM's table 10 gives 35.84 mm ear to front with the bezel and 22.0 without, so the bezel stands 13.84 off the drives' face (the R660's table gives the same 13.84). The model's figure is drawn, as the part's own geometry; the ISM's is recorded in the device's `bezel-depth` gap.
+  honeycomb: >-
+    measured - r760.glb `Body_1_33.001`'s triangles, rasterised along the depth at 0.25 mm and the uncovered regions read off: 25 openings. Five whole hexagons across the middle row (about 44 x 39, centres 61.4, 138.3, 215.3, 292.1 and 369 across the body and 40.5 down), a half-cell below each of them and above the first three (the rims cut them to trapezoids; the upper right is closed where the LED digits sit), and two interlocked rows between them - upper cells at y 1.5..38.3 and lower at 42.8..77.0, four each (about 40 wide, centres 100, 177, 254 and 331, the fourth upper one cut at its top) - with a part-cell above and below at each end. The ISM's figure 37 shows the same two interlocked rows of six to seven cells; its count is read by eye and the model's is the one drawn. The thick bars are the model's; the figure's are not scaled. The openings are drawn as each region's convex outline, simplified to at most eight vertices.
+  end-plates: >-
+    measured - the first opening begins 26.3 from the left end and the last ends 26.4 from the right (r760.glb `Body_1_33.001`); the left carries the button and the keylock, the right is plain. The ISM's wording gives the sides: lock and release at the left, hooks at the right.
+  release: >-
+    measured - r760.glb `PEr760_ FrontBezel_ Button_-1.001` (`Body_1_36.001`): 19.9 x 43.8 x 8.1 deep (z 7.5..15.6), at face x 25.3, y 21.2 - the bezel's local 0.0, 18.6. It is the left end plate's release button, pressed in step 2 of the ISM's removal.
+  lock: >-
+    measured - r760.glb `PEr760_ FrontBezel_ Hook_-1.001` (`Body_1_35.001`): 15.0 x 15.0 x 14.5 deep (z 0.8..15.3) at face x 66.4, y 13.4 - local 41.0, 10.8, the keylock body straddling the bar between the first upper and middle cells. `R760_ BezelKey` (`Body_3_41.003`, 16.8 x 6.0 x 31.0, z -27.0..4.0) is the loose key, drawn out in front of the lock in the scene: it is not part of the bezel and is not drawn.
+  no-branding: >-
+    DELIBERATELY UNBRANDED. The model's `PEr760_ FrontBezel_1-1.001` (45.6 x 16.8, z -0.2..5.8, centred across the face at face x 218.8) is the wordmark plate, and the ISM's figure shows the wordmark across the middle; neither is drawn.
+  lcd-variant: >-
+    NOT MODELLED. The ISM says the removal and installation are the same with and without the LCD panel; the LCD bezel is a different part with a display and states.
+  colour: >-
+    photo - the bezel is dark grey in the ISM's figure; the value is this drawing's, not counted.
+size: {w: 430.7, h: 81.0, d: 19.7}
+size-confidence: {w: measured, h: measured, d: measured}
+relief:
+  features:
+  - node: plate
+    out: 13.84
+    shape: true
+    color: '#3a3e43'
+    confidence: datasheet
+    source: >-
+      the R760 ISM's table 10 (chassis dimensions, PDF page 34): Za is 35.84 mm with the bezel and 22.0 mm without, so the bezel stands 13.84 out of the chassis, which is the figure the R660's table 12 gives too and the one the 3D scene draws. Dell's service model r760.glb has the body 19.7 deep (`Body_1_33.001`, cad z 0.3..19.9), which stood the bezel 5.9 mm past what Dell's own table allows; the model's figure stays the part's `depth` and is recorded in the device's `bezel-depth` gap
+elements:
+  plate:
+    at: [0.0, 0.0]
+    size: [430.7, 81.0]
+    class: bezel
+    description: the bezel - end plates and honeycomb - over an open ground
+  lock:
+    at: [41.0, 10.8]
+    size: [15.0, 15.0]
+    class: control
+    description: >-
+      the keylock - unlocked with the bezel key before the bezel comes off (ISM 'Removing the front bezel', step 1).
+  release:
+    at: [0.0, 18.6]
+    size: [19.9, 43.8]
+    class: control
+    description: >-
+      the release button on the left end plate - step 2 of removal, pressed before the left end is pulled away.
+skins: [default]

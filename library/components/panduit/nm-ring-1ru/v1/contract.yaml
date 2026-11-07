@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: nm-ring-1ru
+version: 1.0.0
+class: mechanical
+description: >-
+  An open D-ring of the rear channel of a Panduit NetManager High Capacity 1RU front-and-rear
+  horizontal manager (NM1) seen from behind - a moulded loop standing 175 mm out of the plate's
+  back face, 15 mm across, whose far end is a hook that leaves the rest open so a cable is laid
+  in. Five stand along the rear of the manager
+provenance:
+  size: >-
+    drawing - the plan view of the NM1 customer drawing (Panduit 10404-19), read at 130 dpi against
+    its 482 [19.0 in] width: five posts stand from the plate to the back of the rear channel, at
+    25, 128, 240, 351 and 453 mm from the left edge, 103, 112, 111 and 102 apart, each about 19 mm
+    across including its foot. Taken as five, 107 apart, the middle one on the centre line, 15 mm
+    across (see nm-ring-2ru). The ring's height is the 44 of the manager less 12, 32. ESTIMATED: the
+    plan is a picture of the posts and no view gives their height or their cross section.
+  relief: >-
+    drawing - the plan view: each post runs the 175 mm of the rear channel from the plate to a
+    foot at the back. The loop is drawn as a back leg on the plate, a top bar and a bottom bar the
+    175 mm out and a hook at the far end across the lower third of the height, which leaves the upper
+    two thirds open. THE BARS' THICKNESS (3) AND THE HOOK'S EXTENT ARE ESTIMATED: the plan shows the
+    posts' foot, not the shape of the loop, and no side view of the rear channel is drawn.
+    Built as plates with square corners where the moulding is curved.
+  guide: >-
+    datasheet - Panduit's Cable Capacity Calculator gives the NM1's rear usable area as 4.1 sq in
+    [2645 mm2]. Over the clear height of the channel, the 44 less two 10 mm walls, 24, that is 110
+    mm out of the plate: the opening is 24 across the run's height and 110 deep, ESTIMATED by that
+    division. The specification sheet notes the rear section "may be partially blocked by rack
+    posts".
+  guide-depth: >-
+    drawing - the ring is a band about 15 mm across along the run, as the plan draws the posts.
+  material: >-
+    datasheet - the NM1 product page lists an ABS body and ABS fingers.
+  color: >-
+    datasheet - "The manager is black" on the product page. The shade is this library's render of
+    black ABS.
+size: {w: 15, h: 32}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: ABS}
+guide: {kind: ring, aperture: {w: 24, h: 110}, run: x, depth: 15}
+elements:
+  back: {at: [0.0, 0.0], size: [15, 32], class: bezel}
+  bar-top: {at: [0.0, 0.0], size: [15, 3], class: bezel}
+  bar-bottom: {at: [0.0, 29.0], size: [15, 3], class: bezel}
+  hook: {at: [0.0, 21.3], size: [15, 10.7], class: bezel}
+relief:
+  features:
+    - node: back
+      out: 3
+      color: '#111315'
+      confidence: estimated
+      source: a leg against the plate; the plan view shows only the posts' outline
+    - node: bar-top
+      out: 175
+      color: '#0d0f10'
+      confidence: estimated
+      source: the plan view of the NM1 drawing, a post the 175 mm of the rear channel; the bar's thickness is not dimensioned
+    - node: bar-bottom
+      out: 175
+      color: '#0d0f10'
+      confidence: estimated
+      source: the plan view of the NM1 drawing, a post the 175 mm of the rear channel; the bar's thickness is not dimensioned
+    - node: hook
+      lift: 172
+      out: 175
+      color: '#101214'
+      confidence: estimated
+      source: the plan view of the NM1 drawing, the foot at the back of each post; its extent is not dimensioned
+skins: [default]

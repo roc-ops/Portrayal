@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: tripplite-duct-1u-cover-side
+version: 1.0.0
+class: mechanical
+description: >-
+  The cover of the Tripp Lite SmartRack SRCABLEDUCT1U finger duct seen from either end - the
+  plate edge-on across the front and the two lips folded back over the walls, 9.8 mm deep.
+  The same cover as tripplite-duct-1u-cover, drawn on the side views: it comes off with it.
+provenance:
+  size: >-
+    drawing - the SRCABLEDUCT1U submittal drawing: the lips run 9.8 mm back from the front edge
+    (top view) and the cover is 42.0 mm over them (body 39.8 on the side view and a lip 1.1 mm
+    outside each wall, estimated). The plate's thickness, 1.1 mm, is the wall's: no view
+    dimensions the cover section.
+  color: >-
+    datasheet - "Cold rolled steel with black finish"; the shade is this library's render, the
+    cover's.
+size: {w: 9.8, h: 42.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: Cold rolled steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#55595e'
+elements:
+  lip-top: {at: [0.0, 0.0], size: [9.8, 1.1], class: bezel}
+  lip-bottom: {at: [0.0, 40.9], size: [9.8, 1.1], class: bezel}
+  plate: {at: [8.7, 0.0], size: [1.1, 42.0], class: bezel}
+skins: [default]

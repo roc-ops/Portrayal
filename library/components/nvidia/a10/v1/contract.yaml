@@ -1,0 +1,228 @@
+format: 1
+kind: module
+name: a10
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA A10 GPU (24 GB GDDR6), a passive single-slot full-height full-length
+  card on the A100 80GB's board outline. The bracket face is a plate with a
+  field of vent slots and no ports. It has one PCIe 8-pin power connector by the
+  top edge at the far end, which has a black vented end plate. It has no NVLink.
+  It plugs into one riser slot and covers none beside it.
+size: {w: 120.02, h: 21.59, d: 268.60}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. A riser bay names each
+  card it takes by hand (docs/cards-by-interface-design.md), and the Dell
+  R740xd's manual names no A10 in its GPU table (table 27 lists the A16, A30,
+  A40, A100 and A800), so none was added. A server whose documents list this
+  card would seat it in a full-length slot.
+attrs:
+  model: 'A10'
+  part-numbers: 'PNY NVA10TCGPUNC-KIT'
+  board-sku: 'PG133 SKU 215, NVPN 699-2G133-0215-C01 or later'
+  role: gpu
+  form-factor: 'Full-height, full-length (FHFL) 10.5 in, single slot'
+  pcie-connector: x16
+  pcie-generation: 4
+  pcie-height: full
+  power-draw-max-w: 150
+  power-input: 'host PCIe slot and one PCIe 8-pin auxiliary connector'
+  memory: '24 GB GDDR6, 384-bit, up to 600 GB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'none'
+  weight-kg: 0.55
+  eol: none-announced
+faces:
+  rear: {ref: nvidia/a10-tail@1}
+  plan:
+    ref: common/pcie-card-plan@1
+provenance:
+  sources: >-
+    NVIDIA A10 Tensor Core GPU Product Brief PB-10415-001_v04, NVIDIA's own
+    copy. Tables 1 and 2, figure 3 (card dimensions), figure 4 (the PCIe 8-pin
+    connector's keep-in, an end view), figure 5 (the extenders) and the power text.
+    NVIDIA's A10 datasheet and PNY's datasheet for the PNY part number. PB-10415
+    figure 3 is the A100 80GB's drawing figure for figure (268.60 and 267.70,
+    59.05, 81.88 REF, 19.50 REF, 3.55 REF, 13.25, 111.15, 104.86). NVIDIA's brief
+    forbids reproducing its figures, so its facts are transcribed and none of its
+    figures is copied.
+  reference-photos: >-
+    reference - PNY's product images for the A10, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/90e30e72-7db0-4e6f-b8d2-ad0c008a8960/images/:
+    a10_front.png (the broad side) and a10_3qtr-top-left.png and
+    a10_3qtr-top-right.png (3/4 views, the first showing the bracket, the second
+    the far end). NVIDIA's hero banner. Licence not stated; facts read from them,
+    pictures not used. THERE IS NO STRAIGHT-ON VIEW OF THE BRACKET, THE FAR END OR
+    THE TOP EDGE, so the face and the far end are drawn from 3/4 views and the
+    provenance says which is which.
+  size: >-
+    registry - the face is std/pcie-bracket-fh@2, 120.02 x 21.59 (PCIe CEM 5.0
+    figure 11-5), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    drawing - PB-10415 figure 3: product length 268.60 with the I/O bracket,
+    267.70 without. The card ends 268.60 behind the bracket's outer face.
+  face-bracket: >-
+    registry - the bracket is std/pcie-bracket-fh@2, so the outline, the tip's
+    retention tab and the keyed flange are CEM's. PNY's 3/4 view shows the
+    A10's bracket in the same silver as the standard part.
+  face-window: >-
+    estimated - PNY's a10_3qtr-top-left.png shows the bracket as a column of
+    narrow vertical vent slots along most of its length with one screw at the tip
+    end. A 3/4 view cannot measure it. The slots are drawn as 24 cuts of 2.2 on
+    a 3.5 pitch across x 24.0 to 105.0 and y 7.6 to 17.2, and the screw is 1.5 in
+    radius at x 21.4, all estimated. The standard's opening is x 19.96 to 109.86.
+  thickness: >-
+    estimated - nothing held states the card's thickness. The single-slot
+    component envelope on the component side of a PCIe card is 14.47 (PCIe CEM
+    5.0), so the shroud's far face is put at y 20.48, 14.47 above the 6.01 board
+    surface, as nvidia/l4@1 does.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-fh@2 and the A100 are. The board, and the
+    bracket's keyed side, are at the top (small y); the cooler is below the board
+    in this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/mcx755106-fh@1 has them) at PB-10415 figure 3's lengths, which are
+    the A100 80GB's: the lower edge 13.25 above the finger datum W, the key
+    datum 59.05 behind the bracket, a notch 3.55 REF deep and 19.50 REF long whose
+    near end is 59.05 + 81.88 = 140.93 behind the bracket, the top edge at W +
+    111.15. PNY's broad-side render shows the same outline with the notch. THE
+    COVER AND SHROUD START 1.00 behind the bracket and THE BOARD 1.90 behind it, as
+    nvidia/l4@1 has them (estimated).
+  body-shroud: >-
+    estimated - a champagne heat-sink shroud over the board's component side
+    with a black cover along the board, about a quarter of the component height as
+    on the A100 and the L4, and a ribbed top and lower edge as the 3/4 renders
+    show. The render shows the card's rear as black, so the PCB's back is left
+    bare and there is no backplate box. The ribs' pitch (the A100's 2.194,
+    borrowed) and the colours are not measured on this card.
+  body-top-edge: >-
+    estimated - PNY's renders show "A10" near the bracket end of the top edge and
+    the NVIDIA mark and wordmark near the far end. Their sizes are the L4's
+    (nvidia/l4@1) and their places are estimated, not measured. The mark is
+    reserved as `logo-zone`.
+  body-power-connector: >-
+    estimated - PB-10415: "One PCIe 8-pin auxiliary power connector", on the east
+    edge. Figure 4 draws a keep-in zone in the end view and says the connector's
+    position on the image is approximate. The housing is drawn at the A100's
+    place by the top edge (x 105.6 to 123.6 on the card, 2.3 from the top edge),
+    on the board's component side, 12.5 across (12.6 less 0.1 so no face shares a
+    plane with the cover's) and 18.0 along, 18.4 deep, black with eight cells. PNY's top-right render shows a dark vented end plate there.
+    THE PORT is `aux-power` on the rear face (`faces.rear`, nvidia/a10-tail@1):
+    std/pcie-8pin-header@1, which presents `pcie-8pin` for a PCIe 8-pin cable and
+    which the card exports as a power port. PB-10415 lists a PCIe 8-pin cable.
+  body-far-end: >-
+    estimated - the far end is a black vented plate (PNY's top-right render); its
+    windows and bosses are not drawn, and the extenders, which PB-10415 figure 5
+    draws, are not modelled (see `extenders`).
+  extenders: >-
+    datasheet - PB-10415 "Extenders": a long offset extender (NVPN
+    682-00007-5555-000, card plus extender 339 mm, 64 g) and a straight extender
+    (NVPN 682-00007-5555-001, 312 mm, 39 g). NOT MODELLED: nothing shows how they
+    fit a single-slot card's far end. The card has no `extender` field.
+  power: >-
+    datasheet - PB-10415 table 1: total board power 150 W. The brief does not say
+    whether it is the default or the maximum, so it is filed as the maximum and
+    the brief's wording is kept here. It gives no ambient.
+  weight: >-
+    datasheet - PB-10415 table 1: board 550 g, excluding the bracket and
+    extenders. The bracket with screws is 12 g.
+  memory: >-
+    datasheet - PB-10415 table 2: GDDR6, 24 GB, 384-bit, up to 600 GB/s.
+  pcie: >-
+    datasheet - PB-10415 table 1: PCI Express 4.0 x16 and x8, PCIe 3.0 x16, lane
+    and polarity reversal supported.
+  part-numbers: >-
+    datasheet - PNY's datasheet gives the part number NVA10TCGPUNC-KIT; the
+    brief's table 1 gives the board SKU PG133 SKU 215, NVPN 699-2G133-0215-C01 or
+    later. No full NVIDIA order code is written.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the bracket face straight on (needs-photo; the
+    slots are estimated from a 3/4 view); (2) the far end, its windows and bosses
+    (needs-photo); (3) the connector's exact place and housing colour (the brief
+    says approximate; needs-photo); (4) the extenders (needs-photo); (5) the
+    thickness, which no source states (vendor-silent); (6) the full NVIDIA order
+    code (vendor-silent); (7) the power figure's qualifier, which the brief
+    omits (vendor-silent).
+  lifecycle: >-
+    No end-of-life notice for the A10 was found, and it is not on PNY's legacy
+    data-center list. The attr says `none-announced`.
+body:
+  depth: 268.60
+  color: '#9aa1a8'
+  plate: {at: [11.38, 3.17], size: [102.90, 18.42]}
+  boxes:
+  - {id: board, at: [28.41, 4.44], size: [97.90, 1.57], from: 1.90, depth: 139.03,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10415 fig 3: lower edge W + 13.25, top edge W + 111.15, to the notch at 140.93; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge; the board''s start at 1.90 is estimated'}
+  - {id: board-notch, at: [31.96, 4.44], size: [94.35, 1.57], from: 140.93, depth: 19.50,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10415 fig 3: the notch, 3.55 REF deep and 19.50 REF long, 59.05 + 81.88 behind the bracket'}
+  - {id: board-east, at: [28.41, 4.44], size: [97.90, 1.57], from: 160.43, depth: 107.77,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-10415 fig 3: lower edge W + 13.25 again east of the notch, to the 268.60 end less 0.4 (as the A100)'}
+  - {id: edge-tab-short, at: [15.16, 4.44], size: [13.25, 1.57], from: 46.90, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10415 fig 3: key datum 59.05 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [15.16, 4.44], size: [13.25, 1.57], from: 60.00, depth: 80.93,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-10415 fig 3: the tab runs 81.88 REF past the key datum'}
+  - {id: edge-pads-short, at: [17.76, 4.39], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [17.76, 4.39], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: cover, at: [28.41, 6.01], size: [97.90, 3.62], from: 1.00, depth: 139.93,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'a quarter of the 14.47 component height, as the L4''s and the A100''s black band; the A10 renders show a black band along the top edge'}
+  - {id: cover-notch, at: [31.96, 6.01], size: [94.35, 3.62], from: 140.93, depth: 19.50,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, inside the notch'}
+  - {id: cover-east, at: [28.41, 6.01], size: [97.90, 3.62], from: 160.43, depth: 106.77,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'as the cover, east of the notch, to the end plate at 267.20'}
+  - {id: shroud, at: [28.41, 9.63], size: [97.90, 10.85], from: 1.00, depth: 139.93,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded by the CEM single-slot component height 14.47 (see provenance thickness); outline as the board; champagne finish from PNY''s renders'}
+  - {id: shroud-notch, at: [31.96, 9.63], size: [94.35, 10.85], from: 140.93, depth: 19.50,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the board''s notch'}
+  - {id: shroud-east, at: [28.41, 9.63], size: [97.90, 10.85], from: 160.43, depth: 106.77,
+     color: '#b8a68c', confidence: estimated, shows: [right, left, bottom],
+     source: 'as the shroud, east of the notch, to the end plate at 267.20'}
+  - {id: end-plate, at: [28.41, 6.01], size: [97.90, 14.47], from: 267.20, depth: 1.00,
+     color: '#202326', confidence: estimated,
+     source: 'the black vented end plate PNY''s top-right render shows; its vents are not drawn (provenance body-far-end)'}
+  # THE PCIe 8-PIN (provenance body-power-connector): a black housing with eight
+  # dark cells, the 3D body of the tail face's `aux-power` port.
+  - {id: power-8pin, at: [105.60, 6.06], size: [18.00, 12.50], from: 250.00, depth: 18.40,
+     color: '#17191c', confidence: estimated,
+     source: 'the A100''s place by the top edge on the board''s component side; 12.6 across, 18.0 along; PB-10415 fig 4 says the position is approximate'}
+  - {id: power-8pin-cell-1, at: [118.90, 7.50], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated,
+     source: 'two rows of four cells on the 4.2 pitch, as the A100''s'}
+  - {id: power-8pin-cell-2, at: [114.70, 7.50], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-3, at: [110.50, 7.50], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-4, at: [106.30, 7.50], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-5, at: [118.90, 12.70], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-6, at: [114.70, 12.70], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-7, at: [110.50, 12.70], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+  - {id: power-8pin-cell-8, at: [106.30, 12.70], size: [3.20, 3.20], from: 268.40, depth: 0.20,
+     color: '#08090a', confidence: estimated, source: 'as cell 1'}
+parts:
+  - {ref: std/pcie-bracket-fh@2, id: bracket, at: [0, 0], behind: true}
+elements:
+  window: {at: [24.00, 7.60], size: [81.00, 9.60], class: vent}
+  screw-1: {at: [19.90, 10.88], size: [3.00, 3.00], class: screw}
+skins: [default]

@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: cmhookmw-plate
+version: 1.0.0
+class: mechanical
+description: >-
+  The mounting plate of the StarTech.com CMHOOKMW multi-directional hook seen from the front - a
+  steel plate 55 mm wide and 70.1 mm high with two vertical slots, its outer corners cut at 45
+  degrees down to the tab that carries the ring - drawn as the well the ring stands in, its floor
+  the front face of the plate
+provenance:
+  size: >-
+    drawing - CMHOOKMW_Diagram.pdf (StarTech.com, third angle projection, millimetres,
+    6/15/2022): the plate is 55.0 wide and 70.1 high, with two slots "2-phi6.0x10.0" 44.5 apart,
+    their middle 11.2 from the edge, and a 45 degree cut that leaves a tab 25.5 high where the ring
+    leaves it; the cut starts 32.7 from the edge. The 25.5 is the ring's height. The datasheet's
+    "Product Width 2.8 in [70.1 mm]" is the plate's height.
+  depth: >-
+    estimated - 114.7. The drawing does not state the plate's gauge. 2.3 mm, the maker's
+    CMHOOK1U and CMHOOK1UN plate, is taken, so the well, from the ring's far end to the plate's
+    front face, is the 117.0 overall less that.
+  second-leg: >-
+    drawing - the front view draws a second, perpendicular leg 15.0 wide and 70.1 high with two
+    slots "2-phi6.0x10.0" 7.0 from its edge; the datasheet's "right-angled mounting bracket with 2
+    sets of mounting holes" is the pair of legs. It is the face the hook is bolted through when
+    the ring faces the other way, and it is not drawn (see the device's gaps).
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmhookmw_datasheet.pdf). The drawing is line
+    work, so the shade is this library's render of black steel.
+size: {w: 55.0, h: 70.1, d: 114.7}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {material: steel}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [55.0, 70.1], class: bezel}
+skins: [default]

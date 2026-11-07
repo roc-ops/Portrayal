@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: qfx5200-48y-fan-afo
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFX520048Y-FAN-AO (the guide's fan table also spells it QFX5200-48Y-FAN-AFO), a field-replaceable
+  fan module with front-to-back (port-to-FRU) airflow: air comes in at the port side and leaves at the
+  fan end. It has a red handle, and is hot-removable and hot-insertable. The QFX5200 hardware guide
+  says the QFX5200-48Y takes it, six to a switch (fan modules 0 to 5, left to right). The
+  back-to-front sibling is QFX520048Y-FAN-AI. The two are never mixed in one chassis, and never with
+  power supplies of the other direction. This module has no status lamp of its own (the guide says
+  the 48Y fan modules have no LED indicators).
+attrs:
+  model: QFX520048Y-FAN-AO
+  airflow: front-to-back
+  power-absent: not-published
+provenance:
+  size: >-
+    photo-measured - Juniper's studio rear photograph of the QFX5200-48Y, whose whole body measures
+    1948 px across 85 to 2032 (4.446 px/mm against the guide's 438.1 mm) and 192 px high (4.42 px/mm
+    against 43.4 mm): the face of a module is 39.9 mm wide and 40.6 mm high, and the grey flange with
+    the captive screw beside it adds 8.3 mm, which the guide's flat figure 26 (a 1501 px raster, 3.256
+    px/mm, aspect 10.05 against the table's 10.09) gives as 8.3 mm too. Six modules sit on a 48.6 mm pitch
+    (figure 26, 158.3 px).
+  depth: >-
+    not stated. The guide's figure 28 is an isometric drawing with no scale and its tables give no
+    depth, so none is written.
+  face: >-
+    photo - the studio photograph shows a black housing with a hexagonal grille over the whole face, a
+    red rounded handle bar across the lower third, a captive screw on the flange at the left and a
+    grey chip lettered F2B at the lower right. The guide's table 17 gives the label as AIR OUT; THE
+    PHOTOGRAPH WINS and the module is drawn with the F2B it shows. Positions are read off the
+    photograph at 9.8 px/mm.
+  airflow: >-
+    datasheet - guide Table 17: QFX5200-48Y-FAN-AFO (Table 3 spells it QFX520048Y-FAN-AO) carries the
+    label AIR OUT, is red, and is port-to-FRU airflow, also called front-to-back. The photographed
+    module is lettered F2B, front-to-back.
+  colour: >-
+    photo-measured - the handle samples about #fa595e on the photograph, which is overexposed on the
+    bar; the drawn red is a shade darker, estimated.
+  power: >-
+    not published. Searched the QFX5200 hardware guide for a per-module wattage near its cooling
+    sections and its power tables; only whole-switch figures exist. The module declares power-absent so
+    the missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  screw:
+    at: [1.6, 16.4]
+    size: [5.6, 5.6]
+    class: screw
+  handle:
+    at: [9.8, 27.0]
+    size: [36.6, 4.1]
+    class: latch
+size:
+  w: 48.1
+  h: 40.6
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: handle
+    out: 3.0
+    color: '#e8444a'
+    confidence: estimated
+    source: photo - the red bar stands proud of the grille; its projection is not measured
+  - node: screw
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: photo - silver captive screw head, projection not measured

@@ -35,6 +35,7 @@ def test_the_walk_reads_the_library():
     assert sum(1 for _ in _manifests()) > 700
 
 
+@pytest.mark.heavy
 def test_no_contract_or_manifest_quotes_a_long_passage():
     runs = [(str(p.relative_to(LIB)), key, n)
             for p in _manifests()
@@ -127,6 +128,7 @@ def _long_runs_in(path):
     return [(n, q) for t in texts for _, n, q in lint.long_quotes(t)]
 
 
+@pytest.mark.heavy
 def test_no_doc_or_other_yaml_quotes_a_long_passage():
     md, ym = _prose_files()
     assert len(md) > 20 and len(ym) > 20, "the prose walk found almost nothing - it is broken"

@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: ex9253-psu-blank
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The blank cover panel for an empty power supply slot of the EX9253. The guide says the switch ships
+  "blank panels for empty slots", one for each slot not occupied by a component, and to fit a replacement
+  power supply shortly after removing one. It prints no part number for a power supply panel.
+attrs:
+  weight-note: not published
+provenance:
+  sources: >-
+    datasheet - EX9253 Switch Hardware Guide (published 2022-11-30), Tables 3 and 32: "Blank panels for empty
+    slots", "one blank panel for each slot not occupied by a component", and the power supply section. The
+    guide draws no panel and gives no part number, size or weight; its only blank panel number is
+    EX9253-LC-BLNK, for line cards. The datasheet's FRU table lists no panel for the power supplies.
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal that fills an opening,
+    so this part draws no elements. `absent` stays, because an empty slot is a real thing to draw.
+  size: >-
+    estimated - the panel is drawn at the size of the power supply it replaces, 86.7 x 39.6 mm, because it
+    fills the same bay.
+  face: >-
+    estimated - no figure or photograph shows the panel. It is drawn as a plain plate with a stiffener.
+states: [absent]
+size:
+  w: 86.7
+  h: 39.6
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

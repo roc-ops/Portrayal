@@ -1,0 +1,32 @@
+---
+manufacturer: Juniper
+model: QFX3500-MB
+description: QFX3500-MB, the RJ-45 management board with FRU-to-port airflow
+console-ports:
+  - name: '{module}/console'
+    type: rj-45
+interfaces:
+  - name: '{module}/c0'
+    type: 1000base-t
+    mgmt_only: true
+  - name: '{module}/c1'
+    type: 1000base-t
+    mgmt_only: true
+comments: 'QFX3500-MB, the RJ-45 management board with FRU-to-port airflow. It is the field-replaceable
+  unit in the middle of the FRU side of a QFX3500, between the two fan trays. Its faceplate carries the
+  LCD that shows the host name and the number of active alarms, the Power, Status and Fan lamps, a USB
+  port, the RJ-45 console port and two 1000BASE-T RJ-45 management ports, C0 and C1. Two fan modules inside
+  the board cool the chassis. Unlike the power supplies and the fan trays, the board is not hot-swappable:
+  the switch must be powered off to replace it. The three sibling boards are QFX3500-MB-RJ45-AFO (the
+  same board with port-to-FRU airflow), QFX3500-MB-SFP-AFI and QFX3500-MB-SFP-AFO (two 1 Gbps SFP management
+  ports in place of the two RJ-45 ones). A board only fits a chassis of its own airflow, so this one fits
+  the QFX3500-48S4Q-AFI and -ACR.
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - airflow: back-to-front
+
+  - power-absent: not-published
+
+  Contract version 1.0.0 (juniper/qfx3500-mb).'

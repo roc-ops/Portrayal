@@ -1,0 +1,187 @@
+format: 1
+kind: module
+name: qfx5200-jpsu-850w-dc-afi
+version: 1.1.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  JPSU-850W-DC-AFI, a DC power supply with back-to-front (FRU-to-port) airflow (AIR IN). It is a
+  field-replaceable unit, hot-removable and hot-insertable, and load-shares with its twin. The QFX5200
+  hardware guide says the QFX5200-32C takes it (the -32C-L takes AC supplies only), two to a switch, in the
+  slots at the right of the FRU panel. The face is that of the front-to-back supply with a Juniper Azure Blue
+  latch: four terminal studs in a row labelled V-, V-, V+ and V+, a protective earthing screw, three lamps
+  labelled IN, OUT and !, and an ejector lever. The front-to-back sibling is JPSU-850W-DC-AFO. AC and DC
+  supplies are never mixed in one 32C chassis, and supplies of different airflow direction are never mixed in any.
+attrs:
+  model: JPSU-850W-DC-AFI
+  role: dc-power-supply
+  inlet: dc-terminal
+  power-output-w: 850
+  airflow: back-to-front
+  input: rated -48 to -60 VDC, operating range -40 to -72 VDC, 10 A maximum (QFX5200-32C, guide Table 25)
+provenance:
+  size: >-
+    estimated - the guide gives this supply no size. It seats in the bay of the AC supply, so the bay's size
+    (54.8 x 40.2 mm, itself estimated) is used: the module is drawn to fill it.
+  depth: >-
+    not stated. The guide's figure 39 is an isometric drawing with no scale and its tables give no depth.
+  face: >-
+    drawing - that of qfx5200-jpsu-850w-dc-afo@1 (the guide's figure 41, fractions of the bay, estimated). The guide
+    draws one DC supply and says the AFI supply differs by airflow and colour.
+  power-output-w: >-
+    the part number says 850 W; the guide's text says the DC power supply in the QFX5200-32C is 1100 W. See
+    qfx5200-jpsu-850w-dc-afo@1: the part number is used. An OUTPUT, since a supply provides power.
+  leds: >-
+    datasheet - guide Table 26 (DC power supply LEDs on a QFX5200-32C): Input green when power is coming in; Output green
+    when the supply sends out power correctly; Fault amber on an error (replace it and leave it seated for airflow).
+  airflow: >-
+    datasheet - guide Table 3: JPSU-850W-DC-AFI is FRUs-to-ports airflow (back-to-front), CLI "DC AFI 850W PSU". The guide
+    gives no handle colour for the DC supply; the Azure Blue latch is carried from the AC supply by the same name
+    (Table 19).
+  colour: >-
+    borrowed - the blue the library already carries for Juniper Azure Blue on juniper/jpsu-850w-ac-afi@1; estimated.
+  seats: >-
+    estimated - each of the four terminal screws is the library's common/terminal-screw-34@1, a screw
+    head 3.4 across (that part's own size is an estimate), standing at the centre of the screw this skin
+    already draws (15.2, 23.6, 32.0 and 40.4 across, 10.6 down). It is lifted 2.2 mm, the estimated lift
+    of the studs this skin draws (the `stud-0` to `stud-3` relief features). The guide's figures show
+    cross-head screws where this skin draws hexagonal studs; the skin is the contract's own estimate and
+    is not redrawn. The QFX5200 Switch Hardware Guide asks for ring-lug power cables for the
+    QFX5200-32C, "Molex 190700069 or equivalent" (PDF page 146) and gives no screw head, thread or
+    pitch; the screw part claims no thread, so none is written. Each screw is a seat a ring lug lands on
+    (`terminal-stud`, which generic/ring-lug@1 mates).
+  shunts: >-
+    THE SECOND SCREW OF EACH PAIR IS A SEAT OUTSIDE THE PORT. The guide's caution says the V+ terminals
+    are shunted internally together, as are the V- terminals, that the same polarity may be wired twice
+    from the same source and that the terminals must never go to different sources. A feed therefore has
+    two conductors and the supply has one input, however many screws carry them. Each pole of the port
+    is the first screw of its pair, counted from the left: `pole-batt` is the left V- screw and
+    `pole-rtn` the left V+ screw. `shunt-batt` (the second V- screw) and `shunt-rtn` (the second V+
+    screw) are seats a lug lands on, as an earth seat is, and are in no pole (decided 2026-11-03). WHICH
+    SCREW OF A PAIR CARRIES THE POLE IS A CHOICE AND NOT A READING: the guide joins the two inside the
+    supply and ranks neither. A later change that gave the port four poles would be a major.
+  poles: >-
+    QFX5200 Switch Hardware Guide, Figure 41 "QFX5200-32C DC Power Supply Faceplate" (PDF page 69,
+    printed page 60) prints V-, V-, V+ and V+ from the left over four screws, with callout 1 "Shunt
+    negative input terminals (-48V)" on the two V- screws and callout 2 "Shunt positive input terminals
+    (+RTN)" on the two V+ screws, and its caution (PDF page 71) says the V+ terminals are shunted
+    internally together, as are the V- terminals. The connection steps (PDF page 146) put the positive
+    (+) cable on "the V+ (return) DC power input terminal" and the negative (-) cable on "the V- (input)
+    DC power input terminal", and the terminal block text (PDF page 148) names the same four terminals.
+    The roles are the guide's words, not the printed signs: `rtn` for the "(return)" terminal and `batt`
+    for the "(input)" terminal, which the guide pairs with the negative cable (spec/schemas/dc.yaml
+    writes `batt` as negative (battery)). The supply has one DC port, `input`, of two poles, `batt` on
+    the left V- screw and `rtn` on the left V+ screw, in the order the figure prints them from the left.
+    The second screw of each pair is a seat outside the port (see `shunts`).
+  voltage: >-
+    NOT STATED. Table 25 (PDF page 70) prints "Rated operating voltage: -48 VDC to -60 VDC" and an
+    operating range of -40 VDC through -72 VDC for the QFX5200-32C: ranges with no nominal. A port
+    states one nominal and no document gives this supply's, so the port states none and a later change
+    can state one once a source says so. `attrs` keeps the range as printed.
+  rating: >-
+    Table 25 (PDF page 70) gives "DC input current rating: 10 A maximum" for the QFX5200-32C, the
+    QFX5200 chassis that takes this supply (the QFX5200-48Y takes another supply, with 21 A and 25 A to
+    11 A, which is not read here). The QFX5100 guide's Table 17 (PDF page 72) gives the same 10 A
+    maximum for the QFX5100-96S, the other chassis that seats it. Both chassis print the one figure, so
+    it is read as the supply's input current and the port states `rating-a` 10. The 850 W supply of the
+    QFX5100-96S is named by no part number in that guide.
+  awg: >-
+    QFX5200 guide, the list of parts and tools for connecting DC power (PDF page 146): "For
+    QFX5200-32C-DC power source cables (14-16 AWG) with ring lug": a range of two sizes, so the port
+    states both, 14 and 16. The QFX5100 guide's list (PDF page 147), for the QFX5100-96S, prints the
+    same. The QFX5200-48Y's 12 AWG belongs to another supply.
+states:
+- ok
+- fault
+- absent
+elements:
+  led-in:
+    at: [16.4, 16.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-out:
+    at: [23.6, 16.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+  led-fault:
+    at: [30.8, 16.0]
+    size: [2.2, 2.2]
+    class: led
+    states:
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  latch:
+    at: [0.7, 1.5]
+    size: [10.3, 22.3]
+    class: latch
+  lever:
+    at: [48.6, 17.0]
+    size: [6.0, 20.0]
+    class: latch
+  terminals:
+    at: [11.8, 5.6]
+    size: [33.0, 10.2]
+    class: terminal
+size:
+  w: 54.8
+  h: 40.2
+size-confidence: {w: estimated, h: estimated}
+size-notes: the bay's size in the QFX5200-32C rear figure and the QFX5120's photograph; no document gives this module's own size
+relief:
+  features:
+  - node: latch
+    out: 1.6
+    color: '#2a8bd8'
+    confidence: estimated
+    source: AC sibling - the latch stands proud of the face; its projection and colour are not measured for this module
+  - node: terminals
+    out: 2.2
+    color: '#111316'
+    confidence: estimated
+    source: guide figure 41 - the terminal block stands proud of the face; not dimensioned
+  - node: stud-0
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: guide figure 41 - threaded studs; height not dimensioned
+  - node: stud-1
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: guide figure 41 - as stud-0
+  - node: stud-2
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: guide figure 41 - as stud-0
+  - node: stud-3
+    cyl: 5.0
+    thread: 1.0
+    lift: 2.2
+    confidence: estimated
+    source: guide figure 41 - as stud-0
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [13.5, 8.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-batt, at: [21.9, 8.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [30.3, 8.9], lift: 2.2}
+  - {ref: common/terminal-screw-34@1, id: shunt-rtn, at: [38.7, 8.9], lift: 2.2}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 10
+      awg: [14, 16]
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles, rating-a: rating, awg: awg}

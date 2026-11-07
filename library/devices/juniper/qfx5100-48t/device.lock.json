@@ -1,0 +1,867 @@
+{
+ "bay-accepts": {
+  "rear/bays/fan-0": [
+   "juniper/qfx5100-fan-afi@1",
+   "juniper/qfx5100-fan-afo@1"
+  ],
+  "rear/bays/fan-1": [
+   "juniper/qfx5100-fan-afi@1",
+   "juniper/qfx5100-fan-afo@1"
+  ],
+  "rear/bays/fan-2": [
+   "juniper/qfx5100-fan-afi@1",
+   "juniper/qfx5100-fan-afo@1"
+  ],
+  "rear/bays/fan-3": [
+   "juniper/qfx5100-fan-afi@1",
+   "juniper/qfx5100-fan-afo@1"
+  ],
+  "rear/bays/fan-4": [
+   "juniper/qfx5100-fan-afi@1",
+   "juniper/qfx5100-fan-afo@1"
+  ],
+  "rear/bays/psu-0": [
+   "juniper/qfx5100-jpsu-650w-ac-afi@1",
+   "juniper/qfx5100-jpsu-650w-ac-afo@1",
+   "juniper/qfx5100-jpsu-650w-dc-afi@1",
+   "juniper/qfx5100-jpsu-650w-dc-afo@1"
+  ],
+  "rear/bays/psu-1": [
+   "juniper/qfx5100-jpsu-650w-ac-afi@1",
+   "juniper/qfx5100-jpsu-650w-ac-afo@1",
+   "juniper/qfx5100-jpsu-650w-dc-afi@1",
+   "juniper/qfx5100-jpsu-650w-dc-afo@1"
+  ]
+ },
+ "composed": "499ec3185cba32f4",
+ "composed-refs": {
+  "common/esd-jack@1": "1.0.1+fa89d49c1ff75841",
+  "common/led-arrow-sm@1": "1.1.0+f6e565f48fbd46a4",
+  "common/led-dot@1": "1.1.0+f09babec64cd84f9",
+  "common/reset-button@1": "1.1.0+cda1cbe1d930fdbc",
+  "common/rj45-ganged-eth-plain@1": "1.0.0+3bd0f8c628445a0b",
+  "common/rj45-ganged-eth@1": "1.2.0+2a9b24f6f8d2aaa7",
+  "common/terminal-screw-34@1": "1.0.1+a05c552610f166f2",
+  "juniper/qfx5100-fan-afi@1": "1.0.0+f0f9f28dd80e99d7",
+  "juniper/qfx5100-fan-afo@1": "1.0.0+8de6015bde23aba9",
+  "juniper/qfx5100-jpsu-650w-ac-afi@1": "1.0.0+be2d16531a8b599d",
+  "juniper/qfx5100-jpsu-650w-ac-afo@1": "1.0.0+b188603969963639",
+  "juniper/qfx5100-jpsu-650w-dc-afi@1": "1.1.0+cc6e87a8ba23d911",
+  "juniper/qfx5100-jpsu-650w-dc-afo@1": "1.1.0+2770f26882a1f5e9",
+  "std/c14-inlet@1": "1.4.0+dfca1653bca2fa7c",
+  "std/qsfp-ganged@1": "1.4.1+6ac71d72bfdf9de9",
+  "std/rj45-ganged@2": "2.1.0+1c2030052f79bb8e",
+  "std/sfp-ganged@1": "1.1.1+46f35de7bfa8a751",
+  "std/usb-a@1": "1.3.0+3c77f06ea6794bfc"
+ },
+ "configs": [
+  "ac-b2f",
+  "ac-f2b",
+  "dc-b2f",
+  "dc-f2b",
+  "th-ac-b2f",
+  "th-ac-f2b"
+ ],
+ "dc-ports": {
+  "psu-0/module/input": {
+   "juniper/qfx5100-jpsu-650w-dc-afi@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   },
+   "juniper/qfx5100-jpsu-650w-dc-afo@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-0/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-0/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  },
+  "psu-1/module/input": {
+   "juniper/qfx5100-jpsu-650w-dc-afi@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc-b2f"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   },
+   "juniper/qfx5100-jpsu-650w-dc-afo@1": {
+    "awg": [
+     14,
+     16
+    ],
+    "configs": [
+     "dc-f2b"
+    ],
+    "direction": "input",
+    "id": "input",
+    "poles": [
+     {
+      "role": "batt",
+      "slot": "psu-1/module/pole-batt"
+     },
+     {
+      "role": "rtn",
+      "slot": "psu-1/module/pole-rtn"
+     }
+    ],
+    "rating-a": null,
+    "side": null,
+    "voltage": null
+   }
+  }
+ },
+ "format": 1,
+ "gaps": "f60831dbd27e1834",
+ "groups": [
+  "esd",
+  "fan-leds",
+  "fans",
+  "mgmt",
+  "psus",
+  "qsfp-plus",
+  "rj45",
+  "rj45-leds",
+  "status-leds"
+ ],
+ "ids": [
+  "front/cutout/esd-front-jack",
+  "front/cutout/led-port-0",
+  "front/cutout/led-port-1",
+  "front/cutout/led-port-10",
+  "front/cutout/led-port-11",
+  "front/cutout/led-port-12",
+  "front/cutout/led-port-13",
+  "front/cutout/led-port-14",
+  "front/cutout/led-port-15",
+  "front/cutout/led-port-16",
+  "front/cutout/led-port-17",
+  "front/cutout/led-port-18",
+  "front/cutout/led-port-19",
+  "front/cutout/led-port-2",
+  "front/cutout/led-port-20",
+  "front/cutout/led-port-21",
+  "front/cutout/led-port-22",
+  "front/cutout/led-port-23",
+  "front/cutout/led-port-24",
+  "front/cutout/led-port-25",
+  "front/cutout/led-port-26",
+  "front/cutout/led-port-27",
+  "front/cutout/led-port-28",
+  "front/cutout/led-port-29",
+  "front/cutout/led-port-3",
+  "front/cutout/led-port-30",
+  "front/cutout/led-port-31",
+  "front/cutout/led-port-32",
+  "front/cutout/led-port-33",
+  "front/cutout/led-port-34",
+  "front/cutout/led-port-35",
+  "front/cutout/led-port-36",
+  "front/cutout/led-port-37",
+  "front/cutout/led-port-38",
+  "front/cutout/led-port-39",
+  "front/cutout/led-port-4",
+  "front/cutout/led-port-40",
+  "front/cutout/led-port-41",
+  "front/cutout/led-port-42",
+  "front/cutout/led-port-43",
+  "front/cutout/led-port-44",
+  "front/cutout/led-port-45",
+  "front/cutout/led-port-46",
+  "front/cutout/led-port-47",
+  "front/cutout/led-port-5",
+  "front/cutout/led-port-6",
+  "front/cutout/led-port-7",
+  "front/cutout/led-port-8",
+  "front/cutout/led-port-9",
+  "front/cutout/port-0",
+  "front/cutout/port-1",
+  "front/cutout/port-10",
+  "front/cutout/port-11",
+  "front/cutout/port-12",
+  "front/cutout/port-13",
+  "front/cutout/port-14",
+  "front/cutout/port-15",
+  "front/cutout/port-16",
+  "front/cutout/port-17",
+  "front/cutout/port-18",
+  "front/cutout/port-19",
+  "front/cutout/port-2",
+  "front/cutout/port-20",
+  "front/cutout/port-21",
+  "front/cutout/port-22",
+  "front/cutout/port-23",
+  "front/cutout/port-24",
+  "front/cutout/port-25",
+  "front/cutout/port-26",
+  "front/cutout/port-27",
+  "front/cutout/port-28",
+  "front/cutout/port-29",
+  "front/cutout/port-3",
+  "front/cutout/port-30",
+  "front/cutout/port-31",
+  "front/cutout/port-32",
+  "front/cutout/port-33",
+  "front/cutout/port-34",
+  "front/cutout/port-35",
+  "front/cutout/port-36",
+  "front/cutout/port-37",
+  "front/cutout/port-38",
+  "front/cutout/port-39",
+  "front/cutout/port-4",
+  "front/cutout/port-40",
+  "front/cutout/port-41",
+  "front/cutout/port-42",
+  "front/cutout/port-43",
+  "front/cutout/port-44",
+  "front/cutout/port-45",
+  "front/cutout/port-46",
+  "front/cutout/port-47",
+  "front/cutout/port-48",
+  "front/cutout/port-49",
+  "front/cutout/port-5",
+  "front/cutout/port-50",
+  "front/cutout/port-51",
+  "front/cutout/port-52",
+  "front/cutout/port-53",
+  "front/cutout/port-6",
+  "front/cutout/port-7",
+  "front/cutout/port-8",
+  "front/cutout/port-9",
+  "front/placements/esd-front-jack",
+  "front/placements/led-port-0",
+  "front/placements/led-port-1",
+  "front/placements/led-port-10",
+  "front/placements/led-port-11",
+  "front/placements/led-port-12",
+  "front/placements/led-port-13",
+  "front/placements/led-port-14",
+  "front/placements/led-port-15",
+  "front/placements/led-port-16",
+  "front/placements/led-port-17",
+  "front/placements/led-port-18",
+  "front/placements/led-port-19",
+  "front/placements/led-port-2",
+  "front/placements/led-port-20",
+  "front/placements/led-port-21",
+  "front/placements/led-port-22",
+  "front/placements/led-port-23",
+  "front/placements/led-port-24",
+  "front/placements/led-port-25",
+  "front/placements/led-port-26",
+  "front/placements/led-port-27",
+  "front/placements/led-port-28",
+  "front/placements/led-port-29",
+  "front/placements/led-port-3",
+  "front/placements/led-port-30",
+  "front/placements/led-port-31",
+  "front/placements/led-port-32",
+  "front/placements/led-port-33",
+  "front/placements/led-port-34",
+  "front/placements/led-port-35",
+  "front/placements/led-port-36",
+  "front/placements/led-port-37",
+  "front/placements/led-port-38",
+  "front/placements/led-port-39",
+  "front/placements/led-port-4",
+  "front/placements/led-port-40",
+  "front/placements/led-port-41",
+  "front/placements/led-port-42",
+  "front/placements/led-port-43",
+  "front/placements/led-port-44",
+  "front/placements/led-port-45",
+  "front/placements/led-port-46",
+  "front/placements/led-port-47",
+  "front/placements/led-port-5",
+  "front/placements/led-port-6",
+  "front/placements/led-port-7",
+  "front/placements/led-port-8",
+  "front/placements/led-port-9",
+  "front/placements/port-0",
+  "front/placements/port-1",
+  "front/placements/port-10",
+  "front/placements/port-11",
+  "front/placements/port-12",
+  "front/placements/port-13",
+  "front/placements/port-14",
+  "front/placements/port-15",
+  "front/placements/port-16",
+  "front/placements/port-17",
+  "front/placements/port-18",
+  "front/placements/port-19",
+  "front/placements/port-2",
+  "front/placements/port-20",
+  "front/placements/port-21",
+  "front/placements/port-22",
+  "front/placements/port-23",
+  "front/placements/port-24",
+  "front/placements/port-25",
+  "front/placements/port-26",
+  "front/placements/port-27",
+  "front/placements/port-28",
+  "front/placements/port-29",
+  "front/placements/port-3",
+  "front/placements/port-30",
+  "front/placements/port-31",
+  "front/placements/port-32",
+  "front/placements/port-33",
+  "front/placements/port-34",
+  "front/placements/port-35",
+  "front/placements/port-36",
+  "front/placements/port-37",
+  "front/placements/port-38",
+  "front/placements/port-39",
+  "front/placements/port-4",
+  "front/placements/port-40",
+  "front/placements/port-41",
+  "front/placements/port-42",
+  "front/placements/port-43",
+  "front/placements/port-44",
+  "front/placements/port-45",
+  "front/placements/port-46",
+  "front/placements/port-47",
+  "front/placements/port-48",
+  "front/placements/port-49",
+  "front/placements/port-5",
+  "front/placements/port-50",
+  "front/placements/port-51",
+  "front/placements/port-52",
+  "front/placements/port-53",
+  "front/placements/port-6",
+  "front/placements/port-7",
+  "front/placements/port-8",
+  "front/placements/port-9",
+  "rear/bays/fan-0",
+  "rear/bays/fan-1",
+  "rear/bays/fan-2",
+  "rear/bays/fan-3",
+  "rear/bays/fan-4",
+  "rear/bays/psu-0",
+  "rear/bays/psu-1",
+  "rear/cutout/console",
+  "rear/cutout/led-alm",
+  "rear/cutout/led-fan-0",
+  "rear/cutout/led-fan-1",
+  "rear/cutout/led-fan-2",
+  "rear/cutout/led-fan-3",
+  "rear/cutout/led-fan-4",
+  "rear/cutout/led-id",
+  "rear/cutout/led-mst",
+  "rear/cutout/led-sys",
+  "rear/cutout/mgmt-c0",
+  "rear/cutout/mgmt-c0-sfp",
+  "rear/cutout/mgmt-c1",
+  "rear/cutout/reset-btn",
+  "rear/cutout/usb",
+  "rear/placements/console",
+  "rear/placements/led-alm",
+  "rear/placements/led-fan-0",
+  "rear/placements/led-fan-1",
+  "rear/placements/led-fan-2",
+  "rear/placements/led-fan-3",
+  "rear/placements/led-fan-4",
+  "rear/placements/led-id",
+  "rear/placements/led-mst",
+  "rear/placements/led-sys",
+  "rear/placements/mgmt-c0",
+  "rear/placements/mgmt-c0-sfp",
+  "rear/placements/mgmt-c1",
+  "rear/placements/reset-btn",
+  "rear/placements/usb"
+ ],
+ "names": "54f039f07b82b79c",
+ "placement-addressing": {
+  "for": {
+   "front/placements/esd-front-jack": [
+    "chassis"
+   ],
+   "front/placements/led-port-0": [
+    "port-0"
+   ],
+   "front/placements/led-port-1": [
+    "port-1"
+   ],
+   "front/placements/led-port-10": [
+    "port-10"
+   ],
+   "front/placements/led-port-11": [
+    "port-11"
+   ],
+   "front/placements/led-port-12": [
+    "port-12"
+   ],
+   "front/placements/led-port-13": [
+    "port-13"
+   ],
+   "front/placements/led-port-14": [
+    "port-14"
+   ],
+   "front/placements/led-port-15": [
+    "port-15"
+   ],
+   "front/placements/led-port-16": [
+    "port-16"
+   ],
+   "front/placements/led-port-17": [
+    "port-17"
+   ],
+   "front/placements/led-port-18": [
+    "port-18"
+   ],
+   "front/placements/led-port-19": [
+    "port-19"
+   ],
+   "front/placements/led-port-2": [
+    "port-2"
+   ],
+   "front/placements/led-port-20": [
+    "port-20"
+   ],
+   "front/placements/led-port-21": [
+    "port-21"
+   ],
+   "front/placements/led-port-22": [
+    "port-22"
+   ],
+   "front/placements/led-port-23": [
+    "port-23"
+   ],
+   "front/placements/led-port-24": [
+    "port-24"
+   ],
+   "front/placements/led-port-25": [
+    "port-25"
+   ],
+   "front/placements/led-port-26": [
+    "port-26"
+   ],
+   "front/placements/led-port-27": [
+    "port-27"
+   ],
+   "front/placements/led-port-28": [
+    "port-28"
+   ],
+   "front/placements/led-port-29": [
+    "port-29"
+   ],
+   "front/placements/led-port-3": [
+    "port-3"
+   ],
+   "front/placements/led-port-30": [
+    "port-30"
+   ],
+   "front/placements/led-port-31": [
+    "port-31"
+   ],
+   "front/placements/led-port-32": [
+    "port-32"
+   ],
+   "front/placements/led-port-33": [
+    "port-33"
+   ],
+   "front/placements/led-port-34": [
+    "port-34"
+   ],
+   "front/placements/led-port-35": [
+    "port-35"
+   ],
+   "front/placements/led-port-36": [
+    "port-36"
+   ],
+   "front/placements/led-port-37": [
+    "port-37"
+   ],
+   "front/placements/led-port-38": [
+    "port-38"
+   ],
+   "front/placements/led-port-39": [
+    "port-39"
+   ],
+   "front/placements/led-port-4": [
+    "port-4"
+   ],
+   "front/placements/led-port-40": [
+    "port-40"
+   ],
+   "front/placements/led-port-41": [
+    "port-41"
+   ],
+   "front/placements/led-port-42": [
+    "port-42"
+   ],
+   "front/placements/led-port-43": [
+    "port-43"
+   ],
+   "front/placements/led-port-44": [
+    "port-44"
+   ],
+   "front/placements/led-port-45": [
+    "port-45"
+   ],
+   "front/placements/led-port-46": [
+    "port-46"
+   ],
+   "front/placements/led-port-47": [
+    "port-47"
+   ],
+   "front/placements/led-port-5": [
+    "port-5"
+   ],
+   "front/placements/led-port-6": [
+    "port-6"
+   ],
+   "front/placements/led-port-7": [
+    "port-7"
+   ],
+   "front/placements/led-port-8": [
+    "port-8"
+   ],
+   "front/placements/led-port-9": [
+    "port-9"
+   ],
+   "rear/placements/led-alm": [
+    "chassis"
+   ],
+   "rear/placements/led-fan-0": [
+    "fan-0"
+   ],
+   "rear/placements/led-fan-1": [
+    "fan-1"
+   ],
+   "rear/placements/led-fan-2": [
+    "fan-2"
+   ],
+   "rear/placements/led-fan-3": [
+    "fan-3"
+   ],
+   "rear/placements/led-fan-4": [
+    "fan-4"
+   ],
+   "rear/placements/led-id": [
+    "chassis"
+   ],
+   "rear/placements/led-mst": [
+    "chassis"
+   ],
+   "rear/placements/led-sys": [
+    "chassis"
+   ],
+   "rear/placements/reset-btn": [
+    "chassis"
+   ]
+  },
+  "rel-pos": {
+   "front/placements/esd-front-jack": 0,
+   "front/placements/led-port-0": 0,
+   "front/placements/led-port-1": 1,
+   "front/placements/led-port-10": 10,
+   "front/placements/led-port-11": 11,
+   "front/placements/led-port-12": 12,
+   "front/placements/led-port-13": 13,
+   "front/placements/led-port-14": 14,
+   "front/placements/led-port-15": 15,
+   "front/placements/led-port-16": 16,
+   "front/placements/led-port-17": 17,
+   "front/placements/led-port-18": 18,
+   "front/placements/led-port-19": 19,
+   "front/placements/led-port-2": 2,
+   "front/placements/led-port-20": 20,
+   "front/placements/led-port-21": 21,
+   "front/placements/led-port-22": 22,
+   "front/placements/led-port-23": 23,
+   "front/placements/led-port-24": 24,
+   "front/placements/led-port-25": 25,
+   "front/placements/led-port-26": 26,
+   "front/placements/led-port-27": 27,
+   "front/placements/led-port-28": 28,
+   "front/placements/led-port-29": 29,
+   "front/placements/led-port-3": 3,
+   "front/placements/led-port-30": 30,
+   "front/placements/led-port-31": 31,
+   "front/placements/led-port-32": 32,
+   "front/placements/led-port-33": 33,
+   "front/placements/led-port-34": 34,
+   "front/placements/led-port-35": 35,
+   "front/placements/led-port-36": 36,
+   "front/placements/led-port-37": 37,
+   "front/placements/led-port-38": 38,
+   "front/placements/led-port-39": 39,
+   "front/placements/led-port-4": 4,
+   "front/placements/led-port-40": 40,
+   "front/placements/led-port-41": 41,
+   "front/placements/led-port-42": 42,
+   "front/placements/led-port-43": 43,
+   "front/placements/led-port-44": 44,
+   "front/placements/led-port-45": 45,
+   "front/placements/led-port-46": 46,
+   "front/placements/led-port-47": 47,
+   "front/placements/led-port-5": 5,
+   "front/placements/led-port-6": 6,
+   "front/placements/led-port-7": 7,
+   "front/placements/led-port-8": 8,
+   "front/placements/led-port-9": 9,
+   "front/placements/port-0": 0,
+   "front/placements/port-1": 1,
+   "front/placements/port-10": 10,
+   "front/placements/port-11": 11,
+   "front/placements/port-12": 12,
+   "front/placements/port-13": 13,
+   "front/placements/port-14": 14,
+   "front/placements/port-15": 15,
+   "front/placements/port-16": 16,
+   "front/placements/port-17": 17,
+   "front/placements/port-18": 18,
+   "front/placements/port-19": 19,
+   "front/placements/port-2": 2,
+   "front/placements/port-20": 20,
+   "front/placements/port-21": 21,
+   "front/placements/port-22": 22,
+   "front/placements/port-23": 23,
+   "front/placements/port-24": 24,
+   "front/placements/port-25": 25,
+   "front/placements/port-26": 26,
+   "front/placements/port-27": 27,
+   "front/placements/port-28": 28,
+   "front/placements/port-29": 29,
+   "front/placements/port-3": 3,
+   "front/placements/port-30": 30,
+   "front/placements/port-31": 31,
+   "front/placements/port-32": 32,
+   "front/placements/port-33": 33,
+   "front/placements/port-34": 34,
+   "front/placements/port-35": 35,
+   "front/placements/port-36": 36,
+   "front/placements/port-37": 37,
+   "front/placements/port-38": 38,
+   "front/placements/port-39": 39,
+   "front/placements/port-4": 4,
+   "front/placements/port-40": 40,
+   "front/placements/port-41": 41,
+   "front/placements/port-42": 42,
+   "front/placements/port-43": 43,
+   "front/placements/port-44": 44,
+   "front/placements/port-45": 45,
+   "front/placements/port-46": 46,
+   "front/placements/port-47": 47,
+   "front/placements/port-48": 48,
+   "front/placements/port-49": 49,
+   "front/placements/port-5": 5,
+   "front/placements/port-50": 50,
+   "front/placements/port-51": 51,
+   "front/placements/port-52": 52,
+   "front/placements/port-53": 53,
+   "front/placements/port-6": 6,
+   "front/placements/port-7": 7,
+   "front/placements/port-8": 8,
+   "front/placements/port-9": 9,
+   "rear/bays/fan-0": 0,
+   "rear/bays/fan-1": 1,
+   "rear/bays/fan-2": 2,
+   "rear/bays/fan-3": 3,
+   "rear/bays/fan-4": 4,
+   "rear/bays/psu-0": 0,
+   "rear/bays/psu-1": 1,
+   "rear/placements/console": 2,
+   "rear/placements/led-alm": 0,
+   "rear/placements/led-fan-0": 0,
+   "rear/placements/led-fan-1": 1,
+   "rear/placements/led-fan-2": 2,
+   "rear/placements/led-fan-3": 3,
+   "rear/placements/led-fan-4": 4,
+   "rear/placements/led-id": 3,
+   "rear/placements/led-mst": 2,
+   "rear/placements/led-sys": 1,
+   "rear/placements/mgmt-c0": 3,
+   "rear/placements/mgmt-c0-sfp": 0,
+   "rear/placements/mgmt-c1": 1,
+   "rear/placements/reset-btn": 5,
+   "rear/placements/usb": 4
+  }
+ },
+ "placement-attrs": "5a2c92e63c3912cf",
+ "placement-geometry": "44136fa355b3678a",
+ "placement-groups": {
+  "front/placements/esd-front-jack": "esd",
+  "front/placements/led-port-0": "rj45-leds",
+  "front/placements/led-port-1": "rj45-leds",
+  "front/placements/led-port-10": "rj45-leds",
+  "front/placements/led-port-11": "rj45-leds",
+  "front/placements/led-port-12": "rj45-leds",
+  "front/placements/led-port-13": "rj45-leds",
+  "front/placements/led-port-14": "rj45-leds",
+  "front/placements/led-port-15": "rj45-leds",
+  "front/placements/led-port-16": "rj45-leds",
+  "front/placements/led-port-17": "rj45-leds",
+  "front/placements/led-port-18": "rj45-leds",
+  "front/placements/led-port-19": "rj45-leds",
+  "front/placements/led-port-2": "rj45-leds",
+  "front/placements/led-port-20": "rj45-leds",
+  "front/placements/led-port-21": "rj45-leds",
+  "front/placements/led-port-22": "rj45-leds",
+  "front/placements/led-port-23": "rj45-leds",
+  "front/placements/led-port-24": "rj45-leds",
+  "front/placements/led-port-25": "rj45-leds",
+  "front/placements/led-port-26": "rj45-leds",
+  "front/placements/led-port-27": "rj45-leds",
+  "front/placements/led-port-28": "rj45-leds",
+  "front/placements/led-port-29": "rj45-leds",
+  "front/placements/led-port-3": "rj45-leds",
+  "front/placements/led-port-30": "rj45-leds",
+  "front/placements/led-port-31": "rj45-leds",
+  "front/placements/led-port-32": "rj45-leds",
+  "front/placements/led-port-33": "rj45-leds",
+  "front/placements/led-port-34": "rj45-leds",
+  "front/placements/led-port-35": "rj45-leds",
+  "front/placements/led-port-36": "rj45-leds",
+  "front/placements/led-port-37": "rj45-leds",
+  "front/placements/led-port-38": "rj45-leds",
+  "front/placements/led-port-39": "rj45-leds",
+  "front/placements/led-port-4": "rj45-leds",
+  "front/placements/led-port-40": "rj45-leds",
+  "front/placements/led-port-41": "rj45-leds",
+  "front/placements/led-port-42": "rj45-leds",
+  "front/placements/led-port-43": "rj45-leds",
+  "front/placements/led-port-44": "rj45-leds",
+  "front/placements/led-port-45": "rj45-leds",
+  "front/placements/led-port-46": "rj45-leds",
+  "front/placements/led-port-47": "rj45-leds",
+  "front/placements/led-port-5": "rj45-leds",
+  "front/placements/led-port-6": "rj45-leds",
+  "front/placements/led-port-7": "rj45-leds",
+  "front/placements/led-port-8": "rj45-leds",
+  "front/placements/led-port-9": "rj45-leds",
+  "front/placements/port-0": "rj45",
+  "front/placements/port-1": "rj45",
+  "front/placements/port-10": "rj45",
+  "front/placements/port-11": "rj45",
+  "front/placements/port-12": "rj45",
+  "front/placements/port-13": "rj45",
+  "front/placements/port-14": "rj45",
+  "front/placements/port-15": "rj45",
+  "front/placements/port-16": "rj45",
+  "front/placements/port-17": "rj45",
+  "front/placements/port-18": "rj45",
+  "front/placements/port-19": "rj45",
+  "front/placements/port-2": "rj45",
+  "front/placements/port-20": "rj45",
+  "front/placements/port-21": "rj45",
+  "front/placements/port-22": "rj45",
+  "front/placements/port-23": "rj45",
+  "front/placements/port-24": "rj45",
+  "front/placements/port-25": "rj45",
+  "front/placements/port-26": "rj45",
+  "front/placements/port-27": "rj45",
+  "front/placements/port-28": "rj45",
+  "front/placements/port-29": "rj45",
+  "front/placements/port-3": "rj45",
+  "front/placements/port-30": "rj45",
+  "front/placements/port-31": "rj45",
+  "front/placements/port-32": "rj45",
+  "front/placements/port-33": "rj45",
+  "front/placements/port-34": "rj45",
+  "front/placements/port-35": "rj45",
+  "front/placements/port-36": "rj45",
+  "front/placements/port-37": "rj45",
+  "front/placements/port-38": "rj45",
+  "front/placements/port-39": "rj45",
+  "front/placements/port-4": "rj45",
+  "front/placements/port-40": "rj45",
+  "front/placements/port-41": "rj45",
+  "front/placements/port-42": "rj45",
+  "front/placements/port-43": "rj45",
+  "front/placements/port-44": "rj45",
+  "front/placements/port-45": "rj45",
+  "front/placements/port-46": "rj45",
+  "front/placements/port-47": "rj45",
+  "front/placements/port-48": "qsfp-plus",
+  "front/placements/port-49": "qsfp-plus",
+  "front/placements/port-5": "rj45",
+  "front/placements/port-50": "qsfp-plus",
+  "front/placements/port-51": "qsfp-plus",
+  "front/placements/port-52": "qsfp-plus",
+  "front/placements/port-53": "qsfp-plus",
+  "front/placements/port-6": "rj45",
+  "front/placements/port-7": "rj45",
+  "front/placements/port-8": "rj45",
+  "front/placements/port-9": "rj45",
+  "rear/bays/fan-0": "fans",
+  "rear/bays/fan-1": "fans",
+  "rear/bays/fan-2": "fans",
+  "rear/bays/fan-3": "fans",
+  "rear/bays/fan-4": "fans",
+  "rear/bays/psu-0": "psus",
+  "rear/bays/psu-1": "psus",
+  "rear/placements/console": "mgmt",
+  "rear/placements/led-alm": "status-leds",
+  "rear/placements/led-fan-0": "fan-leds",
+  "rear/placements/led-fan-1": "fan-leds",
+  "rear/placements/led-fan-2": "fan-leds",
+  "rear/placements/led-fan-3": "fan-leds",
+  "rear/placements/led-fan-4": "fan-leds",
+  "rear/placements/led-id": "status-leds",
+  "rear/placements/led-mst": "status-leds",
+  "rear/placements/led-sys": "status-leds",
+  "rear/placements/mgmt-c0": "mgmt",
+  "rear/placements/mgmt-c0-sfp": "mgmt",
+  "rear/placements/mgmt-c1": "mgmt",
+  "rear/placements/reset-btn": "mgmt",
+  "rear/placements/usb": "mgmt"
+ },
+ "placement-surface": "5f6ec0d50a670cf6",
+ "shape": "a9b986c93fb1f63b",
+ "surface": "6fb24c2116c38a04",
+ "version": "0.2.0"
+}

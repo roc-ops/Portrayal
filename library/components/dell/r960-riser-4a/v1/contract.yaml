@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: r960-riser-4a
+version: 1.0.0
+class: riser
+behaviour: fills
+profile: server
+description: >-
+  Dell riser 4A (full length) of the PowerEdge R960 - slot 10, a full-height slot, and slot 11, a
+  double-width full-height slot for a GPU; fitted in riser configuration 3. Drawn from the ISM's
+  tables, not from a rear figure
+attrs:
+  riser: '4A (FL)'
+  appears-in: 'riser configuration 3'
+  power-absent: not-published
+  slot-10: 'x16, full height, full length, processor 4, PCIe Gen5'
+  slot-11: 'x16, full height, full length, double width, processor 2, PCIe Gen5'
+provenance:
+  power: >-
+    NOT PUBLISHED - the riser is a passive board with connectors; the ISM's table 83 routes the
+    GPU's power from the power distribution board.
+  identity: >-
+    A REMOVABLE ASSEMBLY THAT BRINGS ITS OWN SLOTS (ISM figures 107 and 136-139), so it is a
+    module with `bays`.
+  slots: >-
+    datasheet - R960 ISM table 88 (configuration 3: R4A slot 10 processor 4, slot 11 full height
+    double width processor 2) and the technical guide's table 17.
+  face: >-
+    ESTIMATED. No R960 document draws the rear of configuration 3. The cage is riser 4B's
+    (dell/r960-riser-4b@1) with its lower two windows read as one double-width window for slot 11.
+    The printed marks are riser 4B's, which is a guess for a different cage.
+  size: >-
+    estimated - riser 4B's 120.0 x 63.0.
+  depth: >-
+    measured - Dell's R960 service model, working/intake/dell/3d-models/r960.glb: `PowerEdge_R960_Riser4_Long` under `R960_ Riser 4A - FL` in
+    the `Main Assembly` node is 357.0 long (cad z 525.8 to 882.8). The first pass had 258.0, as the half-length risers.
+size: {w: 120.0, h: 63.0, d: 357.0}
+size-confidence: {w: estimated, h: estimated, d: measured}
+body:
+  depth: 357.0
+  color: '#4a5057'
+plan: {ref: dell/r960-riser-4-plan@1}
+relief:
+  features:
+  - node: plate
+    out: 1.0
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - the cage's plate is the rear wall's own sheet metal, and ISM table 7 puts nothing but the supplies'
+      handles past the wall; no R960 model or side figure is held. The first pass drew it 20.0 proud by analogy with the
+      R660's riser cages, which stood the cages outside the 866.74 chassis
+bays:
+  slot-10:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 4, generation: 5}
+    behind: true
+    rotate: 180
+    at: [5.7, 1.29]
+    size: [90.0, 18.42]
+    accepts: [dell/r960-pcie-filler-fh@1]
+    default: dell/r960-pcie-filler-fh@1
+  slot-11:
+    slot: {connector: x16, lanes: 16, height: full, length: full, processor: 2, generation: 5}
+    behind: true
+    at: [5.7, 21.19]
+    size: [90.0, 38.7]
+    accepts: [dell/r960-pcie-filler-fh-2slot@1]
+    default: dell/r960-pcie-filler-fh-2slot@1
+elements:
+  plate: {at: [0.3, 0.3], size: [119.4, 62.4], class: bezel}
+skins: [default]

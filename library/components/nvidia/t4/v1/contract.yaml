@@ -1,0 +1,178 @@
+format: 1
+kind: module
+name: t4
+version: 1.0.0
+class: expansion-card
+behaviour: fills
+profile: server
+description: >-
+  NVIDIA T4 GPU (16 GB GDDR6) on its low profile bracket, a passive
+  half-height half-length single-slot card that takes no auxiliary power. The
+  bracket face is a black plate with eleven columns of three vent holes and two
+  screws, and the heat sink shows through the holes. The card ships with this
+  bracket (order code 900-2G183-0000-000) or with a full-height one
+  (900-2G183-0000-001); nvidia/t4@1 draws the low profile one.
+size: {w: 79.20, h: 18.42, d: 169.53}
+size-confidence: {w: registry, h: registry, d: drawing}
+unplaced: >-
+  no bay in the library lists this card in `accepts`. Whether a server's
+  documents in the library list a T4 was not read, so no riser was edited; a
+  riser bay that takes a low profile card names each card by hand
+  (docs/cards-by-interface-design.md).
+attrs:
+  model: 'T4'
+  part-numbers: '900-2G183-0000-000 (low profile bracket fitted), 900-2G183-0000-001 (full-height bracket fitted), PNY TCSCT4-KIT'
+  board-sku: 'PG183 SKU 200, NVPN 699-2G183-0200-xxx'
+  role: gpu
+  form-factor: 'Half-height, half-length, single-slot, 6.6 in, low profile bracket'
+  pcie-connector: x16
+  pcie-generation: 3
+  pcie-height: low
+  power-draw-max-w: 70
+  power-input: 'host PCIe slot only'
+  memory: '16 GB GDDR6, 256-bit, up to 320 GB/s'
+  cooling: passive
+  airflow: 'bidirectional; the heat sink takes system airflow either way along the card'
+  nvlink: 'none'
+  weight-kg: 0.301
+  eol: announced
+  eol-announcement: 'https://onestopsystems.com/blogs/eol-notices/nvidia-hgx-a100-4-gpu-80gb-nvidia-pcie-a100-80gb-cowos-hbm2-and-nvidia-tesla-t4-passive-gpu-2560-cores'
+faces:
+  plan:
+    ref: common/pcie-card-plan-lp@1
+provenance:
+  sources: >-
+    NVIDIA T4 70W Low Profile PCIe GPU Accelerator Product Brief
+    PB-09256-001_v05, NVIDIA's own copy. Tables 1 and 2 and figure 2 (board
+    dimensions). The brief's text was read from the PDF, not from the converted
+    copy, whose table 1 is scrambled. NVIDIA's T4 datasheets (two editions) and
+    PNY's datasheet for its part number. NVIDIA's brief forbids reproducing its
+    figures, so its facts are transcribed and none of its figures is copied.
+  reference-photos: >-
+    reference - PNY's product images for the T4, under
+    https://d2vfia6k6wrouk.cloudfront.net/productimages/263a6aca-43bf-45fa-b10c-b27500cc5291/images/:
+    tesla_t4_bracket.png (the bracket straight on, 621 x 181 px),
+    tesla_t4_front.png and tesla_t4_back.png (the two broad sides),
+    tesla_t4_front_top.png (the top edge, oblique) and three 3/4 views. Licence
+    not stated; facts read from them, pictures not used. The far end has no view.
+  size: >-
+    registry - the face is std/pcie-bracket-lp@1, 79.2 x 18.42 (PCIe CEM 5.0
+    figure 11-9), composed behind the punched plate; the card is one slot wide.
+  depth: >-
+    drawing - PB-09256 figure 2: 169.53 from the bracket's outer face to the card's
+    end, the key datum 59.04 +/-0.40 from it, 68.90 MAX card height and 68.08
+    +/-0.52 to the bracket's flange end.
+  face-bracket: >-
+    registry - the bracket is std/pcie-bracket-lp@1, so the outline, the tip's
+    retention tab and the flange are CEM's. THE PHOTOGRAPH SHOWS A BLACK BRACKET
+    and the standard part is zinc coloured; the plate drawn over the opening is
+    dark, and the metal round it stays silver. That is a known difference, not a
+    measurement of the bracket's finish (as nvidia/l4@1).
+  face-holes: >-
+    photo-measured - PNY's straight-on bracket photograph, turned a half-turn
+    into this frame (tip at the left, the board's side at the top). Its scale is
+    the plate's own 18.42 across (145 px, 7.87 px/mm) and its 79.2 along (621
+    px, 7.84), which agree to half a percent, so it is near orthographic. A grid
+    of 11 columns by 3 rows of square holes: 3.5 wide and 3.5 high, on a 4.26
+    pitch along the bracket and 4.15 across, from x 23.6 to 69.7 and y 3.3 to
+    15.15, so the rows fill the standard's opening (y 3.18 to 15.24). The
+    readings are good to about 0.3 mm. The heat sink shows through the first
+    row as copper fins and through the second as a dark mass; the third row is
+    dark. Two Torx screws of 2.0 radius at x 72.8 and 20.5, y 10.9. Text is
+    printed near the tip tab (the part number, turned) and is not drawn.
+  thickness: >-
+    estimated - nothing held states the card's thickness. The single-slot
+    component envelope on the component side of a PCIe card is 14.47 (PCIe CEM
+    5.0), so the shroud's far face is put 14.47 above the board's component
+    surface, as nvidia/l4@1 does.
+  orientation: >-
+    drawn TIP-LEFT, as std/pcie-bracket-lp@1 is: NVIDIA draws this card tip-right
+    and the photograph shows the board at the bottom, so it is turned a half-turn.
+    The board is at the top (small y); the cooler is below it in this frame.
+  body: >-
+    the board, its edge and the pads follow PCIe CEM 5.0 (figures 6-5 and 11-3,
+    as nvidia/l4@1 has them) at PB-09256 figure 2's lengths: the card 68.90 high
+    from the finger datum W (at x 11.11 on this bracket, 79.20 less 68.09), the
+    board's lower edge put 13.25 above it as on the L4 (figure 2 reads 12.9 to
+    13.8 at 5.36 px/mm), the key datum 59.04 behind the bracket and the finger
+    tab to the standard's 72.15 past it, as the figure draws it. The cover and
+    the shroud begin 2.2 behind the bracket and their lower edge is 13.8 above W,
+    their top 1.0 below the board's edge (figure 2's "1.00 EDGE OFFSET"), so
+    they are 54.1 across.
+  body-shroud: >-
+    estimated - a silver heat-sink cover over the board's component side with a
+    black cover along the board, a quarter of the component height as on the L4,
+    and a black top edge. PNY's broad-side renders show a silver face with two
+    green bands and about nine grooves, an NVIDIA mark by the bracket and screws round
+    the edge; the bands are drawn on the broad side and the screws are not. The
+    colours are the renders'.
+  body-top-edge: >-
+    estimated - PNY's oblique top-edge render shows "NVIDIA" and "TESLA T4" on the
+    black top edge. Their places are fractions of the card's length read off that
+    picture (about 0.50 and 0.88), and their sizes are estimated. The mark is
+    reserved as `logo-zone`.
+  body-far-end: >-
+    NOT MODELLED - the far end is drawn closed. No photograph shows it, and
+    figure 2 draws a hockey stick tab and a step at the board's east end (about
+    134 to 147 behind the bracket) that are not modelled.
+  power: >-
+    datasheet - PB-09256 table 1: total board power 70 W (default); the overview
+    says a 70 W maximum power limit. The card takes no auxiliary connector.
+  weight: >-
+    datasheet - PB-09256 table 1: board 301 g; the half-height bracket with
+    screws 10 g and the full-height one 17 g.
+  memory: >-
+    datasheet - PB-09256 table 2: GDDR6, 16 GB, 256-bit, 5001 MHz maximum memory
+    clock, up to 320 GB/s.
+  pcie: >-
+    datasheet - PB-09256 table 1: PCI Express 3.0 x16 and x8. The attr says x16
+    for the connector and 3 for the generation.
+  part-numbers: >-
+    datasheet - PB-09256 table 1 and notes: NVPN 699-2G183-0200-xxx and order
+    codes 900-2G183-0000-000 (low profile bracket fitted, the ATX one included)
+    and 900-2G183-0000-001 (the reverse); PNY's datasheet gives TCSCT4-KIT.
+  gaps: >-
+    GAPS HANDED ON, NOT CLOSED: (1) the full-height bracket variant, which the
+    brief says exists and which is not modelled (needs-photo); (2) the far end,
+    its hockey stick tab and step (needs-photo, needs-drawing); (3) the top
+    edge's printing places (needs-drawing); (4) the thickness, which no source
+    states (vendor-silent); (5) the end-of-life notice's dates for the T4, which
+    could not be read from the page (needs-source).
+  lifecycle: >-
+    One Stop Systems' end-of-life notice, whose title names the NVIDIA Tesla T4
+    passive GPU (the one nvidia/a100-pcie-80gb@1 cites), announces it. Its page
+    could not be read for the T4's dates here, so none are written. PNY lists the
+    T4 under its legacy data-center GPUs.
+body:
+  depth: 169.53
+  color: '#2c2f33'
+  plate: {at: [11.85, 0.00], size: [56.18, 18.42]}
+  boxes:
+  - {id: board, at: [24.36, 1.27], size: [55.65, 1.57], from: 2.20, depth: 167.33,
+     color: '#1d2420', confidence: drawing, shows: [right],
+     source: 'PB-09256 fig 2: card 68.90 high above W, lower edge put 13.25 above W (13.8 read), to the 169.53 end; CEM 5.0: 1.57 board, 1.27 inside the bracket keyed edge; the board''s start is the cover''s'}
+  - {id: edge-tab-short, at: [11.11, 1.27], size: [13.25, 1.57], from: 46.90, depth: 11.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-09256 fig 2: key datum 59.04 behind the bracket, tab 13.25 deep; CEM 5.0 fig 6-5: 12.15 to the tab end, notch 1.90'}
+  - {id: edge-tab-long, at: [11.11, 1.27], size: [13.25, 1.57], from: 60.00, depth: 71.20,
+     color: '#1d2420', confidence: drawing,
+     source: 'PB-09256 fig 2: the finger tab ends 72.15 past the key datum (CEM 5.0 fig 6-5, x16 DIM B), at 131.2'}
+  - {id: edge-pads-short, at: [13.71, 1.22], size: [3.00, 1.67], from: 47.25, depth: 10.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: pads 2.60..5.60 up the tab, pins 1-11 on 1.00 pitch'}
+  - {id: edge-pads-long, at: [13.71, 1.22], size: [3.00, 1.67], from: 60.25, depth: 70.60,
+     color: '#d4a72c', confidence: registry,
+     source: 'CEM 5.0 fig 6-5: the x16 pad run on 1.00 pitch'}
+  - {id: cover, at: [24.93, 2.84], size: [54.10, 3.62], from: 2.20, depth: 167.33,
+     color: '#202326', confidence: estimated, shows: [right],
+     source: 'a quarter of the 14.47 component height, as the L4''s black band; PNY''s renders show a black edge'}
+  - {id: shroud, at: [24.93, 6.46], size: [54.10, 10.85], from: 2.20, depth: 167.33,
+     color: '#b3b7ba', confidence: estimated, shows: [right, left, bottom],
+     source: 'thickness bounded by the CEM single-slot component height 14.47 (see provenance thickness); cover edges 13.8 above W and 1.0 below the board edge from PB-09256 fig 2; silver from PNY''s renders'}
+parts:
+  - {ref: std/pcie-bracket-lp@1, id: bracket, at: [0, 0], behind: true}
+elements:
+  vent: {at: [23.60, 3.30], size: [46.10, 11.85], class: vent}
+  screw-1: {at: [18.50, 8.90], size: [4.00, 4.00], class: screw}
+  screw-2: {at: [70.80, 8.90], size: [4.00, 4.00], class: screw}
+skins: [default]

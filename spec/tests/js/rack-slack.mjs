@@ -60,9 +60,16 @@ test('for every cable the need and the spare are the stock, and the end play and
     n++;
   }
   assert.equal(n, 16);
-  // the reference cord of the note: need 423 mm, a 1 m cord, 577 mm spare: 200 of end play and 377 to store
+  // c12, the reference cord of the note (need 423 mm, a 1 m cord, 577 mm
+  // spare: 200 of end play and 377 to store). Under #966 it rose through the
+  // tray's gap (need 298 mm, a 0.5 m cord with 2 mm to store); CHANGED, drawable
+  // geometry, owner's option A, 2026-10-22, P-0218-2: it goes round the front edge
   const ref = R.spareOf(r, r.cables.find(c => c.id === 'c12'), ctx);
   assert.deepEqual([mm(ref.need_m), ref.stock_m, mm(ref.spare_m), mm(ref.end_play_m), mm(ref.to_store_m)], [423.4, 1, 576.6, 200, 376.6]);
+  // c13, which still goes round the front edge, is the 1 m cord of the note's kind
+  const far = R.spareOf(r, r.cables.find(c => c.id === 'c13'), ctx);
+  assert.equal(far.stock_m, 1);
+  assert.ok(far.to_store_m > 0.3);
   // a cord whose spare is less than the end play keeps what it has at the ends and stores none
   const c3 = R.spareOf(r, r.cables.find(c => c.id === 'c3'), ctx);
   assert.deepEqual([c3.stock_m, mm(c3.spare_m), mm(c3.end_play_m), c3.to_store_m], [0.5, 197.3, 197.3, 0]);
@@ -197,19 +204,26 @@ test('the findings: spare with no place, a pinned length too short, more stored 
   const r = R.withRoutedLengths(bare, ctx);
   const f = SL.slackFindings(r, ctx);
   // every cord of the rack with more than 0.3 m to store and no slack key
+  // (c9 to c12 and c15 were cords of 0.5 m with under 0.3 m to store while they
+  // rose through the tray's gap, #966; CHANGED, drawable geometry, owner's
+  // option A, 2026-10-22, P-0218-2: they go round the front edge and are 1 m cords)
   assert.deepEqual(f.map(x => x.kind), Array(12).fill('spare-unplaced'));
   assert.deepEqual(f.map(x => x.cable), ['c1', 'c5', 'c6', 'c8', 'c9', 'c10', 'c11', 'c12', 'c13', 'c14', 'c15', 'c16']);
-  assert.equal(f.find(x => x.cable === 'c12').text, 'c12 has 0.38 m to store and no place for it.');
+  assert.equal(f.find(x => x.cable === 'c13').text, 'c13 has 0.35 m to store and no place for it.');
   // an empty list is a choice, and gives none; nor does a place
   const chosen = {...r, cables: r.cables.map(c => ({...c, slack: c.id === 'c12' ? [{end: 'a'}] : []}))};
   assert.deepEqual(SL.slackFindings(chosen, ctx), []);
   // the line for the rack counts every cord with spare and no place said, c4 with its 9 mm too
-  // (8.08 m until #987: c8, through ring 4, needs 72 mm less of its 1 m cord)
+  // (8.08 m until #987: c8, through ring 4, needs 72 mm less of its 1 m cord;
+  // 6.35 m and 12 cords while five cords rose through the tray's gap (#966), their
+  // spare mostly gone with the size of the cord; CHANGED, drawable geometry, owner's
+  // option A, 2026-10-22, P-0218-2: they go round the front edge again)
   assert.equal(SL.spareLine(r, ctx), 'Spare: 8.15 m; 13 cords not placed.');
   assert.equal(SL.spareLine(chosen, ctx), 'Spare: 8.15 m; 0 cords not placed.');
   // a pinned length under the need
-  const short = {...r, cables: [{...r.cables[11], length: {value: 0.3, unit: 'm', source: 'entered'}}]};
-  assert.deepEqual(SL.slackFindings(short, ctx), [{kind: 'spare-short', cable: 'c12', text: 'c12 is 0.3 m and needs 0.42 m.'}]);
+  // (0.3 m while c12 went through the tray's gap, #966; 0.42 m round the front edge, as now)
+  const short = {...r, cables: [{...r.cables[11], length: {value: 0.2, unit: 'm', source: 'entered'}}]};
+  assert.deepEqual(SL.slackFindings(short, ctx), [{kind: 'spare-short', cable: 'c12', text: 'c12 is 0.2 m and needs 0.42 m.'}]);
   // values past what there is to store, on a pinned cord
   const {r: tr, c} = trayRack({}, {length: {value: 1, unit: 'm', source: 'entered'}, slack: [{...TRAY, value: 1.5}]});
   assert.deepEqual(SL.slackFindings({...tr, cables: [c]}, F.ctxOf(tr), id => tr.items.find(i => i.id === id).label),

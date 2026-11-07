@@ -1,0 +1,676 @@
+format: 1
+kind: device
+name: ex4300-32f
+version: 0.3.0
+maturity: modelled
+manufacturer: Juniper
+model: EX4300-32F
+portfolio: {line: EX Series, family: EX4300}
+description: >-
+  Juniper EX4300-32F - a fixed 1RU Gigabit Ethernet fibre aggregation switch with 32 100/1000BASE-X SFP
+  ports in four gangs of eight, four 10-Gigabit SFP+ uplink ports and two 40-Gigabit QSFP+ ports on the
+  rear panel that are Virtual Chassis ports by default. The front carries the 32 SFP cages in two stacked
+  rows, an LCD panel with Menu and Enter buttons, three chassis status lamps, the four SFP+ ports, a
+  mini-USB console port and a large slot at the left end for an optional uplink module, which ships
+  covered. The rear carries the two power supply slots at the left, the two QSFP+ ports, two fan modules
+  and the management, console and USB ports at the right; as shipped it holds one 350 W AC power supply,
+  front-to-back (AIR OUT) fan modules and a cover panel over the second power supply slot. The EX4300-32F-DC
+  ships with a 550 W DC supply, and the EX4300-32F-S is the same chassis with the power supplies and fan
+  modules ordered separately.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX4300 Switch Hardware Guide, Juniper Networks, published 2025-08-12 (414 pages;
+      https://www.juniper.net/documentation/us/en/hardware/ex4300/ex4300.pdf): Figures 3 and 4 (isometric
+      panel drawings), Figures 10 and 14 (flat callout figures g022130 and g022131), Table 2 and Table 8 (the
+      32-port models and what each ships with), Tables 4, 5 and 7 (uplink modules and supply airflow), Table
+      10 (chassis size and weight), Tables 18 to 29 (LEDs), Tables 27, 28, 30, 31, 40, 47 and 48 (fans and
+      supplies), Table 33 (power budget) and Table 68 (cover panels). EX4300 Line of Ethernet Switches
+      Datasheet (https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4300-line-of-ethernet-switches-datasheet.pdf,
+      17 pages, PDF created 2022-07-25): Table 1 (models), Table 2 (spare-chassis matrix), Table 3
+      (acoustics), physical and environmental specifications, ordering information. Both documents were
+      fetched from juniper.net on 2026-10-23 and carry the sha256 values below. Juniper's image library
+      holds no photograph of the EX4300-32F: ex4300-32f-front-high.jpg, ex4300-32f-rear-high.jpg and the
+      same under the ex4300 and ex4300-32f folders each returned an HTML 404 page, tried once. The held
+      intake folders for Juniper (exqfx, mx/visio) are not present on this host, so no held photograph,
+      stencil or model was used. The NetBox device-type library was not consulted. Terms of use: the guide
+      and datasheet are Juniper's, published for customers; none of it is copied into the library, only
+      transcribed facts and new drawings.
+  gate-1-front:
+    confidence: drawing
+    note: >-
+      THE FRONT FIGURE PASSES, AT LOW RESOLUTION. Guide Figure 10 (g022130) is a flat front elevation, a
+      609 x 158 px raster: the chassis outline is 568 px across (x 2 to 570) and 56 px down (51.3 to 107.3),
+      aspect 10.1 against the stated 441.0 / 43.7 = 10.09, so it is orthographic and carries geometry, at
+      1.288 px per mm. One pixel is 0.78 mm, so every front position is good to about one millimetre and
+      is estimated. The isometric Figure 3 gives counts only.
+  gate-1-rear:
+    confidence: drawing
+    note: >-
+      THE REAR FIGURE PASSES, AT LOW RESOLUTION. Guide Figure 14 (g022131) is a flat rear elevation, 586 x 165
+      px: the chassis outline is 566 px across (x 5 to 571) for 441.0 mm, 1.285 px per mm, and the top edge sits at
+      row 56.5, so a face 43.7 mm tall would end at row 112.7 where the figure's bottom outline is drawn. Positions
+      are good to about one millimetre and are estimated.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Guide Table 10 and the datasheet: height 1.72 in (4.37 cm) = 43.7 mm; width 17.36 in (44.1 cm) = 441.0
+      mm, "the outer edges of the front-mounting brackets extend the width to 19 in", so 441.0 is the body
+      between the bracket flanges. Depth for the EX4300-32F, which has its own line in Table 10: 17.87 in
+      (45.4 cm) with no power supply or uplink module, 19 in (48.28 cm) with a power supply installed and
+      19.31 in (49.07 cm) with a power supply and an uplink module. The datasheet prints 49.1 cm for the
+      last; the guide's 49.07 is carried. The modelled depth is 482.8 mm, the figure with the power supply
+      fitted, as shipped; the other two are in attrs. 1RU.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. The guide's inventory (Table 68) ships two mounting brackets and mounting screws and
+      says the switch mounts in a two-post or four-post rack; the datasheet lists the kits EX-4PST-RMK
+      (adjustable four-post), EX-RMK (rack-mount) and EX-WMK (wall-mount) as separate items. No figure
+      measures the bracket position for this model, so no ear position is written and no rail kit is listed
+      in chassis.kits. The kit part numbers are recorded here for the later dedupe.
+  front-ports:
+    confidence: estimated
+    note: >-
+      32 SFP cages in four gangs of four columns by two rows, read off Figure 10 at 1.288 px per mm. The gang
+      outlines start at 103.5, 167.7, 231.9 and 296.1 mm and are 59.2 mm wide, so the column pitch is 14.8
+      mm (the dividers between columns are 19.06 px apart) and the gutter is 5.0 mm; the last gang ends at
+      354.8 mm, which 16 columns at 14.8 plus three gutters of 5.0 reproduces (251.8 mm). The registry's
+      sfp-ganged pitch is 14.25, a cage width, not a spacing the figure confirms, so the figure's pitch is
+      used and the cage cutouts stand 0.55 mm apart. The two rows span 9.7 to 35.1 mm down, which is the
+      registry's 15.0 mm row pitch plus one 10.4 mm cage. The stacked pair follows the library's rule: the
+      upper cage upright and the lower turned 180 (decided by the rule, not observed; see mx204's
+      stack-orientation note).
+  port-numbering:
+    confidence: estimated
+    note: >-
+      Figure 10 prints the numbers in pairs under each column, 0 and 1 under the first column, 2 and 3 under
+      the second, up to 30 and 31, with the even number set higher and the odd lower beside it. The even number
+      belongs to the upper cage and the odd to the lower, so numbering runs down each column and then across,
+      as on the 24-port and 48-port models. The four SFP+ ports are numbered 0 to 3 between their lamps. The
+      numeral offsets are read at 1.288 px per mm and are estimated. The guide's CLI interface names (ge-0/0/0 to
+      ge-0/0/31, and ge-0/2/n and xe-0/2/n on the uplink module) are not printed on the metal and are not
+      modelled; no table gives the SFP+ ports' names.
+  port-lamps:
+    confidence: datasheet
+    note: >-
+      Guide Network Port, Built-In QSFP+ Port, Uplink Port, and Uplink Module Port LEDs, Figure 31 and Tables 21
+      and 22: each SFP network port has two lamps, a Link activity lamp (green, blinking with activity, steady
+      when linked) and a Status lamp whose meaning is chosen with the LCD Enter button (ADM, DPX or SPD; the
+      32-port switches have no PoE). Figure 31 draws four small arrows between the upper and lower cage of a
+      column, the Link/Activity and Status arrows of the lower port and of the upper port. They are placed
+      there, in the library's arrow lamps, with the pairing of arrows to windows read from the EX4100 devices,
+      which draw the same four arrows; which arrow is which within a column is not stated by any document held.
+      Each SFP+ uplink port has two square lamps (Figure 33, Table 23), one either side of its number; the left
+      one is taken as Link activity and the right as Status, which no document states.
+  front-right:
+    confidence: estimated
+    note: >-
+      The LCD block follows the 24-port and 48-port EX4300 devices, whose positions were read off Juniper's
+      photographs at 3.29 px per mm: LCD window 377.2 to 412.8 x 6.8 to 16.4 mm; the EX4300 legend above it;
+      Menu and Enter buttons at x 422.2; three chassis status lamps at x 428.9; a face screw each side at (367.4,
+      12.8) and (436.0, 13.1). Figure 10 agrees with them within 1.9 mm (LCD 375.3 to 413.3, buttons 420.6, lamps
+      427.8, screws 367.2 and 436.3), which is two of its pixels. The four SFP+ cages read 359.5 to 419.3 x 24.8
+      to 34.9 mm (four at the same 14.8 pitch), and the mini-USB console jack reads at (431.3, 32.4) with CON1
+      printed below it, both off Figure 10. The 32-port front prints the model as EX4300-32F in the figure; the
+      24-port photographs print EX4300.
+  lamp-legends:
+    confidence: estimated
+    note: >-
+      drawing-vs-photo for the sibling, and no photograph of this model: the guide says the three chassis lamps
+      are labeled ALM, SYS and MST, but Juniper's photographs of the 24-port and 48-port models show three bare
+      lamps with no legend. Figure 10's lamp block is the same as those models', so no legend is drawn. The
+      order top to bottom is the guide's order of naming (ALM, SYS, MST); no document states it, so it is
+      estimated.
+  lcd:
+    confidence: estimated
+    note: >-
+      The LCD panel shows two lines of 16 characters (guide, LCD Panel in EX4300 Switches). It is drawn as the
+      dark green window the sibling photographs show; no library component exists for a display and none is added,
+      so it is a decor rectangle and not a part.
+  uplink-slot:
+    confidence: estimated
+    note: >-
+      The 32-port switches carry the uplink slot as the large opening at the left end of the front, 86.8 x 40.7 mm
+      by Figure 10 (callout 1, "Cover panel for uplink module slot"), against the small slot under the LCD of the
+      24 and 48-port models. The guide supports two modules in it, the 2-port 40-Gigabit EX-UM-2QSFP (Table 5) and
+      the 8-port 1/10-Gigabit EX-UM-8X8SFP, neither of which is in the library; the bay takes only the cover
+      panel here and both are left for a later slice. Uplink modules are not part of the shipping configuration
+      and the guide's inventory (Table 68) says a cover panel is provided.
+  rear:
+    confidence: estimated
+    note: >-
+      Guide Figure 14, 1.285 px per mm, rear seen from behind with x = 0 at the left of the drawing: power supply
+      slot 0 from 9.9 mm and slot 1 from 101.7 mm, each 84.0 mm wide (their module edges read 9.9 to 93.4 and
+      101.8 to 185.3), a vent field from 188.5 to 280.0, the serial number label (callout 10) at 189.2 to 212.6 x 20.3
+      to 25.1, two QSFP+ ports from 217.5 on the registry's 19.0 mm pitch with four small lamps below (centres 223.8,
+      230.9, 242.9 and 249.9 at y 38.4), fan module 0 from 288.5 and fan module 1 from 340.2 (each about 49 to 51
+      mm across, the 48.6 mm face used), the ESD point at (409.5, 5.0), the vertical USB port at (406.1, 28.7), and
+      the management and console jacks from 416.5 to 433.5. The management and console jacks are drawn at the
+      24-port model's 15.8 x 13.2 mm and 14.2 mm spacing, because Figure 14's jacks (16.4 and 10.9 mm tall) are
+      too coarse to size them. Small circles at the left edge of slot 0, beside slot 1 and beside the vent field
+      that no callout names are not modelled.
+  rear-qsfp-lamps:
+    confidence: estimated
+    note: >-
+      Guide Figure 14 callout 9 and Figure 32: each QSFP+ port has two lamps below it, a Link activity lamp and
+      a Status lamp (Table 24: steady green when the 40-Gigabit port is up). Four small rectangles below the pair,
+      7.1 mm apart about each port's centre. The lamps' roles within a pair are not stated. Figure 14 is too
+      coarse to show whether the two ports carry a printed number, so none is drawn (see gaps).
+  fan-legends:
+    confidence: estimated
+    note: >-
+      Figure 14 callout 8, "Fan module slot numbers and LEDs": a fan legend and a status LED sit beside each fan
+      module, to the left of fan 0 (x 283.5) and to the right of fan 1 (x 395). Their text is two or three glyphs
+      in a 1.3 px per mm raster; a slot number is printed, the symbol is not resolved. The status lamp is
+      Table 29's: green when the module works, unlit when absent, failed or of the other airflow.
+  slot-legends:
+    confidence: estimated
+    note: >-
+      Figure 14 callout 11, "Power supply slot numbers": one legend at the left of slot 0 (x 5.7) and one between
+      the two supplies (x 97.3). Slot 0 is taken as the left one, as the guide lists "AC power supplies in slot 0
+      and slot 1" and slot 0 of the fans is the left; no figure labels a number on the drawing legibly, so which
+      supply is 0 is estimated.
+  rear-ground:
+    confidence: datasheet
+    note: >-
+      The guide says the protective earthing terminal of the EX4300 is on the rear panel (Table 69: two-hole
+      terminal, two 10-32 screws, Panduit LCD10-10A-L lug) but no figure for this model identifies it or gives
+      its pitch. It is not modelled; see gaps.
+  fru-bays:
+    confidence: datasheet
+    note: >-
+      Two power supply bays (PSU 0, PSU 1) and two fan bays (0, 1), each seating the guide's FRU parts. No supply
+      or fan is built into the chassis: all are FRUs. Mixing AFO and AFI parts, or AC and DC, is forbidden by the
+      guide and is left to the configuration: a bay lists every part it can take and a configuration seats a
+      matching set. The cover panel the guide ships for an empty supply slot is seated in slot 1 as shipped.
+      Guide Power Supplies: the EX4300-32F does not support DC power, while the EX4300-32F-S and EX4300-32F-DC
+      do, so DC supplies are seated in the -DC configuration only.
+  psu-seating:
+    confidence: datasheet
+    note: >-
+      SOURCES DISAGREE on what the 32-port switch takes. Guide Table 40 says "the 32-port EX4300 switches support
+      only 350 W AC power supplies with front-to-back airflow direction", Table 2 says the switches "support power
+      supply and fan module with front-to-back airflow direction" and ships the -DC with a 550 W AIR OUT supply,
+      while Table 2's -S row says to order fans labelled "either AIR OUT (AFO) or AIR IN (AFI)", and the datasheet's
+      spare-chassis matrix marks the EX4300-32F-S as taking the 1100 W AC AFO supply, both 350 W and 550 W
+      AFI supplies and the 550 W DC AFO supply, and not the 715 W or 1400 W ones. The bays take the supplies both
+      documents allow (350 W AC AFO and 550 W DC AFO), the AFI variants of those two (datasheet Y, and the guide's
+      own AFI fan statement), the cover panel, and not the 1100 W, 715 W or 1400 W supplies; the 1100 W supply rests
+      on the datasheet alone and the newer guide denies it. The fan bays take both airflows.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Guide Tables 7, 27, 28 and 31: AIR OUT (AFO) is front-to-back and AIR IN (AFI) is back-to-front; this model ships
+      AFO fan modules and an AFO supply (Table 28). The guide's model tables list no AFI SKU of the 32-port switch,
+      so no back-to-front configuration is orderable; the -S chassis accepts AFI parts and a viewer can seat them.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide Table 33 and the datasheet. The base power the system needs is 164 W; one 350 W AC supply gives 350 W
+      usable and two give 665 W (Table 33). The 32-port switches have no PoE (guide, Table 2 and Table 33 note). The
+      550 W DC supply's rating gives its own table (Table 49), and the DC supply does not support PoE. No typical
+      or maximum draw of the switch itself is stated by either document.
+  colour:
+    confidence: estimated
+    note: >-
+      The face is #898d94, the median of bare plate in the 24-port studio photograph, used for the family because
+      no photograph of this model exists. The supply and fan faces carry their own tones (see the components).
+  interface-names:
+    confidence: datasheet
+    note: >-
+      Not printed and not modelled. The guide's factory-default configuration names the network ports ge-0/0/0 to
+      ge-0/0/31 and the uplink module ports ge-0/2/n and xe-0/2/n; no table gives the SFP+ or QSFP+ ports' names.
+  variants:
+    confidence: datasheet
+    note: >-
+      The guide's 32-port models are EX4300-32F, EX4300-32F-DC and EX4300-32F-S (Tables 2 and 8). All three share
+      this front panel, so each is a configuration of this device: ac, dc and s. The datasheet also lists the
+      Trade Agreement Act SKUs EX4300-32F-TAA and EX4300-32F-DC-TAA, the same hardware ordered under another
+      number; they are carried as extra part numbers of the ac and dc configurations. The guide's other models
+      (EX4300-24T, -24P, -48T, -48P and their -S, -AFI and -DC variants) are separate devices on main; the
+      EX4300-48MP is the second device of this slice.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      Searched for an end-of-life notice on 2026-10-23. Third-party trackers disagree and none reaches Juniper's own
+      bulletin: one gives announcement and last order together on 2026-03-31 (TSB105633), another gives an
+      announcement of 2022-06-24 with last order 2024-03-31. Both end support on 2029-03-31, which is the only date
+      carried; the sale date is left out because the two disagree. Recorded as announced, estimated.
+  other-faces:
+    confidence: drawing
+    note: >-
+      No source draws the top, bottom or sides flat: the guide's front and rear figures show them in perspective with
+      a logo on the lid and mounting holes in the sides. Each carries an `empty` sentence.
+attrs:
+  physical:
+    weight: 13 lb (5.9 kg) with no power supply and no fan module (guide Table 10, stated for every model but the 48MP); 16.1 lb (7.3 kg) with one power supply and two fan modules (datasheet)
+    depth-no-psu: 454.0 mm (17.87 in, 45.4 cm) with no power supply or uplink module (Table 10)
+    depth-with-uplink: 490.7 mm (19.31 in, 49.07 cm) with a power supply and an uplink module (Table 10)
+    uplink-module-weight: 0.61 lb (0.28 kg) for the 2-port EX-UM-2QSFP; 0.74 lb (0.34 kg) for the 8-port EX-UM-8X8SFP
+  performance:
+    switching-capacity: 232 Gbps unidirectional, 464 Gbps bidirectional, 64-byte packets (datasheet)
+    throughput: 345 Mpps wire speed (datasheet)
+    mac-addresses-max: 64000
+    airflow-cfm: fan 22 CFM, each power supply 7.5 CFM; 59 CFM total with two supplies (datasheet)
+  power:
+    power-base-w: 164
+    psu-redundancy: N+0 or N+N; up to two supplies, one is enough for the chassis
+  environmental:
+    acoustic-noise: 39 dBA with a 350 W AC AFO supply; 41.2 dBA with a 550 W DC AFO supply (datasheet Table 3, ISO 7779 at 23 C)
+    operating-temp: 0 to 45 C (32 to 113 F) for AFO models; 0 to 35 C for AFI models
+    storage-temp: -40 to 70 C
+    humidity: 10 to 85 percent noncondensing operating; 0 to 95 percent non-operating
+    altitude: up to 3049 m operating (10,000 ft); 4877 m non-operating
+  platform:
+    cpu: 1.5 GHz dual-core PowerPC
+    memory: 3 GB DRAM with ECC
+    storage: 4 GB
+  features:
+    virtual-chassis: up to 10 members; the two rear QSFP+ ports are Virtual Chassis ports by default, and the four built-in SFP+ ports cannot be Virtual Chassis ports
+    poe: none - the 32-port switches have no Power over Ethernet
+    macsec: IEEE 802.1AE on all Gigabit Ethernet and 10 Gigabit Ethernet ports
+    uplink-module: one slot; 2-port 40-Gigabit EX-UM-2QSFP or 8-port 1/10-Gigabit SFP+ EX-UM-8X8SFP (neither is part of the shipping configuration)
+    optics-sfp: LC SFP SX (multimode) and LX (single-mode), and 100BASE-FX and 1000BASE-T copper SFPs on the fixed 100/1000BASE-X ports (datasheet, Supported Optics and Ordering Information)
+    optics-sfp-plus: LC SFP+ SR, USR, LRM (multimode), LR, ER (single-mode) and DAC direct-attach copper (datasheet, Supported Optics)
+    optics-qsfp: 40GbE QSFP+ SR4 (multimode) and DAC direct-attach copper (datasheet, Supported Optics)
+  management:
+    console: mini-USB on the front, RJ-45 console on the rear
+    oob: MGMT RJ-45 with link activity and status lamps (rear)
+    lcd: 2 lines of 16 characters with Menu and Enter buttons
+    usb: one USB port on the rear
+  compliance:
+    rohs: RoHS 6/6 (datasheet)
+    nebs: GR-1089-CORE EMC and electrical safety for network telecommunications equipment (listed by the datasheet; no level stated)
+    safety: UL 60950-1, UL 62368-1, CAN/CSA C22.2 No. 60950-1 and 62368-1, EN 60950-1, IEC 60950-1 and IEC 62368-1
+    emc: FCC 47 CFR Part 15 Class A, EN 55022 Class A, ICES-003 Class A, VCCI Class A, AS/NZS CISPR 22 Class A, CISPR 22 Class A, EN 55024, EN 300386, CE
+  lifecycle:
+    eol: announced
+    eol-announcement: https://eoltracking.com/eol/juniper-ex4300
+    end-of-life: '2029-03-31'
+chassis:
+  width: 441.0
+  height: 43.7
+  depth: 482.8
+  ru: 1
+  color: '#898d94'
+  airflow: front-to-back
+  power: ac
+gaps:
+  - what: rear-earthing-terminal
+    scope: [rear]
+    reason: needs-drawing
+    wanted: >-
+      Where the two-hole protective earthing terminal sits on the rear panel and its hole pitch. The guide's Table 69
+      puts it on the rear panel with a two-hole lug and 10-32 screws, and Figure 14 carries no callout for it. A rear
+      photograph or a dimensioned drawing settles it.
+  - what: front-and-rear-photographs
+    scope: [front, rear]
+    reason: needs-photo
+    wanted: >-
+      A straight-on studio photograph of the front and of the rear. The maker's image library holds none for this
+      model, so the front and rear are read off 1.3 px per mm callout figures and the lamp block follows the 24-port
+      photographs.
+  - what: rear-qsfp-numbers
+    scope: [rear]
+    reason: needs-photo
+    wanted: >-
+      Whether the two QSFP+ ports are numbered on the metal. Figure 14 is too coarse to show printing under them;
+      the 24-port model prints 0 to 3 under its four. A rear photograph settles it.
+  - what: rack-ears
+    scope: [front]
+    reason: needs-drawing
+    wanted: >-
+      The bracket positions of the front-mounting brackets: no figure in the guide measures them for this model, so no
+      ear position or kit is listed.
+  - what: lcd-component
+    scope: [front]
+    reason: vendor-silent
+    wanted: >-
+      A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
+  - what: uplink-modules
+    scope: [front]
+    reason: needs-drawing
+    wanted: >-
+      The EX-UM-2QSFP and EX-UM-8X8SFP uplink modules and their ports, left for the later uplink-module slice; the bay
+      takes only the cover panel here.
+  - what: supply-support
+    scope: [rear]
+    reason: sources-disagree
+    wanted: >-
+      Which supplies the 32-port switch takes: the guide's Table 40 says only the 350 W AC AFO supply, the datasheet's
+      spare-chassis matrix also marks the 1100 W AC AFO and both AFI supplies as supported combinations. The bays follow
+      the guide for the 1100 W supply and the datasheet for the AFI ones; see psu-seating.
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      The 32 built-in 100/1000BASE-X SFP ports. rel-pos carries the number printed on the faceplate; the upper cage of a
+      column takes the even number
+  sfp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: two arrow lamps per SFP port, link activity and status, set between the two cage rows
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: the four built-in 1/10-Gigabit SFP+ uplink ports under the LCD panel; not Virtual Chassis capable
+  sfp-plus-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: two square lamps per SFP+ uplink port, link activity and status
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      how the switch is reached out of band - the mini-USB console port on the front, the RJ-45 console port, the
+      management Ethernet port and the USB port on the rear
+  lcd-buttons:
+    term: Button
+    role: management
+    index-origin: 0
+    description: the LCD panel's Menu and Enter buttons
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the three chassis status lamps right of the LCD panel
+  uplink:
+    term: Slot
+    role: traffic
+    index-origin: 0
+    description: the front-panel uplink module slot at the left end
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp, speed: 40g}
+    description: >-
+      The two built-in 40-Gigabit QSFP+ ports on the rear panel; Virtual Chassis ports by default and usable as network
+      ports
+  vcp-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: two lamps below each QSFP+ port, link activity and status
+  fans:
+    term: Fan
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+0
+      redundancy-note: >-
+        Hardware guide, Fan Modules: "Both the fan modules must be installed for optimal functioning of the switch"; the
+        switch keeps running for 30 seconds without thermal shutdown while one is replaced. The guide gives no N+1 form,
+        so no spare fan is claimed
+  fan-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    states: ['off', {name: ok, color: '#22c55e'}]
+    description: Table 29 - green when the fan module is functioning normally; unlit when it is absent, failed or of the wrong airflow
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    attrs:
+      redundancy: n+n
+      redundancy-note: >-
+        Hardware guide, AC and DC Power Supply: two redundancy configurations, N+0 (no power is reserved) and N+N (a full
+        second supply is reserved); one supply carries the switch and up to two seat
+  esd:
+    term: Point
+    role: furniture
+    index-origin: 0
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+views:
+  front:
+    size: {w: 441.0, h: 43.7}
+    panel:
+      decor:
+        - {id: shell-sfp-1, kind: jack-shell, at: [102.9, 9.3], size: [60.4, 26.2], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-sfp-2, kind: jack-shell, at: [167.1, 9.3], size: [60.4, 26.2], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-sfp-3, kind: jack-shell, at: [231.3, 9.3], size: [60.4, 26.2], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-sfp-4, kind: jack-shell, at: [295.5, 9.3], size: [60.4, 26.2], rx: 0.6, fill: '#b1b2b5'}
+        - {id: shell-sfp-plus, kind: jack-shell, at: [358.9, 24.4], size: [60.4, 11.0], rx: 0.6, fill: '#b1b2b5'}
+        - {at: [123.0, 0.9], size: [227.5, 6.4], pattern: vent, vent: 1.0}
+        - {at: [100.0, 39.9], size: [255.5, 2.6], pattern: vent, vent: 1.0}
+        - {id: lcd, kind: display, at: [377.2, 6.8], size: [35.6, 9.6], rx: 0.6, fill: '#404c40'}
+      cutouts:
+        - {block: sfp}
+        - {block: sfp-plus}
+        - {id: console, at: [427.35, 30.1], size: [7.9, 4.6], shape: rect}
+        - {id: btn-menu, at: [419.15, 5.95], size: [6.1, 6.1], shape: circle}
+        - {id: btn-enter, at: [419.15, 14.15], size: [6.1, 6.1], shape: circle}
+        - {id: led-alm, at: [427.9, 5.2], size: [2.0, 2.0], shape: circle}
+        - {id: led-sys, at: [427.9, 8.9], size: [2.0, 2.0], shape: circle}
+        - {id: led-mst, at: [427.9, 12.6], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {block: sfp}
+      - {block: sfp-plus}
+      - {at: [395.4, 4.9], text: EX4300-32F, font-size: 2.4, anchor: middle, fill: '#e4e6e9', for: chassis}
+      - {at: [431.3, 37.5], text: CON1, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: console}
+    components:
+      bays:
+        - {id: uplink, at: [6.0, 1.9], size: {w: 87.0, h: 40.7}, group: uplink, rel-pos: 0,
+           accepts: [juniper/ex4300-32f-uplink-blank@1], default: juniper/ex4300-32f-uplink-blank@1}
+      blocks:
+        - id: sfp
+          ref: std/sfp-ganged@1
+          at: [103.5, 9.7]
+          count: 32
+          rows: 2
+          pitch: 14.8
+          row-pitch: 15.0
+          gang: 4
+          gutter: 5.0
+          number-from: 0
+          cutouts: true
+          rotate: {bottom: 180}
+          attrs: {media: sfp, speed: 1g}
+          numerals: {dx-by-row: [5.1, 9.6], dy-top: 28.7, dy-bottom: 14.7, font-size: 1.7, anchor: middle, fill: '#e4e6e9'}
+          led:
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-link'
+              dx-by-row: [4.27, 1.87]
+              dy-top: 11.75
+              dy-bottom: -3.25
+              skin-top: up
+              skin-bottom: down
+              group: sfp-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 0
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+            - ref: common/led-arrow-sm@1
+              id-format: 'led-port-{n}-status'
+              dx-by-row: [10.12, 7.73]
+              dy-top: 11.75
+              dy-bottom: -3.25
+              skin-top: up
+              skin-bottom: down
+              group: sfp-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 1
+              states: ['off', {name: selected, color: '#22c55e'}, {name: speed-100m, color: '#22c55e', behavior: blinking}]
+        - id: sfp-plus
+          ref: std/sfp-ganged@1
+          at: [359.5, 24.8]
+          count: 4
+          rows: 1
+          pitch: 14.8
+          number-from: 0
+          id-format: 'uplink-{n}'
+          cutouts: true
+          attrs: {media: sfp-plus, speed: 10g}
+          numerals: {dx: 7.125, dy-top: 14.8, font-size: 1.7, anchor: middle, fill: '#e4e6e9'}
+          led:
+            - ref: common/led-rect-sm@1
+              id-format: 'led-uplink-{n}-link'
+              dx: 1.1
+              dy-top: 13.2
+              group: sfp-plus-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 0
+              states: ['off', {name: link, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}]
+            - ref: common/led-rect-sm@1
+              id-format: 'led-uplink-{n}-status'
+              dx: 10.3
+              dy-top: 13.2
+              group: sfp-plus-leds
+              rel-pos-stride: 2
+              rel-pos-offset: 1
+              states: ['off', {name: 10g, color: '#22c55e'}, {name: 1g, color: '#22c55e', behavior: blinking}]
+      placements:
+        - {block: sfp}
+        - {block: sfp-plus}
+        - {ref: juniper/ex4300-console-usb-mini@1, id: console, at: [427.35, 30.1], group: mgmt, rel-pos: 0}
+        - {ref: juniper/ex4300-lcd-button@1, id: btn-menu, skin: menu, at: [419.15, 5.95], for: chassis, group: lcd-buttons, rel-pos: 0,
+           attrs: {function: LCD menu}}
+        - {ref: juniper/ex4300-lcd-button@1, id: btn-enter, skin: enter, at: [419.15, 14.15], for: chassis, group: lcd-buttons, rel-pos: 1,
+           attrs: {function: LCD enter}}
+        - {ref: common/led-dot@1, id: led-alm, at: [427.9, 5.2], for: chassis, group: status-leds, rel-pos: 0,
+           states: ['off', {name: major, color: '#ef4444'}, {name: minor, color: '#eab308'}],
+           description: 'Table 18 - ALM: red major alarm, yellow minor alarm, unlit no alarm (red at power-up until a network link is made)'}
+        - {ref: common/led-dot@1, id: led-sys, at: [427.9, 8.9], for: chassis, group: status-leds, rel-pos: 1,
+           states: ['off', {name: junos, color: '#22c55e'}, {name: booting, color: '#22c55e', behavior: blinking}],
+           description: 'Table 18 - SYS: green steady, Junos OS loaded; green blinking, booting; unlit, powered off or halted'}
+        - {ref: common/led-dot@1, id: led-mst, at: [427.9, 12.6], for: chassis, group: status-leds, rel-pos: 2,
+           states: ['off', {name: primary, color: '#22c55e'}, {name: backup, color: '#22c55e', behavior: blinking}],
+           description: 'Table 18 - MST: standalone, green steady when functioning; Virtual Chassis, green steady primary, blinking backup, unlit line card'}
+        - {ref: common/screw-head@1, id: face-screw-l, at: [365.6, 11.0], group: furniture, rel-pos: 0}
+        - {ref: common/screw-head@1, id: face-screw-r, at: [434.2, 11.3], group: furniture, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [96.5, 1.0], size: {w: 23.0, h: 6.4}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 441.0, h: 43.7}
+    panel:
+      decor:
+        - {at: [188.5, 0.8], size: [91.5, 17.4], pattern: vent, vent: 1.0}
+        - {id: serial-label, kind: label-plate, at: [189.2, 20.3], size: [23.4, 4.8], rx: 0.3, fill: '#e4e6e8'}
+      cutouts:
+        - {id: mgmt, at: [417.0, 10.0], size: [15.8, 13.2], shape: rect}
+        - {id: con2, at: [417.0, 24.2], size: [15.8, 13.2], shape: rect}
+        - {id: esd-rear, at: [407.35, 2.85], size: [4.3, 4.3], shape: circle}
+        - {id: usb, at: [403.85, 22.7], size: [4.5, 12.0], shape: rect}
+        - {id: vcp-0, at: [217.6, 25.0], size: [18.5, 9.58], shape: rect}
+        - {id: vcp-1, at: [236.6, 25.0], size: [18.5, 9.58], shape: rect}
+        - {id: led-vcp-0-a, at: [222.4, 37.6], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-0-b, at: [229.5, 37.6], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-1-a, at: [241.5, 37.6], size: [2.8, 1.6], shape: rect}
+        - {id: led-vcp-1-b, at: [248.5, 37.6], size: [2.8, 1.6], shape: rect}
+        - {id: led-fan-0, at: [282.5, 36.0], size: [2.0, 2.0], shape: circle}
+        - {id: led-fan-1, at: [394.0, 36.0], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+      - {at: [424.9, 8.6], text: MGMT, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: mgmt}
+      - {at: [424.9, 41.0], text: CONSOLE, font-size: 1.5, anchor: middle, fill: '#e4e6e9', for: con2}
+      - {at: [409.5, 11.8], path: 'M -1.6 1.4 L 0 -1.4 L 1.6 1.4 Z M -2.4 2.6 L -1.0 2.6 M 1.0 2.6 L 2.4 2.6', fill: '#e4e6e9', for: esd-rear-jack}
+      - {at: [284.0, 33.6], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: fan-0}
+      - {at: [395.0, 33.6], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: fan-1}
+      - {at: [5.7, 30.0], text: '0', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: psu-0}
+      - {at: [97.3, 30.0], text: '1', font-size: 1.8, anchor: middle, fill: '#e4e6e9', for: psu-1}
+    components:
+      bays:
+        - {id: psu-0, at: [9.9, 0.85], size: {w: 84.0, h: 42.0}, group: psus, rel-pos: 0,
+           accepts: [juniper/ex4300-jpsu-350-ac-afo@1, juniper/ex4300-jpsu-350-ac-afi@1, juniper/ex4300-jpsu-550-dc-afo@1,
+                     juniper/ex4300-jpsu-550-dc-afi@1, juniper/ex4300-psu-blank@1],
+           default: juniper/ex4300-jpsu-350-ac-afo@1}
+        - {id: psu-1, at: [101.7, 0.85], size: {w: 84.0, h: 42.0}, group: psus, rel-pos: 1,
+           accepts: [juniper/ex4300-jpsu-350-ac-afo@1, juniper/ex4300-jpsu-350-ac-afi@1, juniper/ex4300-jpsu-550-dc-afo@1,
+                     juniper/ex4300-jpsu-550-dc-afi@1, juniper/ex4300-psu-blank@1],
+           default: juniper/ex4300-psu-blank@1}
+        - {id: fan-0, at: [289.6, 0.85], size: {w: 48.6, h: 42.0}, group: fans, rel-pos: 0,
+           accepts: [juniper/ex4300-fan-afo@1, juniper/ex4300-fan-afi@1], default: juniper/ex4300-fan-afo@1}
+        - {id: fan-1, at: [340.8, 0.85], size: {w: 48.6, h: 42.0}, group: fans, rel-pos: 1,
+           accepts: [juniper/ex4300-fan-afo@1, juniper/ex4300-fan-afi@1], default: juniper/ex4300-fan-afo@1}
+      placements:
+        - {ref: common/rj45-eth@1, id: mgmt, at: [417.0, 10.0], rotate: 180, group: mgmt, rel-pos: 1,
+           attrs: {speed: 1g, role: mgmt},
+           states: {led-a: ['off', {name: link-activity, color: '#22c55e', behavior: blinking}],
+                    led-b: ['off', {name: speed, color: '#22c55e'}]},
+           description: 'Tables 19 and 20 - Link/Activity green blinking with activity, steady without; Status green steady at 1000 Mbps, blinking at 100 Mbps, off at 10 Mbps'}
+        - {ref: std/rj45@2, id: con2, at: [417.0, 24.2], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial, role: console}}
+        - {ref: common/esd-jack@1, id: esd-rear-jack, at: [406.5, 2.0], for: chassis, group: esd, rel-pos: 0}
+        - {ref: std/usb-a@1, id: usb, at: [400.1, 26.45], rotate: 90, group: mgmt, rel-pos: 3}
+        - {ref: common/usb-symbol@1, id: usb-mark, at: [402.9, 36.0], for: usb, group: furniture, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: vcp-0, at: [217.6, 25.0], group: vcp, rel-pos: 0}
+        - {ref: std/qsfp-ganged@1, id: vcp-1, at: [236.6, 25.0], group: vcp, rel-pos: 1}
+        - {ref: common/led-rect-sm@1, id: led-vcp-0-a, at: [222.4, 37.6], for: vcp-0, group: vcp-leds, rel-pos: 0}
+        - {ref: common/led-rect-sm@1, id: led-vcp-0-b, at: [229.5, 37.6], for: vcp-0, group: vcp-leds, rel-pos: 1}
+        - {ref: common/led-rect-sm@1, id: led-vcp-1-a, at: [241.5, 37.6], for: vcp-1, group: vcp-leds, rel-pos: 2}
+        - {ref: common/led-rect-sm@1, id: led-vcp-1-b, at: [248.5, 37.6], for: vcp-1, group: vcp-leds, rel-pos: 3}
+        - {ref: common/led-dot@1, id: led-fan-0, at: [282.5, 36.0], for: fan-0, group: fan-leds, rel-pos: 0}
+        - {ref: common/led-dot@1, id: led-fan-1, at: [394.0, 36.0], for: fan-1, group: fan-leds, rel-pos: 1}
+  top:
+    size: {w: 441.0, h: 482.8}
+    empty: >-
+      Not drawn flat by any source held. The guide's Figures 3 and 4 show the lid in perspective with a logo and
+      mounting holes along the sides; nothing there can be measured.
+  bottom:
+    size: {w: 441.0, h: 482.8}
+    empty: >-
+      Not drawn by any source held: neither the guide nor the datasheet pictures the underside (the guide lists four
+      rubber feet in its inventory, Table 68).
+  left:
+    size: {w: 482.8, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the left side wall with mounting holes,
+      and the front-mounting brackets are separate hardware.
+  right:
+    size: {w: 482.8, h: 43.7}
+    empty: >-
+      Not drawn flat by any source held. The guide's perspective figures show the right side wall with mounting holes.
+configurations:
+  ac:
+    kind: orderable
+    description: >-
+      EX4300-32F as shipped - one 350 W AC power supply (AIR OUT) in slot 0 with a cover panel over slot 1, two
+      EX4300-FAN (AIR OUT) fan modules, and the uplink slot covered. Front-to-back airflow. EX4300-32F-TAA is the same
+      hardware as a Trade Agreement Act SKU.
+    default: true
+    part-numbers:
+      EX4300-32F: {}
+      EX4300-32F-TAA: {}
+  dc:
+    kind: orderable
+    power: dc
+    description: >-
+      EX4300-32F-DC - one 550 W DC power supply (AIR OUT) in slot 0 with a cover panel over slot 1, two EX4300-FAN
+      (AIR OUT) fan modules, and the uplink slot covered. Front-to-back airflow. EX4300-32F-DC-TAA is the same hardware
+      as a Trade Agreement Act SKU.
+    bays:
+      psu-0: juniper/ex4300-jpsu-550-dc-afo@1
+    part-numbers:
+      EX4300-32F-DC: {}
+      EX4300-32F-DC-TAA: {}
+  s:
+    kind: orderable
+    description: >-
+      EX4300-32F-S - the spare chassis, shipped with no power supply and no fan module; either AC or DC supplies and
+      AIR OUT or AIR IN fans are ordered separately, and the datasheet's spare-chassis matrix says which combinations are
+      supported. The supply and fan bays are shown open.
+    bays:
+      psu-0: ''
+      psu-1: ''
+      fan-0: ''
+      fan-1: ''
+    part-numbers:
+      EX4300-32F-S: {}
+datasheet:
+  title: 'EX4300 Line of Ethernet Switches Datasheet (Juniper Networks, PDF created 2022-07-25)'
+  url: https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex4300-line-of-ethernet-switches-datasheet.pdf
+  sha256: fe874bd323cf1c03a38742f3187650e4bb4a94a177ddb195cc6ba1f4092ecb0b
+references:
+  - {title: 'EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12)', url: 'https://www.juniper.net/documentation/us/en/hardware/ex4300/ex4300.pdf', sha256: 69be5bb48f30174c1e7e223cf3496f47c442a1a22384f6fcddb51cdc87e6fc05}

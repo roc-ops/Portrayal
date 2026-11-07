@@ -1,0 +1,126 @@
+---
+manufacturer: Juniper
+model: EX9251-8X4C
+slug: juniper-ex9251-8x4c
+u_height: 1.0
+is_full_depth: true
+weight: 10.3
+weight_unit: kg
+airflow: front-to-rear
+description: Juniper EX9251, a 1RU fixed-configuration core and aggregation switch that runs Junos OS,
+  the smaller of the two EX9250 chassis
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console
+    type: rj-45
+interfaces:
+  - name: gm-ptp
+    type: 25gbase-x-sfp28
+    mgmt_only: true
+  - name: mgmt
+    type: 1000base-t
+    mgmt_only: true
+  - name: port-0-0
+    type: 100gbase-x-qsfp28
+  - name: port-1-0
+    type: 10gbase-x-sfpp
+  - name: port-0-1
+    type: 100gbase-x-qsfp28
+  - name: port-1-1
+    type: 10gbase-x-sfpp
+  - name: port-0-2
+    type: 100gbase-x-qsfp28
+  - name: port-1-2
+    type: 10gbase-x-sfpp
+  - name: port-0-3
+    type: 100gbase-x-qsfp28
+  - name: port-1-3
+    type: 10gbase-x-sfpp
+  - name: port-1-4
+    type: 10gbase-x-sfpp
+  - name: port-1-5
+    type: 10gbase-x-sfpp
+  - name: port-1-6
+    type: 10gbase-x-sfpp
+  - name: port-1-7
+    type: 10gbase-x-sfpp
+  - name: bits
+    type: other
+    label: BITS
+  - name: clk-10mhz-in
+    type: other
+    label: SMB
+  - name: clk-10mhz-out
+    type: other
+    label: SMB
+  - name: clk-1pps-in
+    type: other
+    label: SMB
+  - name: clk-1pps-out
+    type: other
+    label: SMB
+  - name: tod
+    type: other
+    label: TOD
+module-bays:
+  - name: Fan 0
+    position: fan-0
+    description: 'Accepts: ex9251-fan-1ru'
+  - name: Fan 1
+    position: fan-1
+    description: 'Accepts: ex9251-fan-1ru'
+  - name: Fan 2
+    position: fan-2
+    description: 'Accepts: ex9251-fan-1ru'
+  - name: PSU 0
+    position: psu-0
+    description: 'Accepts: ex4600-jpsu-650-ac-afo, ex4600-jpsu-650-dc-afo, jnp-pwr-blnk-1'
+  - name: PSU 1
+    position: psu-1
+    description: 'Accepts: ex4600-jpsu-650-ac-afo, ex4600-jpsu-650-dc-afo, jnp-pwr-blnk-1'
+comments: "Juniper EX9251, a 1RU fixed-configuration core and aggregation switch that runs Junos OS, the\
+  \ smaller of the two EX9250 chassis. The front has 8 SFP+ ports (10 GbE) in two rows of four, 4 rate-selectable\
+  \ QSFP28 ports (100, 40 or 10 GbE), a GM/PTP SFP cage, a MGMT RJ-45, and the timing and service ports:\
+  \ BITS, CON (console), ToD, a USB port, and 1PPS and 10MHz SMB connectors in and out. The rear carries\
+  \ three fan trays, two power supply slots and the grounding points. The Routing Engine is built in.\
+  \ One panel serves three orders: the AC model, the DC model and the spare chassis.\n\nConfiguration\
+  \ `ac`: EX9251-8X4C: the chassis with two AC power supplies (the guide's Table 2 calls them AC AFO 650W\
+  \ PSU) and three fan trays (JNP-FAN-1RU), with the blank panels the datasheet says ship with it. Front-to-back\
+  \ airflow.\n\nDatasheet: Juniper EX9250 Ethernet Switch Datasheet (1000632-006-EN, Sep 2021)\n  https://web.archive.org/web/20240111201612/https://www.juniper.net/content/dam/www/assets/datasheets/us/en/switches/ex9250-ethernet-switch-datasheet.pdf\n\
+  \nFacts carried in the model that this schema has no field for:\n- compliance.emc: FCC 47 CFR Part 15\
+  \ Class A, EN 55022, VCCI, BSMI CNS 13438, AS/NZS CISPR22 (datasheet)\n- compliance.materials: RoHS\
+  \ 5/6 (datasheet)\n- compliance.nebs: SR-3580 NEBS Criteria Level 3, GR-63-Core, GR-1089-Core (as the\
+  \ datasheet lists them)\n- compliance.safety: CAN/CSA-22.2 No. 60950-00/UL 1950, EN 60950, IEC 60950-1,\
+  \ EN 60825-1 (datasheet)\n- compliance.seismic: Telcordia Technologies Zone 4 earthquake requirements\n\
+  - environmental.altitude: up to 10,000 ft (3,048 m) with no performance degradation\n- environmental.humidity:\
+  \ 5 to 90 percent noncondensing in operation; the datasheet gives 5 to 95 percent non-operating\n- environmental.operating-temp:\
+  \ 0 to 40 C (32 to 104 F)\n- environmental.storage-temp: -40 to 70 C (-40 to 158 F) in the shipping\
+  \ container\n- features.junos-fusion: Junos Fusion Enterprise\n- features.optics-qsfp28: QSFP28 and\
+  \ QSFP+ transceivers; a QSFP28 port runs as 100 GbE, 40 GbE or 4 x 10 GbE\n- features.optics-sfp-plus:\
+  \ 10 GbE SFP+ transceivers and direct attach copper cables\n- features.ptp: the GM/PTP grandmaster clock\
+  \ port; support is not available in the release the guide covers\n- lifecycle.eol: none-announced\n\
+  - management.clock-and-time-io: BITS RJ-45, ToD RJ-45, 1PPS and 10MHz SMB in and out, GM/PTP SFP\n-\
+  \ management.console: RJ-45 serial console port (CON), RS-232\n- management.oob: one RJ-45 management\
+  \ Ethernet port (MGMT), 10/100/1000\n- management.usb: one USB port for installing Junos OS\n- performance.rate-selectable-speeds:\
+  \ 100, 40 or 10 GbE on each QSFP28 port; 4 x 10 GbE with a breakout cable\n- performance.sfp-plus-speeds:\
+  \ 10 GbE on each of the eight SFP+ ports\n- performance.switching-capacity: up to 400 Gbps throughput\
+  \ (guide, EX9251 Switch Hardware Overview); the datasheet says up to 800 Gbps\n- performance.wire-speed-density:\
+  \ 24 x 10 GbE, 4 x 40 GbE or 4 x 100 GbE at wire speed (datasheet, Table 4)\n- physical.depth-note:\
+  \ 18.5 in (47 cm), or 20.43 in (51.89 cm) with the fan tray and power supply handles (guide Table 4)\n\
+  - physical.weight-note: 22.7 lb (10.3 kg) chassis, with the power supplies and fan trays installed (guide\
+  \ Table 4); the datasheet says 23.15 lb (10.5 kg) fully loaded\n- physical.width-note: 19 in (48.26\
+  \ cm) with the brackets in the guide, 17.6 in (44.7 cm) in the datasheet; the body is modelled\n- platform.cpu:\
+  \ 1.6 GHz Intel 8-core x86 (guide, Routing Engine)\n- platform.memory: 32 GB DDR4\n- platform.software:\
+  \ Junos OS, first release 18.1R1\n- platform.storage: 2 x 100 GB SATA SSD\n- power.power-datasheet-max-w:\
+  \ 300 W on AC and 312 W on DC (datasheet Table 3)\n- power.power-envelope: fully-configured\n- power.power-envelope-note:\
+  \ fully loaded switch; 240 W typical at 25 C, 280 W maximum at 55 C (guide Table 12)\n- power.power-input-ac:\
+  \ 100 to 240 VAC, 50 to 60 Hz; 3.2 A at 100 VAC, 1.37 A at 240 VAC; system input power 312 W\n- power.power-input-dc:\
+  \ operating -44 to -72 VDC, nominal -48 and -60 VDC; 20 A at -44 VDC maximum; system input power 331\
+  \ W\n- power.power-max-w: 280\n- power.power-typical-w: 240\n- power.redundancy-note: two supplies,\
+  \ 1+1 feed redundancy; one supply carries the maximum configuration\n- thermal.fans: three fan trays,\
+  \ each with one counter-rotating fan, and a fan in each supply\n- thermal.thermal-output: 1705 BTU/hour\
+  \ (500 W) maximum in the guide's Table 20; 1,275 BTU/hour (360 W) in the datasheet\n\nDrawing version\
+  \ 0.2.0. A major bump means a slot moved or an id was renamed, so anything cached from an earlier export\
+  \ may no longer line up.\nModel maturity: modelled. Every dimension in the source records where it came\
+  \ from."

@@ -1,0 +1,107 @@
+format: 1
+kind: module
+name: ex4400-fan-afi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan module for the Juniper EX4400 switches, back-to-front airflow (AFI).
+  The guide names this unit for the EX4400-24T, -24X, -48T and -48F, which it
+  sells in back-to-front builds. Two fit side by side at the rear, in slots 0
+  and 1. Cold air enters at this face and leaves at the front panel. The face
+  is the same square as the front-to-back unit. It has a blue (Juniper Azure
+  Blue) frame and an AIR IN chip on the handle bar. A status lamp sits at the
+  lower right. Do not mix this unit with front-to-back fans or power supplies
+  in one chassis.
+attrs:
+  model: EX4400 fan module, airflow in (AFI)
+  role: chassis-fan
+  airflow: back-to-front
+  hot-swap: 'yes'
+provenance:
+  sources: >-
+    datasheet - EX4400 Switch Hardware Guide (Juniper Networks, PDF created 2026-07-22). Topic
+    Cooling System and Airflow in an EX4400 Switch - two fan modules (1+1) in rear slots 0 and
+    1, and two airflow models told apart by the legend and the handle. Back-to-front is AIR IN
+    with the Juniper Azure Blue handle. Table 114 names it in the CLI as Fan Module, Airflow In
+    (AFI). Tables 11 and 26 ship it in the -AFI builds of the 24T and 48T. No figure in the guide
+    draws this module.
+  size: >-
+    datasheet - Table 39, Physical Specifications of the EX4400 Fan FRU - width 1.65 in (4.18
+    cm), height 1.65 in (4.18 cm), depth 4.55 in (11.57 cm). The guide gives one set of figures
+    for the fan module and draws one module, so the back-to-front unit takes the same size.
+    Carried as 41.8 x 41.8 x 115.7 mm.
+  depth: >-
+    datasheet - Table 39, depth 4.55 in (11.57 cm), carried as 115.7 mm.
+  elements: >-
+    borrowed - from ex4400-fan-afo@1, which was read off the guide's rear render of the
+    EX4400-24T (Figure 9, g022646). The guide shows no back-to-front unit, so only the legend
+    (AIR IN, as the guide says) and the colour differ. The estimated positions are those of the
+    front-to-back unit.
+  colour: >-
+    estimated - the guide names the handle Juniper Azure Blue and shows no picture of it. The
+    blue is chosen to read as azure against the grey rear, and the whole frame that the
+    front-to-back unit draws in gold is drawn in it, because the frame is the handle of this
+    module. A photograph of the unit would settle both choices.
+  airflow: >-
+    datasheet - Cooling System and Airflow in an EX4400 Switch. Back-to-front means cold air
+    enters through the vents on the rear panel and hot air leaves through the vents on the front
+    panel, indicated by the AIR IN label and the Juniper Azure Blue handle.
+  led: >-
+    datasheet - Fan Module Status, Figure 79 and Table 51. Each fan module has one status lamp.
+    Lit green means the module works normally. Unlit means the module is not seated, has
+    failed, or has an airflow direction that does not match the other parts.
+  relief: >-
+    estimated - the handle and the captive screw stand proud of the grille. The projection is
+    not measured in any source.
+  power: >-
+    NO FIGURE IS PUBLISHED - the guide's heat-dissipation table (Table 52) and its PoE budget
+    tables give whole-switch figures only. The missing-power warning stands, as the record that
+    the figure is missing.
+states:
+- ok
+- fault
+- absent
+elements:
+  screw:
+    at: [1.1, 1.7]
+    size: [6.4, 6.4]
+    class: screw
+  handle:
+    at: [0.6, 21.5]
+    size: [40.6, 9.9]
+    class: latch
+  led:
+    at: [34.9, 36.1]
+    size: [3.0, 3.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - 'off'
+size:
+  w: 41.8
+  h: 41.8
+  d: 115.7
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief:
+  features:
+  - node: handle
+    out: 2.0
+    color: '#2a8bd8'
+    confidence: estimated
+    source: >-
+      The handle bar stands proud of the grille on the front-to-back unit in the guide's Figure
+      62 (g022586). The back-to-front unit is not drawn. The projection is not stated or
+      measured.
+  - node: screw
+    cyl: 2.0
+    knurl: true
+    confidence: estimated
+    source: >-
+      The captive thumbscrew of Figure 62 stands proud of the face. The projection is not
+      stated or measured.
+body:
+  depth: 115.7
+  color: '#4a4d52'
+skins: [default]

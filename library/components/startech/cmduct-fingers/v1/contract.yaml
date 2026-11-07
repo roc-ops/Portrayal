@@ -1,0 +1,77 @@
+format: 1
+kind: component
+name: cmduct-fingers
+version: 1.0.0
+class: mechanical
+description: >-
+  One finger wall of a StarTech.com CMDUCT1UX or CMDUCT2U horizontal finger duct seen end-on
+  from the front - the steel wall along the top or the bottom of the duct, sixteen fingers with
+  a slot between each pair, fifteen slots a cable is laid in through, the wall solid across its
+  root so the fingers stand out of it and not apart from it
+provenance:
+  size: >-
+    drawing - CMDUCT1UX_Diagram.pdf and CMDUCT2U_Diagram.pdf (StarTech.com, third angle
+    projection), the view of the duct from its side: the duct body is 435.00 long and each slot
+    is 11.00 wide, the dimension the drawing gives. The two drawings draw the same wall, fifteen
+    slots in the same places, so one part serves both ducts.
+  pitch: >-
+    estimated - the drawing dimensions no pitch. Counted and measured off the 1U drawing's side
+    view at 2.607 px/mm against its 435.00: fifteen slots whose edges are 28.5 px (10.9 mm)
+    apart, centred 72.4 px (27.77 mm) from each other, the first 22.6 mm from the end of the
+    duct and the last 22.6 from the other, symmetric. The 2U drawing's fifteen slots measure the
+    same. Taken as 27.84, so that fifteen slots fill the 435 evenly from 22.6 to 412.4; the
+    fingers between them are 16.84 wide and the two end ones 17.1.
+  relief: >-
+    estimated - the slots are drawn from 19.1 to 58.1 mm in front of the plate: each is round
+    at its root, 19.1 mm from the plate, and runs out under the cover, whose lips cover the
+    front 21.7 mm of the duct (49.9 to 71.6). The root of the wall is solid up to the slot
+    roots and the fingers stand from there to 58.1. The relief builds plates and cannot curve,
+    so a slot's root is square. The wall is a 1.0 mm sheet: the drawing states no gauge.
+  open-ends: >-
+    estimated - whether a slot is open at the front edge of the wall is not drawn: the drawing
+    ends each slot 8 mm under the cover's lip. The datasheet says the removable cover "makes
+    it easy to add or remove bundled cables", so the slots are open at the front here.
+  color: >-
+    datasheet - "Color: Black", "Material: Steel" (cmduct1ux_datasheet.pdf). The drawing is
+    line work, so the shade is this library's render of black steel.
+size: {w: 435.0, h: 1.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: steel}
+elements:
+  root: {at: [0.0, 0.0], size: [435.0, 1.0], class: bezel}
+  f0: {at: [0.0, 0.0], size: [17.1, 1.0], class: bezel}
+  f1: {at: [28.1, 0.0], size: [16.84, 1.0], class: bezel}
+  f2: {at: [55.94, 0.0], size: [16.84, 1.0], class: bezel}
+  f3: {at: [83.78, 0.0], size: [16.84, 1.0], class: bezel}
+  f4: {at: [111.62, 0.0], size: [16.84, 1.0], class: bezel}
+  f5: {at: [139.46, 0.0], size: [16.84, 1.0], class: bezel}
+  f6: {at: [167.3, 0.0], size: [16.84, 1.0], class: bezel}
+  f7: {at: [195.14, 0.0], size: [16.84, 1.0], class: bezel}
+  f8: {at: [222.98, 0.0], size: [16.84, 1.0], class: bezel}
+  f9: {at: [250.82, 0.0], size: [16.84, 1.0], class: bezel}
+  f10: {at: [278.66, 0.0], size: [16.84, 1.0], class: bezel}
+  f11: {at: [306.5, 0.0], size: [16.84, 1.0], class: bezel}
+  f12: {at: [334.34, 0.0], size: [16.84, 1.0], class: bezel}
+  f13: {at: [362.18, 0.0], size: [16.84, 1.0], class: bezel}
+  f14: {at: [390.02, 0.0], size: [16.84, 1.0], class: bezel}
+  f15: {at: [417.86, 0.0], size: [17.14, 1.0], class: bezel}
+relief:
+  features:
+    - {node: root, out: 18.1, color: '#2a2e33', confidence: estimated, source: 'the wall solid from the plate up to the slot roots, 19.1 mm from the plate less its 1.0 mm sheet'}
+    - {node: f0, out: 57.1, color: '#363b41', confidence: estimated, source: 'a finger from the plate to 58.1 mm in front of it, under the cover'}
+    - {node: f1, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f2, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f3, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f4, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f5, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f6, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f7, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f8, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f9, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f10, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f11, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f12, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f13, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f14, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+    - {node: f15, out: 57.1, color: '#363b41', confidence: estimated, source: 'the same'}
+skins: [default]

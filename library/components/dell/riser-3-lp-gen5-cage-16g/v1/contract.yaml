@@ -53,12 +53,17 @@ size-confidence: {w: drawing, h: drawing}
 relief:
   features:
   - node: plate
-    out: 20.0
+    out: 1.0
     shape: true
     color: '#cfd3d7'
-    confidence: measured
+    confidence: estimated
     source: >-
-      Dell's service model r660.glb: riser 3A's cage 3DGeom~26245 begins at plan y -20.1, 20 mm proud of the rear wall, its bracket 12.2 proud inside it. Its windows are cut through it, so a card's face is seen down
-      them and the bracket's folded flange, 9.4 proud at the end the window
-      does not show, is inside the cage, as on the R740xd's riser shrouds.
+      estimated - the cage's plate is the rear wall's own sheet metal. The R660 ISM's table 12 (chassis dimensions, PDF page 27) puts the rear wall at Zb and nothing but the supplies' handles past it (Zc less Zb, 35.57 mm). Dell's service model r660.glb has riser 3A's cage 3DGeom~26245 begin at plan y -20.1, 20 mm proud of the plane the supplies' faces sit in, which stood the cage outside that chassis; the plate is drawn 1.0 and the model's figure is kept here as the disagreement. Its windows are cut through it, so a card's face is seen down them.
+  - node: flange-cover
+    out: 19.2
+    shape: true
+    color: '#cfd3d7'
+    confidence: estimated
+    source: >-
+      estimated - carried from Dell's R660 service model (r660.glb), which has the piece of riser 3A's cage over its flange end, Body_8_15.004, reach 19.2 past the plane the supplies' faces sit in (the plane is the rear wall, the supplies' rear at 825.0 less the handle's 35.57, ISM table 12, PDF page 27; see dell/riser-3-lp-cage-16g@1). This Gen 5 cage is the same shape as riser 3A's and is not itself in the model. This is the way dell/r740xd draws its riser's outer skin: dell/riser-1-shroud-14g@1 stands 17.76 proud of the panel plane, measured from the service model because the assembly has to stand off far enough to contain the L of a PCIe bracket's flange, and the cards and fillers sit behind it; the rest of the riser stays at the plate. Here too the plate stays 1.0 and the cover is the cage's plain metal from the window's end to the outer face of the flange's fold, the whole height of the cage. A filler's bracket gets it as a card's does, because it is the riser's metal and not the occupant's. The bracket's return flange, std/pcie-bracket-lp@1's 9.40 (PCIe CEM 5.0 figure 11-9), is inside it. This replaces an estimate of 10.26, the flange and one 0.86 sheet.
 skins: [default]

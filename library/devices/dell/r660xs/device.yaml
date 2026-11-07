@@ -1,0 +1,1149 @@
+# SOURCES:
+# Dell's three public documents for the PowerEdge R660xs: the Installation and
+# Service Manual (ISM), the Technical Guide and the Specification Sheet. Every
+# position is read off the ISM's own figures - the front views (figures 1 to 3),
+# the rear view (figure 7), the view from above (figure 8), the bare board
+# (figure 60) and the chassis dimensions (table 8, figure 15) - and its tables
+# (the riser configurations, table 95). No reseller, review, stencil, service
+# model or photograph is used.
+# STATE:
+# DONE: three fronts (10 x 2.5 inch, 8 x 2.5 inch, 4 x 3.5 inch), each its own
+# view; the rear for six riser configurations (1 to 6); the top view - system
+# board, two heatsinks, sixteen DIMM slots, seven fans and the plan projections
+# of the seated parts; the security bezel; estimated bottom and sides.
+# LEFT: the no-backplane front and riser configuration 0 (no figure shows
+# either), riser 2c, the air shroud, covers, backplane and front PERC in the
+# top view, and the supplies that are not on main - see gaps.
+format: 1
+kind: device
+name: r660xs
+version: 1.0.1
+maturity: draft
+manufacturer: Dell
+model: PowerEdge R660xs
+description: >-
+  1U one- or two-processor rack server, 16th generation, the R660's lower-cost
+  1U sibling - four 3.5 inch or eight or ten 2.5 inch front drive bays, two 60 mm
+  power supplies side by side at the right of the rear, up to three PCIe slots, an
+  OCP NIC 3.0 slot, a BOSS riser and two optional rear 2.5 inch drive bays
+profile: server
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - ISM table 8 (figure 15): width 434.0 between the ears (482 across
+      them, 'Xa'), height 42.8. DEPTH 699.1 is the front face to the rear wall: the
+      table gives the ears 22 behind the front face without the bezel ('Za', 35.84
+      with it) and the rear wall 677.1 behind the ears ('Zb', 'ear to rear wall',
+      for 10 or 4 drives and for 8 NVMe drives), 699.1 in all. The spec sheet
+      agrees: 712.95 without the bezel and 748.79 with it are the ear to the PSU
+      handle ('Zc') and that plus the 35.84. THE DEPTH DEPENDS ON THE FRONT: for 8
+      SATA/SAS drives or no backplane table 8 gives 626.42 ear to rear wall, 648.42
+      in all, 50.68 shorter. This device has one depth, the longer, and the 8 x 2.5
+      inch front here is the 8-drive build for either backplane; see the
+      shorter-chassis gap. The technical guide's table 42 repeats the table.
+  front-face:
+    confidence: drawing
+    note: >-
+      THE EARS CARRY THE CONTROL PANELS, SO THEY ARE DRAWN - as the R660's and the
+      R740xd's are: the left panel in the left ear outboard of the drives, the right
+      panel (power, USB, iDRAC Direct) in the right (ISM figures 4 to 6). The front
+      face is therefore 482.6 wide.
+  gate-1:
+    confidence: drawing
+    note: >-
+      the ISM's three front figures are Dell's renders, 1688 x 378, 1650 x 372 and
+      1688 x 378 px (the 4 x 3.5, 8 x 2.5 and 10 x 2.5 builds), the body between the
+      outer edges 1590, 1579 and 1579 px wide for 482.6, so 3.295, 3.272 and 3.272
+      px/mm, and 141 px tall for 42.8 (3.29 px/mm), within 0.5 percent of the
+      width's: they are orthographic and drawn ear to ear at true scale. Every
+      front position is read at that scale from the body's left edge and the
+      top edge, as lamp and glyph centres, not as the carriers' edges.
+  drive-bays:
+    confidence: drawing
+    note: >-
+      drawing - the 2.5 inch fronts: five columns 73.0 wide at x 32.5, 115.35,
+      198.2, 281.1 and 363.95 (an 82.85 pitch) and two rows 15.3 tall at y 7.71 and
+      24.21, the R660's bays (dell/r660@5.2.0): the figures' status-lamp centres
+      stand 82.9 and 83.1 apart on the 10 and 8 drive fronts and 36.5 mm from the
+      body's edge for column 1, which is the R660's lamp offset from its column
+      to 0.1 mm, so the carriers are the same, common/drive-carrier-25@2 laid flat
+      with rotate 270. The 3.5 inch front: four columns 105.5 x 26.9 on a 107.1
+      pitch from x 27.8, the lamp centres standing 107.13 mm apart in figure 1
+      (the R740xd's 12 drive front steps 107.21). The carrier is
+      common/drive-carrier-35, laid wide, as the R740xd seats it. THE 3.5 INCH
+      FRONT'S ROW IS READ AT y 13.9 (figure 1: the carrier's shelf at y 164 px from
+      a top edge at 118, 3.295 px/mm).
+  drive-numbering:
+    confidence: drawing
+    note: >-
+      drawing - the 2.5 inch fronts print the bay number and a right-pointing
+      triangle on the divider left of each column, upper bay even and lower bay
+      odd, as the R660's do (figures 2 and 3): 0/1, 2/3, 4/5, 6/7, 8/9 on the 10
+      drive front, and 0/1, 2/3, 4/5 and then 6 and 7 alone on the lower row of
+      columns 4 and 5 on the 8 drive front (read at x 276.5 and 358.9, the
+      R660's 276.2 and 359.0). THE 3.5 INCH FRONT PRINTS NO NUMBER (figure 1) and
+      its bays are numbered 0 to 3 left to right as a convention, not a reading.
+  drive-default:
+    confidence: datasheet
+    note: >-
+      EVERY BAY DEFAULTS TO A BLANK, as on the R660 and the R740xd: Dell publishes no
+      default drive count, and the ISM requires blanks in every empty slot for
+      cooling ('drive blanks must be installed in all empty drive slots'). A
+      populated machine is a configuration.
+  vent-strip:
+    confidence: estimated
+    note: >-
+      estimated - the strip along the top edge above the drives, 4.32 tall from y
+      2.09: the figures show a row of dark cells there that 3.3 px/mm does not
+      resolve into slots, so it is drawn as a dark strip with a vent field, pitch
+      from the R660's strip (dell/r660@5.2.0, 5.46 by 2.33 slots), and each slot's
+      position is NOT read. The 4 x 3.5 inch front's strip is the figure's two rows
+      of cells over the carriers, 3.6 mm on a 3.6 pitch, read by eye.
+  right-side:
+    confidence: drawing
+    note: >-
+      drawing - on the 10 and 8 drive fronts the VGA module (a separate FRU in
+      the ISM, 'Removing the VGA module') is the plate at x 436.95..457.15
+      carrying a vertical DB-15, as the R660's: the plate's left edge reads 436.1
+      in figure 3 and the power button's left edge 460.0 on the 4 x 3.5 front
+      (the R660's 459.13), so the right control panel is the R660's - the power
+      button at the top, a vertical USB-A, and the iDRAC Direct micro-AB USB with its
+      lamp below (ISM figure 6 and table 6) - and its parts are seated where the R660
+      seats them. THE 4 x 3.5 FRONT'S VGA IS HORIZONTAL, in the dark plate over the
+      fourth column (figure 1), x 397.0..415.8, y 3.3..12.1 read, seated at the
+      part's native 20.47 x 11.4 and centred there.
+  fronts:
+    confidence: drawing
+    note: >-
+      THREE FRONTS, EACH ITS OWN VIEW bound by `configurations.<name>.views`, as the
+      R660's and the R740xd's are. All share the ears, both control panels and the
+      right panel. 10 x 2.5 inch (front, ISM figure 3): the R660's ten bays. 8 x 2.5
+      inch (front-sff8, figure 2): bays 0 to 5 in columns 1 to 3, and bays 6 and 7 in
+      the LOWER row of columns 4 and 5, with a vent block over them: x 278.7..436.7
+      (figure x 945..1462, y 132..196 on a body edge 33 and top edge 125), the
+      R660's 8 drive front is a different one, its vent in the middle column. 4 x 3.5
+      inch (front-lff4, figure 1). The information tag sits at x 381.7 on the 10 and 8
+      drive fronts and x 393.4 on the 4 x 3.5, read as the tag's left end in the
+      figures. The no-backplane front is not drawn: no figure shows it.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the ISM's figure 8 'Inside the system', a render from above with
+      the cover off, 1207 x 1450 px at 1.802 px/mm (the chassis's two side walls 782
+      px apart for the 434 body): plan x = (figure x - 207) / 1.802 and plan y =
+      (figure y - 110) / 1.802, the rear wall at y 0 and the front face at 699.1 (the
+      figure's front edge, y 1370, is 1260 px = 699 mm from it). It is read as a
+      plan, the library's convention: REAR AT y=0, x left to right as the front
+      faces you, the same as the front view. Its parts: the system board
+      (dell/r660xs-system-board@1), the two heatsinks on the socket plates
+      (dell/heatsink-1u-16g@1, 82.1 x 119.1 against the figure's 80.5 x 120.4:
+      figure x 510..655 and 770..915, y 457..675), the sixteen DIMM slots (figure 60
+      names them: B8 B2 B6 B4 at the left, B1 B7 B3 B5 A8 A2 A6 A4 in the middle,
+      A1 A7 A3 A5 at the right; the figure's slots stand on a 7.5 mm pitch like the
+      R660's and the DIMM plan is that part's 3.8 x 133.4) and the seven fans
+      (dell/r660xs-fan@1, 42.5 pitch 42.7 in two groups of four and three). SEATED
+      MODULES PROJECT INTO THIS VIEW through their rear or front bay's `plan:`: the
+      supplies (dell/psu-60mm-plan@1), the OCP card (dell/ocp3-sff-plan@1), the two
+      risers (dell/r660xs-riser-1-plan@1 and -2-plan@1) and the upper row of front
+      drives (std/drive-25-plan@1). The upper-row drives' plan y is the R660's
+      offset from its front, 29.95 behind it, applied to this depth: ESTIMATED. A blank
+      seats no plan, so the default build shows the supplies and the two risers.
+      NOT YET IN THIS VIEW: the air shroud, the covers, the drive backplane and the
+      front PERC, the PCH cover, the cabling and the BOSS riser's and LOM card's
+      projections (see the gaps).
+  bezel:
+    confidence: drawing
+    note: >-
+      DRAWN FITTED, as on the R660 and the R740xd, and taken off in the viewer: the
+      optional security bezel (dell/bezel-1u-16g@1) covers the body between the ears,
+      and `for:` names the bays and parts behind it. It is the R660's: table 8 gives
+      the R660xs a 35.84 ear to front with the bezel and 22 without, 13.84, the
+      figure that part states for the R660. Its openings are holes, so the drives
+      show through. THE L21 WARNINGS IT RAISES ARE TRUE: bays 0 and 1's numbers and
+      arrows, at x 28.13 on the two 2.5 inch fronts, sit under the bezel's plain left
+      end; they are in the baseline rather than waived, so a mark buried by anything
+      else still warns. The LCD bezel is not modelled (the spec sheet offers 'LCD
+      bezel or security bezel').
+  sides-and-bottom:
+    confidence: estimated
+    note: >-
+      estimated - no figure shows the bottom or either side (the ISM's figure 15
+      is a schematic with a side view as one box); their folded edges and the
+      rail land are plausible shapes at plausible sizes, drawn so the faces are not
+      blank, and marked estimated where drawn. They are the R660's, at this depth.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the ISM's figure 7 'Rear view of the system', a render of the default
+      build (riser configuration 1: R1a, R2a), 1650 x 344 px with the 434 body 1416 px
+      wide (x 112..1528): 3.263 px/mm across. ITS HEIGHT DOES NOT AGREE WITH ITS WIDTH
+      TO BETTER THAN 4 percent (149 px for 42.8 is 3.48), so positions are read
+      across at 3.263 and every y is the R660's rows (the riser band at y 2.2 to
+      22.0, the I/O row at 24.7), which the figure agrees with to 1.5 mm: the vent
+      windows' top edge reads 2.6 and the supply faces 41. THE SUPPLIES STAND SIDE BY
+      SIDE AT THE RIGHT, NOT AT OPPOSITE ENDS AS ON THE R660: PSU 2 at x 367.9 and PSU 1
+      at 305.0, read from the orange latches (figure x 1265 and 1470, which are 49
+      into each supply on the R660: 304.3 and 367.2 here against the R660's 367.91 for
+      its PSU 2).
+  rear-power:
+    confidence: datasheet
+    note: >-
+      chassis.power is `ac`: every supply this device accepts is an AC mixed-mode
+      unit (700 to 1400 W, C14). ISM table 12 and the spec sheet also list a 600 W
+      Platinum, a 1800 W Titanium (C15), a 1400 W Titanium 277 V AC / HVDC (APP
+      2006G1) and a 1100 W -48 V DC supply; the 600 W, 1800 W, HVDC and DC supplies are
+      not on main and are not modelled, and when they are, power moves onto per-build
+      configurations.
+  rear-lom-and-io:
+    confidence: drawing
+    note: >-
+      drawing - the lower row, left to right (figure 7): the chassis's vent block
+      (x 2.5..27, three rows of four); the LOM card (dell/r660xs-lom-2x1g@1) at x
+      27.2 with two jacks 18.1 apart and its 1 and 2 under them; the dedicated iDRAC
+      port at x 69.4 with its legend over it; the USB stack at x 112.4, USB 2.0 over
+      3.0, with SS beside the lower; the OCP card at x 138.4 (71.8 wide, as figure 7
+      shows 71.7); the VGA connector at x 245.1 with its mark; the system ID button
+      at x 284.9. THE ISM LISTS NO REAR I/O BOARD for the R660xs as it does for the
+      R660: the iDRAC port, USB ports, VGA and ID button are on the system board's
+      own edge, so they are placed on the chassis here, not in a module. The plate
+      behind the VGA and the button is the figure's, rounded, 71.2 wide.
+  rear-boss-bay:
+    confidence: drawing
+    note: >-
+      drawing - ISM table 7 item 2 'BOSS riser' is the vented bracket between riser 1
+      and riser 2 (figure 7, x 397..): dell/r660xs-boss-riser@1, 42.0 x 22.0 at x 87.3.
+      THE R660'S REAR BOSS-N1 MODULE IS NOT THIS: the R660xs's BOSS-N1 is internal
+      and cold-swap (technical guide, 'BOSS-N1'), so dell/boss-n1-module-1u@1 is
+      not seated.
+  rear-risers:
+    confidence: drawing
+    note: >-
+      drawing - riser 1 at rear-face x 1.5..86.0 and riser 2 at 132.7..302.8, each 19.8
+      tall from y 2.2, the riser cages' extents in figure 7; riser 2's two windows
+      sit at 163.4..218.2 and 236.3..288.7. The slots are the risers' own bays,
+      numbered as Dell numbers them (ISM table 95: slot 1 on riser 1, slots 2 and 3
+      on riser 2). THE FIGURE PRINTS NO SLOT NUMBER on a cage, so none is printed.
+      The slot position of a one-slot riser (2d, 2e) is slot 2 in riser 2's first
+      window with a filler closing the second, read off ISM figures 80 and 81's
+      isometrics.
+  rear-drives:
+    confidence: estimated
+    note: >-
+      estimated - riser configuration 4's two rear 2.5 inch bays sit where riser 2
+      would be (ISM table 7 item 3: 'PCIe expansion card riser 2 ... or Rear drive
+      module'), and NO FIGURE DRAWS THEM: the two bays are the R660's rear bays
+      (dell/r660@5.2.0, 79.25 x 18.0 with a carrier seated flat as at the front)
+      laid in riser 2's band at x 136.8 and 217.5, with the chassis's rear wall
+      behind them. The rear drive cage (ISM figures 100 and 101) is not drawn.
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - ISM table 9, the maximum with every drive fitted: 18.74 kg for 10 x
+      2.5 inch, 19.45 kg for 4 x 3.5 inch, 18.25 kg for 8 x 2.5 inch, 15.38 kg with no
+      backplane; the spec sheet gives 19.45 kg. The 4 x 3.5 inch row prints '(55.33
+      pound)', which is 25.1 kg and not 19.45 (42.9 pound); the other rows' pounds
+      agree with their kilograms, so the kilograms are used and the 55.33 is a
+      misprint in Dell's table. The largest is recorded.
+attrs:
+  physical:
+    ru: 1
+    weight-max-kg: 19.45
+chassis:
+  width: 434.0
+  height: 42.8
+  depth: 699.1
+  ru: 1
+  power: ac
+  color: '#2f3439'
+  edge: '#1d2125'
+  silk: '#c9ced3'
+gaps:
+  - what: shorter-chassis-for-8-sata-sas-and-no-backplane
+    scope: [front-sff8]
+    reason: vendor-silent
+    note: >-
+      ISM table 8 gives a chassis 50.68 shorter (626.42 ear to rear wall, against
+      677.1) for 8 SATA/SAS drives or no backplane, and the same 677.1 as the 10
+      and 4 drive builds for 8 NVMe drives. The 8 x 2.5 inch front is the same front
+      either way and this device has one depth, the longer, 699.1. Which interior
+      layout the shorter chassis has the ISM does not say.
+    wanted: >-
+      a top view of the shorter chassis, or a way to state a depth per backplane
+  - what: no-backplane-front
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the spec sheet lists '0 drive bay' and ISM tables 8, 9 and 37 list a 'No
+      backplane configuration', and NO FIGURE IN THE ISM, TECHNICAL GUIDE OR SPEC
+      SHEET DRAWS ITS FRONT (the ISM's figures 1 to 3 are the 4 x 3.5, 8 x 2.5 and 10
+      x 2.5 builds). The front is not modelled.
+    wanted: >-
+      Dell's front view of the no-backplane build
+  - what: riser-configuration-0-rear
+    scope: [rear, top]
+    reason: needs-drawing
+    note: >-
+      ISM table 95 lists configuration 0, 'No riser', and table 96 its cards (all in
+      the integrated slots). No R660xs figure draws its rear, with plates across both
+      riser positions and the PCH cover in the top view; the ISM's other
+      sibling is the R660's manual, which draws it from another sibling's. Not
+      modelled.
+    wanted: >-
+      a rear view of the no-riser build
+  - what: riser-2c-not-modelled
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the ISM draws riser 2c (figure 79, slot 3 x16, shared with riser 2a's removal
+      procedure, figure 84) and lists it in table 14 ('Slot 3, riser 2c, x16') but
+      no riser configuration in table 95 uses it, and it is not modelled.
+    wanted: >-
+      the configuration that fits riser 2c
+  - what: rear-with-risers-1b-2d-2e-and-the-empty-riser-2
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      only riser configuration 1 has a rear figure (figure 7). Configurations 2, 3,
+      4, 5 and 6 are composed: the one-slot risers (2d, 2e) from their isometrics, a
+      riser 1b as riser 1a, riser 2's absence (configuration 3) as a vented blank by
+      analogy, and the rear drives (configuration 4) as two estimated bays.
+    wanted: >-
+      ISM-quality rear views of configurations 2 to 6
+  - what: bottom-and-sides
+    scope: [bottom, left, right]
+    reason: needs-photo
+    note: >-
+      no figure shows them; see provenance/sides-and-bottom.
+    wanted: >-
+      a photograph of the bottom and a side of an R660xs
+  - what: air-shroud-covers-backplane-in-top-view
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      figure 8 is drawn with the cover, the air shroud and the backplane cover off
+      and shows the drive backplane (item 9) and the front PERC (item 10) as a
+      photograph of the parts, and the ISM draws none of them as a plan. The
+      shroud (figures 27 and 28), the system cover (figures 23 and 24) and the
+      backplane cover (figures 25 and 26) are isometric figures only. The fan
+      cage, the frame that holds the seven fans (figure 8 item 1), is not drawn
+      either: only the fans stand in the view.
+    wanted: >-
+      the shroud's, the fan cage's and the covers' outlines from above
+  - what: lff-drives-have-no-top-plan
+    scope: [top]
+    reason: needs-drawing
+    note: >-
+      the 4 x 3.5 inch front's bays carry no `plan:`, so a fitted 3.5 inch drive
+      never shows from above. The 2.5 inch bays do project, as the carriers'
+      tops, but no figure draws a 3.5 inch carrier from above and its length is
+      not stated, so none is estimated.
+    wanted: >-
+      a 3.5 inch carrier seen from above, or its length
+  - what: lom-and-boss-riser-plan-and-depth
+    scope: [rear, top]
+    reason: needs-drawing
+    note: >-
+      the LOM card (dell/r660xs-lom-2x1g@1) and the BOSS riser
+      (dell/r660xs-boss-riser@1) have no depth and no plan: nothing draws them from
+      above except figure 8's shot of the BOSS riser, which is a riser seen
+      through the interior and is not outlined.
+    wanted: >-
+      the depth of each card
+  - what: other-supplies
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      ISM table 12 lists 600 W, 1800 W, 1100 W DC and 1400 W 277 V supplies that are not
+      on main; see provenance/rear-power.
+    wanted: >-
+      orthographic faces of the supplies
+  - what: lcd-bezel
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the spec sheet and ISM figure 21 offer an LCD bezel; it is not modelled.
+    wanted: >-
+      Dell's LCD bezel front view
+  - what: empty-boss-riser-position
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      see dell/r660xs-boss-riser@1 provenance/empty-position: the BOSS riser's
+      place without it is not drawn.
+    wanted: >-
+      a rear view of a build without the BOSS riser
+  - what: psu-1-mark-absent-in-rc3-and-rc4
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      the PSU 1 mark (the boxed bolt and the 1) is printed on riser 2's cage
+      (dell/r660xs-riser-2-cage@1), so it is absent in riser configurations 3 and
+      4, where a blank or the rear drives stand in riser 2's place and no figure
+      shows those builds.
+    wanted: >-
+      a rear view of a build in riser configuration 3 or 4
+  - what: five-fan-builds
+    scope: [top]
+    reason: vendor-silent
+    note: >-
+      the thermal tables name a five-fan build for one processor without rear
+      drives; which two positions are left out is not stated, so every build here
+      seats seven.
+    wanted: >-
+      the fan positions of the five-fan build
+groups:
+  drives:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the front drive bays, numbered as the 2.5 inch fronts' dividers print them (and as a convention on the 3.5 inch front)
+    attrs: {media: sff-2.5}
+  drives-lff:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the four 3.5 inch front bays, numbered left to right as a convention
+    attrs: {media: lff-3.5}
+  panels:
+    term: Panel
+    role: indicator
+    index-origin: 1
+    description: the left control panel, a field-replaceable module in the left ear
+  ports:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: local console and service access
+    description: the front VGA, the USB-A and the iDRAC Direct micro-AB USB
+  mgmt:
+    term: Button
+    role: management
+    index-origin: 1
+    description: the power button
+  marks:
+    term: Mark
+    role: furniture
+    index-origin: 1
+    description: printed marks seated as parts - the VGA symbol
+  tags:
+    term: Tag
+    role: furniture
+    index-origin: 1
+    description: the slide-out information tag under the right-hand drive columns
+  psus:
+    term: PSU
+    role: service
+    index-origin: 1
+    description: the two 60 mm supplies, side by side at the right of the rear, PSU 1 on the left as the rear faces you
+    attrs:
+      redundancy: '1+1'
+      redundancy-note: >-
+        R660xs technical guide, 'PSUs highline and lowline ratings': 'up to two AC
+        power supplies with 1+1 redundancy'. The ISM's table 7 calls PSU 1 'the
+        primary PSU' and PSU 2 'the secondary'. A hot-spare mode is the R660's
+        feature and is not stated in the R660xs documents held.
+  boss:
+    term: Riser
+    role: service
+    index-origin: 1
+    description: the M.2 BOSS riser between riser 1 and riser 2
+  risers:
+    term: Riser
+    role: service
+    index-origin: 1
+    description: >-
+      the expansion card riser positions, numbered as Dell numbers the risers
+      (ISM table 7: riser 1 holds slot 1, riser 2 slots 2 and 3). `service` and not
+      `traffic`, as on the R660: the group holds the riser, and the cards live in the
+      riser's own slot bays.
+  riser-blanks:
+    term: Blank
+    role: service
+    index-origin: 1
+    description: the vented plate where riser 2 is absent
+  drives-rear:
+    term: Drive
+    role: service
+    index-origin: 0
+    description: the two rear 2.5 inch bays of riser configuration 4, where riser 2 would be
+    attrs: {media: sff-2.5}
+  ocp:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the OCP NIC 3.0 slot
+  lom-card:
+    term: Card
+    role: service
+    index-origin: 1
+    description: >-
+      the LOM card position. The group holds the card, not its two ports, as the
+      R740xd's NDC group does: the ports are the card's own.
+  rear-io:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: service access at the back of the rack - the dedicated iDRAC port, two USB, the VGA and the system ID button
+    description: the connectors on the system board's rear edge
+  memory:
+    term: DIMM
+    role: service
+    index-origin: 1
+    description: >-
+      the 16 DDR5 slots, named as Dell's memory label prints them (ISM figure 60 and
+      table 92), eight per processor - CPU 2's B slots on the left and in the middle,
+      CPU 1's A slots in the middle and on the right, seen from above with the rear at
+      the top
+  fans:
+    term: Fan
+    role: service
+    index-origin: 1
+    description: >-
+      the seven hot-plug fan modules, numbered left to right as seen from above.
+      Technical guide table 2 says 'Hot-plug redundant cooling' and gives no fan
+      redundancy scheme, so none is recorded (the R660's N+1 is its own statement).
+  processors:
+    term: CPU
+    role: service
+    index-origin: 1
+    description: the two processor heatsinks - CPU 1 on the right as the front faces you
+  interior:
+    term: Part
+    role: furniture
+    index-origin: 1
+    description: the chassis floor and the system board
+  covers:
+    term: Cover
+    role: furniture
+    index-origin: 1
+    description: >-
+      the optional security bezel on the front. It is DRAWN FITTED, as on the
+      R660: it is `mounts`, so the viewer takes it off to show the drives, and
+      `for:` names what it covers.
+  leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the iDRAC Direct lamp
+views:
+  front:
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 2.09], size: [412.65, 4.32], fill: '#3a3f44'}
+        - {at: [26.0, 3.08], size: [409.2, 2.33], pattern: vent, pattern-pitch: [5.46, 2.33], vent: 1, fill: '#141719'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      # the right control panel's marks beside the USB port and the iDRAC Direct
+      # port: the USB trident, and a double-ended open wrench for iDRAC Direct
+      - {at: [466.65, 16.83], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 16.83], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 31.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [28.13, 13.87], text: '0', for: drive-0}
+      - {at: [28.13, 16.20], text: '▶', for: drive-0}
+      - {at: [28.13, 30.36], text: '1', for: drive-1}
+      - {at: [28.13, 32.81], text: '▶', for: drive-1}
+      - {at: [110.43, 13.87], text: '2', for: drive-2}
+      - {at: [110.43, 16.20], text: '▶', for: drive-2}
+      - {at: [110.43, 30.36], text: '3', for: drive-3}
+      - {at: [110.43, 32.81], text: '▶', for: drive-3}
+      - {at: [193.3, 13.87], text: '4', for: drive-4}
+      - {at: [193.30, 16.20], text: '▶', for: drive-4}
+      - {at: [193.3, 30.36], text: '5', for: drive-5}
+      - {at: [193.30, 32.81], text: '▶', for: drive-5}
+      - {at: [276.2, 13.87], text: '6', for: drive-6}
+      - {at: [276.20, 16.20], text: '▶', for: drive-6}
+      - {at: [276.2, 30.36], text: '7', for: drive-7}
+      - {at: [276.20, 32.81], text: '▶', for: drive-7}
+      - {at: [359.0, 13.87], text: '8', for: drive-8}
+      - {at: [359.00, 16.20], text: '▶', for: drive-8}
+      - {at: [359.0, 30.36], text: '9', for: drive-9}
+      - {at: [359.00, 32.81], text: '▶', for: drive-9}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 0,
+           plan: {view: top, at: [10.2, 568.7]}}
+        - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 1}
+        - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 2,
+           plan: {view: top, at: [93.7, 568.7]}}
+        - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 3}
+        - {id: drive-4, at: [198.2, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 4,
+           plan: {view: top, at: [176.2, 568.7]}}
+        - {id: drive-5, at: [198.2, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 5}
+        - {id: drive-6, at: [281.1, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 6,
+           plan: {view: top, at: [259.5, 568.7]}}
+        - {id: drive-7, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 7}
+        - {id: drive-8, at: [363.95, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 8,
+           plan: {view: top, at: [342.5, 568.7]}}
+        - {id: drive-9, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 9}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [381.7, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, drive-8, drive-9],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660xs ISM table 6 and table 106: solid green for two seconds when a
+            laptop is connected, flashing green (two on, two off) when recognised,
+            off when unplugged - the R660's and the R740xd's wording.
+  front-sff8:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 2.09], size: [254.4, 4.32], fill: '#3a3f44'}
+        - {at: [26.0, 3.08], size: [251.0, 2.33], pattern: vent, pattern-pitch: [5.46, 2.33], vent: 1, fill: '#141719'}
+        # the VGA module's plate
+        - {at: [436.95, 2.09], size: [20.2, 38.62], fill: '#3d4348'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 2.09], size: [11.2, 38.62], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        # the vent block over the upper right, in place of the upper bays of columns 4 and 5
+        - {at: [278.7, 2.09], size: [158.25, 19.9], fill: '#2a2e32'}
+        - {at: [281.2, 3.4], size: [153.5, 16.4], pattern: vent, pattern-pitch: [5.46, 5.46], vent: 1, fill: '#141719'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [441.755, 12.875], size: [11.40, 20.47], shape: d-sub, rotate: 270}
+    silkscreen:
+      - {at: [466.65, 16.83], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 16.83], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 31.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+      - {at: [28.13, 13.87], text: '0', for: drive-0}
+      - {at: [28.13, 16.20], text: '▶', for: drive-0}
+      - {at: [28.13, 30.36], text: '1', for: drive-1}
+      - {at: [28.13, 32.81], text: '▶', for: drive-1}
+      - {at: [110.43, 13.87], text: '2', for: drive-2}
+      - {at: [110.43, 16.20], text: '▶', for: drive-2}
+      - {at: [110.43, 30.36], text: '3', for: drive-3}
+      - {at: [110.43, 32.81], text: '▶', for: drive-3}
+      - {at: [193.3, 13.87], text: '4', for: drive-4}
+      - {at: [193.30, 16.20], text: '▶', for: drive-4}
+      - {at: [193.3, 30.36], text: '5', for: drive-5}
+      - {at: [193.30, 32.81], text: '▶', for: drive-5}
+      - {at: [276.2, 30.36], text: '6', for: drive-6}
+      - {at: [276.20, 32.81], text: '▶', for: drive-6}
+      - {at: [359.0, 30.36], text: '7', for: drive-7}
+      - {at: [359.00, 32.81], text: '▶', for: drive-7}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: drive-0, at: [32.5, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 0,
+           plan: {view: top, at: [10.2, 568.7]}}
+        - {id: drive-1, at: [32.5, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 1}
+        - {id: drive-2, at: [115.35, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 2,
+           plan: {view: top, at: [93.7, 568.7]}}
+        - {id: drive-3, at: [115.35, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 3}
+        - {id: drive-4, at: [198.2, 7.71], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 4,
+           plan: {view: top, at: [176.2, 568.7]}}
+        - {id: drive-5, at: [198.2, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 5}
+        - {id: drive-6, at: [281.1, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 6,
+           plan: {view: top, at: [259.5, 568.7]}}
+        - {id: drive-7, at: [363.95, 24.21], size: {w: 73.0, h: 15.3}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2,
+           group: drives, rel-pos: 7,
+           plan: {view: top, at: [342.5, 568.7]}}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [381.7, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7, vga, mark-vga],
+           hides: [drive-0, drive-1, drive-2, drive-3, drive-4, drive-5, drive-6, drive-7],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660xs ISM table 6 and table 106: solid green for two seconds when a
+            laptop is connected, flashing green (two on, two off) when recognised,
+            off when unplugged - the R660's and the R740xd's wording.
+  front-lff4:
+    face: front
+    size: {w: 482.6, h: 42.8}
+    panel:
+      decor:
+        - {at: [0, 0], size: [14.2, 42.8], fill: '#22262a'}
+        - {at: [468.88, 0], size: [13.72, 42.8], fill: '#22262a'}
+        - {at: [24.3, 0], size: [433.35, 2.09], fill: '#9aa0a6'}
+        - {at: [24.3, 40.71], size: [433.35, 2.09], fill: '#9aa0a6'}
+        # the vent field over the carriers: two rows of cells, then the dark plate the VGA stands in
+        - {at: [24.3, 2.09], size: [358.1, 11.8], fill: '#3a3f44'}
+        - {at: [44.6, 3.0], size: [335.4, 8.6], pattern: vent, pattern-pitch: [3.6, 4.3], vent: 1, fill: '#141719'}
+        - {at: [382.4, 2.09], size: [75.25, 11.8], fill: '#2a2e32'}
+        # the right control panel strip in the ear
+        - {at: [457.65, 13.9], size: [11.2, 26.8], fill: '#2a2e32'}
+        # the rack latches in both ears
+        - {at: [1.5, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+        - {at: [469.4, 14.07], size: [12.15, 24.41], fill: '#4a5056'}
+      cutouts:
+        - {id: power-btn, at: [459.13, 2.36], size: [8.34, 8.31], shape: rect}
+        - {id: usb-1, at: [460.31, 12.57], size: [4.5, 12.0], shape: rect}
+        - {id: idrac-direct, at: [462.97, 28.83], size: [2.75, 7.5], shape: rect}
+        - {id: idrac-direct-led, at: [459.45, 35.76], size: [2.0, 2.0], shape: circle}
+        - {id: vga, at: [396.2, 2.0], size: [20.47, 11.40], shape: d-sub}
+    silkscreen:
+      - {at: [466.65, 16.83], path: M 0.85 0.35 V 2.5 M 0.85 1.9 L 0.3 1.45 V 1.1 M 0.85 2.2 L 1.42 1.75 V 1.3 M 0.12 1.02 H 0.48 M 0.3 0.84 V 1.2, stroke-width: 0.16, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 16.83], path: M 0.6 0.42 L 0.85 0 L 1.1 0.42 Z M 0.63 2.42 H 1.07 V 2.83 H 0.63 Z M 1.26 1.0 H 1.58 V 1.32 H 1.26 Z, filled: true, fill: '#e6e8ea', for: usb-1}
+      - {at: [466.65, 31.85], path: M -0.06 0.38 L 0.32 0.58 L 0.26 0.16 M 0.32 0.58 L 0.95 1.22 M 1.42 1.36 L 0.95 1.22 L 1.06 1.66, stroke-width: 0.22, fill: '#e6e8ea', for: idrac-direct}
+    components:
+      bays:
+        - {id: panel-left, at: [14.2, 2.34], size: {w: 10.1, h: 38.13},
+           accepts: [dell/control-panel-left-16g@1], default: dell/control-panel-left-16g@1,
+           for: chassis, group: panels, rel-pos: 1}
+        - {id: lff-drive-0, at: [27.8, 13.9], size: {w: 105.5, h: 26.9},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives-lff, rel-pos: 0}
+        - {id: lff-drive-1, at: [134.9, 13.9], size: {w: 105.5, h: 26.9},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives-lff, rel-pos: 1}
+        - {id: lff-drive-2, at: [242.0, 13.9], size: {w: 105.5, h: 26.9},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives-lff, rel-pos: 2}
+        - {id: lff-drive-3, at: [349.1, 13.9], size: {w: 105.5, h: 26.9},
+           accepts: [common/drive-carrier-35@1, common/drive-blank-35@1], default: common/drive-blank-35@1,
+           group: drives-lff, rel-pos: 3}
+      placements:
+        - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
+           group: mgmt, rel-pos: 1}
+        - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
+           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+        - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
+           group: ports, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [396.2, 2.0], group: ports, rel-pos: 3}
+        - {ref: common/vga-symbol@1, id: mark-vga, at: [418.2, 6.0], for: vga, group: marks, rel-pos: 1}
+        - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.4, 40.75], group: tags, rel-pos: 1}
+        - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
+           for: [lff-drive-0, lff-drive-1, lff-drive-2, lff-drive-3, vga, mark-vga],
+           hides: [lff-drive-0, lff-drive-1, lff-drive-2, lff-drive-3],
+           group: covers, rel-pos: 3}
+        - ref: common/led-dot@1
+          id: idrac-direct-led
+          at: [459.45, 35.76]
+          for: idrac-direct
+          group: leds
+          rel-pos: 1
+          states: ['off',
+                   {name: connected, color: '#22c55e'},
+                   {name: recognised, color: '#22c55e',
+                    behavior: {mode: blinking, rate: 0.25}}]
+          description: >-
+            R660xs ISM table 6 and table 106: solid green for two seconds when a
+            laptop is connected, flashing green (two on, two off) when recognised,
+            off when unplugged - the R660's and the R740xd's wording.
+  rear:
+    size: {w: 434.0, h: 42.8}
+    panel:
+      decor:
+        # the rear wall behind everything that seats in it
+        - {at: [0, 0], size: [434.0, 42.8], fill: '#c3c8cd'}
+        # the vent block at the lower left, beside the LOM card
+        - {at: [6.0, 26.42], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [6.0, 31.91], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [6.0, 37.40], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [11.5, 26.42], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [11.5, 31.91], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [11.5, 37.40], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [17.0, 26.42], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [17.0, 31.91], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [17.0, 37.40], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [22.5, 26.42], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [22.5, 31.91], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        - {at: [22.5, 37.40], size: [3.78, 3.75], fill: '#16191c', vent: 1}
+        # the three slots between the USB stack and the OCP card, and the three before the VGA plate
+        - {at: [129.2, 26.42], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        - {at: [129.2, 31.91], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        - {at: [129.2, 37.40], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        - {at: [214.6, 26.42], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        - {at: [214.6, 31.91], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        - {at: [214.6, 37.40], size: [3.3, 3.75], fill: '#16191c', vent: 1}
+        # the plate behind the VGA connector and the system ID button
+        - {at: [219.8, 24.71], size: [71.2, 15.93], fill: '#cdd1d5', rx: 0.8}
+    silkscreen:
+      # THE CHASSIS PRINT, as figure 7 draws it: iDRAC over its port, SS and the USB
+      # trident beside the USB 3.0 port, the trident over the USB 2.0 port, the
+      # monitor mark by the VGA connector and the circled i under the ID button.
+      # All in dark ink: the kit's symbols are light ink for a dark panel and vanish
+      # on this light wall and plate. The bolt and the 1 of PSU 1 are on riser 2's cage
+      # (dell/r660xs-riser-2-cage@1), where the figure prints them. Glyph forms are
+      # original; the figure resolves each icon to a few pixels.
+      - {at: [66.6, 26.4], text: 'iDRAC', font-size: 2.3, anchor: start, fill: '#2b2f33', for: idrac}
+      - {at: [103.6, 38.35], text: 'SS', font-size: 2.3, fill: '#2b2f33', for: usb-2}
+      - {at: [107.0, 36.45], path: M 0.7 1.0 H 3.5 M 1.7 1.0 L 2.3 0.35 H 2.9 M 1.3 1.0 L 1.9 1.65 H 2.5, stroke-width: 0.3, fill: '#2b2f33', for: usb-2}
+      - {at: [107.0, 36.45], path: M 3.3 0.6 L 4.1 1.0 L 3.3 1.4 Z M 2.9 0.05 H 3.5 V 0.65 H 2.9 Z M 0.05 1.0 A 0.4 0.4 0 1 1 0.85 1.0 A 0.4 0.4 0 1 1 0.05 1.0 Z M 2.55 1.65 A 0.35 0.35 0 1 1 3.25 1.65 A 0.35 0.35 0 1 1 2.55 1.65 Z, filled: true, fill: '#2b2f33', for: usb-2}
+      - {at: [106.0, 26.7], path: M 0.7 1.0 H 3.5 M 1.7 1.0 L 2.3 0.35 H 2.9 M 1.3 1.0 L 1.9 1.65 H 2.5, stroke-width: 0.3, fill: '#2b2f33', for: usb-1}
+      - {at: [106.0, 26.7], path: M 3.3 0.6 L 4.1 1.0 L 3.3 1.4 Z M 2.9 0.05 H 3.5 V 0.65 H 2.9 Z M 0.05 1.0 A 0.4 0.4 0 1 1 0.85 1.0 A 0.4 0.4 0 1 1 0.05 1.0 Z M 2.55 1.65 A 0.35 0.35 0 1 1 3.25 1.65 A 0.35 0.35 0 1 1 2.55 1.65 Z, filled: true, fill: '#2b2f33', for: usb-1}
+      - {at: [237.8, 35.7], path: M 1.55 0.55 H 4.45 V 2.85 H 1.55 Z M 0.55 1.2 V 2.2 M 5.45 1.2 V 2.2, stroke-width: 0.34, fill: '#2b2f33', for: video}
+      - {at: [282.5, 35.8], path: M 0 1.6 A 1.6 1.6 0 1 1 3.2 1.6 A 1.6 1.6 0 1 1 0 1.6 Z, filled: true, fill: '#2b2f33', for: system-id}
+      - {at: [282.5, 35.8], path: M 1.3 0.85 A 0.3 0.3 0 1 1 1.9 0.85 A 0.3 0.3 0 1 1 1.3 0.85 Z M 1.35 1.35 H 1.85 V 2.5 H 1.35 Z, filled: true, fill: '#cdd1d5', for: system-id}
+    components:
+      bays:
+        - {id: psu-1, at: [305.0, 1.75], size: {w: 59.8, h: 40.1},
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 1,
+           plan: {view: top, at: [69.2, 0.0], in: system-board}}
+        - {id: psu-2, at: [367.91, 1.75], size: {w: 59.8, h: 40.1},
+           accepts: [dell/psu-1400w-ac-60mm@1, dell/psu-1100w-ac-60mm@1, dell/psu-800w-ac-60mm@1, dell/psu-700w-ac-60mm@1], default: dell/psu-1400w-ac-60mm@1, group: psus, rel-pos: 2,
+           plan: {view: top, at: [6.29, 0.0], in: system-board}}
+        - {id: lom, at: [27.2, 24.71], size: {w: 39.0, h: 15.93},
+           accepts: [dell/r660xs-lom-2x1g@1], default: dell/r660xs-lom-2x1g@1, group: lom-card, rel-pos: 1}
+        # the OCP card before the risers: seen from above, riser 2's cage is over it
+        - {id: ocp, at: [138.4, 24.7], size: {w: 71.8, h: 15.1},
+           accepts: [dell/ocp3-blank-16g@1, dell/ocp3-4x1g-rj45@1, dell/ocp3-2x10g-rj45@1, dell/ocp3-4x10g-rj45@1, dell/ocp3-2x25g-sfp28@1, dell/ocp3-4x25g-sfp28@1, dell/ocp3-2x100g-qsfp56@1], default: dell/ocp3-blank-16g@1, group: ocp, rel-pos: 1,
+           plan: {view: top, at: [223.8, 0.6], in: system-board}}
+        - {id: boss, at: [87.3, 1.5], size: {w: 42.0, h: 22.0},
+           accepts: [dell/r660xs-boss-riser@1], default: dell/r660xs-boss-riser@1, group: boss, rel-pos: 1}
+        # THE SLOTS ARE THE RISERS'. Each riser brings its slot bays and the cage
+        # that holds their windows; the configuration chooses the riser.
+        - {id: riser-1, at: [1.5, 2.2], size: {w: 84.5, h: 19.8},
+           accepts: [dell/r660xs-riser-1a@1, dell/r660xs-riser-1b@1], default: dell/r660xs-riser-1a@1,
+           group: risers, rel-pos: 1,
+           plan: {view: top, at: [348.0, 4.4], in: system-board}}
+        - {id: riser-2, at: [132.7, 2.2], size: {w: 170.1, h: 19.8},
+           accepts: [dell/r660xs-riser-2a@1, dell/r660xs-riser-2d@1, dell/r660xs-riser-2e@1], default: dell/r660xs-riser-2a@1,
+           group: risers, rel-pos: 2,
+           plan: {view: top, at: [131.2, 4.4], in: system-board},
+           only-in: [sff10-rc1-1a2a, sff10-rc2-1a2e, sff10-rc5-1a2d, sff10-rc6-1b2e, sff8-rc1-1a2a, sff8-rc2-1a2e, sff8-rc5-1a2d, sff8-rc6-1b2e, lff4-rc1-1a2a, lff4-rc2-1a2e, lff4-rc5-1a2d, lff4-rc6-1b2e]}
+        - {id: riser-2-blank, at: [132.7, 2.2], size: {w: 170.1, h: 19.8},
+           accepts: [dell/r660xs-riser-2-blank@1], default: dell/r660xs-riser-2-blank@1,
+           group: riser-blanks, rel-pos: 1,
+           only-in: [sff10-rc3-1a, sff8-rc3-1a, lff4-rc3-1a]}
+        - {id: rear-drive-0, at: [136.8, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 0,
+           only-in: [sff10-rc4-1a-rear2, sff8-rc4-1a-rear2, lff4-rc4-1a-rear2]}
+        - {id: rear-drive-1, at: [217.5, 2.1], size: {w: 79.25, h: 18.0}, rotate: 270,
+           accepts: [common/drive-carrier-25@2, common/drive-blank-25@2], default: common/drive-blank-25@2, group: drives-rear, rel-pos: 1,
+           only-in: [sff10-rc4-1a-rear2, sff8-rc4-1a-rear2, lff4-rc4-1a-rear2]}
+      placements:
+        # the connectors on the system board's rear edge, placed on the chassis
+        - {ref: common/rj45-ganged-eth@1, id: idrac, at: [69.4, 27.07], rotate: 180, group: rear-io, rel-pos: 1,
+           attrs: {media: rj45, speed: 1g}}
+        - {ref: std/usb-a@1, id: usb-1, at: [112.7, 27.0], skin: usb2, attrs: {usb: '2.0'}, group: rear-io, rel-pos: 2}
+        - {ref: std/usb-a@1, id: usb-2, at: [112.7, 35.4], attrs: {usb: '3.0'}, group: rear-io, rel-pos: 3}
+        - {ref: common/vga-receptacle@1, id: video, at: [245.1, 26.75], group: rear-io, rel-pos: 4}
+        - {ref: dell/system-id-button-14g@1, id: system-id, at: [284.9, 27.6], for: chassis, group: rear-io, rel-pos: 5}
+  top:
+    # REAR AT y=0, FRONT AT y=699.1 - the library's plan convention, x left to right
+    # as the front faces you. Every position is read off ISM figure 8 (see
+    # provenance/top).
+    size: {w: 434.0, h: 699.1}
+    # THE FLOOR IS A PART, NOT DECOR: a decor rectangle is painted into the face the
+    # 3D viewer draws on the top, and the old full-size floor stood there as an
+    # opaque lid. See dell/r660xs-chassis-floor@1.
+    components:
+      bays:
+        - {id: dimm-b8, at: [139.55, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 1, in: system-board}
+        - {id: dimm-b2, at: [147.05, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 2, in: system-board}
+        - {id: dimm-b6, at: [154.55, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 3, in: system-board}
+        - {id: dimm-b4, at: [162.05, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 4, in: system-board}
+        - {id: dimm-b1, at: [253.85, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 5, in: system-board}
+        - {id: dimm-b7, at: [261.35, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 6, in: system-board}
+        - {id: dimm-b3, at: [268.85, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 7, in: system-board}
+        - {id: dimm-b5, at: [276.35, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 8, in: system-board}
+        - {id: dimm-a8, at: [283.85, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 9, in: system-board}
+        - {id: dimm-a2, at: [291.35, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 10, in: system-board}
+        - {id: dimm-a6, at: [298.85, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 11, in: system-board}
+        - {id: dimm-a4, at: [306.35, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 12, in: system-board}
+        - {id: dimm-a1, at: [396.95, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 13, in: system-board}
+        - {id: dimm-a7, at: [404.45, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 14, in: system-board}
+        - {id: dimm-a3, at: [411.95, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 15, in: system-board}
+        - {id: dimm-a5, at: [419.45, 191.1], size: {w: 3.8, h: 133.4},
+           accepts: [common/dimm-plan@1], default: common/dimm-plan@1,
+           group: memory, rel-pos: 16, in: system-board}
+        - {id: fan-1, at: [87.8, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 1}
+        - {id: fan-2, at: [130.3, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 2}
+        - {id: fan-3, at: [172.8, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 3}
+        - {id: fan-4, at: [215.3, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 4}
+        - {id: fan-5, at: [291.5, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 5}
+        - {id: fan-6, at: [334.0, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 6}
+        - {id: fan-7, at: [376.5, 389.0], size: {w: 42.5, h: 81.0},
+           accepts: [dell/r660xs-fan@1], default: dell/r660xs-fan@1,
+           group: fans, rel-pos: 7}
+      placements:
+        - {ref: dell/r660xs-chassis-floor@1, id: chassis-floor, at: [0.0, 0.0],
+           group: interior, rel-pos: 0,
+           under: [system-board, heatsink-1, heatsink-2, fan-1, fan-2, fan-3, fan-4, fan-5, fan-6, fan-7, dimm-b8, dimm-b2, dimm-b6, dimm-b4, dimm-b1, dimm-b7, dimm-b3, dimm-b5, dimm-a8, dimm-a2, dimm-a6, dimm-a4, dimm-a1, dimm-a7, dimm-a3, dimm-a5]}
+        - {ref: dell/r660xs-system-board@1, id: system-board, at: [5.5, 4.4],
+           group: interior, rel-pos: 1,
+           under: [heatsink-1, heatsink-2, fan-1, fan-2, fan-3, fan-4, fan-5, fan-6, fan-7, dimm-b8, dimm-b2, dimm-b6, dimm-b4, dimm-b1, dimm-b7, dimm-b3, dimm-b5, dimm-a8, dimm-a2, dimm-a6, dimm-a4, dimm-a1, dimm-a7, dimm-a3, dimm-a5]}
+        - {ref: dell/heatsink-1u-16g@1, id: heatsink-1, at: [311.65, 192.1],
+           group: processors, rel-pos: 1, in: system-board}
+        - {ref: dell/heatsink-1u-16g@1, id: heatsink-2, at: [167.3, 192.1],
+           group: processors, rel-pos: 2, in: system-board}
+  bottom:
+    size: {w: 434.0, h: 699.1}
+    panel:
+      decor:
+        - {id: edge-left, at: [0.0, 0.0], size: [4.0, 699.1], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-right, at: [430.0, 0.0], size: [4.0, 699.1], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-front, at: [0.0, 695.1], size: [434.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-rear, at: [0.0, 0.0], size: [434.0, 4.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+  left:
+    size: {w: 699.1, h: 42.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 14.4], size: [699.1, 14.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 1U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [699.1, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 39.8], size: [699.1, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+  right:
+    size: {w: 699.1, h: 42.8}
+    panel:
+      decor:
+        - {id: rail-land, at: [0.0, 14.4], size: [699.1, 14.0], fill: '#3a4045', confidence: estimated, source: "the sliding-rail land along this side. ESTIMATED: no figure held shows this face, so the band is a plausible rail land in a 1U side and not a reading"}
+        - {id: edge-top, at: [0.0, 0.0], size: [699.1, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+        - {id: edge-bottom, at: [0.0, 39.8], size: [699.1, 3.0], fill: '#1a1d21', confidence: estimated, source: "the shell's own folded edge seen from outside. ESTIMATED width - the fold is real, the figure is not measured"}
+configurations:
+  # GENERATED from one table with the only-in lists on the rear bays: three fronts
+  # by six riser configurations, 18 builds. Riser configuration 0 (no riser) and
+  # the no-backplane front are not drawn (see the gaps). Rear storage (riser
+  # configuration 4) is listed with every front: ISM thermal tables 32 and 33
+  # give '1 LP + 2 Rear drives' for the 4 x 3.5 inch, the 8 x 2.5 inch and the 10 x 2.5
+  # inch builds.
+  sff10-rc1-1a2a:
+    kind: orderable
+    default: true
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 1, R1a + R2a: three low-profile slots - slot 1 x16 on riser 1 (processor 1), slots 2 and 3 x8 + x8 on riser 2 (processor 2). ISM table 95.
+  sff10-rc2-1a2e:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 2, R1a + R2e: two low-profile slots - slot 1 x16 on riser 1 (processor 1), slot 2 x16 Gen5 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2e@1
+  sff10-rc3-1a:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 3, R1a: one low-profile slot - slot 1 x16 on riser 1 (processor 1) - and a vented blank where riser 2 would be. ISM table 95.
+  sff10-rc4-1a-rear2:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 4, R1a with rear drives: slot 1 x16 on riser 1 (processor 1) and two rear 2.5 inch drive bays where riser 2 would be. ISM table 95, figure 7 item 3.
+  sff10-rc5-1a2d:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 5, R1a + R2d: two low-profile slots - slot 1 x16 on riser 1, slot 2 x8 Gen5 on riser 2, both processor 1. ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2d@1
+  sff10-rc6-1b2e:
+    kind: orderable
+    description: >-
+      10 x 2.5 inch front (figure 3); riser configuration 6, R1b + R2e: two low-profile slots - slot 1 x8 on riser 1 (processor 1), slot 2 x16 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-1: dell/r660xs-riser-1b@1
+      riser-2: dell/r660xs-riser-2e@1
+  sff8-rc1-1a2a:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 1, R1a + R2a: three low-profile slots - slot 1 x16 on riser 1 (processor 1), slots 2 and 3 x8 + x8 on riser 2 (processor 2). ISM table 95.
+  sff8-rc2-1a2e:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 2, R1a + R2e: two low-profile slots - slot 1 x16 on riser 1 (processor 1), slot 2 x16 Gen5 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2e@1
+  sff8-rc3-1a:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 3, R1a: one low-profile slot - slot 1 x16 on riser 1 (processor 1) - and a vented blank where riser 2 would be. ISM table 95.
+  sff8-rc4-1a-rear2:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 4, R1a with rear drives: slot 1 x16 on riser 1 (processor 1) and two rear 2.5 inch drive bays where riser 2 would be. ISM table 95, figure 7 item 3.
+  sff8-rc5-1a2d:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 5, R1a + R2d: two low-profile slots - slot 1 x16 on riser 1, slot 2 x8 Gen5 on riser 2, both processor 1. ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2d@1
+  sff8-rc6-1b2e:
+    kind: orderable
+    views: {front: front-sff8}
+    description: >-
+      8 x 2.5 inch front with the vent block over the upper right (figure 2); riser configuration 6, R1b + R2e: two low-profile slots - slot 1 x8 on riser 1 (processor 1), slot 2 x16 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-1: dell/r660xs-riser-1b@1
+      riser-2: dell/r660xs-riser-2e@1
+  lff4-rc1-1a2a:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 1, R1a + R2a: three low-profile slots - slot 1 x16 on riser 1 (processor 1), slots 2 and 3 x8 + x8 on riser 2 (processor 2). ISM table 95.
+  lff4-rc2-1a2e:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 2, R1a + R2e: two low-profile slots - slot 1 x16 on riser 1 (processor 1), slot 2 x16 Gen5 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2e@1
+  lff4-rc3-1a:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 3, R1a: one low-profile slot - slot 1 x16 on riser 1 (processor 1) - and a vented blank where riser 2 would be. ISM table 95.
+  lff4-rc4-1a-rear2:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 4, R1a with rear drives: slot 1 x16 on riser 1 (processor 1) and two rear 2.5 inch drive bays where riser 2 would be. ISM table 95, figure 7 item 3.
+  lff4-rc5-1a2d:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 5, R1a + R2d: two low-profile slots - slot 1 x16 on riser 1, slot 2 x8 Gen5 on riser 2, both processor 1. ISM table 95.
+    bays:
+      riser-2: dell/r660xs-riser-2d@1
+  lff4-rc6-1b2e:
+    kind: orderable
+    views: {front: front-lff4}
+    description: >-
+      4 x 3.5 inch front (figure 1); riser configuration 6, R1b + R2e: two low-profile slots - slot 1 x8 on riser 1 (processor 1), slot 2 x16 on riser 2 (processor 2). ISM table 95.
+    bays:
+      riser-1: dell/r660xs-riser-1b@1
+      riser-2: dell/r660xs-riser-2e@1
+datasheet:
+  title: 'Dell PowerEdge R660xs Specification Sheet'
+  sha256: 6146d34154914d3bba7cb5f5c23a3fbbc3e00724c6aa8ab4a65e51e3c0f36400
+references:
+  - {title: 'Dell PowerEdge R660xs Installation and Service Manual', sha256: d03c2583b0a6a6e64980bf0841c48ccff67bf09e3db85cf2768e423e7e2484c9}
+  - {title: 'Dell PowerEdge R660xs Technical Guide', sha256: c7ecdfbb2b69d88cb921e94897886815a12e3a2606fedafc9b5bbd8b1c092005}

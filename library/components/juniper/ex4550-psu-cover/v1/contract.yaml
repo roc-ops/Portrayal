@@ -1,0 +1,42 @@
+format: 1
+kind: module
+name: ex4550-psu-cover
+version: 1.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  The power supply cover panel of the Juniper EX4550 switches. The EX4550 guide lists a cover panel
+  in power supply slot 1 on every model that ships with one supply. The panel is a grey plate with a
+  long rounded finger recess in the middle and a small release tab at the lower right. The guide
+  gives no part number for it.
+attrs:
+  weight-note: not published
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (published 2020-12-15): Figure 6, callout 2, "Power supply
+    cover panel (in power supply slot 1)", a flat line drawing of the rear. The guide gives no part
+    number, no size and no weight for the panel. The guide's own copyright and the Juniper EULA govern
+    it; it is read for facts only and nothing of it is copied.
+  size: >-
+    estimated - the panel is drawn at the size of the power supply it replaces, 54.7 x 40.5 mm,
+    because it fills the same bay. In Figure 6 the panel body measures about 55.1 mm across and 39.7
+    mm high, within the figure's error of 2 percent.
+  face: >-
+    drawing - Figure 6, read at 0.0848 mm per pixel across and 0.0831 down: a plain plate, a rounded
+    recess 30.0 x 5.0 mm centred in it, and a release tab with an arrow at the lower right. Positions
+    are estimated.
+  depth: >-
+    estimated - not stated. Searched the EX4550 guide for the panel's dimensions: nothing is given.
+    No depth is written.
+states: [absent]
+elements:
+  recess:
+    at: [12.2, 17.7]
+    size: [30.0, 5.0]
+    class: pocket
+size:
+  w: 54.7
+  h: 40.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

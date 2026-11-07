@@ -26,6 +26,17 @@ export const SIZES = {
   shelf: {ru: 1, w: 482, h: 44.45, d: 400, mount: 'rack-face'},
 };
 export const chassisOf = ref => SIZES[ref] || null;
+
+// The FHD-CMP5DR with its strip carried back to the rail, so that there is no
+// gap behind the tray (#966): the strip is 110 deep in place of 61.2 and the
+// two arms are gone, in `trays` and in the plates `solids` derive from them.
+export function closed() {
+  const c = CAT['fhd-cmp5dr'], strip = boxes => boxes.reduce((m, b) => (b.w * b.d > m.w * m.d ? b : m));
+  const plate = c.solids.find(s => s.part === 'tray/floor' && s.box.w > 400);
+  return {...c,
+    trays: c.trays.map(t => ({...t, floor: [{...strip(t.floor), d: 110}]})),
+    solids: c.solids.flatMap(s => (s.part !== 'tray/floor' ? [s] : s === plate ? [{...s, box: {...s.box, d: 110}}] : []))};
+}
 const add = (rack, ref, ru, extra = {}) => M.withItem(rack, {ref, cfg: 'base', ru, label: ref, ...extra}).rack;
 
 // The five rings of the FHD-CMP5DR, centred 35.7, 131.1, 241.5, 351.9 and

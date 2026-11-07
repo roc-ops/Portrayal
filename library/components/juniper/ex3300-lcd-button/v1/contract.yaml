@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: ex3300-lcd-button
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  LCD panel navigation button of the Juniper EX3300 switches: a small square pushbutton to the right
+  of the LCD panel. Two of them, Menu and Enter, are on the front panel. Menu toggles between the
+  Idle, Status and Maintenance menus. Enter steps through the options of the menu shown. The
+  `menu` skin carries the list icon and the `enter` skin the return-arrow icon.
+size: {w: 6.4, h: 5.1}
+size-confidence: {w: estimated, h: estimated}
+attrs: {role: lcd-navigation}
+provenance:
+  existence: >-
+    datasheet - EX3300 Switch Hardware Guide (published 2020-12-15), LCD Panel in EX3300 Switches
+    (Figure 5 and the text after it): "There are two navigation buttons - Menu and Enter - to the
+    right of the LCD panel." Menu toggles between the LCD menus and Enter navigates the options
+    (Table 6)
+  size: >-
+    estimated - read off the vector drawing of the guide's Figure 1 (page 25), which is flat and
+    measures 1.0 percent off the chassis aspect: the Menu button is drawn 6.87 by 4.94 mm and the
+    Enter button 5.95 by 5.33 mm at the figure's 0.657 pt/mm. One size of 6.4 by 5.1 mm is used for
+    both, since the two are one part with a different icon. No photograph of the real unit is held,
+    so the shape, a square button with rounded corners, is the drawing's
+  icons: >-
+    drawing - Figure 1 draws a list icon (a bullet and three lines) on the upper button and a return
+    arrow on the lower one. The guide does not describe the icons in words
+elements:
+  cap: {at: [0.5, 0.5], size: [5.4, 4.1], class: button}
+relief:
+  features:
+  - node: cap
+    out: 0.6
+    color: '#c9ccd0'
+    confidence: estimated
+    source: drawing - the button cap stands slightly proud of the plate; projection not measured
+skins: [menu, enter]

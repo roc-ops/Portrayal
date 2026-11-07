@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: wmpvhc-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The 41.5 in dual-hinge cover of a Panduit NetRunner WMPVHC45E 45RU vertical manager seen from the
+  front or the back - a PVC plate that closes half the length of one channel. Two a face ship
+  fitted, and each opens 110 degrees to the left or the right
+provenance:
+  size: >-
+    drawing - the WMPVHC45E customer drawing (Panduit 10225-25 sheet 1): "4- 41.5" DUAL HINGE
+    COVERS", 41.5 in [1054] long, two to each of the two faces, "COVER- PVC"; the cover is as wide as
+    the manager, 6.7 [170].
+  relief: >-
+    drawing - the cover stands at the front of its channel; its plate is taken 3.5 thick (no view
+    sections it) from 162.6 to 166.1 above the well's floor. The same part serves the front and the rear
+    of the manager.
+  lid: >-
+    datasheet - the NetRunner specification sheet (RKSP112): "a cover that can be opened to the left
+    or right 110 degrees", "Dual hinged cover: Can be opened 110 degrees to the left or right to
+    provide complete access to the cables inside the vertical pathway", and "Managers include hinged
+    covers". It opens over the channel, so it is a lid (`lid: true`) that comes off. The format has no
+    hinge, so the cover is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: PVC", "The manager is black" on the product page. The shade is this
+    library's render, a little lighter than the manager so the two read apart.
+size: {w: 170, h: 1054}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: PVC}
+elements:
+  plate: {at: [0.0, 0.0], size: [170, 1054], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 162.6
+      out: 166.1
+      color: '#333639'
+      confidence: estimated
+      source: the WMPVHC45E drawing; the plate's thickness is not dimensioned
+skins: [default]

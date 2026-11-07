@@ -1,0 +1,68 @@
+format: 1
+kind: module
+name: ex4200-fan-tray
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  Fan tray of the Juniper EX4200 switches: one field-replaceable tray with three fans along the
+  left of the rear panel (seen from behind), a honeycomb grille across its face and a captive
+  thumbscrew at each end. It cools the chassis side to rear and is hot-removable and
+  hot-insertable; the switch tolerates one failed fan at room temperature. The guide gives it no
+  part number.
+attrs:
+  model: EX4200 fan tray
+  role: fan-tray
+  fans: 3
+  airflow: side-to-rear
+  airflow-cfm: 20.3
+provenance:
+  existence: >-
+    datasheet - EX4200 Switch Hardware Guide (published 2022-01-16), EX4200 Cooling System: "a
+    field-replaceable unit (FRU) fan tray with three fans (see Figure 15)", installed in the rear
+    panel; "The fan tray located at the rear of the chassis provides side-to-rear chassis cooling
+    (see Figure 16)". The EX4200-24F-S and EX4200-48T-S ship without one. No part number is given
+    anywhere in the guide or the datasheet
+  airflow: >-
+    datasheet - guide Figure 16 and its text (side-to-rear); the EX4200 datasheet gives 20.3 cfm
+    for the system
+  size: >-
+    estimated - 245.0 x 24.2 mm, read off the rear callout figure (Figure 4, g020084; 609 x 252 px,
+    chassis outline 557 px for 438.2 mm, 1.271 px per mm): the tray is the honeycomb plate along
+    the upper left of the rear, from the thumbscrew at its left end to the supply slot at its
+    right, and its height is read at 5 percent foreshortened vertical scale on the chassis height.
+    The ports sit on the chassis below the tray, not on it. Good to about 2 mm
+  face: >-
+    drawing - guide Figure 15 (Fan Tray Used in an EX4200 Switch, g020099): a long plate with a
+    honeycomb band and a thumbscrew at each end, in isometric; Figure 4 gives the plate in rear
+    elevation. No photograph is held, so its colour is estimated
+  power: >-
+    The guide and the datasheet give no fan power figure; none is written, and the library's power
+    warning for this module stands
+states: [absent]
+elements:
+  screw-left:
+    at: [2.2, 8.0]
+    size: [6.0, 6.0]
+    class: screw
+  screw-right:
+    at: [236.8, 8.0]
+    size: [6.0, 6.0]
+    class: screw
+size:
+  w: 245.0
+  h: 24.2
+size-confidence: {w: estimated, h: estimated}
+relief:
+  features:
+  - node: screw-left
+    cyl: 3.0
+    knurl: true
+    confidence: estimated
+    source: guide Figure 15 - the thumbscrew stands out of the plate; projection not measured
+  - node: screw-right
+    cyl: 3.0
+    knurl: true
+    confidence: estimated
+    source: guide Figure 15 - the thumbscrew stands out of the plate; projection not measured

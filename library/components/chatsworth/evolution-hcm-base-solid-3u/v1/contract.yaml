@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: evolution-hcm-base-solid-3u
+version: 1.0.1
+class: mechanical
+description: >-
+  The solid back plate of the 3U Chatsworth Evolution horizontal cable manager (35442-X03)
+  seen from the front, the full 19 in EIA width with its ears and no opening - drawn as the
+  well the two rows of fingers stand in, its floor the front face of the plate
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#232527'
+provenance:
+  shading: >-
+    estimated - a stand-in for the light a render would give: a 12% white layer over the plate
+    so it reads as a plate against the black fingers in front of it. It is a semi-transparent
+    layer over the finish, so it holds for Glacier White too; no document gives the plate's
+    shade.
+  size: >-
+    datasheet - the Evolution Cable Management System data sheet (page 3, Evolution Horizontal
+    Cable Managers table) gives 3U x 19" EIA x 8.2" (208 mm), chassis style solid, for
+    35442-X03. The plate is the whole 482.6 with its ears (a rack-face part is its ears and
+    what hangs off them) and 133.35 high, three units at the EIA-310 1.75 in. The well is 206
+    deep, 2 mm short of the 208 overall, where the plate stands.
+  size-holes: >-
+    datasheet - none: the chassis style is solid. The data sheet's "Solid back shown" picture
+    shows an unbroken back plate.
+size: {w: 482.6, h: 133.35, d: 206.0}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 133.35], class: bezel}
+skins: [default]

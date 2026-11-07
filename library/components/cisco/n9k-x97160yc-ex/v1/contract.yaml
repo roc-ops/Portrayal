@@ -1,0 +1,216 @@
+format: 1
+kind: module
+name: n9k-x97160yc-ex
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Cisco Nexus 9500 48-port 1/10/25-Gigabit Ethernet SFP28 and 4-port 40/100-Gigabit Ethernet QSFP28 line card
+  (N9K-X97160YC-EX). Forty-eight SFP28 ports in two rows of twenty-four and four QSFP28 ports in two rows of
+  two at the right, a Beacon and a Status lamp at the left and one Link triangle per port between the rows,
+  with an ejector lever at each end. The Nexus 9504, 9508 and 9516 take it.
+size: {w: 431.8, h: 44.45, d: 419.1}
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}
+attrs:
+  model: 'N9K-X97160YC-EX'
+  role: 'line-card'
+  sfp28: 48
+  qsfp28: 4
+  media: 'SFP28, 1/10/25 Gigabit Ethernet; QSFP28, 40/100 Gigabit Ethernet'
+  weight-kg: 5.78
+  power-draw-typical-w: 415
+  power-draw-max-w: 516
+  chassis: 'Nexus 9504, Nexus 9508, Nexus 9516'
+  hot-swappable: true
+  eol: 'unknown'
+provenance:
+  size: >-
+    datasheet - Cisco N9508 NX-OS Mode Switch Hardware Installation Guide, Appendix A "Switch Dimensions"
+    (PDF p120, printed 114), "Line cards": 17.0 in (43.18 cm) wide by 1.75 in (4.4 cm) high; the 9504 guide
+    (PDF p120, printed 114) and the 9516 guide (PDF p116, printed 110) print the same row. It is the class row
+    for every line card, not a row of this card.
+  depth: >-
+    datasheet - the same row: 16.5 in (41.91 cm) inside the chassis, ejector levers 2.5 in (6.35 cm) outside
+    it. The depth is the inside figure, as the supervisor's is; the levers swing out and are not added.
+  weight: >-
+    datasheet - Cisco N9504 NX-OS Mode Switch Hardware Installation Guide, "Weights and Quantities" (PDF p121,
+    printed 115): 12.75 lb (5.78 kg), the same in the 9516 guide (PDF p117, printed 111). SLIP: the weights
+    tables call it "10/25-Gigabit"; the power tables of all three guides say "1/10/25-Gigabit", which is
+    carried. The 9508 guide's weights section has no table.
+  power: >-
+    datasheet - the "Planning for Power Requirements" tables (9504 guide, PDF pp17-20, printed 11-14; 9508 and
+    9516 guides, PDF p18, printed 12): typical 415 W, maximum 516 W, the same in all three guides and under the
+    -E, -E2 and -G headings. The 9504's first row splits its label across two lines ("... and 4-port -" and
+    "40/100-Gigabit Ethernet QSFP28 line card (N9K-X97160YC-EX)"), so its figures are read by line order.
+  ports: >-
+    install guide - the Overview tables and the power tables call it a "48-port 1/10/25-Gigabit Ethernet SFP28
+    and 4-port 40/100-Gigabit Ethernet QSFP28 line card". TEXT ONLY: no held figure shows this card's
+    faceplate, so the counts and cages are the guide's words and every position is estimated - two rows of
+    twenty-four SFP cages in three groups of eight (SFP28 uses the SFP cage) on the registry's 14.25 mm pitch,
+    then two columns of two QSFP28 cages, odd ports over even in each column. The SFP28 cages are ports 1 to 48
+    and the QSFP28 cages 49 to 52; the numbering as printed on the metal is not shown, and Ethernet1/n
+    interface names are not drawn.
+  lamps: >-
+    install guide - "Line Card LEDs" (9504 and 9508 guides PDF p136, printed 130; 9516 guide PDF p132,
+    printed 126): the Beacon (BCN) and Status (STS) lamps are "on the front, toward the left side of the
+    module"; the Link lamp of each port is "between the two rows of ports", a triangle pointing to the port
+    above or below it. BCN: flashing blue, or off. STS: green, flashing red, flashing amber, or off. Link:
+    green, orange, flashing orange, or off. The lamps are drawn beside what they name; positions estimated.
+  skin: >-
+    estimated - the card's own faceplate is not shown, so the skin does not show this card. The levers follow
+    the install procedure ("Installing or Replacing a Line Card", 9504 guide PDF p91, printed 85): a release
+    button on each ejector lever, which is pressed before the lever is rotated away. A figure of an unnamed
+    36-port card (9504 guide PDF p93, printed 87) shows two rows with the lamps at the left, a ventilation
+    strip over each row and the levers at each end, and is used for that arrangement only. The maker's mark is
+    reserved as the logo-zone and not drawn.
+  chassis-compatibility: >-
+    install guide - the Overview tables of the 9504 (PDF pp8-9, printed 2-3), 9508 (PDF pp8-9, printed 2-3)
+    and 9516 (PDF pp7-8, printed 1-2) guides list it under the -E, -E2 (9508, 9516) and -G (9504, 9508) fabric
+    modules, four of them for maximum bandwidth (a fifth for redundancy under the 9508's -E and -E2 and the
+    9516's -E2). That is why the slot bays of all three chassis accept it; geometry is not a compatibility
+    source. The fabric modules the guides pair with it are listed in the chassis and are not enforced.
+  lifecycle: >-
+    unknown - Cisco's support page gives no sale status for this part number, and no end-of-sale notice is held.
+elements:
+  bcn:
+    at: [12.5, 12.0]
+    size: [3.0, 3.0]
+    class: led
+    description: BCN lamp, at the left of the face.
+    states:
+    - {name: blue, color: '#2a7de1', behavior: blinking}
+    - 'off'
+  sts:
+    at: [12.5, 25.0]
+    size: [3.0, 3.0]
+    class: led
+    description: STS lamp, at the left of the face.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: red, color: '#d0021b', behavior: blinking}
+    - {name: amber, color: '#f5a623', behavior: blinking}
+    - 'off'
+  logo-zone:
+    at: [413.5, 18.0]
+    size: [8.0, 8.0]
+    class: mechanical
+    description: The maker's mark, reserved and not drawn.
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: 48 SFP28 cages (ports 1 to 48) and 4 QSFP28 cages (ports 49 to 52), all data ports of one card
+  link-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    attrs:
+      led-states: 'green (port active), orange (port disabled or not initialising), flashing orange (beacon on the port, or the port is faulty and disabled), off (port not active, link not connected)'
+parts:
+  - {ref: std/sfp-ganged@1, id: port-1, at: [21, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-2, at: [21, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-3, at: [35.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-4, at: [35.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-5, at: [49.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-6, at: [49.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-7, at: [63.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-8, at: [63.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-9, at: [78, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-10, at: [78, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-11, at: [92.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-12, at: [92.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-13, at: [106.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-14, at: [106.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-15, at: [120.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-16, at: [120.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-17, at: [137, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-18, at: [137, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-19, at: [151.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-20, at: [151.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-21, at: [165.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-22, at: [165.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-23, at: [179.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-24, at: [179.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-25, at: [194, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-26, at: [194, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-27, at: [208.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-28, at: [208.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-29, at: [222.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-30, at: [222.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-31, at: [236.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-32, at: [236.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-33, at: [253, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-34, at: [253, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-35, at: [267.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-36, at: [267.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-37, at: [281.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-38, at: [281.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-39, at: [295.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-40, at: [295.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-41, at: [310, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-42, at: [310, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-43, at: [324.25, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-44, at: [324.25, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-45, at: [338.5, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-46, at: [338.5, 24.4], rotate: 180, group: ports}
+  - {ref: std/sfp-ganged@1, id: port-47, at: [352.75, 9.6], group: ports}
+  - {ref: std/sfp-ganged@1, id: port-48, at: [352.75, 24.4], rotate: 180, group: ports}
+  - {ref: std/qsfp28@1, id: port-49, at: [371, 9.8], group: ports}
+  - {ref: std/qsfp28@1, id: port-50, at: [371, 24.5], rotate: 180, group: ports}
+  - {ref: std/qsfp28@1, id: port-51, at: [392.5, 9.8], group: ports}
+  - {ref: std/qsfp28@1, id: port-52, at: [392.5, 24.5], rotate: 180, group: ports}
+  - {ref: common/led-arrow-sm@1, id: link-1, at: [24.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-2, at: [29.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-3, at: [38.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-4, at: [43.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-5, at: [53.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-6, at: [57.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-7, at: [67.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-8, at: [72.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-9, at: [81.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-10, at: [86.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-11, at: [95.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-12, at: [100.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-13, at: [110.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-14, at: [114.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-15, at: [124.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-16, at: [129.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-17, at: [140.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-18, at: [145.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-19, at: [154.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-20, at: [159.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-21, at: [169.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-22, at: [173.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-23, at: [183.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-24, at: [188.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-25, at: [197.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-26, at: [202.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-27, at: [211.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-28, at: [216.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-29, at: [226.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-30, at: [230.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-31, at: [240.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-32, at: [245.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-33, at: [256.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-34, at: [261.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-35, at: [270.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-36, at: [275.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-37, at: [285.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-38, at: [289.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-39, at: [299.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-40, at: [304.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-41, at: [313.62, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-42, at: [318.38, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-43, at: [327.88, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-44, at: [332.62, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-45, at: [342.12, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-46, at: [346.88, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-47, at: [356.38, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-48, at: [361.12, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-49, at: [377.5, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-50, at: [382.25, 21.2], skin: down, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-51, at: [399, 21.2], skin: up, group: link-leds}
+  - {ref: common/led-arrow-sm@1, id: link-52, at: [403.75, 21.2], skin: down, group: link-leds}
+skins: [default]

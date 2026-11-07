@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dcs511
-version: 2.0.9
+version: 2.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9737-32DB
@@ -487,8 +487,9 @@ gaps:
   wanted: >-
     An elevation of the DC supply. The rear photograph draws the AC pair; the datasheet rates
     a -48 VDC variant at 1600 W and the ordering table lists AS9737-32DB-O-48V-F and -48V-B,
-    so it certainly exists. edgecore/dcs240-psu-dc@1 is seated here and it borrows the AC
-    module's measured face with its terminal marked estimated.
+    so it certainly exists. edgecore/dcs240-psu-dc@2 is seated here and is drawn from the
+    quick start guide's photograph of the supply, a close-up in perspective with no scale, so
+    every position on it is an estimate.
 groups:
   qsfp-dd:
     term: Port
@@ -664,7 +665,7 @@ views:
     components:
       bays:
       - {id: psu-2, at: [12.00, 1.80], size: {w: 54.4, h: 40.0}, group: psus, rel-pos: 2,
-         accepts: ['edgecore/dcs240-psu-ac@1', 'edgecore/dcs240-psu-dc@1'], default: 'edgecore/dcs240-psu-ac@1'}
+         accepts: ['edgecore/dcs240-psu-ac@1', 'edgecore/dcs240-psu-dc@1', 'edgecore/dcs240-psu-dc@2'], default: 'edgecore/dcs240-psu-ac@1'}
       - {id: fan-6, at: [71.63, 1.80], size: {w: 48.5, h: 40.0}, group: fans, rel-pos: 6,
          accepts: ['edgecore/dcs240-fan@1'], default: 'edgecore/dcs240-fan@1'}
       - {id: fan-5, at: [120.13, 1.80], size: {w: 48.5, h: 40.0}, group: fans, rel-pos: 5,
@@ -678,7 +679,7 @@ views:
       - {id: fan-1, at: [314.13, 1.80], size: {w: 48.5, h: 40.0}, group: fans, rel-pos: 1,
          accepts: ['edgecore/dcs240-fan@1'], default: 'edgecore/dcs240-fan@1'}
       - {id: psu-1, at: [371.73, 1.80], size: {w: 54.4, h: 40.0}, group: psus, rel-pos: 1,
-         accepts: ['edgecore/dcs240-psu-ac@1', 'edgecore/dcs240-psu-dc@1'], default: 'edgecore/dcs240-psu-ac@1'}
+         accepts: ['edgecore/dcs240-psu-ac@1', 'edgecore/dcs240-psu-dc@1', 'edgecore/dcs240-psu-dc@2'], default: 'edgecore/dcs240-psu-ac@1'}
       placements:
       - {ref: common/screw-head@1, id: ground-screw-upper, at: [4.14, 23.55], group: furniture, rel-pos: 1}
       - {ref: common/screw-head@1, id: ground-screw-lower, at: [4.60, 34.30], group: furniture, rel-pos: 2}
@@ -741,15 +742,15 @@ configurations:
       AS9737-32DB-O-AC-B-JP: {power-cord: JP}
     region-context: {exhaust: Intake}
     component-attrs:
-      dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
-      dcs240-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+      dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
+      dcs240-psu-ac: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}
   dc-f2b:
     kind: orderable
     power: dc
     description: 'Dual -48 VDC PSUs, front-to-back airflow - red handles and red release latches'
     part-numbers:
       AS9737-32DB-O-48V-F: {part: FP5EC8632006Z}
-    bays: {psu-1: 'edgecore/dcs240-psu-dc@1', psu-2: 'edgecore/dcs240-psu-dc@1'}
+    bays: {psu-1: 'edgecore/dcs240-psu-dc@2', psu-2: 'edgecore/dcs240-psu-dc@2'}
   dc-b2f:
     kind: orderable
     power: dc
@@ -760,10 +761,10 @@ configurations:
     part-numbers:
       AS9737-32DB-O-48V-B: {part: FP5EC8632007Z}
     region-context: {exhaust: Intake}
-    bays: {psu-1: 'edgecore/dcs240-psu-dc@1', psu-2: 'edgecore/dcs240-psu-dc@1'}
+    bays: {psu-1: 'edgecore/dcs240-psu-dc@2', psu-2: 'edgecore/dcs240-psu-dc@2'}
     component-attrs:
-      dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F}
-      dcs240-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c'}
+      dcs240-fan: {handle-finish: '#3d7bd6', airflow-legend: B2F, airflow: back-to-front}
+      dcs240-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}
 references:
 - {title: 'Edgecore DCS511 / AS9737-32DB 32x400G QSFP56-DD Data Center Switch Data Sheet'}
 - {title: 'Edgecore AS9737-32DB 32-Port 400G Ethernet Switch Quick Start Guide'}

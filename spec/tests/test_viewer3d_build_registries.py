@@ -27,7 +27,7 @@ def build_body():
 
 @pytest.mark.parametrize("load", [
     "setNodeStates(STATES, SCOPE);",
-    "setReliefPulled(PULLED, SCOPE);",
+    "pushPulledToRelief();",   # setReliefPulled(paths, SCOPE, views) over PULLED
     "setNodeFields(FIELDS, SCOPE);",
 ])
 def test_build_loads_each_registry_before_the_first_face(load):

@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: qfx3600-qfxc01-fanbi
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  QFXC01-FANBI, a field-replaceable fan tray with FRU-side-to-port-side airflow. Cold air comes in at the
+  FRU end of the switch and hot air leaves at the port end. The tray holds two fan modules and has a
+  single lamp, green when the tray is healthy and blinking amber on an error. It is hot-removable and
+  hot-insertable, and one fan module cannot be replaced alone. The QFX3600 hardware guide gives it
+  to the QFX3600-16Q-AFI and the QFX3600-I-16Q-AFI. The chassis seats three, in slots 0 to 2 from left
+  to right between the two power supplies. The front-to-back and back-to-front trays are never mixed
+  in one chassis, and never with power supplies of the other direction. The front-to-back sibling is
+  QFXC01-FANBO.
+attrs:
+  model: QFXC01-FANBI
+  airflow: back-to-front
+  power-absent: not-published
+provenance:
+  size: >-
+    drawing - the same tray as juniper/qfx3600-qfxc01-fanbo@1 with the airflow turned, so the size is the
+    same: QFX3600 Device Hardware Documentation (modified 2018-07-03), figure 4 (page 27, drawing g050203),
+    scaled to the table's 16.9 x 1.74 in at 1.4106 mm/pt across and 1.450 down, 80.0 x 41.6 mm. The
+    guide draws one tray and does not say the two airflows differ in outline.
+  depth: >-
+    estimated - not stated. The guide's figure 8 is an isometric drawing with no scale and no table gives a
+    depth, so none is written.
+  face: >-
+    drawing - figure 4 draws one tray and does not say which airflow it is. The art is the same as the
+    front-to-back tray's. The guide's Table 12 lists the two trays under two part numbers and states no
+    difference in appearance, so none is drawn.
+  colour: >-
+    estimated - the guide prints no colour for the fan tray (it gives gold and blue handles to the power
+    supplies only). A neutral grey is drawn. No photograph of this tray is held.
+  airflow: >-
+    datasheet - guide, Table 12 (page 36): QFXC01-FANBI is FRU-side-to-port-side. In the guide's words AFI is
+    airflow in, which is FRU-to-port.
+  power: >-
+    not published. Searched the QFX3600 hardware guide near its fan sections, Table 5 (weights) and the
+    power tables 23 and 25: only whole-switch figures exist. The module declares power-absent so the
+    missing figure is a statement and not a silence.
+states: [absent]
+elements:
+  led-fan:
+    at: [27.8, 35.0]
+    size: [2.0, 2.0]
+    class: led
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - 'off'
+  handle:
+    at: [1.4, 31.5]
+    size: [77.2, 8.7]
+    class: latch
+size:
+  w: 80.0
+  h: 41.6
+size-confidence: {w: drawing, h: drawing}
+skins: [default]

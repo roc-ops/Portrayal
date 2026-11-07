@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: pr2v-door-10
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The front full-length dual-hinging push-to-close door of the 10 in wide Panduit PatchRunner 2
+  vertical manager (PR2VD10) seen from the front - a steel skin with ABS ends that closes the
+  front channel. It ships fitted, opens to the left or right and lifts off its hinge pins
+provenance:
+  size: >-
+    drawing - the table of the PR2VD customer drawing (Panduit 14V455LV-DC): door width D 253.7
+    [9.99 in], door height E 2052.9 [80.82 in] for the 7 ft manager, centred on its 2130.4 height.
+  relief: >-
+    estimated - the door stands at the front of the channel: its skin is taken 3.5 thick (no view
+    sections it) from 299.5 to 303 above the well's floor. The drawing's "F=DOOR OPENING DEPTH"
+    (218.4 mm) is how far an open door stands out and is not drawn.
+  lid: >-
+    datasheet - the product page: "includes two full-length metal, dual-hinging, push-to-close
+    doors"; the PR2VD drawing: "PUSH-TO-CLOSE DOOR LATCHES", "TURN KNOB HANDLES", "HINGE PINS & HINGE
+    LATCHES: POLYCARBONATE". It opens over the channel, so it is a lid (`lid: true`) that comes off. The
+    format has no hinge, so the door is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: Steel", "The manager is black" on the product page. The shade is this
+    library's render of black powder-coated steel, a little lighter than the backbone.
+size: {w: 253.7, h: 2052.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: steel}
+elements:
+  plate: {at: [0.0, 0.0], size: [253.7, 2052.9], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 299.5
+      out: 303
+      color: '#2f3235'
+      confidence: estimated
+      source: the PR2VD drawing's door view; the skin's thickness is not dimensioned
+skins: [default]

@@ -1,0 +1,49 @@
+format: 1
+kind: module
+name: jnp10k-pwr-blnk
+version: 2.0.0
+class: blank
+behaviour: fills
+profile: networking
+description: >-
+  Power supply slot cover for the MX10000 series. The MX10004, MX10008 and
+  MX10016 ship one in each supply slot they leave unfilled. A plain panel the size
+  of a supply, 91.4 x 88.9 mm, with a pull at the top. Version 1 drew it 84.0 x 97.0 mm.
+attrs:
+  model: JNP10K-PWR-BLNK
+provenance:
+  states: >-
+    NO LAMP AND NO HEALTH ON A FILLER PANEL. A slot cover is a piece of sheet metal
+    that fills an opening: it has no indicator to light and no condition to report,
+    so this part draws no elements at all. `absent` stays, because an empty slot is a
+    real thing to draw.
+  size: >-
+    derived - the size of the JNP10K-PWR-AC2 it stands beside, 91.4 x 88.9 mm
+    (juniper/jnp10k-pwr-ac2@2: the MX10004 guide's Table 22, the MX10008 guide's
+    Table 55 and the MX10016 guide's Table 39 all give 3.6 in. wide by 3.5 in. high),
+    so the cover and the supply fill a bay the same way, and the three chassis now
+    open the same aperture. Juniper's hardware guides list the supply's physical
+    specifications and ship the cover in the configuration tables, but give no
+    dimensions for the cover, so there is no vendor figure for it.
+  part-number: >-
+    vendor - JNP10K-PWR-BLNK, named as the "power supply blank cover panel" in the
+    MX10004 hardware guide's configuration table (MX10004-BASE and
+    MX10004-3F-BASE, two supplies plus one cover). The MX10008 and MX10016
+    guides' tables ship power supply covers - three on the MX10008 base, five on
+    the MX10016 base - without a part number; the supply slots are the same
+    JNP10K-PWR family across the three chassis, so the one part number is
+    carried to them as an inference, not a vendor statement.
+  face: >-
+    estimated - no photograph or drawing of this cover is in the intake. The art
+    follows the MX10000 line-card cover already in the library: a plain light
+    panel with a pull, turned to the supply's upright shape. The OUTLINE is
+    sourced and the DETAIL is not, which is the honest split.
+states: [absent]
+size:
+  w: 91.4
+  h: 88.9
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  Derived, not measured: no vendor drawing or dimension of the cover is held. It takes the
+  JNP10K-PWR-AC2's own 91.4 x 88.9 mm (version 2 of the supply), so it fills a bay exactly
+  as the supply does.

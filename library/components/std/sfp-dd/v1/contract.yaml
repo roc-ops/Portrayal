@@ -1,0 +1,71 @@
+format: 1
+kind: component
+name: sfp-dd
+version: 1.0.0
+class: port
+profile: networking
+conforms: sfp-dd
+interface: sfp-dd
+description: SFP-DD cage cutout (one port per opening; the belly-to-belly rows of a
+  1RU face are two of these, or two rows of sfp-dd-ganged)
+size: {w: 15.45, h: 10.4, d: 38.9}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+attrs: {media: sfp-dd}
+unplaced: no device places it yet; the first is a follow-up (the Arista 7050SDX4-48D8 and the Juniper QFX5130-48C and -48CM need SFP-DD cages)
+provenance:
+  size: >-
+    drawing - the bezel cutout of a 1x1 SFP-DD cage, 15.45 +/-0.10 by 10.40 +/-0.10, R0.30
+    max. TE Connectivity customer drawing C-2359845 rev A (2020-06-18) sheet 3, and TE
+    application specification 114-60027 rev A (2020-06-18) Figure 4 (A 15.45, C 10.4). Molex
+    product customer drawing 2048233001 rev A (2022-12-10) sheet 6 gives the same two figures.
+    The makers agree. A key notch 1.20 +/-0.10 high stands above the top edge, 3.90 +/-0.10 off
+    the centreline (both makers); it is not drawn, so the opening is the plain rectangle.
+  depth: >-
+    drawing - bezel face to the centreline of the connector guide pins, 38.90 +/-0.30, TE
+    2359845 rev A sheet 3. Molex 2048233001's held sheets give no bezel-to-connector figure, so
+    this is one maker. It is a guide-pin datum and std/sfp's 41.0 is measured to the connector
+    planes, so the two are not comparable.
+  relief.size: >-
+    drawing - the port opening inside the cage, 14.00 +/-0.10 by 8.95: TE 2359845 rev A sheet 1
+    (+/-0.10 on the height) and Molex 2048233001 rev A sheet 1, "inside to inside" (+/-0.15 on
+    the height). The makers agree on the figure and differ on the height tolerance. This is the
+    cage interior, not a module envelope.
+  pitch: >-
+    drawing - 16.25 minimum centreline pitch between single cages, TE 2359845 rev A sheet 3 and
+    114-60027 Figure 4 column B. Molex 2048233001 states no pitch; its sheet 6 gives a 1.30 MIN
+    web between bezel cutouts "for reference only", which would make 16.75. The owner is told of
+    the 0.50 difference; the registry carries TE's figure, which is the one stated as a pitch.
+  latch: >-
+    estimated - read off the TE 2359845 sheet 1 front view, which draws one locking tab on the
+    lower (board-side) edge of the port opening. Molex 2048230001 section 1 says the cage has
+    "side latch tabs". The makers' words differ and no dimension settles it, so nothing here
+    draws a latch.
+  key: >-
+    drawing - the key notch is on the top edge, 3.90 off the centreline to the left looking into
+    the port, and the lower row of a belly-to-belly pair turns it to the bottom and the right
+    (TE 2359845 sheet 3; Molex 2048233001 sheets 1 and 6). Not drawn.
+  registry: >-
+    spec/schemas/standards.yaml `sfp-dd`. The SFP-DD MSA was not used; what only the MSA would
+    settle (lanes, rates, whether an SFP module is specified to work here) is marked unconfirmed
+    there.
+elements:
+  opening: {at: [0.0, 0.0], size: [15.45, 10.4], class: cutout}
+relief:
+  wall: '#aab0b7'
+  cavity: cavity
+  size: {w: 14.0, h: 8.95}
+  features:
+    - node: collar
+      out: 1.0
+      color: '#7d848c'
+      confidence: estimated
+      source: >-
+        std/ cage collars - the library's ONE cage-lip figure, now carried by std/sfp@1,
+        std/xfp@1, std/qsfp28@1, std/qsfp56@1, std/qsfp-dd@1, std/osfp@1 and this cage. Neither
+        maker dimensions how far the EMI spring fingers stand proud of the bezel: TE 2359845
+        sheet 1 gives 16.30 across the fingers against 15.34 for the body, and Molex 2048233001
+        sheet 1 gives 15.90 uncompressed against 15.10, so the fingers reach about 0.5 and 0.4
+        past each side but their depth is not stated. One estimate written again, not a reading.
+connection-points:
+  mate: {at: [7.725, 5.2], direction: front}
+skins: [default]

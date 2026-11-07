@@ -1,0 +1,149 @@
+format: 1
+kind: component
+name: nm-rear-cover-2ru
+version: 1.0.1
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The hinged rear cover of a Panduit NetManager High Capacity 2RU front-and-rear horizontal
+  manager (NM2) seen from behind - a PVC plate across the tips of the rear D-rings, sunk inside
+  a raised rim, with a lip along its top and bottom edge and a row of hinge knuckles along each.
+  It ships fitted and opens up or down 110 degrees
+provenance:
+  size: >-
+    drawing - the parts list of the NM2 customer drawing (Panduit 10404-20): "2- 2RU 19" COVERS",
+    "2RU COVER: PVC", one for each channel. 444.83 wide as the body and 88 high, as nm-cover-2ru.
+  relief: >-
+    drawing - the cover is the back 12.6 mm of the rear channel, as the front cover is of the front
+    (see nm-cover-2ru): its plate and lips are 3.5 and 1.5 thick, ESTIMATED, and stand 171.5 to 175
+    and 162.4 to 175 above the rear well's floor. The NM2 drawing is a plan of the front channel
+    and the rear posts; it does not draw the rear cover, so it is carried over from the front.
+  detail: >-
+    estimated - carried over from nm-cover-2ru, where it is argued: the plate is a centre panel 2.0
+    thick (it stands to 173.5) inside a rim 4.0 wide up each end that stands the whole 3.5, and
+    each of the top and bottom edges carries five knuckles 44.0 wide and 5.0 high. The rim's
+    width, the panel's thickness and the knuckles' count, width and height are STAND-INS read off
+    no document: no Panduit view draws the rear cover's section or its hinge (the NM2 declares
+    both as gaps).
+  lid: >-
+    datasheet - the NetManager High Capacity specification sheet (RKSP237): "Patented front and
+    rear dual hinged cover allows cable access without removing cover", opening 110 degrees to the
+    top or bottom. It opens over the rear channel, so it is a lid (`lid: true`). The format has no
+    hinge, so the cover is on or off; the device records the gap.
+  color: >-
+    datasheet - "Cover Material: PVC", "The manager is black" on the NM2 product page. The shade
+    is this library's render, a little lighter than the manager so the two read apart; the panel
+    is a step darker than the rim and knuckles so the rim reads.
+size: {w: 444.83, h: 88}
+size-confidence: {w: estimated, h: drawing}
+attrs: {material: PVC}
+elements:
+  lip-top: {at: [0.0, 0.0], size: [444.83, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 86.5], size: [444.83, 1.5], class: bezel}
+  plate: {at: [0.0, 0.0], size: [444.83, 88], class: bezel}
+  rim-left: {at: [0.0, 1.5], size: [4.0, 85.0], class: bezel}
+  rim-right: {at: [440.83, 1.5], size: [4.0, 85.0], class: bezel}
+  knuckle-top-1: {at: [22.48, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-2: {at: [111.45, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-3: {at: [200.41, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-4: {at: [289.38, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-top-5: {at: [378.35, 1.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-1: {at: [22.48, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-2: {at: [111.45, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-3: {at: [200.41, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-4: {at: [289.38, 81.5], size: [44.0, 5.0], class: bezel}
+  knuckle-bottom-5: {at: [378.35, 81.5], size: [44.0, 5.0], class: bezel}
+relief:
+  features:
+    - node: lip-top
+      lift: 162.4
+      out: 175
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NM2 drawing does not draw the rear cover
+    - node: lip-bottom
+      lift: 162.4
+      out: 175
+      color: '#333639'
+      confidence: estimated
+      source: carried over from the front cover; the NM2 drawing does not draw the rear cover
+    - node: plate
+      lift: 171.5
+      out: 173.5
+      color: '#2d3033'
+      confidence: estimated
+      source: carried over from the front cover; the panel's thickness is a stand-in, no view sections the cover
+    - node: rim-left
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: carried over from the front cover; a stand-in for the stiffening rim, which no Panduit view draws
+    - node: rim-right
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: carried over from the front cover; a stand-in for the stiffening rim, which no Panduit view draws
+    - node: knuckle-top-1
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: carried over from the front cover; a stand-in for the hinge RKSP237 states, which no view draws
+    - node: knuckle-top-2
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-3
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-4
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-top-5
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-1
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: carried over from the front cover; a stand-in for the hinge RKSP237 states, which no view draws
+    - node: knuckle-bottom-2
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-3
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-4
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+    - node: knuckle-bottom-5
+      lift: 171.5
+      out: 175
+      color: '#3a3d40'
+      confidence: estimated
+      source: the same stand-in
+skins: [default]
