@@ -2,8 +2,8 @@
 
 Both are the AC build of the R/U product page: 32 or 48 RJ45 RS-232 serial ports in G16 modules in the three rear bays, two
 network pairs (RJ45 and SFP), two AC inlets with a rocker each, and a front with a display, a keypad, a power button, a
-card slot, an RJ45 and a micro-USB admin port, two USB ports and a reset. Each bay states the module class it takes and a
-module is drawn in each bay that holds one. Each figure the documents do not give is declared an estimate in the contract
+card slot, an RJ45 and a micro-USB admin port, two USB ports and a reset. No module is modelled: an empty bay states the
+module class it takes and a bay that holds a module is not declared. Each figure the documents do not give is declared an estimate in the contract
 or the provenance that carries it.
 
 These read the library and the registry and render nothing; they read no library/dist.
