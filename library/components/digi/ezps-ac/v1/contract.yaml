@@ -1,0 +1,61 @@
+format: 1
+kind: module
+name: ezps-ac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Digi EZPS-AC, the field-replaceable AC power supply of the Connect EZ 16 and 32.
+  A black 95 x 41.5 face with a round honeycomb fan grille, a portrait IEC C14 inlet and a captive
+  thumbscrew at the outer end.
+size: {w: 95.0, h: 41.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {input: ac, model: EZPS-AC}
+provenance:
+  model: >-
+    datasheet - the Digi Connect EZ 16/32 product page lists "Second, spare or replacement power
+    supply" for the Connect EZ 16 and 32 as EZPS-AC.
+  input: >-
+    datasheet - the product page: "100 - 240 VAC, ~50 - 60 Hz, 2.4 A max for each power
+    supply" and "AC input (C13 connector)", so the inlet is a C14. The same page says the supply is
+    field replaceable. It states no output power and no consumption figure, so this part states neither
+    and the whole-library lint carries it as a part with no power figure.
+  airflow: >-
+    not stated - the rear photograph shows a fan grille on the supply's face; whether it
+    draws air in or blows it out is not stated by any document held, so no airflow is written.
+  size: >-
+    drawing - the Connect EZ 16 dimension model ("footprint" STEP file, EZ16-A000): the supply is
+    a body 95.0 wide and 41.5 high, 179 deep, behind a rear face at the chassis end.
+  layout: >-
+    photo-measured - the Connect EZ 16/32 rear photograph (800 px wide, 1.64 px/mm across): fan
+    centre 29.9 from the supply's left edge, inlet centre 63.6, thumbscrew 91.5 and 16.5 down,
+    read off the photograph and good to about 2 mm. The photograph is stretched about 1.2 times
+    vertically, so every y is taken from the supply's own height in the image.
+  thumbscrew: >-
+    drawing - the dimension model puts the head 10.76 across and 6.2 proud of the face.
+elements:
+  fan-grille: {at: [12.2, 2.0], size: [35.4, 37.5], class: vent}
+  thumbscrew: {at: [86.1, 11.1], size: [10.8, 10.8], class: fastener}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [49.6, 10.75], rotate: 90}
+relief:
+  wall: '#17191b'
+  features:
+    - node: fan-grille
+      vent: 20.0
+      confidence: estimated
+      source: >-
+        digi/ezps-ac@1 - the grille is an opening in the face; how far back it runs before the
+        fan is not stated. Estimated.
+    - node: thumbscrew
+      cyl: 6.2
+      confidence: drawing
+      source: >-
+        digi/ezps-ac@1 - the dimension model gives the head 10.76 across and 6.2 proud.
+connection-points:
+  power: {at: [63.6, 20.75], direction: front}
+body:
+  depth: 179.0
+  color: '#1b1d20'
+skins: [default]

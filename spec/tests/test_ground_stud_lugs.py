@@ -135,7 +135,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (22, 12),
-    "common/ground-stud@1": (11, 11),
+    "common/ground-stud@1": (13, 13),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -458,11 +458,13 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     assert all(n > 0 and d > 0 for n, d in got.values())
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    # 63 -> 65 with the Panduit P24B14M and P32E06M's ground screw each
-    assert sum(n for n, _ in got.values()) == 65
+    # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
+    # 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
+    assert sum(n for n, _ in got.values()) == 67
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    # 44 -> 46 with the Panduit P24B14M and P32E06M
-    assert len({where for where, _, _ in placed}) == 46
+    # 44 -> 46 with the Digi Connect EZ 16 and 32
+    # 46 -> 48 with the Panduit P24B14M and P32E06M
+    assert len({where for where, _, _ in placed}) == 48
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -507,8 +509,9 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    # 62 -> 64 with the Panduit P24B14M and P32E06M's ground screw each
-    assert seen == 64
+    # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
+    # 64 -> 66 with the Panduit P24B14M and P32E06M's ground screw each
+    assert seen == 66
 
 
 @pytest.mark.heavy

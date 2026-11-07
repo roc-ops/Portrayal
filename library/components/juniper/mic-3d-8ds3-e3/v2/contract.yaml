@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-8ds3-e3
-version: 2.1.0
+version: 2.1.1
 class: line-card
 behaviour: fills
 profile: networking
@@ -56,27 +56,40 @@ provenance:
     is the slot geometry of its chassis family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
     usable for this model
+  groups: >-
+    Juniper Networks, MX Series 5G Universal Routing Platform Interface Module Reference, 'DS3/E3
+    MIC' (printed p. 261, Figure 16): 'Eight E3 or DS3 ports', 'Ports are numbered 0 through 7, Tx0
+    through Tx7 and Rx0 through Rx7', 'Coaxial'. The group holds the jacks, two for each port, so
+    its own numbering counts jacks and the port numbers are the figure's. No speed is stated: each
+    port is DS3 or E3 and the speed vocabulary has no word for either.
 states:
 - ok
 - fail
 - absent
 parts:
-- {ref: std/smb@1, id: port-0-0, at: [16.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-1, at: [16.40, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-2, at: [23.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-3, at: [23.90, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-4, at: [31.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-5, at: [31.40, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-6, at: [38.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-7, at: [38.90, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-8, at: [46.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-9, at: [46.40, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-10, at: [53.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-11, at: [53.90, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-12, at: [61.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-13, at: [61.40, 10.73], attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-14, at: [68.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
-- {ref: std/smb@1, id: port-0-15, at: [68.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-0, group: coax, at: [16.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-1, group: coax, at: [16.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-2, group: coax, at: [23.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-3, group: coax, at: [23.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-4, group: coax, at: [31.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-5, group: coax, at: [31.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-6, group: coax, at: [38.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-7, group: coax, at: [38.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-8, group: coax, at: [46.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-9, group: coax, at: [46.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-10, group: coax, at: [53.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-11, group: coax, at: [53.90, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-12, group: coax, at: [61.40, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-13, group: coax, at: [61.40, 10.73], attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-14, group: coax, at: [68.90, 4.70], rotate: 180, attrs: {media: coax, impedance: 75}}
+- {ref: std/smb@1, id: port-0-15, group: coax, at: [68.90, 10.73], attrs: {media: coax, impedance: 75}}
+groups:
+  coax:
+    term: Jack
+    role: traffic
+    index-origin: 0
+    attrs: {media: coax}
+    description: "the sixteen 75-ohm jacks, the Tx and Rx of eight DS3 or E3 ports (Tx0 to Tx7 and Rx0 to Rx7 as Figure 16 prints them)"
 size:
   w: 168.8
   h: 29.2

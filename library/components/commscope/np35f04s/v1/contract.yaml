@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: np35f04s
-version: 1.0.1
+version: 1.1.0
 class: filter
 behaviour: fills
 profile: optical
@@ -58,11 +58,18 @@ elements:
   adapter-tp: {at: [0.8, 39.65], size: [19.0, 10.3], class: adapter}
   adapter-com: {at: [0.8, 50.15], size: [19.0, 10.3], class: adapter}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the SC/APC optical ports of a passive WDM module, its -20 dB test point among them; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: grp, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: dwdm, at: [6.50, 29.70], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: tp, at: [6.50, 40.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: com, at: [6.50, 50.80], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: grp, group: ports, at: [6.50, 19.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: dwdm, group: ports, at: [6.50, 29.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: tp, group: ports, at: [6.50, 40.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: com, group: ports, at: [6.50, 50.80], rotate: 90, attrs: {connector: SC/APC}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
