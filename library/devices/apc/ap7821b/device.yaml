@@ -1,0 +1,248 @@
+format: 1
+kind: device
+name: ap7821b
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AP7821B
+description: >-
+  APC by Schneider Electric NetShelter metered rack PDU, 1U horizontal: a 444 mm black metal box, 102 mm deep.
+  It hands a 200 to 230 V feed (a C20 inlet; 16 A rated, 3300 VA) on to eight IEC C13 outlets in one row. It has no
+  breaker and no switching. The outlet face has the inlet at the left end. At the right end it has a two-digit
+  current display, a round button, two jacks and three small lamps. The other face is plain, with a logo and a
+  ground mark. A cord retention bracket and rack mounting brackets are supplied.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING EXISTS AND THE ONLY PICTURES ARE 369 PX DATASHEET PHOTOGRAPHS, so every position is an estimate. Searched:
+      the APC AP7821B datasheet (6 pp), the Schneider Electric release notes for the network card (990-6391K, no figure
+      of a PDU) and the intake's coverage report; none dimensions a face, and no installation guide, drawing, stencil or
+      CAD file is held. The datasheet's p.5 outlet-face photograph is taken at an angle, so no pitch can be measured on
+      it. The outlet face of the AP7921B, a near-identical face, is the one photograph taken near front-on, and the
+      positions here are the ones read off that photograph (see apc/ap7921b), checked against this photograph only for
+      order: inlet, eight outlets, display, button, two jacks, logo. THE POSITIONS ARE BORROWED, NOT MEASURED ON THIS
+      MODEL (gaps: face-positions).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - AP7821B datasheet: Height 44 mm, Width 444 mm, Depth 102 mm, net weight 1.74 kg (p.1); 1U. Colour
+      read off the p.5 photographs at the median of the face, #33323a, estimated as black matte; no document names
+      one. The AP7921B's face reads #272d2d in a different photograph, so the face colour is taken from that sibling
+      and is the same estimate.
+  ears:
+    confidence: estimated
+    note: >-
+      NOT DRAWN. The datasheet lists rack mounting brackets and a cord retention bracket as supplied (p.1) and states
+      "Mounting location Front Rear", "Mounting position Horizontal". No document says where the brackets bolt, so one
+      `flush` position is written without a figure and it is a stand-in (gaps: ears).
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the plain face, read off the datasheet's p.5 photograph (near front-on, the better of the two views
+      of it): a small round hole near the left end with an earth mark under it, the APC logo with its web address at
+      the right end and a small label under it reading "Metered Rack PDU" in part, the rest not legible. Positions read
+      off the photograph, good to about 3 mm. Which face is the rack front is not stated (gaps: face-names).
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the outlet face, mm from the face's left and top, borrowed from the AP7921B photograph reading (see
+      `method`): the inlet's centre at 17, eight outlets from 55 on a 36.1 pitch, numbered 1 to 8 under their mouths as
+      printed, the display's window from 333 to 355 across, the round button centred at 376, two jacks centred at 397,
+      the logo right of them, and three small lamps. The inlet is empty in this photograph.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - "Number of power socket outlets 8 IEC 60320 C13" (p.1); each is std/c13-outlet@1. "Protection type
+      Without circuit breaker" (p.1). No per-outlet rating and no bank is stated.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Input Connection Type IEC 60320 C20", input 200 V 208 V 230 V, output 208 V 230 V, 50/60 Hz, input
+      current limit 20 A, rated current 16 A, max current draw 20 A, load capacity 3300 VA, cable 2.4 m (p.1). The
+      datasheet lists no cord among what is provided, so none is drawn and none is stated.
+  display:
+    confidence: estimated
+    note: >-
+      estimated - apc/ap78-display@1. The datasheet's text names no display; the photograph shows the window.
+  jacks:
+    confidence: estimated
+    note: >-
+      estimated - two jacks shaped like RJ45 jacks at the right end (p.5 photograph); their labels are not legible and
+      no document names them, so each is std/rj45@2, without a role.
+  dcim:
+    confidence: datasheet
+    note: >-
+      datasheet - the input is a C20 power port (`iec-60320-c20`) and each outlet an `iec-60320-c13` power outlet fed
+      by it. The outlets are named as the unit prints them, 1 to 8.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - sold as a metered rack PDU (title, p.1). What it meters is not stated; `metering-scope: input` is the
+      scope the single display could carry and is a stand-in until a source says (gaps: metering-scope). The unit
+      has no switching in any held document: `outlet-switching: false`.
+attrs:
+  physical:
+    weight-kg: 1.74
+    construction: metal
+  power:
+    input-ac: 200/208/230 V, 16 A rated (limit 20 A), 3300 VA, 50/60 Hz
+    input-inlet: iec-60320-c20
+    input-voltage-v: 230
+    input-current-a: 16
+    output-voltage: 208 V; 230 V
+    frequency: 50/60 Hz
+  management:
+    metering-scope: input
+    outlet-switching: false
+    metering: two-digit display on the outlet face
+chassis:
+  width: 444
+  height: 44
+  depth: 102
+  ru: 1
+  color: '#2c2e30'
+  airflow: passive
+  weight-kg: 1.74
+  ears:
+    color: '#2c2e30'
+    positions:
+      - {name: flush, label: 'rack mounting brackets, position not stated (datasheet p.1)', default: true}
+gaps:
+- what: face-names
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    the datasheet says "Mounting location Front Rear" and names no face as the front. The face with the outlets is
+    drawn as `rear` and the plain face as `front`, the usual way a horizontal PDU is racked; no held document says
+    so.
+  wanted: the installation guide's mounting figure.
+- what: face-positions
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    every position on the outlet face is borrowed from a reading of the AP7921B's photograph and is an estimate good to
+    a few millimetres; none is measured on this model.
+  wanted: a dimensioned drawing or a straight-on photograph of this model with a scale.
+- what: metering-scope
+  scope: [display]
+  reason: vendor-silent
+  note: >-
+    the datasheet sells the unit as metered and says nothing of what is metered or where; the display is one window,
+    so the input is the scope drawn.
+  wanted: the user manual's description of the metering.
+- what: lamp-colours
+  scope: [lamps]
+  reason: needs-photo
+  note: >-
+    three small lamps stand over the display and beside the jacks; their colours and meanings are not legible and no
+    document names them, so they are drawn unlit and uncoloured.
+  wanted: the user manual's description of the status lamps.
+- what: jack-function
+  scope: [jack-1, jack-2]
+  reason: vendor-silent
+  note: >-
+    the labels under the two jacks are not legible and no datasheet names a port.
+  wanted: the user manual, or a close photograph of the jacks.
+- what: jack-speed
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    no document held names the two rear jacks or prints a speed for them, so none is stated.
+  wanted: the user manual's port specification.
+- what: ears
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: >-
+    the datasheet lists rack mounting brackets and a cord retention bracket and gives no figure; no photograph shows
+    them.
+  wanted: the installation guide's mounting figures.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no held document shows the top, the bottom or an end.
+  wanted: straight-on photographs of the top, the bottom and an end.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the eight C13 outlets, numbered 1 to 8 from the left as seen from the outlet face, as printed'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: service, index-origin: 1}
+  jacks: {term: Port, role: management, index-origin: 1, description: 'the two jacks at the right end of the outlet face; their use is not stated'}
+  lamps: {term: LED, role: indicator, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 444, h: 44}
+    panel:
+      decor:
+      - {id: hole-front, at: [24.5, 8.9], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: unidentified}
+    silkscreen:
+      - {id: earth-symbol, at: [26.0, 17.0], path: 'M 0 0 L 0 2.0 M -2.0 2.0 L 2.0 2.0 M -1.3 3.2 L 1.3 3.2 M -0.6 4.4 L 0.6 4.4', stroke-width: 0.35, for: chassis}
+    regions:
+      - {id: logo-zone, at: [411.0, 7.0], size: {w: 22.0, h: 10.0}, label: 'APC logo and web address; not drawn'}
+      - {id: label-zone, at: [411.0, 26.0], size: {w: 22.0, h: 9.0}, label: 'product label, text partly legible; not drawn'}
+  rear:
+    size: {w: 444, h: 44}
+    silkscreen:
+      - {at: [54.9, 38.5], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
+      - {at: [91.0, 38.5], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
+      - {at: [127.1, 38.5], text: '3', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-3}
+      - {at: [163.2, 38.5], text: '4', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-4}
+      - {at: [199.3, 38.5], text: '5', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-5}
+      - {at: [235.4, 38.5], text: '6', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-6}
+      - {at: [271.5, 38.5], text: '7', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-7}
+      - {at: [307.6, 38.5], text: '8', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-8}
+    components:
+      placements:
+        - {id: input, ref: std/c20-inlet@1, at: [4.9, 5.8], rotate: 90, group: power-input, rel-pos: 1, description: 'the IEC C20 power inlet at the left end; the datasheet gives a 2.4 m cable and the photograph shows the inlet empty'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [39.7, 6.0], group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [75.8, 6.0], group: outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [111.9, 6.0], group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [148.0, 6.0], group: outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [184.1, 6.0], group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [220.2, 6.0], group: outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [256.3, 6.0], group: outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [292.4, 6.0], group: outlets, rel-pos: 8, fed-by: input}
+        - {id: display, ref: apc/ap78-display@1, at: [333.0, 10.0], group: display, rel-pos: 1, for: chassis}
+        - {id: button, ref: apc/ap78-button@1, at: [372.5, 15.0], group: buttons, rel-pos: 1, for: display, description: 'round button beside the display; what it does is not stated'}
+        - {id: jack-1, ref: std/rj45@2, at: [389.1, 6.4], group: jacks, rel-pos: 1, description: 'upper jack; its use is not stated'}
+        - {id: jack-2, ref: std/rj45@2, at: [388.1, 25.4], group: jacks, rel-pos: 2, description: 'lower jack; its use is not stated'}
+        - {id: lamp-status, ref: common/led-dot@1, at: [338.0, 5.5], group: lamps, rel-pos: 1, for: chassis}
+        - {id: lamp-jack-1, ref: common/led-dot@1, at: [407.0, 11.0], group: lamps, rel-pos: 2, for: chassis}
+        - {id: lamp-jack-2, ref: common/led-dot@1, at: [407.0, 19.0], group: lamps, rel-pos: 3, for: chassis}
+    regions:
+      - {id: logo-zone, at: [408.0, 22.0], size: {w: 22.0, h: 10.0}, label: 'APC logo; not drawn'}
+  top:
+    size: {w: 444, h: 102}
+    empty: >-
+      no source shows the top straight on: the datasheet has no view of it and the photographs see the lid at a steep
+      angle, a plain black plane with nothing that can be measured.
+  bottom:
+    size: {w: 444, h: 102}
+    empty: >-
+      no source shows the bottom: none of the datasheet's photographs looks at it, and no installation guide is held.
+  left:
+    size: {w: 102, h: 44}
+    empty: >-
+      no source shows the left end straight on; the photograph sees it at a steep angle and no installation guide is
+      held.
+  right:
+    size: {w: 102, h: 44}
+    empty: >-
+      no source shows the right end straight on; the photograph sees it at a steep angle and no installation guide is
+      held.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The rack mounting brackets and the cord retention bracket are in the box and are not drawn.
+    part-numbers:
+      AP7821B: {}
+datasheet:
+  title: 'Schneider Electric APC NetShelter Metered Rack PDU AP7821B product datasheet (5 Nov 2026 copy)'
+  url: https://www.se.com/il/en/product/download-pdf/AP7821B?filename=Schneider+Electric_APC-NetShelter-Metered-Rack-PDU_AP7821B.pdf
+  sha256: 505ff0c9b5dbb17e9fc5e88eea501868788fc9ae4f54e0459b760ac9cdf6974e
