@@ -19,7 +19,7 @@
 format: 1
 kind: device
 name: r760
-version: 2.0.3
+version: 3.0.0
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R760
@@ -496,7 +496,7 @@ groups:
     role: indicator
     index-origin: 1
     description: the left control panel, a field-replaceable module in the left ear
-  ports:
+  local-access:
     term: Port
     role: management
     index-origin: 1
@@ -573,7 +573,7 @@ groups:
     description: >-
       the rear I/O board position - the board carries the ID button, the iDRAC port, two USB and the VGA, which are
       its own ports
-  leds:
+  port-leds:
     term: LED
     role: indicator
     index-origin: 1
@@ -664,11 +664,11 @@ views:
         - {id: drive-23, at: [437.848, 4.0], size: {w: 17.868, h: 79.4}, accepts: *sff-acc, default: common/drive-blank-25@2, group: drives, rel-pos: 23}
       placements:
         - &p-power {ref: dell/power-button-14g@1, id: power-btn, at: [458.80, 3.17], for: chassis, group: mgmt, rel-pos: 1}
-        - &p-usb {ref: std/usb-a@1, id: usb-1, at: [456.65, 23.29], rotate: 90, skin: usb2, attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
-        - &p-idrac {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90, group: ports, rel-pos: 2}
+        - &p-usb {ref: std/usb-a@1, id: usb-1, at: [456.65, 23.29], rotate: 90, skin: usb2, attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
+        - &p-idrac {ref: std/micro-usb@1, id: idrac-direct, at: [459.75, 65.81], rotate: 90, group: local-access, rel-pos: 2}
         # MOUNTED BEHIND THE FACEPLATE, as on the R740xd: the D-sub is on the control-panel board and about
         # a millimetre and a half of it emerges, so the placement insets it
-        - &p-vga {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23, group: ports, rel-pos: 3}
+        - &p-vga {ref: std/vga@1, id: vga, at: [464.90, 21.20], rotate: 270, inset: 5.23, group: local-access, rel-pos: 3}
         - &p-mark-usb {ref: common/usb-symbol@1, id: mark-usb-1, at: [459.45, 14.40], for: usb-1, group: marks, rel-pos: 1}
         - &p-mark-idrac {ref: dell/idrac-direct-symbol@1, id: mark-idrac, at: [461.60, 59.10], for: idrac-direct, group: marks, rel-pos: 2}
         - &p-mark-vga {ref: common/vga-symbol@1, id: mark-vga, at: [472.13, 12.00], for: vga, group: marks, rel-pos: 3}
@@ -678,7 +678,7 @@ views:
           id: idrac-direct-led
           at: [462.50, 72.30]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},

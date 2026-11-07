@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: c40g
-version: 0.6.3
+version: 0.6.4
 maturity: modelled
 manufacturer: Casa Systems
 model: C40G
@@ -193,6 +193,15 @@ provenance:
       a module and fan-left defaults to empty, which is what a chassis without the redundancy kit
       actually looks like. Both strips carry the same FAN TRAY 2 / FAN TRAY 1 / AIR FILTER legend
       printed on the CHASSIS, which is why an empty left slot still shows it in the guide figures
+  power-feed:
+    confidence: datasheet
+    note: >-
+      datasheet - the Casa C40G Hardware Installation Guide, Table A-1, prints AC at 90 to 264 VAC and DC at
+      -48 to -60VDC, and Table A-2 gives the chassis up to four AC supplies or two DC power entry modules.
+      ac-power seats the AC supplies, so it states ac. docsis-non-redundant seats the DC power entry modules,
+      so it states dc, and dc-power is the CommScope C40G data sheet's chassis for DC power, so it states dc.
+      THE BASE CONFIGURATION STATES NOTHING: it seats neither supply and the data sheet sells the chassis for
+      AC or for DC, so no feed is printed for it.
   power-entry:
     confidence: drawing
     note: >-
@@ -692,6 +701,7 @@ configurations:
       rear-5: casa/blank-faceplate@1
   ac-power:
     kind: orderable
+    power: ac
     source: >-
       vendor - CommScope C40G data sheet, C40G_DS_RevA (2024), ORDERING INFORMATION.
       Supplied by the library owner with the sheet it came from.
@@ -708,6 +718,7 @@ configurations:
       psu-4: casa/c40g-psu-ac@1
   dc-power:
     kind: orderable
+    power: dc
     source: >-
       vendor - CommScope C40G data sheet, C40G_DS_RevA (2024), ORDERING INFORMATION.
       Supplied by the library owner with the sheet it came from.
@@ -760,6 +771,7 @@ configurations:
       rear-5: casa/io-6p12@2
   docsis-non-redundant:
     kind: orderable
+    power: dc
     description: 'Non-redundant chassis. The guide: "The Casa C40G chassis is available in both
       redundant and non-redundant versions." There are no switch modules at all - rear 2 and 3
       carry blank filler plates where the redundant schemes carry the SMM Switch pair, and rear

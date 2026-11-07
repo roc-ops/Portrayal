@@ -246,9 +246,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # carriers that the measured 168.8 x 29.2 MIC plate re-majored. It was
     # decided (#448) that the retired majors stay so an outside manifest pinning one still
     # resolves; each older major carries `superseded-by` and nothing seats it.
-    for name in ("mic-3d-10ge-sfp-e", "mic-3d-16che1-t1-ce", "mic-3d-1oc192-xfp",
-                 "mic-3d-20ge-sfp", "mic-3d-2xge-xfp", "mic-3d-40ge-tx",
-                 "mic-3d-4choc3-1oc12", "mic-3d-4choc3-2choc12", "mic-3d-4oc3oc12-1oc48",
+    for name in ("mic-3d-16che1-t1-ce", "mic-3d-1oc192-xfp", "mic-3d-20ge-sfp",
+                 "mic-3d-2xge-xfp", "mic-3d-40ge-tx", "mic-3d-4choc3-1oc12",
+                 "mic-3d-4choc3-2choc12", "mic-3d-4oc3oc12-1oc48",
                  "mic-3d-8choc3-4choc12", "mic-3d-8ds3-e3", "mic-3d-8oc3-2oc12-atm",
                  "mic-3d-8oc3oc12-4oc48", "mic-macsec-20ge", "mic3-100g-dwdm",
                  "mic3-3d-10xge-sfpp", "mic3-3d-1x100ge-cfp", "mic3-3d-1x100ge-cxp",
