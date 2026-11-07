@@ -106,6 +106,29 @@ def test_the_en8400_front_carries_the_orange_label_the_en8100_does_not():
 
 
 @pytest.mark.parametrize("slug", NODES)
+def test_the_faces_are_drawn_as_installed_with_the_lid_below(slug):
+    views = node(slug)["views"]
+    seam_top, seam_bottom = 136, 152  # the flange band on every closed face
+    for face in ("left", "right"):
+        plugs = {p["id"]: p for p in views[face]["components"]["placements"]}
+        assert plugs["fibre-plug"]["at"][1] >= seam_bottom, face  # the lid, the lower half
+        for name, plug in plugs.items():
+            if name != "fibre-plug":  # the RF/AC, AC-only and test plugs are the base's
+                assert plug["at"][1] + 30 <= seam_top, (face, name)
+    # the two ends are a pair: the same plugs, mirrored left to right
+    left = {p["id"]: p["at"] for p in views["left"]["components"]["placements"]}
+    right = {p["id"]: p["at"] for p in views["right"]["components"]["placements"]}
+    assert left["fibre-plug"][0] < 281 / 2 < right["fibre-plug"][0]
+    for face in ("front", "rear"):
+        fins = {d["id"]: d for d in views[face]["panel"]["decor"] if d.get("kind") == "heat-sink-fins"}
+        tall = [d for i, d in fins.items() if i.startswith("fins-tall")]
+        short = [d for i, d in fins.items() if i.startswith("fins-short")]
+        assert tall and short, face
+        assert all(d["at"][1] >= seam_bottom for d in tall), face  # the lid's tall fins, below
+        assert all(d["at"][1] + d["size"][1] <= seam_top for d in short), face
+
+
+@pytest.mark.parametrize("slug", NODES)
 def test_the_three_arrangements_the_makers_drawing_shows_are_configurations(slug):
     configs = node(slug)["configurations"]
     assert configs["2am-2x4"].get("default") is True
@@ -114,6 +137,14 @@ def test_the_three_arrangements_the_makers_drawing_shows_are_configurations(slug
 
 
 def test_the_amplifier_module_draws_its_connectors_and_circuit_lines():
+    """Reads the skin's source text because no library interface returns a skin's contents.
+
+    What it asks about, the ids of the drawn groups and two connector colours, is a property
+    of the drawing in the file; a build is not run here (this module reads library files only)
+    and the built drawing is not the place to look for what a skin file drew. The file is read
+    as text, never parsed, so it adds milliseconds; the 21 seconds of this module is the one
+    library load the other tests share through `libdata`, not a cost of this test.
+    """
     skin = (COMPONENTS / "en8100-rfam/v1/skins/default.svg").read_text()
     for group in ("shunts", "test-leads", "rf-circuit"):
         assert f'id="{group}"' in skin
@@ -122,6 +153,13 @@ def test_the_amplifier_module_draws_its_connectors_and_circuit_lines():
 
 
 def test_no_maker_lettering_and_no_document_hash_is_published():
+    """Reads each skin's source text because no library interface returns a skin's lettering.
+
+    The device views' lettering comes through `libdata`; the skins' text is only in the files,
+    and a check of what the maker's logo would look like must see every file, built or not.
+    They are read as text, not parsed, so the cost is milliseconds; the 21 seconds of this
+    module is the shared library load, not this test.
+    """
     texts = []
     for slug in NODES:
         doc = node(slug)
