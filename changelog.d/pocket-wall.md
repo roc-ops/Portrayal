@@ -25,6 +25,7 @@
   estimate for this card. `return-8`, the wedge behind the bar below window 8,
   is no longer a facet: it lay outside the window and the plate hides it from
   the front. The 2D drawing is unchanged. The shelves that seat it take a
-  patch each: Nokia 7360 ISAM FX-16 (`nokia/nfxs-d-ba`) 1.0.2, FX-8
-  (`nokia/nfxs-e-bb`) 1.0.2 and FX-4 (`nokia/nfxs-f-bb`) 1.0.2. The other
+  patch each: Nokia 7360 ISAM FX-16 (`nokia/nfxs-d-ba`) 1.0.3, FX-8
+  (`nokia/nfxs-e-bb`) 1.0.4 and FX-4 (`nokia/nfxs-f-bb`) 1.0.3. The wall of
+  12.0 mm is declared an estimate: no held page measures this card's plate. The other
   walled-window cards (FGLT-B, FGLT-D, FGUT-A, NGLT-C) follow separately.
