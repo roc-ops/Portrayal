@@ -382,6 +382,7 @@ def test_committed_exports_equal_the_exporters_own_output(name, tmp_path):
 # ------------------------------------------------------------------- the lock
 
 
+@pytest.mark.heavy
 def test_the_lock_agrees_with_the_device():
     from portrayal import devicelock
 
