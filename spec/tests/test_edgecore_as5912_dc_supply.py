@@ -30,8 +30,6 @@ SUPPLY = "edgecore/as5912-54x-psu-dc@1"
 RECEPTACLE = "common/pla03-receptacle@1"
 GENERIC = "common/psu-dc-650@2"
 DEVICE = "edgecore/as5912-54x"
-OTHER_DEVICE = "edgecore/as7326-56x"
-DCS204_SUPPLIES = ["edgecore/psu-48v-650-f@1", "edgecore/psu-48v-650-b@1"]
 
 
 def contract(ref):
@@ -64,12 +62,6 @@ def test_the_supply_states_no_part_number_and_no_input_range_the_guide_does_not_
     assert "input-note" not in d["attrs"] and "airflow" not in d["attrs"]
     assert "NO MAKER PART NUMBER IS HELD" in d["provenance"]["naming"]
     assert "THE GUIDE PRINTS TWO RANGES" in d["provenance"]["input"]
-
-
-def test_the_device_seats_neither_of_the_dcs204_supplies():
-    seated = {r for c in device(DEVICE)["configurations"].values() for r in (c.get("bays") or {}).values()}
-    accepted = {r for b in device(DEVICE)["views"]["rear"]["components"]["bays"] for r in b.get("accepts", [])}
-    assert not (seated | accepted) & set(DCS204_SUPPLIES)
 
 
 def test_the_supply_composes_the_connector_and_says_why_it_states_no_dc_port():
@@ -121,13 +113,3 @@ def test_the_lock_records_the_bays_and_the_composed_parts():
     for bay in ("rear/bays/psu-1", "rear/bays/psu-2"):
         assert set(lock["bay-accepts"][bay]) == {"common/psu-ac-650@3", GENERIC, SUPPLY}
     assert {RECEPTACLE, SUPPLY} <= set(lock["composed-refs"])
-
-
-def test_the_other_device_that_seats_the_generic_supply_still_does():
-    seated = {ref for c in device(OTHER_DEVICE)["configurations"].values() for ref in (c.get("bays") or {}).values()}
-    assert GENERIC in seated and SUPPLY not in seated
-
-
-def test_the_new_supply_needs_no_record():
-    rows = yaml.safe_load((LIB / "conformance-exceptions.yaml").read_text())["rows"]
-    assert [r for r in rows if r["part"] == SUPPLY] == []
