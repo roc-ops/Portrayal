@@ -655,7 +655,7 @@ RULES = {
     "L184": ("component",  "a `supersedes` lists removed component majors: each entry names an `ns/name@major` that is not the part itself and is not in the library any more, carries a `sha256:` signature and the commit it was taken from, and no ref is listed twice", "fix the ref or the signature; remove the entry when the old major is still in the library (it says `superseded-by` instead)",
              "A redirect is read by a saved rack, so a ref that is still published, a self-pointer or a signature that is not one would send a swap to a part that is not what the rack named, or never fire.",
              ERROR),
-    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
+    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180; bays that sit side by side, a carrier's MIC windows, follow one another along x, to the right at 0 and to the left at 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
              "A card two slots wide is drawn across its bay and the next one and covers that one, so a span that names the wrong bay, a bay in the wrong place or none at all puts the card over the wrong opening or offers it where it cannot go.",
              ERROR),
     "L186": ("component, device", "a card wider than one slot and a bay it covers are never both filled - by a configuration, or by what the bays ship", "empty the covered bay (`<carrier>/<bay>: \"\"` in the configuration), or seat a one-slot part; a component does not ship a two-slot default over a bay that ships one too",
@@ -4869,7 +4869,9 @@ def lint_component_span(path, data, lib_roots):
     another bay of this component - a bay in another riser is not a sibling,
     and a card across two risers would come apart - of the same size, turn and
     hand, and each follows the last along the bay's own +y turned by its
-    `rotate`: below it at 0, above it at 180. A quarter turn is refused until a
+    `rotate`: below it at 0, above it at 180. Bays that sit side by side, as a
+    line card's two MIC windows do, follow one another along x instead: to
+    the right of it at 0, to the left at 180. A quarter turn is refused until a
     riser needs one. And the two sides meet: a bay that accepts a part wider
     than one slot names enough bays to cover, and a card that composes the
     two-slot bracket is two slots wide itself.
@@ -4908,11 +4910,18 @@ def lint_component_span(path, data, lib_roots):
                 px = _bay_box(prev)
                 dx, dy = sx[0] - px[0], sx[1] - px[1]
                 along = dy if turn == 0 else -dy
-                if abs(dx) > SPAN_TOLERANCE_MM or not 0 < along <= bx[3] + SPAN_TOLERANCE_MM:
+                # Bays that sit side by side - a carrier's MIC windows - are
+                # followed along x instead: to the right at 0, to the left at 180.
+                across = dx if turn == 0 else -dx
+                below = abs(dx) <= SPAN_TOLERANCE_MM and 0 < along <= bx[3] + SPAN_TOLERANCE_MM
+                beside = abs(dy) <= SPAN_TOLERANCE_MM and 0 < across <= bx[2] + SPAN_TOLERANCE_MM
+                if not (below or beside):
                     side = "below" if turn == 0 else "above"
+                    flank = "right of" if turn == 0 else "left of"
                     err(path, "L185", f"bays/{bid}: spans {sid}, which is not the next bay "
                         f"{side} {prev_id} - a two-slot card covers the bay on its component "
-                        f"side, here {side} it (offset {dx:g}, {dy:g})")
+                        f"side, here {side} it, or the bay {flank} it when the bays sit side by "
+                        f"side (offset {dx:g}, {dy:g})")
                     break
                 prev, prev_id = sib, sid
         for ref in b.get("accepts") or []:
