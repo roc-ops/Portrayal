@@ -1,0 +1,221 @@
+format: 1
+kind: device
+name: dsm-8
+version: 0.1.0
+maturity: modelled
+manufacturer: WTI
+model: DSM-8
+portfolio: {line: Console server, family: DSM}
+description: >-
+  WTI DSM-8 console server, 1U. The front carries a phone jack, a USB mini set-up port, two antenna mounts, a RESET and a DEFAULT button and lamps. The back carries two IEC C14 inlets, eight RJ45 serial ports in two rows of four and two Ethernet jacks.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      NO PHOTOGRAPH IS HELD. Every position on both faces is read from the vector figures of the maker's one-page dimensional drawing (DSM family, revision A): the views carry no dimension for a connector, so each is a point of the drawing, converted at the scale that makes the drawn faceplate the 17.15 inches the drawing prints, and is good to about 1.5 mm. The hardware guide's front and back figures (CPM Series Hardware Guide figures 2.1 to 2.5; DSM Series Hardware Guide figures 2.1 to 2.6) agree with the drawing on the order of every connector. The colours are read from the angled renders on the data sheets, which are marketing renders and not photographs.
+  method:
+    confidence: estimated
+    note: >-
+      THE DRAWING IS LINE ART AT ABOUT 1 TO 3 AND CARRIES NO CONNECTOR DIMENSION. Positions are measured on its vector geometry (a jack's outline, an outlet's box, an inlet's housing), centred on the drawn faceplate; a part is placed by its centre on the drawn outline. The drawn faceplate is slightly shorter than the stated height (drawing 1.74 or 3.46 inches against 1.75 or 3.5), so vertical positions are centred on the face. A lamp's spacing inside its frame is the drawing's.
+  chassis:
+    confidence: drawing
+    note: >-
+      Width 17.15 inches (435.6 mm) is the drawing's top cover width, and the drawing's 18.32 inches is the distance between the rack ear holes. The height is the data sheet's 1.75 inches, one rack unit and the drawing prints 1.74 (the guide and the data sheet agree with each other). The depth is 6.55 inches in the data sheet and the drawing; the hardware guide prints 6.5. No net weight is stated, only a shipping weight, so none is given.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Median pixels of the angled render on the data sheet (page 2, 'CPM-1600-2-ECA'; the DSM data sheet's renders show the same dark face): the front face #373b3e. THE DSM BACK PANEL'S COLOUR IS NOT SHOWN BY ANY HELD RENDER, SO IT IS DRAWN IN THE FRONT COLOUR AND IS UNCHECKED. NO PHOTOGRAPH IS HELD. The red printed bars and the red logo block the render shows are not drawn.
+  ears:
+    confidence: drawing
+    note: >-
+      The drawing shows an ear at each end with two holes (one round, one slotted) and the data sheet says '19 Rack Brackets Included'. The ear hole pitch is not dimensioned; the drawing's 18.32 inches is the distance between the two ear hole axes. The ears are drawn at the faceplate, so the shipped position is flush.
+  inlets:
+    confidence: datasheet
+    note: >-
+      The drawing's main view shows two C14 inlets, A and B ('DUAL INPUT RECEPTACLE C14'); the data sheet says '(1) IEC-320-C14 Inlet' for AC models and the guide calls the second inlet optional. WHICH PART NUMBERS CARRY ONE INLET IS NOT STATED, SO BOTH ARE DRAWN AS THE DRAWING SHOWS THEM.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet page 2: '100 - 240 VAC, 50/60 Hz, 10 Watts Max.' for AC models. The DC models (terminal strip) are not modelled.
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      RJ45 RS-232 serial ports, eight (hardware guide, 'Eight (8) RJ45 connectors'), port 1 marked SETUP. Units ship with a standard or a straight pinout and which a part number has is not stated (hardware guide, appendix B), so the jacks state the media and no pinout.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The ports are console server ports (hardware guide, 'Serial Ports: connection to console ports on target devices').
+  lamps:
+    confidence: drawing
+    note: >-
+      The lamps of both faces are drawn as plain discs, not as states: the hardware guide names them (port activity, plug activity or status) and does not state a colour or a state for any, so none is claimed.
+attrs:
+  physical:
+    construction: metal
+  power:
+    input-voltage: 100 to 240 VAC, 50/60 Hz
+    power-max-w: 10
+  environmental:
+    operating-temp: 0 to 60 C (data sheet)
+    operating-humidity: 10 - 90% RH (data sheet)
+  features:
+    serial-pinout: standard or straight pinned serial ports, by part number (hardware guide)
+chassis:
+  width: 435.6
+  height: 44.45
+  depth: 166.37
+  ru: 1
+  color: '#373b3e'
+  ears:
+    positions:
+    - {name: flush, label: 1U rack bracket as shipped, default: true}
+  power: ac
+gaps:
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    No photograph of any face is held; the only pictures of the product are angled marketing renders. Every position is read from the line drawing and every colour from a render.
+  wanted: A straight-on photograph of each face.
+- what: lamp-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The documents name the lamps and state no colour or state for them; they are drawn as plain discs.
+  wanted: The maker's lamp table for the front panel.
+- what: ear-holes
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The ears are not dimensioned: the holes are drawn (one round, one slotted) with no pitch.
+  wanted: A dimensioned drawing of the rack bracket.
+- what: antenna-mounts
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The two rings marked MAIN and AUX are 'optional cell modem antenna mounts' (drawing). They are drawn as discs and are not ports.
+  wanted: The maker's drawing of the mounts, and which part numbers fit them.
+- what: option-positions
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The drawing shows the second Ethernet jack and the phone jack and says a label is added for units without them; the documents do not say whether a jack sits behind the label. Both are drawn as the drawing shows them.
+  wanted: Which part numbers carry the second Ethernet jack and the phone jack.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    The drawing shows the top cover and one side with vent slots and screws, and does not say which side it is. They are not drawn. The underside is not shown.
+  wanted: A drawing that names each side.
+groups:
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C14 inlets A and B at the left of the back'}
+  serial: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'the RJ45 RS-232 serial ports, port 1 marked SETUP'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the 10/100/1000 Ethernet jacks, Ethernet 0 and Ethernet 1 (the second on dual Ethernet models)'}
+  phone: {term: Port, role: management, index-origin: 1, description: 'the RJ11 phone line jack of the internal modem'}
+  usb-setup: {term: Port, role: management, index-origin: 1, description: 'the USB mini set-up port'}
+views:
+  front:
+    size: {w: 435.6, h: 44.45}
+    panel:
+      decor:
+      - {id: antenna-main, kind: antenna-mount, at: [13.07, 7.98], size: [5.5, 5.5], rx: 2.75, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: antenna-aux, kind: antenna-mount, at: [48.97, 7.98], size: [5.5, 5.5], rx: 2.75, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: control-box, kind: lamp-frame, at: [28.93, 24.1], size: [59.79, 15.49], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: activity-box, kind: lamp-frame, at: [109.77, 24.1], size: [58.76, 15.49], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: reset-button, kind: button, at: [30.46, 27.48], size: [14.96, 9.79], rx: 1.2, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: default-button, kind: button, at: [46.71, 27.48], size: [14.74, 9.79], rx: 1.2, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: status-on, kind: lamp, at: [64.44, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: status-rdy, kind: lamp, at: [72.19, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: status-dcd, kind: lamp, at: [81.01, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-1, kind: lamp, at: [112.22, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-2, kind: lamp, at: [119.0, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-3, kind: lamp, at: [125.89, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-4, kind: lamp, at: [133.1, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-5, kind: lamp, at: [140.42, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-6, kind: lamp, at: [148.17, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-7, kind: lamp, at: [155.38, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-8, kind: lamp, at: [162.16, 34.13], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+    silkscreen:
+    - {at: [20.22, 11.53], text: 'MAIN', font-size: 1.6, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [47.32, 11.53], text: 'AUX', font-size: 1.6, anchor: end, fill: '#f4f4f4', for: chassis}
+    - {at: [15.95, 41.25], text: 'PHONE', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: phone}
+    - {at: [99.38, 28.88], text: 'USB Mini', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: usb-mini}
+    - {at: [37.99, 28.88], text: 'RESET', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [54.13, 28.88], text: 'DEFAULT', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [73.18, 27.37], text: 'STATUS', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [138.83, 27.37], text: 'ACTIVITY', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [213.09, 18.11], text: 'OUT-OF-BAND RESCUE', font-size: 3.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [374.52, 11.66], text: 'Console Server', font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    components:
+      placements:
+      - {ref: common/rj11-jack@1, id: phone, at: [8.95, 22.84], group: phone, rel-pos: 1}
+      - {ref: std/mini-usb@1, id: usb-mini, at: [95.53, 33.0], group: usb-setup, rel-pos: 1, attrs: {role: console}}
+    regions:
+      - {id: logo-zone, at: [174.24, 6.0], size: {w: 20, h: 10}, label: 'WTI logo and red printed bars; not drawn'}
+  rear:
+    size: {w: 435.6, h: 44.45}
+    panel:
+      decor:
+      - {id: unlabelled-circle-1, kind: unidentified, at: [396.38, 5.71], size: [3.2, 3.2], rx: 1.6, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: unlabelled-circle-2, kind: unidentified, at: [407.25, 5.71], size: [3.2, 3.2], rx: 1.6, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+    silkscreen:
+    - {at: [5.16, 21.93], text: 'A', font-size: 2.2, anchor: middle, fill: '#f4f4f4', for: inlet-a}
+    - {at: [62.04, 21.93], text: 'B', font-size: 2.2, anchor: middle, fill: '#f4f4f4', for: inlet-b}
+    - {at: [35.51, 39.49], text: '100-240V~ 50/60Hz 0.1-0.06A', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [78.78, 8.28], text: '1 (SETUP)', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-1}
+    - {at: [78.78, 39.92], text: '2', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-2}
+    - {at: [92.98, 8.28], text: '3', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-3}
+    - {at: [92.98, 39.92], text: '4', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-4}
+    - {at: [107.32, 8.28], text: '5', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-5}
+    - {at: [107.32, 39.92], text: '6', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-6}
+    - {at: [121.52, 8.28], text: '7', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-7}
+    - {at: [121.52, 39.92], text: '8', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-8}
+    - {at: [397.89, 16.35], text: 'ETH 0', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [419.84, 16.35], text: 'ETH 1', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: inlet-a, at: [8.66, 7.13], group: inlets, rel-pos: 1, rotate: 270}
+      - {ref: std/c14-inlet@1, id: inlet-b, at: [36.04, 7.13], group: inlets, rel-pos: 2, rotate: 270}
+      - {ref: std/rj45-ganged@2, id: serial-1, at: [72.43, 10.91], group: serial, rel-pos: 1, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-2, at: [72.43, 22.54], group: serial, rel-pos: 2, rotate: 0, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-3, at: [86.63, 10.91], group: serial, rel-pos: 3, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-4, at: [86.63, 22.54], group: serial, rel-pos: 4, rotate: 0, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-5, at: [100.97, 10.91], group: serial, rel-pos: 5, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-6, at: [100.97, 22.54], group: serial, rel-pos: 6, rotate: 0, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-7, at: [115.17, 10.91], group: serial, rel-pos: 7, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-8, at: [115.17, 22.54], group: serial, rel-pos: 8, rotate: 0, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: common/rj45-eth@1, id: eth-0, at: [389.99, 22.34], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: common/rj45-eth@1, id: eth-1, at: [411.94, 22.34], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}}
+  top:
+    size: {w: 435.6, h: 166.37}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  bottom:
+    size: {w: 435.6, h: 166.37}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  left:
+    size: {w: 166.37, h: 44.45}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  right:
+    size: {w: 166.37, h: 44.45}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The unit as the dimensional drawing shows it. The rack brackets are in the box (data sheet). The 4G LTE modem needs an additional W4G part number (data sheet) and is not modelled.
+    part-numbers:
+      DSM-8: {}
+      DSM-8NM: {}
+      DSM-8-E: {}
+      DSM-8NM-E: {}
+references:
+- {title: 'WTI DSM Series data sheet, DSM20260401', sha256: ace4384250d202e34cecce35f77b319cdf75c84af867b3a71ce60ab0945b2404}
+- {title: 'WTI DSM Series Hardware Guide, Part No. 14529 Rev. B', sha256: 6c770a61918e0135449d734e093a3f7e362c5130ca91e66dceab3f11781a42e2}
+- {title: 'WTI DSM Series Quick Start Guide, Part No. 14451 Rev. E', sha256: 8f609b0c9607df2cbabc31bc861ee42e3a580ff127d68d0c17a2d27140cb932d}
+- {title: 'WTI Dimensional Drawing DSM-8 Family, rev A', sha256: b55acf290fe0f980879e45b3d8e55a46fe2d36bb473116bad4053566cec89718}
