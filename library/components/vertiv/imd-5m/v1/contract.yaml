@@ -1,0 +1,84 @@
+format: 1
+kind: module
+name: imd-5m
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The Vertiv PowerIT IMD-5M monitoring module that Monitored and Switched rack PDUs ship with.
+  It has two Ethernet ports that act as a switch.
+  It has an RJ-12 remote sensor port and an RS-232 serial port on an RJ-45.
+  It also has a USB port, a restart button, a status lamp and a 128 by 128 touchscreen.
+size: {w: 107.4, h: 43.7, d: 40}
+size-confidence: {w: photo-measured, h: estimated, d: estimated}
+attrs: {module: IMD-5M}
+provenance:
+  method: >-
+    datasheet and photo-measured - Vertiv PowerIT Rack Power Distribution Unit Installer/User Guide SL-71211
+    Rev E, section 5.1.3 and Figure 5.2 (PDF page 34), callouts 1 to 8 described on PDF page 35. The figure is a
+    picture of the module and its plate reads 612 by 250 px, 2.45 across to down. The VP5N31A1 front photograph
+    (1000 px) puts the plate 187 px wide at 1.74 px per mm, 107.4 mm. Every position below is read off the figure
+    at 5.70 px per mm across and 5.72 down, taking the plate's own outline as the frame. Good to about 0.7 mm.
+  size: >-
+    photo-measured and estimated - the width is the photograph's. The height is ESTIMATED as the face's 43.7: the
+    figure's aspect with that width gives 43.9, so the plate spans the face. The photograph shows the plate
+    standing proud of the face.
+  identity: >-
+    datasheet - SL-71211 Rev E, 5.1.3: "All Vertiv PowerIT Monitored and Switched rPDUs are shipped with the
+    IMD-5M module." Whether it is hot-swappable is not stated in the text read, so it sits in a bay as a card
+    does on other PDUs because it is a separate module with its own part name.
+  ports: >-
+    datasheet - SL-71211 Rev E section 2.3.1 (PDF page 10): "The Ethernet link speed for this product is:
+    10/100/1000 Mb; full duplex", so the two jacks are `speed: 1g`. The callout table on PDF page 35. 1 Dual Ethernet ports, a two-port switch that can also be two
+    separate interfaces; 2 restart and reset button; 3 RGB status LED, green for running and yellow for booting;
+    4 touchscreen; 5 redundant power input (the comparison sheet SL-70599 calls the feature "Redundant IMD Power
+    Sharing": two IMDs connect "via the Power Sharing port"); 6 remote sensor port on an RJ-12, up to 16 sensors; 7 serial port,
+    RS-232 on an RJ-45; 8 USB port, 0.5 W on a unit-monitored PDU and 5 W on a switched one.
+  jacks: >-
+    photo - the two Ethernet jacks are common/rj45-eth@1 with their two lamps; the sensor jack is a narrower
+    jack, common/rj11-jack@1 (an RJ-12 is the same housing with six contacts); the serial jack is the bare
+    std/rj45@2 with no lamps, as Figure 5.2 shows it; the USB port stands on end with its tongue on one side.
+  lamps: >-
+    datasheet - only the status lamp's meaning is stated (item 3). The Ethernet jacks' two lamps are drawn by
+    the jack part and no held text says what they show, so they carry no states.
+  silk: >-
+    photo - 1 and 2 and a network symbol under the Ethernet jacks, the restart symbol, the status dot and
+    IMD-5M at the lower right. They are drawn as marks in the skin.
+  lcd: >-
+    photo-measured - the screen reads 148 by 162 px in Figure 5.2, 26 by 28 mm. It is a touchscreen; the
+    on-screen menu and BACK buttons are not keys. `kind: pixel` and no `characters`: no row or column count is
+    stated.
+  unnamed-parts: >-
+    NOT DRAWN AS PARTS: Figure 5.2 shows a grey socket with a network symbol above it between the serial
+    jack and the USB port (about 8 by 10 mm), a small trapezoid socket under the USB port (callout 5,
+    "Redundant power input") and a dark vertical slot beside the Ethernet jacks. No held text names the first
+    or the slot, and none names the connector of the second. They are drawn as plain shapes in the skin and
+    listed in the device's gaps.
+  depth: >-
+    estimated - no held source shows the module behind its plate; 40 is chosen to sit inside the box's 304.8
+    depth. The viewer would give a module a 60 mm bay otherwise.
+  power: >-
+    datasheet - the USB port provides up to 0.5 W (unit monitored) or 5 W (outlet monitored and switched);
+    that is what it hands on. No held source states the module's own draw; L27 stands as the record.
+groups:
+  ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two Ethernet ports, which act as a two-port switch'}
+  peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the module''s service connections - the RJ-12 sensor port, the RS-232 serial port and the USB port'}
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  controls: {term: Button, role: management, index-origin: 1}
+elements:
+  lcd: {at: [68.3, 7.5], size: [25.9, 28.3], class: display, kind: pixel}
+parts:
+  - {id: eth1, ref: common/rj45-eth@1, at: [14.2, 21.4], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {id: eth2, ref: common/rj45-eth@1, at: [30.4, 21.4], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {id: sensor, ref: common/rj11-jack@1, at: [12.5, 3.15], group: peripheral, attrs: {media: rj12-sensor, function: remote-sensor}}
+  - {id: serial, ref: std/rj45@2, at: [27.1, 3.3], group: peripheral, attrs: {role: serial}}
+  - {id: usb, ref: std/usb-a@1, skin: usb2, at: [51.7, 7.15], rotate: 270, group: peripheral}
+  - {id: restart, ref: common/reset-button@1, at: [21.2, 37.0], group: controls}
+  - id: status
+    ref: common/led-dot@1
+    at: [36.0, 38.0]
+    group: status-leds
+    states:
+      lamp: ['off', {name: running, color: '#22c55e'}, {name: booting, color: '#facc15'}]
+skins: [default]

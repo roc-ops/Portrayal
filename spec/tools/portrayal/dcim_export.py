@@ -762,6 +762,10 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # A VERTIV POWERIT HORIZONTAL PDU'S FIXED CORD ends in a NEMA L6-30P plug (the SKU page of VP5N31A1 and the
+    # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
+    # as the connectors above are, and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-l6-30p": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -790,6 +794,7 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
 }
 
 
@@ -850,6 +855,9 @@ PART_OUTLET = {
     # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
     # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
     "servertech/hdot-cx-outlet": "other",
+    # A VERTIV POWERIT COMBINATION C13/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
+    # names it, so it is `other` with its label, as the HDOT Cx above is.
+    "vertiv/combo-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -864,7 +872,7 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "vertiv/combo-outlet": "Vertiv combination C13/C19"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #

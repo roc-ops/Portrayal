@@ -32,12 +32,12 @@ CORD_15, CORD_20 = "generic/nema-5-15p-cord@1", "generic/nema-5-20p-cord@1"
 C14, C20 = "generic/c14-plug@1", "generic/c20-plug@1"
 # what each cord end mates, in the order its contract states it
 MATES = {CORD_15: ["nema-5-15r", "nema-5-20r"], CORD_20: ["nema-5-20r"],
-         C14: ["iec-c13", "eaton-c39", "servertech-hdot-cx"],
-         C20: ["iec-c19", "eaton-c39", "servertech-hdot-cx"]}
+         C14: ["iec-c13", "eaton-c39", "servertech-hdot-cx", "vertiv-combo"],
+         C20: ["iec-c19", "eaton-c39", "servertech-hdot-cx", "vertiv-combo"]}
 # what each interface is offered, the accept list a slot publishes
 OFFERED = {"nema-5-15r": [CORD_15], "nema-5-20r": [CORD_15, CORD_20],
            "eaton-c39": [C14, C20], "iec-c13": [C14], "iec-c19": [C20],
-           "servertech-hdot-cx": [C14, C20]}
+           "servertech-hdot-cx": [C14, C20], "vertiv-combo": [C14, C20]}
 
 
 def contract(ref):
