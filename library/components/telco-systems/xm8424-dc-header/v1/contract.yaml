@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: xm8424-dc-header
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: power
+interface: telco-dc-block-2
+description: >-
+  The two-cell pluggable DC connector on the Telco Systems XM-8424H's DC supply module, seen from
+  its mating face. A green block with a screw at each end, two cells between them and a dark latch
+  tab above the middle. It is smaller than common/dc-terminal-plug-2@1 (the ECS4530 block, 32.1 x
+  17.6), so its own part. The module prints no pole mark that the photograph makes legible, so the
+  part carries none. The cable connector telco-systems/xm8424-dc-cable-plug@1 seats at its mate point.
+size: {w: 20.1, h: 12.1, d: 15.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: >-
+  No document held draws the connector or gives a dimension for it. The box is the outline of the green
+  block and its latch tab as the maker's product photograph shows them, measured on that photograph (see
+  provenance), good to about half a millimetre, and it stands for the header.
+attrs: {connector: DC power connector, positions: 2}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the Telco Systems XM-8424H
+    data sheet shows the connector only in its front photographs and says "DC: -48V, -36~-72V" in its
+    specification table and "XM-8424H-DC" in its ordering table. No document held calls it pluggable, a
+    terminal block or a screw terminal; that reading is the photograph's (a flanged green block with a
+    screw at each end and a latch tab), so the interface claims no standard and no pitch.
+  gender: >-
+    NOT STATED. The photograph shows two dark cells, each with a pale dot in it, and no cable; it does not say
+    which half carries pins. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    NO POLE MARK IS LEGIBLE. The module prints a label under the connector that reads about "36~72V 10A" in
+    the photograph and no sign beside either cell, so no role is stated for either (see the supply's `roles`).
+  size: >-
+    PHOTO-MEASURED on the XM-8424H front photograph (the maker's product render) rectified onto the data
+    sheet's 440 x 44 face at 10 px/mm, and declared an estimate because the box is the visible block and
+    stands for the header: the green body runs x 69.4-89.5 and y 27.3-36.6 on that face (a colour-mask
+    bounding box), and the dark latch tab stands above it to y 24.5, so the part is 12.1 tall with the
+    body in its lower 9.3. The render is about 2.6 px/mm. The depth is not visible and is estimated.
+  the-face: >-
+    photo-measured at the same scale: a small screw at each end (centres about 2.2 and 18.0 mm across, 5.1
+    down), two dark cells 3.5 x 5.5 between them, and a dark latch tab rising above the middle of the body.
+  key: >-
+    photograph - a dark tab rises above the middle of the body; no document says it is a latch.
+  mate: >-
+    derived - the centre between the two cells, (10.35, 7.75), facing out. The cable connector's own centre
+    is there too, so the two align.
+  colour: >-
+    photograph - the block is a bright green (drawn #4fb548) with copper-coloured end screws (drawn #d6a84a)
+    and dark cells; the latch tab is dark.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face; the depth is the
+    estimate the earlier drawing of this block carried.
+elements:
+  body: {at: [0.0, 2.8], size: [20.1, 9.3], class: connector}
+  entry-1: {at: [6.1, 5.0], size: [3.5, 5.5], class: connector}
+  entry-2: {at: [11.1, 5.0], size: [3.5, 5.5], class: connector}
+connection-points:
+  mate: {at: [10.35, 7.75], direction: front}
+skins: [default]

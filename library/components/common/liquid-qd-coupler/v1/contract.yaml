@@ -1,10 +1,11 @@
 format: 1
 kind: component
 name: liquid-qd-coupler
-version: 1.0.0
+version: 1.0.1
 class: coupler
 behaviour: mounts
 profile: networking
+unmated: a liquid-cooling quick-disconnect coupler that joins the tray's coolant loop to the rack manifold and carries liquid, so no cable, cord or lug lands on it and the library offers no mate for it
 description: >-
   Liquid-cooling quick-disconnect (QD) coupler on an equipment rear - a hex-bodied fitting
   with a flush valve face, standing in a round dished recess. The point where a liquid-cooled
@@ -29,8 +30,15 @@ provenance:
   depth: >-
     NOT STATED. The three-quarter render ds6001-A-3 shows the fittings standing proud of the
     recess; the relief below is proportion by eye.
+  valve-class: >-
+    The valve is the face of a liquid-cooling quick-disconnect coupler, the point where the
+    tray's cold-plate loop meets the rack manifold's facility-water supply or return, and the
+    part's medium is liquid. It carries coolant and takes no cable, cord, lug or plug, so it is
+    class `mechanical` and not `port`, the class the port checks read as a place a cable or
+    plug lands. The class changes nothing that is drawn: the position, size and relief of the
+    valve are as they were.
 elements:
-  valve: {at: [16.0, 16.0], size: [6.4, 6.4], class: port}
+  valve: {at: [16.0, 16.0], size: [6.4, 6.4], class: mechanical}
 relief:
   features:
     - node: fitting

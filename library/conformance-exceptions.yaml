@@ -1,0 +1,213 @@
+# library/conformance-exceptions.yaml
+# The records of the port-usable codes of the part-conformance runner (docs/part-conformance-design.md,
+# section 10): C19, C20, C21 and C22. Every port on a device must be usable, so a connector in the library
+# has a mate, or says why none can exist. There are two records, and a finding is covered by one of them.
+#
+# A ROW is a gap a mate or a part can close: {part, code, why, order, since}.
+#   part   a component ref (`ns/name@major`), or a device name for a finding in the device's own drawing
+#   code   C19, C20, C21 or C22
+#   why    what is missing, in a sentence
+#   order  the change that closes it, as an issue or pull request number such as "#1234"; no order, no row
+#   since  the date the row was written
+# A row covers its part on every device that places it, so a new device that places a listed part adds no
+# row. A row for a device covers only that device's own drawing. A row whose finding no longer occurs is
+# stale, and a stale row fails once `cap:` is present.
+#
+# AN `unmated` SENTENCE is the other record, for "no mate can exist": a component contract's (the part
+# takes nothing), a `spec/schemas/connectors.yaml` entry's (no plug of that interface exists) or a
+# `spec/schemas/pluggables.yaml` family's, as a map from a rate to its sentence (no module is made at
+# that rate). A sentence is at least 40 characters. A part, an interface or a rate that does have a mate
+# must not carry one, and a part with a sentence for a code needs no row for it.
+#
+# Rows are grouped by the change that closes them, one block each, with a comment line between blocks.
+#
+# THE SWITCHES are this file's, and the test reads them here:
+#   cap:     an integer. While it is absent the test reports what it finds and passes. Once it is present
+#            the rules fail a pull request: a finding no record covers, a stale row, more rows than the
+#            cap, a row for a closed code, and a runner that crashes or times out.
+#   closed:  a list of codes from C19, C20, C21, C22 whose findings can no longer be recorded by a row.
+#            A row for a closed code fails once `cap:` is present.
+# The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
+# whatever the switches say.
+format: 1
+cap: 31
+rows:
+  # Closed by #1354: Earth studs on Cisco, Nokia, MikroTik, Casa, Edgecore and Eaton devices
+  - part: edgecore/agr-ground-plate@1
+    code: C20
+    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
+    order: "#1354"
+    since: 2026-11-01
+
+  # Closed by #1356: Amphenol Network Solutions power shelves and the Open Rack v3 bus-bar connector
+  - part: amphenol-ns/input-feed-busbar@1
+    code: C20
+    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
+    order: "#1356"
+    since: 2026-11-01
+
+  # Closed by #1357: Nokia and Supermicro DC supplies and terminal blocks
+  - part: lmfs-f
+    code: C19
+    why: "a configuration says the device is powered (dc) and no power end is offered"
+    order: "#1357"
+    since: 2026-11-01
+
+  # Closed by #1358: UfiSpace DC supplies
+  - part: s9511-20ct
+    code: C19
+    why: "a configuration says the device is powered (dc) and no power end is offered"
+    order: "#1358"
+    since: 2026-11-01
+  - part: ufispace/psu-102-dc@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1358"
+    since: 2026-11-01
+
+  # Closed by #1359: Edgecore power supplies
+  - part: common/psu-dc-650@2
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1359"
+    since: 2026-11-01
+
+  # Closed by #1360: Cisco power modules
+  - part: cisco/nxa-pdc-1100w@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1360"
+    since: 2026-11-01
+  - part: cisco/nxa-pdc-440w@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1360"
+    since: 2026-11-01
+  - part: cisco/nxa-pdc-715w@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1360"
+    since: 2026-11-01
+
+  # Closed by #1361: Juniper EX power
+  - part: juniper/ex8200-pwr-dc2kr@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1361"
+    since: 2026-11-01
+  - part: juniper/ex8200-pwr-dc3kr@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1361"
+    since: 2026-11-01
+  - part: juniper/jpsu-550-c-dc-afi@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1361"
+    since: 2026-11-01
+  - part: juniper/jpsu-550-c-dc-afo@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1361"
+    since: 2026-11-01
+  - part: juniper/ex2200-rps-port@1
+    code: C20
+    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
+    order: "#1361"
+    since: 2026-11-01
+  - part: juniper/ex4100-h-terminal-pad@1
+    code: C20
+    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
+    order: "#1361"
+    since: 2026-11-01
+
+  # Closed by #1362: Juniper QFX and MX power
+  - part: juniper/mx2000-psm-dc-v@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1362"
+    since: 2026-11-01
+  - part: juniper/mx240-psu-ac@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1362"
+    since: 2026-11-01
+  - part: juniper/mx304-psu-hvacdc@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1362"
+    since: 2026-11-01
+  - part: juniper/qfx5230-jnp-2400w-dc-afi@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1362"
+    since: 2026-11-01
+  - part: juniper/qfx5230-jnp-3000w-dc-afo@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1362"
+    since: 2026-11-01
+
+  # Closed by #1363: Arista, Aurcore, Celestica, Oscilloquartz, Smartoptics and Telco Systems power
+  - part: tm-3308h
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: tm-3312
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: tm-3348
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: tm-340
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: xm-7280
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: xm-7380
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+  - part: xm-8102
+    code: C19
+    why: "a configuration says the device is powered (ac, dc) and no power end is offered"
+    order: "#1363"
+    since: 2026-11-01
+
+  # Closed by #1364: AC inlets and fixed cords on Casa, Dell, Eaton, FS, MikroTik and Smartoptics devices
+  - part: crs328-24p-4s-plus-rm
+    code: C19
+    why: "a configuration says the device is powered (ac) and no power end is offered"
+    order: "#1364"
+    since: 2026-11-01
+  - part: dell/r960-psu-2800w-ac@1
+    code: C19
+    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
+    order: "#1364"
+    since: 2026-11-01
+
+  # Closed by #1366: Alarm, timing and coolant connectors on five devices
+  - part: osa-5420-quartz
+    code: C22
+    why: "the IRIG-B card draws its IRIG input, optical output, ten IRIG outputs and alarm and pulse relay as ports with no registered interface; the 2023 data sheet lists them and names no connector type for any"
+    order: "#1366"
+    since: 2026-11-01
+
+  # Opened by #1069: the slots of the FHD-FAPM6's six openings take inserts, and the runner counts a mate as a part of class
+  # `port` or `transceiver`. Closes when the runner reads a part that occupies a slot and mates its interface as a mate.
+  - part: fs/fhd-fapm6@1
+    code: C21
+    why: "the six keystone slots accept a blank and a jack, which mate the interface and are of class mechanical, and the runner counts only a part of class port or transceiver as a mate"
+    order: "#1069"
+    since: 2026-11-05

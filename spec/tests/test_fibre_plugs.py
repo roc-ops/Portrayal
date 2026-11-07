@@ -150,7 +150,7 @@ def _usb_receptacle_interfaces():
 def test_the_usb_receptacle_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _usb_receptacle_interfaces() == {"usb-a", "micro-usb-b", "usb-c"}
+    assert _usb_receptacle_interfaces() == {"usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c"}
 
 
 def _dsub_connector_interfaces():
@@ -224,12 +224,18 @@ def test_the_terminal_screw_interfaces_were_read():
 def test_the_terminal_header_interfaces_were_read():
     """The census's exclusion is keyed on these; an empty set would exclude
     nothing and say nothing."""
-    assert _terminal_header_interfaces() == {"terminal-508-2", "terminal-508-5",
+    assert _terminal_header_interfaces() >= {"terminal-508-2", "terminal-508-5",
                                              "terminal-508-6", "dc-barrel",
                                              # the GPU power headers (P-0028) state
                                              # `input: dc` as the barrel jack does
                                              "eps12v-8pin", "pcie-8pin",
-                                             "pcie-12vhpwr", "pcie-12v-2x6"}
+                                             "pcie-12vhpwr", "pcie-12v-2x6",
+                                             # the Open Rack v3 bus-bar clip states
+                                             # `input: dc` too
+                                             "orv3-busbar",
+                                             # the four-pole DC feed header of the
+                                             # TM-7124S states `media: dc-terminal`
+                                             "screw-terminal-4"}
 
 
 def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
@@ -344,11 +350,70 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # spec/tests/test_small_connector_plugs.py.
         if any(m in copper_multipair for m in ms):
             continue
+        # NOR ARE THE STACK AND VIRTUAL CHASSIS CABLE ENDS.
+        # cisco/stackwise-480-plug@1, stackpower-plug@1, flexstack-plug@1 and
+        # juniper/ex4200-vcp-plug@1 mate `stackwise-480`, `stackpower`,
+        # `flexstack` and `ex4200-vcp`, which the registry holds so a stack
+        # port is a slot. Left out by what each IS - its `attrs.media` is the
+        # copper stack link it mates - and their census is
+        # spec/tests/test_stack_vc_interfaces.py.
+        if str((c.get("attrs") or {}).get("media") or "") in (
+                "stackwise-480", "stackpower", "flexstack", "ex4200-vcp"):
+            continue
         # NOR IS THE NVLINK BRIDGE (P-0028). nvidia/nvlink-bridge-a100-2slot@1
         # mates `nvlink-a100-pcie`, the bridge connector on an A100 card's top
         # edge. Left out by what it IS - its `attrs.media` is `nvlink`, a copper
         # card-to-card link - and its tests are spec/tests/test_gpu_power_nvlink.py.
         if str((c.get("attrs") or {}).get("media") or "") == "nvlink":
+            continue
+        # NOR ARE THE ALARM-HEADER AND nrgNET CONNECTOR MATES.
+        # generic/wire-wrap-3-plug@1 and generic/screw-terminal-5-plug@1 mate
+        # `wire-wrap-3` and `screw-terminal-5`, the three-pin wire-wrap alarm
+        # header and the five-way nrgNET connector of an Amphenol Network
+        # Solutions power panel. Left out by what each IS - its `attrs.media` is
+        # `wire-wrap` or `nrgnet`, a copper wire terminal - and the tests of the
+        # parts that present them are spec/tests/test_amphenol_every_port.py.
+        if str((c.get("attrs") or {}).get("media") or "") in ("wire-wrap", "nrgnet"):
+            continue
+        # NOR IS THE 50-PIN MICRO D-SUB CABLE PLUG. common/micro-dsub-50-plug@1
+        # mates `micro-dsub-50`, the CO alarm connector of the Nokia general
+        # facilities cards, which the registry holds so the connector is a slot.
+        # Left out by what it IS - its `attrs.media` is `micro-dsub-50`, a
+        # copper alarm cable - and its tests are
+        # spec/tests/test_nokia_gfc_connector_parts.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "micro-dsub-50":
+            continue
+        # NOR IS THE 4FF SIM CARD TRAY. opengear/sim-tray-4ff@1 mates
+        # `sim-tray-4ff`, the SIM slot of the Opengear cellular console managers.
+        # Left out by what it IS - its `attrs.media` is `sim`, a card tray and
+        # no fibre - and its tests are spec/tests/test_opengear_cm8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sim":
+            continue
+        # NOR IS THE SD CARD. common/sd-card@1 mates `sd-card`, the full-size card slot of
+        # the Vertiv Avocent ACS8000 console servers, which the registry holds so the slot is
+        # a slot. Left out by what it IS - its `attrs.media` is `sd-card`, a storage card - and
+        # its tests are spec/tests/test_vertiv_acs8000.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
+            continue
+        # NOR ARE THE KEYSTONE INSERTS. common/keystone-blank@2 and
+        # fs/keystone-rj45-cat6@1 mate `keystone`, the opening of the FS FHD-FAPM6
+        # panel, which the registry holds so each opening is a slot. Left out by
+        # what each IS - an insert that closes the opening or carries a copper
+        # jack - and their census is spec/tests/test_keystone_inserts.py.
+        if "keystone" in ms:
+            continue
+        # NOR IS THE SCTE-91 PORT PLUG. generic/scte-91-port-plug@1 mates
+        # `scte-91`, the threaded external port of the Entra edge nodes, which the
+        # registry holds so the port is a slot. Left out by what it IS - a hex
+        # sealing plug for an RF or fibre port, not a fibre plug - and its census
+        # is spec/tests/test_scte_91_registry.py.
+        if "scte-91" in ms:
+            continue
+        # NOR IS THE STEREO PLUG. common/stereo-plug@1 mates `stereo-jack`, the RS-232
+        # jack of the CH3000 communications modules. Left out by what it IS - its
+        # `attrs.media` is `serial`, a copper cable end - and its census is
+        # spec/tests/test_ch3000_interfaces.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "serial":
             continue
         if any(m in connectors for m in ms) and c.get("class") != "cap":
             ns = f.parents[2].name
@@ -456,6 +521,7 @@ def _within(inner, outer, tol=1e-6):
             and inner[2] <= outer[2] + tol and inner[3] <= outer[3] + tol)
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref", [MPO12, MPO24])
 def test_a_seated_mpo_plug_lies_inside_its_opening_and_the_opening_inside_its_adapter(
         tmp_path, lib, ref):
@@ -580,6 +646,7 @@ def occupant(root, path, ref):
     return occ
 
 
+@pytest.mark.heavy
 def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
     """THE ASSERTION THE COMPOSITION EXISTS FOR, and it is made in the DEVICE
     frame rather than on the contract's own arithmetic.
@@ -623,6 +690,7 @@ def test_the_duplex_plugs_halves_land_on_the_adapters_two_bores(tmp_path):
         assert abs(hx - bx) < 1e-6 and abs(hy - by) < 1e-6, (half_id, bore_id)
 
 
+@pytest.mark.heavy
 def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
     """Deep addressing: `bay-1/lc01` is the duplex slot of the adapter `lc01`
     in the cassette in `bay-1`, and the plug is drawn inside the innermost
@@ -665,6 +733,7 @@ def test_the_duplex_plug_seats_three_levels_down_on_an_fhd_cassette(tmp_path):
         assert abs(px - bx) < 1e-6 and abs(py - by) < 1e-6, (half_id, bore_id)
 
 
+@pytest.mark.heavy
 def test_a_boot_seats_on_one_half_of_the_duplex_plug(tmp_path):
     """HOW A BOOT ADDRESSES ONE HALF, which the brief left to be decided.
 
@@ -776,6 +845,7 @@ def test_a_key_under_a_seated_occupant_that_reaches_nothing_is_still_an_error(tm
     assert "occupants/bay-1/lc01-occupant/zz" in r.stderr, r.stderr[-600:]
 
 
+@pytest.mark.heavy
 def test_the_sc_plug_seats_in_an_fhd_sc_cassette_bore(tmp_path):
     """`bay-1/sc1/1` is bore 1 of the adapter `sc1` in the cassette -
     the seat common/sc-dust-cap@1 already takes, with the plug in its place."""

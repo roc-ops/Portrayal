@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: nxa-pdc-930w
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -54,6 +54,26 @@ provenance:
     electrical inlet on the front of the power supply" and that a latch on the
     Cisco-supplied power cord releases it. The connector is not drawn, and the ring of the
     input symbol is left empty because the marking this supply prints is not pictured.
+  connector: >-
+    the supply composes cisco/nxa-pdc-930w-dc-header@1 as `dc-header`, the three-position DC power connector
+    of the Cisco N93108TC-FX3 NX-OS Mode Switch Hardware Installation Guide, "Connecting a Power Cable to an
+    NXA-PDC-930W Power Supply" (PDF page 49) and its figure 504148 (PDF page 50), inside the window the skin
+    draws for the inlet. The guide names no maker or part number for it, so the part is a declared stand-in
+    (its own provenance). Its place is an estimate: the guide gives no dimension. cisco/nxa-pdc-930w-dc-plug@1,
+    the cable connector of the figure, mates it. THE OTHER TWO GUIDES THAT SEAT THIS SUPPLY (N93180YC-FX3 and
+    N93180YC-FX3S) PRINT NO FIGURE OF IT. The skin is unchanged, and the plain recess it draws is the window the
+    connector stands in.
+  roles: >-
+    guide - figure 504148 (N93108TC-FX3 guide, PDF page 50) prints "- DC", "+ DC" and an earth symbol beside the
+    three cells, top to bottom, and the text says the ground, negative and positive DC power cables go to the
+    connector block. The roles are therefore `neg`, `pos` and `gnd`, in that order from the top. The guide prints no
+    nominal on the figure; the specification table prints a range.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The three poles are the contacts of one pluggable connector
+    that has an earth cell in it, and a port whose poles are a connector's contacts is offered only where that path's
+    part is itself the connector; on a supply in a bay it is the supply, not the connector it composes, so a port stated
+    here would be published and then not offered. The roles above are recorded for the port a later change can state, a
+    minor on the devices that seat this supply.
   lamps: >-
     datasheet - the guides' appendix C, "Power Supply LEDs", one table for every supply:
     solid green for a regulated 12 V main and 12 V standby output, solid or blinking amber
@@ -99,6 +119,8 @@ relief:
       source: >-
         cisco/nxa-pdc-930w@1's own elements key - the latch stands proud in every picture of
         the family and how far is not stated.
+parts:
+  - {ref: cisco/nxa-pdc-930w-dc-header@1, id: dc-header, at: [72.5, 10.8]}
 skins: [default]
 body:
   depth: 185

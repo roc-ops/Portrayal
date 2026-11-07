@@ -49,6 +49,7 @@ def comps(tmp_path_factory):
     return got
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("ref,jack,plug", CARD_JACKS)
 def test_a_cards_one_jack_is_its_own_slot(comps, ref, jack, plug):
     slot = next((c for c in comps[ref].get("cages") or [] if c["id"] == jack), None)
@@ -79,6 +80,7 @@ def _render_with(tmp_path, dev, cfg, bays, occupants):
     return "".join(p.read_text() for p in out.glob(f"{Path(dev).name}.{cfg}.*.svg"))
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("dev,cfg,bay,ref,jack,plug", [
     ("casa/c100g", "bdm2m-11plus1", "front-6", "casa/smm-8x10g@1", "console",
      "generic/rj45-plug@1"),

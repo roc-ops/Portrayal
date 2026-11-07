@@ -1,0 +1,69 @@
+format: 1
+kind: module
+name: pwr-c1-1100wac
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 1100 W AC power supply of the Cisco Catalyst 9300 family, PWR-C1-1100WAC - not
+  Platinum-certified, and the supply that powers the UPOE models. The same dark,
+  honeycomb-vented rear face as the 715 W supply but deeper, with an AC OK and a PS OK
+  lamp, an IEC C14 inlet, two release latches and a power cord retainer. Airflow is
+  front-to-back.
+size: {w: 82.55, h: 40.1}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'PWR-C1-1100WAC'
+  power-output-w: 1100
+  input: ac
+  inlet: c14
+  input-voltage: '115 to 240 VAC (autoranging)'
+  input-current-max: '12 to 6 A'
+  input-frequency: '50 to 60 Hz'
+  output: '-56 V at 19.64 A'
+  weight-kg: 1.4
+  airflow: front-to-back
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Table 35 lists PWR-C1-1100WAC for the
+    C9300 series and Figure 46 draws it, isometrically, with callouts for the AC OK LED, the
+    PS OK LED, the AC power cord connector, the release latch, the power cord retainer and
+    the keying feature.
+  power: >-
+    datasheet - Table 45, Power Specifications for AC Power Supplies: maximum output power
+    1100 W, 115 to 240 VAC autoranging at 50-60 Hz, input current 12-6 A, output -56 V at
+    19.64 A. An OUTPUT rating, so power-output-w.
+  size: >-
+    datasheet - Physical Specifications of Power Supplies, 1.58 x 3.25 x 13.7 in (40.1 x
+    82.55 x 348.2 mm), read height, width, depth as cisco/pwr-c1-715wac-p@1 reads it.
+  weight: >-
+    datasheet - 3 lb (1.4 kg).
+  depth: >-
+    datasheet - 348.2 mm.
+  elements: >-
+    estimated - Figure 46 is isometric; positions are read off the community NetBox rear
+    elevation of the C9300-48T, which labels its supplies PWR-C1-1100WAC; see
+    cisco/pwr-c1-715wac-p@1 for the scale.
+  lamps: >-
+    datasheet - Table 36, Switch Power Supply Module LEDs.
+  inlet: >-
+    datasheet - C15 cords (Table 49) mate a C14 inlet.
+  colour: >-
+    estimated - read off the NetBox elevation.
+states: [absent]
+elements:
+  ac-ok: {at: [10.2, 7.6], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  ps-ok: {at: [31.4, 7.6], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  latch: {at: [28.2, 26.5], size: [11.0, 11.9], class: handle}
+  retainer: {at: [56.0, 28.5], size: [12.7, 9.9], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.2, 7.3]}
+relief:
+  wall: '#15171a'
+skins: [default]
+body:
+  depth: 348.2
+  color: '#2a2c30'
+  footprint: {at: [0, 0], size: [82.55, 40.1]}

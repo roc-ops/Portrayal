@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: n9k-pac-3000w-b
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -47,6 +47,21 @@ provenance:
   skin: >-
     estimated - the arrangement (vented upper half, handle, inlet at the bottom) is read from the guide's
     figures on PDF pp102-103; none dimensions it, so every position in the skin is estimated.
+  inlet-part: >-
+    COMPOSED, NOT DRAWN, SINCE 1.1.0: std/c20-inlet@1, so a power cord lands on the supply. ITS PLACE IS
+    ESTIMATED, read off the drawing it replaces: that drawing's box (32.5 x 42.0 at [6.0, 76.0]) was itself
+    estimated from the guide's figures, none of which dimensions the inlet, and the part's own 32.4 x 24.4,
+    turned on end, stands on that box's centre, [22.25, 97.0]. ITS TURN IS ESTIMATED TOO. The Cisco N9508
+    NX-OS Mode Switch Hardware Installation Guide draws this supply's inlet in its figures for "Installing
+    or Replacing a 3-kW AC Power Supply" (PDF pp102 and 103; the N9504 guide's PDF pp106 and 107 and the
+    N9516 guide's PDF pp102 and 103 carry the same figures): the supply stands on end, its inlet in a
+    rounded recess in the lower half, a wire cord retainer at the left of the recess, and three blades,
+    one alone at the right in the middle and two one above the other at the left. The N9504 guide's figure
+    on PDF p107 draws the same supply lying on its side, as that chassis seats it, with the lone blade at
+    the top. A C20's lone blade is its earth contact, which std/c20-inlet@1 draws at the top, so the part
+    is turned 90 to put it at the right. The guides' cord tables (the N9508 guide's PDF pp125 to 127) list
+    C19 cords for this supply, the end that mates a C20. No page gives the inlet's size or place on the
+    supply. The cord retainer and the cord are not drawn.
   lifecycle: >-
     unknown - Cisco's support page gives no sale status for this part number.
 elements:
@@ -68,4 +83,6 @@ elements:
     - {name: amber, color: '#f5a623'}
     - {name: flashing-amber, color: '#f5a623', behavior: blinking}
     - 'off'
+parts:
+  - {ref: std/c20-inlet@1, id: inlet, at: [6.05, 84.80], rotate: 90}
 skins: [default]

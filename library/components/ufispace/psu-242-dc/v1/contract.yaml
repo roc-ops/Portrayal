@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: psu-242-dc
-version: 1.1.0
+version: 1.2.0
 class: psu
 behaviour: fills
 profile: networking
@@ -11,7 +11,7 @@ description: UfiSpace PSU-242-DEERN 2400W -48V DC PSU (S9311-64D) - CRPS form
   appliance inlet; red release latch on the right edge, status lamp below it;
   front-to-back (exhaust) airflow
 size: {w: 73.5, h: 40.0}
-attrs: {power-output-w: 2400, input: dc, model: PSU-242-DEERN, airflow: exhaust, inlet: dc-terminal}
+attrs: {power-output-w: 2400, input: dc, model: PSU-242-DEERN, airflow: exhaust, inlet: other}
 provenance:
   inlet: >-
     transcribed from this contract's own description: 'a two-row DC input connector and its
@@ -45,12 +45,38 @@ provenance:
     good to a couple of percent, so the block is drawn on the AC inlet's measured
     footprint rather than on the sheet's scale; see the device's dc-psu-face gap.
   connector: >-
-    vendor-named, not modelled as a standard part. The datasheet gives the DC input
-    connector by name for the intake variant only - 'PSU-242-DIEB-NN 2400W, DC,
-    intake air, CRPS TE 2204535-3 ELON Mini' - and names no connector for this
-    exhaust variant; HIG Figure 6 prints 'INPUT CONNECTOR PN3072980925'. The library
-    has no ELON Mini part and the registry carries no DC blade-block standard, so
-    the block is drawn from the figure rather than resolved to a std/ part.
+    the supply composes ufispace/psu-242-dc-header@1 as `dc-header`, the six-position DC input connector
+    of the UfiSpace S9311-64D Hardware Installation Guide, Figure 6 (PDF page 11), at the box of the
+    `dc-input` element, which is the block the skin already draws. The figure prints "INPUT CONNECTOR
+    PN:3072980925"; that is the number the figure prints, as printed, and not a maker's identity, because
+    no document held joins it to a maker's part. The datasheet names "CRPS TE 2204535-3 ELON Mini" for
+    the intake variant PSU-242-DIEB-NN only and names no connector for this exhaust unit. So the part is a
+    declared stand-in (its own provenance), its interface claims no maker, standard or pitch, and its
+    size is an estimate. ufispace/psu-242-dc-plug@1, the cable connector of Figures 24 and 25 (PDF pages
+    22 and 23), mates it. The skin is unchanged and the header is drawn over the block it draws, shape
+    for shape. The device's `dc-b2f` configuration seats this part for the intake variant, whose
+    connector no held figure shows (the device's intake-psu-face gap): it draws the exhaust unit's
+    block there too, as the skin did.
+  roles: >-
+    guide - Figure 6 (PDF page 11) prints "V+" beside the upper row and "V-" beside the lower,
+    "DC+(+48V)" with three arrows to the three upper cells and "DC-(0)" with three arrows to the three
+    lower. Each row is one pole of three cells in parallel. The roles are the library's `pos` for the
+    upper row ("V+", "DC+(+48V)") and `neg` for the lower ("V-", "DC-(0)"), as the figure marks them.
+    The marks read the other way round from a -48 V feed: the figure puts +48 V on DC+ and 0 on DC-,
+    where the guide's connecting-power step and the datasheet feed the supply from a -48 to -60 V source
+    and name no conductor of it. No document states which pole is the return, so no voltage is carried
+    and the roles are the printed marks and nothing more.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port whose poles are a connector's contacts is
+    offered only where that path's part is itself the connector; on a supply in a bay it is the supply,
+    not the connector it composes, so a port stated here would be published and then not offered. The
+    roles above are recorded for the port a later change can state, a minor on the device that seats
+    this supply.
+  pe-lug: >-
+    HIG Figure 6 (PDF page 11) prints "PE LUG" and "2-M4 SCREW PEM TYPE FH4-M4-L8" on 11.0 mm centres
+    above the connector: a ground seat outside the connector. The two round holes the skin draws
+    (`lug-holes`) are left as drawn and none is composed: no registered stud pair has 11.0 mm centres.
+    A later change can state them as a ground seat.
   led-states: >-
     HIG section 10, PSU FRU LED table (page 25) - the same table serves both AC and
     DC supplies, and this contract carries the same five states as
@@ -114,6 +140,8 @@ relief:
       source: >-
         ufispace/psu-242-dc@1 - unsourced. Same 0.4 estimate as the other UfiSpace
         FRUs.
+parts:
+  - {ref: ufispace/psu-242-dc-header@1, id: dc-header, at: [43.5, 12.6]}
 fields:
   latch-finish:
     label: Latch colour

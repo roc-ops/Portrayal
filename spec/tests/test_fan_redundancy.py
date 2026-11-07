@@ -283,7 +283,13 @@ def test_the_unstated_ones_are_the_ones_we_could_not_source():
     # at the rotor level (one failed rotor tolerated), which is not a count of modules the switch can
     # lose, so the group quotes that and states no form.
     assert "juniper/qfx5130-48c" in unstated
-    assert len(unstated) == 45, unstated
+    # THE CISCO NEXUS 9336C-FX2-E MADE IT FORTY-SIX: six fan modules and redundancy only at the rotor
+    # level (one failed rotor in any one module tolerated), no count of modules, so the group says
+    # so in its note and states no form.
+    assert "cisco/n9k-c9336c-fx2-e" in unstated
+    # THE ZPE NSC-T48S MADE IT FORTY-SEVEN: the data sheet says "Fanless" and the front figure shows two fan modules, so its group quotes both and states no form.
+    assert "zpe/nsc-t48s" in unstated
+    assert len(unstated) == 47, unstated
 
 
 def test_the_comparison_layer_can_now_reach_them():
@@ -702,4 +708,19 @@ def test_the_comparison_layer_can_now_reach_them():
     # guide, Fan Modules: "slots for two 1+1 redundant fan modules")
     # 168 with the Cisco Nexus 93180YC-FX3, 93180YC-FX3S and 93108TC-FX3: n+1 over four fan modules (installation
     # guides, Overview), the last as 3+1 (its guide: powers down with fewer than 3 fans operational)
-    assert n == 168, n
+    # 170 with the Cisco C9300-48P and C9300-48T: 2+1 over three fan modules (hardware installation guide, Fan Module)
+    # 171 with the Cisco Nexus 9504: 2+1 over three fan trays (hardware guide, PDF p96, printed 90)
+    # 172 with the Cisco Nexus 9516: 2+1 over three fan trays (hardware guide, PDF p89, printed 83)
+    # 174 with the Cisco Nexus 93108TC-FX3P (3+1 over four fan modules) and 9348GC-FX3 (2+1 over three):
+    # installation guides, Overview
+    # 177 with the Cisco C9300-24P, C9300-24U and C9300-48U, the same 2+1 over three fan modules
+    # 179 with the Cisco Nexus 9348GC-FX3PH and 92348GC-FX3 (2+1 over three fan modules each): installation
+    # guides, Overview
+    # 180 with the Cisco Catalyst 3650-48PD: 2+1 over three fan modules (3650 hardware installation guide,
+    # Fan Modules: "Three fans are required for proper cooling" and the switch "can operate with two operational fans")
+    # 183 with the Cisco NCS 5011 (3+1 over four fan modules; the NCS 5000 guide, Fan Modules) and the
+    # NCS-57C3-MOD-S and -MOD-HX (n+1 over six fan trays; the NCS 5700 guide, Fan Modules and Fan Trays)
+    # 187 with the Juniper EX3200-24T, -48T, -24P and -48P: n+0 over one fan tray (hardware guide, Cooling System)
+    # 187 with the Arista 7050CX3-32S, 7050SX3-48YC12, 7050SX3-48YC8 and 7050TX3-48C8: four and two fan modules
+    # (data sheet, model tables)
+    assert n == 191, n

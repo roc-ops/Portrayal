@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: mini-usb
+version: 1.0.0
+class: port
+profile: networking
+description: Mini-USB Type-B receptacle, as used for a console port
+size: {w: 7.7, h: 3.9, d: 9.0}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+conforms: mini-usb-b
+interface: mini-usb-b
+attrs: {media: mini-usb-b}
+provenance:
+  size: >-
+    registry - the mini-usb-b entry of spec/schemas/standards.yaml, which reads Molex sales
+    drawing SD-54819-026 rev A (part 54819-0519, right angle, through hole): a 7.7 x 3.9
+    shell case, bounding box. Other makers' Mini-B shells may differ by a few tenths.
+  depth: >-
+    registry - the same entry's 9.0, the overall length on the drawing's side view.
+  opening: >-
+    registry - the plug opening inside the case is 6.9 wide by 3.1 high with five contacts at
+    0.8 pitch, as the registry's notes give it. The cut-away lower corners are drawn as
+    chamfers; the drawing's two R0.7 bends are not reproduced.
+elements:
+  opening: {at: [0.0, 0.0], size: [7.7, 3.9], class: cutout}
+relief:
+  wall: '#8d949c'
+connection-points:
+  mate: {at: [3.85, 1.95], direction: front}
+skins: [default]

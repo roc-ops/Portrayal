@@ -6,11 +6,13 @@ import pathlib
 import yaml
 
 from portrayal import libwalk
+import pytest
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 
 
+@pytest.mark.heavy
 def test_no_shipped_configuration_seats_an_optic():
     fitted = []
     for man in libwalk.iter_devices([LIB]):

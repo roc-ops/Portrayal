@@ -1,0 +1,73 @@
+format: 1
+kind: module
+name: fan-t2
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The hot-swappable 12 V fan module of the Cisco Catalyst 9300 family, FAN-T2 - a single fan
+  behind a honeycomb grille, a status lamp at the upper left of its rear face and a pull
+  handle across the middle. Three seat across the rear of every Catalyst 9300 except the
+  C9300LM-48T-4Y, which has fixed fans. Airflow is front-to-back.
+size: {w: 43.9, h: 41.1}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'FAN-T2'
+  fans: 1
+  airflow: front-to-back
+  airflow-cfm: 20
+  voltage: '12 V'
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Fan Module: "All switches except
+    C9300LM-48T-4Y support three internal hot-swappable 12-V fan modules (FAN-T2=)". The
+    trailing = is Cisco's spare-order mark and is not part of the model.
+  power: >-
+    NOT PUBLISHED. Searched the guide for a fan module wattage (Table 48, the fan section and
+    the specifications of the switches) and found the switch's figures only; L29 stands.
+  size: >-
+    datasheet - Table 48, Fan Module Environmental and Physical Specifications: Dimensions (H x
+    D x W) 1.62 x 1.73 x 4.24 in (4.11 x 4.39 x 10.76 cm), weight 0.48 lb (0.21 kg) for three
+    fans. THE ORDER OF THE THREE FIGURES IS NOT CERTAIN. Read as height 41.1, face width 43.9
+    and depth 107.6, it agrees with the community NetBox elevation, in which a fan opening
+    measures 39.1 wide inside a 63.0 mm fan-to-fan step; the 4.24 in cannot be a width, as
+    three of them would not fit the rear. The face is 43.9 x 41.1 and the depth 107.6.
+  depth: >-
+    datasheet - 107.6 mm, the 4.24 in figure of the same row.
+  airflow: >-
+    datasheet - Table 48 prints 20 cfm; the guide's airflow pattern figure (Figure 15) draws
+    the airflow front-to-rear and side-to-rear, the switch's airflow, which the fan serves.
+  elements: >-
+    estimated - the guide draws the fan module only inside Figure 10, isometrically, and the
+    fan LED is "at the top left corner of the fan assembly (viewed from the rear)". Positions
+    are read off the community NetBox rear elevation at 5.03 px per mm taken from its 19 inch
+    width: the grille is the whole face less a 2 mm margin and the handle bar crosses the
+    middle.
+  lamp: >-
+    datasheet - the guide's Fan LEDs: green when all fans operate normally, amber when one or
+    more has a tachometer fault, off when the fans have stopped (Table 11). One lamp per fan
+    module.
+  colour: >-
+    estimated - read off the NetBox elevation, which draws the fan modules near black.
+states: [absent]
+elements:
+  fan: {at: [2.0, 2.0], size: [39.9, 37.1], class: rotor}
+  fan-led: {at: [3.0, 3.0], size: [2.6, 2.6], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
+  handle: {at: [0.0, 15.0], size: [43.9, 11.1], class: handle}
+relief:
+  wall: '#15171a'
+  features:
+    - node: fan
+      vent: 24
+      confidence: estimated
+      source: >-
+        cisco/fan-t2@1's own elements key - the grille's extent is read off the NetBox
+        elevation and the depth behind it is not stated.
+skins: [default]
+body:
+  depth: 107.6
+  color: '#2a2c30'
+  footprint: {at: [0, 0], size: [43.9, 41.1]}

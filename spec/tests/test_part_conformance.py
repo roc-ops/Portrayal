@@ -11,6 +11,7 @@ on what a live device lacks the day this runs:
   check that passes because it looked at nothing.
 """
 import copy
+import importlib.util
 import json
 import pathlib
 import shutil
@@ -18,6 +19,7 @@ import subprocess
 import sys
 
 import pytest
+import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 TOOL = ROOT / "spec/tools/dev/part_conformance.py"
@@ -160,6 +162,575 @@ def test_the_report_is_written_to_out_and_names_its_timing(tmp_path):
     report, _ = run(build(tmp_path), tmp_path)
     assert report["seconds"] > 0 and set(report["timing"]) >= {"settings", "cabling", "occupants", "configs"}
     assert "summary" in report
+
+
+# ── the port-usable codes: C19 to C22, judged in the scan mode ──────────────────────────────────────
+#
+# Every test builds the one library below, changes one thing, and reads what the scan finds. A baseline
+# with the fault absent is clean; the same world with the fault planted is found, under its code.
+
+SENTENCE = "a printed marking on the panel; it takes no cable, cord or lug"       # at least 40 characters
+CFP2 = {"interface": "cfp2", "rates": ["cfp2"], "source": "a test family"}
+SFP = {"interface": "sfp", "rates": ["sfp", "sfp-plus", "sfp28"], "source": "a test family"}
+DEV_REF = "std/rj45@2:1.0.0"
+
+
+def registries(tmp_path, *, connectors=None, families=None):
+    """A schemas folder holding the two registries the runner reads."""
+    folder = tmp_path / "schemas"
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "connectors.yaml").write_text(yaml.safe_dump({"format": 1, "interfaces": connectors or {"rj45": {"standard": "rj45"}}}))
+    (folder / "pluggables.yaml").write_text(yaml.safe_dump({"format": 1, "families": families or {"cfp2": CFP2, "sfp": SFP}}))
+    return folder
+
+
+def contract(tmp_path, ref, **fields):
+    """A contract in a library folder: only what the runner reads of it (`unmated`, the rest for the family file)."""
+    ns, tail = ref.split("/")
+    name, major = tail.split("@")
+    folder = tmp_path / "library" / "components" / ns / name / f"v{major}"
+    folder.mkdir(parents=True, exist_ok=True)
+    (folder / "contract.yaml").write_text(yaml.safe_dump({"format": 1, "kind": "component", "name": name, "version": f"{major}.0.0", **fields}))
+    return tmp_path / "library"
+
+
+def world(tmp_path, *, comps, front=(), rear=(), cages=(), rear_cages=(), cfgs=None, bays=None):
+    """A dist of one device `dev`; `cfgs` maps a configuration name to its {view: [elements]}."""
+    cfgs = cfgs or {"base": {"front": list(front), "rear": list(rear)}}
+    dist = tmp_path / "dist"
+    dist.mkdir(parents=True)
+    def put(name, value):
+        (dist / name).write_text(json.dumps(value))
+    put("components.json", {"components": [JACK, PLUG, *comps]})
+    put("rack.json", {"format": 1, "devices": {"dev": {"ru": 1, "w": 436, "h": 43.7, "d": 300, "mount": "rack", "kind": "switch",
+                                                        "manufacturer": "Acme", "model": "DEV", "default": next(iter(cfgs)), "configs": list(cfgs)}}})
+    rows = []
+    chassis = {"id": "chassis-faceplate", "path": "chassis", "class": "chassis", "parent": None, "box": {"x": 0, "y": 0, "w": 436, "h": 43.7}}
+    for name, views in cfgs.items():
+        files = {}
+        for view in ("front", "rear"):
+            files[view] = f"dev.{name}.{view}.svg"
+            put(f"dev.{name}.{view}.elements.json", {"device": "dev", "config": name, "view": view, "viewBox": [0, 0, 436, 43.7],
+                                                     "elements": [chassis, *views.get(view, [])]})
+            (dist / files[view]).write_text("<svg></svg>")
+        rows.append({"name": name, "files": files, "bays": dict(bays or {}), "occupants": {}, "states": {}, "names": {}, "slots": [], "mount-points": []})
+    put("dev.configs.json", {"default": next(iter(cfgs)), "pdu-class": None, "bays": {"front": [], "rear": []},
+                             "cages": {"front": list(cages), "rear": list(rear_cages)}, "configs": rows})
+    return dist
+
+
+def scan(dist, tmp_path, *, schemas=None, library=None, refs=("dev",), extra=()):
+    out = tmp_path / "scan.json"
+    p = subprocess.run([sys.executable, str(TOOL), "--dist", str(dist), "--scan", "--refs", *refs, "--out", str(out),
+                        "--library", str(library or tmp_path / "library"), "--schemas", str(schemas or registries(tmp_path)), *extra],
+                       capture_output=True, text=True)
+    assert p.returncode == 0, p.stderr[-1500:] + p.stdout[-1500:]
+    return json.loads(out.read_text())
+
+
+def usable(report):
+    """{code: [finding]} over every configuration of every part of a scan report."""
+    codes = {}
+    for part in report["parts"]:
+        for row in part["configs"]:
+            assert "cabling" not in row and "settings" not in row, "the scan lays no cable and sets no state"
+            for f in row["usable"]["found"]:
+                codes.setdefault(f["code"], []).append({**f, "cfg": row["cfg"]})
+    return codes
+
+
+def causes(report, code):
+    return [c for f in usable(report).get(code, []) for c in f["causes"]]
+
+
+def test_c21_finds_a_connector_slot_whose_accepts_hold_no_plug(tmp_path):
+    cap = comp("generic/rj45-cap@1", **{"class": "cap"}, mates="rj45")
+    jack = comp("std/rj45@2", interface="rj45")
+    drawn = [element("port-1", "port", ref=DEV_REF)]
+    good = scan(world(tmp_path / "a", comps=[cap, jack], front=drawn, cages=[slot("port-1", ["generic/rj45-plug@1", "generic/rj45-cap@1"])]), tmp_path / "a")
+    assert usable(good) == {}, usable(good)
+    bad = scan(world(tmp_path / "b", comps=[cap, jack], front=drawn, cages=[slot("port-1", ["generic/rj45-cap@1"])]), tmp_path / "b")
+    assert sorted(usable(bad)) == ["C21"], usable(bad)
+    assert [(c["part"], c["path"]) for c in causes(bad, "C21")] == [("std/rj45@2", "port-1")]
+
+
+def test_c21_lets_off_a_plug_a_cover_mount_and_an_interface_with_a_sentence(tmp_path):
+    jack = comp("std/rj45@2", interface="rj45")
+    for name, iface, accepts, sentence in (("plug", "rj45", ["generic/rj45-plug@1"], None), ("cover", "guard", [], None),
+                                           ("sentence", "rj45x", [], SENTENCE), ("none", "rj45", [], None)):
+        folder = tmp_path / name
+        folder.mkdir()
+        schemas = registries(folder, connectors={"rj45": {"standard": "rj45"}, "guard": {"cover": True},
+                                                 "rj45x": ({"unmated": sentence} if sentence else {})})
+        dist = world(folder, comps=[jack], front=[element("port-1", "port", ref=DEV_REF)], cages=[{**slot("port-1", accepts), "interface": iface}])
+        found = usable(scan(dist, folder, schemas=schemas))
+        assert (sorted(found) == ["C21"]) == (name == "none"), (name, found)
+    # the sentence is the only difference between `sentence` and a slot that is found
+    folder = tmp_path / "bare"
+    folder.mkdir()
+    dist = world(folder, comps=[jack], front=[element("port-1", "port", ref=DEV_REF)], cages=[{**slot("port-1", []), "interface": "rj45x"}])
+    assert sorted(usable(scan(dist, folder, schemas=registries(folder, connectors={"rj45": {"standard": "rj45"}, "rj45x": {"standard": "rj45"}})))) == ["C21"]
+
+
+def test_c21_on_a_cage_finds_no_module_unless_the_family_has_a_sentence_for_the_rate(tmp_path):
+    cage_part = comp("std/cfp2@1", interface="cfp2")
+    module = comp("generic/cfp2-lc@1", **{"class": "transceiver"}, mates="cfp2")
+    cable = comp("generic/cfp2-cable@1", mates="cfp2")                                  # a cable end is class port
+    cage = lambda accepts: {"id": "port-1", "kind": "cage", "interface": "cfp2", "media": "cfp2", "bores": [], "accepts": accepts,
+                            "default": None, "at": [0, 0], "mate": [1, 1], "rotate": None}
+    drawn = [element("port-1", "port", ref="std/cfp2@1:1.0.0")]
+    results = {}
+    for name, accepts, families in (("empty", [], {"cfp2": CFP2}),
+                                    ("sentence", [], {"cfp2": {**CFP2, "unmated": {"cfp2": SENTENCE}}}),
+                                    ("other-rate", [], {"cfp2": {**CFP2, "rates": ["cfp", "cfp2"], "unmated": {"cfp": SENTENCE}}}),
+                                    ("module", ["generic/cfp2-lc@1"], {"cfp2": CFP2}),
+                                    ("cable", ["generic/cfp2-cable@1"], {"cfp2": CFP2})):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[cage_part, module, cable], front=drawn, cages=[cage(accepts)])
+        results[name] = sorted(usable(scan(dist, folder, schemas=registries(folder, families=families))))
+    assert results == {"empty": ["C21"], "sentence": [], "other-rate": ["C21"], "module": [], "cable": []}, results
+
+
+def test_the_scan_counts_the_cages_that_accept_no_module_at_their_own_rate(tmp_path):
+    cage_part = comp("std/sfp@1", interface="sfp")
+    cage = {"id": "port-1", "kind": "cage", "interface": "sfp", "media": "sfp28", "bores": [], "default": None, "at": [0, 0], "mate": [1, 1], "rotate": None}
+    counts = {}
+    for name, module in (("lower", comp("acme/sfp-plus-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp-plus"})),
+                         ("lower-port", comp("acme/sfp-plus-dac@1", mates="sfp", attrs={"rate": "sfp-plus"})),
+                         ("off-ladder", comp("acme/qsfp-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "qsfp"})),
+                         ("higher", comp("acme/sfp56-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp56"})),
+                         ("own", comp("acme/sfp28-sr@1", **{"class": "transceiver"}, mates="sfp", attrs={"rate": "sfp28"})),
+                         ("generic", comp("generic/sfp-lc@1", **{"class": "transceiver"}, mates="sfp"))):
+        folder = tmp_path / name
+        folder.mkdir()
+        ref = f"{module['ns']}/{module['name']}@1"
+        dist = world(folder, comps=[cage_part, module], front=[element("port-1", "port", ref="std/sfp@1:1.0.0")], cages=[{**cage, "accepts": [ref]}])
+        report = scan(dist, folder)
+        assert usable(report) == {}, (name, usable(report))
+        counts[name] = report["scan"]["cages-below-own-rate"]
+    assert counts == {"lower": 1, "lower-port": 1, "off-ladder": 0, "higher": 0, "own": 0, "generic": 0}, counts
+
+
+def test_c22_finds_a_port_part_that_presents_no_interface_unless_it_composes_one(tmp_path):
+    bare = comp("acme/bare-port@1")
+    composing = comp("acme/bare-port@1", parts=[{"id": "j", "ref": "std/rj45@2"}])
+    jack = comp("std/rj45@2", interface="rj45")
+    drawn = [element("port-1", "port", ref="acme/bare-port@1:1.0.0")]
+    good = scan(world(tmp_path / "a", comps=[composing, jack], front=drawn), tmp_path / "a")
+    assert usable(good) == {}, usable(good)
+    bad = scan(world(tmp_path / "b", comps=[bare, jack], front=drawn), tmp_path / "b")
+    assert sorted(usable(bad)) == ["C22"], usable(bad)
+    assert [c["part"] for c in causes(bad, "C22")] == ["acme/bare-port@1"]
+
+
+def test_c22_lets_off_a_plug_and_a_part_carrying_a_sentence(tmp_path):
+    drawn = [element("port-1", "port", ref="acme/p@1:1.0.0")]
+    for name, part, fields in (("mates", comp("acme/p@1", mates="rj45"), {}),
+                               ("occupies", comp("acme/p@1", behaviour="occupies"), {}),
+                               ("sentence", comp("acme/p@1"), {"unmated": SENTENCE}),
+                               ("neither", comp("acme/p@1"), {})):
+        folder = tmp_path / name
+        folder.mkdir()
+        library = contract(folder, "acme/p@1", **fields)
+        found = usable(scan(world(folder, comps=[part], front=drawn), folder, library=library))
+        assert (sorted(found) == ["C22"]) == (name == "neither"), (name, found)
+
+
+def test_c20_reports_the_part_it_used_to_skip_as_a_marking_unless_it_carries_a_sentence(tmp_path):
+    marking = comp("acme/rps-port@1", **{"class": "inlet"})
+    drawn = [element("rps", "inlet", ref="acme/rps-port@1:1.0.0")]
+    bad = scan(world(tmp_path / "a", comps=[marking], front=drawn), tmp_path / "a")
+    assert sorted(usable(bad)) == ["C20"], usable(bad)
+    assert [c["part"] for c in causes(bad, "C20")] == ["acme/rps-port@1"]
+    library = contract(tmp_path / "b", "acme/rps-port@1", unmated=SENTENCE)
+    assert usable(scan(world(tmp_path / "b", comps=[marking], front=drawn), tmp_path / "b", library=library)) == {}
+
+
+def test_c19_lets_off_a_supply_whose_part_carries_a_sentence(tmp_path):
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    drawn = [element("psu-1", "psu", ref="acme/psu@1:1.0.0")]
+    bad = scan(world(tmp_path / "a", comps=[supply], front=drawn), tmp_path / "a")
+    assert sorted(usable(bad)) == ["C19"], usable(bad)
+    assert [c["part"] for c in causes(bad, "C19")] == ["acme/psu@1"]
+    library = contract(tmp_path / "b", "acme/psu@1", unmated=SENTENCE)
+    assert usable(scan(world(tmp_path / "b", comps=[supply], front=drawn), tmp_path / "b", library=library)) == {}
+
+
+def test_c19_lets_off_a_configuration_whose_every_supply_bay_is_open_and_no_other(tmp_path):
+    """A spare chassis ships with its supply bays open: the configuration says it is powered, and it has no supply to offer a power end.
+    The supplies ordered for it are judged on their own parts. A bay that takes no supply, a bay seated, a bay seated by default and a
+    chassis with no bay at all stay reported."""
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    fan = comp("acme/fan@1", **{"class": "fan"})
+    psu_bay = lambda pid, default=None: {"id": pid, "accepts": ["acme/psu@1"], "default": default, "group": "psu"}
+    fan_bay = {"id": "fan-0", "accepts": ["acme/fan@1"], "default": None, "group": "fan"}
+    drawn = [element("psu-1", "psu", ref="acme/psu@1:1.0.0")]
+
+    def reported(name, bays, seated, front=()):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[supply, fan], front=list(front), bays=seated)
+        doc = json.loads((dist / "dev.configs.json").read_text())
+        doc["bays"] = {"front": bays, "rear": []}
+        doc["configs"][0]["power"] = ["ac"]
+        (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder)))
+
+    got = {"every supply bay open": reported("a", [psu_bay("psu-0"), psu_bay("psu-1"), fan_bay], {"psu-0": "", "psu-1": "", "fan-0": ""}),
+           "a supply drawn with no power end": reported("b", [psu_bay("psu-1")], {"psu-1": "acme/psu@1"}, drawn),
+           "one supply bay seated, none drawn": reported("c", [psu_bay("psu-0"), psu_bay("psu-1")], {"psu-0": "acme/psu@1", "psu-1": ""}),
+           "a bay that takes no supply": reported("d", [fan_bay], {"fan-0": ""}),
+           "a supply bay seated by default": reported("e", [psu_bay("psu-1", "acme/psu@1")], {}),
+           "no bay": reported("f", [], {})}
+    assert got == {"every supply bay open": [], "a supply drawn with no power end": ["C19"], "one supply bay seated, none drawn": ["C19"],
+                   "a bay that takes no supply": ["C19"], "a supply bay seated by default": ["C19"], "no bay": ["C19"]}, got
+
+
+def test_c19_counts_only_the_supply_bays_the_configuration_has(tmp_path):
+    """The build publishes a bay with the configurations that have it (`only-in`), and the drawing leaves it out of any other. A supply bay
+    scoped to another configuration is not a bay of this one, so its default orders nothing here. A bay scoped to this configuration, a bay
+    that states no scope and a chassis whose only supply bay belongs elsewhere (it has none) stay reported."""
+    supply = comp("acme/psu@1", **{"class": "psu"})
+    psu_bay = lambda pid, default=None, **scope: {"id": pid, "accepts": ["acme/psu@1"], "default": default, "group": "psu", **scope}
+
+    def reported(name, bays, seated):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[supply], bays=seated)
+        doc = json.loads((dist / "dev.configs.json").read_text())
+        doc["bays"] = {"front": bays, "rear": []}
+        doc["configs"][0]["power"] = ["ac"]
+        (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder)))
+
+    got = {"every bay open, a seated bay scoped to another configuration":
+               reported("a", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["other"]})], {"psu-0": ""}),
+           "the same bay scoped to this configuration":
+               reported("b", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["base"]})], {"psu-0": ""}),
+           "a seated bay that states no scope":
+               reported("c", [psu_bay("psu-0"), psu_bay("psu-0-3u", "acme/psu@1")], {"psu-0": ""}),
+           "the only supply bay scoped to another configuration":
+               reported("d", [psu_bay("psu-0-3u", "acme/psu@1", **{"only-in": ["other"]})], {})}
+    assert got == {"every bay open, a seated bay scoped to another configuration": [],
+                   "the same bay scoped to this configuration": ["C19"],
+                   "a seated bay that states no scope": ["C19"],
+                   "the only supply bay scoped to another configuration": ["C19"]}, got
+
+
+def test_c19_and_c20_let_off_a_fixed_cord_and_an_inlet_that_its_placement_presents(tmp_path):
+    """A device fed through a fixed cord, a plug of the part's own that its sentence says is no connector, offers no power end by
+    design (C19). A placed part that composes one connector part presents it as its own slot, at the placement's path (C20)."""
+    inlet = comp("acme/inl@1", **{"class": "inlet"}, interface="rj45")
+    supply = comp("acme/psu@1", **{"class": "psu"}, parts=[{"id": "inlet", "ref": "acme/inl@1"}])
+    cord = [element("cord", "inlet", ref="acme/cord@1:1.0.0")]
+    placed = [element("psu-1", "psu", ref="acme/psu@1:1.0.0"), element("psu-1/inlet", "inlet", x=40, ref="acme/inl@1:1.0.0")]
+
+    def codes(name, parts, drawn, sentence=False, cages=(), powered=False):
+        folder = tmp_path / name
+        folder.mkdir()
+        library = contract(folder, "acme/cord@1", unmated=SENTENCE) if sentence else None
+        dist = world(folder, comps=parts, front=drawn, cages=cages)
+        if powered:                                                             # the configuration says the device is powered
+            doc = json.loads((dist / "dev.configs.json").read_text())
+            doc["configs"][0]["power"] = ["ac"]
+            (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(usable(scan(dist, folder, library=library)))
+
+    fixed = [comp("acme/cord@1", **{"class": "inlet"}, attrs={"plug": "nema-5-15p"})]
+    got = {"fixed cord": codes("a", fixed, cord, sentence=True, powered=True),
+           "cord with no sentence": codes("b", fixed, cord, powered=True),
+           "sentence on a part with no plug": codes("c", [comp("acme/cord@1", **{"class": "inlet"})], cord, sentence=True, powered=True),
+           "slot at the placement": codes("d", [supply, inlet], placed, cages=[slot("psu-1")]),
+           "slot of another interface": codes("e", [supply, inlet], placed, cages=[{**slot("psu-1"), "interface": "iec-c14"}]),
+           "no slot at the placement": codes("f", [supply, inlet], placed)}
+    assert got == {"fixed cord": [], "cord with no sentence": ["C19", "C20"], "sentence on a part with no plug": ["C19"],
+                   "slot at the placement": [], "slot of another interface": ["C20"], "no slot at the placement": ["C19", "C20"]}, got
+
+
+def test_c20_counts_a_seat_the_build_publishes_and_judges_a_placed_block_by_the_seats_drawn_in_it(tmp_path):
+    """A drawn screw, stud or inlet is a place to land a cord or lug when the build publishes a connector slot at its own path, with a
+    registered interface, that takes a cable end. The poles of a DC port are such seats, and the free-port list shows the port in their
+    place. A block that a placed part draws with no part of its own is judged by the seats drawn inside it. A terminal drawn with no
+    published seat stays reported."""
+    screw = comp("acme/scr@1", **{"class": "screw"})
+    block = element("psu-1/block", "terminal", parent="psu-1", box={"x": 10, "y": 5, "w": 20, "h": 8})
+    titled = {**block, "ref": "acme/scr@1:1.0.0"}                               # the same block, drawn from a part of its own
+
+    def inside(pid, x):
+        return element(pid, "screw", parent="psu-1", ref="acme/scr@1:1.0.0", box={"x": x, "y": 6, "w": 4, "h": 4})
+
+    def seat(pid, interface="rj45", accepts=("generic/rj45-plug@1",)):
+        return {**slot(pid, accepts), "interface": interface}
+
+    def reported(name, drawn, cages):
+        folder = tmp_path / name
+        folder.mkdir()
+        dist = world(folder, comps=[screw], front=drawn, cages=cages)
+        if cages:                                                               # one DC port over the seats, which the free-port list offers instead of them
+            doc = json.loads((dist / "dev.configs.json").read_text())
+            doc["configs"][0]["dc-ports"] = [{"id": "in", "path": "psu-1/in", "direction": "input",
+                                              "poles": [{"role": "batt", "slot": c["id"]} for c in cages]}]
+            (dist / "dev.configs.json").write_text(json.dumps(doc))
+        return sorted(c["path"] for c in causes(scan(dist, folder), "C20"))
+
+    one, two, three = inside("psu-1/s1", 12), inside("psu-1/s2", 20), inside("psu-1/s3", 26)
+    got = {"seat at the screw": reported("a", [one], [seat("psu-1/s1")]),
+           "no seat": reported("b", [one], []),
+           "seat of an interface nobody registered": reported("c", [one], [seat("psu-1/s1", "nothing")]),
+           "seat at another path": reported("d", [one], [seat("psu-1/s2")]),
+           "seat that takes no cable end": reported("e", [one], [seat("psu-1/s1", accepts=("acme/scr@1",))]),
+           "the device's own element": reported("f", [element("gnd", "ground", x=20)], [seat("gnd")]),
+           "block with a seat in it": reported("g", [block, one, two], [seat("psu-1/s1"), seat("psu-1/s2")]),
+           "block with seats in it and one screw without": reported("h", [block, one, two, three], [seat("psu-1/s1"), seat("psu-1/s2")]),
+           "block with no seat in it": reported("i", [block, one, two], []),
+           "block whose only seat is outside it": reported("j", [block, inside("psu-1/s4", 40)], [seat("psu-1/s4")]),
+           "block drawn from a part of its own": reported("k", [titled, one], [seat("psu-1/s1")])}
+    assert got == {"seat at the screw": [], "no seat": ["psu-1/s1"], "seat of an interface nobody registered": ["psu-1/s1"],
+                   "seat at another path": ["psu-1/s1"], "seat that takes no cable end": ["psu-1/s1"], "the device's own element": [],
+                   "block with a seat in it": [], "block with seats in it and one screw without": ["psu-1/s3"],
+                   "block with no seat in it": ["psu-1/block", "psu-1/s1", "psu-1/s2"],
+                   "block whose only seat is outside it": ["psu-1/block"], "block drawn from a part of its own": ["psu-1/block"]}, got
+
+
+def test_every_finding_lists_every_cause_uncapped_with_the_part_that_draws_it(tmp_path):
+    bare = comp("acme/lug@1", **{"class": "inlet"})
+    five = [element(f"in-{i}", "inlet", x=20 + 30 * i, ref="acme/lug@1:1.0.0") for i in range(5)]
+    own = element("own", "inlet", x=400)                                    # the device's own drawing: no ref
+    report = scan(world(tmp_path, comps=[bare], front=[*five, own]), tmp_path)
+    found = usable(report)
+    assert sorted(found) == ["C20"] and len(found["C20"]) == 1, found
+    got = found["C20"][0]["causes"]
+    assert len(got) == 6, got                                               # five bare inlets and the device's own: no cap of three
+    assert all(set(c) == {"part", "device", "cfg", "view", "path"} for c in got), got
+    assert sorted((c["part"], c["path"]) for c in got) == sorted([("acme/lug@1", f"in-{i}") for i in range(5)] + [("", "own")])
+    assert {(c["device"], c["cfg"], c["view"]) for c in got} == {("dev", "base", "front")}
+
+
+def test_the_part_of_a_skin_art_element_is_the_component_whose_skin_draws_it(tmp_path):
+    inlet = comp("acme/art-inlet@1", **{"class": "inlet"})
+    port = comp("acme/art-port@1")
+    art = [element("panel/art-1", "inlet", ref="acme/art-inlet@1:1.0.0"), element("panel/art-2", "port", ref="acme/art-port@1:1.0.0")]
+    report = scan(world(tmp_path, comps=[inlet, port], front=art), tmp_path)
+    assert [(c["part"], c["path"]) for c in causes(report, "C20")] == [("acme/art-inlet@1", "panel/art-1")]
+    assert [(c["part"], c["path"]) for c in causes(report, "C22")] == [("acme/art-port@1", "panel/art-2")]
+
+
+def test_a_published_slot_the_configuration_does_not_draw_is_not_judged(tmp_path):
+    jack = comp("std/rj45@2", interface="rj45")
+    drawn = [element("port-1", "port", ref=DEV_REF)]
+    slots = [slot("port-1", []), slot("port-2", [])]                         # cages[] lists a slot of any configuration
+    bad = scan(world(tmp_path / "a", comps=[jack], front=drawn, cages=slots), tmp_path / "a")
+    assert [c["path"] for c in causes(bad, "C21")] == ["port-1"], "only the drawn slot is on this device as built"
+    both = [element("port-1", "port", ref=DEV_REF), element("port-2", "port", ref=DEV_REF)]
+    assert [c["path"] for c in causes(scan(world(tmp_path / "b", comps=[jack], front=both, cages=slots), tmp_path / "b"), "C21")] == ["port-1", "port-2"]
+
+
+def test_c22_finds_a_drawn_port_whose_part_the_build_does_not_hold(tmp_path):
+    drawn = [element("port-1", "port", ref="acme/missing@1:1.0.0")]
+    report = scan(world(tmp_path, comps=[], front=drawn), tmp_path)
+    assert [c["part"] for c in causes(report, "C22")] == ["acme/missing@1"]
+
+
+def test_c22_reads_the_back_of_a_seated_part_through_the_parts_of_its_rear_face(tmp_path):
+    """The back of a part seated in a bay is drawn on the host's other panel as a projection: it carries no `ref` and
+    its address is `of`. What it presents is what the part's rear face composes at that id."""
+    jack = comp("std/rj45@2", interface="rj45")
+    bare = comp("acme/bare-end@1")
+
+    def found(name, end_ref, back=True):
+        folder = tmp_path / name
+        folder.mkdir()
+        parts = panel(back)
+        if back and end_ref != "std/rj45@2":
+            parts[1] = comp("acme/pnl-rear@1", **{"class": "adapter-panel"}, parts=[{"id": i, "ref": end_ref} for i in ("b1", "b2")])
+        ends = [{"id": f"bay-1-rear--{i}", "class": "port", "parent": "bay-1/module", "of": f"bay-1/module/{i}", "seat": "bay-1",
+                 "box": {"x": 30 + 30 * n, "y": 5, "w": 12, "h": 10}} for n, i in enumerate(("b1", "b2"))]
+        dist = world(folder, comps=[jack, bare, *parts], rear=ends, bays={"bay-1": "acme/pnl@1:1.0.0"})
+        return sorted(c["path"] for c in causes(scan(dist, folder), "C22"))
+
+    assert found("composed", "std/rj45@2") == []                                        # the face composes a jack: it presents rj45
+    both = ["bay-1/module/b1", "bay-1/module/b2"]
+    assert found("bare", "acme/bare-end@1") == both                                     # the face composes a part that presents nothing
+    assert found("no-face", "std/rj45@2", back=False) == both                           # the seated part has no rear face to read
+
+
+def test_the_scan_judges_every_configuration_and_lays_no_cable(tmp_path):
+    bare = comp("acme/lug@1", **{"class": "inlet"})
+    clean = {"front": [], "rear": []}
+    cfgs = {f"c{i}": clean for i in range(3)}
+    cfgs["c3"] = {"front": [element("in-1", "inlet", ref="acme/lug@1:1.0.0")], "rear": []}     # beyond the default three
+    # each configuration draws other files, so none is folded into another
+    cfgs = {name: {"front": list(v["front"]) + [element(f"marker-{name}", "led", x=300)], "rear": []} for name, v in cfgs.items()}
+    dist = world(tmp_path, comps=[bare], cfgs=cfgs)
+    report = scan(dist, tmp_path)
+    assert [row["cfg"] for row in report["parts"][0]["configs"]] == ["c0", "c1", "c2", "c3"]
+    assert [c["cfg"] for c in causes(report, "C20")] == ["c3"], usable(report)
+    # the cabling run, at its default three configurations, never reaches the fourth
+    normal = tmp_path / "normal.json"
+    subprocess.run([sys.executable, str(TOOL), "--dist", str(dist), "--refs", "dev", "--out", str(normal), "--skip", "settings", "occupants"],
+                   capture_output=True, text=True, check=True)
+    assert [r["cfg"] for r in json.loads(normal.read_text())["parts"][0]["configs"]] == ["c0", "c1", "c2"]
+
+
+def families_report(refs_and_devices):
+    """A scan report holding one C20 cause per (part, device)."""
+    parts = {}
+    for ref, device in refs_and_devices:
+        row = parts.setdefault(device, {"ref": device, "configs": [{"cfg": "base", "usable": {"found": [{"code": "C20", "text": "t", "n": 0, "causes": []}]}}]})
+        row["configs"][0]["usable"]["found"][0]["causes"].append({"part": ref, "device": device, "cfg": "base", "view": "rear", "path": "x"})
+        row["configs"][0]["usable"]["found"][0]["n"] += 1
+    return {"dist": "dist", "parts": list(parts.values())}
+
+
+def test_by_family_assigns_by_the_five_rules_in_order(tmp_path):
+    spec = {
+        "acme/mini@1": {"class": "port", "interface": "mini-usb-b"},                                  # 1: an interface
+        "acme/ac-psu@1": {"class": "psu", "attrs": {"input": "ac"}},                                  # 2: a supply, by its attrs
+        "acme/dc-psu@1": {"class": "psu", "attrs": {"input": "dc"}},
+        "acme/stud@1": {"class": "ground"},                                                           # 3: a ground part
+        "acme/vcp-port@1": {"class": "port"},                                                         # 4: a name
+        "acme/console-jack@1": {"class": "port"},                                                     # 4: a name whose family has commas in it
+        "acme/odd@1": {"class": "port"},                                                           # 5: none of them
+        "acme/dc-both@1": {"class": "psu", "interface": "iec-c14", "attrs": {"input": "dc"}},        # rules 1 and 2 match: 1 wins
+        "acme/dc-ground@1": {"class": "ground"},                                                      # rules 3 and 4 match: 3 wins
+        "acme/pole@1": {"class": "screw", "interface": "terminal-stud"},                              # the interface's own exception for a class
+    }
+    library = tmp_path / "library"
+    for ref, fields in spec.items():
+        contract(tmp_path, ref, provenance={"existence": "datasheet - the guide lists it on the rear panel of the box", "size": "estimated"}, **fields)
+    report = tmp_path / "scan.json"
+    report.write_text(json.dumps(families_report([(ref, f"dev-{i}") for i, ref in enumerate(spec)])))
+    out = tmp_path / "families.json"
+    p = subprocess.run([sys.executable, str(TOOL), "--by-family", str(report), "--library", str(library), "--out", str(out)], capture_output=True, text=True)
+    assert p.returncode == 0, p.stderr[-1500:]
+    got = json.loads(out.read_text())["families"]
+    where = {part["ref"]: name for name, fam in got.items() for part in fam["parts"]}
+    assert where == {"acme/mini@1": "console (RJ45, USB, Mini-B, DB9)", "acme/ac-psu@1": "power inlets (AC)", "acme/dc-psu@1": "DC terminals and barrels",
+                     "acme/stud@1": "ground and earth studs", "acme/vcp-port@1": "stack and virtual chassis", "acme/odd@1": "other",
+                     "acme/dc-both@1": "power inlets (AC)", "acme/dc-ground@1": "ground and earth studs",
+                     "acme/pole@1": "DC terminals and barrels", "acme/console-jack@1": "console (RJ45, USB, Mini-B, DB9)"}, where
+    first = next(p for p in got["other"]["parts"] if p["ref"] == "acme/odd@1")
+    assert first["provenance"]["existence"].startswith("datasheet - the guide lists") and first["class"] == "port"
+    assert got["other"]["vendors"] == ["acme"] and got["other"]["devices"] == ["dev-6"]
+
+
+def by_family_where(tmp_path, spec):
+    """`--by-family` over one C20 cause per part of `spec` ({ref: contract fields}), with the real family file:
+    {ref: family name}."""
+    for ref, fields in spec.items():
+        contract(tmp_path, ref, **fields)
+    report = tmp_path / "scan.json"
+    report.write_text(json.dumps(families_report([(ref, f"dev-{i}") for i, ref in enumerate(spec)])))
+    out = tmp_path / "families.json"
+    p = subprocess.run([sys.executable, str(TOOL), "--by-family", str(report), "--library", str(tmp_path / "library"), "--out", str(out)],
+                       capture_output=True, text=True)
+    assert p.returncode == 0, p.stderr[-1500:]
+    got = json.loads(out.read_text())["families"]
+    return {part["ref"]: name for name, fam in got.items() for part in fam["parts"]}
+
+
+KEY_FAMILIES = {
+    "flexstack": "stack and virtual chassis", "stackwise-480": "stack and virtual chassis",
+    "stackpower": "stack and virtual chassis", "ex4200-vcp": "stack and virtual chassis",
+    "cisco-rps2300": "RPS", "ex3300-rps": "RPS",
+    "rj45": "console (RJ45, USB, Mini-B, DB9)",
+    "screw-terminal-2": "DC terminals and barrels", "screw-terminal-4": "DC terminals and barrels",
+    "terminal-381-5": "DC terminals and barrels", "orv3-busbar": "DC terminals and barrels",
+    "wire-wrap-3": "other", "screw-terminal-5": "other", "terminal-350-6": "other",
+}
+
+
+def test_by_family_places_each_stack_rps_console_terminal_and_alarm_key_in_its_family(tmp_path):
+    spec, want = {}, {}
+    for i, (key, family) in enumerate(KEY_FAMILIES.items()):
+        # a key mapped to "other" gets a name the DC pattern would take, so only the key can keep it out of DC
+        ref = f"acme/terminal-x{i}@1" if family == "other" else f"acme/p-{i}@1"
+        spec[ref] = {"class": "port", "interface": key}
+        want[ref] = family
+    assert by_family_where(tmp_path, spec) == want
+
+
+def test_by_family_places_the_c16_inlet_key_in_the_ac_inlet_family(tmp_path):
+    where = by_family_where(tmp_path, {"acme/p-0@1": {"class": "port", "interface": "iec-c16"}})
+    assert where == {"acme/p-0@1": "power inlets (AC)"}
+
+
+def test_by_family_places_the_nokia_alarm_and_bits_keys_in_other(tmp_path):
+    # a name the DC pattern would take, so only the key can keep each out of DC
+    where = by_family_where(tmp_path, {"acme/terminal-x0@1": {"class": "port", "interface": "micro-dsub-50"},
+                                       "acme/terminal-x1@1": {"class": "port", "interface": "wire-wrap-6"}})
+    assert where == {"acme/terminal-x0@1": "other", "acme/terminal-x1@1": "other"}
+
+
+def test_by_family_keeps_a_busbar_out_of_usb_and_a_usb_port_in_it(tmp_path):
+    # "busbar" contains "usb"
+    where = by_family_where(tmp_path, {"acme/input-feed-busbar@1": {"class": "port"},
+                                       "acme/some-bus-bar@1": {"class": "port"},
+                                       "acme/usb-a-port@1": {"class": "port"}})
+    assert where == {"acme/input-feed-busbar@1": "DC terminals and barrels",
+                     "acme/some-bus-bar@1": "DC terminals and barrels",
+                     "acme/usb-a-port@1": "USB"}
+
+
+def test_by_family_sends_a_supply_to_dc_by_its_role_or_a_dc_word_of_its_name(tmp_path):
+    where = by_family_where(tmp_path, {
+        "acme/pwr-do@1": {"class": "psu", "attrs": {"role": "dc-power-supply"}},          # DC by its role, no dc in the name
+        "acme/a9k-pwr-2kw-dc@1": {"class": "psu", "attrs": {"role": "power-module"}},     # DC by a word of its name
+        "acme/x-hvacdc@1": {"class": "psu", "attrs": {"role": "hvac-dc-power-supply"}},  # dc is not a word of it
+        "acme/dcs201-psu-ac@1": {"class": "psu", "attrs": {"role": "power-supply"}},      # nor of this
+        "acme/plain-psu@1": {"class": "psu", "attrs": {"input": "ac"}},
+    })
+    assert where == {"acme/pwr-do@1": "DC terminals and barrels", "acme/a9k-pwr-2kw-dc@1": "DC terminals and barrels",
+                     "acme/x-hvacdc@1": "power inlets (AC)", "acme/dcs201-psu-ac@1": "power inlets (AC)",
+                     "acme/plain-psu@1": "power inlets (AC)"}
+
+
+DC_NAMED_SUPPLIES = ("cisco/a9k-pwr-2kw-dc@1", "juniper/jpsu-550-c-dc-afi@1", "juniper/jpsu-550-c-dc-afo@1",
+                     "juniper/ex4100-h-24f-dc-psu@1", "juniper/ex4100-h-24mp-dc-psu@1", "juniper/mx2000-psm-dc-v@1",
+                     "juniper/qfx10002-jpsu-1600w-dc-afo@1", "juniper/qfx524x-2ru-pwr-do@1")
+
+
+def test_every_dc_supply_of_the_real_library_is_in_the_dc_family_and_the_hvdc_one_is_not():
+    loader = importlib.util.spec_from_file_location("part_conformance", TOOL)
+    module = importlib.util.module_from_spec(loader)
+    loader.loader.exec_module(module)
+    families = yaml.safe_load(module.FAMILIES.read_text())
+    got, says_dc = {}, []
+    for path in sorted((ROOT / "library/components").glob("*/*/v*/contract.yaml")):
+        text = path.read_text()
+        if "class: psu" not in text:
+            continue
+        c = yaml.safe_load(text)
+        if c.get("class") != "psu":
+            continue
+        name = path.parts[-3]
+        ref = f"{path.parts[-4]}/{name}@{path.parts[-2][1:]}"
+        got[ref] = module.family_of(families, c, name)
+        if c.get("interface") in families["interfaces"]:
+            continue            # placed by rule 1, not by the supply rule
+        if (c.get("attrs") or {}).get("role") == "dc-power-supply" or "dc" in name.split("-"):
+            says_dc.append(ref)
+    dc = families["psu"]["dc"]
+    stray = [ref for ref in says_dc if got[ref] != dc]
+    print("supplies that say DC and are not in the DC family:", stray)
+    assert not stray, f"supplies that say DC and are not in the DC family: {stray}"
+    for ref in DC_NAMED_SUPPLIES:
+        assert got[ref] == dc, f"{ref} is in {got[ref]}"
+    assert got["juniper/mx304-psu-hvacdc@1"] == families["psu"]["ac"]
+
+
+def test_every_family_the_family_file_names_is_one_of_its_families():
+    families = yaml.safe_load((ROOT / "spec/tools/dev/port_families.yaml").read_text())
+    known, named = set(families["families"]), set()
+    for entry in families["interfaces"].values():
+        named.add(entry if isinstance(entry, str) else entry["family"])
+        if isinstance(entry, dict):
+            named.update((entry.get("by-class") or {}).values())
+    named.update(families["classes"].values())
+    named.update(p["family"] for p in families["name-patterns"])
+    named.update([families["psu"]["ac"], families["psu"]["dc"], families["other"]])
+    assert named <= known, f"not in `families`: {sorted(named - known)}"
 
 
 @pytest.mark.skipif(not (DIST / "devices.json").exists(), reason="library/dist not built - run ./build.sh")

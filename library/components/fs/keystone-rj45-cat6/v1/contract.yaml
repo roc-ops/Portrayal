@@ -1,0 +1,74 @@
+format: 1
+kind: component
+name: keystone-rj45-cat6
+version: 1.0.0
+class: mechanical
+behaviour: occupies
+mates: keystone
+interface: rj45
+interface-at: port
+conforms: keystone-opening
+profile: networking
+description: >-
+  FS Cat6 unshielded RJ45 keystone jack (FS #72818, the jack the FHD-FAPM6
+  datasheet lists). It is a snap-in jack with an RJ45 on the front, where any
+  patch-panel port takes a cable, and a punch-down (IDC) termination behind it.
+  It seats in the clip of an FHD-FAPM6 opening. Its body turns on its side in
+  the landscape opening; the housing is drawn unturned (estimated, below). It
+  offers one port, `rj45`.
+size: {w: 16.5, h: 14.9}
+size-confidence: {w: datasheet, h: datasheet}
+size-notes: >-
+  THE OPENING IT FILLS, as common/keystone-clip@3 takes it: 16.5 x 14.9
+  landscape. The jack's own body, 14.5 x 16.1 (a body 14.5 wide and 16.1
+  tall, so 16.1 x 14.5 turned on its side), is the figure recorded in
+  fs/fhd-fapm6-rj45@1 from FS's Cat6 punchdown keystone jack datasheet (p3).
+  That datasheet is not held, so the body is carried over unread and the
+  envelope is the opening.
+attrs: {opening: keystone, media: rj45, model: KEYSTONE-RJ45-CAT6}
+unplaced: >-
+  seated by a configuration of a panel, or by a person choosing an insert for
+  an opening; no device in this library composes it in a fixed place
+parts:
+  - {id: rj45, ref: std/rj45@2, at: [0.35, 0.85]}
+provenance:
+  size: >-
+    datasheet - see size-notes. The 14.5 x 16.1 body is carried over from
+    fs/fhd-fapm6-rj45@1, which read it from the jack datasheet; that datasheet
+    is not held, so it is not re-read here.
+  parts: >-
+    ONE RJ45 PORT, `rj45`: std/rj45@2, the library's RJ45 housing (15.8 x
+    13.2, TE 1734264), centred in the opening as fs/fhd-fapm6-rj45@1 centres
+    each of its six, 0.35 from the left edge and 0.85 from the top. THE
+    HOUSING IS THE LIBRARY's, NOT FS's: no held document draws the jack's front
+    face-on. ESTIMATED: which way the aperture faces; it is drawn unturned,
+    pins up, because a 15.8 x 13.2 housing turned a quarter does not fit a
+    14.9 opening. A generic/rj45-plug@1 cable end lands on it as on any RJ45
+    port. ESTIMATED: no lamps are drawn, as no held document shows any on a
+    keystone jack.
+  match: >-
+    ESTIMATED: that FS #72818 is the jack the Cat6 punchdown keystone jack
+    datasheet describes. The FAPM6 datasheet (p5) lists #72818 as the Cat6
+    unshielded keystone jack and describes nothing; the jack datasheet gives no
+    item number. The match is the one fs/fhd-fapm6-rj45@1 already makes.
+  rear: >-
+    The punch-down (IDC) termination behind the jack is NOT MODELLED here: this
+    contract composes no rear port. fs/fhd-fapm6-rj45-rear@1 draws it for the
+    fixed panel; for a seated jack it is left for a later change. The jack
+    takes 23 to 26 AWG cable: that range is carried over unread from
+    fs/fhd-fapm6-rj45@1, which read it from the jack datasheet, and that
+    datasheet is not held, so it is ESTIMATED here.
+  face: >-
+    ESTIMATED. The body is drawn as the blanking insert is: a plain plate
+    16.1 x 14.6, centred, with the composed RJ45 housing over it. No held
+    document shows the jack face-on.
+  colour: >-
+    ESTIMATED. Off-white, #ece9e2, as common/keystone-clip@3 draws FS's white
+    plastic. The jack datasheet is not held and no held photograph shows #72818.
+  mate: >-
+    `mate.at` is the centre of the opening, (8.25, 7.45), where the clip's own
+    `mate` point stands.
+connection-points:
+  mate: {at: [8.25, 7.45], direction: front}
+  port: {at: [8.25, 7.45], direction: front}
+skins: [default]

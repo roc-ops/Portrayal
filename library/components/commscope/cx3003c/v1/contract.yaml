@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cx3003c
-version: 1.0.1
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: optical
@@ -45,10 +45,17 @@ provenance:
     link and activity, green = 1000 Mbps link and activity. Those are the two lamps each
     common/rj45-eth@1 draws in its own housing - split here by speed rather than the part's
     link / activity convention - so they are not composed again.
+  rs232-connector: >-
+    datasheet - the CX3003C data sheet says the RS-232 port uses a stereo
+    jack style connector. The panel connector is the composed
+    common/stereo-jack@1, which presents the registered interface
+    stereo-jack; the body round it stays drawn in the skin, declared as
+    class bezel. Ids, positions, sizes and the skin are unchanged. The
+    part's size is an estimate, said in the part.
 elements:
   screw-1: {at: [10.5, 0.1], size: [5.8, 5.8], class: fastener}
   screw-2: {at: [36.7, 0.1], size: [5.8, 5.8], class: fastener}
-  rs232: {at: [9.50, 13.40], size: [7.4, 7.4], class: port}
+  rs232: {at: [9.50, 13.40], size: [7.4, 7.4], class: bezel}
   reset: {at: [43.6, 22.4], size: [1.4, 1.4], class: button}
 groups:
   mgmt:
@@ -64,6 +71,7 @@ parts:
   - {ref: common/led-dot@1, id: led-status-2, at: [5.1, 12.4], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [5.1, 15.5], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-access, at: [5.1, 18.0], attrs: {function: activity}}
+  - {ref: common/stereo-jack@1, id: rs232-jack, group: mgmt, at: [9.500, 13.400]}
 connection-points:
   mate: {at: [26.26, 21.6], direction: front}
 skins: [default]

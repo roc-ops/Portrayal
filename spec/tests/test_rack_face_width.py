@@ -75,6 +75,7 @@ def test_the_regex_reads_every_compiled_drawing():
     assert not bad, f"{len(bad)} drawing(s) the face-size read would get wrong: {bad[:5]}"
 
 
+@pytest.mark.heavy
 def test_only_a_rack_face_is_wider_than_its_plane():
     """If a second device ever draws a face wider than its plane, it should be
     because it has integral ears too - not because a view was mis-sized. This

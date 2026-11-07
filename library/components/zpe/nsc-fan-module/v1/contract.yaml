@@ -1,0 +1,51 @@
+format: 1
+kind: module
+name: nsc-fan-module
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The fan module on the HDMI and USB face of the Nodegrid Serial Console S: a slate square
+  plate with a round dotted grille, four small corner screws, two captive thumbscrews on its
+  right edge and a third on a tab that stands out of its left edge. Two sit side by side on
+  the T48S. Drawn from one photograph; no document dimensions it.
+size: {w: 68.4, h: 42.5}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  depth: >-
+    estimated - the 56 mm depth is a placeholder for the module's length into the chassis. No
+    document and no photograph shows it.
+  size: >-
+    estimated - read off the ZPE Systems T48S front photograph (T48S-4.jpg), whose face is 854
+    px for the datasheet's 443 mm, so about 1.93 px per mm. The body is about 59.4 mm wide, the
+    tab on its left 9.0 more, and the plate runs the face's height less a hairline. The photograph is
+    small (165 px tall) and the figures are good to about 1 mm. No document gives a dimension.
+  grille: >-
+    estimated - a dotted round grille about 31 mm across, centred in the body, read off the same
+    photograph. The dot pitch is not resolved; the pattern is drawn, not measured.
+  screws: >-
+    estimated - four corner screws (about 3.4 mm), two thumbscrews on the right edge (about
+    6 mm) and one on the left tab, read off the same photograph.
+  states: >-
+    NO LAMP. The photograph shows none on the module and no document names one.
+  power: >-
+    NOT STATED. The Serial Console S datasheet gives the unit's typical consumption (45 W) and
+    no figure for a fan module, so the part states no draw and lint L27 stands.
+elements:
+  grille: {at: [20.5, 5.8], size: [31.0, 31.0], class: rotor}
+  thumbscrew-tab: {at: [1.9, 18.8], size: [5.4, 5.4], class: screw}
+relief:
+  features:
+    - node: grille
+      vent: 25
+      confidence: estimated
+      source: >-
+        this contract's provenance.grille - the grille is a round field of small holes; how far
+        it is set back is not stated by any document held.
+skins: [default]
+body:
+  depth: 56
+  color: '#26292d'
+  footprint: {at: [9.0, 0], size: [59.4, 42.5]}
+  plate: {at: [0, 0], size: [68.4, 42.5]}

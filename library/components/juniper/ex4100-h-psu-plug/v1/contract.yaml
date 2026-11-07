@@ -1,0 +1,45 @@
+format: 1
+kind: component
+name: ex4100-h-psu-plug
+version: 1.0.0
+class: port
+mates: terminal-381-5
+profile: power
+description: >-
+  The conductor ends of the wires that land on a PSU connector of the Juniper EX4100-H-12MP, seen from the front as seated.
+  Five stripped ends sit side by side at the connector's five clamp positions, 3.81 mm apart. The part seats in a
+  `terminal-381-5` connector at its own mate point. The guide names no cable connector for it; the wires clamp straight
+  into the connector's openings.
+size: {w: 8.5, h: 30.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, juniper/ex4100-h-psu-connector@1, 8.5 by 30.5. No document gives a dimension of
+  a conductor end or of a wire.
+attrs: {media: ex4100-h-psu, connector: conductor ends, positions: 5}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. The EX4100-H Switch Hardware Guide (Juniper Networks, published
+    2026-10-01), the connection steps for the EX4100-H-12MP and Figure 106, has the other ends of the interconnecting
+    wire inserted into the PSU connector's slots and clamped by the screws on its sides. No maker, series or part number
+    of any cable connector is named, so the part is the wires' own ends and claims none.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - the grey body and the lighter conductor ends are declared estimates. No photograph or figure shows a
+    conductor end seated, and the guide's figures are line art with no colour.
+  wiring: >-
+    guide - the four wires of the interconnecting wire join the 54V+, 54V-, 12V+ and 12V- positions and the middle
+    position is left unwired (Figure 106 and its steps). The part is drawn with five ends and carries no wire colour:
+    the guide's colours (red, black, brown and gray) belong to the PSU output terminal's wires and are not drawn here.
+  far-end: >-
+    NOT DRAWN. The other end of the interconnecting wire lands on the output terminal of the external supply.
+  depth: >-
+    NOT STATED. No document gives how far a conductor enters the connector, so the part draws a plan outline only and
+    builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [4.25, 15.25], direction: front}
+skins: [default]

@@ -1,0 +1,123 @@
+format: 1
+kind: module
+name: scbe2-mx
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX Series Enhanced Switch Control Board 2 (SCBE2-MX, CLI name SCBE2; Junos 13.3R1 and later) -
+  the fabric and control carrier for the MX240, MX480 and MX960 that adds the XF2 fabric, two SFP+ XGE
+  ports and an external clock jack. It seats in the same SCB slots as the SCB-MX. The Routing Engine slides
+  into the board's own bay. The face carries the OK/FAIL, FABRIC ACTIVE and FABRIC ONLY lamps at the left,
+  two XGE cages with LINK lamps, the BITS, GPS and UTI lamps, the RJ-45 EXT CLK jack and an ejector lever at
+  each end.
+attrs:
+  model: SCBE2-MX
+  power-draw-max-w: 185
+  fabric-bandwidth: up to 480 Gbps per slot (non-redundant fabric), 340 Gbps (redundant)
+  generation: 2nd
+  sfp-plus: 2
+provenance:
+  size: >-
+    estimated - the bay envelope, carried as juniper/scb-mx@3 carries it: 413.5 x 29.5, the lever-tip
+    envelope of Juniper's stencil and the plate height (plate 396.0 between the levers). It is the SCB
+    bays' size and not this board's: the MX960 Hardware Guide (PDF dated 2025-08-19), SCBE2-MX Weight
+    and Dimensions (PDF p226, printed 207), prints width 17 in (43.2 cm), depth 22 in (55.9 cm), height 1.25
+    in (3.2 cm) and 9.6 lb (4.4 kg) with a Routing Engine installed. 17 in is 431.8 mm against the 413.5
+    envelope and 1.25 in is 31.8 mm against 29.5; that is the one 17 x 22 x 1.25 in figure the guides give
+    every MPC, DPC and SCB (see juniper/scb-mx@3), so the bays are not moved, resized or retyped for it.
+    The guide figures are not carried as `datasheet` because the envelope is not theirs
+  weight: guide - 9.6 lb (4.4 kg) with a Routing Engine installed
+  software: >-
+    guide - MX960 Hardware Guide, SCBE2-MX Description (printed p207): Junos OS Release 13.3R1 and later;
+    name in CLI SCBE2 (SCBE2-MX-S in the MX480 guide's show chassis hardware example). Orderable name
+    SCBE2-MX-BB (MX family data sheet) is a note only: no configuration is added
+  power: >-
+    EVERY PRINTED FIGURE, WITH ITS PAGE (watts at 55 / 40 / 25 C): 185 / 160 / 155, in the MX960 guide's
+    SCBE2-MX Maximum Power Requirements (printed p207) and Power Requirements for Switch Control Boards
+    (printed p198), and in the MX480 guide's table of the same figures. The guides agree and state it for
+    all of MX240, MX480 and MX960. Max takes 55 C. The guide states no typical, so none is carried
+  fabric: >-
+    guide - SCBE2-MX Features, Increased Bandwidth (printed p208): up to 480 Gbps (non-redundant fabric
+    configuration), 340 Gbps (redundant), on the third generation XF2 fabric chip. The MX480 guide's
+    capacity table agrees
+  re-bay: >-
+    estimated - the bay is drawn the width of the RE-S-1300 and RE-S-2000 plates (271.9) from card x
+    47.2, the first clear space after the lamp group, to 319.1, the last before the XGE screw: the figure
+    does not show the slot. Accepts the two Routing Engines the guide's Interoperability with Routing
+    Engines table (printed p213) lists that the library holds: RE-S-1300 (EOL'd) and RE-S-2000 (EOL'd).
+    The same table lists RE-S-1800 (all variants) and RE-S-X6-64G and -128G, which are not in the library.
+    "Each Routing Engine must be installed directly into an SCB" (guide), so the bay is the board's
+  face: >-
+    drawing, ESTIMATED - Figure 50 of the MX960 guide (PDF p226) is a straight vertical line drawing of the
+    whole board with two magnified insets (Port 0, Port 1), turned here as scb-mx@3 is turned (top of the
+    drawing at the left). Positions were read off the insets' pixels, fitted so the board body is the 29.5
+    plate height, and are good to about 2 mm along the card and 1.5 mm across. Lamps at card x 33.9 (OK/FAIL,
+    y 21.8) and 41.3 (FABRIC ACTIVE y 21.2, FABRIC ONLY y 13.7); the legends stack ACTIVE over ONLY and
+    which lamp each reads is estimated. Cages at card x 333.9 and 349.1 (y 18.3), LINK lamps at 330.1
+    and 345.3 (y 9.7), the BITS, GPS and UTI lamps in a row at x 360.9 (y 10.5, 16.6, 22.7; the order of
+    the three legends against the three lamps is estimated), the jack at x 372.0 (y 17.1). The two plus
+    screws (card x 44.3, y 8.3 and x 322.1, y 9.5), the levers and the Routing Engine bay are estimated
+  levers: >-
+    drawing, estimated - Figure 50 shows a winged lever with a captive screw at each end, about 19-31 mm
+    long and 11-13 across; drawn 24.0 x 9.0 with the tips at the envelope edge. scb-mx@3's photo-measured
+    29 x 7.4 is the neighbour's, not this board's reading
+  ports: >-
+    guide - SCBE2-MX Components (printed p210): two XGE ports providing 10 GbE/1 GbE SFP+ interfaces,
+    joined to the Ethernet control switch; one RJ-45 external clock interface labeled EXT CLK that
+    receives GPS and PPS timing, with BITS, GPS and UTI LEDs. Features (printed p208) says BITS, GPS or UTI
+    clock source input; the jack is carried as rj45-tod and whether it is better typed rj48 for BITS is a
+    question the guide does not settle. The registry cages std/sfp@1 and std/rj45@2 are reused
+  leds: >-
+    guide Table 78, SCBE2-MX LEDs (printed p210-211): FABRIC ACTIVE green; FABRIC ONLY green (fabric-only
+    mode; off is fabric or control-board mode); OK/FAIL green online, red failed, off offline; BITS, GPS,
+    UTI each green active, red failed, off offline; LINK green port enabled and link up, off otherwise
+  logo-zone: >-
+    reserved - Figure 50 prints no vendor mark on the board; the zone is kept clear as the neighbours do
+    and no logo or wordmark is drawn
+states:
+- ok
+- fail
+- absent
+groups:
+  xge:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the two SFP+ XGE ports, joined to the Ethernet control switch
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: the RJ-45 external clock interface
+parts:
+- {ref: std/sfp@1, id: xge-0, group: xge, at: [326.65, 13.3], attrs: {function: XGE port 0}}
+- {ref: std/sfp@1, id: xge-1, group: xge, at: [341.85, 13.3], attrs: {function: XGE port 1}}
+- {ref: std/rj45@2, id: ext-clk, group: timing, at: [364.1, 10.5], rotate: 180, attrs: {media: rj45-tod, function: 'external clock (BITS, GPS, UTI)'}}
+elements:
+  lever-left:
+    at: [0.0, 10.25]
+    size: [24.0, 9.0]
+    class: latch
+  lever-right:
+    at: [389.5, 10.25]
+    size: [24.0, 9.0]
+    class: latch
+  logo-zone:
+    at: [60.0, 2.0]
+    size: [18.0, 5.0]
+    class: label
+bays:
+  re:
+    at: [47.2, 1.0]
+    size: [271.9, 27.5]
+    accepts: [juniper/re-s-1300@2, juniper/re-s-2000@2]
+    default: juniper/re-s-1300@2
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the SCB bays that take this board, as juniper/scb-mx@3
+  carries them (its size-notes say how they were found). They are not the guide's 17 x 1.25 in.
+size-confidence: {w: drawing, h: estimated}

@@ -1,0 +1,56 @@
+format: 1
+kind: module
+name: nc57-mod-rp2-e-hx
+version: 1.0.0
+class: supervisor
+behaviour: fills
+profile: networking
+description: >-
+  The environment-hardened route processor of the Cisco NCS-57C3-MOD-HX, ordered as NC57-MOD-RP2-E-HX. It is drawn as the
+  NC57-MOD-RP2-E is: a landscape module with a USB port, a console jack and a management Ethernet jack, a recessed reset
+  button and three lamps (STS, ACT and ATTN). The -HX chassis takes only this route processor.
+size: {w: 196.0, h: 18.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+part-numbers:
+  NC57-MOD-RP2-E-HX: {part: NC57-MOD-RP2-E-HX}
+attrs:
+  role: route-processor
+  power-absent: not-published
+provenance:
+  model: >-
+    datasheet - Hardware Installation Guide for Cisco NCS 5700 Series Fixed-Port Routers (first published 2021-06-23, last modified
+    2026-05-15), Route Processor Card: the figure and its callouts are headed "NC57-MOD-RP2-E/NC57-MOD-RP2-E-HX"; Table 2: the
+    NCS-57C3-MOD-HX "operates with the NC57-MOD-RP2-E-HX route processor", and only the environmental-hardened route processor is to be
+    installed in it.
+  power: >-
+    NOT STATED. Searched the guide for the route processor's watts: only supply ratings are given. No power figure is written.
+  size: >-
+    photo-measured - the size of nc57-mod-rp2-e from Figure 19. The guide gives one figure for both parts and says nothing of how the
+    hardened card differs, so its face is the -E card's, and this is a reading of that figure and not of a hardened card.
+  ports: >-
+    as nc57-mod-rp2-e: the callouts name a USB port, a console port, a management Ethernet port and a recessed reset button; no management
+    rate is given. Lamps: Table 33 covers both cards.
+  depth: >-
+    estimated - not stated in any held document; 250 mm is a round figure for a route processor of this class.
+states: [absent]
+elements:
+  sts: {at: [49.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: boot, color: '#f59e0b'}, {name: alarm, color: '#ef4444'}]}
+  act: {at: [58.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: active, color: '#22c55e'}, {name: standby, color: '#f59e0b'}]}
+  attn: {at: [67.0, 14.0], size: [2.0, 2.0], class: led, states: ['off', {name: identify, color: '#3b82f6'}]}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the route processor's out-of-band ports - a USB port, a console jack and a management Ethernet jack. Three media, one
+      purpose: reaching the router when the data plane cannot.
+parts:
+  - {ref: std/usb-a@1, id: usb, group: mgmt, at: [27.0, 7.0], attrs: {media: usb-a}}
+  - {ref: std/rj45-ganged@2, id: console, group: mgmt, at: [124.0, 3.5], attrs: {media: rj45-serial, role: console}}
+  - {ref: common/rj45-ganged-eth@1, id: mgmt, group: mgmt, at: [147.0, 3.5], attrs: {media: rj45, role: mgmt}}
+skins: [default]
+body:
+  depth: 250
+  color: '#c3c7cc'
+  footprint: {at: [0, 0], size: [196.0, 18.5]}

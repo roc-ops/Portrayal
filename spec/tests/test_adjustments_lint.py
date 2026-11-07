@@ -38,6 +38,7 @@ def only(found, code, *words):
 
 # --- the fixture itself ---------------------------------------------------------------
 
+@pytest.mark.heavy
 def test_the_fixture_validates_and_lints_clean():
     """The whole of lint, not only the eleven rules: a fixture that another
     rule refuses would show the tests below nothing about a clean device."""
@@ -458,6 +459,7 @@ def _through_lint(tmp_path, edit):
     return sorted({m.split("[", 1)[1].split("]", 1)[0] for m in got.errors})
 
 
+@pytest.mark.heavy
 def test_lint_itself_raises_the_rules_and_not_only_this_file(tmp_path):
     """THE WIRING. Every test above calls the rules directly; this one asks
     lint. A `moves-with` that names nothing, a default outside its range (which
@@ -472,6 +474,7 @@ def test_lint_itself_raises_the_rules_and_not_only_this_file(tmp_path):
     assert _through_lint(tmp_path, lambda d: None) == []
 
 
+@pytest.mark.heavy
 def test_the_command_line_raises_them_too(tmp_path):
     """And from the command line, over a library root: the fixture root with
     one fault planted exits 1 and prints the code."""

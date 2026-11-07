@@ -1,0 +1,5 @@
+### Added
+- `common/micro-dsub-50-receptacle@1`, `common/micro-dsub-50-plug@1` and `common/wire-wrap-header-6@1`: the 50-pin micro D-sub alarm connector (female) with its cable plug, and the six-pin wire-wrap BITS header, of the Nokia NGFC-H and NGFC-G general facilities cards. The receptacle and the header present the registry keys `micro-dsub-50` and `wire-wrap-6`; the plug mates the first, and no plug seats on the header.
+
+### Changed
+- `nokia/ngfc-h@1` 1.1.0 to 1.2.0 and `nokia/ngfc-g@1` 1.0.0 to 1.1.0: the alarm connector and the BITS header are placed parts, under the ids `alarm-io` and `bits` the elements had, so they present a registered interface instead of being reported as ports with none. Each joins a group of its own. The NGFC-G draws both parts at the sizes of the NGFC-H art, 2.0 x 0.95 mm and 3.5 x 3.05 mm larger than it drew them. `nokia/nfxs-e-bb` and `nokia/nfxs-f-bb` take a patch (1.0.1 to 1.0.2) with their locks and the drawing version line of their exported device types, and the module types of the two cards carry the new contract versions. Their two port rows of the records file are gone and its `cap:` is 210.

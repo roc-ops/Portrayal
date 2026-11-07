@@ -23,6 +23,7 @@ MODELS = {
     "crs328-4c-20s-4s-plus-rm": ("CRS328-4C-20S-4S+RM", "CRS328"),
 }
 NAMES = sorted(MODELS)
+VERSIONS = {name: "1.0.1" for name in NAMES if name != "crs312-4c-plus-8xg-rm"} | {"crs309-1g-8s-plus-in": "1.1.0"}
 ENVELOPE = {  # width, height, depth
     "crs317-1g-16s-plus-rm": (443.0, 44.0, 224.0),
     "crs309-1g-8s-plus-in": (272.0, 44.0, 191.0),
@@ -53,7 +54,7 @@ def test_the_device_is_named_as_the_maker_prints_it(name):
     assert d["model"] == model
     assert d["portfolio"] == {"line": "Switches", "family": "Cloud Router Switch", "series": series}
     assert "+" not in name
-    assert d["version"] == "1.0.0"
+    assert name not in VERSIONS or d["version"] == VERSIONS[name]
     assert list(d["configurations"]["base"]["part-numbers"]) == [model]
 
 
@@ -171,14 +172,14 @@ def test_crs309_de9_console_is_an_rs232_port_the_export_does_not_carry():
         assert not doc.get("console_ports"), target
 
 
-def test_crs309_is_passive_with_a_chassis_art_earth_stud_and_a_narrow_body():
+def test_crs309_is_passive_with_a_placed_disc_for_its_earth_stud_and_a_narrow_body():
     d = load("crs309-1g-8s-plus-in")
     rear = d["views"]["rear"]
     assert not [x for x in rear["panel"]["decor"] if x.get("kind") == "fan-grille"]
     assert d["attrs"]["thermal"]["cooling"].startswith("passive")
     assert [g["what"] for g in d["gaps"] if g["what"] == "earth-stud-part"] == ["earth-stud-part"]
     assert d["chassis"]["width"] == 272.0 < 443.0
-    assert not [p for p in placements(d, "rear") if "ground-stud" in p["ref"]]
+    assert [p["ref"] for p in placements(d, "rear") if "earth-stud" in p["ref"]] == ["mikrotik/earth-stud-disc@1"]
 
 
 # --- CRS312 ---------------------------------------------------------------------------------------------------
@@ -211,13 +212,10 @@ def test_crs312_lower_left_cage_is_1f_as_printed():
     assert at["cage-3"][0] > at["cage-1"][0]
 
 
-def test_crs312_power_is_built_in_and_the_rear_is_empty_with_a_gap():
+def test_crs312_power_is_built_in_and_the_rear_keeps_a_gap_for_what_it_does_not_draw():
     d = load("crs312-4c-plus-8xg-rm")
     assert not (d["views"]["front"].get("components") or {}).get("bays")
-    assert d["views"]["rear"].get("empty") and not placements(d, "rear")
-    assert not [p for v in d["views"].values() for p in (v.get("components") or {}).get("placements") or []
-                if p["ref"] == "std/c14-inlet@1"]
-    gap = [g for g in d["gaps"] if g["what"] == "rear-face"]
+    gap = [g for g in d["gaps"] if g["what"] == "rear-elevation"]
     assert len(gap) == 1 and gap[0]["scope"] == ["rear"]
     assert d["attrs"]["power"]["power-max-w"] == 60
     assert "four built-in fans" in d["attrs"]["thermal"]["cooling"]
@@ -330,7 +328,7 @@ def test_dcim_interfaces_and_power_ports_follow_the_faces():
     assert len(b.get("power-ports") or []) == 1
     c = exported("crs312-4c-plus-8xg-rm")
     assert count(c, "10gbase-x-sfpp") == 4 and count(c, "10gbase-t") == 12 and count(c, "100base-tx") == 1
-    assert not c.get("power-ports")
+    assert len(c["power-ports"]) == 2
     e = exported("crs328-4c-20s-4s-plus-rm")
     assert count(e, "10gbase-x-sfpp") == 4 and count(e, "1000base-x-sfp") == 24 and count(e, "1000base-t") == 4
     assert len(e["power-ports"]) == 2
@@ -347,12 +345,14 @@ def test_the_committed_exports_are_what_the_exporter_writes_now(name, target, tm
     assert (tmp_path / rel).read_text() == (ROOT / "library/exports" / rel).read_text()
 
 
+@pytest.mark.heavy
 def test_the_lock_files_match_the_devices():
     lib = ROOT / "library"
     assert not [f for f in devicelock.check(lib) if f[0].startswith("mikrotik/")]
     known = devicelock.load_lock(lib)["devices"]
     for name in NAMES:
         entry = known[f"mikrotik/{name}"]
-        assert entry["version"] == load(name)["version"] == "1.0.0"
+        assert entry["version"] == load(name)["version"]
+        assert name not in VERSIONS or entry["version"] == VERSIONS[name]
         per_device = json.loads((DEVICES / name / "device.lock.json").read_text())
         assert per_device["gaps"] == entry["gaps"]

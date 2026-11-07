@@ -127,6 +127,7 @@ def strings(node):
             yield from strings(v)
 
 
+@pytest.mark.heavy
 def test_nothing_in_the_library_seats_version_1_of_a_fan_tray():
     """A whole-string match: a note may name a retired part in a sentence, and no list or field may name it alone."""
     retired = {f"juniper/{p}@1" for p in GUIDE}

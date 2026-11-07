@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 7280sr3-40yc6
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Arista
 model: 7280SR3-40YC6
@@ -275,16 +275,6 @@ gaps:
     Storage temperature -25 to 70 C (guide Table 2) against -40 to 70 C (data sheet), and relative humidity
     5 to 90 percent against 5 to 95 percent. The guide's, the older document by three months, are in attrs.
   wanted: the maker's statement of which is current.
-- what: config-scoped-device-attrs
-  scope:
-  - front
-  - rear
-  reason: vendor-silent
-  note: >-
-    The 7280SR3E-40YC6-M has 32 GB of memory against 8 GB, inband SyncE, and (guide Table 4) the same
-    power draw. No configuration can state a device attribute (the same open gap as cisco/asr-9001). The
-    platform lines name both.
-  wanted: configuration-scoped device attrs.
 - what: rack-ears
   scope:
   - front
@@ -1357,6 +1347,12 @@ configurations:
       The 7280SR3E-40YC6-M, the same face with 32 GB of memory and inband SyncE, with front-to-rear air.
       Ordered as DCS-7280SR3E-40YC6-M-F. The guide gives it 9.6 kg and the same power draw as the base
       switch.
+    export-description: >-
+      Arista 7280SR3E-40YC6-M - the SyncE, expanded-memory build of the 7280SR3-40YC6 with 32 GB of memory,
+      a fixed 1RU data-centre switch router with 40 x 1/10/25G SFP and 6 x 100G QSFP ports, running EOS
+    attrs:
+      platform: {memory: 32 GB}
+      features: {eos-license: license group G2; minimum EOS 4.28.1}
     part-numbers:
       DCS-7280SR3E-40YC6-M-F: {}
   m-r:
@@ -1365,6 +1361,12 @@ configurations:
     description: The 7280SR3E-40YC6-M with rear-to-front air. Ordered as DCS-7280SR3E-40YC6-M-R.
     bays: {psu-1: arista/7280r3-pwr-500-ac-rev@1, psu-2: arista/7280r3-pwr-500-ac-rev@1, fan-1: arista/7280r3-fan-m-rev@1,
       fan-2: arista/7280r3-fan-m-rev@1}
+    export-description: >-
+      Arista 7280SR3E-40YC6-M - the SyncE, expanded-memory build of the 7280SR3-40YC6 with 32 GB of memory,
+      a fixed 1RU data-centre switch router with 40 x 1/10/25G SFP and 6 x 100G QSFP ports, running EOS
+    attrs:
+      platform: {memory: 32 GB}
+      features: {eos-license: license group G2; minimum EOS 4.28.1}
     part-numbers:
       DCS-7280SR3E-40YC6-M-R: {}
   dc-f:

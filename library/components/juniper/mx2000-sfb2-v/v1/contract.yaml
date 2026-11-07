@@ -1,0 +1,78 @@
+format: 1
+kind: module
+name: mx2000-sfb2-v
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX2000-SFB2-S Enhanced Switch Fabric Board (the SFB2) - eight stand in the centre of the upper cage
+  of the MX2010 and MX2020, in the slots the SFB and SFB3 use. It has the SFB's form factor and twice its
+  bandwidth: up to 2 Tbps per slot with eight boards and 1.7 Tbps with seven. The faceplate is drawn from a
+  perspective figure, so its detail is estimated; the guide puts the board's status lamps on the craft
+  interface, and none is drawn here.
+attrs:
+  model: MX2000-SFB2-S
+  power-draw-max-w: 295
+  fabric-bandwidth: up to 2 Tbps per slot with eight boards, 1.7 Tbps per slot with seven
+provenance:
+  size: >-
+    guide - MX2020 Hardware Guide (PDF dated 2025-11-18), MX2000-SFB2-S Enhanced Switch Fabric Board
+    Description (PDF p132, printed p112): weight 16 lb (7.2 kg), width 1.7 in (4.31 cm), depth 23.6 in
+    (59.94 cm) and 26.14 in (66.39 cm) with the ejector handle, height 16.225 in (41.21 cm). 1.7 in is the
+    43.18 and 16.225 in the 412.1 of the sfb bays and of juniper/mx2000-sfb-v@2, so the figures are carried
+    as the guide prints them. The guide says the SFB and SFB2 'have the same form factor' (PDF p110): that
+    sentence (PDF p130, printed p110) is the reason the two sizes agree and is not a reading of this
+    board's face. The depth is carried without the handle
+  weight: guide - 16 lb (7.2 kg), MX2020 Hardware Guide printed p112
+  software: >-
+    guide - MX2020 Hardware Guide, SFB2 description (printed p111): Junos OS Release 15.1 and later; name in
+    CLI Switch Fabric Board. Orderable names MX2000-SFB2-BB, -R and -S (MX2000 data sheet) are a note only:
+    no configuration is added
+  power: >-
+    EVERY PRINTED FIGURE, WITH ITS SCOPE (watts). MX2020 Hardware Guide, SFB2 description, Maximum Power
+    Requirements (PDF p133, printed p113): MX2020 typical 250, and 295 at 55 C, 280 at 40 C and 270 at 25 C;
+    MX2010 typical 220, and 265 at 55 C, 250 at 40 C and 240 at 25 C. The MX2020 and MX2010 FRU power tables
+    agree: '| SFB2 | MX2000-SFB2-S | 250 W (Typical) 295 W at 55 C |' and '220 W (Typical) 265 W at 55 C 250 W at
+    40 C'. The MX2020 guide's per-board power table lists 280 W beside MX2000-SFB2-S (the 40 C figure); the
+    7840 W and 5998 W on that row are SYSTEM power with droop sharing and are not this board. The figures
+    are two chassis scopes and not an error: the highest, 295 W (MX2020 at 55 C), is carried as
+    power-draw-max-w, as cisco/a99-sfc3 carries the larger of its two chassis scopes; a build is conservative
+    in the MX2010
+  fabric: >-
+    guide - MX2000-SFB2-S description (PDF pp130-131, printed pp110-111): up to 2 Tbps of full-duplex
+    switching capacity to each MPC; each SFB2 hosts one fabric plane made of three fabric chipsets (the
+    feature list says two PF fabric chips per card, and the two sentences are not reconciled here); 2 Tbps
+    per slot with eight SFB2s and 1.7 Tbps with seven; seven are needed for line rate
+  face: >-
+    drawing, ESTIMATED - Figure 52 of the MX2020 guide (PDF p131, printed p111; Figure 48 of the MX2010 guide, PDF p128) is
+    a PERSPECTIVE drawing, a three-quarter view of the board's front edge at about 0.9 px/mm, so every
+    position is estimated from foreshortened pixels, good to about 5 mm along the card and 3 mm across. It
+    shows an ejector handle at each end, a handle bar running down the left of the edge with two pairs of
+    oval cut-outs (at about 0.30 and 0.38 of the length and at about 0.64 and 0.77), a toothed vent strip
+    along the right of the edge, and two blank label recesses between. The drawing does not resolve any
+    lamp or any text, so none is drawn. The face of juniper/mx2000-sfb-v@2 (a full-height air grille) is the
+    SFB's and is not copied
+  leds: >-
+    NO LAMP DRAWN. The guide says each SFB2 has a set of bicolor LEDs on the craft interface, labeled 0
+    through 7, and refers to the MX2000 Switch Fabric Board LED topic for their functions, which is not held
+    (its text is not in the converted guide); Figure 52 shows no lamp on the board, so the lamp states are
+    an open gap
+  logo-zone: >-
+    reserved - Figure 52 prints no vendor mark on the board; a zone in the clear space is kept and no logo
+    or wordmark is drawn
+states:
+- absent
+elements:
+  logo-zone:
+    at: [17.0, 255.0]
+    size: [14.0, 6.0]
+    class: label
+size:
+  w: 43.18
+  h: 412.1
+  d: 599.4
+size-notes: >-
+  w and h are the sfb bays' envelope and also the guide's 1.7 in x 16.225 in; d is the guide's 23.6 in
+  (59.94 cm) without the ejector handle (26.14 in, 66.39 cm, with it).
+size-confidence: {w: datasheet, h: datasheet, d: datasheet}

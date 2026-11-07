@@ -1,0 +1,58 @@
+format: 1
+kind: component
+name: xm3352-dc-header
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: power
+interface: telco-dc-block-3
+description: >-
+  The three-cell pluggable DC connector on the Telco Systems XM-3352's DC supply module, seen from
+  its mating face. A green block with a flange and a screw at each end and three cells in a row.
+  The module prints "-" above the left cell and "+" above the right one. The cable connector
+  telco-systems/xm3352-dc-cable-plug@1 seats at its mate point.
+size: {w: 23.4, h: 13.9, d: 15.0}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+size-notes: >-
+  No document held draws the connector or gives a dimension for it. The box is the outline of the
+  green block as the data sheet's front photograph shows it, measured on that photograph (see
+  provenance), good to about half a millimetre, and it stands for the header.
+attrs: {connector: DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED: the Telco Systems XM-3352
+    data sheet shows the connector in its front photographs and says only "Power Supply 100-240V AC, 48-60V
+    DC" and, in its ordering table, "XM-3352-DCPS" for the DC supply. No document held calls it pluggable,
+    a terminal block or a screw terminal; that reading is the photograph's (a flanged green block with a
+    screw at each end), so the interface claims no standard and no pitch.
+  gender: >-
+    NOT STATED. The photograph shows the seated block from the front, three cells in a row and no cable;
+    it does not say which half carries pins. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    photograph - the module prints "-" above the left cell and "+" above the right one and leaves the middle
+    cell unmarked; the cells are drawn in that order. The module also prints "-48V" with a direct-current
+    mark. No document states what the middle cell is for.
+  size: >-
+    PHOTO-MEASURED on the XM-3352 front photograph rectified onto 220 x 44 (about 5 px/mm), and declared an
+    estimate because the box is the visible block and stands for the header: the green body and flanges run
+    x 19.0-42.4, y 29.0-42.9 on the face (a colour-mask bounding box). Depth is not visible and is estimated.
+  the-face: >-
+    photo-measured at the same scale: flanges with a screw at each end (centres about 3.0 and 20.4
+    across, 5.4 down), a centre body 12.6 wide above three wire entries.
+  key: >-
+    photograph - a flange at each end holds the block with a screw. Nothing is drawn as a latch tab.
+  mate: >-
+    derived - the centre of the middle cell, (11.7, 10.5), facing out. The cable connector's own middle
+    entry is at its centre too, so the two align.
+  colour: >-
+    photograph - the block is a teal green (drawn #57c188 with #4fb57e flanges) with silver end screws and
+    dark green wire entries; the photograph's wire entries read black. The data sheet's own figures are
+    photographs too.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face; the depth is the
+    estimate the earlier drawing of this block carried.
+elements:
+  body: {at: [5.0, 0.0], size: [13.4, 13.9], class: connector}
+connection-points:
+  mate: {at: [11.7, 10.5], direction: front}
+skins: [default]

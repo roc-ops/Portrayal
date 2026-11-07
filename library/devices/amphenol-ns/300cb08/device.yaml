@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 300cb08
-version: 2.0.2
+version: 2.2.1
 maturity: modelled
 manufacturer: Amphenol Network Solutions
 model: 300CB08
@@ -83,10 +83,12 @@ provenance:
       breakers from 2 A to 60 A as eleven part numbers that differ in nothing
       but the figure printed on the handle, so they are one part with a
       `rating` field, set per position in a configuration. Each breaker ships
-      with a touch guard seated on it, a separate part that a configuration
-      can take off. The populated
+      with a touch guard seated on it. The populated
       example is an invented load to show the field working; the vendor
-      publishes no standard fill.
+      publishes no standard fill. `populated-guards-off` is the same load
+      with `amphenol-ns/breaker-bare-1ru@1` in each position, the breaker as
+      it looks with its guard off, so the ratings show: a view, not a part
+      number, and the vendor publishes no such fill either.
   ratings:
     confidence: datasheet
     note: >-
@@ -203,7 +205,8 @@ gaps:
   note: >-
     the TPA fuse holder, part 307492, is seated from three-quarter views only:
     its face is placed by eye and its size is borrowed from the breaker whose
-    position it fits.
+    position it fits. The covers-off view seats breakers only and does not
+    touch this.
   wanted: a face-on, dimensioned view of 307492.
 groups:
   breakers-a: {term: Position, role: traffic, index-origin: 1, description: 'side A breaker positions, numbered 1 to 8 left to right'}
@@ -254,37 +257,37 @@ views:
       - {at: [258.0, 41.8], text: 'POS 1', font-size: 2.0, anchor: end, for: breaker-b1, fill: '#2b2d30'}
     components:
       bays:
-        - {id: breaker-a1, at: [14.2, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a1, at: [14.2, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 1}
-        - {id: breaker-a2, at: [34.01, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a2, at: [34.01, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 2}
-        - {id: breaker-a3, at: [53.82, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a3, at: [53.82, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 3}
-        - {id: breaker-a4, at: [73.63, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a4, at: [73.63, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 4}
-        - {id: breaker-a5, at: [93.44, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a5, at: [93.44, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 5}
-        - {id: breaker-a6, at: [113.25, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a6, at: [113.25, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 6}
-        - {id: breaker-a7, at: [133.06, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a7, at: [133.06, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 7}
-        - {id: breaker-a8, at: [152.87, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-a8, at: [152.87, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-a, rel-pos: 8}
-        - {id: breaker-b1, at: [261.1, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b1, at: [261.1, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 1}
-        - {id: breaker-b2, at: [280.91, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b2, at: [280.91, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 2}
-        - {id: breaker-b3, at: [300.72, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b3, at: [300.72, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 3}
-        - {id: breaker-b4, at: [320.53, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b4, at: [320.53, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 4}
-        - {id: breaker-b5, at: [340.34, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b5, at: [340.34, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 5}
-        - {id: breaker-b6, at: [360.15, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b6, at: [360.15, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 6}
-        - {id: breaker-b7, at: [379.96, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b7, at: [379.96, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 7}
-        - {id: breaker-b8, at: [399.77, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
+        - {id: breaker-b8, at: [399.77, 2.5], size: {w: 17.8, h: 39.1}, accepts: [amphenol-ns/breaker-1ru@1, amphenol-ns/breaker-bare-1ru@1, amphenol-ns/tpa-fuse-holder-307492@1, amphenol-ns/breaker-blank-1ru@1],
            default: amphenol-ns/breaker-blank-1ru@1, group: breakers-b, rel-pos: 8}
       placements:
         - {id: thumbscrew-left, ref: amphenol-ns/cover-thumbscrew@1, at: [1.55, 17.35], group: cover, rel-pos: 1}
@@ -472,6 +475,50 @@ configurations:
       breaker-b6: amphenol-ns/breaker-1ru@1
       breaker-b7: amphenol-ns/breaker-1ru@1
       breaker-b8: amphenol-ns/breaker-1ru@1
+    bay-attrs:
+      breaker-a1: {rating: 60}
+      breaker-a2: {rating: 60}
+      breaker-a3: {rating: 50}
+      breaker-a4: {rating: 40}
+      breaker-a5: {rating: 30}
+      breaker-a6: {rating: 30}
+      breaker-a7: {rating: 20}
+      breaker-a8: {rating: 10}
+      breaker-b1: {rating: 60}
+      breaker-b2: {rating: 60}
+      breaker-b3: {rating: 50}
+      breaker-b4: {rating: 40}
+      breaker-b5: {rating: 30}
+      breaker-b6: {rating: 30}
+      breaker-b7: {rating: 20}
+      breaker-b8: {rating: 10}
+    component-attrs:
+      dip-a: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+      dip-b: {sw-1: down, sw-2: down, sw-3: down, sw-4: down, sw-5: down, sw-6: down, sw-7: down, sw-8: down}
+  populated-guards-off:
+    kind: example
+    description: >-
+      The same sixteen breakers as the populated example drawn with the cover
+      that ships on each one taken off, so every rating shows on its handle. An
+      invented spread of ratings; a view, not a part number and not an
+      orderable bundle.
+    bays:
+      breaker-a1: amphenol-ns/breaker-bare-1ru@1
+      breaker-a2: amphenol-ns/breaker-bare-1ru@1
+      breaker-a3: amphenol-ns/breaker-bare-1ru@1
+      breaker-a4: amphenol-ns/breaker-bare-1ru@1
+      breaker-a5: amphenol-ns/breaker-bare-1ru@1
+      breaker-a6: amphenol-ns/breaker-bare-1ru@1
+      breaker-a7: amphenol-ns/breaker-bare-1ru@1
+      breaker-a8: amphenol-ns/breaker-bare-1ru@1
+      breaker-b1: amphenol-ns/breaker-bare-1ru@1
+      breaker-b2: amphenol-ns/breaker-bare-1ru@1
+      breaker-b3: amphenol-ns/breaker-bare-1ru@1
+      breaker-b4: amphenol-ns/breaker-bare-1ru@1
+      breaker-b5: amphenol-ns/breaker-bare-1ru@1
+      breaker-b6: amphenol-ns/breaker-bare-1ru@1
+      breaker-b7: amphenol-ns/breaker-bare-1ru@1
+      breaker-b8: amphenol-ns/breaker-bare-1ru@1
     bay-attrs:
       breaker-a1: {rating: 60}
       breaker-a2: {rating: 60}

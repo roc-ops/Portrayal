@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: jpsu-150-dc-header
+version: 1.0.0
+class: inlet
+profile: power
+interface: juniper-dc-block-3
+description: >-
+  The three-position pluggable DC power connector on the face of the Juniper JPSU-150-DC-AFO supply of the EX3400 and EX4100
+  switches, seen from its mating face. A grey body carries three cells in a column and a mounting hole at each end. The supply
+  prints "+", "-" and an earth symbol beside the cells, top to bottom. The cable connector juniper/jpsu-150-dc-plug@1 seats
+  at its mate point and is held by a screw at each end.
+size: {w: 10.0, h: 25.0}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  Neither guide gives a dimension for the connector (EX3400 Figures 46 and 47, EX4100 Figures 74 and 75, the same drawing in both).
+  The box is an estimate chosen to stand inside the block that both supplies' skins already draw (10.1 by 25.8 on the EX3400
+  supply, 12.6 by 27.5 on the EX4100 supply), so that one part serves both without moving a drawn box.
+attrs: {connector: pluggable DC power connector, positions: 3}
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED FOR THE CONNECTOR: the EX3400 Switch Hardware
+    Guide (Juniper Networks, published 2026-01-09), "Connecting DC Power to an EX3400 Switch" (PDF pages 142 and 143, Figures 46
+    and 47) and the EX4100 Switch Hardware Guide (Juniper Networks), "Connect DC Power to an EX4100 Switch" (PDF pages 139 and
+    140, Figures 74 and 75) call it "the terminal connector" and "the power supply socket", and list it as a part that is
+    provided. The EX3400 guide names "Molex 192120005" for the wire pins, which go into the cable connector, and not for the
+    connector, and the EX4100 guide names no part at all. So no part number is stated for the connector and the interface
+    claims no standard.
+  gender: >-
+    NOT STATED. Figure 47 (EX3400) and Figure 75 (EX4100) show a grey block with three cells and a hole at each end on the
+    supply, and a three-cell plug with a flange and a screw hole at each end approaching it; neither guide says which half
+    carries pins. The cable connector is drawn as the half that seats in this one.
+  marks: >-
+    guide - Figure 47 (EX3400) and Figure 75 (EX4100) print "+", "-" and an earth symbol beside the three cells, top to bottom,
+    and the supply's skin already draws them in that order. The text of both guides says the DC power inlet "has two terminals
+    labeled + and -" and a terminal to connect to earth ground.
+  size: >-
+    estimated - see size-notes. The cell pitch (5.6), the cell size (6.8 by 4.6) and the mounting holes (0.9 radius, 2.2 from each
+    end) are readings of the proportions of Figure 47, which is drawn without a scale.
+  key: >-
+    guide - both figures show a hole at each end of the block that takes the screws of the cable connector's flanges; the text
+    says to secure the connector "by tightening the two screws on either side". Drawn as the two holes; the screws are the
+    plug's.
+  mate: >-
+    derived - the centre of the middle cell, (5.0, 11.9), facing out. The cable connector's own middle cell is at its centre too,
+    so the two align.
+  colour: >-
+    estimated - the grey body #a9adb1 and its edge #5e656c are the colours both supplies' skins already draw for the block. The
+    figures are line art and print no colour, and no photograph of the DC supply is held (the photographs held show the AC
+    supplies), so no colour here is a reading.
+  relief: >-
+    NONE STATED. No document gives how far the connector stands out of the supply's face, so it is drawn flush and states no
+    relief.
+elements: {}
+connection-points:
+  mate: {at: [5.0, 11.9], direction: front}
+skins: [default]

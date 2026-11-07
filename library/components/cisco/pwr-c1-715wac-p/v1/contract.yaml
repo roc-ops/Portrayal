@@ -1,0 +1,81 @@
+format: 1
+kind: module
+name: pwr-c1-715wac-p
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 715 W AC Platinum-certified power supply of the Cisco Catalyst 9300 family,
+  PWR-C1-715WAC-P - the default supply of the C9300-48P. A dark, honeycomb-vented rear
+  face with an AC OK and a PS OK lamp, an IEC C14 inlet, two release latches and a power
+  cord retainer. Two seat in every Catalyst 9300 and a slot cover fills one that is
+  empty. Airflow is front-to-back.
+size: {w: 82.55, h: 40.1}
+size-confidence: {w: datasheet, h: datasheet}
+attrs:
+  model: 'PWR-C1-715WAC-P'
+  power-output-w: 715
+  input: ac
+  inlet: c14
+  input-voltage: '100 to 240 VAC (autoranging)'
+  input-current-max: '10 to 5 A'
+  input-frequency: '47 to 63 Hz'
+  output: '-56 V at 12.8 A'
+  weight-kg: 1.2
+  airflow: front-to-back
+  efficiency: platinum
+provenance:
+  model: >-
+    datasheet - Cisco Catalyst 9300 Series Switches Hardware Installation Guide (first
+    published 2017-06-20, last modified 2026-05-15), Table 35 lists PWR-C1-715WAC-P for the
+    C9300, C9300L and C9300X series and Table 18 gives it as the default supply of the
+    C9300-48P. The trailing = Cisco puts on a spare is not part of the model.
+  power: >-
+    datasheet - Table 44, Power Specifications for Platinum-Certified AC Power Supplies:
+    maximum output power 715 W, input 100 to 240 VAC autoranging at 47-63 Hz, input current
+    10-5 A, output -56 V at 12.8 A. An OUTPUT rating, so power-output-w. The guide's
+    Table 44 prints 798 W of input power and 2723 BTU per hour at 100 VAC.
+  size: >-
+    datasheet - the guide's Physical Specifications of Power Supplies, 1.58 x 3.25 x 12.20 in
+    (40.1 x 82.55 x 309.9 mm). THE GUIDE HEADS THAT COLUMN "H x D x W" BUT PRINTS HEIGHT,
+    WIDTH, DEPTH: the 3.25 in (82.55 mm) is the width of the rear face, which the
+    community NetBox elevation agrees with (81.9 mm measured across the supply), and the
+    12.20 in is the depth. The face is read as 82.55 x 40.1.
+  weight: >-
+    datasheet - the same table prints 2.6 lb (1.2 kg).
+  depth: >-
+    datasheet - 309.9 mm, the third figure of the same row.
+  elements: >-
+    estimated - the guide has no figure of the 350 W or 715 W AC supplies (Figures 46 to 49
+    are the 1100 W, 1900 W, 1900 W HV and 715 W DC supplies, all isometric). Positions of the lamps,
+    the inlet, the latches and the retainer are read off the community NetBox rear
+    elevation of the C9300-48T, a drawing that is not Cisco's, at 5.03 px per mm taken from
+    the elevation's 19 inch width, and are good to about a millimetre. The guide's
+    callouts for the 1100 W supply (Figure 46) name the same parts: AC OK LED, PS OK LED, AC
+    power cord connector, release latch, power cord retainer and keying feature.
+  lamps: >-
+    datasheet - Table 36, Switch Power Supply Module LEDs: AC OK is green with AC input
+    present, off without; PS OK is green with output to the switch active, red when the
+    output has failed, off when the output is disabled or the input is out of range.
+  inlet: >-
+    datasheet - the guide's Table 49 lists the cords for PWR-C1-715WAC-P with C15 plugs
+    (CAB-C15-CBN, CAB-AC-C15-KOR), which mate a C14 inlet. The earth pin is at the top as the
+    NetBox elevation shows it.
+  colour: >-
+    estimated - read off the NetBox elevation, which draws the face near black.
+states: [absent]
+elements:
+  ac-ok: {at: [10.2, 7.6], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#22c55e'}]}
+  ps-ok: {at: [31.4, 7.6], size: [3.0, 3.0], class: led, states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#ef4444'}]}
+  latch: {at: [28.2, 26.5], size: [11.0, 11.9], class: handle}
+  retainer: {at: [56.0, 28.5], size: [12.7, 9.9], class: handle}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [41.2, 7.3]}
+relief:
+  wall: '#15171a'
+skins: [default]
+body:
+  depth: 309.9
+  color: '#2a2c30'
+  footprint: {at: [0, 0], size: [82.55, 40.1]}

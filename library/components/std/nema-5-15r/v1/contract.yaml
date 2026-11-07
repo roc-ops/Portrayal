@@ -1,0 +1,93 @@
+format: 1
+kind: component
+name: nema-5-15r
+version: 1.0.0
+class: inlet
+profile: power
+conforms: nema-5-15r
+interface: nema-5-15r
+description: >-
+  A NEMA 5-15R single receptacle face, 15 A 125 V, as a rack PDU carries it.
+  It is flat, with the U earth hole up and two parallel slots: the line on the
+  left, the neutral on the right. It takes a 5-15P. A 5-20P does not enter it,
+  because its turned neutral blade needs the T slot of a 5-20R.
+size: {w: 27.0, h: 27.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs: {outlet: nema-5-15r, media: ac, rating-a: 15, accepts: '5-15P'}
+unplaced: seated by a rack PDU with 5-15R outlets, and no such PDU is modelled yet; the strip needs its own drawing from a held document
+provenance:
+  size: >-
+    BORROWED from std/nema-5-20r@1: 27 x 27, Qualtek 739W-X2/30 "Snap-in 20
+    Amp T-slot receptacle", face view. No dimensioned drawing of a 5-15R is
+    held, and a 15 A face may be another size. NEMA WD 6, which governs the
+    configuration, is not held.
+  method: >-
+    borrowed - the earth hole and the line slot are read off the 5-20R's
+    drawing (std/nema-5-20r@1 provenance.method) and moved 2.61 to the right,
+    which centres the pattern on the face. The 739W-X2/30 sets it left of
+    centre only to make room for the arm of the T, which this receptacle does
+    not have.
+  holes: >-
+    borrowed, and one estimate. The earth hole is the 5-20R's U, 5.28 x 5.31
+    with a flat top and a round bottom, at the top centre. The line slot is its
+    2.22 x 6.99, on the left, centred 6.35 left of the earth axis. THE NEUTRAL
+    SLOT IS ESTIMATED: it is the line slot mirrored about the earth axis, 2.22
+    x 6.99, 6.35 right of it. No held document dimensions a 5-15R neutral slot.
+    The 6.35 is half of the 12.7 between the blades of a 5-15P (Volex
+    PS204, as generic/nema-5-15p-cord@1 provenance.blades records), which the
+    5-20R's drawing agrees with within 0.1. The holes are drawn at the size of
+    the hole, not a lead-in.
+  config: >-
+    the 5-15R configuration: two parallel slots and an earth hole, no T. A
+    5-15P's blades both enter; a 5-20P's turned neutral blade does not. The
+    plug face is the mirror image of this one.
+  depth: >-
+    estimated - each hole is a `pocket` as deep as the blade a seated 5-15P
+    pushes into it: 15.88 for the two slots (the blades are 15.88 MIN long)
+    and 21.4 for the earth hole (the earth pin is 21.4 MAX), as Volex PS204,
+    p.147, dimensions them (recorded in generic/nema-5-15p-cord@1
+    provenance.blades). The receptacle body behind the face is not built: a
+    face part has no `size.d`, which would sink a pit behind the whole 27
+    square (size-d-on-a-fixed-part).
+  known-3d-simplification: >-
+    As std/nema-5-20r@1 states it: relief.js punches each pocket's mouth in the
+    hole's own shape, so the U reads correctly face on, and walls the pocket
+    along the node's bounding box.
+  interface: >-
+    `nema-5-15r` in spec/schemas/connectors.yaml, standard `nema-5-15r`.
+    generic/nema-5-15p-cord@1 mates it and seats at `mate`. generic/nema-5-20p-cord@1
+    does not: it names `nema-5-20r` alone.
+  mate: >-
+    estimated - (13.5, 19.0): the earth axis, on the line of the two blades,
+    which is the centre of the face as the pattern is centred. The 5-20R puts
+    its own mate on the same point of its blade pattern, and the 5-15P cord's
+    `mate` is on the middle of its blade line.
+  media: >-
+    `media: ac`: an outlet states what it hands on, as std/nema-5-20r@1
+    does. `outlet` is the DCIM type and says which way power runs.
+elements:
+  face: {at: [0, 0], size: [27.0, 27.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  features:
+    - node: hole-earth
+      pocket: 21.4
+      confidence: estimated
+      source: >-
+        Volex Power Products catalogue, Aug-2025, p.147 (PS204), the 5-15P
+        earth pin 21.4 MAX long: as deep as a seated pin reaches.
+    - node: slot-line
+      pocket: 15.88
+      confidence: estimated
+      source: >-
+        Volex Power Products catalogue, Aug-2025, p.147 (PS204), the 5-15P
+        blades 15.88 MIN long: as deep as a seated blade reaches.
+    - node: slot-neutral
+      pocket: 15.88
+      confidence: estimated
+      source: >-
+        Volex Power Products catalogue, Aug-2025, p.147 (PS204), the 5-15P
+        blades 15.88 MIN long: as deep as a seated blade reaches.
+connection-points:
+  mate: {at: [13.5, 19.0], direction: front}
+skins: [default]

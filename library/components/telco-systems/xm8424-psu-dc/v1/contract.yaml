@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: xm8424-psu-dc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -24,13 +24,29 @@ provenance:
     which the data sheet's range confirms apart from the sign.
   elements: >-
     photo-measured on the same rectified render: the green plug body x 69.4-89.5, y 27.3-36.6 on
-    the face (telco-systems/xm8424-dc-plug@1); a dark captive thumbscrew that stands proud, so
+    the face (telco-systems/xm8424-dc-header@1); a dark captive thumbscrew that stands proud, so
     its face-level base is placed at about (94.8, 24.2) rather than at the centre of its shadowed
     silhouette (89.1-97.9 x 20.9-32.9); the STAT lamp at about (89.5, 38.3).
+  connector: >-
+    the supply composes telco-systems/xm8424-dc-header@1 as `dc-in`, the two-cell pluggable DC connector
+    its photographs show (the Telco Systems XM-8424H data sheet, its front photographs), at the place the
+    skin has always drawn it. No document held names its maker or part number, so the part is a declared
+    stand-in (its own provenance) and the connector key `telco-dc-block-2` claims none.
+    telco-systems/xm8424-dc-cable-plug@1, a declared stand-in for the cable connector, mates it. The skin
+    is unchanged.
+  roles: >-
+    NOT STATED. The photograph shows two cells and no sign printed beside either, and the data sheet gives
+    a range ("DC: -48V, -36~-72V") and no pole assignment, so no role is given to either cell.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. The two cells are the contacts of one pluggable
+    connector and no document says which takes which pole, and a port whose poles are a connector's contacts
+    is offered only where that path's part is itself the connector; on a supply in a bay it is the supply, so
+    a port stated here would be published and then not offered. A later change can state the port once a
+    document gives the poles, a minor on the devices that seat this supply.
 states: [absent]
 elements:
   thumbscrew: {at: [40.9, 20.2], size: [6.4, 6.4], class: fastener}
 parts:
-  - {ref: telco-systems/xm8424-dc-plug@1, id: dc-in, at: [18.7, 23.7]}
+  - {ref: telco-systems/xm8424-dc-header@1, id: dc-in, at: [18.7, 23.7]}
   - {ref: common/led-rect-sm@1, id: led-stat, at: [37.4, 36.7]}
 skins: [default]

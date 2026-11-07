@@ -306,6 +306,7 @@ def parity(tmp_path_factory):
     return cases, stdin, node("parity", stdin)
 
 
+@pytest.mark.heavy
 @needs_node
 def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
     """The census, pinned: the cases this file is about are all LIFTED, the
@@ -338,6 +339,7 @@ def test_every_case_is_a_lifted_slot_the_kit_used_to_refuse(parity):
     assert by["dcp-2 ila-node"]["built"]["slot-1/module/edfa"]["ref"] == DUPLEX
 
 
+@pytest.mark.heavy
 @needs_node
 def test_nestedSlots_is_the_slot_entry_on_every_carrier(parity):
     """The parity seats through the kit's own nestedSlots (B3 Task 10a) - on
@@ -350,6 +352,7 @@ def test_nestedSlots_is_the_slot_entry_on_every_carrier(parity):
     assert all(h["same"] for h in checked), checked
 
 
+@pytest.mark.heavy
 @needs_node
 def test_the_kit_seats_a_lifted_slot_exactly_as_the_build(parity):
     cases, _, got = parity
@@ -419,6 +422,7 @@ MUTATIONS = [
 ]
 
 
+@pytest.mark.heavy
 @needs_node
 @pytest.mark.parametrize("label,old,new,where", MUTATIONS, ids=[m[0] for m in MUTATIONS])
 def test_a_mutated_shift_fails_the_parity(parity, tmp_path, label, old, new, where):

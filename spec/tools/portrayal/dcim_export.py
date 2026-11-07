@@ -63,8 +63,9 @@ import yaml
 
 from portrayal.artifacts import Dist, face_file
 
-from portrayal.manifest import view_parts, alias_names, config_airflow
+from portrayal.manifest import view_parts, alias_names, config_airflow, config_attrs
 from portrayal import manifest as _manifest
+from portrayal.devices_index import programmable_notes
 from portrayal import optical_ports
 from portrayal.faces import POWER_FACES
 
@@ -612,6 +613,10 @@ PART_POWER = {
     # AND THE JUNIPER EX3300-24T-DC's FOUR-TERMINAL BLOCK (A+, B+, A-, B-) under a clear cover,
     # the input of the switch's built-in DC supply: ring lugs on the terminals, the same row.
     "juniper/ex3300-dc-terminal": "dc-terminal",
+    # AND THE JUNIPER EX2200-24T-DC's AND EX2300-24T-DC's FOUR-TERMINAL BLOCKS, the input of each switch's
+    # built-in DC supply: ring lugs on the terminals, the same row for the same reason.
+    "juniper/ex2200-dc-terminal": "dc-terminal",
+    "juniper/ex2300-dc-terminal": "dc-terminal",
     # A PLUGGABLE TWO-POLE BLOCK IS WHERE THE WIRE LANDS TOO, so the same row: the
     # ECS4530-54CSFP-DC-I takes -48 V in a screw-clamp plug seated in a header, the
     # plug pulled out whole rather than lugs lifted off screws.
@@ -623,11 +628,11 @@ PART_POWER = {
     # (-48VA RETA -48VB RETB) in one pluggable screw-clamp header on the chassis
     # face. It is still where a supply's wire is landed, so the same row.
     "telco-systems/tm-7124s-dc-feed": "dc-terminal",
-    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-pole screw-clamp plug (20.1 mm
+    # AND THE XM-8424H's DC SUPPLY MODULE: a smaller two-cell pluggable block (20.1 mm
     # against the ECS4530's 32.1), so its own part, landing the -36 to -72 V feed. The same row.
-    "telco-systems/xm8424-dc-plug": "dc-terminal",
-    # AND THE XM-3352's DC SUPPLY: a three-pole screw-clamp plug, the same row.
-    "telco-systems/xm3352-dc-plug": "dc-terminal",
+    "telco-systems/xm8424-dc-header": "dc-terminal",
+    # AND THE XM-3352's DC SUPPLY: a three-cell pluggable block, the same row.
+    "telco-systems/xm3352-dc-header": "dc-terminal",
     # AND THE AURCORE AIS SWITCHES' FIVE-WAY HEADER, `+ - earth + -`: two DC feeds
     # landed in one pluggable screw-clamp plug on the top face, the TM-7124S case
     # again. Still where a supply's wire is landed, so the same row (#737).
@@ -661,6 +666,49 @@ PART_POWER = {
     # netbox-community/netbox (netbox/dcim/choices.py at 9bcfd739) or nautobot/nautobot
     # (at f9cdca3d). A clip is not a screw terminal, so it is `other`, as the barrel is.
     "common/orv3-busbar-connector": "other",
+    # A POSITRONIC PCS POWER CONNECTOR IS A POWER INPUT NEITHER LIBRARY NAMES. The Edgecore
+    # PSU-48V-650-F and -B take their -48 V feed through a three-position PCS connector (PLA03)
+    # that a cable connector plugs into. PowerPortTypeChoices has no Positronic entry in either
+    # target, and a plug is not a screw terminal, so it is `other`, as the bus-bar clip is, and
+    # POWER_LABEL says which connector.
+    "common/pla03-receptacle": "other",
+    # THE OSA 5420 AND OSA 5421 DC SUPPLIES' POWER HEADER IS A THREE-POSITION LATCHING HEADER NEITHER
+    # LIBRARY NAMES, from a maker the manual does not name. It is not a screw terminal, so it is `other`,
+    # and POWER_LABEL says which connector.
+    "oscilloquartz/osa542x-dc-header": "other",
+    # THE NXA-PDC-930W'S DC POWER CONNECTOR IS A THREE-POSITION BLOCK THE GUIDE DOES NOT NAME THE MAKER OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "cisco/nxa-pdc-930w-dc-header": "other",
+    # THE ASR 9000 FIXED-PORT DC SUPPLIES' POWER CONNECTOR IS A TWO-SOCKET BLOCK THE GUIDE DOES NOT NAME THE SERIES OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "cisco/a9k-dc-header": "other",
+    # THE QFX5200-48Y DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER NEITHER LIBRARY NAMES, from a maker the
+    # guide does not name. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx5200-48y-dc-header": "other",
+    # THE QFX5210 DC SUPPLIES' POWER HEADER IS A THREE-POSITION HEADER THE GUIDE DOES NOT NAME THE MAKER OF, with no pole
+    # printed at any cell. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx5210-dc-header": "other",
+    # THE QFX5241 AND QFX10002 DC SUPPLIES' POWER CONNECTORS ARE VENDOR CONNECTORS THE GUIDES DO NOT NAME THE PART OF.
+    # Neither is a screw terminal, so each is `other`, and POWER_LABEL says which connector.
+    "juniper/qfx524x-dc-header": "other",
+    "juniper/qfx10002-dc-header": "other",
+    # THE DC CONNECTORS OF THE EDGECORE AS5835, AMX3200 AND AGR560 48 VDC SUPPLIES ARE VENDOR CONNECTORS THE
+    # DOCUMENTS DO NOT NAME THE PART OF. None is a screw terminal, so each is `other`, and POWER_LABEL says which.
+    "edgecore/dcs201-dc-header": "other",
+    "edgecore/amx-3200-dc-header": "other",
+    "edgecore/agr560-dc-header": "other",
+    "edgecore/ais800-64-dc-header": "other",
+    # THE DCP-2-PSU-DC-FB'S DC POWER CONNECTOR IS A THREE-CELL PLUGGABLE CONNECTOR THE MANUAL DOES NOT NAME THE PART OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "smartoptics/dcp-2-dc-header": "other",
+    # THE JPSU-150-DC-AFO'S DC POWER CONNECTOR IS A THREE-POSITION PLUGGABLE BLOCK THE GUIDES DO NOT NAME THE MAKER OF.
+    # It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "juniper/jpsu-150-dc-header": "other",
+    # THE NC5K-PDC-930W SUPPLIES' DC POWER CONNECTOR IS THE SAME BLOCK drawn at the size of their housing: the same row.
+    "cisco/nc5k-pdc-930w-dc-header": "other",
+    # THE PSU-242-DEERN'S DC INPUT CONNECTOR IS A SIX-POSITION BLOCK, TWO ROWS OF THREE, THAT THE GUIDE DOES NOT NAME THE
+    # MAKER OF. It is not a screw terminal, so it is `other`, and POWER_LABEL says which connector.
+    "ufispace/psu-242-dc-header": "other",
     # A RACK PDU'S FIXED INPUT CORD. The Eaton G4 EVMI2130X has no inlet: its feed
     # is a 10 ft cord ending in a NEMA L21-30P twist-lock plug, and the part that
     # stands for it is the cord leaving the end cap. `nema-l21-30p` is a
@@ -705,6 +753,14 @@ PART_POWER = {
     "std/pcie-8pin-header": "other",
     "std/12vhpwr-header": "other",
     "std/12v-2x6-header": "other",
+    # A RITTAL DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) plug. No upstream
+    # type for it has been read from a held source, so it is `other` and POWER_LABEL
+    # says which connector.
+    "rittal/pdu-cord-cee-16a": "other",
+    # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
+    # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
+    # says which connector.
+    "servertech/pro4x-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -714,6 +770,24 @@ POWER_LABEL = {
     "std/pcie-8pin-header": "PCIe 8-pin (6+2)",
     "std/12vhpwr-header": "12VHPWR 16-pin",
     "std/12v-2x6-header": "12V-2x6 16-pin",
+    "common/pla03-receptacle": "Positronic PCS PLA03 (3-position)",
+    "oscilloquartz/osa542x-dc-header": "Latching power header (3-position, - Gnd +)",
+    "juniper/jpsu-150-dc-header": "DC power connector block (3-position, + - earth)",
+    "cisco/nxa-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "cisco/a9k-dc-header": "DC power connector block (2-position, +DC -DC)",
+    "juniper/qfx5200-48y-dc-header": "DC power header (3-position, RTN, -36 to -72 V, grounding)",
+    "juniper/qfx5210-dc-header": "DC power header (3-position, cells 1 to 3)",
+    "juniper/qfx524x-dc-header": "DC power connector (6-position, 2x3)",
+    "juniper/qfx10002-dc-header": "DC power connector (D-sub 3W3, -48 V, return, ground)",
+    "edgecore/dcs201-dc-header": "Pluggable DC terminal (3-position, earth - +)",
+    "edgecore/amx-3200-dc-header": "DC power connector (3-pin)",
+    "edgecore/agr560-dc-header": "DC power connector (2-socket)",
+    "edgecore/ais800-64-dc-header": "DC power connector (6-socket)",
+    "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
+    "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
+    "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
+    "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
 }
 
 
@@ -750,8 +824,11 @@ def power_row(ref, pid):
 # PowerOutletTypeChoices values in both: netbox-community/netbox
 # netbox/dcim/choices.py at 64ce9e2d (TYPE_IEC_C19, TYPE_NEMA_520R) and
 # nautobot/nautobot nautobot/dcim/choices.py at 3edb1fca (the same two).
+#
+# AND THE NEMA 5-15R. `nema-5-15r` is the PowerOutletTypeChoices value of the
+# 5-15R in both, beside `nema-5-20r` in the same list.
 OUTLET_TYPES = frozenset({"dc-terminal", "other", "iec-60320-c13", "eaton-c39",
-                          "iec-60320-c19", "nema-5-20r"})
+                          "iec-60320-c19", "nema-5-15r", "nema-5-20r"})
 PART_OUTLET = {
     # ONE OUTPUT CIRCUIT OF A BREAKER PANEL, a BATT screw over an RTN screw: the
     # two poles of one circuit, so one outlet, as one feed is one power port.
@@ -768,15 +845,24 @@ PART_OUTLET = {
     # name it, so it is `eaton-c39` rather than `other`.
     "std/c13-outlet": "iec-60320-c13",
     "eaton/c39-outlet": "eaton-c39",
+    # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
+    # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
+    "servertech/hdot-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
     "std/nema-5-20r": "nema-5-20r",
+    # A NEMA 5-15R, upstream's `nema-5-15r`.
+    "std/nema-5-15r": "nema-5-15r",
+    # A RITTAL PDU'S CEE 7/3 EARTHING-PIN SOCKET. No upstream outlet type for it has been
+    # read from a held source, so it is `other` with the connector as its label.
+    "rittal/cee-7-3-outlet": "other",
 }
 # The label an `other` outlet carries, so it says what to plug into it.
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
-OUTLET_LABEL = {"amphenol-ns/output-p40": "P40"}
+OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
+                "rittal/cee-7-3-outlet": "CEE 7/3"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
@@ -837,6 +923,11 @@ PART_MEDIA = {
     ("qsfp", "40g"): "40gbase-x-qsfpp",
     ("qsfp28", "100g"): "100gbase-x-qsfp28",
     ("qsfp-dd", "400g"): "400gbase-x-qsfpdd",
+    # A QSFP-DD CAGE PLACED AT 100G TAKES A QSFP28 OPTIC, and the library already
+    # types it so: a device's QSFP-DD cages at 100G reach IFACE_TYPE's (qsfp, 100g)
+    # row. The Juniper MX304's LMIC16 states `media: qsfp-dd, speed: 100g` on twelve
+    # of its sixteen cages and would otherwise take the card's 400G type on all.
+    ("qsfp-dd", "100g"): "100gbase-x-qsfp28",
     # A PLACEMENT'S OWN 800G, so a QSFP-DD800 port that says so types from
     # itself; the card's `qsfp-dd-800g` gives the same answer (QDD800_ATTR).
     ("qsfp-dd", "800g"): "800gbase-x-qsfpdd",
@@ -997,6 +1088,10 @@ NOT_A_DCIM_PORT = {
                               "Machine gateways, for an external redundant supply: the data sheets "
                               "name the input (and the switch's rating, 52 V DC at 7.69 A) and no "
                               "connector type, so it cannot be typed honestly",
+    "juniper/ex2200-rps-port": "the redundant power system port of the Juniper EX2200 switches: the "
+                               "guide names the port and gives no connector type, and no DCIM has a "
+                               "port type for it, so it presents nothing and cannot be typed "
+                               "honestly",
 
     # --- USB: real ports, no device-type field to put them in ----------------
     # A DCIM device type has console ports, power ports and interfaces. A USB
@@ -1009,6 +1104,9 @@ NOT_A_DCIM_PORT = {
     # path (device_console_row), and iDRAC Direct moved to MGMT_NOT_A_DCIM_PORT.
     "common/usb-a": "USB storage/maintenance port; not a console - std/usb-a's console placements type via device_console_row",
     "common/usb-a-bezel": "the same USB storage/maintenance port as common/usb-a, in a taller panel bezel; split out of that name's @3 in #264 and it needs its own entry because this register keys on the NAME, not the major",
+    "raritan/pxo-usb-b": "the USB-B jack of the Raritan PXO controller: a device-side port for a phone or tablet, a computer "
+                         "link (command line, recovery) and cascading - no document names it a console, and a DCIM device type "
+                         "has no field for a USB data port",
     # `std/usb-c` WAS HERE, as the GL-8xEP's USB-C power input. It was stale: the
     # DS6000, DS6001 and AS7326-56X have exported a USB-C console all along, and
     # test_silent_drops' mirror of `build` did not know the console exit, so it
@@ -1073,11 +1171,37 @@ NOT_A_DCIM_PORT = {
     "amphenol-ns/alarm-card-307608": "Form C alarm relay contacts on wire-wrap headers - dry "
                                      "contacts for an external alarm loop; neither DCIM has a "
                                      "port type for an alarm contact",
+    "common/micro-dsub-50-receptacle": "the 50-pin micro D-sub CO alarm connector of the Nokia NGFC-H and "
+                                       "NGFC-G cards - external alarm inputs and relay contacts, not a "
+                                       "network port or a console; neither DCIM has a port type for an "
+                                       "alarm connector",
+    "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
+                                 "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
+                                 "a port type for such a header",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
-                               "connector with no registered interface and no port type in either "
-                               "DCIM; the guide names it only as a 68-pin connector",
+                               "connector that presents the registered interface ex4200-vcp, and "
+                               "neither DCIM has a port type for it; the guide names it only as a "
+                               "68-pin connector",
+    "cisco/stackwise-480-port": "the StackWise-480 stacking port of the Catalyst 9300: Cisco's own "
+                                "stacking connector, which presents the registered interface "
+                                "stackwise-480, and neither DCIM has a port type for it; the guide "
+                                "names it only as a StackWise-480 port connector",
+    "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
+                             "power-sharing link between switches, not a power input; neither DCIM "
+                             "has a type for it and a power port would read as a feed",
+
+    # --- test points and a serial jack ---------------------------------------------
+    "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "
+                               "monitoring tap, not a network interface, and neither DCIM has a port type "
+                               "for a G-type connector",
+    "common/g-type-female-port": "the G-type female -20 dB RF test point of the CommScope CH3000 DR3600N: a "
+                                 "monitoring tap, not a network interface, and neither DCIM has a port type "
+                                 "for a G-type connector",
+    "common/stereo-jack": "the stereo-jack style RS-232 port of the CommScope CH3000 CX3003C and CX3033N, "
+                          "reserved for factory use: not a console a DCIM manages, and neither DCIM has a "
+                          "port type for it",
 
     # `dell/rj45-port-14g` USED TO BE HERE, as "a modelling gap, not an exporter
     # one": the NDC's four jacks carried no speed, so the exporter could not say
@@ -1085,6 +1209,9 @@ NOT_A_DCIM_PORT = {
     # reading the labels Dell's own master prints between the jacks, and the four
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
+    "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
+    "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
@@ -1353,7 +1480,13 @@ def breakout_note(breakout, n):
 # needs them as interfaces. They export exactly as they did when they sat in
 # `traffic`: typed from the cage and speed, and not `mgmt_only`, because the
 # fabric is the data path, not the way you reach the box.
-PORT_ROLES = {"traffic", "fabric", "management", "service"}
+#
+# `stack-control` IS A PORT ROLE TOO. The control and sync jacks between the
+# units of a stack are cabled like any other port, and the CSR310's STACK-CTRL
+# exports as the 1G interface it did when it sat in `traffic`: it states its
+# speed, which the RJ45 guard in `iface_type` asks for. It is not `mgmt_only`,
+# since it is not the way you reach the box.
+PORT_ROLES = {"traffic", "fabric", "management", "service", "stack-control"}
 NON_PORT_ROLES = {"indicator", "furniture"}
 
 
@@ -1579,11 +1712,33 @@ def device_console_row(p, a):
     if (ref.split("@")[0] == MICRO_USB_REF
             and DB9_CONSOLE.search(db9_words({**p, "attrs": a}))):
         return {"name": "Console (Micro-USB)", "type": "usb-micro-b"}
-    # THE EX4300'S MINI-USB CONSOLE (CON1) has its own part because the registry holds
-    # no mini-USB receptacle; the part is a console by what it is, so it needs no role
-    # on the placement. `usb-mini-b` is a console-port type in both targets.
+    # THE EX4300'S MINI-USB CONSOLE (CON1) is its own part, juniper/ex4300-console-usb-mini,
+    # because it keeps the size its photograph gave; it presents `mini-usb-b`. The part is a
+    # console by what it is, so it needs no role on the placement. `usb-mini-b` is a
+    # console-port type in both targets.
     if ref.split("@")[0] == "juniper/ex4300-console-usb-mini":
         return {"name": "Console (mini-USB)", "type": "usb-mini-b"}
+    # THE REGISTRY'S OWN MINI-B RECEPTACLE, std/mini-usb (the Catalyst 9300's console). It is a
+    # console when its placement says role console; the same jack could be a service port.
+    if ref.split("@")[0] == "std/mini-usb" and role == "console":
+        return {"name": "Console (mini-USB)", "type": "usb-mini-b"}
+    return None
+
+
+# A CONSOLE SERVER'S SERIAL LINES are console SERVER ports, the other end of a
+# console port: the RJ45 jacks a terminal cable plugs into so that the box can
+# reach the serial consoles of other equipment. Only a placement that says
+# `role: console-server` is one - an `rj45-serial` jack is also a PDU's LX
+# interface and a routing engine's serial jack, which are consoles or something
+# else, never console servers. NetBox ConsoleServerPortTypeChoices at 64ce9e2d
+# (`rj-45`) and Nautobot ConsoleServerPortTypeChoices at 3edb1fca (`rj-45`), the
+# same files and the same commits as the console-port type above.
+def device_console_server_row(p, a):
+    """The console-server-port row `build` lists a device placement under, or
+    None. Named by the placement's id, which is the printed label, and typed
+    `rj-45`; `media: rj45-serial` is required so that the type is true."""
+    if a.get("role") == "console-server" and a.get("media") == "rj45-serial":
+        return {"name": p["id"], "type": "rj-45"}
     return None
 
 
@@ -1600,6 +1755,8 @@ def device_port_type(p, a, group_role, names=None):
         return None, None, "a timing or RF input"
     if names is None and a.get("role") == "console":
         return None, None, "a console port"
+    if names is None and device_console_server_row(p, a):
+        return None, None, "a console server port"
     if names is None and group_role not in PORT_ROLES:
         return None, None, f"in a group whose role is {group_role!r}, not a port role"
     if names is None and a.get("role") == "mgmt" and a.get("speed") == "10g":
@@ -1639,6 +1796,23 @@ def flatten(section, prefix=""):
         else:
             out[key] = v
     return out
+
+
+def poe_pd_prose(dev):
+    """One sentence for a powered device's PoE input, or None: neither target has a
+    field for the standard a device needs or the most it takes in."""
+    power = (dev.get("attrs") or {}).get("power") or {}
+    standard = power.get("poe-pd-standard")
+    if not standard:
+        return None
+    text = f"PoE powered device: {standard}"
+    if power.get("poe-pd-standard-min"):
+        text += f" (runs on {power['poe-pd-standard-min']})"
+    if power.get("poe-pd-class") is not None:
+        text += f", class {power['poe-pd-class']}"
+    if power.get("poe-pd-max-w") is not None:
+        text += f", at most {power['poe-pd-max-w']:g} W at the PD input"
+    return text + "."
 
 
 def comments_for(dev, cfg_name, cfg):
@@ -1689,6 +1863,19 @@ def comments_for(dev, cfg_name, cfg):
     rating = _manifest.input_rating(dev)
     if rating:
         lines += [f"Input rating: {rating}.", ""]
+    # A POWERED DEVICE'S PoE INPUT: the standard it needs, what it runs reduced on and the most it
+    # takes in, which a device type has no field for (docs/non-rack-devices-design.md).
+    pd = poe_pd_prose(dev)
+    if pd:
+        lines += [pd, ""]
+
+    # A USER-CHOSEN PORT LIGHT COLOUR (#1271): neither target has a field for
+    # it, so one line says it, with the maker's own name for it when the
+    # model gives one
+    prog = programmable_notes(dev)
+    if prog is not None:
+        lines += ["Lamps with a programmable colour, set by the user"
+                  + (f" ({', '.join(prog)})" if prog else "") + ".", ""]
 
     ds = dev.get("datasheet") or {}
     if ds.get("url"):
@@ -1698,7 +1885,7 @@ def comments_for(dev, cfg_name, cfg):
         lines.append("")
 
     facts = []
-    for section, vals in (dev.get("attrs") or {}).items():
+    for section, vals in config_attrs(dev, cfg).items():
         flat = flatten(vals)
         for k, v in flat.items():
             if isinstance(v, bool):
@@ -1840,6 +2027,7 @@ def is_full_depth(ch):
 MOUNT_PROSE = {
     "din-rail": "Mounts on a DIN rail (IEC 60715); not rack-mounted.",
     "wall": "Wall-mounted; not rack-mounted.",
+    "ceiling": "Ceiling-mounted; not rack-mounted.",
     "desktop": "Desktop unit; not rack-mounted.",
     "rack-face": "Mounts on the rack rail face at a rack unit; occupies no rack unit.",
     "rack-side": "Mounts on the side of a rack's upright, beside the rack; occupies no rack unit.",
@@ -1943,8 +2131,8 @@ def worth_a_file(doc, dev):
     DCIM cables to. Outlets and not power ports, because a box whose only
     resolved row is its own inlet is still the failure described above.
     """
-    if any(k in doc for k in ("console-ports", "interfaces", "module-bays",
-                              "power-outlets")):
+    if any(k in doc for k in ("console-ports", "console-server-ports", "interfaces",
+                              "module-bays", "power-outlets")):
         return True
     return (dev or {}).get("profile") == "passive"
 
@@ -2025,7 +2213,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     if air:
         out["airflow"] = air
 
-    if dev.get("description"):
+    # A BUILD THAT SHOULD NOT READ AS THE BASE MODEL says so in its own
+    # `export-description`; any other build keeps the device's first sentence.
+    if cfg.get("export-description"):
+        out["description"] = fit(cfg["export-description"])
+    elif dev.get("description"):
         out["description"] = fit(first_sentence(dev["description"]))
 
     # Images, if this configuration has been rendered. front_image/rear_image are
@@ -2063,6 +2255,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
     own = listing_names(dev) if names is None and dev.get("interfaces") else {}
 
     console, mgmt_sfp, bays, powers, timing = [], [], [], {}, {}
+    console_server = []
     outlets = {}
     for view in views_for(dev, cfg_name):
         parts = view_parts(view)
@@ -2115,6 +2308,11 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
             con = device_console_row(p, a)
+            csp = device_console_server_row(p, a)
+            if csp:
+                console_server.append(csp)
+                if trace is not None:
+                    trace.add(p["id"])
             if con:
                 console.append({**con, "_id": p["id"]})
                 if trace is not None:
@@ -2128,7 +2326,7 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
                 if trace is not None:
                     trace.add(p["id"])
         for b in scoped(parts["bays"], cfg_name):
-            bays.append(bay_row(b["id"], b.get("accepts")))
+            bays.append(bay_row(b["id"], b.get("accepts"), None, b.get("interface")))
 
     # Switch and management interfaces. With a listing, a placement is an
     # interface exactly when a rule names it - `mgmt-eth` becomes `ma1` because
@@ -2225,6 +2423,8 @@ def build(dev, cfg_name, cfg, listing, dist=None, frus=None, label=None, trace=N
         for c in console:
             c.pop("_id", None)
         out["console-ports"] = console
+    if console_server:
+        out["console-server-ports"] = console_server
     if ifaces:
         out["interfaces"] = ifaces
     # A CHASSIS INLET AND A SUPPLY'S INLET ARE NOT THE SAME PORT, and the
@@ -2447,7 +2647,7 @@ def outlet_rows(outlets, powers, bays, who, names=None, dev=None):
     for bay in bays:
         held = protects.get(bay["position"])
         if held:
-            said = bay.get("description")
+            said = (bay.get("description") or "").rstrip(".") or None
             whole = f"{said}; protects {', '.join(held)}" if said else None
             if whole is None or len(whole) <= LIMIT:
                 bay["description"] = fit_items(
@@ -2908,7 +3108,8 @@ def tokenize_fibre_map(m):
 # devices in one space - and the comment keeps the height the vendor states.
 #
 # FRONT PORTS. NetBox 4.5 moved the front-to-rear binding out of the type
-# (netbox#20564), which is why the fibre map exists. Nautobot did not: its
+# (netbox#20564), which is why the fibre map exists; 4.6 put it back in the type
+# as `port-mappings`, which `with_port_mappings` writes. Nautobot did not move it: its
 # FrontPortTemplate has a non-null `rear_port_template` and
 # `rear_port_position`, its library schema spells them `rear_port` and
 # `rear_port_position`, and neither has `positions` on a front port. A front
@@ -2932,14 +3133,48 @@ def _note(doc, text):
     doc["comments"] = (body + "\n\n" + text).strip()
 
 
+# PORT MAPPINGS. NetBox 4.6 and later keep the front-to-rear binding in the type
+# as `port-mappings` (PortTemplateMapping): `{front_port, front_port_position,
+# rear_port, rear_port_position}`, each position 1 to 1024. A fibre-map row is
+# those four fields under shorter keys, so the mappings are the rows one for
+# one, in the map's order. `ratio` and `band` have no field there and stay in
+# the fibre map, which remains the full record. A type with no fibre map has no
+# binding to state. A row that names a port or a position the type does not
+# have would import as an error on the instance, so it stops the export here.
+def with_port_mappings(doc, rows):
+    fronts = {p["name"]: p.get("positions") or 1 for p in doc.get("front-ports") or []}
+    rears = {p["name"]: p.get("positions") or 1 for p in doc.get("rear-ports") or []}
+    maps = []
+    for row in rows:
+        f, r = row["front"], row["rear"]
+        fp, rp = row["front_position"], row["rear_position"]
+        if (f not in fronts or r not in rears or not 1 <= fp <= min(fronts[f], 1024)
+                or not 1 <= rp <= min(rears[r], 1024)):
+            raise NotExpressible(
+                f"{doc.get('manufacturer')} {doc.get('model')}: the map row {f}:{fp} -> "
+                f"{r}:{rp} names a port or position the type does not have")
+        maps.append({"front_port": f, "front_port_position": fp,
+                     "rear_port": r, "rear_port_position": rp})
+    out = {}
+    for key, value in doc.items():
+        out[key] = value
+        if key == "front-ports":
+            out["port-mappings"] = maps
+    return out
+
+
 def for_target(doc, target, fibre_map=None):
-    """`doc` as `target` can import it. NetBox takes it as written; Nautobot
-    takes a copy with a whole-unit height and rear-bound front ports.
+    """`doc` as `target` can import it. NetBox takes it as written, with the
+    fibre map's rows as `port-mappings`; Nautobot takes a copy with a
+    whole-unit height and rear-bound front ports.
 
     `fibre_map` is the module's own map, tokenised the same way `doc` is, and
     is what a document with front ports is bound from.
     """
     if target != "nautobot":
+        rows = (fibre_map or {}).get("rows") or []
+        if target == "netbox" and rows and doc.get("front-ports"):
+            return with_port_mappings(doc, rows)
         return doc
     whole = float(doc.get("u_height") or 0).is_integer()
     if whole and not doc.get("front-ports"):

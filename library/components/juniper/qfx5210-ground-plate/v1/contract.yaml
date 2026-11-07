@@ -1,13 +1,14 @@
 format: 1
 kind: component
 name: qfx5210-ground-plate
-version: 1.0.0
+version: 1.1.0
 class: ground
+interface: stud-pair-5-8
 behaviour: mounts
 profile: networking
 description: >-
   Protective earthing terminal on the FRU panel of the QFX5210-64C. It is a pale bracket plate with two
-  screws, beside the panel's earth symbol, that one two-hole lug lands across. The guide says the chassis
+  bare threaded holes, beside the panel's earth symbol, that one two-hole lug lands across. The guide says the chassis
   has a two-hole protective grounding terminal and that the posts of the bracket point to the left. The lug
   is fixed with two #10-32 UNF screws and washers (not supplied). For an AC-powered switch the terminal is
   used as well as the earth pin of the power cord.
@@ -19,17 +20,27 @@ provenance:
     4.1 px/mm across the body): about 43 x 11 mm there, and 33 x 12 mm on the guide's Figure 8.
     The smaller extent is drawn. Neither was measured against anything of known size.
   holes: >-
-    estimated - the guide gives no spacing for the two holes. The drawn screws are 16.0 mm apart on
+    estimated - the guide gives no spacing for the two holes. They read 16.0 mm apart on
     the guide's Figure 8 (3.25 px/mm) and 18 mm on the photograph, so 15.9 mm, the 5/8 in. of a
     two-hole lug, is drawn. The size of the screws the lug takes (#10-32 UNF) is the guide's.
   seat: >-
-    NOT A LUG SEAT. The plate draws the terminal and presents no connection point: the library's lug seats
-    belong to parts whose screw sizes and pair pitch a document states, and this guide states a screw size
-    and no spacing, so no pair seat is claimed.
+    THE PAIR IS A LUG SEAT, ON THE PITCH OF THE LUG THE GUIDE NAMES. The guide names a Panduit LCD10-10A-L
+    lug and two #10-32 UNF screws and states no spacing. The two holes are composed on 15.875 mm (5/8 in.),
+    the pitch of the library's two-hole lug for the same hole-spacing code (Panduit LCD6-10A-L), which the
+    guide's Figure 8 reading of 16.0 mm agrees with to 0.13 mm; the photograph's 18 mm is a looser reading and
+    is not used. The holes stay bare, as the studio photograph shows them (a dark threaded opening with a
+    light rim, no screw); the screws are not provided with the switch.
 size:
   w: 34.0
   h: 12.0
 size-confidence: {w: estimated, h: estimated}
 size-notes: the plate outline read off the FRU-side photograph and the guide's Figure 8; no document gives it
 elements: {}
+parts:
+  # FIRST HOLE, then second, left to right: the pair's axis, so a lug's wire leaves to the right
+  - {ref: common/ground-hole-10-32@1, id: '1', at: [6.637, 3.587]}
+  - {ref: common/ground-hole-10-32@1, id: '2', at: [22.512, 3.587]}
+connection-points:
+  # the midpoint of the two holes' mate points, at the face
+  mate: {at: [16.9875, 6.0], direction: front}
 skins: [default]

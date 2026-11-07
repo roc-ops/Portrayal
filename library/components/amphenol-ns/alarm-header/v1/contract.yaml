@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: alarm-header
+version: 1.0.0
+class: port
+interface: wire-wrap-3
+profile: power
+description: >-
+  One three-pin wire-wrap header of an Amphenol Network Solutions 300CB08
+  alarm card, seen from the rear: a white shroud with three gilt pins, carrying
+  one side's Form C alarm relay contacts. It presents the `wire-wrap-3`
+  interface at the top of its shroud. The alarm card composes one per side,
+  and the nrgSMART centre block repeats the pair.
+size: {w: 11.0, h: 5.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {contacts: Form C relay, pins: 3}
+provenance:
+  size: >-
+    drawing - the header as amphenol-ns/alarm-card-307608@1 drew it before the header became a part of its own: 11.0
+    by 5.5 in the centre block of the 300CB08 installation guide 149722-2 A9 Fig. 3-6, moved here unchanged.
+  pins: >-
+    drawing and datasheet - three pins at a 3.5 pitch, as the card drew them. The 300CB08 datasheet gives Form C
+    relay contacts on wire-wrap terminals that also mate with TE Connectivity 3-640428-3 (Terminals, p4), and the
+    installation guide says the pins connect to external alarms by wire wrap and can also mate to that connector
+    (section 1.4, p9). NO PITCH IS STATED in either: 3.5 is the card's drawn spacing and is not a reading of the pin pitch.
+  seat: >-
+    estimated - `mate` sits `on: shroud`, midway along the three pins, so a part seated here starts where the shroud
+    ends. The shroud's 6.0 of height is by eye, as the card built it.
+  behaviour: >-
+    DELIBERATELY OMITTED. The header is part of the card and is never placed on its own; the card states no
+    `behaviour` of its own either, so none is added here.
+elements: {}
+relief:
+  features:
+    - node: shroud
+      out: 6.0
+      color: '#f1f0eb'
+      confidence: estimated
+      source: >-
+        a three-pin wire-wrap header shroud, as amphenol-ns/alarm-card-307608@1 built it before the header became a part of its own; its height is not in the documents held
+connection-points:
+  mate: {at: [5.5, 2.75], direction: front, 'on': shroud}
+skins: [default]

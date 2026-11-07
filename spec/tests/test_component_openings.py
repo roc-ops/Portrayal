@@ -234,6 +234,7 @@ def test_a_rotated_cage_is_punched_through_its_rotated_opening():
 
 # --------------------------------------- a skin L21 can read, holes and all ---
 
+@pytest.mark.heavy
 def test_a_readable_skin_opens_its_own_paint_and_not_its_parts(tmp_path):
     """When the skin can be read node by node, the hole goes with the node it
     is cut in - not with the parts composed over it, and not with another node
