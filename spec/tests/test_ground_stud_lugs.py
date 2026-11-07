@@ -134,7 +134,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 CENSUS = {
     "common/ground-lug@1": (31, 22),
     "common/ground-screw@1": (20, 10),
-    "common/ground-stud@1": (11, 11),
+    "common/ground-stud@1": (13, 13),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -390,9 +390,11 @@ def test_the_parts_that_present_terminal_stud_and_the_one_lug_that_mates_it():
     earth_stud_parts = ("common/ground-hole-1-4@1", "common/ground-stud-10-32@1", "mikrotik/earth-stud-disc@1",
                         "common/ground-screw-washer@1")
     # and the hex-nut stud that a supply's pair of terminals composes
+    # and the wire terminal pad that the Juniper EX4100-H-24F and -24MP place twelve times each
     assert sorted(presents) == sorted([*SINGLE, CASA_STUD, "common/terminal-screw-34@1",
                                        "common/terminal-screw-38@1", *SIZED_SCREWS, SR1_STUD, *bare_holes,
-                                       *earth_stud_parts, "common/hex-nut-stud@1"])
+                                       *earth_stud_parts, "common/hex-nut-stud@1",
+                                       "juniper/ex4100-h-terminal-pad@1"])
     assert mates == [LUG]
     lug = _contract(LUG)
     # 1.0.1: the provenance says it turns (#829); nothing it draws changed
@@ -457,9 +459,11 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     assert all(n > 0 and d > 0 for n, d in got.values())
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    assert sum(n for n, _ in got.values()) == 63
+    # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
+    assert sum(n for n, _ in got.values()) == 65
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    assert len({where for where, _, _ in placed}) == 44
+    # 44 -> 46 with the Digi Connect EZ 16 and 32
+    assert len({where for where, _, _ in placed}) == 46
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -504,7 +508,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # every placement of the census but the Casa terminal's one
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    assert seen == 62
+    # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
+    assert seen == 64
 
 
 @pytest.mark.heavy

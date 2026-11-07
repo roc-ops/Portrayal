@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-16x100ge-tr
-version: 1.0.2
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -136,6 +136,15 @@ provenance:
     Series 4th Generation Ethernet Line Card Family', updated 15 March 2024. Table 2
     lists this part number as affected. Last order 15 June 2024; last date of hardware
     support 15 June 2029.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, PDF page 56, '16-Port 100-Gigabit Ethernet Line Card with QSFP28/QSFP+':
+    'sixteen ports for QSFP28/QSFP+ modules that operate at a rate of 100 Gbps'. The card's 16
+    port parts join its group (qsfp28-100g holds 16 ports). Role traffic: the ports are what the
+    card is for. index-origin 0: the guides name a card's ports from 0, and the parts here are
+    p0, p1 and so on. Media and speed are stated only as the pages above print them. The guide
+    also names QSFP+ modules for this card without a rate, so the group states the 100 Gbps the
+    guide prints. Nothing was measured: no position, size or part changed.
 elements:
   led-p0:
     at: [3.19, 50.97]
@@ -441,23 +450,31 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  qsfp28-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g}
+    description: >-
+      16 QSFP28 ports, each up to 100 Gb Ethernet.
 parts:
-  - {ref: std/qsfp-ganged@1, id: p0, at: [5.26, 47.95], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p1, at: [5.26, 66.67], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p2, at: [5.26, 85.41], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p3, at: [5.26, 104.14], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p4, at: [5.26, 132.79], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p5, at: [5.26, 151.53], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p6, at: [5.26, 170.26], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p7, at: [5.26, 188.99], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p8, at: [5.26, 216.03], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p9, at: [5.26, 234.77], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p10, at: [5.26, 253.49], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p11, at: [5.26, 272.22], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p12, at: [5.26, 296.87], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p13, at: [5.26, 315.6], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p14, at: [5.26, 334.33], rotate: 90}
-  - {ref: std/qsfp-ganged@1, id: p15, at: [5.26, 353.07], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p0, group: qsfp28-100g, at: [5.26, 47.95], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p1, group: qsfp28-100g, at: [5.26, 66.67], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p2, group: qsfp28-100g, at: [5.26, 85.41], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p3, group: qsfp28-100g, at: [5.26, 104.14], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p4, group: qsfp28-100g, at: [5.26, 132.79], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p5, group: qsfp28-100g, at: [5.26, 151.53], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p6, group: qsfp28-100g, at: [5.26, 170.26], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p7, group: qsfp28-100g, at: [5.26, 188.99], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p8, group: qsfp28-100g, at: [5.26, 216.03], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p9, group: qsfp28-100g, at: [5.26, 234.77], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p10, group: qsfp28-100g, at: [5.26, 253.49], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p11, group: qsfp28-100g, at: [5.26, 272.22], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p12, group: qsfp28-100g, at: [5.26, 296.87], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p13, group: qsfp28-100g, at: [5.26, 315.6], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p14, group: qsfp28-100g, at: [5.26, 334.33], rotate: 90}
+  - {ref: std/qsfp-ganged@1, id: p15, group: qsfp28-100g, at: [5.26, 353.07], rotate: 90}
 body:
   depth: 604.5
   color: '#b9bec4'

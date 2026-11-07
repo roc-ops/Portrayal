@@ -1082,6 +1082,11 @@ NOT_A_DCIM_PORT = {
                      "(device_port_type)",
 
     # --- power: a connector no DCIM has a type for ---------------------------
+    "cisco/rps2300-connector": "the RPS connector of the Catalyst 2960-S switches: the guide names it and "
+                               "gives no connector type or pinout, and no DCIM has a power port type for "
+                               "it, so it cannot be typed honestly",
+    "cisco/flexstack-port": "the FlexStack stacking port of the Catalyst 2960-S module: a vendor stacking "
+                            "interface no DCIM has a port type for, so it cannot be typed honestly",
     "juniper/ex3300-rps-port": "the redundant power system port of the Juniper EX3300 switches: the "
                                "guide names the port and gives no connector type or pinout, and no "
                                "DCIM has a power port type for an RPS connector, so it cannot be "
@@ -1189,6 +1194,9 @@ NOT_A_DCIM_PORT = {
     "cisco/stackpower-port": "the StackPower connector of the Catalyst 9300 (S-PWR 1 and 2): a "
                              "power-sharing link between switches, not a power input; neither DCIM "
                              "has a type for it and a power port would read as a feed",
+    "digi/microsd-socket": "the micro-SD socket of the Digi Connect EZ 16 and 32: a memory card "
+                           "slot, not a network, console or power connection, and neither DCIM "
+                           "has a port type for a storage card",
 
     # --- test points and a serial jack ---------------------------------------------
     "common/g-type-male-port": "the G-type male -20 dB RF test point of the CommScope CH3000 receivers: a "

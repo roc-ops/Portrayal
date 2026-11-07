@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-10x400ge-x-se
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -163,6 +163,14 @@ provenance:
     and if either produces a figure it belongs here.
   lifecycle: >-
     searched - no end-of-life notice for this part number is in the intake.
+  groups: >-
+    install guide - Cisco ASR 9000 Series Aggregation Services Router Ethernet Line Card
+    Installation Guide, PDF page 64, '10-Port 400-Gigabit Ethernet Line Cards with QSFPDD': 'ten
+    ports for QSFPDD modules' that carry 10, 40, 100, 200 or 400 Gb Ethernet. The card's 10 port
+    parts join its group (qsfpdd-400g holds 10 ports). Role traffic: the ports are what the card
+    is for. index-origin 0: the guides name a card's ports from 0, and the parts here are p0, p1
+    and so on. Media and speed are stated only as the pages above print them. The group states
+    the highest rate the guide prints. Nothing was measured: no position, size or part changed.
 elements:
   led-p0:
     at: [6.72, 39.89]
@@ -378,17 +386,25 @@ relief:
       source: >-
         common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
         estimated' and the dome carries none
+groups:
+  qsfpdd-400g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp-dd, speed: 400g}
+    description: >-
+      10 QSFP-DD ports, each up to 400 Gb Ethernet.
 parts:
-  - {ref: std/qsfp-dd@1, id: p0, at: [8.02, 36.45], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p1, at: [8.02, 67.67], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p2, at: [8.02, 98.88], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p3, at: [8.02, 130.09], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p4, at: [20.74, 173.49], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p5, at: [20.74, 204.7], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p6, at: [20.74, 235.91], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p7, at: [20.74, 267.14], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p8, at: [20.74, 298.34], rotate: 90}
-  - {ref: std/qsfp-dd@1, id: p9, at: [20.74, 329.56], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p0, group: qsfpdd-400g, at: [8.02, 36.45], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p1, group: qsfpdd-400g, at: [8.02, 67.67], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p2, group: qsfpdd-400g, at: [8.02, 98.88], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p3, group: qsfpdd-400g, at: [8.02, 130.09], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p4, group: qsfpdd-400g, at: [20.74, 173.49], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p5, group: qsfpdd-400g, at: [20.74, 204.7], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p6, group: qsfpdd-400g, at: [20.74, 235.91], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p7, group: qsfpdd-400g, at: [20.74, 267.14], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p8, group: qsfpdd-400g, at: [20.74, 298.34], rotate: 90}
+  - {ref: std/qsfp-dd@1, id: p9, group: qsfpdd-400g, at: [20.74, 329.56], rotate: 90}
 body:
   depth: 609.6
   color: '#b9bec4'
