@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic-3d-40ge-tx
-version: 1.2.2
+version: 1.2.3
 class: line-card
 behaviour: fills
 profile: networking
@@ -34,51 +34,64 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, 'Tri-Rate MIC' (printed
+    pages 353 to 357): '40 autonegotiating 10BASE-T, 100BASE-TX, or 1000BASE-T Megabit Ethernet ports'
+    reached through RJ-45 connectors, at 'speeds of 10 Mbps, 100 Mbps, or 1000 Mbps'; port 0 through 9
+    within each of four logical PICs. Carried as 1g, the top of the autonegotiating range, as the
+    library states a tri-speed jack. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  rj45-1g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+    description: the autonegotiating 10/100/1000 RJ-45 ports, each carried as 1g, the top of its range
 parts:
-- {ref: common/rj45-ganged-eth@1, id: port-0-0, at: [16, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-1, at: [16, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-2, at: [28.7, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-3, at: [28.7, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-4, at: [41.4, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-5, at: [41.4, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-6, at: [54.1, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-7, at: [54.1, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-8, at: [66.8, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-0-9, at: [66.8, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-0, at: [86.5, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-1, at: [86.5, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-2, at: [99.2, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-3, at: [99.2, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-4, at: [111.9, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-5, at: [111.9, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-6, at: [124.6, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-7, at: [124.6, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-8, at: [137.3, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-1-9, at: [137.3, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-0, at: [157, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-1, at: [157, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-2, at: [169.7, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-3, at: [169.7, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-4, at: [182.4, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-5, at: [182.4, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-6, at: [195.1, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-7, at: [195.1, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-8, at: [207.8, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-2-9, at: [207.8, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-0, at: [227.5, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-1, at: [227.5, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-2, at: [240.2, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-3, at: [240.2, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-4, at: [252.9, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-5, at: [252.9, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-6, at: [265.6, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-7, at: [265.6, 15.8], attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-8, at: [278.3, 3.6], rotate: 180, attrs: {media: rj45}}
-- {ref: common/rj45-ganged-eth@1, id: port-3-9, at: [278.3, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-0, group: rj45-1g, at: [16, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-1, group: rj45-1g, at: [16, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-2, group: rj45-1g, at: [28.7, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-3, group: rj45-1g, at: [28.7, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-4, group: rj45-1g, at: [41.4, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-5, group: rj45-1g, at: [41.4, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-6, group: rj45-1g, at: [54.1, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-7, group: rj45-1g, at: [54.1, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-8, group: rj45-1g, at: [66.8, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-0-9, group: rj45-1g, at: [66.8, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-0, group: rj45-1g, at: [86.5, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-1, group: rj45-1g, at: [86.5, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-2, group: rj45-1g, at: [99.2, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-3, group: rj45-1g, at: [99.2, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-4, group: rj45-1g, at: [111.9, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-5, group: rj45-1g, at: [111.9, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-6, group: rj45-1g, at: [124.6, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-7, group: rj45-1g, at: [124.6, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-8, group: rj45-1g, at: [137.3, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-1-9, group: rj45-1g, at: [137.3, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-0, group: rj45-1g, at: [157, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-1, group: rj45-1g, at: [157, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-2, group: rj45-1g, at: [169.7, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-3, group: rj45-1g, at: [169.7, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-4, group: rj45-1g, at: [182.4, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-5, group: rj45-1g, at: [182.4, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-6, group: rj45-1g, at: [195.1, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-7, group: rj45-1g, at: [195.1, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-8, group: rj45-1g, at: [207.8, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-2-9, group: rj45-1g, at: [207.8, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-0, group: rj45-1g, at: [227.5, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-1, group: rj45-1g, at: [227.5, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-2, group: rj45-1g, at: [240.2, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-3, group: rj45-1g, at: [240.2, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-4, group: rj45-1g, at: [252.9, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-5, group: rj45-1g, at: [252.9, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-6, group: rj45-1g, at: [265.6, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-7, group: rj45-1g, at: [265.6, 15.8], attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-8, group: rj45-1g, at: [278.3, 3.6], rotate: 180, attrs: {media: rj45}}
+- {ref: common/rj45-ganged-eth@1, id: port-3-9, group: rj45-1g, at: [278.3, 15.8], attrs: {media: rj45}}
 size:
   w: 343.0
   h: 27.0
