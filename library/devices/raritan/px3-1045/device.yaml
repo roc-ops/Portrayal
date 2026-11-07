@@ -1,0 +1,293 @@
+format: 1
+kind: device
+name: px3-1045
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PX3-1045
+description: >-
+  Raritan PX3-1045 rack PDU, 0U: a black strip 52 mm wide, 55 mm deep and 1780 mm long for a rack's vertical channel.
+  It has 36 IEC C13 outlets, 10 A, in two circuits of 18 and six groups of three. Each circuit has a breaker, and a
+  replaceable controller sits between the two circuits. The fixed 3 m cord has an IEC 60309 2P+E 6h 32 A plug.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      FIGURES FROM THE MAKER'S PRINTED SIZES AND ONE FRONT PHOTOGRAPH. The technical specification (rev 2025-06-25)
+      and the mechanical drawing MPX3-1045 (Rev 2A, June 13, 2017) print the unit size, the outlet pitch and the
+      mounting buttons; the front photograph (9600 x 2000, straight on) gives every position along the strip, read to
+      about 5 mm from the end where the photograph starts. The library draws the PDU STANDING, cord end down, as the
+      photograph's cord end is the bottom when mounted, so a position along the strip is the y of the front view. No
+      vendor file is held; the figures were read by a person and written down. No PX3 3D model or stencil was read.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1780 x 52 x 55 mm (70.1 x 2.1 x 2.2 in), the specification's width, depth and height. 6.5 kg, shipping
+      9 kg and 285 x 115 x 1915 mm. The chassis is black and matte, from the photograph; the hex value is an estimate
+      of that black.
+  mount:
+    confidence: drawing
+    note: >-
+      drawing - `rack-side`: a zero-U strip that hangs on two mounting buttons beside the rack's upright (kit RACK-
+      KIT-PX2-1K-ZU). `ru: 40` is the height it runs, 1780 mm being 40.04 units; it is derived, not printed.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - every position along the strip is read off the front photograph to about 5 mm. Circuit 1: 18
+      outlets in six groups of three from about 46 to 520 mm, CIRCUIT 1 and a breaker at about 560 to 580. Controller
+      from about 648 to 864. Circuit 2: 18 outlets from about 911 to 1384, CIRCUIT 2 and a breaker at about 1425 to
+      1445. Cord gland at about 1749. The outlets stand 24.0 apart inside a group, the printed pitch; the gap between
+      groups, 8.0, is DERIVED from the span and is an estimate. Positions ACROSS the strip are not in any source: the
+      outlets are centred, the rest are estimates.
+  numbering:
+    confidence: estimated
+    note: >-
+      the photograph prints 1 to 18 and 19 to 36 above the outlets. The maker's pages do not say which end of a circuit
+      carries 1, so the numerals are taken to rise along the strip in the photograph's reading order (gaps: numbering-
+      direction).
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the technical specification: (36) IEC C13, 10 A, two circuits of 18, drawn as std/c13-outlet@1. The
+      outlets are not described as locking, and the orientation of the nose is not published, so the part is drawn
+      unturned.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet and photograph - two breakers, one for each circuit (the selector table and the photograph's CIRCUIT 1
+      and CIRCUIT 2 labels). Each outlet of a circuit runs through its breaker. No rating is published.
+  controller:
+    confidence: estimated
+    note: >-
+      ESTIMATED BEYOND ITS SPAN. The maker's pages give the controller as replaceable, from about 648 to 864 mm, with a
+      colour matrix display and four buttons on its left half and two stacked Ethernet jacks, two USB, a console and a
+      sensor port on its right half. The sizes of the display and the buttons are the PXO's (the same maker's drawing-
+      measured 42.2 by 33.9 and 8.4), and every position inside the span is an estimate (gaps: controller-layout).
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - two mounting buttons 1244.0 apart. The drawing marks 268.0 at one end; 268.0 + 1244.0 + 268.0 =
+      1780.0, so the buttons are read as 268.0 from each end. The marks 423.5 and 933.0 are not read (gaps: rear-
+      marks). The button is centred across, an estimate.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - IEC 60309 2P+E 6h, 32 A, IP44, 3 m (9.84 ft) standard, bottom-front feed, cord retention yes. No
+      voltage or phase is printed.
+attrs:
+  physical:
+    length-mm: 1780
+    weight-kg: 6.5
+    construction: metal strip
+  power:
+    input-cord: fixed
+    input-plug: other
+    input-current-a: 32
+    breakers: two breakers, one for each circuit of 18 outlets (no rating published)
+chassis: {width: 52, height: 1780, depth: 55, ru: 40, mount: rack-side, color: '#1c1c1e', airflow: passive}
+gaps:
+- what: numbering-direction
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the photograph prints 1 to 18 and 19 to 36 above the outlets, and the maker's pages do not say whether 1 is at the
+    end nearer the cord or the end away from it. The numerals are drawn rising along the strip from the end the
+    photograph starts at.
+  wanted: the front photograph read for the numeral beside the first outlet of each circuit.
+- what: controller-layout
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the controller's span is read off the photograph, and its ports and display are named in the maker's pages
+    without sizes or positions. The display, the four buttons and the jacks are placed inside the span at estimated
+    positions, the display and buttons at the PXO's sizes. The two USB ports are drawn as USB-A, since the maker's
+    pages do not give their types, and the console and sensor jacks are drawn as RJ45 serial jacks like the PXO's. The
+    logo at the controller's top right is not drawn.
+  wanted: the drawing's View C dimensioned, or a close photograph of the controller.
+- what: port-names
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the maker's pages name the ports and not their printed labels, so the two Ethernet jacks are exported as Ethernet
+    1 and Ethernet 2.
+  wanted: a close photograph of the controller, or the maker's user guide for the PX3.
+- what: outlet-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    no dimensioned outlet drawing is held, so the C13 is the standard's, and the outlet's nose direction and any
+    locking feature are not drawn.
+  wanted: the drawing's View B dimensioned across the strip.
+- what: cord-end-marks
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the photograph shows a small earth symbol and a lamp near the cord gland, and the maker's pages give no position
+    for either, so neither is drawn. The gland's diameter is not published and is an estimate.
+  wanted: the front photograph read at the cord end.
+- what: breaker-lamp
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    each breaker is a small rocker with a lamp, and the lamp's colour and meaning are not published, so only the
+    rocker is a part and its lamp is art.
+  wanted: the maker's user guide.
+- what: rear-marks
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the drawing marks 423.5 and 933.0 on the back, and the maker's pages do not say what they locate. They are not
+    drawn.
+  wanted: the mechanical drawing's rear view read for those two marks.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    the maker's pages give no view of the ends or the long sides: no feature, vent or fastener on them is published, so
+    none is drawn. Their outlines are the printed 52 by 55 and 55 by 1780.
+  wanted: the drawing's side and end views dimensioned, or photographs of the ends and the sides.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the 36 IEC C13 outlets in two circuits of 18, numbered 1 to 36 as the photograph prints them'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the two circuit breakers, one for each circuit of 18 outlets'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 BaseT Ethernet jacks of the controller (technical specification, networking)'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console jack, the sensor jack and the two USB jacks of the controller'}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1780}
+    panel:
+      decor:
+      - {id: controller-panel, at: [0, 648.0], size: [52.0, 216.0], fill: '#18191b', kind: controller-panel}
+      - {id: display-window, at: [9.0, 656.0], size: [33.9, 42.2], fill: '#0b0b0c', kind: display}
+      - {id: nav-button-1, at: [9.3, 705.8], size: [8.4, 8.4], rx: 4.2, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+      - {id: nav-button-2, at: [34.3, 705.8], size: [8.4, 8.4], rx: 4.2, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+      - {id: nav-button-3, at: [9.3, 719.8], size: [8.4, 8.4], rx: 4.2, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+      - {id: nav-button-4, at: [34.3, 719.8], size: [8.4, 8.4], rx: 4.2, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+    silkscreen:
+      - {at: [26.0, 545.0], text: CIRCUIT 1, font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: chassis}
+      - {at: [26.0, 1409.0], text: CIRCUIT 2, font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: chassis}
+      - {at: [46.5, 57.0], text: '1', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-1}
+      - {at: [46.5, 81.0], text: '2', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-2}
+      - {at: [46.5, 105.0], text: '3', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-3}
+      - {at: [46.5, 137.0], text: '4', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-4}
+      - {at: [46.5, 161.0], text: '5', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-5}
+      - {at: [46.5, 185.0], text: '6', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-6}
+      - {at: [46.5, 217.0], text: '7', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-7}
+      - {at: [46.5, 241.0], text: '8', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-8}
+      - {at: [46.5, 265.0], text: '9', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-9}
+      - {at: [46.5, 297.0], text: '10', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-10}
+      - {at: [46.5, 321.0], text: '11', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-11}
+      - {at: [46.5, 345.0], text: '12', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-12}
+      - {at: [46.5, 377.0], text: '13', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-13}
+      - {at: [46.5, 401.0], text: '14', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-14}
+      - {at: [46.5, 425.0], text: '15', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-15}
+      - {at: [46.5, 457.0], text: '16', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-16}
+      - {at: [46.5, 481.0], text: '17', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-17}
+      - {at: [46.5, 505.0], text: '18', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-18}
+      - {at: [46.5, 922.0], text: '19', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-19}
+      - {at: [46.5, 946.0], text: '20', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-20}
+      - {at: [46.5, 970.0], text: '21', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-21}
+      - {at: [46.5, 1002.0], text: '22', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-22}
+      - {at: [46.5, 1026.0], text: '23', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-23}
+      - {at: [46.5, 1050.0], text: '24', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-24}
+      - {at: [46.5, 1082.0], text: '25', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-25}
+      - {at: [46.5, 1106.0], text: '26', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-26}
+      - {at: [46.5, 1130.0], text: '27', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-27}
+      - {at: [46.5, 1162.0], text: '28', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-28}
+      - {at: [46.5, 1186.0], text: '29', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-29}
+      - {at: [46.5, 1210.0], text: '30', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-30}
+      - {at: [46.5, 1242.0], text: '31', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-31}
+      - {at: [46.5, 1266.0], text: '32', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-32}
+      - {at: [46.5, 1290.0], text: '33', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-33}
+      - {at: [46.5, 1322.0], text: '34', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-34}
+      - {at: [46.5, 1346.0], text: '35', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-35}
+      - {at: [46.5, 1370.0], text: '36', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-36}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [10.8, 46.0], group: outlets, rel-pos: 1, through: breaker-1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [10.8, 70.0], group: outlets, rel-pos: 2, through: breaker-1, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [10.8, 94.0], group: outlets, rel-pos: 3, through: breaker-1, fed-by: input}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [10.8, 126.0], group: outlets, rel-pos: 4, through: breaker-1, fed-by: input}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [10.8, 150.0], group: outlets, rel-pos: 5, through: breaker-1, fed-by: input}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [10.8, 174.0], group: outlets, rel-pos: 6, through: breaker-1, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [10.8, 206.0], group: outlets, rel-pos: 7, through: breaker-1, fed-by: input}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [10.8, 230.0], group: outlets, rel-pos: 8, through: breaker-1, fed-by: input}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [10.8, 254.0], group: outlets, rel-pos: 9, through: breaker-1, fed-by: input}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [10.8, 286.0], group: outlets, rel-pos: 10, through: breaker-1, fed-by: input}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [10.8, 310.0], group: outlets, rel-pos: 11, through: breaker-1, fed-by: input}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [10.8, 334.0], group: outlets, rel-pos: 12, through: breaker-1, fed-by: input}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [10.8, 366.0], group: outlets, rel-pos: 13, through: breaker-1, fed-by: input}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [10.8, 390.0], group: outlets, rel-pos: 14, through: breaker-1, fed-by: input}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [10.8, 414.0], group: outlets, rel-pos: 15, through: breaker-1, fed-by: input}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [10.8, 446.0], group: outlets, rel-pos: 16, through: breaker-1, fed-by: input}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [10.8, 470.0], group: outlets, rel-pos: 17, through: breaker-1, fed-by: input}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [10.8, 494.0], group: outlets, rel-pos: 18, through: breaker-1, fed-by: input}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [10.8, 911.0], group: outlets, rel-pos: 19, through: breaker-2, fed-by: input}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [10.8, 935.0], group: outlets, rel-pos: 20, through: breaker-2, fed-by: input}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [10.8, 959.0], group: outlets, rel-pos: 21, through: breaker-2, fed-by: input}
+        - {id: outlet-22, ref: std/c13-outlet@1, at: [10.8, 991.0], group: outlets, rel-pos: 22, through: breaker-2, fed-by: input}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [10.8, 1015.0], group: outlets, rel-pos: 23, through: breaker-2, fed-by: input}
+        - {id: outlet-24, ref: std/c13-outlet@1, at: [10.8, 1039.0], group: outlets, rel-pos: 24, through: breaker-2, fed-by: input}
+        - {id: outlet-25, ref: std/c13-outlet@1, at: [10.8, 1071.0], group: outlets, rel-pos: 25, through: breaker-2, fed-by: input}
+        - {id: outlet-26, ref: std/c13-outlet@1, at: [10.8, 1095.0], group: outlets, rel-pos: 26, through: breaker-2, fed-by: input}
+        - {id: outlet-27, ref: std/c13-outlet@1, at: [10.8, 1119.0], group: outlets, rel-pos: 27, through: breaker-2, fed-by: input}
+        - {id: outlet-28, ref: std/c13-outlet@1, at: [10.8, 1151.0], group: outlets, rel-pos: 28, through: breaker-2, fed-by: input}
+        - {id: outlet-29, ref: std/c13-outlet@1, at: [10.8, 1175.0], group: outlets, rel-pos: 29, through: breaker-2, fed-by: input}
+        - {id: outlet-30, ref: std/c13-outlet@1, at: [10.8, 1199.0], group: outlets, rel-pos: 30, through: breaker-2, fed-by: input}
+        - {id: outlet-31, ref: std/c13-outlet@1, at: [10.8, 1231.0], group: outlets, rel-pos: 31, through: breaker-2, fed-by: input}
+        - {id: outlet-32, ref: std/c13-outlet@1, at: [10.8, 1255.0], group: outlets, rel-pos: 32, through: breaker-2, fed-by: input}
+        - {id: outlet-33, ref: std/c13-outlet@1, at: [10.8, 1279.0], group: outlets, rel-pos: 33, through: breaker-2, fed-by: input}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [10.8, 1311.0], group: outlets, rel-pos: 34, through: breaker-2, fed-by: input}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [10.8, 1335.0], group: outlets, rel-pos: 35, through: breaker-2, fed-by: input}
+        - {id: outlet-36, ref: std/c13-outlet@1, at: [10.8, 1359.0], group: outlets, rel-pos: 36, through: breaker-2, fed-by: input}
+        - {id: breaker-1, ref: raritan/px3-breaker@1, at: [19.0, 560.0], group: breakers, rel-pos: 1, description: 'Breaker 1 of 2: the circuit breaker of circuit 1, outlets 1 to 18'}
+        - {id: breaker-2, ref: raritan/px3-breaker@1, at: [19.0, 1425.0], group: breakers, rel-pos: 2, description: 'Breaker 2 of 2: the circuit breaker of circuit 2, outlets 19 to 36'}
+        - {id: input, ref: raritan/px3-cord-60309@1, at: [16.0, 1739.0], group: power-input, rel-pos: 1, description: 'the fixed 3 m input cord, ending in an IEC 60309 2P+E 6h 32 A plug; only its gland is drawn'}
+        - {id: eth-1, ref: common/rj45-eth@1, at: [6.0, 764.0], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Ethernet 1, the upper of two stacked jacks'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [6.0, 779.0], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Ethernet 2, the lower of two stacked jacks'}
+        - {id: console, ref: std/rj45@2, at: [30.2, 764.0], group: mgmt, rel-pos: 1, attrs: {role: console, media: rj45-serial}, description: console (the maker's pages name it console/modem)}
+        - {id: sensor, ref: std/rj45@2, at: [30.2, 779.0], group: mgmt, rel-pos: 2, attrs: {media: rj45-serial}, description: sensor port}
+        - {id: usb-1, ref: std/usb-a@1, at: [6.0, 802.0], group: mgmt, rel-pos: 3, description: 'USB port 1; type not published, drawn as USB-A'}
+        - {id: usb-2, ref: std/usb-a@1, at: [34.0, 802.0], group: mgmt, rel-pos: 4, description: 'USB port 2; type not published, drawn as USB-A'}
+  rear:
+    size: {w: 52, h: 1780}
+    components:
+      placements:
+        - {id: button-1, ref: raritan/px3-mounting-button@1, at: [18.65, 260.65], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: raritan/px3-mounting-button@1, at: [18.65, 1504.65], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 52, h: 55}
+    empty: >-
+      no source shows the top end: the maker's pages publish no feature on it, so nothing is drawn.
+  bottom:
+    size: {w: 52, h: 55}
+    empty: >-
+      no source shows the bottom end: the cord leaves by the front face near it, and nothing else on the end is
+      published.
+  left:
+    size: {w: 55, h: 1780}
+    empty: >-
+      no source shows the left long side; nothing on it is published.
+  right:
+    size: {w: 55, h: 1780}
+    empty: >-
+      no source shows the right long side; nothing on it is published.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-36'}
+- {physical: eth-1, name: Ethernet 1}
+- {physical: eth-2, name: Ethernet 2}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 3 m cord beyond its gland is not drawn.
+    part-numbers:
+      PX3-1045: {}
+datasheet:
+  title: 'Raritan PX3-1045 technical specification (rev 2025-06-25)'
+references:
+  - {title: 'Raritan mechanical drawing MPX3-1045, Rev 2A, June 13, 2017'}
+  - {title: 'Raritan PX3-1045 front photograph (9600 x 2000)'}
