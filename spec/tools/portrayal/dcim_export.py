@@ -770,6 +770,11 @@ PART_POWER = {
     # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
     # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
     "raritan/px3-cord-60309": "other",
+    # A RARITAN PX4'S KEYED LEGRAND UNIVERSAL INPUT CONNECTOR and a PX3-5469R'S FIXED CORD, which ends in an IEC 60309 2P+E 6h
+    # 32 A plug (the Raritan technical specifications). No power-port type of the two targets is held for either in this
+    # tree, so each is `other` and POWER_LABEL says which connector.
+    "raritan/px4-universal-input": "other",
+    "raritan/px3-rear-cord-60309": "other",
 }
 # THE CONNECTOR A `other` POWER PORT IS, for a reader who would otherwise see
 # "Other". Only the parts above that have no upstream type are listed; a test
@@ -800,6 +805,8 @@ POWER_LABEL = {
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
+    "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
 }
 
 
@@ -860,6 +867,8 @@ PART_OUTLET = {
     # A SERVER TECHNOLOGY HDOT Cx OUTLET, a hybrid of the C13 and C19 that takes a C14 or a
     # C20. Neither target names it, so it is `other` with its label, as the P40 above is.
     "servertech/hdot-cx-outlet": "other",
+    # A RARITAN PX4'S LOCKING Cx OUTLET, 16 A. Neither target names it, so it is `other` with its label.
+    "raritan/px4-cx-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -874,7 +883,7 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking"}
 
 # ...AND WHAT A SUPPLY SAYS WHEN IT DRAWS NO INLET.
 #
