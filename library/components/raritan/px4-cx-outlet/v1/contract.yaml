@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: px4-cx-outlet
+version: 1.0.0
+class: inlet
+profile: power
+unmated: no interface key is registered for the Raritan Cx outlet, so no plug part declares a mate for it (a key is a registry name and is named by the registry's owner)
+description: >-
+  The locking Cx outlet of a Raritan PX4 rack PDU, 16 A, drawn wider than a C13 outlet. A rounded recess with a
+  C13-style nose and three contacts.
+size: {w: 32.0, h: 24.0, d: 20}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {media: ac, rating-a: 16}
+provenance:
+  size: >-
+    estimated - NO SOURCE GIVES THE OUTLET'S SIZE. The mechanical drawing MPX4 (Rev 0C) draws it wider than a C13 and
+    prints only the pitch, 26.6. So 32.0 across is an estimate wider than the C13's 30.4, and 24.0 along is the pitch
+    less a 2.6 web, as the Server Technology HDOT Cx outline takes it. Depth 20 is borrowed from the C19.
+  identity: >-
+    datasheet - the technical specification lists (18) C13 locking 10 A and (18) Cx locking 16 A. The PX4 data sheet,
+    section HDOT CX OUTLETS, calls it the HDOT Cx outlet, a hybrid of IEC C13 and C19 that takes C20 and C14 cables.
+  interface: >-
+    NONE. A connector key is a registry name and is the registry owner's to give. The Server Technology PRO4X data
+    sheet uses the same name and the same words for its outlet, whose key is `servertech-hdot-cx`, but no document
+    says in so many words that the two are one connector, so this part presents no key and offers no mate.
+  rating: >-
+    datasheet - 16 A, as the specification prints for the Cx outlets. No other figure is stated.
+  shape: >-
+    estimated and borrowed - the recess, nose and slots are the HDOT Cx outline's simplified shape, stretched to the
+    estimated size. The retention clip beside each outlet is not drawn.
+  colour: >-
+    UNCHECKED ESTIMATE - no document states the colour. Near-black, as the PX4 renders on file show it; they were not
+    compared with these two models.
+elements:
+  recess: {at: [0, 0], size: [32.0, 24.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+skins: [default]
