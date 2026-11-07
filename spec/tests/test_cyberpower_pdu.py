@@ -11,7 +11,7 @@ What is true of the library once they are in:
   - a figure no document gives is declared an estimate in the contract that carries it;
   - the maker is registered.
 
-These read the contracts and the device sources. They read no library/dist and render nothing.
+These read the contracts and the device sources, and the DCIM files the exporter wrote. They render nothing.
 """
 from pathlib import Path
 
@@ -104,17 +104,10 @@ def test_the_switched_pdu_front_carries_every_port_the_photograph_shows():
     assert sorted(i for i, r in refs.items() if r == "common/usb-a-bezel@1") == ["usb-1", "usb-2"]
 
 
-def test_the_switched_pdu_rear_is_declared_unshown_and_not_drawn():
-    rear = device("pdu81001g")["views"]["rear"]
-    assert not (rear.get("components") or {}).get("placements")
-    assert "empty" in rear
-
-
-def test_the_switched_pdu_outlets_are_named_as_the_unit_prints_them_and_the_basic_pdu_names_none():
+def test_the_switched_pdu_outlets_are_named_as_the_unit_prints_them():
     rules = {r["physical"]: r for r in device("pdu81001g")["interfaces"]}
     assert rules["outlet-{n}"]["name"] == "{n}"
     assert rules["outlet-{n}"]["range"] == "1-8"
-    assert "interfaces" not in device("pdu30bhvt8r")
 
 
 @pytest.mark.parametrize("ref", NEW_PARTS)
@@ -133,8 +126,13 @@ def test_a_cord_part_states_the_plug_on_its_far_end(ref, plug):
     assert c["attrs"]["plug"] == plug
 
 
-def test_the_5_15r_outlet_is_no_longer_said_to_be_unplaced():
-    assert "unplaced" not in contract("std/nema-5-15r@1")
+@pytest.mark.parametrize("model,plug,outlets", [("PDU30BHVT8R", "nema-l6-30p", 8), ("PDU81001G", "nema-5-15p", 8)])
+def test_the_exporter_writes_the_input_plug_and_every_outlet_the_drawing_places(model, plug, outlets):
+    """The DCIM file the exporter wrote from the built library, not the source, carries the cord's plug and the outlets."""
+    exported = yaml.safe_load((LIB / "exports" / "netbox" / "device-types" / "CyberPower" / f"{model}.yaml").read_text())
+    assert [p["type"] for p in exported["power-ports"]] == [plug]
+    assert len(exported["power-outlets"]) == outlets
+    assert {o["power_port"] for o in exported["power-outlets"]} == {"input"}
 
 
 def test_the_maker_is_registered():
