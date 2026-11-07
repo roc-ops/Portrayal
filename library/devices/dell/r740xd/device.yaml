@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: r740xd
-version: 30.0.0
+version: 30.0.1
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R740xd
@@ -92,6 +92,13 @@ provenance:
       orderable PSUs from 495 W to 2600 W across AC, DC, HVDC and Mixed Mode, so there is no
       single chassis figure to record; the draw belongs to whichever PSU is fitted, and that is a
       rear-face question this draft does not reach.
+  power-feed:
+    note: >-
+      AC. Every configuration seats the default supply of both bays, dell/psu-1100w-ac-14g, and none
+      overrides a supply bay, so the builds are fed from AC. The Dell PowerEdge R740XD Information Update
+      tech sheet, Table 2, prints that supply as 100-240 V AC. The bays also accept the 1100 W DC supply,
+      -(48 V to -60 V) DC in the same table, and Dell sells HVDC mixed-mode supplies the library does not
+      model; no configuration seats either, so no configuration states `dc` or `hvdc`.
   idrac-direct-led:
     note: >-
       A SEPARATE, UNMARKED LAMP BELOW THE PORT - not the wrench above it. That distinction is the
@@ -175,6 +182,7 @@ chassis:
   color: '#2f3439'
   edge: '#1d2125'
   silk: '#c9ced3'
+  power: ac
 # THE FRONT AND THE REAR ARE NOT INDEPENDENT, and nothing in this file can say
 # so yet. Recorded as a gap rather than left for the next person to rediscover
 # from a bay number that does not add up.
