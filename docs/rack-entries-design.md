@@ -37,8 +37,8 @@ Counted on `main`:
   opened on its own shows that port free.
 - The ring and duct fill (`fill` in `kit/rack/route.js`) adds the area of each
   cable whose route passes the part, from the diameter of the cable's media
-  (`DIAMETERS`, and the `od_mm` of `spec/schemas/cable-types.yaml`), against
-  `FILL_LIMIT`. `capacityOver` counts cables against a part's stated capacity.
+  (`DIAMETERS`; `spec/schemas/cable-types.yaml` carries an `od_mm` per type),
+  against `FILL_LIMIT`. `capacityOver` counts cables against a part's stated capacity.
   A cable that is not in the rack file is not counted by either.
 
 The issue's "Done when" is four lines. The last section of this note says which
@@ -127,7 +127,9 @@ is made.
 
 **What `box` absent means depends on `kind`.**
 
-- `open`: the whole part of `outer`. For a roof, the plan of the envelope.
+- `open`: the whole part of `outer`. For a roof, the plan of the envelope. A
+  product that states no `outer` gives the exit no extent, so it states a `box`
+  or declares no `open` entry; the lint holds this.
 - `brush`, `knockout`, `cutout`: **not stated**. The entry exists, a route can
   end at it, and its size is a gap the product lists in `gaps` with the
   document wanted. Nothing is estimated.
@@ -301,7 +303,9 @@ the spelling.
   `outside`, has it. `portFree` reads both and `freePorts` therefore leaves it
   out. With the cable not passed in, the port reads free.
 - **A ring or duct counts** an outside cable whose in-rack route passes it,
-  once, by the cable's media diameter. Only the in-rack part is counted.
+  once, by the cable's media diameter. Only the in-rack part is counted. This
+  is `fill`; whether a part's stated-capacity count (`capacityOver`) also reads
+  `outside` is not settled here.
 - **`outside` absent is not `outside: []`.** An empty list is the caller saying
   that nothing is stored elsewhere. Absent says the caller has not looked.
 - **The rack file never stores them.** The kit reads `outside` and writes
