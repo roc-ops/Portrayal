@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: ez-sysfan
+version: 1.0.0
+class: fan
+behaviour: fills
+profile: networking
+description: >-
+  The system fan module on the rear of the Digi Connect EZ 16 and 32 (the "Sys Fan" lamp's fan).
+  A black module 54.7 x 41.8 with a round honeycomb grille and three thumbscrews.
+size: {w: 54.7, h: 41.8}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the Connect EZ 16 dimension model ("footprint" STEP file, EZ16-A000): the fan
+    housing is 58.1 wide, 41.8 high and 42 deep. It overlaps the first supply's 95.0 box by
+    3.4 mm, so the module is drawn 54.7 wide, up to the supply's edge, and its 42 depth is kept.
+  layout: >-
+    photo-measured - the Connect EZ 16/32 rear photograph: the grille centred in the module, and
+    three thumbscrews, one at the top left and two on the strip toward the supply (heads 10.76
+    across and 6.2 proud in the dimension model). The two on the strip stand 3.4 mm beyond this
+    module's edge in the dimension model and are drawn at its edge here.
+  role: >-
+    datasheet - the product page lists "Fan 1, Fan 2, Sys Fan" among its lamps. Which of the
+    three fans this module is, and whether it can be replaced in the field (the thumbscrews
+    suggest it, no document says so), is not stated.
+  airflow: >-
+    not stated - no document held says which way this fan moves air, so no airflow is written.
+  power: >-
+    not stated - no document held gives the fan's draw, so none is written and the whole-library
+    lint carries it as a part with no power figure.
+elements:
+  grille: {at: [8.6, 3.0], size: [37.4, 35.8], class: vent}
+  screw-top: {at: [0.0, 0.2], size: [9.0, 9.0], class: fastener}
+  screw-mid: {at: [45.7, 11.9], size: [9.0, 9.0], class: fastener}
+  screw-low: {at: [45.7, 32.6], size: [9.0, 9.0], class: fastener}
+relief:
+  wall: '#17191b'
+  features:
+    - node: grille
+      vent: 20.0
+      confidence: estimated
+      source: >-
+        digi/ez-sysfan@1 - the grille is an opening; how far back it runs before the rotor is not
+        stated.
+    - node: screw-top
+      cyl: 6.2
+      confidence: drawing
+      source: >-
+        digi/ez-sysfan@1 - the dimension model gives the head 10.76 across and 6.2 proud.
+    - node: screw-mid
+      cyl: 6.2
+      confidence: drawing
+      source: as screw-top
+    - node: screw-low
+      cyl: 6.2
+      confidence: drawing
+      source: as screw-top
+body:
+  depth: 42.0
+  color: '#1b1d20'
+skins: [default]
