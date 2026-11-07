@@ -326,7 +326,9 @@ options:
 - **Cable entries** (`brush`, `knockout`, `cutout`, `open`) are boxes in the
   roof, floor or a side, in the product's own frame of reference. They are
   pass-throughs in the sense of the cable managers note: nothing routes through
-  them in the first build, and a later route can end at one.
+  them in the first build, and a later route can end at one. The key's
+  places, an open frame's top and the cables passed in are proposed in
+  [rack-entries-design.md](rack-entries-design.md).
 - **`options`** are the sold variations that change a number (23 in rails, a
   rail depth with channels fitted). A rack file names the options it takes
   (section 9); a product with none states none.
