@@ -1,0 +1,257 @@
+format: 1
+kind: device
+name: lm80
+version: 0.1.0
+maturity: draft
+manufacturer: Lantronix
+model: LM80
+description: >-
+  Lantronix LM80 compact advanced serial console server, a small chassis with eight RJ45 serial ports. The front has two
+  10/100/1000 Ethernet ports, an RJ45 console port, one SFP port, a USB-A port, a USB-C port and two SMA antenna
+  connectors. It has no expansion bays. No held document shows its rear.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      Lantronix LM80 product brief (MPB-00157 Rev A), System Specifications, Dimensions and Weight: "43 mm (1.7 in.) x
+      254 mm (10 in.) x 163 mm (6.4 in.)", and one rack unit. The width and the straight photograph show a unit about half
+      the width of a rack, so the rack unit is the height class and the unit is not drawn as a rack part.
+  layout-source:
+    confidence: drawing
+    note: >-
+      Every position on the front is read off the maker's front illustration (2550 x 591 px). Its plate is 2377 px for 254
+      mm, which gives 9.36 px/mm across, and 407 px for 43 mm, which gives 9.46 px/mm down. The two agree within 1.1 per
+      cent, so the figure is orthographic. Positions are read to about 0.5 mm. The base ports stand at the same distances
+      from the left edge as on the LM83X, which is what the two illustrations show. The straight photograph agrees on the
+      order and the count of every part.
+  serial:
+    confidence: drawing
+    note: >-
+      LM80 product brief: "Supports up to 8 devices via serial (RS-232)". The illustration shows eight RJ45 jacks in two
+      rows of four numbered 1 to 4 over 5 to 8 under blue bars. The jack centres are 16.1 mm apart across and 10.6 mm apart
+      down. The ganged jack part is 11.0 mm high, so the rows are placed 11.0 mm apart, centred on the stack, 0.4 mm wider
+      than the figure. The upper row is turned 180 degrees because its latch notch and lamp tabs are at the top.
+  network:
+    confidence: datasheet
+    note: >-
+      LM80 product brief: "Two 10/100/1000 BaseT Ethernet interfaces (with failover support)", and "One 1-Gbps SFP
+      port", besides the console port. The illustration prints E1 and E2 on two stacked jacks and E3 on the SFP cage.
+  console:
+    confidence: datasheet
+    note: >-
+      LM80 product brief: "one RS-232 console port", "One USB-A port, one USB-C port". The jack printed CON is the console
+      jack, with the USB-A port and the USB-C port under it. The brief does not say what either USB port is for.
+  antenna:
+    confidence: drawing
+    note: >-
+      The illustration and the photographs show two SMA connectors printed AUX and MAIN on a rounded plate at the left
+      end. The option card brief, page 2, shows the same plate as the face of each 88-CAT4 cellular card, 50.3 mm wide
+      and 22.9 mm high, so the plate is the face of the option slot with a cellular card in it. It is drawn 22.5 mm high,
+      as the illustration reads. The face of a unit with
+      another card, or none, is not shown in any held document.
+  leds:
+    confidence: estimated
+    note: >-
+      The illustration prints four small lamps with a power mark, a link mark, a warning mark and a pulse mark. No
+      document says what any lamp shows. The round button is not named by any document and is not drawn as a part.
+  power:
+    confidence: datasheet
+    note: >-
+      LM80 product brief: "Internal universal power (100-240 VAC, 50/60 Hz); 30W". The brief does not say whether 30 W is
+      the draw or the rating, so it is filed as the maximum. No held document shows the inlet.
+  mount:
+    confidence: estimated
+    note: >-
+      The brief says the unit is "well-suited for deployments that have physical space limitations, or in non-racked
+      environments" and lists no ear or rack kit. The photographs show a plain front with no ear. The unit is stated as
+      a desktop device because no document shows a rack mount.
+attrs:
+  physical: {weight-kg: 1.2}
+  power:
+    input: ac
+    power-max-w: 30
+    power-input: internal universal supply, 100 to 240 VAC, 50/60 Hz
+  environmental:
+    operating-temp-c: 0 to 45
+    storage-temp-c: -30 to 60
+    humidity-pct: 20 to 80 non-condensing in operation
+  features:
+    optics-sfp: one 1-Gbps SFP port; no held document names an optic type or reach
+  platform:
+    storage: 256 GB NVMe, TCG Opal 2.0, 256-bit AES encryption
+  compliance:
+    emissions: FCC class A, CE, TUV
+    rohs: RoHS Compliant
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 254.0
+  height: 43.0
+  depth: 163.0
+  mount: desktop
+  color: '#a6adb3'
+gaps:
+- what: rear-panel
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph or a drawing of the rear of the LM80.
+  note: >-
+    No held document shows the rear, so the AC inlet, any vent and the label are not drawn.
+- what: option-slot
+  scope: [front]
+  reason: needs-drawing
+  wanted: a drawing of the option slot, and a registry key for what the slot takes.
+  note: >-
+    The LM80 has one option slot. The option card brief gives each option card a size and a small picture of its face.
+    The slot is the plate with the two SMA connectors at the left end. A bay for it needs an interface key that the
+    registry does not hold, so the option cards are not modelled.
+- what: indicator-led
+  scope: [front]
+  reason: vendor-silent
+  wanted: a table of what the four lamps and the round button show and do.
+  note: >-
+    No held LM80 document describes a lamp or a button. The lamps are drawn with no state.
+- what: mounting
+  scope: [front]
+  reason: vendor-silent
+  wanted: a statement of how the unit mounts, and of any rack kit.
+  note: >-
+    The brief calls the unit 1RU and says it suits non-racked sites. No held document shows an ear or a bracket.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and both flanks.
+  note: >-
+    The four faces draw the envelope only. The angled photograph shows a plain lid and one flank with a label, at a size
+    that gives no position.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: eight RJ45 RS-232 serial ports.
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two RJ45 10/100/1000 Ethernet ports E1 and E2.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 1-Gbps SFP port, printed E3.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 RS-232 console port.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: the USB-A port and the USB-C port stacked under the console jack, which the brief lists together
+    description: the USB-A port and the USB-C port.
+  antenna:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: coax-sma}
+    description: the two SMA connectors printed AUX and MAIN.
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+views:
+  front:
+    size: {w: 254.0, h: 43.0}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [254.0, 43.0], fill: '#2b2e33', kind: bezel}
+      - {id: option-plate, at: [1.6, 1.8], size: [50.3, 22.5], fill: '#25282c', kind: plate}
+      - {id: option-screw-1, at: [48.4, 3.7], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: option-screw-2, at: [3.0, 16.8], size: [2.8, 2.8], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: button, at: [11.55, 29.3], size: [4.6, 4.6], fill: '#4a4d52', shape: circle, kind: push-button}
+      - {id: bar-e1, at: [52.9, 5.9], size: [17.3, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e2, at: [52.9, 36.2], size: [17.3, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e3, at: [21.4, 36.2], size: [15.1, 0.5], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-con-top, at: [73.1, 2.6], size: [19.2, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-con-bottom, at: [73.1, 36.6], size: [19.2, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-top, at: [95.3, 7.6], size: [64.6, 0.5], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-bottom, at: [95.3, 36.6], size: [64.6, 0.5], fill: '#29a8e0', kind: legend-bar}
+    silkscreen:
+    - {at: [15.4, 16.4], text: AUX, font-size: 2.2, anchor: middle, fill: '#e8ecef', for: antenna-aux}
+    - {at: [40.9, 16.4], text: MAIN, font-size: 2.2, anchor: middle, fill: '#e8ecef', for: antenna-main}
+    - {at: [62.0, 4.3], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
+    - {at: [62.0, 41.0], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-2}
+    - {at: [29.1, 41.0], text: E3, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-3}
+    - {at: [82.9, 41.0], text: CON, font-size: 2.4, anchor: middle, fill: '#29a8e0', for: console}
+    - {at: [103.2, 5.3], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
+    - {at: [119.2, 5.3], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
+    - {at: [135.2, 5.3], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
+    - {at: [151.2, 5.3], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
+    - {at: [103.2, 41.0], text: '5', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-5}
+    - {at: [119.2, 41.0], text: '6', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-6}
+    - {at: [135.2, 41.0], text: '7', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-7}
+    - {at: [151.2, 41.0], text: '8', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-8}
+    - {at: [206.0, 23.0], text: LANTRONIX, font-size: 12.5, anchor: middle, fill: '#f0f2f4', for: chassis}
+    - {at: [206.2, 33.4], text: LM80, font-size: 5.0, anchor: middle, fill: '#f0f2f4', for: chassis}
+    components:
+      placements:
+      - {ref: common/sma-jack@1, id: antenna-aux, at: [10.65, 4.05], group: antenna, rel-pos: 1}
+      - {ref: common/sma-jack@1, id: antenna-main, at: [36.15, 4.05], group: antenna, rel-pos: 2}
+      - {ref: std/sfp@1, id: port-3, at: [21.85, 25.35], group: sfp, rel-pos: 1}
+      - {ref: common/rj45-ganged-eth@1, id: net-1, at: [55.65, 9.9], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g}}
+      - {ref: common/rj45-ganged-eth@1, id: net-2, at: [55.65, 24.1], group: network, rel-pos: 2, attrs: {speed: 1g}}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [76.55, 5.4], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: std/usb-a@1, id: usb-a, at: [76.9, 21.75], group: usb, rel-pos: 1}
+      - {ref: std/usb-c@1, id: usb-c, at: [78.73, 32.02], group: usb, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [96.85, 11.0], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [112.85, 11.0], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [128.85, 11.0], rotate: 180, group: serial, rel-pos: 3, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [144.85, 11.0], rotate: 180, group: serial, rel-pos: 4, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-5, at: [96.85, 22.0], group: serial, rel-pos: 5, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-6, at: [112.85, 22.0], group: serial, rel-pos: 6, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-7, at: [128.85, 22.0], group: serial, rel-pos: 7, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-8, at: [144.85, 22.0], group: serial, rel-pos: 8, attrs: {media: rj45-serial}}
+      - {ref: common/led-dot@1, id: led-power, at: [8.8, 33.7], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-link, at: [17.7, 33.7], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-alert, at: [38.6, 33.7], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/led-dot@1, id: led-pulse, at: [46.5, 33.7], for: chassis, group: status-leds, rel-pos: 4}
+  rear:
+    size: {w: 254.0, h: 43.0}
+    empty: >-
+      No held document shows the rear. The product brief gives the dimensions and the power supply and says nothing of the
+      rear panel. The two photographs show the front. The brief lists no inlet, vent or label.
+  top:
+    size: {w: 254.0, h: 163.0}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [254.0, 163.0], fill: '#a6adb3', kind: envelope}
+  bottom:
+    size: {w: 254.0, h: 163.0}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [254.0, 163.0], fill: '#a6adb3', kind: envelope}
+  left:
+    size: {w: 163.0, h: 43.0}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [163.0, 43.0], fill: '#a6adb3', kind: envelope}
+  right:
+    size: {w: 163.0, h: 43.0}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [163.0, 43.0], fill: '#a6adb3', kind: envelope}
+configurations:
+  ac:
+    kind: orderable
+    default: true
+    description: The unit with its internal AC supply.
+    part-numbers:
+      80-8S-NNN-NAA: {}
+references:
+- title: >-
+    LM80 Remote Environment Management product brief, MPB-00157 Rev A (2022)
+- title: >-
+    LM-Series Expansion Modules and Option Cards product brief (2023)
