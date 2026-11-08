@@ -27,6 +27,9 @@ MODULES = {
         "ms-mic-16g", "mic3-3d-10xge-sfpp", "mic3-3d-2x40ge-qsfpp", "mic3-3d-1x100ge-cfp",
         "mic3-3d-1x100ge-cxp", "mx-mic-blank"}),
 }
+# the dual-wide MICs each column also lists: they sit in mic0 only, which spans mic1
+DUAL_WIDE = {"juniper/mpc2e-3d-ng": {"mic-3d-40ge-tx"},
+             "juniper/mpc3e-3d-ng": {"mic-3d-40ge-tx", "mic3-100g-dwdm"}}
 # the base cards whose slots the NG cards share
 BASE = {"juniper/mpc2e-3d-ng": "juniper/mpc2e-3d@3", "juniper/mpc3e-3d-ng": "juniper/mpc3e-3d@3"}
 
@@ -67,7 +70,8 @@ def test_the_mic_bays_take_the_columns_mics(ref):
     doc = _contract(ref)
     assert sorted(doc["bays"]) == ["mic0", "mic1"], f"{ref}: the figure shows two MIC windows"
     for bay_id, bay in doc["bays"].items():
-        assert _names(bay["accepts"]) == mics, f"{ref} {bay_id}: not the MIC column of its compatibility table"
+        column = mics | DUAL_WIDE[ref] if bay_id == "mic0" else mics
+        assert _names(bay["accepts"]) == column, f"{ref} {bay_id}: not the MIC column of its compatibility table"
 
 
 @pytest.mark.parametrize("ref", MODULES)

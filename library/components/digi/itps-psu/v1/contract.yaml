@@ -1,0 +1,74 @@
+format: 1
+kind: module
+name: itps-psu
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The field-replaceable AC power supply module of the Digi Connect IT 16 and 48, as the rear
+  photograph shows it. It has a black 94 x 42 face with a round honeycomb fan grille and a portrait
+  IEC C14 inlet. A rating legend is printed beside the inlet and a blue thumbscrew stands at each
+  end. The supply comes in a kit of two, ITPS-PSEK (port-side exhaust) or ITPS-PSIK (port-side
+  intake). The photograph does not say which.
+size: {w: 94.0, h: 42.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {input: ac}
+provenance:
+  model: >-
+    datasheet - the Digi Connect IT 16/48 product page lists the "dual power supply kit" as a
+    mandatory accessory, each device requiring one kit, in two forms: ITPS-PSEK, port side exhaust,
+    and ITPS-PSIK, port side intake. This part is the module of either kit; no held document or
+    photograph tells the two apart, so one part draws both and states no part number.
+  input: >-
+    datasheet - the product page: "Redundant 100-240 V ~ 50-60 Hz 2.4 A max for each power supply",
+    and the rear photograph shows an inlet of the C14 shape. The page states no output power and no
+    consumption of a single supply, so this part states neither; the whole-library lint carries it
+    as a part with no power figure.
+  airflow: >-
+    not stated - the kits differ in airflow direction, and the photograph does not say which kit it
+    shows, so no airflow is written.
+  size: >-
+    photo-measured - the Connect IT 16/48 rear photograph (800 px wide, 1.65 px/mm across for the
+    444 mm width): each supply is 94 wide, from the thumbscrew on the box's outer edge to the one
+    on its inner edge; its height is the height of the rear. Good to about 2 mm.
+  depth: >-
+    estimated - no held document gives how far the module runs behind its face. 150 is a stand-in
+    for the 3D body, in a box 300 deep; the module's drawing or Digi's hardware guide would replace it.
+  layout: >-
+    photo-measured - read off the same photograph, as the mean of the two supplies: the fan centre
+    31.3 from the module's left edge, the inlet centre 67.5, the thumbscrews at 4.0 and 90.0 and 16.0
+    down. The two supplies differ by up to 4 mm in the fan and inlet positions relative to their
+    edges (the right-hand one stands nearer its left edge); one drawing serves both and is good to
+    about 4 mm. The rating legend beside the inlet reads "100-240V~/2.4A,50-60Hz".
+elements:
+  fan-grille: {at: [12.3, 2.0], size: [38.0, 38.0], class: vent}
+  thumbscrew-a: {at: [0.5, 12.5], size: [7.0, 7.0], class: fastener}
+  thumbscrew-b: {at: [86.5, 12.5], size: [7.0, 7.0], class: fastener}
+parts:
+  - {ref: std/c14-inlet@1, id: inlet, at: [53.5, 11.0], rotate: 90}
+relief:
+  wall: '#17191b'
+  features:
+    - node: fan-grille
+      vent: 20.0
+      confidence: estimated
+      source: >-
+        digi/itps-psu@1 - the grille is an opening in the face; how far back it runs before the
+        fan is not stated. Estimated.
+    - node: thumbscrew-a
+      cyl: 5.0
+      confidence: estimated
+      source: >-
+        digi/itps-psu@1 - the head's height is not stated; the rear photograph shows it standing
+        proud of the face. Estimated.
+    - node: thumbscrew-b
+      cyl: 5.0
+      confidence: estimated
+      source: as thumbscrew-a
+connection-points:
+  power: {at: [67.5, 21.0], direction: front}
+body:
+  depth: 150.0
+  color: '#1b1d20'
+skins: [default]

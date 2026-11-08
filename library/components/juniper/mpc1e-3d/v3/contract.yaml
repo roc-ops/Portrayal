@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc1e-3d
-version: 3.0.0
+version: 3.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -43,9 +43,8 @@ provenance:
     mic-3d-4choc3-1oc12 (row MIC-3D-4COC3-1COC12-CE; 12.2 under the queuing SKUs only);
     mic-3d-4choc3-2choc12 and mic-3d-8choc3-4choc12 (row MIC-3D-4CHOC3-2CHOC12, MIC-3D-8CHOC3-4CHOC12;
     11.4 under the queuing SKUs only); and mic-3d-10ge-sfp-e, which has NO ROW in Table 10 at all.
-    ADDED: none. In the column but not listed: MIC-3D-20GE-SFP-E and MIC-3D-8CHDS3-E3-B (not modelled
-    in this library) and MIC-3D-40GE-TX (11.2R4; dual-wide, so no single bay can take it -
-    roc-ops/Portrayal#34). MIC-3D-16CHE1-T1-CE is listed with the table's own note: 'Support for
+    ADDED: mic-3d-40ge-tx (row MIC-3D-40GE-TX, 11.2R4), dual-wide: it is in mic0's list only, and mic0 states `span: [mic1]`, so it seats across both windows. In the column but not listed: MIC-3D-20GE-SFP-E and MIC-3D-8CHDS3-E3-B (not modelled
+    in this library). MIC-3D-16CHE1-T1-CE is listed with the table's own note: 'Support for
     Non-Channelized MIC only'. The MPC1 column takes the same set, differing only in first release.
   numbering: 'guide - ports number within each PIC group with an n/ group legend, per the module reference
     port-numbering figures (g000930, g100786); the exact print positions are layout-derived'
@@ -81,6 +80,7 @@ bays:
   mic0:
     at: [37.7, 0.15]
     size: [168.8, 29.2]
+    span: [mic1]
     accepts:
     - juniper/mic-3d-20ge-sfp@2
     - juniper/mic-macsec-20ge@2
@@ -91,6 +91,7 @@ bays:
     - juniper/mic-3d-8ds3-e3@2
     - juniper/mic-3d-16che1-t1-ce@2
     - juniper/ms-mic-16g@2
+    - juniper/mic-3d-40ge-tx@2
     - juniper/mx-mic-blank@2
     default: juniper/mic-3d-20ge-sfp@2
   mic1:

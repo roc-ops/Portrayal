@@ -960,9 +960,12 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     the wedge and the plate it sits on disagree about where the panel is.
     Hand-written profiles are untouched - only a feature THIS BUILD expanded
     from a `facet` is shifted here, guarded by `raw_feat.get("facet")`.
-    Clamped at 0: an inset larger than the wedge's own proud extent must not
-    read as a negative depth - EXCEPT on a sunk facet (`lift < 0`), whose
-    heights are below the plate on purpose and pass through unclamped.
+    Never clamped at 0. A wedge whose root the inset takes behind the plate
+    keeps that negative root, as a sunk facet's does: clamped, the profile lost
+    the inset (its slope flattened) and the kit, which rebuilds the wedge from
+    the profile's lowest height, stood the proud edge up by the whole inset.
+    `kit/swap.js` `insetFeature` ports `_inset_feature` and not this: it moves
+    only `out` and `lift`, and a profile it does not see is untouched.
     """
     if not raw_feat.get("facet") or pre_out is None or feat is None or feat.get("out") is None:
         return feat
@@ -972,9 +975,7 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     pkey = "profile-y" if raw_feat["facet"]["facing"] in ("up", "down") else "profile"
     if feat.get(pkey):
         feat = dict(feat)
-        floor = None if (raw_feat.get("lift") or 0) < 0 else 0.0
-        feat[pkey] = [[x, round(o + shift, 4) if floor is None else max(floor, round(o + shift, 4))]
-                      for x, o in feat[pkey]]
+        feat[pkey] = [[x, round(o + shift, 4)] for x, o in feat[pkey]]
     return feat
 
 
@@ -2170,7 +2171,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -2318,7 +2326,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -4255,7 +4270,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")
+                                     "data-vent", "data-groove", "data-wall-depth")
                             or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
