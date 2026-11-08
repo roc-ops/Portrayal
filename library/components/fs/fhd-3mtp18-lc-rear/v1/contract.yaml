@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-3mtp18-lc-rear
-version: 1.1.0
+version: 1.2.0
 class: cassette
 description: >-
   The back of FS FHD-3MTP18LCDOS2A (SKU 105333) and its OM4 twin 105335: the
@@ -17,10 +17,18 @@ size-notes: >-
   this is a FACE, and the depth of the body it closes is the cassette's
   `body.depth`.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 3 MTP-12 adapters on the rear face, the trunk ends of the front adapters, passive
 parts:
-  - {id: mtp1, ref: common/mpo-flange-adapter@2, at: [3.3, 15.0]}
-  - {id: mtp2, ref: common/mpo-flange-adapter@2, at: [34.3, 15.0]}
-  - {id: mtp3, ref: common/mpo-flange-adapter@2, at: [65.3, 15.0]}
+  - {id: mtp1, group: adapters, ref: common/mpo-flange-adapter@2, at: [3.3, 15.0]}
+  - {id: mtp2, group: adapters, ref: common/mpo-flange-adapter@2, at: [34.3, 15.0]}
+  - {id: mtp3, group: adapters, ref: common/mpo-flange-adapter@2, at: [65.3, 15.0]}
 provenance:
   size: >-
     borrowed - see size-notes.
@@ -53,4 +61,12 @@ provenance:
     body on 105333.D.jpg, above the left bulkhead. The round warranty seal
     beside it is a sticker over the lid edge and is not drawn, as on every FHD
     back.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: rear connector, MTP adapters with
+    male ferrules) and page 12 (ordering table, which names a cassette by the MTP-12 adapters it
+    carries). This face holds three of them, as the contract draws. The datasheet prints the
+    connector and the polish and no data rate, and names no role for the adapters; the role
+    follows the job, a through connection a trunk cable is plugged into, so it is traffic, and
+    no speed is stated. The group's media is the adapters' own, fiber. The front face's LC
+    adapters take their own group.
 skins: [default]

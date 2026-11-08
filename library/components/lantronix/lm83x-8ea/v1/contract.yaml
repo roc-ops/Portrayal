@@ -1,0 +1,60 @@
+format: 1
+kind: module
+name: lm83x-8ea
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Lantronix 83X-8EA, the 8-port Ethernet expansion module of the LM83X console server. The face has eight RJ45
+  10/100/1000 jacks in two rows of four, numbered 1 to 4 over 5 to 8. It has two thumbscrews and the legend ETHERNET.
+  It seats in one of the three expansion bays of the LM83X.
+size: {w: 92.9, h: 43.2, d: 129.2}
+size-confidence: {w: datasheet, h: borrowed, d: datasheet}
+attrs:
+  model: 83X-8EA
+provenance:
+  size: >-
+    datasheet - Lantronix LM-Series Expansion Modules and Option Cards product brief, page 1, table "Expansion Modules
+    for LM83X": 83X-8EA, "129.2x92.9x43.7" mm, length x width x height, 142 g. The face takes the 43.2 mm height of the
+    bay, as for the 83X-8SA. The printed 43.7 is recorded in this note only; the contract states 43.2.
+  speed: >-
+    datasheet - LM83X product brief (MPB-00156 Rev B), System Specifications: "8-Port Ethernet card (10/100/1000
+    Mbps". The ports are stated at the highest rate, 1 Gbps.
+  power: >-
+    not published - neither brief gives a power draw for a module. The lint finding for a module with no draw stays and
+    is recorded in the baseline.
+  layout: >-
+    drawing - the front illustration of the LM83X (5993 x 675 px), read at 11.77 px/mm across and 11.88 px/mm down. The
+    module in the second bay of the illustration is this one. The jacks are 14.65 mm apart across (four, measured from
+    the dark openings) and the rows are 11.7 mm apart down (centres 16.85 and 28.55 mm below the top of the face).
+    Each jack is a cell of the 12.7 by 11.0 ganged jack part set on those centres. The cell is narrower than the
+    maker's frame, as for the 83X-8SA.
+  rows: >-
+    drawing - the upper row has its latch notch and lamp tabs at the top and the lower row at the bottom, so the upper
+    row is the part turned 180 degrees.
+  screws: >-
+    photo-measured - as for the 83X-8SA: the thumbscrews sit at the left and right edges at the height of the upper row.
+  printing: >-
+    drawing - numerals 1 to 8 and the two bars in yellow, ETHERNET and a network mark under the left screw. The bay
+    number printed beside the screw is not drawn, for the reason given on the 83X-8SA.
+  lamps: >-
+    drawing - the Ethernet jack part carries a link lamp and an activity lamp. The figure shows two tabs on each jack.
+    No document says what the module's lamps show, so none is claimed beyond off and on.
+groups:
+  ethernet:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: eight RJ45 10/100/1000 Ethernet ports numbered 1 to 8 as printed.
+parts:
+  - {ref: common/rj45-ganged-eth@1, id: p1, at: [17.4, 11.15], rotate: 180, group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p2, at: [32.05, 11.15], rotate: 180, group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p3, at: [46.65, 11.15], rotate: 180, group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p4, at: [61.35, 11.15], rotate: 180, group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p5, at: [17.4, 22.85], group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p6, at: [32.05, 22.85], group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p7, at: [46.65, 22.85], group: ethernet, attrs: {speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: p8, at: [61.35, 22.85], group: ethernet, attrs: {speed: 1g}}
+skins: [default]
