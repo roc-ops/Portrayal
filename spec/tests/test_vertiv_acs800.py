@@ -48,7 +48,7 @@ def test_the_device_is_the_one_model_the_data_sheet_orders():
     assert d["configurations"]["base"]["part-numbers"] == {"ACS804MEAC-400": {}}
 
 
-def test_the_chassis_is_the_data_sheets_size_and_stands_on_a_desk():
+def test_the_chassis_is_the_data_sheets_size_and_has_no_rack_units():
     c = _device()["chassis"]
     assert c["width"] == pytest.approx(8.374 * IN_TO_MM, abs=0.05)
     assert c["depth"] == pytest.approx(7.156 * IN_TO_MM, abs=0.05)
@@ -102,7 +102,7 @@ def test_the_new_parts_declare_what_no_document_gives():
         assert "STAND-IN" in text or "ESTIMATE" in text.upper(), ref
 
 
-def test_the_two_weights_and_sizes_the_guide_and_the_data_sheet_disagree_on_are_gaps():
+def test_the_two_weights_the_guide_and_the_data_sheet_give_are_a_gap_and_no_weight_is_stated():
     d = _device()
     gaps = {g["what"]: g for g in d["gaps"]}
     assert gaps["weight"]["reason"] == "sources-disagree"
