@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: g5-breaker-pair-20a
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The two branch breakers of a Panduit G5 intelligent PDU with a single-phase feed. They are 20 A single-pole
+  electromechanical switches and breakers stacked across one plate, held by four screws. Each is printed with
+  its number (B1 or B2) and "L-N". Fixed to the PDU, not a plug-in part.
+size: {w: 45.8, h: 80.7}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 1, breakers: 2}
+provenance:
+  method: >-
+    drawing - Panduit customer drawing P32E06M_DC rev 06A (12/16/2022) is a vector sheet, drawn to no stated
+    scale. Its scale was taken from its own 1750.0 overall dimension, which puts the body's 52 across at
+    52.3 on the rendered sheet, and every figure below was read off a rendering of the front view at 800 dpi
+    (4.21 px/mm), to about 0.5 mm. The drawing lies the PDU down, cord end left; this part is drawn as the PDU
+    stands, cord end down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - the plate on the front view of P32E06M_DC is 80.7 along the PDU by 45.8 across, with rounded
+    corners of about 2.5. Each breaker has a window 32.5 along by 16.6 (B1) or 17.1 (B2) across and a screw
+    either side of it along the PDU.
+  rating: >-
+    drawing - P32E06M_DC note 1 reads "(2) 20AMP, SINGLE-POLE" and the front view's callout "20 AMP,
+    SINGLE-POLE ELECTRO MECHANICAL SWITCH / BREAKER(2) PLACES".
+  printing: >-
+    drawing - the plate prints "B1" and "B2", each with "L-N" beneath it, which fits the drawing's note
+    "PDU TO BE WIRED LINE TO NEUTRAL". The rocker's ON and OFF printing is under 1.5 mm and is not drawn.
+  colour: >-
+    NOT CHECKED - no photograph of the plate is held, so the plate colour is a dark neutral chosen to read
+    against the face and is not read from a source.
+  relief: >-
+    not built - no view of P32E06M_DC gives the plate's height off the face.
+elements:
+  rocker-1: {at: [3.6, 36.8], size: [16.6, 32.5], class: breaker, states: ['on', 'off']}
+  rocker-2: {at: [24.9, 36.8], size: [17.1, 32.5], class: breaker, states: ['on', 'off']}
+skins: [default]
