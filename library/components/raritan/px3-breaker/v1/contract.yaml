@@ -1,0 +1,27 @@
+format: 1
+kind: component
+name: px3-breaker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  A circuit breaker of a Raritan PX3 rack PDU: a small rocker with a lamp beside it, one for each of the two circuits.
+  Fixed to the PDU, not a plug-in part.
+size: {w: 14.0, h: 20.0}
+size-confidence: {w: estimated, h: photo-measured}
+provenance:
+  size: >-
+    photo-measured and estimated - the PX3-1045 front photograph shows the breaker from about 560 to 580 mm along the
+    strip, so 20.0 along is read off the photograph to about 5 mm. NOTHING STATES THE ACROSS: 14.0 is an estimate,
+    chosen to sit inside the 52 mm strip beside the outlet column.
+  identity: >-
+    datasheet and photograph - the selector table gives one breaker for each circuit, and the photograph labels
+    CIRCUIT 1 and CIRCUIT 2 beside a small rocker with a lamp.
+  rating: >-
+    NO CURRENT RATING, pole count or trip curve is held for this model, so none is stated.
+  not-drawn: >-
+    the rocker's travel and the lamp's colour are not published; only the rocker's outline and a lamp window are
+    drawn.
+elements:
+  rocker: {at: [0, 0], size: [14.0, 20.0], class: breaker, states: ['on', 'off']}
+skins: [default]

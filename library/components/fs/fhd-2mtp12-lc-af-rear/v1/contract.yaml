@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-2mtp12-lc-af-rear
-version: 1.1.0
+version: 1.2.0
 class: cassette
 description: >-
   The back of FS FHD-2MTP12LCDOS2AF (SKU 68540): two MTP-12 trunk bulkheads -
@@ -25,9 +25,17 @@ size-notes: >-
   cassette's edge in 3D. The depth of the body this face closes belongs to the
   cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 2 MTP-12 adapters on the rear face, the trunk ends of the front adapters, passive
 parts:
-  - {id: mtp1, ref: common/mpo-flange-adapter@2, at: [3.3, 14.3]}
-  - {id: mtp2, ref: common/mpo-flange-adapter@2, at: [64.6, 14.3]}
+  - {id: mtp1, group: adapters, ref: common/mpo-flange-adapter@2, at: [3.3, 14.3]}
+  - {id: mtp2, group: adapters, ref: common/mpo-flange-adapter@2, at: [64.6, 14.3]}
 provenance:
   size: >-
     borrowed - see size-notes.
@@ -48,4 +56,12 @@ provenance:
     The `MALE`/`SEALED` warranty seal between the two legends is a sticker over
     the lid join rather than printing on this face, and is not drawn - the same
     treatment the single-MTP backs give it.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: rear connector, MTP adapters with
+    male ferrules) and page 12 (ordering table, which names a cassette by the MTP-12 adapters it
+    carries). This face holds two of them, as the contract draws. The datasheet prints the
+    connector and the polish and no data rate, and names no role for the adapters; the role
+    follows the job, a through connection a trunk cable is plugged into, so it is traffic, and
+    no speed is stated. The group's media is the adapters' own, fiber. The front face's LC
+    adapters take their own group.
 skins: [default]

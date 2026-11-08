@@ -35,6 +35,14 @@ MEASURED AGAINST THE LIBRARY BEFORE IT WAS WRITTEN: the bank/rows/pitch/gang/
 gutter model reproduces 39 of 56 existing port blocks to the 0.01mm the files
 carry, and 48 of 56 to within 0.11mm - the residue being independent rounding in
 hand-authored numbers rather than disagreement about the shape.
+
+`spec/tools/dev/layout_fit.py` re-measures this: before any device was converted,
+8 of the 180 longhand devices with a repeated block fit as the generator stands,
+and 4 of those 8 are now authored as layouts (a coordinate written as a whole
+number comes out as a float, which changes the compiled source, and one device's
+column positions are rounded by no single pitch). The blocks it cannot write fail
+mostly on the keys a placement carries, numbering, gaps, rows, `rel-pos` and
+file order; the tool prints the table.
 """
 import argparse
 import copy

@@ -117,6 +117,11 @@ def test_tilt_frame():
     s = o["sunk"]
     assert s["opticBase"] == pytest.approx(-6.73, abs=1e-3)
     assert s["opticFromFacet"] == pytest.approx(s["cageFromFacet"], abs=1e-3) == 3
+    # and both stand on the wedge as it sits in the well: its root on the
+    # floor (-6.73), the cage's anchor 5 mm up the slope, not 6.73 higher
+    assert s["facetLift"] == pytest.approx(-6.73, abs=1e-3)
+    assert s["cageZ0"] == pytest.approx(-6.73 + 5 * math.tan(math.radians(30)), abs=1e-3)
+    assert s["opticZ0"] == pytest.approx(-6.73 + 6 * math.tan(math.radians(30)), abs=1e-3)
     assert t["r90Facing"] == "right"
     assert t["noFacet"] is None
 

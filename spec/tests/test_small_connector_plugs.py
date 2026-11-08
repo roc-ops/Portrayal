@@ -304,9 +304,10 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
 @pytest.mark.heavy
 def test_the_census_of_placed_jacks_on_device_views():
     """The device side, walked off every view: the only one of the three a
-    chassis places is the RJ11 jack, three times on two devices: the two
-    telephone jacks of the HLX-TGV, both turned 180, and the SLC 8000's
-    modem jack, not turned. A part that
+    chassis places is the RJ11 jack, six times on five devices: the two
+    telephone jacks of the HLX-TGV, both turned 180, the SLC 8000's
+    modem jack, not turned, and the phone jack of each of three WTI console
+    servers, not turned. A part that
     states one of the three media and is none of the jacks is a plug or a
     card that composes one."""
     placed = {r: [] for r in JACK_IFACE}
@@ -319,7 +320,10 @@ def test_the_census_of_placed_jacks_on_device_views():
                                              p.get("rotate")))
     assert placed["common/rj11-jack@1"] == [("halny/hlx-tgv", "tel-2", 180),
                                             ("halny/hlx-tgv", "tel-1", 180),
-                                            ("lantronix/slc-8000", "modem", None)]
+                                            ("lantronix/slc-8000", "modem", None),
+                                            ("wti/cpm-1600-1", "phone", None),
+                                            ("wti/cpm-800-1", "phone", None),
+                                            ("wti/dsm-8", "phone", None)]
     assert placed["std/mrj21@1"] == [] and placed["common/vhdci-receptacle@1"] == []
     media = {_contract(j)["attrs"]["media"] for j in JACK_IFACE}
     assert media == {"mrj21", "vhdci", "rj11"}

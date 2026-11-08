@@ -28,13 +28,13 @@ FAN_V3 = "cisco/asr-9922-fan-v3@1"
 
 # chassis -> (line-card bays that take the 16-port, line-card bays that take the 32-port, all bays, version)
 CHASSIS = {
-    "9006": (4, 0, 11, "3.3.5"),
-    "9010": (8, 0, 18, "2.0.3"),
-    "9904": (2, 2, 8, "3.3.5"),
-    "9906": (4, 4, 13, "2.0.5"),  # 6 slots + 3 AC and 4 DC power-module bays; 2.0.0 with the V3 power modules
-    "9910": (8, 8, 24, "2.0.5"),   # 10 slots + 6 AC and 8 DC power-module bays
-    "9912": (10, 10, 31, "2.3.5"),  # 2.2.0 here, then 2.3.0 with the A99-SFC2 (fabric boards change)
-    "9922": (20, 20, 49, "2.3.5"),
+    "9006": (4, 0, 11, "3.5.1"),
+    "9010": (8, 0, 18, "2.0.5"),
+    "9904": (2, 2, 8, "3.4.1"),
+    "9906": (4, 4, 13, "2.0.6"),  # 6 slots + 3 AC and 4 DC power-module bays; 2.0.0 with the V3 power modules
+    "9910": (8, 8, 24, "2.1.1"),   # 10 slots + 6 AC and 8 DC power-module bays
+    "9912": (10, 10, 31, "2.4.1"),  # 2.2.0 here, then 2.3.0 with the A99-SFC2 (fabric boards change)
+    "9922": (20, 20, 49, "2.4.1"),
 }
 CARDS = {"a9k-16x100ge-se": (SE16, TR16, "1.2.0"), "a99-32x100ge-se": (SE32, TR32, "1.3.0")}
 
