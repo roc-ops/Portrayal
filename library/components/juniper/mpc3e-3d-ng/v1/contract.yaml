@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc3e-3d-ng
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -40,10 +40,13 @@ provenance:
     MS-MIC-16G (all '14.1R4, 14.2R3 with Junos Continuity 15.1'), MIC-3D-10GE-SFP-E (24.2), MIC-MACSEC-20GE
     (18.3R1), and MIC-3D-4CHOC3-2CHOC12, MIC-3D-8CHOC3-4CHOC12 and MIC-3D-16CHE1-T1-CE ('15.1 with flexible
     queuing option', which the bays cannot express). Under that column MIC-3D-4COC3-1COC12-CE is an en dash, so it
-    is not listed. In the column but not listed: MIC-3D-40GE-TX and MIC3-100G-DWDM (each dual-wide, so no single
-    bay can take it) and MIC-3D-8CHDS3-E3-B (a variant of the listed mic-3d-8ds3-e3). The table's notes hold for
-    the MS-MIC-16G: only one per MPC, and beside MIC3-3D-2X40GE-QSFPP, MIC3-3D-10XGE-SFPP or MIC3-3D-1X100GE-CFP
-    the pair does not meet NEBS on the MPC3E.
+    is not listed. MIC-3D-40GE-TX (PDF p. 66, printed p. 57; '14.1R4, 14.2R3 with Junos Continuity 15.1') and
+    MIC3-100G-DWDM (PDF p. 64, printed p. 55; '15.1F5 15.1F6 17.1R1') both print a release in that column. The
+    module reference calls MIC3-100G-DWDM a 'Dual-wide MIC that installs into two MIC slots' (PDF p. 323, printed
+    p. 314) and MIC-3D-40GE-TX a 'Dual-wide MIC that installs into 2 slots' (PDF p. 363, printed p. 354), so both are
+    in mic0's list only, and mic0 states `span: [mic1]`. In the column but not listed: MIC-3D-8CHDS3-E3-B (a variant
+    of the listed mic-3d-8ds3-e3). The table's notes hold for the MS-MIC-16G: only one per MPC, and beside
+    MIC3-3D-2X40GE-QSFPP, MIC3-3D-10XGE-SFPP or MIC3-3D-1X100GE-CFP the pair does not meet NEBS on the MPC3E.
   numbering: >-
     guide - the reference prints small numerals beside every cage, numbered within each PIC segment with a group
     legend, never flat across the card. The MICs seated in this carrier's two bays draw those numerals; the carrier
@@ -74,6 +77,7 @@ bays:
   mic0:
     at: [37.7, 0.15]
     size: [168.8, 29.2]
+    span: [mic1]
     accepts:
     - juniper/mic-3d-20ge-sfp@2
     - juniper/mic-macsec-20ge@2
@@ -93,6 +97,8 @@ bays:
     - juniper/mic3-3d-2x40ge-qsfpp@2
     - juniper/mic3-3d-1x100ge-cfp@2
     - juniper/mic3-3d-1x100ge-cxp@2
+    - juniper/mic-3d-40ge-tx@2
+    - juniper/mic3-100g-dwdm@2
     - juniper/mx-mic-blank@2
     default: juniper/mic3-3d-10xge-sfpp@2
   mic1:

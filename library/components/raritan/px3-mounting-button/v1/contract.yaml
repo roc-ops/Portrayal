@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: px3-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  A mounting button on the back of a Raritan PX3 zero-U strip: a flat screw head that hooks into a keyhole in the rack
+  frame.
+size: {w: 14.7, h: 14.7}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the mechanical drawing MPX3-1045 (Rev 2A) calls the button an M5 x 10 flat screw with a head of 14.7 mm.
+    The part is that head. Its flange, shoulder and height off the back are not published, so none is drawn.
+  how-it-mounts: >-
+    drawing - two buttons 1244.0 mm apart, mounting kit RACK-KIT-PX2-1K-ZU (technical specification).
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot in a bracket or a cabinet channel
+    presents. The button seats at its `mate`, the centre of its head.
+elements:
+  head: {at: [0, 0], size: [14.7, 14.7], class: mount}
+connection-points:
+  mate: {at: [7.35, 7.35], direction: front}
+skins: [default]
