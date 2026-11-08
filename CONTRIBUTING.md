@@ -523,6 +523,27 @@ project accepts contributions under the
 sign-off is your statement that you may submit the work under Apache-2.0. There
 is no CLA.
 
+## Lists many changes add to
+
+A new maker, a new connector key or a part the exporter must name is one entry
+in a list every such change edits: `spec/schemas/vendors.yaml`,
+`spec/schemas/connectors.yaml` and the tables in
+`spec/tools/portrayal/dcim_registers.py` (`NOT_A_DCIM_PORT`,
+`MGMT_NOT_A_DCIM_PORT`, `PART_OUTLET`, `OUTLET_LABEL`, `POWER_LABEL`).
+[`.gitattributes`](.gitattributes) marks those three files `merge=union`, so
+two pull requests that each add an entry at the same place both keep theirs and
+need no merge of main.
+
+- Add the entry and change nothing around it: an edit to an existing entry that
+  another pull request also touches is still an ordinary conflict, and a union
+  merge of two edits of one entry leaves a duplicate that
+  `spec/tests/test_shared_lists_merge.py` fails on.
+- Put logic in `dcim_export.py`. `dcim_registers.py` holds `NAME = <literal>`
+  tables only, because a union merge of two edits of one function would glue
+  them together without a conflict.
+- Write an entry once. A key written twice in any of the three files fails the
+  same test.
+
 ## What will not be merged
 
 - Vendor material in any form, including a figure "just for reference".
