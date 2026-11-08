@@ -1,0 +1,109 @@
+---
+manufacturer: WTI
+model: CPM-800-1
+slug: wti-cpm-800-1
+u_height: 1.0
+is_full_depth: true
+description: WTI CPM-800-1 console server and switched PDU hybrid, 1U
+front_image: true
+rear_image: true
+console-ports:
+  - name: Console (mini-USB)
+    type: usb-mini-b
+console-server-ports:
+  - name: serial-1
+    type: rj-45
+  - name: serial-2
+    type: rj-45
+  - name: serial-3
+    type: rj-45
+  - name: serial-4
+    type: rj-45
+  - name: serial-5
+    type: rj-45
+  - name: serial-6
+    type: rj-45
+  - name: serial-7
+    type: rj-45
+  - name: serial-8
+    type: rj-45
+interfaces:
+  - name: eth-0
+    type: 1000base-t
+    mgmt_only: true
+  - name: eth-1
+    type: 1000base-t
+    mgmt_only: true
+power-ports:
+  - name: inlet-1
+    type: iec-60320-c20
+    description: 20 A input
+  - name: inlet-2
+    type: iec-60320-c20
+    description: 20 A input
+power-outlets:
+  - name: outlet-1
+    type: nema-5-15r
+    power_port: inlet-1
+  - name: outlet-2
+    type: nema-5-15r
+    power_port: inlet-1
+  - name: outlet-3
+    type: nema-5-15r
+    power_port: inlet-1
+  - name: outlet-4
+    type: nema-5-15r
+    power_port: inlet-1
+  - name: outlet-5
+    type: nema-5-15r
+    power_port: inlet-2
+  - name: outlet-6
+    type: nema-5-15r
+    power_port: inlet-2
+  - name: outlet-7
+    type: nema-5-15r
+    power_port: inlet-2
+  - name: outlet-8
+    type: nema-5-15r
+    power_port: inlet-2
+comments: 'WTI CPM-800-1 console server and switched PDU hybrid, 1U. The front is the console server.
+  It has eight RJ45 serial ports, two Ethernet jacks, a phone jack and a USB set-up port. It also has
+  two antenna mounts, RESET and DEFAULT buttons and lamps. The rear is the PDU. It has two IEC C20 inlets,
+  each feeding four of the eight NEMA 5-15R outlets, A1 to A8.
+
+
+  Configuration `base`: The unit as the dimensional drawing shows it. The rack brackets are in the box
+  (data sheet). The 4G LTE modem needs an additional W4G part number (data sheet) and is not modelled.
+
+
+  Rack mounting positions: flush ("1U rack bracket as shipped"; as shipped).
+
+
+  Input rating: 20 A input.
+
+
+  Facts carried in the model that this schema has no field for:
+
+  - environmental.operating-humidity: 10 - 90% RH (data sheet)
+
+  - environmental.operating-temp: 0 to 60 C (data sheet)
+
+  - features.serial-pinout: standard or straight pinned serial ports, by part number (hardware guide)
+
+  - physical.construction: metal
+
+  - power.input-current-a: 20
+
+  - power.input-feeds: two inlets, one per bank of four outlets
+
+  - power.input-plug: iec-60320-c20
+
+  - power.input-voltage: 100 to 120 VAC, 50/60 Hz
+
+  - power.power-distribution: 3.2/3.8 kW (80% derated, data sheet)
+
+
+  Drawing version 0.1.0. A major bump means a slot moved or an id was renamed, so anything cached from
+  an earlier export may no longer line up.
+
+  Model maturity: modelled. Every dimension in the source records where it came from.'

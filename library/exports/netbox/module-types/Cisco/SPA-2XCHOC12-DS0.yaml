@@ -11,7 +11,8 @@ interfaces:
 comments: 'Cisco 2-Port Channelized OC-12/DS0 SPA, a double-height shared port adapter for the ASR 9000
   SIP-700. The 2-port channelized OC-12/DS0 SPA takes a small form-factor pluggable (SFP) optical transceiver
   in each port for SONET single-mode and multimode fiber connections. Qualified optics: SFP-OC12-MM, -SR,
-  -IR1, -LR1, -LR2. Seats in a SIP-700 SPA subslot; it is a module, not a device.
+  -IR1, -LR1, -LR2. Seats across two SIP-700 SPA subslots side by side. The left one of a row carries
+  it; it is a module, not a device.
 
 
   Facts carried in the model that this schema has no field for:
@@ -34,4 +35,6 @@ comments: 'Cisco 2-Port Channelized OC-12/DS0 SPA, a double-height shared port a
 
   - role: shared-port-adapter
 
-  Contract version 1.2.0 (cisco/spa-2xchoc12-ds0).'
+  - slot-width: 2 (seated, it also covers the bay beside its own, which stays empty)
+
+  Contract version 1.3.0 (cisco/spa-2xchoc12-ds0).'

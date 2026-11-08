@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: as5912-54x
-version: 3.0.9
+version: 3.1.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5912-54X
@@ -136,7 +136,8 @@ gaps:
     `provenance.chassis` says, and rules out the 438.4 x 43.5 of the AS7726 and
     AS7326 line on purpose. The QSG's 609 mm depth was never recorded until
     now, so a reader holding the QSG could not tell that the choice was made
-    with it in view.
+    with it in view. The guide was read again when the DC supply was added: page 3
+    prints the same 438.4 x 609 x 43.25 mm, so the gap is still true.
   wanted: >-
     a measured depth, rail to rear, off a real unit - a tape measure settles it, as
     edgecore/as7946-30xb settled its own 480-versus-524 depth by measuring hardware.
@@ -511,14 +512,14 @@ views:
       - {at: [365.9, 9.6], text: '1', font-size: 4.4, for: fan-1}
     components:
       bays:
-        - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 2, default: common/psu-ac-650@3}
+        - {id: psu-2, at: [10, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/as5912-54x-psu-dc@1], group: psus, rel-pos: 2, default: common/psu-ac-650@3}
         - {id: fan-6, at: [72, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 6, default: common/fan-module@1}
         - {id: fan-5, at: [120.6, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 5, default: common/fan-module@1}
         - {id: fan-4, at: [169.2, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 4, default: common/fan-module@1}
         - {id: fan-3, at: [217.8, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 3, default: common/fan-module@1}
         - {id: fan-2, at: [266.4, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 2, default: common/fan-module@1}
         - {id: fan-1, at: [315, 2], size: {w: 48.6, h: 40}, accepts: [common/fan-module@1], group: fans, rel-pos: 1, default: common/fan-module@1}
-        - {id: psu-1, at: [368, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
+        - {id: psu-1, at: [368, 2], size: {w: 54, h: 40}, accepts: [common/psu-ac-650@3, common/psu-dc-650@2, edgecore/as5912-54x-psu-dc@1], group: psus, rel-pos: 1, default: common/psu-ac-650@3}
       placements:
         - {ref: common/rack-ear@1, id: rear-ear-left, at: [-14, 0], skin: left, optional: ears, group: furniture, rel-pos: 4}
         - {ref: common/rack-ear@1, id: rear-ear-right, at: [440, 0], skin: right, optional: ears, group: furniture, rel-pos: 5}
@@ -623,8 +624,8 @@ configurations:
     airflow: front-to-back
     description: Dual -48V DC PSUs, front-to-back airflow (5912-54X-O-48V-F)
     bays:
-      psu-1: common/psu-dc-650@2
-      psu-2: common/psu-dc-650@2
+      psu-1: edgecore/as5912-54x-psu-dc@1
+      psu-2: edgecore/as5912-54x-psu-dc@1
   dc-b2f:
     kind: orderable
     power: dc
@@ -634,13 +635,13 @@ configurations:
     description: Dual -48V DC PSUs, back-to-front airflow (5912-54X-O-48V-B)
     component-attrs:
       fan-module: {airflow-legend: B2F, handle-finish: '#3d7bd6', airflow: back-to-front}
-      psu-dc-650: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', cover-edge: '#2a5aa8', airflow: back-to-front}
+      as5912-54x-psu-dc: {latch-finish: '#3d7bd6', latch-edge: '#234b8c', airflow: back-to-front}
     region-context:
       intake: Exhaust
       exhaust: Intake
     bays:
-      psu-1: common/psu-dc-650@2
-      psu-2: common/psu-dc-650@2
+      psu-1: edgecore/as5912-54x-psu-dc@1
+      psu-2: edgecore/as5912-54x-psu-dc@1
 datasheet:
   title: Edgecore AGR100 (AS5912-54X) Data Sheet R20 2024-06-27
   url: https://www.edge-core.com/product/agr100/

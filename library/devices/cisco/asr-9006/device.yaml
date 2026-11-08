@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9006
-version: 3.3.5
+version: 3.5.1
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9006
@@ -18,6 +18,17 @@ description: >-
   component drops into, not a traced faceplate.
 profile: networking
 provenance:
+  sip-700-seating:
+    confidence: datasheet
+    note: >-
+      datasheet - the line card slots take cisco/a9k-sip-700@2 (A9K-SIP-700) and
+      cisco/a9k-sip-700-8g@2 (A9K-SIP-700-8G). Cisco ASR 9000 Series SIP and SPA Hardware Installation
+      Guide, Supported Platforms: "supported on all Cisco ASR 9000 Series Routers"; the Cisco ASR 9000
+      SIP-700 data sheet (c78-573452), Chassis compatibility: "All Cisco ASR 9000 Series chassis". The
+      ASR 9000 Series Overview and Reference Guide excepts the ASR 9906 in a note, so that chassis does not
+      name them. The guide's installing section says a SIP slides into any available line card slot, so
+      every line card slot here names both and no RSP, fabric, fan or power bay does. Each slot is the
+      41.4 x 395.7 mm envelope the SIP is drawn in.
   chassis:
     confidence: datasheet
     note: >-
@@ -327,7 +338,8 @@ provenance:
       out looks like. Its position on the right face is read from Figure 207 as fractions - rear
       end of the side, spanning the card cage height band - and anchored to the depth and cage
       extents known from elsewhere. That is the least certain geometry in this manifest and is
-      flagged in gaps
+      flagged in gaps. The part is ASR-9006-FILTER, from the thermal infrastructure table of the
+      ASR 9000 data sheet c78-501767 (p7), and the bay takes it
   grounding:
     confidence: datasheet
     note: >-
@@ -509,15 +521,11 @@ provenance:
       roc-ops/Portrayal#262 is gone
   openings-without-occupants:
     note: >-
-      the two fan trays, the four power modules and the air filter are drawn as CUTOUTS rather
-      than bays, and the distinction is deliberate. A bay must name a component that fits it, and
-      a9k-slot-cover is a LINE CARD AND RSP blank - its own description says so - so a 41.4 x
-      395.7 filler plate does not cover a 175.65 x 70.97 fan tray opening or a 103.22 x 46.34
-      power module one. Pointing them at it would have linted clean at the cost of seven false
-      compatibility claims. Drawing them as cutouts keeps every measurement in the file and the
-      metal correct, and states nothing about what goes in them. They become bays when the ASR
-      9006 fan tray and the version 2 AC and DC power modules exist in library/components/cisco/ -
-      the geometry is already here and the change is mechanical
+      the two fan trays, the three power modules and the air filter are all bays now, each
+      naming the part it takes. They were cutouts until a part existed to name, because a bay
+      must name a component that fits it and a9k-slot-cover is a line card and RSP blank. The
+      filter is the last: it takes cisco/asr-9006-filter@1, and its opening keeps the size this
+      file already drew
   callout-audit:
     note: >-
       the guide's own overview figure was walked callout by callout, which is the check that
@@ -697,19 +705,6 @@ gaps:
     presence, its side, its access direction and the fact that it is user-replaceable are all
     stated in words by the guide and are not in doubt.
   wanted: a dimensioned side elevation of the ASR 9006, or the air filter's own spare-part drawing
-- what: openings-awaiting-components
-  scope: [right]
-  reason: needs-drawing
-  note: >-
-    ONE OPENING IS LEFT, AND THIS NOTE USED TO SAY SEVEN. FT0 and FT1 are bays now -
-    they accept cisco/asr-9006-fan@1, whose own envelope is the measurement of these
-    very openings - and M0 to M3 became the pm-0 to pm-2 power bays some time before
-    that, which this note had not caught up with. What is still a cutout with no
-    occupant is the right-side air filter, 52 x 279.63.
-    THE ORIGINAL POINT STANDS FOR THAT ONE: a cutout with no part is invisible to
-    every rule - a missing ref lints, an absent bay does not - so a reader could
-    reasonably think this chassis has no filter. It has one; it is waiting.
-  wanted: the ASR 9006 chassis air filter, which is the last of the seven openings this gap was opened for
 - what: undocumented-faces
   scope: [bottom, left]
   reason: vendor-silent
@@ -737,6 +732,7 @@ gaps:
     slots on the evidence of its -TR sibling's data sheet row (the se-line-card-seating provenance note),
     which is an inference and not a statement from Cisco. The -SE differs from the -TR in buffering and
     table scale, and that is not modelled.
+    Re-read when the SIP-700 and SIP-700-8G were seated in the same slots: this gap is about the -SE cards only and is unchanged.
   wanted: >-
     a Cisco document that names the -SE part beside a chassis, or says it is not compatible with one
 groups:
@@ -766,6 +762,11 @@ groups:
     role: furniture
     index-origin: 0
     physical-context: Chassis
+  filters:
+    term: Filter
+    role: service
+    index-origin: 0
+    description: the chassis air filter, along the right side and reached from the rear (Table 17)
   grounding:
     term: Point
     role: furniture
@@ -799,10 +800,10 @@ views:
         - {id: pm-0, at: [13.51, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 0, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-1, at: [152.63, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 1, default: cisco/a9k-pwr-3kw-ac@1}
         - {id: pm-2, at: [291.75, 386.33], size: {w: 139.12, h: 44.45}, accepts: ['cisco/a9k-pwr-3kw-ac@1', 'cisco/a9k-pwr-2kw-dc@1', 'cisco/a9k-pwr-1p5kw-dc@1'], group: power-modules, rel-pos: 2, default: cisco/a9k-pwr-3kw-ac@1}
-        - {id: slot-5, at: [39.38, 107.232], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
-        - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
-        - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
-        - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
+        - {id: slot-5, at: [39.38, 107.232], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-sip-700-8g@2', 'cisco/a9k-sip-700@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 5, default: cisco/a9k-slot-cover@1}
+        - {id: slot-4, at: [39.38, 153.837], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-sip-700-8g@2', 'cisco/a9k-sip-700@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 4, default: cisco/a9k-slot-cover@1}
+        - {id: slot-3, at: [39.38, 200.442], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-sip-700-8g@2', 'cisco/a9k-sip-700@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 3, default: cisco/a9k-slot-cover@1}
+        - {id: slot-2, at: [39.38, 247.047], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-16x100ge-se@1', 'cisco/a9k-16x100ge-tr@1', 'cisco/a9k-20hg-flex-se@1', 'cisco/a9k-20hg-flex-tr@1', 'cisco/a9k-24x10ge-1g-se@1', 'cisco/a9k-2x100ge-se@2', 'cisco/a9k-400g-dwdm-tr@2', 'cisco/a9k-48x10ge-1g-se@1', 'cisco/a9k-4x100ge-se@1', 'cisco/a9k-8hg-flex-se@1', 'cisco/a9k-8hg-flex-tr@1', 'cisco/a9k-8x100g-lb-se@1', 'cisco/a9k-8x100ge-se@1', 'cisco/a9k-mod200-se@2', 'cisco/a9k-mod200-tr@2', 'cisco/a9k-mod400-se@2', 'cisco/a9k-mod400-tr@2', 'cisco/a9k-sip-700-8g@2', 'cisco/a9k-sip-700@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 2, default: cisco/a9k-slot-cover@1}
         - {id: slot-1, at: [39.38, 293.652], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-rsp@2', 'cisco/a9k-rsp-8g@2', 'cisco/a9k-rsp440-se@2', 'cisco/a9k-rsp440-tr@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 1, default: cisco/a9k-slot-cover@1}
         - {id: slot-0, at: [39.38, 340.257], size: {w: 395.7, h: 41.4}, opening: {w: 355.6, h: 41.4}, rotate: 270, accepts: ['cisco/a9k-rsp880-se@2', 'cisco/a9k-rsp880-tr@2', 'cisco/a9k-rsp880-lt-se@2', 'cisco/a9k-rsp880-lt-tr@2', 'cisco/a9k-rsp@2', 'cisco/a9k-rsp-8g@2', 'cisco/a9k-rsp440-se@2', 'cisco/a9k-rsp440-tr@2', 'cisco/a9k-rsp5-se@2', 'cisco/a9k-rsp5-tr@2', 'cisco/a9k-slot-cover@1'], group: slots, rel-pos: 0, default: cisco/a9k-slot-cover@1}
       placements:
@@ -853,6 +854,8 @@ views:
         - {id: ground-pad, at: [662.8, 14.0], size: [46.0, 20.0], shape: rect}
         - {id: air-filter-opening, at: [674.8, 104.63], size: [52.0, 279.63], shape: rect}
     components:
+      bays:
+        - {id: air-filter, at: [674.8, 104.63], size: {w: 52.0, h: 279.63}, accepts: ['cisco/asr-9006-filter@1'], group: filters, rel-pos: 0, default: cisco/asr-9006-filter@1}
       placements:
         - {id: ground-pad, ref: cisco/a9k-ground-pad@1, at: [662.8, 14.0], group: grounding, rel-pos: 2}
     regions:

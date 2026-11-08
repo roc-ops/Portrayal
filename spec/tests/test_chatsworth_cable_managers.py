@@ -45,6 +45,7 @@ RECOMMENDED = {1: 28, 2: 87, 3: 143, 4: 202}
 RU_MM = 44.45
 
 ids = sorted(PARTS)
+FAMILIES = {v[3] for v in PARTS.values()}   # the Evolution horizontals; other Chatsworth lines have their own tests
 
 
 def load(slug):
@@ -59,7 +60,7 @@ def front(slug):
 
 
 def test_there_are_thirteen_devices_and_no_other():
-    assert sorted(p.name for p in DEVICES.iterdir() if p.is_dir()) == ids
+    assert sorted(p.name for p in DEVICES.iterdir() if p.is_dir() and p.name[:5] in FAMILIES) == ids
 
 
 @pytest.mark.parametrize("slug", ids)
@@ -188,7 +189,8 @@ def _types(kind):
     out = {}
     for f in (EXPORTS / kind / "device-types/Chatsworth Products").glob("*.yaml"):
         d = yaml.safe_load(f.read_text())
-        out[d["model"]] = d
+        if d["model"][:5] in FAMILIES:
+            out[d["model"]] = d
     return out
 
 

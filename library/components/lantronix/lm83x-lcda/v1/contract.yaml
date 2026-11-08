@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: lm83x-lcda
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Lantronix 83X-LCDA, the LCD module of the LM83X console server. The face has a text display, a keypad of six keys
+  and the maker's name, and two thumbscrews. It seats in one of the three expansion bays of the LM83X.
+size: {w: 92.9, h: 43.2, d: 130.8}
+size-confidence: {w: datasheet, h: borrowed, d: datasheet}
+attrs:
+  model: 83X-LCDA
+provenance:
+  size: >-
+    datasheet - Lantronix LM-Series Expansion Modules and Option Cards product brief, page 1, table "Expansion Modules
+    for LM83X": 83X-LCDA "LM83X LCD with Keypad Module", "130.8x92.9x43.7" mm, length x width x height, 131 g. The face
+    takes the 43.2 mm height of the bay, as for the 83X-8SA. The printed 43.7 is recorded in this note only; the contract
+    states 43.2.
+  power: >-
+    not published - neither brief gives a power draw for a module. The lint finding for a module with no draw stays and
+    is recorded in the baseline.
+  layout: >-
+    drawing - the front illustration of the LM83X (5993 x 675 px), read at 11.77 px/mm across and 11.88 px/mm down.
+    The module in the fourth position of the illustration is this one. The display glass reads 39.3 by 13.7 mm. The six
+    keys are a left, an up, a right and a down arrow, a square centre key and a back key at the lower left, each about
+    5.6 mm across. The straight photograph shows the same arrangement.
+  keys: >-
+    drawing - the keys carry arrow marks, a square and a double-arrow mark. No document names a key or says what any
+    does, so the keys are named for their marks and claim no function.
+  screen: >-
+    The display is a screen and not a character display: the illustration shows the text LMS Version X.0, and no
+    document states how many characters it holds.
+  screws: >-
+    photo-measured - as for the 83X-8SA: thumbscrews at the left and right edges. The bay number printed beside the
+    left screw is not drawn, for the reason given on the 83X-8SA.
+elements:
+  screen:
+    at: [12.5, 12.1]
+    size: [39.3, 13.7]
+    class: screen
+    description: the LCD glass; the illustration shows the text LMS Version X.0.
+  key-up: {at: [65.0, 10.1], size: [5.6, 5.6], class: button, label-anchor: above}
+  key-left: {at: [55.3, 18.9], size: [5.6, 5.6], class: button, label-anchor: left}
+  key-enter: {at: [64.7, 19.2], size: [5.6, 5.6], class: button}
+  key-right: {at: [73.9, 19.2], size: [5.6, 5.6], class: button, label-anchor: right}
+  key-down: {at: [65.0, 28.3], size: [5.6, 5.6], class: button, label-anchor: below}
+  key-back: {at: [55.3, 28.3], size: [5.6, 5.6], class: button}
+relief:
+  features:
+  - node: screen
+    pocket: 0.5
+    confidence: estimated
+    source: the photograph shows the glass set in the plate; no document states how far it is set back
+  - {node: key-up, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+  - {node: key-left, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+  - {node: key-enter, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+  - {node: key-right, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+  - {node: key-down, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+  - {node: key-back, out: 0.8, confidence: estimated, source: the photograph shows raised keys; no document states how far they stand}
+skins: [default]

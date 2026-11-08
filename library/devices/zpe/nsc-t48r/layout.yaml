@@ -1,0 +1,265 @@
+format: 1
+kind: device
+name: nsc-t48r
+version: 0.1.0
+maturity: modelled
+manufacturer: ZPE Systems
+model: NSC-T48R
+aliases:
+- {name: Nodegrid Serial Console R, kind: marketing}
+- {name: NSC-T48R-STND-SAC, kind: variant}
+portfolio: {line: Nodegrid, family: Serial Console, series: Serial Console R}
+description: >-
+  48-port serial console server, 1RU. The Rear carries the 48 RJ45 serial ports in two rows of
+  24, in three blocks of eight columns, odd numbers above even. It also has two Ethernet RJ45
+  ports, the console RJ45 with a USB-A port beneath it, and one AC inlet with a rocker switch.
+  Modelled as the single-AC build, NSC-T48R-STND-SAC, the one the held photograph shows. No held
+  document shows the Front.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document and one photograph. ZPE Systems, Nodegrid Serial Console (R Series) data sheet,
+      October 3, 2024, page 2 (interfaces, physical, power), page 3 (ordering table) and page 4
+      (the side drawing of the chassis with its ear holes). Photograph from the maker's pages:
+      the T48R single-AC Rear (T48R-SAC-2.jpg), 1024 px wide. No installation guide or CAD
+      model is held.
+  face-names:
+    confidence: datasheet
+    note: >-
+      The data sheet's page 4 labels its two small pictures "NSC Front" and "NSC Rear". The face
+      the photograph shows, with the 48 RJ45 ports and the inlet, is the Rear.
+  size:
+    confidence: datasheet
+    note: >-
+      Page 2, "Size (L x W x H): 443 x 312 x 43 mm", 1U. 443 is the body's width and 312 its
+      depth; the page 4 side drawing marks 312.0 mm and 43 mm. Weight 4.9 kg, "depending on
+      options".
+  scale:
+    confidence: photo-measured
+    note: >-
+      EVERY POSITION IS READ OFF A 1024 PX PHOTOGRAPH, whose face is 856 px wide, about 1.93 px
+      per mm, good to about 2 mm. The serial block, the console and the USB port are placed as
+      the same chassis' Rear on nsc-t48s is, which the photograph agrees with to 2 mm: the block
+      of 48 starts and ends within 2 mm of that device's block, and the label of port 47 is 2 mm
+      from where the registry's pitch puts it. The two Ethernet ports are read off the photograph.
+  serial-ports:
+    confidence: photo-measured
+    note: >-
+      Rear photograph and data sheet page 2: 48 RJ45 serial ports, numbered 1 to 48, odd above
+      even, the numeral above the top row and below the bottom row, in three blocks of eight
+      columns. The page names the pinout nowhere on the data sheet; the maker's page calls it
+      Cisco. No lamp meaning is held.
+  ethernet:
+    confidence: datasheet
+    note: >-
+      Page 2, "2 Gigabit (10/100/1000BT) Ethernet interfaces on RJ45". The photograph prints ETH0
+      above ETH1, a stacked pair.
+  usb:
+    confidence: datasheet
+    note: >-
+      Page 2, "1 USB 3.0 Host and 2 USB 2.0 Hosts on Type A connector". The Rear photograph shows
+      one blue USB-A beneath the console, the USB 3.0 by its blue tongue. The two USB 2.0 ports are
+      not on a face any held document shows.
+  power:
+    confidence: datasheet
+    note: >-
+      Page 2: "Power consumption 45 W typical", "Single or Dual AC: 100-240 VAC, 50/60 Hz",
+      "40V-63 VDC dual power input (redundant)". The photograph's inlet is one IEC C14 turned a
+      quarter turn, with a rocker switch above it. The data sheet states no maximum draw and no
+      fuse or current rating.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The face is the median of bare plate along the lower edge of the photograph, #2f4052, a
+      navy blue-grey. Lettering is white.
+attrs:
+  physical:
+    weight-kg: 4.9
+    weight-note: '4.9 kg (10.8 lb), depending on options'
+    shipping-weight-kg: 9.5
+    shipping-dimensions-mm: '600 x 440 x 210'
+  performance:
+    serial-ports-max: 48
+    serial-rate: 'RS-232 on RJ45, 230,400 bps max per port'
+  power:
+    power-typical-w: 45
+    power-input-ac: '100-240 VAC, 50/60 Hz'
+    power-input-dc: '40-63 VDC dual (redundant) input, on the DC builds'
+  environmental:
+    operating-temp: '0 to 50 C (32 to 122 F), 5-95% RH, non-condensing'
+    storage-temp: '-20 to 67 C (-4 to 153 F), 5-95% RH, non-condensing'
+  platform:
+    processor: 'Intel x86_64 multi-core'
+    memory: '4GB DDR3'
+    storage: '32GB flash (mSATA SSD)'
+  compliance:
+    safety: 'UL 62368-1, CSA C22.2 No. 62368-1, EN 62368-1:2014, IEC 62368-1, CB, EAC/Customs Union, KCC, BSMI, CCC'
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 443
+  height: 43
+  depth: 312
+  ru: 1
+  weight-kg: 4.9
+  color: '#2f4052'
+  power: ac
+gaps:
+- what: front
+  scope: [front]
+  reason: needs-photo
+  wanted: >-
+    A photograph of the 48-port Front. The only Front a held document shows is the 96-port build's,
+    with ports 49 to 96, which this build does not have. The 48-port Front is therefore stated as
+    empty, not drawn. The data sheet lists 1 HDMI port and 2 USB 2.0 ports that no held Rear shows.
+- what: other-skus
+  scope: [front, rear]
+  reason: needs-photo
+  wanted: >-
+    A Rear photograph of the dual-AC, dual-DC and SFP+ builds, and any photograph of the 16 and
+    32-port builds. The device is modelled as the one build the photograph shows, and each other
+    build is a configuration to add when its face is held. The 96-port build's Front is held and
+    its Rear is not.
+- what: rack-ears
+  scope: [front, rear]
+  reason: needs-drawing
+  wanted: >-
+    The data sheet's page 4 side drawing marks the ear holes (56.2 and 32.2 mm from the Rear) for
+    the legacy ZRMK-A kit, and no held document says which hole an ear uses for a 4-post rack, so
+    `chassis.ears` is left out.
+- what: jack-lamps
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    What the lamps of each serial jack show. The data sheet has no LED table; no guide is held.
+- what: dot-left-of-ports
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    A small dark dot stands between the inlet and port 1 in the photograph. No document names it
+    and it is not drawn.
+- what: ethernet-lamps
+  scope: [rear]
+  reason: vendor-silent
+  wanted: >-
+    The two Ethernet jacks show no lamp at the photograph's size; the part's own two lamp windows
+    are drawn as the part gives them, with no meaning stated.
+- what: sides-and-top
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  wanted: >-
+    Any photograph or drawing of the lid, the base and the sides. The data sheet's page 4 drawing
+    is a section through the side showing ear holes, vent slots and the rails; it is not a view
+    of a face.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  eth:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    mixed: >-
+      the console RJ45 and the USB 3.0 Host beside it on the Rear
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 443, h: 43}
+    empty: >-
+      No document held shows the 48-port Front. The 96-port build's Front photograph has ports 49
+      to 96 on it, which this build does not have.
+  rear:
+    size: {w: 443, h: 43}
+    panel:
+      decor:
+      - {id: psu-plate-1, at: [0.4, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      - {id: console-bezel, at: [424.9, 14.4], size: [16.7, 21.0], fill: '#b9bdc1', rx: 0.5, kind: port-bezel}
+      cutouts:
+      - {block: serial}
+      - {block: eth}
+      - {id: console, at: [426.5, 14.7], size: [12.7, 11.0], shape: rect}
+      - {id: usb-rear, at: [427.0, 29.45], size: [12.0, 4.5], shape: rect}
+      - {id: inlet-1, at: [1.4, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: switch-1, at: [3.65, 2.8], size: [15.5, 6.0], shape: rect}
+    silkscreen:
+    - {block: serial}
+    - {block: eth}
+    - {id: silk-eth-0, at: [412.9, 6.6], text: ETH0, font-size: 2.2, anchor: middle, fill: '#e8edef', for: eth-0}
+    - {id: silk-eth-1, at: [412.9, 41.0], text: ETH1, font-size: 2.2, anchor: middle, fill: '#e8edef', for: eth-1}
+    - {id: silk-console, at: [432.85, 11.8], text: CONSOLE, font-size: 2.4, anchor: middle, fill: '#e8edef', for: console}
+    - {id: silk-usb-rear, at: [433.0, 40.2], text: USB, font-size: 2.4, anchor: middle, fill: '#e8edef', for: usb-rear}
+    components:
+      blocks:
+      - id: serial
+        ref: common/rj45-ganged-lamped@1
+        at: [49.2, 10.2]
+        count: 48
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.2
+        gang: 8
+        gutter: 7.4
+        number-from: 1
+        cutouts: true
+        rotate: {top: 180}
+        numerals: {dx: 6.35, dy-top: -2.9, dy-bottom: 16.8, font-size: 4.0, anchor: middle, fill: '#f2f5f6'}
+      - id: eth
+        ref: common/rj45-ganged-eth@1
+        at: [406.5, 10.2]
+        count: 2
+        rows: 2
+        pitch: 13.97
+        row-pitch: 14.2
+        number-from: 0
+        id-format: 'eth-{n}'
+        cutouts: true
+        rotate: {top: 180}
+      placements:
+      - {block: serial}
+      - {block: eth}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [426.5, 14.7], rotate: 180, group: mgmt, rel-pos: 1,
+         attrs: {media: rj45-serial, role: console}}
+      - {ref: std/usb-a@1, id: usb-rear, at: [427.0, 29.45], group: mgmt, rel-pos: 2,
+         attrs: {usb: '3.0'}}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [-2.6, 16.9], rotate: 270, group: inlets, rel-pos: 1}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-1, at: [3.65, 2.8], group: switches, rel-pos: 1, for: inlet-1}
+  top:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the lid: the data sheet's two small pictures are the Front and the
+      Rear, and its page 4 drawing is a section through the side.
+  bottom:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the underside: the data sheet's two small pictures are the Front and
+      the Rear, and its page 4 drawing is a section through the side.
+  left:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows a side wall as a view; the data sheet's page 4 drawing is a section
+      through the side with ear holes and vent slots, not a face.
+  right:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows this side wall as a view: the page 4 drawing is a section through
+      one side, with ear holes and vent slots, and is not a face.
+configurations:
+  sac:
+    kind: base
+    part-numbers:
+      NSC-T48R-STND-SAC: {}
+    description: >-
+      NSC-T48R-STND-SAC, the single-AC build with two RJ45 Ethernet ports, as the Rear photograph
+      shows it
+    default: true
+references:
+- {title: 'Nodegrid Serial Console (R Series) data sheet (ZPE Systems, October 3, 2024)'}

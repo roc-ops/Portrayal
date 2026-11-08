@@ -1,0 +1,445 @@
+format: 1
+kind: device
+name: nscp-t48r-core
+version: 0.1.0
+maturity: modelled
+manufacturer: ZPE Systems
+model: NSCP-T48R-CORE
+aliases:
+- {name: Nodegrid Serial Console Plus - Core Edition, kind: marketing}
+- {name: NSCP-T48R-CORE-DAC, kind: variant}
+portfolio: {line: Nodegrid, family: Serial Console, series: Serial Console Plus Core Edition}
+description: >-
+  48-port serial console server, 1RU. The Front is a blank plate carrying two stacked USB-A ports, the
+  console RJ45 and the SYS and PWR lamps. The Rear carries the 48 RJ45 serial ports in two rows of 24,
+  in three blocks of eight columns, odd numbers above even. It also has two Ethernet RJ45 ports, two SFP
+  cages and two AC inlets each with a rocker switch. Modelled as the dual-AC build with no 5G or analog-modem
+  option, NSCP-T48R-CORE-DAC, the one the data sheet shows.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      One document and one photograph. ZPE Systems, Nodegrid Serial Console Plus - Core Edition data sheet,
+      June 19, 2025, page 1 (the pictures "Front" and "Back"), page 2 (interfaces, physical, power) and
+      pages 3 and 4 (the ordering table). Photograph from the maker's pages: the Core Edition Front (NSCP-CE-Front-Side-1.webp),
+      1010 px wide, the same picture the data sheet prints on page 1. The Rear is the data sheet's own
+      picture on page 1, 1010 px wide. No installation guide, drawing or CAD model is held.
+  face-names:
+    confidence: datasheet
+    note: >-
+      THE DATA SHEET'S WORDS ARE KEPT. Page 1 captions the plate with the console and the USB ports "Front"
+      and the face with the 48 RJ45 ports "Back"; the device calls the second the Rear, as the maker's
+      other serial consoles do.
+  size:
+    confidence: datasheet
+    note: >-
+      Page 2, "Size (L x W x H): 443 x 312 x 43 mm", 1U. 443 is the body's width and 312 its depth. Weight
+      5.265 kg, "depending on options".
+  scale:
+    confidence: photo-measured
+    note: >-
+      EVERY POSITION IS READ OFF A 1010 PX PICTURE, whose face is 1008 px wide, about 2.28 px per mm horizontally
+      and about 2.1 px per mm vertically (the pictures are slightly off square), good to about 2 mm. The
+      Rear's serial block is placed as the Rear of nsc-t48s places its block, which the picture agrees
+      with to about 2 mm. The Ethernet pair, the SFP pair and the Front's parts are read off the pictures.
+  serial-ports:
+    confidence: photo-measured
+    note: >-
+      Rear picture and data sheet page 2: 48 RJ45 serial ports, numbered 1 to 48, odd above even, the
+      numeral above the top row and below the bottom row, in three blocks of eight columns; "Cisco Rolled"
+      in the ordering table.
+  usb:
+    confidence: datasheet
+    note: >-
+      Page 2, "2X USB 3.0 Host on Type A connector". The Front picture shows two USB-A ports stacked at
+      its left end, each with a blue tongue, with USB printed above and beneath them.
+  power:
+    confidence: datasheet
+    note: >-
+      Page 2: "Dual AC: 100-240 VAC, 50/60 Hz", "40V-63 VDC dual power input (redundant)", "Power consumption
+      45 W typical". The Rear picture's inlets are two IEC C14, each with a rocker switch above it. No
+      maximum draw, fuse or current rating is stated.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The Rear is the median of bare plate along the lower edge of the data sheet's picture, #454d63.
+      The Front picture reads #131c34, a much darker navy: one chassis is drawn in one colour, the Rear's,
+      and the difference is the pictures' lighting or a darker front plate, which no document says.
+attrs:
+  physical: {weight-kg: 5.265, weight-note: '5.265 kg (11.6 lb), depending on options', shipping-weight-kg: 8.745,
+    shipping-dimensions-mm: 533 x 497 x 209}
+  performance: {serial-ports-max: 48, serial-rate: 'RS-232 on RJ45, 230,400 bps max per port'}
+  power: {power-typical-w: 45, power-input-ac: '100-240 VAC, 50/60 Hz', power-input-dc: '40-63 VDC dual
+      (redundant) input, on the DC builds'}
+  environmental: {operating-temp: '0 to 60 C (32 to 140 F), 5-95% RH, non-condensing', storage-temp: '-20
+      to 67 C (-4 to 153 F), 5-95% RH, non-condensing'}
+  platform: {processor: Intel x86_64 quad-core, memory: 4GB DDR4, storage: 32GB SSD}
+  features: {optics-sfp-plus: 'SFP+ cages, 10Gb'}
+  lifecycle: {eol: none-announced}
+chassis: {width: 443, height: 43, depth: 312, ru: 1, weight-kg: 5.265, color: '#454d63', power: ac}
+gaps:
+- what: hdmi
+  scope:
+  - front
+  - rear
+  reason: sources-disagree
+  wanted: >-
+    The ordering rows say "1 HDMI" and the interface list on page 2 does not. The Front picture shows
+    no HDMI port and the Rear picture shows none, so none is drawn and no face is said to carry it.
+- what: other-skus
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A Rear photograph of the single-AC and dual-DC builds, of the 5G and analog-modem builds (-5G, -AM),
+    where their antenna connectors, SIM slots and telephone jack stand, and of the 16 and 32-port builds.
+    The device is modelled as the one build the pictures show.
+- what: front-round-caps
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    Two round dark features stand at the Front's two ends, 12 mm across, and a small dark ring stands
+    beneath the left one. No document names them; they are drawn as decor.
+- what: reset-and-lamp-meaning
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The Front prints SYS, PWR and RST. The picture shows the two lamps and no separate reset opening,
+    so no reset button is drawn. The lamps' colours and meaning are not held.
+- what: rack-ears
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The data sheet says only "Front-Rear Mounting Brackets". No Core Edition document dimensions an ear
+    or says where it bolts, so `chassis.ears` is left out.
+- what: jack-lamps
+  scope:
+  - rear
+  - front
+  reason: vendor-silent
+  wanted: >-
+    What the lamps of each serial jack and of the console jack show. The data sheet has no LED table;
+    no guide is held.
+- what: ethernet-and-sfp-lamps
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The Ethernet jacks and the SFP cages show no lamp at the picture's size; the parts' own lamp windows
+    are drawn as the parts give them, with no meaning stated.
+- what: sides-and-top
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: Any photograph or drawing of the lid, the base and the sides. None is held.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  eth:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: rj45, speed: 1g}
+  sfp-plus:
+    term: Port
+    role: management
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  usb-front:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '3.0'}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 443, h: 43}
+    panel:
+      decor:
+      - {id: cap-left, at: [7.1, 4.7], size: [12.3, 12.3], fill: '#0b0f1a', rx: 6.15, kind: unnamed-cap}
+      - {id: cap-right, at: [422.9, 5.6], size: [12.3, 12.3], fill: '#0b0f1a', rx: 6.15, kind: unnamed-cap}
+      - {id: ring-left, at: [10.7, 20.6], size: [5.0, 5.0], fill: '#0b0f1a', rx: 2.5, kind: unnamed-ring}
+      cutouts:
+      - {id: usb-1, at: [25.5, 23.9], size: [12.0, 4.5], shape: rect}
+      - {id: usb-2, at: [25.5, 32.2], size: [12.0, 4.5], shape: rect}
+      - {id: console, at: [402.5, 24.7], size: [12.7, 11.0], shape: rect}
+      - {id: led-sys, at: [423.6, 27.4], size: [2.0, 2.0], shape: circle}
+      - {id: led-pwr, at: [423.6, 31.7], size: [2.0, 2.0], shape: circle}
+    silkscreen:
+    - {id: silk-usb-1, at: [31.5, 19.4], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-1}
+    - {id: silk-usb-2, at: [31.5, 41.0], text: USB, font-size: 2.0, anchor: middle, fill: '#e8edef', for: usb-2}
+    - {id: silk-console, at: [408.85, 41.2], text: CONSOLE, font-size: 2.0, anchor: middle, fill: '#e8edef',
+      for: console}
+    - {id: silk-sys, at: [429.4, 28.9], text: SYS, font-size: 1.8, anchor: middle, fill: '#e8edef', for: led-sys}
+    - {id: silk-pwr, at: [429.4, 33.2], text: PWR, font-size: 1.8, anchor: middle, fill: '#e8edef', for: led-pwr}
+    - {id: silk-rst, at: [436.4, 33.2], text: RST, font-size: 1.8, anchor: middle, fill: '#e8edef', for: chassis}
+    - {id: silk-series, at: [411.0, 16.8], text: serial console plus, font-size: 1.5, anchor: middle,
+      fill: '#e8edef', for: chassis}
+    - {id: silk-model, at: [411.0, 11.4], text: nodegrid, font-size: 4.3, anchor: middle, fill: '#f2f5f6',
+      for: chassis}
+    components:
+      placements:
+      - {ref: std/usb-a@1, id: usb-1, at: [25.5, 23.9], group: usb-front, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [25.5, 32.2], group: usb-front, rel-pos: 2}
+      - ref: common/rj45-ganged-lamped@1
+        id: console
+        at: [402.5, 24.7]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - {ref: common/led-dot@1, id: led-sys, at: [423.6, 27.4], group: leds, rel-pos: 1, for: chassis,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-pwr, at: [423.6, 31.7], group: leds, rel-pos: 2, for: chassis,
+        states: ['off', 'on']}
+    regions:
+    - id: logo-zone
+      at: [24.0, 6.0]
+      size: {w: 18.0, h: 9.0}
+      label: zpe logo; not drawn
+  rear:
+    size: {w: 443, h: 43}
+    panel:
+      decor:
+      - {id: psu-plate-1, at: [0.4, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      - {id: psu-plate-2, at: [23.2, 0.3], size: [22.4, 42.4], fill: '#262c30', kind: power-plate}
+      cutouts:
+      - {id: port-1, at: [49.2, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [49.2, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [63.17, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [63.17, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [77.14, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [77.14, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [91.11, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [91.11, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [105.08, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [105.08, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [119.05, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [119.05, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [133.02, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [133.02, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [146.99, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [146.99, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-17, at: [168.36, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-18, at: [168.36, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-19, at: [182.33, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-20, at: [182.33, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-21, at: [196.3, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-22, at: [196.3, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-23, at: [210.27, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-24, at: [210.27, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-25, at: [224.24, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-26, at: [224.24, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-27, at: [238.21, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-28, at: [238.21, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-29, at: [252.18, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-30, at: [252.18, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-31, at: [266.15, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-32, at: [266.15, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-33, at: [287.52, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-34, at: [287.52, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-35, at: [301.49, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-36, at: [301.49, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-37, at: [315.46, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-38, at: [315.46, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-39, at: [329.43, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-40, at: [329.43, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-41, at: [343.4, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-42, at: [343.4, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-43, at: [357.37, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-44, at: [357.37, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-45, at: [371.34, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-46, at: [371.34, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: port-47, at: [385.31, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: port-48, at: [385.31, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: eth-0, at: [406.5, 10.2], size: [12.7, 11.0], shape: rect}
+      - {id: eth-1, at: [406.5, 24.4], size: [12.7, 11.0], shape: rect}
+      - {id: uplink-0, at: [425.5, 9.5], size: [14.25, 10.4], shape: rect}
+      - {id: uplink-1, at: [425.5, 24.5], size: [14.25, 10.4], shape: rect}
+      - {id: inlet-1, at: [1.4, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: inlet-2, at: [24.0, 12.9], size: [20.0, 28.0], shape: rect}
+      - {id: switch-1, at: [3.65, 2.8], size: [15.5, 6.0], shape: rect}
+      - {id: switch-2, at: [26.25, 2.8], size: [15.5, 6.0], shape: rect}
+    silkscreen:
+    - {at: [55.55, 7.3], text: '1', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-1}
+    - {at: [55.55, 41.2], text: '2', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-2}
+    - {at: [69.52, 7.3], text: '3', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-3}
+    - {at: [69.52, 41.2], text: '4', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-4}
+    - {at: [83.49, 7.3], text: '5', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-5}
+    - {at: [83.49, 41.2], text: '6', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-6}
+    - {at: [97.46, 7.3], text: '7', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-7}
+    - {at: [97.46, 41.2], text: '8', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-8}
+    - {at: [111.43, 7.3], text: '9', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-9}
+    - {at: [111.43, 41.2], text: '10', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-10}
+    - {at: [125.4, 7.3], text: '11', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-11}
+    - {at: [125.4, 41.2], text: '12', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-12}
+    - {at: [139.37, 7.3], text: '13', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-13}
+    - {at: [139.37, 41.2], text: '14', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-14}
+    - {at: [153.34, 7.3], text: '15', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-15}
+    - {at: [153.34, 41.2], text: '16', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-16}
+    - {at: [174.71, 7.3], text: '17', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-17}
+    - {at: [174.71, 41.2], text: '18', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-18}
+    - {at: [188.68, 7.3], text: '19', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-19}
+    - {at: [188.68, 41.2], text: '20', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-20}
+    - {at: [202.65, 7.3], text: '21', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-21}
+    - {at: [202.65, 41.2], text: '22', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-22}
+    - {at: [216.62, 7.3], text: '23', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-23}
+    - {at: [216.62, 41.2], text: '24', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-24}
+    - {at: [230.59, 7.3], text: '25', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-25}
+    - {at: [230.59, 41.2], text: '26', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-26}
+    - {at: [244.56, 7.3], text: '27', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-27}
+    - {at: [244.56, 41.2], text: '28', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-28}
+    - {at: [258.53, 7.3], text: '29', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-29}
+    - {at: [258.53, 41.2], text: '30', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-30}
+    - {at: [272.5, 7.3], text: '31', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-31}
+    - {at: [272.5, 41.2], text: '32', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-32}
+    - {at: [293.87, 7.3], text: '33', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-33}
+    - {at: [293.87, 41.2], text: '34', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-34}
+    - {at: [307.84, 7.3], text: '35', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-35}
+    - {at: [307.84, 41.2], text: '36', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-36}
+    - {at: [321.81, 7.3], text: '37', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-37}
+    - {at: [321.81, 41.2], text: '38', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-38}
+    - {at: [335.78, 7.3], text: '39', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-39}
+    - {at: [335.78, 41.2], text: '40', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-40}
+    - {at: [349.75, 7.3], text: '41', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-41}
+    - {at: [349.75, 41.2], text: '42', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-42}
+    - {at: [363.72, 7.3], text: '43', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-43}
+    - {at: [363.72, 41.2], text: '44', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-44}
+    - {at: [377.69, 7.3], text: '45', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-45}
+    - {at: [377.69, 41.2], text: '46', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-46}
+    - {at: [391.66, 7.3], text: '47', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-47}
+    - {at: [391.66, 41.2], text: '48', font-size: 4.0, anchor: middle, fill: '#f2f5f6', for: port-48}
+    - {id: silk-eth-0, at: [412.9, 6.6], text: ETH0, font-size: 2.2, anchor: middle, fill: '#e8edef',
+      for: eth-0}
+    - {id: silk-eth-1, at: [412.9, 41.0], text: ETH1, font-size: 2.2, anchor: middle, fill: '#e8edef',
+      for: eth-1}
+    - {id: silk-sfp-0, at: [432.6, 6.6], text: SFP 0, font-size: 2.2, anchor: middle, fill: '#e8edef',
+      for: uplink-0}
+    - {id: silk-sfp-1, at: [432.6, 41.0], text: SFP 1, font-size: 2.2, anchor: middle, fill: '#e8edef',
+      for: uplink-1}
+    components:
+      placements:
+      - {ref: common/rj45-ganged-lamped@1, id: port-1, at: [49.2, 10.2], rotate: 180, group: serial, rel-pos: 1}
+      - {ref: common/rj45-ganged-lamped@1, id: port-2, at: [49.2, 24.4], group: serial, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: port-3, at: [63.17, 10.2], rotate: 180, group: serial,
+        rel-pos: 3}
+      - {ref: common/rj45-ganged-lamped@1, id: port-4, at: [63.17, 24.4], group: serial, rel-pos: 4}
+      - {ref: common/rj45-ganged-lamped@1, id: port-5, at: [77.14, 10.2], rotate: 180, group: serial,
+        rel-pos: 5}
+      - {ref: common/rj45-ganged-lamped@1, id: port-6, at: [77.14, 24.4], group: serial, rel-pos: 6}
+      - {ref: common/rj45-ganged-lamped@1, id: port-7, at: [91.11, 10.2], rotate: 180, group: serial,
+        rel-pos: 7}
+      - {ref: common/rj45-ganged-lamped@1, id: port-8, at: [91.11, 24.4], group: serial, rel-pos: 8}
+      - {ref: common/rj45-ganged-lamped@1, id: port-9, at: [105.08, 10.2], rotate: 180, group: serial,
+        rel-pos: 9}
+      - {ref: common/rj45-ganged-lamped@1, id: port-10, at: [105.08, 24.4], group: serial, rel-pos: 10}
+      - {ref: common/rj45-ganged-lamped@1, id: port-11, at: [119.05, 10.2], rotate: 180, group: serial,
+        rel-pos: 11}
+      - {ref: common/rj45-ganged-lamped@1, id: port-12, at: [119.05, 24.4], group: serial, rel-pos: 12}
+      - {ref: common/rj45-ganged-lamped@1, id: port-13, at: [133.02, 10.2], rotate: 180, group: serial,
+        rel-pos: 13}
+      - {ref: common/rj45-ganged-lamped@1, id: port-14, at: [133.02, 24.4], group: serial, rel-pos: 14}
+      - {ref: common/rj45-ganged-lamped@1, id: port-15, at: [146.99, 10.2], rotate: 180, group: serial,
+        rel-pos: 15}
+      - {ref: common/rj45-ganged-lamped@1, id: port-16, at: [146.99, 24.4], group: serial, rel-pos: 16}
+      - {ref: common/rj45-ganged-lamped@1, id: port-17, at: [168.36, 10.2], rotate: 180, group: serial,
+        rel-pos: 17}
+      - {ref: common/rj45-ganged-lamped@1, id: port-18, at: [168.36, 24.4], group: serial, rel-pos: 18}
+      - {ref: common/rj45-ganged-lamped@1, id: port-19, at: [182.33, 10.2], rotate: 180, group: serial,
+        rel-pos: 19}
+      - {ref: common/rj45-ganged-lamped@1, id: port-20, at: [182.33, 24.4], group: serial, rel-pos: 20}
+      - {ref: common/rj45-ganged-lamped@1, id: port-21, at: [196.3, 10.2], rotate: 180, group: serial,
+        rel-pos: 21}
+      - {ref: common/rj45-ganged-lamped@1, id: port-22, at: [196.3, 24.4], group: serial, rel-pos: 22}
+      - {ref: common/rj45-ganged-lamped@1, id: port-23, at: [210.27, 10.2], rotate: 180, group: serial,
+        rel-pos: 23}
+      - {ref: common/rj45-ganged-lamped@1, id: port-24, at: [210.27, 24.4], group: serial, rel-pos: 24}
+      - {ref: common/rj45-ganged-lamped@1, id: port-25, at: [224.24, 10.2], rotate: 180, group: serial,
+        rel-pos: 25}
+      - {ref: common/rj45-ganged-lamped@1, id: port-26, at: [224.24, 24.4], group: serial, rel-pos: 26}
+      - {ref: common/rj45-ganged-lamped@1, id: port-27, at: [238.21, 10.2], rotate: 180, group: serial,
+        rel-pos: 27}
+      - {ref: common/rj45-ganged-lamped@1, id: port-28, at: [238.21, 24.4], group: serial, rel-pos: 28}
+      - {ref: common/rj45-ganged-lamped@1, id: port-29, at: [252.18, 10.2], rotate: 180, group: serial,
+        rel-pos: 29}
+      - {ref: common/rj45-ganged-lamped@1, id: port-30, at: [252.18, 24.4], group: serial, rel-pos: 30}
+      - {ref: common/rj45-ganged-lamped@1, id: port-31, at: [266.15, 10.2], rotate: 180, group: serial,
+        rel-pos: 31}
+      - {ref: common/rj45-ganged-lamped@1, id: port-32, at: [266.15, 24.4], group: serial, rel-pos: 32}
+      - {ref: common/rj45-ganged-lamped@1, id: port-33, at: [287.52, 10.2], rotate: 180, group: serial,
+        rel-pos: 33}
+      - {ref: common/rj45-ganged-lamped@1, id: port-34, at: [287.52, 24.4], group: serial, rel-pos: 34}
+      - {ref: common/rj45-ganged-lamped@1, id: port-35, at: [301.49, 10.2], rotate: 180, group: serial,
+        rel-pos: 35}
+      - {ref: common/rj45-ganged-lamped@1, id: port-36, at: [301.49, 24.4], group: serial, rel-pos: 36}
+      - {ref: common/rj45-ganged-lamped@1, id: port-37, at: [315.46, 10.2], rotate: 180, group: serial,
+        rel-pos: 37}
+      - {ref: common/rj45-ganged-lamped@1, id: port-38, at: [315.46, 24.4], group: serial, rel-pos: 38}
+      - {ref: common/rj45-ganged-lamped@1, id: port-39, at: [329.43, 10.2], rotate: 180, group: serial,
+        rel-pos: 39}
+      - {ref: common/rj45-ganged-lamped@1, id: port-40, at: [329.43, 24.4], group: serial, rel-pos: 40}
+      - {ref: common/rj45-ganged-lamped@1, id: port-41, at: [343.4, 10.2], rotate: 180, group: serial,
+        rel-pos: 41}
+      - {ref: common/rj45-ganged-lamped@1, id: port-42, at: [343.4, 24.4], group: serial, rel-pos: 42}
+      - {ref: common/rj45-ganged-lamped@1, id: port-43, at: [357.37, 10.2], rotate: 180, group: serial,
+        rel-pos: 43}
+      - {ref: common/rj45-ganged-lamped@1, id: port-44, at: [357.37, 24.4], group: serial, rel-pos: 44}
+      - {ref: common/rj45-ganged-lamped@1, id: port-45, at: [371.34, 10.2], rotate: 180, group: serial,
+        rel-pos: 45}
+      - {ref: common/rj45-ganged-lamped@1, id: port-46, at: [371.34, 24.4], group: serial, rel-pos: 46}
+      - {ref: common/rj45-ganged-lamped@1, id: port-47, at: [385.31, 10.2], rotate: 180, group: serial,
+        rel-pos: 47}
+      - {ref: common/rj45-ganged-lamped@1, id: port-48, at: [385.31, 24.4], group: serial, rel-pos: 48}
+      - {ref: common/rj45-ganged-eth@1, id: eth-0, at: [406.5, 10.2], rotate: 180, group: eth, rel-pos: 0}
+      - {ref: common/rj45-ganged-eth@1, id: eth-1, at: [406.5, 24.4], group: eth, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: uplink-0, at: [425.5, 9.5], group: sfp-plus, rel-pos: 0}
+      - {ref: std/sfp-ganged@1, id: uplink-1, at: [425.5, 24.5], rotate: 180, group: sfp-plus, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [-2.6, 16.9], rotate: 270, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [20.0, 16.9], rotate: 270, group: inlets, rel-pos: 2}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-1, at: [3.65, 2.8], group: switches, rel-pos: 1, for: inlet-1}
+      - {ref: zpe/nsc-power-rocker@1, id: switch-2, at: [26.25, 2.8], group: switches, rel-pos: 2, for: inlet-2}
+  top:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the lid: the data sheet's pictures are the Front, the Rear and a diagram.
+  bottom:
+    size: {w: 443, h: 312}
+    empty: >-
+      No document held shows the underside: the data sheet's pictures are the Front, the Rear and a diagram.
+  left:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows a side wall: the data sheet's pictures are the Front, the Rear and a diagram.
+  right:
+    size: {w: 312, h: 43}
+    empty: >-
+      No document held shows this side wall: the data sheet's pictures are the Front, the Rear and a diagram.
+configurations:
+  dac:
+    kind: base
+    part-numbers:
+      NSCP-T48R-CORE-DAC: {}
+    description: >-
+      NSCP-T48R-CORE-DAC, the dual-AC build with two RJ45 Ethernet ports and two SFP cages. It has no
+      5G or analog modem, as the data sheet's pictures show it
+    default: true
+references:
+- title: Nodegrid Serial Console Plus - Core Edition data sheet (ZPE Systems, June 19, 2025)
