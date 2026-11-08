@@ -1,0 +1,286 @@
+format: 1
+kind: device
+name: cpm-800-1
+version: 0.1.0
+maturity: modelled
+manufacturer: WTI
+model: CPM-800-1
+portfolio: {line: Console server and PDU, family: CPM-800}
+description: >-
+  WTI CPM-800-1 console server and switched PDU hybrid, 1U. The front is the console server. It has eight RJ45 serial ports, two Ethernet jacks, a phone jack and a USB set-up port. It also has two antenna mounts, RESET and DEFAULT buttons and lamps. The rear is the PDU. It has two IEC C20 inlets, each feeding four of the eight NEMA 5-15R outlets, A1 to A8.
+profile: power
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      NO PHOTOGRAPH IS HELD. Every position on both faces is read from the vector figures of the maker's one-page dimensional drawing (CPM-800 family, revision A): the views carry no dimension for a connector, so each is a point of the drawing, converted at the scale that makes the drawn faceplate the 17.15 inches the drawing prints, and is good to about 1.5 mm. The hardware guide's front and back figures (CPM Series Hardware Guide figures 2.1 to 2.5; DSM Series Hardware Guide figures 2.1 to 2.6) agree with the drawing on the order of every connector. The colours are read from the angled renders on the data sheets, which are marketing renders and not photographs.
+  method:
+    confidence: estimated
+    note: >-
+      THE DRAWING IS LINE ART AT ABOUT 1 TO 3 AND CARRIES NO CONNECTOR DIMENSION. Positions are measured on its vector geometry (a jack's outline, an outlet's box, an inlet's housing), centred on the drawn faceplate; a part is placed by its centre on the drawn outline. The drawn faceplate is slightly shorter than the stated height (drawing 1.74 or 3.46 inches against 1.75 or 3.5), so vertical positions are centred on the face. A lamp's spacing inside its frame is the drawing's. The captions inside the buttons, the lamp and port numerals, the ACT and LNK legends over the Ethernet jacks and the SETUP bracket over port 1 are placed from the printed positions in the drawing and are good to about 0.7 mm.
+  chassis:
+    confidence: drawing
+    note: >-
+      Width 17.15 inches (435.6 mm) is the drawing's top cover width, and the drawing's 18.32 inches is the distance between the rack ear holes. The height is the data sheet's 1.75 inches, one rack unit and the drawing prints 1.74 (the guide and the data sheet agree with each other). The depth is 8.7 inches, the data sheet and the drawing; the hardware guide prints 8.75. No net weight is stated, only a shipping weight, so none is given.
+  colour:
+    confidence: estimated
+    note: >-
+      Median pixels of the angled render on the data sheet (page 2, 'CPM-1600-2-ECA'; the DSM data sheet's renders show the same dark face): the front face #373b3e, the rear plate #ebf5fb (lit and bluish in the render) with black printing. A MARKETING RENDER IS NOT A PHOTOGRAPH, AND NO HELD DOCUMENT HAS ONE, SO EVERY COLOUR HERE IS UNCHECKED AGAINST A PHOTOGRAPH. The red printed bars and the red logo block the render shows are not drawn.
+  ears:
+    confidence: drawing
+    note: >-
+      The drawing shows an ear at each end with two holes (one round, one slotted) and the data sheet says '19 Rack Brackets Included'. The ear hole pitch is not dimensioned; the drawing's 18.32 inches is the distance between the two ear hole axes. The ears are drawn at the faceplate, so the shipped position is flush.
+  outlets:
+    confidence: datasheet
+    note: >-
+      Data sheet page 2 and the drawing: eight NEMA 5-15R outlets in one row, A1 to A8 (the drawing's 'SWITCHED OUTPUT RECEPTACLES NEMA 5-15R'); a divider after A4 and each inlet 'supplies power to a single four-outlet Bus' (hardware guide, section 2.5). The ATS models feed the same outlets from a primary and a secondary inlet (hardware guide); this device is the standard, non-ATS family. No breaker is stated.
+  inlets:
+    confidence: datasheet
+    note: >-
+      IEC-320-C20 (hardware guide, section 2.2 and 2.5), '20 Amp' each (data sheet). A cord is not in the box for the -1 models: the data sheet lists 'C19 to NEMA 5-15P, 8' as the detachable cord and is not a drawing of a cord, so none is drawn.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet page 2: 100/120V, '3.2/3.8 kW' (CPM-800) or '6.4/7.6 kW' (CPM-1600) of power distribution at 80% derating, 20 amps per inlet; hardware guide: 100 - 120 VAC, 50/60 Hz. The unit's own draw is not stated by any held document, so no power-max-w is given.
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      RJ45 RS-232 serial ports, eight (hardware guide, 'Eight (8) RJ45 connectors'), port 1 marked SETUP. Units ship with a standard or a straight pinout and which a part number has is not stated (hardware guide, appendix B), so the jacks state the media and no pinout.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The ports are console server ports (hardware guide, 'Serial Ports: connection to console ports on target devices').
+  lamps:
+    confidence: drawing
+    note: >-
+      The lamps of both faces are drawn as plain discs, not as states: the hardware guide names them (port activity, plug activity or status) and does not state a colour or a state for any, so none is claimed.
+attrs:
+  physical:
+    construction: metal
+  power:
+    input-plug: iec-60320-c20
+    input-voltage: 100 to 120 VAC, 50/60 Hz
+    input-current-a: 20
+    input-feeds: two inlets, one per bank of four outlets
+    power-distribution: 3.2/3.8 kW (80% derated, data sheet)
+  environmental:
+    operating-temp: 0 to 60 C (data sheet)
+    operating-humidity: 10 - 90% RH (data sheet)
+  features:
+    serial-pinout: standard or straight pinned serial ports, by part number (hardware guide)
+chassis:
+  width: 435.6
+  height: 44.45
+  depth: 220.98
+  ru: 1
+  color: '#373b3e'
+  ears:
+    positions:
+    - {name: flush, label: 1U rack bracket as shipped, default: true}
+  power: ac
+gaps:
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    No photograph of any face is held; the only pictures of the product are angled marketing renders. Every position is read from the line drawing and every colour from a render.
+  wanted: A straight-on photograph of each face.
+- what: lamp-states
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The documents name the lamps and state no colour or state for them; they are drawn as plain discs.
+  wanted: The maker's lamp table for the front panel.
+- what: ear-holes
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The ears are not dimensioned: the holes are drawn (one round, one slotted) with no pitch.
+  wanted: A dimensioned drawing of the rack bracket.
+- what: antenna-mounts
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The two rings marked MAIN and AUX are 'optional cell modem antenna mounts' (drawing). They are drawn as discs and are not ports.
+  wanted: The maker's drawing of the mounts, and which part numbers fit them.
+- what: option-positions
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The drawing shows the second Ethernet jack and the phone jack and says a label is added for units without them; the documents do not say whether a jack sits behind the label. Both are drawn as the drawing shows them.
+  wanted: Which part numbers carry the second Ethernet jack and the phone jack.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    The drawing shows the top cover and one side with vent slots and screws, and does not say which side it is. They are not drawn. The underside is not shown.
+  wanted: A drawing that names each side.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight switched NEMA 5-15R outlets, A1 to A8 (A1-A4 from the first inlet, A5-A8 from the second)'}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C20 inlets, A1-A4 and A5-A8, at the left of the rear as seen from behind'}
+  serial: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'the RJ45 RS-232 serial ports, port 1 marked SETUP'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the 10/100/1000 Ethernet jacks, Ethernet 0 and Ethernet 1 (the second on dual Ethernet models)'}
+  phone: {term: Port, role: management, index-origin: 1, description: 'the RJ11 phone line jack of the internal modem'}
+  usb-setup: {term: Port, role: management, index-origin: 1, description: 'the USB mini set-up port'}
+views:
+  front:
+    size: {w: 435.6, h: 44.45}
+    panel:
+      decor:
+      - {id: activity-box, kind: lamp-frame, at: [192.57, 21.14], size: [60.48, 18.04], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: control-box, kind: lamp-frame, at: [259.21, 21.2], size: [65.51, 17.92], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: plug-box, kind: lamp-frame, at: [332.38, 21.14], size: [33.29, 18.04], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: reset-button, kind: button, at: [264.54, 22.77], size: [15.66, 14.21], rx: 1.2, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: default-button, kind: button, at: [282.68, 22.77], size: [15.46, 14.21], rx: 1.2, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: activity-1, kind: lamp, at: [196.45, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-2, kind: lamp, at: [203.81, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-3, kind: lamp, at: [211.17, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-4, kind: lamp, at: [218.54, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-5, kind: lamp, at: [225.9, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-6, kind: lamp, at: [233.26, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-7, kind: lamp, at: [240.62, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: activity-8, kind: lamp, at: [247.99, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: status-on, kind: lamp, at: [303.26, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: status-rdy, kind: lamp, at: [310.72, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: status-dcd, kind: lamp, at: [318.19, 32.87], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-1, kind: lamp, at: [336.34, 25.93], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-2, kind: lamp, at: [343.8, 25.93], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-3, kind: lamp, at: [351.79, 25.93], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-4, kind: lamp, at: [359.46, 25.93], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-5, kind: lamp, at: [336.34, 33.39], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-6, kind: lamp, at: [343.8, 33.39], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-7, kind: lamp, at: [351.79, 33.39], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: plug-8, kind: lamp, at: [359.46, 33.39], size: [2.2, 2.2], rx: 1.1, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: antenna-main, kind: antenna-mount, at: [4.67, 6.91], size: [5.6, 5.6], rx: 2.8, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: antenna-aux, kind: antenna-mount, at: [40.96, 6.91], size: [5.6, 5.6], rx: 2.8, fill: '#1a1a1a', stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: setup-bracket-arm-l, kind: rule, at: [70.81, 16.23], size: [3.2, 0.25], fill: '#f4f4f4'}
+      - {id: setup-bracket-tick-l, kind: rule, at: [70.68, 16.23], size: [0.25, 1.4], fill: '#f4f4f4'}
+      - {id: setup-bracket-arm-r, kind: rule, at: [82.41, 16.23], size: [3.2, 0.25], fill: '#f4f4f4'}
+      - {id: setup-bracket-tick-r, kind: rule, at: [85.48, 16.23], size: [0.25, 1.4], fill: '#f4f4f4'}
+    silkscreen:
+    - {at: [11.67, 10.51], text: 'MAIN', font-size: 1.6, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [39.56, 10.51], text: 'AUX', font-size: 1.6, anchor: end, fill: '#f4f4f4', for: chassis}
+    - {at: [7.67, 40.71], text: 'SETUP USB', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: setup-usb}
+    - {at: [23.33, 42.06], text: 'PHONE', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: phone}
+    - {at: [40.75, 42.06], text: 'Ethernet 0', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [57.97, 42.06], text: 'Ethernet 1', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    - {at: [129.48, 19.25], text: 'SERIAL PORTS', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: [serial-1, serial-2, serial-3, serial-4, serial-5, serial-6, serial-7, serial-8]}
+    - {at: [78.21, 41.23], text: '1', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-1}
+    - {at: [92.89, 41.23], text: '2', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-2}
+    - {at: [107.52, 41.23], text: '3', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-3}
+    - {at: [122.14, 41.23], text: '4', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-4}
+    - {at: [136.82, 41.23], text: '5', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-5}
+    - {at: [151.44, 41.23], text: '6', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-6}
+    - {at: [166.13, 41.23], text: '7', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-7}
+    - {at: [180.75, 41.23], text: '8', font-size: 1.8, anchor: middle, fill: '#f4f4f4', for: serial-8}
+    - {at: [222.81, 19.25], text: 'ACTIVITY', font-size: 1.6, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [272.37, 30.4], text: 'RESET', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [290.41, 30.4], text: 'DEFAULT', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [197.55, 30.74], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [204.91, 30.74], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [212.27, 30.74], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [219.64, 30.74], text: '4', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [227.0, 30.74], text: '5', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [234.36, 30.74], text: '6', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [241.72, 30.74], text: '7', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [249.09, 30.74], text: '8', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [304.36, 30.96], text: 'ON', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [311.82, 30.96], text: 'RDY', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [319.29, 30.96], text: 'DCD', font-size: 1.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [311.82, 26.89], text: 'STATUS', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [337.44, 24.05], text: '1', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [337.44, 38.52], text: '5', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [344.9, 24.05], text: '2', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [344.9, 38.52], text: '6', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [352.89, 24.05], text: '3', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [352.89, 38.52], text: '7', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [360.56, 24.05], text: '4', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [360.56, 38.52], text: '8', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [36.15, 20.11], text: 'ACT', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [45.35, 20.11], text: 'LNK', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-0}
+    - {at: [53.37, 20.11], text: 'ACT', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    - {at: [62.57, 20.11], text: 'LNK', font-size: 1.3, anchor: middle, fill: '#f4f4f4', for: eth-1}
+    - {at: [78.21, 16.85], text: 'SETUP', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: serial-1}
+    - {at: [349.02, 19.77], text: 'PLUG STATUS', font-size: 1.5, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [163.33, 12.51], text: 'OUT-OF-BAND RESCUE', font-size: 3.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    components:
+      placements:
+      - {ref: std/mini-usb@1, id: setup-usb, at: [3.87, 32.19], group: usb-setup, rel-pos: 1, attrs: {role: console}}
+      - {ref: common/rj11-jack@1, id: phone, at: [16.33, 22.29], group: phone, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: eth-0, at: [32.89, 23.0], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: common/rj45-eth@1, id: eth-1, at: [50.15, 23.0], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}}
+      - {ref: std/rj45-ganged@2, id: serial-1, at: [71.86, 21.33], group: serial, rel-pos: 1, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-2, at: [86.54, 21.33], group: serial, rel-pos: 2, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-3, at: [101.17, 21.33], group: serial, rel-pos: 3, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-4, at: [115.79, 21.33], group: serial, rel-pos: 4, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-5, at: [130.47, 21.33], group: serial, rel-pos: 5, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-6, at: [145.09, 21.33], group: serial, rel-pos: 6, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-7, at: [159.78, 21.33], group: serial, rel-pos: 7, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+      - {ref: std/rj45-ganged@2, id: serial-8, at: [174.4, 21.33], group: serial, rel-pos: 8, rotate: 180, attrs: {media: rj45-serial, role: console-server}}
+    regions:
+      - {id: logo-zone, at: [174.24, 6.0], size: {w: 20, h: 10}, label: 'WTI logo and red printed bars; not drawn'}
+  rear:
+    size: {w: 435.6, h: 44.45}
+    panel:
+      decor:
+      - {id: rear-plate, kind: face-plate, at: [0, 0], size: [435.6, 44.45], fill: '#ebf5fb'}
+      - {id: bus-divider, kind: rule, at: [271.32, 0.6], size: [0.5, 43.25], fill: '#111111'}
+    silkscreen:
+    - {at: [146.32, 36.11], text: 'A1', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-1}
+    - {at: [182.18, 36.11], text: 'A2', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-2}
+    - {at: [218.05, 36.11], text: 'A3', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-3}
+    - {at: [253.91, 36.11], text: 'A4', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-4}
+    - {at: [289.78, 36.11], text: 'A5', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-5}
+    - {at: [325.64, 36.11], text: 'A6', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-6}
+    - {at: [361.51, 36.11], text: 'A7', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-7}
+    - {at: [397.37, 36.11], text: 'A8', font-size: 2.0, anchor: middle, fill: '#111111', for: outlet-8}
+    - {at: [38.04, 34.86], text: 'A1 - A4', font-size: 2.2, anchor: middle, fill: '#111111', for: inlet-1}
+    - {at: [94.4, 34.86], text: 'A5 - A8', font-size: 2.2, anchor: middle, fill: '#111111', for: inlet-2}
+    components:
+      placements:
+      - {ref: std/nema-5-15r@1, id: outlet-1, at: [132.82, 4.59], group: outlets, rel-pos: 1, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-2, at: [168.68, 4.59], group: outlets, rel-pos: 2, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-3, at: [204.55, 4.59], group: outlets, rel-pos: 3, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-4, at: [240.41, 4.59], group: outlets, rel-pos: 4, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-5, at: [276.28, 4.59], group: outlets, rel-pos: 5, rotate: 180, fed-by: inlet-2}
+      - {ref: std/nema-5-15r@1, id: outlet-6, at: [312.14, 4.59], group: outlets, rel-pos: 6, rotate: 180, fed-by: inlet-2}
+      - {ref: std/nema-5-15r@1, id: outlet-7, at: [348.01, 4.59], group: outlets, rel-pos: 7, rotate: 180, fed-by: inlet-2}
+      - {ref: std/nema-5-15r@1, id: outlet-8, at: [383.87, 4.59], group: outlets, rel-pos: 8, rotate: 180, fed-by: inlet-2}
+      - {ref: std/c20-inlet@1, id: inlet-1, at: [21.84, 5.9], group: inlets, rel-pos: 1, rotate: 180}
+      - {ref: std/c20-inlet@1, id: inlet-2, at: [78.2, 5.9], group: inlets, rel-pos: 2, rotate: 180}
+  top:
+    size: {w: 435.6, h: 220.98}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  bottom:
+    size: {w: 435.6, h: 220.98}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  left:
+    size: {w: 220.98, h: 44.45}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+  right:
+    size: {w: 220.98, h: 44.45}
+    empty: >-
+      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The unit as the dimensional drawing shows it. The rack brackets are in the box (data sheet). The 4G LTE modem needs an additional W4G part number (data sheet) and is not modelled.
+    part-numbers:
+      CPM-800-1: {}
+      CPM-800-1-M: {}
+      CPM-800-1-C: {}
+      CPM-800-1-CM: {}
+      CPM-800-1-E: {}
+      CPM-800-1-EM: {}
+      CPM-800-1-EC: {}
+      CPM-800-1-ECM: {}
+references:
+- {title: 'WTI CPM Series data sheet, CPM20260511', sha256: f5794e1b5759efbc99a01039f19c43e7ec6cfd8e21336abb7928f31087a4b12b}
+- {title: 'WTI CPM Series Hardware Guide, Part No. 14528 Rev. B', sha256: 1395d123fc3e995b6a512292f72a8932d3d72cb05ab77735ac4b4b77491d5aab}
+- {title: 'WTI CPM Series Quick Start Guide, Part No. 14463 Rev. F', sha256: 10f17f57be8504c51f5163969e96460d965f516fd08535375fe877036f5e4a95}
+- {title: 'WTI Dimensional Drawing CPM-800-1 Dual Bus Family, rev A', sha256: 445f6ef7fbe9a1c580e73780b94b3983632df076c29eea2828fd766e1a1e01dc}

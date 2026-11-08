@@ -57,7 +57,9 @@ PLACED = {
 # the placing devices whose documents state no rating for the jack: the CM8000 data sheet (p.2, "Power
 # Adapter") says "Universal 110-240V AC to 12V DC external power adapter" and gives no current or barrel
 # size, so their placements carry no `attrs` and they are not in PLACED, whose entries all state both
-NO_RATING_STATED = {"opengear/cm8004", "opengear/cm8004-c", "opengear/cm8008", "opengear/cm8008-c"}
+# The Connect IT 4's page prints "18 V DC, .66 A" and its rear prints "18V 1.0A" beside the jack: two currents, so its
+# placement states neither.
+NO_RATING_STATED = {"digi/connect-it-4", "opengear/cm8004", "opengear/cm8004-c", "opengear/cm8008", "opengear/cm8008-c"}
 # the CRS504-4XQ-IN: its brochure gives the jack's voltage (36-57 V) and no current or barrel size, so the
 # placement carries `input-voltage` alone
 NO_RATING_STATED |= {"mikrotik/crs504-4xq-in"}
@@ -151,8 +153,8 @@ def test_the_jack_states_no_rating_of_its_own():
 @pytest.mark.heavy
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part. Sixteen: seven state a rating here, the four
-    CM8000 devices, the CRS504-4XQ-IN and the CRS510-8XS-2XQ-IN state none, two access points carry their own (48 V and 54 V)
+    composes it inside another part. Seventeen: seven state a rating here, the four
+    CM8000 devices, the CRS504-4XQ-IN, the CRS510-8XS-2XQ-IN and the Connect IT 4 state none, two access points carry their own (48 V and 54 V)
     and the ACS800 states a voltage."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
@@ -161,7 +163,7 @@ def test_the_jack_is_placed_on_exactly_these_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS | VOLTAGE_ONLY and len(found) == 16
+    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS | VOLTAGE_ONLY and len(found) == 17
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())
