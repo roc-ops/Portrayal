@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc4e-3d-2cge-8xge-v2k
-version: 1.2.2
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -43,21 +43,43 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '2x100GE +
+    8x10GE MPC4E' (printed pages 179 to 181): 'Fixed configuration MPC with two 100-Gigabit
+    Ethernet ports and eight 10-Gigabit Ethernet ports'; the 10-Gigabit ports are labelled 0/0
+    to 0/3 and 2/0 to 2/3, the 100-Gigabit ports 1/0 and 3/0. The book names no role for the
+    ports; the role follows the job, a network interface a transceiver is plugged into, so it is
+    traffic. Ids port-P-N are the faceplate labels P/N.
 states:
 - ok
 - fail
 - absent
+groups:
+  sfp-plus-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      the eight SFP+ ports, labelled 0/0 to 0/3 and 2/0 to 2/3, each at 10 Gbps
+  cfp-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cfp, speed: 100g}
+    description: >-
+      the two CFP ports, labelled 1/0 and 3/0, each at 100 Gbps
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [5.38, 26.73], rotate: 270, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [5.38, 42.57], rotate: 270, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/cfp@2, id: port-1-0, at: [-20.90, 99.10], rotate: 90, attrs: {media: cfp}}
-- {ref: std/sfp-ganged@1, id: port-2-1, at: [5.38, 160.03], rotate: 270, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-2-0, at: [21.38, 160.03], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-2-3, at: [5.38, 175.88], rotate: 270, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-2-2, at: [21.38, 175.88], rotate: 90, attrs: {media: sfp-plus}}
-- {ref: std/cfp@2, id: port-3-0, at: [-20.90, 232.40], rotate: 90, attrs: {media: cfp}}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp-plus-10g, at: [5.38, 26.73], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp-plus-10g, at: [21.38, 26.73], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp-plus-10g, at: [5.38, 42.57], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp-plus-10g, at: [21.38, 42.57], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@2, id: port-1-0, group: cfp-100g, at: [-20.90, 99.10], rotate: 90, attrs: {media: cfp}}
+- {ref: std/sfp-ganged@1, id: port-2-1, group: sfp-plus-10g, at: [5.38, 160.03], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-0, group: sfp-plus-10g, at: [21.38, 160.03], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-3, group: sfp-plus-10g, at: [5.38, 175.88], rotate: 270, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-2-2, group: sfp-plus-10g, at: [21.38, 175.88], rotate: 90, attrs: {media: sfp-plus}}
+- {ref: std/cfp@2, id: port-3-0, group: cfp-100g, at: [-20.90, 232.40], rotate: 90, attrs: {media: cfp}}
 size:
   w: 41.0
   h: 425.0

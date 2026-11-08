@@ -200,6 +200,8 @@ Nothing new in 2D:
 - A part on a sunk facet is foreshortened exactly as on a proud one.
 - The derived profile carries negative heights, and `data-z-*` attributes accept them.
 - The pocket draws as it does today.
+- A part mounted behind the face (an `inset`) lowers every height of its facets by the inset. A facet whose root that takes below the plate keeps the negative root, as a sunk facet does: the profile is not clamped at the plate, and the kit rebuilds the wedge from the profile's lowest height. A facet wholly behind the plate is dropped.
+- A card `in:` a well sinks by the well's floor, and its facets' heights sink with it.
 
 ### Lint (L117, extended)
 

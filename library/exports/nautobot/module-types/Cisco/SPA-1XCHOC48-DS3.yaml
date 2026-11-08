@@ -4,12 +4,12 @@ model: SPA-1XCHOC48/DS3
 description: Cisco 1-Port Channelized OC48/STM16 DS3 SPA, a double-height shared port adapter for the
   ASR 9000 SIP-700
 interfaces:
-  - name: '{module}/p0'
+  - name: '{module.parent}/{module}/p0'
     type: sonet-oc48
 comments: 'Cisco 1-Port Channelized OC48/STM16 DS3 SPA, a double-height shared port adapter for the ASR
   9000 SIP-700. The 1-port channelized STM-16/OC-48 SPA takes a small form-factor pluggable (SFP) optical
-  transceiver in its port for SONET and SDH single-mode and multimode fiber connections. Seats in a SIP-700
-  SPA subslot; it is a module, not a device.
+  transceiver in its port for SONET and SDH single-mode and multimode fiber connections. Seats across
+  two SIP-700 SPA subslots side by side. The left one of a row carries it; it is a module, not a device.
 
 
   Facts carried in the model that this schema has no field for:
@@ -32,4 +32,6 @@ comments: 'Cisco 1-Port Channelized OC48/STM16 DS3 SPA, a double-height shared p
 
   - role: shared-port-adapter
 
-  Contract version 1.2.0 (cisco/spa-1xchoc48-ds3).'
+  - slot-width: 2 (seated, it also covers the bay beside its own, which stays empty)
+
+  Contract version 1.3.0 (cisco/spa-1xchoc48-ds3).'
