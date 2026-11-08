@@ -395,6 +395,12 @@ def test_the_librarys_fibre_plugs_are_these_six_and_there_are_six():
         # its tests are spec/tests/test_vertiv_acs8000.py.
         if str((c.get("attrs") or {}).get("media") or "") == "sd-card":
             continue
+        # NOR IS THE DIGITAL OUT CONDUCTOR END. vertiv/acs800-digital-out-plug@1 mates
+        # `screw-terminal-4-relay`, the four-pin relay connector on the front of the Vertiv
+        # Avocent ACS800. Left out by what it IS - its `attrs.media` is `acs800-digital-out`,
+        # the ends of copper wires - and its tests are spec/tests/test_vertiv_acs800.py.
+        if str((c.get("attrs") or {}).get("media") or "") == "acs800-digital-out":
+            continue
         # NOR ARE THE TEN-POSITION SERIAL PLUG AND THE MICRO-SD CARD.
         # generic/rj45-10p-plug@1 and generic/microsd-card@1 mate `rj45-10p` and
         # `microsd`, the serial jack and the card socket of the Digi Connect EZ 16

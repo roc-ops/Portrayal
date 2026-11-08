@@ -1,0 +1,375 @@
+format: 1
+kind: device
+name: acs804meac-400
+version: 0.1.0
+maturity: modelled
+manufacturer: Vertiv
+model: ACS804MEAC-400
+portfolio: {line: Console servers, family: Avocent ACS800}
+description: >-
+  Vertiv Avocent ACS800 compact serial console, the 4-port unit with an analog modem. It has four RJ45 serial
+  ports and an RJ45 console port. It also has two 10/100/1000 RJ45 LAN ports and a 12 VDC power jack for the
+  external AC/DC adapter. The front carries the MODEM, DIGITAL IN and SENSOR RJ45 jacks, a four-pin DIGITAL OUT connector, four
+  USB ports and the STATUS and POWER lamps. The unit stands on a desk, or takes the maker's wall, DIN rail or 1U
+  shelf kit.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Vertiv Avocent ACS800 Serial Console data sheet AV-12340 (R09/22): the ordering table, hardware
+      specifications, power usage and dimensions, and its pictures of the front and of the eight-port rear.
+      Vertiv Avocent ACS800/8000 Advanced Console System Installer/User Guide (PDF built 2025-03-05): Figure
+      1.4 and Table 1.4 (the callouts), Table 1.5 (the serial lamp states), "Digital Out sensors" (the two relay
+      switches) and Table A.2. Avocent ACS800 Advanced Console System Mounting Installation Guide 590-1509-501A,
+      pages 1 to 3: the DIN rail, wall and 1U shelf kits. The maker's product photographs of the front and of
+      the two-port rear. No dimensioned drawing, 3D model or stencil is held.
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING IS HELD, SO EVERY POSITION ON BOTH FACES IS MEASURED OFF THE MAKER'S PHOTOGRAPHS AND IS
+      ESTIMATED. The front is the 800 x 600 front photograph: the face is 690 pixels across for the 212.7 mm
+      body, 3.244 pixels per millimetre, and a jack's 52 pixel width reads 16.0 mm against the 15.8 mm of an RJ45
+      housing. The photograph looks slightly down on the unit, so every y is taken from the bottom edge of the
+      face with the same scale. The rear is the data sheet's picture of the eight-port unit, rendered at 400 dpi
+      (7.457 pixels per millimetre across the body), and the two-port rear photograph (3.40 pixels per millimetre)
+      is the second reading: the first jack pair sits at 77.4 mm in the photograph and 77.6 mm in the picture, and
+      the two jacks of the pair 14.4 mm apart in the photograph and 14.5 mm in the picture. A position is good to
+      about 0.5 mm across and 1 mm down. Counts and colours are read directly.
+  chassis:
+    confidence: datasheet
+    note: >-
+      8.374 x 7.156 x 1.161 in (W x D x H), data sheet AV-12340 page 2, converted to 212.7 x 181.76 x 29.49 mm.
+      The installer guide, Table A.2, prints 1.3 x 8.38 x 7.16 in (H x W x D): the width and depth agree to
+      0.01 in and the height does not (gap `height`). The data sheet's figure is used because it is printed to a
+      thousandth of an inch.
+  colour:
+    confidence: photo-measured
+    note: >-
+      medians of the front photograph: the face #494949 with an orange trim line along its bottom edge #ec8e30;
+      of the rear photograph: the rear plate #edeef0 under a dark lid #515151. The lid is seen from above in
+      both photographs and is not a face.
+  front-layout:
+    confidence: estimated
+    note: >-
+      From the front photograph. The mark and the product name Avocent ACS800 sit at the left, the STATUS and
+      POWER lamps follow, then four jacks in a row: MODEM, DIGITAL IN, the DIGITAL OUT connector and SENSOR, then
+      two blocks of two stacked USB ports each, with the USB symbol under each block. The MODEM, DIGITAL IN and
+      SENSOR jacks are RJ45 housings in white bezels, 20.6 mm apart centre to centre (MODEM to DIGITAL IN) and
+      41.3 mm (DIGITAL IN to SENSOR, the DIGITAL OUT connector between). The photograph does not number the USB
+      ports; the upper port of the first block is taken as 1, the lower as 2, then the second block.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      From the data sheet's eight-port rear picture and the two-port rear photograph. The 12VDC jack is at the
+      left, then CONSOLE, then LAN 1 and LAN 2 with a green lamp at the upper left and a yellow at the upper
+      right of each, then the serial jacks in gangs of two (a framed pair each) with a green lamp at the lower
+      left and a yellow at the lower right of every jack. The eight-port picture shows gangs of 2, 2 and 4; the
+      photograph shows the first pair. THE REAR OF THE FOUR-PORT UNIT IS NOT PHOTOGRAPHED: its four serial jacks
+      are drawn as the first two gangs of the eight-port picture, at the positions that picture gives them, and
+      the numbers 1 to 4 under them as printed on both pictures.
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      Data sheet hardware specifications: 2, 4 or 8 serial ports on RJ45, selectable between RS-232, RS-422 and
+      RS-485, one serial console port on RJ45. Installer guide Table 1.4 callout 5: all of the serial ports are
+      multi-protocol. The ordering table lists the 4-port unit only.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      Installer guide Table 1.4, callout 5: connect "the appropriate serial and power devices" to the serial ports.
+      Callout 7 is the console port. The serial ports are console server ports as on the ACS8000.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Installer guide Table 1.4, callout 1: the STATUS lamp is green when the console system is fully booted up
+      and initialized and the Power lamp is green when power is being supplied. Table 1.5 gives each serial jack a
+      green and a yellow lamp with the meanings written under each state.
+  digital-out:
+    confidence: datasheet
+    note: >-
+      Installer guide, "Digital Out sensors": "the four pins of the green connector form two switches", Switch 1
+      the two pins on the left and Switch 2 the two on the right, relays rated 12 A and 300 V. The guide's Table
+      A.2 says "four output signals" and its text two digital outputs; both fit two switches of two pins. The
+      front is the only face that carries it.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet power usage: nominal 120 VAC typical 0.13 A and 6.2 W, maximum 0.47 A and 28 W; nominal 240 VAC
+      typical 0.10 A and 7 W, maximum 0.29 A and 28 W. 28 W is the maximum at both and is filed as
+      `power-max-w`. The supply is an external AC/DC adapter, 100 to 240 VAC in and 12 VDC out; the rear carries
+      the 12VDC jack the adapter plugs into. The installer guide, Table A.2, gives an internal supply and 17 W
+      maximum: gap `power`.
+  ears:
+    confidence: drawing
+    note: >-
+      Mounting Installation Guide 590-1509-501A: an optional kit of two brackets with DIN clips for 35 mm rail
+      (page 1), an optional kit of two brackets for a wall (page 2) and an optional kit of two brackets and a 1U
+      shelf (page 3). No kit is part of the unit, none is dimensioned and no kit part number is held, so the unit
+      is a desktop box with no ears and no rack units.
+  sku:
+    confidence: datasheet
+    note: >-
+      The data sheet ordering table lists one model, ACS804MEAC-400, "ACS800 4-port unit w/analog modem,
+      external AC/DC, PDU cable". The data sheet says the family has 2, 4 or 8 serial ports and no held document
+      gives the part number of the 2-port or the 8-port unit.
+attrs:
+  physical:
+    weight-note: not stated, the two documents that give a weight disagree (gap `weight`)
+  power:
+    power-max-w: 28
+    power-input: external AC/DC power adapter, 100 to 240 VAC, 50/60 Hz in, 12 VDC out (data sheet)
+    power-usage: typical 6.2 W (0.13 A) at 120 VAC and 7 W (0.10 A) at 240 VAC; maximum 28 W at both (data sheet)
+  platform:
+    cpu: Dual-core ARM Cortex-A9 MPCore with CoreSight
+    ram: 1 GB DDR3L
+    storage: 16 GB eMMC flash
+  environmental:
+    operating-temp-c: 0 to 70
+    storage-temp-c: -20 to 90
+    operating-humidity: 20% to 80% non-condensing RH
+    storage-humidity: 5% to 95% relative humidity
+  features:
+    serial-pinout: automatic Cyclades and Cisco pin-out detection (data sheet)
+    modem: built-in V.92 analog modem (data sheet)
+    sensor-ports: environmental sensor port (RJ45, 1-wire) and a digital in port (data sheet)
+    digital-out: two relay switches on one four-pin connector, 12 A and 300 V (installer guide)
+  compliance:
+    certification: >-
+      Emissions and immunity: FCC Class A, CE Class A, UKCA, ICES-003, VCCI, RCM, Customs Union, KCC. Safety: UL,
+      cUL, EN-60950, CB, Customs Union (data sheet).
+chassis:
+  width: 212.7
+  height: 29.49
+  depth: 181.76
+  color: '#494949'
+  mount: desktop
+gaps:
+- what: dimensioned-drawing
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    No dimensioned drawing, 3D model or stencil of the faces is held. Both faces are measured off the maker's
+    photographs and every position is estimated (provenance `method`).
+  wanted: A dimensioned front and rear view of the ACS800.
+- what: four-port-rear
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    No photograph or picture of the four-port unit's rear is held. The rear is the two-port photograph and the
+    data sheet's eight-port picture, and the four jacks are the first two gangs of the eight-port picture.
+  wanted: A photograph of the ACS804MEAC-400 rear.
+- what: height
+  scope: [front, rear, left, right]
+  reason: sources-disagree
+  note: >-
+    The data sheet gives 1.161 in and the installer guide, Table A.2, 1.3 in, a difference of 3.5 mm. Width and
+    depth agree. The data sheet's figure is used.
+  wanted: The maker's height of the unit with and without its feet.
+- what: weight
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    The data sheet gives 2.4 lb and the installer guide, Table A.2, 3.8 lb (1.72365 kg), which is 1.72 kg only if
+    the pound figure is rounded. No weight is stated.
+  wanted: The maker's weight for the ACS804MEAC-400.
+- what: power
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    The data sheet gives an external AC/DC adapter and a maximum of 28 W at 120 VAC and 240 VAC. The installer
+    guide, Table A.2, gives an internal 100 to 240 VAC supply and 17 W maximum. The rear carries a 12VDC jack and
+    the mounting guide tells the installer to place "the power supply" behind the unit, so the data sheet is
+    used. The adapter is not drawn: no held document gives its size or its draw.
+  wanted: The maker's power figures for the ACS804MEAC-400 and the adapter's part number.
+- what: usb-numbering
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The four front USB ports are not numbered on the unit. The upper port of the first block is drawn as 1.
+  wanted: The maker's numbering of the USB ports.
+- what: mounting-kits
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: >-
+    The mounting guide shows optional DIN rail, wall and 1U shelf kits that bolt to the bottom edge of the unit.
+    No figure dimensions a bracket or a hole and no kit part number is held, so no kit is listed.
+  wanted: The kit part numbers and a dimensioned drawing of each kit.
+- what: top-bottom-sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    Only the front and rear are photographed straight on. The top is seen at a slant in both photographs as a
+    plain lid with a small mark at the rear corner and no vents; no photograph shows the bottom or a side.
+  wanted: Photographs or a drawing of the top, bottom and sides.
+groups:
+  modem:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the MODEM jack of the internal V.92 analog modem
+  sensors:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the DIGITAL IN and SENSOR jacks, one for digital-in sensors and one for a 1-Wire environmental sensor
+  digital-out:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the four-pin DIGITAL OUT connector, two relay switches of two pins each
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '2.0'}
+    description: the four USB 2.0 Type A ports on the front, two stacked in each of two blocks
+  power-in:
+    term: Inlet
+    role: service
+    index-origin: 1
+    description: the 12VDC jack the external AC/DC adapter plugs into
+  lan:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two 10/100/1000 RJ45 LAN ports, printed LAN 1 and LAN 2
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the serial console port on RJ45
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: >-
+      the 4 RJ45 serial ports in two framed pairs; rel-pos carries the number printed under them. All take
+      RS-232, RS-422 or RS-485
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the STATUS and POWER lamps
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 1
+views:
+  front:
+    size: {w: 212.7, h: 29.49}
+    panel:
+      decor:
+      - {id: orange-line, kind: trim, at: [0.6, 27.99], size: [211.5, 1.5], fill: '#ec8e30'}
+      - {id: usb-frame-1, kind: frame-plate, at: [168.3, 7.3], size: [13.8, 13.6], rx: 0.8, fill: '#d8d8d8'}
+      - {id: usb-inset-1, kind: frame-plate, at: [168.8, 7.8], size: [12.8, 12.6], rx: 0.6, fill: '#262626'}
+      - {id: usb-frame-2, kind: frame-plate, at: [185.4, 7.3], size: [13.8, 13.6], rx: 0.8, fill: '#d8d8d8'}
+      - {id: usb-inset-2, kind: frame-plate, at: [185.9, 7.8], size: [12.8, 12.6], rx: 0.6, fill: '#262626'}
+    silkscreen:
+    - {at: [76.1, 15.02], text: STATUS, font-size: 2.0, anchor: end, fill: '#f4f4f4', for: led-status}
+    - {at: [76.1, 20.3], text: POWER, font-size: 2.0, anchor: end, fill: '#f4f4f4', for: led-power}
+    - {at: [93.0, 26.4], text: MODEM, font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: modem}
+    - {at: [113.6, 26.4], text: DIGITAL IN, font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: digital-in}
+    - {at: [134.1, 26.4], text: DIGITAL OUT, font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: digital-out}
+    - {at: [154.9, 26.4], text: SENSOR, font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: sensor}
+    - {at: [4.0, 22.7], text: Avocent ACS800, font-size: 3.9, anchor: start, fill: '#f4f4f4', for: chassis}
+    components:
+      placements:
+      - {ref: std/rj45@2, id: modem, at: [85.05, 8.2], group: modem, rel-pos: 1, attrs: {media: rj45-telemetry, finish: '#ececec', function: modem}}
+      - {ref: std/rj45@2, id: digital-in, at: [105.7, 8.2], group: sensors, rel-pos: 1, attrs: {media: rj45-telemetry, finish: '#ececec', function: digital-in}}
+      - {ref: vertiv/acs800-digital-out@1, id: digital-out, at: [126.1, 15.3], group: digital-out, rel-pos: 1}
+      - {ref: std/rj45@2, id: sensor, at: [147.0, 8.2], group: sensors, rel-pos: 2, attrs: {media: rj45-telemetry, finish: '#ececec', function: sensor}}
+      - {ref: std/usb-a@1, id: usb-1, at: [169.2, 8.0], skin: usb2, group: usb, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [169.2, 14.9], skin: usb2, group: usb, rel-pos: 2}
+      - {ref: std/usb-a@1, id: usb-3, at: [186.3, 8.0], skin: usb2, group: usb, rel-pos: 3}
+      - {ref: std/usb-a@1, id: usb-4, at: [186.3, 14.9], skin: usb2, group: usb, rel-pos: 4}
+      - {ref: common/usb-symbol@1, id: usb-mark-1, at: [172.8, 23.2], group: furniture, rel-pos: 1}
+      - {ref: common/usb-symbol@1, id: usb-mark-2, at: [189.9, 23.2], group: furniture, rel-pos: 2}
+      - ref: common/led-dot@1
+        id: led-status
+        at: [78.5, 13.4]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states: ['off', {name: initialized, color: '#00b300'}]
+      - ref: common/led-dot@1
+        id: led-power
+        at: [78.5, 18.6]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states: ['off', {name: power-supplied, color: '#00b300'}]
+    regions:
+      - {id: logo-zone, at: [4.0, 6.4], size: {w: 40.1, h: 9.2}, label: 'Vendor logo; not drawn'}
+  rear:
+    size: {w: 212.7, h: 29.49}
+    panel:
+      decor:
+      - {id: rear-plate, kind: face-plate, at: [0.6, 6.3], size: [211.5, 23.19], fill: '#edeef0'}
+      - {id: pair-frame-1, kind: jack-plate, at: [77.6, 9.6], size: [32.1, 14.6], fill: '#f8f8f9'}
+      - {id: pair-frame-2, kind: jack-plate, at: [112.1, 9.6], size: [32.2, 14.6], fill: '#f8f8f9'}
+    silkscreen:
+    - {at: [11.0, 26.8], text: 12VDC, font-size: 3.0, anchor: middle, fill: '#222222', for: power-in}
+    - {at: [26.8, 26.8], text: CONSOLE, font-size: 3.0, anchor: middle, fill: '#222222', for: console}
+    - {at: [46.7, 26.8], text: LAN 1, font-size: 3.0, anchor: middle, fill: '#222222', for: lan-1}
+    - {at: [66.4, 26.8], text: LAN 2, font-size: 3.0, anchor: middle, fill: '#222222', for: lan-2}
+    - {id: tab-1, at: [83.4, 24.0], path: 'M 0.6 0 H 4.6 L 5.2 2.8 H 0 Z', filled: false, stroke-width: 0.25, fill: '#222222', for: serial-1}
+    - {id: tab-2, at: [97.9, 24.0], path: 'M 0.6 0 H 4.6 L 5.2 2.8 H 0 Z', filled: false, stroke-width: 0.25, fill: '#222222', for: serial-2}
+    - {id: tab-3, at: [118.3, 24.0], path: 'M 0.6 0 H 4.6 L 5.2 2.8 H 0 Z', filled: false, stroke-width: 0.25, fill: '#222222', for: serial-3}
+    - {id: tab-4, at: [132.6, 24.0], path: 'M 0.6 0 H 4.6 L 5.2 2.8 H 0 Z', filled: false, stroke-width: 0.25, fill: '#222222', for: serial-4}
+    - {at: [85.9, 26.4], text: '1', font-size: 2.4, anchor: middle, fill: '#222222', for: serial-1}
+    - {at: [100.6, 26.4], text: '2', font-size: 2.4, anchor: middle, fill: '#222222', for: serial-2}
+    - {at: [120.9, 26.4], text: '3', font-size: 2.4, anchor: middle, fill: '#222222', for: serial-3}
+    - {at: [135.2, 26.4], text: '4', font-size: 2.4, anchor: middle, fill: '#222222', for: serial-4}
+    components:
+      placements:
+      - {ref: common/dc-barrel@1, id: power-in, at: [5.0, 10.1], group: power-in, rel-pos: 1, attrs: {input-voltage: 12}}
+      - {ref: std/rj45@2, id: console, at: [18.9, 9.8], group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console, finish: '#ececec'}}
+      - {ref: common/rj45-eth@1, id: lan-1, at: [38.8, 9.8], rotate: 180, group: lan, rel-pos: 1, attrs: {finish: '#ececec'}}
+      - {ref: common/rj45-eth@1, id: lan-2, at: [58.5, 9.8], rotate: 180, group: lan, rel-pos: 2, attrs: {finish: '#ececec'}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [79.55, 12.0], group: serial, rel-pos: 1,
+         attrs: {serial-protocols: 'RS-232, RS-422, RS-485'},
+         states: {led-a: ['off', {name: connected, color: '#39b54a'}, {name: session-active-slow-blink, color: '#39b54a', behavior: blinking}, {name: data-activity-fast-blink, color: '#39b54a', behavior: blinking}], led-b: ['off', {name: data-buffering, color: '#e0b21b'}, {name: alert-slow-blink, color: '#e0b21b', behavior: blinking}, {name: emergency-fast-blink, color: '#e0b21b', behavior: blinking}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [94.25, 12.0], group: serial, rel-pos: 2,
+         attrs: {serial-protocols: 'RS-232, RS-422, RS-485'},
+         states: {led-a: ['off', {name: connected, color: '#39b54a'}, {name: session-active-slow-blink, color: '#39b54a', behavior: blinking}, {name: data-activity-fast-blink, color: '#39b54a', behavior: blinking}], led-b: ['off', {name: data-buffering, color: '#e0b21b'}, {name: alert-slow-blink, color: '#e0b21b', behavior: blinking}, {name: emergency-fast-blink, color: '#e0b21b', behavior: blinking}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [114.55, 12.0], group: serial, rel-pos: 3,
+         attrs: {serial-protocols: 'RS-232, RS-422, RS-485'},
+         states: {led-a: ['off', {name: connected, color: '#39b54a'}, {name: session-active-slow-blink, color: '#39b54a', behavior: blinking}, {name: data-activity-fast-blink, color: '#39b54a', behavior: blinking}], led-b: ['off', {name: data-buffering, color: '#e0b21b'}, {name: alert-slow-blink, color: '#e0b21b', behavior: blinking}, {name: emergency-fast-blink, color: '#e0b21b', behavior: blinking}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [128.85, 12.0], group: serial, rel-pos: 4,
+         attrs: {serial-protocols: 'RS-232, RS-422, RS-485'},
+         states: {led-a: ['off', {name: connected, color: '#39b54a'}, {name: session-active-slow-blink, color: '#39b54a', behavior: blinking}, {name: data-activity-fast-blink, color: '#39b54a', behavior: blinking}], led-b: ['off', {name: data-buffering, color: '#e0b21b'}, {name: alert-slow-blink, color: '#e0b21b', behavior: blinking}, {name: emergency-fast-blink, color: '#e0b21b', behavior: blinking}]}}
+  top:
+    size: {w: 212.7, h: 181.76}
+    empty: >-
+      Only the front and rear are photographed straight on. Both photographs show the top at a slant as a plain
+      lid with a small mark at the rear corner and no vents or openings, so nothing is drawn.
+  bottom:
+    size: {w: 212.7, h: 181.76}
+    empty: >-
+      Not drawn by any source held: no photograph, drawing or guide figure shows the underside. The mounting
+      guide shows the slotted bracket flanges of its optional kits along the bottom edge and does not dimension
+      them.
+  left:
+    size: {w: 181.76, h: 29.49}
+    empty: >-
+      Not drawn by any source held: no photograph or figure shows a side face.
+  right:
+    size: {w: 181.76, h: 29.49}
+    empty: >-
+      Not drawn by any source held: no photograph or figure shows a side face.
+configurations:
+  base:
+    kind: base
+    description: >-
+      ACS804MEAC-400, the 4-port unit with an analog modem, an external AC/DC adapter and a PDU cable (data
+      sheet ordering table). The mounting kits are optional and are not part of this configuration.
+    default: true
+    part-numbers:
+      ACS804MEAC-400: {}
+references:
+- {title: 'Vertiv Avocent ACS800 Serial Console data sheet, AV-12340 (R09/22), Vertiv', sha256: e0c0df78026e8bc3229bfcabb2a62727d800b972775d60082923e02196ccf84e}
+- {title: 'Avocent ACS800 Advanced Console System Mounting Installation Guide, 590-1509-501A, Vertiv', sha256: c2c15a7dc3bfa35e4691ca6a3cbe70573442d7aa8c319c42714afb667ce4ef78}
+- {title: 'Vertiv Avocent ACS800/8000 Advanced Console System Installer/User Guide, Vertiv', sha256: 7f2577516a8f5cb6329a26917763aed26c95f37ea5fb109ebb9ed01238075dca}
