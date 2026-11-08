@@ -200,9 +200,9 @@ def rps_skin():
 def test_the_rps_connector_has_twenty_two_cells_in_two_rows_of_eleven_at_the_measured_pitch():
     import re
     skin = rps_skin()
-    cells = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="3.5" height="3.7"', skin)
+    cells = re.findall(r'<path d="M ([\d.]+) ([\d.]+) H', re.search(r'<g fill="#7d7464">(.*?)</g>', skin, re.S).group(1))
     assert len(cells) == 22
-    xs = sorted({float(x) for x, _ in cells})
+    xs = sorted({round(float(x) - 0.3, 2) for x, _ in cells})  # each path starts 0.3 mm in, at the corner radius
     ys = sorted({float(y) for _, y in cells})
     assert len(xs) == 11 and len(ys) == 2
     assert abs((xs[-1] - xs[0]) / 10 - 4.17) < 0.01 and abs(ys[1] - ys[0] - 4.03) < 0.01
@@ -763,7 +763,7 @@ def test_the_rps_connector_fills_equal_their_photograph_samples():
     assert re.search(r'id="housing"[^>]*fill="#f4f5ee"', skin)
     assert re.search(r'id="opening"[^>]*fill="#656c66"', skin)
     assert re.search(r'id="top-edge"[^>]*fill="#0e1010"', skin)
-    assert len(re.findall(r'width="3.5" height="3.7"', skin)) == 22 and '<g fill="#7d7464">' in skin
+    assert len(re.findall(r'<path d="M ', skin)) == 22 and '<g fill="#7d7464">' in skin
     assert len(re.findall(r'width="1.2" height="1.2"', skin)) == 22 and '<g fill="#887555">' in skin
     assert "rps-connector-part" in gaps(device("ws-c2960s-48fpd"))
 

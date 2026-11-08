@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: ap78-button
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  The round button beside the display of the APC NetShelter 1U rack PDUs AP7821B and AP7921B. It is a grey disc with a
+  faint ring of printing round it. No held document names it or says what it does.
+size: {w: 7.0, h: 7.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    photo - the APC AP7821B datasheet (p.5) and AP7921B datasheet (p.6) photographs of the outlet face show one
+    round button between the display and the jacks. Neither datasheet mentions a button in its text.
+  size: >-
+    estimated - read off the 369 px AP7921B photograph (datasheet p.6): about 17 px across where the 445 mm face
+    spans about 280 px, so 7 mm, good to about 2 mm.
+  colour: >-
+    photo - the disc reads #6a7372 (AP7921B) and #76737c (AP7821B) at the median of its pixels, lighter than the
+    face round it.
+elements:
+  cap: {at: [0.3, 0.3], size: [6.4, 6.4], class: button}
+relief:
+  features:
+    - node: cap
+      out: 0.5
+      color: '#6a7372'
+      confidence: estimated
+      source: >-
+        no document gives how far the button stands from the face; 0.5 mm is a stand-in, declared an estimate.
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-sip-700
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -155,17 +155,25 @@ provenance:
     render.py, which seats an occupant into a seated module's own bay, and 24 SPAs
     are now modelled from the SIP and SPA Hardware Installation Guide's Table 10.
     So `accepts` can name real parts and does.
-  accepts-is-singles-only: >-
-    THE 22 SINGLE-WIDTH SPAs ARE LISTED AND THE TWO DOUBLES ARE NOT, and that is a
-    limit of the bay model rather than a statement about the hardware.
-    SPA-2XCHOC12/DS0 and SPA-1XCHOC48/DS3 occupy TWO SUBSLOTS SIDE BY SIDE - about
-    34.58 across against a subslot's 17.29 - and an occupant that spans two bays has
-    no representation here: a bay holds one module sized to itself. Listing them
-    would put a 34.58 part in a 17.29 opening and the drawing would lie. They are
-    built and correct as components; what is missing is a way to say a module fills
-    two bays. Note the guide names this class 'double-height' in Table 10 and
-    'double-width' in the SIP-700 chapter - one axis, two vocabularies, which is why
-    the count of affected parts (2 of 24) matters more than either word.
+  accepts-doubles: >-
+    THE 22 SINGLE-WIDTH SPAs ARE LISTED IN ALL FOUR BAYS, AND THE TWO DOUBLES IN BAY-2
+    AND BAY-3 ONLY. SPA-2XCHOC12/DS0 and SPA-1XCHOC48/DS3 are 34.58 across against a
+    subslot's 17.29, so each states slot-width 2 and covers a row of the face: the
+    bay that lists it states `span` and names the bay beside it. Guide, PDF page 24,
+    Table 10: both are 'double-height'. Figures 6 and 8 (PDF pages 26 and 29) draw
+    each plate twice a single's thickness and a single's length. Figure 2 (page 18)
+    draws one such plate in each of the two rows, and Table 7 with Figure 3 (page
+    20) puts 'Double height single width SPA in Subslot 0, Bay 3' beside a 'Single
+    height single width SPA in Subslot 1, Bay 0'. So a double covers Bay 2 with Bay 0
+    (top row) or Bay 3 with Bay 1 (bottom row). THE LEFT BAY OF A ROW CARRIES IT, and
+    that is the drawing's reading of the guide's naming: a span runs to the right of
+    its bay at rotate 0, Bay 3 is the one the guide names, and Bay 2 is its mirror in
+    the other row. Bay 0 and Bay 1 list no double because no bay lies to their right.
+    The guide names this class 'double-height' in Table 10 and 'double-width' in the
+    SIP-700 chapter - one axis, two vocabularies. Its page 18 also says a SIP-700
+    takes '1 double-width, double-height SPA' and its page 19 says it 'does not
+    support double-width, double-height SPAs'; neither SPA is wider than one row, so
+    neither sentence reaches them.
   blank-is-a-real-part-we-do-not-have: >-
     NO DEFAULT OCCUPANT IS SET, and the reason is a missing component rather than a
     missing decision. Cisco requires a filler: an unused bay must be closed with a
@@ -247,14 +255,17 @@ bays:
   bay-2:
     at: [6.77, 27.71]
     size: [17.29, 167.87]
+    span: [bay-0]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchoc48-ds3@1
     - cisco/spa-1xchstm1-oc3@1
     - cisco/spa-1xoc12-atm-v2@1
     - cisco/spa-1xoc3-atm-v2@1
     - cisco/spa-1xoc48pos-rpr@1
     - cisco/spa-24cht1-ce-atm@1
     - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xchoc12-ds0@1
     - cisco/spa-2xoc12-pos@1
     - cisco/spa-2xoc48pos-rpr@1
     - cisco/spa-2xt3e3@1
@@ -299,14 +310,17 @@ bays:
   bay-3:
     at: [6.77, 195.59]
     size: [17.29, 167.87]
+    span: [bay-1]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchoc48-ds3@1
     - cisco/spa-1xchstm1-oc3@1
     - cisco/spa-1xoc12-atm-v2@1
     - cisco/spa-1xoc3-atm-v2@1
     - cisco/spa-1xoc48pos-rpr@1
     - cisco/spa-24cht1-ce-atm@1
     - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xchoc12-ds0@1
     - cisco/spa-2xoc12-pos@1
     - cisco/spa-2xoc48pos-rpr@1
     - cisco/spa-2xt3e3@1

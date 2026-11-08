@@ -2,10 +2,11 @@
 (docs/pcie-two-slot-bays-design.md: `slot-width` on the part, `span` on the bay).
 
 Juniper's MX Series Interface Module Reference lists MIC-3D-40GE-TX for the
-MPC1E and MPC2E (Tables 10 and 11) and a dash for the MPC3E (Table 12); it
-lists MIC3-100G-DWDM for the MPC3E and has no row for the MPC1E or MPC2E. Each
-carrier's `mic0` accepts the MICs its column lists and spans `mic1`, the window
-beside it. The kit's side is spec/tests/js/rack-dual-wide-mic.mjs.
+MPC1E, MPC2E and MPC2E-3D-NG (Tables 10 and 11) and for the MPC3E-3D-NG
+(Table 12), where the MPC3E has a dash; it lists MIC3-100G-DWDM for the MPC3E
+and the MPC3E-3D-NG (Table 12) and has no row for the MPC1E, MPC2E or
+MPC2E-3D-NG. Each carrier's `mic0` accepts the MICs its column lists and spans
+`mic1`, the window beside it. The kit's side is spec/tests/js/rack-dual-wide-mic.mjs.
 """
 import shutil
 import sys
@@ -24,8 +25,15 @@ RENDER = ROOT / "spec/tools/portrayal/render.py"
 
 TX = "juniper/mic-3d-40ge-tx@2"
 DWDM = "juniper/mic3-100g-dwdm@2"
-CARRIERS = {"juniper/mpc1e-3d@3": TX, "juniper/mpc2e-3d@3": TX, "juniper/mpc3e-3d@3": DWDM}
-NOT_LISTED = {"juniper/mpc1e-3d@3": DWDM, "juniper/mpc2e-3d@3": DWDM, "juniper/mpc3e-3d@3": TX}
+LISTED = {
+    "juniper/mpc1e-3d@3": [TX],
+    "juniper/mpc2e-3d@3": [TX],
+    "juniper/mpc3e-3d@3": [DWDM],
+    "juniper/mpc2e-3d-ng@1": [TX],
+    "juniper/mpc3e-3d-ng@1": [TX, DWDM],
+}
+CARRIERS = list(LISTED)
+SEATED = [(carrier, mic) for carrier, mics in LISTED.items() for mic in mics]
 
 
 def _contract(ref):
@@ -60,18 +68,18 @@ def test_a_dual_wide_mic_states_its_width_and_is_seated(ref):
 def test_mic0_spans_mic1_and_lists_the_mic_the_module_reference_lists(carrier):
     bays = _contract(carrier)["bays"]
     assert bays["mic0"]["span"] == ["mic1"]
-    assert CARRIERS[carrier] in bays["mic0"]["accepts"]
-    assert NOT_LISTED[carrier] not in bays["mic0"]["accepts"]
+    for mic in (TX, DWDM):
+        assert (mic in bays["mic0"]["accepts"]) == (mic in LISTED[carrier])
     assert "span" not in bays["mic1"]
     for mic in (TX, DWDM):
         assert mic not in bays["mic1"]["accepts"], "mic1 has no bay beside it to cover"
 
 
-@pytest.mark.parametrize("carrier", CARRIERS)
-def test_the_span_box_is_the_plate_of_the_mic(carrier):
+@pytest.mark.parametrize("carrier,mic", SEATED)
+def test_the_span_box_is_the_plate_of_the_mic(carrier, mic):
     bays = _contract(carrier)["bays"]
     at, size = span_box(bays["mic0"], bays, span_covers(bays["mic0"], 2))
-    mic = _contract(CARRIERS[carrier])["size"]
+    mic = _contract(mic)["size"]
     assert at == [37.7, 0.15]
     assert size == (pytest.approx(mic["w"]), pytest.approx(mic["h"]))
 
@@ -145,8 +153,7 @@ def _tag(svg, path):
 
 
 @pytest.mark.heavy
-@pytest.mark.parametrize("carrier,mic", [("juniper/mpc2e-3d@3", TX), ("juniper/mpc1e-3d@3", TX),
-                                         ("juniper/mpc3e-3d@3", DWDM)])
+@pytest.mark.parametrize("carrier,mic", SEATED)
 def test_the_build_seats_the_mic_in_mic0_and_covers_mic1(tmp_path, carrier, mic):
     rc, err, svg = _build(tmp_path, {"dpc2": carrier, "dpc2/mic0": mic, "dpc2/mic1": ""})
     assert rc == 0, err[-800:]
