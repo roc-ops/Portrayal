@@ -1,0 +1,932 @@
+format: 1
+kind: device
+name: ex2500-24f
+version: 0.2.0
+maturity: modelled
+manufacturer: Juniper
+model: EX2500-24F
+portfolio: {line: EX Series, family: EX2500}
+description: >-
+  Juniper EX2500-24F, a fixed 1RU 10 GbE top-of-rack switch with 24 SFP+ ports. The front carries the
+  24 ports in six gangs of four, four system lamps, two management jacks, a mini-USB serial console and
+  a reset button. The rear carries two AC power inlets beside a vented panel. The two supplies and six
+  fans are built in, so there are no bays. One panel serves both models: the -FB moves air front to back
+  and the -BF back to front.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      EX2500 Ethernet Switch Hardware Guide (Juniper Networks, 61 pages), read via mirror: the copy held
+      is a ManualsLib reproduction of Juniper's manual, the only copy found, since Juniper no longer hosts
+      it. Used: Figures 1 and 2 (the front and rear panels), Figure 3 (the lamps), Tables 4 to 11 (ports,
+      console and lamps), Table 12 (envelope and weight), Table 13 (environment), Table 14 (power) and
+      Table 15 (part numbers). EX2500 Ethernet Switches datasheet (Juniper Networks, 1000282-001-EN, Apr
+      2009, 4 pages): the cover photograph, the specifications and the ordering information. No studio
+      photograph, stencil or 3D model of the EX2500 is held. Terms: both documents are Juniper's and are
+      read for facts only; nothing of either is copied into the library.
+  gate-1:
+    confidence: drawing
+    note: >-
+      Figures 1 and 2 are vector line drawings and were rendered at 600 dpi and measured with a pixel
+      ruler. The front figure's body is 3607 px across and 295 px down: 0.1217 mm per px across from the
+      439 mm of Table 12 and 0.1492 down from its 44.0 mm. The drawing is not at one scale, 22 percent
+      tighter down than across, and the check is the cage opening: it reads 10.4 mm down on that scale,
+      the registry's 10.4, on a quantity the scale never saw. The rear figure is 3622 px across and 341
+      px down: 0.1212 across and 0.1287 down, a 7 percent aspect error. Every position read off a figure
+      is estimated, to about a millimetre across and 1.5 mm down. The mirror's raster is the figure as
+      printed, so a dimension it could not give was not read from it.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Table 12: 4.4 x 43.9 x 38.1 cm (1.73 x 17.3 x 15.0 in), 6.4 kg (14.1 lb), the same for the -FB and
+      the -BF. THE DATASHEET DISAGREES on the weight: it gives 14.9 lb (6.8 kg), and 1.7 x 17.3 x 15 in.
+      The guide's figures are used because Table 12 gives them per model; the datasheet's weight is kept
+      in attrs. 1RU. The width is the body: the drawings show no mounting brackets.
+  ports:
+    confidence: drawing
+    note: >-
+      Figure 1: 24 SFP+ ports in one row, printed 1 to 24, in six gangs of four. The cage frames start
+      62.8 mm apart from 16.9 mm in; within a gang the frames are 14.76 mm apart, 3.6 percent over the
+      registry's 14.25 mm pitch, so the drawn pitch is used with the gutter between gangs at 62.8 - 4
+      x 14.76 = 3.76 mm. The cage opening is 10.4 mm high and its top is 25.6 mm down. The numerals stand
+      under each cage, their centres 40.1 mm down. The guide says the ports take approved SFP+ transceivers
+      and direct access cables, and the datasheet says each runs at 1 GbE or 10 GbE.
+  port-lamps:
+    confidence: drawing
+    note: >-
+      Figure 1 and Figure 3: two round lamps over each cage, centred on it and 6.1 mm apart, 20.7 mm down.
+      The leader lines of Figure 3 put L/A on the left lamp and SP on the right. Table 10: L/A is solid
+      green with a link and no activity, blinking green with activity, and off with no link; SP is solid
+      green at 10 Gbps and off at 1 Gbps.
+  chassis-lamps:
+    confidence: drawing
+    note: >-
+      Figure 3 and Table 8: four round lamps in a column at the left, SYS, FAN, ST-A and ST-B, 10.4 mm
+      from the left edge and 16.8, 21.9, 26.9 and 32.1 mm down. Table 9: SYS is solid green with both
+      supplies good and blinking green with one failed or one cord connected; FAN is solid green with
+      the fans good and blinking with a failure. ST-A is a status lamp whose meaning the guide does not
+      give, and ST-B is reserved for future use.
+  management:
+    confidence: drawing
+    note: >-
+      Figure 1: two RJ-45 jacks stacked in one frame at the right, B above A, 424.1 mm across and 14.8
+      and 29.0 mm down, with their letters at 436 mm. Table 11 gives their lamps: link (solid green with
+      a link, blinking with activity) and speed (solid green at 100 or 1000 Mbps, off at 10). Below them
+      are the mini-USB console CON, centred at 396 mm and 33.2 mm down, and the RESET button, centred
+      at 408.9 mm and 32.9 mm down. The guide: "1 RS-232 console port (mini-USB)", and an external cable
+      converts it to D9. The datasheet's list says "RS-232 DB9 console port", which the guide corrects
+      for the unit.
+  vents:
+    confidence: drawing
+    note: >-
+      Figure 1: a hexagonal vent field over the whole width of the face from 1.9 to 17.5 mm down, a smaller
+      one at the right of port 24 above the console, and in the figure the lamps and the maker's logo
+      sit in it at the left. Figure 2: a vented panel between the two inlets, 51.5 to 386.7 mm across,
+      its hexagon field from 67.6 to 370.6 mm, with two cross-head screws at its right end. The panel
+      is where the six fans exhaust or draw in. The fans themselves are not drawn: no figure shows a fan
+      face.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      Figure 2: an inlet at each end, centred 24.0 and 414.9 mm across and 20.5 mm down, each drawn portrait,
+      22 mm across by 35 mm high with its three pins stacked, so it is the library's C14 inlet turned
+      a quarter. Guide, Power Supplies: two internal 275 W supplies, each with its own IEC 320 inlet on
+      the rear and no power switch. The supplies are internal and the guide gives no part number for them.
+  rear-earth:
+    confidence: estimated
+    note: >-
+      Figure 2 (page 4), read at 600 dpi on the rear figure's pixel ruler (0.1212 mm per px across, 0.1287
+      down): a circled earth symbol on the bare panel at the left of the left inlet, centred 6.5 mm from
+      the left edge and 2.8 mm below the inlet's centre (23.3 mm down). It is about 8.6 mm across in the
+      figure while the registered symbol is 6.0 mm, so it is centred on the figure's mark and is smaller.
+      The figure draws no plate, lug, stud or screw, and no page names a lug, a screw size or a thread,
+      so nothing is drawn for the terminal. Six small plain circles, three at each end, are not placed.
+      Reading accuracy about 1 mm across and 1.5 mm down.
+  fans:
+    confidence: datasheet
+    note: >-
+      Guide, Fans: six internal fans, and fans are not customer replaceable. The datasheet says redundant,
+      variable-speed. They are not field-replaceable units, so there is no bay, and the guide gives no
+      part number or face for them.
+  airflow:
+    confidence: datasheet
+    note: >-
+      Table 12 and the datasheet: the EX2500-24F-FB moves air front to back and the EX2500-24F-BF back
+      to front; the datasheet's Figure 1 draws both. One panel serves both, so each model is a configuration.
+  colour:
+    confidence: estimated
+    note: >-
+      The figures are line drawings. The body is a near black read from the datasheet's cover photograph,
+      a perspective view of the front right corner, with silver cages and white printing. A photograph
+      that is not in perspective would settle the shade.
+  power:
+    confidence: datasheet
+    note: >-
+      Table 14: two supplies, 1+1 redundant, 275 W each, 100 to 240 VAC universal, 50 to 60 Hz, 2.75 A
+      at 100 VAC and 1.15 A at 240 VAC, system dissipation 200 W typical. The datasheet gives 192 W average
+      at full line rate. Table 13: 1100 BTU an hour maximum.
+  environment:
+    confidence: datasheet
+    note: >-
+      Table 13: operating 0 to +40 C, 0 to +35 C with a fan or supply failed, storage -20 to +70 C, 10
+      to 90 percent humidity operating, altitude 3,050 m operating, under 65 dB. THE DATASHEET DISAGREES
+      on the operating minimum: it gives -10 C (14 F). The guide's range is used.
+  ears-and-kits:
+    confidence: datasheet
+    note: >-
+      NOT MODELLED. Tables 16 and 17 and Figures 4 to 9 describe a standard two-post kit and a four-post
+      kit, and Table 15 and the datasheet order the generic four-post kit as EX2500-RMK-4POST. The drawings
+      of the panels show no ear, so no ear position is stated, and no kit is listed in chassis.kits.
+  ordering-codes:
+    confidence: datasheet
+    note: >-
+      Table 15 prints EX2500-24F-FB and EX2500-24F-BF. The datasheet's ordering table prints the first
+      as EX2500-2F-FB, which is read as a misprint of the guide's code.
+  lifecycle:
+    confidence: estimated
+    note: >-
+      The product is end of life and Juniper no longer hosts its documents. No end-of-life notice is held,
+      so no lifecycle is written.
+attrs:
+  physical:
+    weight-note: 6.4 kg (14.1 lb) in the guide's Table 12; 14.9 lb (6.8 kg) in the datasheet
+    depth-note: 38.1 cm (15.0 in) (Table 12)
+  performance: {throughput: '480 Gbps full duplex, non-blocking on all ports (datasheet)', latency: about
+      700 ns (datasheet), vlans-max: 1024, sfp-plus-speeds: 10 GbE or 1 GbE on each SFP+ port (datasheet)}
+  power:
+    power-typical-w: 200
+    power-envelope: unstated
+    power-input-ac: 100 to 240 VAC, 50 to 60 Hz
+    power-current-max: 2.75 A at 100 VAC; 1.15 A at 240 VAC
+    redundancy-note: two internal 275 W supplies in 1+1, load sharing at about half load each
+  thermal:
+    thermal-output-btu-h: 1100
+    cooling: >-
+      six internal fans, not customer replaceable; front-to-back in the -FB and back-to-front in the -BF
+  environmental:
+    operating-temp: 0 to +40 C, +35 C maximum with a fan or supply failed
+    storage-temp: -20 to +70 C
+    humidity: 10 to 90 percent noncondensing operating, 10 to 95 percent storage
+    altitude: 3,050 m operating, 4,573 m storage
+    acoustic-noise: under 65 dB
+  features:
+    optics-sfp-plus: SFP+ 10GBASE-SR and 10GBASE-LR transceivers and 1 m and 3 m direct access cables
+  management:
+    oob: two 10/100/1000BASE-T RJ-45 management ports
+    console: one RS-232 serial console port, a mini-USB connector with an external cable to D9
+  compliance:
+    emc: FCC Part 15 Class A, EN 55022 Class A, VCCI Class A, ICES-003, AS/NZS CISPR 22 Class A
+chassis: {width: 439.0, height: 43.9, depth: 381.0, ru: 1, weight-kg: 6.4, color: '#232528', airflow: front-to-back,
+  power: ac}
+gaps:
+- what: rack-ears-and-kits
+  scope:
+  - front
+  reason: needs-drawing
+  wanted: >-
+    The dimensions and positions of the two-post and four-post kits. Tables 16 and 17 and Figures 4 to
+    9 list and draw the parts, and the panel figures show no ear.
+- what: photographs
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A straight-on studio photograph of each side. The only photograph is the datasheet's cover picture,
+    a perspective view of the front right corner, so every position is read from the figures.
+- what: supplies-and-fans
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The part numbers and faces of the two internal supplies and the six fans. The guide names them by
+    role only and says they are built in.
+- what: console-cable
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: >-
+    The part number of the mini-USB to D9 console cable. The guide gives its wiring in Table 7 and no
+    code.
+- what: lamp-st-a
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: What the ST-A lamp shows. Table 8 calls it a status LED and gives no states.
+- what: mgmt-lamps
+  scope:
+  - front
+  reason: needs-photo
+  wanted: >-
+    The position of the two management jacks' own lamps. The figure draws small squares at the jack corners,
+    and the photograph shows a green one at the lower left of jack A.
+- what: rear-earth-mark
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    The hardware of the protective earthing terminal and its size. The earth symbol is placed from Figure
+    2, which draws no lug, stud or screw at it. The guide's safety text names the terminal without describing
+    it.
+- what: four-faces
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  wanted: A flat drawing or photograph of the lid, the underside and the side panels.
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp-plus, speed: 10g}
+    description: >-
+      The 24 SFP+ ports as printed, 1 to 24, each taking a 10 GbE SFP+ or direct access cable, or a 1
+      GbE optic
+  sfp-plus-activity-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    states:
+    - 'off'
+    - {name: link, color: '#22c55e'}
+    - {name: activity, color: '#22c55e', behavior: blinking}
+    description: The L/A lamp of each SFP+ port, the left of the pair over the cage (Table 10)
+  sfp-plus-speed-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    states:
+    - 'off'
+    - {name: 10g, color: '#22c55e'}
+    description: >-
+      The SP lamp of each SFP+ port, the right of the pair over the cage; lit at 10 Gbps, off at 1 Gbps
+      (Table 10)
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the management cluster at the right of the front: two RJ-45 management ports, A and B, and a mini-USB
+      serial console. Two kinds, one purpose: reaching the switch when the data ports cannot.
+  controls: {term: Button, role: management, index-origin: 0, description: the recessed RESET button}
+  status-leds: {term: LED, role: indicator, index-origin: 0, description: 'The four system lamps SYS,
+      FAN, ST-A and ST-B (Table 8)'}
+  power-input: {term: Inlet, role: service, index-origin: 0, description: 'The two IEC 320 inlets, one
+      for each internal supply'}
+  furniture:
+    term: Item
+    role: furniture
+    index-origin: 0
+    description: the two screws on the rear panel and the earth symbol at its left end
+views:
+  front:
+    size: {w: 439.0, h: 43.9}
+    panel:
+      decor:
+      - {id: vent-top, at: [8.5, 1.9], size: [386.2, 5.0], pattern: vent, vent: 1}
+      - {id: vent-left, at: [3.1, 9.0], size: [11.9, 4.9], pattern: vent, vent: 1}
+      - {id: vent-main, at: [15.0, 9.0], size: [379.7, 8.5], pattern: vent, vent: 1}
+      - {id: vent-right, at: [393.0, 18.0], size: [20.0, 11.5], pattern: vent, vent: 1}
+      cutouts:
+      - {id: port-1, at: [17.16, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-1, at: [20.21, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-1-speed, at: [26.36, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-2, at: [31.92, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-2, at: [34.98, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-2-speed, at: [41.12, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-3, at: [46.68, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-3, at: [49.73, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-3-speed, at: [55.88, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-4, at: [61.44, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-4, at: [64.5, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-4-speed, at: [70.63, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-5, at: [79.96, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-5, at: [83.02, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-5-speed, at: [89.16, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-6, at: [94.72, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-6, at: [97.78, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-6-speed, at: [103.91, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-7, at: [109.48, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-7, at: [112.54, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-7-speed, at: [118.68, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-8, at: [124.24, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-8, at: [127.3, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-8-speed, at: [133.44, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-9, at: [142.76, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-9, at: [145.81, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-9-speed, at: [151.95, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-10, at: [157.52, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-10, at: [160.58, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-10-speed, at: [166.72, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-11, at: [172.28, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-11, at: [175.34, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-11-speed, at: [181.47, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-12, at: [187.04, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-12, at: [190.09, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-12-speed, at: [196.23, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-13, at: [205.56, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-13, at: [208.62, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-13-speed, at: [214.75, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-14, at: [220.32, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-14, at: [223.38, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-14-speed, at: [229.51, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-15, at: [235.08, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-15, at: [238.14, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-15-speed, at: [244.28, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-16, at: [249.84, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-16, at: [252.9, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-16-speed, at: [259.04, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-17, at: [268.36, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-17, at: [271.42, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-17-speed, at: [277.56, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-18, at: [283.12, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-18, at: [286.18, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-18-speed, at: [292.31, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-19, at: [297.88, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-19, at: [300.94, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-19-speed, at: [307.07, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-20, at: [312.64, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-20, at: [315.69, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-20-speed, at: [321.83, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-21, at: [331.16, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-21, at: [334.22, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-21-speed, at: [340.36, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-22, at: [345.92, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-22, at: [348.98, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-22-speed, at: [355.12, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-23, at: [360.68, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-23, at: [363.74, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-23-speed, at: [369.88, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: port-24, at: [375.44, 25.6], size: [14.25, 10.4], shape: rect}
+      - {id: led-port-24, at: [378.5, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-port-24-speed, at: [384.63, 19.7], size: [2.0, 2.0], shape: circle}
+      - {id: led-sys, at: [9.35, 15.8], size: [2.0, 2.0], shape: circle}
+      - {id: led-fan, at: [9.35, 20.85], size: [2.0, 2.0], shape: circle}
+      - {id: led-st-a, at: [9.35, 25.9], size: [2.0, 2.0], shape: circle}
+      - {id: led-st-b, at: [9.35, 31.05], size: [2.0, 2.0], shape: circle}
+      - {id: mgmt-b, at: [417.8, 9.3], size: [12.7, 11.0]}
+      - {id: mgmt-a, at: [417.8, 23.5], size: [12.7, 11.0]}
+      - {id: console-usb, at: [392.05, 31.25], size: [7.7, 3.9]}
+      - {id: btn-reset, at: [406.9, 30.9], size: [4.0, 4.0], shape: circle}
+    silkscreen:
+    - {at: [24.29, 41.4], text: '1', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-1}
+    - {at: [39.05, 41.4], text: '2', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-2}
+    - {at: [53.8, 41.4], text: '3', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-3}
+    - {at: [68.56, 41.4], text: '4', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-4}
+    - {at: [87.08, 41.4], text: '5', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-5}
+    - {at: [101.84, 41.4], text: '6', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-6}
+    - {at: [116.61, 41.4], text: '7', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-7}
+    - {at: [131.37, 41.4], text: '8', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-8}
+    - {at: [149.88, 41.4], text: '9', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-9}
+    - {at: [164.65, 41.4], text: '10', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-10}
+    - {at: [179.41, 41.4], text: '11', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-11}
+    - {at: [194.16, 41.4], text: '12', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-12}
+    - {at: [212.69, 41.4], text: '13', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-13}
+    - {at: [227.44, 41.4], text: '14', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-14}
+    - {at: [242.21, 41.4], text: '15', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-15}
+    - {at: [256.97, 41.4], text: '16', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-16}
+    - {at: [275.49, 41.4], text: '17', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-17}
+    - {at: [290.25, 41.4], text: '18', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-18}
+    - {at: [305.0, 41.4], text: '19', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-19}
+    - {at: [319.76, 41.4], text: '20', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-20}
+    - {at: [338.29, 41.4], text: '21', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-21}
+    - {at: [353.05, 41.4], text: '22', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-22}
+    - {at: [367.81, 41.4], text: '23', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-23}
+    - {at: [382.56, 41.4], text: '24', font-size: 3.3, anchor: middle, fill: '#eef0f2', for: port-24}
+    - {id: silk-model, at: [424.6, 4.9], text: EX2500, font-size: 4.0, anchor: middle, fill: '#f2f4f6',
+      for: chassis}
+    - {id: silk-sys, at: [8.2, 17.6], text: SYS, font-size: 2.4, anchor: end, fill: '#e4e6e9', for: led-sys}
+    - {id: silk-fan, at: [8.2, 22.65], text: FAN, font-size: 2.4, anchor: end, fill: '#e4e6e9', for: led-fan}
+    - {id: silk-st-a, at: [8.2, 27.7], text: ST-A, font-size: 2.4, anchor: end, fill: '#e4e6e9', for: led-st-a}
+    - {id: silk-st-b, at: [8.2, 32.85], text: ST-B, font-size: 2.4, anchor: end, fill: '#e4e6e9', for: led-st-b}
+    - {id: silk-con, at: [395.9, 41.5], text: CON, font-size: 3.0, anchor: middle, fill: '#f2f4f6', for: console-usb}
+    - {id: silk-reset, at: [408.9, 41.5], text: RESET, font-size: 3.0, anchor: middle, fill: '#f2f4f6',
+      for: btn-reset}
+    - {id: silk-mgmt, at: [424.15, 41.5], text: MGMT, font-size: 3.0, anchor: middle, fill: '#f2f4f6',
+      for: mgmt-a}
+    - {id: silk-b, at: [436.2, 14.95], text: B, font-size: 3.4, anchor: middle, fill: '#e4e6e9', for: chassis}
+    - {id: silk-a, at: [436.2, 28.55], text: A, font-size: 3.4, anchor: middle, fill: '#e4e6e9', for: chassis}
+    components:
+      placements:
+      - {ref: std/sfp-ganged@1, id: port-1, at: [17.16, 25.6], group: sfp-plus, rel-pos: 1}
+      - {ref: std/sfp-ganged@1, id: port-2, at: [31.92, 25.6], group: sfp-plus, rel-pos: 2}
+      - {ref: std/sfp-ganged@1, id: port-3, at: [46.68, 25.6], group: sfp-plus, rel-pos: 3}
+      - {ref: std/sfp-ganged@1, id: port-4, at: [61.44, 25.6], group: sfp-plus, rel-pos: 4}
+      - {ref: std/sfp-ganged@1, id: port-5, at: [79.96, 25.6], group: sfp-plus, rel-pos: 5}
+      - {ref: std/sfp-ganged@1, id: port-6, at: [94.72, 25.6], group: sfp-plus, rel-pos: 6}
+      - {ref: std/sfp-ganged@1, id: port-7, at: [109.48, 25.6], group: sfp-plus, rel-pos: 7}
+      - {ref: std/sfp-ganged@1, id: port-8, at: [124.24, 25.6], group: sfp-plus, rel-pos: 8}
+      - {ref: std/sfp-ganged@1, id: port-9, at: [142.76, 25.6], group: sfp-plus, rel-pos: 9}
+      - {ref: std/sfp-ganged@1, id: port-10, at: [157.52, 25.6], group: sfp-plus, rel-pos: 10}
+      - {ref: std/sfp-ganged@1, id: port-11, at: [172.28, 25.6], group: sfp-plus, rel-pos: 11}
+      - {ref: std/sfp-ganged@1, id: port-12, at: [187.04, 25.6], group: sfp-plus, rel-pos: 12}
+      - {ref: std/sfp-ganged@1, id: port-13, at: [205.56, 25.6], group: sfp-plus, rel-pos: 13}
+      - {ref: std/sfp-ganged@1, id: port-14, at: [220.32, 25.6], group: sfp-plus, rel-pos: 14}
+      - {ref: std/sfp-ganged@1, id: port-15, at: [235.08, 25.6], group: sfp-plus, rel-pos: 15}
+      - {ref: std/sfp-ganged@1, id: port-16, at: [249.84, 25.6], group: sfp-plus, rel-pos: 16}
+      - {ref: std/sfp-ganged@1, id: port-17, at: [268.36, 25.6], group: sfp-plus, rel-pos: 17}
+      - {ref: std/sfp-ganged@1, id: port-18, at: [283.12, 25.6], group: sfp-plus, rel-pos: 18}
+      - {ref: std/sfp-ganged@1, id: port-19, at: [297.88, 25.6], group: sfp-plus, rel-pos: 19}
+      - {ref: std/sfp-ganged@1, id: port-20, at: [312.64, 25.6], group: sfp-plus, rel-pos: 20}
+      - {ref: std/sfp-ganged@1, id: port-21, at: [331.16, 25.6], group: sfp-plus, rel-pos: 21}
+      - {ref: std/sfp-ganged@1, id: port-22, at: [345.92, 25.6], group: sfp-plus, rel-pos: 22}
+      - {ref: std/sfp-ganged@1, id: port-23, at: [360.68, 25.6], group: sfp-plus, rel-pos: 23}
+      - {ref: std/sfp-ganged@1, id: port-24, at: [375.44, 25.6], group: sfp-plus, rel-pos: 24}
+      - ref: common/led-dot@1
+        id: led-port-1
+        at: [20.21, 19.7]
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, color: '#22c55e', behavior: blinking}
+        for: port-1
+        group: sfp-plus-activity-leds
+        rel-pos: 1
+      - ref: common/led-dot@1
+        id: led-port-1-speed
+        at: [26.36, 19.7]
+        states: &id002
+        - 'off'
+        - {name: 10g, color: '#22c55e'}
+        for: port-1
+        group: sfp-plus-speed-leds
+        rel-pos: 1
+      - ref: common/led-dot@1
+        id: led-port-2
+        at: [34.98, 19.7]
+        states: *id001
+        for: port-2
+        group: sfp-plus-activity-leds
+        rel-pos: 2
+      - ref: common/led-dot@1
+        id: led-port-2-speed
+        at: [41.12, 19.7]
+        states: *id002
+        for: port-2
+        group: sfp-plus-speed-leds
+        rel-pos: 2
+      - ref: common/led-dot@1
+        id: led-port-3
+        at: [49.73, 19.7]
+        states: *id001
+        for: port-3
+        group: sfp-plus-activity-leds
+        rel-pos: 3
+      - ref: common/led-dot@1
+        id: led-port-3-speed
+        at: [55.88, 19.7]
+        states: *id002
+        for: port-3
+        group: sfp-plus-speed-leds
+        rel-pos: 3
+      - ref: common/led-dot@1
+        id: led-port-4
+        at: [64.5, 19.7]
+        states: *id001
+        for: port-4
+        group: sfp-plus-activity-leds
+        rel-pos: 4
+      - ref: common/led-dot@1
+        id: led-port-4-speed
+        at: [70.63, 19.7]
+        states: *id002
+        for: port-4
+        group: sfp-plus-speed-leds
+        rel-pos: 4
+      - ref: common/led-dot@1
+        id: led-port-5
+        at: [83.02, 19.7]
+        states: *id001
+        for: port-5
+        group: sfp-plus-activity-leds
+        rel-pos: 5
+      - ref: common/led-dot@1
+        id: led-port-5-speed
+        at: [89.16, 19.7]
+        states: *id002
+        for: port-5
+        group: sfp-plus-speed-leds
+        rel-pos: 5
+      - ref: common/led-dot@1
+        id: led-port-6
+        at: [97.78, 19.7]
+        states: *id001
+        for: port-6
+        group: sfp-plus-activity-leds
+        rel-pos: 6
+      - ref: common/led-dot@1
+        id: led-port-6-speed
+        at: [103.91, 19.7]
+        states: *id002
+        for: port-6
+        group: sfp-plus-speed-leds
+        rel-pos: 6
+      - ref: common/led-dot@1
+        id: led-port-7
+        at: [112.54, 19.7]
+        states: *id001
+        for: port-7
+        group: sfp-plus-activity-leds
+        rel-pos: 7
+      - ref: common/led-dot@1
+        id: led-port-7-speed
+        at: [118.68, 19.7]
+        states: *id002
+        for: port-7
+        group: sfp-plus-speed-leds
+        rel-pos: 7
+      - ref: common/led-dot@1
+        id: led-port-8
+        at: [127.3, 19.7]
+        states: *id001
+        for: port-8
+        group: sfp-plus-activity-leds
+        rel-pos: 8
+      - ref: common/led-dot@1
+        id: led-port-8-speed
+        at: [133.44, 19.7]
+        states: *id002
+        for: port-8
+        group: sfp-plus-speed-leds
+        rel-pos: 8
+      - ref: common/led-dot@1
+        id: led-port-9
+        at: [145.81, 19.7]
+        states: *id001
+        for: port-9
+        group: sfp-plus-activity-leds
+        rel-pos: 9
+      - ref: common/led-dot@1
+        id: led-port-9-speed
+        at: [151.95, 19.7]
+        states: *id002
+        for: port-9
+        group: sfp-plus-speed-leds
+        rel-pos: 9
+      - ref: common/led-dot@1
+        id: led-port-10
+        at: [160.58, 19.7]
+        states: *id001
+        for: port-10
+        group: sfp-plus-activity-leds
+        rel-pos: 10
+      - ref: common/led-dot@1
+        id: led-port-10-speed
+        at: [166.72, 19.7]
+        states: *id002
+        for: port-10
+        group: sfp-plus-speed-leds
+        rel-pos: 10
+      - ref: common/led-dot@1
+        id: led-port-11
+        at: [175.34, 19.7]
+        states: *id001
+        for: port-11
+        group: sfp-plus-activity-leds
+        rel-pos: 11
+      - ref: common/led-dot@1
+        id: led-port-11-speed
+        at: [181.47, 19.7]
+        states: *id002
+        for: port-11
+        group: sfp-plus-speed-leds
+        rel-pos: 11
+      - ref: common/led-dot@1
+        id: led-port-12
+        at: [190.09, 19.7]
+        states: *id001
+        for: port-12
+        group: sfp-plus-activity-leds
+        rel-pos: 12
+      - ref: common/led-dot@1
+        id: led-port-12-speed
+        at: [196.23, 19.7]
+        states: *id002
+        for: port-12
+        group: sfp-plus-speed-leds
+        rel-pos: 12
+      - ref: common/led-dot@1
+        id: led-port-13
+        at: [208.62, 19.7]
+        states: *id001
+        for: port-13
+        group: sfp-plus-activity-leds
+        rel-pos: 13
+      - ref: common/led-dot@1
+        id: led-port-13-speed
+        at: [214.75, 19.7]
+        states: *id002
+        for: port-13
+        group: sfp-plus-speed-leds
+        rel-pos: 13
+      - ref: common/led-dot@1
+        id: led-port-14
+        at: [223.38, 19.7]
+        states: *id001
+        for: port-14
+        group: sfp-plus-activity-leds
+        rel-pos: 14
+      - ref: common/led-dot@1
+        id: led-port-14-speed
+        at: [229.51, 19.7]
+        states: *id002
+        for: port-14
+        group: sfp-plus-speed-leds
+        rel-pos: 14
+      - ref: common/led-dot@1
+        id: led-port-15
+        at: [238.14, 19.7]
+        states: *id001
+        for: port-15
+        group: sfp-plus-activity-leds
+        rel-pos: 15
+      - ref: common/led-dot@1
+        id: led-port-15-speed
+        at: [244.28, 19.7]
+        states: *id002
+        for: port-15
+        group: sfp-plus-speed-leds
+        rel-pos: 15
+      - ref: common/led-dot@1
+        id: led-port-16
+        at: [252.9, 19.7]
+        states: *id001
+        for: port-16
+        group: sfp-plus-activity-leds
+        rel-pos: 16
+      - ref: common/led-dot@1
+        id: led-port-16-speed
+        at: [259.04, 19.7]
+        states: *id002
+        for: port-16
+        group: sfp-plus-speed-leds
+        rel-pos: 16
+      - ref: common/led-dot@1
+        id: led-port-17
+        at: [271.42, 19.7]
+        states: *id001
+        for: port-17
+        group: sfp-plus-activity-leds
+        rel-pos: 17
+      - ref: common/led-dot@1
+        id: led-port-17-speed
+        at: [277.56, 19.7]
+        states: *id002
+        for: port-17
+        group: sfp-plus-speed-leds
+        rel-pos: 17
+      - ref: common/led-dot@1
+        id: led-port-18
+        at: [286.18, 19.7]
+        states: *id001
+        for: port-18
+        group: sfp-plus-activity-leds
+        rel-pos: 18
+      - ref: common/led-dot@1
+        id: led-port-18-speed
+        at: [292.31, 19.7]
+        states: *id002
+        for: port-18
+        group: sfp-plus-speed-leds
+        rel-pos: 18
+      - ref: common/led-dot@1
+        id: led-port-19
+        at: [300.94, 19.7]
+        states: *id001
+        for: port-19
+        group: sfp-plus-activity-leds
+        rel-pos: 19
+      - ref: common/led-dot@1
+        id: led-port-19-speed
+        at: [307.07, 19.7]
+        states: *id002
+        for: port-19
+        group: sfp-plus-speed-leds
+        rel-pos: 19
+      - ref: common/led-dot@1
+        id: led-port-20
+        at: [315.69, 19.7]
+        states: *id001
+        for: port-20
+        group: sfp-plus-activity-leds
+        rel-pos: 20
+      - ref: common/led-dot@1
+        id: led-port-20-speed
+        at: [321.83, 19.7]
+        states: *id002
+        for: port-20
+        group: sfp-plus-speed-leds
+        rel-pos: 20
+      - ref: common/led-dot@1
+        id: led-port-21
+        at: [334.22, 19.7]
+        states: *id001
+        for: port-21
+        group: sfp-plus-activity-leds
+        rel-pos: 21
+      - ref: common/led-dot@1
+        id: led-port-21-speed
+        at: [340.36, 19.7]
+        states: *id002
+        for: port-21
+        group: sfp-plus-speed-leds
+        rel-pos: 21
+      - ref: common/led-dot@1
+        id: led-port-22
+        at: [348.98, 19.7]
+        states: *id001
+        for: port-22
+        group: sfp-plus-activity-leds
+        rel-pos: 22
+      - ref: common/led-dot@1
+        id: led-port-22-speed
+        at: [355.12, 19.7]
+        states: *id002
+        for: port-22
+        group: sfp-plus-speed-leds
+        rel-pos: 22
+      - ref: common/led-dot@1
+        id: led-port-23
+        at: [363.74, 19.7]
+        states: *id001
+        for: port-23
+        group: sfp-plus-activity-leds
+        rel-pos: 23
+      - ref: common/led-dot@1
+        id: led-port-23-speed
+        at: [369.88, 19.7]
+        states: *id002
+        for: port-23
+        group: sfp-plus-speed-leds
+        rel-pos: 23
+      - ref: common/led-dot@1
+        id: led-port-24
+        at: [378.5, 19.7]
+        states: *id001
+        for: port-24
+        group: sfp-plus-activity-leds
+        rel-pos: 24
+      - ref: common/led-dot@1
+        id: led-port-24-speed
+        at: [384.63, 19.7]
+        states: *id002
+        for: port-24
+        group: sfp-plus-speed-leds
+        rel-pos: 24
+      - ref: common/led-dot@1
+        id: led-sys
+        at: [9.35, 15.8]
+        for: chassis
+        group: status-leds
+        rel-pos: 0
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 9 - SYS: solid green, both power supplies good; blinking green, a supply failed, one cord
+          connected, or service required; unlit, total power failure
+      - ref: common/led-dot@1
+        id: led-fan
+        at: [9.35, 20.85]
+        for: chassis
+        group: status-leds
+        rel-pos: 1
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#22c55e', behavior: blinking}
+        description: >-
+          Table 9 - FAN: solid green, the fans are good; blinking green, a fan has failed or service is
+          required; unlit, total power failure
+      - ref: common/led-dot@1
+        id: led-st-a
+        at: [9.35, 25.9]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+        description: Table 8 - a status lamp; the guide gives no states
+      - ref: common/led-dot@1
+        id: led-st-b
+        at: [9.35, 31.05]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: lit, color: '#22c55e'}
+        description: Table 8 - a status lamp reserved for future use
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-a
+        at: [417.8, 23.5]
+        group: mgmt
+        rel-pos: 0
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+        states:
+          led-a:
+          - 'off'
+          - {name: link, color: '#22c55e'}
+          - {name: activity, color: '#22c55e', behavior: blinking}
+          led-b:
+          - 'off'
+          - {name: 100-1000m, color: '#22c55e'}
+        description: >-
+          Table 11 - link: solid green with a link, blinking with activity; speed: solid green at 100
+          or 1000 Mbps, off at 10 Mbps
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-b
+        at: [417.8, 9.3]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+        states:
+          led-a:
+          - 'off'
+          - {name: link, color: '#22c55e'}
+          - {name: activity, color: '#22c55e', behavior: blinking}
+          led-b:
+          - 'off'
+          - {name: 100-1000m, color: '#22c55e'}
+        description: >-
+          Table 11 - link: solid green with a link, blinking with activity; speed: solid green at 100
+          or 1000 Mbps, off at 10 Mbps
+      - ref: std/mini-usb@1
+        id: console-usb
+        at: [392.05, 31.25]
+        group: mgmt
+        rel-pos: 2
+        attrs: {role: console}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [406.9, 30.9]
+        for: chassis
+        group: controls
+        rel-pos: 0
+        attrs: {function: Reset}
+    regions:
+    - id: logo-zone
+      at: [2.2, 1.4]
+      size: {w: 5.7, h: 5.6}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 439.0, h: 43.9}
+    panel:
+      decor:
+      - {id: vent-plate, at: [51.5, 2.0], size: [335.2, 39.9], rx: 1.2, fill: '#2c2f33'}
+      - {id: vent-rear, at: [67.6, 4.4], size: [303.0, 34.3], pattern: vent, vent: 1}
+      cutouts:
+      - {id: ac-inlet-0, at: [14.0, 6.5], size: [20.0, 28.0], shape: rect}
+      - {id: ac-inlet-1, at: [404.9, 6.5], size: [20.0, 28.0], shape: rect}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-0, at: [10.0, 10.5], rotate: 90, group: power-input, rel-pos: 0}
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [400.9, 10.5], rotate: 90, group: power-input, rel-pos: 1}
+      - {ref: common/screw-head@1, id: rear-screw-0, at: [378.4, 8.5], group: furniture, rel-pos: 0}
+      - {ref: common/screw-head@1, id: rear-screw-1, at: [378.4, 34.6], group: furniture, rel-pos: 1}
+      - {ref: common/ground-symbol@1, id: earth-mark, at: [3.5, 20.3], for: chassis, group: furniture,
+        rel-pos: 2}
+  top:
+    size: {w: 439.0, h: 381.0}
+    empty: >-
+      Not drawn by any source held. The guide's figures show no lid and the datasheet photograph shows
+      it only at an angle, plain.
+  bottom:
+    size: {w: 439.0, h: 381.0}
+    empty: Not drawn by any source held. The guide's figures show no underside.
+  left:
+    size: {w: 381.0, h: 43.9}
+    empty: >-
+      Not drawn by any source held. The mounting figures show the brackets and no flat side wall.
+  right:
+    size: {w: 381.0, h: 43.9}
+    empty: Not drawn by any source held. No figure shows the right wall flat.
+configurations:
+  fb:
+    kind: base
+    default: true
+    description: >-
+      EX2500-24F-FB: the 24-port switch with front-to-back airflow (guide Table 12 and Table 15).
+    part-numbers:
+      EX2500-24F-FB: {}
+  bf:
+    kind: orderable
+    airflow: back-to-front
+    description: >-
+      EX2500-24F-BF: the same panels with back-to-front airflow, so the ports face the hot aisle (guide
+      Table 12 and Table 15).
+    part-numbers:
+      EX2500-24F-BF: {}
+references:
+- title: EX2500 Ethernet Switch Hardware Guide (Juniper Networks), via the ManualsLib mirror
+  url: https://www.manualslib.com/manual/1743729/Juniper-Ex2500.html
+  sha256: 3f3523826d8bc63fcb9fd26b1e589205ace33f1e3dc508ea080b3c78216ce3ae
+- title: EX2500 Ethernet Switches datasheet (Juniper Networks, 1000282-001-EN, Apr 2009)
+  sha256: f40f576a7ea03a0e1e74f127f48b69a124bb9259f13bd911d1adf0038783f289

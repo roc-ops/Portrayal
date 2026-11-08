@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: dcp-mid-mount-bracket
+version: 1.0.0
+class: mount
+behaviour: mounts
+profile: networking
+description: >-
+  The mid-mount bracket marked 225 mm of the Smartoptics DCP rack-mount kit, one for each side of
+  the chassis. An L-shaped plate that screws to the side of the chassis, flipped so that its angle
+  points inward, and bolts to the posts of a two-post rack at the middle of the chassis. It
+  replaces the front bracket, the extension and the rear bracket. Its flange carries the protective
+  ground terminal (an M5 nut on a stud). Drawn as a plain plate: the manual dimensions nothing.
+size: {w: 21.3, h: 45.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  model: >-
+    datasheet - the Smartoptics DCP-Series User Manual, release 14.0 A, section 3.2.1 (item 1,
+    "Mid-mount, front right and front left (225mm)"), section 3.2.2.2 ("For a 2-post rack, use part
+    number one") and section 3.2.6, which fits it with the angle inward.
+  size: >-
+    estimated - NO FIGURE DIMENSIONS THIS PART. 21.3 mm is the reach of an ear from a 440 mm body
+    to the 482.6 mm rack face, and 45.0 mm is the chassis height; they are placeholders for the
+    flange seen from the front, and nothing measures them. The "225mm" in the parts list is the
+    name the manual gives the part. It does not say what the figure measures, so it is not read as
+    a length.
+  ground: >-
+    datasheet - the figure of section 3.2.2.2 draws a terminal on this part's flange. Section 3.2.8
+    says only that the front rack mount brackets include one. The stud is the library's nominal
+    nut-on-stud part, which draws an M4 nut where the manual's nut is M5, and its position on the
+    flange is an estimate.
+skins: [default]
+parts:
+  - {ref: common/ground-stud@1, id: earth, at: [6.6, 18.45]}

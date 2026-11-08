@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-1mtp24-lc-os2-a
-version: 4.1.1
+version: 4.2.0
 class: cassette
 behaviour: fills
 description: >-
@@ -35,19 +35,28 @@ body:
   # - see its own size-notes. It is what a pulled cassette's box is drawn as,
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 12 LC duplex adapters on the front face, OS2 single-mode LC, 24 fibres, Type A,
+      passive
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [17.24, 18.66]}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [30.13, 18.66]}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [43.19, 18.66]}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.25, 18.66]}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [69.30, 18.66]}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [82.19, 18.66]}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [17.24, 3.89]}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [30.13, 3.89]}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [43.19, 3.89]}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.25, 3.89]}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [69.30, 3.89]}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [82.19, 3.89]}
+  - {id: lc01, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [17.24, 18.66]}
+  - {id: lc02, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [30.13, 18.66]}
+  - {id: lc03, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [43.19, 18.66]}
+  - {id: lc04, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.25, 18.66]}
+  - {id: lc05, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [69.30, 18.66]}
+  - {id: lc06, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [82.19, 18.66]}
+  - {id: lc07, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [17.24, 3.89]}
+  - {id: lc08, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [30.13, 3.89]}
+  - {id: lc09, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [43.19, 3.89]}
+  - {id: lc10, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.25, 3.89]}
+  - {id: lc11, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [69.30, 3.89]}
+  - {id: lc12, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [82.19, 3.89]}
 faces:
   rear: {ref: fs/fhd-1mtp24-lc-rear@3}
 optical:
@@ -239,4 +248,13 @@ provenance:
     logo by the library's no-logo rule, the seal because it is a sticker over
     the lid join. The thumb-knobs and the eight end-of-row port numbers ARE
     drawn now; see provenance.face-legends.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: front connector LC/SC duplex, rear
+    connector MTP adapters, polarity types) and page 12 (ordering table). The ordering table on
+    page 12 lists this cassette by its counts ("to 12x LC Duplex, 24 Fibers"), and the
+    contract's face draws the same 12 adapters. The datasheet prints the fibre mode, "UPC/APC" for single-mode LC (the polish is the contract's own stated convention, not printed per cassette),
+    and the polarity and no data rate, and names no role for the adapters; the role follows the
+    job, a through connection a patch cord is plugged into, so it is traffic, and no speed is
+    stated. The group's media is the adapters' own, fiber. The polarity stays in
+    optical.polarity. The rear face holds the cassette's MTP adapters and takes its own group.
 skins: [default]

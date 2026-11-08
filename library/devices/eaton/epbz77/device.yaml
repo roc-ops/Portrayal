@@ -1,0 +1,340 @@
+format: 1
+kind: device
+name: epbz77
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: EPBZ77
+description: >-
+  Eaton ePDU G3 basic rack PDU, 0U. A 1524 mm metal strip with 24 NEMA 5-20R outlets in one row. It takes
+  a single-phase 120 V feed through a fixed 15 ft cord that ends in a NEMA L5-20P (16 A, 1.92 kW). At
+  the cord end of the face are an inner ground stud, a 20 A push-to-reset circuit breaker and a power
+  lamp. It has no display, no switch and no network port.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S RASTER DRAWING. The Eaton ePBZ77 technical drawing (EPBZ77-APR, 23 May
+      2011, sheet size A2, scale 1:2) has no text layer and no vector paths, so every figure was read
+      off a 300 dpi render: 5.98 px per mm, from the drawing's own 215.3 dimension (the cord end to the
+      EATON logo) and checked on the 27.0 mm outlet face (it reads 27.0 to 27.4). The drawing's own note
+      says "all dimension for reference only". Readings are good to about 0.3 mm. The drawing is a broken
+      view (the strip is cut between outlet 2 and outlet 16) so positions past the break come from the
+      45.0 pitch and the 1524 overall, not from a measurement. The drawing is drawn lying down with the
+      cord end at the left; this model turns it so the cord end is at the foot, as the library's other
+      0U PDUs stand, and the sheet does not say which end is up. No photograph of any face is held: colours,
+      finish and the shape of every part that stands proud of the face are unchecked.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1524 overall length (60 in, the SKU's "60 in"); the face reads 37.5 across at 300 dpi,
+      and the SKU gives 1.5 in (38.1) for the other two axes, so the strip is modelled 38 by 38. The drawing's
+      38.0 by 38.0 detail beside the plug is read as the same cross-section and is not labelled as one.
+      The SKU's weight, 0.0001 lb, is implausible and is not used. The strip's colour is not stated in
+      any held document (the drawing's material note says only "see Note"); the face is drawn near black
+      as the other Eaton strips are, which is unchecked.
+  mount:
+    confidence: estimated
+    note: >-
+      `rack-side`, as the library's other zero-U strips, `ru: 35` from 1524 / 44.45 = 34.3 rounded up.
+      The SKU says "0U (Vertical)" and the drawing "Mounting Vertical (0U)". NO MOUNTING HARDWARE IS DRAWN
+      OR LISTED: the back view shows four screws and no button, bracket or keyhole (gaps: mounting).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view, x measured from the cord end and turned to y from the top (y = 1524 -
+      x), y across from the face's left edge. Cord end to far end: two screws at 7.0 from the end (6.6
+      and 30.0 across); the INNER GROUND STUD, a hexagon 5.9 across, at 37.0; the cord's strain relief
+      centred at 67.0, 21.5 along and 18.7 across; the 20 A breaker centred at 102.1; the POWER lamp at
+      132.3; the EATON logo from 215.3. The first outlet is centred 402.0 from the end (the drawing's
+      2.0 plus 400.0) and the 24 follow at 45.0 ("45.0 X 24 PCS"), the last at 1437.0, which leaves 87
+      to the far end, where two screws stand 7.0 from the end. The outlet faces are 27.0 square (read
+      27.0 to 27.4) and centred across at 19.0.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - "NEMA 5-20R x 24", "20A 120V NEMA 5-20R SINGLE TYPE 24 PCS", numbered from 1, outlet 1
+      the one nearest the cord. The drawing draws each with the T slot toward the cord end and the earth
+      hole toward the face's right when the strip is turned as here. Numerals read 1, 2, 16, 17 and 18
+      on the sheet; the rest follow the same rule. The legend "16A Max" is printed beside outlet 1. The
+      last outlet label the drawing shows is 18 and it states 24 outlets (the break hides 3 to 15 and
+      19 to 24).
+  breaker:
+    confidence: drawing
+    note: >-
+      drawing and datasheet - "Over Current Protection CB/20A (UL1077)" and the face's printed "20A Circuit
+      Breaker": one push-to-reset breaker, 18.3 across at its outer ring on the drawing. The library part
+      is common/breaker-push-reset@1, 16.5 by 14.3 and a class stand-in with its own estimates, so the
+      drawn ring and the part differ by about 2 and the part is declared a stand-in. The drawing states
+      no lines: the unit is single-phase and the breaker protects all 24 outlets.
+  lamp:
+    confidence: drawing
+    note: >-
+      drawing - one lamp printed POWER, a ring 8.0 across. No colour or state is stated by any held document.
+      It is drawn with eaton/tripplite-led@1, 6.0 across, a stand-in for the ring's size, and it carries
+      no state vocabulary of the unit's own.
+  ground:
+    confidence: drawing
+    note: >-
+      drawing - "INNER GROUND STUD", a hexagon 5.9 across at the cord end. The part is common/ground-stud@1,
+      whose hex nut is its own estimate and 8.1 across, so the drawn hexagon and the part differ. The
+      drawing gives no thread; this is a stand-in and is listed as a question.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the first view of the sheet, a plain plate with a screw 7.0 from each end at 5.5 and 31.1
+      across, read from the 70 dpi view of the sheet's top strip. Nothing else is drawn on it.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the sheet draws both sides, with the "ePDU" and EATON logos and the outlet mouldings standing
+      off the face. No figure gives the logos' size or how far the mouldings stand, so neither is drawn
+      and each side carries a logo-zone region (gaps: side-features).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - "Input NEMA L5-20P", "Power Cord 12AWG / 3C, 15FT" (drawing); "5-20P, L5-20P"
+      and "15 ft" (SKU). The drawing's 250 mm adapter from the L5-20P to a 5-20R is not part of the PDU
+      and is not drawn. `input-plug` is the slug the cord exports, `nema-l5-20p`. 120 V single-phase,
+      "16A / 120Vac" on the drawing and "100-120V", "16A", "1.92 kW max" on the SKU.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the SKU: "OUTLET CONTROL No"; the drawing: "Power Switch N/A". Nothing meters the unit
+      and no outlet switches, so `metering-scope: none` and `outlet-switching: false`. The outlets state
+      no `states`.
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one power port, `nema-l5-20p`, the part's slug, and each outlet a power outlet fed
+      by it, `nema-5-20r` (both in NetBox and Nautobot). The outlets are named as the unit prints them,
+      1 to 24. No `feed_leg` is written: a single-phase PDU is on whatever leg its plug is on.
+attrs:
+  physical: {length-mm: 1524}
+  power:
+    input-ac: 100-120 V single-phase, 16 A
+    input-plug: nema-l5-20p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 16
+    plug-rating-a: 20
+    capacity-kw: 1.92
+    capacity-scope: >-
+      the load the PDU can hand on (SKU, "1.92 kW max"); it is not what the PDU draws itself, which no
+      document held states
+    output-rating: 16 A total; 20 A 120 V NEMA 5-20R outlets
+    breakers: one 20 A circuit breaker (UL1077)
+  management: {metering-scope: none, outlet-switching: false}
+  compliance: {certifications: UL60950-1; UL}
+chassis: {width: 38, height: 1524, depth: 38, ru: 35, mount: rack-side, color: '#1d1e20', airflow: passive}
+gaps:
+- what: mounting
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    the SKU says "0U (Vertical)" and the drawing "Mounting Vertical (0U)", but neither draws or lists
+    a mounting button, bracket or keyhole, and the rear view shows only four screws. No mounting hardware
+    is placed (searched: the drawing's every view, the SKU, the G3 quick start guide, which is generic).
+  wanted: the accessory kit the maker lists for this strip, or a rear photograph.
+- what: side-features
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: >-
+    the sheet draws both sides with the ePDU and EATON logos and the outlet mouldings standing proud of
+    the face, and dimensions none of it. The sides are drawn as plain faces with a logo-zone region.
+  wanted: a dimensioned section through the strip, or a photograph of a side.
+- what: colours
+  scope:
+  - front
+  - rear
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    no photograph of any face is held and no document states a colour. Every colour is a stand-in (near
+    black), unchecked against the unit.
+  wanted: a photograph of the strip.
+- what: stand-in-parts
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    the ground stud, the breaker and the lamp are class parts (common/ground-stud@1, common/breaker-push-reset@1,
+    eaton/tripplite-led@1) whose size differs from the drawn feature by about 2 mm; the drawing gives
+    no part number for any of them.
+  wanted: the maker's part numbers or a dimensioned detail of the cord end.
+- what: weight
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    the SKU's weight, 0.0001 lb, is implausible and no other held document gives one, so none is stated.
+  wanted: the maker's weight.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: the PDU's 24 NEMA 5-20R outlets, numbered 1 to 24 from the cord end as printed
+  breakers: {term: Breaker, role: service, index-origin: 1}
+  lamps: {term: LED, role: indicator, index-origin: 1}
+  grounding: {term: Stud, role: service, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 38.0, h: 1524.0}
+    panel:
+      decor:
+      - {id: screw-1, at: [3.8, 1514.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-2, at: [27.2, 1514.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-3, at: [3.8, 4.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-4, at: [27.2, 4.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+    silkscreen:
+    - {at: [19.0, 1140.3], text: '1', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-1}
+    - {at: [19.0, 1095.3], text: '2', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-2}
+    - {at: [19.0, 1050.3], text: '3', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-3}
+    - {at: [19.0, 1005.3], text: '4', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-4}
+    - {at: [19.0, 960.3], text: '5', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-5}
+    - {at: [19.0, 915.3], text: '6', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-6}
+    - {at: [19.0, 870.3], text: '7', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-7}
+    - {at: [19.0, 825.3], text: '8', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-8}
+    - {at: [19.0, 780.3], text: '9', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-9}
+    - {at: [19.0, 735.3], text: '10', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-10}
+    - {at: [19.0, 690.3], text: '11', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-11}
+    - {at: [19.0, 645.3], text: '12', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-12}
+    - {at: [19.0, 600.3], text: '13', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-13}
+    - {at: [19.0, 555.3], text: '14', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-14}
+    - {at: [19.0, 510.3], text: '15', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-15}
+    - {at: [19.0, 465.3], text: '16', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-16}
+    - {at: [19.0, 420.3], text: '17', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-17}
+    - {at: [19.0, 375.3], text: '18', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-18}
+    - {at: [19.0, 330.3], text: '19', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-19}
+    - {at: [19.0, 285.3], text: '20', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-20}
+    - {at: [19.0, 240.3], text: '21', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-21}
+    - {at: [19.0, 195.3], text: '22', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-22}
+    - {at: [19.0, 150.3], text: '23', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-23}
+    - {at: [19.0, 105.3], text: '24', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-24}
+    - {at: [18.7, 1437.8], text: 20A, font-size: 3.0, anchor: middle, fill: '#e8e8e6', for: breaker}
+    - {at: [18.7, 1441.8], text: Circuit Breaker, font-size: 3.0, anchor: middle, fill: '#e8e8e6', for: breaker}
+    - {at: [19.4, 1397.4], text: POWER, font-size: 3.0, anchor: middle, fill: '#e8e8e6', for: power-led}
+    - {at: [19.0, 1146.0], text: 16A Max, font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-1}
+    components:
+      placements:
+      - {id: outlet-1, ref: std/nema-5-20r@1, at: [5.5, 1108.5], rotate: 90, group: outlets, rel-pos: 1,
+        fed-by: input, through: breaker}
+      - {id: outlet-2, ref: std/nema-5-20r@1, at: [5.5, 1063.5], rotate: 90, group: outlets, rel-pos: 2,
+        fed-by: input, through: breaker}
+      - {id: outlet-3, ref: std/nema-5-20r@1, at: [5.5, 1018.5], rotate: 90, group: outlets, rel-pos: 3,
+        fed-by: input, through: breaker}
+      - {id: outlet-4, ref: std/nema-5-20r@1, at: [5.5, 973.5], rotate: 90, group: outlets, rel-pos: 4,
+        fed-by: input, through: breaker}
+      - {id: outlet-5, ref: std/nema-5-20r@1, at: [5.5, 928.5], rotate: 90, group: outlets, rel-pos: 5,
+        fed-by: input, through: breaker}
+      - {id: outlet-6, ref: std/nema-5-20r@1, at: [5.5, 883.5], rotate: 90, group: outlets, rel-pos: 6,
+        fed-by: input, through: breaker}
+      - {id: outlet-7, ref: std/nema-5-20r@1, at: [5.5, 838.5], rotate: 90, group: outlets, rel-pos: 7,
+        fed-by: input, through: breaker}
+      - {id: outlet-8, ref: std/nema-5-20r@1, at: [5.5, 793.5], rotate: 90, group: outlets, rel-pos: 8,
+        fed-by: input, through: breaker}
+      - {id: outlet-9, ref: std/nema-5-20r@1, at: [5.5, 748.5], rotate: 90, group: outlets, rel-pos: 9,
+        fed-by: input, through: breaker}
+      - {id: outlet-10, ref: std/nema-5-20r@1, at: [5.5, 703.5], rotate: 90, group: outlets, rel-pos: 10,
+        fed-by: input, through: breaker}
+      - {id: outlet-11, ref: std/nema-5-20r@1, at: [5.5, 658.5], rotate: 90, group: outlets, rel-pos: 11,
+        fed-by: input, through: breaker}
+      - {id: outlet-12, ref: std/nema-5-20r@1, at: [5.5, 613.5], rotate: 90, group: outlets, rel-pos: 12,
+        fed-by: input, through: breaker}
+      - {id: outlet-13, ref: std/nema-5-20r@1, at: [5.5, 568.5], rotate: 90, group: outlets, rel-pos: 13,
+        fed-by: input, through: breaker}
+      - {id: outlet-14, ref: std/nema-5-20r@1, at: [5.5, 523.5], rotate: 90, group: outlets, rel-pos: 14,
+        fed-by: input, through: breaker}
+      - {id: outlet-15, ref: std/nema-5-20r@1, at: [5.5, 478.5], rotate: 90, group: outlets, rel-pos: 15,
+        fed-by: input, through: breaker}
+      - {id: outlet-16, ref: std/nema-5-20r@1, at: [5.5, 433.5], rotate: 90, group: outlets, rel-pos: 16,
+        fed-by: input, through: breaker}
+      - {id: outlet-17, ref: std/nema-5-20r@1, at: [5.5, 388.5], rotate: 90, group: outlets, rel-pos: 17,
+        fed-by: input, through: breaker}
+      - {id: outlet-18, ref: std/nema-5-20r@1, at: [5.5, 343.5], rotate: 90, group: outlets, rel-pos: 18,
+        fed-by: input, through: breaker}
+      - {id: outlet-19, ref: std/nema-5-20r@1, at: [5.5, 298.5], rotate: 90, group: outlets, rel-pos: 19,
+        fed-by: input, through: breaker}
+      - {id: outlet-20, ref: std/nema-5-20r@1, at: [5.5, 253.5], rotate: 90, group: outlets, rel-pos: 20,
+        fed-by: input, through: breaker}
+      - {id: outlet-21, ref: std/nema-5-20r@1, at: [5.5, 208.5], rotate: 90, group: outlets, rel-pos: 21,
+        fed-by: input, through: breaker}
+      - {id: outlet-22, ref: std/nema-5-20r@1, at: [5.5, 163.5], rotate: 90, group: outlets, rel-pos: 22,
+        fed-by: input, through: breaker}
+      - {id: outlet-23, ref: std/nema-5-20r@1, at: [5.5, 118.5], rotate: 90, group: outlets, rel-pos: 23,
+        fed-by: input, through: breaker}
+      - {id: outlet-24, ref: std/nema-5-20r@1, at: [5.5, 73.5], rotate: 90, group: outlets, rel-pos: 24,
+        fed-by: input, through: breaker}
+      - {id: ground-stud, ref: common/ground-stud@1, at: [14.65, 1482.95], group: grounding, rel-pos: 1,
+        for: chassis}
+      - {id: input, ref: eaton/g3-cord-l5-20p@1, at: [8.65, 1447.65], rotate: 90, group: power-input,
+        rel-pos: 1}
+      - id: breaker
+        ref: common/breaker-push-reset@1
+        at: [10.45, 1414.75]
+        group: breakers
+        rel-pos: 1
+        description: the 20 A push-to-reset circuit breaker (UL1077) that protects all 24 outlets
+      - {id: power-led, ref: eaton/tripplite-led@1, at: [16.4, 1388.7], group: lamps, rel-pos: 1, for: chassis,
+        description: the POWER lamp}
+    regions:
+    - id: logo-zone
+      at: [9.0, 1240.0]
+      size: {w: 20.0, h: 45.0}
+      label: EATON logo, from 215.3 to about 260 from the cord end; not drawn
+  rear:
+    size: {w: 38.0, h: 1524.0}
+    panel:
+      decor:
+      - {id: screw-1, at: [2.7, 1514.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-2, at: [27.9, 1514.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-3, at: [2.7, 4.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-4, at: [27.9, 4.2], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+  top:
+    size: {w: 38, h: 38}
+    empty: >-
+      no source draws the end: the drawing's end detail shows the cord's section and no face of the far
+      end, and the SKU has no picture of it.
+  bottom:
+    size: {w: 38, h: 38}
+    empty: >-
+      no source draws the cord end as a face: the drawing's detail beside the plug shows a 38.0 by 38.0
+      section with the cord leaving it, which is not a view of the end.
+  right:
+    size: {w: 38, h: 1524}
+    empty: >-
+      the drawing draws the side with its logos and the outlet mouldings standing proud, and no figure
+      dimensions them (gaps: side-features); the ePDU and EATON logos are not drawn.
+  left:
+    size: {w: 38, h: 1524}
+    empty: >-
+      the drawing draws this side as the other one mirrored, with its logos and the mouldings standing
+      proud, and no figure dimensions them (gaps: side-features); the logos are not drawn.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: 1-24}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, with its fixed 15 ft cord. The 250 mm adapter from the L5-20P plug to a 5-20R
+      is in the box and is not drawn.
+    part-numbers:
+      EPBZ77: {}
+datasheet:
+  title: Eaton EPBZ77 product specification page (skuPage.EPBZ77)
+  url: https://www.eaton.com/us/en-us/skuPage.EPBZ77.pdf
+  sha256: c9d109e2c7fc64aa996b8beb013175d5e6c5ce51728464e4b58a7891229a3df6
+references:
+- title: Eaton ePBZ77 technical drawing, EPBZ77-APR
+  url: >-
+    https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-EPBZ77-techdrawing.pdf
+  sha256: 98a6ab9440c3a42c6dbe2ad1990e5a02a384a2ae183535cf23294cd0a909199c

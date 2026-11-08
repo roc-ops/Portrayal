@@ -231,4 +231,45 @@ const wellCase = (pocketBox, facets, wells) => {
                 both: m.mirrorClears(cl, pc, true, true)};
 }
 
+// POCKET WALL (`pocket: {depth, wall}`, render.py `data-wall-depth`). The walls
+// stop at the plate's back face; the floor stays at the pocket's depth, and
+// below the wall the sides are open to the interior.
+{
+  // what a cavity builds: a wall shorter than the pocket is stated, else as before
+  out.shellPlain = m.cavityShell({d: 28}, 100);
+  out.shellWalled = m.cavityShell({d: 28, wallDepth: 12}, 100);
+  out.shellWallZero = m.cavityShell({d: 28, wallDepth: 0}, 100);
+  out.shellWallPastFloor = m.cavityShell({d: 28, wallDepth: 30}, 100);   // not a wall: builds as plain
+  out.shellWallClamped = m.cavityShell({d: 120, wallDepth: 12}, 100);    // floor clamps to INTO - 2, wall stays
+  out.shellWallSeeThrough = m.cavityShell({d: 28, wallDepth: 12, seeThrough: true}, 100);
+  out.shellWallSheet = m.cavityShell({d: 28, wallDepth: 12, sheet: true}, 100);
+  // where the walls stand: face to wall only, and a lifted pocket from its own mouth
+  out.span = {plain: m.wallSpan({d: 28, lift: 0}, 100),
+              walled: m.wallSpan({d: 28, lift: 0, wallDepth: 12}, 100),
+              lifted: m.wallSpan({d: 28, lift: 10, wallDepth: 12}, 100)};
+  // the pocket a sunk facet stands in carries the wall; without one it carries none
+  const cav = {x: 0, y: 60, w: 25, h: 120, lift: 0, d: 28, owner: 'dev'};
+  const keys = k => k && Object.keys(k).sort();
+  out.pocketOfPlain = keys(m.pocketOf(face1, [cav], c => 28));
+  out.pocketOfWalled = m.pocketOf(face1, [{...cav, wallDepth: 12}], c => 28, c => 12);
+  // beside a tooth as wide as its pocket: the plate down to the wall, open below it
+  const span = {x: 0, y: -2, w: 25, h: 40, floor: -12, mouth: 0, wall: 6};
+  const w = skirtCase(TF({pocket: span}), TR({pocket: span}));
+  const under = w.sk.segs.filter(g => g.under);
+  const sideOf = g => { const [p, q] = [w.sk.ring[g.k], w.sk.ring[(g.k + 1) % w.sk.ring.length]];
+                        return p[0] === q[0] ? (p[0] === 0 ? 'left' : 'right') : null; };
+  out.skirtWall = {edges: w.edges,
+                   underSides: under.map(sideOf).sort(),
+                   underBases: under.map(g => g.base),
+                   underZ: [r3(Math.min(...under.flatMap(g => g.verts))), r3(Math.max(...under.flatMap(g => g.verts)))],
+                   zmin: w.zmin};
+  // a pocket that states no wall skirts exactly as it did
+  const plain = skirtCase(TF({pocket: {...span, wall: undefined}}), TR({pocket: {...span, wall: undefined}}));
+  out.skirtWallless = {edges: plain.edges, under: plain.sk.segs.filter(g => g.under).length};
+  // a tooth narrower than its pocket borders open pocket: the wall changes nothing
+  const narrow = {x: -5, y: -2, w: 35, h: 40, floor: -12, mouth: 0, wall: 6};
+  const nw = skirtCase(TF({pocket: narrow}), TR({pocket: narrow}));
+  out.skirtWallNarrow = {edges: nw.edges, under: nw.sk.segs.filter(g => g.under).length};
+}
+
 console.log(JSON.stringify(out));

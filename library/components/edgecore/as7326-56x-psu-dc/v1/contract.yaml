@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: as7326-56x-psu-dc
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  The 650 W -48 VDC supply of the Edgecore DCS203 (AS7326-56X). It has a release latch, a black pull
+  handle and a grille. A blue Positronic PLA03 connector stands low on the right of its face. A label
+  beside it prints RTN on top and an earth symbol at the bottom. The cable plugs into that connector.
+size: {w: 54.0, h: 40.0}
+size-confidence: {w: borrowed, h: borrowed}
+attrs:
+  power-output-w: 650
+  input: dc
+  input-note: '-36 - -72 VDC'
+provenance:
+  naming: >-
+    NO MAKER PART NUMBER IS HELD FOR THIS SUPPLY, so it is named for the chassis that seats it, as
+    edgecore/agr110-psu-dc@1 and edgecore/as5912-54x-psu-dc@1 are, and states no model. The DCS203 data
+    sheet (EC-DS-0725-R10) orders the two DC builds as "Dual DC PSUs" (7326-56X-O-48V-F and -B) and lists
+    part numbers for the AC supply FRUs only; its quick start guide (E082024-AP-R04) names no supply
+    number. The DCS204 data sheet lists the DC supply FRUs PSU-48V-650-F (F0TZZ7632004A) and PSU-48V-650-B
+    (F0TZZ7632003A), but that is another chassis's supply and no document says the DCS203 takes it, so
+    neither number is borrowed and edgecore/psu-48v-650-f@1 and -b@1 are not seated here. If a part number
+    is ever held, stating it as `part-numbers` renames the exported module type.
+  size: >-
+    BORROWED from common/psu-dc-650@2, which the DCS203 rear bays seated before (54.0 x 40.0 each,
+    `psu-1` and `psu-2`). No document held dimensions the supply's face.
+  body: >-
+    BORROWED from common/psu-dc-650@2 (depth 195, colour #b9bec4, the latch, the black handle's place and
+    size, the grille's mesh).
+  the-face: >-
+    READ FROM ONE PHOTOGRAPH, NOT AN ELEVATION. DCS203 quick start guide (E082024-AP-R04), step 4 "Connect
+    Power" (PDF page 2), the second figure: the supply seen from above and to the left, a red latch at the
+    far left, a black U-handle over a grille of square holes, and, low on the right of the face, a blue
+    connector standing upright with an ear at each end, its pins in one column; a label beside it to the
+    right prints "RTN" at the top, a middle line too small to read and an earth symbol at the bottom; above
+    the connector two small vents and a round dark feature. The same photograph is the subject of
+    edgecore/psu-48v-650-f@1 and -b@1 and edgecore/as5912-54x-psu-dc@1, so the connector is placed where they
+    place it, at (32.8, 10.3). THE POSITIONS ARE ESTIMATED: the photograph has no scale and is taken at an
+    angle. The label's middle line is not drawn, because this figure does not let it be read; the DCS204
+    guide's supply prints "-36~-72V" there, and that is not copied across. The round feature is not
+    identified by any document held and is not drawn.
+  colour: >-
+    estimated - the figure shows a red latch and a blue connector and its colours are the figure's, not
+    sampled. The latch default is the library's Edgecore front-to-back red (common/psu-dc-650@2 draws it
+    so) and the back-to-front build sets the library's blue on it from the device, as it set it on the
+    generic supply; the handle #1c1f23 and the label #e6e9ec as edgecore/psu-48v-650-f@1 draws them.
+  airflow: >-
+    NOT STATED ON THE PART. The guide says the two supplies must have the same airflow direction as the
+    installed fan trays (step 4), and the device's two DC builds say which; the build sets the latch colour
+    and the direction, as it did on the generic supply.
+  power: >-
+    quick start guide, Hardware Specifications (PDF page 3) - "48 VDC PSU: Power Rating -36 VDC to -72 VDC,
+    650 Watts". A rating, not a draw.
+  input: >-
+    ONE RANGE, AS PRINTED. The quick start guide's callout under the connector figure (PDF page 2) reads
+    "-36 - -72 VDC", its specification table (PDF page 3) reads "DC Input -36 VDC to -72 VDC, 16 A maximum",
+    and the data sheet (PDF page 3, Power) reads "DC input range: -36~-72 VDC". The three agree, so the
+    range is stated as `input-note` in the form the DCS204's supplies state theirs. Only a range is
+    printed, so no nominal voltage is stated, and the 16 A maximum stays here in the provenance until a
+    port can carry it.
+  wire: >-
+    the caution under "Connect Power" (PDF page 2): "#14 AWG (for -36 VDC to -72 VDC PSU) wire".
+  connector: >-
+    the supply composes common/pla03-receptacle@1 as `inlet`, the male Positronic PLA03 connector (its own
+    provenance: the guide names the plug "Positronic PLA03F7000/AA connector", callout 1, and no document
+    names this half); the female cable connector generic/pla03-plug@1 mates it, so the end of a cable is the
+    plug in this connector, as a cord's is in an AC supply's C14.
+  roles: >-
+    guide and photograph - the label prints RTN at the top contact and an earth symbol at the bottom one, and
+    the guide's callouts name the plug's wires 2 "DC Return", 3 "-36 - -72 VDC" and 4 "Ground". The
+    photograph shows the red wire above the black and the yellow-green one below, which is the order
+    generic/pla03-plug@1 draws, so the figure and the plug agree. In the library's words
+    (spec/schemas/dc.yaml): rtn, batt, gnd.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE. A port's path is the part's own path and its id
+    (`psu-1/module/input`), and a port whose poles are a connector's contacts is offered only where that
+    path's part is itself the connector; on a supply in a bay it is the supply, not the connector it
+    composes, so a port stated here would be published and then not offered. The roles, the 16 A and the
+    #14 AWG above are recorded for the port a later change can state, a minor on the devices that seat it.
+  states: >-
+    THE SAME AS THE AC SUPPLY BESIDE IT (common/psu-ac-650@3): no held document describes a status lamp
+    on the supply, so none is drawn. `absent` stays.
+  relief: >-
+    NONE STATED. No document gives how far the latch, the handle or the connector stand off the face.
+states: [absent]
+elements:
+  latch: {at: [0.0, 8.0], size: [7.8, 24.0], class: latch}
+  handle: {at: [10.0, 8.0], size: [5.0, 24.0], class: handle}
+  dc-inlet: {at: [32.8, 10.3], size: [10.36, 28.6], class: inlet}
+parts:
+  - {ref: common/pla03-receptacle@1, id: inlet, at: [32.8, 10.3]}
+connection-points:
+  power: {at: [37.98, 24.6], direction: rear}
+fields:
+  latch-finish:
+    label: Latch colour
+    type: text
+    default: '#c22f2f'
+  latch-edge:
+    label: Latch edge
+    type: text
+    default: '#7a1a1a'
+skins: [default]
+body:
+  depth: 195
+  color: '#b9bec4'

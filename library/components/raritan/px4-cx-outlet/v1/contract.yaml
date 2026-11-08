@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: px4-cx-outlet
+version: 1.1.0
+class: inlet
+profile: power
+interface: raritan-hdot-cx
+description: >-
+  The locking HDOT Cx outlet of a Raritan PX4 rack PDU, 16 A, drawn wider than a C13 outlet. It is a hybrid of the IEC
+  C13 and C19 outlets and takes a C14 or a C20 plug. A rounded recess with a C13-style nose and three contacts.
+size: {w: 32.0, h: 24.0, d: 20}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {outlet: raritan-hdot-cx, media: ac, rating-a: 16, accepts: 'C14, C20'}
+provenance:
+  size: >-
+    estimated - NO SOURCE GIVES THE OUTLET'S SIZE. The mechanical drawing MPX4 (Rev 0C) draws it wider than a C13 and
+    prints only the pitch, 26.6. So 32.0 across is an estimate wider than the C13's 30.4, and 24.0 along is the pitch
+    less a 2.6 web, as the Server Technology HDOT Cx outline takes it. Depth 20 is borrowed from the C19.
+  identity: >-
+    datasheet - the technical specification lists (18) C13 locking 10 A and (18) Cx locking 16 A. The PX4 data sheet,
+    section HDOT CX OUTLETS (PDF page 2), calls it the HDOT Cx outlet, a hybrid of IEC C13 and C19 that takes C20 and C14
+    cables.
+  interface: >-
+    `raritan-hdot-cx` in spec/schemas/connectors.yaml, the key the maker's own HDOT Cx outlet has. The Server Technology
+    PRO4X data sheet uses the same name and the same words for its outlet, whose key is `servertech-hdot-cx`, but no
+    document says in so many words that the two are one connector, so each maker's outlet has its own key.
+    generic/c14-plug@1 and generic/c20-plug@1 mate it: the PX4 data sheet says the outlet takes a C14 or a C20.
+  mate: >-
+    estimated - (16.0, 12.0), the centre of the recess, ONE POINT FOR TWO PLUGS as on servertech/hdot-cx-outlet@1 and
+    eaton/c39-outlet@1. No drawing held shows either plug seated, and the RamLock lever beside the outlet, which locks
+    the plug, is not drawn.
+  rating: >-
+    datasheet - 16 A, as the specification prints for the Cx outlets. No other figure is stated.
+  shape: >-
+    estimated and borrowed - the recess, nose and slots are the HDOT Cx outline's simplified shape, stretched to the
+    estimated size. The retention clip beside each outlet is not drawn.
+  colour: >-
+    UNCHECKED ESTIMATE - no document states the colour. Near-black, as the PX4 renders on file show it; they were not
+    compared with these two models.
+elements:
+  recess: {at: [0, 0], size: [32.0, 24.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [16.0, 12.0], direction: front}
+skins: [default]
