@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mpc2e-3d-ng
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -41,8 +41,10 @@ provenance:
     queuing option', which the bays cannot express). Under that column MIC-3D-4COC3-1COC12-CE is an en dash, so
     it is not listed; the MIC3 family is excluded by the card's page: 'MPC2E-3D-NG does not support
     MIC3-3D-10XGE-SFPP, MIC3-3D-1X100GE-CFP, MIC3-3D-1X100GE-CXP, and MIC3-3D-2X40GE-QSFPP'. In the column but not
-    listed: MIC-3D-40GE-TX (dual-wide, so no single bay can take it) and MIC-3D-8CHDS3-E3-B (a variant of the
-    listed mic-3d-8ds3-e3). The table's note holds for the MS-MIC-16G: only one per MPC.
+    listed: MIC-3D-8CHDS3-E3-B (a variant of the listed mic-3d-8ds3-e3). MIC-3D-40GE-TX prints '14.1R4, 14.2R3
+    with Junos Continuity 15.1' in that column (PDF p. 60, printed p. 51). The module reference calls it a
+    'Dual-wide MIC that installs into 2 slots', so it is in mic0's list only, and mic0 states `span: [mic1]`.
+    MIC3-100G-DWDM has no row in Table 11. The table's note holds for the MS-MIC-16G: only one per MPC.
   numbering: >-
     guide - the reference prints small numerals beside every cage, numbered within each PIC segment with a group
     legend, never flat across the card. The MICs seated in this carrier's two bays draw those numerals; the carrier
@@ -73,6 +75,7 @@ bays:
   mic0:
     at: [37.7, 0.15]
     size: [168.8, 29.2]
+    span: [mic1]
     accepts:
     - juniper/mic-3d-20ge-sfp@2
     - juniper/mic-macsec-20ge@2
@@ -88,6 +91,7 @@ bays:
     - juniper/mic-3d-8ds3-e3@2
     - juniper/mic-3d-16che1-t1-ce@2
     - juniper/ms-mic-16g@2
+    - juniper/mic-3d-40ge-tx@2
     - juniper/mx-mic-blank@2
     default: juniper/mic-3d-20ge-sfp@2
   mic1:

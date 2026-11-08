@@ -10,8 +10,7 @@ on the top one, the -36 to -72 VDC feed on the middle one and an earth symbol pr
     voltage and no current;
   - the AGR110 and the AGR130 seat it in the `dc` configuration. Their rear bays still accept common/psu-dc-650@2 beside it, because a bay
     that stops accepting a part is a major bump for the device;
-  - common/psu-dc-650@2 is not edited, and the device that also seats it (AS7326-56X; the AS7726-32X now seats its own
-    PSU-48V-650-F and -B, and the AS5912-54X its own supply) is not touched, so the generic supply keeps its record.
+  - common/psu-dc-650@2 is not edited; the AS7726-32X, the AS5912-54X and the AS7326-56X each seat a supply of their own now.
 
 These run against the real library, a components index built by the indexer the build runs, the device locks and the records file. They read
 no library/dist and render nothing.
@@ -35,7 +34,6 @@ SCREW = "common/terminal-screw-34@1"
 LUG = "generic/ring-lug@1"
 SCREWS = [("pole-rtn", [32.6, 8.7], "rtn"), ("pole-batt", [32.6, 18.0], "batt"), ("pole-gnd", [32.6, 27.0], "gnd")]
 DEVICES = {"edgecore/agr110": "8.3.0", "edgecore/agr130": "0.2.0"}
-CONTROLS = ["edgecore/as7326-56x"]
 
 
 def contract(ref):
@@ -143,13 +141,6 @@ def test_the_lock_records_the_port_of_each_supply_bay_with_its_three_poles(slug)
         assert [(p["role"], p["slot"]) for p in port["poles"]] == [(role, f"{bay}/module/{i}") for i, _, role in SCREWS]
         assert (port["awg"], port["rating-a"], port["voltage"], port["configs"]) == ([10], None, None, ["dc"])
     assert SUPPLY in lock["bay-accepts"]["rear/bays/psu-0"] and GENERIC in lock["bay-accepts"]["rear/bays/psu-0"]
-
-
-@pytest.mark.parametrize("slug", CONTROLS)
-def test_the_other_devices_that_seat_the_generic_supply_still_do(slug):
-    doc = device(slug)
-    seated = {ref for c in doc["configurations"].values() for ref in (c.get("bays") or {}).values()}
-    assert GENERIC in seated and SUPPLY not in seated
 
 
 def test_the_new_supply_needs_no_record():
