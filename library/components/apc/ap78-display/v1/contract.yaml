@@ -1,0 +1,67 @@
+format: 1
+kind: component
+name: ap78-display
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The two-digit display of the APC NetShelter 1U rack PDUs AP7821B and AP7921B. It is a pale window in the
+  right-hand part of the outlet face, with two seven-segment cells. The AP7921B datasheet calls it a local current
+  monitoring display; the AP7821B datasheet names no display. What the cells read out beyond that is not stated.
+size: {w: 22.0, h: 17.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    estimated - read off the 369 px datasheet photograph of the AP7921B outlet face (APC AP7921B datasheet, p.6,
+    near front-on): the window spans about 55 px of the 280 px the 445 mm face spans, so 22 mm across and 17 mm
+    down, good to about 2 mm. The AP7821B photograph (APC AP7821B datasheet, p.5, angled) shows the same window and
+    gives the same size to within the same reading. Neither is a measurement.
+  digits: >-
+    estimated - the photographs show two ghosted cells of 8; the cell size and pitch are a stand-in in proportion
+    to the window, 7.6 by 11.6 on a 9.0 pitch, with no decimal point drawn because the photographs show none.
+  colour: >-
+    photo - the unlit window reads #adb8b4 (AP7921B) and #b3afb0 (AP7821B) at the median of its pixels. The colour
+    of a lit segment is not shown in any held photograph and is not stated; the segments are drawn #d03a30 as a
+    stand-in, declared an estimate.
+  semantics: >-
+    datasheet - the AP7921B datasheet (p.1) names a "local current monitoring display"; the AP7821B datasheet names
+    none in text and the photograph shows the same window. No document says what the digits show, so the part claims
+    only two seven-segment cells.
+  relief: >-
+    none built - the photographs show a flush window and no source gives a standoff.
+elements:
+  window:
+    at: [0.3, 0.3]
+    size: [21.4, 16.4]
+    class: display
+    characters: 2
+    description: >-
+      the readout window, two seven-segment cells; each cell's glyph set is on its digit.
+  digit-1:
+    at: [3.4, 2.7]
+    size: [7.6, 11.6]
+    class: display
+    characters: 1
+    description: >-
+      the left digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: &digit-states
+      - {name: '0', lights: [a, b, c, d, e, f]}
+      - {name: '1', lights: [b, c]}
+      - {name: '2', lights: [a, b, g, e, d]}
+      - {name: '3', lights: [a, b, g, c, d]}
+      - {name: '4', lights: [f, g, b, c]}
+      - {name: '5', lights: [a, f, g, c, d]}
+      - {name: '6', lights: [a, f, g, e, c, d]}
+      - {name: '7', lights: [a, b, c]}
+      - {name: '8', lights: [a, b, c, d, e, f, g]}
+      - {name: '9', lights: [a, b, c, d, f, g]}
+      - {name: 'blank', lights: []}
+  digit-2:
+    at: [12.4, 2.7]
+    size: [7.6, 11.6]
+    class: display
+    characters: 1
+    description: >-
+      the right digit. Its states are the characters a seven-segment cell can form, each naming the segments it lights - a top, b top-right, c bottom-right, d bottom, e bottom-left, f top-left, g middle.
+    states: *digit-states
+skins: [default]
