@@ -29,7 +29,7 @@ test('a type file gives its own name lists, by section, and its bays by name and
   const asr = lists(ASR);
   assert.deepEqual(asr.sections.interfaces, []);
   assert.deepEqual(asr.bays.find(b => b.position === 'slot-2'), {name: 'slot-2', position: 'slot-2'});
-  assert.equal(asr.bays.length, 11);
+  assert.equal(asr.bays.length, 12);
   // A quoted name is read without its quotes; a name is not a path until a bay's position replaces {module}.
   assert.deepEqual(lists(CARD).sections.interfaces.slice(0, 2), ['{module}/p0', '{module}/p1']);
   // A bay's name is for display; its position is the drawing's bay id.
