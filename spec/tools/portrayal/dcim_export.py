@@ -780,6 +780,11 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # A PANDUIT PDU'S FIXED CORD ends in an IEC 60309 plug: the G5 intelligent unit's in a 2P+E 6h 32 A plug and the
+    # basic unit's in a 3P+E 9h 60 A plug. No power-port type of the two targets is held for either in this tree, so
+    # each is `other`, and POWER_LABEL says which connector.
+    "panduit/g5-cord-60309-2pe-6h": "other",
+    "panduit/g5-cord-60309-3pe-9h": "other",
 }
 
 

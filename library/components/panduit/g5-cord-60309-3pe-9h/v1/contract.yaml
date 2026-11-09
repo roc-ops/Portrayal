@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: g5-cord-60309-3pe-9h
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in an IEC 60309 3P+E 9h plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Panduit basic PDU of the B series for a three-phase delta feed. It ends in an IEC 60309
+  3P+E 9h plug rated 60 A (48 A derated). It leaves the end of the strip through a cable gland. Drawn as the end
+  of the strip shows it; the cord and plug beyond it are not.
+size: {w: 32.0, h: 32.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: iec-60309-3p-e-9h-60a, cord-length-m: 3}
+provenance:
+  size: >-
+    estimated - NO VIEW OF Panduit customer drawing P24B14M_DC rev 01B DIMENSIONS THE GLAND. The 32.0 is the gland of
+    the G5 intelligent unit's drawing (P32E06M_DC), taken as a stand-in because the basic unit's gland is drawn the
+    same height beside a strip of the same width; no document held measures it for this part.
+  plug: >-
+    drawing - P24B14M_DC note 1 reads "INPUT PLUG: IEC 60309 3P+E 9H 60A", and its plug and receptacle block
+    "60 AMP, 250V x 3~ DELTA, 3P/4W, IEC 60309, SPLASHPROOF, IP44".
+  cord: >-
+    drawing - P24B14M_DC reads "INPUT CORD LENGTH: 3m [10']" and dimensions the cord "2921-3302 [115.0"-130.0"]".
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part
+    (docs/connectors-power-design.md section 7). This part stands for the power input a DCIM records, one power
+    port of type `other` labelled as an IEC 60309 3P+E 9h plug.
+elements:
+  gland: {at: [0, 0], size: [32.0, 32.0], class: inlet}
+skins: [default]
