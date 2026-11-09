@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-2x40ge-qsfpp
-version: 1.2.1
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -33,13 +33,24 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '40-Gigabit Ethernet
+    MIC with QSFP+' (printed pages 302 and 303): 'Two 40-Gigabit Ethernet ports' and 'speeds up to
+    40 Gbps' on each port; the ports are labeled 'PORT [0] - PORT [1]'. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  qsfp-plus-40g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp-plus, speed: 40g}
+    description: the 40-Gigabit Ethernet QSFP+ cages, each running at up to 40 Gbps
 parts:
-- {ref: std/qsfp28@1, id: port-0-0, at: [16.00, 8.43], attrs: {media: qsfp-plus}}
-- {ref: std/qsfp28@1, id: port-0-1, at: [37.50, 8.43], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-0-0, group: qsfp-plus-40g, at: [16.00, 8.43], attrs: {media: qsfp-plus}}
+- {ref: std/qsfp28@1, id: port-0-1, group: qsfp-plus-40g, at: [37.50, 8.43], attrs: {media: qsfp-plus}}
 size:
   w: 168.0
   h: 27.0
