@@ -47,23 +47,24 @@ def test_the_rear_draws_two_air_vent_fields():
     assert centre(low) > 619.51 / 2 > centre(high)
 
 
-def test_the_power_tray_shows_six_receptacles_on_one_pitch():
-    inlets = sorted((d for d in decor() if d["size"] == [30.6, 23.4]), key=lambda d: d["at"][1])
-    assert len(inlets) == 6
-    assert len({d["at"][0] for d in inlets}) == 1
-    pitches = [b["at"][1] - a["at"][1] for a, b in zip(inlets, inlets[1:])]
-    assert all(abs(p - 48.3) < 0.2 for p in pitches), pitches
+def test_the_power_tray_is_drawn_as_a_plate_with_no_receptacle_painted_on_it():
     plate = next(d for d in decor() if d.get("id") == "rear-power-tray-plate")
-    for d in inlets:
-        assert box(plate)[0] <= box(d)[0] and box(d)[2] <= box(plate)[2]
-        assert box(plate)[1] <= box(d)[1] and box(d)[3] <= box(plate)[3]
+    assert box(plate)[2] - box(plate)[0] > 40 and box(plate)[3] - box(plate)[1] > 290
+    on_plate = [d for d in decor() if d is not plate and overlaps(box(d), box(plate))
+                and box(plate)[1] <= box(d)[1] and box(d)[3] <= box(plate)[3]
+                and box(d)[1] < 410 and d.get("fill") in ("#000000", "#ffffff", "#d9d9d9")]
+    assert not on_plate, on_plate
 
 
-def test_no_receptacle_is_placed_as_a_part_because_no_guide_names_its_type():
+def test_no_receptacle_is_placed_as_a_part_and_the_gap_and_the_conformance_row_say_why():
     refs = [p["ref"] for p in rear()["components"]["placements"]]
     assert not [r for r in refs if "inlet" in r or "c19" in r or "c20" in r or "iec" in r]
     note = device()["provenance"]["rear-power-inlets"]["note"]
     assert "Figure 66" in note and "IEC input" in note
+    gaps = {g["what"]: g for g in device()["gaps"]}
+    assert gaps["rear-power-receptacles"]["scope"] == ["rear"]
+    rows = yaml.safe_load((ROOT / "library/conformance-exceptions.yaml").read_text())["rows"]
+    assert [r for r in rows if r["part"] == "asr-9906" and r["code"] == "C19"]
 
 
 def test_the_esd_jack_sits_in_its_own_cutout_on_the_rear():
