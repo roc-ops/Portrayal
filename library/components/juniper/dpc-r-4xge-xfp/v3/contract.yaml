@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpc-r-4xge-xfp
-version: 3.0.0
+version: 3.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -72,15 +72,30 @@ provenance:
     its lamp from y 17.9 up (to about 7.1 and 12.0). Set at 2.6 mm, the size the printed lengths give
     (PORT 0/0 12.4 mm, TUNNEL 10.8, LINK 5.9). The MX480's later DPC 4x10GE prints 0/0 rather than
     PORT 0/0 on the same layout; this card is the MX240's.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '10-Gigabit
+    Ethernet DPC with XFP' (printed pages 92 to 94): 'Four 10-Gigabit Ethernet ports' for the
+    model DPC-R-4XGE-XFP and 'throughput on each port at speeds up to 10 Gbps'; the ports are
+    PICs 0 through 3 of one port each, and the link LEDs are labelled top to bottom 0/0 through
+    3/0. The role is traffic: the book names no role for the ports, and the role follows the
+    job, a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      the four XFP ports, labelled 0/0 to 3/0 by PIC and port, each at up to 10 Gbps
 parts:
-- {ref: std/xfp@1, id: port-0, at: [95.80, 14.00]}
-- {ref: std/xfp@1, id: port-1, at: [171.95, 14.00]}
-- {ref: std/xfp@1, id: port-2, at: [248.05, 14.00]}
-- {ref: std/xfp@1, id: port-3, at: [324.05, 14.00]}
+- {ref: std/xfp@1, id: port-0, group: xfp-10g, at: [95.80, 14.00]}
+- {ref: std/xfp@1, id: port-1, group: xfp-10g, at: [171.95, 14.00]}
+- {ref: std/xfp@1, id: port-2, group: xfp-10g, at: [248.05, 14.00]}
+- {ref: std/xfp@1, id: port-3, group: xfp-10g, at: [324.05, 14.00]}
 elements:
   lever-left:
     at: [0.0, 11.05]
