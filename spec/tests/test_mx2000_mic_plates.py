@@ -44,6 +44,7 @@ def _resolve(ref):
 
 
 @pytest.mark.parametrize("name", MICS)
+@pytest.mark.heavy
 def test_the_current_mic_is_the_plate_and_says_how_it_got_there(name):
     doc = _current(name)
     assert (doc["size"]["w"], doc["size"]["h"]) == PLATE
