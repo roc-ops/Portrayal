@@ -16,6 +16,8 @@ import pytest
 
 import libdata
 
+pytestmark = pytest.mark.heavy
+
 PLATE = (29.2, 168.8)
 MICS = ("mic-mrate", "mic-macsec-mrate", "mx-mic-blank-v")
 CARRIERS = ("mx2k-mpc8e-v2k", "mx2k-mpc9e-v2k")
@@ -44,7 +46,6 @@ def _resolve(ref):
 
 
 @pytest.mark.parametrize("name", MICS)
-@pytest.mark.heavy
 def test_the_current_mic_is_the_plate_and_says_how_it_got_there(name):
     doc = _current(name)
     assert (doc["size"]["w"], doc["size"]["h"]) == PLATE
