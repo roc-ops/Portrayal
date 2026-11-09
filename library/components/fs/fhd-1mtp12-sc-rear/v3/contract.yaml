@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-1mtp12-sc-rear
-version: 3.1.0
+version: 3.2.0
 class: cassette
 description: >-
   The back of FS FHD-1MTP6SCDOS2A (SKU 57058): the cassette body seen from
@@ -36,8 +36,16 @@ size-notes: >-
   cassette's edge in 3D. The depth of the body this face closes belongs to the
   cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 1 MTP-12 adapter on the rear face, the trunk ends of the front adapters, passive
 parts:
-  - {id: mtp, ref: common/mpo-flange-adapter@2, at: [3.0, 14.3]}
+  - {id: mtp, group: adapters, ref: common/mpo-flange-adapter@2, at: [3.0, 14.3]}
 provenance:
   size: >-
     see size-notes.
@@ -62,4 +70,13 @@ provenance:
     `MALE` warranty seal on the lid edge, which is a sticker over the join
     rather than printing on this face, and the two thumb-screws, which are on
     the faceplate that overhangs this body, not on it.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: rear connector, MTP adapters with
+    male ferrules) and page 12 (ordering table: MTP-12 rear connector, 12 fibres, with the note
+    "SC Adapter: 12-Fiber only"); FS Modular Cabling System Guide, page 7 (the row "12F, OS2
+    SMF, Type A, #57058, FHD-1MTP6SCDOS2A"). This face holds one MTP-12 adapter, as the contract
+    draws. The datasheet prints the connector and the polish and no data rate, and names no
+    role for the adapter; the role follows the job, a through connection a trunk cable is
+    plugged into, so it is traffic, and no speed is stated. The group's media is the adapter's
+    own, fiber. The front face's SC adapters take their own group.
 skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fapm6-rj45
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -23,13 +23,22 @@ body:
   footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+groups:
+  jacks:
+    term: Jack
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45}
+    description: >-
+      the 6 Cat6 unshielded RJ45 keystone jacks on the front face, numbered as FS numbers
+      the panel
 parts:
-  - {id: p1, ref: std/rj45@2, at: [20.495, 19.37]}
-  - {id: p2, ref: std/rj45@2, at: [20.495, 2.47]}
-  - {id: p3, ref: std/rj45@2, at: [46.585, 19.37]}
-  - {id: p4, ref: std/rj45@2, at: [46.585, 2.47]}
-  - {id: p5, ref: std/rj45@2, at: [72.675, 19.37]}
-  - {id: p6, ref: std/rj45@2, at: [72.675, 2.47]}
+  - {id: p1, group: jacks, ref: std/rj45@2, at: [20.495, 19.37]}
+  - {id: p2, group: jacks, ref: std/rj45@2, at: [20.495, 2.47]}
+  - {id: p3, group: jacks, ref: std/rj45@2, at: [46.585, 19.37]}
+  - {id: p4, group: jacks, ref: std/rj45@2, at: [46.585, 2.47]}
+  - {id: p5, group: jacks, ref: std/rj45@2, at: [72.675, 19.37]}
+  - {id: p6, group: jacks, ref: std/rj45@2, at: [72.675, 2.47]}
 faces:
   rear: {ref: fs/fhd-fapm6-rj45-rear@1}
 provenance:
@@ -86,4 +95,15 @@ provenance:
     NOT AN FS SKU. FS sells the FAPM6 (143239) and the keystone jacks (#72818)
     as separate items; this part is the two assembled, as the panel is
     deployed. No FS document gives a loaded panel a number.
+  groups: >-
+    FS FHD-FAPM6 Multimedia Modular Panel Datasheet, page 2 (section I: "Number of Port 6"; copper
+    insert style, inline coupler or keystone jack, UTP; section II: Cat5e/6/6a, 24 ports per 1U)
+    and, in the earlier revision held beside it, page 5 (Keystone Jacks, Cat6 RJ45 unshielded,
+    #72818, the jack this contract seats; the later revision lists other Cat6 jack numbers and
+    not this one). The panel has six openings and the contract seats a jack in each, numbered as
+    FS numbers the panel (see face-legends). The datasheet prints the cable category and no data
+    rate, and names no role for the jacks; the role follows the job, a through connection a
+    patch cord is plugged into, so it is traffic, and no speed is stated. The group's media is
+    the jacks' own, rj45. The punch-down termination behind each jack is on the rear face, which
+    takes no group in this change.
 skins: [default]

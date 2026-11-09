@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: keystone-rj45-cat6
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: occupies
 mates: keystone
@@ -29,8 +29,16 @@ attrs: {opening: keystone, media: rj45, model: KEYSTONE-RJ45-CAT6}
 unplaced: >-
   seated by a configuration of a panel, or by a person choosing an insert for
   an opening; no device in this library composes it in a fixed place
+groups:
+  jack:
+    term: Jack
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45}
+    description: >-
+      the one Cat6 unshielded RJ45 port on the front of the keystone jack
 parts:
-  - {id: rj45, ref: std/rj45@2, at: [0.35, 0.85]}
+  - {id: rj45, group: jack, ref: std/rj45@2, at: [0.35, 0.85]}
 provenance:
   size: >-
     datasheet - see size-notes. The 14.5 x 16.1 body is carried over from
@@ -68,6 +76,15 @@ provenance:
   mate: >-
     `mate.at` is the centre of the opening, (8.25, 7.45), where the clip's own
     `mate` point stands.
+  groups: >-
+    FS FHD-FAPM6 Multimedia Modular Panel Datasheet, in the earlier revision held beside the
+    later one, page 5 (Keystone Jacks, Cat6 RJ45, unshielded, #72818) and page 2 (copper insert
+    style, keystone jack, UTP). The jack has one RJ45 port on its front, as the contract
+    composes it; the match of #72818 to the jack the contract draws is the contract's own
+    estimate (see match). The datasheet prints the cable category and no data rate, and names
+    no role for the jack; the role follows the job, a through connection a patch cord is
+    plugged into, so it is traffic, and no speed is stated. The group's media is the port's
+    own, rj45.
 connection-points:
   mate: {at: [8.25, 7.45], direction: front}
   port: {at: [8.25, 7.45], direction: front}
