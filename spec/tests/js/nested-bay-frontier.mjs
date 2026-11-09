@@ -27,6 +27,8 @@ function node(attrs) {
     _attrs: attrs,
     getAttribute: k => (k in attrs ? attrs[k] : null),
     remove() { const i = NODES.indexOf(el); if (i >= 0) NODES.splice(i, 1); },
+    // a bay group here has no seen-through child, so the real call finds none
+    querySelectorAll: () => [],
     querySelector: sel => {
       const m = /^\[id="(.*)"\]$/.exec(sel);
       return m ? NODES.find(n => n.getAttribute('id') === m[1]) || null : null;

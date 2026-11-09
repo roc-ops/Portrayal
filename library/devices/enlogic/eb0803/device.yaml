@@ -1,0 +1,903 @@
+format: 1
+kind: device
+name: eb0803
+version: 0.1.0
+maturity: modelled
+manufacturer: Enlogic
+model: EB0803
+description: 'Enlogic EB basic PDU, 0U: a 1490 mm dark strip, 52 mm wide and 53 mm deep, that hangs on two toolless
+  buttons beside a rack and hands a three-phase 208 V wye feed (a fixed 3 m cord with a NEMA L21-30P plug, 30 A
+  derated to 24 A, 8.6 kVA) on to 30 unswitched outlets in three colour-coded banks of ten - 24 IEC C13, 3 IEC C19
+  and 3 NEMA 5-20R - each bank behind its own 20 A double-pole breaker. No meter, no display, no network interface.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S VECTOR DRAWING AND ITS FACE RENDER. Enlogic EB0803
+      dimensioned drawing TA-EB0803A, rev E1, 2020.05.20 (one A2 sheet) draws a top, a rear, a bottom, a front and
+      a right view of the strip lying down, cord end at the left. Its views are paths: positions were read off the
+      page''s geometry and off 400 and 1000 dpi renders, at the drawing''s own scale, 1.9524 mm per pt, which the
+      1490.0 overall (763.19 pt between the end lines) and the 52.0 width both check. The data sheet''s page 1 carries
+      one face-on render of the whole strip (9854 by 333 px, 6.385 px per mm over the 1490); the outlet wells, the
+      bank colours and the printing were read off it, and it is the colour reference. The library draws the PDU
+      STANDING, cord end up (the data sheet''s thumbnail stands it so, and the drawing''s TOP FEED says the cord
+      is at the top), so a drawing x along the length becomes y down from the cord end and a drawing y across becomes
+      x from the left.'}
+  mount: {confidence: drawing, note: '`rack-side`, the library''s way to say a part stands vertically beside an
+      upright, on the toolless buttons of the rear view (VERTICAL,MID; 1244.0 between the two drawn buttons, the
+      first 65.5 from the cord end). `ru: 34` is the 1490 it runs, 1490 / 44.45 = 33.5; no source sells it by rack
+      units. The installation guide''s mounting brackets (full length 1555, mid length 1244) are accessories and
+      are not drawn.'}
+  chassis: {confidence: drawing, note: 'drawing and datasheet - 1490.0 long, 52.0 wide and 53.0 deep (data sheet
+      "Chassis Dimensions (L x W x D) 1490.0 x 52.0 x 53.0 mm", "Depth At Circuit Breaker 53 mm"; the drawing''s
+      front, bottom and right views give the same). The body colour is #202020, read off the face render (a vendor
+      rendering, not a photograph of a unit; the data sheet states no chassis colour for this model).'}
+  colour: {confidence: photo-measured, note: 'the face render reads B1 plate and mouldings #646867 (the drawing''s
+      "LIGHT GRAY"), B2 #77a6ee ("BLUE") and B3 #32353a ("DARK GRAY"), the body #202020 and the ground screw''s
+      cap green (#4baf65). The strip is drawn in those colours. No photograph of a unit is held, so the colours
+      are the render''s and are unchecked against a real strip.'}
+  front: {confidence: drawing, note: 'drawing - the front view, mm from the cord end and from the left edge as the
+      strip stands: three banks B1, B2 and B3, each 461.18 after the last, each from the cord end a breaker plate,
+      one NEMA 5-20R receptacle, two packs of four IEC C13 (106.64 apart) and one IEC C19 plate. The four C13 of
+      a pack stagger: two wells low on the page and two high, so the strip''s outlets alternate across its width;
+      the render''s wells give each centre (the drawing''s pack outlines agree within 1.4 mm). The C13 wells with
+      their earth slot toward the far end are turned 180, the others are not; the C19''s single slot is toward the
+      cord end (no turn); the 5-20R is turned 180 (the drawing draws its earth hole toward the far end). A ground
+      screw and its earth symbol stand at the cord end.'}
+  outlets: {confidence: datasheet, note: 'datasheet and drawing - "Outlet Configuration 24(C13),3(C19),3(5-20R)";
+      the drawing''s receptacle block gives IEC 60320/C13 (10A, 250V), IEC 60320/C19 (16A, 250V) and NEMA 5-20R
+      (16A, 125V) as the maximum rated outputs. std/c13-outlet@1, std/c19-outlet@1 and std/nema-5-20r@1. None is
+      switched, none has a lamp. THE UNIT PRINTS NO OUTLET NUMBER (the render and the drawing show none), so the
+      outlets keep their placement ids, counted from the cord end.'}
+  input: {confidence: datasheet, note: 'datasheet and drawing - "Input Plug Type NEMA L21-30P", "Input Current (Phase)
+      30A (24A derated)", "Max Input Power 8.6 kVA", cord "3m (9.84'')"; the drawing: "THREE-PHASE WYE", plug "NEMA
+      L21-30P, 4P 5W" and "3m[10''''],TOP FEED". The unit has a fixed cord and no inlet. THE DATA SHEET AND THE
+      DRAWING DISAGREE ON THE VOLTAGE (gaps: input-voltage): "Acceptable Input Voltage 208VAC, 3phase" against "INPUT
+      VOLTAGE: 100-120/200-240VAC". 208 is written because the plug''s own rating, 120/208 V, agrees with it.'}
+  breakers: {confidence: datasheet, note: 'datasheet and drawing - "(3)2-pole,20A,5 kAIC" and "20 A, DOUBLE - POLE
+      ELECTRO-MECHANICAL SWITCH / BREAKER (3) PLACES"; each plate prints its bank and its lines (B1 L1-L2, B2 L2-L3,
+      B3 L3-L1) and "L1-N(5-20R)" and its like. THE OUTLETS RUN `through` THEIR BANK''S BREAKER, a reading: the
+      printing puts the bank''s three kinds of outlet and its breaker on one colour and under one plate, and no
+      wiring diagram is held. The 5-20R states its own lines (the line of the plate''s last legend and neutral);
+      the C13 and C19 take the breaker''s.'}
+  rear: {confidence: drawing, note: 'drawing - the rear view: two toolless buttons, O18.4, 1244.0 apart, the first
+      65.5 from the cord end, on the width''s centre line. The drawing also marks "TOOLESS MOUNTING BUTTON LOCATIONS
+      (12) PL" with plus marks along the back; only the two drawn circles are buttons (gaps: button-locations).'}
+  sides: {confidence: drawing, note: 'drawing - the top and bottom views draw five and eleven round heads about
+      6.9 across on the two sides, at the along positions and depths from the front written here (the top view puts
+      five 40.1 behind the front on the standing PDU''s right side; the bottom view puts five 40.8 and six 8.6 behind
+      it on the left side). The side faces'' colour and finish are not shown by any held source (gaps: ends).'}
+  dcim: {confidence: datasheet, note: 'the input is one NEMA L21-30P power port from the cord part and each outlet
+      a power outlet it feeds: `iec-60320-c13`, `iec-60320-c19` and `nema-5-20r`. Each outlet runs `through` its
+      bank''s breaker. No feed_leg is written: a C13 or C19 is line to line and a DCIM outlet''s feed_leg names
+      one leg.'}
+  lifecycle: {confidence: datasheet, note: 'only the held documents were read: none announces an end of life, and
+      the data sheet is copyright 2023. No web search was made.'}
+attrs:
+  physical: {length-mm: 1490, construction: 'metal strip, dark'}
+  power: {input-ac: '208 V three-phase wye (data sheet; the drawing prints 100-120/200-240 V), 30 A (24 A derated),
+      50/60 Hz', input-plug: nema-l21-30p, input-cord: fixed, input-phase: three, input-wiring: wye, input-voltage-v: 208,
+    input-current-a: 24, plug-rating-a: 30, max-input-power: 8.6 kVA, output-voltage: 208 V (data sheet), output-rating: 10
+      A per C13; 16 A per C19; 16 A per 5-20R (125 V), breakers: 'three 20 A two-pole, 5 kAIC, hydraulic-magnetic',
+    frequency: 50/60 Hz}
+  environmental: {operating-temp: -5 to 60 C (23 to 140 F), storage-temp: -20 to 60 C (-4 to 140 F), humidity: '5-90
+      % RH operating, 5-95 % storage, non-condensing', altitude: 3000 m (9840 ft) maximum operating elevation}
+  management: {metering-scope: none, outlet-switching: false}
+  compliance: {product-compliance: 'RoHS, REACH; IEC 62368 listed'}
+  lifecycle: {eol: none-announced}
+chassis: {width: 52, height: 1490, depth: 53, ru: 34, mount: rack-side, color: '#202020', airflow: passive}
+gaps:
+- what: input-voltage
+  scope: [front]
+  reason: sources-disagree
+  note: the data sheet gives "208VAC, 3phase" for input and output, the drawing "100-120/200-240VAC" for input with
+    a 5-20R rated 125 V. 208 is written (the plug's 120/208 V agrees); both are recorded.
+  wanted: the maker's word on the input and output voltage of this SKU.
+- what: weight
+  scope: [front, rear, left, right]
+  reason: vendor-silent
+  note: 'no held document states a weight: the drawing''s title block says N/A and the data sheet has no field.'
+  wanted: a weight from the maker.
+- what: colour
+  scope: [front, rear, left, right]
+  reason: needs-photo
+  note: the only colour source is the data sheet's face render. No photograph of a unit, and no view of the back,
+    the sides or the ends in colour, is held. The standard 5-20R part draws a dark face; the render paints it in
+    the bank's colour.
+  wanted: photographs of a unit, front, back, sides and ends.
+- what: button-locations
+  scope: [rear]
+  reason: needs-drawing
+  note: the drawing's note counts twelve toolless button locations and marks plus signs for them along the back;
+    only two circles are drawn as buttons, so only two are placed.
+  wanted: a drawing that dimensions the other ten locations.
+- what: breaker-plate-length
+  scope: [front]
+  reason: sources-disagree
+  note: the drawing's breaker plate is 75.2 along the strip, the data sheet's face render's 80.0 (it also prints
+    the plate's lines and receptacle legends across the strip where the drawing prints them small and horizontal).
+    The render is used, as the newer artwork; the plate and its legends are drawn as it shows them.
+  wanted: the maker's word on which artwork is current.
+- what: windows
+  scope: [front]
+  reason: vendor-silent
+  note: each pack of C13 carries four pairs of small rounded windows beside its outlets, drawn and rendered in a
+    shade of the bank's colour; no held document names them, so they are drawn as decor.
+  wanted: the maker's word on what they are.
+- what: outlet-locks
+  scope: [front]
+  reason: needs-drawing
+  note: the data sheet's introduction says "color-coded locking IEC outlets" and the drawing shows a small tab on
+    some wells; no held view dimensions it, so it is not drawn.
+  wanted: a close-up of a well.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: the cord end and the far end are drawn only as the right view's plain square, and the sides as screw heads
+    in a depth profile; no photograph looks at an end or a side.
+  wanted: straight-on photographs of an end and a side.
+- what: outlet-numbers
+  scope: [front]
+  reason: vendor-silent
+  note: the unit prints no outlet number in the drawing or the render, so no outlet name is taken.
+  wanted: none.
+groups:
+  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the ten outlets of bank B1, counted from the
+      cord end: one NEMA 5-20R, eight IEC C13 and one IEC C19, behind breaker B1'}
+  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the ten outlets of bank B2, counted from the
+      cord end: one NEMA 5-20R, eight IEC C13 and one IEC C19, behind breaker B2'}
+  outlets-b3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the ten outlets of bank B3, counted from the
+      cord end: one NEMA 5-20R, eight IEC C13 and one IEC C19, behind breaker B3'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'B1, B2 and B3, each 20 A double-pole and
+      each feeding the ten outlets of its bank'}
+  marks: {term: Mark, role: furniture, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1490}
+    panel:
+      decor:
+      - id: ground-boss
+        at: [5.8, 12.6]
+        size: [12.0, 12.0]
+        rx: 6.0
+        fill: '#8c8f91'
+        kind: boss
+      - id: b1-pack-1
+        at: [0, 286.1]
+        size: [52, 98.1]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: b1-pack-2
+        at: [0, 392.74]
+        size: [52, 98.1]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: b1-c19-plate
+        at: [4.3, 499.0]
+        size: [43.0, 39.1]
+        rx: 1.5
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: b2-pack-1
+        at: [0, 747.28]
+        size: [52, 98.1]
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: b2-pack-2
+        at: [0, 853.92]
+        size: [52, 98.1]
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: b2-c19-plate
+        at: [4.3, 960.18]
+        size: [43.0, 39.1]
+        rx: 1.5
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: b3-pack-1
+        at: [0, 1208.46]
+        size: [52, 98.1]
+        fill: '#32353a'
+        kind: outlet-moulding
+      - id: b3-pack-2
+        at: [0, 1315.1]
+        size: [52, 98.1]
+        fill: '#32353a'
+        kind: outlet-moulding
+      - id: b3-c19-plate
+        at: [4.3, 1421.36]
+        size: [43.0, 39.1]
+        rx: 1.5
+        fill: '#32353a'
+        kind: outlet-moulding
+      - id: b1-pack-1-window-1
+        at: [37.3, 289.6]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-2
+        at: [37.3, 297.7]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-3
+        at: [37.3, 337.7]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-4
+        at: [37.3, 345.8]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-5
+        at: [8.2, 315.2]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-6
+        at: [8.2, 323.4]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-7
+        at: [8.2, 363.3]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-1-window-8
+        at: [8.2, 371.5]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-1
+        at: [37.3, 396.24]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-2
+        at: [37.3, 404.34]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-3
+        at: [37.3, 444.34]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-4
+        at: [37.3, 452.44]
+        size: [7.8, 5.4]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-5
+        at: [8.2, 421.84]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-6
+        at: [8.2, 430.04]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-7
+        at: [8.2, 469.94]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b1-pack-2-window-8
+        at: [8.2, 478.14]
+        size: [7.8, 5.2]
+        fill: '#565a59'
+        kind: window
+      - id: b2-pack-1-window-1
+        at: [37.3, 750.78]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-2
+        at: [37.3, 758.88]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-3
+        at: [37.3, 798.88]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-4
+        at: [37.3, 806.98]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-5
+        at: [8.2, 776.38]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-6
+        at: [8.2, 784.58]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-7
+        at: [8.2, 824.48]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-1-window-8
+        at: [8.2, 832.68]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-1
+        at: [37.3, 857.42]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-2
+        at: [37.3, 865.52]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-3
+        at: [37.3, 905.52]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-4
+        at: [37.3, 913.62]
+        size: [7.8, 5.4]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-5
+        at: [8.2, 883.02]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-6
+        at: [8.2, 891.22]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-7
+        at: [8.2, 931.12]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b2-pack-2-window-8
+        at: [8.2, 939.32]
+        size: [7.8, 5.2]
+        fill: '#6a95dd'
+        kind: window
+      - id: b3-pack-1-window-1
+        at: [37.3, 1211.96]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-2
+        at: [37.3, 1220.06]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-3
+        at: [37.3, 1260.06]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-4
+        at: [37.3, 1268.16]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-5
+        at: [8.2, 1237.56]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-6
+        at: [8.2, 1245.76]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-7
+        at: [8.2, 1285.66]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-1-window-8
+        at: [8.2, 1293.86]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-1
+        at: [37.3, 1318.6]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-2
+        at: [37.3, 1326.7]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-3
+        at: [37.3, 1366.7]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-4
+        at: [37.3, 1374.8]
+        size: [7.8, 5.4]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-5
+        at: [8.2, 1344.2]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-6
+        at: [8.2, 1352.4]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-7
+        at: [8.2, 1392.3]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b3-pack-2-window-8
+        at: [8.2, 1400.5]
+        size: [7.8, 5.2]
+        fill: '#2b2d31'
+        kind: window
+      - id: b1-socket-hole-1
+        at: [23.55, 217.05]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+      - id: b1-socket-hole-2
+        at: [23.55, 262.05]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+      - id: b2-socket-hole-1
+        at: [23.55, 678.23]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+      - id: b2-socket-hole-2
+        at: [23.55, 723.23]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+      - id: b3-socket-hole-1
+        at: [23.55, 1139.41]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+      - id: b3-socket-hole-2
+        at: [23.55, 1184.41]
+        size: [4.5, 4.5]
+        rx: 2.25
+        fill: '#0b0b0b'
+        kind: hole
+    components:
+      placements:
+      - id: outlet-1
+        ref: std/nema-5-20r@1
+        at: [12.3, 228.3]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b1
+        lines: [L1, N]
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at: [2.2, 287.6]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [19.0, 311.1]
+        group: outlets-b1
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-4
+        ref: std/c13-outlet@1
+        at: [2.2, 335.7]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-5
+        ref: std/c13-outlet@1
+        at: [19.0, 358.9]
+        group: outlets-b1
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-6
+        ref: std/c13-outlet@1
+        at: [2.2, 394.0]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-7
+        ref: std/c13-outlet@1
+        at: [19.0, 417.4]
+        group: outlets-b1
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-8
+        ref: std/c13-outlet@1
+        at: [2.2, 442.1]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-9
+        ref: std/c13-outlet@1
+        at: [19.0, 465.5]
+        group: outlets-b1
+        rel-pos: 9
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-10
+        ref: std/c19-outlet@1
+        at: [8.0, 503.95]
+        group: outlets-b1
+        rel-pos: 10
+        fed-by: input
+        through: breaker-b1
+      - id: breaker-b1
+        ref: enlogic/eb-breaker-20a-2p@1
+        at: [2.5, 107.1]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: 'Breaker B1 (light gray), 20 A double-pole across L1 and L2: protects the ten outlets of bank
+          B1'
+        attrs: {bank-color: '#646867', ink: '#e6e6e6', bank: B1, lines: L1-L2, branch: L1-N(5-20R)}
+      - id: outlet-11
+        ref: std/nema-5-20r@1
+        at: [12.3, 689.48]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b2
+        lines: [L2, N]
+      - id: outlet-12
+        ref: std/c13-outlet@1
+        at: [2.2, 748.78]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-13
+        ref: std/c13-outlet@1
+        at: [19.0, 772.28]
+        group: outlets-b2
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [2.2, 796.88]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at: [19.0, 820.08]
+        group: outlets-b2
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-16
+        ref: std/c13-outlet@1
+        at: [2.2, 855.18]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-17
+        ref: std/c13-outlet@1
+        at: [19.0, 878.58]
+        group: outlets-b2
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-18
+        ref: std/c13-outlet@1
+        at: [2.2, 903.28]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-19
+        ref: std/c13-outlet@1
+        at: [19.0, 926.68]
+        group: outlets-b2
+        rel-pos: 9
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-20
+        ref: std/c19-outlet@1
+        at: [8.0, 965.13]
+        group: outlets-b2
+        rel-pos: 10
+        fed-by: input
+        through: breaker-b2
+      - id: breaker-b2
+        ref: enlogic/eb-breaker-20a-2p@1
+        at: [2.5, 568.28]
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        description: 'Breaker B2 (blue), 20 A double-pole across L2 and L3: protects the ten outlets of bank B2'
+        attrs: {bank-color: '#77a6ee', ink: '#1c2a4a', bank: B2, lines: L2-L3, branch: L2-N(5-20R)}
+      - id: outlet-21
+        ref: std/nema-5-20r@1
+        at: [12.3, 1150.66]
+        rotate: 180
+        group: outlets-b3
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b3
+        lines: [L3, N]
+      - id: outlet-22
+        ref: std/c13-outlet@1
+        at: [2.2, 1209.96]
+        rotate: 180
+        group: outlets-b3
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-23
+        ref: std/c13-outlet@1
+        at: [19.0, 1233.46]
+        group: outlets-b3
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-24
+        ref: std/c13-outlet@1
+        at: [2.2, 1258.06]
+        rotate: 180
+        group: outlets-b3
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-25
+        ref: std/c13-outlet@1
+        at: [19.0, 1281.26]
+        group: outlets-b3
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at: [2.2, 1316.36]
+        rotate: 180
+        group: outlets-b3
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at: [19.0, 1339.76]
+        group: outlets-b3
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-28
+        ref: std/c13-outlet@1
+        at: [2.2, 1364.46]
+        rotate: 180
+        group: outlets-b3
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-29
+        ref: std/c13-outlet@1
+        at: [19.0, 1387.86]
+        group: outlets-b3
+        rel-pos: 9
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-30
+        ref: std/c19-outlet@1
+        at: [8.0, 1426.31]
+        group: outlets-b3
+        rel-pos: 10
+        fed-by: input
+        through: breaker-b3
+      - id: breaker-b3
+        ref: enlogic/eb-breaker-20a-2p@1
+        at: [2.5, 1029.46]
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        description: 'Breaker B3 (dark gray), 20 A double-pole across L3 and L1: protects the ten outlets of bank
+          B3'
+        attrs: {bank-color: '#32353a', ink: '#e6e6e6', bank: B3, lines: L3-L1, branch: L3-N(5-20R)}
+      - id: ground-symbol
+        ref: common/ground-symbol@1
+        at: [9.0, 4.2]
+        group: marks
+        rel-pos: 1
+      - id: ground
+        ref: common/ground-screw@1
+        at: [9.0, 15.8]
+        group: grounding
+        rel-pos: 1
+  rear:
+    size: {w: 52, h: 1490}
+    components:
+      placements:
+      - id: button-1
+        ref: enlogic/pdu-mounting-button@1
+        at: [16.8, 56.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: enlogic/pdu-mounting-button@1
+        at: [16.8, 1300.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 53}
+    components:
+      placements:
+      - id: input
+        ref: enlogic/pdu-cord-l21-30p@1
+        at: [7.45, 7.95]
+        group: power-input
+        rel-pos: 1
+        description: the fixed 3 m cord with a NEMA L21-30P plug, leaving the cord end of the strip through a cable
+          gland
+  bottom:
+    size: {w: 52, h: 53}
+    empty: the right view of the drawing (TA-EB0803A) draws this end as a plain square 52.0 by 53.0 with no feature
+      on it, and no photograph looks at it.
+  left:
+    size: {w: 53, h: 1490}
+    panel:
+      decor:
+      - id: screw-1
+        at: [8.75, 19.75]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-2
+        at: [8.75, 410.25]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-3
+        at: [8.75, 741.15]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-4
+        at: [8.75, 1072.55]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [8.75, 1463.65]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-6
+        at: [40.95, 335.25]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-7
+        at: [40.95, 441.85]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-8
+        at: [40.95, 795.75]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-9
+        at: [40.95, 902.45]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-10
+        at: [40.95, 1256.95]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-11
+        at: [40.95, 1363.55]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+  right:
+    size: {w: 53, h: 1490}
+    panel:
+      decor:
+      - id: screw-1
+        at: [36.65, 20.15]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-2
+        at: [36.65, 410.75]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-3
+        at: [36.65, 741.65]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-4
+        at: [36.65, 1073.05]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [36.65, 1464.15]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as it ships: the fixed cord and the two toolless buttons on it. The mounting brackets
+      of the quick start guide are not drawn.'
+    part-numbers:
+      EB0803: {}
+datasheet: {title: 'Enlogic EB0803 data sheet, "Basic PDU data sheet - EB series" (3 pages)', url: 'https://nvent.widen.net/content/c7hb0eo9lf/original/eb0803-spec-sheet.pdf',
+  sha256: ddbd42c94bef58100ad9780852de22e6da1236f1962648bcfc9218096e631089}
+references:
+- {title: 'Enlogic EB0803 dimensioned drawing TA-EB0803A, rev E1, 2020.05.20 (one A2 sheet)', url: 'https://nvent.widen.net/content/ny0uiryzjs/original/ta-eb0803-e1.pdf',
+  sha256: 369702df70c7e9ce2c8cdf10bde4dff631667b55344512280bc749ddf868ee51}
+- {title: 'Enlogic EB 2.0 Series PDU, Quick Start Installation Guide', url: 'https://nvent.widen.net/content/rmg6v3jpv0/original/enlogic-installation-guide-pdu.pdf',
+  sha256: 694ccb32a01adcb3785e63744b614e0aa6a6d84500bfa753f17b584490359956}

@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: pdu-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  The toolless mounting button on the back of an Enlogic zero-U PDU: a round
+  flange 18.4 across, one at each of two points on the back of the strip, that
+  hooks into a keyhole slot in a rack's vertical channel. Seen here from behind
+  the PDU.
+size: {w: 18.4, h: 18.4}
+size-confidence: {w: drawing, h: drawing}
+attrs: {fit: toolless}
+provenance:
+  size: >-
+    drawing - the rear view of the Enlogic EB0803 drawing TA-EB0803A (rev E1,
+    2020.05.20) dimensions the two button locations "(2) PL O18.4"; the EN2333
+    drawing TA-EN2333A (rev E1) dimensions the same. The part is the 18.4 circle.
+  relief: >-
+    estimated, from a sibling detail - the EN2951 drawing (sheet 2, MOUNTING BUTTON, "BUTTON MOUNTING SCREW
+    (INCLUDED)") details a button of 18.4 head diameter, 10.4 neck diameter and two
+    heights, 2.2 and 2.0. No held EB0803 or EN2333 sheet draws the button's side, so
+    the head's 2.2 is taken from that sibling detail and nothing of the neck is built.
+  how-it-mounts: >-
+    datasheet - the EB 2.0 Series quick start installation guide describes mounting
+    brackets with hooks and toolless mounting pegs; no held document gives the slot
+    size the button enters, so the fit is stated by mechanism and not checked by
+    dimension.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the mounting interface a keyhole slot
+    in a bracket or a cabinet channel presents. The button seats at its `mate`, on
+    its axis.
+elements:
+  head: {at: [0, 0], size: [18.4, 18.4], class: mount}
+relief:
+  features:
+    - node: head
+      cyl: 2.2
+      color: '#2a2c2f'
+      confidence: estimated
+      source: >-
+        EN2951 drawing sheet 2, MOUNTING BUTTON: the 2.2 height beside the 18.4 head;
+        taken for the head of this button, which no held sheet sections.
+connection-points:
+  mate: {at: [9.2, 9.2], direction: front}
+skins: [default]

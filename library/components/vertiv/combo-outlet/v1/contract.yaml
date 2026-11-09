@@ -1,0 +1,55 @@
+format: 1
+kind: component
+name: combo-outlet
+version: 1.0.0
+class: inlet
+profile: power
+interface: vertiv-combo
+description: >-
+  The combination C13/C19 outlet of a Vertiv PowerIT rack PDU. It takes a C14 or a C20 plug
+  and holds it with the P-Lock cord retention. A dark well with a grey nose that has two
+  chamfered corners, two line contacts on one side and the earth contact on the other.
+size: {w: 20.0, h: 27.0, d: 20}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {outlet: vertiv-combo, media: ac, rating-a: 16, accepts: 'C14, C20', retention: P-Lock}
+provenance:
+  size: >-
+    photo-measured - VP5N31A1 rear photograph (vertiv-geist-switched-vp5n31a1_rear.jpg, 1000 px),
+    the body 764 px across for the SKU page's 17 in, so 1.77 px per mm. The twelve outlets read 27.0
+    apart; one well reads about 35 px across and 45 px down, 19.8 by 27.0 mm. The photograph looks
+    slightly down on the face, so the height is good to about 1.5 mm and the width to 0.5 mm. No
+    dimensioned drawing of the outlet is held.
+  identity: >-
+    datasheet - Vertiv PowerIT Rack Power Distribution Unit Installer/User Guide SL-71211 Rev E,
+    Table 2.4 (PDF page 10): "Combination C13/C19", 250 VAC, 16 A with a C20 cord and 10 A with a C14 cord;
+    section 3.2.2 (PDF page 28): "Vertiv Combination C13/C19 Outlet with P-Lock power cord retention." It is a vendor outlet
+    and no IEC 60320 sheet, so it is a vertiv/ part and not a std/ one.
+  rating: >-
+    datasheet - SL-71211 Rev E Table 2.4. `rating-a` is the 16 A of the C20 cord; a C14 cord is 10 A.
+  depth: >-
+    estimated - no held document or photograph shows the outlet in section. 20 is the C19 nose's 20 MIN
+    (registry entry c19-plug, Volex VAC19 p.262), as for eaton/c39-outlet@1.
+  interface: >-
+    `vertiv-combo` in spec/schemas/connectors.yaml. Two cord ends mate it and seat at `mate`:
+    generic/c14-plug@1 and generic/c20-plug@1, the plugs Table 2.4 gives ratings for.
+  mate: >-
+    estimated - (9.5, 13.5), the centre of the nose as the photograph draws it. One point for two plugs,
+    as on the Eaton C39 and the Server Technology HDOT Cx. No held document shows either plug seated.
+  face: >-
+    photo-measured - the nose is a light grey trapezoid with its two near corners cut, two T-shaped line
+    slots on the side of the cord end and a plus-shaped earth slot in the middle of the other side, as
+    the rear photograph shows. The shapes are drawn from the photograph and not from a measured
+    drawing. The orange or green tab above and below a group of six outlets is the PDU's, not the
+    outlet's, and is drawn on the device.
+  media: >-
+    `media: ac`: an outlet states what it hands on, as eaton/c39-outlet@1 does.
+  relief: >-
+    `relief.cavity` names the `recess` outline, so the 3D walls follow it.
+elements:
+  recess: {at: [0, 0], size: [20.0, 27.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [9.5, 13.5], direction: front}
+skins: [default]

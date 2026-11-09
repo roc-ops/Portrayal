@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx240
-version: 6.4.6
+version: 6.5.1
 maturity: modelled
 manufacturer: Juniper
 model: MX240
@@ -214,6 +214,12 @@ gaps:
     reason: needs-photo
     wanted: faces for the high-capacity AC/DC supplies (figures 15/17 are
       isometric line art only).
+  - what: ac-psu-face
+    scope: [psus]
+    reason: needs-photo
+    wanted: a photograph of the normal-capacity AC supply's face - the reference
+      photograph shows the DC unit, so the AC face is read off Figure 14 (line
+      art in perspective) and every box on it is an estimate.
   - what: craft-and-card-dimensions
     scope: [craft, slots]
     reason: vendor-silent
@@ -346,16 +352,16 @@ views:
     components:
       bays:
         - {id: pem0, at: [11.0, 8.9], size: {w: 101.5, h: 79.7},
-           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1],
+           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1, juniper/mx240-psu-ac@2],
            default: juniper/mx240-psu-dc@1, group: psus, rel-pos: 0}
         - {id: pem1, at: [112.9, 8.9], size: {w: 101.5, h: 79.7},
-           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1],
+           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1, juniper/mx240-psu-ac@2],
            default: juniper/mx240-psu-dc@1, group: psus, rel-pos: 1}
         - {id: pem2, at: [214.8, 8.9], size: {w: 101.5, h: 79.7},
-           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1],
+           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1, juniper/mx240-psu-ac@2],
            default: juniper/mx240-psu-dc@1, group: psus, rel-pos: 2}
         - {id: pem3, at: [316.7, 8.9], size: {w: 101.5, h: 79.7},
-           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1],
+           accepts: [juniper/mx240-psu-dc@1, juniper/mx240-psu-ac@1, juniper/mx240-psu-ac@2],
            default: juniper/mx240-psu-dc@1, group: psus, rel-pos: 3}
         - {id: air-filter, at: [25.1, 100.0], size: {w: 12.0, h: 110.0},
            accepts: [juniper/mx240-air-filter@1], default: juniper/mx240-air-filter@1,
@@ -434,10 +440,10 @@ configurations:
     description: AC-powered chassis - normal-capacity AC supplies (high-line
       uses PEM0/PEM2; the four-bay low-line form is drawn).
     bays:
-      pem0: juniper/mx240-psu-ac@1
-      pem1: juniper/mx240-psu-ac@1
-      pem2: juniper/mx240-psu-ac@1
-      pem3: juniper/mx240-psu-ac@1
+      pem0: juniper/mx240-psu-ac@2
+      pem1: juniper/mx240-psu-ac@2
+      pem2: juniper/mx240-psu-ac@2
+      pem3: juniper/mx240-psu-ac@2
 datasheet:
   title: 'HPE MX 204/240/480/960 Series Universal Routing Platforms data sheet (a00150825enw)'
   sha256: dd37a225da8ea1f064fed5a274919357a68f1dea89e6db6c67a7e3f818b3d883

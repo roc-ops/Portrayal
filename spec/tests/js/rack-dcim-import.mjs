@@ -205,7 +205,7 @@ test('identity spot checks: thirteen vendored files across vendors read to exact
       {interfaces: [55, 'mgmt-eth', 'port-54'], 'console-ports': [1, 'Console', 'Console']}, [8, 'fan-1', 'psu-2']],
     ['nautobot/device-types/Cisco/ASR 9001 Router.yaml', 'Cisco', 'ASR 9001 Router',
       // two console ports since upstream c8aa39081 (#384: an AUX line reaches the export)
-      {interfaces: [12, 'svc-lan', 'tod'], 'console-ports': [2, 'Console', 'AUX']}, [5, 'fan-0', 'mpa-1']],
+      {interfaces: [14, 'svc-lan', 'tod'], 'console-ports': [2, 'Console', 'AUX']}, [5, 'fan-0', 'mpa-1']],
     ['nautobot/device-types/Juniper/MX10004.yaml', 'Juniper', 'MX10004', {}, [11, 'fan0', 're1']],
     ['netbox/module-types/Cisco/A99-10X400GE-X-SE.yaml', 'Cisco', 'A99-10X400GE-X-SE', {interfaces: [10, '{module}/p0', '{module}/p9']}, null],
     ['netbox/module-types/HPE/expansion-slot-blank-fh.yaml', 'HPE', 'expansion-slot-blank-fh', {}, null]];

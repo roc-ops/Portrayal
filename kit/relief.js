@@ -369,7 +369,8 @@ export function facetZ(r, {deg, facing}, lift, [px, py]) {
   const t = Math.tan(deg * Math.PI / 180);
   const d = facing === 'up' ? py - r.y : facing === 'down' ? r.y + r.h - py
           : facing === 'left' ? px - r.x : r.x + r.w - px;
-  return (lift || 0) + Math.max(0, d) * t;
+  // d runs negative before the root edge: the slope carries on past it
+  return (lift || 0) + d * t;
 }
 // THE HEIGHT OF THE RAISED SOLID at a face point: the tallest `out` whose box
 // holds it, a profiled one read off its piecewise-linear profiles (offsets

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dsx2-32
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Raritan
 model: DSX2-32
@@ -50,7 +50,8 @@ provenance:
     note: >-
       From the data sheet photograph. From the left: the two AC inlets, each under its switch and numbered 1 and 2; the fan;
       the TERMINAL jack with the ADMIN mini-USB jack to its right and the MODEM position, which is a blank square on this
-      AC model; under them the DVI jack between two thumbscrews and the RESET hole; a column of THREE USB ports; the two
+      AC model; under them the DVI jack between two thumbscrews and the RESET hole (the jack is std/dvi-d-jack@1, its size and
+      its contact cells read off the same photograph and estimated); a column of THREE USB ports; the two
       LAN jacks, LAN 2 over LAN 1; and the serial ports, two banks of 16 in two rows each with its numerals above and below.
   front-layout:
     confidence: estimated
@@ -146,12 +147,6 @@ gaps:
     The only front photograph held is of a DSX2-32M-DC. The front of the DSX2-32 is drawn from it. Whether the two fronts differ
     beyond the printed model label is not stated by any held page.
   wanted: A straight-on front photograph of the DSX2-32.
-- what: dvi-d
-  scope: [rear]
-  reason: needs-drawing
-  note: >-
-    The DVI-D jack is a region only: the library has no DVI jack part and no connector key covers a DVI-D jack.
-  wanted: A ruling on the connector key for the DVI-D jack.
 - what: power-lamp
   scope: [front]
   reason: needs-photo
@@ -190,6 +185,7 @@ groups:
   usb-rear: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a, usb: '2.0'}, description: 'the three USB 2.0 Type A ports on the rear, for a keyboard, a mouse or a cell modem'}
   usb-front: {term: Port, role: management, index-origin: 1, attrs: {media: usb-a, usb: '2.0'}, description: 'the USB 2.0 Type A port on the front'}
   lan: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 RJ45 LAN ports, printed LAN 1 and LAN 2'}
+  video: {term: Port, role: management, index-origin: 1, attrs: {media: dvi-d}, description: 'the DVI-D video jack, between two thumbscrews, for a keyboard tray or KVM console on the local port (user guide, PDF page 34)'}
   buttons: {term: Button, role: service, index-origin: 1, description: 'the recessed RESET hole'}
   serial-1-8:
     term: Port
@@ -322,7 +318,7 @@ views:
     - {at: [127.6, 23.2], text: TERMINAL, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: console}
     - {at: [144.25, 11.6], text: ADMIN, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: admin-usb}
     - {at: [155.9, 23.2], text: MODEM, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: chassis}
-    - {at: [141.7, 39.4], text: DVI, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [140.6, 39.4], text: DVI, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: video}
     - {at: [161.2, 38.98], text: RESET, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: reset}
     - {at: [169.2, 8.6], text: USB, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: usb-rear-1}
     - {at: [186.5, 5.6], text: LAN 2, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: lan-2}
@@ -382,6 +378,7 @@ views:
       - {ref: std/c14-inlet@1, id: inlet-2, at: [38.4, 19.2], rotate: 180, group: inlets, rel-pos: 2}
       - {ref: std/rj45@2, id: console, at: [119.7, 5.2], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console, finish: '#9a9594'}}
       - {ref: std/mini-usb@1, id: admin-usb, at: [140.4, 14.5], group: admin-usb, rel-pos: 1, attrs: {role: console}}
+      - {ref: std/dvi-d-jack@1, id: video, at: [127.2, 26.7], group: video, rel-pos: 1}
       - {ref: common/reset-button@1, id: reset, at: [166.9, 36.3], for: chassis, group: buttons, rel-pos: 1}
       - {ref: std/usb-a@1, id: usb-rear-1, at: [163.2, 13.05], skin: usb2, group: usb-rear, rel-pos: 1}
       - {ref: std/usb-a@1, id: usb-rear-2, at: [163.2, 21.65], skin: usb2, group: usb-rear, rel-pos: 2}
@@ -392,8 +389,6 @@ views:
       - {block: serial-9-16}
       - {block: serial-17-24}
       - {block: serial-25-32}
-    regions:
-    - {id: dvi-d, at: [128.7, 28.3], size: {w: 23.7, h: 6.5}, label: 'DVI-D video jack; no part draws it'}
   top:
     size: {w: 440, h: 334}
     empty: >-
