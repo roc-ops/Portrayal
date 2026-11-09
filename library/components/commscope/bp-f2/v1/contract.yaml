@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bp-f2
-version: 1.0.1
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -35,15 +35,27 @@ provenance:
     composed beside them, which are the ports and present the registered
     interface sc, so a drawn port stood on the face that presented none.
     Ids, positions, sizes and the skin are unchanged.
+  groups: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), p3, Required Module Back Plates: BP-F2 is
+    the single output EDFA SC/APC plate; the drawing of the plate keys two ports, OPTICAL INP
+    and OPTICAL OUT. Role traffic: the amplifier's optical path. The sheet prints output powers
+    and no data rate.
 elements:
   screw-top: {at: [7.88, 0.5], size: [10.0, 10.0], class: fastener}
   vents: {at: [3.3, 31.4], size: [18.8, 46.0], class: vent}
   adapter-1: {at: [1.0, 81.65], size: [17.6, 10.3], class: adapter}
   adapter-2: {at: [1.0, 102.85], size: [17.6, 10.3], class: adapter}
   screw-bottom: {at: [7.88, 119.3], size: [10.0, 10.0], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the SC/APC optical input and output of an EDFA back plate; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: input, at: [8.21, 82.30], rotate: 90, attrs: {role: optical-input, connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: output, at: [8.21, 103.50], rotate: 90, attrs: {role: optical-output, connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: input, group: optical, at: [8.21, 82.30], rotate: 90, attrs: {role: optical-input, connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: output, group: optical, at: [8.21, 103.50], rotate: 90, attrs: {role: optical-output, connector: SC/APC}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
