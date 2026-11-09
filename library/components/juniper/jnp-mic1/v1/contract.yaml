@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jnp-mic1
-version: 1.3.0
+version: 1.4.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -52,20 +52,36 @@ provenance:
     (ambient unqualified); the MACsec variant runs 110/120'
   face: 'photo - positions read off the frontwtop photograph at ~2.95 px/mm, approximate to ~2 mm; the module size itself is the vendor FRU dimension table in the MX10003 hardware guide - cages on a 20.5 mm pitch in two belly-to-belly rows,
     group lamps L0-L3 and the vertical 12XQSFP28 legend at the right'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, 'Multi-Rate
+    Ethernet MIC' (printed pages 369 to 374), the JNP-MIC1 and JNP-MIC1-MACSEC: 'Twelve
+    100-Gigabit Ethernet ports', 'The ports are numbered 0 through 11.' Table 40 prints
+    100-Gigabit, 40-Gigabit and 4x10-Gigabit Ethernet 'yes' for each of the twelve ports (the 10
+    Gbps by breakout cable, which is a logical interface and is not written). The role is
+    traffic: the page names no role for the ports, and the role follows the job, a network
+    interface a transceiver is plugged into.
 states: [absent]
+groups:
+  qsfp28-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: qsfp28, speed: 100g, speeds: [40g, 100g]}
+    description: >-
+      the twelve QSFP28 ports, numbered 0 to 11, each at 40 or 100 Gbps
 parts:
-- {ref: std/qsfp28@1, id: port-0, at: [3.50, 6.0]}
-- {ref: std/qsfp28@1, id: port-1, at: [3.50, 24.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-2, at: [24.00, 6.0]}
-- {ref: std/qsfp28@1, id: port-3, at: [24.00, 24.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-4, at: [44.50, 6.0]}
-- {ref: std/qsfp28@1, id: port-5, at: [44.50, 24.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-6, at: [65.00, 6.0]}
-- {ref: std/qsfp28@1, id: port-7, at: [65.00, 24.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-8, at: [85.50, 6.0]}
-- {ref: std/qsfp28@1, id: port-9, at: [85.50, 24.0], rotate: 180}
-- {ref: std/qsfp28@1, id: port-10, at: [106.00, 6.0]}
-- {ref: std/qsfp28@1, id: port-11, at: [106.00, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-0, group: qsfp28-100g, at: [3.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-1, group: qsfp28-100g, at: [3.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-2, group: qsfp28-100g, at: [24.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-3, group: qsfp28-100g, at: [24.00, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-4, group: qsfp28-100g, at: [44.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-5, group: qsfp28-100g, at: [44.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-6, group: qsfp28-100g, at: [65.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-7, group: qsfp28-100g, at: [65.00, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-8, group: qsfp28-100g, at: [85.50, 6.0]}
+- {ref: std/qsfp28@1, id: port-9, group: qsfp28-100g, at: [85.50, 24.0], rotate: 180}
+- {ref: std/qsfp28@1, id: port-10, group: qsfp28-100g, at: [106.00, 6.0]}
+- {ref: std/qsfp28@1, id: port-11, group: qsfp28-100g, at: [106.00, 24.0], rotate: 180}
 elements:
   led-l0:
     at: [130.2, 7.2]
