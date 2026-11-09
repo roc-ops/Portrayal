@@ -20,7 +20,7 @@ import xml.etree.ElementTree as ET
 import pytest
 import yaml
 
-from portrayal import render
+from portrayal import libwalk, render
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -31,7 +31,7 @@ NODE = ROOT / "spec/tests/js/bay-seen-through.mjs"
 @functools.lru_cache(maxsize=1)
 def _devices():
     out = []
-    for f in sorted(LIB.glob("devices/*/*/device.yaml")):
+    for f in libwalk.iter_devices([LIB]):
         doc = yaml.safe_load(f.read_text())
         for vname, view in (doc.get("views") or {}).items():
             for b in ((view.get("components") or {}).get("bays") or []):
