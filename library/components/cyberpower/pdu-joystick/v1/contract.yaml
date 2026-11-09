@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: pdu-joystick
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  The navigation button of the CyberPower PDU81001G: a round black cap in a ring, with an arrow at its top, bottom, left
+  and right. The data sheet photograph shows it under a RESET legend. The data sheet says nothing of how it works.
+size: {w: 14.0, h: 14.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - CyberPower PDU81001G data sheet, page 1 photograph of the controller face. No document names it or says what
+    its four arrows select.
+  size: >-
+    ESTIMATED. Read as a fraction of the body off the angled photograph on page 1: the four arrows span about 14 mm and the
+    cap about 7 mm. No document dimensions it. needs-drawing: a straight-on photograph of the controller face.
+elements:
+  cap: {at: [3.5, 3.5], size: [7.0, 7.0], class: button}
+relief:
+  features:
+    - node: cap
+      out: 1.2
+      color: '#111315'
+      confidence: estimated
+      source: >-
+        no document gives how far the cap stands; 1.2 mm is a stand-in for a moulded cap, declared an estimate.
+skins: [default]

@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: pdu-cord-l6-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L6-30P twist-lock plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of the CyberPower PDU30BHVT8R, 10 ft (3.0 m) long with a NEMA L6-30P twist-lock plug. It leaves
+  the right end of the outlet face through a collar. Only the collar is drawn, as the rear drawing shows it.
+size: {w: 25.0, h: 25.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-l6-30p, cord-length-ft: 10}
+provenance:
+  size: >-
+    drawing - the High Voltage Type rear view in the PDU30BHVT8R user manual (K01-0000512-00), PDF page 14, callout 9
+    "AC Power Cord": the collar's outer ring reads 90 px across at 3.62 px per mm (the 445 mm body is 1611 px in the
+    600 dpi render), 24.9 mm, drawn 25.0. The drawing's aspect is 3 percent off the data sheet's, so the figure is good
+    to about 1 mm.
+  plug: >-
+    datasheet - PDU30BHVT8R data sheet, page 1: "Input Plug Type NEMA L6-30P", "Plug Style Straight (Twist Lock)", and
+    "Cord Length (ft.) 10 ft (3.0 m)".
+  not-drawn: >-
+    THE CORD BEYOND THE COLLAR AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands for the
+    power input a DCIM records, a NEMA L6-30P power port.
+elements:
+  collar: {at: [0, 0], size: [25.0, 25.0], class: inlet}
+skins: [default]

@@ -135,7 +135,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The Panduit P24B14M and P32E06M each place one common/ground-screw@1 at the cord end, 20 -> 22 on 10 -> 12 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (22, 12),
+    "common/ground-screw@1": (23, 13),   # (22, 12) and the CyberPower PDU30BHVT8R's external site ground
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
@@ -469,11 +469,13 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
     # 65 -> 66 with the Eaton EPBZ77's ground stud
     # 66 -> 68 with the Panduit P24B14M and P32E06M's ground screw each
-    assert sum(n for n, _ in got.values()) == 68
+    # 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
+    assert sum(n for n, _ in got.values()) == 69
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
     # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
     # 47 -> 49 with the Panduit P24B14M and P32E06M
-    assert len({where for where, _, _ in placed}) == 49
+    # 49 -> 50 with the CyberPower PDU30BHVT8R
+    assert len({where for where, _, _ in placed}) == 50
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -521,7 +523,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
     # 64 -> 65 with the Eaton EPBZ77's ground stud
     # 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
-    assert seen == 67
+    # 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
+    assert seen == 68
 
 
 @pytest.mark.heavy
