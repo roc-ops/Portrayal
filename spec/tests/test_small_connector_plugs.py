@@ -298,7 +298,7 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
             assert cages[p["id"]]["kind"] == "connector", (ref, p["id"])
             assert cages[p["id"]]["interface"] == iface, (ref, p["id"])
             assert cages[p["id"]]["accepts"] == [PAIRS[iface][1]], (ref, p["id"])
-    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 0}
+    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 1}
 
 
 @pytest.mark.heavy

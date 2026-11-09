@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9001
-version: 3.0.3
+version: 4.0.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9001
@@ -248,11 +248,13 @@ provenance:
       has the SAME y on both
   din-connectors:
     note: >-
-      THE 10MHz AND 1PPS PORTS ARE DECLARED AS PANEL CUTOUTS AND NOT COMPOSED, deliberately. Table
-      4 of the guide gives their connector as DIN 1.0/2.3, and there is no std/ part for it - the
-      registry has sma, smb, mcx and f-type. Substituting one of those would name a connector
-      Cisco does not. The holes are measured (about 4 mm, centred at y 68.0) and a gap records
-      what is missing
+      The 10MHz and 1PPS ports are common/din-1-0-2-3-jack@1 placements under the ids their holes
+      already had. Table 4 of the fixed-port install guide (PDF p21, printed p13) gives both
+      connectors as DIN 1.0/2.3, and Figure 13 (PDF p20, printed p12) draws two round jacks side by
+      side under callout 2 with a short legend over each, which the silkscreen of this face already
+      follows. Each hole is the jack's own round 5.59 mm opening, which replaces the 4 mm hole
+      drawn before, and keeps the centre that hole had. The guide states neither impedance nor
+      thread, so the placements state none
   variants:
     note: >-
       the ASR 9001-S is a CONFIGURATION, not a second device, because the rule in
@@ -331,36 +333,6 @@ gaps:
     a power figure for the ASR 9001-S: a column of its own in the guide's power table, or a data
     sheet that prints one.
   blocks: []
-- what: din-1-0-2-3-connector
-  scope: [clk-10mhz, clk-1pps]
-  reason: needs-drawing
-  note: >-
-    Table 4 of the fixed-port install guide gives the 10MHz and 1PPS connectors
-    as DIN 1.0/2.3. The standards registry has no key for it - sma, smb, mcx and
-    f-type are there, DIN 1.0/2.3 is not - so these two openings are declared as
-    panel cutouts at their measured size rather than composed from a std/ part.
-    Substituting sma or smb would name a connector Cisco does not.
-    THE REASON WAS vendor-silent AND THAT WAS THE WRONG TOKEN. Cisco is not
-    silent - it names the connector outright. What is missing is a panel-cutout
-    dimension, which is needs-drawing, and the difference matters because the
-    two tokens ask different things of a reader: vendor-silent reads as closed
-    until better documents appear, needs-drawing reads as an errand somebody can
-    run today. The correction came from asr9k-cards, who had just been wrong in
-    exactly this direction about the XFP - concluding a figure was unsourceable
-    after searching the intake rather than the standards - and found it in
-    INF-8077i ten minutes after looking somewhere else. IEC 61169-8 is the
-    somewhere else here, and nobody has opened it yet.
-  wanted: >-
-    a std/din-1-0-2-3 part and its standards.yaml key. THE CONNECTOR IS
-    STANDARDISED, so a sourced dimension exists to be found rather than
-    estimated - DIN 1.0/2.3 is specified in IEC 61169-8, and any manufacturer's
-    bulkhead-jack panel drawing carries the D-hole figure. std/mcx is the worked
-    example of exactly this being done properly earlier tonight: registered from
-    IEC 61169-36 / CECC 22220 at 4.95 x 4.50 with confidence verified, replacing
-    an estimate that was 28 percent too small. This should be done the same way,
-    and until it is, an sma or smb standing in would be a plausible wrong answer
-    - which is the failure mode this project keeps having to dig back out
-  blocks: []
 groups:
   mpa-bays: {role: traffic, term: Bay, index-origin: 0, physical-context: NetworkingDevice}
   power-modules:
@@ -374,7 +346,7 @@ groups:
   cooling: {role: service, term: Fan Tray, index-origin: 0, physical-context: Fan}
   sfp-plus: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
   cluster: {role: traffic, term: Port, index-origin: 0, attrs: {media: sfp-plus, speed: 10g}}
-  timing: {role: management, term: Port, index-origin: 0, mixed: 'the timing row - the ToD/1PPS jack and the two BITS/DTI SYNC jacks. One job (clock), two signal types on one 8P8C shell'}
+  timing: {role: management, term: Port, index-origin: 0, mixed: 'the timing row: the ToD jack, the two BITS/DTI SYNC jacks and the 10MHz and 1PPS DIN 1.0/2.3 jacks. One job (clock), two connector types'}
   mgmt: {role: management, term: Port, index-origin: 0, mixed: 'local and remote management access - console, auxiliary, Ethernet and USB'}
   system-leds: {role: indicator, term: LED, index-origin: 1}
 views:
@@ -385,8 +357,8 @@ views:
         - {at: [182.9, 2.6], size: [26.0, 35.6], fill: '#d2d4d6'}
         - {at: [137.5, 46.1], size: [12.0, 26.8], fill: '#f5d21a'}
       cutouts:
-        - {id: clk-10mhz, at: [180.3, 66.0], size: [4.0, 4.0], shape: circle}
-        - {id: clk-1pps, at: [193.05, 66.0], size: [4.0, 4.0], shape: circle}
+        - {id: clk-10mhz, at: [179.505, 65.205], size: [5.59, 5.59], shape: circle}
+        - {id: clk-1pps, at: [192.255, 65.205], size: [5.59, 5.59], shape: circle}
         - {id: tod, at: [159.75, 45.45], size: [12.7, 11]}
         - {id: svc-lan, at: [159.75, 61.5], size: [12.7, 11]}
         - {id: sync-0, at: [207.35, 45.45], size: [12.7, 11]}
@@ -418,8 +390,8 @@ views:
       - {at: [141.0, 59.5], text: 'ATTENTION', rotate: 90, for: chassis}
       - {at: [144.0, 59.5], text: 'ON-OFF FOR', rotate: 90, for: chassis}
       - {at: [147.0, 59.5], text: 'ENTIRE SHELF', rotate: 90, for: chassis}
-      - {at: [182.3, 64.0], text: '10MHz'}
-      - {at: [195.05, 64.0], text: '1PPS'}
+      - {at: [182.3, 64.0], text: '10MHz', for: clk-10mhz}
+      - {at: [195.05, 64.0], text: '1PPS', for: clk-1pps}
       - {at: [340.0, 84.0], text: 'Cisco ASR-9001', for: chassis}
       - {at: [166.1, 44.050000000000004], text: 'TOD', for: tod}
       - {at: [166.1, 60.1], text: 'SVC LAN', for: svc-lan}
@@ -456,6 +428,8 @@ views:
       placements:
         - {ref: std/rj45-ganged@2, id: tod, at: [159.75, 45.45], group: timing, rel-pos: 0, attrs: {media: rj45-tod}}
         - {ref: common/rj45-ganged-eth@1, id: svc-lan, at: [159.75, 61.5], group: mgmt, rel-pos: 9, rotate: 180, attrs: {speed: 100m}, provenance: {media: 'Ethernet, not timing: the legend reads SVC LAN and the install guide lists this as a service LAN port, not one of the tod/sync timing signals it shares the panel row with, so it is drawn lamped (common/rj45-ganged-eth@1) rather than the bare std/rj45-ganged@2 its physical row-mates use, and grouped with mgmt (console, auxiliary, Ethernet and USB management access) rather than timing.'}}
+        - {ref: common/din-1-0-2-3-jack@1, id: clk-10mhz, at: [178.795, 64.495], group: timing, rel-pos: 3}
+        - {ref: common/din-1-0-2-3-jack@1, id: clk-1pps, at: [191.545, 64.495], group: timing, rel-pos: 4}
         - {ref: std/rj45-ganged@2, id: sync-0, at: [207.35, 45.45], group: timing, rel-pos: 1, attrs: {media: rj48}}
         - {ref: std/rj45-ganged@2, id: sync-1, at: [207.35, 61.5], group: timing, rel-pos: 2, rotate: 180, attrs: {media: rj48}}
         - {ref: std/rj45-ganged@2, id: console, at: [228.5, 45.45], group: mgmt, rel-pos: 4, attrs: {media: rj45-serial, role: console}}
