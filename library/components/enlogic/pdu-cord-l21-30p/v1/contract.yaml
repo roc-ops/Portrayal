@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: pdu-cord-l21-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the cable gland of a PDU's fixed input cord, whose far end is a NEMA L21-30P plug that goes into a receptacle outside this library; no cable lands on the gland, so no mate is offered for it
+description: >-
+  The fixed input cord of an Enlogic EB0803 three-phase PDU with a NEMA L21-30P
+  plug: 3 m of cord leaving the cord end of the strip through a cable gland. Drawn
+  as the gland shows from the end; the cord and plug beyond it are not.
+size: {w: 37.1, h: 37.1}
+size-confidence: {w: drawing, h: estimated}
+attrs: {plug: nema-l21-30p, cord-length-m: 3}
+provenance:
+  size: >-
+    drawing - the front view of the Enlogic EB0803 drawing TA-EB0803A (rev E1,
+    2020.05.20) draws the gland nut as a block 37.1 across the strip (721.4 to 740.4
+    pt on the page, read off the vector at the sheet's 1.9524 mm per pt, which the
+    1490 overall and the 52.0 width both check) and 25.0 long, and the cord leaving it
+    9.0 pt (17.6 mm) across. The end-on shape of the gland is not drawn: the part is
+    a circle of the across figure with the cord's 17.6 as its bore, and the 37.1 is
+    taken for its height too (estimated).
+  cord: >-
+    datasheet - EB0803 data sheet: "Input Cord Length 3m (9.84')"; the drawing
+    "3m[10''],TOP FEED".
+  plug: >-
+    drawing and datasheet - the drawing's PLUG/RECEPTACLE BLOCK draws the plug "NEMA
+    L21-30P, 4P 5W" with "30A, 120/208V MAX RATED INPUT" and "24A DERATED"; the data
+    sheet gives "Input Plug Type NEMA L21-30P". The plug face is not a part here: a
+    device draws this cord or a plug face, never both, or one input exports as two
+    power ports.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is
+    not a part. This part stands for the power input a DCIM records, a NEMA L21-30P
+    power port.
+elements:
+  gland: {at: [0, 0], size: [37.1, 37.1], class: inlet}
+skins: [default]

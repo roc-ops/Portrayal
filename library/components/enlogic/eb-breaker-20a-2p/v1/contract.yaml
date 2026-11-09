@@ -1,0 +1,67 @@
+format: 1
+kind: component
+name: eb-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker at the head of an outlet bank of an Enlogic EB basic PDU - a 20 A
+  double-pole rocker in a recess on a rounded plate held by four screws, the plate in
+  the bank's colour and printed with the bank's name (B1), the two lines it is across
+  (L1-L2) and the line of the bank's 5-20R receptacle (L1-N(5-20R)). Fixed to the PDU,
+  not a plug-in part.
+size: {w: 46.8, h: 80.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  method: >-
+    drawing and render - the Enlogic EB0803 drawing TA-EB0803A (rev E1, 2020.05.20, A2) is
+    vector; its plate, screws, recess and rocker were read off a 1000 dpi render of the
+    front view at the sheet's own scale, 1.9524 mm per pt (the 1490 overall between the
+    strip's end lines and the 52.0 width both check it). The EB0803 data sheet (page 1)
+    carries a face-on render of the whole strip, 9854 by 333 px, whose scale 6.385 px per
+    mm is the same 1490 and 52.0; the plate's extent and its printing were read off it.
+    The drawing lies the PDU down, cord end left; this part is drawn as the PDU stands,
+    cord end up, so the drawing's length runs down the part and its width across it.
+  size: >-
+    photo-measured - THE DRAWING AND THE RENDER DISAGREE ON THE PLATE'S LENGTH. The
+    drawing's plate is 75.2 along the strip by 47.1 across (stroke centres); the render's,
+    found as the one connected area of the bank's grey, is 80.0 by 46.8. The render also
+    prints two vertical legends in the last 17 mm of its plate that the drawing does not
+    carry as such (it prints them small and horizontal at the top right), so the render is
+    the newer artwork. The render's 80.0 by 46.8 is used and the drawing's figures are
+    recorded. The screws are centred 12.7 and 56.5 along and 14.3 and 32.6 across (the
+    drawing: 11.9, 56.2, 14.9, 33.7), the recess 35.1 by 19.7 at 17.3 along and 24.3
+    across and the rocker 7.8 by 14.7 at 27.1 along and 26.1 across (both from the
+    drawing; the render's black body measures 34.1 by 18.6 at 17.9 and 23.7).
+  rating: >-
+    datasheet and drawing - EB0803 data sheet: "(3)2-pole,20A,5 kAIC,"temp stable,
+    hy-mag type"; the drawing: "20 A, DOUBLE - POLE ELECTRO-MECHANICAL SWITCH /
+    BREAKER (3) PLACES".
+  rocker: >-
+    render - the rocker is a black bar with ON and OFF legends beside it and a 20 under
+    it. The legends are under 2.5 mm and are not drawn.
+  colour: >-
+    photo-measured - the plate is the bank's colour, a FIELD (`bank-color`): the EB0803
+    data sheet's face render reads B1 grey #646867, B2 blue #77a6ee and B3 charcoal
+    #32353a at the plate. The drawing names the banks "LIGHT GRAY", "BLUE" and "DARK
+    GRAY". The render is a vendor rendering, not a photograph of a unit, so the colours
+    are as it paints them. The legend ink is a field too (`ink`); B1 and B3 print light,
+    B2 dark, the dark ink read by eye (estimated).
+  legends: >-
+    render - B1 stands 7.6 high at 35.1 along and 14.3 across, reading down the strip;
+    the lines (L1-L2) and the receptacle's line (L1-N(5-20R)) read across the strip, 4.9
+    and 4.7 high, centred 23.8 across, at 64.1 and 74.9 along. They are fields `bank`,
+    `lines` and `branch`: B2 prints L2-L3 and L2-N(5-20R), B3 L3-L1 and L3-N(5-20R).
+  relief: >-
+    drawing - the top and bottom views draw the plate about level with the strip's face
+    (0.35 mm proud at most); it is drawn flat.
+fields:
+  bank-color: {label: Bank colour, type: text, default: '#646867'}
+  ink: {label: Legend ink, type: text, default: '#e6e6e6'}
+  bank: {label: Bank, type: text, default: B1}
+  lines: {label: Lines, type: text, default: L1-L2}
+  branch: {label: Receptacle line, type: text, default: L1-N(5-20R)}
+elements:
+  rocker: {at: [6.0, 27.1], size: [14.7, 7.8], class: breaker, states: ['on', 'off']}
+skins: [default]
