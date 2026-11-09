@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic6-100g-cxp
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -30,15 +30,26 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    Ethernet MIC with CXP (4 Ports)' (printed pages 308 and 309): 'Four 100-Gigabit Ethernet ports'
+    and 'up to 100Gbps per port'; the ports are labeled 'Port 0 to Port 3'. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  cxp-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cxp, speed: 100g}
+    description: the 100-Gigabit Ethernet CXP cages, each running at up to 100 Gbps
 parts:
-- {ref: std/cxp@2, id: port-0-0, at: [1.75, 20.25], rotate: 90, attrs: {media: cxp}}
-- {ref: std/cxp@2, id: port-0-1, at: [1.75, 48.85], rotate: 90, attrs: {media: cxp}}
-- {ref: std/cxp@2, id: port-0-2, at: [1.75, 77.45], rotate: 90, attrs: {media: cxp}}
-- {ref: std/cxp@2, id: port-0-3, at: [1.75, 106.05], rotate: 90, attrs: {media: cxp}}
+- {ref: std/cxp@2, id: port-0-0, group: cxp-100g, at: [1.75, 20.25], rotate: 90, attrs: {media: cxp}}
+- {ref: std/cxp@2, id: port-0-1, group: cxp-100g, at: [1.75, 48.85], rotate: 90, attrs: {media: cxp}}
+- {ref: std/cxp@2, id: port-0-2, group: cxp-100g, at: [1.75, 77.45], rotate: 90, attrs: {media: cxp}}
+- {ref: std/cxp@2, id: port-0-3, group: cxp-100g, at: [1.75, 106.05], rotate: 90, attrs: {media: cxp}}
 size:
   w: 27.0
   h: 200.0

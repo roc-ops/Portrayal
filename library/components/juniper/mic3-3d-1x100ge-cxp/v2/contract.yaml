@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-3d-1x100ge-cxp
-version: 2.1.0
+version: 2.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -38,12 +38,23 @@ provenance:
     is the slot geometry of its chassis family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
     usable for this model
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    Ethernet MIC with CXP' (printed page 306): 'One 100-gigabit Ethernet port' and 'speeds up to 100
+    Gbps' on the port; the port is labeled 'PORT0'. The role is traffic.
 states:
 - ok
 - fail
 - absent
+groups:
+  cxp-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cxp, speed: 100g}
+    description: the 100-Gigabit Ethernet CXP cage, running at up to 100 Gbps
 parts:
-- {ref: std/cxp@2, id: port-0-0, at: [18.15, 8.55], attrs: {media: cxp}}
+- {ref: std/cxp@2, id: port-0-0, group: cxp-100g, at: [18.15, 8.55], attrs: {media: cxp}}
 size:
   w: 168.8
   h: 29.2
