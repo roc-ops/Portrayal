@@ -790,6 +790,10 @@ PART_POWER = {
     # each is `other`, and POWER_LABEL says which connector.
     "panduit/g5-cord-60309-2pe-6h": "other",
     "panduit/g5-cord-60309-3pe-9h": "other",
+    # A VERTIV POWERIT HORIZONTAL PDU'S FIXED CORD ends in a NEMA L6-30P plug (the SKU page of VP5N31A1 and the
+    # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
+    # as the connectors above are, and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-l6-30p": "other",
 }
 
 
