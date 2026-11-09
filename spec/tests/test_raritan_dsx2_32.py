@@ -82,9 +82,9 @@ def test_the_rear_carries_two_ac_inlets_each_under_a_switch(dev):
     assert dev["attrs"]["power"]["power-max-w"] == 23
 
 
-def test_the_dvi_jack_and_the_front_power_lamp_are_stated_gaps_and_no_modem_jack_is_drawn(dev):
+def test_the_front_power_lamp_is_a_stated_gap_and_no_modem_jack_is_drawn(dev):
     gaps = {g["what"] for g in dev["gaps"]}
-    assert {"dvi-d", "power-lamp", "front-other-sku", "rack-kit"} <= gaps
+    assert {"power-lamp", "front-other-sku", "rack-kit"} <= gaps
     assert not [p for p in placements(dev, "rear").values() if "rj11" in p["ref"]]
 
 

@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: dvi-d-jack
+version: 1.0.0
+class: port
+profile: networking
+conforms: dvi-d
+interface: dvi-d
+description: >-
+  DVI-D video receptacle. A light insulator in a metal shell holds three rows of eight contact cells and, to their right,
+  the flat blade slot. It has no group of four analogue pins around the blade, which is what a DVI-D jack lacks. A cable
+  plug enters it. Drawn from one photograph.
+size: {w: 26.8, h: 9.8}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: dvi-d}
+provenance:
+  size: >-
+    estimated - the shell of the DVI jack in the labelled rear photograph of the Raritan Dominion SX II data sheet
+    V1209R3 (page 4, the DSX2-32), measured on the page rendered at 600 dpi: 247 by 90 pixels at 9.21 pixels per
+    millimetre (the photograph's own 3.07 pixels per millimetre, three times). The edges are read to about 1 mm.
+    NO DVI STANDARD DOCUMENT IS HELD (no document of the Digital Display Working Group, no maker's drawing of a
+    DVI receptacle), so the size is not checked against one and the `dvi-d` entry of standards.yaml carries it as
+    an estimate. The photograph shows a jack in a 44 mm high panel, so the figure is the jack as that unit shows
+    it and not a registered cutout.
+  contacts: >-
+    estimated - the photograph shows three rows of eight dark cells in the insulator and a flat blade slot to
+    their right. The cells are read at a pitch of about 2.1 mm across and down (about 1 mm of error on the first
+    and the last), 1.2 by 1.0 mm each, the first centre 2.3 mm from the left edge of the shell and 2.6 mm below its
+    top. The blade slot is read as 5.4 mm long and 0.9 mm high, from 19.6 mm across. No pin numbers are drawn or
+    claimed: the data sheet and the user guide give no DVI pinout.
+  depth: >-
+    not stated - no held document gives the depth of the receptacle, so the part is a flat face and has no `size.d`.
+  colour: >-
+    photo-measured - medians of the data sheet photograph: the insulator #e6e1e0 and the contact cells #504846.
+    The metal shell around them is drawn a neutral grey and is not a measured colour.
+  interface: >-
+    `dvi-d` in spec/schemas/connectors.yaml, standard `dvi-d`. The Raritan data sheet labels the jack "DVI-D
+    Video" (page 4) and the User Guide v2.6.0 lists "DVI-D port" in the appliance diagram key (printed page 12).
+    A DVI-D plug is the cable end that enters it; no plug part is in the library yet.
+  mate: >-
+    estimated - (13.4, 4.9): the centre of the shell as drawn, where a plug's centre would sit. No held document
+    states where a DVI plug seats.
+elements:
+  opening: {at: [0.0, 0.0], size: [26.8, 9.8], class: cutout}
+relief:
+  wall: '#8d949c'
+connection-points:
+  mate: {at: [13.4, 4.9], direction: front}
+skins: [default]
