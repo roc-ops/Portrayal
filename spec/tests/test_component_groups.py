@@ -308,8 +308,8 @@ def test_a_card_traffic_port_is_not_mgmt_only():
 # Cards that declare no groups yet. The test below needs one that still declares none: when a later
 # migration groups the last of these, name another ungrouped card here.
 UNGROUPED_CARDS = [
-    "juniper/dpce-r-40ge-sfp@2", "juniper/dpce-40ge-tx@2",
-    "juniper/dpc-r-4xge-xfp@3", "juniper/dpce-20ge-2xge@2",
+    "juniper/mic-3d-4choc3-1oc12@1", "juniper/jnp-mic1@1",
+    "juniper/mx304-lmic16@1", "juniper/jnp10k-lc480@1",
 ]
 
 

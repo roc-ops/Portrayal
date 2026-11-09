@@ -1,0 +1,95 @@
+format: 1
+kind: module
+name: a99-sfc3-t
+version: 2.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+  Cisco ASR 9900 Series Third Generation Switch Fabric Card for the ASR 9906. Line-card
+  width but longer than a line card at 492.1 mm. Two ejector levers, captive screws and
+  a single tri-colour Status LED; no vent field.
+size: {w: 38.27, h: 492.1}
+size-confidence: {w: drawing, h: drawing}
+size-notes: >-
+  both axes from the card's own stencil master, the plate and not the slot envelope that
+  version 1 carried: 38.27 wide, 492.1 high. The ASR 9906 rear cage holds five of them on a
+  38.36 mm pitch, which the 43.7 mm envelope could not. See provenance.envelope.
+attrs:
+  model: 'A99-SFC3-T'
+  role: 'switch-fabric'
+  generation: '3rd'
+  chassis: 'ASR 9906'
+  power-draw-max-w: 110
+  eol: 'none-announced'
+provenance:
+  envelope: >-
+    drawing - version 1 carried the card master's slot envelope, 43.7 mm. On version 1's skin
+    the plate runs from x 2.97 to x 41.24, so the margins around it are 2.97 mm on the left and
+    2.46 mm on the right (2.97 + 38.27 + 2.46 = 43.7). The stencil master "ASR-9906 Rear" draws
+    the chassis' fabric cage as five slots on a 38.36 mm pitch, so five 43.7 mm envelopes would
+    overlap by 5.3 mm each. This version carries the plate, 38.27 mm, which the card master and
+    the cage pitch agree on to 0.1 mm. THE SLOT ENVELOPE IS NOT HELD: the card master's 43.7 mm
+    and the chassis master's 38.36 mm pitch disagree and neither is repaired here. The captive
+    screw spacing disagrees too, about 494.4 mm on the chassis master read by eye and 468 mm on
+    the card master (screw centres at y 12.0 and y 480.0 on the skin); it is a known gap. No
+    document in the intake states a fabric card's thickness. WHAT WOULD SETTLE IT: a Cisco
+    figure that states the width of one fabric slot, or the card's thickness.
+  relief: >-
+    The only relief on this face is the status lamp's dome, 0.3 mm. It is ESTIMATED: the figure
+    is the library's one panel-lamp figure, common/led-dot@1, whose own provenance is
+    'size: estimated', and no document in the intake gives a projection for this card. It is
+    an interpolation for a realistic view and not a claim about the hardware.
+  size: >-
+    drawing - the card's stencil master, 38.27 x 492.1 mm: the faceplate, at the stencil's 1:10
+    inches. This is not the master's 43.7 mm slot envelope, which version 1 carried and which
+    this version does not hold (see envelope). No document in the intake states a fabric card's
+    dimensions.
+  depth: >-
+    NOT MODELLED. No document in the intake gives a fabric card's depth, and unlike the
+    line cards there is no datasheet row to take it from. Rather than inherit the line
+    cards' 604.5 - which would be a guess dressed as a measurement, and these cards do
+    not even share the line cards' length - the component declares a faceplate and no
+    body. It will render as a face rather than a box in 3D, and that is the honest
+    depiction of what is known.
+  lamp: >-
+    install guide - Table 9, 'FC Card LED Display Definitions', of the Overview and
+    Reference Guide. Four states, transcribed rather than reduced: green, red, amber and
+    off, each with the sentence Cisco prints beside it. This is a sourced vocabulary,
+    not the RSP's borrowed.
+  chassis: >-
+    datasheet - c78-741129, Cisco ASR 9900 Series Third Generation Switch Fabric Card 3, Table 3: 'A99-SFC3-T
+    (supports ASR 9906 chassis)'.
+  power: >-
+    install guide - Table 23 of the Overview and Reference Guide, row 'A99-SFC3-T Card':
+    105 W at 27 C, 108 W at 40 C, 110 W at 55 C. max is the highest rated ambient; no
+    typical is stated.
+  lifecycle: >-
+    searched - no end-of-life notice for this part number is in the intake.
+elements:
+  status:
+    at: [17.43, 358.4]
+    size: [3.2, 3.2]
+    class: led
+    description: >-
+      the single tri-colour Status LED. Table 9, 'FC Card LED Display Definitions', of
+      the Overview and Reference Guide: green - FC card powered on and FPGA is
+      programmed; red - fault or malfunction in FC card power up or FPGA programming;
+      amber - FC card powered on but fabric not active; off - FC card powered off via
+      CLI. Cisco's own note on the green state is worth carrying: 'Fabric Data Link
+      failure is not detected so LED remains green'.
+    states:
+    - {name: green, color: '#39b54a'}
+    - {name: amber, color: '#f5a623'}
+    - {name: red, color: '#d0021b'}
+    - 'off'
+relief:
+  wall: '#4a4f55'
+  features:
+    - node: status
+      dome: 0.3
+      confidence: estimated
+      source: >-
+        common/led-dot@1 - the library's one panel-lamp figure. Its own provenance is 'size:
+        estimated' and the dome carries none
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpce-2xge-xfp
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -64,13 +64,28 @@ provenance:
     content ends well short of the right lever (384.5): shifted clear of the photographed lever and status
     group; the photographed DPCs show this area as lamp and legend space. Pitches and the order along
     the card are unchanged.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '10-Gigabit
+    Ethernet Enhanced DPCs with XFP' (printed pages 95 to 97): 'Two 10-Gigabit Ethernet ports'
+    for the model DPCE-R-2XGE-XFP and 'throughput on each port at speeds up to 10 Gbps'; the
+    ports are PICs 0 and 1 of one port each, and the link LEDs are labelled top to bottom 0/0
+    through 1/0. The role is traffic: the book names no role for the ports, and the role follows
+    the job, a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      the two XFP ports, labelled 0/0 and 1/0 by PIC and port, each at up to 10 Gbps
 parts:
-- {ref: std/xfp@1, id: port-0-0, at: [35.05, 9.90], attrs: {media: xfp}}
-- {ref: std/xfp@1, id: port-1-0, at: [64.14, 9.90], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-0-0, group: xfp-10g, at: [35.05, 9.90], attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1-0, group: xfp-10g, at: [64.14, 9.90], attrs: {media: xfp}}
 size:
   w: 413.5
   h: 29.5

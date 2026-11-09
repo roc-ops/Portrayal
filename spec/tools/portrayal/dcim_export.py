@@ -722,6 +722,9 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # THE ENLOGIC EB0803'S FIXED CORD ends in a NEMA L21-30P plug (its data sheet and
+    # drawing), the same `nema-l21-30p` as the Eaton cord above.
+    "enlogic/pdu-cord-l21-30p": "nema-l21-30p",
     # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
     # for the same reason as the Eaton cord: the part stands for the cord leaving
     # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
@@ -777,6 +780,9 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # THE PRO3X BASIC 3A06'S FIXED CORD ENDS IN AN IEC 60309 3P+G 9h PLUG (the SKU page of C3B36RL-DQJE0AT2). No
+    # power-port type of the two targets is held for it in this tree, so it is `other`, and POWER_LABEL says which.
+    "servertech/pro3x-cord-60309": "other",
     # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
     # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
     "raritan/px3-cord-60309": "other",

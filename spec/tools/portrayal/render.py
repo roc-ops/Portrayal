@@ -4561,6 +4561,44 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if opening.get("data-depth") is None:
                 opening.set("data-depth", f"{occupant_depth(b):g}")
                 opening.set("data-wall", "#2a2e31")
+        # WHAT IS SEEN THROUGH THE OPENING WHEN IT IS EMPTY. Panel decor lies
+        # under every bay's opening, so a bar standing behind a frame, or a
+        # spool inside a tray, drawn as decor is hidden at the slot mouths in
+        # every configuration. The mark is the bay's own: it follows the
+        # opening, inside the bay's group, so it paints over the dark of the
+        # hole and under the module the group goes on to hold. It is always
+        # written, and hidden (`display`) when the configuration seats the bay,
+        # so a swap that empties the bay has something to show again
+        # (kit/swap.js toggles the same attribute). 2D only: the 3D scene
+        # builds what stands behind the opening as parts.
+        if b.get("seen-through"):
+            seen_g = ET.SubElement(bay_g, f"{{{SVG_NS}}}g")
+            seen_g.set("id", f"{b['id']}--seen-through")
+            seen_g.set("data-class", "seen-through")
+            if default:
+                seen_g.set("display", "none")
+            clip = ET.SubElement(seen_g, f"{{{SVG_NS}}}clipPath")
+            clip.set("id", f"{b['id']}--seen-through-clip")
+            clip_r = ET.SubElement(clip, f"{{{SVG_NS}}}rect")
+            for k, v in (("x", f"{ox:g}"), ("y", f"{oy:g}"),
+                         ("width", f"{op['w']:g}"), ("height", f"{op['h']:g}")):
+                clip_r.set(k, v)
+            items_g = ET.SubElement(seen_g, f"{{{SVG_NS}}}g")
+            items_g.set("clip-path", f"url(#{b['id']}--seen-through-clip)")
+            for n_, it in enumerate(b["seen-through"]):
+                dx, dy = it["at"]; dw, dh = it["size"]
+                slot = it.get("shape") == "slot"
+                el = ET.SubElement(items_g, f"{{{SVG_NS}}}{'path' if slot else 'rect'}")
+                el.set("id", f"{b['id']}--seen-{it.get('id') or n_}")
+                el.set("data-kind", it.get("kind") or "seen-through")
+                if slot:
+                    el.set("d", _slot_path(dx, dy, dw, dh))
+                else:
+                    el.set("x", f"{dx:g}"); el.set("y", f"{dy:g}")
+                    el.set("width", f"{dw:g}"); el.set("height", f"{dh:g}")
+                    if it.get("rx"):
+                        el.set("rx", f"{it['rx']:g}")
+                el.set("fill", it["fill"])
         if default:
             # THE BAY'S CENTRE, and nothing else. instance_group hangs the
             # occupant by its own middle, so there is no origin to solve for and
