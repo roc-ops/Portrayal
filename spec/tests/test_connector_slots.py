@@ -110,6 +110,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "cee-7-3",
                          "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
+                         # the DVI-D video receptacle of the Raritan DSX2-32, std/dvi-d-jack@1
+                         "dvi-d",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",

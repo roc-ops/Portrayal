@@ -196,6 +196,7 @@ NOT_A_DCIM_PORT = {
                                "over one cable; neither library has a type for it, and one row "
                                "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
+    "std/dvi-d-jack": "DVI-D; a video output for a monitor, and neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
 
