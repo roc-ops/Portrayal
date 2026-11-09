@@ -1,0 +1,110 @@
+format: 1
+kind: module
+name: mx240-psu-ac
+version: 2.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MX240 normal-capacity AC power supply. High-line (220 V) systems
+  carry one or two in PEM0/PEM2; low-line (110 V) systems two or four in
+  PEM0-PEM3. One C20 appliance inlet stands beside the input switch. A fan sits
+  behind the slotted vents. Three status lamps stand in a column at the right
+  edge and a pull handle lies along the foot of the face. Weighs 2.3 kg; each
+  inlet needs a dedicated feed and 15 A (250 VAC) breaker.
+attrs:
+  model: MX240 AC PSU (normal capacity)
+  power-output-w: 1590
+  power-output-low-line-w: 1027
+  role: ac-power-supply
+  input: dedicated AC feed per inlet, 15 A (250 VAC) breaker
+  redundancy: high-line 1+1; low-line 2+2
+provenance:
+  power: >-
+    MX240 hardware guide, Table 18 'AC Power Supply Electrical Specifications', the
+    Normal-Capacity block: 'Maximum output power | 1027 W (low line) 1590 W (high line)'.
+    Table 19 repeats it as output per supply. The High-Capacity block directly beneath reads
+    1167/2050 and is a DIFFERENT part this contract does not model - the two blocks sit in
+    one table under repeated headings, which is how a reader takes the wrong row.
+    Recorded the way mx304-psu-ac already does it: the HIGH-LINE rating in
+    power-output-w with the low-line figure beside it, because a supply has a
+    rating rather than a distribution and the two lines are two ratings.
+  size: 'photo (DC unit) - the AC PEM shares the 101.5 x 79.7 mm bay. The face
+    is drawn from guide Figure 14 (see face) and is APPROXIMATE; the reference
+    photograph shows the DC variant'
+  power-output: 'NOT STATED PER MODULE - Table 95 gives system output
+    (2054 W low-line / 1590 W high-line for the normal-capacity set); no
+    per-module nameplate in the intake. L27 stands as the record'
+  leds: >-
+    MX240 hardware guide, 'MX240 AC Power Supply LEDs' and Table 17 'AC Power Supply LEDs'
+    (printed page 42): three LEDs labelled AC OK (yellow or green), DC OK (green) and PS FAIL
+    (red). Figure 15 colours three lamps in that order, top to bottom. Version 1 carried the
+    DC unit's legends (PWR OK, BKR ON, INPUT OK), which the AC table does not use.
+  inlet: >-
+    MX240 hardware guide, 'MX240 AC Power Supply Description' (printed page 39: "one AC
+    appliance inlet, one AC input switch, a fan, and LEDs") and 'AC Power Cord Specifications'
+    (printed page 45: "a single AC appliance inlet" of type "C20 (right angle)" per IEC
+    60320, mated by a C19 cord end). The part is std/c20-inlet@1, the registered iec-c20
+    inlet. ITS PLACE IS AN ESTIMATE, read off Figure 14 (see face): the figure draws the
+    coupler beside the input switch, and the part's 32.4 x 24.4 mm cut-out is centred on the
+    drawn coupler recess (about 33 mm across and 58 mm down) and then moved right until it
+    clears the switch. The figure draws the bezel taller than the part. Where the cord
+    leaves (right angle) is not drawn.
+  face: >-
+    ESTIMATED. Every box on this face is read off guide Figure 14 'AC Power Supply' (printed
+    page 40, PDF page 56 of the MX240 hardware guide), a line drawing in perspective with no
+    scale and no colour. Method: the page was rendered at 400 dpi, the slant of the front
+    plate's top edge (about 10 degrees) was sheared out so that horizontal edges are level,
+    the plate was taken as the bay's 101.5 x 79.7 mm, and each feature's box was read as a
+    share of the plate's width and height and multiplied by the bay. The plate's lower edge
+    is where the held DC unit's photograph ends the plate above its flange; the flange and
+    the two captive screws on it lie below that edge, outside the bay, and are not drawn.
+    Shares across and down. Switch 2 to 18 and 55 to 98; coupler bezel 19 to 49 and 48 to 98;
+    vent slots in five columns, 17 to 82 and 6 to 92, the left three columns only above the
+    coupler; four round vents right of the coupler at 50 to 55 and 56 to 80; two more slots
+    and a round vent under the lamps; three lamps in a column at 94 across and 29, 38 and 46
+    down; pull handle 40 to 96 across and 86 to 107 down (it hangs over the plate's lower edge,
+    and is drawn as a bar inside it). The figure's scan is coarse, so every share is good to
+    about 3 points, and perspective foreshortens widths more than heights (a lamp reads about
+    half as wide as tall), so round things are drawn round and the figure's last slot in the
+    right column, hidden behind the handle, is left out. Not drawn, because the figure does not
+    say what they are: a ring at the top left, three round holes at the left and two small
+    discs near the lamps.
+  colours: >-
+    ESTIMATED, carried from version 1.0.0 unchanged: the body, latch, switch and vent colours
+    are those of the DC unit's photograph. No photograph of the AC variant is held; Figure 14
+    is line art with no colour, and Figure 15 colours only its lamps.
+states:
+- ok
+- fault
+- absent
+parts:
+- {ref: std/c20-inlet@1, id: inlet, at: [19.6, 45.9]}
+elements:
+  handle:
+    at: [40.6, 71.0]
+    size: [56.8, 6.5]
+    class: latch
+  breaker:
+    at: [2.5, 43.8]
+    size: [16.0, 34.4]
+    class: switch
+size:
+  w: 101.5
+  h: 79.7
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  Carried from the DC supply, whose photograph measures the bay both supplies share. The AC
+  supply's own width and height are not stated by the guide.
+relief:
+  features:
+  - node: handle
+    out: 2.2
+    color: '#26292d'
+    confidence: estimated
+    source: photo (DC unit) - the pull handle stands proud
+  - node: breaker
+    out: 2.4
+    color: '#26292d'
+    confidence: estimated
+    source: drawing - the input switch projects; estimated

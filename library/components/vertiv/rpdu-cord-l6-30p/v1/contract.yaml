@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: rpdu-cord-l6-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L6-30P locking plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Vertiv PowerIT horizontal rack PDU with an L6-30P plug. It leaves
+  the rear face through a round cable gland with a hex nut. Drawn as the rear face shows it;
+  the cord and plug beyond it are not.
+size: {w: 33.4, h: 33.4}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {plug: nema-l6-30p}
+provenance:
+  size: >-
+    photo-measured - VP5N31A1 rear photograph (vertiv-geist-switched-vp5n31a1_rear.jpg, 1000 px) at
+    1.77 px per mm, the body's 764 px for the SKU page's 17 in. The gland's hex nut reads about 59 px
+    across, 33.4 mm. Its height is ESTIMATED at the same figure: the nut stands out of the face and the
+    photograph looks slightly down on it, so its top and bottom edges are shifted.
+  cord: >-
+    estimated - the photograph shows a bore about 16 mm across and nothing of the cord beyond it. The
+    cord is drawn as that bore. No held source gives its diameter, gauge or length.
+  plug: >-
+    datasheet - the SKU page for VP5N31A1 says it has a "power cord with a L6-30P plug"; the Vertiv rack PDU
+    brochure SL-20881 p4 gives the input as L6-30P. No held document dimensions the plug or the gland, and
+    no photograph shows the cord, so the plug face is not drawn here.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part
+    (docs/connectors-power-design.md section 7). This part stands for the power input a DCIM records.
+elements:
+  gland: {at: [0, 0], size: [33.4, 33.4], class: inlet}
+skins: [default]
