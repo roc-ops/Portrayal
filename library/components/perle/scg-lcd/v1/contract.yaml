@@ -1,0 +1,41 @@
+format: 1
+kind: component
+name: scg-lcd
+version: 1.0.0
+class: display
+profile: networking
+description: >-
+  The front-panel LCD of the Perle IOLAN SCG console servers, a blue display with white text. It is set into the
+  front plate between the power button and the keypad. It shows up to four lines of 18 characters, and the keypad
+  moves through its menus.
+size: {w: 66.9, h: 16.9}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  identity: >-
+    IOLAN SCG Hardware Installation Guide, Expandable Models (5500427-10), "LCD Display and Keypad" (page 14):
+    "up to 4 lines of text with each line holding up to 18 characters". Page 9 labels the display "LCD Display".
+  size: >-
+    drawing - the glass outline of the front view in Appendix D (page 35), measured against the drawing's own
+    body width of 436 mm (1935 px at 400 dpi, 4.44 px/mm; the drawing's height of 194 px reads 43.7 mm against
+    the printed 44). The glass reads 297 px by 75 px, 66.9 by 16.9 mm. The drawing prints no dimension for it,
+    so the figure is read off the drawing and is good to about 0.5 mm.
+  colour: >-
+    photo-measured - the blue glass and white lettering are read from the labelled front photograph on page 9
+    (an SCG50 RRU-LAWM). The lettering in the photograph is the maker's logo; the text a unit shows is software
+    and is not drawn.
+  screen: >-
+    The element is `class: screen`, not `display`, because the guide gives a line count and a width of 18
+    characters for the whole family, not for a glass whose size the drawing gives; the count is recorded here.
+elements:
+  screen:
+    at: [0.0, 0.0]
+    size: [66.9, 16.9]
+    class: screen
+    description: the LCD glass of the front panel
+relief:
+  features:
+  - node: screen
+    pocket: 0.5
+    confidence: estimated
+    source: the photograph shows the glass in a flat bezel; no document states how far it is set back
+skins: [default]

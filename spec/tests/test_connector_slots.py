@@ -179,7 +179,9 @@ def test_the_connector_registry_is_not_vacuous():
                          "ubiquiti-usp-rps",
                          # the I/O module bay of the Lantronix SLC 8000: a device bay states it
                          # as its `interface`, so no part presents it
-                         "slc-io-module"}
+                         "slc-io-module",
+                         # the G16 module bay of the Perle IOLAN SCG, stated the same way
+                         "scg-g16-module"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

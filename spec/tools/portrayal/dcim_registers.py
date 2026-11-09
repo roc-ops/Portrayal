@@ -269,6 +269,7 @@ NOT_A_DCIM_PORT = {
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
+    "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
