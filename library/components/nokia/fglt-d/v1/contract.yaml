@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fglt-d
-version: 1.4.1
+version: 1.4.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -105,19 +105,30 @@ provenance:
     isotropic). Line fits on the tooth outline of the left elevation give the long edge
     that carries the cage at 29.5-29.7 degrees to the plate and the short edge at
     59.8-60.0 degrees, on the 20.66 pitch. DEPTH: the sawtooth stands BEHIND the plate:
-    the left elevation draws the plate 14.0 mm deep (front line 68-70 px, back line
-    111-113 px) and nothing proud of it, and the tooth tips touch the back. The opening
-    the cages look through is one pocket, `well`, 33.0 to 366.99 and 22.95 deep; every
+    the left elevation draws the plate with a front line at 68-70 px and a back line at
+    111-113 px (13.4 to 14.0 mm; WALL below reads 13.5), nothing proud of it, and the
+    tooth tips touch the back. The opening
+    the cages look through is one pocket, `well`, 33.0 to 361.83 (the bottom of face-16) and 22.95 deep; every
     facet has `lift` -22.95. The angles are unchanged by the depth. Section, plate front
     at 0: tooth crest -14.0, tooth root and pocket floor -22.95. Modelled as sixteen
     teeth of 30 degrees (face-N, facing up, the cage on it) and 60 degrees (return-N,
     facing down, below it): face 15.50 and return 5.17 mm of front view. Each face keeps
     the cage centre the flat front of Figure 143 gives (45.15 + 20.66 n), its lower edge
     0.5 mm above the crest, so the cage runs back parallel to the return below it, 0.58
-    mm inside it, and passes below the pocket floor before any wall. The last return,
-    and so the pocket, runs to 366.99, over the tips of the ESD and hot-surface
-    triangles (from 365) (gap); ending the pocket sooner would put cage 16 through its
-    wall.
+    mm inside it, and passes below the pocket floor before any wall. WALL: the pocket states
+    `wall` 13.5, the plate's back face, and below that it is open to the inside of the
+    card, so the lower cage of face-16 runs under the plate's solid edge without coming
+    out through a wall (L117 checks this). The walls stop at the plate; the floor stays
+    at 22.95. The wall is ESTIMATED from this card's own figure: Figure 143's left
+    elevation draws the plate as full-height lines, the front at 68-70 px (centre 69) and
+    the back, which the tooth tips touch, at 111-112 px (centre 111.5), 42.5 px apart at
+    3.143 px/mm (the figure's own scale: the card's 405 mm is 1273 px), 13.5 mm. The
+    figure carries no dimension line, so the depth is good to about 1 mm (the back line
+    read at 111 and at 113 gives 13.4 and 14.0). The wall stays above the teeth's
+    crests (-14.0), as it must: a deeper wall would stand across the teeth. The pocket
+    ends at the bottom of face-16, 361.83, clear of the ESD and hot-surface triangles
+    (from 365.0); return-16, the wedge below it, lies outside the last window, in the
+    plate's thickness, and is no longer a facet (its element stays as plate art).
   thumbscrews: >-
     photo - lab photos of an installed FX-8, 2026-09-24; flush-with-end per the maintainer's reading.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -139,7 +150,7 @@ elements:
   logo-zone: {at: [7.5, 23.3], size: [15.5, 8.5], class: label}
   model-label: {at: [7.5, 11.0], size: [15.6, 11.1], class: label}
   blank-label: {at: [7.6, 383.1], size: [14.8, 11.0], class: label}
-  well: {at: [5, 33], size: [19, 333.994], class: mechanical}
+  well: {at: [5, 33], size: [19, 328.829], class: mechanical}
   face-1: {at: [5, 36.434], size: [19, 15.495], class: mechanical}
   return-1: {at: [5, 51.929], size: [19, 5.165], class: mechanical}
   face-2: {at: [5, 57.094], size: [19, 15.495], class: mechanical}
@@ -188,9 +199,13 @@ relief:
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
     - node: well
-      pocket: 22.95
+      pocket: {depth: 22.95, wall: 13.5}
       confidence: estimated
-      source: 'ETSI UDS A18 p349 Figure 143 left elevation: plate front 68-70 px to plate back 111-113 px = 14.0 mm (3.143 px/mm), the tooth tips touching the back'
+      source: >-
+        ETSI UDS A18 p349 Figure 143 left elevation, this card's own: wall 13.5 is the plate
+        front (the line at 68-70 px) to plate back (the line at 111-112 px that the tooth
+        tips touch), 42.5 px at 3.143 px/mm; depth 22.95 is the tooth roots. The figure
+        carries no dimension line of its own
     - node: face-1
       facet: {deg: 30, facing: up}
       lift: -22.95
@@ -343,11 +358,6 @@ relief:
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
     - node: face-16
       facet: {deg: 30, facing: up}
-      lift: -22.95
-      confidence: estimated
-      source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
-    - node: return-16
-      facet: {deg: 60, facing: down}
       lift: -22.95
       confidence: estimated
       source: 'ETSI UDS A18 p349 Figure 143 side elevations: face 29.6-29.7 deg, return 59.8-60.0 deg (line fits on the tooth outline)'
