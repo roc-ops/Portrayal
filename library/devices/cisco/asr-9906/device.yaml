@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: asr-9906
-version: 2.1.0
+version: 2.2.0
 maturity: modelled
 manufacturer: Cisco
 model: ASR 9906
@@ -406,6 +406,52 @@ provenance:
       the card's own 38.27 x 492.1 faceplate, so there are 0.09 mm between neighbours; the
       first major of the card, 43.7 wide, did not fit five slots and is replaced (see the card's
       provenance envelope). WHAT WOULD SETTLE IT: a dimensioned rear elevation of the chassis.
+  rear-face:
+    confidence: drawing
+    note: >-
+      drawing - the stencil master "ASR-9906 Rear" (the Cisco ASR 9000 Visio stencil, 1.90 by 2.45 in
+      at 1:10), read by eye off a 1554 px render with the calibration the fabric bays use: x on the
+      482.6 mm rack face shifted in by 17.8 mm to the body edge, y on the 619.51 mm body height. Edges
+      of the vent fields, the inlets and the DC housing were read as the extent of their black pixels
+      on a 3047 px render, so they are good to about 0.3 mm; the clamp tabs, screws, slots and the
+      screw and plus marks were placed by eye and are good to about 1.5 mm. Nothing here is
+      dimensioned by Cisco. WHAT THE MASTER DRAWS AND THIS FACE NOW DRAWS: two hexagon vent fields (lower
+      left 94.3 x 337.7 mm, upper right 54.4 x 92.0 mm, flat-topped hexagons on a 17.8 mm and a 7.8 mm
+      column pitch, the first row cut by the field edge as drawn); the power tray's rear plate
+      (43.8 x 296.4 mm) with six IEC receptacles of 30.6 x 23.4 mm on a 48.3 mm pitch, each with its
+      bezel, three white contacts, a clamp tab and two further tabs, and the DC output blade housing
+      below it (65.6 x 55.1 mm, a black slot and two screws); the ESD jack at the bottom right; eight
+      round screw heads and twenty-three plus marks, the latter drawn as dots. The five fabric bays are
+      in provenance fabric-bays.
+      NOT DRAWN, AND SAID SO: the hexagon holes of the DC housing (an irregular pattern of 50 or so
+      holes), the M0 to M2 and A and B legends and the rating legend printed on the tray, the ESD
+      symbol (the legend ESD is drawn), the I2C connector's pins, the fabric cage's own rails, latch
+      strips and dark backplane, and the 3 mm side rails of the tray. The master paints the rear
+      grey (#a5a5a5) where the chassis colour of this file is #c8cacc; the chassis colour is not changed
+      here.
+  rear-power-inlets:
+    confidence: datasheet
+    note: >-
+      datasheet + drawing - the receptacles are the version 3 AC power tray's, not the module's. Overview
+      and Reference Guide Figure 66, "Version 3 Rear Panel" (b-asr9k-overview-reference-guide.pdf,
+      PDF p102, printed p90), shows six receptacles in a row, the callout reading "IEC input
+      receptacles with retention brackets", DC output power blades at one end and the I2C cable
+      connector at the other; the text says the version 2 and 3 receptacles have "a clamp mechanism with a
+      screw" and are "20-A UL/CSA-rated, 16-IEC-rated". No document held names the receptacle type
+      (C19 or C20) or gives its dimensions, so no inlet part is placed, and they are drawn as paint,
+      not as connectors. They are not part of the power modules (cisco/pwr-6kw-ac-v3@1 states that its
+      cord lands on the tray). NOTE the pitch: the master draws M0, M1 and M2 at 96.7 mm on this face
+      (two receptacles of 48.3 mm), where the front master puts the modules on a 139.0 mm pitch. The
+      two are not reconciled and neither is changed. The master's top to bottom order is M2, M1, M0
+      with A above B in each, read from the legends.
+  rear-ground-pad-position:
+    confidence: drawing
+    note: >-
+      drawing - the master draws a pad plate of 64.6 x 15.8 mm with two holes 20.2 mm apart at (392.2,
+      523.6) and (412.4, 523.6) mm, and the earth symbol below it. THE PAD IS NOT MOVED: it stays at (375.0, 566.01), where the sibling chassis put theirs, because a placed id moving is a major bump of the chassis. The part's hole pitch is 15.875 mm and
+      the master's 20.2 mm, so with the screws centred on the holes' midpoint, (402.3, 523.6), each
+      would sit 2.2 mm from its drawn hole. Provenance grounding said the borrowed position "could be a
+      centimetre out"; against this master it is 52 mm out in y.
   fabric-cards:
     confidence: datasheet
     note: >-
@@ -504,6 +550,7 @@ chassis:
   airflow: front-to-back
   color: '#c8cacc'
   silk: '#231f20'
+  ears: {h: 533.7, y: 72.5}
 gaps:
 - what: chassis-power-figure
   scope:
@@ -575,8 +622,12 @@ gaps:
     an exception to that: the NEBS grounding receptacle, which Table 12 states and Figure 61
     shows, on an offset borrowed from the sibling chassis rather than measured - see
     provenance/grounding. The five fabric bays are drawn (provenance fabric-bays); the rest of
-    the rear - the vents, the power inlets, the fan door - is still not drawn.
-  wanted: an ASR 9906 rear elevation, or a rear photograph
+    the rear is drawn from the same master (provenance rear-face, rear-power-inlets and
+    rear-ground-pad-position). STILL OPEN: the master is a stencil drawing and no figure dimensions
+    any rear feature; the receptacle type, the DC housing's holes and the fabric cage's own metal
+    are not drawn. The ground pad stays 52 mm from where the master draws it (provenance
+    rear-ground-pad-position).
+  wanted: a dimensioned ASR 9906 rear elevation, or a rear photograph
 - what: bottom-face-is-undocumented-family-wide
   scope: [bottom]
   reason: vendor-silent
@@ -678,14 +729,157 @@ views:
   rear:
     size: {w: 447.0, h: 619.51}
     panel:
+      decor:
+        - {id: rear-vent-lower-left, at: [16.7, 269.8], size: [94.3, 337.7], fill: '#a5a5a5', pattern: motif, pattern-pitch: [35.61, 20.56], pattern-cells: [[[10.95, 0], [5.47, 9.48], [0, 9.48], [0, 0]], [[10.95, 20.56], [0, 20.56], [0, 11.08], [5.47, 11.08]], [[35.61, 9.48], [30.14, 9.48], [24.66, 0], [35.61, 0]], [[24.66, 20.56], [30.14, 11.08], [35.61, 11.08], [35.61, 20.56]], [[28.75, 10.28], [23.28, 19.76], [12.33, 19.76], [6.86, 10.28], [12.33, 0.8], [23.28, 0.8]]], pattern-offset: [11.6, -0.55], vent: 60, confidence: drawing, source: 'stencil master ASR-9906 Rear, hexagon field at the lower left'}
+        - {id: rear-vent-upper-right, at: [378.3, 13.6], size: [54.4, 92.0], fill: '#a5a5a5', pattern: motif, pattern-pitch: [15.6, 9.01], pattern-cells: [[[4.33, 0], [2.17, 3.75], [0, 3.75], [0, 0]], [[4.33, 9.01], [0, 9.01], [0, 5.25], [2.17, 5.25]], [[15.6, 3.75], [13.43, 3.75], [11.27, 0], [15.6, 0]], [[11.27, 9.01], [13.43, 5.25], [15.6, 5.25], [15.6, 9.01]], [[12.13, 4.5], [9.97, 8.26], [5.63, 8.26], [3.47, 4.5], [5.63, 0.75], [9.97, 0.75]]], pattern-offset: [4.33, 3.75], vent: 60, confidence: drawing, source: 'stencil master ASR-9906 Rear, hexagon field at the upper right'}
+        - {id: rear-power-tray-frame, at: [378.7, 120.8], size: [66.2, 298.1], stroke: '#4d4d4d', stroke-width: 0.5}
+        - {id: rear-power-tray-plate, at: [390.3, 120.8], size: [43.8, 296.4], fill: '#aaafb7'}
+        - {at: [390.7, 131.2], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 132.7], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 141.1], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 146.6], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 146.6], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 122.4], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 157.7], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 157.7], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 123.9], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 160.5], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 160.5], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 124.8], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 124.8], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 124.8], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [390.7, 179.54], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 181.04], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 189.44], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 194.94], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 194.94], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 170.74], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 206.04], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 206.04], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 172.24], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 208.84], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 208.84], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 173.14], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 173.14], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 173.14], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [390.7, 227.73], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 229.23], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 237.63], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 243.13], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 243.13], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 218.93], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 254.23], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 254.23], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 220.43], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 257.03], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 257.03], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 221.33], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 221.33], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 221.33], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [390.7, 276.07], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 277.57], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 285.97], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 291.47], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 291.47], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 267.27], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 302.57], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 302.57], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 268.77], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 305.37], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 305.37], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 269.67], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 269.67], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 269.67], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [390.7, 324.41], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 325.91], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 334.31], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 339.81], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 339.81], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 315.61], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 350.91], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 350.91], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 317.11], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 353.71], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 353.71], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 318.01], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 318.01], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 318.01], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [390.7, 372.59], size: [34.9, 26.5], fill: '#d9d9d9', rx: 2}
+        - {at: [392.6, 374.09], size: [30.6, 23.4], fill: '#000000', rx: 1.5}
+        - {at: [406.5, 382.49], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [400.8, 387.99], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [411.9, 387.99], size: [3.5, 1.4], fill: '#ffffff'}
+        - {at: [405, 363.79], size: [14.3, 8.7], fill: '#d9d9d9', rx: 2}
+        - {at: [396.2, 399.09], size: [14.6, 8.2], fill: '#d9d9d9', rx: 2}
+        - {at: [411.3, 399.09], size: [11.1, 8.2], fill: '#7f7f7f'}
+        - {at: [409.9, 365.29], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [401.4, 401.89], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [414.8, 401.89], size: [4, 4], fill: '#5f5f5f', rx: 2}
+        - {at: [394.2, 366.19], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [400.2, 366.19], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [423, 366.19], size: [4.8, 4.3], fill: '#000000'}
+        - {at: [393.9, 411.9], size: [4.4, 4.7], fill: '#000000'}
+        - {at: [400.2, 411.9], size: [4.4, 4.7], fill: '#000000'}
+        - {at: [406.5, 411.9], size: [4.4, 4.7], fill: '#000000'}
+        - {at: [412.8, 411.9], size: [4.4, 4.7], fill: '#000000'}
+        - {at: [419.1, 411.9], size: [4.4, 4.7], fill: '#000000'}
+        - {at: [425.1, 411.7], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {id: rear-dc-output-housing, at: [378.7, 417.9], size: [65.6, 55.1], fill: '#a6a6a6', rx: 1.5}
+        - {at: [378.7, 417.9], size: [65.6, 55.1], stroke: '#222222', stroke-width: 0.5, rx: 1.5}
+        - {at: [408, 444.1], size: [5.7, 28.9], fill: '#000000', rx: 2.85}
+        - {at: [397.45, 443.75], size: [5.7, 5.7], stroke: '#777777', stroke-width: 0.5, rx: 2.85}
+        - {at: [398.8, 445.1], size: [3, 3], fill: '#000000', rx: 1.5}
+        - {at: [423.75, 443.75], size: [5.7, 5.7], stroke: '#777777', stroke-width: 0.5, rx: 2.85}
+        - {at: [425.1, 445.1], size: [3, 3], fill: '#000000', rx: 1.5}
+        - {at: [134.1, 45.56], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [135.9, 47.36], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [203.66, 45.56], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [205.46, 47.36], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [273.54, 45.56], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [275.34, 47.36], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [343.1, 45.56], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [344.9, 47.36], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [114.84, 279.74], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [116.64, 281.54], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [114.84, 381.95], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [116.64, 383.75], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [114.84, 483.86], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [116.64, 485.66], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [114.84, 586.08], size: [8, 8], stroke: '#8a8a8a', stroke-width: 0.6, rx: 4}
+        - {at: [116.64, 587.88], size: [4.4, 4.4], fill: '#000000', rx: 2.2}
+        - {at: [13.44, 5.75], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [116.85, 5.75], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [325.55, 5.75], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [429.58, 5.75], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [370.58, 24.03], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [435.48, 26.2], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 47.26], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [435.48, 90.32], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 149.17], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [370.58, 138.33], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 250.77], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [370.58, 253.87], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 352.37], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [370.58, 380.56], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 454.28], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [370.58, 458.93], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [411.57, 478.75], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [435.48, 501.05], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [7.23, 556.19], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [435.48, 592.43], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [13.44, 610.09], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [116.85, 610.09], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
+        - {at: [325.55, 610.09], size: [4.6, 4.6], fill: '#5f5f5f', rx: 2.3}
       cutouts:
-        - {id: ground-pad-rear, at: [375.0, 566.01], size: [46.0, 20.0], shape: rect}
+        - {id: ground-pad-rear, at: [375, 566.01], size: [46.0, 20.0], shape: rect}
+        - {id: esd-rear, at: [337.8, 598.8], size: [5.0, 5.0], shape: circle}
     silkscreen:
       - {at: [167.9, 589.0], text: FC0, font-size: 6, anchor: middle, for: fc-0}
       - {at: [204.3, 589.0], text: FC1, font-size: 6, anchor: middle, for: fc-1}
       - {at: [240.9, 589.0], text: FC2, font-size: 6, anchor: middle, for: fc-2}
       - {at: [277.3, 589.0], text: FC3, font-size: 6, anchor: middle, for: fc-3}
       - {at: [313.6, 589.0], text: FC4, font-size: 6, anchor: middle, for: fc-4}
+      - {at: [350.5, 603.16], text: ESD, font-size: 6, anchor: start, for: esd-jack-rear}
     components:
       bays:
         - {id: fc-0, at: [148.45, 74.5], size: {w: 38.27, h: 492.1}, accepts: ['cisco/a99-sfc3-t@2'], group: fabric, rel-pos: 0, default: cisco/a99-sfc3-t@2}
@@ -694,10 +888,14 @@ views:
         - {id: fc-3, at: [263.53, 74.5], size: {w: 38.27, h: 492.1}, accepts: ['cisco/a99-sfc3-t@2'], group: fabric, rel-pos: 3, default: cisco/a99-sfc3-t@2}
         - {id: fc-4, at: [301.89, 74.5], size: {w: 38.27, h: 492.1}, accepts: ['cisco/a99-sfc3-t@2'], group: fabric, rel-pos: 4, default: cisco/a99-sfc3-t@2}
       placements:
-        - {ref: cisco/a9k-ground-pad@1, id: ground-pad-rear, at: [375.0, 566.01], group: grounding, rel-pos: 1}
+        - {ref: cisco/a9k-ground-pad@1, id: ground-pad-rear, at: [375, 566.01], group: grounding, rel-pos: 1}
+        - {ref: common/esd-jack@1, id: esd-jack-rear, at: [337.3, 598.3], for: chassis, group: grounding, rel-pos: 3}
     regions:
       - {id: fabric-cards, label: 'Fabric card cage - five fabric cards, numbering restarts at Slot 0'}
       - {id: nebs-ground, label: 'NEBS bonding and grounding - bottom rear and left side'}
+      - {id: rear-vents, label: 'Hexagon vent fields - lower left and upper right of the rear'}
+      - {id: rear-power-tray, label: 'Power tray rear - six IEC input receptacles, A and B for each of M0 to M2, with the DC output blades below'}
+      - {id: rear-esd, label: 'ESD grounding jack - bottom right of the rear'}
   top:
     size: {w: 447.0, h: 730.8}
     panel:
