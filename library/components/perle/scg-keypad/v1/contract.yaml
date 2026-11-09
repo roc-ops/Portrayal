@@ -1,0 +1,63 @@
+format: 1
+kind: component
+name: scg-keypad
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  The front-panel keypad of the Perle IOLAN SCG console servers. Four arrow keys sit in a cross with an Enter key
+  at the centre and a Back key at the upper right. The keys move through the settings the LCD shows.
+size: {w: 27.4, h: 27.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  keys: >-
+    IOLAN SCG Hardware Installation Guide, Expandable Models (5500427-10), "LCD Display and Keypad" (page 14):
+    arrow keys, an enter key and a back key. The front view of Appendix D (page 35) draws six round keys:
+    up, left, enter and right in a cross, down below, and back at the upper right.
+  size: >-
+    drawing - each key is a circle of 34 px at 4.44 px/mm in the front view of Appendix D (7.7 mm), the cross
+    is 27.4 mm across and 27.0 mm tall. The drawing prints no dimension for it; the figures are read off the
+    drawing against its body width of 436 mm and are good to about 0.5 mm. The key glyphs are the drawing's.
+  keys-position: >-
+    drawing - the key centres are read off the same view: the cross centre column 13.7 mm from the left, the
+    arrow keys 9.8 mm either side of it, the rows 9.8 mm apart, and back above the right-hand arrow.
+  colour: >-
+    photo-measured - the labelled front photograph on page 9 (an SCG50 RRU-LAWM) shows each key as a dark disc with
+    a gold ring and a gold arrow. The drawing is line art. The gold is read off the photograph at a few pixels
+    per key and is approximate.
+  height: >-
+    estimated - the keys are drawn proud by 0.8 mm; no document states how far they stand.
+elements:
+  up: {at: [9.85, 0.0], size: [7.7, 7.7], class: button, label-anchor: above}
+  down: {at: [9.85, 19.3], size: [7.7, 7.7], class: button, label-anchor: below}
+  left: {at: [0.0, 9.65], size: [7.7, 7.7], class: button, label-anchor: left}
+  right: {at: [19.7, 9.65], size: [7.7, 7.7], class: button, label-anchor: right}
+  enter: {at: [9.85, 9.65], size: [7.7, 7.7], class: button}
+  back: {at: [19.7, 0.0], size: [7.7, 7.7], class: button, label-anchor: above}
+relief:
+  features:
+  - node: up
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: down
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: left
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: right
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: enter
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+  - node: back
+    out: 0.8
+    confidence: estimated
+    source: the photograph shows raised keys; no document states how far they stand
+skins: [default]
