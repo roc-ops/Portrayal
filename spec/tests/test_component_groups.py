@@ -305,11 +305,19 @@ def test_a_card_traffic_port_is_not_mgmt_only():
         {"100gbase-x-qsfp28"}
 
 
+# Cards that declare no groups yet. The test below needs one that still declares none: when a later
+# migration groups the last of these, name another ungrouped card here.
+UNGROUPED_CARDS = [
+    "juniper/mic-3d-4choc3-1oc12@1", "juniper/jnp-mic1@1",
+    "juniper/mx304-lmic16@1", "juniper/jnp10k-lc480@1",
+]
+
+
 def test_an_ungrouped_card_exports_as_it_did():
     """A card with no groups takes no new path: its parts are its parts."""
-    c = _contract("juniper/mic3-3d-10xge-sfpp@2")
-    assert not c.get("groups")
-    doc = _module("juniper/mic3-3d-10xge-sfpp@2")
+    ref = next((r for r in UNGROUPED_CARDS if not _contract(r).get("groups")), None)
+    assert ref, "every card in UNGROUPED_CARDS now declares groups: name one that does not"
+    doc = _module(ref)
     assert doc["interfaces"] and not any(i.get("mgmt_only") for i in doc["interfaces"])
 
 

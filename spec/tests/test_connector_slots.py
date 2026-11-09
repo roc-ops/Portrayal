@@ -105,11 +105,13 @@ def test_the_connector_registry_is_not_vacuous():
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
-                         "raritan-hdot-cx",
+                         "raritan-hdot-cx", "vertiv-combo",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
                          "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
+                         # the DVI-D video receptacle of the Raritan DSX2-32, std/dvi-d-jack@1
+                         "dvi-d",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
@@ -180,6 +182,8 @@ def test_the_connector_registry_is_not_vacuous():
                          # the I/O module bay of the Lantronix SLC 8000: a device bay states it
                          # as its `interface`, so no part presents it
                          "slc-io-module",
+                         # the G16 module bay of the Perle IOLAN SCG, stated the same way
+                         "scg-g16-module",
                          # the DIGITAL OUT header of the Vertiv Avocent ACS800, presented by
                          # vertiv/acs800-digital-out@1 and mated by vertiv/acs800-digital-out-plug@1
                          "screw-terminal-4-relay"}

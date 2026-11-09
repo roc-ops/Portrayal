@@ -219,6 +219,7 @@ The v1 checks are unchanged:
 - **The pocket floor is cleared under each facet's footprint**, as v1 clears the flat face and card planes under a facet. Otherwise the floor plane cuts across the cage wells of the parts on the facet.
 - Skirts drop from the surface to the facet's own base (`lift`), not to the plate. The v1 apex rule (no skirt where a same-owner facet neighbour is as tall) still holds between the teeth.
 - **Parts on a sunk facet** stand on its surface through the same tilt frame; `facetZ` already adds `lift`. Their cavities run back along the facet normal.
+- **A part whose box starts before the facet's root edge** stands on the facet's plane carried on past the root in a straight line, below the root's height, as a sunk facet's surface is. `facetZ` does not hold the height at the root. Whether L117's 0.5 mm of overshoot is the right allowance, and whether optics are checked against it, is a lint question this does not settle.
 - **Nothing is clipped.** A cage coming out through the pocket floor, a pocket wall, or the back of a tooth is a geometry error in the model, and stays visible so it gets fixed.
 - A drawing with no negative facet lift builds exactly as before.
 

@@ -37,10 +37,14 @@ POWER_LABEL = {
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
+    "servertech/pro3x-cord-60309": "IEC 60309 3P+G 9h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
+    "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
 }
 
 PART_OUTLET = {
@@ -64,6 +68,9 @@ PART_OUTLET = {
     "servertech/hdot-cx-outlet": "other",
     # A RARITAN PX4'S LOCKING Cx OUTLET, 16 A. Neither target names it, so it is `other` with its label.
     "raritan/px4-cx-outlet": "other",
+    # A VERTIV POWERIT COMBINATION C13/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
+    # names it, so it is `other` with its label, as the HDOT Cx above is.
+    "vertiv/combo-outlet": "other",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -79,7 +86,8 @@ PART_OUTLET = {
 # test_power_outlets.py holds both tables to OUTLET_TYPES (an assert here would
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
-                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking"}
+                "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking",
+                "vertiv/combo-outlet": "Vertiv combination C13/C19"}
 
 # EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
 #
@@ -192,6 +200,7 @@ NOT_A_DCIM_PORT = {
                                "over one cable; neither library has a type for it, and one row "
                                "could not stand for the sixteen outputs it carries",
     "common/vga-receptacle": "VGA; neither library has a video port type",
+    "std/dvi-d-jack": "DVI-D; a video output for a monitor, and neither library has a video port type",
     "common/rj11-jack": "FXS analogue telephone line. `rj-11` upstream is a CONSOLE type; "
                         "an FXS line is not a console and must not read as one",
 
@@ -265,6 +274,7 @@ NOT_A_DCIM_PORT = {
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
+    "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).

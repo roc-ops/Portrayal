@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: g5-cord-60309-2pe-6h
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in an IEC 60309 2P+E 6h plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Panduit G5 intelligent PDU for a single-phase feed. It ends in an IEC 60309 2P+E
+  6h plug rated 32 A, with the 30 A and 24 A derating the drawing prints. It leaves the end of the strip
+  through a cable gland. Drawn as the end of the strip shows it; the cord and plug beyond it are not.
+size: {w: 32.0, h: 32.0}
+size-confidence: {w: drawing, h: estimated}
+attrs: {plug: iec-60309-2p-e-6h-32a, cord-length-m: 3}
+provenance:
+  size: >-
+    drawing - the front view of Panduit customer drawing P32E06M_DC rev 06A shows the cable gland 32 across, centred
+    on the strip's width, read off a rendering at 800 dpi to about 0.5 mm. The gland's depth into the strip
+    and its place across the strip's 53 depth are not dimensioned, so the 32.0 is the one figure used and the
+    gland is drawn as a round of it. The sheet draws no end view of the strip with the gland in it.
+  plug: >-
+    drawing - P32E06M_DC specification block: "INPUT PLUG: IEC 60309 2P+E 6H 32A/30A(24A DERATED)", and its
+    plug and receptacle block, "IEC 60309, 2P 3W, 6H", "IP44 (SPLASHPROOF)", "230-400V MAX RATED INPUT".
+  cord: >-
+    drawing - sheet 2 of P32E06M_DC gives the plain part number a 3 m cord, 3M(+254MM/-127MM), with the
+    1 m variants listed by their own part numbers.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part
+    (docs/connectors-power-design.md section 7). This part stands for the power input a DCIM records, one power
+    port of type `other` labelled as an IEC 60309 2P+E 6h plug.
+elements:
+  gland: {at: [0, 0], size: [32.0, 32.0], class: inlet}
+skins: [default]
