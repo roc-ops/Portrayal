@@ -201,8 +201,8 @@ def test_the_two_figures_the_table_prints_twice_are_stated_with_both():
 
 
 def test_no_model_name_the_pages_do_not_print_is_used():
-    """The held pages say 'Velocity Double-Sided Vertical Cable Manager'; the issue's own name for another
-    line is not a model name here."""
+    """The held pages say 'Velocity Double-Sided Vertical Cable Manager'; a name for another product line,
+    which no held page uses, is not a model name here."""
     text = ""
     for fam in ("13911", "13912", "13914", "13915"):
         for p in (LIB / "devices" / "chatsworth").glob(f"{fam}-7*/device.yaml"):
