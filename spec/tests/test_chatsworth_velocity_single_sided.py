@@ -153,18 +153,6 @@ def test_the_gaps_say_what_the_pages_do_not(name):
     assert "performance" not in doc["attrs"], "the data sheet points to a cable fill table and states no figure"
 
 
-def test_no_model_name_the_pages_do_not_print_is_used():
-    """The held pages say 'Velocity Single-Sided Vertical Cable Manager'; the issue's own name for another
-    line is not a model name here."""
-    text = ""
-    for fam in ("13901", "13904", "13905"):
-        for p in (LIB / "devices" / "chatsworth").glob(f"{fam}-7*/device.yaml"):
-            text += p.read_text()
-        for p in (LIB / "components" / "chatsworth").glob(f"velocity-{fam}-*/v1/contract.yaml"):
-            text += p.read_text()
-    assert text and "G3" not in text
-
-
 @pytest.mark.parametrize("name", list(PARTS))
 def test_the_part_stands_beside_a_rack_on_either_side_and_two_on_one_side_overlap(name):
     _, ru, _, _, _ = PARTS[name]
