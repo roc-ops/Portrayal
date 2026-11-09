@@ -2887,24 +2887,37 @@ standards:
       A connector of another position count is not in SFF-8441 and is not
       this entry.
   rj11:
-    registry: TE Connectivity customer drawing C-1775675 rev C (30 Dec 2014), "Modular Jack, Side Entry, Low Profile, DIP", sheet 1
+    registry: TE Connectivity customer drawing C-1775675 rev C (30 Dec 2014), "Modular Jack, Side Entry, Low Profile, DIP", sheet 1; IEC 60603-7 governs the plug interface and is not held
+    w: 9.88
+    h: 11.26
+    radius: 0
     confidence: drawing
     depth: 20.57
     depth-confidence: drawing
+    cavity: {w: 9.88, h: 11.26}
+    cavity-confidence: drawing
+    tiers:
+      - {name: body, w: 9.88, h: 6.85, confidence: estimated}
+      - {name: shoulder, w: 6.60, h: 1.69, confidence: estimated}
+      - {name: slot, w: 4.04, h: 2.72, confidence: estimated}
     source: >-
       TE C-1775675 rev C, sheet 1: a six-position modular jack housing 13.34
-      wide (15.7 across its two side lugs) and 12.6 high above the board,
-      20.57 deep, with a plug opening 9.88 wide. The one housing is listed
-      with six, four or two contacts loaded (6P, 4P, 2P).
+      wide (15.7 across its two side lugs) and 15.0 high, 20.57 deep, with a
+      plug opening 9.88 wide. The 12.6 the front view prints is the height of
+      the side lugs, not of the housing. The one housing is listed with six,
+      four or two contacts loaded (6P, 4P, 2P).
     notes: >-
-      THE SIX-POSITION MODULAR JACK, the body a telephone line uses: RJ11 is
-      the name of the wiring with two contacts loaded, RJ14 with four and
-      RJ12 or RJ25 with six, and one plug body fits all of them. NO ENVELOPE
-      IS CLAIMED: the `rj11` interface cites this entry for what the connector
-      is; common/rj11-jack@1, the one part that presents it, draws this
-      entry's 9.88 opening (its tiers scaled off the same front view) and its
-      20.57 depth (#837), in a housing photo-measured at 14.0 x 13.5 off a
-      different maker's jack, and so states no `conforms`.
+      THE SIX-POSITION MODULAR JACK's PLUG OPENING, the body a telephone line
+      uses: RJ11 is the name of the wiring with two contacts loaded, RJ14 with
+      four and RJ12 or RJ25 with six, and one plug body fits all of them. `w`
+      and `h` are the OPENING's bounding box, not a housing: TE's housing is
+      13.34 wide and 15.0 high, and a different maker's jack is a different
+      housing round the same plug. Only the 9.88 width is printed; the three
+      tiers (body 9.88 x 6.85, a 6.60 wide shoulder 1.69 high, a 4.04 wide latch
+      slot 2.72 high) are scaled off the front view, which is why each carries
+      an estimated confidence, and `h` is their sum. A MAKER'S DRAWING IS THE
+      SOURCE: IEC 60603-7 is not held, so the standard's own figure is unchecked.
+      std/rj11@1 draws this opening and common/rj11-jack@1 composes it.
       The four-position handset jack (4P4C) and the eight-position RJ45 are
       different bodies and are not this entry. The cable plug that mates it
       is `rj11-plug`.
