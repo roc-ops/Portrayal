@@ -738,6 +738,11 @@ PART_POWER = {
     # `nema-l5-20p`, TYPE_NEMA_L520P in both targets at the commits the generic
     # plugs below cite.
     "eaton/tripplite-cord-l5-20p": "nema-l5-20p",
+    # The CyberPower PDU30BHVT8R's fixed 10 ft cord ends in a NEMA L6-30P (`nema-l6-30p`, TYPE_NEMA_L630P) and the
+    # PDU81001G's 12 ft cord in a NEMA 5-15P (`nema-5-15p`, as the FS cord above). Neither value was checked
+    # against a target's source file here.
+    "cyberpower/pdu-cord-l6-30p": "nema-l6-30p",
+    "cyberpower/pdu-cord-5-15p": "nema-5-15p",
     # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
     "eaton/g3-cord-l5-20p": "nema-l5-20p",
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
@@ -788,6 +793,10 @@ PART_POWER = {
     # each is `other`, and POWER_LABEL says which connector.
     "panduit/g5-cord-60309-2pe-6h": "other",
     "panduit/g5-cord-60309-3pe-9h": "other",
+    # A VERTIV POWERIT HORIZONTAL PDU'S FIXED CORD ends in a NEMA L6-30P plug (the SKU page of VP5N31A1 and the
+    # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
+    # as the connectors above are, and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-l6-30p": "other",
 }
 
 

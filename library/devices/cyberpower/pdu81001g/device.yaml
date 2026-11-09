@@ -1,0 +1,227 @@
+format: 1
+kind: device
+name: pdu81001g
+version: 0.1.0
+maturity: modelled
+manufacturer: CyberPower
+model: PDU81001G
+description: >-
+  CyberPower PDU81001G gigabit switched metered-by-outlet rack PDU, 1U, 100 to 120 V, 15 A, single phase. A black metal
+  box 433 mm wide, 112 mm deep and 44 mm high with a mounting ear at each end. The front carries a fixed 12 ft cord with a
+  NEMA 5-15P plug at the left end. It has eight NEMA 5-15R outlets, each with a lamp. A controller block holds a reset
+  button, a navigation button and a graphic display. It also holds two USB jacks, an environment jack, a serial and link
+  jack and two gigabit Ethernet jacks. No document shows the rear.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      ESTIMATED. NO DIMENSIONED DRAWING AND NO STRAIGHT-ON PICTURE EXISTS. Every position on the front is read off the one
+      product photograph on page 1 of the PDU81001G data sheet, taken from the right and above, so it is NOT orthographic:
+      x is read as a fraction of the body's width (1145 px for 433 mm, 0.378 mm per px, the ears excluded) and y at the
+      face's own vertical scale (3.17 px per mm, 44 mm of face between the top edge and the bottom edge). The eight outlets
+      sit on a near-constant 77.6 px pitch, which supports a common pitch across the block, but the controller block lies
+      farther along the foreshortened direction and its positions are good to about 2 mm. The Visio stencil held for this model
+      was not opened.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - CyberPower PDU81001G data sheet, page 2: "433 x 44 x 112 mm" and "17.05 x 1.75 x 4.41 in." (W x H x D), "Rack
+      Height 1U", weight 2.6 kg. THE EARS ARE NOT IN IT: the photograph shows an ear at each end outside the body, so 433 is read
+      as the body between the folds. The finish is black.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - millimetres from the body's left edge and its top. Outlets: centres at 44.5, 73.8, 103.2, 132.5, 161.9, 191.2,
+      220.6 and 249.9 across (a 29.35 pitch) and 17.1 down; lamps 3.5 right of each centre and 36.4 down; numerals 1 to 8 beside
+      the lamps. Cord at 17.8 across, 24.4 down. Reset dot 11.0 down and the navigation button 23.6 down, both at 303.0. Display 317.3
+      to 345.4 across, 10.4 to 42.2 down. USB 1 and USB 2 centre at 352.0 and 363.8 across, 14.2 down. The environment jack and the
+      serial and link jack centre at 380.0, 14.2 and 35.6 down. ETH 1 and ETH 2 centre at 399.4, 15.6 and 34.7 down.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the data sheet, pages 1 and 2: "8 x NEMA 5-15R", "Number of Outlets 8", "Outlets - Total 8". The data sheet does not
+      say whether they are front or rear; the photograph shows all eight on the front, numbered 1 to 8 from the left. std/nema-5-15r@1
+      is the library's 5-15R face, borrowed from the 5-20R (no 15 A face is dimensioned), so the outlets are the part's size and not
+      a reading of the photograph, where the face reads about 25 mm across.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Input Plug Type NEMA 5-15P", "Cord Length (ft.) 12 ft (3.7 m)", derated input current 12 A, maximum 15 A. The plug style is
+      not stated. The photograph shows the cord leaving the left end of the front.
+  controller:
+    confidence: datasheet
+    note: >-
+      datasheet - page 1 features "Dual Network Gigabit 10/100/1000 Ethernet Ports"; page 2 "Hardware Connection Port RJ45 Universal
+      (RJ45)", "Environmental Sensor Optional, via RJ45" and "LCD Multifunction LCD". The photograph labels USB 1, USB 2, ETH 1 and
+      ETH 2 (10/100/1000), prints "ENV" under the upper black RJ45 jack and "Serial/Link" above the lower one, and a RESET legend
+      over a dot above the navigation button. Which of the two black jacks is the environment jack is read from where the labels stand
+      (gaps: env-serial-labels).
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - "Outlet switching Yes" and "Switchable Metered-by-Outlets", so `outlet-switching: true`, each outlet states on and off, and the
+      metering is per outlet (`metering-scope: outlet`).
+attrs:
+  physical:
+    weight-kg: 2.6
+    construction: metal
+  power:
+    input-plug: nema-5-15p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 15
+    input-range: 100-120 V
+    frequency: 50/60 Hz
+    output-rating: 1800 W
+  environmental:
+    operating-temp: 0 to 60 C (32 to 140 F)
+    humidity: 0 to 95 % non-condensing
+    altitude: 0 to 3500 m (0 to 11483 ft)
+    storage-temp: -15 to 65 C (5 to 149 F)
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+  compliance:
+    certifications: UL62368, FCC Class A, ICES-003 Issue 7
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 433
+  height: 44
+  depth: 112
+  ru: 1
+  color: '#26282b'
+  ears:
+    color: '#26282b'
+    positions:
+      - {name: flush, default: true}
+gaps:
+- what: rear
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    no document shows the rear of this model: the data sheet has one photograph, of the front, and no manual is held. The data sheet's eight
+    outlets are all on the front in the photograph, so nothing is known to stand on the rear.
+  wanted: a photograph of the rear, or the installation guide.
+- what: env-serial-labels
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the photograph prints "ENV" and "Serial/Link" between the two black RJ45 jacks. Whether each label names the jack nearest it or the two read
+    as one legend is not stated by any held document, and what each jack carries is not stated. Both are typed `rj45-serial`, the media the lint
+    vocabulary has for a jack that is not Ethernet (the Ethernet jacks are the two labelled ETH 1 and ETH 2), because the labels say Serial and ENV and the
+    data sheet calls the port "Universal (RJ45)"; no role, speed or pinout is given.
+  wanted: the installation guide's port table.
+- what: ear-positions
+  scope: [front, left, right]
+  reason: needs-drawing
+  note: >-
+    the data sheet gives no ear, bracket or hole dimension; the photograph shows an ear at each end with two holes visible on the right one.
+    Only the flush position the photograph shows is named, without a figure.
+  wanted: a dimensioned drawing.
+- what: stencil
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    a Visio stencil is held (its internal title reads PDU81001) and was not opened.
+  wanted: the stencil opened and compared with the front.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no document shows the top, the bottom or an end of this model. The photograph sees the top and the right end at a steep angle with
+    ventilation holes along the side, which cannot be measured.
+  wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight NEMA 5-15R outlets, numbered 1 to 8 from the left as printed'}
+  outlet-leds: {term: LED, role: indicator, index-origin: 1, description: 'one green lamp under each outlet', states: ['off', {name: 'on', color: '#9bd13a'}]}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two gigabit Ethernet jacks, ETH 1 and ETH 2 (10/100/1000)'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the two USB jacks and the two black RJ45 jacks, ENV and Serial/Link, of the controller block'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the navigation button and the reset button of the controller block'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 433, h: 44}
+    silkscreen:
+      - {at: [53.7, 37.9], text: '1', font-size: 1.8, fill: '#d0d0d0', for: outlet-1}
+      - {at: [83.05, 37.9], text: '2', font-size: 1.8, fill: '#d0d0d0', for: outlet-2}
+      - {at: [112.4, 37.9], text: '3', font-size: 1.8, fill: '#d0d0d0', for: outlet-3}
+      - {at: [141.75, 37.9], text: '4', font-size: 1.8, fill: '#d0d0d0', for: outlet-4}
+      - {at: [171.1, 37.9], text: '5', font-size: 1.8, fill: '#d0d0d0', for: outlet-5}
+      - {at: [200.45, 37.9], text: '6', font-size: 1.8, fill: '#d0d0d0', for: outlet-6}
+      - {at: [229.8, 37.9], text: '7', font-size: 1.8, fill: '#d0d0d0', for: outlet-7}
+      - {at: [259.15, 37.9], text: '8', font-size: 1.8, fill: '#d0d0d0', for: outlet-8}
+      - {at: [303.0, 7.6], text: Reset, font-size: 1.6, anchor: middle, fill: '#d0d0d0', for: reset}
+      - {at: [352.0, 25.6], text: USB 1, font-size: 1.5, anchor: middle, fill: '#d0d0d0', for: usb-1}
+      - {at: [363.8, 25.6], text: USB 2, font-size: 1.5, anchor: middle, fill: '#d0d0d0', for: usb-2}
+      - {at: [380.0, 23.4], text: ENV, font-size: 1.5, anchor: middle, fill: '#d0d0d0', for: env}
+      - {at: [380.0, 27.2], text: Serial/Link, font-size: 1.5, anchor: middle, fill: '#d0d0d0', for: serial-link}
+      - {at: [412.0, 16.1], text: ETH 1, font-size: 1.6, fill: '#d0d0d0', for: eth-1}
+      - {at: [412.0, 30.4], text: ETH 2, font-size: 1.6, fill: '#d0d0d0', for: eth-2}
+      - {at: [358.2, 37.0], text: CyberPower, anchor: middle, font-size: 3.6, fill: '#e8e8e8', for: chassis}
+    components:
+      placements:
+        - {id: input, ref: cyberpower/pdu-cord-5-15p@1, at: [9.8, 16.4], group: power-input, rel-pos: 1, description: 'the fixed 12 ft input cord, ending in a NEMA 5-15P plug'}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [31.0, 3.6], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [60.3, 3.6], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [89.7, 3.6], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [119.0, 3.6], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [148.4, 3.6], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [177.7, 3.6], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [207.1, 3.6], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [236.4, 3.6], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: led-1, ref: common/led-dot@1, at: [47.0, 35.4], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: common/led-dot@1, at: [76.35, 35.4], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-3, ref: common/led-dot@1, at: [105.7, 35.4], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-4, ref: common/led-dot@1, at: [135.05, 35.4], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-5, ref: common/led-dot@1, at: [164.4, 35.4], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-6, ref: common/led-dot@1, at: [193.75, 35.4], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-7, ref: common/led-dot@1, at: [223.1, 35.4], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-8, ref: common/led-dot@1, at: [252.45, 35.4], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: reset, ref: common/reset-button@1, at: [301.0, 9.0], group: buttons, rel-pos: 2, for: display}
+        - {id: joystick, ref: cyberpower/pdu-joystick@1, at: [296.0, 16.6], group: buttons, rel-pos: 1, for: display}
+        - {id: display, ref: cyberpower/pdu-lcd@1, at: [317.3, 10.4], group: display, rel-pos: 1, for: chassis}
+        - {id: usb-1, ref: common/usb-a-bezel@1, at: [343.5, 9.55], rotate: 90, group: mgmt, rel-pos: 1}
+        - {id: usb-2, ref: common/usb-a-bezel@1, at: [355.3, 9.55], rotate: 90, group: mgmt, rel-pos: 2}
+        - {id: env, ref: std/rj45@2, at: [372.1, 7.6], group: mgmt, rel-pos: 3, attrs: {media: rj45-serial}, description: 'ENV, printed between the two black jacks; the data sheet lists an optional environmental sensor "via RJ45"'}
+        - {id: serial-link, ref: std/rj45@2, at: [372.1, 29.0], group: mgmt, rel-pos: 4, attrs: {media: rj45-serial}, description: 'Serial/Link, printed between the two black jacks; the data sheet lists "Hardware Connection Port RJ45 Universal"'}
+        - {id: eth-1, ref: common/rj45-eth@1, at: [391.5, 9.0], rotate: 90, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 1, 10/100/1000'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [391.5, 28.1], rotate: 90, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 2, 10/100/1000'}
+  rear:
+    size: {w: 433, h: 44}
+    empty: >-
+      no source shows the rear of this model: the data sheet has one photograph, of the front, and no installation guide or manual is held.
+      Searched: the data sheet text and pictures.
+  top:
+    size: {w: 433, h: 112}
+    empty: >-
+      no source shows the top straight on: the data sheet's photograph sees it at a steep angle. Searched: the data sheet.
+  bottom:
+    size: {w: 433, h: 112}
+    empty: >-
+      no source shows the bottom: the data sheet's only picture looks at the front from above. Searched: the data sheet.
+  left:
+    size: {w: 112, h: 44}
+    empty: >-
+      no source shows the left end straight on; the photograph shows the cord and the ear and no end face. Searched: the data sheet.
+  right:
+    size: {w: 112, h: 44}
+    empty: >-
+      no source shows the right end straight on; the photograph sees it side on, with ventilation holes along it, and nothing of it can be
+      measured. Searched: the data sheet.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 12 ft cord is drawn only as the strain relief it leaves by.
+    part-numbers:
+      PDU81001G: {}
+datasheet:
+  title: 'CyberPower PDU81001G data sheet (Gigabit Switched Metered-by-Outlet PDU)'
+  url: https://images.salsify.com/image/upload/s--y6GiOBxj--/765346735196006568d9f3e0099547bed156f10c.pdf
+  sha256: 944827d527d3b6d5e5e675618ec4ba1d835ac7b768f92c68360b263d26f1f7f9
