@@ -1,11 +1,11 @@
 """The MX240 normal-capacity AC supply draws the C20 inlet its guide names, so a cord has a place to land.
 
 juniper/mx240-psu-ac@1 drew a handle, an input switch and a vent field, and no inlet, so it offered no cable end. The guide
-says each supply has "a single AC appliance inlet" of type C20 (right angle), which a C19 cord end mates. It now composes
-std/c20-inlet@1 as `inlet`, as the MX304 supply does:
+says each supply has "a single AC appliance inlet" of type C20 (right angle), which a C19 cord end mates. The current major,
+@2, composes std/c20-inlet@1 as `inlet`, as the MX304 supply does:
 
   - the supply composes the registered C20 inlet under the id `inlet`, and the library holds the mate (a C19 plug);
-  - the inlet stands on a free place of the drawn face, declared an estimate, and no drawn box, the handle or the switch moves;
+  - the inlet stands clear of every drawn box and lamp, declared an estimate (where the face puts it is test_juniper_mx240_psu_ac_face);
   - the exported module type gains one power port, `{module}/inlet`, and no exported port name changes;
   - the supply says where its face and its colours come from, and that no photograph of the AC variant is held.
 
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
 SCHEMAS = ROOT / "spec" / "schemas"
 
-PSU = "juniper/mx240-psu-ac@1"
+PSU = "juniper/mx240-psu-ac@2"
 INLET = "std/c20-inlet@1"
 PLUG = "generic/c19-plug@1"
 MODULE_TYPE = "MX240 AC PSU (normal capacity).yaml"
@@ -64,13 +64,13 @@ def test_the_interface_is_registered_and_the_library_mates_it():
     assert contract(PLUG)["mates"] == "iec-c20"
 
 
-def test_the_supply_composes_the_registered_c20_inlet_as_inlet_and_is_a_new_minor():
+def test_the_supply_composes_the_registered_c20_inlet_as_inlet_and_is_the_second_major():
     d = contract(PSU)
     assert [(q["ref"], q["id"]) for q in d["parts"]] == [(INLET, "inlet")]
-    assert d["version"] == "1.1.0"
+    assert d["version"] == "2.0.0"
 
 
-def test_the_inlet_stands_clear_of_every_drawn_box_and_the_lamp_row_on_the_face():
+def test_the_inlet_stands_clear_of_every_drawn_box_and_the_lamps_on_the_face():
     d = contract(PSU)
     inlet = contract(INLET)["size"]
     x, y = d["parts"][0]["at"]
@@ -86,10 +86,8 @@ def test_the_inlet_stands_clear_of_every_drawn_box_and_the_lamp_row_on_the_face(
         assert not overlap(box, (cx - r, cy - r, 2 * r, 2 * r)), (cx, cy)
 
 
-def test_the_drawn_boxes_and_the_size_do_not_move():
-    d = contract(PSU)
-    assert boxes(d) == {"handle": (44.0, 63.5, 44.0, 4.6), "breaker": (10.0, 44.0, 14.0, 20.0)}
-    assert d["size"] == {"w": 101.5, "h": 79.7}
+def test_the_bay_size_does_not_change():
+    assert contract(PSU)["size"] == {"w": 101.5, "h": 79.7}
 
 
 def test_the_face_and_the_colours_are_declared_estimates_and_no_photograph_of_the_ac_variant_is_held():

@@ -1,10 +1,11 @@
 format: 1
 kind: module
 name: mx240-psu-ac
-version: 1.1.0
+version: 1.0.0
 class: psu
 behaviour: fills
 profile: networking
+superseded-by: juniper/mx240-psu-ac@2
 description: >-
   Juniper MX240 normal-capacity AC power supply. High-line (220 V) systems
   carry one or two in PEM0/PEM2; low-line (110 V) systems two or four in
@@ -36,29 +37,10 @@ provenance:
     (2054 W low-line / 1590 W high-line for the normal-capacity set); no
     per-module nameplate in the intake. L27 stands as the record'
   leds: 'guide AC PSU LED table, same three-lamp vocabulary as the DC unit'
-  inlet: >-
-    MX240 hardware guide, 'MX240 AC Power Supply Description' (printed page 39: "one AC
-    appliance inlet, one AC input switch, a fan, and LEDs") and 'AC Power Cord Specifications'
-    (printed page 45: "a single AC appliance inlet" of type "C20 (right angle)" per IEC
-    60320, mated by a C19 cord end). The part is std/c20-inlet@1, the registered iec-c20
-    inlet. ITS PLACE IS AN ESTIMATE. Figure 14 (printed page 40) is isometric line art with
-    no scale: it puts the inlet beside the input switch above the pull handle, left of
-    centre. That place is already held by the drawn input switch, the lamp row and the
-    handle, whose boxes this contract does not move, so the inlet stands on the nearest free
-    part of the drawn face, above the lamp row and right of the vent field, at (32.0, 27.0).
-    That is about 13 mm right of and 17 mm above where Figure 14 puts it, because the drawn
-    face has the lamps there. Where the cord leaves (right angle) is not drawn. A photograph
-    of the AC rear, or a front elevation, would settle the place.
-  colours: >-
-    ESTIMATED, carried from version 1.0.0 unchanged: the body, latch, switch and vent colours
-    are those of the DC unit's photograph. No photograph of the AC variant is held; Figure 14
-    is line art with no colour, and Figure 15 colours only its lamps.
 states:
 - ok
 - fault
 - absent
-parts:
-- {ref: std/c20-inlet@1, id: inlet, at: [32.0, 27.0]}
 elements:
   handle:
     at: [44.0, 63.5]
