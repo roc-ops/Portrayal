@@ -85,6 +85,19 @@ def test_tilt_frame():
     # right: root at x=25, proud edge at x=0; at px=0, d = r.x + r.w - px = 25+0-0 = 25
     assert o["facetZRight"] == pytest.approx(25 * math.tan(math.radians(45)), abs=1e-3)
 
+    # a part whose box starts 6.5 mm before the root edge: the slope carries on
+    # past the root, below the root's height, as a sunk facet's does - the
+    # height is not held at the root's
+    b = o["facetZBeforeRoot"]
+    t30, t45 = math.tan(math.radians(30)), math.tan(math.radians(45))
+    assert b["up"] == pytest.approx(-6.5 * t30, abs=1e-3)
+    assert b["down"] == pytest.approx(-6.5 * t30, abs=1e-3)
+    assert b["left"] == pytest.approx(-6.5 * t45, abs=1e-3)
+    assert b["right"] == pytest.approx(-6.5 * t45, abs=1e-3)
+    assert b["lifted"] == pytest.approx(2 - 6.5 * t30, abs=1e-3)
+    assert b["atRoot"] == 2
+    assert o["tools"]["early"]["tilt"]["z0"] == pytest.approx(2 - 6.5 * t30, abs=1e-3)
+
     # tiltOf: the nearest tilted group wins over an outer one; the group itself
     # answers for itself; a node on no facet answers null
     assert o["tiltOf"] == {"deg": 30, "facing": "up", "on": "card--housing", "hostIsOptic": True}

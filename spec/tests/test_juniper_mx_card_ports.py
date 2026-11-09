@@ -198,7 +198,7 @@ def test_the_drawing_notes_say_the_drawing_is_left():
 
 def test_the_lc2103_is_left_as_it_was():
     c = yaml.safe_load((COMP / "jnp10003-lc2103/v1/contract.yaml").read_text())
-    assert c["attrs"]["qsfp"] == 6 and c["version"] == "1.3.1"
+    assert c["attrs"]["qsfp"] == 6 and c["version"] == "1.4.0"
 
 
 def test_no_card_states_a_count_key_outside_the_libraries_port_keys():

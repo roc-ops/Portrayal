@@ -133,7 +133,7 @@ def test_every_asr_9000_card_seats_in_one_size():
     # and WHAT ITS CONTRACT SAYS IT IS, never by how close it is to the answer -
     # a filter near 395.7 would have excused exactly the 428.5 RSP this was
     # written for. The 9906/9910 rear fabric cards are a different form factor
-    # (76.2 x 492.1) and seat only in their own fabric bays, so they are out.
+    # (76.2 x 492.1 and 38.27 x 492.1) and seat only in their own fabric bays, so they are out.
     chassis = {"asr-9006", "asr-9010", "asr-9904", "asr-9906", "asr-9910",
                "asr-9912", "asr-9922"}
     cards = {"line-card", "supervisor", "fabric", "blank"}
@@ -141,7 +141,8 @@ def test_every_asr_9000_card_seats_in_one_size():
 
     def is_card(ref):
         c = libwalk.load_contract(ref, [LIB]) or {}
-        return c.get("class") in cards and "-sfc-s" not in ref and "-sfc3-s" not in ref
+        return (c.get("class") in cards and "-sfc-s" not in ref and "-sfc3-s" not in ref
+                and "-sfc3-t" not in ref)
 
     full = {ref: e for ref, e in sizes.items()
             if any(o in chassis for _, o, _, _ in e) and is_card(ref)}

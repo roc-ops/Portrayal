@@ -1727,6 +1727,56 @@
            },
            "description": "the HOLE IN THE SHEET METAL, when it differs from `size`. `size` is the space the slot RESERVES - what the occupant is placed into and checked against - and on a card cage that is the card including its ejector brackets. The hole the card's plate covers is smaller, and it is the hole you see when the bay is empty. On an ASR 9006 they are 395.70 and 352.59: painting the reserved space dark would put 21.5 mm of opening over metal at each end. Absent means the two are the same, which is the common case. Measured only - never inferred from the occupant."
           },
+          "seen-through": {
+           "type": "array",
+           "minItems": 1,
+           "description": "WHAT THE MAKER'S PICTURE SHOWS THROUGH THIS BAY'S OPENING WHEN IT IS EMPTY, and a seated part covers: a bar standing behind the frame, a spool inside the tray. Panel `decor` cannot say it, because a bay's opening is painted over the decor and the decor under the opening is hidden in every configuration. The items are drawn inside the opening, in the face's own coordinates (the same `at` as a panel decor item), clipped to the opening, over the dark of the hole and under whatever the bay holds. A configuration that seats a part in the bay, and a swap that does, hides them; emptying the bay shows them again. A 2D picture: it builds no 3D geometry of its own, because the 3D scene builds what stands behind the opening as parts. State only what a held source shows, with its `source`.",
+           "items": {
+            "type": "object",
+            "required": [
+             "at",
+             "size",
+             "fill"
+            ],
+            "additionalProperties": false,
+            "properties": {
+             "id": {
+              "type": "string",
+              "description": "name this item in the drawing"
+             },
+             "kind": {
+              "type": "string",
+              "description": "what this item IS - cable-bar, slack-spool. It reaches the drawing as data-kind"
+             },
+             "at": {
+              "$ref": "#/$defs/xy"
+             },
+             "size": {
+              "$ref": "#/$defs/xy"
+             },
+             "fill": {
+              "type": "string"
+             },
+             "rx": {
+              "type": "number"
+             },
+             "shape": {
+              "enum": [
+               "rect",
+               "slot"
+              ],
+              "default": "rect"
+             },
+             "confidence": {
+              "$ref": "#/$defs/confidence"
+             },
+             "source": {
+              "type": "string",
+              "description": "where precisely, in one phrase"
+             }
+            }
+           }
+          },
           "accepts": {
            "type": "array",
            "items": {
