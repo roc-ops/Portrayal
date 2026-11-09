@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fhd-1ufmt-n
-version: 1.2.3
+version: 1.2.4
 maturity: modelled
 manufacturer: FS.com
 model: FHD-1UFMT-N
@@ -63,7 +63,9 @@ provenance:
     confidence: drawing
     note: >-
       the two slack spools drawn behind openings 1 and 4 in the front view are inside the
-      tray, seen through an empty slot; a seated module hides them. Not drawn.
+      tray, seen through an empty slot; a seated module hides them. Drawn as the `seen-through`
+      of bays 1 and 4, read at 1200 dpi (the arch about 30 wide and 31 high, drawn as a round top on straight sides, with a 50 wide base
+      and a slot), in a grey estimated for the line drawing. Their depth in the tray is not stated.
   envelope-faces:
     confidence: drawing
     note: >-
@@ -110,6 +112,11 @@ views:
           at: [21.325, 4.475]
           size: {w: 108.97, h: 35.05}
           opening: {w: 89.74, h: 36.26}
+          seen-through:
+            - {id: spool-flange, at: [61.3, 37.5], size: [50.0, 2.6], fill: '#2a2e32', kind: slack-spool, confidence: estimated, source: 'datasheet p4 front view, the base of the spool drawn in opening 1 (colour estimated: the drawing is line art)'}
+            - {id: spool, at: [71.2, 7.2], size: [30.2, 30.2], rx: 15.1, fill: '#2a2e32', kind: slack-spool, confidence: drawing, source: 'datasheet p4 front view, the round top of the arched spool drawn in opening 1, 1200 dpi (colour estimated: the drawing is line art)'}
+            - {id: spool-body, at: [71.2, 22.3], size: [30.2, 15.9], fill: '#2a2e32', kind: slack-spool, confidence: drawing, source: 'datasheet p4 front view, the straight sides of the arched spool drawn in opening 1 (colour estimated: the drawing is line art)'}
+            - {id: spool-hole, at: [78.35, 18.1], size: [15.9, 8.2], fill: '#101214', kind: slack-spool, shape: slot, confidence: drawing, source: 'datasheet p4 front view, the slot in the spool drawn in opening 1'}
           accepts:
             - fs/fhd-1mtp6lcd-os2-a@4
             - fs/fhd-splice-12-lc@3
@@ -248,6 +255,11 @@ views:
           at: [352.365, 4.475]
           size: {w: 108.97, h: 35.05}
           opening: {w: 89.74, h: 36.26}
+          seen-through:
+            - {id: spool-flange, at: [370.7, 37.5], size: [50.0, 2.6], fill: '#2a2e32', kind: slack-spool, confidence: estimated, source: 'datasheet p4 front view, the base of the spool drawn in opening 4 (colour estimated: the drawing is line art)'}
+            - {id: spool, at: [380.6, 7.2], size: [30.2, 30.2], rx: 15.1, fill: '#2a2e32', kind: slack-spool, confidence: drawing, source: 'datasheet p4 front view, the round top of the arched spool drawn in opening 4, 1200 dpi (colour estimated: the drawing is line art)'}
+            - {id: spool-body, at: [380.6, 22.3], size: [30.2, 15.9], fill: '#2a2e32', kind: slack-spool, confidence: drawing, source: 'datasheet p4 front view, the straight sides of the arched spool drawn in opening 4 (colour estimated: the drawing is line art)'}
+            - {id: spool-hole, at: [387.75, 18.1], size: [15.9, 8.2], fill: '#101214', kind: slack-spool, shape: slot, confidence: drawing, source: 'datasheet p4 front view, the slot in the spool drawn in opening 4'}
           accepts:
             - fs/fhd-1mtp6lcd-os2-a@4
             - fs/fhd-splice-12-lc@3
