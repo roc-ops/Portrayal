@@ -1,0 +1,856 @@
+format: 1
+kind: device
+name: p32e06m
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: P32E06M
+description: >-
+  Panduit P32E06M G5 intelligent rack PDU, monitored and switched, 0U full: a 1750 mm strip for a cabinet's vertical
+  channel. It has a fixed 3 m cord ending in an IEC 60309 2P+E 6h 32 A plug, single-phase, 200-240 V. It has 32
+  outlets, 24 IEC C13 and 8 IEC C19, in four blocks of eight. Two blocks are on each of two 20 A single-pole breakers.
+  A controller with a display, indicators, five RJ45 jacks and a USB-A port sits between the two halves.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S VECTOR DRAWING. Panduit customer drawing P32E06M_DC rev 06A (12/16/2022), two sheets,
+      is a vector sheet drawn to no stated scale, with a front, rear, left, right and bottom view. Its scale was
+      taken from its own 1750.0 overall dimension (the 1555.0 between the buttons agrees), and every position was
+      read off renderings of the front view at 400 and 800 dpi, to about 1 mm across and 3 mm along the strip. The
+      library draws the PDU STANDING, cord end down, so a position along the drawing becomes 1750 minus that, and
+      a position across becomes x. No photograph and no 3D model of the part is held.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`: the strip stands beside a rack's upright on two mounting buttons on its back, 1555.0 apart and
+      40.5 from the cord end (rear view). The drawing says 'VERTICAL, 0U, FULL' and gives no count of units; `ru:
+      39` is the whole units the 1750 mm length covers (39.4) and is not stated by any document.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1750.0 long and 53.0 deep (right view, at the far end); the bottom view dimensions 52.0 and 75.0,
+      and FBSP28 gives 2.0 in (50.8) wide and 2.1 in (53.34) deep. The width is taken as 52.0 and the depth as 53.0;
+      which drawn figure is the body's width, and what the 75.0 measures, is not said (gaps: body-width). Weight
+      6.5 kg is the sheet-2 table's for the plain part number.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view. From the cord end: a plate with the earth screw, one plate with two breakers, four
+      outlet blocks of eight with the controller between the second and the third, and the far end. Outlet positions
+      are the centres of each outlet as drawn; the outlet pitch is not dimensioned.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - '(24) C13, (8) C19', numbered 1 to 32 across the four blocks as the front view prints them (the
+      numerals are read from the drawing and not every one is legible at its size); each block is a C19, three C13,
+      three C13 and a C19, the C13s staggered across the face. Each outlet is std/c13-outlet@1 or std/c19-outlet@1.
+      The way up of each outlet is read off the front view.
+  banks:
+    confidence: drawing
+    note: >-
+      drawing - the front view labels the first two blocks 'B1 [DARK GRAY]' and the last two 'B2 [LIGHT GRAY]',
+      over breakers B1 and B2. THAT B1 FEEDS THE FIRST TWO BLOCKS IS A READING OF THE LABELS: no sentence held says
+      it. The two greys are drawn as #55585c and #9a9da1 and are estimates of the words: no photograph is held.
+  colour:
+    confidence: drawing
+    note: >-
+      drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P32E06M, drawn here as the RAL's #0e0e10
+      on the body. THE PLATE, MOULDING, SCREW AND LAMP-WINDOW COLOURS ARE NOT CHECKED against any source; no photograph
+      is held.
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the controller plate is between the second and third block, 127.8 along. P32E06M is composed with
+      panduit/g5-controller@1 in a bay because the FBSP28 sheet calls the controller hot swappable. Its jacks' functions
+      are not read (see the component's provenance).
+  input:
+    confidence: drawing
+    note: >-
+      drawing - 'INPUT PLUG: IEC 60309 2P+E 6H 32A/30A(24A DERATED)', 'INPUT VOLTAGE: 200-240VAC', 'INPUT PHASE:
+      SINGLE-PHASE', 'RATED POWER: 7.4 / 5.8kVA (DUAL RATED)', 'PDU TO BE WIRED LINE TO NEUTRAL'. Sheet 2 gives
+      the plain part number a 3 m cord. The cord is one part at the cord end; its length and the plug's face are
+      not drawn.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - sheet 2 of the drawing titles the plain part MONITORED SWITCHED and FBSP28 lists it under the
+      MS series: 'aggregate power monitoring and outlet level switching', so `metering-scope: input` and `outlet-switching:
+      true` (the class `switched-metered-input`), and each outlet declares [on, off].
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view: two buttons 40.5 from the cord end and 1555.0 apart, on the strip's centre line.
+      the callout 'TOOLESS MOUNTING BUTTON LOCATIONS (12) PL' names twelve button locations on the rear, and only
+      the two dimensioned ones are drawn ('(2) PL O18.4' gives the buttons); the other ten are not dimensioned and
+      are not drawn. '(2) PL 24.0' locates two further marks beside them, which no document names (gaps: rear-marks).
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the left and right views draw rows of small marks and, near the cord end of the left view, a rectangle;
+      none is read here (gaps: side-marks).
+  ends:
+    confidence: drawing
+    note: >-
+      drawing - the cord end carries the gland and cord; the far end is a plain closed line. The cord end is drawn
+      as the gland alone.
+attrs:
+  physical: {length-mm: 1750, weight-kg: 6.5}
+  power:
+    input-ac: >-
+      single-phase, 200-240 V, 32 A / 30 A (24 A derated), 7.4 / 5.8 kVA dual rated (drawing note 1)
+    input-plug: other
+    input-cord: fixed
+    input-phase: single
+    input-current-a: 24
+    plug-rating-a: 32
+    breakers: two 20 A single-pole electromechanical switches and breakers
+  management: {metering-scope: input, outlet-switching: true, network-module: G5 controller}
+chassis: {width: 52, height: 1750, depth: 53, ru: 39, mount: rack-side, color: '#0e0e10', airflow: passive, weight-kg: 6.5}
+gaps:
+- what: body-width
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the bottom view dimensions 52.0 and 75.0, the right view 53.0, and the sheet gives 2.0 in (50.8) wide and 2.1
+    in (53.34) deep; no document says which drawn figure is the body's width or what the 75.0 measures. The strip
+    is drawn 52 wide and 53 deep.
+  wanted: a dimensioned end view of the strip, or a measured unit.
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no photograph of any face is held, so no colour, finish, printing or plate shape is checked against a photograph.
+  wanted: a photograph of each face of the P32E06M.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    no dimension of an outlet, a lamp window or a plate on the front view is stated; the positions are read off
+    the drawing at its own 1750.0 scale.
+  wanted: a dimensioned front view.
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the rear view's callout 'TOOLESS MOUNTING BUTTON LOCATIONS (12) PL' names twelve button locations; only the
+    two dimensioned ones ('(2) PL O18.4', 40.5 from the cord end and 1555.0 apart) are drawn, and the other ten
+    are not dimensioned and not drawn. The '(2) PL 24.0' and '(4) PL 32.0' dimensions locate marks beside the buttons,
+    and no document says what those are.
+  wanted: the maker's installation drawing.
+- what: side-marks
+  scope: [left, right]
+  reason: vendor-silent
+  note: >-
+    the left and right views draw rows of small marks and a rectangle near the cord end; no document names them
+    and the model does not read their positions.
+  wanted: a photograph of each long side.
+- what: wordmark-and-legends
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the wordmark, the earth symbol and the legends beside the lamp windows, other than the outlet numbers and the
+    breaker legends, are not drawn.
+  wanted: a photograph of the cord end and the controller.
+- what: breaker-lines
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the plate prints L-N for each breaker; which line each is across is not stated, so the breakers state no `lines`.
+  wanted: the maker's wiring diagram.
+- what: part-number-variants
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    sheet 2 of the drawing lists seventeen more part numbers of this strip (the colours RAL 3020, 1023 and 5005,
+    1 m cords at 5.9 kg, and a bottom-end-fed cord), and note 5 says the views show the top-end-fed cord; the device
+    states the plain P32E06M's 3 m cord and 6.5 kg only, and no variant is a configuration.
+  wanted: an order for each variant that has a held photograph or a dimensioned drawing.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      the PDU's 32 outlets, numbered 1 to 32 across four blocks of eight, as the front view prints them - 24 IEC
+      C13 and 8 IEC C19, each switchable
+  breakers:
+    term: Breaker
+    role: service
+    index-origin: 1
+    description: >-
+      two 20 A single-pole breakers, B1 and B2, on one plate; B1 feeds the first two blocks and B2 the last two
+  controller: {term: Module, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1750}
+    panel:
+      decor:
+      - id: moulding-1
+        at: [1.0, 1102.5]
+        size: [50.0, 256.4]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-1
+        at: [37.95, 1319.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-2
+        at: [9.35, 1263.4]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-3
+        at: [37.95, 1285.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-4
+        at: [37.95, 1237.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-5
+        at: [9.35, 1209.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-6
+        at: [9.35, 1160.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-7
+        at: [37.95, 1183.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-8
+        at: [9.35, 1125.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-2
+        at: [1.0, 812.5]
+        size: [50.0, 256.4]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-9
+        at: [37.95, 1029.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-10
+        at: [9.35, 973.4]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-11
+        at: [37.95, 995.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-12
+        at: [37.95, 947.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-13
+        at: [9.35, 919.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-14
+        at: [9.35, 870.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-15
+        at: [37.95, 893.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-16
+        at: [9.35, 835.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-3
+        at: [1.0, 332.7]
+        size: [50.0, 256.4]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-17
+        at: [37.95, 549.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-18
+        at: [9.35, 493.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-19
+        at: [37.95, 515.5]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-20
+        at: [37.95, 467.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-21
+        at: [9.35, 439.5]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-22
+        at: [9.35, 390.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-23
+        at: [37.95, 414.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-24
+        at: [9.35, 355.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-4
+        at: [1.0, 42.9]
+        size: [50.0, 256.4]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-25
+        at: [37.95, 260.1]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-26
+        at: [9.35, 203.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-27
+        at: [37.95, 225.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-28
+        at: [37.95, 177.5]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-29
+        at: [9.35, 149.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-30
+        at: [9.35, 101.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-31
+        at: [37.95, 124.3]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-32
+        at: [9.35, 65.5]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: controller-bracket-1
+        at: [22.7, 765.7]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+      - id: controller-bracket-2
+        at: [22.7, 628.7]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+    silkscreen:
+    - at: [40.9, 1343.5]
+      text: '1'
+      rotate: -90
+      for: outlet-1
+    - at: [12.3, 1281.0]
+      text: '2'
+      rotate: -90
+      for: outlet-2
+    - at: [40.9, 1284.1]
+      text: '3'
+      rotate: -90
+      for: outlet-3
+    - at: [12.3, 1233.0]
+      text: '4'
+      rotate: -90
+      for: outlet-4
+    - at: [40.9, 1228.3]
+      text: '5'
+      rotate: -90
+      for: outlet-5
+    - at: [12.3, 1178.4]
+      text: '6'
+      rotate: -90
+      for: outlet-6
+    - at: [40.9, 1180.3]
+      text: '7'
+      rotate: -90
+      for: outlet-7
+    - at: [12.3, 1118.6]
+      text: '8'
+      rotate: -90
+      for: outlet-8
+    - at: [40.9, 1053.5]
+      text: '9'
+      rotate: -90
+      for: outlet-9
+    - at: [12.3, 991.0]
+      text: '10'
+      rotate: -90
+      for: outlet-10
+    - at: [40.9, 994.1]
+      text: '11'
+      rotate: -90
+      for: outlet-11
+    - at: [12.3, 943.0]
+      text: '12'
+      rotate: -90
+      for: outlet-12
+    - at: [40.9, 938.3]
+      text: '13'
+      rotate: -90
+      for: outlet-13
+    - at: [12.3, 888.4]
+      text: '14'
+      rotate: -90
+      for: outlet-14
+    - at: [40.9, 890.3]
+      text: '15'
+      rotate: -90
+      for: outlet-15
+    - at: [12.3, 828.6]
+      text: '16'
+      rotate: -90
+      for: outlet-16
+    - at: [40.9, 573.7]
+      text: '17'
+      rotate: -90
+      for: outlet-17
+    - at: [12.3, 511.2]
+      text: '18'
+      rotate: -90
+      for: outlet-18
+    - at: [40.9, 514.3]
+      text: '19'
+      rotate: -90
+      for: outlet-19
+    - at: [12.3, 463.2]
+      text: '20'
+      rotate: -90
+      for: outlet-20
+    - at: [40.9, 458.5]
+      text: '21'
+      rotate: -90
+      for: outlet-21
+    - at: [12.3, 408.6]
+      text: '22'
+      rotate: -90
+      for: outlet-22
+    - at: [40.9, 410.5]
+      text: '23'
+      rotate: -90
+      for: outlet-23
+    - at: [12.3, 348.8]
+      text: '24'
+      rotate: -90
+      for: outlet-24
+    - at: [40.9, 283.9]
+      text: '25'
+      rotate: -90
+      for: outlet-25
+    - at: [12.3, 221.4]
+      text: '26'
+      rotate: -90
+      for: outlet-26
+    - at: [40.9, 224.5]
+      text: '27'
+      rotate: -90
+      for: outlet-27
+    - at: [12.3, 173.4]
+      text: '28'
+      rotate: -90
+      for: outlet-28
+    - at: [40.9, 168.7]
+      text: '29'
+      rotate: -90
+      for: outlet-29
+    - at: [12.3, 118.8]
+      text: '30'
+      rotate: -90
+      for: outlet-30
+    - at: [40.9, 120.7]
+      text: '31'
+      rotate: -90
+      for: outlet-31
+    - at: [12.3, 59.0]
+      text: '32'
+      rotate: -90
+      for: outlet-32
+    components:
+      bays:
+      - id: controller
+        at: [2.85, 636.6]
+        size: {w: 47.0, h: 127.8}
+        accepts: [panduit/g5-controller@1]
+        default: panduit/g5-controller@1
+        group: controller
+        rel-pos: 1
+      placements:
+      - id: outlet-1
+        ref: std/c19-outlet@1
+        at: [-0.7, 1314.85]
+        rotate: 270
+        group: outlets
+        rel-pos: 1
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at: [3.1, 1284.0]
+        rotate: 180
+        group: outlets
+        rel-pos: 2
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [19.2, 1258.6]
+        group: outlets
+        rel-pos: 3
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-4
+        ref: std/c13-outlet@1
+        at: [3.1, 1236.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 4
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-5
+        ref: std/c13-outlet@1
+        at: [19.2, 1203.3]
+        group: outlets
+        rel-pos: 5
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-6
+        ref: std/c13-outlet@1
+        at: [3.1, 1179.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 6
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-7
+        ref: std/c13-outlet@1
+        at: [19.2, 1154.6]
+        group: outlets
+        rel-pos: 7
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-8
+        ref: std/c19-outlet@1
+        at: [17.8, 1119.05]
+        rotate: 90
+        group: outlets
+        rel-pos: 8
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-9
+        ref: std/c19-outlet@1
+        at: [-0.7, 1024.85]
+        rotate: 270
+        group: outlets
+        rel-pos: 9
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-10
+        ref: std/c13-outlet@1
+        at: [3.1, 994.0]
+        rotate: 180
+        group: outlets
+        rel-pos: 10
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-11
+        ref: std/c13-outlet@1
+        at: [19.2, 968.6]
+        group: outlets
+        rel-pos: 11
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-12
+        ref: std/c13-outlet@1
+        at: [3.1, 946.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 12
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-13
+        ref: std/c13-outlet@1
+        at: [19.2, 913.3]
+        group: outlets
+        rel-pos: 13
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [3.1, 889.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 14
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at: [19.2, 864.6]
+        group: outlets
+        rel-pos: 15
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-16
+        ref: std/c19-outlet@1
+        at: [17.8, 829.05]
+        rotate: 90
+        group: outlets
+        rel-pos: 16
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-17
+        ref: std/c19-outlet@1
+        at: [-0.7, 545.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 17
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-18
+        ref: std/c13-outlet@1
+        at: [3.1, 514.2]
+        rotate: 180
+        group: outlets
+        rel-pos: 18
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-19
+        ref: std/c13-outlet@1
+        at: [19.2, 488.8]
+        group: outlets
+        rel-pos: 19
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at: [3.1, 466.5]
+        rotate: 180
+        group: outlets
+        rel-pos: 20
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at: [19.2, 433.5]
+        group: outlets
+        rel-pos: 21
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-22
+        ref: std/c13-outlet@1
+        at: [3.1, 409.5]
+        rotate: 180
+        group: outlets
+        rel-pos: 22
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-23
+        ref: std/c13-outlet@1
+        at: [19.2, 384.8]
+        group: outlets
+        rel-pos: 23
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-24
+        ref: std/c19-outlet@1
+        at: [17.8, 349.25]
+        rotate: 90
+        group: outlets
+        rel-pos: 24
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-25
+        ref: std/c19-outlet@1
+        at: [-0.7, 255.25]
+        rotate: 270
+        group: outlets
+        rel-pos: 25
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at: [3.1, 224.4]
+        rotate: 180
+        group: outlets
+        rel-pos: 26
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at: [19.2, 199.0]
+        group: outlets
+        rel-pos: 27
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-28
+        ref: std/c13-outlet@1
+        at: [3.1, 176.7]
+        rotate: 180
+        group: outlets
+        rel-pos: 28
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-29
+        ref: std/c13-outlet@1
+        at: [19.2, 143.7]
+        group: outlets
+        rel-pos: 29
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-30
+        ref: std/c13-outlet@1
+        at: [3.1, 119.7]
+        rotate: 180
+        group: outlets
+        rel-pos: 30
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-31
+        ref: std/c13-outlet@1
+        at: [19.2, 95.0]
+        group: outlets
+        rel-pos: 31
+        fed-by: input
+        states: ['on', 'off']
+      - id: outlet-32
+        ref: std/c19-outlet@1
+        at: [17.8, 59.45]
+        rotate: 90
+        group: outlets
+        rel-pos: 32
+        fed-by: input
+        states: ['on', 'off']
+      - id: breakers
+        ref: panduit/g5-breaker-pair-20a@1
+        at: [3.0, 1577.9]
+        group: breakers
+        rel-pos: 1
+        description: Breakers B1 and B2, two 20 A single-pole switches and breakers on one plate
+      - id: ground
+        ref: common/ground-screw@1
+        at: [35.6, 1729.7]
+        group: grounding
+        rel-pos: 1
+    regions:
+    - id: block-1
+      label: Outlets 1 to 8 on breaker B1
+      members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8]
+    - id: block-2
+      label: Outlets 9 to 16 on breaker B1
+      members: [outlet-9, outlet-10, outlet-11, outlet-12, outlet-13, outlet-14, outlet-15, outlet-16]
+    - id: block-3
+      label: Outlets 17 to 24 on breaker B2
+      members: [outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24]
+    - id: block-4
+      label: Outlets 25 to 32 on breaker B2
+      members: [outlet-25, outlet-26, outlet-27, outlet-28, outlet-29, outlet-30, outlet-31, outlet-32]
+  rear:
+    size: {w: 52, h: 1750}
+    components:
+      placements:
+      - id: button-1
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 1700.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 145.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 53}
+    empty: >-
+      the far end of the strip: neither drawing draws it as an end view, and each shows the strip's end as a plain
+      closed line; searched the front, rear, left, right and bottom views and the sheet's notes.
+  bottom:
+    size: {w: 52, h: 53}
+    components:
+      placements:
+      - id: input
+        ref: panduit/g5-cord-60309-2pe-6h@1
+        at: [10.0, 10.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 2P+E 6h plug rated 32 A
+  left:
+    size: {w: 53, h: 1750}
+    empty: >-
+      the long side of the strip: P32E06M_DC draws it as a left and a right view with a row of small marks along
+      it and a rectangle near the cord end whose purpose no document states; searched every view of P32E06M_DC,
+      the FBSP28 sheet and IM054.
+  right:
+    size: {w: 53, h: 1750}
+    empty: >-
+      the long side of the strip: P32E06M_DC draws it as a left and a right view with a row of small marks along
+      it and a rectangle near the cord end whose purpose no document states; searched every view of P32E06M_DC,
+      the FBSP28 sheet and IM054.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the controller in its place.
+    bays: {controller: panduit/g5-controller@1}
+    part-numbers:
+      P32E06M: {}
+datasheet:
+  title: >-
+    Panduit G5 Intelligent Power Distribution Units (iPDUs) specification sheet FBSP28-WW-ENG 4/2024
+  url: https://www.panduit.com/PanProductResource/en/P32E06M/SpecificationSheets.pdf
+  sha256: fd205905bcd4e613a8ecf4ce7fd0f67c38341401d2213524b92606ed06926201
+references:
+- title: >-
+    Panduit customer drawing P32E06M_DC, intelligent series PDU P32E06M-XXYZ, rev 06A 12/16/2022
+  url: https://www.panduit.com/PanProductResource/en/P32E06M/PartDrawings.pdf
+  sha256: 071694e32f68018ec57338b0e430918dbc585c43934fbbf04780073d25900d6a
+- {title: Panduit G5 PDU Installation Manual IM054 REV 10, url: 'https://www.panduit.com/PanProductResource/en/P32E06M/InstallationDocuments.pdf',
+  sha256: c251a281c6f9fa15661bd0687a726011ae69c753e82849608e5e19bc64df592f}
