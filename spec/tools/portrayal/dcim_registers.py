@@ -42,6 +42,8 @@ POWER_LABEL = {
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
+    "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
+    "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
 }
 
 PART_OUTLET = {
