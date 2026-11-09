@@ -1,0 +1,1064 @@
+format: 1
+kind: device
+name: pro3x-basic-3a06
+version: 0.1.0
+maturity: modelled
+manufacturer: Server Technology
+model: PRO3X Basic 3A06
+description: 'Server Technology PRO3X Basic 3A06, 0U: a 1778.0 mm strip for a rack''s vertical channel. It has 36 outlets,
+  18 HDOT C13 and 18 HDOT Cx, in six groups of six, each behind its own two-pole breaker. It has no controller, and it meters
+  and switches nothing. The drawing is the one for the 208 V delta 60 A SKU.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S VECTOR DRAWING. Server Technology outline drawing 412-1500-060
+      rev 1A (sheet 1, titled PRO3X V36, 208V 3PH DELTA 60A) draws the strip lying down, cord end left, with a plan view,
+      a rear view above it, a side view, two end views and a detail A of the outlets. Its views are paths, so positions were
+      read off the PDF''s geometry at 0.51381 pt/mm, the scale that puts the 1778.0 overall on the strip. The library draws
+      the PDU STANDING, cord end down, so a position along the drawing becomes 1778.0 minus that, and a position across becomes
+      x. The maker''s Visio stencil for the 3A06 was not opened.'}
+  mount: {confidence: drawing, note: '`rack-side`: the strip stands beside a rack''s upright on mounting buttons at the back.
+      The outline dimensions twelve positions along the back and marks two of them as buttons 933.5 apart; those two carry
+      a button here and the other ten are holes (gaps: button-positions).'}
+  chassis: {confidence: drawing, note: drawing - 1778.0 long and 55.9 wide. The side view's body is 63.5 deep and the outlets
+      reach 81.2; the SKU page prints 82 maximum and 64 nominal depth.}
+  front: {confidence: drawing, note: 'drawing - the plan view. From the cord end: the front-entry plate, a caution label,
+      a rating label, then three groups, each a breaker module and six outlets (three HDOT Cx then three HDOT C13, detail
+      A), a blank panel where the 4G16A''s controller would be, and three more groups. Group and module positions are dimensioned
+      by paths and read at about 0.3 mm. THE OUTLETS'' OWN CENTRES ARE THE RAMLOCK TAB CENTRES, 26.65 apart for Cx and 21.25
+      for C13; the C13 triplet is spaced at the standard recess 22.0 about its drawn middle, so a C13 sits up to 0.8 mm off,
+      and its housing runs 6 past the group''s drawn frame. Across, the outlets sit where the PRO4X 4G16A''s do (a stand-in,
+      not measured here). The front-entry plate and the two labels are read off the raster to about 2 mm.'}
+  numbering: {confidence: drawing, note: 'drawing - the numbers printed under the outlets were read from a render: the group
+      of BR2 prints 12 11 10 9 8 7 from the cord side, and the group beyond BR1 ends at 1.'}
+  breakers: {confidence: drawing, note: 'drawing - each module prints its pair of lines and BR number: BR6 L3-L1, BR5 L2-L3,
+      BR4 L1-L2 from the cord end, then BR3 L3-L1, BR2 L2-L3, BR1 L1-L2, an arrow pointing at the group it feeds. The wiring
+      diagram 495-1500-060 draws six breakers (CB) each feeding six adjacent outlets. The SKU page says 2-pole breakers, 10
+      kAIC. No current rating is held.'}
+  capability: {confidence: datasheet, note: 'datasheet - the SKU page prints Branch Monitoring, Input Monitoring and Outlet
+      Monitoring None, so `metering-scope: none` and `outlet-switching: false`; no outlet declares a state.'}
+  outlets: {confidence: datasheet, note: 'datasheet - the SKU page says 18 IEC C13 and 18 Cx outlets, HDOT Cx a hybrid C13/C19
+      that takes a C14 or a C20 plug. HDOT C13 is drawn as std/c13-outlet@1; the HDOT Cx is servertech/hdot-cx-outlet@1, an
+      estimate of the recess (no dimensioned outlet drawing is held).'}
+  rear: {confidence: drawing, note: 'drawing - the rear view dimensions 68.4 and 20.0 from each end, 98.4 from each end to
+      the outer pair 1581.2 apart, and 31.3 either side of marks 422.3 from the 98.4 marks, 933.5 apart. The marks beside
+      the 88.4 and 68.4 ones are read as holes: twelve positions in all, two of them buttons.'}
+  sides: {confidence: drawing, note: drawing - the side view shows a perforated band along nearly the whole length; the other
+      side is drawn as its mirror (estimated); its depth is read off the raster.}
+  ends: {confidence: estimated, note: estimated - the end views show a plate with the cord entry; they are drawn as caps.}
+  input: {confidence: datasheet, note: 'datasheet - the SKU page lists C3B36RL-DQJE0AT2 as 208V Delta 60A IEC 60309 3P+G 9Hr,
+      17.3 kW, 60 A (48 A rated), three-phase delta, cord Bottom/End; the drawing title matches that SKU, and the page''s
+      other SKUs print other plugs. The cord''s length and gauge and the plug''s face are in no held document (gaps: cord-and-plug).'}
+attrs:
+  physical: {length-mm: 1778.0, construction: metal strip}
+  power: {input-cord: fixed, input-plug: other, input-phase: three, input-wiring: delta, input-voltage-v: 208, input-current-a: 60,
+    input-ac: 'three-phase delta, L1 L2 L3 PE. The SKU page for C3B36RL-DQJE0AT2 prints 208 V, 60 A (48 A rated), 17.3 kW
+      and an IEC 60309 3P+G 9h plug.', breakers: 'six two-pole branch breakers, 10 kAIC (SKU page)'}
+  management: {metering-scope: none, outlet-switching: false}
+chassis: {width: 55.9, height: 1778.0, depth: 63.5, ru: 40, mount: rack-side, color: '#2b2d30', airflow: passive}
+gaps:
+- what: cord-and-plug
+  scope: [bottom]
+  reason: vendor-silent
+  note: the SKU page names the plug and the outline marks the entry locations, and no held document gives the cord's length
+    or gauge or draws the plug's face. Only an entry frame is drawn, at the size of the PRO4X 4G16A's, borrowed.
+  wanted: the SKU's own data sheet or a photograph of the cord and its plug.
+- what: button-positions
+  scope: [rear]
+  reason: vendor-silent
+  note: the rear view marks twelve positions and no document says which carry buttons on this SKU; the pair 933.5 apart is
+    drawn with buttons.
+  wanted: the PRO3X installation guide, or a photograph of the back.
+- what: outlet-size
+  scope: [front]
+  reason: needs-drawing
+  note: no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held; the Cx recess is estimated and the C13 is the standard's,
+    so the retention latch above each outlet is not drawn.
+  wanted: a dimensioned outlet drawing from Server Technology.
+- what: breaker-handle
+  scope: [front]
+  reason: vendor-silent
+  note: the module draws an OFF and ON handle window; only the window is drawn, and its legend and the arrow are not reproduced.
+  wanted: a photograph of a breaker module.
+- what: body-colour
+  scope: [front]
+  reason: vendor-silent
+  note: no document states a colour and no photograph of this SKU is held, so a dark neutral is used.
+  wanted: a photograph of this SKU.
+- what: end-plates
+  scope: [front, top, bottom]
+  reason: needs-photo
+  note: the end views are read at low resolution, so the end faces are caps and the front-entry plate is a plate.
+  wanted: a close photograph of each end.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 36 outlets, numbered 1 to 36 as printed from
+      the far end - 18 HDOT C13 and 18 HDOT Cx in six groups of six'}
+  outlet-numerals: {term: Label, role: furniture, index-origin: 1}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'six two-pole branch breakers, each feeding the six
+      outlets of one group'}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 55.9, h: 1778.0}
+    panel:
+      decor:
+      - id: end-cap-top
+        at: [0, 0]
+        size: [55.9, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at: [0, 1776.0]
+        size: [55.9, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: front-entry-plate
+        at: [6.9, 1725.0]
+        size: [39.1, 49.1]
+        rx: 1.5
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: caution-label
+        at: [3.4, 1693.0]
+        size: [27.0, 24.7]
+        rx: 1.0
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: rating-label
+        at: [17.2, 1641.7]
+        size: [20.5, 39.3]
+        rx: 1.0
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: breaker-plate-6
+        at: [1.7, 1544.5]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-6
+        at: [12.4, 1547.0]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-6-1
+        at: [3.9, 1584.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-2
+        at: [3.9, 1554.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-3
+        at: [38.5, 1593.3]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-4
+        at: [38.5, 1551.2]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-6
+        at: [14.9, 1381.2]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: breaker-plate-5
+        at: [1.7, 1321.2]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-5
+        at: [12.4, 1323.7]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-5-1
+        at: [3.9, 1361.4]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-5-2
+        at: [3.9, 1331.4]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-5-3
+        at: [38.5, 1370.0]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-5-4
+        at: [38.5, 1327.9]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-5
+        at: [14.9, 1157.9]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: breaker-plate-4
+        at: [1.7, 1097.8]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-4
+        at: [12.4, 1100.3]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-4-1
+        at: [3.9, 1138.0]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-4-2
+        at: [3.9, 1108.0]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-4-3
+        at: [38.5, 1146.6]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-4-4
+        at: [38.5, 1104.5]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-4
+        at: [14.9, 934.8]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: breaker-plate-3
+        at: [1.7, 612.5]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-3
+        at: [12.4, 615.0]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-3-1
+        at: [3.9, 652.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-2
+        at: [3.9, 622.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-3
+        at: [38.5, 661.3]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-4
+        at: [38.5, 619.2]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-3
+        at: [14.9, 449.3]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: breaker-plate-2
+        at: [1.7, 389.3]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-2
+        at: [12.4, 391.8]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-2-1
+        at: [3.9, 429.5]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-2-2
+        at: [3.9, 399.5]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-2-3
+        at: [38.5, 438.1]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-2-4
+        at: [38.5, 396.0]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-2
+        at: [14.9, 226.1]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: breaker-plate-1
+        at: [1.7, 165.9]
+        size: [53.0, 58.2]
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: breaker-label-1
+        at: [12.4, 168.4]
+        size: [18.7, 53.2]
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: screw-1-1
+        at: [3.9, 206.1]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-1-2
+        at: [3.9, 176.1]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-1-3
+        at: [38.5, 214.7]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-1-4
+        at: [38.5, 172.6]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-1
+        at: [14.9, 2.9]
+        size: [35.2, 150.6]
+        rx: 3
+        fill: '#1e1f21'
+        kind: outlet-housing
+    components:
+      placements:
+      - id: outlet-1
+        ref: std/c13-outlet@1
+        at: [17.2, 2.95]
+        group: outlets
+        rel-pos: 1
+        through: breaker-1
+        fed-by: input
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at: [17.2, 24.95]
+        group: outlets
+        rel-pos: 2
+        through: breaker-1
+        fed-by: input
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [17.2, 46.95]
+        group: outlets
+        rel-pos: 3
+        through: breaker-1
+        fed-by: input
+      - id: outlet-4
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 69.1]
+        group: outlets
+        rel-pos: 4
+        through: breaker-1
+        fed-by: input
+      - id: outlet-5
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 95.8]
+        group: outlets
+        rel-pos: 5
+        through: breaker-1
+        fed-by: input
+      - id: outlet-6
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 122.4]
+        group: outlets
+        rel-pos: 6
+        through: breaker-1
+        fed-by: input
+      - id: outlet-7
+        ref: std/c13-outlet@1
+        at: [17.2, 226.15]
+        group: outlets
+        rel-pos: 7
+        through: breaker-2
+        fed-by: input
+      - id: outlet-8
+        ref: std/c13-outlet@1
+        at: [17.2, 248.15]
+        group: outlets
+        rel-pos: 8
+        through: breaker-2
+        fed-by: input
+      - id: outlet-9
+        ref: std/c13-outlet@1
+        at: [17.2, 270.15]
+        group: outlets
+        rel-pos: 9
+        through: breaker-2
+        fed-by: input
+      - id: outlet-10
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 292.3]
+        group: outlets
+        rel-pos: 10
+        through: breaker-2
+        fed-by: input
+      - id: outlet-11
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 319.0]
+        group: outlets
+        rel-pos: 11
+        through: breaker-2
+        fed-by: input
+      - id: outlet-12
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 345.6]
+        group: outlets
+        rel-pos: 12
+        through: breaker-2
+        fed-by: input
+      - id: outlet-13
+        ref: std/c13-outlet@1
+        at: [17.2, 449.35]
+        group: outlets
+        rel-pos: 13
+        through: breaker-3
+        fed-by: input
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [17.2, 471.35]
+        group: outlets
+        rel-pos: 14
+        through: breaker-3
+        fed-by: input
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at: [17.2, 493.35]
+        group: outlets
+        rel-pos: 15
+        through: breaker-3
+        fed-by: input
+      - id: outlet-16
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 515.5]
+        group: outlets
+        rel-pos: 16
+        through: breaker-3
+        fed-by: input
+      - id: outlet-17
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 542.2]
+        group: outlets
+        rel-pos: 17
+        through: breaker-3
+        fed-by: input
+      - id: outlet-18
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 568.8]
+        group: outlets
+        rel-pos: 18
+        through: breaker-3
+        fed-by: input
+      - id: outlet-19
+        ref: std/c13-outlet@1
+        at: [17.2, 934.85]
+        group: outlets
+        rel-pos: 19
+        through: breaker-4
+        fed-by: input
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at: [17.2, 956.85]
+        group: outlets
+        rel-pos: 20
+        through: breaker-4
+        fed-by: input
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at: [17.2, 978.85]
+        group: outlets
+        rel-pos: 21
+        through: breaker-4
+        fed-by: input
+      - id: outlet-22
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1001.0]
+        group: outlets
+        rel-pos: 22
+        through: breaker-4
+        fed-by: input
+      - id: outlet-23
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1027.7]
+        group: outlets
+        rel-pos: 23
+        through: breaker-4
+        fed-by: input
+      - id: outlet-24
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1054.3]
+        group: outlets
+        rel-pos: 24
+        through: breaker-4
+        fed-by: input
+      - id: outlet-25
+        ref: std/c13-outlet@1
+        at: [17.2, 1157.95]
+        group: outlets
+        rel-pos: 25
+        through: breaker-5
+        fed-by: input
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at: [17.2, 1179.95]
+        group: outlets
+        rel-pos: 26
+        through: breaker-5
+        fed-by: input
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at: [17.2, 1201.95]
+        group: outlets
+        rel-pos: 27
+        through: breaker-5
+        fed-by: input
+      - id: outlet-28
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1224.1]
+        group: outlets
+        rel-pos: 28
+        through: breaker-5
+        fed-by: input
+      - id: outlet-29
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1250.8]
+        group: outlets
+        rel-pos: 29
+        through: breaker-5
+        fed-by: input
+      - id: outlet-30
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1277.4]
+        group: outlets
+        rel-pos: 30
+        through: breaker-5
+        fed-by: input
+      - id: outlet-31
+        ref: std/c13-outlet@1
+        at: [17.2, 1381.25]
+        group: outlets
+        rel-pos: 31
+        through: breaker-6
+        fed-by: input
+      - id: outlet-32
+        ref: std/c13-outlet@1
+        at: [17.2, 1403.25]
+        group: outlets
+        rel-pos: 32
+        through: breaker-6
+        fed-by: input
+      - id: outlet-33
+        ref: std/c13-outlet@1
+        at: [17.2, 1425.25]
+        group: outlets
+        rel-pos: 33
+        through: breaker-6
+        fed-by: input
+      - id: outlet-34
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1447.4]
+        group: outlets
+        rel-pos: 34
+        through: breaker-6
+        fed-by: input
+      - id: outlet-35
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1474.1]
+        group: outlets
+        rel-pos: 35
+        through: breaker-6
+        fed-by: input
+      - id: outlet-36
+        ref: servertech/hdot-cx-outlet@1
+        at: [17.35, 1500.7]
+        group: outlets
+        rel-pos: 36
+        through: breaker-6
+        fed-by: input
+      - id: numeral-1
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 16.95]
+        group: outlet-numerals
+        rel-pos: 1
+        attrs: {label: '1'}
+      - id: numeral-2
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 38.95]
+        group: outlet-numerals
+        rel-pos: 2
+        attrs: {label: '2'}
+      - id: numeral-3
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 60.95]
+        group: outlet-numerals
+        rel-pos: 3
+        attrs: {label: '3'}
+      - id: numeral-4
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 85.1]
+        group: outlet-numerals
+        rel-pos: 4
+        attrs: {label: '4'}
+      - id: numeral-5
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 111.8]
+        group: outlet-numerals
+        rel-pos: 5
+        attrs: {label: '5'}
+      - id: numeral-6
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 138.4]
+        group: outlet-numerals
+        rel-pos: 6
+        attrs: {label: '6'}
+      - id: numeral-7
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 240.15]
+        group: outlet-numerals
+        rel-pos: 7
+        attrs: {label: '7'}
+      - id: numeral-8
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 262.15]
+        group: outlet-numerals
+        rel-pos: 8
+        attrs: {label: '8'}
+      - id: numeral-9
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 284.15]
+        group: outlet-numerals
+        rel-pos: 9
+        attrs: {label: '9'}
+      - id: numeral-10
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 308.3]
+        group: outlet-numerals
+        rel-pos: 10
+        attrs: {label: '10'}
+      - id: numeral-11
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 335.0]
+        group: outlet-numerals
+        rel-pos: 11
+        attrs: {label: '11'}
+      - id: numeral-12
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 361.6]
+        group: outlet-numerals
+        rel-pos: 12
+        attrs: {label: '12'}
+      - id: numeral-13
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 463.35]
+        group: outlet-numerals
+        rel-pos: 13
+        attrs: {label: '13'}
+      - id: numeral-14
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 485.35]
+        group: outlet-numerals
+        rel-pos: 14
+        attrs: {label: '14'}
+      - id: numeral-15
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 507.35]
+        group: outlet-numerals
+        rel-pos: 15
+        attrs: {label: '15'}
+      - id: numeral-16
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 531.5]
+        group: outlet-numerals
+        rel-pos: 16
+        attrs: {label: '16'}
+      - id: numeral-17
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 558.2]
+        group: outlet-numerals
+        rel-pos: 17
+        attrs: {label: '17'}
+      - id: numeral-18
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 584.8]
+        group: outlet-numerals
+        rel-pos: 18
+        attrs: {label: '18'}
+      - id: numeral-19
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 948.85]
+        group: outlet-numerals
+        rel-pos: 19
+        attrs: {label: '19'}
+      - id: numeral-20
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 970.85]
+        group: outlet-numerals
+        rel-pos: 20
+        attrs: {label: '20'}
+      - id: numeral-21
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 992.85]
+        group: outlet-numerals
+        rel-pos: 21
+        attrs: {label: '21'}
+      - id: numeral-22
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1017.0]
+        group: outlet-numerals
+        rel-pos: 22
+        attrs: {label: '22'}
+      - id: numeral-23
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1043.7]
+        group: outlet-numerals
+        rel-pos: 23
+        attrs: {label: '23'}
+      - id: numeral-24
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1070.3]
+        group: outlet-numerals
+        rel-pos: 24
+        attrs: {label: '24'}
+      - id: numeral-25
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1171.95]
+        group: outlet-numerals
+        rel-pos: 25
+        attrs: {label: '25'}
+      - id: numeral-26
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1193.95]
+        group: outlet-numerals
+        rel-pos: 26
+        attrs: {label: '26'}
+      - id: numeral-27
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1215.95]
+        group: outlet-numerals
+        rel-pos: 27
+        attrs: {label: '27'}
+      - id: numeral-28
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1240.1]
+        group: outlet-numerals
+        rel-pos: 28
+        attrs: {label: '28'}
+      - id: numeral-29
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1266.8]
+        group: outlet-numerals
+        rel-pos: 29
+        attrs: {label: '29'}
+      - id: numeral-30
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1293.4]
+        group: outlet-numerals
+        rel-pos: 30
+        attrs: {label: '30'}
+      - id: numeral-31
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1395.25]
+        group: outlet-numerals
+        rel-pos: 31
+        attrs: {label: '31'}
+      - id: numeral-32
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1417.25]
+        group: outlet-numerals
+        rel-pos: 32
+        attrs: {label: '32'}
+      - id: numeral-33
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1439.25]
+        group: outlet-numerals
+        rel-pos: 33
+        attrs: {label: '33'}
+      - id: numeral-34
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1463.4]
+        group: outlet-numerals
+        rel-pos: 34
+        attrs: {label: '34'}
+      - id: numeral-35
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1490.1]
+        group: outlet-numerals
+        rel-pos: 35
+        attrs: {label: '35'}
+      - id: numeral-36
+        ref: servertech/outlet-numeral@1
+        at: [51.4, 1516.7]
+        group: outlet-numerals
+        rel-pos: 36
+        attrs: {label: '36'}
+      - id: breaker-1
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 183.8]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: Breaker 1 of 6, a two-pole branch breaker across L1 and L2, printed BR1
+      - id: breaker-2
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 407.2]
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        description: Breaker 2 of 6, a two-pole branch breaker across L2 and L3, printed BR2
+      - id: breaker-3
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 630.4]
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        description: Breaker 3 of 6, a two-pole branch breaker across L3 and L1, printed BR3
+      - id: breaker-4
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 1115.7]
+        group: breakers
+        rel-pos: 4
+        lines: [L1, L2]
+        description: Breaker 4 of 6, a two-pole branch breaker across L1 and L2, printed BR4
+      - id: breaker-5
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 1339.1]
+        group: breakers
+        rel-pos: 5
+        lines: [L2, L3]
+        description: Breaker 5 of 6, a two-pole branch breaker across L2 and L3, printed BR5
+      - id: breaker-6
+        ref: servertech/pro3x-breaker@1
+        at: [32.9, 1562.4]
+        group: breakers
+        rel-pos: 6
+        lines: [L3, L1]
+        description: Breaker 6 of 6, a two-pole branch breaker across L3 and L1, printed BR6
+  rear:
+    size: {w: 55.9, h: 1778.0}
+    panel:
+      decor:
+      - id: end-cap-top
+        at: [0, 0]
+        size: [55.9, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at: [0, 1776.0]
+        size: [55.9, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: mount-hole-1
+        at: [24.8, 1706.45]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-2
+        at: [24.8, 1686.45]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-3
+        at: [24.8, 1676.45]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-4
+        at: [24.8, 1383.75]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-5
+        at: [24.8, 1321.15]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-6
+        at: [24.8, 450.25]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-7
+        at: [24.8, 387.65]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-8
+        at: [24.8, 95.25]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-9
+        at: [24.8, 85.25]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-10
+        at: [24.8, 65.25]
+        size: [6.3, 6.3]
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+    components:
+      placements:
+      - id: button-1
+        ref: servertech/mounting-button@1
+        at: [15.25, 1342.9]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: servertech/mounting-button@1
+        at: [15.25, 409.4]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 55.9, h: 63.5}
+    panel:
+      decor:
+      - id: end-cap
+        at: [0, 0]
+        size: [55.9, 63.5]
+        fill: '#26282b'
+        kind: end-cap
+  bottom:
+    size: {w: 55.9, h: 63.5}
+    panel:
+      decor:
+      - id: end-cap
+        at: [0, 0]
+        size: [55.9, 63.5]
+        fill: '#26282b'
+        kind: end-cap
+    components:
+      placements:
+      - id: input
+        ref: servertech/pro3x-cord-60309@1
+        at: [13.0, 27.7]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 3P+G 9h plug
+  left:
+    size: {w: 63.5, h: 1778.0}
+    panel:
+      decor:
+      - id: end-cap-top
+        at: [0, 0]
+        size: [63.5, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at: [0, 1776.0]
+        size: [63.5, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: vent
+        at: [0, 8.6]
+        size: [30.0, 1761.0]
+        fill: '#1a1b1d'
+        kind: vent-grille
+  right:
+    size: {w: 63.5, h: 1778.0}
+    panel:
+      decor:
+      - id: end-cap-top
+        at: [0, 0]
+        size: [63.5, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at: [0, 1776.0]
+        size: [63.5, 2]
+        fill: '#26282b'
+        kind: end-cap
+      - id: vent
+        at: [33.5, 8.6]
+        size: [30.0, 1761.0]
+        fill: '#1a1b1d'
+        kind: vent-grille
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: 1-36}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships.
+    part-numbers:
+      C3B36RL-DQJE0AT2: {}
+datasheet: {title: Server Technology PRO3X data sheet (STI_PRO3X_Datasheet_R3), url: 'https://cdn10.servertech.com/assets/documents/documents/917/original/STI_PRO3X_Datasheet_R3.pdf',
+  sha256: 39f5acbb35d132d9d9385a2e7bd474ab6db625edc5f0b92705bb91efffcb856e}
+references:
+- {title: 'Server Technology outline drawing, PRO3X V36, 208V 3PH DELTA 60A, 412-1500-060 rev 1A', url: 'https://cdn10.servertech.com/assets/documents/documents/854/original/412-1500-060_%283A06%29.pdf',
+  sha256: 5e8587acd58eaf0edad7060cfc62a833cd517ca5e56fa0f6ac774d37299fa76b}
+- {title: 'Server Technology functional block wiring diagram, V36, BASIC, 3PH DELTA 60A, 495-1500-060 rev 1', url: 'https://cdn10.servertech.com/assets/documents/documents/862/original/495-1500-060.pdf',
+  sha256: 74e1f425d721035cdfd645d64a4e465eb799d5c79a736495db26b375c3093d17}
+- {title: Server Technology PRO3X Basic C3B36RL product page (0u-vertical-3A06), url: 'https://www.servertech.com/power-distribution-unit-pdu/basic-pdu/0u-vertical-3A06',
+  sha256: 313b0a9c71fc3fff9f678f6aba0e4cd391cf870cc3458cdd8910c5566ab324b9}

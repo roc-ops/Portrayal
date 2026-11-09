@@ -777,6 +777,9 @@ PART_POWER = {
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
     "servertech/pro4x-cord-60309": "other",
+    # THE PRO3X BASIC 3A06'S FIXED CORD ENDS IN AN IEC 60309 3P+G 9h PLUG (the SKU page of C3B36RL-DQJE0AT2). No
+    # power-port type of the two targets is held for it in this tree, so it is `other`, and POWER_LABEL says which.
+    "servertech/pro3x-cord-60309": "other",
     # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
     # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
     "raritan/px3-cord-60309": "other",
