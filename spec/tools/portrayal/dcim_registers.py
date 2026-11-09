@@ -44,6 +44,7 @@ POWER_LABEL = {
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
     "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
+    "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
 }
 
 PART_OUTLET = {
@@ -70,6 +71,11 @@ PART_OUTLET = {
     # A VERTIV POWERIT COMBINATION C13/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
     # names it, so it is `other` with its label, as the HDOT Cx above is.
     "vertiv/combo-outlet": "other",
+    # A PANDUIT G5 PDU'S 16 A COMBINATION C13/C15/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
+    # names it, so it is `other` with its label. Its 10 A C13/C15 sibling presents `iec-c13`, a C13 with the C15
+    # extension, so it exports as upstream's `iec-60320-c13`, as std/c13-outlet does.
+    "panduit/g5-outlet-c13-c15-c19": "other",
+    "panduit/g5-outlet-c13-c15": "iec-60320-c13",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
@@ -86,7 +92,8 @@ PART_OUTLET = {
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
                 "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking",
-                "vertiv/combo-outlet": "Vertiv combination C13/C19"}
+                "vertiv/combo-outlet": "Vertiv combination C13/C19",
+                "panduit/g5-outlet-c13-c15-c19": "Panduit combination C13/C15/C19"}
 
 # EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
 #

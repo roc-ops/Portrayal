@@ -1,0 +1,2118 @@
+format: 1
+kind: device
+name: p42g20m
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: P42G20M
+description: 'Panduit P42G20M G5 intelligent rack PDU, monitored and switched per outlet, 0U: a 1780 mm strip for a cabinet''s
+  vertical channel. It has a fixed 3 m cord ending in an IEC 60309 3P+E 9h 60 A plug, three-phase delta, 200-240 V. It has
+  42 outlets in two rows: 21 C13/C15 combination sockets and 21 C13/C15/C19 combination sockets, in six blocks. Each block
+  is on a 20 A double-pole breaker across two of the three lines. A controller with a display, indicators, five RJ45 jacks
+  and a USB-A port sits between the two halves.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S VECTOR DRAWING. Panduit customer drawing P42G20M-XXYZ_DC
+      rev 01A (12/22/2022), two sheets, has a front, rear, left, right and bottom view. Its scale was taken from its own
+      1780.0 overall dimension (the 1555.0 between the buttons agrees) and every position was read off renderings of the
+      front view at 400 dpi, to about 1 mm across and 3 mm along the strip. The library draws the PDU STANDING, cord end
+      down, so a position along the drawing becomes 1780 minus that, and a position across becomes x. No photograph and
+      no 3D model of the part is held.'}
+  mount: {confidence: drawing, note: '`rack-side`: the strip stands beside a rack''s upright on two mounting buttons on
+      its back, 1555.0 apart and 40.5 from the cord end (rear view). The drawing says ''VERTICAL, 0U'' and gives no count
+      of units; `ru: 40` is the whole units the 1780 mm length covers (40.04) and is not stated by any document.'}
+  chassis: {confidence: drawing, note: 'drawing - 1780.0 long (front view), 56.0 and 75.0 on the bottom view; FBSP28 gives
+      2.2 in (55.88) wide and 2.9 in (73.66) deep, which supports 56.0 as the width and 75.0 as the depth, though the drawing
+      does not label them (gaps: body-width). Weight 6.8 kg is the sheet-2 table''s only row.'}
+  front: {confidence: drawing, note: 'drawing - the front view. From the cord end: a plate with the external ground, three
+      breaker plates B1 to B3, three blocks of four columns of two outlets, the controller, three breaker plates B4 to B6,
+      and three blocks of three columns, to the far end. Plate and outlet positions are the centres as drawn; the outlet
+      pitch is not dimensioned. The column pitch is 37.1, read off the first half, and is kept in the second where the drawing
+      reads about 39.'}
+  outlets: {confidence: drawing, note: 'drawing - ''(21)C13/C15, (21)C13/C15/C19''; the receptacle block draws each as ONE
+      SOCKET named ''C13/C15 COMBO 10A'' and ''C13/C15/C19 COMBO 16A'', so each is one outlet. The upper row of the front
+      view is the C13/C15 and the lower row the C13/C15/C19 (x = 4 and 28). FBSP28 counts 48 outlets in its row and lists
+      the C21 as well; the drawing''s 21 and 21 are used. The outlets are numbered 1 to 42 column by column from the cord
+      end, the upper socket first: THE NUMBERING IS AN ASSUMPTION, the sheet''s text layer holds no outlet numeral (gaps:
+      outlet-numerals). THE WAY UP OF EACH SOCKET IS NOT READ: both are drawn unturned.'}
+  banks: {confidence: drawing, note: 'drawing - the front view labels the six blocks ''B1 [WHITE]'', ''B2 [LIGHT GRAY]'',
+      ''B3 [DARK GRAY]'', ''B4 [WHITE]'', ''B5 [LIGHT GRAY]'', ''B6 [DARK GRAY]'' and the six breaker plates B1 to B6, each
+      printing the lines it is across: L1-L2, L2-L3, L3-L1, L1-L2, L2-L3, L3-L1. THAT BLOCK Bk IS FED BY BREAKER Bk IS A
+      READING OF THE LABELS: no sentence held says it. The three greys are drawn as #e4e5e7, #9a9da1 and #55585c and are
+      estimates of the words: no photograph is held.'}
+  colour: {confidence: drawing, note: 'drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P42G20M, drawn
+      here as the RAL''s #0e0e10 on the body. THE PLATE, MOULDING AND SCREW COLOURS ARE NOT CHECKED against any source;
+      no photograph is held.'}
+  controller: {confidence: drawing, note: 'drawing - the controller plate (''NMC SHOWN IN DEFAULT ORIENTATION'') is drawn
+      between the third and fourth breaker plate, about 137 along against the component''s 127.8; the bay is centred on
+      it. P42G20M is composed with panduit/g5-controller@1 in a bay because the FBSP28 sheet calls the controller hot swappable.
+      Its jacks'' functions are not read.'}
+  input: {confidence: drawing, note: 'drawing - ''INPUT PLUG: IEC 60309 3P+E 9H 60A (IP44)'', ''INPUT VOLTAGE: 200-240VAC'',
+      ''INPUT CURRENT: 60A (48A DERATED)'', ''INPUT PHASE: THREE-PHASE, DELTA'', ''RATED POWER: 17.3 KVA''. Sheet 2 gives
+      the plain part number a 3 m cord. The cord is one part at the cord end; its length and the plug''s face are not drawn.'}
+  capability: {confidence: datasheet, note: 'datasheet - the drawing''s unit type is MONITORED & SWITCHED PER OUTLET and
+      FBSP28 lists it under the MSPO series, so `metering-scope: outlet` and `outlet-switching: true`, and each outlet declares
+      [on, off].'}
+  rear: {confidence: drawing, note: 'drawing - the rear view: two buttons 40.5 from the cord end and 1555.0 apart, on the
+      strip''s centre line. The callout ''TOOLESS MOUNTING BUTTON LOCATIONS (12) PL'' names twelve button locations and
+      only the two dimensioned ones are drawn (gaps: rear-marks).'}
+  sides: {confidence: estimated, note: 'ESTIMATED from the vector paths of sheet 1 of P42G20M-XXYZ_DC (3.1801 mm to the
+      sheet point, scaled on the 1780.0 overall dimension, which is 559.74 pt between its extension lines). The sheet''s
+      LEFT VIEW is the library''s right face and its RIGHT VIEW the library''s left face, because the sheet draws the strip
+      standing cord end up; the two views agree on the 62.9 mm line of single marks and on the 48.0 of the four ringed marks
+      that the sheet dimensions ''(4) PL 48.0'', which checks the mapping. Drawn as unnamed decor: the dot lattices as rectangles
+      of 4.0 mm dots on a 5.0 mm pitch (1662 dots on the right face, 1748 on the left, in 32 and 30 rectangles), the round
+      marks 9.3 mm across (single and paired), the four ringed marks 7.8 mm across, the three 4.1 mm dots of the left face
+      and the two L-shaped strokes of the right face. Each position is good to about 1 mm. No function is stated for any
+      mark. The sheet''s small tabs along the front edge, the edge lines and the cord gland are the strip''s outline and
+      are not drawn (gaps: side-marks).'}
+  ends: {confidence: estimated, note: 'ESTIMATED from the vector paths - the sheet''s BOTTOM VIEW is the far end, the library''s
+      top face: a 10 by 10 lattice of 4.0 mm dots on a 5.0 mm pitch and a 26 mm plate along the rear edge, drawn as unnamed
+      decor. No sheet or view shows the cord end as an end view (the cord leaves the strip in the other views), so the bottom
+      face is the cord gland alone (gaps: cord-end-face).'}
+attrs:
+  physical: {length-mm: 1780, weight-kg: 6.8}
+  power: {input-ac: 'three-phase delta, 200-240 V, 60 A (48 A derated), 17.3 kVA (drawing note 1)', input-plug: other, input-cord: fixed,
+    input-phase: three, input-wiring: delta, input-current-a: 48, plug-rating-a: 60, breakers: six 20 A double-pole electromechanical
+      switches and breakers}
+  management: {metering-scope: outlet, outlet-switching: true, network-module: G5 controller}
+chassis: {width: 56, height: 1780, depth: 75, ru: 40, mount: rack-side, color: '#0e0e10', airflow: passive, weight-kg: 6.8}
+gaps:
+- what: body-width
+  scope: [front]
+  reason: sources-disagree
+  note: the bottom view dimensions 56.0 and 75.0 without saying which is the width; FBSP28 gives 2.2 in (55.88) wide and
+    2.9 in (73.66) deep, and the strip is drawn 56 wide and 75 deep on that reading.
+  wanted: a dimensioned end view of the strip, or a measured unit.
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: no photograph of any face is held, so no colour, finish, printing or plate shape is checked against a photograph.
+  wanted: a photograph of each face of the P42G20M.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: no dimension of an outlet or a plate on the front view is stated; the positions are read off the drawing at its
+    own 1780.0 scale.
+  wanted: a dimensioned front view.
+- what: outlet-numerals
+  scope: [front]
+  reason: needs-drawing
+  note: 'sheet 1 of P42G20M-XXYZ_DC is a vector page, and `pdftotext -bbox` of it gives no outlet numeral: the only digits
+    in its text layer are the sheet zones 1 and 2, the dimension 20 of the 20 A callout and the part-number table, so there
+    is no numeral to read and none is drawn. The numbering is column by column from the cord end.'
+  wanted: a front view whose outlet numerals are text.
+- what: c15-notch
+  scope: [front]
+  reason: vendor-silent
+  note: the 10 A 'C13/C15 COMBO' socket is a C13 outlet with the C15 extension its name states; it presents the C13 key
+    and takes a C14 plug, and no C15 plug is registered, so the extension is stated here and not as a key. The drawing dimensions
+    neither.
+  wanted: a dimensioned drawing of the socket.
+- what: cord-end-face
+  scope: [bottom]
+  reason: needs-drawing
+  note: 'no view of either sheet is an end view from the cord end: the sheet''s BOTTOM VIEW is the far end and the other
+    views show the cord leaving the strip. The bottom face is the gland alone.'
+  wanted: an end view of the cord end.
+- what: outlet-count
+  scope: [front]
+  reason: sources-disagree
+  note: FBSP28's row counts 48 outlets, its configuration cells and the drawing add to 42; 42 are drawn and each of the
+    drawing's 42 sockets is one outlet.
+  wanted: the maker's statement of the count.
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  note: the rear view's callout 'TOOLESS MOUNTING BUTTON LOCATIONS (12) PL' names twelve button locations; only the two
+    dimensioned ones are drawn. The '2X 24.0' and '(4) PL 48.0' dimensions locate marks beside the buttons, and no document
+    says what those are.
+  wanted: the maker's installation drawing.
+- what: side-marks
+  scope: [left, right, top]
+  reason: vendor-silent
+  note: the dot lattices, round marks, ringed marks and L-shaped strokes of the long sides and the far end's lattice are
+    drawn from the sheet as unnamed decor and no document names any of them; the outline's small tabs, its edge lines and
+    the end view's front flange are not drawn.
+  wanted: a photograph of each long side.
+- what: breaker-plate-size
+  scope: [front]
+  reason: needs-drawing
+  note: the breaker plates are drawn about 56 along the strip against panduit/g5-breaker-20a's 70.2, which was read for
+    the P24B14M; the part is reused, and the plates are placed on their drawn centres, 74 apart.
+  wanted: a dimensioned front view.
+- what: wordmark-and-legends
+  scope: [front]
+  reason: needs-photo
+  note: the wordmark, the external-ground legend and the legends beside the sockets, other than the breaker legends, are
+    not drawn.
+  wanted: a photograph of the cord end and the controller.
+- what: part-number-variants
+  scope: [front, rear]
+  reason: vendor-silent
+  note: sheet 2 of the drawing lists the plain P42G20M only; the key lists six colours, three cord lengths and a bottom-end-fed
+    cord, and note 5 says the views show the top-end-fed cord. The device states the plain part's 3 m cord and 6.8 kg only.
+  wanted: an order for each variant that has a held photograph or a dimensioned drawing.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 42 outlets, numbered 1 to 42 column by column
+      from the cord end - 21 C13/C15 and 21 C13/C15/C19 combination sockets, each switchable'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'six 20 A double-pole breakers, B1 to B6, each
+      feeding one block of outlets'}
+  controller: {term: Module, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1780}
+    panel:
+      decor:
+      - id: moulding-1
+        at: [1.0, 1283.1]
+        size: [54.0, 151.4]
+        rx: 2.0
+        fill: '#e4e5e7'
+        kind: outlet-moulding
+      - id: moulding-2
+        at: [1.0, 1117.1]
+        size: [54.0, 151.4]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: moulding-3
+        at: [1.0, 951.1]
+        size: [54.0, 151.4]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: moulding-4
+        at: [1.0, 284.2]
+        size: [54.0, 114.3]
+        rx: 2.0
+        fill: '#e4e5e7'
+        kind: outlet-moulding
+      - id: moulding-5
+        at: [1.0, 149.2]
+        size: [54.0, 114.3]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: moulding-6
+        at: [1.0, 13.2]
+        size: [54.0, 114.3]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: controller-bracket-1
+        at: [24.7, 781.2]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+      - id: controller-bracket-2
+        at: [24.7, 644.2]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+    components:
+      bays:
+      - id: controller
+        at: [4.5, 652.1]
+        size: {w: 47.0, h: 127.8}
+        accepts: [panduit/g5-controller@1]
+        default: panduit/g5-controller@1
+        group: controller
+        rel-pos: 1
+      placements:
+      - id: outlet-1
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1398.0]
+        group: outlets
+        rel-pos: 1
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-2
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1398.0]
+        group: outlets
+        rel-pos: 2
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-3
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1360.9]
+        group: outlets
+        rel-pos: 3
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-4
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1360.9]
+        group: outlets
+        rel-pos: 4
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-5
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1323.8]
+        group: outlets
+        rel-pos: 5
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-6
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1323.8]
+        group: outlets
+        rel-pos: 6
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-7
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1286.7]
+        group: outlets
+        rel-pos: 7
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-8
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1286.7]
+        group: outlets
+        rel-pos: 8
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-9
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1232.0]
+        group: outlets
+        rel-pos: 9
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-10
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1232.0]
+        group: outlets
+        rel-pos: 10
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-11
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1194.9]
+        group: outlets
+        rel-pos: 11
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-12
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1194.9]
+        group: outlets
+        rel-pos: 12
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-13
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1157.8]
+        group: outlets
+        rel-pos: 13
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-14
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1157.8]
+        group: outlets
+        rel-pos: 14
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-15
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1120.7]
+        group: outlets
+        rel-pos: 15
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-16
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1120.7]
+        group: outlets
+        rel-pos: 16
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-17
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1066.0]
+        group: outlets
+        rel-pos: 17
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-18
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1066.0]
+        group: outlets
+        rel-pos: 18
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-19
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 1028.9]
+        group: outlets
+        rel-pos: 19
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-20
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 1028.9]
+        group: outlets
+        rel-pos: 20
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-21
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 991.8]
+        group: outlets
+        rel-pos: 21
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-22
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 991.8]
+        group: outlets
+        rel-pos: 22
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-23
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 954.7]
+        group: outlets
+        rel-pos: 23
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-24
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 954.7]
+        group: outlets
+        rel-pos: 24
+        fed-by: input
+        through: breaker-3
+        states: ['on', 'off']
+      - id: outlet-25
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 362.0]
+        group: outlets
+        rel-pos: 25
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-26
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 362.0]
+        group: outlets
+        rel-pos: 26
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-27
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 324.9]
+        group: outlets
+        rel-pos: 27
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-28
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 324.9]
+        group: outlets
+        rel-pos: 28
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-29
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 287.8]
+        group: outlets
+        rel-pos: 29
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-30
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 287.8]
+        group: outlets
+        rel-pos: 30
+        fed-by: input
+        through: breaker-4
+        states: ['on', 'off']
+      - id: outlet-31
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 227.0]
+        group: outlets
+        rel-pos: 31
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-32
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 227.0]
+        group: outlets
+        rel-pos: 32
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-33
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 189.9]
+        group: outlets
+        rel-pos: 33
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-34
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 189.9]
+        group: outlets
+        rel-pos: 34
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-35
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 152.8]
+        group: outlets
+        rel-pos: 35
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-36
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 152.8]
+        group: outlets
+        rel-pos: 36
+        fed-by: input
+        through: breaker-5
+        states: ['on', 'off']
+      - id: outlet-37
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 91.0]
+        group: outlets
+        rel-pos: 37
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: outlet-38
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 91.0]
+        group: outlets
+        rel-pos: 38
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: outlet-39
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 53.9]
+        group: outlets
+        rel-pos: 39
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: outlet-40
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 53.9]
+        group: outlets
+        rel-pos: 40
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: outlet-41
+        ref: panduit/g5-outlet-c13-c15@1
+        at: [4.0, 16.8]
+        group: outlets
+        rel-pos: 41
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: outlet-42
+        ref: panduit/g5-outlet-c13-c15-c19@1
+        at: [28.0, 16.8]
+        group: outlets
+        rel-pos: 42
+        fed-by: input
+        through: breaker-6
+        states: ['on', 'off']
+      - id: breaker-1
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 1603.9]
+        group: breakers
+        rel-pos: 1
+        lines: &id001 [L1, L2]
+        description: Breaker B1, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B1, lines: L1-L2}
+      - id: breaker-2
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 1529.9]
+        group: breakers
+        rel-pos: 2
+        lines: &id002 [L2, L3]
+        description: Breaker B2, a 20 A double-pole switch and breaker across L2-L3
+        attrs: {label: B2, lines: L2-L3}
+      - id: breaker-3
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 1454.9]
+        group: breakers
+        rel-pos: 3
+        lines: &id003 [L3, L1]
+        description: Breaker B3, a 20 A double-pole switch and breaker across L3-L1
+        attrs: {label: B3, lines: L3-L1}
+      - id: breaker-4
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 561.9]
+        group: breakers
+        rel-pos: 4
+        lines: *id001
+        description: Breaker B4, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B4, lines: L1-L2}
+      - id: breaker-5
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 487.9]
+        group: breakers
+        rel-pos: 5
+        lines: *id002
+        description: Breaker B5, a 20 A double-pole switch and breaker across L2-L3
+        attrs: {label: B5, lines: L2-L3}
+      - id: breaker-6
+        ref: panduit/g5-breaker-20a@1
+        at: [4.7, 407.9]
+        group: breakers
+        rel-pos: 6
+        lines: *id003
+        description: Breaker B6, a 20 A double-pole switch and breaker across L3-L1
+        attrs: {label: B6, lines: L3-L1}
+      - id: ground
+        ref: common/ground-screw@1
+        at: [6.0, 1741.2]
+        group: grounding
+        rel-pos: 1
+    regions:
+    - id: bank-1
+      label: Bank B1 - 8 outlets on breaker B1, lines L1-L2
+      members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8, breaker-1]
+    - id: bank-2
+      label: Bank B2 - 8 outlets on breaker B2, lines L2-L3
+      members: [outlet-9, outlet-10, outlet-11, outlet-12, outlet-13, outlet-14, outlet-15, outlet-16, breaker-2]
+    - id: bank-3
+      label: Bank B3 - 8 outlets on breaker B3, lines L3-L1
+      members: [outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24, breaker-3]
+    - id: bank-4
+      label: Bank B4 - 6 outlets on breaker B4, lines L1-L2
+      members: [outlet-25, outlet-26, outlet-27, outlet-28, outlet-29, outlet-30, breaker-4]
+    - id: bank-5
+      label: Bank B5 - 6 outlets on breaker B5, lines L2-L3
+      members: [outlet-31, outlet-32, outlet-33, outlet-34, outlet-35, outlet-36, breaker-5]
+    - id: bank-6
+      label: Bank B6 - 6 outlets on breaker B6, lines L3-L1
+      members: [outlet-37, outlet-38, outlet-39, outlet-40, outlet-41, outlet-42, breaker-6]
+  rear:
+    size: {w: 56, h: 1780}
+    components:
+      placements:
+      - id: button-1
+        ref: panduit/g5-mounting-button@1
+        at: [18.8, 1730.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: panduit/g5-mounting-button@1
+        at: [18.8, 175.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 56, h: 75}
+    panel:
+      decor:
+      - id: side-dots-1
+        at: [2.9, 13.64]
+        size: [50.2, 50.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.51, 3.33]
+          - [3.34, 4.5]
+          - [1.68, 4.5]
+          - [0.51, 3.33]
+          - [0.51, 1.67]
+          - [1.68, 0.5]
+          - [3.34, 0.5]
+          - [4.51, 1.67]
+        pattern-pitch: [5.02, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, BOTTOM VIEW (the far end, the library's top face), read from the vector paths
+      - id: side-bar-1
+        at: [15.1, 0.0]
+        size: [26.1, 3.2]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, BOTTOM VIEW (the far end, the library's top face), read from the vector paths
+  bottom:
+    size: {w: 56, h: 75}
+    components:
+      placements:
+      - id: input
+        ref: panduit/g5-cord-60309-3pe-9h@1
+        at: [12.0, 21.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 3P+E 9h plug rated 60 A
+  left:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - id: side-dots-1
+        at: [15.0, 6.2]
+        size: [5.0, 630.6]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-2
+        at: [15.0, 792.1]
+        size: [5.0, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-3
+        at: [15.0, 947.2]
+        size: [5.0, 751.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-4
+        at: [20.0, 6.2]
+        size: [10.0, 150.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-5
+        at: [20.0, 166.2]
+        size: [10.0, 10.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-6
+        at: [20.0, 186.3]
+        size: [10.0, 450.5]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-7
+        at: [20.0, 792.1]
+        size: [10.0, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-8
+        at: [20.0, 947.2]
+        size: [10.0, 751.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-9
+        at: [30.0, 6.2]
+        size: [5.0, 90.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-10
+        at: [30.0, 101.2]
+        size: [5.0, 55.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-11
+        at: [30.0, 166.2]
+        size: [5.0, 10.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-12
+        at: [30.0, 186.3]
+        size: [5.0, 45.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-13
+        at: [30.0, 236.5]
+        size: [5.0, 129.9]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-14
+        at: [30.0, 371.6]
+        size: [5.0, 265.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-15
+        at: [30.0, 792.1]
+        size: [5.0, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-16
+        at: [30.0, 947.2]
+        size: [5.0, 751.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-17
+        at: [35.0, 6.2]
+        size: [5.0, 630.6]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-18
+        at: [35.0, 792.1]
+        size: [5.0, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-19
+        at: [35.0, 947.2]
+        size: [5.0, 751.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-20
+        at: [40.0, 126.2]
+        size: [5.0, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-21
+        at: [40.0, 261.4]
+        size: [5.0, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-22
+        at: [40.0, 792.1]
+        size: [5.0, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-23
+        at: [40.0, 907.1]
+        size: [5.0, 35.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-24
+        at: [40.0, 1102.5]
+        size: [5.0, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-25
+        at: [40.0, 1267.8]
+        size: [5.0, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-26
+        at: [45.0, 126.2]
+        size: [20.0, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-27
+        at: [45.0, 261.4]
+        size: [20.0, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-28
+        at: [45.0, 792.1]
+        size: [20.0, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-29
+        at: [45.0, 1102.5]
+        size: [20.0, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-dots-30
+        at: [45.0, 1267.8]
+        size: [20.0, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.5, 3.33]
+          - [3.33, 4.5]
+          - [1.67, 4.5]
+          - [0.5, 3.33]
+          - [0.5, 1.67]
+          - [1.67, 0.5]
+          - [3.33, 0.5]
+          - [4.5, 1.67]
+        pattern-pitch: [5.0, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-1
+        at: [7.47, 2.47]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-2
+        at: [7.47, 332.96]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-3
+        at: [7.47, 573.18]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-4
+        at: [7.47, 813.6]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-5
+        at: [7.47, 1013.74]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-6
+        at: [7.47, 1290.03]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-7
+        at: [7.47, 1530.45]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-8
+        at: [7.47, 1745.87]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-9
+        at: [36.85, 815.5]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-10
+        at: [36.85, 900.6]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-11
+        at: [42.38, 649.11]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-12
+        at: [42.39, 775.24]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-20
+        at: [30.13, 96.66]
+        size: [4.1, 4.1]
+        rx: 2.05
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-21
+        at: [30.13, 231.75]
+        size: [4.1, 4.1]
+        rx: 2.05
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-mark-22
+        at: [30.13, 367.03]
+        size: [4.1, 4.1]
+        rx: 2.05
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-ring-1
+        at: [23.48, 154.91]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-ring-2
+        at: [23.48, 178.96]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-ring-3
+        at: [23.48, 1711.89]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+      - id: side-ring-4
+        at: [23.48, 1735.93]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, RIGHT VIEW (the library's left face), read from the vector paths
+  right:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - id: side-dots-1
+        at: [4.98, 787.1]
+        size: [5.05, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-2
+        at: [10.03, 126.2]
+        size: [20.2, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-3
+        at: [10.03, 261.4]
+        size: [20.2, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-4
+        at: [10.03, 787.1]
+        size: [20.2, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-5
+        at: [10.03, 1102.5]
+        size: [20.2, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-6
+        at: [10.03, 1267.8]
+        size: [20.2, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-7
+        at: [30.23, 126.2]
+        size: [5.05, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-8
+        at: [30.23, 261.4]
+        size: [5.05, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-9
+        at: [30.23, 787.1]
+        size: [5.05, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-10
+        at: [30.23, 912.3]
+        size: [5.05, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-11
+        at: [30.23, 1102.5]
+        size: [5.05, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-12
+        at: [30.23, 1267.8]
+        size: [5.05, 25.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-13
+        at: [35.28, 6.2]
+        size: [5.05, 625.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-14
+        at: [35.28, 787.1]
+        size: [5.05, 25.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-15
+        at: [35.28, 817.1]
+        size: [5.05, 85.1]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-16
+        at: [35.28, 907.1]
+        size: [5.05, 30.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-17
+        at: [35.28, 947.2]
+        size: [5.05, 550.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-18
+        at: [35.28, 1658.2]
+        size: [5.05, 30.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-19
+        at: [40.33, 6.2]
+        size: [10.1, 150.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-20
+        at: [40.33, 166.2]
+        size: [10.1, 10.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-21
+        at: [40.33, 191.2]
+        size: [10.1, 440.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-22
+        at: [40.33, 787.1]
+        size: [10.1, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-23
+        at: [40.33, 947.2]
+        size: [10.1, 550.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-24
+        at: [40.33, 1658.2]
+        size: [10.1, 30.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-25
+        at: [50.43, 6.2]
+        size: [5.05, 150.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-26
+        at: [50.43, 166.2]
+        size: [5.05, 10.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-27
+        at: [50.43, 191.2]
+        size: [5.05, 440.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-28
+        at: [50.43, 787.1]
+        size: [5.05, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-29
+        at: [50.43, 947.2]
+        size: [5.05, 741.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-30
+        at: [55.48, 6.2]
+        size: [5.05, 625.7]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-31
+        at: [55.48, 787.1]
+        size: [5.05, 150.2]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-dots-32
+        at: [55.48, 947.2]
+        size: [5.05, 741.0]
+        pattern: motif
+        pattern-cells:
+        - - [4.53, 3.33]
+          - [3.35, 4.5]
+          - [1.7, 4.5]
+          - [0.53, 3.33]
+          - [0.53, 1.67]
+          - [1.7, 0.5]
+          - [3.35, 0.5]
+          - [4.53, 1.67]
+        pattern-pitch: [5.05, 5.0]
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-1
+        at: [21.02, 93.88]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-2
+        at: [21.02, 101.32]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-3
+        at: [21.02, 228.97]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-4
+        at: [21.02, 236.6]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-5
+        at: [21.02, 364.25]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-6
+        at: [21.02, 371.69]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-7
+        at: [21.02, 1071.57]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-8
+        at: [21.02, 1079.01]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-9
+        at: [21.02, 1237.76]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-10
+        at: [21.02, 1245.2]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-11
+        at: [21.02, 1403.95]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-12
+        at: [21.02, 1411.39]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-13
+        at: [23.31, 649.13]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-14
+        at: [23.31, 765.32]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-15
+        at: [28.84, 810.54]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-16
+        at: [28.84, 900.8]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-17
+        at: [58.23, 2.49]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-18
+        at: [58.23, 332.96]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-19
+        at: [58.23, 573.18]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-20
+        at: [58.23, 813.6]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-21
+        at: [58.23, 1013.76]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-22
+        at: [58.23, 1290.04]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-23
+        at: [58.23, 1530.46]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-mark-24
+        at: [58.23, 1745.88]
+        size: [9.3, 9.3]
+        rx: 4.65
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-ring-1
+        at: [44.47, 154.92]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-ring-2
+        at: [44.47, 178.96]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-ring-3
+        at: [44.47, 1711.89]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-ring-4
+        at: [44.47, 1735.94]
+        size: [7.05, 7.05]
+        rx: 3.53
+        stroke: '#3c4046'
+        stroke-width: 0.75
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-bar-1
+        at: [14.1, 1648.9]
+        size: [0.8, 11.5]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-bar-2
+        at: [14.5, 1660.0]
+        size: [11.6, 0.8]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-bar-3
+        at: [39.3, 1498.55]
+        size: [11.65, 0.8]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+      - id: side-bar-4
+        at: [50.55, 1498.95]
+        size: [0.8, 11.44]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P42G20M-XXYZ_DC sheet 1, LEFT VIEW (the library's right face), read from the vector paths
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the controller in its place.
+    bays: {controller: panduit/g5-controller@1}
+    part-numbers:
+      P42G20M: {}
+datasheet: {title: Panduit G5 Intelligent Power Distribution Units (iPDUs) specification sheet FBSP28-WW-ENG 4/2024, sha256: fd205905bcd4e613a8ecf4ce7fd0f67c38341401d2213524b92606ed06926201,
+  url: 'https://www.panduit.com/PanProductResource/en/P42G20M/SpecificationSheets.pdf'}
+references:
+- {title: 'Panduit customer drawing P42G20M-XXYZ_DC, intelligent series PDU P42G20M-XXYZ, rev 01A 12/22/2022', url: 'https://www.panduit.com/PanProductResource/en/P42G20M/PartDrawings.pdf',
+  sha256: 84fd4db7fa6829ad842d4cffb0397f7600cd228b7e3a55361519c6e3b7458679}
+- {title: Panduit G5 PDU Installation Manual IM054 REV 10, sha256: c251a281c6f9fa15661bd0687a726011ae69c753e82849608e5e19bc64df592f,
+  url: 'https://www.panduit.com/PanProductResource/en/P42G20M/InstallationDocuments.pdf'}

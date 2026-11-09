@@ -1,0 +1,1193 @@
+format: 1
+kind: device
+name: p36g18m
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: P36G18M
+description: 'Panduit P36G18M G5 intelligent rack PDU, monitored and switched per outlet, 0U full: a 1750 mm strip for a
+  cabinet''s vertical channel. It has a fixed 3 m cord ending in a NEMA L6-30P plug, single-phase, 200-240 V, 30 A. It has
+  36 outlets, 30 IEC C13 and 6 IEC C19, in six blocks of six. Three blocks are on each of two 20 A double-pole breakers.
+  A controller with a display, indicators, five RJ45 jacks and a USB-A port sits between the two halves.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S DRAWING. Panduit customer drawing P36G18M_DC rev 02A (06/07/2018),
+      two sheets, has a front, rear, left, right and bottom view; sheet 1 is a SCAN, not a vector drawing. Its scale was
+      taken from its own 1750.0 overall dimension (the 1555.0 between the buttons agrees) and every position was read off
+      renderings of the front view at 400 and 1600 dpi, to about 1 mm across and 3 mm along the strip. The library draws
+      the PDU STANDING, cord end down, so a position along the drawing becomes 1750 minus that, and a position across becomes
+      x. No photograph and no 3D model of the part is held.'}
+  mount: {confidence: drawing, note: '`rack-side`: the strip stands beside a rack''s upright on two mounting buttons on
+      its back, 1555.0 apart and 40.5 from the cord end (rear view). The drawing says ''VERTICAL, 0U FULL'' (its text layer
+      ''OU'') and gives no count of units; `ru: 39` is the whole units the 1750 mm length covers (39.4) and is not stated
+      by any document.'}
+  chassis: {confidence: drawing, note: 'drawing - 1750.0 long and 53.0 deep (right view, at the far end); the bottom view
+      dimensions 52.0 and 75.0, and FBSP28 gives 2.0 in (50.8) wide and 2.1 in (53.34) deep. The width is taken as 52.0
+      and the depth as 53.0, as for the P32E06M; which drawn figure is the body''s width, and what the 75.0 measures, is
+      not said (gaps: body-width). Weight 9.9 kg is the sheet-2 table''s for the plain part number.'}
+  front: {confidence: drawing, note: 'drawing - the front view. From the cord end: a plate with the earth screw, two breaker
+      plates, three outlet blocks of six, the controller, and three more blocks of six to the far end. Each block is a moulding
+      with a lamp window beside every outlet. Outlet and plate positions are the centres as drawn; the outlet pitch is not
+      dimensioned.'}
+  outlets: {confidence: drawing, note: 'drawing - ''(30)C13, (6)C19'', ''MONITORED & SWITCHED PER OUTLET''. Each block is
+      a C19 followed by five C13, the C13s staggered across the face. Each outlet is std/c13-outlet@1 or std/c19-outlet@1.
+      They are numbered 1 to 36 along the strip from the cord end, as the few numerals legible in the scan suggest (1 to
+      6 in the first block); the numerals are blobs of a 150 ppi scan, not read and not drawn (gaps: outlet-numerals). THE
+      DRAWN OUTLET SYMBOLS ARE SMALLER THAN THE REGISTRY''S WELLS, so the C13 are placed at a pitch of 22.1 along the strip,
+      0.1 over the well''s own length, where the drawing reads 21.8: an ESTIMATE of the reading error and not a source (gaps:
+      outlet-size).'}
+  banks: {confidence: drawing, note: 'drawing - the front view labels the first three blocks ''B1 [DARK GRAY]'' and the
+      last three ''B2 [LIGHT GRAY]'', over breakers B1 and B2. THAT B1 FEEDS THE FIRST THREE BLOCKS IS A READING OF THE
+      LABELS: no sentence held says it. The two greys are drawn as #55585c and #9a9da1 and are estimates of the words: no
+      photograph is held.'}
+  colour: {confidence: drawing, note: 'drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P36G18M, drawn
+      here as the RAL''s #0e0e10 on the body. THE PLATE, MOULDING, SCREW AND LAMP-WINDOW COLOURS ARE NOT CHECKED against
+      any source; no photograph is held.'}
+  controller: {confidence: drawing, note: 'drawing - the controller plate is drawn between the third and fourth block. P36G18M
+      is composed with panduit/g5-controller@1 in a bay because the FBSP28 sheet calls the controller hot swappable; the
+      bay is where the P32E06M''s is, which the drawing of this one agrees with to about 3 mm. Its jacks'' functions are
+      not read (see the component''s provenance).'}
+  input: {confidence: drawing, note: 'drawing - ''INPUT PLUG: NEMA L6-30P'', ''INPUT VOLTAGE: 200-240VAC'', ''INPUT CURRENT:
+      30A (24A DERATED)'', ''INPUT PHASE: SINGLE-PHASE'', ''RATED POWER: 5.0 kVA''. Sheet 2 gives the plain part number
+      a 3 m cord. The cord is one part at the cord end; its length and the plug''s face are not drawn.'}
+  capability: {confidence: datasheet, note: 'datasheet - the drawing''s unit type is MONITORED & SWITCHED PER OUTLET and
+      FBSP28 lists it under the MSPO series, so `metering-scope: outlet` and `outlet-switching: true`, and each outlet declares
+      [on, off].'}
+  rear: {confidence: drawing, note: 'drawing - the rear view: two buttons 40.5 from the cord end and 1555.0 apart, on the
+      strip''s centre line. The callout ''TOOLESS MOUNTING BUTTON LOCATIONS (12) PL'' names twelve button locations and
+      only the two dimensioned ones are drawn (gaps: rear-marks).'}
+  sides: {confidence: estimated, note: 'ESTIMATED from sheet 1 of P36G18M_DC, a 150 ppi scan, rendered at 300 dpi (one pixel
+      is 0.585 mm of the strip, scaled on the 1750.0 dimension). The sheet''s LEFT VIEW is the library''s right face and
+      its RIGHT VIEW the library''s left face, because the sheet draws the strip standing cord end up. Each mark is a dark
+      blob: 24 on the right face and 20 on the left, each drawn as an unnamed round mark 8.5 mm across (the blob is 14 px)
+      at its pixel centre, good to about 1 mm; the four blobs that carry a crosshair (24.0 and 40.5 from each button) are
+      drawn as the same round mark without the crosshair. On the right face the drawing also shows a rectangle near the
+      cord end, 160 by 36 mm: its two ends and its rear edge are drawn as thin bars, and its front edge, which lies 3.5
+      mm beyond the face''s front line in the housing that stands proud there, is not. No function is stated for any mark.
+      The small notches in the strip''s outline are the profile of the outlet blocks and are not drawn (gaps: side-marks).'}
+  ends: {confidence: estimated, note: 'ESTIMATED - the sheet''s BOTTOM VIEW is the far end, the library''s top face: a rounded
+      rectangle 52 across with one screw head 7.6 mm across, 5.9 from the rear edge and centred across, drawn as an unnamed
+      round mark; the plate that stands 5 mm proud of the rear edge there lies outside the face and is not drawn. No sheet
+      or view shows the cord end as an end view (the sheet''s views leave the cord end as the cord leaving the strip), so
+      the bottom face is the cord gland alone (gaps: cord-end-face).'}
+attrs:
+  physical: {length-mm: 1750, weight-kg: 9.9}
+  power: {input-ac: 'single-phase, 200-240 V, 30 A (24 A derated), 5.0 kVA (drawing note 1)', input-plug: other, input-cord: fixed,
+    input-phase: single, input-current-a: 24, plug-rating-a: 30, breakers: two 20 A double-pole electromechanical switches
+      and breakers}
+  management: {metering-scope: outlet, outlet-switching: true, network-module: G5 controller}
+chassis: {width: 52, height: 1750, depth: 53, ru: 39, mount: rack-side, color: '#0e0e10', airflow: passive, weight-kg: 9.9}
+gaps:
+- what: body-width
+  scope: [front]
+  reason: sources-disagree
+  note: the bottom view dimensions 52.0 and 75.0, the right view 53.0, and the sheet gives 2.0 in (50.8) wide and 2.1 in
+    (53.34) deep; no document says which drawn figure is the body's width or what the 75.0 measures. The strip is drawn
+    52 wide and 53 deep.
+  wanted: a dimensioned end view of the strip, or a measured unit.
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: no photograph of any face is held, so no colour, finish, printing or plate shape is checked against a photograph.
+  wanted: a photograph of each face of the P36G18M.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: no dimension of an outlet, a lamp window or a plate on the front view is stated; the positions are read off the
+    drawing at its own 1750.0 scale.
+  wanted: a dimensioned front view.
+- what: outlet-size
+  scope: [front]
+  reason: needs-drawing
+  note: 'the drawn outlet symbols are smaller than the registry''s C13 and C19 wells, so the drawn centres could not all
+    be kept: the C13 of a block are 22.1 apart where the drawing reads about 21.8. No document dimensions Panduit''s own
+    outlet.'
+  wanted: a dimensioned outlet drawing from Panduit.
+- what: outlet-numerals
+  scope: [front]
+  reason: needs-drawing
+  note: sheet 1 of P36G18M_DC is a 150 ppi scan (one page raster, 2700 by 1800 px) with no text layer for the front view;
+    the numeral beside each outlet is a blob a few pixels high, 3 to 4 mm of the strip, at 1.2 mm a pixel, so none can be
+    read and none is drawn. The numbering is the order along the strip.
+  wanted: a vector copy of the front view.
+- what: cord-end-housing
+  scope: [front, left, right]
+  reason: needs-drawing
+  note: 'the sheet''s left and right views and its bottom view show the first 335 mm from the cord end, where the breakers
+    sit, standing about 22 mm proud of the strip''s front: the bottom view''s two figures are 52.0 and 75.0, and 53.0 +
+    22 is 75. The device is a plain box 53 deep and does not draw that housing; the 75.0 is most likely its depth, which
+    is not stated by any note.'
+  wanted: a dimensioned side view of the cord end.
+- what: cord-end-face
+  scope: [bottom]
+  reason: needs-drawing
+  note: 'no view of either sheet is an end view from the cord end: the sheet''s BOTTOM VIEW is the far end and the other
+    views show the cord leaving the strip. The bottom face is the gland alone, a 32.0 round that is an estimate.'
+  wanted: an end view of the cord end.
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  note: the rear view's callout 'TOOLESS MOUNTING BUTTON LOCATIONS (12) PL' names twelve button locations; only the two
+    dimensioned ones are drawn. The '(2) PL 24.0' and '(4) PL 32.0' dimensions locate marks beside the buttons, and no document
+    says what those are.
+  wanted: the maker's installation drawing.
+- what: side-marks
+  scope: [left, right, top]
+  reason: vendor-silent
+  note: 'the long sides'' marks and the rectangle near the cord end are drawn from the sheet as unnamed decor and no document
+    names any of them; what the scan does not resolve is not drawn: the outline''s small notches, the crosshair strokes,
+    the rectangle''s front edge (3.5 mm beyond the face) and the plate on the far end''s rear edge. The scan is 150 ppi,
+    1.2 mm a pixel at the strip''s scale.'
+  wanted: a photograph of each long side.
+- what: wordmark-and-legends
+  scope: [front]
+  reason: needs-photo
+  note: the wordmark, the earth symbol and the legends beside the lamp windows, other than the breaker legends, are not
+    drawn.
+  wanted: a photograph of the cord end and the controller.
+- what: part-number-variants
+  scope: [front, rear]
+  reason: vendor-silent
+  note: sheet 2 of the drawing lists more part numbers of this strip (five more colours, 1 m and 2 m cords and a bottom-end-fed
+    cord), and note 5 says the views show the top-end-fed cord; the device states the plain P36G18M's 3 m cord and 9.9 kg
+    only, and no variant is a configuration.
+  wanted: an order for each variant that has a held photograph or a dimensioned drawing.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 36 outlets, numbered 1 to 36 along the strip
+      from the cord end - 30 IEC C13 and 6 IEC C19 in six blocks of six, each switchable'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'two 20 A double-pole breakers, B1 and B2; B1 feeds
+      the first three blocks and B2 the last three'}
+  controller: {term: Module, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1750}
+    panel:
+      decor:
+      - id: moulding-1
+        at: [1.0, 1205.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-1
+        at: [37.95, 1348.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-2
+        at: [37.95, 1314.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-3
+        at: [9.35, 1291.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-4
+        at: [37.95, 1269.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-5
+        at: [9.35, 1247.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-6
+        at: [37.95, 1225.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-2
+        at: [1.0, 999.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-7
+        at: [37.95, 1142.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-8
+        at: [37.95, 1108.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-9
+        at: [9.35, 1085.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-10
+        at: [37.95, 1063.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-11
+        at: [9.35, 1041.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-12
+        at: [37.95, 1019.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-3
+        at: [1.0, 793.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-13
+        at: [37.95, 936.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-14
+        at: [37.95, 902.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-15
+        at: [9.35, 879.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-16
+        at: [37.95, 857.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-17
+        at: [9.35, 835.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-18
+        at: [37.95, 813.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-4
+        at: [1.0, 424.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-19
+        at: [37.95, 567.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-20
+        at: [37.95, 533.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-21
+        at: [9.35, 510.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-22
+        at: [37.95, 488.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-23
+        at: [9.35, 466.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-24
+        at: [37.95, 444.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-5
+        at: [1.0, 218.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-25
+        at: [37.95, 361.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-26
+        at: [37.95, 327.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-27
+        at: [9.35, 304.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-28
+        at: [37.95, 282.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-29
+        at: [9.35, 260.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-30
+        at: [37.95, 238.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-6
+        at: [1.0, 12.0]
+        size: [50.0, 186.0]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-31
+        at: [37.95, 155.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-32
+        at: [37.95, 121.0]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-33
+        at: [9.35, 98.9]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-34
+        at: [37.95, 76.8]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-35
+        at: [9.35, 54.7]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-36
+        at: [37.95, 32.6]
+        size: [5.9, 16.6]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: controller-bracket-1
+        at: [22.7, 765.7]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+      - id: controller-bracket-2
+        at: [22.7, 628.7]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#565b60'
+        kind: screw-head
+    components:
+      bays:
+      - id: controller
+        at: [2.5, 636.6]
+        size: {w: 47.0, h: 127.8}
+        accepts: [panduit/g5-controller@1]
+        default: panduit/g5-controller@1
+        group: controller
+        rel-pos: 1
+      placements:
+      - id: outlet-1
+        ref: std/c19-outlet@1
+        at: [-0.7, 1343.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 1
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at: [3.1, 1311.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 2
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [19.2, 1289.2]
+        group: outlets
+        rel-pos: 3
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-4
+        ref: std/c13-outlet@1
+        at: [3.1, 1267.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 4
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-5
+        ref: std/c13-outlet@1
+        at: [19.2, 1245.0]
+        group: outlets
+        rel-pos: 5
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-6
+        ref: std/c13-outlet@1
+        at: [3.1, 1222.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 6
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-7
+        ref: std/c19-outlet@1
+        at: [-0.7, 1137.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 7
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-8
+        ref: std/c13-outlet@1
+        at: [3.1, 1105.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 8
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-9
+        ref: std/c13-outlet@1
+        at: [19.2, 1083.2]
+        group: outlets
+        rel-pos: 9
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-10
+        ref: std/c13-outlet@1
+        at: [3.1, 1061.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 10
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-11
+        ref: std/c13-outlet@1
+        at: [19.2, 1039.0]
+        group: outlets
+        rel-pos: 11
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-12
+        ref: std/c13-outlet@1
+        at: [3.1, 1016.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 12
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-13
+        ref: std/c19-outlet@1
+        at: [-0.7, 931.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 13
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [3.1, 899.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 14
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at: [19.2, 877.2]
+        group: outlets
+        rel-pos: 15
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-16
+        ref: std/c13-outlet@1
+        at: [3.1, 855.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 16
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-17
+        ref: std/c13-outlet@1
+        at: [19.2, 833.0]
+        group: outlets
+        rel-pos: 17
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-18
+        ref: std/c13-outlet@1
+        at: [3.1, 810.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 18
+        fed-by: input
+        through: breaker-1
+        states: ['on', 'off']
+      - id: outlet-19
+        ref: std/c19-outlet@1
+        at: [-0.7, 562.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 19
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at: [3.1, 530.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 20
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at: [19.2, 508.2]
+        group: outlets
+        rel-pos: 21
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-22
+        ref: std/c13-outlet@1
+        at: [3.1, 486.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 22
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-23
+        ref: std/c13-outlet@1
+        at: [19.2, 464.0]
+        group: outlets
+        rel-pos: 23
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-24
+        ref: std/c13-outlet@1
+        at: [3.1, 441.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 24
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-25
+        ref: std/c19-outlet@1
+        at: [-0.7, 356.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 25
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at: [3.1, 324.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 26
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at: [19.2, 302.2]
+        group: outlets
+        rel-pos: 27
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-28
+        ref: std/c13-outlet@1
+        at: [3.1, 280.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 28
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-29
+        ref: std/c13-outlet@1
+        at: [19.2, 258.0]
+        group: outlets
+        rel-pos: 29
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-30
+        ref: std/c13-outlet@1
+        at: [3.1, 235.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 30
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-31
+        ref: std/c19-outlet@1
+        at: [-0.7, 150.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 31
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-32
+        ref: std/c13-outlet@1
+        at: [3.1, 118.3]
+        rotate: 180
+        group: outlets
+        rel-pos: 32
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-33
+        ref: std/c13-outlet@1
+        at: [19.2, 96.2]
+        group: outlets
+        rel-pos: 33
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-34
+        ref: std/c13-outlet@1
+        at: [3.1, 74.1]
+        rotate: 180
+        group: outlets
+        rel-pos: 34
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-35
+        ref: std/c13-outlet@1
+        at: [19.2, 52.0]
+        group: outlets
+        rel-pos: 35
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: outlet-36
+        ref: std/c13-outlet@1
+        at: [3.1, 29.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 36
+        fed-by: input
+        through: breaker-2
+        states: ['on', 'off']
+      - id: breaker-1
+        ref: panduit/g5-breaker-20a@1
+        at: [2.7, 1608.8]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: Breaker B1, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B1, lines: L1-L2}
+      - id: breaker-2
+        ref: panduit/g5-breaker-20a@1
+        at: [2.7, 1537.6]
+        group: breakers
+        rel-pos: 2
+        lines: [L1, L2]
+        description: Breaker B2, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B2, lines: L1-L2}
+      - id: ground
+        ref: common/ground-screw@1
+        at: [35.6, 1729.7]
+        group: grounding
+        rel-pos: 1
+    regions:
+    - id: block-1
+      label: Outlets 1 to 6 on breaker B1
+      members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6]
+    - id: block-2
+      label: Outlets 7 to 12 on breaker B1
+      members: [outlet-7, outlet-8, outlet-9, outlet-10, outlet-11, outlet-12]
+    - id: block-3
+      label: Outlets 13 to 18 on breaker B1
+      members: [outlet-13, outlet-14, outlet-15, outlet-16, outlet-17, outlet-18]
+    - id: block-4
+      label: Outlets 19 to 24 on breaker B2
+      members: [outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24]
+    - id: block-5
+      label: Outlets 25 to 30 on breaker B2
+      members: [outlet-25, outlet-26, outlet-27, outlet-28, outlet-29, outlet-30]
+    - id: block-6
+      label: Outlets 31 to 36 on breaker B2
+      members: [outlet-31, outlet-32, outlet-33, outlet-34, outlet-35, outlet-36]
+  rear:
+    size: {w: 52, h: 1750}
+    components:
+      placements:
+      - id: button-1
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 1700.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 145.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 53}
+    panel:
+      decor:
+      - id: side-mark-1
+        at: [21.8, 2.1]
+        size: [7.6, 7.6]
+        rx: 3.8
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, BOTTOM VIEW (the far end, the library's top face), 300 dpi render of the scan
+  bottom:
+    size: {w: 52, h: 53}
+    components:
+      placements:
+      - id: input
+        ref: panduit/g5-cord-l6-30p@1
+        at: [10.0, 10.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in a NEMA L6-30P plug rated 30 A
+  left:
+    size: {w: 53, h: 1750}
+    panel:
+      decor:
+      - id: side-mark-1
+        at: [16.81, 1705.68]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-2
+        at: [16.81, 1681.4]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-3
+        at: [35.82, 1540.42]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-4
+        at: [35.82, 1426.34]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-5
+        at: [41.67, 1291.79]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-6
+        at: [41.67, 1237.39]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-7
+        at: [41.67, 1088.8]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-8
+        at: [41.67, 1034.39]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-9
+        at: [41.67, 885.22]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-10
+        at: [41.67, 830.81]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-11
+        at: [20.91, 769.39]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-12
+        at: [20.91, 644.2]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-13
+        at: [41.67, 523.1]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-14
+        at: [41.67, 468.7]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-15
+        at: [41.67, 319.52]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-16
+        at: [41.67, 265.12]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-17
+        at: [16.81, 162.45]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-18
+        at: [17.4, 137.88]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-19
+        at: [41.67, 115.94]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+      - id: side-mark-20
+        at: [41.67, 61.54]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, RIGHT VIEW (the library's left face), blobs of a 300 dpi render of the scan
+  right:
+    size: {w: 53, h: 1750}
+    panel:
+      decor:
+      - id: side-mark-1
+        at: [30.85, 1705.39]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-2
+        at: [30.85, 1681.4]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-3
+        at: [12.42, 1421.66]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-4
+        at: [38.75, 1394.75]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-5
+        at: [5.99, 1289.45]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-6
+        at: [5.99, 1235.05]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-7
+        at: [38.75, 1192.34]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-8
+        at: [5.99, 1085.87]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-9
+        at: [5.99, 1031.47]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-10
+        at: [38.75, 989.93]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-11
+        at: [5.99, 882.29]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-12
+        at: [5.99, 827.89]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-13
+        at: [27.05, 759.44]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-14
+        at: [27.05, 644.2]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-15
+        at: [5.99, 520.18]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-16
+        at: [5.99, 465.77]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-17
+        at: [38.75, 423.07]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-18
+        at: [5.99, 316.6]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-19
+        at: [5.99, 262.19]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-20
+        at: [38.75, 220.66]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-21
+        at: [30.85, 137.88]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-22
+        at: [5.99, 113.6]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-23
+        at: [5.99, 58.61]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-mark-24
+        at: [38.75, 17.66]
+        size: [8.5, 8.5]
+        rx: 4.25
+        fill: '#26292d'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-bar-1
+        at: [31.0, 1464.6]
+        size: [0.8, 159.6]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-bar-2
+        at: [0.0, 1464.2]
+        size: [31.3, 0.8]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+      - id: side-bar-3
+        at: [0.0, 1623.8]
+        size: [31.3, 0.8]
+        rx: 0.2
+        fill: '#3c4046'
+        kind: side-mark
+        confidence: estimated
+        source: P36G18M_DC sheet 1, LEFT VIEW (the library's right face), blobs of a 300 dpi render of the scan
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the controller in its place.
+    bays: {controller: panduit/g5-controller@1}
+    part-numbers:
+      P36G18M: {}
+datasheet: {title: Panduit G5 Intelligent Power Distribution Units (iPDUs) specification sheet FBSP28-WW-ENG 4/2024, sha256: fd205905bcd4e613a8ecf4ce7fd0f67c38341401d2213524b92606ed06926201,
+  url: 'https://www.panduit.com/PanProductResource/en/P36G18M/SpecificationSheets.pdf'}
+references:
+- {title: 'Panduit customer drawing P36G18M_DC, intelligent series PDU P36G18M-XXYZ, rev 02A 06/07/2018', url: 'https://www.panduit.com/PanProductResource/en/P36G18M/PartDrawings.pdf',
+  sha256: f657b3eebfe6e2ffb941997d0134ac809229fece357ab2a0f6128c0c9989dfba}
+- {title: Panduit G5 PDU Installation Manual IM054 REV 10, sha256: c251a281c6f9fa15661bd0687a726011ae69c753e82849608e5e19bc64df592f,
+  url: 'https://www.panduit.com/PanProductResource/en/P36G18M/InstallationDocuments.pdf'}
