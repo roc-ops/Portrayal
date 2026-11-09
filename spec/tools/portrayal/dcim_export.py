@@ -722,6 +722,9 @@ PART_POWER = {
     # netbox/dcim/choices.py at 2b3f4b48, TYPE_NEMA_L2130P; nautobot/nautobot
     # nautobot/dcim/choices.py at c77e4255, the same).
     "eaton/g4-cord-l21-30p": "nema-l21-30p",
+    # THE ENLOGIC EB0803'S FIXED CORD ends in a NEMA L21-30P plug (its data sheet and
+    # drawing), the same `nema-l21-30p` as the Eaton cord above.
+    "enlogic/pdu-cord-l21-30p": "nema-l21-30p",
     # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
     # for the same reason as the Eaton cord: the part stands for the cord leaving
     # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
