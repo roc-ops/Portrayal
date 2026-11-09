@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: g5-breaker-20a
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of a Panduit basic PDU of the B series. It is a 20 A double-pole electromechanical
+  switch and breaker on its own plate, held by four screws. The plate prints the breaker's number and the
+  pair of lines it is across. Fixed to the PDU, not a plug-in part.
+size: {w: 46.6, h: 70.2}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  method: >-
+    drawing - Panduit customer drawing P24B14M_DC rev 01B (08/21/2017) is a vector sheet, drawn to no
+    stated scale. Its scale was taken from its own 1750.0 overall dimension, which puts the body's 52 across
+    at 52.3 on the rendered sheet, and every figure below was read off a rendering of the front view at
+    800 dpi (3.65 px/mm), to about 0.5 mm. The drawing lies the PDU down, cord end left; this part is drawn as
+    the PDU stands, cord end down, so the drawing's length runs up the part and its width across it.
+  size: >-
+    drawing - the plate on the front view of P24B14M_DC is 70.2 along the PDU by 46.6 across, inside the
+    52 wide face, with rounded corners of about 2.2. Its four screws are centred 11.8 and 55.6 along and
+    12.9 and 32.6 across, the rocker's window 26.8 along by 19.2 across.
+  rating: >-
+    drawing - P24B14M_DC note 1 and the front view's callout read "(6) 20AMP, DOUBLE-POLE" and "20 AMP,
+    DOUBLE - POLE ELECTRO MECHANICAL SWITCH / BREAKER (6) PLACES".
+  printing: >-
+    drawing - the plate prints "B1" to "B6" and, beside each, the two lines it is across: "L1-L2", "L2-L3"
+    and "L3-L1" (B1 to B3), then the same three again (B4 to B6). Both are fields of the placement.
+    The rocker prints ON and OFF; that printing is under 1.5 mm and is not drawn.
+  colour: >-
+    NOT CHECKED - no photograph of the plate is held, so the plate colour is a dark neutral chosen to read
+    against the face and is not read from a source.
+  relief: >-
+    not built - no view of P24B14M_DC gives the plate's height off the face.
+fields:
+  label: {label: Breaker number, type: text, default: B1}
+  lines: {label: Lines it is across, type: text, default: L1-L2}
+elements:
+  rocker: {at: [22.5, 27.5], size: [19.2, 26.8], class: breaker, states: ['on', 'off']}
+skins: [default]

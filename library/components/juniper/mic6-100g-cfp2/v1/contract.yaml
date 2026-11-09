@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic6-100g-cfp2
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -31,13 +31,25 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    Ethernet MIC with CFP2' (printed pages 310 and 312): 'Two 100-Gigabit Ethernet CFP2 ports' and
+    'up to 100 Gbps per port'; the ports are labeled 'Port 0 and Port 1'. The role is traffic. The
+    LAN and OTN/OTU4 line rates are modes of one port and are not a speed here.
 states:
 - ok
 - fail
 - absent
+groups:
+  cfp2-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cfp2, speed: 100g}
+    description: the 100-Gigabit Ethernet CFP2 cages, each running at up to 100 Gbps
 parts:
-- {ref: std/cfp2@2, id: port-0-0, at: [-7.25, 26.40], rotate: 90, attrs: {media: cfp2}}
-- {ref: std/cfp2@2, id: port-0-1, at: [-7.25, 69.50], rotate: 90, attrs: {media: cfp2}}
+- {ref: std/cfp2@2, id: port-0-0, group: cfp2-100g, at: [-7.25, 26.40], rotate: 90, attrs: {media: cfp2}}
+- {ref: std/cfp2@2, id: port-0-1, group: cfp2-100g, at: [-7.25, 69.50], rotate: 90, attrs: {media: cfp2}}
 size:
   w: 27.0
   h: 200.0
