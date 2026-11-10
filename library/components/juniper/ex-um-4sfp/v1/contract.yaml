@@ -1,0 +1,87 @@
+format: 1
+kind: module
+name: ex-um-4sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-4SFP, the four-port 1 Gbps SFP uplink module of the EX3200 and EX4200 switches. It
+  slides into the front-panel uplink module slot behind the flip-up door. It has four SFP cages in one
+  row, numbered 0 to 3. Each cage has a link activity lamp and a status lamp above it. It ships with
+  dust covers in the ports.
+attrs:
+  model: EX-UM-4SFP
+  sfp: 4
+  ports-note: four 1 Gbps SFP ports; interfaces ge-0/1/0 to ge-0/1/3 (EX3200 guide, PDF page 127)
+provenance:
+  sources: >-
+    datasheet - EX3200 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Uplink Modules
+    in EX3200 Switches, PDF pages 29 to 31, Figure 5 (g020107): four ports for 1-gigabit SFP
+    transceivers, "The model number of the uplink module is EX-UM-4SFP". EX4200 Switch Hardware
+    Guide, Uplink Modules in EX4200 Switches, PDF pages 30 and 31, Figure 6 (the same drawing,
+    g020107), the same sentence. Both guides' figures draw four cages in one row. Figure 11 (EX3200 guide, PDF page 36) draws the lamps; Table 10
+    (PDF pages 39 to 40) describes them. The interface names ge-0/1/0 to ge-0/1/3 are the EX3200
+    guide's factory default configuration note, PDF page 127.
+  size: >-
+    estimated - no document dimensions the module. It is the uplink slot the two chassis' cover panels
+    close, 63.0 x 14.5 mm, read off the product photographs on page 4 of the EX3200 datasheet (the
+    cover contract gives the method). The depth is not stated.
+  elements: >-
+    drawing and estimated - Figure 5 is a three-quarter view, so no distance on it is a
+    measurement. It shows four SFP cages in one row with the screw-hole flanges at the ends, two
+    small lamps above each cage, a round hole at each end of the plate and a keyhole at the centre
+    of its top edge (the hole the installation step names, "the keyhole on the front panel of the
+    uplink module"). The end holes are drawn and the keyhole is not, because at this scale the
+    lamps stand where it would. The cages are taken at the SFF-8433 pitch of std/sfp-ganged, 14.25 mm,
+    in one block centred on the plate (3.0 to 60.0 mm across). On the figure the block looks
+    narrower against the plate than four cages at that pitch would be; a three-quarter view at
+    that scale cannot settle it, so the standard pitch is kept and this is the estimate. The lamps
+    stand above the left of each cage, 3.9 and 8.8 mm in, at the ratio the figure shows.
+  led: >-
+    datasheet - EX3200 guide Figure 11 and Table 10, Network Port LEDs. Each port has a link
+    activity lamp (callout "Link/Activity LED", the left one) and a status lamp ("Status LED").
+    Link activity is green, blinking with traffic. Status shows the speed - green for 1000 Mbps,
+    unlit for 10 or 100 Mbps.
+  colour: >-
+    estimated - no colour photograph of the module is held. The datasheet photograph is greyscale and
+    shows a light metal plate on the XFP module only. The plate is drawn silver.
+  power: >-
+    NO FIGURE IS PUBLISHED - neither guide gives the module a weight or a draw.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp
+      speed: 1g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port - link activity at the left, status at the right, above the cage. Numbered
+      in printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [3.0, 4.0], group: sfp, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [17.25, 4.0], group: sfp, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [31.5, 4.0], group: sfp, attrs: {media: sfp}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [45.75, 4.0], group: sfp, attrs: {media: sfp}}
+- {ref: common/led-dot@1, id: led-0-link, at: [6.9, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [11.8, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [21.15, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [26.05, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [35.4, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [40.3, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [49.65, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [54.55, 1.4], group: port-leds, attrs: {function: status}}
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]
