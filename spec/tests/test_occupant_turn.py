@@ -65,7 +65,8 @@ def test_the_registry_lets_a_lug_turn_freely_on_a_stud_and_names_no_other_turns(
     # the pair and never across it; every other interface allows 0 alone
     pairs = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
     assert all(reg[k]["turns"] == [0, 180] for k in pairs)
-    assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", *pairs])
+    # a spade terminal slides on from any side, so `spade-m4` names the four right angles, as `terminal-stud` does
+    assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", "spade-m4", *pairs])
 
 
 @pytest.mark.heavy

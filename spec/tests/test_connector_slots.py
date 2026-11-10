@@ -115,6 +115,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                         # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                         "spade-m4",
                          "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
                          # GPU power and NVLink (P-0028): presented by parts no
@@ -204,6 +206,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
                                    "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                                   # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                                   "spade-m4",
                                    "mrj21", "vhdci", "rj11",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard",
