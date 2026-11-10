@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: acs800-digital-out-plug
+version: 1.0.0
+class: port
+mates: screw-terminal-4-relay
+profile: power
+description: >-
+  The conductor ends of the wires that land on the DIGITAL OUT connector of the Vertiv Avocent ACS800, seen from
+  the front as seated. Four stripped ends sit side by side at the connector's four pins. The part seats in a
+  `screw-terminal-4-relay` connector at its own mate point.
+size: {w: 16.0, h: 5.6}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the connector it seats in, vertiv/acs800-digital-out@1, 16.0 by 5.6. No document gives a
+  dimension of a conductor end or of a wire.
+attrs: {media: acs800-digital-out, connector: conductor ends, positions: 4}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. The Vertiv Avocent ACS800/8000 Advanced Console System
+    Installer/User Guide, "Digital Out sensors", says the pins form two relay switches that open or close a
+    circuit and shows no cable connector, so the part is the wires' own ends and claims no maker, series or
+    part number.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - the grey body and the lighter conductor ends are declared estimates. No document shows a
+    conductor end seated.
+  wiring: >-
+    guide - two switches of two pins each. No wire gauge or colour is stated, so none is drawn.
+  far-end: >-
+    NOT DRAWN. The other end lands on the circuit the relay switches, which is the site's.
+  depth: >-
+    NOT STATED. No document gives how far a conductor enters the connector, so the part draws a plan outline
+    only and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [8.0, 2.8], direction: front}
+skins: [default]
