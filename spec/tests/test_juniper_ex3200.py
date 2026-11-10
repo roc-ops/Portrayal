@@ -153,7 +153,9 @@ def test_the_front_carries_the_lcd_buttons_lamps_and_the_covered_uplink_slot(dev
     legends = {s["text"] for s in d["views"]["front"]["silkscreen"]}
     assert {"EX3200", "ALM", "SYS", "MST"} <= legends
     slot = bays(d, "front")["uplink"]
-    assert slot["accepts"] == [f"juniper/{COVER}@1"] and slot["default"] == f"juniper/{COVER}@1"
+    assert slot["accepts"] == [f"juniper/{COVER}@1", "juniper/ex-um-4sfp@1", "juniper/ex-um-2x4sfp@1",
+                               "juniper/ex-um-2x4sfp-m@1", "juniper/ex-um-2xfp@1"]
+    assert slot["default"] == f"juniper/{COVER}@1"
     assert set(bays(d, "front")) == {"uplink"}
 
 
@@ -215,7 +217,8 @@ def test_the_bay_accepts_what_the_guide_lists_and_ships_the_minimum(dev):
 def test_each_configuration_lists_its_part_numbers(dev):
     d = load(dev)
     want = DEVICES[dev][5]
-    assert set(d["configurations"]) == set(want)
+    # an `example` configuration shows a part in a slot and is no order code
+    assert {c for c, v in d["configurations"].items() if v["kind"] != "example"} == set(want)
     for cfg, pns in want.items():
         got = d["configurations"][cfg]
         assert got["kind"] == "orderable" and list(got["part-numbers"]) == pns
@@ -250,7 +253,7 @@ def test_every_figure_the_guide_does_not_print_is_a_declared_gap(dev):
     """No photograph is held at full resolution and no figure dimensions the faces: the gaps say so."""
     d = layout(dev)
     gaps = {g["what"] for g in d["gaps"]}
-    assert {"uplink-modules", "rear-blank-plate", "side-faces", "rack-ears", "lcd-component"} <= gaps
+    assert {"rear-blank-plate", "side-faces", "rack-ears", "lcd-component"} <= gaps
     for key in ("gate-1-front", "gate-1-rear", "front-ports", "rear", "colour"):
         assert d["provenance"][key]["confidence"] == "estimated"
 
@@ -260,7 +263,7 @@ def test_every_figure_the_guide_does_not_print_is_a_declared_gap(dev):
 def test_the_dcim_types_export_one_per_orderable_configuration(target, dev):
     d = load(dev)
     folder = LIB / "exports" / target / "device-types" / "Juniper"
-    for cfg in d["configurations"].values():
+    for cfg in (c for c in d["configurations"].values() if c["kind"] != "example"):
         pn = sorted(cfg["part-numbers"])[0]
         doc = yaml.safe_load((folder / f"{pn}.yaml").read_text())
         assert doc["manufacturer"] == "Juniper" and doc["model"] == pn
