@@ -1,0 +1,667 @@
+format: 1
+kind: device
+name: ar7722
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AR7722
+description: 'Vertical cable manager for a 600 mm wide, 45U NetShelter SX cabinet, APC AR7722: a 23U length and
+  a 20U length, each a rail with a smooth plastic loop to every rack unit, stood end to end down one side of the
+  cabinet''s zero-U space. It takes no rack unit.'
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: 'datasheet - `rack-side`: "Number of rack unit 0U", "Mounting Location Side" and the installation sheet
+      (990-5140A) hooks it onto the side of the cabinet, in the zero-U space. `ru: 43` is the 23U and the 20U length
+      it is made of. Which side is a placement''s to say.'
+  method:
+    confidence: datasheet
+    note: 'FIGURES FROM THE MAKER''S OWN DOCUMENTS, read as data: the AR7722 data sheet and the installation sheet
+      990-5140A. The data sheet''s height, width, depth and weight are `datasheet`. The sheet''s 1911 mm is the
+      two lengths end to end: the installation sheet labels them 20U and 23U, 20 x 44.45 + 23 x 44.45 = 1911.35.
+      Everything read off the sheet''s figures is estimated and said so. No drawing or photograph is copied.'
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 107 x 1911 x 45: "Width 4.2 in (107 mm)", "Height 75.2 in (1911 mm)", "Depth 1.8 in (45 mm)",
+      for the set of two lengths. The height is drawn 1911.35, the 43 rack units of the two lengths, so they stand
+      end to end with no overlap; the sheet prints whole millimetres.'
+  depth:
+    confidence: datasheet
+    note: datasheet - "Depth 1.8 in (45 mm)".
+  shell:
+    confidence: estimated
+    note: estimated - the loops are drawn as slabs the depth of the part; no view sections a loop.
+  thickness:
+    confidence: estimated
+    note: estimated - no document states a gauge; the parts carry their own depths.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Net Weight 5.004 lb(US) (2.27 kg)" for the set of two; packed 2.73 kg.
+  front:
+    confidence: estimated
+    note: 'estimated - the face the installation sheet draws: the 23U length above the 20U, a rail down the left
+      edge and a loop to each of 43 rack units.'
+  rear:
+    confidence: estimated
+    note: estimated - the back of the same loops, the rail on the right.
+  top:
+    confidence: estimated
+    note: 'estimated - the plan: the rail and the top loop''s edge.'
+  bottom:
+    confidence: estimated
+    note: estimated - the plan again; the two ends are alike.
+  left:
+    confidence: estimated
+    note: estimated - the rail's edge down the part, read from the plan.
+  right:
+    confidence: estimated
+    note: estimated - the loops' ends down the part.
+  guides:
+    confidence: estimated
+    note: estimated - the duct is the run down the loops, at one rack unit pitch, the gap the pitch less the 31
+      mm loop.
+  capacity:
+    confidence: datasheet
+    note: datasheet - no cable capacity is stated (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: 'datasheet - "Color: Black", the provided equipment (2 x vertical cable organizers, installation guide);
+      the installation sheet lists six nylon spacers and six 8-32 screws.'
+  color:
+    confidence: estimated
+    note: 'estimated - "Color: Black". The shade is the library''s render of black plastic.'
+attrs:
+  physical:
+    weight-kg: 2.27
+    color: Black
+    mounting-hardware: Nylon spacer x6 and 8-32 screw x6 (installation sheet)
+chassis:
+  width: 107.0
+  height: 1911.35
+  depth: 45.0
+  ru: 43
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 2.27
+  color: '#232527'
+gaps:
+- what: finger-shape
+  scope:
+  - front
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  note: the installation sheet draws each finger in an isometric or face-on figure that is not dimensioned. Its
+    height, length and the shape of its tip are read off the figure and estimated.
+  wanted: a section through a finger and the rail or back plate
+- what: cable-capacity
+  scope:
+  - front
+  reason: vendor-silent
+  note: the data sheet states no cable capacity, so none is recorded and none is estimated.
+  wanted: a capacity figure and the cable it is stated for
+- what: cabinet-fit
+  scope:
+  - rear
+  reason: vendor-silent
+  note: which NetShelter SX cabinets take this manager is stated only by the data sheet's title and the installation
+    sheet's; no cabinet model number is listed, and the library has no NetShelter SX enclosure to place it in.
+  wanted: the maker's compatibility list, and the cabinet's accessory channel drawing
+- what: mounting-interface
+  scope:
+  - rear
+  reason: needs-drawing
+  note: the installation sheet shows the manager hooked onto keyhole slots in the cabinet's accessory channel and
+    held by screws; the slots' pitch and the hooks are not dimensioned and are not drawn.
+  wanted: a dimensioned drawing of the manager fitted to the channel
+- what: length-seam
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  note: the set is two lengths, 23U and 20U; they are drawn end to end and the joint is not dimensioned. Which of
+    the two stands higher is read off the installation sheet's figures (the 23U above, page 2).
+  wanted: a drawing of the two lengths fitted to one side
+groups:
+  lengths:
+    term: Length
+    role: furniture
+    index-origin: 1
+    description: the 23U length, then the 20U length, top to bottom
+views:
+  front:
+    size:
+      w: 107.0
+      h: 1911.35
+    components:
+      placements:
+      - ref: apc/nsx-vcm-23u@1
+        id: length-23u
+        at:
+        - 0.0
+        - 0.0
+        group: lengths
+        rel-pos: 1
+      - ref: apc/nsx-vcm-20u@1
+        id: length-20u
+        at:
+        - 0.0
+        - 1022.3499999999999
+        group: lengths
+        rel-pos: 2
+    guides:
+    - id: duct
+      kind: duct
+      at:
+      - 12.0
+      - 0
+      size:
+      - 95.0
+      - 1911.35
+      run: y
+      finger-pitch: 44.45
+      finger-gap: 13.45
+      confidence: estimated
+      source: 'installation sheet 990-5140A, page 1 figure: a loop to each rack unit down the length; the pitch
+        the rack unit of the data sheet''s family, the gap the pitch less the loop drawn 31 high'
+  rear:
+    size:
+      w: 107.0
+      h: 1911.35
+    panel:
+      decor:
+      - id: rail
+        at:
+        - 95
+        - 0
+        size:
+        - 12
+        - 1911.35
+        fill: '#232527'
+        kind: base
+      - id: loop-1
+        at:
+        - 0
+        - 6.725
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-2
+        at:
+        - 0
+        - 51.175
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-3
+        at:
+        - 0
+        - 95.625
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-4
+        at:
+        - 0
+        - 140.075
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-5
+        at:
+        - 0
+        - 184.525
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-6
+        at:
+        - 0
+        - 228.975
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-7
+        at:
+        - 0
+        - 273.425
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-8
+        at:
+        - 0
+        - 317.875
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-9
+        at:
+        - 0
+        - 362.325
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-10
+        at:
+        - 0
+        - 406.775
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-11
+        at:
+        - 0
+        - 451.225
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-12
+        at:
+        - 0
+        - 495.675
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-13
+        at:
+        - 0
+        - 540.125
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-14
+        at:
+        - 0
+        - 584.575
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-15
+        at:
+        - 0
+        - 629.025
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-16
+        at:
+        - 0
+        - 673.475
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-17
+        at:
+        - 0
+        - 717.925
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-18
+        at:
+        - 0
+        - 762.375
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-19
+        at:
+        - 0
+        - 806.825
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-20
+        at:
+        - 0
+        - 851.275
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-21
+        at:
+        - 0
+        - 895.725
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-22
+        at:
+        - 0
+        - 940.175
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-23
+        at:
+        - 0
+        - 984.625
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-24
+        at:
+        - 0
+        - 1029.075
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-25
+        at:
+        - 0
+        - 1073.525
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-26
+        at:
+        - 0
+        - 1117.975
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-27
+        at:
+        - 0
+        - 1162.425
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-28
+        at:
+        - 0
+        - 1206.875
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-29
+        at:
+        - 0
+        - 1251.325
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-30
+        at:
+        - 0
+        - 1295.775
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-31
+        at:
+        - 0
+        - 1340.225
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-32
+        at:
+        - 0
+        - 1384.675
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-33
+        at:
+        - 0
+        - 1429.125
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-34
+        at:
+        - 0
+        - 1473.575
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-35
+        at:
+        - 0
+        - 1518.025
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-36
+        at:
+        - 0
+        - 1562.475
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-37
+        at:
+        - 0
+        - 1606.925
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-38
+        at:
+        - 0
+        - 1651.375
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-39
+        at:
+        - 0
+        - 1695.825
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-40
+        at:
+        - 0
+        - 1740.275
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-41
+        at:
+        - 0
+        - 1784.725
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-42
+        at:
+        - 0
+        - 1829.175
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: loop-43
+        at:
+        - 0
+        - 1873.625
+        size:
+        - 95
+        - 31.0
+        fill: '#26282a'
+        kind: finger-wall
+  top:
+    size:
+      w: 107.0
+      h: 45.0
+    panel:
+      decor:
+      - id: rail
+        at:
+        - 0
+        - 0
+        size:
+        - 12
+        - 45
+        fill: '#232527'
+        kind: base
+      - id: loop
+        at:
+        - 12
+        - 0
+        size:
+        - 95
+        - 45
+        fill: '#26282a'
+        kind: finger-wall
+  bottom:
+    size:
+      w: 107.0
+      h: 45.0
+    panel:
+      decor:
+      - id: rail
+        at:
+        - 0
+        - 0
+        size:
+        - 12
+        - 45
+        fill: '#232527'
+        kind: base
+      - id: loop
+        at:
+        - 12
+        - 0
+        size:
+        - 95
+        - 45
+        fill: '#26282a'
+        kind: finger-wall
+  left:
+    size:
+      w: 45.0
+      h: 1911.35
+    panel:
+      decor:
+      - id: rail
+        at:
+        - 0
+        - 0
+        size:
+        - 45
+        - 1911.35
+        fill: '#232527'
+        kind: base
+  right:
+    size:
+      w: 45.0
+      h: 1911.35
+    panel:
+      decor:
+      - id: loops
+        at:
+        - 0
+        - 0
+        size:
+        - 45
+        - 1911.35
+        fill: '#26282a'
+        kind: finger-wall
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The set as APC ships AR7722: a 23U and a 20U length.'
+datasheet:
+  title: APC NetShelter Cable Management, Vertical Cable Manager, for NetShelter SX 600mm Wide 45U, Set of 2, 107
+    x 1911 x 45 mm (AR7722), product data sheet
+  url: https://www.se.com/us/en/product/download-pdf/AR7722?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR7722.pdf
+  sha256: 038106b04b35f5057bdf908800ea5a6e52c0a2c3a4557c7ee6b31cae71ee4fdb
+references:
+- title: Vertical Cable Manager for NetShelter SX 600 mm 45U Cabinet (AR7722), installation sheet 990-5140A, 1/2016
+  url: https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=MLAN-97BN9M_R1_EN.pdf&p_Doc_Ref=SPD_MLAN-97BN9M_EN
+  sha256: 6139d3246068ed7b70ae3246016b44259010196b3548f57ecc21a38a9715fa9f
+- title: Enclosure and Rack Systems, Cable Management, brochure
+  url: https://download.se.com/files?p_enDocType=Brochure&p_File_Name=JCOS-7H4M68_R9_EN.pdf&p_Doc_Ref=SPD_JCOS-7H4M68_EN
+  sha256: 02469963a9f34e0aa7052010a9edef1c9a5e2c2fe5392a2a9f96ba48c5f5c501
