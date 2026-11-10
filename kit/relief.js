@@ -13,6 +13,7 @@
 import { paintFields, unpaintFields, paintAdjustments } from './fields.js';
 import { paintDisplays } from './displays.js';
 import { boundLamps, expandStates } from './states.js';
+import { seatPoint } from './section.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -275,6 +276,32 @@ export function faceFrame({pos, rot, flipLX = false, flipLY = false}, fw, fh) {
       const l = [0, 1, 2].map(j => m[0][j] * d[0] + m[1][j] * d[1] + m[2][j] * d[2]);
       return {x: sx * l[0] + fw / 2, y: fh / 2 - sy * l[1], behind: -l[2]};
     },
+  };
+}
+
+// WHERE EACH PART STANDS ON A STEPPED HOUSING (section.js surfaceUnder). Every
+// part of a face is built on the face's flat plane; on a housing that states a
+// section a part is moved along the plane's normal to the surface under its
+// CENTRE, so one that straddles a step takes the depth at its centre. `rects`
+// are the face's entries in drawing mm ({owner?, x, y, w, h}); all the entries
+// of one owner are one part, whose centre is the centre of their union, so a
+// bezel, its cavity and its studs move together. `seatAt(cx, cy)` answers the
+// offset under a drawing point, or is null for a housing with no section, which
+// puts every part at 0. Returns the function that answers for one entry.
+export function partSeats(rects, seatAt) {
+  if (!seatAt) return () => 0;
+  const union = new Map();
+  for (const r of rects) {
+    if (!r.owner) continue;
+    const u = union.get(r.owner);
+    union.set(r.owner, u ? {x0: Math.min(u.x0, r.x), y0: Math.min(u.y0, r.y),
+                            x1: Math.max(u.x1, r.x + r.w), y1: Math.max(u.y1, r.y + r.h)}
+                          : {x0: r.x, y0: r.y, x1: r.x + r.w, y1: r.y + r.h});
+  }
+  return r => {
+    const u = r.owner && union.get(r.owner);
+    if (u) return seatAt((u.x0 + u.x1) / 2, (u.y0 + u.y1) / 2);
+    return Number.isFinite(r.x + r.w) && Number.isFinite(r.y + r.h) ? seatAt(r.x + r.w / 2, r.y + r.h / 2) : 0;
   };
 }
 
@@ -3624,11 +3651,42 @@ export async function buildFaceRelief(F, ctx) {
       tiltGroupIn(parent, t, {fw, fh, flipLX: !!F.flipLX, flipLY: !!F.flipLY});
     const sideMats = c => Array.from({length: 6},
       () => new THREE.MeshLambertMaterial({color: c}));
+    // A PART OF A STEPPED HOUSING STANDS ON THE FACET UNDER IT (partSeats,
+    // section.js). `ctx.section` is the published polygon with the chassis
+    // size, present only when the body is built from it; without it every seat
+    // is 0 and a part is built on the flat plane as it always was. The centre of
+    // a part on the flat plane is taken to the scene through this face's own
+    // frame, so a flipped face (the underside) reads the same column.
+    const seatFrame = ctx.section
+      ? faceFrame({pos: F.pos(), rot: F.rot, flipLX: !!F.flipLX, flipLY: !!F.flipLY}, fw, fh) : null;
+    const seatRect = (owner, e) => { const p = e.proj || e; return {owner, x: p.x, y: p.y, w: p.w, h: p.h}; };
+    const seatFor = partSeats(
+      [...[...cavities, ...outs, ...domes].map(e => seatRect(e.owner, e)),
+       ...frus.map(f => seatRect(f.path, f))],
+      seatFrame && ((cx, cy) => seatPoint(ctx.section.polygon, F.view, seatFrame.world(cx, cy, 0),
+                                          ctx.section.W, ctx.section.H, ctx.section.D)));
+    // the offset of an entry (owned by its `owner`), and of a FRU (owned by its own path)
+    const seatOf = e => seatFor(seatRect(e.owner, e));
+    const seatOfFru = f => seatFor(seatRect(f.path, f));
+    // one group per distinct offset, hung off the face; a part at 0 is in the face's own
+    const seatGroups = new Map();
+    const seatGroup = dz => {
+      if (!dz) return grp;
+      const k = dz.toFixed(3);
+      if (!seatGroups.has(k)) {
+        const g = new THREE.Group();
+        g.position.z = dz;
+        grp.add(g);
+        seatGroups.set(k, g);
+      }
+      return seatGroups.get(k);
+    };
     // each FRU gets a subgroup so its art and relief travel together when ejected
     const fruGroups = {};
     // a card's optic rides in the card's group (bodyRole `nested`): pulled on
-    // its own, and gone with the card - every other FRU hangs off the face
-    const hostOf = f => (f.within || []).map(p => p && fruGroups[p]).find(Boolean) || grp;
+    // its own, and gone with the card - every other FRU hangs off the face, at
+    // the depth of the facet under it
+    const hostOf = f => (f.within || []).map(p => p && fruGroups[p]).find(Boolean) || seatGroup(seatOfFru(f));
     for (const f of frus) {
       const fg = new THREE.Group();
       (f.tilt ? tiltGroupFor(f.tilt, hostOf(f)) : hostOf(f)).add(fg);
@@ -3646,14 +3704,15 @@ export async function buildFaceRelief(F, ctx) {
                           bodyDepth: f.bodyDepth, pull: travel.pull,
                           leavesBay: travel.leavesBay, bayDepth: travel.bayDepth};
     }
-    let curOwner = null, curTilt = null;
+    let curOwner = null, curTilt = null, curSeat = 0;
     // Tagged on the way in, so `setPulled` can hide a part's relief without the
     // part having to be a FRU. A cover's meshes stay in the shared group - they
     // are not going anywhere - and simply stop being drawn.
     // A tilted entry goes into its tilt group under the same parent.
+    // What is not in a FRU's group stands at its part's seat (`curSeat`).
     const addTo = obj => {
       if (curOwner) obj.userData.portrayalPath = curOwner;
-      const into = curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : grp;
+      const into = curOwner && fruGroups[curOwner] ? fruGroups[curOwner] : seatGroup(curSeat);
       return (curTilt ? tiltGroupFor(curTilt, into) : into).add(obj);
     };
     // the front-view rect of an entry: where its art is cut from the face
@@ -3667,6 +3726,7 @@ export async function buildFaceRelief(F, ctx) {
       // same path - the collar went out with the cassette and a tree pull hid it.
       curOwner = c.hollow ? null : c.owner;
       curTilt = c.tilt || null;
+      curSeat = seatOf(c);
       // a tilted cavity's art is cut at its front-view rect and stretched over
       // its true size (for every other cavity pc is c)
       const pc = projOf(c);
@@ -3873,6 +3933,7 @@ export async function buildFaceRelief(F, ctx) {
     for (const dm of domes) { // gentle domes: node art draped on a paraboloid cap
       curOwner = dm.owner;
       curTilt = dm.tilt || null;
+      curSeat = seatOf(dm);
       // (LED lamps, bulged fan guards); apex proud, rim sunk 0.15 into the face
       // (the kept raster itself: a texture only reads it)
       const dcv = await rasterSource(dm.svgText, dm.w, dm.h, PX);
@@ -3895,6 +3956,7 @@ export async function buildFaceRelief(F, ctx) {
     for (const o of outs) {   // protrusions: bezel plates, handles, studs, tubes
       curOwner = o.owner;
       curTilt = o.tilt || null;
+      curSeat = seatOf(o);
       // the pocket a sunk facet stands in, for what its skirt stands beside
       // (profileSkirt, emptyHeightAt); a proud facet has none
       if (o.facet && (o.lift || 0) < 0)
@@ -4277,6 +4339,7 @@ export async function buildFaceRelief(F, ctx) {
     }
     curOwner = null;
     curTilt = null;
+    curSeat = 0;
     // DEEPEST FIRST: a card's optic cuts its plane off the face before the
     // card punches its own shape out (the card's art leaves the optic out, but
     // its punch would still clear the optic's pixels). The sort is stable, so
@@ -4504,12 +4567,13 @@ export async function buildFaceRelief(F, ctx) {
       bay.userData.portrayalPath = f.path;
       // an optic's cage is on its card, so the hole behind it leaves with the card;
       // a tilted module's hole is in its tilt frame, which is its group's parent
-      (f.within || f.tilt ? fruGroups[f.path].parent : grp).add(bay);
+      (f.within || f.tilt ? fruGroups[f.path].parent : seatGroup(seatOfFru(f))).add(bay);
     }
     for (const s of subBodies) {
       const body = BODY_META[s.ref];
       if (!body || !body.boxes) continue;
-      const into = s.tilt ? tiltGroupFor(s.tilt, fruGroups[s.owner] || grp) : fruGroups[s.owner] || grp;
+      const host = fruGroups[s.owner] || seatGroup(seatFor({owner: s.owner}));
+      const into = s.tilt ? tiltGroupFor(s.tilt, host) : host;
       for (const b of bodyBoxes(body, 0, 0)) {
         if (!pieceFitted(b, shown[s.path])) continue;
         const r = s.tilt ? unproject(localToFace(s.toFace, b), s.tilt) : localToFace(s.toFace, b);

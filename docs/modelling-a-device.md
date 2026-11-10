@@ -582,15 +582,19 @@ side facet takes the drawing of the face it looks toward, projected flat: a face
 facing up or down shows the top or bottom drawing, one facing the front or rear
 shows that drawing at its own height. Check: look at the box from above, below,
 the front and either end in the viewer; the steps stand out of the casting and
-each end is its outline with clear corners. Ports, bays and component relief on
-such a device are still placed on the flat plane of the bounding box, so a part
-over a recessed facet stands from that plane and hangs in the air over the facet.
+each end is its outline with clear corners. A part on the front or rear face stands
+at the depth of the casting under the row of its centre; a part on the top or
+bottom face at the height of the casting under the column of its centre; relief
+`out` is measured from there. A part on an end face is not moved, the ends being
+flat. Check: a plug on a recessed casting touches it from the side, and does not
+hang in front of it. A front or rear part that runs across a step (for example the
+flange) has two depths under it and takes the one under its centre row; lint does
+not refuse it, so keep such a part wholly on one level.
 
-**What is not there yet.** Ribs or fins on the housing, relief taken from the
-facet under a part, the GLB, USDZ and image exports of the stepped body and the
-open state of a housing with a section come in later changes, so a modeller
-should not look for them: a fin is drawn as art on the face for now, and a device
-with a `section` cannot also state `halves`.
+**What is not there yet.** Ribs or fins on the housing, relief taken from a fin
+field, and the open state of a housing with a section come in later changes, so a
+modeller should not look for them: a fin is drawn as art on the face for now, and
+a device with a `section` cannot also state `halves`.
 
 ## Stage 2: the cutouts
 

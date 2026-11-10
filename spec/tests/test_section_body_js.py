@@ -471,7 +471,9 @@ def test_no_library_device_states_a_section():
     paths = libwalk.iter_devices([LIB])
     assert len(paths) > 100
     for path in paths:
-        assert "section" not in (yaml.safe_load(path.read_text()).get("chassis") or {}), path
+        text = path.read_text()
+        if "section" in text:         # only a file that says the word can state the key
+            assert "section" not in (yaml.safe_load(text).get("chassis") or {}), path
 
 
 @pytest.mark.heavy
