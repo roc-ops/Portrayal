@@ -8,5 +8,5 @@
   of the two pairs and the 5/8 in. pitch, taken from the 3000 W sibling's lug, are estimated and the contract says so. The port states
   no voltage, because the guide gives a range.
 - The QFX5230-64CD, which places it in its DC AIR IN configuration, takes a minor, because the build now publishes a DC port for it,
-  with its lock and the drawing version line of its exported device types; the supply's module type carries the new contract
+  with its version file and the drawing version line of its exported device types; the supply's module type carries the new contract
   version. No port, interface or id moves. One row of the records file is gone.
