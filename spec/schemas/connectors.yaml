@@ -151,6 +151,11 @@ interfaces:
   stud-pair-5-8: {standard: two-hole-lug-5-8, turns: [0, 180], note: 'two studs or tapped holes on 5/8 in. (15.875) centres that one two-hole lug lands across; generic/two-hole-lug-5-8@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
   stud-pair-3-4: {standard: two-hole-lug-3-4, turns: [0, 180], note: 'two studs or tapped holes on 3/4 in. (19.05) centres that one two-hole lug lands across; generic/two-hole-lug-3-4@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
   stud-pair-1: {standard: two-hole-lug-1, turns: [0, 180], note: 'two studs or tapped holes on 1 in. (25.4) centres that one two-hole lug lands across; generic/two-hole-lug-1@1 mates it. The ring lug still mates each stud alone', spans: {interface: terminal-stud, count: 2}}
+  # A SPADE (FORK) TERMINAL ON AN M4 POST. The Casa C100G Hardware Installation Guide (07/08/2022), page 6-20 (PDF page 134),
+  # "Required terminals": "Use spade terminals for screw M4; install between two flat washers." Its own interface and not
+  # `terminal-stud`: a ring lug is threaded over the end of a stud and a spade slides in from the side, so a ring lug does not
+  # land where a spade does. The thread is in the key because the page states it. The lug's own size is not.
+  spade-m4: {turns: [0, 90, 180, 270], note: 'an M4 post or screw that takes a spade (fork) terminal slid in between two flat washers, under its locking nut, as the Casa C100G Hardware Installation Guide (07/08/2022) asks of the power entry module terminals ("spade terminals for screw M4"). The guide states the post and the terminal type and no direction the terminal leaves in, so all four right angles are allowed. generic/spade-lug@1 mates it. A one-hole ring lug is a different interface (terminal-stud). No standard is held for a spade terminal, so the entry cites none'}
   # The high-density and telephone connectors (#790,
   # docs/connectors-mrj21-vhdci-rj11-design.md). The cable plug that mates
   # each is a generic plug; the far end of the cable, and any breakout, is not
