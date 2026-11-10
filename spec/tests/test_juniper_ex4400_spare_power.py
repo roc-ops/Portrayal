@@ -8,7 +8,8 @@ spare. The spare now states the feeds the hardware guide prints for it, the way
 
   - EX4400-24P-S, 24MP-S, 48P-S, 48MP-S: the guide lists the 2000 W DC supply for the spare
     ("Additional spare models" in the model overview and the DC power supply ratings table)
-    and the 1600 W AC supply in the AC ratings table, so the build lists `ac` and `dc`.
+    and the 1600 W AC supply (an AC ratings row for the 24P-S and 24MP-S, the model's own
+    sentence for the 48P and 48MP), so the build lists `ac` and `dc`.
   - EX4400-24T-S, 48T-S: "supports 550-W AC or DC power supplies" in the model's own section.
   - EX4400-48F-S: the same sentence for the model, and the -S takes the 550 W variable DC
     supply as well.
