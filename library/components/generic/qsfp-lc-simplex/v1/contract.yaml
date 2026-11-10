@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc-simplex
-version: 1.0.1
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -103,8 +103,23 @@ provenance:
     so the two ends of one link differ; one vendor render of this face shows a
     violet tab, and neither datasheet states a colour. A vendor wrapper sets
     `latch-color`.
+  groups: >-
+    Source: the ROBOfiber QSFP-10010-WA/WB datasheet Rev 1.1 p8 Figure 3 end view and the GBC
+    Photonics QSFP28 BiDi 100GbE datasheet p4 end view, which both draw a single ferrule in the
+    face's transmit position (provenance.bore). The role is traffic, this contract's own reading
+    of the job: the module's network port, where its fibre or cable is plugged in. The shape
+    stands for every module of its kind, so the group states no speed: rate, reach and watts
+    belong on the vendor wrapper.
+groups:
+  qsfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the one LC bore of a QSFP-family simplex module
 parts:
-  - {ref: std/lc-bore@3, id: bore, at: [3.70, 0.95], rotate: 180, lift: 19.2}
+  - {ref: std/lc-bore@3, id: bore, group: qsfp, at: [3.70, 0.95], rotate: 180, lift: 19.2}
   - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 19.2}
 relief:
   features:

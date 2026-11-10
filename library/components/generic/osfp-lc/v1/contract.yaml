@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: osfp-lc
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: osfp
@@ -116,9 +116,23 @@ provenance:
     TABLE 3-3 ALSO USES GREY, for an active optical cable: the default here
     is the library neutral and not that code. A vendor wrapper sets
     `latch-color`.
+  groups: >-
+    Source: the OSFP Module Specification Rev 5.22 Figure 14-27, which draws the two bores with
+    transmit left of receive looking at the front (provenance.bores). The role is traffic, this
+    contract's own reading of the job: the module's network port, where its fibre or cable is
+    plugged in. The shape stands for every module of its kind, so the group states no speed:
+    rate, reach and watts belong on the vendor wrapper.
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of an OSFP module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [5.815, 4.75], rotate: 180, lift: 21.39}
-  - {ref: std/lc-bore@3, id: rx, at: [12.065, 4.75], rotate: 180, lift: 21.39}
+  - {ref: std/lc-bore@3, id: tx, group: osfp, at: [5.815, 4.75], rotate: 180, lift: 21.39}
+  - {ref: std/lc-bore@3, id: rx, group: osfp, at: [12.065, 4.75], rotate: 180, lift: 21.39}
   - {ref: common/osfp-pull-tab@1, id: tab, at: [0.0, 1.35], lift: 21.39}
 relief:
   features:

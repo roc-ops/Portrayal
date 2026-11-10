@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-lc
-version: 2.2.3
+version: 2.3.0
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -205,9 +205,23 @@ provenance:
     up (render.py `stroke_shade`) - and #444444 for this default, the shade
     of #6f6f6f. It was a literal (#9a9a9a) that no field moved, so any
     `latch-color` but the default was drawn with the default's edge (#482).
+  groups: >-
+    Source: the ProLabs PAN-QSFP28-100GBASE-CWDM4-C datasheet, Mechanical Specifications,
+    section A-A, which labels the T and R bores on the module face (provenance.face-lc). The
+    role is traffic, this contract's own reading of the job: the module's network port, where
+    its fibre or cable is plugged in. The shape stands for every module of its kind, so the
+    group states no speed: rate, reach and watts belong on the vendor wrapper.
+groups:
+  qsfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of a QSFP-family module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.95], rotate: 180, lift: 20.0}
-  - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.95], rotate: 180, lift: 20.0}
+  - {ref: std/lc-bore@3, id: tx, group: qsfp, at: [3.70, 0.95], rotate: 180, lift: 20.0}
+  - {ref: std/lc-bore@3, id: rx, group: qsfp, at: [9.95, 0.95], rotate: 180, lift: 20.0}
   # THE TAB IS COMPOSED AGAIN. It was painted here only because a composed part
   # could not take latch-color at build time; since pluggables-heads decision 4 it
   # can. lift 20.0 stands it on the nose front. At y -1.23 the grip's top sits

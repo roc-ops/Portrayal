@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: osfp-mpo16
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: osfp
@@ -127,8 +127,22 @@ provenance:
     nm one, so the face does not choose. NOTE THAT TABLE 3-3 ALSO USES GREY,
     for an active optical cable: the default here is the library neutral and
     not that code. A vendor wrapper sets `latch-color`.
+  groups: >-
+    Source: the OSFP Module Specification Rev 5.22 section 14.4.12 and Figure 14-46, which
+    describe the MPO-16 receptacle of the module (provenance.receptacle). The role is traffic,
+    this contract's own reading of the job: the module's network port, where its fibre or cable
+    is plugged in. The shape stands for every module of its kind, so the group states no speed:
+    rate, reach and watts belong on the vendor wrapper.
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the MPO-16 receptacle of an OSFP module
 parts:
-  - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [4.84, 5.2], lift: 21.39}
+  - {ref: std/mpo16-module-receptacle@1, id: mpo16, group: osfp, at: [4.84, 5.2], lift: 21.39}
   - {ref: common/osfp-pull-tab@1, id: tab, at: [0.0, 1.35], lift: 21.39}
 relief:
   features:
