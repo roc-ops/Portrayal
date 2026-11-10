@@ -69,6 +69,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
+| `section.js` | the 3D body of a housing that states `chassis.section`: the end profile extruded along the width, each facet mapped like the box face it looks toward; no THREE in it, so it runs under node (used by `viewer3d.js`) |
 | `camera-fit.js` | the 3D opening view fitted to the chassis box: the nearest distance at which all eight corners sit inside the frame for the lens and the frame's aspect (never nearer than the old two spans), with the dolly limit and far plane that follow it; no THREE in it, so it runs under node (used by `viewer3d.js`) |
 | `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
 | `marks.js` | annotation and callouts |
