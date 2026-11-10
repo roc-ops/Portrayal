@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ocp3-4x1g-rj45
-version: 1.1.0
+version: 1.2.0
 class: nic
 behaviour: fills
 profile: server
@@ -76,15 +76,28 @@ provenance:
   power: >-
     NOT STATED for this card. TG Table 11 gives the OCP slot's range, 15-35 W,
     for every card it takes; no document held gives this card's own figure.
+  groups: >-
+    Dell, PowerEdge R660 Technical Guide, 'Supported OCP cards' (Table 12, printed pages 21 and 22):
+    each OCP 3.0 row gives a card's port type, port speed and port count, here port type 'BT', port
+    speed '1 GbE' and port count '4', so the four ports of the card are one kind at one rate. The
+    role is traffic. The guide prints no label for an individual port, so the group numbers the
+    ports as the part ids do, from 1. The vendors the table lists for the row are not named here.
 size: {w: 71.8, h: 15.1, d: 115.0}
 plan: {ref: dell/ocp3-sff-plan@1}
 size-confidence: {w: measured, h: measured, d: measured}
 body:
   depth: 115.0
   color: '#b8bdc2'
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the four 1 GbE RJ45 ports of the card, numbered 1 to 4 as the part ids number them
 parts:
-  - {ref: common/rj45-ganged-eth@1, id: port-1, at: [8.05, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
-  - {ref: common/rj45-ganged-eth@1, id: port-2, at: [22.35, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
-  - {ref: common/rj45-ganged-eth@1, id: port-3, at: [36.65, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
-  - {ref: common/rj45-ganged-eth@1, id: port-4, at: [50.95, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-1, group: ports, at: [8.05, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-2, group: ports, at: [22.35, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-3, group: ports, at: [36.65, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-ganged-eth@1, id: port-4, group: ports, at: [50.95, 1.9], rotate: 180, attrs: {media: rj45, speed: 1g}}
 skins: [default]
