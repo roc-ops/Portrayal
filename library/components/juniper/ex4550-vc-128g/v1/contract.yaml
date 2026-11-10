@@ -1,0 +1,72 @@
+format: 1
+kind: module
+name: ex4550-vc-128g
+version: 1.0.0
+class: fabric
+behaviour: fills
+profile: networking
+description: >-
+    Juniper EX4550-VC-128G, the 128 Gbps Virtual Chassis module of the EX4550 switches (the face prints EX4550-VC1-128G). It slides into the module slot on the front panel or the one on the rear panel. It has two dedicated Virtual Chassis ports, VCP-1 above VCP-0, that join the switch to an EX4200, EX4500 or EX4550 switch with a Virtual Chassis cable. One ST lamp shows its state and two captive screws hold it. It is hot-insertable and hot-removable.
+attrs:
+  model: EX4550-VC-128G
+  role: virtual-chassis-module
+  weight: 0.66 lb (0.3 kg)
+  power-absent: not-published
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Expansion Modules in EX4550 Switches: Table 8 (PDF pages 43 to 44) lists the module and its model number; Virtual Chassis Module in EX4550 Switches: Figure 14 (PDF page 47, the module in three-quarter view) and Figure 15 (PDF page 48, g021425, the face drawn flat); Table 3 (PDF page 23) lists it as EX4550-VC-128G. The cables it takes are EX-CBL-VCP-50CM, -1M, -3M and -5M (PDF page 48).
+  size: >-
+    estimated - no document dimensions the module. It fills the module slot, 86.5 x 41.0 mm, which juniper/ex4550-em-cover@1 reads
+    off Figures 4 and 6 (the method is there). The figure's outline is read as fractions and applied to 86.5 x 41.0 mm.
+  elements: >-
+    drawing - Figure 15 is a flat elevation, outline 1564 x 735 px at 600 dpi, read as fractions and applied to 86.5 x 41.0 mm. Two connector openings, VCP-1 above VCP-0, each centred 43.1 mm across; the part is the EX4200's port, 36.2 x 8.3 mm, where the figure draws a housing 37.5 x 10.6 mm. Four hex posts beside the openings (not named in the guide). The ST lamp is at 8.0, 28.6 mm. Screws, vents, notches and the legend are drawn as on the other modules; the face prints EX4550-VC1-128G where Table 3 prints EX4550-VC-128G.
+  colour: >-
+    estimated - no photograph of this module is held and the figures are line drawings. The plate takes the grey of the
+    nearest held evidence of this maker's module faces (#888c92, the fitted EX-UM-4X4SFP in the EX4300-24T photograph); the
+    screws are silver. A photograph would replace it.
+  led: >-
+    datasheet - guide Figure 15 callouts and Table 9 (PDF page 46): the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and functioning normally. Table 10 (PDF page 49): green when the module works, unlit when it does not or the switch is off.
+  weight: >-
+    datasheet - guide, Table 6, Chassis Physical Specifications (PDF page 36): "Virtual Chassis module: 0.66 lb (0.3 kg)".
+  power: >-
+    not published - searched the guide's power tables for a figure for any module and found only whole-switch totals, so the
+    module declares power-absent.
+  ports: >-
+    borrowed - juniper/ex4200-vcp-port@1, as juniper/ex4500-vc1@1 borrows it: the guide's Virtual Chassis cables EX-CBL-VCP-50CM to -5M
+    join EX4200, EX4500 and EX4550 switches (PDF page 48), so one cable fits all and it is one connector and one part.
+states:
+- ok
+- fail
+- absent
+groups:
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: >-
+      The two dedicated Virtual Chassis ports, VCP-0 (lower) and VCP-1 (upper). The CLI names them VCP-1/0 and VCP-1/1 in the front slot and VCP-2/0 and VCP-2/1 in the rear slot
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      the ST lamp of the module (guide Table 9)
+parts:
+- {ref: juniper/ex4200-vcp-port@1, id: vcp-1, at: [25.04, 5.95], group: vcp}
+- {ref: juniper/ex4200-vcp-port@1, id: vcp-0, at: [25.04, 26.7], group: vcp}
+- {ref: common/led-dot@1, id: led-st, at: [7.00, 27.60], group: status, attrs: {function: module status}}
+elements:
+  screw-left:
+    at: [0.30, 15.60]
+    size: [8.8, 8.8]
+    class: screw
+  screw-right:
+    at: [77.40, 15.60]
+    size: [8.8, 8.8]
+    class: screw
+size:
+  w: 86.5
+  h: 41.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

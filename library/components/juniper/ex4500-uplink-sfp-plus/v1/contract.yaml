@@ -1,0 +1,94 @@
+format: 1
+kind: module
+name: ex4500-uplink-sfp-plus
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+    The 4-port SFP+ uplink module of the Juniper EX4500 switches. It slides horizontally into either of the two uplink module slots on the front panel, PIC 1 at the left or PIC 2 at the right. It has four SFP+ cages side by side, numbered 0 to 3, each taking a 10 Gbps SFP+ transceiver or a 1 Gbps SFP transceiver. A link and activity lamp and a status lamp for each port, and one ST lamp, sit along the top edge. Two captive screws hold it. It ships with dust covers in the ports and is hot-insertable and hot-removable. The guide gives no Juniper part number for it.
+attrs:
+  role: uplink-module
+  sfp-plus: 4
+  weight-note: not published
+  power-absent: not-published
+  ports-note: four SFP+ ports, each at 10 Gbps with SFP+ or 1 Gbps with SFP, usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4500 Switch Hardware Guide (modified 2017-10-18): Uplink Modules in EX4500 Switches (PDF page 47, printed 25) and Figure 10 (PDF page 48, printed 26, g020806, the module in three-quarter view with the lamps and ST labelled); Figure 4 (PDF page 39, printed 17, g020800) and Figure 5 (PDF page 40) draw the module in place, flat. Figure 17 (printed 32) and Tables 13 and 14 give the port lamps. The guide prints no part number for the module.
+  size: >-
+    drawing - the slot's size, 151.0 x 40.8 mm, which juniper/ex4500-uplink-cover@1 reads off Figure 4 (the method is there). The module in Figure 4
+    is outlined 1725 x 464 px at 1200 dpi, an aspect of 3.72 against the slot's 3.70.
+  elements: >-
+        drawing - Figure 4 draws the module flat, read as fractions of its outline and applied to 151.0 x 40.8 mm. One row of four cages in one frame
+        from 45.1 to 106.8 mm, the cells 15.4 mm apart (the registry's 14.25 mm cage is centred in each), 10.3 mm down. Along the top edge eight lamp
+        slots in four pairs, one above each cage's number, and a ninth for ST at 119.0 mm; each is drawn as a slot and a 2 mm round lamp sits in it (the
+        figure draws slots 2.9 x 6.1 mm: the lamp is a stand-in, estimated). A latch bracket with a captive screw at each end, the screws 18.8 and 133.0
+        mm across, 10.9 mm across. A honeycomb field under the cages. Figure 10 gives the lamp order: link and activity, then status, for each port.
+        Positions are good to about 0.5 mm.
+  colour: >-
+    estimated - no photograph of this module is held and the figures are line drawings. The plate takes the grey of the
+    nearest held evidence of this maker's module faces (#888c92, the fitted EX-UM-4X4SFP in the EX4300-24T photograph); the
+    screws are silver. A photograph would replace it.
+  led: >-
+        datasheet - guide Table 7 (PDF page 48): the ST lamp is unlit when the module is offline or the chassis is off, and green when it is online and
+        functioning normally. Each port has a link and activity lamp and a status lamp (Figure 17, Tables 13 and 14).
+  weight: >-
+    not published - searched the guide's physical specifications (Table 6, printed 25) and found a chassis and a supply weight and no uplink module.
+  power: >-
+    not published - searched the guide's power tables for a figure for any module and found only whole-switch totals, so the
+    module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      The four cages, numbered 0 to 3 as printed. SFP+ at 10 Gbps, or SFP at 1 Gbps
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      A link and activity lamp and a status lamp for each port, along the top edge, in the order of Figure 10: link of port 0, status of port 0, and so on
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      the ST lamp of the module (guide Table 9)
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [45.70, 10.6], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [61.05, 10.6], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [76.40, 10.6], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [91.75, 10.6], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [48.00, 3.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [55.70, 3.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [63.30, 3.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [70.90, 3.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [78.40, 3.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [86.10, 3.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [93.50, 3.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [101.10, 3.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [118.00, 3.60], group: status, attrs: {function: module status}}
+elements:
+  screw-left:
+    at: [13.35, 10.95]
+    size: [10.9, 10.9]
+    class: screw
+  screw-right:
+    at: [127.55, 11.25]
+    size: [10.9, 10.9]
+    class: screw
+size:
+  w: 151.0
+  h: 40.8
+size-confidence: {w: estimated, h: estimated}
+skins: [default]
