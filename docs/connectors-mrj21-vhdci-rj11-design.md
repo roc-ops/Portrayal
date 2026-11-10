@@ -67,7 +67,7 @@ slot. The VHDCI and RJ11 parts stated no interface. There was no cable plug.
 | VHDCI plug | SFF-8441 Rev 14.1, Figures 18, 25 and 27 | front shell 7.10 long, flange 35.08 x 5.80, screwlocks on 37.7 centres, mated gap 0.34, fixed shell 5.2 proud |
 | | Cliff Electronic Components data sheet VHDCI Cable (08/2021 ISS.2) | a raster drawing of the hood with thumbscrews; cable OD 10.0, black; 5 mm screws |
 | RJ11 plug | Multicomp drawing M10002356 rev A, sheets 1 and 2 | body 9.65 x 6.60 x 12.43, latch 2.77 below, cable entry 2.90 x 5.20 |
-| RJ11 jack | TE customer drawing C-1775675 rev C | six-position housing 13.34 x 12.6 x 20.57, opening 9.88 |
+| RJ11 jack | TE customer drawing C-1775675 rev C | six-position housing 13.34 x 15.0 x 20.57 (the 12.6 the front view prints is its side lugs), opening 9.88 |
 
 **The MRJ21 plug is scaled throughout.** No dimensioned drawing of the plug is held: the
 public documents found dimension the receptacle and not the plug. The Bel Stewart drawing is
@@ -146,3 +146,6 @@ and the kit's own slot walk and seat under node for two nested seats.
 - 2026-10-06: generic straight cable plugs for the three, each with a 30 mm stub sized by
   `cable-od`.
 - 2026-10-06: the RJ11 plug follows the RJ45 plug's shape and carries its own stub.
+- 2026-11-07: the RJ11 plug opening is a standard part, `std/rj11@1`, drawn from TE C-1775675 rev C, and
+  the jack composes it and keeps its face. The `rj11` registry entry now claims the opening (9.88 wide, 20.57
+  deep) and no housing: a maker's drawing is the source, and IEC 60603-7 is not held.
