@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4300-32f
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4300-32F
@@ -135,10 +135,9 @@ provenance:
       The 32-port switches carry the uplink slot as the large opening at the left end of the front, 86.8
       x 40.7 mm by Figure 10 (callout 1, "Cover panel for uplink module slot"), against the small slot
       under the LCD of the 24 and 48-port models. The guide supports two modules in it, the 2-port 40-Gigabit
-      EX-UM-2QSFP (Table 5) and the 8-port 1/10-Gigabit EX-UM-8X8SFP, neither of which is in the library;
-      the bay takes only the cover panel here and both are left for a later slice. Uplink modules are
-      not part of the shipping configuration and the guide's inventory (Table 68) says a cover panel is
-      provided.
+      EX-UM-2QSFP (Table 5) and the 8-port 1/10-Gigabit EX-UM-8X8SFP; the bay takes the cover panel, which
+      ships, and both. Uplink modules are not part of the shipping configuration and the guide's inventory
+      (Table 68) says a cover panel is provided.
   rear:
     confidence: estimated
     note: >-
@@ -347,13 +346,6 @@ gaps:
   reason: vendor-silent
   wanted: >-
     A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
-- what: uplink-modules
-  scope:
-  - front
-  reason: needs-drawing
-  wanted: >-
-    The EX-UM-2QSFP and EX-UM-8X8SFP uplink modules and their ports, left for the later uplink-module
-    slice; the bay takes only the cover panel here.
 - what: supply-support
   scope:
   - rear
@@ -618,6 +610,8 @@ views:
         rel-pos: 0
         accepts:
         - juniper/ex4300-32f-uplink-blank@1
+        - juniper/ex-um-2qsfp@1
+        - juniper/ex-um-8x8sfp@1
         default: juniper/ex4300-32f-uplink-blank@1
       placements:
       - ref: std/sfp-ganged@1
@@ -1655,6 +1649,18 @@ configurations:
     bays: {psu-0: '', psu-1: '', fan-0: '', fan-1: ''}
     part-numbers:
       EX4300-32F-S: {}
+  um-2qsfp:
+    kind: example
+    description: >-
+      The EX4300-32F as shipped, with an EX-UM-2QSFP uplink module in the uplink slot in place of the
+      cover. An illustration, not an order code.
+    bays: {uplink: juniper/ex-um-2qsfp@1}
+  um-8x8sfp:
+    kind: example
+    description: >-
+      The EX4300-32F as shipped, with an EX-UM-8X8SFP uplink module in the uplink slot in place of the
+      cover. An illustration, not an order code.
+    bays: {uplink: juniper/ex-um-8x8sfp@1}
 datasheet:
   title: EX4300 Line of Ethernet Switches Datasheet (Juniper Networks, PDF created 2022-07-25)
   url: >-
