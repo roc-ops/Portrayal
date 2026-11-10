@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4300-24p
-version: 0.2.2
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4300-24P
@@ -136,9 +136,9 @@ provenance:
     note: >-
       Every EX4300 24-port and 48-port switch has one front-panel uplink module slot (guide, Uplink
       Modules in EX4300 Switches); uplink modules are not part of the shipping configuration and the
-      guide's inventory (Table 68) says a cover panel for the slot is provided. The slot is a bay
-      that takes the cover panel here; the EX-UM-4X4SFP module it is sold with is left for a later
-      slice. The photographs are of switches with a module fitted, so they give the opening and not
+      guide's inventory (Table 68) says a cover panel for the slot is provided.
+      The slot is a bay that takes the cover panel, which ships, and the 4-port 1/10-Gigabit SFP+ EX-UM-4X4SFP the
+      guide lists (Table 12). The photographs are of switches with a module fitted, so they give the opening and not
       the cover.
   rear:
     confidence: drawing
@@ -305,12 +305,6 @@ gaps:
     reason: vendor-silent
     wanted: >-
       A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
-  - what: uplink-modules
-    scope: [front]
-    reason: needs-drawing
-    wanted: >-
-      The EX-UM-4X4SFP uplink module and its ports, left for the later uplink-module slice; the bay
-      takes only the cover panel here.
   - what: poe-budget-figures
     scope: [front]
     reason: sources-disagree
@@ -421,7 +415,7 @@ views:
     components:
       bays:
         - {id: uplink, at: [363.3, 24.2], size: {w: 73.9, h: 18.7}, group: uplink, rel-pos: 0,
-           accepts: [juniper/ex4300-uplink-blank@1], default: juniper/ex4300-uplink-blank@1}
+           accepts: [juniper/ex4300-uplink-blank@1, juniper/ex-um-4x4sfp@1], default: juniper/ex4300-uplink-blank@1}
       blocks:
         - id: rj45
           ref: common/rj45-ganged-eth@1

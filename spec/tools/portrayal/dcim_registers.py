@@ -38,6 +38,7 @@ POWER_LABEL = {
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "servertech/pro3x-cord-60309": "IEC 60309 3P+G 9h plug on a fixed cord",
+    "servertech/pro3x-cord-60309-2pe": "IEC 60309 2P+E 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
@@ -45,6 +46,8 @@ POWER_LABEL = {
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
     "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
+    "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
+    "enlogic/pdu-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
 }
 
 PART_OUTLET = {
@@ -71,12 +74,21 @@ PART_OUTLET = {
     # A VERTIV POWERIT COMBINATION C13/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
     # names it, so it is `other` with its label, as the HDOT Cx above is.
     "vertiv/combo-outlet": "other",
+    # A PANDUIT G5 PDU'S 16 A COMBINATION C13/C15/C19 OUTLET, which takes a C14 or a C20 plug. Neither target
+    # names it, so it is `other` with its label. Its 10 A C13/C15 sibling presents `iec-c13`, a C13 with the C15
+    # extension, so it exports as upstream's `iec-60320-c13`, as std/c13-outlet does.
+    "panduit/g5-outlet-c13-c15-c19": "other",
+    "panduit/g5-outlet-c13-c15": "iec-60320-c13",
     # A C19 OUTLET, upstream's `iec-60320-c19`, and a NEMA 5-20R, upstream's
     # `nema-5-20r` (it takes a 5-15P as well; the type names the receptacle).
     "std/c19-outlet": "iec-60320-c19",
     "std/nema-5-20r": "nema-5-20r",
     # A NEMA 5-15R, upstream's `nema-5-15r`.
     "std/nema-5-15r": "nema-5-15r",
+    # AN ENLOGIC ADVANTAGE PDU'S COMBINATION OUTLETS: the maker's C13/C15 well takes a C14, so it is upstream's
+    # `iec-60320-c13`; its C13/C15/C19 well takes a C14 or a C20, no target names it, so it is `other` with its label.
+    "enlogic/combo-outlet-c13-c15": "iec-60320-c13",
+    "enlogic/combo-outlet-c13-c15-c19": "other",
     # A RITTAL PDU'S CEE 7/3 EARTHING-PIN SOCKET. No upstream outlet type for it has been
     # read from a held source, so it is `other` with the connector as its label.
     "rittal/cee-7-3-outlet": "other",
@@ -87,7 +99,9 @@ PART_OUTLET = {
 # run on import, which test_tools_layout forbids).
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
                 "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking",
-                "vertiv/combo-outlet": "Vertiv combination C13/C19"}
+                "vertiv/combo-outlet": "Vertiv combination C13/C19",
+                "enlogic/combo-outlet-c13-c15-c19": "Enlogic combination C13/C15/C19",
+                "panduit/g5-outlet-c13-c15-c19": "Panduit combination C13/C15/C19"}
 
 # EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
 #
@@ -215,6 +229,11 @@ NOT_A_DCIM_PORT = {
                                     "barrier strip with its switch and cover, bolted to the rear. "
                                     "Its feeds are the chassis power inputs, stated in the "
                                     "device's power attrs; no connector here has a DCIM type",
+    "nokia/fx-16-dc-terminal-block": "the four -48 V dual-post terminals TB1-1 to TB1-4 of the 7360 "
+                                     "ISAM FX-16 shelf's power distribution unit, two feeds of a "
+                                     "battery and its return. They are the shelf's power inputs, "
+                                     "stated as two DC ports on the part; no terminal here has a "
+                                     "DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
     # `amphenol-ns/output-terminal` and `amphenol-ns/output-p40` were here, as

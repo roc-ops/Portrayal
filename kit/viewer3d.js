@@ -36,6 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
+import { sectionBody, sectionSeat, seatPoint } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -641,6 +642,12 @@ export function createViewer(container, opts = {}) {
     // the wells cut in each face and the air openings declared on each, for
     // the pass below that shows a face's vents on the well wall behind it
     const wells = [], apertures = {};
+    // A STEPPED HOUSING'S PARTS STAND ON THE FACET UNDER THEM (relief.js
+    // partSeats): relief is handed the polygon the body is extruded from, and a
+    // device with no section, or one the body cannot be built from, is handed
+    // none and is placed on the flat planes
+    const seatPoly = COMP ? null : sectionSeat(devIndex && devIndex.chassis, W, H, D);
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -648,6 +655,7 @@ export function createViewer(container, opts = {}) {
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
                                 sheet: !!(devIndex && sheetShell(devIndex.chassis)),
+                                section: seatSection,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -736,6 +744,12 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
+    // a section the body can be extruded from, or null; a section stated with
+    // another body key, or one that cannot be built, is said and built as it was
+    const secBody = COMP ? null : sectionBody(devIndex && devIndex.chassis, W, H, D);
+    if (secBody && secBody.refused) {
+      console.warn(`viewer3d: ${secBody.refused}; building the box without the section`);
+    }
     if (bodyBox) {
       // A BODY IN PIECES: the face on a thin plate and each box behind it
       // where the part says it is - the riser alone shows its PCB and its
@@ -828,6 +842,22 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
+    } else if (secBody && secBody.arrays) {
+      // A STEPPED HOUSING (`chassis.section`, section.js): the end profile
+      // extruded along the width. Each facet takes the UV it would have on the
+      // box face it looks toward and that face's material, so the six face
+      // textures stay at indices 0-5 in FACE_OF_INDEX order and picking, the
+      // face frames and level of detail read this body as they read a box. Its
+      // bounds are the chassis box's, so the camera fit above is the box's.
+      const a = secBody.arrays;
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+      geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+      geo.setIndex(a.indices);
+      for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+      box = new THREE.Mesh(geo, mats);
+      scene.add(box);
     } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
       // A BEVELLED BODY (#735): the polygons render.py published, each face
       // mapped the way BoxGeometry maps it so the face textures land exactly

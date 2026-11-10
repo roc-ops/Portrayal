@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4200-24p
-version: 0.2.1
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4200-24P
@@ -133,9 +133,11 @@ provenance:
     note: >-
       One front-panel uplink module slot under a flip-up door; the packing list ships a cover panel (the
       blanking panel) preinstalled, and uplink modules "must be ordered separately". The slot is a bay that
-      takes the cover here. THE MODULES ARE NOT MODELLED, by the task's rule: EX-UM-4SFP (4 SFP ports),
-      EX-UM-2X4SFP (2 SFP+ ports, or 4 SFP in 1-gigabit mode), EX-UM-2X4SFP-M (the same with MACsec) and
-      EX-UM-2XFP (2 XFP ports). The photographs show the slot with modules fitted.
+      takes the cover here.
+      The bay also takes the four uplink modules the guide names: EX-UM-4SFP (4 SFP ports), EX-UM-2X4SFP (2
+      SFP+ ports, or 4 SFP in 1-gigabit mode), EX-UM-2X4SFP-M (the same with MACsec) and EX-UM-2XFP (2 XFP
+      ports). The datasheet photographs show the slot with modules fitted, so they give the opening and not
+      the cover.
   rear:
     confidence: estimated
     note: >-
@@ -303,12 +305,6 @@ gaps:
     reason: vendor-silent
     wanted: >-
       A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
-  - what: uplink-modules
-    scope: [front]
-    reason: needs-drawing
-    wanted: >-
-      The four EX-UM uplink modules and their ports, left for a later uplink-module slice; the bay takes only
-      the cover panel here.
   - what: fan-power
     scope: [rear]
     reason: vendor-silent
@@ -432,7 +428,9 @@ views:
     components:
       bays:
         - {id: uplink, at: [366.9, 26.5], size: {w: 63.0, h: 14.5}, group: uplink, rel-pos: 0,
-           accepts: [juniper/ex4200-uplink-cover@1], default: juniper/ex4200-uplink-cover@1}
+           accepts: [juniper/ex4200-uplink-cover@1, juniper/ex-um-4sfp@1, juniper/ex-um-2x4sfp@1,
+                     juniper/ex-um-2x4sfp-m@1, juniper/ex-um-2xfp@1],
+           default: juniper/ex4200-uplink-cover@1}
       blocks:
         - id: rj45
           ref: common/rj45-ganged-eth@1

@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: ex-um-2x4sfp-m
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-2X4SFP-M, the SFP+ MACsec uplink module of the EX3200 and EX4200 switches. It is the
+  EX-UM-2X4SFP with MACsec on all four ports, and the guides draw the two with one figure. It slides into
+  the front-panel uplink module slot behind the flip-up door. It has four SFP cages in one row, numbered 0
+  to 3. In the default 10-gigabit mode only ports 0 and 2 are enabled, and they take SFP+ transceivers.
+  In the 1-gigabit mode all four ports take SFP transceivers. Each cage has a link activity lamp and a
+  status lamp. An operating mode lamp at the right is lit in the 10-gigabit mode.
+attrs:
+  model: EX-UM-2X4SFP-M
+  sfp-plus: 2
+  sfp: 4
+  macsec: all four ports
+  ports-note: default mode, SFP+ ports 0 and 2 at 10 Gbps; 1-gigabit mode, four SFP ports at 1 Gbps
+provenance:
+  sources: >-
+    datasheet - EX4200 Switch Hardware Guide (Juniper Networks), Uplink Modules in EX4200 Switches, PDF
+    page 30: "All four ports on the uplink module are MACsec-capable", and "The model number of the
+    uplink module is EX-UM-2X4SFP-M". Figure 7 on PDF page 32 (g020123) draws it with the SFP+ module,
+    as does EX3200 Switch Hardware Guide (published 2020-12-15), PDF page 32, Figure 6, titled with
+    both. The EX3200 guide prints no model number for its MACsec module, so the number is the EX4200
+    guide's. Both guides say the MACsec module needs Junos OS 13.2X50-D10 or later.
+  size: >-
+    estimated - no document dimensions the module. It is the uplink slot the two chassis' cover panels
+    close, 63.0 x 14.5 mm, read off the product photographs on page 4 of the EX3200 datasheet. The
+    depth is not stated.
+  elements: >-
+    drawing and estimated - the same figure as the EX-UM-2X4SFP, the same place for every cage and lamp
+    (see that contract), the keyhole undrawn for the same reason. The figure does not show how the MACsec
+    module differs from the plain one, so the two faces are identical.
+  led: >-
+    datasheet - the same lamps as the EX-UM-2X4SFP: EX3200 guide Figure 12 and Table 10.
+  mode: >-
+    datasheet - the same as the EX-UM-2X4SFP: ports 0 and 2 are SFP+ at 10 Gbps, ports 1 and 3 are SFP
+    at 1 Gbps; in the 1-gigabit mode every port takes SFP.
+  colour: >-
+    estimated - no colour photograph of the module is held. The plate is drawn silver.
+  power: >-
+    NO FIGURE IS PUBLISHED - neither guide gives the module a weight or a draw.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    mixed: >-
+      the four uplink cages, numbered 0 to 3 as printed. Ports 0 and 2 take SFP+ at 10 Gbps and ports 1 and
+      3 take SFP at 1 Gbps. In the 1-gigabit mode every port takes SFP
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port - link activity at the left, status at the right, above the cage - then
+      the operating mode lamp. Numbered in printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [1.8, 4.0], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [16.05, 4.0], group: sfp-plus, attrs: {media: sfp, speed: 1g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [30.3, 4.0], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [44.55, 4.0], group: sfp-plus, attrs: {media: sfp, speed: 1g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [5.7, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [10.6, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [19.95, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [24.85, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [34.2, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [39.1, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [48.45, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [53.35, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-mode, at: [59.8, 6.2], group: port-leds, attrs: {function: operating mode}}
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

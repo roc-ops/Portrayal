@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cfp4-lc
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: cfp4
@@ -94,9 +94,24 @@ provenance:
     held codes a colour, so the colour is a fact about a product and a vendor
     wrapper sets `latch-color`. The outline follows the fill
     (`data-stroke-derive`).
+  groups: >-
+    Source: the Finisar FTLC1141RDNL Product Specification Rev C1 p8 end view and the FS
+    CFP4-LR4-100G datasheet p13 end view, which draw the two LC bores on the module head
+    (provenance.bores). The role is traffic, this contract's own reading of the job: the
+    module's network port, where its fibre or cable is plugged in. The shape stands for every
+    module of its kind, so the group states no speed: rate, reach and watts belong on the vendor
+    wrapper.
+groups:
+  cfp4:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of a CFP4 module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [5.275, 1], rotate: 180, lift: 16}
-  - {ref: std/lc-bore@3, id: rx, at: [11.525, 1], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: tx, group: cfp4, at: [5.275, 1], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: rx, group: cfp4, at: [11.525, 1], rotate: 180, lift: 16}
 relief:
   features:
     - node: body

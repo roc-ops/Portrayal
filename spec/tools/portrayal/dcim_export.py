@@ -725,6 +725,11 @@ PART_POWER = {
     # THE ENLOGIC EB0803'S FIXED CORD ends in a NEMA L21-30P plug (its data sheet and
     # drawing), the same `nema-l21-30p` as the Eaton cord above.
     "enlogic/pdu-cord-l21-30p": "nema-l21-30p",
+    # THE ENLOGIC EN2951'S FIXED CORD ends in a CS8365 plug (the data sheet writes CS8365L, the drawing CS8365): the
+    # `cs8365c` of the Eaton cord below, a reading. THE EN6952'S ends in an IEC 60309 3P+E 9h plug, so it is `other`,
+    # as the Panduit cord's is, and POWER_LABEL says which connector.
+    "enlogic/pdu-cord-cs8365": "cs8365c",
+    "enlogic/pdu-cord-60309-3pe-9h": "other",
     # AN FS FAN PANEL'S OR FAN TRAY'S FIXED CORD, ending in a US NEMA 5-15P plug,
     # for the same reason as the Eaton cord: the part stands for the cord leaving
     # the back. `nema-5-15p` is TYPE_NEMA_515P in both targets
@@ -783,6 +788,10 @@ PART_POWER = {
     # THE PRO3X BASIC 3A06'S FIXED CORD ENDS IN AN IEC 60309 3P+G 9h PLUG (the SKU page of C3B36RL-DQJE0AT2). No
     # power-port type of the two targets is held for it in this tree, so it is `other`, and POWER_LABEL says which.
     "servertech/pro3x-cord-60309": "other",
+    # THE PRO3X BASIC 3A01'S FIXED CORD ENDS IN AN IEC 60309 2P+E 6h PLUG (the SKU sheet of C3B36RL-EPJE0AT4, "IEC
+    # 230V/32A 2P+PE 6Hr"). No power-port type of the two targets is held for it in this tree, so it is `other`, and
+    # POWER_LABEL says which.
+    "servertech/pro3x-cord-60309-2pe": "other",
     # A RARITAN PX3-1045'S FIXED CORD ends in an IEC 60309 2P+E 6h 32 A plug (the technical specification). No
     # power-port type of the two targets is held for it in this tree, so it is `other` and POWER_LABEL says which.
     "raritan/px3-cord-60309": "other",
@@ -796,6 +805,7 @@ PART_POWER = {
     # each is `other`, and POWER_LABEL says which connector.
     "panduit/g5-cord-60309-2pe-6h": "other",
     "panduit/g5-cord-60309-3pe-9h": "other",
+    "panduit/g5-cord-l6-30p": "other",
     # A VERTIV POWERIT HORIZONTAL PDU'S FIXED CORD ends in a NEMA L6-30P plug (the SKU page of VP5N31A1 and the
     # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
     # as the connectors above are, and POWER_LABEL says which connector.

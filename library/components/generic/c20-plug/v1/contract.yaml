@@ -1,9 +1,9 @@
 format: 1
 kind: component
 name: c20-plug
-version: 1.5.0
+version: 1.7.0
 class: port
-mates: [iec-c19, eaton-c39, servertech-hdot-cx, raritan-hdot-cx, vertiv-combo]
+mates: [iec-c19, eaton-c39, servertech-hdot-cx, raritan-hdot-cx, vertiv-combo, enlogic-combo, panduit-combo]
 conforms: c20-plug
 profile: networking
 description: >-
@@ -42,7 +42,12 @@ provenance:
     sheet says takes a C14 or a C20 plug; it seats the same way.
     `vertiv-combo` is the Vertiv combination outlet, which Table 2.4 of the
     PowerIT installer guide SL-71211 Rev E rates with a C20 cord at 16 A; it
-    seats the same way.
+    seats the same way. `enlogic-combo` is the Enlogic C13/C15/C19 combination
+    outlet, which the maker's customer drawing EN2951-WXYZ_DA rev E3 (sheet 2)
+    rates at 16 A; it seats the same way. `panduit-combo` is the Panduit G5
+    combination outlet, which the P42G20M customer drawing's plug and
+    receptacle block names C13/C15/C19 COMBO at 16 A; it seats at the `mate` of
+    panduit/g5-outlet-c13-c15-c19@1 the same way.
   no-depth: >-
     NO `size.d`, DELIBERATELY, as on generic/c19-plug@1: a `size.d` on a part
     with no `behaviour` is built as a pit behind its box. The length is in the

@@ -1,0 +1,92 @@
+format: 1
+kind: module
+name: mic-macsec-mrate
+version: 2.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MACsec multirate QSFP28 MIC for the MX2000 MPC8E/MPC9E; only the vertical author exists, drawn at the MIC plate.
+attrs:
+  model: MIC-MACSEC-MRATE
+  power-draw-max-w: 110
+  qsfp: 12
+provenance:
+  qsfp-rate: >-
+    module reference, 'Multi-Rate Ethernet MIC' (p369), MIC-MACSEC-MRATE and its Table 41: 'Twelve Gigabit
+    Ethernet QSFP+ ports, each of which can be configured as a 40Gigabit Ethernet port or as four
+    10-Gigabit Ethernet ports'. THE 100G RATE DEPENDS ON THE CARRIER, so every port is counted at the 40G
+    it always runs: 'Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports'
+    (Table 41: ports 4, 5, 10 and 11 'no'), and 'When used in MP8CE: Four ports out of the total twelve
+    ports support 100-Gigabit Ethernet speed' (four ports the book does not name). The placements are
+    left as they were. This is not the JNP-MIC1 count: that MIC's Table 40 gives all twelve ports 100G.
+  stack-orientation: >-
+    The library's stack convention (docs/pluggables-3d-design.md, S1-S4): on a card
+    drawn on its side a pair sits left and right, the left cage 270 beside the right 90,
+    so both cage lips face the band between the two cages and both bails face outward.
+    Decided by the rule, not an observation, so a photograph of the stack overturns it:
+    the 6 QSFP pairs (port-0-1/port-0-0 to port-1-5/port-1-4). Turning a composed cage
+    in place changes no box, id or anything a device places, so it is a minor bump (S6).
+  size: >-
+    borrowed - the MIC plate, 168.8 x 29.2, drawn turned (w across the card, h along it): the figure
+    juniper/mx-mic-blank@2 states, photo-measured off the MX104 and MX80 front photographs. This
+    model was not photographed; size-notes says what that does and does not carry.
+  layout: >-
+    estimated - RE-ENVELOPED, NOT REDRAWN, at 2.0.0 (#261): every part and printed mark of the 1.x art
+    moved by (+1.1, +0.4) onto the plate, so positions along the plate stay as 1.x had them. What 1.x said
+    of them: registry + layout - the face is the slot geometry of its chassis family.
+  power: >-
+    module reference - 'MIC-MACSEC-MRATE: 110 W at 45 C, 105 W at 25 C'
+    (mx-module-reference-p0301-0600). THE 45 C RUNG IS CARRIED, for the MIC alone without optics.
+    This ladder has two rungs and stops at 45 C rather than the 55 C the MPC and DPC tables use, so
+    110 W is this part's worst PUBLISHED figure and not a 55 C figure; reading the 25 C end would
+    have been 5 percent low. The part has no row in any chassis guide's Table 93.
+  numbering: 'guide - ports number within each PIC group with an n/ group
+    legend, per the module reference port-numbering figures (g000930,
+    g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, 'MIC MRATE' and
+    'Multi-Rate Ethernet MIC' (printed pages 358 to 361 and 370 to 379): twelve ports 'numbered 0
+    through 11', each configurable as 40 or as four 10-Gigabit Ethernet ports, and eight of them (0 to 3
+    and 6 to 9) as 100-Gigabit Ethernet ports on the MPC9E, four on the MPC8E. The rate of a port
+    depends on its carrier, and the book calls the cage QSFP+ here and QSFP28 for the JNP-MIC1, so the
+    group states neither a speed nor a media: each port keeps the media it already states. Port ids
+    port-P-N are faceplate port 6P+N. The role is traffic.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: the twelve multi-rate QSFP cages, numbered 0 to 11 on the faceplate
+parts:
+- {ref: std/qsfp28@1, id: port-0-1, group: qsfp, at: [-0.70, 18.13], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-0, group: qsfp, at: [10.30, 18.13], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-3, group: qsfp, at: [-0.70, 39.73], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-2, group: qsfp, at: [10.30, 39.73], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-5, group: qsfp, at: [-0.70, 61.32], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-0-4, group: qsfp, at: [10.30, 61.32], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-1, group: qsfp, at: [-0.70, 91.93], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-0, group: qsfp, at: [10.30, 91.93], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-3, group: qsfp, at: [-0.70, 113.52], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-2, group: qsfp, at: [10.30, 113.52], rotate: 90, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-5, group: qsfp, at: [-0.70, 135.13], rotate: 270, attrs: {media: qsfp28}}
+- {ref: std/qsfp28@1, id: port-1-4, group: qsfp, at: [10.30, 135.13], rotate: 90, attrs: {media: qsfp28}}
+size:
+  w: 29.2
+  h: 168.8
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: >-
+  w and h are the MIC form's plate, borrowed from juniper/mx-mic-blank@2 and the horizontal MICs that
+  state it (#261): 168.8 x 29.2, photo-measured off square-on MX104 and MX80 front photographs, drawn
+  here turned. This model was not photographed. The guides call every MIC one 1.25 x 6.25 x 6.8 in
+  part, but their rows do not dimension the face (the axes are assigned differently in different
+  books and the figures are rounded to a tenth of an inch), so the figure is the MIC form's and not
+  this model's own. Until 2.0.0 this was the 27.0 x 168.0 'window', an estimate read off the carrier.
+  The MX2010 front photograph, scaled at 0.981 px/mm off the chassis (473.5 px over the guide's 19 in,
+  1482.7 px over its 59.50 in), reads four seated MIC faces 27.1 mm across (+/- 1.2) and 166.9 mm long
+  (+/- 2.1): the length agrees with the plate and the width reads 2.1 mm short of it. It has a third of
+  the resolution of the MX104 and MX80 photographs, so it is declared here and not used for the figure.

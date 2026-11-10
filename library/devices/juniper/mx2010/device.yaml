@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx2010
-version: 3.1.9
+version: 4.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX2010
@@ -105,6 +105,8 @@ gaps:
       cages each) are not identifiable at about 1 px/mm.
       Since roc-ops/Portrayal#261 the MX240-form MPCs seat here through the adapter card
       (juniper/mx2000-lc-adapter@1), so the range is the MX960's.
+      The multirate MICs of the MX2K-MPC8E and MX2K-MPC9E now seat at the MIC plate, 168.8 x 29.2,
+      borrowed from the horizontal MICs; their ports stay laid out from the module reference.
   - what: cb-re-face-detail
     scope: [res]
     reason: needs-photo
@@ -248,34 +250,34 @@ views:
            accepts: [juniper/mx2000-cb-re-v@2, juniper/mx2000-cb-re-128g-v@2, juniper/mx2000-cb-re-1800-v@2], default: juniper/mx2000-cb-re-v@2,
            group: res, rel-pos: 1}
         - {id: fpc0, at: [4.10, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-lc-adapter@1, group: fpcs, rel-pos: 0}
         - {id: fpc1, at: [47.28, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 1}
         - {id: fpc2, at: [90.46, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-lc-adapter@1, group: fpcs, rel-pos: 2}
         - {id: fpc3, at: [133.64, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 3}
         - {id: fpc4, at: [176.82, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-lc-adapter@1, group: fpcs, rel-pos: 4}
         - {id: fpc5, at: [220.00, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 5}
         - {id: fpc6, at: [263.18, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-lc-adapter@1, group: fpcs, rel-pos: 6}
         - {id: fpc7, at: [306.36, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 7}
         - {id: fpc8, at: [349.54, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-lc-adapter@1, group: fpcs, rel-pos: 8}
         - {id: fpc9, at: [392.72, 728.1], size: {w: 43.18, h: 449.8},
-           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@1, juniper/mx2k-mpc9e-v2k@1, juniper/mx2000-mpc-blank-v@1],
+           accepts: [juniper/mx2000-lc-adapter@1, juniper/mx2k-mpc11e-v2k@1, juniper/mx2k-mpc6e-v2k@1, juniper/mx2k-mpc8e-v2k@2, juniper/mx2k-mpc9e-v2k@2, juniper/mx2000-mpc-blank-v@1],
            default: juniper/mx2000-mpc-blank-v@1, group: fpcs, rel-pos: 9}
   rear:
     size:

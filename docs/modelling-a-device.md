@@ -577,12 +577,24 @@ provenance:
   names the document and page, and says so when the drawing had to be turned to the
   way the device is installed.
 
-**What is not there yet.** Only the two end faces take the shape in this change.
-Ribs or fins on the housing, the 3D body built from the section and the open state
-of a housing with a section come in later changes, so a modeller should not look
-for them: a fin is drawn as art on the face for now, the 3D viewer still builds a
-plain box from the six faces and does not extrude the section, and a device with
-a `section` cannot also state `halves`.
+**In 3D** the viewer builds the body as the section extruded along the width. Each
+side facet takes the drawing of the face it looks toward, projected flat: a facet
+facing up or down shows the top or bottom drawing, one facing the front or rear
+shows that drawing at its own height. Check: look at the box from above, below,
+the front and either end in the viewer; the steps stand out of the casting and
+each end is its outline with clear corners. A part on the front or rear face stands
+at the depth of the casting under the row of its centre; a part on the top or
+bottom face at the height of the casting under the column of its centre; relief
+`out` is measured from there. A part on an end face is not moved, the ends being
+flat. Check: a plug on a recessed casting touches it from the side, and does not
+hang in front of it. A front or rear part that runs across a step (for example the
+flange) has two depths under it and takes the one under its centre row; lint does
+not refuse it, so keep such a part wholly on one level.
+
+**What is not there yet.** Ribs or fins on the housing, relief taken from a fin
+field, and the open state of a housing with a section come in later changes, so a
+modeller should not look for them: a fin is drawn as art on the face for now, and
+a device with a `section` cannot also state `halves`.
 
 ## Stage 2: the cutouts
 

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cxp-mpo
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: cxp
@@ -112,8 +112,23 @@ provenance:
     section 5.3 says the colour may be specified by the application and
     codes none, so the colour is a fact about a product and a vendor wrapper
     sets `latch-color`. The outline follows the fill (`data-stroke-derive`).
+  groups: >-
+    Source: the Finisar FTLD12CL3C Product Specification Rev C1 p10 Figure 3, which draws the
+    module with a single MPO receptacle, and the Cisco 100GBASE CXP Modules Data Sheet
+    C78-734364 (provenance.receptacle). The role is traffic, this contract's own reading of the
+    job: the module's network port, where its fibre or cable is plugged in. The shape stands for
+    every module of its kind, so the group states no speed: rate, reach and watts belong on the
+    vendor wrapper.
+groups:
+  cxp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the MPO receptacle of a CXP module
 parts:
-  - {ref: std/mpo24-module-receptacle@1, id: mpo, at: [4.15, 0.6], lift: 33.55}
+  - {ref: std/mpo24-module-receptacle@1, id: mpo, group: cxp, at: [4.15, 0.6], lift: 33.55}
 relief:
   features:
     - node: body

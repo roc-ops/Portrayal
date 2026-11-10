@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: motive-vcm-tshape-ds
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One T-shaped cable guide (finger) of the Chatsworth Motive double-sided vertical cable manager,
+  seen from its face. It is a black plastic arm that stands out from the centre section, with a
+  wider head at its end. It is one rack unit from the next. One part serves both faces, every width
+  and both colours of the manager.
+provenance:
+  size: >-
+    datasheet - the cell is one rack unit, 44.45: the data sheet (page 1) says the side assemblies
+    of the double-sided manager carry T-shaped cable guides 'that align with rack-mount unit (U)
+    spaces on rack'. The width (20), the arm (12) and the head (30) are ESTIMATED: no held page
+    dimensions a guide, and the photographs on the data sheet and the drawing on installation
+    instructions page 2 are not to a stated scale, so they give a shape and no size.
+  relief: >-
+    estimated - the arm stands 184 from the face of the centre section and the head closes its end
+    at 198, where the door begins. The installation instructions (page 2) draw the guides of the
+    rear and the front equal about a centre section, and the figure is not to a stated scale, so
+    each is read as a third of the overall depth less the doors. The split between arm and head is
+    read by eye, and no held page gives the depth of a guide.
+size: {w: 20, h: 44.45}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Plastic}
+elements:
+  head: {at: [0, 7.23], size: [20, 30], class: bezel}
+  arm: {at: [0, 16.23], size: [20, 12], class: bezel}
+relief:
+  features:
+    - node: arm
+      out: 184
+      color: '#26282a'
+      confidence: estimated
+      source: the installation instructions' page 2 figure shows a slender arm from the centre section to the head; its length is the channel less the head, read by eye
+    - node: head
+      lift: 184
+      out: 198
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the installation instructions' page 2 figure shows the T head at the end of each guide; no page dimensions it
+skins: [default]

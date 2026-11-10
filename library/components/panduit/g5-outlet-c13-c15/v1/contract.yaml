@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: g5-outlet-c13-c15
+version: 1.0.0
+class: inlet
+profile: power
+interface: iec-c13
+description: >-
+  The C13/C15 combination outlet of a Panduit G5 intelligent PDU, rated 10 A, 250 V: one socket that the drawing's
+  receptacle block calls "C13/C15 COMBO". A dark well with a grey nose, two line slots and an earth slot. It is a C13
+  outlet with the C15 notch, and takes a C14 plug.
+size: {w: 24.0, h: 35.0, d: 20}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {outlet: panduit-c13-c15-combo, media: ac, rating-a: 10}
+provenance:
+  size: >-
+    estimated - read off a rendering of the front view of Panduit customer drawing P42G20M-XXYZ_DC rev 01A at 400
+    dpi: a drawn socket is about 35 along the strip and 24 across it, to about 2 mm. No dimension of the outlet is
+    printed on the drawing. It is drawn smaller than the std/c13-outlet@1 well and does not share its size.
+  identity: >-
+    drawing - the plug and receptacle block of P42G20M-XXYZ_DC names the receptacle "C13/C15 COMBO", "10A, 250V MAX
+    RATED OUTPUT", and draws it as one socket. The G5 iPDU sheet FBSP28 row for P42G20M lists "(21)C13, C15". It is a
+    maker's combination socket and no IEC 60320 sheet, so it is a panduit/ part and not a std/ one.
+  rating: >-
+    drawing - "10A, 250V MAX RATED OUTPUT" in the receptacle block.
+  depth: >-
+    estimated - no held document or photograph shows the outlet in section. 20 is the figure the registry's C19 nose
+    gives, as for vertiv/combo-outlet@1.
+  interface: >-
+    `iec-c13`. The drawing names the socket "C13/C15 COMBO" at "10A, 250V MAX RATED OUTPUT": a C13 outlet with the C15
+    extension, which a C14 plug enters. It takes a C14 and not a C20, so it presents the C13 key and no combination key;
+    generic/c14-plug@1 mates it and seats at `mate`. The C15 notch is not a key of its own: the registry holds no C15
+    plug, and the device that places this part carries the gap `c15-notch`. It is rated 10 A, as std/c13-outlet@1 is.
+  mate: >-
+    estimated - (12.0, 17.5), the centre of the socket's box, as on panduit/g5-outlet-c13-c15-c19@1. No held document
+    shows a plug seated.
+  face: >-
+    drawing - the symbol is a rounded well with a nose, two line slots on one side and the earth slot on the other,
+    drawn small. The shapes are read from the line drawing and are not measured. No photograph is held.
+  media: >-
+    `media: ac`: an outlet states what it hands on.
+  relief: >-
+    `relief.cavity` names the `recess` outline, so the 3D walls follow it.
+elements:
+  recess: {at: [0, 0], size: [24.0, 35.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [12.0, 17.5], direction: front}
+skins: [default]

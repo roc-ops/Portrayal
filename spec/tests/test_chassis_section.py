@@ -297,6 +297,85 @@ def test_a_part_on_the_front_or_the_rear_is_not_judged():
     assert found(doc) == {}
 
 
+# --- lint: a PLACED part (a component placement), not a bay ---------------------------------
+#
+# The tests above put a bay on each face. The rule also measures a placement, by the size
+# of the component it names, so these place std/db9@1 (20.47 x 11.40) and need the library
+# to resolve it. A part that cannot be sized is not measured, so each refusal below is also
+# a proof that the size was found.
+
+PART = "std/db9@1"
+
+
+def placed(doc, view, at, pid="probe"):
+    doc["views"][view].setdefault("components", {}).setdefault("placements", []).append(
+        {"ref": PART, "id": pid, "at": list(at)})
+    return doc
+
+
+def found_placed(doc):
+    """`{code: [message]}` as `found`, with the library to size the placements from."""
+    with lint.collecting() as got:
+        lint.lint_device_section("device.yaml", doc, [str(LIB)])
+    out = {}
+    for m in got.errors + got.warnings:
+        code = m.split("[", 1)[1].split("]", 1)[0]
+        out.setdefault(code, []).append(m.split("] ", 1)[1])
+    return out
+
+
+def test_the_fixtures_own_placed_parts_are_quiet():
+    assert found_placed(device()) == {}
+
+
+def test_a_placed_part_inside_the_end_outline_is_quiet():
+    assert found_placed(placed(device(), "right", (100.0, 30.0))) == {}
+    assert found_placed(placed(device(), "left", (100.0, 200.0))) == {}
+
+
+def test_a_placed_part_in_a_clear_corner_of_an_end_face_is_refused():
+    for view, at in (("right", (0.0, 0.0)), ("left", (0.0, 0.0)), ("right", (255.0, 5.0))):
+        got = found_placed(placed(device(), view, at))
+        assert codes()["parts"] in got, (view, at)
+        assert any("probe" in m for m in got[codes()["parts"]])
+
+
+def test_a_placed_part_across_a_step_of_an_end_face_is_refused():
+    """5 to 25.47 across, 125 to 136.4 down: the corners are inside the profile, the edge is not."""
+    assert codes()["parts"] in found_placed(placed(device(), "right", (5.0, 125.0)))
+
+
+def test_a_placed_part_on_the_top_face_must_not_straddle_a_step():
+    """The step at 250 is 31 down the top drawing (front at the bottom); 20 to 31.4 crosses it."""
+    assert found_placed(placed(device(), "top", (100.0, 100.0))) == {}
+    got = found_placed(placed(device(), "top", (100.0, 20.0)))
+    assert codes()["parts"] in got
+    assert any("probe" in m for m in got[codes()["parts"]])
+    assert severity_placed(placed(device(), "top", (100.0, 20.0)), codes()["parts"]) == "error"
+
+
+def test_a_placed_part_on_the_bottom_face_must_not_straddle_a_step():
+    """The bottom's step at 253 across the depth is 28 down the drawing from the rear, and the
+    drawing is mirrored: 245 to 256.4 crosses the step at 253."""
+    assert found_placed(placed(device(), "bottom", (100.0, 100.0))) == {}
+    assert codes()["parts"] in found_placed(placed(device(), "bottom", (100.0, 245.0)))
+
+
+def test_a_placed_part_on_the_front_is_not_judged_across_the_flange():
+    """The stated gap: a front or rear part over rows 132 to 155 has two depths under it and the
+    rule does not refuse it. The kit seats it at the depth under its centre row."""
+    assert found_placed(placed(device(), "front", (100.0, 125.0))) == {}
+    assert found_placed(placed(device(), "rear", (100.0, 125.0))) == {}
+
+
+def severity_placed(doc, code):
+    with lint.collecting() as got:
+        lint.lint_device_section("device.yaml", doc, [str(LIB)])
+    if any(f"[{code}]" in m for m in got.errors):
+        return "error"
+    return "warning" if any(f"[{code}]" in m for m in got.warnings) else None
+
+
 # --- the helper that reads the polygon -----------------------------------------------------
 
 def test_the_left_outline_is_the_right_one_mirrored_with_the_winding_reversed():

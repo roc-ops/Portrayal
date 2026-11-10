@@ -399,3 +399,43 @@ export function stateChoices(svg, select, states, cur) {
   const unknown = cur && !names.includes(cur) && !global.includes(cur) ? cur : null;
   return {declared, global, unknown};
 }
+
+// ------------------------------------------- a light the user colours (#1271)
+
+// A model marks a lamp `programmable` when the maker lets the user choose its
+// colour (docs/format-stability.md, "A port light the user can colour"). The
+// build writes `data-programmable="true"` on that lamp's element, and the
+// maker's own name for the feature in `data-programmable-note`. A reader that
+// wants to try a colour on such a lamp asks these three.
+
+/** The note of a programmable-colour lamp ('' when it states none), or null when `el` is no such lamp. */
+export function programmableOf(el) {
+  if (!el?.getAttribute || el.getAttribute('data-programmable') !== 'true') return null;
+  return (el.getAttribute('data-programmable-note') || '').trim();
+}
+
+const DEMO_HEX = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+/** A colour a reader chose as lower-case `#rrggbb`, or null. Opaque: no alpha, no colour name. */
+export function demoHex(v) {
+  if (!DEMO_HEX.test(String(v ?? ''))) return null;
+  const h = String(v).slice(1).toLowerCase();
+  return '#' + (h.length === 3 ? [...h].map(c => c + c).join('') : h);
+}
+
+/**
+ * The colours to hand a 3D scene: `{path: '#rrggbb'}` for each entry of `map`
+ * (a Map or an object) that is a colour and names a programmable lamp on
+ * `root`. Anything else is left out.
+ */
+export function demoColours(root, map) {
+  const out = {};
+  if (!root?.querySelectorAll) return out;
+  const marked = new Set();
+  for (const el of root.querySelectorAll('[data-path][data-programmable]'))
+    if (programmableOf(el) !== null) marked.add(el.getAttribute('data-path'));
+  for (const [path, colour] of map instanceof Map ? map : Object.entries(map || {})) {
+    const hex = demoHex(colour);
+    if (hex && marked.has(path)) out[path] = hex;
+  }
+  return out;
+}
