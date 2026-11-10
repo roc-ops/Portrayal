@@ -11,7 +11,11 @@
 // stand-ins, and the README text below says each to the user:
 //   - a document is `apiVersion: infrahub.app/v1`, `kind: Object`,
 //     `spec: {kind, data}`, the design note's reading of the schema library's own
-//     object files; `data` is a list; one file holds several documents.
+//     object files. That `data` is a list, and that one file holds several
+//     documents, are this module's own assumptions; the note does not give them.
+//   - a file's body is JSON, which is YAML, one document after each `---` line.
+//   - a site is written with its `name` alone, and a rack with `name`, `height`
+//     and `site`, and no `status`: the note does not list their other fields.
 //   - a rack's site, and a device's type, are written as the plain name string
 //     (as the device-side files write a manufacturer).
 //   - a device's rack is the design note's nested block,
@@ -108,7 +112,8 @@ export function infrahubReadme({notes, skipped}) {
     '## Not confirmed',
     '',
     'None of this was loaded into an Infrahub instance. Assumed:',
-    '- the object file shape (`apiVersion: infrahub.app/v1`, `kind: Object`, `spec: {kind, data}`), with `data` a list and several documents in one file;',
+    '- the object file shape (`apiVersion: infrahub.app/v1`, `kind: Object`, `spec: {kind, data}`), with `data` a list and several documents in one file, each after a `---` line and written as JSON;',
+    '- a site is written with its name alone, and a rack with its name, height and site and no status; their other fields are not listed in the design note;',
     '- a site and a device type are named by a plain string, and a device names its rack by a nested `location` block;',
     '- `position` may be absent for a device with no U position, and `rack_face` may be written for every device;',
     '- the site and the rack may need loading before the devices (the file order does that).',

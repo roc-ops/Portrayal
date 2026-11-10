@@ -117,6 +117,34 @@ test('a top-down rack writes its positions bottom-up', () => {
   assert.equal(byName['leaf-1'].position, 3);
 });
 
+test('a type with a model and no maker is not an object either', () => {
+  const r = rack();
+  const o = I.infrahubObjects({rack: r, items: items(r), types: new Map([...types, ['a', {manufacturer: ' ', model: 'SW-1'}]])});
+  assert.ok(!docOf(o, '3-devices.yml').some(d => d.name === 'leaf-1'));
+  assert.ok(o.skipped.some(s => s.id === 'a'));
+});
+
+test('a rack that starts above unit 1 says its positions count from 1', () => {
+  const r = rack();
+  r.frame.startU = 5;
+  assert.ok(out(r).notes.some(n => /from 5/.test(n) && /from 1/.test(n)));
+});
+
+test('an item with no height takes it from chassisOf, and counts as 1U without one', () => {
+  const r = rack();
+  const bare = r.items.map(({id, ref, label, ru, face, mount, heldBy}) => ({id, ref, label, ru, face, mount, heldBy}));
+  let asked = 0;
+  const withChassis = I.infrahubObjects({rack: r, items: bare, types, chassisOf: () => { asked++; return {u: 2}; }});
+  assert.ok(asked > 0);
+  assert.equal(docOf(withChassis, '3-devices.yml').length, 4);
+  assert.equal(docOf(I.infrahubObjects({rack: r, items: bare, types}), '3-devices.yml').length, 4);
+});
+
+test('no device and no rack carries a status', () => {
+  const o = out();
+  for (const d of [...docOf(o, '2-racks.yml'), ...docOf(o, '3-devices.yml')]) assert.ok(!('status' in d));
+});
+
 test('the readme names the load order, what is not confirmed and what is left out', () => {
   const o = out();
   const text = I.infrahubReadme(o);
