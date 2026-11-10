@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bp-f2-al
-version: 1.0.0
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -29,12 +29,24 @@ provenance:
     estimated - the drawing keys the ports with black squares in the order
     OPTICAL INP, OPTICAL OUT, top to bottom, and does not mark which adapter is which; they are
     assigned in that order from the top.
+  groups: >-
+    datasheet - FA3500 data sheet (87-10007 Rev AA), p3, Required Module Back Plates: BP-F2-AL
+    is the single output EDFA LC/APC plate; the drawing keys OPTICAL INP and OPTICAL OUT and
+    shows one duplex adapter. Role traffic: the amplifier's optical path. The sheet prints no
+    data rate.
 elements:
   screw-top: {at: [7.88, 0.5], size: [10.0, 10.0], class: fastener}
   vents: {at: [4.3, 32.3], size: [17.2, 29.2], class: vent}
   screw-bottom: {at: [7.88, 119.3], size: [10.0, 10.0], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC/APC adapter of an EDFA back plate, carrying its optical input and output; the data sheet states no data rate
 parts:
-  - {ref: common/lc-duplex-v-adapter@6, id: optical, at: [14.36, 71.72], attrs: {role: optical, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical, group: optical, at: [14.36, 71.72], attrs: {role: optical, connector: LC/APC, housing-finish: '#2fa84f'}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
