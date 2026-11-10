@@ -1,8 +1,8 @@
 """The queuing, P and NG-queuing MPC carriers exist, carry their model numbers and power, take their own MIC column and sit in
 the chassis slots that take the card they are the sibling of.
 
-The MX Series Interface Module Reference lists each card in Table 4 'MPCs Supported by MX240, MX480, MX960, MX10003,
-MX10004, MX10016, MX2008, MX2010, and MX2020 Routers' (PDF pp. 33-34) with its model number. Each has its own column in
+The Juniper Networks MX Series 5G Universal Routing Platform Interface Module Reference lists each card in Table 4 'MPCs
+Supported by MX240, MX480, MX960, MX10003, MX10004, MX10016, MX2008, MX2010, and MX2020 Routers' (PDF pp. 32-34) with its model number. Each has its own column in
 the MIC/MPC compatibility tables (Table 10 for the MPC1 family, Table 11 for the MPC2 family, Table 12 for the MPC3 family),
 and the MIC bays take that column. The MX240 hardware guide's FRU power table (Table 93) gives the watts.
 """
