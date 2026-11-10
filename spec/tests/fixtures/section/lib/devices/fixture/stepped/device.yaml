@@ -1,0 +1,80 @@
+format: 1
+kind: device
+name: stepped
+version: 1.0.0
+maturity: draft
+manufacturer: Fixture
+model: STEPPED
+description: >-
+  Test fixture: a box 600 long, 288 high and 281 deep whose end is a stepped profile, a narrower
+  upper casting, a flange the full depth and a narrower lower casting, extruded along its length.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      a test fixture for the end profile of a housing; every number is chosen for the tests.
+  chassis.section:
+    confidence: estimated
+    note: >-
+      a test fixture: twelve points, an upper casting from 14 to 250, a flange across the whole
+      depth and a lower casting from 28 to 253.
+chassis:
+  width: 600.0
+  height: 288.0
+  depth: 281.0
+  mount: strand
+  section:
+  - [14.0, 0.0]
+  - [250.0, 0.0]
+  - [250.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 155.0]
+  - [253.0, 155.0]
+  - [253.0, 288.0]
+  - [28.0, 288.0]
+  - [28.0, 155.0]
+  - [0.0, 155.0]
+  - [0.0, 132.0]
+  - [14.0, 132.0]
+views:
+  front:
+    size: {w: 600.0, h: 288.0}
+    panel:
+      decor:
+      - {id: front-art, at: [0.0, 0.0], size: [600.0, 288.0], fill: "#7d858c"}
+  rear:
+    size: {w: 600.0, h: 288.0}
+    panel:
+      decor:
+      - {id: rear-art, at: [0.0, 0.0], size: [600.0, 288.0], fill: "#6f777e"}
+  right:
+    size: {w: 281.0, h: 288.0}
+    panel:
+      decor:
+      - {id: right-upper, at: [14.0, 0.0], size: [236.0, 132.0], fill: "#8a9299"}
+      - {id: right-flange, at: [0.0, 132.0], size: [281.0, 23.0], fill: "#9aa2a9"}
+      - {id: right-lower, at: [28.0, 155.0], size: [225.0, 133.0], fill: "#7a8289"}
+  left:
+    size: {w: 281.0, h: 288.0}
+    panel:
+      decor:
+      - {id: left-upper, at: [31.0, 0.0], size: [236.0, 132.0], fill: "#8a9299"}
+      - {id: left-flange, at: [0.0, 132.0], size: [281.0, 23.0], fill: "#9aa2a9"}
+      - {id: left-lower, at: [28.0, 155.0], size: [225.0, 133.0], fill: "#7a8289"}
+  top:
+    size: {w: 600.0, h: 281.0}
+    panel:
+      decor:
+      - {id: top-art, at: [0.0, 0.0], size: [600.0, 281.0], fill: "#939ba2"}
+  bottom:
+    size: {w: 600.0, h: 281.0}
+    panel:
+      decor:
+      - {id: bottom-art, at: [0.0, 0.0], size: [600.0, 281.0], fill: "#6a7279"}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The box as drawn.

@@ -636,7 +636,10 @@ def _composed(doc, versions):
 # `shell` IS GEOMETRY TOO: it decides whether the envelope is a solid box or
 # open air round what the views' parts build (docs/cable-managers-design.md
 # section 4).
-CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell"}
+# `section` IS GEOMETRY AS `bevel` IS: it is the outline of the left and right
+# faces and what a part on any face may stand on. Stating one on a released
+# device, or moving a point of it, is a major.
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell", "section"}
 # `mount` IS NOT A DIMENSION EITHER: it says how the box is installed and moves
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or

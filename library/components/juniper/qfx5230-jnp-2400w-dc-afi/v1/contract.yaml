@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: qfx5230-jnp-2400w-dc-afi
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -43,6 +43,33 @@ provenance:
   input: >-
     datasheet - guide Table 18 (AFI DC 2400 W: -40 to -72 VDC, rated -48 to -60 VDC) and Table 21 (input switch
     setting 60 A, maximum input current 60 A DC).
+  seats: >-
+    A DECLARED STAND-IN. Figure 39 of the QFX5230 guide shows threaded studs, a lug and nuts per supply in an unscaled
+    isometric with the cover and nuts off, for "a DC Power Supply in a QFX5230-64CD Switch"; Table 16 lists this unit
+    and the 3000 W unit under one DC power supply description (figure 22), and the connection steps (printed pages 98
+    to 100) say "the DC PSM" for both; no held figure gives the studs' position on the face, which pair is which, any
+    printed mark, or a flat view. Each polarity is juniper/mx240-dc-pole@1, a pair of studs on 5/8 in. (15.875) centres
+    that one two-hole lug lands across, drawn side by side inside the footprint of the terminal block cover (x 42.2 to
+    66.6, y 3.7 to 36.1), one pair above the other, centred on the cover, where the 3000 W sibling draws them. Every
+    position is estimated. THE LUG'S PITCH IS NOT PRINTED FOR THIS UNIT: the QFX5700 Hardware Guide, "QFX5700 DC Power
+    Lugs" (printed page 49), says the cable lugs "are dual hole and sized to fit M6 at 15.86-mm (0.625-in.) center
+    line", and it prints that for the JNP-3000W-DC-AFO, not for this part number; the QFX5230-64CD guide draws a lug
+    over a pair of nuts and prints no spacing or size. The 5/8 in. pitch is taken from the sibling because the guide
+    gives one figure (22) and one set of connection steps for both DC units and the library's two skins draw the
+    cover alike; that is an estimate for this unit, declared. No document held gives the studs' size or height: the studs are
+    common/terminal-screw-34@1 inside the pole, which claims no thread although Figure 39 draws one.
+  poles: >-
+    datasheet - QFX5230-64CD Hardware Guide, installation step 7 (printed page 99): "two terminals labeled -48V/-60V
+    (negative) and RTN (positive)". The roles are the text's: `batt` for -48V/-60V (spec/schemas/dc.yaml writes `batt`
+    as negative (battery)) and `rtn` for RTN. NO FIGURE PRINTS A MARK AT THE BLOCK AND THE TEXT GIVES NO ORDER, so
+    which pair is above the other is not read from any document: RTN is drawn upper and -48V/-60V lower, an
+    estimate. One input, so one port, `input`, of two poles.
+  voltage: >-
+    NOT STATED AS ONE FIGURE. Table 18 gives -40 to -72 VDC with a rated range of -48 to -60 VDC. A nominal that is a
+    range is not one figure, so the port states none; `attrs` keeps the range as it already carried it.
+  rating: >-
+    datasheet - QFX5230-64CD Hardware Guide, Table 21 (DC Input Ratings), the row for the AFI DC 2400 W unit: input
+    switch setting 60A and maximum input current 60ADC, one figure for both, so the port states 60.
 states:
 - ok
 - fault
@@ -75,3 +102,15 @@ relief:
     color: '#6ea301'
     confidence: estimated
     source: photo of the AC AIR OUT sibling - the handle bar stands proud of the fan guard; its projection is not measured
+parts:
+  - {ref: juniper/mx240-dc-pole@1, id: pole-rtn, at: [44.7625, 11.3]}
+  - {ref: juniper/mx240-dc-pole@1, id: pole-batt, at: [44.7625, 25.1]}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 60
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+      source: {poles: poles, rating-a: rating}

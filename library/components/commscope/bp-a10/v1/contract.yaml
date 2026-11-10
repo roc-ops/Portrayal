@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bp-a10
-version: 1.0.0
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -35,17 +35,38 @@ provenance:
     drawing - the two duplex adapters abut, housing to housing, as one quad LC block
     9.3 + 9.3 wide with no web between them, which is how the data sheets draw it; so they
     sit at their own width, 9.30, rather than at a cassette's adapter pitch.
+  groups: >-
+    datasheet - AR3044H and AR3044L data sheets, p2, RF and Optical Interface: the optical
+    connectors, LC/APC, are at back plate BP-A10; p3 drawing of the BP-A10: a block of two
+    duplex adapters with bores numbered 1 to 4. Role traffic: the four optical inputs of the
+    receiver. The sheets print no data rate. datasheet - AR3044H and AR3044L data sheets, p2:
+    the four RF outputs, F-type female, are at back plate BP-A10; p3 drawing of the BP-A10: four
+    jacks numbered 1 to 4. Role traffic: the receiver's four RF outputs. The sheets print a
+    passband and no data rate.
 elements:
   screw-top: {at: [8.68, 1.0], size: [8.4, 8.4], class: fastener}
   vents: {at: [3.6, 15.6], size: [18.0, 13.2], class: vent}
   screw-bottom: {at: [8.68, 119.8], size: [8.4, 8.4], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC/APC adapters of a quad return receiver back plate, each carrying two optical inputs; the data sheet states no data rate
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f}
+    description: the four F-type RF outputs of a quad return receiver back plate; the data sheet states no data rate
 parts:
-  - {ref: std/f-type@1, id: rf-out-1, at: [10.35, 36.05], attrs: {role: rf-output}}
-  - {ref: std/f-type@1, id: rf-out-2, at: [10.35, 52.25], attrs: {role: rf-output}}
-  - {ref: std/f-type@1, id: rf-out-3, at: [10.35, 68.15], attrs: {role: rf-output}}
-  - {ref: std/f-type@1, id: rf-out-4, at: [10.35, 84.25], attrs: {role: rf-output}}
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, at: [3.3, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, at: [12.6, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: std/f-type@1, id: rf-out-1, group: rf, at: [10.35, 36.05], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-2, group: rf, at: [10.35, 52.25], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-3, group: rf, at: [10.35, 68.15], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-out-4, group: rf, at: [10.35, 84.25], attrs: {role: rf-output}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, group: optical, at: [3.3, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, group: optical, at: [12.6, 98.83], attrs: {role: optical-input, connector: LC/APC, housing-finish: '#2fa84f'}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

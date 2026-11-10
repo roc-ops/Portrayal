@@ -1204,6 +1204,50 @@ does not list. Files written without them are read as before. A consumer that
 validates a manifest with a copy of the schema updates the copy before it reads
 a device that opens.
 
+## A housing with a stepped end
+
+A device may be a housing that is one end profile extruded along its length
+([modelling-a-device.md](modelling-a-device.md) has a worked example). The format
+gains one optional key and the build gains one field, so `format` stays 1 and
+`contract` stays 2. A device that states no `section` gains no key and no
+attribute: its build is byte for byte what it was.
+
+**In a manifest.** `chassis.section`, a list of at least four `[x, y]` points in
+millimetres, the closed outline of the housing's end seen as the right face is
+drawn: x across the depth from the front, y down the height from the top. It is
+the envelope, so the top and bottom edges run along the tips of anything that
+stands up from the casting. It is clockwise with y down, every edge is
+horizontal or vertical, and it touches all four sides of the `depth` by `height`
+box with exactly one edge on the top side and one on the bottom. The left face is
+its mirror in x. Lint L204 to L207 check it.
+
+**In a compiled face.** On the left and right faces the element with the id
+`chassis-faceplate` is a `<path>` of the polygon (the left face mirrored in x with
+the winding reversed) and not a `<rect>`; the rest of the face is unpainted. The
+front, rear, top and bottom faces are drawn as before. A reader that finds the
+faceplate by its id reads either element.
+
+**In `<device>.configs.json`**, of such a device: `chassis.section`, the points as
+written. It is left out for every other device. The box stays the bounding box,
+and `chassis.w`, `h` and `d`, the rack fit and the exports read it as before.
+
+**What the lock asks for.** `section` is shape, as `bevel` and `rounded` are: it
+sets the outline of a face and what a part may stand on. Stating it on a device
+that was released without it, moving a point of it, or taking it away is a major.
+Renaming the key, or changing the frame or the winding it is read in, is a
+breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states `section`, because `chassis` accepts no key the schema does not list;
+this is the situation `halves` is in. Files written without it are read as
+before. A consumer that validates a manifest with a copy of the schema updates
+the copy before it reads a device that states a section.
+
+**Not in this change.** A fin field on the housing, the 3D body built from the
+section and the open state of a housing with a section are later changes. Until
+they land the section is drawn on the left and right faces only, and a
+device cannot state `section` together with `halves`.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them
