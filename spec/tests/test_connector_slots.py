@@ -105,7 +105,7 @@ def test_the_connector_registry_is_not_vacuous():
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
-                         "raritan-hdot-cx", "vertiv-combo",
+                         "raritan-hdot-cx", "vertiv-combo", "enlogic-combo", "panduit-combo",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
                          "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
@@ -115,6 +115,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                         # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                         "spade-m4",
                          "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
                          # GPU power and NVLink (P-0028): presented by parts no
@@ -204,6 +206,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
                                    "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                                   # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                                   "spade-m4",
                                    "mrj21", "vhdci", "rj11",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard",

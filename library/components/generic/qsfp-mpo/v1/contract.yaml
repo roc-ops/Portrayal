@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-mpo
-version: 1.0.2
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: qsfp
@@ -116,8 +116,23 @@ provenance:
     the wrapper states the colour its wavelength calls for: beige for an SR4,
     blue for a PSM4 or DR4. The outline follows the fill (`data-stroke-derive`
     on the composed tab).
+  groups: >-
+    Source: SFF-8436 Rev 4.9 section 5.1, which says the module's optical interface is the MPO
+    adapter interface (IEC 61754-7 interface 7-3), and SFF-8679 Rev 1.9 section 7.3.1 Figure 7-2
+    (provenance.receptacle). The role is traffic, this contract's own reading of the job: the
+    module's network port, where its fibre or cable is plugged in. The shape stands for every
+    module of its kind, so the group states no speed: rate, reach and watts belong on the vendor
+    wrapper.
+groups:
+  qsfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the MPO receptacle of a QSFP-family module
 parts:
-  - {ref: std/mpo-module-receptacle@1, id: mpo, at: [2.725, 0.5], lift: 20.0}
+  - {ref: std/mpo-module-receptacle@1, id: mpo, group: qsfp, at: [2.725, 0.5], lift: 20.0}
   - {ref: common/qsfp-pull-tab@2, id: tab, at: [-0.325, -1.23], lift: 20.0}
 relief:
   features:
