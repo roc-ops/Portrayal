@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: pdu-cord-cs8365
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the cable gland of a PDU's fixed input cord, whose far end is a CS8365 locking plug that goes into a receptacle outside this library; no cable lands on the gland, so no mate is offered for it
+description: >-
+  The fixed input cord of an Enlogic EN2951 three-phase PDU with a CS8365 plug: 1.8 m of cord (the default of
+  the ordering table) leaving the cord end of the strip through a cable gland. Drawn as the gland shows from the
+  end; the cord and plug beyond it are not.
+size: {w: 46.0, h: 46.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: cs8365c, cord-length-m: 1.8}
+provenance:
+  size: >-
+    ESTIMATED - the front view of Enlogic drawing EN2951-WXYZ_DA rev E3 draws the gland nut at the cord end as a
+    block nearly the strip's width across, about 19 pt (46 mm at 2.4306 mm per pt), read off a 300 dpi render
+    to about 2 mm. The end-on shape is not drawn: the part is a circle of that figure with the cord's bore
+    inside it.
+  cord: >-
+    datasheet and drawing - EN2951 data sheet "Input Cord Length 1.8m (5.91')"; the drawing's ordering table
+    "(DEFAULT) 1.8m [6'] = 0" with other lengths from 0.5 m to 3 m as options. The part is the default.
+  plug: >-
+    THE SOURCES NAME THE PLUG TWO WAYS - the data sheet "Input Plug Type CS8365L", the drawing "CS8365=0" and
+    "CS8365, 3P 4W, 50A, 250V, 3-PHASE MAX RATED INPUT, 40A DERATED" (sheet 2 draws its face). Neither writes the
+    `C` of the registered CS8365C. The part is recorded as the `cs8365c` power port, the plug the Eaton PDU
+    cord eaton/g4-cord-cs8365c@1 records for a "CS8365"; that is a reading, not a held statement. The plug face
+    is not a part here: a device draws this cord or a plug face, never both.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands
+    for the power input a DCIM records, a `cs8365c` power port.
+elements:
+  gland: {at: [0, 0], size: [46.0, 46.0], class: inlet}
+skins: [default]

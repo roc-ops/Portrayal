@@ -46,6 +46,7 @@ POWER_LABEL = {
     "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
     "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
+    "enlogic/pdu-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
 }
 
 PART_OUTLET = {
@@ -83,6 +84,10 @@ PART_OUTLET = {
     "std/nema-5-20r": "nema-5-20r",
     # A NEMA 5-15R, upstream's `nema-5-15r`.
     "std/nema-5-15r": "nema-5-15r",
+    # AN ENLOGIC ADVANTAGE PDU'S COMBINATION OUTLETS: the maker's C13/C15 well takes a C14, so it is upstream's
+    # `iec-60320-c13`; its C13/C15/C19 well takes a C14 or a C20, no target names it, so it is `other` with its label.
+    "enlogic/combo-outlet-c13-c15": "iec-60320-c13",
+    "enlogic/combo-outlet-c13-c15-c19": "other",
     # A RITTAL PDU'S CEE 7/3 EARTHING-PIN SOCKET. No upstream outlet type for it has been
     # read from a held source, so it is `other` with the connector as its label.
     "rittal/cee-7-3-outlet": "other",
@@ -94,6 +99,7 @@ PART_OUTLET = {
 OUTLET_LABEL = {"amphenol-ns/output-p40": "P40", "servertech/hdot-cx-outlet": "HDOT Cx",
                 "rittal/cee-7-3-outlet": "CEE 7/3", "raritan/px4-cx-outlet": "Cx locking",
                 "vertiv/combo-outlet": "Vertiv combination C13/C19",
+                "enlogic/combo-outlet-c13-c15-c19": "Enlogic combination C13/C15/C19",
                 "panduit/g5-outlet-c13-c15-c19": "Panduit combination C13/C15/C19"}
 
 # EVERY PORT-CLASS PART THIS EXPORTER NEVER EMITS, AND WHY IT DOES NOT.
