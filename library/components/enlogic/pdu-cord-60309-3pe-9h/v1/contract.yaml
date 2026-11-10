@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: pdu-cord-60309-3pe-9h
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the cable gland of a PDU's fixed input cord, whose far end is an IEC 60309 3P+E 9h plug that goes into a receptacle outside this library; no cable lands on the gland, so no mate is offered for it
+description: >-
+  The fixed input cord of an Enlogic EN6952 three-phase PDU with an IEC 60309 3P+E 9h plug (the maker's 460P9,
+  IP44): 1.8 m of cord (the default of the ordering table) leaving the cord end of the strip through a cable
+  gland. Drawn as the gland shows from the end; the cord and plug beyond it are not.
+size: {w: 46.0, h: 46.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: iec-60309-3p-e-9h-60a, cord-length-m: 1.8}
+provenance:
+  size: >-
+    ESTIMATED - the front view of Enlogic drawing EN6952-WXYZ_DA rev E3 draws the gland nut at the cord end as a
+    block nearly the strip's width across, about 19 pt (46 mm at 2.4306 mm per pt), read off a 300 dpi render
+    to about 2 mm. The end-on shape is not drawn: the part is a circle of that figure with the cord's bore
+    inside it.
+  cord: >-
+    datasheet and drawing - EN6952 data sheet "Input Cord Length 1.8m (5.91')".
+  plug: >-
+    datasheet and drawing - EN6952 data sheet "Input Plug Type 460P9 (IP44)", "60A (48A DERATED)"; the drawing
+    sheet 2 "IEC 60309, 3P 4W, 9H" with an optional IP67 plug (the sheets name it 460P9W and "IEC 60309, 3P 4W,
+    9H IP67"; only the default is drawn). The plug face is not a part here.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands
+    for the power input a DCIM records, one power port of type `other` labelled as an IEC 60309 3P+E 9h plug.
+elements:
+  gland: {at: [0, 0], size: [46.0, 46.0], class: inlet}
+skins: [default]
