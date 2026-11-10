@@ -1,0 +1,44 @@
+format: 1
+kind: component
+name: en-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker at the head of an outlet bank of an Enlogic Advantage Series PDU (the EN2 and EN6 families):
+  a 20 A double-pole rocker in a recess on a plate held by four screws, the plate in the bank's colour and printed
+  with the bank's name (B1) and the two lines it is across (L1-L2). Fixed to the PDU, not a plug-in part.
+size: {w: 44.9, h: 50.2}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  method: >-
+    drawing - Enlogic customer drawing EN2951-WXYZ_DA rev E3 (sheet 1, FRONT VIEW) is vector; the plate's edges
+    were read from its path geometry at 2.4306 mm per pt (the 56.0 width read as 23.04 pt, which the 1826.0
+    overall also checks). The EN6952 drawing draws the same plate at the same size. The drawing lies the PDU
+    down, cord end left; this part is drawn as the PDU stands, cord end up, so the drawing's length runs down
+    the part and its width across it, the drawing's top edge on the right.
+  size: >-
+    drawing - the plate is 20.64 pt along the strip by 18.48 pt across it: 50.2 by 44.9, to about 1 mm. The
+    screws, the recess and the rocker are read off a 300 dpi render of the same view, to about 1.5 mm, and are
+    ESTIMATED.
+  rating: >-
+    datasheet and drawing - EN2951 data sheet: "(6)2-pole,20A,5 kAIC"; the drawing: "20 AMP, DOUBLE-POLE
+    ELECTRO MECHANICAL SWITCH / BREAKER (6) PLACES".
+  colour: >-
+    drawing - the bank colour is a FIELD (`bank-color`): the drawing names B1 and B4 WHITE, B2 and B5 LIGHT GRAY,
+    B3 and B6 DARK GRAY. No held document gives a colour value and no photograph of a unit is held, so the
+    values a device writes are estimates. The legend ink is a field too (`ink`).
+  legends: >-
+    drawing - the plate prints the bank (B1 to B6) large and the lines (L1-L2, L2-L3, L3-L1) small under it. They
+    are the fields `bank` and `lines`.
+  relief: >-
+    not shown - the drawing's side view is an outline; the plate is drawn flat.
+fields:
+  bank-color: {label: Bank colour, type: text, default: '#e8e8e8'}
+  ink: {label: Legend ink, type: text, default: '#202020'}
+  bank: {label: Bank, type: text, default: B1}
+  lines: {label: Lines, type: text, default: L1-L2}
+elements:
+  rocker: {at: [27.0, 17.0], size: [7.8, 14.7], class: breaker, states: ['on', 'off']}
+skins: [default]

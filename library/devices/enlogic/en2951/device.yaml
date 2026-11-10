@@ -1,0 +1,278 @@
+format: 1
+kind: device
+name: en2951
+version: 0.1.0
+maturity: modelled
+manufacturer: Enlogic
+model: EN2951
+description: "Enlogic EN2 PDU, 0U: a 1826 mm dark strip, 56 mm wide and 75 mm deep, that hangs on two toolless buttons beside a rack and hands a three-phase 208 V delta feed (a fixed 1.8 m cord with a CS8365 plug (the data sheet writes CS8365L), 50 A (40 A derated)) on to 42 switched outlets - 21 C13/C15 and 21 C13/C15/C19 combination outlets - in six colour-coded banks, each behind its own 20 A double-pole breaker, with a hot-swap network management module (display, two Ethernet ports, USB-C and two sensor ports) between banks three and four."
+profile: power
+provenance:
+  method: {confidence: drawing, note: "FIGURES FROM THE MAKER'S VECTOR DRAWING. Enlogic EN2951 customer drawing EN2951-WXYZ_DA rev E3, 2023/02/09 (three A3 sheets) and the EN2951 data sheet (four pages). Sheet 1 is vector: the front view's path boxes were read at 2.4306 mm per pt, the 56.0 width as drawn (23.04 pt), which the 1826.0 overall (751.3 pt between the end lines) checks. Sheet 2 carries a raster close-up of the network module, read by eye. The strip is drawn STANDING, cord end up: a drawing x along the strip becomes y down from the cord end and the drawing's top edge becomes the right edge (the turn the EB0803 uses)."}
+  mount: {confidence: drawing, note: "`rack-side`, on the two toolless buttons of the rear view (VERTICAL, 0U FULL; 1555.0 between them, the first 129.7 from the cord end). `ru: 41` is the 1826 it runs, 1826 / 44.45; no source sells it by rack units. The drawing's universal bracket (note 3, 'provided with the unit') and the installation guide's brackets are not drawn; that guide is titled for the EB 2.0 series and is used only for its page 2 statement that the distance between pegs depends on the model (full length 1555 mm), which this drawing's 1555.0 agrees with."}
+  chassis: {confidence: drawing, note: "drawing and datasheet - 1826.0 long, 56.0 wide and 75.0 deep (data sheet 'Chassis Dimensions (L x W x D) 1826.0 x 56.0 x 75.0 mm', 'Depth At Circuit Breaker 75 mm'; the drawing's front, side and bottom views give the same). The body is drawn dark: the drawing's identification table lists 'BLACK' as the default chassis colour, so #202020 is a stand-in, no photograph of a unit is held."}
+  colour: {confidence: estimated, note: "ESTIMATED - the drawing names the banks B1 and B4 WHITE, B2 and B5 LIGHT GRAY, B3 and B6 DARK GRAY and gives no colour values; no photograph or render of a unit is held. The bank plates are drawn #e8e8e8, #b7b9ba and #4a4d51, the body #202020 (BLACK, the default of the identification table), the outlet mouldings the body's colour."}
+  front: {confidence: drawing, note: "drawing - the front view, mm from the cord end and from the left as the strip stands: the cord gland and a ground screw with its earth symbol at the cord end; the six breaker plates B1 to B3 in a row, then 12 columns of outlets (three groups J1 to J3 of four), the network module, B4 to B6, then nine columns (three groups J4 to J6 of three). Each column is an upper well (C13/C15) and a lower well (C13/C15/C19), both 34.4 along the strip."}
+  outlets: {confidence: drawing, note: "drawing and datasheet - OUTLET QTY & TYPE '(21)C13/C15,(21)C13/C15/C19'; data sheet 'Outlet Configuration 21(C13/C15),21(4-in-1 Combo)'. 21 wells of each kind, enlogic/combo-outlet-c13-c15@1 (10 A) and enlogic/combo-outlet-c13-c15-c19@1 (16 A). Every outlet is switchable ('Remote Outlet Switching Yes') and runs `through` its bank's breaker, the wiring sheet's B1 to B6 over J1 to J6. THE UNIT PRINTS NO OUTLET NUMBER in any held view, so the outlets keep their placement ids, counted from the cord end, upper well first."}
+  input: {confidence: datasheet, note: "datasheet and drawing - 'Input Plug Type CS8365L (the drawing: CS8365)', 'Acceptable Input Voltage 208VAC, 3-phase', 'Input Current (Phase) 50 A (40 A derated)', 'Max Input Power 14.4 kVA', cord 'Input Cord Length 1.8m (5.91')' (the drawing's default, other lengths optional), the drawing 'THREE-PHASE,DELTA'. The unit has a fixed cord and no inlet."}
+  breakers: {confidence: datasheet, note: "datasheet and drawing - '(6)2-pole,20A,5 kAIC' and '20 AMP, DOUBLE-POLE ELECTRO MECHANICAL SWITCH / BREAKER (6) PLACES'; each plate prints its bank and its lines (B1 L1-L2, B2 L2-L3, B3 L3-L1, then the same for B4 to B6). THE OUTLETS RUN `through` THEIR BANK'S BREAKER by the wiring sheet (sheet 3) printing B1 to B6 over J1 to J6."}
+  module: {confidence: drawing, note: "drawing - sheet 1 draws the network module as a 147 mm block between banks three and four; sheet 2's raster close-up (about 25 mm by 76 mm of paper, undimensioned) shows, top to bottom: the large LED display with its coloured border, an oLED screen with three buttons, a USB-C port and a Reset pinhole, two RJ45 Ethernet ports side by side (labelled 10/100/1000 and 10/100) and two sensor ports labelled Sensor 1 and Sensor 2. THE MODULE'S PARTS ARE PLACED IN THE CLOSE-UP'S PROPORTIONS scaled into the front view's 147 mm, to about 3 mm, and are estimates."}
+  rear: {confidence: drawing, note: "drawing - the rear view: two toolless buttons, O18.4, 1555.0 apart, the first 129.7 from the cord end, on the width's centre line."}
+  sides: {confidence: drawing, note: "drawing - the side and bottom views are outlines with dimensions (the side view's '(4) PL 48.0' and '2X 24.0' mark positions the sheet does not draw), so the ends and sides are drawn empty (gaps: ends)."}
+  dcim: {confidence: datasheet, note: "the input is one power port from the cord part and each outlet a power outlet it feeds: `iec-60320-c13` for the C13/C15 wells and `iec-60320-c19` for the C13/C15/C19 wells, a reading (the maker's combination wells take more than one cord end). Each outlet runs `through` its bank's breaker. No feed_leg is written: a delta input has no neutral."}
+  lifecycle: {confidence: datasheet, note: "only the held documents were read: none announces an end of life, and the data sheet is copyright 2023. No web search was made."}
+attrs:
+  physical: {length-mm: 1826, construction: 'metal strip, dark'}
+  power: {input-ac: "208 V three-phase delta, 50 A (40 A derated), 50/60 Hz", input-plug: cs8365c, input-cord: fixed, input-phase: three, input-wiring: delta, input-voltage-v: 208, input-current-a: 40, plug-rating-a: 50, max-input-power: 14.4 kVA, output-voltage: 200-240 V, output-rating: 10 A per C13/C15 well; 16 A per C13/C15/C19 well, breakers: 'six 20 A two-pole, 5 kAIC, hydraulic-magnetic', frequency: 50/60 Hz}
+  environmental: {operating-temp: -5 to 60 C (23 to 140 F), storage-temp: -20 to 60 C (-4 to 140 F), humidity: '5-90 %% RH operating, 5-95 %% storage, non-condensing', altitude: 3000 m (9840 ft) maximum operating elevation}
+  management: {metering-scope: branch, outlet-switching: true}
+  compliance: {product-compliance: 'RoHS, REACH; IEC 62368 listed; UL 2900-1'}
+  lifecycle: {eol: none-announced}
+chassis: {width: 56, height: 1826, depth: 75, ru: 41, mount: rack-side, color: '#202020', airflow: passive}
+gaps:
+- what: weight
+  scope: [front, rear, left, right]
+  reason: vendor-silent
+  note: "no held document states a weight: neither the drawing nor the data sheet has a field."
+  wanted: a weight from the maker.
+- what: colour
+  scope: [front, rear, left, right]
+  reason: needs-photo
+  note: "no photograph of a unit, and no render, is held: bank plate and body colours are estimates from the drawing's colour names."
+  wanted: photographs of a unit, front, back, sides and ends.
+- what: module-ports
+  scope: [front]
+  reason: needs-photo
+  note: "the module's picture on sheet 2 is a small undimensioned raster: the ports' positions are read in its proportions, which way each jack faces (the RJ45 latch side) is not stated, and the two sensor ports are drawn as dark openings, not as a connector, because no held document names their connector type."
+  wanted: a photograph of the module's face and the manual's port table.
+- what: sensor-count
+  scope: [front]
+  reason: sources-disagree
+  note: "the data sheet says the module 'supports up to 10 digital sensor' and the drawing's close-up 'supports up to 8 physical sensors'; two sensor ports are drawn."
+  wanted: the maker's word on the sensor capacity.
+- what: input-plug
+  scope: [top]
+  reason: sources-disagree
+  note: "the data sheet names the plug CS8365L and the drawing CS8365; the registry's plug is CS8365C. The cord is recorded as `cs8365c`, a reading."
+  wanted: the maker's word on the plug.
+- what: button-locations
+  scope: [rear]
+  reason: needs-drawing
+  note: "the side view marks '(4) PL 48.0' and '2X 24.0' without drawing what they locate; only the two rear buttons are placed."
+  wanted: a drawing that dimensions the other locations.
+- what: outlet-turn
+  scope: [front]
+  reason: needs-drawing
+  note: "the sheet-2 close-ups of the two outlet wells are undimensioned rasters; no turn is claimed for any outlet, and the wells are drawn to the registry C13 and C19 shapes scaled into the drawn size."
+  wanted: a dimensioned drawing of each well.
+- what: c15-notch
+  scope: [front]
+  reason: needs-drawing
+  note: "the maker's \"C13/C15 COMBO 10A, 250V\" well (the upper row) is a C13 with the C15 extension, rated 10 A; it is placed as `iec-c13` and not as a combination key, because it takes a C14 plug but not a C20. Whether it should have a key of its own is open."
+  wanted: the maker's word on the C15 notch and a dimensioned drawing of the well.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: "the side and bottom views are plain outlines; no photograph looks at an end or a side."
+  wanted: straight-on photographs of an end and a side.
+- what: outlet-numbers
+  scope: [front]
+  reason: vendor-silent
+  note: "no held view prints an outlet number, so no outlet name is taken."
+  wanted: none.
+groups:
+  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of bank B1, counted from the cord end: 4 C13/C15 and 4 C13/C15/C19, each switchable, behind breaker B1'}
+  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of bank B2, counted from the cord end: 4 C13/C15 and 4 C13/C15/C19, each switchable, behind breaker B2'}
+  outlets-b3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of bank B3, counted from the cord end: 4 C13/C15 and 4 C13/C15/C19, each switchable, behind breaker B3'}
+  outlets-b4: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of bank B4, counted from the cord end: 3 C13/C15 and 3 C13/C15/C19, each switchable, behind breaker B4'}
+  outlets-b5: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of bank B5, counted from the cord end: 3 C13/C15 and 3 C13/C15/C19, each switchable, behind breaker B5'}
+  outlets-b6: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of bank B6, counted from the cord end: 3 C13/C15 and 3 C13/C15/C19, each switchable, behind breaker B6'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'B1 to B6, each 20 A double-pole and each feeding its own bank of outlets'}
+  network: {term: Port, role: management, index-origin: 1, mixed: 'the network module''s two Ethernet ports: a 10/100/1000 primary port and a 10/100 port for redundancy and daisy-chain cascading'}
+  usb: {term: Port, role: management, index-origin: 1}
+  marks: {term: Mark, role: furniture, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  resets: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1826}
+    panel:
+      decor:
+      - id: module-panel
+        at: [0.0, 1000.14]
+        size: [56.0, 147.0]
+        fill: '#17181a'
+        kind: module
+      - id: led-display
+        at: [3.7, 1014.54]
+        size: [48.5, 52.1]
+        rx: 2.0
+        fill: '#050505'
+        kind: display
+      - id: oled-display
+        at: [4.6, 1073.04]
+        size: [36.4, 17.2]
+        rx: 1.0
+        fill: '#1b2a2e'
+        kind: display
+      - id: sensor-1
+        at: [12.9, 1116.74]
+        size: [14.8, 13.6]
+        rx: 1.0
+        fill: '#0d0e0f'
+        kind: sensor-jack
+      - id: sensor-2
+        at: [28.4, 1116.74]
+        size: [14.8, 13.6]
+        rx: 1.0
+        fill: '#0d0e0f'
+        kind: sensor-jack
+      - id: module-button-1
+        at: [43.4, 1068.04]
+        size: [10.0, 6.0]
+        rx: 3.0
+        fill: '#2f6fb5'
+        kind: button
+      - id: module-button-2
+        at: [43.4, 1076.44]
+        size: [10.0, 6.0]
+        rx: 3.0
+        fill: '#2f6fb5'
+        kind: button
+      - id: module-button-3
+        at: [43.4, 1084.84]
+        size: [10.0, 6.0]
+        rx: 3.0
+        fill: '#2f6fb5'
+        kind: button
+    components:
+      placements:
+      - {id: outlet-1, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 347.67], group: outlets-b1, rel-pos: 1, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-2, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 347.67], group: outlets-b1, rel-pos: 2, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-3, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 385.3], group: outlets-b1, rel-pos: 3, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-4, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 385.3], group: outlets-b1, rel-pos: 4, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-5, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 422.63], group: outlets-b1, rel-pos: 5, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-6, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 422.63], group: outlets-b1, rel-pos: 6, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-7, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 460.26], group: outlets-b1, rel-pos: 7, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-8, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 460.26], group: outlets-b1, rel-pos: 8, fed-by: input, through: breaker-b1, states: ['on', 'off']}
+      - {id: outlet-9, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 520.34], group: outlets-b2, rel-pos: 1, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-10, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 520.34], group: outlets-b2, rel-pos: 2, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-11, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 557.97], group: outlets-b2, rel-pos: 3, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-12, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 557.97], group: outlets-b2, rel-pos: 4, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-13, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 595.3], group: outlets-b2, rel-pos: 5, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-14, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 595.3], group: outlets-b2, rel-pos: 6, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-15, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 632.93], group: outlets-b2, rel-pos: 7, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-16, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 632.93], group: outlets-b2, rel-pos: 8, fed-by: input, through: breaker-b2, states: ['on', 'off']}
+      - {id: outlet-17, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 693.01], group: outlets-b3, rel-pos: 1, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-18, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 693.01], group: outlets-b3, rel-pos: 2, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-19, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 730.64], group: outlets-b3, rel-pos: 3, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-20, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 730.64], group: outlets-b3, rel-pos: 4, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-21, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 767.97], group: outlets-b3, rel-pos: 5, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-22, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 767.97], group: outlets-b3, rel-pos: 6, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-23, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 805.6], group: outlets-b3, rel-pos: 7, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-24, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 805.6], group: outlets-b3, rel-pos: 8, fed-by: input, through: breaker-b3, states: ['on', 'off']}
+      - {id: outlet-25, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1396.53], group: outlets-b4, rel-pos: 1, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-26, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1396.53], group: outlets-b4, rel-pos: 2, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-27, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1433.86], group: outlets-b4, rel-pos: 3, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-28, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1433.86], group: outlets-b4, rel-pos: 4, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-29, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1471.49], group: outlets-b4, rel-pos: 5, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-30, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1471.49], group: outlets-b4, rel-pos: 6, fed-by: input, through: breaker-b4, states: ['on', 'off']}
+      - {id: outlet-31, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1545.86], group: outlets-b5, rel-pos: 1, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-32, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1545.86], group: outlets-b5, rel-pos: 2, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-33, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1583.49], group: outlets-b5, rel-pos: 3, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-34, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1583.49], group: outlets-b5, rel-pos: 4, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-35, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1621.11], group: outlets-b5, rel-pos: 5, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-36, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1621.11], group: outlets-b5, rel-pos: 6, fed-by: input, through: breaker-b5, states: ['on', 'off']}
+      - {id: outlet-37, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1695.49], group: outlets-b6, rel-pos: 1, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - {id: outlet-38, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1695.49], group: outlets-b6, rel-pos: 2, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - {id: outlet-39, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1733.12], group: outlets-b6, rel-pos: 3, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - {id: outlet-40, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1733.12], group: outlets-b6, rel-pos: 4, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - {id: outlet-41, ref: enlogic/combo-outlet-c13-c15@1, at: [27.8, 1770.45], group: outlets-b6, rel-pos: 5, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - {id: outlet-42, ref: enlogic/combo-outlet-c13-c15-c19@1, at: [5.5, 1770.45], group: outlets-b6, rel-pos: 6, fed-by: input, through: breaker-b6, states: ['on', 'off']}
+      - id: breaker-b1
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 112.29]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: 'Breaker B1 (white), 20 A double-pole across L1 and L2: protects its bank of outlets'
+        attrs: {bank-color: '#e8e8e8', ink: '#202020', bank: B1, lines: L1-L2}
+      - id: breaker-b2
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 187.55]
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        description: 'Breaker B2 (light gray), 20 A double-pole across L2 and L3: protects its bank of outlets'
+        attrs: {bank-color: '#b7b9ba', ink: '#202020', bank: B2, lines: L2-L3}
+      - id: breaker-b3
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 262.8]
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        description: 'Breaker B3 (dark gray), 20 A double-pole across L3 and L1: protects its bank of outlets'
+        attrs: {bank-color: '#4a4d51', ink: '#e6e6e6', bank: B3, lines: L3-L1}
+      - id: breaker-b4
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1164.65]
+        group: breakers
+        rel-pos: 4
+        lines: [L1, L2]
+        description: 'Breaker B4 (white), 20 A double-pole across L1 and L2: protects its bank of outlets'
+        attrs: {bank-color: '#e8e8e8', ink: '#202020', bank: B4, lines: L1-L2}
+      - id: breaker-b5
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1239.9]
+        group: breakers
+        rel-pos: 5
+        lines: [L2, L3]
+        description: 'Breaker B5 (light gray), 20 A double-pole across L2 and L3: protects its bank of outlets'
+        attrs: {bank-color: '#b7b9ba', ink: '#202020', bank: B5, lines: L2-L3}
+      - id: breaker-b6
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1315.15]
+        group: breakers
+        rel-pos: 6
+        lines: [L3, L1]
+        description: 'Breaker B6 (dark gray), 20 A double-pole across L3 and L1: protects its bank of outlets'
+        attrs: {bank-color: '#4a4d51', ink: '#e6e6e6', bank: B6, lines: L3-L1}
+      - {id: network-1, ref: common/rj45-eth@1, at: [10.6, 1100.64], group: network, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'Gigabit Ethernet port, 10/100/1000 Mbps (the primary network port)'}
+      - {id: network-2, ref: common/rj45-eth@1, at: [29.9, 1100.64], group: network, rel-pos: 2, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'Ethernet port, 10/100 Mbps (redundancy and daisy-chain cascading)'}
+      - {id: usb-c, ref: std/usb-c@1, at: [15.9, 1092.94], group: usb, rel-pos: 1, description: 'USB-C port (upgrades, connectivity and expansion)'}
+      - {id: reset, ref: common/reset-button@1, at: [32.4, 1091.54], for: chassis, group: resets, rel-pos: 1}
+      - {id: ground-symbol, ref: common/ground-symbol@1, at: [44.8, 16.0], group: marks, rel-pos: 1}
+      - {id: ground, ref: common/ground-screw@1, at: [49.7, 29.4], group: grounding, rel-pos: 1}
+  rear:
+    size: {w: 56, h: 1826}
+    components:
+      placements:
+      - {id: button-1, ref: enlogic/pdu-mounting-button@1, at: [18.8, 120.5], group: mounting, rel-pos: 1}
+      - {id: button-2, ref: enlogic/pdu-mounting-button@1, at: [18.8, 1675.5], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 56, h: 75}
+    components:
+      placements:
+      - {id: input, ref: enlogic/pdu-cord-cs8365@1, at: [5.0, 14.5], group: power-input, rel-pos: 1, description: 'the fixed 1.8 m cord with a CS8365 plug (the data sheet writes CS8365L), leaving the cord end of the strip through a cable gland'}
+  bottom:
+    size: {w: 56, h: 75}
+    empty: the bottom view of the drawing (EN2951-WXYZ_DA) draws this end as a plain outline, 56.0 by 75.0, and no photograph looks at it.
+  left:
+    size: {w: 75, h: 1826}
+    empty: the side view of the drawing (EN2951-WXYZ_DA) draws this side as a plain outline with dimensions only, and no photograph looks at it.
+  right:
+    size: {w: 75, h: 1826}
+    empty: the side view of the drawing (EN2951-WXYZ_DA) draws this side as a plain outline with dimensions only, and no photograph looks at it.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as the drawing shows its default: a black chassis, the default plug, a 1.8 m cord and top feed. The other plugs, colours, cord lengths and bottom feed of the identification table are options and are not drawn.'
+    part-numbers:
+      EN2951: {}
+datasheet: {title: 'Enlogic EN2951, Input metered PDU - EN2 series data sheet (4 pages)', url: 'https://nvent.widen.net/content/9gpwmrplqa/original/en2951-spec-sheet.pdf', sha256: f6c6c24d123e5085fbbbf6b1fdc85580fb4c6bfe0f5babf3dc8fb98372477f08}
+references:
+- {title: 'Enlogic EN2951 customer drawing EN2951-WXYZ_DA, rev E3, 2023/02/09 (three A3 sheets)', url: 'https://nvent.widen.net/content/xmsilhvodq/original/en2951-wxyz_da_e3_released.pdf', sha256: 9431f8cb4c32e70f035aed6d19c997e5ee848fe143df49e5c3eeb99d88af6fd6}
+- {title: 'Enlogic EB 2.0 Series PDU, Quick Start Installation Guide (page 2 only; titled for another series)', url: 'https://nvent.widen.net/content/rmg6v3jpv0/original/enlogic-installation-guide-pdu.pdf', sha256: 694ccb32a01adcb3785e63744b614e0aa6a6d84500bfa753f17b584490359956}
