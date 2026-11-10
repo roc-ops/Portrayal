@@ -4591,8 +4591,10 @@ export async function buildFaceRelief(F, ctx) {
   // front cover's plate where it reaches over the flange - had nowhere to be
   // painted once the face was cropped to itself, so it is painted on a plane
   // the size of the drawing with the face cut out of it. A sheet body builds
-  // nothing from its faces (sheetShell), and nothing here either.
-  if (beyond && !ctx.sheet) {
+  // nothing from its faces (sheetShell), and nothing here either. Nor does a body whose ribs
+  // stand outside the box (`noWing`): they are geometry there, and the plane would stand a flat
+  // copy of them, gaps filled, in front of them.
+  if (beyond && !ctx.sheet && !ctx.noWing) {
     const wing = document.createElement('canvas');
     wing.width = beyond.cv.width; wing.height = beyond.cv.height;
     const wx = wing.getContext('2d');
