@@ -1340,6 +1340,19 @@ nothing that was read changes. The key is part of the published format from the
 release that carries it: renaming it or changing what it holds after that is a
 breaking change.
 
+**Packs of a built dist.** `spec/tools/dev/dist_packs.py` writes, into a folder of
+its own, a derived form of `library/dist/` for a file server that limits the number of
+files: `devices/<device>.json` (`{"more", "files"}`, the faces the default
+configuration names), `devices/<device>.more.json` (`{"files"}`, every other
+face a configuration names), `components/<namespace>.<k>.json` (`{"files"}`, a
+namespace's skins in chunks whose file is at most 1 MB, by byte order of the file
+name) and `components/index.json` (`{<namespace>: [first skin of each chunk
+after the first]}`). They are not part of `dist/` or of the npm packages, and
+`contract` does not rise, since nothing in `dist/` changes. The tool is run by a
+consumer, never by the build. A consumer that makes packs holds them as its own
+format, and reads them with `kit/dist.js` `packedDist` and `fetchDist`, which
+are new exports and change none that was there.
+
 ## What is promised before 1.0
 
 The package is at 0.x, and at 0.x the promise is deliberately small:

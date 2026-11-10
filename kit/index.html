@@ -138,7 +138,7 @@ import { statesOfEl, messagesOfEl, charactersOfEl, boundLamps, offIsSet,
 import { encodeSwaps, encodeTurns, searchWith } from './swap.js';
 import { encodeFields } from './fields.js';
 import { positionControl } from './positions.js';
-import { flatDist, packageDist, distResolver, faceFile } from './dist.js';
+import { flatDist, packageDist, distResolver, faceFile, fetchDist } from './dist.js';
 import { drawEars, clearEars, earPlan, faceSize, frontWidthOfText } from './ears2d.js';
 import { describeHalves, viewFor } from './housing.js';
 
@@ -754,7 +754,7 @@ async function frontWidth() {
   if (state.view === 'front' && state.svg) return faceSize(state.svg)?.[0];
   if (state.faces?.front && state.facesFor === key) return faceSize(state.faces.front)?.[0];
   if (!(key in frontW)) {
-    frontW[key] = fetch(distAt(faceFile(state.meta, state.cfg, 'front')))
+    frontW[key] = fetchDist(distAt(faceFile(state.meta, state.cfg, 'front')))
       .then(r => (r.ok ? r.text() : '')).then(frontWidthOfText).catch(() => null);
   }
   return frontW[key];

@@ -23,7 +23,7 @@ const INFLIGHT = new Map();
 export function jdist(url) {
   const key = new URL(url, location.href).href;
   if (!INFLIGHT.has(key)) {
-    INFLIGHT.set(key, fetch(key).then(r => {
+    INFLIGHT.set(key, fetchDist(key).then(r => {
       if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
       return r.json();
     }).catch(err => {
@@ -266,5 +266,140 @@ export async function readRack(distAt, ref) {
   return doc;
 }
 
+// ---- device packs ------------------------------------------------------------
+//
+// A file server that limits the number of files can serve a build as packs instead of one file
+// per drawing: `spec/tools/dev/dist_packs.py` writes them from a built dist, on
+// request, and the published build and the npm packages do not change. A device
+// has a pack of the faces its default configuration draws and, when any other
+// configuration draws a face of its own, a second pack; a namespace's skins are
+// packs of at most about 1 MB. A pack holds the drawings as text.
+//
+// The kit still asks for one drawing at a time, by a URL: a pack's URL with the
+// drawing's path in the fragment. `fetchDist` is `fetch` for every URL the kit
+// reads from a dist, and answers a pack URL from the pack, as a Response of its
+// own, so a caller cannot tell a packed drawing from a loose file.
+//
+//   <base>packs/devices/<device>.json#<face file>
+//   <base>packs/components/<namespace>.<k>.json#components/<skin>
+
+const PACKS = new Map();   // pack url -> Promise of the parsed pack, or of null (no such pack)
+const MISSES = new Set();  // pack urls with a fragment that no pack holds
+const PACK_URL = /\/packs\/(?:devices|components)\/[^/?#]+\.json#/;
+const DEVICE_PACK = /^(.*\/)packs\/devices\/([^/.?#]+)\.json$/;
+const TYPES = {svg: 'image/svg+xml', json: 'application/json'};
+
+/** A pack, fetched once and shared. A network failure or a 5xx is tried again
+ *  once; a pack that is still not there then is not remembered, so a later call
+ *  asks again. A 404 is: packs do not change during a page. */
+async function loadPack(url) {
+  let failed;
+  for (let attempt = 0; attempt < 2; attempt++) {
+    let r;
+    try { r = await fetch(url); } catch (err) { failed = err; continue; }
+    if (r.status === 404) return null;
+    if (r.ok) return r.json();
+    failed = Object.assign(new Error(`${url}: HTTP ${r.status}`), {packStatus: r.status});
+    if (r.status < 500) break;
+  }
+  throw failed;
+}
+
+function pack(url) {
+  let hit = PACKS.get(url);
+  if (!hit) {
+    hit = loadPack(url);
+    PACKS.set(url, hit);
+    hit.catch(() => { if (PACKS.get(url) === hit) PACKS.delete(url); });
+  }
+  return hit;
+}
+
+const held = (p, path) => (p?.files && Object.hasOwn(p.files, path) ? p.files[path] : undefined);
+
+/** Which pack of a device holds `path`, from its configs.json when jdist has it
+ *  (a read still on its way is waited for), else by trying the default pack and
+ *  then the second. Resolves to the text, or undefined when no pack holds it. */
+async function deviceText(base, device, path, defaultUrl) {
+  const moreUrl = `${base}packs/devices/${device}.more.json`;
+  const entry = INFLIGHT.get(new URL(`${base}${device}.configs.json`, location.href).href);
+  const idx = entry ? await entry.catch(() => null) : null;
+  const configs = idx?.configs;
+  if (Array.isArray(configs) && configs.length && configs.every(c => c?.files && typeof c.files === 'object')) {
+    const dflt = configs.find(c => c.name === idx.default);
+    if (dflt) {
+      if (Object.values(dflt.files).includes(path)) return held(await pack(defaultUrl), path);
+      // a face no configuration names is not in any pack: no request
+      if (!configs.some(c => Object.values(c.files).includes(path))) return undefined;
+      return held(await pack(moreUrl), path);
+    }
+  }
+  const first = await pack(defaultUrl);
+  const text = held(first, path);
+  return text !== undefined || !first?.more ? text : held(await pack(moreUrl), path);
+}
+
+const missing = () => new Response(null, {status: 404});
+
+/**
+ * `fetch`, for a file of a dist. A plain URL is passed to `fetch` as it is. A
+ * pack URL (see above) answers the drawing from its pack: a new Response on
+ * every call, typed by the file name, or a new 404 when no pack holds it. A
+ * network failure rejects, as `fetch` does, and a 5xx is answered as itself,
+ * after one more try.
+ */
+export async function fetchDist(url, init) {
+  if (!PACK_URL.test(String(url))) return fetch(url, init);
+  const u = new URL(url, location.href);
+  const full = u.href;
+  if (MISSES.has(full)) return missing();
+  let path = u.hash.slice(1);
+  try { path = decodeURIComponent(path); } catch { /* not encoded: as it is */ }
+  const packUrl = full.split('#', 1)[0];
+  let text;
+  try {
+    const dev = DEVICE_PACK.exec(packUrl);
+    text = dev ? await deviceText(dev[1], dev[2], path, packUrl) : held(await pack(packUrl), path);
+  } catch (err) {
+    if (err.packStatus) return new Response(null, {status: err.packStatus});
+    throw err;
+  }
+  if (text === undefined) { MISSES.add(full); return missing(); }
+  return new Response(text, {headers: {'content-type': TYPES[path.split('.').pop()] || 'text/plain'}});
+}
+
+/**
+ * path -> URL over a build directory whose drawings are read from packs
+ * (`dist_packs.py` wrote them to `<base>packs/`). A device's configs.json and
+ * source.json, the library-wide JSON and the racks are the plain files; a
+ * device's drawing is its default pack's URL with the path as the fragment
+ * (`fetchDist` routes it to the pack that holds it); a skin is the chunk of its
+ * namespace that holds it, found by binary search in `components/index.json`.
+ *
+ * Resolves once that index has loaded, so no caller holds a `distAt` that is not
+ * ready. Read what it returns with `fetchDist`: a bare `fetch` gets the pack.
+ */
+export async function packedDist(base) {
+  const plain = flatDist(base);
+  const b = plain('');
+  const index = await jdist(`${b}packs/components/index.json`);
+  return path => {
+    if (path.startsWith('components/')) {
+      const ns = path.slice('components/'.length).split('--')[0];
+      // own keys only, as in packageDist: `constructor` is nobody's namespace
+      const firsts = Object.hasOwn(index, ns) ? index[ns] : [];
+      const skin = path.slice('components/'.length);
+      let lo = 0, hi = firsts.length;
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        if (firsts[mid] <= skin) lo = mid + 1; else hi = mid;
+      }
+      return `${b}packs/components/${ns}.${lo + 1}.json#${path}`;
+    }
+    if (path.endsWith('.svg')) return `${b}packs/devices/${path.split('.')[0]}.json#${path}`;
+    return plain(path);
+  };
+}
+
 /** Forget everything fetched so far. For harnesses that rebuild dist in place. */
-export function clearDistCache() { INFLIGHT.clear(); }
+export function clearDistCache() { INFLIGHT.clear(); PACKS.clear(); MISSES.clear(); }
