@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-fap12lcd-om5
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 behaviour: fills
 description: >-
@@ -27,19 +27,28 @@ body:
   footprint: {at: [10.485, 0.125], size: [88.0, 34.8]}
 elements:
   logo-zone: {at: [1.6, 3.2], size: [5.3, 5.0], class: label}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 12 LC duplex adapters on the front face, numbered on the plate; OM5 UPC, 24
+      fibres, passive
 parts:
-  - {id: lc01, ref: common/lc-duplex-v-adapter@6, at: [14.91, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc02, ref: common/lc-duplex-v-adapter@6, at: [28.89, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc03, ref: common/lc-duplex-v-adapter@6, at: [42.87, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc04, ref: common/lc-duplex-v-adapter@6, at: [56.85, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc05, ref: common/lc-duplex-v-adapter@6, at: [70.85, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc06, ref: common/lc-duplex-v-adapter@6, at: [84.83, 18.615], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc07, ref: common/lc-duplex-v-adapter@6, at: [14.91, 2.635], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc08, ref: common/lc-duplex-v-adapter@6, at: [28.89, 2.635], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc09, ref: common/lc-duplex-v-adapter@6, at: [42.87, 2.635], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc10, ref: common/lc-duplex-v-adapter@6, at: [56.85, 2.635], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc11, ref: common/lc-duplex-v-adapter@6, at: [70.85, 2.635], attrs: {housing-finish: '#a0ae61'}}
-  - {id: lc12, ref: common/lc-duplex-v-adapter@6, at: [84.83, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc01, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [14.91, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc02, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [28.89, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc03, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [42.87, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc04, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.85, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc05, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [70.85, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc06, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [84.83, 18.615], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc07, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [14.91, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc08, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [28.89, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc09, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [42.87, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc10, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.85, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc11, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [70.85, 2.635], attrs: {housing-finish: '#a0ae61'}}
+  - {id: lc12, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [84.83, 2.635], attrs: {housing-finish: '#a0ae61'}}
 faces:
   rear: {ref: fs/fhd-fap12lcd-om5-rear@1}
 optical:
@@ -141,4 +150,16 @@ provenance:
     reserved, not drawn - FS prints its mark top left on every panel face
     (drawings p5-p9, the renders); the library reproduces no vendor logo. Box
     read off the drawings, to about half a millimetre.
+  groups: >-
+    FS FHD Fiber Cabling System Guide, page 8 (Table 5, FHD LC Adapter Panels: FHD-FAP12LCDXOM5,
+    OM5, 24F) and FS FHD Fiber Adapter Panels Datasheet, page 2 (section II: LC duplex adapters,
+    12 or 18 per panel, 24 or 36 fibres; polish MMF UPC-UPC) and the page 5 drawing of the 24F LC
+    panel, twelve openings in two rows of six. The datasheet's LC ordering table (page 10) lists
+    no OM5 row, and neither page prints the SKU: that this contract is the guide's OM5 panel
+    rests on FS's variant selector for SKU 35488, which is not held. The count, the 12 adapters,
+    is the contract's own face, which is the page 5 drawing, and the guide's 24 fibres. The pages
+    print the fibre and the polish and no data rate, and name no role for the adapters; the role
+    follows the job, a through connection a patch cord is plugged into, so it is traffic, and
+    no speed is stated. The group's media is the adapters' own, fiber. The rear face holds the
+    same sleeves as the front, so it takes the same group and the same count.
 skins: [default]

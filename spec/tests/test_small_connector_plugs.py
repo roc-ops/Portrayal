@@ -195,11 +195,13 @@ def test_the_rj11_jack_models_its_housing_depth_and_a_cavity():
     three-tier opening recessed as std/rj45@2 recesses its own. Fails by
     design when the depth moves: the plug's provenance.seated-depth cites it
     and says it is not a plug stop."""
-    jack = _contract("common/rj11-jack@1")
-    assert jack["size"]["d"] == pytest.approx(std()["rj11"]["depth"]) == pytest.approx(20.57)
-    assert jack["relief"]["cavity"] == "cavity"
-    assert jack["relief"]["size"] == {"w": 9.88, "h": 11.26}
+    jack, opening = _contract("common/rj11-jack@1"), _contract("std/rj11@1")
+    assert jack["size"]["d"] == opening["size"]["d"] == pytest.approx(std()["rj11"]["depth"]) == pytest.approx(20.57)
+    # the cavity is the composed opening's, std/rj11@1; the jack draws the housing round it
+    assert opening["relief"]["cavity"] == "cavity"
+    assert opening["relief"]["size"] == {"w": 9.88, "h": 11.26}
     assert jack["elements"]["jack"]["size"] == [9.88, 11.26]
+    assert "relief" not in jack
     text = flat(_contract(RJ11)["provenance"]["seated-depth"])
     assert "common/rj11-jack@1 is 20.57 deep" in text and "not a plug stop" in text, text
 
@@ -209,23 +211,23 @@ def test_the_rj11_jack_draws_the_six_position_tiers_and_two_contacts():
     """The cavity node is the opening's outline in three tiers (body 9.88 x
     6.85, shoulder 6.60 x 1.69, latch slot 4.04 x 2.72), and two contacts
     are loaded, positions 3 and 4 on the 1.02 pitch."""
-    n = skin_nodes("common/rj11-jack@1")
+    n = skin_nodes("std/rj11@1")
     d = n["cavity"].get("d").split()
-    assert d[:3] == ["M", "2.06", "1.5"]
+    assert d[:3] == ["M", "0", "0"]
     steps = [(d[i], float(d[i + 1])) for i in range(3, len(d) - 1, 2)]
     assert steps == [("h", 9.88), ("v", 6.85), ("h", -1.64), ("v", 1.69), ("h", -1.28),
                      ("v", 2.72), ("h", -4.04), ("v", -2.72), ("h", -1.28), ("v", -1.69),
                      ("h", -1.64)]
-    pins = [e for e in n["jack-pins"] if e.tag.endswith("rect")]
+    pins = [e for e in n["pins"] if e.tag.endswith("rect")]
     xs = [float(e.get("x")) + float(e.get("width")) / 2 for e in pins]
-    assert xs == pytest.approx([6.49, 7.51])
+    assert xs == pytest.approx([4.43, 5.45])
     assert xs[1] - xs[0] == pytest.approx(1.02)
 
 
 @pytest.mark.heavy
 def test_the_edited_jacks_kept_their_bodies():
     v, r = _contract("common/vhdci-receptacle@1"), _contract("common/rj11-jack@1")
-    assert v["version"] == "1.0.1" and r["version"] == "1.2.0"
+    assert v["version"] == "1.0.1" and r["version"] == "1.3.0"
     assert v["size"] == {"w": 40.4, "h": 5.2}
     assert r["size"] == {"w": 14.0, "h": 13.5, "d": 20.57}
     # `tel` moved with `mate` to the body tier's centre (#837): one place for both
@@ -334,7 +336,8 @@ def test_the_census_of_placed_jacks_on_device_views():
             continue
         ref = f"{f.parts[-4]}/{c['name']}@{f.parts[-2][1:]}"
         (cards if c.get("kind") == "module" else stating).add(ref)
-    assert stating == set(JACK_IFACE), sorted(stating ^ set(JACK_IFACE))
+    # std/rj11@1 states the jack's medium and is the opening the jack composes, not a jack
+    assert stating == set(JACK_IFACE) | {"std/rj11@1"}, sorted(stating ^ set(JACK_IFACE))
     for ref in cards:
         assert any(p.get("ref") in JACK_IFACE for p in _contract(ref).get("parts") or []), ref
 
@@ -553,13 +556,15 @@ def test_the_rj11_plug_has_its_latch_where_the_jack_has_its_keyway():
         n = skin_nodes(ref)
         h = _contract(ref)["size"]["h"]
         assert float(n["contacts"].get("y")) < h / 2 < float(n["latch"].get("y")), ref
-    n = skin_nodes("common/rj11-jack@1")
+    n = skin_nodes("std/rj11@1")
     h = _contract("common/rj11-jack@1")["size"]["h"]
-    pins = [e for e in n["jack-pins"] if e.tag.endswith("rect")]
-    assert len(pins) == 2 and all(float(e.get("y")) < h / 2 for e in pins)
+    # the opening's own coordinates: the jack places it 1.5 down
+    top = [p for p in _contract("common/rj11-jack@1")["parts"] if p["ref"] == "std/rj11@1"][0]["at"][1]
+    pins = [e for e in n["pins"] if e.tag.endswith("rect")]
+    assert len(pins) == 2 and all(top + float(e.get("y")) < h / 2 for e in pins)
     # the latch slot is the cavity's lowest tier, below the middle
     d = n["cavity"].get("d").split()
-    ys, y = [], float(d[2])
+    ys, y = [], float(d[2]) + top
     for i in range(3, len(d) - 1, 2):
         if d[i] == "v":
             y += float(d[i + 1])

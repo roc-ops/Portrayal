@@ -471,7 +471,7 @@ STACK = "cisco/c2960s-stack@1"
 
 def test_flexstack_module_is_one_new_component_with_the_printed_part_number():
     c = component("c2960s-stack")
-    assert c["version"] == "1.0.0" and c["kind"] == "module"
+    assert c["version"] == "1.1.0" and c["kind"] == "module"
     assert c["part-numbers"] == {"C2960S-STACK": {"part": "C2960S-STACK"}}
     assert "model" not in c["attrs"], "a part with part-numbers carries its name there (lint L1)"
     assert "PDF p29" in c["provenance"]["part-number"] and "1-5" in c["provenance"]["part-number"]
