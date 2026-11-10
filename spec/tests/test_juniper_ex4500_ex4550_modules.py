@@ -104,6 +104,7 @@ def test_each_module_fits_inside_its_slot(comp):
         assert 0 <= p["at"][0] <= w and 0 <= p["at"][1] <= h
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("comp", [m for m in MODULES if MODULES[m][0]])
 def test_one_maker_part_number_is_one_component(comp):
     """A part number is never carried by a second component (no twin)."""
