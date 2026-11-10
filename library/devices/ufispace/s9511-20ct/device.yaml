@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9511-20ct
-version: 3.0.2
+version: 3.1.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9511-20CT
@@ -56,7 +56,7 @@ provenance:
       'Fixed, 3+1 redundant Fans'; the HIG's PSU Overview section says 'Dual-feed one power stage
       fixed PSU' and its Fan Overview heading is '3+1 Redundant, fixed fans.' So there are no
       components.bays anywhere in this manifest. The two DC feeds are the six screw terminal posts
-      on the front, drawn as panel decor under INPUT0 and INPUT1 silkscreen; the four fans are the
+      on the front, each block a placement of ufispace/s9511-dc-input@1 under INPUT0 and INPUT1 silkscreen; the four fans are the
       four circular grilles on the rear, drawn as panel decor under FAN0-FAN3 silkscreen. Neither
       is addressable - see the fixed-fru-not-addressable gap - and the front FAN lamp therefore
       points at the chassis rather than at four fan ids. THAT IS TRUE OF THE DOCUMENTED BUILD, AND
@@ -338,17 +338,17 @@ gaps:
   scope: [status-leds, furniture]
   reason: needs-hardware
   note: >-
-    This chassis has no bays, so neither its two DC feeds nor its four fans is addressable.
-    They are real, distinguishable things - the HIG's FAN lamp reports one or more fans
-    failed, and the rear legends number them FAN0 to FAN3 - but a fixed part seats nothing,
-    the terminal posts and the grilles are panel metal drawn as decor, and the library has
-    no terminal-block or fan-grille component to place over them. The FAN and PWR lamps
-    therefore point at the chassis. Recorded rather than papered over with groups nothing
-    joins. This is the same shortfall the S9502-16SMT records for its fixed supply; that
-    device needed a terminal block, this one needs a fan grille as well.
+    This chassis has no bays, so its four fans are not addressable. They are real,
+    distinguishable things - the HIG's FAN lamp reports one or more fans failed, and the
+    rear legends number them FAN0 to FAN3 - but a fixed part seats nothing, the grilles are
+    panel metal drawn as decor, and the library has no fan-grille component to place over
+    them. The two DC feeds are now placements, psu-0 and psu-1, of ufispace/s9511-dc-input@1;
+    the PWR lamp still points at the chassis, because pointing it at the two feeds changes its
+    `for`, which is a major version of this device. Recorded rather than papered over with
+    groups nothing joins.
   wanted: >-
-    a terminal-block or power-inlet component and a fixed-fan-grille component that a
-    non-removable part can be placed as
+    a fixed-fan-grille component that a non-removable part can be placed as, and a decision to
+    point the PWR lamp at psu-0 and psu-1, which costs this device a major version
 - what: system-lamp-size
   scope: [status-leds]
   reason: needs-hardware
@@ -436,6 +436,12 @@ groups:
     role: indicator
     index-origin: 1
     description: every indicator that belongs to a particular port, ordered by that port
+  psus:
+    term: PSU
+    role: service
+    index-origin: 0
+    description: the two feeds of the FIXED dual-feed supply. These do not pull out - what the front panel carries is each
+      feed's input block, drawn as a placement for that reason
   grounding:
     term: Point
     role: furniture
@@ -464,12 +470,6 @@ views:
         - {at: [278.37, 8.6], size: [29.78, 26.9], fill: '#b0b5bb', rx: 0.8}
         - {at: [310.11, 8.6], size: [60.87, 26.9], fill: '#b0b5bb', rx: 0.8}
         - {at: [372.07, 8.6], size: [61.19, 26.9], fill: '#b0b5bb', rx: 0.8}
-        - {at: [23.91, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
-        - {at: [33.37, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
-        - {at: [42.93, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
-        - {at: [63.80, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
-        - {at: [73.26, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
-        - {at: [82.72, 20.0], size: [3.81, 12.0], fill: '#b0b5bb', rx: 0.5}
     silkscreen:
       - {at: [35.33, 10.8], text: INPUT0, font-size: 2.0, anchor: middle, for: chassis}
       - {at: [75.16, 10.8], text: INPUT1, font-size: 2.0, anchor: middle, for: chassis}
@@ -516,6 +516,8 @@ views:
       - {at: [424.05, 38.60], text: '19', font-size: 1.8, anchor: middle, fill: '#2e2e10', for: port-19}
     components:
       placements:
+        - {ref: ufispace/s9511-dc-input@1, id: psu-0, at: [20.3, 18.0], group: psus, rel-pos: 0}
+        - {ref: ufispace/s9511-dc-input@1, id: psu-1, at: [60.17, 18.0], group: psus, rel-pos: 1}
         - {ref: common/smb-jack@1, id: clk-1pps, at: [122.05, 4.90], group: timing, rel-pos: 2, attrs: {role: 1pps-io}}
         - {ref: common/smb-jack@1, id: clk-10mhz, at: [122.05, 15.80], group: timing, rel-pos: 3, attrs: {role: 10mhz-io}}
         - {ref: common/sma-jack@1, id: gnss-ant, at: [120.80, 26.69], group: timing, rel-pos: 1, attrs: {role: gnss-in}}
@@ -620,6 +622,7 @@ views:
         - {ref: common/led-dot@1, id: led-port-19, at: [423.75, 21.0], for: port-19, group: port-leds, rel-pos: 20}
         - {ref: common/ground-symbol@1, id: ground-mark, at: [434.00, 18.00], group: grounding, rel-pos: 1}
     regions:
+      - {id: power-feeds, at: [18, 5], size: {w: 72, h: 35}, label: Fixed dual power feed, members: [psu-0, psu-1]}
       - {id: timing, at: [118, 3], size: {w: 44, h: 39}, label: Timing block, members: [gnss-ant, clk-1pps, clk-10mhz, bits, tod]}
       - {id: mgmt-block, at: [165, 7], size: {w: 18, h: 32}, label: Management, members: [mgmt, usb, console]}
       - {id: combo, at: [240, 6], size: {w: 71, h: 33}, label: 1G RJ45/SFP combo, members: [port-0-rj45, port-1-rj45, port-2-rj45, port-3-rj45, port-0-sfp, port-1-sfp, port-2-sfp, port-3-sfp]}

@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: s9511-dc-input
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: UfiSpace S9511-20CT fixed dual-feed DC supply input. The front-panel window of a NON-REMOVABLE
+  supply, carrying a three-pole screw terminal block for RTN, -36 to -72V and earth
+size: {w: 31.1, h: 15.8}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  read off the front-panel photograph of the S9511-20CT Hardware Installation Guide's Figure 6 (the PDF's page 10) at the
+  scale its two INPUT legends give, about 5.4 px/mm; the photograph is a cropped picture with no dimension line, so the
+  block's outline is a reading to a few tenths of a millimetre, not a measurement
+attrs: {power-absent: not-published, input: dc, model: 'S9511-20CT dual-feed DC supply input', inlet: dc-terminal}
+provenance:
+  inlet: >-
+    S9511-20CT Hardware Installation Guide, section 7.1 DC Version, step 2: 'Locate the DC power screw-type terminal block on
+    the DC PSU' and Figure 16 (PDF page 14): three terminals side by side under M3.5 screws, a ring lug under each.
+  removability: >-
+    THIS IS NOT A FIELD-REPLACEABLE UNIT. The datasheet's Redundancy row reads 'Dual-feed one power stage PSU' and the guide's
+    PSU Overview calls it 'Dual-feed one power stage fixed PSU'. What the front panel carries is its input connector, and that
+    is what this part draws; a device places it, once for each feed, so nothing implies it pulls out.
+  power-absent: >-
+    NOT PUBLISHED. No output rating, wattage, part number or model line of the supply is printed in the S9511-20CT
+    datasheet or the S9511-20CT Hardware Installation Guide, so the part states no `power-output-w`; the datasheet's 'Typical
+    power: 63 Watts (no transceiver)' is the chassis's and lives on the device.
+  power: >-
+    NOT A RATING OF THE SUPPLY. The guide asks for 'a reserve of at least 200 watts on each
+    power circuit' (Installation Environment Requirements, PDF page 5), which is a requirement on the plant, not a rating.
+  size: >-
+    estimated - the block measures 31.1 x 15.8 on the Figure 6 photograph (three silver terminals in a dark frame) and
+    that is the part's size; see `size-notes`.
+  terminal-block: >-
+    estimated - three terminals at 9.5 mm centres (5.5, 15.0 and 24.5 across, 8.0 down), the pitch the S9511-20CT's own
+    device file read for its panel posts from the same figure. The photograph's silver terminals read about 6.4 mm across.
+    The printed legend under each block, 'RTN -36 ~ -75V' with an earth symbol (Figure 6), is chassis silkscreen and lives
+    on the device.
+  seats: >-
+    estimated - each terminal screw is the library's common/terminal-screw-34@1, a screw head 3.4 across (that part's own
+    size is an estimate), standing at the centre of the clamp screw this skin draws and lifted 12.0 mm, the projection the
+    guide gives for the whole block (it is not a height of the screw). The head is drawn smaller than the ring round it:
+    Figure 16 names M3.5 screws, whose thread is wider than that head, so the drawing marks where a lug lands and does not
+    show the screw. The same figure gives a lug hole over 3.5 mm and a lug no wider than 8.2 mm (W < 8.2 mm).
+  poles: >-
+    S9511-20CT Hardware Installation Guide, Figure 6 (PDF page 10): the panel legend under each block reads, left to right,
+    'RTN', a negative voltage range and the earth symbol; Figure 16 (PDF page 14) shows three terminals and its last picture
+    labels the right-hand cable 'Green/Yellow Grounding Wire (min. size 14 AWG)'. The roles are the legend's: `rtn` for RTN,
+    `batt` for the negative voltage range (spec/schemas/dc.yaml writes `batt` as -48V or negative (battery)) and `gnd` for the
+    earth symbol. The earth terminal is the third pole of the port and is not a conductor of a feed. No document held gives a
+    nominal voltage. A fixed supply is one feed: the two feeds of a device are two placements, each with its own port.
+  rating: >-
+    datasheet - 'DC input: -36 to -72V, 8A' (PDF page 1), and the guide's checklist, 'DC version: -36 to -72VDC, 8A maximum'
+    (PDF page 6). Neither says whether the 8 A is each feed or both; the port carries the figure as printed. The range has no
+    nominal, and a port's `voltage` needs one, so the port states no voltage. The guide adds a built-in 15 A fast-acting fuse
+    (step 4); that is the fuse, not the input current. The panel legend prints -75 V where both documents' text prints -72 V.
+  awg: >-
+    S9511-20CT Hardware Installation Guide, section 7.1 step 2: a 'UL 1015, 14 AWG DC power cable' of stranded copper to the
+    DC inlet connector; the package checklist asks for '14-AWG wire with ring terminal for power' (PDF page 6) and the earth wire
+    of Figure 16 is labelled 'min. size 14 AWG'. One size in every place the guide gives one, so the port states it.
+  led: >-
+    NONE DRAWN. The guide says 'the LED on the PSU will light up with a Green color' (step 5) but its front-panel table has no
+    per-supply lamp and Figure 6 shows none on this window. The panel's PWR lamp is a system lamp on the device.
+elements:
+  terminal-block: {at: [0.0, 0.0], size: [31.1, 15.8], class: terminal}
+relief:
+  features:
+    - node: terminal-block
+      out: 12
+      confidence: datasheet
+      source: >-
+        S9511-20CT Hardware Installation Guide, Installation Environment Requirements, Space Clearance (PDF page 5):
+        'The connectors for the power supplies will extend outwards by 0.48 inches (1.2 cm).' Published by the vendor for
+        this platform's front-panel connectors.
+connection-points:
+  power: {at: [15.55, 7.9], direction: front}
+parts:
+  - {ref: common/terminal-screw-34@1, id: pole-rtn, at: [3.8, 6.3], lift: 12.0}
+  - {ref: common/terminal-screw-34@1, id: pole-batt, at: [13.3, 6.3], lift: 12.0}
+  - {ref: common/terminal-screw-34@1, id: pole-gnd, at: [22.8, 6.3], lift: 12.0}
+dc:
+  ports:
+    - id: input
+      direction: input
+      rating-a: 8
+      awg: [14]
+      poles:
+        - {role: rtn, slot: pole-rtn}
+        - {role: batt, slot: pole-batt}
+        - {role: gnd, slot: pole-gnd}
+      source: {poles: poles, rating-a: rating, awg: awg}
+skins: [default]
