@@ -1485,6 +1485,15 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin, isCurren
     const loaded = ref ? await loadSkin(ref) : null;
     if (!isCurrent(bay.id)) continue;         // a newer swap owns this bay
     g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
+    // WHAT IS SEEN THROUGH THE EMPTY OPENING (render.py `seen-through`) belongs
+    // to the empty opening: a seated part hides it, an emptied bay shows it. The
+    // build writes it either way, hidden by `display`, and this toggles the same
+    // attribute. An unknown ref leaves the bay open, so it leaves the mark.
+    const seatedNow = !!(ref && loaded);
+    for (const s of g.querySelectorAll(':scope > [data-class="seen-through"]')) {
+      if (seatedNow) s.setAttribute('display', 'none');
+      else s.removeAttribute('display');
+    }
     applied++;
     if (bay.span?.length) markSpan(rootEl, bay, ref && loaded ? loaded.comp : null);
     if (!ref) continue;                       // deliberately empty

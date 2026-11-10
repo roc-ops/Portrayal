@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: pro3x-breaker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  A branch breaker of a Server Technology PRO3X Basic PDU, a two-pole breaker.
+  Its OFF and ON handle shows through a square window in the module that heads each group of outlets.
+  Fixed to the PDU, not a plug-in part.
+size: {w: 15.7, h: 17.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {poles: 2}
+provenance:
+  method: >-
+    drawing - Server Technology outline drawing 412-1500-060 rev 1A is vector, so the window was read from its path
+    geometry at 0.51381 pt/mm, the scale that puts its 1778.0 overall on the strip. The drawing lies the PDU down, cord
+    end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - the window is 17.1 along the PDU by 15.7 across, one to each of the six breaker modules.
+  rating: >-
+    datasheet - the wiring diagram 495-1500-060 draws each breaker two-pole ("CB") and the SKU page says 2-pole
+    breakers with 10 kAIC. NO CURRENT RATING IS HELD, so none is stated.
+  handle: >-
+    not drawn - the module draws an OFF and ON handle behind the window and no document dimensions it, so only the
+    window is drawn.
+elements:
+  window: {at: [0, 0], size: [15.7, 17.1], class: breaker}
+skins: [default]

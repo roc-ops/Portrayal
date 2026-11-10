@@ -158,7 +158,16 @@ def test_no_bare_media_type_states_a_jacket(built):
     assert len(bare) == 12
     assert [tid for tid in bare if "jacket" in built["types"][tid]] == []
     stated = sorted(tid for tid, t in built["types"].items() if "jacket" in t)
-    assert stated == ["aoc-siemon-q1q28f"], "a new jacket colour comes with its source and its own check"
+    assert stated == ["aoc-siemon-q1q28f", "cab-spwr-150cm", "cab-spwr-30cm"], "a new jacket colour comes with its source and its own check"
+
+
+def test_the_stackpower_jacket_is_the_guide_s_figure(built):
+    # the Catalyst 9300 guide shows one StackPower cable for both lengths
+    for tid in ("cab-spwr-30cm", "cab-spwr-150cm"):
+        j = built["types"][tid]["jacket"]
+        assert j["color"] == "#304548" and j["basis"] == "photo"
+        assert j["sources"] == ["cisco-c9300-hig"]
+        assert "11,596 pixels" in j["note"]
 
 
 @pytest.mark.parametrize("jacket,says", [
