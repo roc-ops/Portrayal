@@ -135,9 +135,10 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The Panduit P24B14M and P32E06M each place one common/ground-screw@1 at the cord end, 20 -> 22 on 10 -> 12 devices.
 # The CyberPower PDU30BHVT8R places one common/ground-screw@1, its external site ground, 22 -> 23 on 12 -> 13 devices.
 # The Enlogic EB0803 places one common/ground-screw@1, 23 -> 24 on 13 -> 14 devices.
+# The Moxa NPort 5650-16 and 5650-16-T each place one ground screw on their rear face, 24 -> 26 on 14 -> 16 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (24, 14),   # (22, 12), the CyberPower PDU30BHVT8R's external site ground, and the Enlogic EB0803's one
+    "common/ground-screw@1": (26, 16),   # (24, 14) and the CyberPower PDU30BHVT8R's external site ground
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
@@ -473,13 +474,15 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 66 -> 68 with the Panduit P24B14M and P32E06M's ground screw each
     # 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
     # 69 -> 70 with the Enlogic EB0803's one ground screw
-    assert sum(n for n, _ in got.values()) == 70
+    # 70 -> 72 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+    assert sum(n for n, _ in got.values()) == 72
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
     # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
     # 47 -> 49 with the Panduit P24B14M and P32E06M
     # 49 -> 50 with the CyberPower PDU30BHVT8R
     # 50 -> 51 with the Enlogic EB0803
-    assert len({where for where, _, _ in placed}) == 51
+    # 51 -> 53 with the Moxa NPort 5650-16 and 5650-16-T
+    assert len({where for where, _, _ in placed}) == 53
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -529,7 +532,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
     # 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
     # 68 -> 69 with the Enlogic EB0803's one ground screw
-    assert seen == 69
+    # 69 -> 71 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+    assert seen == 71
 
 
 @pytest.mark.heavy
