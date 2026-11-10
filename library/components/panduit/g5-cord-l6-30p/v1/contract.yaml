@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: g5-cord-l6-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L6-30P locking plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Panduit G5 intelligent PDU for a 30 A single-phase feed. It ends in a NEMA L6-30P
+  locking plug rated 30 A, 250 V, with the 24 A derating the drawing prints. It leaves the end of the strip
+  through a cable gland. Drawn as the end of the strip shows it; the cord and plug beyond it are not.
+size: {w: 32.0, h: 32.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-l6-30p, cord-length-m: 3}
+provenance:
+  size: >-
+    estimated - the gland of the P36G18M strip is drawn on the customer drawing's end views as the same round
+    gland as the P32E06M's, and the 32.0 across read for that one (Panduit customer drawing P32E06M_DC rev 06A) is
+    used here. The P36G18M drawing is a scan, and no figure of the gland is read from it. The gland's depth into
+    the strip is not dimensioned, so it is drawn as a round of that figure.
+  plug: >-
+    drawing - P36G18M_DC rev 02A specification block: "INPUT PLUG: NEMA L6-30P", "INPUT CURRENT: 30A (24A DERATED)",
+    and its plug and receptacle block, "NEMA L6 - 30P, 2P 3W", "30A, 250V MAX RATED INPUT", "24A DERATED". The G5
+    iPDU sheet FBSP28 row for P36G18M reads "L6-30P".
+  cord: >-
+    drawing - sheet 2 of P36G18M_DC gives the plain part number a 3 m cord (configurable lengths 1, 2 and 3 m).
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part
+    (docs/connectors-power-design.md section 7). This part stands for the power input a DCIM records, one power
+    port of type `other` labelled as a NEMA L6-30P plug.
+elements:
+  gland: {at: [0, 0], size: [32.0, 32.0], class: inlet}
+skins: [default]

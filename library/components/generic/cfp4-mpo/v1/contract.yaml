@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cfp4-mpo
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: cfp4
@@ -106,8 +106,23 @@ provenance:
     held codes a colour, so the colour is a fact about a product and a vendor
     wrapper sets `latch-color`. The outline follows the fill
     (`data-stroke-derive`).
+  groups: >-
+    Source: the Gigalight GF4-M101-SR4C datasheet p6 Figure 3, which draws the MPO receptacle on
+    the module head, and section 5.6 of the CFP MSA CFP4 Hardware Specification Rev 1.1
+    (provenance.receptacle). The role is traffic, this contract's own reading of the job: the
+    module's network port, where its fibre or cable is plugged in. The shape stands for every
+    module of its kind, so the group states no speed: rate, reach and watts belong on the vendor
+    wrapper.
+groups:
+  cfp4:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the MPO receptacle of a CFP4 module
 parts:
-  - {ref: std/mpo-module-receptacle@1, id: mpo, at: [4.3, 0.95], lift: 16.0}
+  - {ref: std/mpo-module-receptacle@1, id: mpo, group: cfp4, at: [4.3, 0.95], lift: 16.0}
 relief:
   features:
     - node: body
