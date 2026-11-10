@@ -1,0 +1,98 @@
+format: 1
+kind: module
+name: ex-um-4x4sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-4X4SFP, the four-port 1/10 Gbps SFP+ uplink module of the EX4300 24-port and 48-port
+  switches, except the EX4300-48MP. It slides into the uplink module slot on the front panel. It has four
+  SFP+ cages in one row, numbered 0 to 3. Each cage takes an SFP+ transceiver at 10 Gbps or an SFP
+  transceiver at 1 Gbps. Each cage has a link activity lamp and a status lamp below it. Two captive
+  screws hold it and a handle at each end pulls it out. It ships with dust covers in the ports.
+attrs:
+  model: EX-UM-4X4SFP
+  sfp-plus: 4
+  weight: 0.44 lb (0.2 kg)
+  power-absent: not-published
+  ports-note: four SFP+ ports, each at 10 Gbps with SFP+ or 1 Gbps with SFP, and usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12), Uplink Modules in
+    EX4300 Switches, PDF pages 72 to 73 and Table 12: the module houses "up to four SFP+ transceivers, four
+    SFP transceivers" or a mix, and its ports can be Virtual Chassis ports. Table 15 (PDF page 77) holds
+    Figure 17 (g022085, the module in three-quarter view) and Figure 18 (g022086, the face drawn flat with
+    its lamps, captive screws and handles numbered). Figures 33 and 35 to 37 of the LED topic (PDF pages
+    88 to 90) show the same lamps. The model number is the guide's, Table 15, and the EX4300 Line of
+    Ethernet Switches Datasheet (PDF page 16, ordering table) lists it for the EX4300-24T, -24P, -48T and
+    -48P with their variants.
+  size: >-
+    photo-measured - the slot's opening, 73.9 x 18.7 mm, which Juniper's straight-on studio photograph of
+    the EX4300-24T front (ex4300-24t-front-high.jpg, 1500 x 195 px, a module fitted) and of the EX4300-48P
+    front show with this module in it (see juniper/ex4300-uplink-blank@1, which carries the method). The
+    guide gives no module size. The depth is not stated.
+  elements: >-
+    drawing and photo-measured - Figure 18 is a flat elevation and the 24T photograph shows the module
+    fitted, at 16.45 px per mm on a 5 times enlargement. Four cages in one row; the block runs 8.2 to 65.0
+    mm across in the photograph and the cages stand at the SFF-8433 pitch of 14.25 mm, centred on the plate
+    (8.45 mm in). Each cage has a lamp below it at 3.1 and 10.2 mm from its left edge, squares 2.0 x 1.8
+    mm in the photograph; the photograph prints the port number between them. A captive screw at each upper
+    end, 5.0 mm across (the figure 5.3, the photograph 6.0). A handle at each lower end, 7.3 x 10.0 mm,
+    overlapping the plate end. The figure's raised shoulders above the handles are drawn as the plain plate
+    rectangle.
+  colour: >-
+    photo-measured - the median of the pixels in the 24T photograph: the faceplate #888c92, the same grey as
+    the chassis plate (#898d94), the two handles light blue (#99dbfb and #7bc9ef, drawn #8fd1f5), the screw
+    heads silver (#9ca4ab). The photograph prints the numbers 0 to 3 in light grey.
+  led: >-
+    datasheet - guide Figure 18 callouts 1 and 2 and Tables 21 to 24: each port has a link activity lamp (the
+    left one) and a status lamp (the right one). No document held states the colour of the lamps on this module
+    apart from those tables, so each lamp keeps the library's default states.
+  weight: >-
+    datasheet - guide, Chassis Physical Specifications, PDF page 64: "4-port 1-Gigabit Ethernet/10-Gigabit
+    Ethernet SFP+ uplink module ... 0.44 lb (0.2 kg)"; datasheet PDF page 9, "SFP+ uplink module: 0.44 lb
+    (0.2 kg)".
+  power: >-
+    not published - searched the guide's power budget tables (Tables 32 to 36) and the datasheet for a
+    figure for any uplink module and found none, so the module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      The four uplink cages, numbered 0 to 3 as the photograph prints them. SFP+ at 10 Gbps, or SFP at 1 Gbps
+      with an SFP transceiver
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port below the cage, link activity at the left and status at the right. Numbered in
+      printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [8.45, 2.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [22.7, 2.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [36.95, 2.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [51.2, 2.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/led-rect-sm@1, id: led-0-link, at: [10.15, 13.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-rect-sm@1, id: led-0-status, at: [17.25, 13.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-rect-sm@1, id: led-1-link, at: [24.4, 13.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-rect-sm@1, id: led-1-status, at: [31.5, 13.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-rect-sm@1, id: led-2-link, at: [38.65, 13.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-rect-sm@1, id: led-2-status, at: [45.75, 13.6], group: port-leds, attrs: {function: status}}
+- {ref: common/led-rect-sm@1, id: led-3-link, at: [52.9, 13.6], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-rect-sm@1, id: led-3-status, at: [60.0, 13.6], group: port-leds, attrs: {function: status}}
+size:
+  w: 73.9
+  h: 18.7
+size-confidence: {w: photo-measured, h: photo-measured}
+skins: [default]

@@ -1,0 +1,114 @@
+format: 1
+kind: module
+name: ex-um-4sfpp-mr
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-4SFPP-MR, the four-port 1/10 Gbps SFP+ uplink module of the EX4300-48MP switches. It slides
+  into the uplink module slot below the status block at the right end of the front panel. It has four SFP+
+  cages in one row, numbered 0 to 3. Each cage takes an SFP+ transceiver at 10 Gbps or an SFP transceiver at
+  1 Gbps. Each port has a link activity lamp and a status lamp above its cage. Two captive screws hold it
+  and a handle along the bottom pulls it out. It ships with dust covers in the ports.
+attrs:
+  model: EX-UM-4SFPP-MR
+  sfp-plus: 4
+  weight: 0.57 lb (0.26 kg)
+  power-absent: not-published
+  ports-note: four SFP+ ports, each at 10 Gbps with SFP+ or 1 Gbps with SFP; the ports cannot be Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12), Uplink Modules in
+    EX4300 Switches, Table 14 (PDF pages 75 to 76): four SFP+ transceivers, four SFP transceivers or a mix,
+    and the ports "cannot" be configured as Virtual Chassis ports. Table 17 (PDF page 81) holds Figure 25
+    (g022454, the face drawn flat with the lamps, screws and handle numbered; the guide draws no
+    three-quarter view of this module). Figure 37 (PDF page 90) shows the lamps. The datasheet ordering table
+    (PDF page 16) lists EX-UM-4SFPP-MR for the EX4300-48MP.
+  size: >-
+    photo-measured - it fills the EX4300-48MP's uplink slot, 66.6 x 24.5 mm, which Juniper's straight-on studio
+    photograph of the EX4300-48MP front shows covered (juniper/ex4300-48mp-uplink-blank@1 carries the method).
+    Figure 25's outline is 743 x 280 px at 400 dpi, an aspect of 2.65 against the slot's 2.72. The guide gives
+    no module size. The depth is not stated.
+  elements: >-
+    drawing - Figure 25 is a flat elevation, read as fractions of its outline at 11.16 px per mm and applied to
+    66.6 x 24.5 mm. Four cages at the SFF-8433 pitch of 14.25 mm, a block centred on the plate (4.8 mm in), 7.4
+    mm down. Two round lamps above each cage, 4.5 mm down, at 4.0 and 10.5 mm from its left edge (link
+    activity at the left, status at the right, callouts 2 and 3). The numbers 0 to 3 print under the cages. A
+    slotted captive screw at each upper end, placed as juniper/ex4300-48mp-uplink-blank@1 places them. A handle
+    bar along the bottom, 10.6 to 56.1 mm across, 2.3 mm high. The row of hexagonal vents along the top edge
+    and the two side notches are not drawn.
+  colour: >-
+    estimated - no photograph of this module is held. The plate takes the grey of the fitted EX-UM-4X4SFP in
+    the EX4300-24T photograph (#888c92), the nearest held evidence of this family's faceplate; the handle is
+    drawn light grey because no held document shows its colour.
+  led: >-
+    datasheet - guide Figure 25 callouts 2 and 3 and Figure 37: a link activity lamp and a status lamp for each
+    port.
+  weight: >-
+    datasheet - guide, Chassis Physical Specifications, PDF page 64: "4-port 1-Gigabit Ethernet SFP/10-Gigabit
+    Ethernet SFP+ uplink module ... 0.57 lb (0.26 kg)".
+  power: >-
+    not published - searched the guide's power budget tables (Tables 32 to 36) and the datasheet for a
+    figure for any uplink module and found none, so the module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      The four uplink cages, numbered 0 to 3 as printed. SFP+ at 10 Gbps, or SFP at 1 Gbps with an SFP
+      transceiver
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port above the cage, link activity at the left and status at the right. Numbered in
+      printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [4.8, 7.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [19.05, 7.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [33.3, 7.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [47.55, 7.4], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [7.8, 3.5], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [14.3, 3.5], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [22.05, 3.5], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [28.55, 3.5], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [36.3, 3.5], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [42.8, 3.5], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [50.55, 3.5], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [57.05, 3.5], group: port-leds, attrs: {function: status}}
+elements:
+  screw-left:
+    at: [1.7, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [61.2, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 66.6
+  h: 24.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+skins: [default]
