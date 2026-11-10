@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: pem-post
+version: 1.0.0
+class: screw
+interface: spade-m4
+profile: networking
+description: >-
+  A seat for one of the eight threaded posts of a Casa C-series power entry
+  module. It paints nothing, because casa/pem@1 already draws the post's
+  locking nut. A spade terminal is slid on here, so it presents the `spade-m4`
+  interface at the top of that nut, on the post's axis. The module composes
+  one per post, standing on the nut it draws.
+size: {w: 6.6, h: 5.72}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the box of the nut casa/pem@1 draws at each post, a hexagon 6.6 across its
+  corners; not measured
+provenance:
+  size: >-
+    estimated - the box of the nut casa/pem@1 draws at each of its eight posts,
+    which that part's own provenance gives as estimated. Casa C100G Hardware
+    Installation Guide (07/08/2022), PDF page 136, step 2 of Figure 6-12, has
+    the installer use a "7mm nut driver"; a nut a 7 mm driver turns is 7 mm
+    across its flats, and the hexagon is 5.72 across its flats. The drawing was
+    not changed here: it is the module's earlier estimate, and what the guide's
+    7 mm asks of it is left to a change of its own.
+  thread: >-
+    The post is an M4 screw: the guide (PDF page 134) calls for "spade
+    terminals for screw M4". The thread is not drawn.
+  seat: >-
+    THE TERMINAL SEATS ON TOP OF THE NUT, NOT UNDER IT. The module composes
+    each post at lift 8.2, the top of the nut it draws (the block face at 6.0
+    and the nut's 2.2, both that module's earlier estimates), so a terminal
+    seated here starts where the nut ends. The guide puts the terminal between
+    two flat washers, under the nut; nothing of the washers is drawn.
+  turns: >-
+    the interface allows the four right angles and `mate` narrows none: the
+    guide states no direction the terminals leave in. Figure 6-12 pictures the
+    cables of the left block leaving sideways, outward on the outer posts and
+    inward on the inner ones; it is a figure of the cables Casa supplies, not a
+    rule of the post.
+  drawing: >-
+    NOTHING IS PAINTED, DELIBERATELY. The nut is part of the module's own art
+    (`nut-b4-vdc` and its seven neighbours), and moving it into this part would
+    take the extent the module's `branch-1` to `branch-4` groups publish from
+    them. The part is the seat: a size, an interface and a `mate` point. Its
+    skin holds one rectangle of the part's box with no fill and no stroke,
+    because a seat with nothing in its skin has no box, and the conformance
+    check reads the box of every seat it walks.
+  behaviour: >-
+    DELIBERATELY OMITTED. The post is part of the module and is never placed
+    on its own; the module composes it.
+elements: {}
+connection-points:
+  mate: {at: [3.3, 2.86], direction: front}
+skins: [default]

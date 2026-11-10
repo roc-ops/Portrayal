@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: pem
-version: 1.8.0
+version: 1.9.0
 class: power
 behaviour: fills
 profile: networking
@@ -11,7 +11,9 @@ description: >-
   branches. A branch is a -48/-60 VDC feed with its return, landed on a pair
   of studs in one of the two terminal blocks, and protected by its own rocker
   circuit breaker in the row above. The faceplate draws a leader line from
-  each branch's terminal-cover screw up to the breaker that protects it.
+  each branch's terminal-cover screw up to the breaker that protects it. Each
+  of the eight posts takes a spade terminal on an M4 screw, as the Casa guide
+  asks, and presents the `spade-m4` interface.
 attrs:
   model: 'PEM'
   power-output-w: 3840
@@ -96,6 +98,11 @@ provenance:
     TOP row is -48/-60VDC and the BOTTOM row is RTN, labelled once per block in
     the central gap. Left block holds Branch 4 (left column) and Branch 3; right
     block holds Branch 2 and Branch 1 (right column)'
+  posts: 'datasheet - Casa C100G Hardware Installation Guide (07/08/2022), page 6-20 (PDF page 134), "Required terminals": spade
+    terminals for screw M4, installed between two flat washers, at most 9.3 mm outside diameter. The guide''s chapter 6, "DC power
+    sources and requirements", item 8, says 9.2 mm for the same terminal. Each of the eight posts is casa/pem-post@1, a seat that
+    draws nothing and stands on the nut this module draws, at lift 8.2 (the block face at 6.0 and the nut''s 2.2); it presents
+    `spade-m4`'
   hand: 'drawing - in it `pemA` sits at x 97.70 (RIGHT) and `pemB` at x 2.98 (LEFT)'
   relief: 'estimated, and the split matters. WHAT is raised, what it is, and where
     it sits are read off Figure 1-6, "C100G Power Entry Module, terminal covers
@@ -212,6 +219,16 @@ relief:
     - {node: ok, dome: 0.3, confidence: estimated, source: 'common/led-dot@1 - the library one figure for a panel lamp. NOT MEASURED: that part carries no depth or relief provenance, only size: estimated'}
     - {node: rail-screw-l, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
     - {node: rail-screw-r, cyl: 1.6, confidence: estimated, source: 'edgecore/agr-panel-screw@1 - the library one figure for a captive screw head. NOT MEASURED: that part own provenance reads estimated - it stands proud but was not measured'}
+parts:
+  - {ref: casa/pem-post@1, id: post-b4-vdc, at: [21.8, 33.64], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b4-rtn, at: [21.8, 53.84], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b3-vdc, at: [45.9, 33.64], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b3-rtn, at: [45.9, 53.84], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b2-vdc, at: [154.5, 33.64], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b2-rtn, at: [154.5, 53.84], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b1-vdc, at: [178.6, 33.64], lift: 8.2}
+  - {ref: casa/pem-post@1, id: post-b1-rtn, at: [178.6, 53.84], lift: 8.2}
+
 body:
   depth: 250.0
   color: '#8d949c'
