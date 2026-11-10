@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: pro3x-cord-60309-2pe
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in an IEC 60309 2P+E 6h plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Server Technology PRO3X Basic PDU whose SKU sheet lists an IEC 230V/32A 2P+PE 6h plug.
+  It leaves the cord end of the strip through a cord-entry frame.
+  Drawn as a frame; the cord and plug beyond it are not.
+size: {w: 29.2, h: 33.1}
+size-confidence: {w: borrowed, h: borrowed}
+size-notes: borrowed from servertech/pro4x-cord-60309@1, the same maker's entry frame on the same family of strip
+attrs: {plug: iec-60309-2p-e-6h}
+provenance:
+  size: >-
+    borrowed - the 3A01 drawing's end view draws a cord-entry frame and no figure of it is dimensioned. The 29.2 by
+    33.1 frame is servertech/pro4x-cord-60309@1's, read from the PRO4X outline drawing's end view.
+  plug: >-
+    datasheet - the maker's SKU data sheet for C3B36RL-EPJE0AT4 prints Input Plug "IEC 230V/32A 2P+PE 6Hr". The
+    drawing marks "FRONT ENTRY LOCATION" and "BOTTOM ENTRY LOCATION" and draws no cord and no plug.
+  not-drawn: >-
+    THE CORD BEYOND THE FRAME AND THE PLUG ARE NOT DRAWN, and no document held gives the cord's length or gauge:
+    the far end of a cord is not a part (docs/connectors-power-design.md section 7). This part stands for the power
+    input a DCIM records, one power port of type `other` labelled as an IEC 60309 2P+E 6h plug.
+elements:
+  frame: {at: [0, 0], size: [29.2, 33.1], class: inlet}
+skins: [default]
