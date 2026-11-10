@@ -466,6 +466,7 @@ console.log(JSON.stringify({box: openingView({W, H, D, aspect: 2}), body: openin
 AS_TODAY = ["cisco/c9300-24p", "aurcore/ais4001", "fs/cmh-6dr1u"]
 
 
+@pytest.mark.heavy
 def test_no_library_device_states_a_section():
     paths = libwalk.iter_devices([LIB])
     assert len(paths) > 100
@@ -473,6 +474,7 @@ def test_no_library_device_states_a_section():
         assert "section" not in (yaml.safe_load(path.read_text()).get("chassis") or {}), path
 
 
+@pytest.mark.heavy
 @needs_node
 def test_three_devices_of_other_kinds_are_built_as_they_were(tmp_path):
     """The published chassis of a plain box, a bevelled box and a sheet body: sectionBody
