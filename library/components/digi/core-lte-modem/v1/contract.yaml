@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: core-lte-modem
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: fills
 profile: networking
@@ -30,6 +30,14 @@ provenance:
     jacks at 17.5 and 107.5 from the model's plate edge, less the 3.3 cut, the legend centred
     between them, and the thumbscrews from the dimension model at 4.5 and 132.0, less the
     cut at the left. Good to about 2 mm.
+  groups: >-
+    Digi Connect EZ 16/32 product page, the cellular rows "When used with Digi CORE plug-in LTE modem": its
+    "CONNECTORS" row lists two 50 ohm SMA connectors, and the module's accessory row names the model as
+    "LTE Cat 4 with 3G / 2G fallback". The two jacks are printed WWAN2 and WWAN1 on the plate in the
+    Connect EZ 16/32 rear photograph. Both join one group. The page prints a connector count and an LTE
+    category and no data rate for either jack, so the group states no speed. Its role is traffic, the
+    schema's role for the link the box is bought to carry, as the antenna group of the Digi Connect IT
+    16 and 48 is; the page names no role for the jacks, so that is the contract's reading of the job.
   sim: >-
     not drawn - the two mini-SIM slots are inside the module and no document held shows
     where they are.
@@ -40,9 +48,17 @@ elements:
   legend: {at: [34.4, 7.0], size: [56.5, 6.0], class: label}
   screw-left: {at: [0.0, 4.7], size: [9.0, 9.0], class: fastener}
   screw-right: {at: [124.2, 4.7], size: [9.0, 9.0], class: fastener}
+groups:
+  antennas:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-sma}
+    description: >-
+      the two WWAN antenna jacks of the module plate, printed WWAN2 and WWAN1
 parts:
-  - {ref: std/sma@1, id: wwan2, at: [11.1, 7.1]}
-  - {ref: std/sma@1, id: wwan1, at: [101.1, 7.1]}
+  - {ref: std/sma@1, id: wwan2, at: [11.1, 7.1], group: antennas}
+  - {ref: std/sma@1, id: wwan1, at: [101.1, 7.1], group: antennas}
 relief:
   wall: '#17191b'
   features:
