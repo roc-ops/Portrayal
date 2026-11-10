@@ -158,6 +158,61 @@ export function sectionArrays(section, W, H, D) {
   return {positions, normals, uvs, indices, groups};
 }
 
+// WHERE A PART STANDS ON A STEPPED HOUSING. A part is built on the flat plane of
+// the bounding box's face; over a recessed casting that plane is in the air. This
+// is how far, in millimetres along the face's outward normal, the section's OUTER
+// surface under the part stands from that plane: 0 where the housing reaches the
+// plane, negative where it is recessed.
+//   front, rear   `at` is a row, mm down from the top; the surface is the
+//                 outermost vertical facet that row crosses, its depth from the
+//                 plane being the facet's x (front) or D - x (rear)
+//   top, bottom   `at` is a column, mm back from the front; the surface is the
+//                 outermost horizontal facet over that column
+// The right and left faces are the caps, flat at the ends of the extrusion, and
+// any other face (a part's own) has no section: 0. A row or column exactly on a
+// step takes the outermost of the facets that meet there, and one outside the
+// solid takes 0. The polygon touches all four sides of its box (section.py), so
+// its x runs 0..D and its y 0..H.
+export function surfaceUnder(section, face, at, W, H, D) {
+  const pts = section.map(p => [Number(p[0]), Number(p[1])]);
+  const lone = face === 'front' || face === 'rear';
+  if (!lone && face !== 'top' && face !== 'bottom') return 0;
+  const near = [];          // positions along the facet's axis of the facets facing this face
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
+    if (lone && x0 === x1 && y0 !== y1) {
+      const rearward = y1 > y0;           // the outward normal (dy, -dx): toward the rear for dy > 0
+      if ((face === 'rear') === rearward && Math.min(y0, y1) - EPS <= at && at <= Math.max(y0, y1) + EPS) near.push(x0);
+    } else if (!lone && y0 === y1 && x0 !== x1) {
+      const up = x1 > x0;                 // ny = -sign(dx): up for dx > 0
+      if ((face === 'top') === up && Math.min(x0, x1) - EPS <= at && at <= Math.max(x0, x1) + EPS) near.push(y0);
+    }
+  }
+  if (!near.length) return 0;
+  if (face === 'front') return -Math.min(...near);
+  if (face === 'rear') return Math.max(...near) - D;
+  if (face === 'top') return -Math.min(...near);
+  return Math.max(...near) - H;
+}
+
+// `surfaceUnder` for a point of the face's flat plane in the viewer's frame
+// (+x right, +y up, +z out of the front, the box centred on the origin): a
+// front or rear part's row is its height below the top, a top or bottom part's
+// column its distance behind the front.
+export function seatPoint(section, face, p, W, H, D) {
+  if (face === 'front' || face === 'rear') return surfaceUnder(section, face, H / 2 - p[1], W, H, D);
+  if (face === 'top' || face === 'bottom') return surfaceUnder(section, face, D / 2 - p[2], W, H, D);
+  return 0;
+}
+
+// The polygon relief seats parts on: the published section when the chassis
+// builds as a stepped body (sectionBody has arrays), else null, so a device
+// without one - or with one that is refused - is placed on the flat planes.
+export function sectionSeat(chassis, W, H, D) {
+  const b = sectionBody(chassis, W, H, D);
+  return b && b.arrays ? chassis.section : null;
+}
+
 // What viewer3d.js asks about a chassis (the `chassis` of configs.json):
 //   null                     the chassis states no section: build it as before
 //   {arrays}                 the section extruded along the width

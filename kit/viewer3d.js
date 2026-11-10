@@ -36,7 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody } from './section.js';
+import { sectionBody, sectionSeat, seatPoint } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -642,6 +642,12 @@ export function createViewer(container, opts = {}) {
     // the wells cut in each face and the air openings declared on each, for
     // the pass below that shows a face's vents on the well wall behind it
     const wells = [], apertures = {};
+    // A STEPPED HOUSING'S PARTS STAND ON THE FACET UNDER THEM (relief.js
+    // partSeats): relief is handed the polygon the body is extruded from, and a
+    // device with no section, or one the body cannot be built from, is handed
+    // none and is placed on the flat planes
+    const seatPoly = COMP ? null : sectionSeat(devIndex && devIndex.chassis, W, H, D);
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -649,6 +655,7 @@ export function createViewer(container, opts = {}) {
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
                                 sheet: !!(devIndex && sheetShell(devIndex.chassis)),
+                                section: seatSection,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
