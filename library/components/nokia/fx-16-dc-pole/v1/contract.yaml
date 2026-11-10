@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: fx-16-dc-pole
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one
+# two-hole lug lands across both studs, at their midpoint. That slot and the two stud slots
+# below are mutually exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One dual-post terminal of the 7360 ISAM FX-16 shelf's power distribution unit. It is two
+  studs side by side on 5/8 in. (15.875) centres, the landing one two-hole power lug takes.
+  nokia/fx-16-dc-terminal-block@1 composes four, TB1-1 to TB1-4.
+size: {w: 19.275, h: 3.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, side by side: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    datasheet and estimated - the 5/8 in. pitch is the interface's (spec/schemas/standards.yaml
+    `two-hole-lug-5-8`, 15.875); each stud is common/terminal-screw-34@1, whose own 3.4 across
+    is an estimate.
+  pitch: >-
+    THE PITCH IS THE LUG'S, READ OFF THE SHELF'S ELEVATION AND CONFIRMED. The 7360 ISAM FX
+    Hardware Installation Manual R6.9 (3HH-12893-AAAA-TCZZA Issue 29) names the lug that
+    lands on the FX-16 terminals as a "2 AWG 1/4 - 5/8 dual-hole copper lug" (printed p112,
+    PDF p113, section 6.5.3.1, Note 2: Burndy YAZ2C-2TC14, Thomas and Betts 54855BEPH). The
+    NFXS-D BA unit data sheet (3FE65209BAAATQZZA04, Figure 13 p21) draws the two studs of
+    each terminal 15.9 apart, which agrees with the 5/8 in. of the lug to 0.03. No document
+    held dimensions the studs themselves, so they are taken to stand where the lug's holes
+    do and are composed at exactly 15.875; lint L116 holds them there.
+  thread: >-
+    NOT CLAIMED. No held page states the thread of the terminal studs or the diameter of
+    their nuts. The studs are common/terminal-screw-34@1, a head 3.4 across that claims no
+    thread: a STAND-IN, declared. It marks where a lug lands, and the drawn nut and post are
+    the skin of the block that composes this part.
+  lug: >-
+    THE DOCUMENTED LUG IS NOT THE ONE OFFERED. The manual's lug is a 2 AWG copper, long
+    barrel, peep-hole, dual-hole lug (printed p112). generic/two-hole-lug-5-8@1, which mates
+    this interface, is the library's nominal lug on #6 AWG wire and stands in for it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right
+    (manifest.spanning_axis). The block that composes this pole turns it to the angle the
+    elevation draws. The manual's Figure 46 (printed p113) draws the cables leaving down
+    and to the left of the pairs; it states no direction.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own
+    `mate` points and states `seat-out: 9.2`, the height each stud presents at (its lift 8.0
+    and its 1.2 head), so a lug across the pair lies exactly where a one-hole lug on either
+    stud would. L116 holds the two to one figure. THE LIFT 8.0 IS AN ESTIMATE: no held page gives
+    the height of the studs above the panel, so 8.0, and the 9.2 built on it, stand in, declared,
+    and are not a reading.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its
+  # own, `<pole>/1` and `<pole>/2`, which the ring lug still seats in.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [0, 0], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [15.875, 0], lift: 8.0}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (1.7, 1.7) and
+  # (17.575, 1.7), at the height they present.
+  mate: {at: [9.6375, 1.7], direction: front, seat-out: 9.2}
+skins: [default]

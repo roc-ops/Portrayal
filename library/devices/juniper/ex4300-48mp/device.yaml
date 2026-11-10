@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4300-48mp
-version: 0.2.1
+version: 0.3.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4300-48MP
@@ -139,8 +139,7 @@ provenance:
       the guide's inventory (Table 68) says a cover panel for the slot is provided. The 48MP's slot opening
       is 370.7 to 437.3 x 17.7 to 42.2 mm (66.6 x 24.5) below the status plate, and the photograph shows
       it covered. The guide's Table 6 supports two modules in it, the 2-port 40/100-Gigabit EX-UM-2QSFP-MR
-      and the 4-port 1/10-Gigabit EX-UM-4SFPP-MR, neither of which is in the library; the bay takes only
-      the cover panel here and both are left for a later slice.
+      and the 4-port 1/10-Gigabit EX-UM-4SFPP-MR; the bay takes the cover panel, which ships, and both.
   rear:
     confidence: drawing
     note: >-
@@ -304,13 +303,6 @@ gaps:
   wanted: >-
     The bracket positions of the front-mounting brackets: no figure in the guide dimensions them against
     the face, so no ear position or kit is listed.
-- what: uplink-modules
-  scope:
-  - front
-  reason: needs-drawing
-  wanted: >-
-    The EX-UM-2QSFP-MR and EX-UM-4SFPP-MR uplink modules and their ports, left for the later uplink-module
-    slice; the bay takes only the cover panel here.
 - what: qr-code-label
   scope:
   - front
@@ -557,6 +549,8 @@ views:
         rel-pos: 0
         accepts:
         - juniper/ex4300-48mp-uplink-blank@1
+        - juniper/ex-um-2qsfp-mr@1
+        - juniper/ex-um-4sfpp-mr@1
         default: juniper/ex4300-48mp-uplink-blank@1
       placements:
       - ref: common/rj45-ganged-eth@1
@@ -1163,6 +1157,18 @@ configurations:
     bays: {psu-0: '', psu-1: '', fan-0: '', fan-1: ''}
     part-numbers:
       EX4300-48MP-S: {}
+  um-2qsfp-mr:
+    kind: example
+    description: >-
+      The EX4300-48MP as shipped, with an EX-UM-2QSFP-MR uplink module in the uplink slot in place of
+      the cover. An illustration, not an order code.
+    bays: {uplink: juniper/ex-um-2qsfp-mr@1}
+  um-4sfpp-mr:
+    kind: example
+    description: >-
+      The EX4300-48MP as shipped, with an EX-UM-4SFPP-MR uplink module in the uplink slot in place of
+      the cover. An illustration, not an order code.
+    bays: {uplink: juniper/ex-um-4sfpp-mr@1}
 datasheet:
   title: EX4300 Line of Ethernet Switches Datasheet (Juniper Networks, PDF created 2022-07-25)
   url: >-

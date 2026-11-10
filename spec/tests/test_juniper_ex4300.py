@@ -176,7 +176,8 @@ def test_the_front_carries_the_console_lcd_buttons_lamps_and_the_uplink_slot(dev
     # the photograph prints no legend by the chassis lamps; the guide's names are not invented
     assert not legends & {"ALM", "SYS", "MST"}
     slot = bays(d, "front")["uplink"]
-    assert slot["accepts"] == ["juniper/ex4300-uplink-blank@1"]
+    # the cover panel is what ships; the guide's one module for these models fits as well
+    assert slot["accepts"] == ["juniper/ex4300-uplink-blank@1", "juniper/ex-um-4x4sfp@1"]
     assert slot["default"] == "juniper/ex4300-uplink-blank@1"
 
 
@@ -253,7 +254,8 @@ def test_the_default_build_ships_what_the_guide_says(dev):
 def test_each_configuration_lists_its_part_numbers(dev):
     d = load(dev)
     want = DEVICES[dev][4]
-    assert set(d["configurations"]) == set(want)
+    # an `example` configuration shows a part in a slot and is no order code
+    assert {c for c, v in d["configurations"].items() if v["kind"] != "example"} == set(want)
     for cfg, pns in want.items():
         got = d["configurations"][cfg]
         assert got["kind"] == "orderable"
@@ -295,7 +297,8 @@ def test_the_spare_chassis_shows_its_bays_open(dev):
 def test_only_the_48t_has_airflow_and_dc_builds():
     """Tables 1, 3 and 8 list AFI and DC builds for the 48T alone among these four panels."""
     for dev in ("ex4300-24t", "ex4300-24p", "ex4300-48p"):
-        assert set(load(dev)["configurations"]) == {"ac", "s"}
+        cfgs = load(dev)["configurations"]
+        assert {c for c, v in cfgs.items() if v["kind"] != "example"} == {"ac", "s"}
     d = load("ex4300-48t")
     assert d["configurations"]["afi"]["airflow"] == "back-to-front"
     assert d["configurations"]["dc"]["power"] == "dc"
@@ -349,8 +352,8 @@ def test_the_exported_type_lists_both_consoles(target, dev):
 
 
 def test_the_new_components_are_family_prefixed():
-    """This slice adds no shared Juniper EX/QFX component: every juniper/ part its devices
-    place or seat is the EX4300's own."""
+    """Every juniper/ part these devices place or seat is the EX4300's own, or the EX-UM uplink module
+    the guide lists for them: one maker part number is one component."""
     refs = set()
     for dev in DEVICES:
         d = load(dev)
@@ -360,7 +363,7 @@ def test_the_new_components_are_family_prefixed():
             for b in bays(d, view).values():
                 refs.update(b["accepts"])
     mine = {r for r in refs if r.startswith("juniper/")}
-    assert mine and all(r.startswith("juniper/ex4300-") for r in mine)
+    assert mine and all(r.startswith(("juniper/ex4300-", "juniper/ex-um-")) for r in mine)
 
 
 @pytest.mark.parametrize("comp", sorted(PSUS) + sorted(FANS) + BLANKS +
@@ -513,7 +516,7 @@ MORE = {
 MORE_PSUS = {"ex4300-jpsu-1400-ac-afo": ("JPSU-1400-AC-AFO", 1400, "front-to-back", "ac")}
 MORE_FANS = {"ex4300-48mp-fan-afo": ("EX4300-48MP-FAN", "front-to-back")}
 MORE_BLANKS = {"ex4300-32f": "ex4300-32f-uplink-blank", "ex4300-48mp": "ex4300-48mp-uplink-blank"}
-# the uplink modules the guide lists for each (Tables 5 and 6): none is in the library yet
+# the uplink modules the guide lists for each (Tables 5 and 6)
 MORE_UPLINKS = {"ex4300-32f": ["EX-UM-2QSFP", "EX-UM-8X8SFP"],
                 "ex4300-48mp": ["EX-UM-2QSFP-MR", "EX-UM-4SFPP-MR"]}
 
@@ -607,7 +610,7 @@ def test_the_32f_front_has_the_console_lcd_buttons_lamps_and_the_large_uplink_sl
     slot = bays(d, "front")["uplink"]
     # Figure 10 callout 1: the cover panel is the large opening at the left end, not the 74 mm one
     assert slot["size"]["w"] > 80
-    assert slot["accepts"] == ["juniper/ex4300-32f-uplink-blank@1"]
+    assert slot["accepts"] == ["juniper/ex4300-32f-uplink-blank@1", "juniper/ex-um-2qsfp@1", "juniper/ex-um-8x8sfp@1"]
     assert slot["default"] == "juniper/ex4300-32f-uplink-blank@1"
     assert {"EX4300-32F", "CON1"} <= {s.get("text") for s in d["views"]["front"]["silkscreen"]}
 
@@ -660,7 +663,8 @@ def test_the_48mp_status_block_prints_the_photographs_legends_in_its_order():
     assert ids["console"]["ref"] == "juniper/ex4300-console-usb-mini@1"
     assert "EX4300-48MP" in {s.get("text") for s in front["silkscreen"]}
     slot = bays(d, "front")["uplink"]
-    assert slot["accepts"] == ["juniper/ex4300-48mp-uplink-blank@1"]
+    assert slot["accepts"] == ["juniper/ex4300-48mp-uplink-blank@1", "juniper/ex-um-2qsfp-mr@1",
+                               "juniper/ex-um-4sfpp-mr@1"]
 
 
 @pytest.mark.parametrize("dev,ports", [("ex4300-32f", 2), ("ex4300-48mp", 4)])
@@ -732,7 +736,8 @@ def test_the_more_bays_accept_what_the_guide_lists(dev):
 def test_the_more_configurations_list_their_part_numbers(dev):
     d = load(dev)
     want = MORE[dev][2]
-    assert set(d["configurations"]) == set(want)
+    # an `example` configuration shows a part in a slot and is no order code
+    assert {c for c, v in d["configurations"].items() if v["kind"] != "example"} == set(want)
     for cfg, pns in want.items():
         assert d["configurations"][cfg]["kind"] == "orderable"
         assert list(d["configurations"][cfg]["part-numbers"]) == pns
@@ -772,18 +777,17 @@ def test_the_48mp_builds_seat_the_1400_w_supply_and_its_own_fan():
 
 
 @pytest.mark.parametrize("dev", MORE)
-def test_the_uplink_bay_takes_only_the_modules_the_library_holds(dev):
-    """The guide lists two uplink modules for each of these (Tables 5 and 6). None is in the library, so
-    the bay takes its cover panel alone and the gap names the modules left for a later slice."""
+def test_the_uplink_bay_takes_its_cover_and_the_modules_the_guide_lists(dev):
+    """The guide lists two uplink modules for each of these (Tables 5 and 6). The bay takes its cover panel,
+    which ships, and both modules, and no gap names them."""
     d = load(dev)
     slot = bays(d, "front")["uplink"]
-    assert slot["accepts"] == [f"juniper/{MORE_BLANKS[dev]}@1"]
+    modules = [f"juniper/{m.lower()}@1" for m in MORE_UPLINKS[dev]]
+    assert slot["accepts"] == [f"juniper/{MORE_BLANKS[dev]}@1"] + modules
+    assert slot["default"] == f"juniper/{MORE_BLANKS[dev]}@1"
     for ref in slot["accepts"]:
         assert (LIB / "components" / ref.split("@")[0] / "v1/contract.yaml").exists()
-    gap = [g for g in d["gaps"] if g["what"] == "uplink-modules"]
-    assert len(gap) == 1
-    for module in MORE_UPLINKS[dev]:
-        assert module in gap[0]["wanted"]
+    assert not [g for g in d["gaps"] if g["what"] == "uplink-modules"]
 
 
 @pytest.mark.parametrize("target", ["netbox", "nautobot"])
@@ -832,7 +836,8 @@ def test_the_more_new_components_are_family_prefixed_and_state_their_size_source
                 refs.update(b["accepts"])
     mine = {r for r in refs if r.startswith("juniper/")}
     # the one part reused from another EX line: the 48MP's rear reset pinhole is the EX4100's
-    assert mine and all(r.startswith("juniper/ex4300-") for r in mine - {"juniper/ex4100-reset-pinhole@1"})
+    assert mine and all(r.startswith(("juniper/ex4300-", "juniper/ex-um-"))
+                        for r in mine - {"juniper/ex4100-reset-pinhole@1"})
     for comp in (sorted(MORE_PSUS) + sorted(MORE_FANS) + sorted(MORE_BLANKS.values())):
         c = contract(comp)
         assert c["size-confidence"]
