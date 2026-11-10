@@ -256,6 +256,10 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
         kept[f"juniper/{name}"] = [1, 2]
     for name in ("mic-3d-4xge-xfp", "mpc1e-3d", "mpc2e-3d", "mpc3e-3d"):
         kept[f"juniper/{name}"] = [2, 3]
+    # DEPRECATED, NOT DELETED: the multirate MICs, the vertical MIC blank and the two MX2000
+    # carriers that took the MIC plate; the older major stays for a saved rack that pins it.
+    for name in ("mic-mrate", "mic-macsec-mrate", "mx-mic-blank-v", "mx2k-mpc8e-v2k", "mx2k-mpc9e-v2k"):
+        kept[f"juniper/{name}"] = [1, 2]
     # #887 re-majored the 4-port XFP MIC again for its pic/port ids; @3 stays
     # because juniper/mpc2e-3d@3 still accepts it beside @4.
     kept["juniper/mic-3d-4xge-xfp"] = [2, 3, 4]

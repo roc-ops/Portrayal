@@ -87,12 +87,12 @@ CARDS = [
         "cfp2-rate": ["Two 100-Gigabit Ethernet CFP2 ports"]}),
     ("mic6-100g-cxp", "v1", {"cxp": 4}, {
         "cxp-rate": ["Four 100-Gigabit Ethernet ports", "Supports 100GBASE-SR10 over CXP pluggable optics"]}),
-    ("mic-mrate", "v1", {"qsfp": 12}, {
+    ("mic-mrate", "v2", {"qsfp": 12}, {
         "qsfp-rate": ["Twelve Gigabit Ethernet ports that support quad small form-factor pluggable plus "
                       "(QSFP+) transceivers",
                       "Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports",
                       "4 ports out of the total 12 support 100-Gigabit Ethernet speed"]}),
-    ("mic-macsec-mrate", "v1", {"qsfp": 12}, {
+    ("mic-macsec-mrate", "v2", {"qsfp": 12}, {
         "qsfp-rate": ["Twelve Gigabit Ethernet QSFP+ ports",
                       "Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports",
                       "Four ports out of the total twelve ports support 100-Gigabit Ethernet speed"]}),
