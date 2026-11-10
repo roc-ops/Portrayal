@@ -2055,19 +2055,27 @@ Three tables once named a colour for an AOC and disagreed. They now agree:
   `mediaColor`, for every media, so `CABLE_COLOURS.aoc` is `#08788a` too. It
   was `#2F80C0`, blue, from a palette of the writer's own.
 
-The one maker's source the library holds is Siemon's 100G QSFP28 AOC, aqua on
-its photograph (`#49eaf8`, counted). It is the `jacket` of the named type
+The one AOC with a maker's source is Siemon's 100G QSFP28 AOC, aqua on its
+photograph (`#49eaf8`, counted). It is the `jacket` of the named type
 `aoc-siemon-q1q28f` and the stated jacket of `siemon/qsfp28-aoc@1`, so a
 cable between two of those ends is aqua by rule 2, not teal. No source is held
 for a 400G QSFP-DD AOC, which takes the default. `rack-cable-colour.mjs` and
 `rack-aoc-colour.mjs` hold the values.
+
+The named types that state a jacket are the ones with a `jacket` entry in
+`spec/schemas/cable-types.yaml`; each entry says what it was read from. Besides
+the Siemon AOC they are the two Cisco StackPower cables (`#304548`, counted on
+the guide's product image, which is shaded and not a studio photograph).
 
 ### 14.6 Not built
 
 - A command that sets a cable's `type` (#897). A type's colour reaches a
   cable whose file names the type; nothing in the kit writes that key yet.
 - A colour for a bundle, a strap, or a plug.
-- A jacket colour for any type but the one with a source.
+- A jacket colour for a type with no source for it. The Cisco FlexStack and
+  RPS cables are such types: the guide that names them draws the FlexStack
+  cable as line art, does not draw the RPS cable, and states no colour for
+  either.
 
 ### 14.7 Still open
 
@@ -2076,5 +2084,7 @@ for a 400G QSFP-DD AOC, which takes the default. `rack-cable-colour.mjs` and
   `cablePlan3d`. Until it does, no page shows a colour from the ends or a
   type.
 - **Named cable types with sourced jacket colours** (#897): each type needs a
-  source for its colour; the table holds one today.
+  source for its colour, and the types that have one are listed in 14.5. A
+  maker's word for a colour ("black", "purple") has no `basis` of its own in
+  the table, which names only `standard`, `convention` and `photo`.
 - The rulings of 14.3 other than the order, as noted there.
