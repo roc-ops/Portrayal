@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cfp-lc
-version: 1.0.1
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: cfp
@@ -102,9 +102,24 @@ provenance:
     held codes a colour for the knobs or the faceplate, so the colour is a
     fact about a product and a vendor wrapper sets `latch-color`, the key
     every pluggable generic uses for the part a hand takes hold of.
+  groups: >-
+    Source: the CFP MSA Hardware Specification Rev 1.4 Figure 5-16, the Modulelink CFP-100G-LR4
+    datasheet p16 end view and the Gigalight GCF-S101-LR4C datasheet p11 end view, which draw
+    the two LC openings on the module faceplate (provenance.bores). The role is traffic, this
+    contract's own reading of the job: the module's network port, where its fibre or cable is
+    plugged in. The shape stands for every module of its kind, so the group states no speed:
+    rate, reach and watts belong on the vendor wrapper.
+groups:
+  cfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of a CFP module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [33.125, 2.85], rotate: 180, lift: 14.5}
-  - {ref: std/lc-bore@3, id: rx, at: [39.375, 2.85], rotate: 180, lift: 14.5}
+  - {ref: std/lc-bore@3, id: tx, group: cfp, at: [33.125, 2.85], rotate: 180, lift: 14.5}
+  - {ref: std/lc-bore@3, id: rx, group: cfp, at: [39.375, 2.85], rotate: 180, lift: 14.5}
   - {ref: common/cfp-thumbscrew@1, id: screw-l, at: [-2.0, 2.2], lift: 14.5}
   - {ref: common/cfp-thumbscrew@1, id: screw-r, at: [70.0, 2.2], lift: 14.5}
 relief:

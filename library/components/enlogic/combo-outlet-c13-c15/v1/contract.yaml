@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: combo-outlet-c13-c15
+version: 1.0.0
+class: inlet
+profile: power
+interface: iec-c13
+description: >-
+  The C13/C15 combination outlet of an Enlogic Advantage Series PDU (the EN2 and EN6 families): a single
+  well that takes the cord end of an IEC C13 or an IEC C15 coupler, rated 10 A at 250 V. Fixed to the PDU;
+  drawn as a dark well with the nose standing in it, 22.8 across the strip and 34.4 along it.
+size: {w: 22.8, h: 34.4, d: 18}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {outlet: iec-60320-c13, media: ac, rating-a: 10, accepts: 'C14, C16'}
+provenance:
+  size: >-
+    drawing - Enlogic customer drawing EN2951-WXYZ_DA rev E3 (sheet 1, FRONT VIEW) draws the upper row of outlets
+    14.16 pt long along the strip and 9.4 pt across it; at the sheet's 2.4306 mm per pt (the 56.0 width read
+    as 23.04 pt, which the 1826.0 overall and the 751 pt between the strip's end lines both check) that is 34.4
+    along by 22.8 across, to about 1 mm (the drawing's own tolerance for an unmarked figure). The EN6952 drawing
+    draws the same row at the same size.
+  identity: >-
+    drawing - EN2951-WXYZ_DA rev E3, sheet 1, OUTLET QTY & TYPE "(21)C13/C15,(21)C13/C15/C19" and sheet 2,
+    RECEPTACLE "C13/C15 COMBO 10A, 250V MAX RATED OUTPUT"; the data sheet's "Outlet Configuration
+    21(C13/C15),21(4-in-1 Combo)". The sheet-2 close-up of the receptacle is a small raster picture: it shows the
+    well's rounded corners and three contact slots but is not dimensioned.
+  face: >-
+    ESTIMATED - the well's outline (rounded corners, a chamfer at one end) and the nose are drawn to the shape of
+    the registry's C13 outlet, scaled into the 22.8 by 34.4 the drawing gives. THE DRAWN WELL'S CONTOUR AND ITS
+    TURN (which end the earth contact is at) ARE NOT DIMENSIONED, so no turn is claimed.
+  depth: >-
+    estimated - 18, the C13 nose length of std/c13-outlet@1; no held document sections the outlet.
+  interface: >-
+    `iec-c13` in spec/schemas/connectors.yaml: a C14 cord end (generic/c14-plug@1) mates it, seating at `mate`.
+    The well is a C13 with the C15 extension (the C15 notch), rated "10A, 250V" on the drawing's sheet 2, so it
+    presents `iec-c13` and not a combination key; the device records the notch as the gap `c15-notch`. No
+    registered key or mate part exists for a C16 cord end, so none is claimed.
+  media: '`media: ac`: an outlet states what it hands on, as std/c13-outlet@1 does.'
+elements:
+  recess: {at: [0, 0], size: [22.8, 34.4], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [11.4, 17.2], direction: front}
+skins: [default]

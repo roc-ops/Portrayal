@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: combo-outlet-c13-c15-c19
+version: 1.0.0
+class: inlet
+profile: power
+interface: enlogic-combo
+description: >-
+  The C13/C15/C19 combination outlet of an Enlogic Advantage Series PDU (the EN2 and EN6 families): a single
+  larger well that takes the cord end of an IEC C19 coupler (and the C13 and C15 the maker names), rated 16 A
+  at 250 V. Fixed to the PDU; drawn as a dark well with the nose standing in it, 22.1 across the strip and
+  34.4 along it.
+size: {w: 22.1, h: 34.4, d: 20}
+size-confidence: {w: drawing, h: drawing, d: estimated}
+attrs: {outlet: enlogic-combo, media: ac, rating-a: 16, accepts: 'C20, C14, C16'}
+provenance:
+  size: >-
+    drawing - Enlogic customer drawing EN2951-WXYZ_DA rev E3 (sheet 1, FRONT VIEW) draws the lower row of
+    outlets 14.16 pt long along the strip and 9.1 pt across it; at the sheet's 2.4306 mm per pt (see
+    enlogic/combo-outlet-c13-c15@1) that is 34.4 along by 22.1 across, to about 1 mm. The EN6952 drawing
+    draws the same row at the same size.
+  identity: >-
+    drawing - EN2951-WXYZ_DA rev E3, sheet 1, OUTLET QTY & TYPE "(21)C13/C15,(21)C13/C15/C19" and sheet 2,
+    RECEPTACLE "C13/C15/C19 COMBO 16A, 250V MAX RATED OUTPUT"; the data sheet's "21(4-in-1 Combo)".
+  face: >-
+    ESTIMATED - the outline and nose are drawn to the shape of the registry's C19 outlet, scaled into the
+    drawn 22.1 by 34.4; the close-up on sheet 2 is a small undimensioned raster. No turn is claimed.
+  depth: >-
+    estimated - 20, the C19 nose's minimum of the registry entry `c19-plug`; no held document sections the
+    outlet.
+  interface: >-
+    `enlogic-combo` in spec/schemas/connectors.yaml, the maker's "C13/C15/C19 COMBO 16A, 250V" well (drawing
+    sheet 2): a vendor connector and no IEC 60320 sheet. Two cord ends mate it and seat at `mate`:
+    generic/c14-plug@1 and generic/c20-plug@1.
+  media: '`media: ac`: an outlet states what it hands on, as std/c19-outlet@1 does.'
+elements:
+  recess: {at: [0, 0], size: [22.1, 34.4], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [11.05, 17.2], direction: front}
+skins: [default]

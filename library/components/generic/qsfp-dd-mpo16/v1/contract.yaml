@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qsfp-dd-mpo16
-version: 1.0.2
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: qsfp-dd
@@ -120,8 +120,22 @@ provenance:
     850 nm until a wrapper said otherwise. The wavelength is the wrapper's
     fact (L99), so the wrapper states the colour: beige for an SR8, blue for a
     DR8.
+  groups: >-
+    Source: QSFP-DD HW Rev 6.3 section 6.2.1 and Figure 29, which describe the MPO-16 receptacle
+    of the module (provenance.receptacle). The role is traffic, this contract's own reading of
+    the job: the module's network port, where its fibre or cable is plugged in. The shape stands
+    for every module of its kind, so the group states no speed: rate, reach and watts belong on
+    the vendor wrapper.
+groups:
+  qsfp-dd:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the MPO-16 receptacle of a QSFP-DD module
 parts:
-  - {ref: std/mpo16-module-receptacle@1, id: mpo16, at: [2.725, 0.25], lift: 31.9}
+  - {ref: std/mpo16-module-receptacle@1, id: mpo16, group: qsfp-dd, at: [2.725, 0.25], lift: 31.9}
   - {ref: common/qsfp-dd-pull-tab-type2@1, id: tab, at: [0.0, -3.13], lift: 31.9}
 relief:
   features:

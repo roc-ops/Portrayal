@@ -313,6 +313,10 @@ ISSUED = {
     "L201": "device",
     "L202": "device",
     "L203": "device",
+    "L204": "device",
+    "L205": "device",
+    "L206": "device",
+    "L207": "device",
 }
 
 

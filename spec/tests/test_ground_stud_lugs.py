@@ -136,9 +136,12 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The CyberPower PDU30BHVT8R places one common/ground-screw@1, its external site ground, 22 -> 23 on 12 -> 13 devices.
 # The Enlogic EB0803 places one common/ground-screw@1, 23 -> 24 on 13 -> 14 devices.
 # The Moxa NPort 5650-16 and 5650-16-T each place one ground screw on their rear face, 24 -> 26 on 14 -> 16 devices.
+# The CyberPower PDU15M2F12R places one common/ground-screw@1, its external site ground, 26 -> 27 on 16 -> 17 devices.
+# The Enlogic EN2951 and EN6952 each place one common/ground-screw@1, 27 -> 29 on 17 -> 19 devices.
+# The Panduit P36G18M and P42G20M each place one common/ground-screw@1 at the cord end, 29 -> 31 on 19 -> 21 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (26, 16),   # (24, 14) and the CyberPower PDU30BHVT8R's external site ground
+    "common/ground-screw@1": (31, 21),   # (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
@@ -475,14 +478,20 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
     # 69 -> 70 with the Enlogic EB0803's one ground screw
     # 70 -> 72 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
-    assert sum(n for n, _ in got.values()) == 72
+    # 72 -> 73 with the CyberPower PDU15M2F12R's external site ground
+    # 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
+    # 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
+    assert sum(n for n, _ in got.values()) == 77
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
     # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
     # 47 -> 49 with the Panduit P24B14M and P32E06M
     # 49 -> 50 with the CyberPower PDU30BHVT8R
     # 50 -> 51 with the Enlogic EB0803
     # 51 -> 53 with the Moxa NPort 5650-16 and 5650-16-T
-    assert len({where for where, _, _ in placed}) == 53
+    # 53 -> 54 with the CyberPower PDU15M2F12R
+    # 54 -> 56 with the Enlogic EN2951 and EN6952
+    # 56 -> 58 with the Panduit P36G18M and P42G20M
+    assert len({where for where, _, _ in placed}) == 58
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -533,7 +542,10 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
     # 68 -> 69 with the Enlogic EB0803's one ground screw
     # 69 -> 71 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
-    assert seen == 71
+    # 71 -> 72 with the CyberPower PDU15M2F12R's external site ground
+    # 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
+    # 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
+    assert seen == 76
 
 
 @pytest.mark.heavy

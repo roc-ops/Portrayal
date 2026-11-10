@@ -137,7 +137,7 @@ def test_it_is_a_generic_transceiver_of_its_family(ref):
     std = standards()[conforms]
     assert (d["size"]["w"], d["size"]["h"], d["size"]["d"]) == (std["w"], std["h"], std["depth"])
     assert d["size-confidence"] == {"w": "registry", "h": "registry", "d": "registry"}
-    assert d["unplaced"] and d["version"] == "1.0.0" and d["skins"] == ["default"]
+    assert d["unplaced"] and d["version"] == "1.1.0" and d["skins"] == ["default"]
     # it seats centre on centre
     assert d["connection-points"]["mate"]["at"] == [d["size"]["w"] / 2, d["size"]["h"] / 2]
 

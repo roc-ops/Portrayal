@@ -1,0 +1,80 @@
+format: 1
+kind: module
+name: ex-um-2xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-2XFP, the two-port 10 Gbps XFP uplink module of the EX3200 and EX4200 switches. It slides
+  into the front-panel uplink module slot behind the flip-up door. It has two XFP cages side by side,
+  numbered 0 and 1. Each port has a status lamp above and a link activity lamp below, at the right of its
+  cage. It ships with a dust cover in one port.
+attrs:
+  model: EX-UM-2XFP
+  xfp-10g: 2
+  ports-note: two 10 Gbps XFP ports; interfaces xe-0/1/0 and xe-0/1/1 (EX3200 guide, PDF page 127)
+provenance:
+  sources: >-
+    datasheet - EX3200 Switch Hardware Guide (Juniper Networks, published 2020-12-15), XFP Uplink Module,
+    PDF page 33, Figure 7 (g020108): "two ports for 10-gigabit XFP transceivers". The EX3200 guide prints
+    no model number for it, so the number is the EX4200 guide's: EX4200 Switch Hardware Guide, Uplink
+    Modules in EX4200 Switches, PDF page 30, "The model number of the uplink module is EX-UM-2XFP", and
+    Figure 8 on PDF page 34, the same drawing (g020108). Figure 13 (EX3200 guide, PDF page 37) draws the
+    lamps; Table 10 describes them. The photograph of the EX3200-24T on page 4 of the EX3200 datasheet
+    (Juniper Networks, 1000216-013-EN) shows this module fitted.
+  size: >-
+    estimated - no document dimensions the module. It is the uplink slot the two chassis' cover panels
+    close, 63.0 x 14.5 mm, read off the product photographs on page 4 of the EX3200 datasheet. The
+    depth is not stated.
+  elements: >-
+    photo-measured - the datasheet photograph, with the module fitted, is the only held picture that
+    is nearly front-on. Measured on it at 4.8 px/mm (the 63.0 mm plate is 305 px wide): the two cages
+    are 19.6 mm wide, which agrees with the XFP MSA's 19.5 mm bezel opening, and begin 7.2 and 35.1 mm
+    in from the plate's left edge. The lamps stand at the right of each cage - 3.1 mm beyond it for the
+    first, 5.2 mm from the plate's right edge for the second - the status lamp 2.3 mm and the link
+    activity lamp 7.2 mm down from the plate's top. Figure 7 draws the same arrangement: a pair of lamps
+    right of each cage, status above link activity. The photograph is greyscale and 47 px a cage
+    tall, so each figure is good to about 1 mm. A round hole at each end of the plate (Figure 7) is
+    drawn on the plate and is not a part; Figure 7's keyhole above the first pair of lamps is not drawn,
+    because the lamps stand where it would.
+  led: >-
+    datasheet - EX3200 guide Figure 13 and Table 10. Each port has a status lamp and a link activity
+    lamp. The speed of the XFP ports is always 10 Gbps, so the status lamp "is always green on an XFP uplink
+    module". Link activity is green, blinking with traffic.
+  colour: >-
+    photo-measured - the datasheet photograph shows a light metal plate with dark cages and lamps, in
+    greyscale. The plate is drawn silver. It is greyscale, so no hue is read.
+  power: >-
+    NO FIGURE IS PUBLISHED - neither guide gives the module a weight or a draw.
+states:
+- ok
+- fail
+- absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: xfp
+      speed: 10g
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port - status above, link activity below, at the right of the cage. Numbered
+      in printed order, left to right
+parts:
+- {ref: std/xfp@1, id: port-0, at: [7.2, 2.2], group: xfp-10g, attrs: {media: xfp}}
+- {ref: std/xfp@1, id: port-1, at: [35.1, 2.2], group: xfp-10g, attrs: {media: xfp}}
+- {ref: common/led-dot@1, id: led-0-status, at: [28.8, 1.3], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-0-link, at: [28.8, 6.2], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [58.9, 1.3], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [58.9, 6.2], group: port-leds, attrs: {function: link activity}}
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]
