@@ -1,0 +1,115 @@
+format: 1
+kind: component
+name: fx-16-dc-terminal-block
+version: 1.0.0
+class: inlet
+behaviour: mounts
+profile: networking
+description: >-
+  The -48 VDC input terminals of the 7360 ISAM FX-16 shelf (NFXS-D BA) power distribution
+  unit: four dual-post terminals on angled shrouds along the foot of the front, TB1-1 to
+  TB1-4 left to right, each taking a two-hole lug. They are EBAT-A, EBATRET-A, EBATRET-B and
+  EBAT-B, two feeds of a battery and its return. The safety cover that closes over them once
+  cabled is not drawn.
+size: {w: 202.5, h: 19.9}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  model: 7360 ISAM FX-16 -48 VDC terminals TB1-1 to TB1-4
+  input: dc
+  feeds: 2
+provenance:
+  sources: >-
+    datasheet and drawing - NFXS-D BA unit data sheet 3FE-65209-BAAA-TQZZA Issue 05
+    (3FE65209BAAATQZZA05): Figure 4 and Table 2 p9, section 1.5 p13, section 1.5.2 p14;
+    Issue 04 (3FE65209BAAATQZZA04) Figure 13 p21, the elevation the positions are
+    measured on. 7360 ISAM FX ANSI Hardware Installation Manual R6.9 (3HH-12893-AAAA-TCZZA
+    Issue 29): Figure 44 p111, Figure 46 p113 and section 6.5.3.1 p112. No photograph of
+    the terminals is staged.
+  size: >-
+    drawing - the box round the eight nuts the shelf drew as separate shapes before this
+    part: 202.5 x 19.9, measured on Figure 13 p21 of Issue 04 at 6.2619 px/mm.
+  layout: >-
+    drawing - NFXS-D BA data sheet Issue 04 Figure 13 p21, the stud centres of TB1-1 at
+    (108.7, 592.7) and (122.45, 584.7) from the shelf's top left, repeating every 58.95
+    across, which is 5.95 / 13.95 and 19.7 / 5.95 in this part's own frame (origin
+    (102.75, 578.75) of the front). The two studs of each terminal lie 15.9 apart on a
+    line at 30.2 degrees, the upper stud to the right. Figure 4 p9 of Issue 05 and Figure
+    44 p111 of the manual draw the same four terminals in the same slant.
+  tilt: >-
+    drawing - each pole is composed turned -30.2 degrees (an anticlockwise turn of 30.2 on
+    the face), the slant Figure 13 p21 measures and Figure 4 p9 shows. No document states
+    the angle as a number. The turn is the composed part's own `rotate` about its centre;
+    the interface's `turns` are the lug's, not the host's.
+  studs: >-
+    datasheet - Table 2 p9: each connector is a "Dual-post connector accepts dual-hole
+    lugs with up to 2 AWG wire". The manual (printed p112, section 6.5.3.1) names the lug
+    as a 2 AWG "1/4 - 5/8" dual-hole copper lug, so the pair is nokia/fx-16-dc-pole@1, the
+    5/8 in. pair. The thread and the nut are not stated and are not claimed.
+  poles: >-
+    datasheet - NFXS-D BA data sheet Issue 05 Table 2 p9 lists the four connectors left to
+    right in the order the shelf prints them: 2 EBAT-A, 3 EBATRET-A, 4 EBATRET-B, 5
+    EBAT-B, and Figure 4 prints "TB1-1 -48V BAT A", "TB1-2 BAT RTN A", "TB1-3 BAT RTN B"
+    and "TB1-4 -48V BAT B" on them. The roles are the manual's words: `batt` for a
+    -48 V battery terminal and `rtn` for a battery return (spec/schemas/dc.yaml). Table 2
+    says each return is "(for EBAT-A)" and "(for EBAT-B)", so feed A is TB1-1 with TB1-2
+    and feed B is TB1-4 with TB1-3, in the order the shelf prints them.
+  voltage: >-
+    datasheet - NFXS-D BA data sheet Issue 05 section 1.5 p13: "a nominal voltage level of
+    -48 Vdc supplied by battery power sources". The range the alarm thresholds bound
+    (section 1.5.4) is not a statement of the input range, so none is stated.
+  rating: >-
+    datasheet - NFXS-D BA data sheet Issue 05 section 1.5.2 p14: each of the two branches
+    is "capable of providing up to 70 A" with "its own battery return", and section 1.5.6
+    gives two dual-pole (2 x 35 A) breakers, "each capable of 70 A per branch". One feed is
+    one branch, so each port states 70.
+  awg: >-
+    datasheet - Table 2 p9, "up to 2 AWG wire", section 1.5.5 "connections for 2 AWG type
+    power cables", and the manual printed p112: "The 7360 ISAM
+    FX-16 requires the use of a 2 AWG power cable". Both state 2 AWG, so each port states
+    [2].
+  cover: >-
+    datasheet - Lightspan Access Node FX Unit Data Sheet Guide 3HH90279AAAATQZZA23 Figure 20 p61
+    and the manual Figures 45 and 47 show a safety cover over the four terminals, labelled "CAUTION: BEFORE REMOVING TERMINAL COVER,
+    DISCONNECT BOTH A AND B POWER SOURCES". The elevation draws the terminals uncovered and
+    that is drawn here; the cover has no part number or dimension in any held document. A gap
+    of the shelf.
+  colour: >-
+    drawing - the nut and post fills the shelf drew before this part moved here, light grey
+    #e8eaec and dark grey #4a5056, from the line art; no photograph is held.
+elements:
+  tb1-1: {at: [0.0, 0.0], size: [25.65, 19.9], class: terminal}
+  tb1-2: {at: [58.95, 0.0], size: [25.65, 19.9], class: terminal}
+  tb1-3: {at: [117.9, 0.0], size: [25.65, 19.9], class: terminal}
+  tb1-4: {at: [176.85, 0.0], size: [25.65, 19.9], class: terminal}
+parts:
+  # one pole per terminal, each turned about its own centre; the centre of a pair is the
+  # midpoint of its two stud centres, (12.825, 9.95) in the first, and the part's own top
+  # left is that centre less (9.6375, 1.7)
+  - {ref: nokia/fx-16-dc-pole@1, id: tb1-1, at: [3.1875, 8.25], rotate: -30.2}
+  - {ref: nokia/fx-16-dc-pole@1, id: tb1-2, at: [62.1375, 8.25], rotate: -30.2}
+  - {ref: nokia/fx-16-dc-pole@1, id: tb1-3, at: [121.0875, 8.25], rotate: -30.2}
+  - {ref: nokia/fx-16-dc-pole@1, id: tb1-4, at: [180.0375, 8.25], rotate: -30.2}
+dc:
+  ports:
+    - id: feed-a
+      direction: input
+      voltage: {nominal: -48}
+      rating-a: 70
+      awg: [2]
+      poles:
+        - {role: batt, slot: tb1-1}
+        - {role: rtn, slot: tb1-2}
+      source: {poles: poles, voltage: voltage, rating-a: rating, awg: awg}
+    - id: feed-b
+      direction: input
+      voltage: {nominal: -48}
+      rating-a: 70
+      awg: [2]
+      poles:
+        - {role: rtn, slot: tb1-3}
+        - {role: batt, slot: tb1-4}
+      source: {poles: poles, voltage: voltage, rating-a: rating, awg: awg}
+connection-points:
+  feed-a: {at: [38.9, 9.95], direction: front}
+  feed-b: {at: [163.6, 9.95], direction: front}
+skins: [default]

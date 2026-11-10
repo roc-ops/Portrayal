@@ -463,7 +463,7 @@ WANT = {"down": 239, "left": 61, "up": 37, "right": 44}   # 228: the MikroTik CR
 # the Nokia SR-1e, SR-2e and SR-3e 10-32 pairs lead down, the SR-12's 1/4-20 pair leads left
 # the Cisco ASR 9000 grounding pad: 13 pair seats on 10 devices (left 7, right 5, up 1)
 # the Amphenol Network Solutions 300CB08 input terminals: four pair seats on each of eight devices, leading down
-WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 30}   # left: one more on each of the four Juniper EX3200
+WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 34}   # left: one more on each of the four Juniper EX3200; right: the four terminals of the Nokia FX-16 shelf, turned 30.2 degrees by their block and named for the nearest right angle
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -512,7 +512,14 @@ HARD_RESIDUAL = {("juniper/mx150", "rear", "ground-studs"): ("left", 1, 0),
                  ("juniper/ex4100-f-24p", "rear", "ground-pair"): ("right", 2, 0),
                  ("juniper/ex4100-f-24t", "rear", "ground-pair"): ("right", 1, 0),
                  ("juniper/ex4100-f-48p", "rear", "ground-pair"): ("right", 2, 0),
-                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0)}
+                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 # the FX-16 shelf's four dual-post terminals stand 58.95 apart on a 30.2 degree slant; the least bad
+                 # way along a pair still lies across the next terminal or its shroud (the elevation's geometry, not
+                 # the rule's)
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-1"): ("right", 1, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-2"): ("right", 2, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-3"): ("right", 1, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-4"): ("right", 1, 0)}
 # the crossings the seat's own direction made, which the default must not.
 # The MX150's second stud is `ground-stud-1` of main, one level into its pair.
 CROSSED_BEFORE = {("supermicro/sys-111e-fwtr", "front", "ground-stud"),
@@ -542,7 +549,7 @@ def census():
                 box = R.occupant_box(seat["mate"], lug, absolute)
                 box0 = R.occupant_box(seat["mate"], lug, seat["rotate"])
                 rows[(slug, v, key)] = dict(
-                    lug=ref, dir=NAMES[(absolute + lead) % 360], turn=t,
+                    lug=ref, dir=NAMES[(round((absolute + lead) / 90) * 90) % 360], turn=t,
                     hard=sum(R._crosses(box, o) for o in seat["obstacles"]),
                     soft=sum(R._crosses(box, o) for o in seat["legends"]),
                     hard0=sum(R._crosses(box0, o) for o in seat["obstacles"]))
