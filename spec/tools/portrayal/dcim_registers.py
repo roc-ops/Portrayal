@@ -229,6 +229,11 @@ NOT_A_DCIM_PORT = {
                                     "barrier strip with its switch and cover, bolted to the rear. "
                                     "Its feeds are the chassis power inputs, stated in the "
                                     "device's power attrs; no connector here has a DCIM type",
+    "nokia/fx-16-dc-terminal-block": "the four -48 V dual-post terminals TB1-1 to TB1-4 of the 7360 "
+                                     "ISAM FX-16 shelf's power distribution unit, two feeds of a "
+                                     "battery and its return. They are the shelf's power inputs, "
+                                     "stated as two DC ports on the part; no terminal here has a "
+                                     "DCIM type",
     "casa/c40g-ac-inlet-panel": "an inlet PANEL - a bolted assembly carrying the receptacles, "
                                 "not a connector; the C40G's own inlets are not modelled yet",
     # `amphenol-ns/output-terminal` and `amphenol-ns/output-p40` were here, as
