@@ -517,6 +517,73 @@ the halves on a released device is a minor, changing the base's `outer`, the
 lid's `hinge` or the half a bay is in is a major, and a corrected `angle` or
 `stands` is a patch.
 
+## A housing with a stepped end
+
+A cast or extruded housing whose end is not a rectangle (a narrower upper
+casting, a flange across the whole depth, a narrower lower casting) states that
+end once as `chassis.section` and draws its six faces as usual. The section is a
+closed list of `[x, y]` points in millimetres in the right face's frame: x across
+the depth from the front, y down the height from the top. It is the outline of
+the whole housing, so the top and bottom edges run along the highest and lowest
+things that stand on the casting. Write it clockwise as the right face looks on
+the page, every edge horizontal or vertical, touching all four sides of the
+`depth` by `height` box, with one edge on the top and one on the bottom. The
+rules are L204 to L207 and what they check is in [lint-rules.md](lint-rules.md);
+the format and what the lock asks for are in
+[format-stability.md](format-stability.md).
+
+```yaml
+chassis:
+  width: 600.0
+  height: 288.0
+  depth: 281.0
+  mount: strand
+  section:
+  - [14.0, 0.0]
+  - [250.0, 0.0]
+  - [250.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 155.0]
+  - [253.0, 155.0]
+  - [253.0, 288.0]
+  - [28.0, 288.0]
+  - [28.0, 155.0]
+  - [0.0, 155.0]
+  - [0.0, 132.0]
+  - [14.0, 132.0]
+provenance:
+  chassis.section:
+    confidence: drawing
+    note: >-
+      the maker's name for the document, its revision and the page with the end view,
+      and how the profile was turned to the way the device is installed
+```
+
+- **The right face is the polygon and the left face is its mirror.** Each is drawn
+  with the casting's outline and the corners the profile leaves empty are
+  transparent. Draw the art of an end face inside the outline, one rectangle for
+  each step is enough. Check: the build's right and left faces are paths, not
+  rectangles, and the picture shows the steps.
+- **Parts stay on the casting.** A part on an end face lies wholly inside its
+  outline; a part on the top or bottom does not straddle a step of the body. Check:
+  L207 is silent.
+- **The box is still the box.** `width`, `height` and `depth` are the housing's
+  bounding box and what the rack fit and the exports read. Check: the section
+  touches all four sides, so L205 is silent.
+- **Not with the other body keys.** A housing with a `section` is not racked and
+  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or
+  `halves`. Check: L206 is silent.
+- **State where the profile came from.** `provenance` keyed `chassis.section`
+  names the document and page, and says so when the drawing had to be turned to the
+  way the device is installed.
+
+**What is not there yet.** Only the two end faces take the shape in this change.
+Ribs or fins on the housing, the 3D body built from the section and the open state
+of a housing with a section come in later changes, so a modeller should not look
+for them: a fin is drawn as art on the face for now, the 3D viewer still builds a
+plain box from the six faces and does not extrude the section, and a device with
+a `section` cannot also state `halves`.
+
 ## Stage 2: the cutouts
 
 Declare every hole in `panel.cutouts` before choosing what goes in it.

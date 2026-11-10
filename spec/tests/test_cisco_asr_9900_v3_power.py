@@ -299,7 +299,8 @@ def test_the_existing_bays_are_unchanged():
     esd = {c["id"] for c in d6["views"]["front"]["panel"]["cutouts"]}
     assert esd == {"power-shelf", "esd"}
     assert d6["views"]["rear"]["components"]["placements"] == [
-        {"ref": "cisco/a9k-ground-pad@1", "id": "ground-pad-rear", "at": [375.0, 566.01], "group": "grounding", "rel-pos": 1}]
+        {"ref": "cisco/a9k-ground-pad@1", "id": "ground-pad-rear", "at": [375.0, 566.01], "group": "grounding", "rel-pos": 1},
+        {"ref": "common/esd-jack@1", "id": "esd-jack-rear", "at": [337.3, 598.3], "for": "chassis", "group": "grounding", "rel-pos": 3}]
     for doc in (d6, d10):
         slots = [k for k in doc["configurations"]["base"]["bays"] if k.startswith("slot-")]
         assert all(doc["configurations"]["base"]["bays"][k] == "cisco/a9k-slot-cover@1" for k in slots)
@@ -313,7 +314,7 @@ def test_the_power_group_is_declared_and_the_rear_is_still_undrawn_for_power(nam
         assert g["term"] == "PM" and g["role"] == "service"
         assert g["physical-context"] == "Power Module"
     # devicelock: "This change needs at least a major bump" - the shelf cutouts moved and grew
-    assert doc["version"] == {"asr-9906": "2.1.0", "asr-9910": "2.1.1"}[name]
+    assert doc["version"] == {"asr-9906": "2.2.2", "asr-9910": "2.1.1"}[name]
     rear_ids = {b["id"] for b in doc["views"]["rear"]["components"].get("bays", [])}
     assert not any("pm" in i for i in rear_ids)
 

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mx2000-cb-re-128g-v
-version: 2.0.0
+version: 2.1.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -37,17 +37,45 @@ provenance:
   face: 'photo - the jack stack resolves as RJ45 pairs, a USB and an SFP
     cage on the studio photograph; per-jack legends are below its
     resolution and are summarised - see the device gaps'
+  groups: >-
+    Juniper Networks, MX2010 Universal Routing Platform Hardware Guide (published 2025-11-17),
+    'REMX2K-X8-128G CB-RE Components' (printed page 95, Figure 44): the front-panel tables and
+    figures name the 'AUX', 'CONSOLE' and 'MGMT' ports, a USB port, the external-clock ports and
+    'XGE-0' and 'XGE-1', and the text says each CB-RE has 'one 10/100/1000-Mbps Ethernet port'
+    for the management network; the pinout section prints the same of 'MGMT' (printed page 236).
+    So the MGMT jack carries `speed: 1g` (the highest native rate of a 10/100/1000 jack) and the
+    two serial jacks are typed rj45-serial, the BITS jack rj48, as the sibling CB-RE states
+    them. Figure 44 labels the ports AUX, CONSOLE, MGMT, USB, XGE-0 and XGE-1 and EXTCLK0 and
+    EXTCLK1. The guide says the XGE ports 'provide support for hardware diagnostics and JCS
+    port testing' (printed page 96): the management SFP joins the management group as the
+    sibling board's does and states no rate. The role follows the job: the page names no role for the ports, and the role
+    is management because a board's console, auxiliary, management Ethernet, USB and
+    external-clock jacks are how the box is reached and disciplined.
 states:
 - ok
 - fail
 - absent
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 0
+    mixed: >-
+      the Routing Engine management cluster - the out-of-band Ethernet jack, the RJ-45 serial
+      ports and the USB service port. One job (reaching and disciplining the box), several media
+  timing:
+    term: Port
+    role: management
+    index-origin: 0
+    description: >-
+      the BITS external clock jack
 parts:
-- {ref: std/rj45@2, id: console, at: [9.19, 55.4], rotate: 90, attrs: {function: serial console}}
-- {ref: std/rj45@2, id: aux, at: [9.19, 78.4], rotate: 90, attrs: {function: auxiliary console}}
-- {ref: common/rj45-eth@1, id: mgmt, at: [9.19, 118.4], rotate: 90, attrs: {function: out-of-band management}}
-- {ref: std/rj45@2, id: bits, at: [9.19, 141.4], rotate: 90, attrs: {function: BITS timing}}
-- {ref: std/usb-a@1, id: usb, at: [14.84, 230.0], attrs: {function: USB service port}}
-- {ref: std/sfp@1, id: sfp-mgmt, at: [9.09, 262.0], rotate: 90, attrs: {function: management SFP}}
+- {ref: std/rj45@2, id: console, group: mgmt, at: [9.19, 55.4], rotate: 90, attrs: {media: rj45-serial, function: serial console}}
+- {ref: std/rj45@2, id: aux, group: mgmt, at: [9.19, 78.4], rotate: 90, attrs: {media: rj45-serial, function: auxiliary console}}
+- {ref: common/rj45-eth@1, id: mgmt, group: mgmt, at: [9.19, 118.4], rotate: 90, attrs: {speed: 1g, media: rj45, function: out-of-band management}}
+- {ref: std/rj45@2, id: bits, group: timing, at: [9.19, 141.4], rotate: 90, attrs: {media: rj48, function: BITS timing}}
+- {ref: std/usb-a@1, id: usb, group: mgmt, at: [14.84, 230.0], attrs: {function: USB service port}}
+- {ref: std/sfp@1, id: sfp-mgmt, group: mgmt, at: [9.09, 262.0], rotate: 90, attrs: {function: management SFP}}
 size:
   w: 43.18
   h: 412.1

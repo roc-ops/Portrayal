@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-1mtp12-sc-os2-a
-version: 3.0.2
+version: 3.1.0
 class: cassette
 behaviour: fills
 description: >-
@@ -37,13 +37,22 @@ body:
   # - see its own size-notes. It is what a pulled cassette's box is drawn as,
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 6 SC duplex adapters on the front face, OS2 single-mode SC, 12 fibres, Type A,
+      passive
 parts:
-  - {id: sc1, ref: common/sc-duplex-adapter@5, at: [17.36, 4.825]}
-  - {id: sc2, ref: common/sc-duplex-adapter@5, at: [30.09, 4.825]}
-  - {id: sc3, ref: common/sc-duplex-adapter@5, at: [43.24, 4.825]}
-  - {id: sc4, ref: common/sc-duplex-adapter@5, at: [56.22, 4.825]}
-  - {id: sc5, ref: common/sc-duplex-adapter@5, at: [69.21, 4.825]}
-  - {id: sc6, ref: common/sc-duplex-adapter@5, at: [82.45, 4.825]}
+  - {id: sc1, group: adapters, ref: common/sc-duplex-adapter@5, at: [17.36, 4.825]}
+  - {id: sc2, group: adapters, ref: common/sc-duplex-adapter@5, at: [30.09, 4.825]}
+  - {id: sc3, group: adapters, ref: common/sc-duplex-adapter@5, at: [43.24, 4.825]}
+  - {id: sc4, group: adapters, ref: common/sc-duplex-adapter@5, at: [56.22, 4.825]}
+  - {id: sc5, group: adapters, ref: common/sc-duplex-adapter@5, at: [69.21, 4.825]}
+  - {id: sc6, group: adapters, ref: common/sc-duplex-adapter@5, at: [82.45, 4.825]}
 faces:
   rear: {ref: fs/fhd-1mtp12-sc-rear@3}
 optical:
@@ -181,4 +190,18 @@ provenance:
     stays an assumption; the colour is corroboration, not the source. A
     green flange in a face-on photograph of a real SC APC FHD panel, or a
     datasheet that names 57058 "SC UPC" outright, would settle it.
+  groups: >-
+    FS FHD MTP-12/24 Cassettes Datasheet, page 2 (section I: front connector LC/SC duplex, rear
+    connector MTP adapters, polarity types) and page 12 (ordering table: front connector SC
+    duplex, and the note "SC Adapter: 12-Fiber only"); FS Modular Cabling System Guide, page 7:
+    the table row "12F, OS2 SMF, Type A, #57058, FHD-1MTP6SCDOS2A", whose part number reads one
+    MTP-12 to six SC duplex, as the same guide's LC cassettes read. The datasheet's ordering
+    table does not list this SKU; the adapter count is that part number's six and the contract's
+    own face, which draws the same six. The datasheet prints the fibre mode and the polarity and
+    no data rate, and names no role for the adapters; the role follows the job, a through
+    connection a patch cord is plugged into, so it is traffic, and no speed is stated. The
+    group's media is the adapters' own, fiber. The polish is not printed per cassette and the
+    group does not state it; optical.polish stays the contract's own marked assumption. The
+    polarity stays in optical.polarity. The rear face holds the cassette's MTP adapter and takes
+    its own group.
 skins: [default]
