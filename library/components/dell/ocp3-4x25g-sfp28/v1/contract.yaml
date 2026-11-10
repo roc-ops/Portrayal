@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ocp3-4x25g-sfp28
-version: 1.1.0
+version: 1.2.0
 class: nic
 behaviour: fills
 profile: server
@@ -53,15 +53,28 @@ provenance:
     4 x SFP28 from another vendor, StorageReview -01.jpg) has a lamp column and
     printed numbers, which shows that vendors differ here and that this card's
     own printing is not in hand.
+  groups: >-
+    Dell, PowerEdge R660 Technical Guide, 'Supported OCP cards' (Table 12, printed pages 21 and 22):
+    each OCP 3.0 row gives a card's port type, port speed and port count, here port type 'SFP28',
+    port speed '25 GbE' and port count '4', so the four ports of the card are one kind at one rate.
+    The role is traffic. The guide prints no label for an individual port, so the group numbers the
+    ports as the part ids do, from 1. The vendors the table lists for the row are not named here.
 size: {w: 71.8, h: 15.1, d: 115.0}
 plan: {ref: dell/ocp3-sff-plan@1}
 size-confidence: {w: measured, h: measured, d: measured}
 body:
   depth: 115.0
   color: '#b8bdc2'
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp28, speed: 25g}
+    description: the four 25 GbE SFP28 ports of the card, numbered 1 to 4 as the part ids number them
 parts:
-  - {ref: std/sfp-ganged@1, id: port-1, at: [7.38, 3.17], attrs: {media: sfp28, speed: 25g}}
-  - {ref: std/sfp-ganged@1, id: port-2, at: [21.63, 3.17], attrs: {media: sfp28, speed: 25g}}
-  - {ref: std/sfp-ganged@1, id: port-3, at: [35.88, 3.17], attrs: {media: sfp28, speed: 25g}}
-  - {ref: std/sfp-ganged@1, id: port-4, at: [50.13, 3.17], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-1, group: ports, at: [7.38, 3.17], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-2, group: ports, at: [21.63, 3.17], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-3, group: ports, at: [35.88, 3.17], attrs: {media: sfp28, speed: 25g}}
+  - {ref: std/sfp-ganged@1, id: port-4, group: ports, at: [50.13, 3.17], attrs: {media: sfp28, speed: 25g}}
 skins: [default]

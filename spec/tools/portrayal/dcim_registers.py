@@ -193,6 +193,9 @@ NOT_A_DCIM_PORT = {
                                         "inputs and a relay output (NO, COM, NC) on a six-pole pluggable "
                                         "terminal, not a network port or a console. Neither library has an "
                                         "alarm port",
+    "vertiv/acs800-digital-out": "the Avocent ACS800's DIGITAL OUT connector - two relay switches of two "
+                                 "pins each on a four-pin pluggable terminal, not a network port or a "
+                                 "console. Neither library has a relay output port",
     "juniper/ex4100-h-terminal-pad": "one of the twelve wire terminals behind the EX4100-H-24MP and -24F "
                                      "terminal door - L, N and G for an AC supply, DC+, DC- and G for a DC "
                                      "supply, for the supply slot of the same number. One terminal is not a "

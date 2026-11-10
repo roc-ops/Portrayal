@@ -46,6 +46,7 @@ from portrayal import capability
 from portrayal import ears as ears_mod
 from portrayal import halves as _halves
 from portrayal import bevel as _bevel
+from portrayal import section as _section
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
 TOOL_VERSION = "0.2.0"
@@ -2782,6 +2783,33 @@ def bevel_face(svg, faceplate, ch, face, w, h):
         strip.set("stroke", ch.get("edge", "#22262a")); strip.set("stroke-width", "0.25")
 
 
+def section_face(faceplate, ch, face, w, h):
+    """Draw a housing's end profile on its left and right faces.
+
+    `chassis.section` is the profile in the right face's frame. The faceplate
+    becomes a <path> of the polygon with the same id, which is all relief.js and
+    the kit look it up by, and the rest of the face is left unpainted: transparent
+    corners, as a sheet body's face is. The left face is the polygon mirrored in x
+    with the winding reversed (section.outline). The front, rear, top and bottom
+    keep the full rectangle.
+
+    A bevelled face is a convex solid and bevel_face takes its outline from a hull;
+    a stepped profile is not convex, so the path is the polygon's own points in
+    order, which is all a path of straight edges needs. L206 refuses a section
+    with a bevel, so the two never meet.
+    """
+    pts = _section.points(ch)
+    if pts is None or face not in _section.END_FACES:
+        return
+    if (w, h) != (ch["depth"], ch["height"]):
+        return       # L205 refuses an end face drawn at another size
+    faceplate.tag = f"{{{SVG_NS}}}path"
+    for k in ("x", "y", "width", "height", "rx"):
+        faceplate.attrib.pop(k, None)
+    outline = _section.outline(face, pts, ch["depth"])
+    faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
+
+
 def _shift_heights(node, by):
     """Move a node's absolute heights by `by` mm: its `out`, and its profile.
 
@@ -3018,6 +3046,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     if not sheet:
         faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
+    section_face(faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
     palette = {}
@@ -6437,6 +6466,10 @@ def main():
                              # so the site reads one file (#907)
                              **({"kits": published_kits(ch["kits"], lib)}
                                 if ch.get("kits") else {}),
+                             # the end profile of a stepped housing, as
+                             # written; absent on a box
+                             **({"section": [list(p) for p in ch["section"]]}
+                                if ch.get("section") else {}),
                              # the two halves of a box that opens, as written;
                              # absent on a box that does not
                              **({"halves": _halves.published(device)} if _halves.declared(device) else {})},

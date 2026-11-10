@@ -716,6 +716,22 @@ RULES = {
              "correct a `stands` against its source, or the chassis dimension, or state in `provenance` why the closed box is taller than its two shells",
              "Two halves that do not add up to the box they make mean one of the three figures is wrong, and a viewer that opens the lid by the stated stands would leave a gap or an overlap at the seam.",
              WARNING),
+    "L204": ("device", "a housing's `chassis.section` is a polygon the end faces can be drawn from: a closed list of points with no repeated point, no vertex on a straight run, no edge that crosses another, every edge axis-aligned, and clockwise with y down by the sign of its area (error)",
+             "list the corners of the end profile once each, in order, clockwise as the right end face is seen with y down; an edge that is not horizontal or vertical is approximated by steps",
+             "A polygon that crosses itself, doubles back or winds the wrong way has no inside that is the same for every reader, so the end face, the body built from it and the test for a part on it would each pick their own.",
+             ERROR),
+    "L205": ("device", "a housing's `chassis.section` fills the box it is the profile of: inside the `depth` by `height` box, touching all four of its sides, with exactly one edge on the top side and one on the bottom side, and each end face drawn at the chassis's own size (error)",
+             "bring the points inside the box or out to its sides, make the top and the bottom one run each, and drop a `size` on a left or right view that differs from the depth and height",
+             "The box is what the rack, the exports and the lock read, so a profile that does not reach its sides, or notches its top, is a body that is not the size the device states, and an end face drawn at another size puts the outline where the parts are not.",
+             ERROR),
+    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or `halves` (error)",
+             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body, a sheet body and a box that opens each have a way of being drawn that a stepped end does not yet join",
+             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first, and a box that opens has no stated way to cut a stepped housing at its seam.",
+             ERROR),
+    "L207": ("device", "on a device with a `chassis.section`, a part on the left or right face lies wholly inside that face's outline, and a part on the top or bottom face does not straddle a step of the body (error)",
+             "move the part onto the casting it belongs to, away from the transparent corner or the edge of a step; the left face is the right face's mirror",
+             "A port, a bay or a cutout in a corner the profile does not fill is a part floating in air, and one across a step stands partly on a casting and partly on the flange, so no height can be right for the whole of it.",
+             ERROR),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -8943,6 +8959,85 @@ def lint_device_halves(path, data):
                                         "view states a `half`: the open drawing says nothing of it")
 
 
+# THE CODES OF THE SECTION RULES BY WHAT THEY JUDGE, for the test that reads
+# them. The calls below spell each code out, because the severity guard reads
+# literals; test_chassis_section.py holds the two in step.
+SECTION_CODES = {"polygon": "L204", "fit": "L205", "kind": "L206", "parts": "L207"}
+
+
+def lint_device_section(path, data, lib_roots):
+    """L204-L207: a housing's end profile is a polygon the faces can be drawn
+    from, it fills the box, it is stated where it can be drawn, and parts sit on
+    the casting (docs/modelling-a-device.md, "A housing with a stepped end").
+
+    The schema checks only that `section` is a list of number pairs. What a
+    polygon has to be, to be an outline, is judged here from portrayal.section,
+    the one place that reads it.
+    """
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    if "section" not in ch:
+        return
+    pts = _section.points(ch)
+    if pts is None:
+        return                  # the schema reports a section that is not number pairs
+    for m in _section.polygon_problems(pts):
+        err(path, "L204", f"`chassis.section`: {m}")
+    w, h, d = ch.get("width"), ch.get("height"), ch.get("depth")
+    if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (w, h, d)):
+        return
+    for m in _section.box_problems(pts, d, h):
+        err(path, "L205", f"`chassis.section`: {m}")
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        size = view.get("size")
+        if (view.get("face") or vname) in _section.END_FACES and size and (
+                abs(size["w"] - d) > 0.01 or abs(size["h"] - h) > 0.01):
+            err(path, "L205", f"{vname}: the view is {size['w']:g} x {size['h']:g} but the "
+                              f"chassis draws this end face {d:g} x {h:g}: an end face of a "
+                              "housing with a section is drawn at the chassis's own size")
+    mount = ch.get("mount", "rack")
+    if mount in ("rack", "rack-face", "rack-side"):
+        err(path, "L206", f"`chassis.section` is stated on a {mount!r} device: a housing with a "
+                          "stepped end is not racked")
+    for key in ("bevel", "rounded", "ears", "overhang", "kits", "halves"):
+        if ch.get(key):
+            err(path, "L206", f"`chassis.section` is stated with `chassis.{key}`, which this "
+                              "version does not join to a stepped end")
+    if ch.get("shell") == "sheet":
+        err(path, "L206", "`chassis.section` is stated with `chassis.shell: sheet`, which this "
+                          "version does not join to a stepped end")
+    if _section.polygon_problems(pts) or _section.box_problems(pts, d, h):
+        return                  # the rest reads a polygon that is one
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        face = view.get("face") or vname
+        if face not in _section.END_FACES + _section.LEVEL_FACES:
+            continue
+        vp = view_parts(view)
+        boxes = []
+        for q in vp["placements"]:
+            if not q.get("at") or q.get("behind"):
+                continue
+            sz = _instance_size(q.get("ref"), lib_roots)
+            if sz:
+                boxes.append((q.get("id", "?"), facets.projected_box(q["at"], *sz, q.get("rotate"), None)))
+        for kind in ("bays", "cutouts"):
+            for q in vp[kind]:
+                at, sz = q.get("at"), q.get("size")
+                if at and isinstance(sz, dict) and "w" in sz:
+                    boxes.append((q.get("id", kind[:-1]), (at[0], at[1], at[0] + sz["w"], at[1] + sz["h"])))
+        outline = _section.outline(face, pts, d)
+        for pid, (x0, y0, x1, y1) in boxes:
+            if outline is not None and not _section.contains_box(outline, (x0, y0, x1, y1)):
+                err(path, "L207", f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}) is not "
+                                  "wholly inside the outline of this end face: parts sit on the "
+                                  "casting, not in a corner the profile leaves empty")
+            elif outline is None and _section.straddles_step(pts, face, d, y0, y1):
+                err(path, "L207", f"{vname}/{pid}: rows {y0:.2f} to {y1:.2f} run over a step of "
+                                  "the body: a part sits on one level of the casting")
+
+
 def _is_kit(ref, lib_roots):
     """Whether a ref names a `kind: kit` contract. False for a ref that does not
     resolve - that is L5's or L10's own finding, not this one."""
@@ -14964,6 +15059,7 @@ def main():
                 lint_device_mount(f, d)
                 lint_device_poe_pd(f, d)
                 lint_device_halves(f, d)
+                lint_device_section(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

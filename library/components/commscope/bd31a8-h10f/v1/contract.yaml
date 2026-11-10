@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bd31a8-h10f
-version: 1.0.0
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -52,26 +52,46 @@ provenance:
   optical-order: >-
     estimated - the photograph does not number the LC outputs. They are paired left to
     right, 1-2, 3-4, 5-6 and 7-8, the order the RF jacks are numbered in.
+  groups: >-
+    datasheet - HT3580H data sheet (2024), p5, BD31A8-100 Quad-Density Back Plates: the H10F
+    plate supports eight separate optical output LC/APC connectors; the p5 photograph shows four
+    duplex adapters. Role traffic: the transmitters' optical outputs. The sheet prints no data
+    rate. datasheet - HT3580H data sheet (2024), p5: the H10F plate provides 1 common BC input
+    and 8 separate NC RF inputs, F-type; the photograph numbers the jacks and marks BC. Role
+    traffic: the transmitters' RF inputs. The sheet prints a passband and no data rate.
 elements:
   screw-top-1: {at: [8.28, 0.0], size: [9.2, 9.2], class: fastener}
   screw-top-2: {at: [35.04, 0.0], size: [9.2, 9.2], class: fastener}
   fan: {at: [2.7, 33.4], size: [40.0, 40.0], class: vent}
   screw-bottom-1: {at: [8.28, 121.0], size: [9.2, 9.2], class: fastener}
   screw-bottom-2: {at: [35.04, 121.0], size: [9.2, 9.2], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the duplex LC/APC adapters of a quad-density transmitter back plate, each carrying two optical outputs; the data sheet states no data rate
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f}
+    description: the F-type RF inputs of a quad-density transmitter back plate, one broadcast and eight narrowcast; the data sheet states no data rate
 parts:
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, at: [4.96, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, at: [14.56, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-5-6, at: [28.26, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: common/lc-duplex-v-adapter@6, id: optical-7-8, at: [38.06, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
-  - {ref: std/f-type@1, id: rf-nc-1, at: [1.95, 89.35], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-2, at: [1.95, 107.05], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-3, at: [14.85, 81.15], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-4, at: [14.85, 97.45], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-bc, at: [14.85, 114.55], attrs: {role: rf-input-broadcast}}
-  - {ref: std/f-type@1, id: rf-nc-5, at: [27.65, 87.95], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-6, at: [27.65, 104.95], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-7, at: [40.45, 79.05], attrs: {role: rf-input-narrowcast}}
-  - {ref: std/f-type@1, id: rf-nc-8, at: [40.45, 95.45], attrs: {role: rf-input-narrowcast}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-1-2, group: optical, at: [4.96, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-3-4, group: optical, at: [14.56, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-5-6, group: optical, at: [28.26, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: common/lc-duplex-v-adapter@6, id: optical-7-8, group: optical, at: [38.06, 13.62], attrs: {role: optical-output, connector: LC/APC, housing-finish: '#2fa84f'}}
+  - {ref: std/f-type@1, id: rf-nc-1, group: rf, at: [1.95, 89.35], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-2, group: rf, at: [1.95, 107.05], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-3, group: rf, at: [14.85, 81.15], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-4, group: rf, at: [14.85, 97.45], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-bc, group: rf, at: [14.85, 114.55], attrs: {role: rf-input-broadcast}}
+  - {ref: std/f-type@1, id: rf-nc-5, group: rf, at: [27.65, 87.95], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-6, group: rf, at: [27.65, 104.95], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-7, group: rf, at: [40.45, 79.05], attrs: {role: rf-input-narrowcast}}
+  - {ref: std/f-type@1, id: rf-nc-8, group: rf, at: [40.45, 95.45], attrs: {role: rf-input-narrowcast}}
 connection-points:
   mate: {at: [26.26, 65.1], direction: front}
 skins: [default]
