@@ -320,6 +320,13 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The Catalyst 2960-S RPS receptacle: the @2 draws the screw holes, the dark top edge and the contacts and is
     # seated by the 2960-S switches; the @1, drawn as it was, stays for a saved rack or a manifest that names it.
     kept["cisco/rps2300-connector"] = [1, 2]
+    # The Juniper MX240 normal-capacity AC supply redrawn from its guide's figure: the MX240's `ac` configuration seats the
+    # @2, and its supply bays still accept the @1, drawn as it was and `superseded-by` the @2.
+    kept["juniper/mx240-psu-ac"] = [1, 2]
+    # The ASR 9906 fabric card: the @2 is the plate width the chassis' rear cage holds five of, seated by the
+    # ASR 9906; the @1, drawn at the slot envelope that does not fit five slots, stays for a saved rack or a
+    # manifest that names it, `superseded-by` the @2.
+    kept["cisco/a99-sfc3-t"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):

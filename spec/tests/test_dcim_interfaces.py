@@ -485,14 +485,16 @@ def test_a_device_whose_supply_carries_the_inlet_exports_none_itself():
 # piece of hardware.
 
 def test_a_chassis_timing_jack_says_what_it_is():
-    """The ASR 9001's two SYNC jacks and its ToD port. `other` alone would say
-    only that a port exists; `other` + SYNC says what to plug into it."""
+    """The ASR 9001's two SYNC jacks, its ToD port and its two DIN 1.0/2.3 clock
+    jacks. `other` alone would say only that a port exists; `other` + SYNC says
+    what to plug into it."""
     d = _export("ASR 9001 Router")
     if d is None:
         pytest.skip("the ASR 9001 is not in this library")
     timing = {i["name"]: i.get("label") for i in (d.get("interfaces") or [])
               if i["type"] == "other"}
-    assert timing == {"sync-0": "SYNC", "sync-1": "SYNC", "tod": "TOD"}
+    assert timing == {"clk-10mhz": "1.0/2.3", "clk-1pps": "1.0/2.3",
+                      "sync-0": "SYNC", "sync-1": "SYNC", "tod": "TOD"}
 
 
 def test_the_two_passes_agree_about_std_smb():
