@@ -36,7 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat } from './section.js';
+import { sectionBody, sectionSeat, seatPoint } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -647,7 +647,7 @@ export function createViewer(container, opts = {}) {
     // device with no section, or one the body cannot be built from, is handed
     // none and is placed on the flat planes
     const seatPoly = COMP ? null : sectionSeat(devIndex && devIndex.chassis, W, H, D);
-    const seatSection = seatPoly && {polygon: seatPoly, W, H, D};
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,

@@ -262,15 +262,19 @@ def src(name):
 def test_the_viewer_hands_relief_the_section_it_builds_the_body_from():
     code = src("viewer3d.js")
     assert "sectionSeat" in code
-    assert re.search(r"buildFaceRelief\(F, \{[^}]*section: ", code, re.S)
+    assert re.search(r"buildFaceRelief\(F, \{[^}]*section: seatSection", code, re.S)
 
 
 def test_relief_builds_each_part_in_a_group_moved_by_its_seat():
     code = src("relief.js")
     assert "partSeats(" in code
     assert "seatGroup" in code
-    # the seat is read from the part's centre on the flat plane, through the face's own frame
-    assert "seatPoint(" in code
+    # the seat is read from the part's centre on the flat plane, through the face's own frame, by
+    # the function the viewer hands in: relief.js imports nothing new, so the tests that copy it
+    # next to its few imports keep working
+    assert "ctx.section.seat(F.view, seatFrame.world(" in code
+    assert "from './section.js'" not in code
+    assert "seatPoint(seatPoly" in src("viewer3d.js")
 
 
 def test_the_tests_script_checks_nothing_new_because_section_js_is_already_in_it():

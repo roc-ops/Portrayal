@@ -13,7 +13,6 @@
 import { paintFields, unpaintFields, paintAdjustments } from './fields.js';
 import { paintDisplays } from './displays.js';
 import { boundLamps, expandStates } from './states.js';
-import { seatPoint } from './section.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -3652,19 +3651,20 @@ export async function buildFaceRelief(F, ctx) {
     const sideMats = c => Array.from({length: 6},
       () => new THREE.MeshLambertMaterial({color: c}));
     // A PART OF A STEPPED HOUSING STANDS ON THE FACET UNDER IT (partSeats,
-    // section.js). `ctx.section` is the published polygon with the chassis
-    // size, present only when the body is built from it; without it every seat
-    // is 0 and a part is built on the flat plane as it always was. The centre of
-    // a part on the flat plane is taken to the scene through this face's own
-    // frame, so a flipped face (the underside) reads the same column.
+    // section.js). `ctx.section.seat(view, p)` is handed in by the viewer, which
+    // owns the polygon: how far the casting under the scene point `p` of a face's
+    // flat plane stands from it. It is present only when the body is built from
+    // a section; without it every seat is 0 and a part is built on the flat plane
+    // as it always was. The centre of a part on the flat plane is taken to the
+    // scene through this face's own frame, so a flipped face (the underside)
+    // reads the same column.
     const seatFrame = ctx.section
       ? faceFrame({pos: F.pos(), rot: F.rot, flipLX: !!F.flipLX, flipLY: !!F.flipLY}, fw, fh) : null;
     const seatRect = (owner, e) => { const p = e.proj || e; return {owner, x: p.x, y: p.y, w: p.w, h: p.h}; };
     const seatFor = partSeats(
       [...[...cavities, ...outs, ...domes].map(e => seatRect(e.owner, e)),
        ...frus.map(f => seatRect(f.path, f))],
-      seatFrame && ((cx, cy) => seatPoint(ctx.section.polygon, F.view, seatFrame.world(cx, cy, 0),
-                                          ctx.section.W, ctx.section.H, ctx.section.D)));
+      seatFrame && ((cx, cy) => ctx.section.seat(F.view, seatFrame.world(cx, cy, 0))));
     // the offset of an entry (owned by its `owner`), and of a FRU (owned by its own path)
     const seatOf = e => seatFor(seatRect(e.owner, e));
     const seatOfFru = f => seatFor(seatRect(f.path, f));
