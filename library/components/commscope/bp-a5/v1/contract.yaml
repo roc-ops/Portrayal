@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: bp-a5
-version: 1.0.1
+version: 1.1.0
 class: coupler
 behaviour: fills
 profile: optical
@@ -36,14 +36,34 @@ provenance:
     composed beside them, which are the ports and present the registered
     interface sc, so a drawn port stood on the face that presented none.
     Ids, positions, sizes and the skin are unchanged.
+  groups: >-
+    datasheet - AR3002E data sheet (2022), p2, RF and Optical Interface: the optical connector,
+    SC/APC, is at back plate BP-A5. No page held draws a BP-A5, so its one optical port is
+    placed by the connector alone. Role traffic: it carries the receiver's optical input. The
+    sheet prints no data rate. datasheet - AR3002E data sheet (2022), p2: the RF output, F-type
+    female, is at back plate BP-A5. Role traffic: it carries the receiver's RF output. The sheet
+    prints a passband and no data rate.
 elements:
   screw-top: {at: [7.98, 1.5], size: [9.8, 9.8], class: fastener}
   fan-grille: {at: [3.0, 30.0], size: [19.76, 25.0], class: vent}
   optical-in: {at: [6.2, 61.5], size: [13.36, 13.0], class: adapter}
   screw-bottom: {at: [7.98, 118.9], size: [9.8, 9.8], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the SC/APC optical input of a forward receiver back plate; the data sheet states no data rate
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f}
+    description: the F-type RF output of a forward receiver back plate; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: optical-in-bore, at: [8.69, 64.0], attrs: {role: optical-input, connector: SC/APC}}
-  - {ref: std/f-type@1, id: rf-out, at: [8.03, 78.0], attrs: {role: rf-output}}
+  - {ref: std/sc-bore@1, id: optical-in-bore, group: optical, at: [8.69, 64.0], attrs: {role: optical-input, connector: SC/APC}}
+  - {ref: std/f-type@1, id: rf-out, group: rf, at: [8.03, 78.0], attrs: {role: rf-output}}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
