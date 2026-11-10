@@ -83,7 +83,10 @@ def test_one_maker_part_number_is_one_component():
         model = str((yaml.safe_load(path.read_text()).get("attrs") or {}).get("model", ""))
         if model.startswith("EX-UM-"):
             seen.setdefault(model, []).append(path.parent.parent.name)
-    assert {m: sorted(v) for m, v in seen.items()} == {MODULES[c][0]: [c] for c in MODULES}
+    # the five EX4300 modules (test_juniper_ex4300_uplink_modules.py) are components of their own
+    ex4300 = ["ex-um-2qsfp", "ex-um-2qsfp-mr", "ex-um-4sfpp-mr", "ex-um-4x4sfp", "ex-um-8x8sfp"]
+    want = {MODULES[c][0]: [c] for c in MODULES} | {c.upper(): [c] for c in ex4300}
+    assert {m: sorted(v) for m, v in seen.items()} == want
 
 
 @pytest.mark.parametrize("fam,dev", ALL)
