@@ -7,6 +7,6 @@
 
 ### Changed
 - The uplink slot of the four EX3200 and seven EX4200 devices (`ex3200-24t`, `-48t`, `-24p`, `-48p`; `ex4200-24t`, `-48t`, `-24p`, `-48p`, `-24px`,
-  `-48px`, `-24f`) takes the modules as well as its cover panel; the cover is still what ships. Each takes a minor, with its lock and the module-bay
-  text and drawing version line of its exported device types. The EX3200-24T and EX4200-24T gain four `example` configurations, one for each module, so that a face
+  `-48px`, `-24f`) takes the modules as well as its cover panel; the cover is still what ships. Each takes a minor version, and the module-bay
+  text and drawing version line of its exported device types change with it. The EX3200-24T and EX4200-24T gain four `example` configurations, one for each module, so that a face
   shows it; they are illustrations and add no exported device type. The `uplink-modules` gap goes from every layout.
