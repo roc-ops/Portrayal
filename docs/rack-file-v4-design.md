@@ -2064,7 +2064,7 @@ for a 400G QSFP-DD AOC, which takes the default. `rack-cable-colour.mjs` and
 
 The named types that state a jacket are the ones with a `jacket` entry in
 `spec/schemas/cable-types.yaml`; each entry says what it was read from. Besides
-the Siemon AOC they are the two Cisco StackPower cables (`#304548`, counted on
+the Siemon AOC they are the Cisco StackPower cables (`#304548`, counted on
 the guide's product image, which is shaded and not a studio photograph).
 
 ### 14.6 Not built
