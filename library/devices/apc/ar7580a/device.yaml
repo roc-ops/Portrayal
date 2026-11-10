@@ -1,0 +1,336 @@
+format: 1
+kind: device
+name: ar7580a
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AR7580A
+description: 'Vertical cable manager for a 750 mm wide, 42U NetShelter SX cabinet, APC AR7580A: a back plate 1778
+  mm tall with a column of 40 smooth plastic fingers down each side of one cable channel, a finger to each rack
+  unit, made of two 20U lengths. It stands in the cabinet''s zero-U space and takes no rack unit.'
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: 'datasheet - `rack-side`: "Number of rack unit 0U", "Mounting Location Front, Rear". The installation
+      sheet hooks the plate onto the cabinet''s accessory channel with support plate and screws. `ru: 40` is the
+      1778 mm in rack units. Which side is a placement''s to say.'
+  method:
+    confidence: datasheet
+    note: 'FIGURES FROM THE MAKER''S OWN DOCUMENTS, read as data: the AR7580A data sheet and its installation sheet.
+      Height, width, depth and weight are `datasheet`; the finger size and the split of the depth are ESTIMATED.
+      No drawing or photograph is copied.'
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 97 x 1778 x 160: "Width 3.8 in (97 mm)", "Height 70 in (1778 mm)", "Depth 6.3 in (160 mm)".'
+  depth:
+    confidence: estimated
+    note: estimated - the 160 is the data sheet's; it is drawn as a 20 back plate zone and a 140 well. No view sections
+      the part.
+  shell:
+    confidence: estimated
+    note: 'estimated - a hollow channel, not a box: the back plate as a well, the 80 fingers standing off its floor.'
+  thickness:
+    confidence: estimated
+    note: estimated - no document states a gauge; the parts carry their own.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Net Weight 9.02 lb(US) (4.09 kg)" for the part as sold (two lengths); packed 4.91 kg.
+  front:
+    confidence: estimated
+    note: 'estimated - the working face: the back plate with its 40 fingers a side in two lengths of 20, and the
+      channel between.'
+  rear:
+    confidence: estimated
+    note: estimated - the back of the plate, which stands against the cabinet; plain (see `gaps`).
+  top:
+    confidence: estimated
+    note: 'estimated - the plan: the back plate zone and the two finger columns.'
+  bottom:
+    confidence: estimated
+    note: estimated - the plan again.
+  left:
+    confidence: estimated
+    note: estimated - the back plate and the finger zone along it.
+  right:
+    confidence: estimated
+    note: estimated - the left view turned round.
+  guides:
+    confidence: estimated
+    note: estimated - the duct is the channel between the two finger columns, run down the height; the pitch is
+      the rack unit of the data sheet's "1U increments", the gap the pitch less the 31 mm finger.
+  capacity:
+    confidence: datasheet
+    note: datasheet - no cable capacity is stated (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: 'datasheet - "Color: Black", the provided equipment (installation guide, mounting hardware, six cable
+      retainers with snap hinges, top securing bracket).'
+  color:
+    confidence: estimated
+    note: 'estimated - "Color: Black". The shade is the library''s render of black plastic.'
+attrs:
+  physical:
+    weight-kg: 4.09
+    finger-material: plastic
+    color: Black
+    mounting-hardware: Support plate x1, 6 mm screw x5, spacer x4 (installation sheet)
+chassis:
+  width: 97.0
+  height: 1778.0
+  depth: 160.0
+  ru: 40
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 4.09
+  color: '#232527'
+gaps:
+- what: finger-shape
+  scope:
+  - front
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  note: the installation sheet draws each finger in an isometric or face-on figure that is not dimensioned. Its
+    height, length and the shape of its tip are read off the figure and estimated.
+  wanted: a section through a finger and the rail or back plate
+- what: cable-capacity
+  scope:
+  - front
+  reason: vendor-silent
+  note: the data sheet states no cable capacity, so none is recorded and none is estimated.
+  wanted: a capacity figure and the cable it is stated for
+- what: cabinet-fit
+  scope:
+  - rear
+  reason: vendor-silent
+  note: which NetShelter SX cabinets take this manager is stated only by the data sheet's title and the installation
+    sheet's; no cabinet model number is listed, and the library has no NetShelter SX enclosure to place it in.
+  wanted: the maker's compatibility list, and the cabinet's accessory channel drawing
+- what: mounting-interface
+  scope:
+  - rear
+  reason: needs-drawing
+  note: the installation sheet shows the manager hooked onto keyhole slots in the cabinet's accessory channel and
+    held by screws; the slots' pitch and the hooks are not dimensioned and are not drawn.
+  wanted: a dimensioned drawing of the manager fitted to the channel
+- what: cable-retainers
+  scope:
+  - front
+  reason: needs-drawing
+  note: the data sheet lists six cable retainers with snap hinges, shown in the installation sheet's inventory only;
+    their size and places are not given and they are not drawn.
+  wanted: the retainers' size and where they clip on
+- what: top-bracket-and-support-plate
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: the top securing bracket and the support plate are listed and drawn in the inventory, not dimensioned, and
+    are not drawn.
+  wanted: their sizes and places on the plate
+- what: length-seam
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  note: 'the part is two 20U lengths (the installation sheet''s inventory: Vertical Cable Manager (2)); the joint
+    is not dimensioned and the plate is drawn as one length.'
+  wanted: a drawing of the joint
+groups:
+  body:
+    term: Back plate
+    role: furniture
+    index-origin: 1
+    description: the back plate and its well
+  fingers:
+    term: Finger section
+    role: furniture
+    index-origin: 1
+    description: the lengths of 20 fingers, left then right, top to bottom
+views:
+  front:
+    size:
+      w: 97.0
+      h: 1778.0
+    components:
+      placements:
+      - ref: apc/nsx-vcm-750-base@1
+        id: base
+        at:
+        - 0.0
+        - 0.0
+        group: body
+        rel-pos: 1
+      - ref: apc/nsx-vcm-750-fingers@1
+        id: fingers-left-1
+        at:
+        - 5.0
+        - 0.0
+        group: fingers
+        rel-pos: 1
+        in: base
+      - ref: apc/nsx-vcm-750-fingers@1
+        id: fingers-left-2
+        at:
+        - 5.0
+        - 889.0
+        group: fingers
+        rel-pos: 2
+        in: base
+      - ref: apc/nsx-vcm-750-fingers@1
+        id: fingers-right-1
+        at:
+        - 72.0
+        - 0.0
+        group: fingers
+        rel-pos: 3
+        in: base
+      - ref: apc/nsx-vcm-750-fingers@1
+        id: fingers-right-2
+        at:
+        - 72.0
+        - 889.0
+        group: fingers
+        rel-pos: 4
+        in: base
+    guides:
+    - id: duct
+      kind: duct
+      at:
+      - 25.0
+      - 0
+      size:
+      - 47.0
+      - 1778.0
+      run: y
+      finger-pitch: 44.45
+      finger-gap: 13.45
+      confidence: estimated
+      source: 'AR7580A installation sheet, page 1 figure: the finger columns at the edges and the channel between;
+        pitch the rack unit of the data sheet ("1U increments"), the gap the pitch less the finger drawn 31 high'
+  rear:
+    size:
+      w: 97.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: back-plate
+        at:
+        - 0
+        - 0
+        size:
+        - 97.0
+        - 1778.0
+        fill: '#232527'
+        kind: base
+  top:
+    size:
+      w: 97.0
+      h: 160.0
+    panel:
+      decor: &id001
+      - id: backplate
+        at:
+        - 0
+        - 0
+        size:
+        - 97.0
+        - 20
+        fill: '#232527'
+        sink: 0.05
+        kind: base
+      - id: fingers-left
+        at:
+        - 5
+        - 20
+        size:
+        - 20
+        - 138
+        fill: '#26282a'
+        kind: finger-wall
+      - id: fingers-right
+        at:
+        - 72
+        - 20
+        size:
+        - 20
+        - 138
+        fill: '#26282a'
+        kind: finger-wall
+  bottom:
+    size:
+      w: 97.0
+      h: 160.0
+    panel:
+      decor: *id001
+  left:
+    size:
+      w: 160.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: backplate
+        at:
+        - 0
+        - 0
+        size:
+        - 20
+        - 1778.0
+        fill: '#232527'
+        sink: 0.05
+        kind: base
+      - id: fingers
+        at:
+        - 20
+        - 0
+        size:
+        - 138
+        - 1778.0
+        fill: '#26282a'
+        kind: finger-wall
+  right:
+    size:
+      w: 160.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: backplate
+        at:
+        - 140
+        - 0
+        size:
+        - 20
+        - 1778.0
+        fill: '#232527'
+        sink: 0.05
+        kind: base
+      - id: fingers
+        at:
+        - 2
+        - 0
+        size:
+        - 138
+        - 1778.0
+        fill: '#26282a'
+        kind: finger-wall
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The manager as APC ships AR7580A.
+datasheet:
+  title: APC NetShelter Cable Manager, for 42U 750W NetShelter SX, Vertical, 1778H x 97W x 160D mm (AR7580A), product
+    data sheet
+  url: https://www.se.com/us/en/product/download-pdf/AR7580A?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR7580A.pdf
+  sha256: 0f51dd13f653594c4d392ae22f01f0f896290c3295402f417b76200647941253
+references:
+- title: Vertical Cable Manager for NetShelter SX 750 mm 42U Cabinet (AR7580A), installation sheet
+  url: https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=JKUR-948NBR_R1_EN.pdf&p_Doc_Ref=SPD_JKUR-948NBR_EN
+  sha256: f4ac879ba365557ca1fe12bbde30174868f9999249213c4549b5a3fe2c17dfec
+- title: Enclosure and Rack Systems, Cable Management, brochure
+  url: https://download.se.com/files?p_enDocType=Brochure&p_File_Name=JCOS-7H4M68_R9_EN.pdf&p_Doc_Ref=SPD_JCOS-7H4M68_EN
+  sha256: 02469963a9f34e0aa7052010a9edef1c9a5e2c2fe5392a2a9f96ba48c5f5c501
