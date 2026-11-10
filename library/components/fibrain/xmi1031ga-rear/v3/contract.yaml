@@ -1,10 +1,10 @@
 format: 1
 kind: component
-name: xmi1021da-rear
-version: 2.1.0
+name: xmi1031ga-rear
+version: 3.0.0
 class: adapter-panel
 description: >-
-  The back of Fibrain XMI1021DA: the same adapters that face forward, seen from
+  The back of Fibrain XMI1031GA: the same adapters that face forward, seen from
   behind, whose far ends take the pigtails spliced inside the panel.
 size: {w: 100.0, h: 21.0}
 size-confidence: {w: datasheet, h: datasheet}
@@ -21,19 +21,27 @@ groups:
     attrs: {media: fiber}
     description: the 6 adapters seen from the back of the holder
 parts:
-  - {id: b01, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [83.900, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b02, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [67.800, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b03, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [51.700, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b04, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [35.600, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b05, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [19.500, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
-  - {id: b06, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [3.400, 5.850], rotate: 180, attrs: {housing-finish: '#54ccde'}}
+  - {id: b01, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [83.900, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
+  - {id: b02, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [67.800, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
+  - {id: b03, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [51.700, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
+  - {id: b04, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [35.600, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
+  - {id: b05, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [19.500, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
+  - {id: b06, ref: fibrain/lc-duplex-adapter@1, group: adapters, at: [3.400, 8.750], rotate: 180, attrs: {housing-finish: '#44a72a'}}
 provenance:
   size: >-
     datasheet - see size-notes.
   parts: >-
     THE FRONT's ADAPTERS, SEEN FROM BEHIND. Each front part has one entry here,
-    `bNN` behind `lcNN`, at the front column mirrored across the 100 face and
-    at the same height. Turned the other way from its front, so bore k is the same sleeve - see the holder's provenance.optical.
+    `bNN` behind `lcNN`, at the front column mirrored across the 100 face.
+    Turned the other way from its front, so bore k is the same sleeve - see the
+    holder's provenance.optical. THE FERRULE AXIS IS THE FRONT's, 11.95 from the
+    top of the holder. Half a turn about the body's centre alone would put it at
+    9.05, 2.90 off, because the adapter's ferrules stand 6.10 from the top of its
+    9.30 body and 3.20 once it is turned. So the body is placed 2.90 lower, at y
+    8.75, and its outline stands 2.90 below the front's (8.75 to 18.05 against
+    5.85 to 15.15): that outline is the stand-in's, not a measurement. No held
+    document shows the back of an adapter, so the front, the face the maker's
+    elevation measures, stands.
   coupler: >-
     EACH ADAPTER IS A COUPLER WITH AN END ON EACH FACE. The front's end is
     toward the aisle and this face is the end into the rack, one mating sleeve,
@@ -51,7 +59,7 @@ provenance:
     front is.
   groups: >-
     Fibrain HD adapter holder data sheet XMx (revision 1.1, modified 03.06.2024), page
-    1, lists XMI1021DA as 'FO Holder 6x LCdx, MM, OM4' and describes a holder 'fully
+    1, lists XMI1031GA as 'FO Holder 6x LCdx/APC, SM' and describes a holder 'fully
     equipped with adapters'. This component is the holder seen from behind, and each
     adapter is the same mating sleeve as the front one of the same number in the
     holder's own paths, so the ports are a group of their own on this component. No page
@@ -59,9 +67,12 @@ provenance:
     the panel, so it is traffic. The port is passive and the data sheet prints no rate
     for it, so the group states no speed.
 skins: [default]
-# The @1 of this part is gone from the library (#1046). A rack file that names it
+# The @1 and @2 of this part are gone from the library. A rack file that names it
 # is read as this one: the ids of its parts, its ports and their names are the same.
 supersedes:
-  - ref: fibrain/xmi1021da-rear@1
+  - ref: fibrain/xmi1031ga-rear@2
+    signature: sha256:60358c29c23a27d9ba9a1e158c566b06d5a360124a9d0ee0b0c925f8d00d0857
+    from: 0788a0f52dda
+  - ref: fibrain/xmi1031ga-rear@1
     signature: sha256:60358c29c23a27d9ba9a1e158c566b06d5a360124a9d0ee0b0c925f8d00d0857
     from: 8c7f9a3b1d34
