@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: motive-vcm-guide
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One T-shaped cable guide (finger) of the Chatsworth Motive single-sided vertical cable manager,
+  seen from the front. It is a black plastic arm that stands forward from the side assembly, with a
+  wider head at its end. It is one rack unit from the next. One part serves every width and both
+  colours of the manager.
+provenance:
+  size: >-
+    datasheet - the cell is one rack unit, 44.45: the data sheet (page 1) says the side assemblies
+    carry T-shaped cable guides 'that align with rack-mount unit (U) spaces on rack'. The width
+    (20), the arm (12) and the head (30) are ESTIMATED: no held page dimensions a guide, and the
+    photographs on page 1 and the drawing on installation instructions page 2 are not to a stated
+    scale, so they give a shape and no size.
+  relief: >-
+    estimated - the arm rises from the frame and the head closes its end, ending at 389 where the
+    door begins. The split between arm and head is read by eye from the page 1 photographs, and no
+    held page gives the depth of a guide.
+size: {w: 20, h: 44.45}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Plastic}
+elements:
+  head: {at: [0, 7.23], size: [20, 30], class: bezel}
+  arm: {at: [0, 16.23], size: [20, 12], class: bezel}
+relief:
+  features:
+    - node: arm
+      out: 375
+      color: '#26282a'
+      confidence: estimated
+      source: the data sheet's page 1 photographs show a slender arm from the side assembly to the head; its length is the frame depth less the head, read by eye
+    - node: head
+      lift: 375
+      out: 389
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the data sheet's page 1 photographs show the T head at the end of each guide; no page dimensions it
+skins: [default]

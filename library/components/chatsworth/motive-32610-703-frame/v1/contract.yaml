@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: motive-32610-703-frame
+version: 1.0.0
+class: mechanical
+description: >-
+  The frame of the Chatsworth Motive 32610-703 single-sided vertical cable manager, seen from the
+  front. It has two side assemblies that carry the T-shaped guides and, between them, the central
+  track, 2133.6 mm long, in black powder coat.
+provenance:
+  size: >-
+    datasheet - the matrix (page 3) gives the width as 6 in (150 mm) and the height as 7' (2.1 m),
+    nominal sizes: the figures are taken as the overall size, and the height is 7 ft, 84 in. The
+    side assembly width (20), the track width (30) and the depth of the frame (389, the printed 392
+    less the door) are ESTIMATED: no held page dimensions a section of the frame.
+  track: >-
+    estimated - the data sheet (page 1) says the frame is an extruded aluminum profile with an
+    integral central track, and the installation instructions (page 2) show it down the middle of
+    the manager. Its width and how far it stands from the rear are not dimensioned by any held page,
+    so it is drawn the full depth of the frame.
+  color: >-
+    estimated - the matrix (page 3) gives the colour as Black and the specifications (page 1) as
+    'Black or Glacier White powder coat paint'; the shade drawn is read from the data sheet's
+    renders, which are not a colour value.
+size: {w: 150, h: 2133.6, d: 389}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {material: Steel and aluminum}
+elements:
+  side-left: {at: [0, 0], size: [20, 2133.6], class: bezel}
+  side-right: {at: [130, 0], size: [20, 2133.6], class: bezel}
+  track: {at: [60, 0], size: [30, 2133.6], class: bezel}
+relief:
+  features:
+    - node: side-left
+      out: 389
+      color: '#202224'
+      confidence: estimated
+      source: the side assembly's section is not dimensioned by a held page; it is drawn the full depth of the frame
+    - node: side-right
+      out: 389
+      color: '#202224'
+      confidence: estimated
+      source: as side-left
+    - node: track
+      out: 389
+      color: '#2b2d30'
+      confidence: estimated
+      source: the central track's width and depth are not dimensioned by a held page; it is drawn the full depth of the frame
+skins: [default]
