@@ -1,0 +1,56 @@
+format: 1
+kind: component
+name: pro1-dc-input-block
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One input block of a Server Technology PRO1 -48VDC Switched PDU. It has three terminal positions
+  stacked top to bottom, +RTN, GND and -48VDC. Each position is two 1/4-20 studs on 5/8 in. centres
+  under a clear cover. A two-hole lug lands across each pair. The part is drawn for the left block of
+  the front face, with the studs toward the legends. The right block is the same part, mirrored.
+size: {w: 43.9, h: 76.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {terminals: 3, stud-thread: 1/4-20}
+provenance:
+  size: >-
+    drawing - Server Technology data sheet 48DCWC-16-2X100-A0 (Primary), PDF page 4 "Drawings", the plan
+    view. The block is 43.9 wide by 76.5 high, read from the 748 ppi raster at 3.3 px/mm, the scale that
+    puts the 432.00 body on the view. The drawing is a raster, so each figure carries about 1 mm.
+  pitch: >-
+    datasheet - the data sheet prints "(2) x 1/4-20 dual-studs on 5/8 in. centers (100A max)", so the
+    studs stand 15.875 apart and each pair is common/hex-nut-stud-pair-5-8@1, which holds that pitch. The
+    PRO1 DC User Guide (301-4800-3), PDF page 9 (printed 9 of 211), "Terminal Stud Spacing", labels the
+    same spacing 16.0 in its figure. The data sheet's figure is used, a 0.125 difference.
+  rows: >-
+    drawing - the three stud pairs are centred 11.1, 38.2 and 65.2 from the block's top, a pitch of 27.1,
+    and the pair is centred 25.0 from the block's left edge, 3.0 right of the block's middle, as the
+    drawing shows. The drawing is a raster; each figure carries about 1 mm.
+  thread: >-
+    datasheet and drawing - 1/4-20 on the data sheet, "1/4"-20 UNC-2A" in the guide's figure on PDF
+    page 9. The composed stud pair claims no thread; this contract does.
+  lug: >-
+    datasheet - the PRO1 DC User Guide, PDF page 206 (printed 206 of 211), "Inlet Connections": a
+    two-hole copper compression lug for dual-stud blocks, for cable of 6 AWG to 1 AWG. The pair
+    presents stud-pair-5-8, and generic/two-hole-lug-5-8@1 mates it. The lug's own size is the library's.
+  nuts: >-
+    drawing - the plan view draws each stud as a hex nut about 14.8 across corners with the stud end
+    in its middle. The nuts are drawn in the skin. The studs they surround are the composed pair's
+    own washer and stud end, whose size is the pair's estimate.
+  colour: >-
+    photo-measured - a photograph of the sibling model 4811, which has the same layout, shows a black block
+    with a clear cover over the studs. It is not a photograph of this model. No photograph is copied here.
+  cover: >-
+    estimated - the cover lies over the whole block in the photograph and the drawing's outline. The
+    drawing gives no cover thickness or fixing, so the cover is drawn as one clear sheet.
+  power: >-
+    the input blocks pass the supply's current and draw none; the maker's 100 A per block figure is the
+    device's input rating.
+elements:
+  body: {at: [0.0, 0.0], size: [43.9, 76.5], class: decor}
+  cover: {at: [0.0, 0.0], size: [43.9, 76.5], class: decor}
+parts:
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: rtn, at: [13.5, 7.5]}
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: gnd, at: [13.5, 34.6]}
+  - {ref: common/hex-nut-stud-pair-5-8@1, id: neg48, at: [13.5, 61.6]}
+skins: [default]
