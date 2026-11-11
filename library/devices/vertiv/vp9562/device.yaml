@@ -27,7 +27,7 @@ provenance:
       photo-measured - the body between the ear folds reads 733 px on the rear, 447 mm, and the face 73 px high, 44.5 mm, taken as 1U (44.45).
       THE DATA SHEET PRINTS 1.72 in x 17 in x 3.75 in (43.7, 431.8 and 95.3 mm) and the image reads 447 mm across: the two disagree by 15 mm
       (gaps: chassis-width). The photograph is the source here because every position is measured on it, and the sheet's inch figures read low
-      against its own 1U and 19 in. The depth is the sheet's 3.75 in. Colour photo-measured: the face's median is about #54554f.
+      against its own 1U and 19 in. The depth is the sheet's 3.75 in. The colour is the sheet's "Black" (see the colour gap).
   ears:
     confidence: photo-measured
     note: >-
@@ -62,11 +62,12 @@ provenance:
       datasheet - "Over Current Protection 15A Thermal Breaker", "Quantity per Breaker 10": one breaker for all ten outlets, the round button
       with 15 on the front image.
   colours:
-    confidence: photo-measured
+    confidence: datasheet
     note: >-
-      photo-measured medians - body #54554f on the front and #555651 on the rear, ear #4b4a46, the bushing #85847f with a #0a0a09 bore, the
-      maker's plate #121727, the blank plate #868580, the lamp plate #4a4948. These are the lit image's colours; the sheet says only "Black"
-      and offers other chassis colours (black, red, orange, yellow, green, blue, white swatches) on request.
+      The body and the ears are drawn black (about #1b1c1e, an estimate): the sheet says "Black" and offers other chassis colours
+      (black, red, orange, yellow, green, blue, white swatches) on request. The sheet's lit image reads the body at #54554f on the front
+      and #555651 on the rear and the ears at #4b4a46, which is the lighting and not the finish. The bushing #85847f with a #0a0a09 bore,
+      the maker's plate #121727, the blank plate #868580 and the lamp plate #4a4948 are photo-measured medians of that image.
   capability:
     confidence: datasheet
     note: >-
@@ -103,10 +104,10 @@ chassis:
   height: 44.45
   depth: 95.25
   ru: 1
-  color: '#54554f'
+  color: '#1b1c1e'
   airflow: passive
   ears:
-    color: '#4b4a46'
+    color: '#1b1c1e'
     positions:
       - {name: flush, default: true}
 gaps:
@@ -149,6 +150,14 @@ gaps:
   note: >-
     a small tab ring sits at the upper right of the cord bushing; its use is not stated.
   wanted: the installer guide for this model.
+- what: colour
+  scope: [front, rear, top, bottom, left, right]
+  reason: sources-disagree
+  note: >-
+    the data sheet says "Black" and the body and ears are drawn black (about #1b1c1e, the near-black the library gives other black
+    powder-coat parts; an estimate). The sheet's lit image reads the body at #54554f on the front and #555651 on the rear and the ears
+    at #4b4a46, which is the lighting and not the finish. The plates, lens and bushing keep their image readings.
+  wanted: a photograph of the unit under neutral light, or the swatch of the finish.
 - what: top-bottom-sides
   scope: [top, bottom, left, right]
   reason: needs-photo
