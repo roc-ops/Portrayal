@@ -2006,7 +2006,7 @@ const { text, notes: n } = toDrawio(shell.state.svg, doc, { cables });
 picture. Over it, one invisible shape for every port and bay is named by its
 `data-path` (`port-12`, `slot-2/module/p0`), carries that path again as a row of
 its Shape Data (`portrayal-path`, with `portrayal-class` and the media, speed,
-group and module the drawing states), and has one connection point at its
+group and model the drawing states), and has one connection point at its
 centre, written as a formula so that it stays centred when the shape is resized.
 A script reading the file finds a port by its name or by its data.
 

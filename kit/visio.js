@@ -11,7 +11,7 @@
 // - A shape per port or bay, NAMED BY ITS ADDRESS (`NameU` and `Name` are the
 //   drawing's `data-path`: `port-12`, `slot-2/module/p0`). The same address is
 //   a row of the shape's Shape Data (`portrayal-path`), with the class and the
-//   media, speed, group and module the drawing states. A script reading the
+//   media, speed, group and model the drawing states. A script reading the
 //   file finds a port by name or by data; it never reverses a coordinate. That
 //   is the acceptance test of the exporter tab: can a named port still be found?
 //
