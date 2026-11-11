@@ -1,13 +1,14 @@
 # Cards by interface: a slot that seats by form, not by list
 
-Status: proposed. The mechanism was decided 2026-10-18 (#120, #43): PCIe, OCP
+Status: accepted 2026-11-11. The mechanism was decided 2026-10-18 (#120, #43): PCIe, OCP
 and EDSFF slots seat cards by `interface:` on the slot and `mates:` on the card,
 as an optic seats in a cage (lint L12), and not by `accepts:` lists that name
-every card. The choice among #120's options A to D for a card that is also a
-product is **not** decided; this note lays them out and proposes one.
+every card. Of #120's options A to D, option A is chosen for a card that is also
+a product: it stays a module. This note lays the options out and records the choice.
 
 This note changes nothing. The build it describes is one-way, and the one-way
 items are listed in "What moves when it is built".
+The first use of the low-profile key (`pcie-lp`) is its own change.
 
 ## Goal
 
@@ -303,6 +304,8 @@ seats exactly what it did before.
   x16-in-x8 warning, and the cover-off interior view of #43.
 
 ## Open questions
+
+Each question below is settled as the note proposes it (2026-11-11); the questions stay as the record of what was open.
 
 1. **Which of #120's options?** A is proposed. Choosing C instead means the 37
    cards authored as modules are redone, and each module type the DCIM imported is
