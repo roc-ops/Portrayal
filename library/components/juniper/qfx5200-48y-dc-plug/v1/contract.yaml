@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qfx5200-48y-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: juniper-dc-header-3
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the QFX5200-48Y DC power cable, wired, seen from the wire side as seated. One insulated
   wire enters each of its three ways. They run top to bottom as the supply numbers them: red (RTN, pin 3),
   black (-36 to -72 V, pin 2) and green (grounding, pin 1). It seats in a `juniper-dc-header-3` header at its
-  own mate point. It carries one wire per contact, not one cable.
+  own mate point. It carries one wire per contact, all in one cable that ends at its `mate` point.
 size: {w: 10.9, h: 28.4}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -43,9 +43,15 @@ provenance:
     plan outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [5.3, 14.3], direction: front}
+  cable: {at: [5.3, 14.3], direction: front}
   wire-1: {at: [5.3, 9.5], direction: front}
   wire-2: {at: [5.3, 14.3], direction: front}
   wire-3: {at: [5.3, 19.1], direction: front}
