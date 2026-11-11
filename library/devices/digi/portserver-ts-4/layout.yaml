@@ -8,7 +8,7 @@ model: PortServer TS 4
 portfolio: {line: Console Servers, family: PortServer TS, series: PortServer TS 1/2/4}
 description: >-
   Digi PortServer TS 4 is a small desktop serial server with four RJ-45 RS-232 serial ports and one
-  10/100 Ethernet port. The Ethernet end carries the Ethernet jack, two lamp pairs, a card-sized
+  10/100 Ethernet port. The Ethernet end carries the Ethernet jack, two lamp pairs, a
   slot, a reset button and the locking DC power jack. The serial end carries the four serial jacks.
   It runs from 9 to 30 V DC on a 12 V wall supply. It is not recommended for new designs; the
   maker names the Connect EZ TS as its successor.
@@ -79,8 +79,9 @@ provenance:
     confidence: datasheet
     note: >-
       The page lists the lamps "Link, activity, power, status". The photograph prints LINK and ACT over
-      the first pair and PWR and READY over the second. No document states a colour or a state, so each
-      lamp has on and off only.
+      the first pair and PWR and READY over the second. The quick start guide gives states for its Power,
+      Link, 10/100, ACT and COL lamps, under names that differ from the photograph's legends, and no
+      colour; so each lamp has on and off only.
   colour:
     confidence: photo-measured
     note: >-
@@ -151,7 +152,9 @@ gaps:
   scope: [front]
   reason: vendor-silent
   note: >-
-    The page names the lamps and no colour or state of any of them.
+    The page names the lamps and no colour or state. The quick start guide gives states for its Power,
+    Link, 10/100, ACT and COL lamps and no colour, and its names do not match the photograph's legends,
+    so its states are not mapped to the four lamps drawn.
   wanted: Digi's lamp table.
 - what: legend-text
   scope: [top]
