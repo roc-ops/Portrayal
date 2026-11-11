@@ -1,0 +1,286 @@
+format: 1
+kind: device
+name: portserver-ts-2
+version: 1.0.0
+maturity: draft
+manufacturer: Digi
+model: PortServer TS 2
+portfolio: {line: Console Servers, family: PortServer TS, series: PortServer TS 1/2/4}
+description: >-
+  Digi PortServer TS 2 is a small desktop serial server with two RJ-45 RS-232 serial ports and one 10/100
+  Ethernet port. The Ethernet end carries the Ethernet jack, two lamp pairs, a card-sized slot, a reset
+  button and the locking DC power jack. The serial end carries the two serial jacks. It runs from 9 to
+  30 V DC on a 12 V wall supply. It is not recommended for new designs; the maker names the Connect EZ
+  TS as its successor.
+profile: networking
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Digi PortServer TS product page (digi.com, read 2026-11-05): ports, power, size, weight, part numbers
+      and accessories. Digi's PortServer TS family line art, front and back (181 x 110 and 209 x 110 px):
+      the position of every jack, lamp, slot and button, as drawing. Digi's PortServer TS family quick
+      start guide (90000687-88), page 1: the serial jack is a ten-wire RJ-45, and page 2: the locking
+      power connector with its centre pin positive. One angled photograph of the PortServer TS 1: the
+      black body and the legends printed on the top. No data sheet or user guide is held; the data sheet
+      is behind a form on the maker's site and the user guide is a link to a document not held.
+  chassis:
+    confidence: datasheet
+    note: >-
+      The product page prints "13.34 cm x 8.46 cm x 2.42 cm (5.25 in x 3.33 in x 0.95 in)" labelled L
+      x W x D. The line art shows the two ends as the wide faces, so 133.4 is the depth of the unit, 84.6
+      the width of each end and 24.2 its height; the page's D is read as the thickness. The page prints
+      one size for all three models.
+  gate-1:
+    confidence: drawing
+    note: >-
+      Each line-art end is read at its own scale across, from the outline of the face (0.495 mm per pixel
+      on the front, 0.460 on the back), and down from the face's own height. The line art is a small picture
+      whose proportions are not exact (the front outline is 10 per cent taller in proportion than the
+      stated size), so every position is good to about 2 mm.
+  front-layout:
+    confidence: drawing
+    note: >-
+      From the front line art: the Ethernet jack 7.4 from the left, the first lamp pair at 27.2, a slot
+      11.6 wide from 31.6, a small square button at 48.7, the second lamp pair at 61.8 and the power jack
+      at 71.7 (centres). The legends are not on this face; the photograph prints them on the top.
+  rear-layout:
+    confidence: drawing
+    note: >-
+      From the back line art: the serial jacks stand in one row, each opening 16.0 wide on a 16.0 pitch
+      from 7.4. The 1-port, 2-port and 4-port brackets in the drawing end at the first, second and fourth
+      jack, so the PortServer TS 2 fills the first two and the rest of the face is drawn plain. The words
+      RJ-45 Serial are printed under the jacks in the drawing.
+  top-layout:
+    confidence: photo-measured
+    note: >-
+      From the angled photograph of the PortServer TS 1: the logo at the rear left, the wordmark PORTSERVER
+      and TS near the front edge and, on the edge itself, the legends ETHERNET, LINK, ACT, RESET, PWR,
+      READY and 9-30V DC 525mA MAX. The photograph is in perspective, so the legends take the x of the
+      part each one labels in the line art, and the wordmark is placed to about 5 mm.
+  ports:
+    confidence: datasheet
+    note: >-
+      The product page lists "2 RS-232 RJ-45; up to 230 kbps through-put; signal support for TXD, RXD,
+      RTS, CTS, DTR, DSR, DCD" and "1 RJ-45 10/100 Mbps 10/100Base-T (auto-sensing)". The quick start
+      guide, page 1, says "PortServer TS products use an RJ-45 10-wire jack (female)", so each serial
+      jack is the ten-position jack.
+  power:
+    confidence: datasheet
+    note: >-
+      The product page prints "9-30 VDC" as the input, a supply of "12 VDC / 1.5 A max out" and "Typical:
+      4 W; Max: 6 W" consumed. The line art and the quick start guide show a locking barrel jack. The
+      photograph prints "9-30V DC 525mA MAX" beside the jack. The photograph also shows a terminal-block
+      connector where the line art shows the barrel; the barrel is drawn, and the difference is listed
+      among the gaps.
+  lamps:
+    confidence: datasheet
+    note: >-
+      The page lists the lamps "Link, activity, power, status". The photograph prints LINK and ACT over
+      the first pair and PWR and READY over the second. No document states a colour or a state, so each
+      lamp has on and off only.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The photograph shows a black body (16, 16, 16 read off the top) with white legends and a bright
+      metal jack shield.
+attrs:
+  physical: {weight-kg: 0.189, package-dimensions: not stated}
+  power:
+    power-input: 9-30 VDC; supply included 12 VDC / 1.5 A max out, 100-240 VAC 50-60 Hz in
+    power-typical-w: 4
+    power-max-w: 6
+  environmental: {operating-temp-c: 0 to 60, storage-temp-c: -40 to 85, humidity: 5% to 95% (non-condensing)}
+  features: {serial-modes: 'RS-232, up to 230 kbps'}
+  compliance:
+    safety: UL/CUL 60950, IEC 60950, CB
+    emissions: >-
+      CE; FCC Part 15 (Class A); EN55024; EN55022 Class A; AS/NZS 3548; CISPR 22; VCCI V-3/99.05
+chassis: {width: 84.6, height: 24.2, depth: 133.4, mount: desktop, color: '#101010', power: dc}
+gaps:
+- what: side-and-bottom-faces
+  scope:
+  - bottom
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    The held photograph is angled and shows the top and a corner of the left wall, with two small holes
+    in it whose size and place cannot be read. The line art shows the two ends only. The bottom and the
+    two walls are sized from the page and drawn empty.
+  wanted: A photograph or drawing of the sides and the underside.
+- what: wall-and-din-mounts
+  scope:
+  - bottom
+  reason: needs-drawing
+  note: >-
+    The page lists a wall-mount bracket (76000641) and a DIN-rail bracket (76000756) and gives no size
+    for either. The line art draws tabs below each end of the unit; no document states what they are.
+  wanted: Digi's installation drawing for the brackets.
+- what: power-connector-variant
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    The line art and the quick start guide show a locking barrel jack. The angled photograph shows a terminal-block
+    connector at the same place. Nothing held says which model carries which.
+  wanted: The data sheet or the hardware guide.
+- what: unpopulated-serial-openings
+  scope:
+  - rear
+  reason: vendor-silent
+  note: >-
+    The line art's brackets end at the second jack for the 2-port model. Whether the other two openings
+    are blanked, absent or open is not shown, so the rest of the face is drawn plain.
+  wanted: A photograph of the rear of the 2-port model.
+- what: slot-function
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    The line art and the photograph show a slot beside the reset button. No held document names it, so
+    it is drawn as a cutout without a port.
+  wanted: The data sheet or the hardware guide.
+- what: led-states
+  scope:
+  - front
+  reason: vendor-silent
+  note: The page names the lamps and no colour or state of any of them.
+  wanted: Digi's lamp table.
+- what: legend-text
+  scope:
+  - top
+  reason: needs-photo
+  note: >-
+    The only photograph is angled, so the legends are placed by the line art and the wordmark to about
+    5 mm. A mark printed near the rear edge of the photographed unit is not drawn.
+  wanted: A straight-on photograph of the top.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the two RJ-45 RS-232 serial ports, numbered 1 and 2 from the left of the serial end
+  eth:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m}
+    description: the 10/100 Ethernet port
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the locking DC power jack, 9 to
+      30 V DC'}
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the lamps, link and activity over the Ethernet jack, power and ready by the power jack
+  controls: {term: Button, role: management, index-origin: 1, description: the reset button}
+views:
+  front:
+    size: {w: 84.6, h: 24.2}
+    panel:
+      decor:
+      - {id: aux-slot, kind: slot, at: [31.6, 15.3], size: [11.6, 3.4]}
+      cutouts:
+      - {id: eth, at: [7.8, 4.3], size: [15.8, 13.2], shape: rect}
+      - {id: led-link, at: [26.2, 9.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-act, at: [26.2, 15.0], size: [2.0, 2.0], shape: circle}
+      - {id: btn-reset, at: [46.7, 12.1], size: [4.0, 4.0], shape: rect}
+      - {id: led-pwr, at: [60.8, 9.2], size: [2.0, 2.0], shape: circle}
+      - {id: led-ready, at: [60.8, 15.0], size: [2.0, 2.0], shape: circle}
+      - {id: dc-in, at: [65.7, 6.5], size: [12.0, 13.0], shape: rect}
+    components:
+      placements:
+      - ref: common/rj45-eth@1
+        id: eth
+        at: [7.8, 4.3]
+        group: eth
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m}
+      - {ref: common/led-dot@1, id: led-link, at: [26.2, 9.2], for: chassis, group: status-leds, rel-pos: 1,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-act, at: [26.2, 15.0], for: chassis, group: status-leds, rel-pos: 2,
+        states: ['off', 'on']}
+      - ref: common/reset-button@1
+        id: btn-reset
+        at: [46.7, 12.1]
+        for: chassis
+        group: controls
+        rel-pos: 1
+        attrs: {function: reset}
+      - {ref: common/led-dot@1, id: led-pwr, at: [60.8, 9.2], for: chassis, group: status-leds, rel-pos: 3,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-ready, at: [60.8, 15.0], for: chassis, group: status-leds, rel-pos: 4,
+        states: ['off', 'on']}
+      - ref: common/dc-barrel@1
+        id: dc-in
+        at: [65.7, 6.5]
+        group: inlets
+        rel-pos: 1
+        attrs: {input-voltage: 9-30 V DC}
+  rear:
+    size: {w: 84.6, h: 24.2}
+    panel:
+      cutouts:
+      - {id: serial-1, at: [7.4, 2.4], size: [16.0, 16.2], shape: rect}
+      - {id: serial-2, at: [23.4, 2.4], size: [16.0, 16.2], shape: rect}
+    silkscreen:
+    - {at: [23.4, 22.4], text: RJ-45 Serial, font-size: 1.7, anchor: middle, fill: '#d4d6d9', for: serial-1}
+    components:
+      placements:
+      - ref: digi/serial-jack-10p@1
+        id: serial-1
+        at: [7.4, 2.4]
+        group: serial
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: rs232}
+      - ref: digi/serial-jack-10p@1
+        id: serial-2
+        at: [23.4, 2.4]
+        group: serial
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: rs232}
+  top:
+    size: {w: 84.6, h: 133.4}
+    silkscreen:
+    - {at: [15.7, 129.6], text: ETHERNET, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [27.2, 123.6], text: LINK, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [27.2, 129.6], text: ACT, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [48.7, 129.6], text: RESET, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [61.8, 123.6], text: PWR, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [61.8, 129.6], text: READY, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [76.5, 126.6], text: 9-30V DC, font-size: 1.6, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [76.5, 129.6], text: 525mA MAX, font-size: 1.6, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [40.0, 116.0], text: PORTSERVER TS, font-size: 5.0, anchor: middle, fill: '#8a8a8a', for: chassis}
+    regions:
+    - id: logo-zone
+      at: [6.0, 8.0]
+      size: {w: 24.0, h: 10.0}
+      label: Vendor logo; not drawn
+  bottom:
+    size: {w: 84.6, h: 133.4}
+    empty: >-
+      No held source shows the bottom face: the line art draws the two ends and the photograph shows the
+      top.
+  left:
+    size: {w: 133.4, h: 24.2}
+    empty: >-
+      No held source shows the left wall clearly: the one photograph shows two small holes in it whose
+      size and place cannot be read.
+  right:
+    size: {w: 133.4, h: 24.2}
+    empty: >-
+      No held source shows the right wall: the line art draws the two ends and the photograph shows the
+      top and the left wall.
+configurations:
+  default:
+    kind: orderable
+    description: The two-port model with the included 12 V wall supply.
+    default: true
+    part-numbers:
+      '70002043': {}
+references:
+- title: >-
+    Digi PortServer TS product page (digi.com; the page read 2026-11-05, with its specification table)
+- title: Digi PortServer TS family line art, front and back (digi.com)
+- {title: Digi PortServer TS Family Quick Start Guide (90000687-88)}
