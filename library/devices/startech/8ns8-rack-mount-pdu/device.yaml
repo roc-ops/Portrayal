@@ -1,0 +1,214 @@
+format: 1
+kind: device
+name: 8ns8-rack-mount-pdu
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: 8NS8-RACK-MOUNT-PDU
+description: >-
+  StarTech.com 8NS8-RACK-MOUNT-PDU, a 1U horizontal switched rack PDU, 120 V, 15 A, single phase. A black steel box with a
+  built-in mounting bracket at each end. The front carries a 15 A push-to-reset circuit breaker at the left and the maker's logo.
+  It also carries eight numbered rocker switches, one per outlet. Each switch is lit red while its outlet is on and sits under
+  a hinged cover. The rear carries eight NEMA 5-15R outlets, numbered 8 to 1 from the left as seen from the rear. A fixed 8 ft
+  (2.4 m) cord with a NEMA 5-15P plug leaves at the right.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      ESTIMATED where a position is read off a figure that prints no scale. Positions on the front and the rear are read off the
+      two diagrams on page 1 of the 8NS8-RACK-MOUNT-PDU Quick-Start Guide (Manual Revision September 5, 2024), "Product Diagram,
+      Front" and "Rear", as fractions of the 482.6 mm rack face each diagram spans from ear tip to ear tip (4103 px at 400 dpi, 8.50 px per
+      mm; the body between the ears is 3742 px, 440 mm, and the face 374 px, 44 mm). The two diagrams are drawn to slightly
+      different outlet pitches (38.0 mm across the switches and 38.8 mm across the outlets), so each face is read on its own and
+      the two disagree by up to 3 mm where a switch stands in front of its outlet. The data sheet's photograph on page 1 is an
+      angled view and is used for colour only.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 8NS8-RACK-MOUNT-PDU data sheet, page 2: "Product Length 19.0 in [48.2 cm]", "Product Width 3.8 in [95.5 mm]", "Product
+      Height 1.7 in [44 mm]", "Weight of Product 4.4 lb [2.0 kg]", "U Height 1U", "Color Black", "Material Steel". The length includes the
+      built-in brackets; the body between the folds is read off the guide's diagram as 440 mm (ESTIMATED; the bracket is about 21 mm each
+      side). The width is read as the depth of a horizontal unit; the sheet does not say which axis it means.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - millimetres from the body's left edge and top, read off the guide's front diagram (no scale printed, see method).
+      Breaker centre 29.9 across, 22.0 down. Logo centre 85.5 across. Switch covers are 24.0 x 38.8, centres at 140.2 across then every 38.0
+      mm, tops 4.9 down; the numerals 1 to 8 stand 16.9 left of each cover's centre, 9.6 down.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - millimetres from the body's left edge as seen from the rear, read off the guide's rear diagram. Outlet 8 centre at 30.6
+      across, then every 38.8 mm to outlet 1 at 302.2, all 26.2 down; the numerals stand 19.0 left of each centre and 9.0 down. Cord relief centre at
+      413.0 across, 23.7 down.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - data sheet, page 1 and 2: "8x NEMA 5-15R outlets", "Number of Power Outlets 8", "rear facing outlets"; guide page 1,
+      component 3: "Outlets (x8) NEMA 5-15R Connector 125V AC / 15A". std/nema-5-15r@1 is the library's 5-15R face, borrowed from the 5-20R,
+      so the outlets are that part's size; the guide's diagram draws each in a block 28.2 x 33.6.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Built-in 8ft. (2.4m) NEMA 5-15P power cord", "Connector 1 NEMA 5-15 (125V AC, 15A)", "Input Voltage 120 AC", "Regulatory
+      Derated Input Current (North America) 12A", "Maximum Total Current 15A". Guide page 1, component 4: "Built-in Power Cable, NEMA 5-15P
+      Connector, 125V AC / 15A".
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - each outlet "features an individual illuminated rocker switch", so `outlet-switching: true`; nothing is metered (no meter,
+      display or network port is listed), so `metering-scope: none` and the class is switched.
+  breaker:
+    confidence: datasheet
+    note: >-
+      datasheet - "15A Circuit Breaker ... self-tripping and resettable"; guide component 1: "Turns-Off All Power, in the Event of a Power Surge,
+      15A Tripping Point, Push to Reset". Drawn with common/breaker-push-reset@1, which is a hex nut with a round plunger; the guide's diagram
+      draws a round ring with a dark centre, so the nut's shape differs from the figure.
+attrs:
+  physical:
+    weight-kg: 2.0
+    construction: steel
+  power:
+    input-ac: '120 V AC, 15 A (12 A derated, North America), NEMA 5-15P, 8 ft (2.4 m) fixed cord'
+    input-plug: nema-5-15p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 12
+    plug-rating-a: 15
+  environmental:
+    operating-temp: -5 to 40 C (23 to 104 F)
+    storage-temp: -10 to 50 C (14 to 122 F)
+    humidity: 5 % (0 C) to 95 % (40 C)
+  management:
+    metering-scope: none
+    outlet-switching: true
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440
+  height: 44
+  depth: 95.5
+  ru: 1
+  color: '#1f1f21'
+  ears:
+    color: '#1f1f21'
+    positions:
+      - {name: flush, label: 'built-in 19 in mounting brackets (guide page 1, component 5)', default: true}
+gaps:
+  - what: ear-holes
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      the guide draws two slotted holes in each bracket and gives no dimension; the guide says the unit takes "4x Cabinet Screws"
+      and "4x Cage Nuts" (not included). Only the flush position is named.
+    wanted: a dimensioned drawing.
+  - what: body-width
+    scope: [front, rear]
+    reason: needs-drawing
+    note: >-
+      the data sheet's 19.0 in length includes the brackets and the body between the folds is read off the guide's diagram (440 mm, about 21 mm
+      of bracket each side).
+    wanted: a dimensioned drawing.
+  - what: outlet-pitch
+    scope: [rear]
+    reason: needs-drawing
+    note: >-
+      the guide's two diagrams give outlet pitches of 38.8 mm (rear) and 38.0 mm (the switches in front); no document prints a figure.
+    wanted: a dimensioned drawing.
+  - what: switch-outlet-binding
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      each switch stands on the front and its outlet on the rear, and a lamp is bound to an outlet only within one view, so the switches are
+      not tied to their outlets by `for`. The guide numbers each switch and each outlet 1 to 8 and says the switch "Turns the Corresponding Outlet
+      On or Off"; the numbers are the only tie, and the wiring order is not stated.
+    wanted: nothing further from the vendor; the library would need a cross-view lamp binding.
+  - what: sides
+    scope: [top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      no document shows the top, the bottom or an end straight on; the data sheet photograph sees the top and the right end at a steep angle
+      and shows ventilation on neither.
+    wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight NEMA 5-15R outlets, numbered 1 to 8 as printed on the rear'}
+  switches: {term: Switch, role: service, index-origin: 1, description: 'the eight covered rocker switches, one per outlet, each lit red while its outlet is on', states: ['off', {name: 'on', color: '#e2594a'}]}
+  breaker: {term: Breaker, role: service, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 440, h: 44}
+    silkscreen:
+      - {at: [123.3, 9.6], text: '1', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-1}
+      - {at: [161.3, 9.6], text: '2', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-2}
+      - {at: [199.3, 9.6], text: '3', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-3}
+      - {at: [237.3, 9.6], text: '4', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-4}
+      - {at: [275.3, 9.6], text: '5', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-5}
+      - {at: [313.3, 9.6], text: '6', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-6}
+      - {at: [351.3, 9.6], text: '7', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-7}
+      - {at: [389.3, 9.6], text: '8', font-size: 3.0, anchor: middle, fill: '#d0d0d0', for: switch-8}
+      - {at: [85.5, 23.6], text: StarTech.com, font-size: 4.6, anchor: middle, fill: '#e8e8e8', for: chassis}
+    components:
+      placements:
+        - {id: breaker, ref: common/breaker-push-reset@1, at: [21.65, 14.85], group: breaker, rel-pos: 1, description: 'the 15 A circuit breaker: push to reset; it turns off all power on a trip'}
+        - {id: switch-1, ref: startech/outlet-switch-cover@1, at: [128.2, 4.9], group: switches, rel-pos: 1, for: chassis}
+        - {id: switch-2, ref: startech/outlet-switch-cover@1, at: [166.2, 4.9], group: switches, rel-pos: 2, for: chassis}
+        - {id: switch-3, ref: startech/outlet-switch-cover@1, at: [204.2, 4.9], group: switches, rel-pos: 3, for: chassis}
+        - {id: switch-4, ref: startech/outlet-switch-cover@1, at: [242.2, 4.9], group: switches, rel-pos: 4, for: chassis}
+        - {id: switch-5, ref: startech/outlet-switch-cover@1, at: [280.2, 4.9], group: switches, rel-pos: 5, for: chassis}
+        - {id: switch-6, ref: startech/outlet-switch-cover@1, at: [318.2, 4.9], group: switches, rel-pos: 6, for: chassis}
+        - {id: switch-7, ref: startech/outlet-switch-cover@1, at: [356.2, 4.9], group: switches, rel-pos: 7, for: chassis}
+        - {id: switch-8, ref: startech/outlet-switch-cover@1, at: [394.2, 4.9], group: switches, rel-pos: 8, for: chassis}
+  rear:
+    size: {w: 440, h: 44}
+    silkscreen:
+      - {at: [283.2, 9.0], text: '1', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-1}
+      - {at: [244.4, 9.0], text: '2', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-2}
+      - {at: [205.6, 9.0], text: '3', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-3}
+      - {at: [166.8, 9.0], text: '4', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-4}
+      - {at: [128.0, 9.0], text: '5', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-5}
+      - {at: [89.2, 9.0], text: '6', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-6}
+      - {at: [50.4, 9.0], text: '7', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-7}
+      - {at: [11.6, 9.0], text: '8', font-size: 2.6, anchor: middle, fill: '#d0d0d0', for: outlet-8}
+    components:
+      placements:
+        - {id: input, ref: startech/pdu-cord-5-15p@1, at: [405.0, 15.7], group: power-input, rel-pos: 1, description: 'the fixed 8 ft cord, ending in a NEMA 5-15P plug'}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [288.7, 12.7], rotate: 270, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [249.9, 12.7], rotate: 270, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [211.1, 12.7], rotate: 270, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [172.3, 12.7], rotate: 270, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [133.5, 12.7], rotate: 270, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [94.7, 12.7], rotate: 270, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [55.9, 12.7], rotate: 270, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [17.1, 12.7], rotate: 270, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+  top:
+    size: {w: 440, h: 95.5}
+    empty: >-
+      no source shows the top straight on: the data sheet's photograph sees it at a steep angle. Searched: the data sheet and the Quick-Start Guide.
+  bottom:
+    size: {w: 440, h: 95.5}
+    empty: >-
+      no source shows the bottom. Searched: the data sheet and the Quick-Start Guide.
+  left:
+    size: {w: 95.5, h: 44}
+    empty: >-
+      no source shows the left end straight on. Searched: the data sheet and the Quick-Start Guide.
+  right:
+    size: {w: 95.5, h: 44}
+    empty: >-
+      no source shows the right end straight on. Searched: the data sheet and the Quick-Start Guide.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, with its 8 ft cord drawn only as the strain relief it leaves by.
+    part-numbers:
+      8NS8-RACK-MOUNT-PDU: {}
+datasheet:
+  title: '8NS8-RACK-MOUNT-PDU data sheet (8-Outlet Horizontal Rack Mount PDU, 1U)'
+  url: https://media.startech.com/cms/pdfs/8ns8-rack-mount-pdu_datasheet.pdf
+  sha256: 3c0e9a63b9f8e04edb587c2c0da4a4db0c37a3e84f1e43f6053be80cf48b30a9

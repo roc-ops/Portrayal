@@ -1,0 +1,160 @@
+format: 1
+kind: device
+name: pdu08c13h
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: PDU08C13H
+description: >-
+  StarTech.com PDU08C13H, a 1U horizontal basic rack PDU with eight IEC C13 outlets, single phase. It takes 16 A at 120 V or 20 A at 240 V.
+  It has 3600 J surge protection and a resettable circuit breaker. A black steel box with a mounting bracket at each end. The front carries
+  the eight C13 outlets in a row from the left and two round push buttons. At the right is an IEC C20 power inlet. The 10 ft C19 to NEMA 5-20P
+  cord in the box is not part of the unit and is not drawn. No document shows the rear.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      ESTIMATED. NO DIMENSIONED DRAWING AND NO STRAIGHT-ON PICTURE EXISTS. Every position is read off the one product photograph on page 1 of the
+      PDU08C13H data sheet (a 400 x 400 pixel image, taken from the front left and above), so it is NOT orthographic: x is read as a fraction of the
+      ear-to-ear length along the face (ear tips at 20 and 348 px, 484 mm) and corrected by eye for perspective, which spreads the nearer, right-hand side;
+      y is read at the face's own scale. The outlets sit on a near-constant pitch, which supports one pitch across the row, but the two push
+      buttons and the inlet lie in the stretched part of the view, and every position is good to about 10 mm across and 3 mm down.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - PDU08C13H data sheet, page 2: "Product Length 19.1 in [48.4 cm]", "Product Width 3.9 in [98.8 mm]", "Product Height 1.7 in
+      [44.0 mm]", "Weight of Product 3.4 lb [1.5 kg]", "Color Black", "Material Steel", "Form Factor Horizontal". The length includes the
+      brackets; the body between the folds is taken as 440 mm, the figure the 8NS8-RACK-MOUNT-PDU guide's diagram gives for the same
+      maker's 1U strip (ESTIMATED for this model). The width is read as the depth of a horizontal unit.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - millimetres from the body's left edge and its top, read off the photograph (see method). Outlet centres 17.7 across and every 40.0 mm to
+      297.7, all 22.0 down; the two push buttons centre at 331.0 across, 15.0 and 30.0 down; the inlet centre at 403.0 across, 22.0 down.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - data sheet, page 1 and 2: "8 POWERFUL NEMA C13 OUTLETS", "Number of Power Outlets 8", "Connector 2 (Quantity) 8, IEC C13 Receptacle
+      (250V AC, 10A)". The photograph shows all eight on the front; the data sheet does not say which face. The outlets are std/c13-outlet@1's size.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Connector 1 IEC C20 (250V AC, 16A)", "C20 Power Cord Input", "Input Voltage 110V-240V AC", "Regulatory Derated Input Current (North
+      America) 16A", "Maximum Total Current 20A", "Load cap. @ 120V/16A (1920VA) Load cap. @240V/20A (4800VA)". The sheet's own text calls the included cord both
+      "C19 to NEMA5-20p" and the unit's input a C20; the inlet is a C20. The photograph shows the inlet at the right end of the front.
+  breaker:
+    confidence: datasheet
+    note: >-
+      datasheet - "Built-in resettable circuit breaker that acts as a surge protector or shields from unintentional overloads", "Surge Protection: 3600 Joules".
+      The sheet does not say where the breaker is. The photograph shows two round chrome push buttons between the outlets and the inlet; they are drawn
+      with common/breaker-push-reset@1 on that reading (gaps: breaker-buttons).
+attrs:
+  physical:
+    weight-kg: 1.5
+    construction: steel
+  power:
+    input-ac: '110-240 V AC, 16 A derated (20 A maximum), IEC C20 inlet; 1920 VA at 120 V, 4800 VA at 240 V'
+    input-plug: iec-60320-c20
+    input-cord: detachable
+    input-phase: single
+    input-current-a: 16
+    capacity-kw: 4.8
+  environmental:
+    operating-temp: -5 to 45 C (23 to 113 F)
+    storage-temp: -25 to 65 C (-13 to 149 F)
+  management:
+    metering-scope: none
+    outlet-switching: false
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440
+  height: 44
+  depth: 98.8
+  ru: 1
+  color: '#1f1f21'
+  ears:
+    color: '#1f1f21'
+    positions:
+      - {name: flush, default: true}
+gaps:
+  - what: rear
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      no document shows the rear of this model: the data sheet has one photograph, of the front, and the manual is not held. All eight outlets and the inlet stand on
+      the front in the photograph, so nothing is known to stand on the rear.
+    wanted: a photograph of the rear, or the instruction manual.
+  - what: breaker-buttons
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the photograph shows two round chrome push buttons between the outlets and the inlet and no label is legible. The data sheet names one "built-in resettable circuit
+      breaker". Whether the two buttons are two breakers, or one breaker and one other control, is not stated.
+    wanted: the instruction manual.
+  - what: ear-positions
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the data sheet gives no ear, bracket or hole dimension; it lists four M5 screws and four M5 cage nuts. The body width between the folds is an estimate.
+    wanted: a dimensioned drawing.
+  - what: sides
+    scope: [top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      the photograph sees the top, with a printed rating label, and the right end at a steep angle; nothing of either can be measured.
+    wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the eight IEC C13 outlets, numbered 1 to 8 from the left as seen from the front: the photograph prints no numbers'}
+  breaker: {term: Breaker, role: service, index-origin: 1, description: 'the two round push buttons, read as breaker reset buttons'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 440, h: 44}
+    components:
+      placements:
+        - {id: input, ref: std/c20-inlet@1, at: [386.8, 9.8], group: power-input, rel-pos: 1, description: 'the C20 power inlet; the 10 ft C19 to NEMA 5-20P cord in the box plugs into it'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [6.7, 6.8], rotate: 270, group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [46.7, 6.8], rotate: 270, group: outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [86.7, 6.8], rotate: 270, group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [126.7, 6.8], rotate: 270, group: outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [166.7, 6.8], rotate: 270, group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [206.7, 6.8], rotate: 270, group: outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [246.7, 6.8], rotate: 270, group: outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [286.7, 6.8], rotate: 270, group: outlets, rel-pos: 8, fed-by: input}
+        - {id: breaker-1, ref: common/breaker-push-reset@1, at: [322.75, 7.85], group: breaker, rel-pos: 1, description: 'upper round push button; the data sheet does not say what each button does'}
+        - {id: breaker-2, ref: common/breaker-push-reset@1, at: [322.75, 22.85], group: breaker, rel-pos: 2, description: 'lower round push button; the data sheet does not say what each button does'}
+  rear:
+    size: {w: 440, h: 44}
+    empty: >-
+      no source shows the rear of this model: the data sheet has one photograph, of the front, and no manual is held. Searched: the data sheet text and picture.
+  top:
+    size: {w: 440, h: 98.8}
+    empty: >-
+      no source shows the top straight on: the data sheet's photograph sees it at a steep angle. Searched: the data sheet.
+  bottom:
+    size: {w: 440, h: 98.8}
+    empty: >-
+      no source shows the bottom: the data sheet's only picture looks at the front from above. Searched: the data sheet.
+  left:
+    size: {w: 98.8, h: 44}
+    empty: >-
+      no source shows the left end straight on. Searched: the data sheet.
+  right:
+    size: {w: 98.8, h: 44}
+    empty: >-
+      no source shows the right end straight on: the photograph sees it side on and nothing of it can be measured. Searched: the data sheet.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 10 ft C19 to NEMA 5-20P cord in the box is not drawn.
+    part-numbers:
+      PDU08C13H: {}
+datasheet:
+  title: 'PDU08C13H data sheet (1U 19 inch 8 Port Rack Mount PDU, IEC C13)'
+  url: https://media.startech.com/cms/pdfs/pdu08c13h_datasheet.pdf
+  sha256: 0face7dd1c97398bc2cf412793a2a01d1339b8b7d59ca2331e96dc51b9975b6c

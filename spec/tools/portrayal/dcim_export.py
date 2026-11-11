@@ -748,6 +748,8 @@ PART_POWER = {
     # against a target's source file here.
     "cyberpower/pdu-cord-l6-30p": "nema-l6-30p",
     "cyberpower/pdu-cord-5-15p": "nema-5-15p",
+    # The StarTech.com 8NS8-RACK-MOUNT-PDU's 8 ft cord and the RKPW081915's 6 ft cord end in a NEMA 5-15P: the same slug.
+    "startech/pdu-cord-5-15p": "nema-5-15p",
     # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
     "eaton/g3-cord-l5-20p": "nema-l5-20p",
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
