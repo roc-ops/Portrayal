@@ -5,5 +5,5 @@
   the channel depth, the material and the colour are the pages', and the plate and cover thickness, the walls and the brush
   slot are estimated and say so. Each snap cover is its own removable part with a `cover-off` configuration where it is
   drawn. The pages list a cable pass-through and a cable support bar without a size or a place, so neither is drawn.
-  The rest of #1099 stays open: the 23 in manager, the steel, 3 in and
+  The rest of #1099 stays open: the 23 in manager, the steel, 3 in deep and
   hinged raceways, the one channel vertical raceways, the brush strip panel and the toolless rings have no held page.
