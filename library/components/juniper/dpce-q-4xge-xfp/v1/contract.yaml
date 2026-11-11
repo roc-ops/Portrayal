@@ -1,0 +1,89 @@
+format: 1
+kind: module
+name: dpce-q-4xge-xfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPCE-R-Q-4XGE-XFP, a 10-Gigabit Ethernet Enhanced Queuing IP Services DPC with XFP (EOL).
+  Four 10GbE XFP ports, each with a PORT n/0 / TUNNEL / LINK legend and lamp pair,
+  drawn on the face of the 4-port DPC-R card.
+  The Ethernet Services model DPCE-X-Q-4XGE-XFP prints the same watts and ports and shares this part.
+attrs:
+  xfp-10g: 4
+  model: DPCE-R-Q-4XGE-XFP
+  model-variants: DPCE-X-Q-4XGE-XFP
+  power-draw-max-w: 330
+provenance:
+  ethernet-rate: >-
+    the Ethernet rate, from the MX Series Interface Module Reference, which files both models under
+    10-Gigabit Ethernet Enhanced Queuing DPCs with XFP. The XFP cage cannot say: it takes a 10GbE optic and an
+    OC-192 one, and the framing is what differs.
+  power: >-
+    MX240 Hardware Guide, Table 93 FRU Power Requirements, Dense Port Concentrators (printed p. 229):
+    one row, 330 W, for DPCE-R-Q-4XGE-XFP and DPCE-X-Q-4XGE-XFP. The module reference states 6.87 A @ 48 V
+    (330 W) for each in its own section. The vendor does not qualify an ambient for the DPC rows; filed as
+    max, which is our reading.
+  size: >-
+    estimated from the sibling juniper/dpc-r-4xge-xfp, which is photographed: a 396.0 x 29.5 plate centred in a
+    413.5 lever envelope. The module reference gives no figure for either model of this part, and none
+    dimensions the plate.
+  size-ports: >-
+    estimated from the sibling juniper/dpc-r-4xge-xfp: four XFP cages centred at card x 105.55, 181.7, 257.8
+    and 333.8, y 18.85. The module reference's Figure 7 (printed p. 95), the 4-port Enhanced DPC with XFP,
+    draws four cages down the front plate; no figure of this card is held.
+  port-lamps: >-
+    estimated from the sibling: each port's TUNNEL and LINK lamps sit side by side left of its cage. The
+    module reference lists a link LED per port; the TUNNEL lamp is the sibling's.
+  port-legends: >-
+    estimated from the sibling: PORT n/0, TUNNEL and LINK printed vertically, reading upward.
+  levers: >-
+    the sibling's photo-measured levers (29.0 x 7.4, tip at the envelope edge). Figure 7 draws one lever with a
+    round screw head at the left end of the plate.
+  model-name: >-
+    the label is set at the sibling's position (card x 11.4, baseline 25.5), which is estimated; the text is
+    this card's model number without its XFP suffix, as Figure 7 prints DPCE-R-4XGE for the card beside it.
+  status-group: >-
+    Figure 7 draws one OK/FAIL lamp with its legend beside the left lever. Position taken from the sibling,
+    estimated.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '10-Gigabit Ethernet Enhanced
+    Queuing IP Services DPC with XFP' and '10-Gigabit Ethernet Enhanced Queuing Ethernet Services DPC with
+    XFP' (printed pp. 101 to 106): four 10-Gigabit Ethernet ports, throughput on each port at speeds up to
+    10 Gbps. The role is traffic: the book names no role for the ports, and the role follows the job, a
+    network interface a transceiver is plugged into.
+states:
+- ok
+- fail
+- absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      the four XFP ports, labelled 0/0 to 3/0 by PIC and port, each at up to 10 Gbps
+parts:
+- {ref: std/xfp@1, id: port-0, group: xfp-10g, at: [95.80, 14.00]}
+- {ref: std/xfp@1, id: port-1, group: xfp-10g, at: [171.95, 14.00]}
+- {ref: std/xfp@1, id: port-2, group: xfp-10g, at: [248.05, 14.00]}
+- {ref: std/xfp@1, id: port-3, group: xfp-10g, at: [324.05, 14.00]}
+elements:
+  lever-left:
+    at: [0.0, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+  lever-right:
+    at: [384.5, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the card family that every MX240, MX480 and MX960
+  slot takes (the MX960 seats it turned 90). Both are the sibling juniper/dpc-r-4xge-xfp's figures; the
+  module reference does not dimension this card.
+size-confidence: {w: estimated, h: estimated}
