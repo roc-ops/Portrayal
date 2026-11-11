@@ -2587,7 +2587,7 @@ function alongTray(rack, t, prev, next, cable, ctx, r) {
 // named like something every object has (`constructor`) is a media the table
 // does not know, never the function of that name.
 const ownMedia = (table, media) => (typeof media === 'string' && Object.hasOwn(table, media) ? table[media] : undefined);
-const cableDiameter = (cable, ctx) => {
+export const cableDiameter = (cable, ctx) => {
   const d = typeof ctx?.diameterOf === 'function' ? ctx.diameterOf(cable) : null;
   return typeof d === 'number' && d > 0 ? d : ownMedia(DIAMETERS, cable?.media) ?? UNSET_D;
 };
