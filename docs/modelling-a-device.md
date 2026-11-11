@@ -1298,3 +1298,16 @@ holds two kinds of block, and each is placed in the face's lists by a
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.
+
+**`whole-numbers: true`** is an optional key at the top of a `layout.yaml`, level
+with `views`. The expander computes every coordinate it writes, so a position of
+14 comes out as `14.0`, where a device written by hand says `14`. The two parse
+equal, but the compiled source is hashed as JSON, so the source hash and every
+face compiled from it change although the drawing does not. With the key, an
+`at` or a `size` that the expander computes and that is a whole number is
+written as an integer; `14.0` becomes `14` and `17.6` stays `17.6`. Use it
+when a layout reproduces a hand-written device and a whole number would
+otherwise change its hash. The key touches only the numbers the expander
+computes: longhand items, the non-view keys, and a block's own figures such as a
+numeral's `font-size` are copied as written. It is not written to `device.yaml`,
+it must be `true` or `false`, and a layout without it expands exactly as before.
