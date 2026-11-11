@@ -8,7 +8,7 @@ and second groups, and a 3 m cord that ends in a NEMA L5-20P plug. What is true 
     named as the unit numbers it;
   - the input is one cord part that states its plug, and the DCIM export names it as a NEMA L5-20P power port;
   - the controller panel carries every jack the maker's drawing shows, each a part;
-  - the two places the maker's documents disagree or are silent are written down as gaps, not drawn as if known.
+  - the input conflict and the places the maker's documents are silent are written down as gaps, not drawn as if known.
 
 These read the contracts and the device source. They read no library/dist and render nothing.
 """
@@ -138,7 +138,7 @@ def test_the_mounting_buttons_stand_the_distance_apart_the_drawing_prints():
     assert round(rear["button-2"]["at"][1] - rear["button-1"]["at"][1], 1) == 1244.0
 
 
-def test_the_two_places_the_documents_disagree_or_are_silent_are_gaps():
+def test_the_input_conflict_and_the_silent_places_are_gaps():
     gaps = {g["what"]: g for g in device()["gaps"]}
     assert gaps["input-conflict"]["reason"] == "sources-disagree"
     assert "IEC320 C20" in gaps["input-conflict"]["note"] and "NEMA L5-20P" in gaps["input-conflict"]["note"]
