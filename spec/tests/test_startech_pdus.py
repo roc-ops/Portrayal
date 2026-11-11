@@ -115,10 +115,26 @@ def test_a_new_part_says_where_each_figure_came_from_and_which_are_estimates(ref
     assert "ESTIMATED" in c["provenance"]["size"]
 
 
-def test_the_cord_part_states_the_plug_on_its_far_end_and_no_length():
+def test_the_cord_part_states_only_the_plug_on_its_far_end():
+    """`attrs` equals the plug alone, so a stated length (or any other attribute) would fail it."""
     c = contract("startech/pdu-cord-5-15p@1")
     assert c["class"] == "inlet"
     assert c["attrs"] == {"plug": "nema-5-15p"}
+
+
+@pytest.mark.parametrize("sku", ["8ns8-rack-mount-pdu", "rkpw081915"])
+def test_the_rear_outlets_stand_in_one_row_8_7_mm_from_the_top_as_the_guide_draws_them(sku):
+    """An independent literal: the guide's rear diagram puts the outlet blocks 9.3 to 35.8 mm below the body's top, so the part's
+    placement (rotated 270, 13.5 mm below its origin) sits at 8.7. A drift of an outlet's position fails this."""
+    ys = {p["at"][1] for i, p in placements(sku, "rear").items() if i.startswith("outlet-")}
+    assert ys == {8.7}
+
+
+def test_no_text_calls_the_switch_cover_hinged():
+    """The guide says only "Remove Cover to Access Switch"; no document says hinged."""
+    for p in [LIB / "components" / "startech" / "outlet-switch-cover" / "v1" / "contract.yaml",
+              LIB / "devices" / "startech" / "8ns8-rack-mount-pdu" / "device.yaml"]:
+        assert "hinged" not in p.read_text().lower(), p
 
 
 @pytest.mark.parametrize("sku", sorted(SKUS))

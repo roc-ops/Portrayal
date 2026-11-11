@@ -9,7 +9,7 @@ description: >-
   StarTech.com 8NS8-RACK-MOUNT-PDU, a 1U horizontal switched rack PDU, 120 V, 15 A, single phase. A black steel box with a
   built-in mounting bracket at each end. The front carries a 15 A push-to-reset circuit breaker at the left and the maker's logo.
   It also carries eight numbered rocker switches, one per outlet. Each switch is lit red while its outlet is on and sits under
-  a hinged cover. The rear carries eight NEMA 5-15R outlets, numbered 8 to 1 from the left as seen from the rear. A fixed 8 ft
+  a removable cover. The rear carries eight NEMA 5-15R outlets, numbered 8 to 1 from the left as seen from the rear. A fixed 8 ft
   (2.4 m) cord with a NEMA 5-15P plug leaves at the right.
 profile: power
 provenance:
@@ -40,14 +40,14 @@ provenance:
     confidence: photo-measured
     note: >-
       photo-measured - millimetres from the body's left edge as seen from the rear, read off the guide's rear diagram. Outlet 8 centre at 30.6
-      across, then every 38.8 mm to outlet 1 at 302.2, all 26.2 down; the numerals stand 19.0 left of each centre and 9.0 down. Cord relief centre at
+      across, then every 38.8 mm to outlet 1 at 302.2, all 22.2 down (re-measured on the guide's rear diagram, 9.3 to 35.8 mm below the body's top for each block); the numerals stand 19.0 left of each centre and 9.0 down. Cord relief centre at
       413.0 across, 23.7 down.
   outlets:
     confidence: datasheet
     note: >-
       datasheet - data sheet, page 1 and 2: "8x NEMA 5-15R outlets", "Number of Power Outlets 8", "rear facing outlets"; guide page 1,
       component 3: "Outlets (x8) NEMA 5-15R Connector 125V AC / 15A". std/nema-5-15r@1 is the library's 5-15R face, borrowed from the 5-20R,
-      so the outlets are that part's size; the guide's diagram draws each in a block 28.2 x 33.6.
+      so the outlets are that part's size; the guide's diagram draws each in a block about 27.8 x 26.5.
   input:
     confidence: datasheet
     note: >-
@@ -174,14 +174,14 @@ views:
     components:
       placements:
         - {id: input, ref: startech/pdu-cord-5-15p@1, at: [405.0, 15.7], group: power-input, rel-pos: 1, description: 'the fixed 8 ft cord, ending in a NEMA 5-15P plug'}
-        - {id: outlet-1, ref: std/nema-5-15r@1, at: [288.7, 12.7], rotate: 270, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-2, ref: std/nema-5-15r@1, at: [249.9, 12.7], rotate: 270, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-3, ref: std/nema-5-15r@1, at: [211.1, 12.7], rotate: 270, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-4, ref: std/nema-5-15r@1, at: [172.3, 12.7], rotate: 270, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-5, ref: std/nema-5-15r@1, at: [133.5, 12.7], rotate: 270, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-6, ref: std/nema-5-15r@1, at: [94.7, 12.7], rotate: 270, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-7, ref: std/nema-5-15r@1, at: [55.9, 12.7], rotate: 270, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-8, ref: std/nema-5-15r@1, at: [17.1, 12.7], rotate: 270, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [288.7, 8.7], rotate: 270, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [249.9, 8.7], rotate: 270, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [211.1, 8.7], rotate: 270, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [172.3, 8.7], rotate: 270, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [133.5, 8.7], rotate: 270, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [94.7, 8.7], rotate: 270, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [55.9, 8.7], rotate: 270, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [17.1, 8.7], rotate: 270, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
   top:
     size: {w: 440, h: 95.5}
     empty: >-
