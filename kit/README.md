@@ -61,6 +61,57 @@ served from: another CDN, or `library/packages/` after `./publish.sh` to try
 the packages locally. The explorer does that with `?dist=packages`, and reads
 jsDelivr with `?dist=cdn` (and `&index=<version>`).
 
+### Reading a build served as packs
+
+**Next release: `fetchDist` and `packedDist`.** A build holds one file per
+drawing, which is right for a build and costly on a file server that limits the
+number of files. `spec/tools/dev/dist_packs.py --dist library/dist --out <new folder>`
+packs a built dist into a few files per device. Nothing builds them by default:
+`library/dist/` and the npm packages are as they were, and a consumer that wants
+packs makes them and serves them under `<base>packs/`. `packedDist` reads them:
+
+```js
+import { packedDist, fetchDist } from '@portrayal/kit/dist';
+
+const dist = await packedDist('/portrayal/dist/');   // base of the build and its packs/
+createShell({ dist });
+const res = await fetchDist(dist('acme-box.default.front.svg'));   // a Response, as fetch gives
+```
+
+`packedDist(base)` resolves once `packs/components/index.json` has loaded, so
+the `dist` it returns is ready to use. Its function maps a device's
+`configs.json` and `source.json`, the library-wide JSON and `racks/…` to the
+plain files under `base`. It maps a device's drawing to the URL of that
+device's pack with the drawing's path as the fragment
+(`<base>packs/devices/<device>.json#<face file>`), and a skin to the chunk of
+its namespace that holds it
+(`<base>packs/components/<namespace>.<k>.json#components/<skin>`), found by
+binary search in the index.
+
+**Read every URL of a dist with `fetchDist(url, init)`.** It has the contract
+of `fetch`. A plain URL is passed to `fetch` as it is. A pack URL is answered
+from its pack, as a new `Response` on every call, typed by the file name; a
+drawing that no pack holds is a new 404. A bare `fetch` of a pack URL gets the
+whole pack. The kit reads through `fetchDist` everywhere, so a `dist` from
+`packedDist`, from `layeredDist` over those, or from `flatDist` all work in the
+shell, the viewer and the rack view.
+
+- **Routing.** A device has a pack of the faces its default configuration draws
+  and, when another configuration draws a face of its own, a second pack
+  (`<device>.more.json`). `fetchDist` reads the device's `configs.json` from
+  `jdist`'s memo (and waits for a read that is still on its way) and goes
+  straight to the pack that holds the face; a face no configuration names is a
+  miss with no request. When `configs.json` is not there, failed, or has no
+  `files`, it tries the first pack and then the second if the first says
+  `"more": true`.
+- **Fetching.** Each pack is fetched once per page and shared. A network
+  failure or a 5xx is tried once more and not remembered; a pack that is not
+  there (404) is remembered for the page.
+- `svgSource` (`relief.js`) forgets a fetch that was rejected, so a failure does
+  not blank every drawing of a device for the page. A missing drawing is still
+  remembered as `''`.
+- `clearDistCache()` forgets the packs as well as the JSON.
+
 ## Modules
 
 | module | what it does |

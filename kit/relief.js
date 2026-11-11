@@ -13,6 +13,7 @@
 import { paintFields, unpaintFields, paintAdjustments } from './fields.js';
 import { paintDisplays } from './displays.js';
 import { boundLamps, expandStates } from './states.js';
+import { fetchDist } from './dist.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -1681,8 +1682,15 @@ export function svgSource(url, scope) {
   // instead of throwing: `''.matchAll` yields nothing, `innerHTML = ''` empties
   // the node, `parseFromString('')` raises a parsererror the caller already
   // checks for, and a Blob of '' fails the image load exactly as a 404 page did.
-  if (!SVG_CACHE.has(url))
-    SVG_CACHE.set(url, fetch(url).then(r => r.ok ? r.text() : ''));
+  //
+  // A REJECTED FETCH IS DROPPED, and only that. The drawings of a device read
+  // from a pack share one fetch, so a network failure remembered here would
+  // blank every one of them for the page. The '' above stays: it is an answer.
+  if (!SVG_CACHE.has(url)) {
+    const hit = fetchDist(url).then(r => r.ok ? r.text() : '');
+    SVG_CACHE.set(url, hit);
+    hit.catch(() => { if (SVG_CACHE.get(url) === hit) SVG_CACHE.delete(url); });
+  }
   return SVG_CACHE.get(url);
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }
