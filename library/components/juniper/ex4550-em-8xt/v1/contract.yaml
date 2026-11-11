@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: ex4550-em-8xt
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+    Juniper EX4550-EM-8XT, the eight-port 10GBASE-T expansion module of the EX4550 switches. It slides into the module slot on the front panel or the one on the rear panel. It has eight RJ-45 jacks in two rows of four, numbered 0 to 7, the even numbers on the upper row, each at 100 Mbps, 1 Gbps or 10 Gbps. One link and activity arrow lamp per port sits at the top of the jack field, and the module has one ST lamp. Two captive screws hold it. It is hot-insertable and hot-removable.
+attrs:
+  model: EX4550-EM-8XT
+  rj45: 8
+  weight: 0.9 lb (0.41 kg)
+  power-absent: not-published
+  ports-note: eight RJ-45 ports at 100 Mbps, 1 Gbps or 10 Gbps, usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Expansion Modules in EX4550 Switches: Table 8 (PDF pages 43 to 44) lists the module and its model number; Figure 9 (PDF page 45, the module in three-quarter view) and Figure 12 (PDF page 46, g021474, the face drawn flat); Figure 19 (PDF page 52) and Table 14 (the port lamps). Installing an Expansion Module (Figure 75) seats it in the EX4550-32T.
+  size: >-
+    estimated - no document dimensions the module. It fills the module slot, 86.5 x 41.0 mm, which juniper/ex4550-em-cover@1 reads
+    off Figures 4 and 6 (the method is there). The figure's outline is read as fractions and applied to 86.5 x 41.0 mm.
+  elements: >-
+    drawing - Figure 12 is a flat elevation, outline 1587 x 734 px at 600 dpi, read as fractions and applied to 86.5 x 41.0 mm. Two rows of four jacks on a 14.0 mm pitch (the registry's 13.97) from 16.1 mm in, the upper row at 10.1 mm and the lower at 22.2 mm, the upper row turned 180 as the library stacks jacks: the figure draws the upper jack with its notch at the top and its contacts at the foot and the lower one the other way. One arrow lamp per port in the notch strip, 9.05 mm down: an up arrow at the left of each upper jack (callout 2, link and activity of the upper port) and a down arrow at its right (callout 3, the lower port); the arrows sit in the notch at the top corners of each upper jack's frame, above the jack's opening, so the upper cell starts at 10.1 mm where the figure's opening starts. The ST lamp is at 8.6, 28.8 mm. Numbers, screws (4.9 mm from both edges), vents, notches and the legend EX4550-EM-8XT are drawn as on the 8XSFP.
+  colour: >-
+    estimated - no photograph of this module is held and the figures are line drawings. The plate takes the grey of the
+    nearest held evidence of this maker's module faces (#888c92, the fitted EX-UM-4X4SFP in the EX4300-24T photograph); the
+    screws are silver. A photograph would replace it.
+  led: >-
+    datasheet - guide Figure 12 callouts and Table 9 (PDF page 46): the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and functioning normally. Each port has one link and activity lamp (Table 14); the 10GBASE-T ports have no status lamp.
+  weight: >-
+    datasheet - guide, Table 6, Chassis Physical Specifications (PDF page 36): "10GBASE-T expansion module: 0.9 lb (0.41 kg)".
+  power: >-
+    not published - searched the guide's power tables for a figure for any module and found only whole-switch totals, so the
+    module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  rj45:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: rj45
+      speed: 10g
+    description: >-
+      The eight jacks, numbered 0 to 7 as printed, the even numbers on the upper row. 100 Mbps, 1 Gbps or 10 Gbps
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      One link and activity arrow lamp for each port, at the top of the jack field, numbered as its port
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      the ST lamp of the module (guide Table 9)
+parts:
+- {ref: common/rj45-ganged-eth-plain@1, id: port-0, at: [16.1, 10.1], rotate: 180, group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-1, at: [16.1, 22.2], group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-2, at: [30.1, 10.1], rotate: 180, group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-3, at: [30.1, 22.2], group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-4, at: [44.1, 10.1], rotate: 180, group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-5, at: [44.1, 22.2], group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-6, at: [58.1, 10.1], rotate: 180, group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/rj45-ganged-eth-plain@1, id: port-7, at: [58.1, 22.2], group: rj45, attrs: {media: rj45, speed: 10g}}
+- {ref: common/led-arrow-sm@1, id: led-0, at: [16.05, 8.05], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-1, at: [26.52, 8.05], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-2, at: [30.07, 8.05], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-3, at: [40.38, 8.05], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-4, at: [44.08, 8.05], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-5, at: [54.38, 8.05], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-6, at: [58.08, 8.05], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-7, at: [68.38, 8.05], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-st, at: [7.56, 27.77], group: status, attrs: {function: module status}}
+elements:
+  screw-left:
+    at: [0.50, 15.30]
+    size: [8.8, 8.8]
+    class: screw
+  screw-right:
+    at: [77.20, 15.30]
+    size: [8.8, 8.8]
+    class: screw
+size:
+  w: 86.5
+  h: 41.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]
