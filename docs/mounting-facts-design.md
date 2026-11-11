@@ -70,7 +70,7 @@ chassis:
   does; an estimate says so and has a `gaps` entry.
 
 Why `mountings` and not a second `mount`: `chassis.mount` says how the box is
-installed in kind (`rack`, `wall`, `ceiling`) and has one value; a rolled and an
+installed in kind (for example `rack`, `wall` or `ceiling`) and has one value; a rolled and an
 unrolled shelf are both `rack`. The two names are close, and a reader may
 confuse them; section 8 (Question 1) asks whether another name is better.
 
@@ -100,13 +100,18 @@ printed page is one less.
 
 | device | mounting | fact | where |
 |---|---|---|---|
-| `nokia/nfxs-e-bb` (FX-8) | horizontal | lug 6 AWG | parts list, section 9.2.2, p165 |
-| | vertical | lug 8 AWG | the same list, p165 |
+| `nokia/nfxs-e-bb` (FX-8) | horizontal, 19 in. rack | lug 6 AWG | parts list, section 9.2.2, p165 |
+| | vertical, 19 in. rack | lug 8 AWG | the same list, p165 |
 | | horizontal | open channel faces the shelf wall | section 9.2, Caution 1, p160; Figure 80, p161 |
 | | horizontal, as drawn | cables are routed through the left side of the rack to the terminal block on the bottom of the shelf | "Power cable routing and connection" under 10.5.3, p202; Figure 105, p203 |
 | `nokia/nfxs-f-bb` (FX-4) | both | lug 10 AWG (the largest the terminal block takes) | parts list, section 13.2.2, p255; "Power cable type" under 14.5.3, p302 |
 | | horizontal | open channel faces the shelf wall | section 13.2, Caution 1, p250; Figure 140, p251 |
 | | horizontal, as drawn | cables are routed through the left side of the rack to the terminal block on the bottom of the shelf | "Power cable routing and connection" under 14.5.3, and Figure 176, p303 |
+
+The FX-8's parts list for a 23 in. rack (section 9.3.2, p181) names one "8 AWG
+power lug" and no 6 AWG, for horizontal and vertical mounting alike, so the 6 AWG
+horizontal lug is stated for the 19 in. rack only, and the manual's two lists do
+not agree for a horizontal mount in a 23 in. rack (section 8, Question 2).
 
 The routing text names no mounting and says the cables "can then be routed" to the
 terminal block; the figures that go with it (105 and 176) draw a horizontal
@@ -150,8 +155,10 @@ code is L217 at the time of writing):
   figure it would go in the surface set (a patch to state or correct), as
   `weight-kg` and `ears.h` do; whether `cable-exit` stays there is Question 3.
   If the lay ever reads `cable-exit` to place a cable, that value becomes
-  geometry and moving it is a major for each device that states it, as the ears
-  note says of `ears.h`. The first statement on a device would then be the bump
+  geometry and moving it is a major for each device that states it; `ears` and
+  `kits` are surface because the generic ear is never in a published face
+  (rack-mounting-design.md), and a lay that places cables from `cable-exit`
+  would be a different case. The first statement on a device would then be the bump
   the lock computes for a surface key, a patch as `ears.rolled` was; the lock,
   not this note, has the last word.
 - **The DCIM exports.** A device that states the key gains one comment
@@ -170,14 +177,15 @@ code is L217 at the time of writing):
 
 A new optional key on the device manifest: format 1 is unchanged and every file
 valid before stays valid (format-stability.md, "What is a breaking change").
-It is **one-way** in the sense that file uses: from the first device on `main`
-that states it, the key's name, the list's shape, the words of `cable-exit`
-and `channel`, and `roll` as a list cannot change without a format change, and
-the served copy of the device schema is republished in the same release as that
-device, or a reader validating against the older copy refuses the device. Going
-back is deleting the statements, so no consumer outside the repository has
-yet been promised anything. Neither `contract` nor the rack file's `version`
-rises.
+It is **one-way** in the sense format-stability.md gives the word for an
+additive key: from the first device on `main` that states it, the key's name,
+the list's shape, the words of `cable-exit` and `channel`, and `roll` as a list
+cannot change without a format change, and the served copy of the device schema
+is republished in the same release as that device, or a reader validating
+against the older copy refuses the device. Before that first device the key can
+still be changed freely, since nothing states it; after it, deleting the
+statements does not restore the earlier schema for a reader that has already
+copied it. Neither `contract` nor the rack file's `version` rises.
 
 ## 8. Order of work, and open questions
 
@@ -194,8 +202,9 @@ Questions this note leaves open:
 
 - Question 1. Is `chassis.mountings` the right name and place, given `chassis.mount`?
 - Question 2. The vertical mounting's cable exit: no held text states "up", and the
-  manual's lug (6 AWG horizontal) is larger than the NGFC-H terminal's stated
-  range (up to 8 AWG, M5 studs): which statement does the library keep?
+  manual's lug (6 AWG horizontal, in the 19 in. list only) is larger than the
+  NGFC-H terminal's stated range (up to 8 AWG, M5 studs), while the 23 in. list
+  names one 8 AWG lug: which statement does the library keep?
 - Question 3. Surface or geometry for `cable-exit`, now or when the lay reads it?
 - Question 4. Does `lug` carry only `awg`, or also the part number the manual gives
   (Burndy YAZ8C-2TC10 for the FX-8, Panduit PV10-10R for the FX-4)?
