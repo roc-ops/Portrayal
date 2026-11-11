@@ -49,8 +49,7 @@ provenance:
       boxes put the F connector at 11.75 right and 12.85 down, the USB-C at 31.5 and 14.25 and the
       RJ45 at 18.5 and 14.4: they agree with the figure within 0.8 mm across and, down the face,
       within 0.8 (F connector), 1.5 (USB-C) and 1.2 mm (RJ45). The figure is drawn from, because it
-      shows where the visible feature is and a bounding box also holds what stands behind it. The
-      model could not be drawn to settle it (it is Draco-compressed and the reader is not installed).
+      shows where the visible feature is and a bounding box also holds what stands behind it.
   coax-end:
     confidence: drawing
     note: >-
@@ -59,20 +58,28 @@ provenance:
       corners, wider than that part. The SYS lamp is the library's 2 mm lamp (the figure's is about
       2.6 mm). The figure labels one point System LED and Reset Button and shows a pinhole under the
       lamp, drawn as a 1.5 mm hole; the library's reset-button part is a 4 mm pinhole and is not
-      used for that reason.
+      used for that reason. The USB Type-C opening: the library's std/usb-c@1 is 8.34 x 2.56 mm and is
+      placed turned to 2.56 wide and 8.34 high; the model's opening is 3.2 x 8.9 mm
+      (TYPE_C-14PIN-XC_3); the figure's, with its rim, is about 3.9 x 9.3 mm. The library part's size is
+      the one drawn.
   ethernet-end:
     confidence: drawing
     note: >-
       the jack is drawn with the library's own RJ45 part (15.8 x 13.2); the figure's opening with
       its surround is about 17.4 wide and 15 high. The legends GE and 10/100/1000/2500BT are read
-      from the stock photograph and the page 4 figure. A small flat tab under the housing between
+      from the stock photograph and the page 4 figure. The photograph's amber and green jack lamps
+      are not drawn. A small flat tab under the housing between
       the feet is not drawn.
   end-plates:
     confidence: drawing
     note: >-
       both end views show the plate carrying the ports set in from the housing by a thin border:
       on the coax end about 1.9 mm in from the left, 1.8 from the right, 1.0 from the top, and ending
-      25.1 mm down; on the Ethernet end 1.8, 1.8, 1.2 and 25.4. Drawn as a 0.2 mm outline.
+      25.1 mm down; on the Ethernet end 1.8, 1.8, 1.2 and 25.4. Drawn as a 0.2 mm outline. The maker's
+      3D model prints a film on each end plate (F_FILM and B_FILM, each 32.4 x 22.8 mm, 2.3 mm in from
+      each side and 1.2 mm from the top, ending 24.0 mm down). The drawn plate is larger than the film
+      because the figure's outline is the edge of the inset plate, and the film is read as the printed
+      area inside that edge (an inference: no document says so).
   seam:
     confidence: drawing
     note: >-
@@ -92,9 +99,11 @@ provenance:
   chassis-colour:
     confidence: photo-measured
     note: >-
-      the median of the lit side faces of the cover and the base in the stock photograph,
-      #38393a and #373737, taken as #383838. The photograph's top reads #59595b, which is the
-      lighting. The figure renders the same plastic darker (about #232325), and its feet about
+      the median of the lit side faces of the cover and the base in the stock photograph (1920 x 1080
+      px), #38393a and #373737, taken as #383838. Measured again on two blocks of the lit side, the
+      cover's 210 x 35 px at x 800 to 1010, y 450 to 485 (7350 px) and the base's 210 x 30 px at
+      y 525 to 555 (6300 px), the medians are #383839 and #363637, within two levels of those. The photograph's top
+      reads #59595b, which is the lighting. The figure renders the same plastic darker (about #232325), and its feet about
       0.77 of its body, which on the photograph's body is #2b2b2b.
 attrs:
   physical:
@@ -139,7 +148,8 @@ gaps:
   note: >-
     the datasheet's page 2 diagram draws the link below the IPC-1C as "1G PoE" under the legend
     "Ethernet + PoE", with a wall-plate access point at its end; page 3 prints power input USB Type C,
-    max power 3 W, and no PoE output or budget. A 3 W unit cannot feed an access point, so the diagram
+    max power 3 W, and no PoE output or budget. Its page 3 diagram draws the IPC-1C's own link as
+    plain "1G" Ethernet and the IPC-2C's as "2.5G PoE++". A 3 W unit cannot feed an access point, so the diagram
     is read as a generic reference and no PoE output is stated.
   wanted: >-
     Whether the Ethernet port supplies PoE, and at which standard and budget: a figure on the
