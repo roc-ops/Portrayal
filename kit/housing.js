@@ -104,7 +104,14 @@ function rotate(v, axis, angle) {            // Rodrigues, axis a unit vector
 // in the half's own frame (before the lid turns). The lid turns the way that
 // takes its outer face toward the hinge side, whatever the face it hinges on.
 // A lid that states no angle opens to 180 degrees, laid flat.
-export function housingPlan(halves, size) {
+//
+// A HOUSING WITH A SECTION (`split`, section.js `sectionHalves`) is not two boxes. `size` is
+// still the closed box; each half then takes the size and centre of its own part of the stepped
+// body (ribs and ribs that stand outside the box included), the lid's closed centre is its
+// part's, and the hinge edge is the line the split names: where the seam meets the hinge face's
+// outline, not the box's edge. The plan carries `split` so the viewer builds the parts, and a
+// call without one is the plan of two boxes, as it has always been.
+export function housingPlan(halves, size, split) {
   if (!halves || !halves.base || !halves.lid || !size) return null;
   const outer = NORMAL[halves.base.outer], hinge = NORMAL[halves.lid.hinge];
   const bs = num(halves.base.stands), ls = num(halves.lid.stands);
@@ -127,19 +134,25 @@ export function housingPlan(halves, size) {
   const lidClosed = scale(s, tOuter + bs + ls / 2);
   // the hinge edge: on the seam, on the hinge face
   const hingeHalf = scale(hinge, (ext(hinge).reduce((a, b) => a + b, 0)) / 2);
-  const pivot = add(seamAt, sub(hingeHalf, scale(s, dot(hingeHalf, s))));
+  const boxPivot = add(seamAt, sub(hingeHalf, scale(s, dot(hingeHalf, s))));
   // the axis that turns s toward the hinge's normal: a = s x n
   const axis = cross(s, hinge);
   const angle = (num(halves.lid.angle) ?? DEFAULT_ANGLE) * Math.PI / 180;
-  const lidCenter = add(pivot, rotate(sub(lidClosed, pivot), axis, angle));
+  const parts = split && split.base && split.lid && split.pivot ? split : null;
+  const pivot = parts ? parts.pivot : boxPivot;
+  const closed = parts ? parts.lid.center : lidClosed;
+  const lidCenter = add(pivot, rotate(sub(closed, pivot), axis, angle));
   const sh = Math.sin(angle / 2);
-  return {
+  const plan = {
     s, along,
-    base: {size: half(bs), center: baseCenter, seam: s, floor: outer, stands: bs},
-    lid: {size: half(ls), center: lidCenter, closedCenter: lidClosed, seam: scale(s, -1), floor: s,
-          stands: ls, pivot, axis, angle,
+    base: {size: parts ? parts.base.size : half(bs), center: parts ? parts.base.center : baseCenter,
+           seam: s, floor: outer, stands: bs},
+    lid: {size: parts ? parts.lid.size : half(ls), center: lidCenter, closedCenter: closed,
+          seam: scale(s, -1), floor: s, stands: ls, pivot, axis, angle,
           quaternion: [axis[0] * sh, axis[1] * sh, axis[2] * sh, Math.cos(angle / 2)]},
   };
+  if (parts) plan.split = parts;
+  return plan;
 }
 
 // a point of the lid's own frame, in the box frame once the lid is open

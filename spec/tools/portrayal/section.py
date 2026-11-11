@@ -171,6 +171,61 @@ def level_steps(pts, side):
     return [x for x, a, b in zip(xs[1:], heights, heights[1:]) if abs(a - b) > TOL]
 
 
+def seam_row(halves, height):
+    """Where the seam of a housing that opens cuts the section, as a row in the
+    section's frame (y down from the top): the plane `base.stands` from the base's
+    `outer` face. None where the base states no top or bottom `outer` or no
+    numeric `stands`. kit/section.js `splitSection` reads the same rule."""
+    base = (halves or {}).get("base")
+    base = base if isinstance(base, dict) else {}
+    stands = base.get("stands")
+    if isinstance(stands, bool) or not isinstance(stands, (int, float)):
+        return None
+    if base.get("outer") == "top":
+        return float(stands)
+    if base.get("outer") == "bottom":
+        return float(height) - float(stands)
+    return None
+
+
+def seam_problems(pts, row):
+    """What is wrong with the seam row against the section: the plane has to cut
+    the body into two parts that each have outline, so it is inside the section's
+    height and not on a horizontal edge (every vertex height carries one)."""
+    ys = [p[1] for p in pts]
+    if row <= min(ys) + TOL or row >= max(ys) - TOL:
+        return [f"the seam is {row:g} mm down the section, which is outside its height, "
+                f"{min(ys):g} to {max(ys):g}: one half would be empty"]
+    if any(abs(row - y) <= TOL for y in ys):
+        return [f"the seam is {row:g} mm down the section, exactly on a horizontal edge of "
+                "it: which side of the edge each half takes is not stated"]
+    return []
+
+
+def width_at(pts, row):
+    """The extent across the depth the section has at `row`: `(lo, hi)` of its
+    solid intervals there, or None where the row is on an edge or outside."""
+    for b0, b1, intervals in _bands(pts):
+        if b0 < row < b1 and intervals:
+            return intervals[0][0], intervals[-1][1]
+    return None
+
+
+def edge_extent(pts, side, height):
+    """`(x0, x1)` of the section's one edge on the top or the bottom side of the box, or
+    None where there is not exactly one (L205 reports that)."""
+    y = 0.0 if side == "top" else float(height)
+    runs = [(min(a[0], b[0]), max(a[0], b[0])) for a, b in _edges(pts)
+            if a[1] == b[1] and abs(a[1] - y) <= TOL and a[0] != b[0]]
+    return runs[0] if len(runs) == 1 else None
+
+
+def widest(pts):
+    """The widest extent across the depth the section has in any band."""
+    spans = [(iv[0][0], iv[-1][1]) for _, _, iv in _bands(pts) if iv]
+    return max(hi - lo for lo, hi in spans) if spans else 0.0
+
+
 def straddles_step(pts, side, depth, lo, hi):
     """Whether a part on the top or bottom face, whose box covers the drawing
     rows `lo` to `hi` (the face is drawn with the front at the bottom, so a row
