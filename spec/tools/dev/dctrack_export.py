@@ -154,6 +154,9 @@ is written once, under that maker.
   held, so no port is written;
 - images, and connections (cables);
 - the device type's depth, airflow, description and comments;
+- the rack PDU sheet, and the rack-side fields (a cabinet's geometry and
+  numbering, an item's Rails Used and Status), which the rack-side sheets of
+  the Rack Builder name;
 - the REST calls, and any load into dcTrack.
 
 Nothing here has been loaded into a dcTrack instance.

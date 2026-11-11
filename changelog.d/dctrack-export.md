@@ -7,6 +7,7 @@
   module (`kit/rack/dctrack.js`) writes the location, cabinet and device sheets
   of a rack file in the import template's own column names, from Sunbird's
   dcTrack 6.0.3 User Guide and 8.0.0 Implementation Guide. Ports, port types,
-  images, connections and the REST calls are not written. The note
+  images, connections, the rack PDU sheet, a model's class, mounting, form
+  factor and part number, and the REST calls are not written. The note
   `docs/dctrack-export-design.md` gives each header its page and lists the
   stand-ins that no page prints.

@@ -179,7 +179,8 @@ model list), the location's code, the cabinet's name, `U Position` and
 | the REST calls | the API help is not held; this part writes files only |
 | the rack PDU sheet; Depth Position and Cabinet Side of a part beside the rack | a rack file does not say which item is a rack PDU, and holds no side or depth for a 0U part |
 | the cabinet's Front Faces, Row Label, Position in Row; an item's Rails Used and Status | no rack field holds them; an item with no status is imported as Planned |
-| Class, Mounting and Form Factor of a model; the model's part number and depth | the device type does not state them, or no field is named |
+| Class, Mounting and Form Factor of a model; the model's part number, depth, airflow, description and comments | the device type does not state them, or no field is named |
+| the cabinet's height, width, depth and numbering | dcTrack takes them from the cabinet model |
 | facts with no field: datasheet, maturity, power envelope | no notes field is confirmed |
 | a load into a dcTrack instance | none was available |
 
@@ -192,7 +193,7 @@ model list), the location's code, the cabinet's name, `U Position` and
    of the location that holds the item (pounds for a US location, as the item
    form prints), so that `Weight (kg)` needs a conversion?
 4. How is a model brought in: only by the Sunbird Master Models Library file
-   and the Models Library page (PDF pages 299 and 439), or is there an import
+   and the Models Library page (PDF pages 445 and 439), or is there an import
    file? That decides the shape of the model list.
 5. A location's Data Center Area and Country, and a cabinet's make and model:
    where do they come from for a rack file?
