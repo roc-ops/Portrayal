@@ -30,10 +30,10 @@ HEADER = "oscilloquartz/osa542x-dc-header@1"
 PLUG = "oscilloquartz/osa542x-dc-plug@1"
 SUPPLIES = {"oscilloquartz/osa542x-psu-dc-40w@1": 40, "oscilloquartz/osa542x-psu-dc-90w@1": 90}
 DEVICES = {
-    "oscilloquartz/osa-5420-quartz": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
-    "oscilloquartz/osa-5420-quartz-hq-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
-    "oscilloquartz/osa-5421-quartz-hq-plus-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
-    "oscilloquartz/osa-5421-rubidium": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
+    "oscilloquartz/osa-5420-quartz": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-40w@1"),
+    "oscilloquartz/osa-5420-quartz-hq-plus": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-40w@1"),
+    "oscilloquartz/osa-5421-quartz-hq-plus-plus": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-90w@1"),
+    "oscilloquartz/osa-5421-rubidium": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-90w@1"),
 }
 
 
