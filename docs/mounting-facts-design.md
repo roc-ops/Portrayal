@@ -57,8 +57,9 @@ chassis:
   and an entry states at least one of them. A statement a source does not make is
   left out, never written as unknown.
 - `lug.awg` is a positive number, the conductor size of the lug. Other
-  figures of a lug (hole size, spacing, part number) are not stated by the held
-  guides for these shelves as a fact of the mounting; this note proposes leaving
+  figures of a lug (hole size, spacing, part number) are given by the held
+  guide as the recommended crimp lug of the power cable, not as a fact of a
+  mounting; this note proposes leaving
   them out for now (section 8, Question 4), and they could be added to `lug`
   later, as keys of an object.
 - `cable-exit` is the side of the box the cable leaves by in that mounting,
@@ -102,16 +103,18 @@ printed page is one less.
 |---|---|---|---|
 | `nokia/nfxs-e-bb` (FX-8) | horizontal, 19 in. rack | lug 6 AWG | parts list, section 9.2.2, p165 |
 | | vertical, 19 in. rack | lug 8 AWG | the same list, p165 |
-| | horizontal | open channel faces the shelf wall | section 9.2, Caution 1, p160; Figure 80, p161 |
+| | horizontal, EIA standard 19 in. rack | open channel faces the shelf wall | section 9.2, Caution 1, p160; Figure 80, p161 |
 | | horizontal, as drawn | cables are routed through the left side of the rack to the terminal block on the bottom of the shelf | "Power cable routing and connection" under 10.5.3, p202; Figure 105, p203 |
-| `nokia/nfxs-f-bb` (FX-4) | both | lug 10 AWG (the largest the terminal block takes) | parts list, section 13.2.2, p255; "Power cable type" under 14.5.3, p302 |
-| | horizontal | open channel faces the shelf wall | section 13.2, Caution 1, p250; Figure 140, p251 |
+| `nokia/nfxs-f-bb` (FX-4) | both, 19 in. rack | lug 10 AWG (the largest the terminal block takes) | parts list, section 13.2.2, p255; "Power cable type" under 14.5.3, p302 |
+| | horizontal, EIA standard 19 in. rack | open channel faces the shelf wall | section 13.2, Caution 1, p250; Figure 140, p251 |
 | | horizontal, as drawn | cables are routed through the left side of the rack to the terminal block on the bottom of the shelf | "Power cable routing and connection" under 14.5.3, and Figure 176, p303 |
 
 The FX-8's parts list for a 23 in. rack (section 9.3.2, p181) names one "8 AWG
 power lug" and no 6 AWG, for horizontal and vertical mounting alike, so the 6 AWG
 horizontal lug is stated for the 19 in. rack only, and the manual's two lists do
 not agree for a horizontal mount in a 23 in. rack (section 8, Question 2).
+
+The FX-4's parts list for a 23 in. rack (section 13.3.2, p270) names no power lug.
 
 The routing text names no mounting and says the cables "can then be routed" to the
 terminal block; the figures that go with it (105 and 176) draw a horizontal
