@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4550-32t
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4550-32T
@@ -102,8 +102,9 @@ provenance:
     note: >-
       Figures 2, 3 and 6: two module slots, one on the front panel at the left and one on the rear panel.
       Table 3 lists the four modules each takes, EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and EX4550-VC-128G.
-      Every model ships with a cover panel in each slot. THE MODULES ARE NOT MODELLED: each slot is a
-      bay that accepts the cover panel alone, and the four modules are named here and in a gap.
+      Every model ships with a cover panel in each slot. Each slot is a bay that takes the cover panel,
+      which ships, and the four modules; the modules are drawn from Figures 11 to 15 of the guide's module
+      topics.
   rear-layout:
     confidence: drawing
     note: >-
@@ -205,14 +206,15 @@ gaps:
   wanted: >-
     The part number of the mounting kit and the ear positions. The guide describes the front mount brackets
     and prints no part number for them.
-- what: expansion-modules
+- what: module-connector
   scope:
   - front
   - rear
   reason: needs-drawing
   wanted: >-
-    The four modules a slot takes (EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and EX4550-VC-128G)
-    are not modelled. Each slot accepts its cover panel only.
+    The connector between each module and the chassis. No registered connector key names it and no figure
+    of the guide draws it, so the modules are drawn from their faces only. A document that draws the module's
+    edge connector and a key for it would add it.
 - what: datasheet
   scope:
   - front
@@ -486,6 +488,10 @@ views:
         rel-pos: 0
         accepts:
         - juniper/ex4550-em-cover@1
+        - juniper/ex4550-em-8xsfp@1
+        - juniper/ex4550-em-8xt@1
+        - juniper/ex4550-em-2qsfp@1
+        - juniper/ex4550-vc-128g@1
         default: juniper/ex4550-em-cover@1
       placements:
       - {ref: common/rj45-ganged-eth-plain@1, id: port-0, at: [106.4, 9.5], rotate: 180, group: rj45,
@@ -970,6 +976,10 @@ views:
         rel-pos: 1
         accepts:
         - juniper/ex4550-em-cover@1
+        - juniper/ex4550-em-8xsfp@1
+        - juniper/ex4550-em-8xt@1
+        - juniper/ex4550-em-2qsfp@1
+        - juniper/ex4550-vc-128g@1
         default: juniper/ex4550-em-cover@1
       - id: fan-1
         at: [286.9, 1.9]
@@ -1064,6 +1074,12 @@ configurations:
       The EX4550-32T-AFO with a second AC supply in slot 1, as the guide allows. An illustration, not
       an order code.
     bays: {psu-1: juniper/ex4600-jpsu-650-ac-afo@1}
+  em-8xt:
+    kind: example
+    description: >-
+      The switch as shipped, with EX4550-EM-8XT seated in em-1 in place of the cover. An illustration,
+      not an order code.
+    bays: {em-1: juniper/ex4550-em-8xt@1}
 references:
 - title: >-
     Juniper EX4550 Switch Hardware Guide (published 2020-12-15), from the EX Series documentation archive

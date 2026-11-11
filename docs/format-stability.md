@@ -1243,10 +1243,60 @@ this is the situation `halves` is in. Files written without it are read as
 before. A consumer that validates a manifest with a copy of the schema updates
 the copy before it reads a device that states a section.
 
-**Not in this change.** A fin field on the housing, the 3D body built from the
-section and the open state of a housing with a section are later changes. Until
-they land the section is drawn on the left and right faces only, and a
-device cannot state `section` together with `halves`.
+**Not in this change.** The open state of a housing with a section is a later
+change. Until it lands a device cannot state `section` together with `halves`.
+
+## Ribs on a stepped housing
+
+A housing that states a `chassis.section` may also state its ribs. The format
+gains one optional key and the build gains no new file, so `format` stays 1 and
+`contract` stays 2. A device that states no `fins` gains no key and no element:
+its build is byte for byte what it was.
+
+**In a manifest.** `chassis.fins`, a list of rib fields. Each is
+`{on, span, rib, gap}` and either `core` (an inside field) or `outside: true` with a
+`height` (an outside field), and optionally `steps`, a list of `{span, height}`.
+`on` is `top` or `bottom`, naming the one edge of the section on that side of the
+box; write it quoted in YAML (`'on': top`), because a bare `on` is read as true.
+`span` is where the field runs along the length, in millimetres from the left end.
+`rib` and `gap` are a rib's thickness and the gap after it; the first rib starts at
+`span[0]`. `core` is the height of the tallest rib: the distance from the section's
+edge in to the casting's own surface. The `steps` tile the span, and a rib takes the
+height of the step whose half-open span holds its centre. An outside field has no
+`core`: the section's edge is the casting's surface and the ribs stand out of it by
+their step heights (or by `height`), at most 60 mm beyond the box. Lint L208 to L216
+check it. A device has at most 400 ribs.
+
+**In a compiled face.** The front and rear faceplate (the `chassis-faceplate`
+element, a `<path>` now) is the silhouette: at the core outside every span, at the
+step's tip line within one, so the gaps are filled; for an outside field it stands
+out of the casting's edge and the drawing's `viewBox` grows past the face as it does
+for a part beyond it, with `data-face-w` and `data-face-h` naming the face. The top
+and bottom faces stay full rectangles. A group with the id `chassis-fins` holds a `rect`
+for each rib on the front and rear, a stripe for each rib on the top or bottom, and
+on an end face a band in a rib tone where the casting is cut back to its core. It is painted last and takes no click. A device with no `fins`
+has no such group.
+
+**In `<device>.configs.json`**, of such a device: `chassis.fins`, the fields as
+written. It is left out for every other device. The box stays the bounding box and
+`chassis.w`, `h` and `d`, the rack fit and the exports read it as before, so ribs
+that stand outside it count in none of them; the 3D scene and its export include
+them.
+
+**What the lock asks for.** `fins` is surface, as `mount` and `kits` are: the ribs
+stand on a casting whose outline `section` already fixes, and no size changes.
+Stating it, retuning a rib's height or a step, or taking it away on a released
+device is a patch. Renaming the key or a field, or changing what `core` or a step
+means, is a breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states `fins`, because `chassis` accepts no key the schema does not list; this
+is the situation `section` and `halves` are in. A consumer that validates a
+manifest with a copy of the schema updates the copy before it reads a device that
+states ribs.
+
+**Not in this change.** The open state of a housing with ribs, and relief taken
+from a rib, are later changes. A device with `fins` cannot yet state `halves`.
 
 ## What else a consumer holds
 
@@ -1339,6 +1389,19 @@ is a 2D drawing only, and `contract` does not rise, since the group is new and
 nothing that was read changes. The key is part of the published format from the
 release that carries it: renaming it or changing what it holds after that is a
 breaking change.
+
+**Packs of a built dist.** `spec/tools/dev/dist_packs.py` writes, into a folder of
+its own, a derived form of `library/dist/` for a file server that limits the number of
+files: `devices/<device>.json` (`{"more", "files"}`, the faces the default
+configuration names), `devices/<device>.more.json` (`{"files"}`, every other
+face a configuration names), `components/<namespace>.<k>.json` (`{"files"}`, a
+namespace's skins in chunks whose file is at most 1 MB, by byte order of the file
+name) and `components/index.json` (`{<namespace>: [first skin of each chunk
+after the first]}`). They are not part of `dist/` or of the npm packages, and
+`contract` does not rise, since nothing in `dist/` changes. The tool is run by a
+consumer, never by the build. A consumer that makes packs holds them as its own
+format, and reads them with `kit/dist.js` `packedDist` and `fetchDist`, which
+are new exports and change none that was there.
 
 ## What is promised before 1.0
 

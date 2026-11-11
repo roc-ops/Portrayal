@@ -29,7 +29,7 @@ const NEW = 'host && host.querySelector ? featureOn(host, on) : null';
 const OLD = 'host && host.querySelector ? host.querySelector(`[id="${on.replace(/"/g, \'\\\\"\')}"]`) : null';
 assert.ok(src.includes(NEW), 'the lookup this test swaps out moved');
 const dir = mkdtempSync(join(tmpdir(), 'relief-old-'));
-for (const f of ['fields.js', 'states.js', 'displays.js']) copyFileSync(join(KIT, f), join(dir, f));
+for (const f of ['fields.js', 'states.js', 'displays.js', 'dist.js']) copyFileSync(join(KIT, f), join(dir, f));
 writeFileSync(join(dir, 'relief.js'), src.replace(NEW, OLD));
 const now = await import(pathToFileURL(join(KIT, 'relief.js')));
 const before = await import(pathToFileURL(join(dir, 'relief.js')));

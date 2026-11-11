@@ -847,6 +847,71 @@
       "items": {"type": "number"}
      }
     },
+    "fins": {
+     "type": "array",
+     "description": "THE RIBS OF A CAST HOUSING, a list of rib fields on the housing's `section`. Each field is on the one edge of the section that lies on the top or the bottom of the box (`on`), runs along the length from `span[0]` to `span[1]` in millimetres from the left end, and puts a rib `rib` thick every `rib` plus `gap`, the first at the start of the span; a part of a pitch left at the end is a warning. A field is one of two kinds. An INSIDE field states `core`: the height of its tallest rib, which is how far the casting's own surface lies in from the edge. The section's edge is then the tip line of the tallest rib, the box and every size stay as stated, and the casting is cut back to its core surface everywhere along the length, with the ribs standing on it. `steps` lower the tips: each is a `span` and the `height` of the rib tips above the core surface in it, the steps tile the field's span exactly, every height is at most `core` and one equals it, and a rib takes the height of the step whose span `[from, to)` holds its centre; without steps every tip is at `core`. An OUTSIDE field (`outside: true`) states `height` and no `core`: the section's edge is the casting's own surface and the ribs stand out of it, by their step heights or by `height`, up to 60 mm beyond the box; the box and every size read stay the casting's, so the ribs count in none of them. Fields on one edge may not overlap, an inside field is alone on its edge, and a device has at most 400 ribs. A part on the front or the rear does not lie above a step's tip line or over a field. It needs a `section`. It is surface: retuning a rib's height is a patch. A validator that does not know the key refuses a device that states it.",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["on", "span", "rib", "gap"],
+      "properties": {
+       "on": {
+        "enum": ["top", "bottom"],
+        "description": "The side of the box whose edge of the section carries the ribs. In YAML write the key quoted, `'on': top`: a bare `on` is read as true."
+       },
+       "span": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "number"},
+        "description": "Where the field runs along the length, `[from, to]` in millimetres from the left end, inside `[0, width]`."
+       },
+       "core": {
+        "type": "number",
+        "description": "Inside fields: the height of the tallest rib, the distance from the edge in to the casting's core surface, in millimetres. Not stated on an outside field."
+       },
+       "height": {
+        "type": "number",
+        "description": "Outside fields: how far the tallest rib stands out of the casting's edge, in millimetres, at most 60. Not stated on an inside field."
+       },
+       "rib": {
+        "type": "number",
+        "description": "The thickness of one rib along the length, in millimetres."
+       },
+       "gap": {
+        "type": "number",
+        "description": "The gap after each rib along the length, in millimetres."
+       },
+       "outside": {
+        "type": "boolean",
+        "description": "True for ribs that stand out of the casting's edge instead of cutting into it, beyond the size the box states."
+       },
+       "steps": {
+        "type": "array",
+        "minItems": 1,
+        "description": "A stepped tip line: spans that tile the field's span, each with the height of the rib tips in it.",
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": ["span", "height"],
+         "properties": {
+          "span": {
+           "type": "array",
+           "minItems": 2,
+           "maxItems": 2,
+           "items": {"type": "number"},
+           "description": "`[from, to]` along the length, in millimetres from the left end; a rib belongs to the step whose half-open span holds its centre."
+          },
+          "height": {
+           "type": "number",
+           "description": "The height of the rib tips in this step above the core surface (inside), or above the edge (outside), in millimetres."
+          }
+         }
+        }
+       }
+      }
+     }
+    },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. `top-to-bottom` is air drawn in at the top face and pushed out of the bottom, as a rack fan tray blowing down through the rack does. The enums differ on purpose: `side`, `passive` and `top-to-bottom` are chassis answers a configuration cannot give, because a fanless enclosure, a side-breathing modular chassis and a fan tray offer no airflow option to choose between. L91 checks the division.",
      "enum": [

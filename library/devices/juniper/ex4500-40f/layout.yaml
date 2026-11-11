@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4500-40f
-version: 0.3.1
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4500-40F
@@ -101,12 +101,12 @@ provenance:
   uplink-slots:
     confidence: drawing
     note: >-
-      Figures 4 and 9: two uplink module slots at the top of the face, PIC 1 at the left and PIC 2 at the right,
-      151.0 x 40.8 mm. Table 3 says each model ships with two uplink module cover panels; the figures draw the
-      4-port SFP+ module in place instead. UPLINK MODULES ARE NOT MODELLED: this slice builds no module family,
-      so each slot is a bay that accepts the cover panel alone. The cover panel is drawn as a plain plate with
-      two screws, because no figure draws it. The module (4 SFP+ ports, labelled ST) is named here and in a
-      gap.
+      Figures 4 and 9: two uplink module slots at the top of the face, PIC 1 at the left and PIC 2 at the
+      right, 151.0 x 40.8 mm. Table 3 says each model ships with two uplink module cover panels; the
+      figures draw the 4-port SFP+ module in place instead. Each slot is a bay that takes the cover panel,
+      which ships, and the 4-port SFP+ uplink module. The cover panel is drawn as a plain plate with two
+      screws, because no figure draws it. The module is drawn from Figures 4 and 10; the guide prints no
+      part number for it.
   rear-layout:
     confidence: drawing
     note: >-
@@ -210,13 +210,13 @@ gaps:
   wanted: >-
     The part number of the mounting kit and the ear positions. The guide describes the front mounting
     brackets and prints no part number for them.
-- what: uplink-modules
+- what: module-connector
   scope: [front]
   reason: needs-drawing
   wanted: >-
-    The 4-port SFP+ uplink module is not modelled. Each slot accepts its cover panel only. The module's
-    ports are numbered 0 to 3 with a lamp pair each and an ST lamp (guide Figures 10 and 17). The guide
-    prints no model number for it. A third-party tracker lists it as EX4500-UM-4XSFP, which is unconfirmed.
+    The connector between each module and the chassis. No registered connector key names it and no figure of the guide
+    draws it, so the modules are drawn from their faces only. A document that draws the module's edge connector and a key
+    for it would add it.
 - what: part-numbers
   scope: [rear]
   reason: vendor-silent
@@ -423,9 +423,9 @@ views:
           states: ['off', {name: enabled, color: '#22c55e'}, {name: speed-1g, color: '#22c55e', behavior: blinking}]
       bays:
       - {id: uplink-1, at: [18.3, 4.8], size: {w: 151.0, h: 40.8}, group: uplink, rel-pos: 0,
-         accepts: ['juniper/ex4500-uplink-cover@1'], default: 'juniper/ex4500-uplink-cover@1'}
+         accepts: ['juniper/ex4500-uplink-cover@1', 'juniper/ex4500-uplink-sfp-plus@1'], default: 'juniper/ex4500-uplink-cover@1'}
       - {id: uplink-2, at: [182.4, 4.8], size: {w: 151.0, h: 40.8}, group: uplink, rel-pos: 1,
-         accepts: ['juniper/ex4500-uplink-cover@1'], default: 'juniper/ex4500-uplink-cover@1'}
+         accepts: ['juniper/ex4500-uplink-cover@1', 'juniper/ex4500-uplink-sfp-plus@1'], default: 'juniper/ex4500-uplink-cover@1'}
       placements:
       - {block: sfp-plus}
       - {ref: juniper/ex4300-lcd-button@1, id: btn-menu, skin: menu, at: [405.15, 9.85], for: chassis, group: lcd-buttons, rel-pos: 0,
@@ -571,5 +571,12 @@ configurations:
       The EX4500-40F-FB with a second AC supply in slot 1, as the guide allows. An illustration, not an order code.
     bays:
       psu-1: juniper/ex4500-psu-ac-fb@1
+  uplink-sfp-plus:
+    kind: example
+    description: >-
+      The switch as shipped, with the 4-port SFP+ uplink module seated in uplink-1 and uplink-2 in place of the cover. An illustration, not an order code.
+    bays:
+      uplink-1: juniper/ex4500-uplink-sfp-plus@1
+      uplink-2: juniper/ex4500-uplink-sfp-plus@1
 references:
 - {title: 'Juniper EX4500 Switch Hardware Guide (modified 2017-10-18)', url: 'https://www.juniper.net/documentation/', sha256: f0d6cd302b3f87900d3c786f1ec8f6bd502c2c633efd5f784cc0aaab5e5dfb31}
