@@ -2298,7 +2298,9 @@ through the tray floor is told so and told what to do.
 - Slack on the held face of a tray.
 - The vertical mounting of #550 beyond the `roll` key and its convention:
   where a turned box stands across the opening, its mount kit, and the facts
-  that differ with the mounting (lug size, cable exit) are that issue.
+  that differ with the mounting (lug size, cable exit) are that issue; the
+  last are designed, not built, in
+  [mounting-facts-design.md](mounting-facts-design.md).
 - No plan view of the rack (decision 1).
 - No cable weight, tension or load on a tray.
 - Slack across racks, service loops at a device, and slack in a vertical duct.
