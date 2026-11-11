@@ -256,6 +256,12 @@ NOT_A_DCIM_PORT = {
     "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
                                  "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
                                  "a port type for such a header",
+    "common/st-receptacle": "the ST receptacle of the optical IRIG output of the Oscilloquartz IRIG-B card - "
+                            "a time-code signal on 62/125 um fibre at 820 nm, not an Ethernet or "
+                            "serial port; neither DCIM has a port type for a time-code output",
+    "common/terminal-header-250-3": "the three-position alarm/pulse relay terminal block of the Oscilloquartz "
+                                    "IRIG-B card - dry contacts for an external alarm loop; neither DCIM has "
+                                    "a port type for an alarm contact",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
