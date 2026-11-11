@@ -10,7 +10,10 @@ records the choice.
 The build it describes is one-way, and the one-way items are listed in "What
 moves when it is built". Part of the mechanism has landed since this note was
 written; "What is on `main`" says what. The rest of the note stays as it was
-written, with its counts taken from `main` at that time.
+written, with its counts taken from `main` at that time: the OCP bullet under
+"The interface keys", "What moves when it is built" and "The first build slice"
+still describe the build as not yet made, and a later change brings them up to
+date.
 
 ## Goal
 
@@ -35,8 +38,9 @@ person installing a card reads 9 of slot 1's 24 names and 13 of slot 3's 23.
 - **A device bay may state `interface` instead of, or beside, `accepts`**
   (`device.schema.json`, `anyOf`), and so may a component bay now
   (`component.schema.json`, `bays`). `manifest.py` has `takes` and `offers`, and
-  the component and device indexes, the catalogue, the device lock and lint read
-  a bay through `offers`. The device lock hashes a stated `interface` "so the
+  the component and device indexes and the catalogue read a bay through
+  `offers`; lint and the device lock follow it for the parts a bay seats. The
+  device lock hashes a stated `interface` "so the
   first bay to state one is not stated in silence". No library part states
   `interface` or `mates` for the two PCIe keys yet.
 - **L12 holds a `mate-to` or an `occupants:` seat to its host's interface**
@@ -308,9 +312,10 @@ seats exactly what it did before.
 
 ## Open questions
 
-Each question below is settled as the note proposes it (2026-11-11); the questions stay as the record of what was open.
+Each question below is settled as the note proposes it (2026-11-11); the
+questions stay as the record of what was open.
 
-1. **Which of #120's options?** A is proposed. Choosing C instead means the 37
+1. **Which of #120's options?** A is chosen. Choosing C instead means the 37
    cards authored as modules are redone, and each module type the DCIM imported is
    replaced.
 2. **Spelling and home of the keys.** `pcie-fh` and `pcie-lp` in `connectors.yaml`
