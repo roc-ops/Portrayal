@@ -36,6 +36,7 @@ POWER_LABEL = {
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "rittal/pdu-cord-cee-16a-1p": "CEE (IEC 60309) 16 A plug, 1P (L, N, PE)",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "servertech/pro3x-cord-60309": "IEC 60309 3P+G 9h plug on a fixed cord",
     "servertech/pro3x-cord-60309-2pe": "IEC 60309 2P+E 6h plug on a fixed cord",
