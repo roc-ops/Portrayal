@@ -139,8 +139,10 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The CyberPower PDU15M2F12R places one common/ground-screw@1, its external site ground, 26 -> 27 on 16 -> 17 devices.
 # The Enlogic EN2951 and EN6952 each place one common/ground-screw@1, 27 -> 29 on 17 -> 19 devices.
 # The Panduit P36G18M and P42G20M each place one common/ground-screw@1 at the cord end, 29 -> 31 on 19 -> 21 devices.
+# The UfiSpace S9500-30XS's one common/ground-lug@1 became one common/ground-stud-pair-5-8-m4@1 host (#918),
+# 31 -> 30 on 22 -> 21 devices.
 CENSUS = {
-    "common/ground-lug@1": (31, 22),
+    "common/ground-lug@1": (30, 21),
     "common/ground-screw@1": (31, 21),   # (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
@@ -207,7 +209,7 @@ STUD_SIZE = {
     "nokia/sr-3e": {"ground-studs": "10-32"},
     "ufispace/m3000-14xc": UFI_PAIR,
     "ufispace/s9500-22xst": UFI_PAIR,
-    "ufispace/s9500-30xs": {"ground-lug": "M4"},
+    "ufispace/s9500-30xs": UFI_PAIR,
     "ufispace/s9501-18smt": {"ground-screws-1": "M4", "ground-screws-2": "M4"},
     "ufispace/s9501-28smt": UFI_PAIR,
     "ufispace/s9502-16smt": UFI_PAIR,
@@ -481,7 +483,8 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 72 -> 73 with the CyberPower PDU15M2F12R's external site ground
     # 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
     # 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
-    assert sum(n for n, _ in got.values()) == 77
+    # 77 -> 76 with the S9500-30XS's lug becoming a pair host
+    assert sum(n for n, _ in got.values()) == 76
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
     # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
     # 47 -> 49 with the Panduit P24B14M and P32E06M
@@ -491,7 +494,8 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 53 -> 54 with the CyberPower PDU15M2F12R
     # 54 -> 56 with the Enlogic EN2951 and EN6952
     # 56 -> 58 with the Panduit P36G18M and P42G20M
-    assert len({where for where, _, _ in placed}) == 58
+    # 58 -> 57 with the S9500-30XS's lug becoming a pair host
+    assert len({where for where, _, _ in placed}) == 57
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -545,7 +549,8 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 71 -> 72 with the CyberPower PDU15M2F12R's external site ground
     # 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
     # 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
-    assert seen == 76
+    # 76 -> 75 with the S9500-30XS's lug becoming a pair host
+    assert seen == 75
 
 
 @pytest.mark.heavy
