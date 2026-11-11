@@ -36,7 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat, seatPoint } from './section.js';
+import { sectionBody, sectionSeat, seatPoint, seatFins, finReach } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -647,7 +647,15 @@ export function createViewer(container, opts = {}) {
     // device with no section, or one the body cannot be built from, is handed
     // none and is placed on the flat planes
     const seatPoly = COMP ? null : sectionSeat(devIndex && devIndex.chassis, W, H, D);
-    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D)};
+    // (a part that slips onto a field of ribs is read at the core line: section.js surfaceUnder)
+    const seatRibs = COMP ? null : seatFins(devIndex && devIndex.chassis, W, H, D);
+    // RIBS THAT STAND OUTSIDE THE BOX GROW THE DRAWING PAST ITS FACE, and the face is cropped back to
+    // itself; the ink beyond it is painted on a flat plane (relief.js, WHAT IS DRAWN PAST THE FACE). The
+    // ribs are real geometry in this body, so that plane would only stand a flat copy of them, gaps filled,
+    // in front of the real ones: it is not painted.
+    const reachRibs = COMP ? {top: 0, bottom: 0} : finReach(devIndex && devIndex.chassis);
+    const ribsOutside = reachRibs.top > 0 || reachRibs.bottom > 0;
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -655,7 +663,7 @@ export function createViewer(container, opts = {}) {
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
                                 sheet: !!(devIndex && sheetShell(devIndex.chassis)),
-                                section: seatSection,
+                                section: seatSection, noWing: ribsOutside,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -1469,6 +1477,11 @@ export function createViewer(container, opts = {}) {
       // The same framing the component path below already uses, rather than a
       // third set of constants: one opening view, two callers.
       openOn(W, H, D);
+      // RIBS THAT STAND OUTSIDE THE BOX (section.js finReach) are drawn and exported but are in no
+      // size: the box is what every reader measures, the camera fits what is drawn. The box is
+      // centred on the origin, so the fit takes the taller of the two reaches both ways.
+      const reach = finReach(devIndex.chassis);
+      if (reach.top || reach.bottom) openOn(W, H + 2 * Math.max(reach.top, reach.bottom), D);
       fitState = 'closed';      // the box is framed closed; applyHousing frames it open
     }
     CFG = config || devIndex.default;

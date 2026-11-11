@@ -28,11 +28,25 @@
 // (right, left, top, bottom, front, rear), so picking, the face frames and
 // level of detail read the section body as they read the box.
 //
+// THE RIBS (`chassis.fins`, read the same way: spec/tools/portrayal/fins.py is the
+// one place the compiler reads it). With fins the body is the section CUT BACK to
+// each inside field's core surface, along the whole width (the end margins carry no
+// ribs), and the ribs are slabs standing on that surface up to their step height,
+// merged into the SAME buffer, not a mesh each: five faces a rib (none against the
+// core), four vertices a face, in the materials of the way each looks, so picking,
+// the face frames and the planar UVs read them as they read the casting. An outside
+// field's ribs stand out of the section's own edge, beyond the box, and cut nothing.
+// A section with no fins builds exactly as it did.
+//
 // No `three` in here.
 
 import { boxUV, FACE_INDEX } from './bevel.js';
 
 const EPS = 1e-9;
+const FIN_TOL = 0.01;
+const FIN_MAX_RIBS = 400;
+
+const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
 // twice the signed area by the shoelace sum; positive is clockwise on the
 // screen with y down (section.py area2)
@@ -82,12 +96,156 @@ function earClip(pts) {
   return out;
 }
 
+// ---- the fields of ribs, read as fins.py reads them ---------------------------------------
+
+function finSpan(f) {
+  const s = f && f.span;
+  return Array.isArray(s) && s.length === 2 && s.every(isNum) ? [s[0], s[1]] : null;
+}
+
+function finSteps(f) {
+  if (!Array.isArray(f.steps) || !f.steps.length) return null;
+  const out = [];
+  for (const s of f.steps) {
+    if (!s || !Array.isArray(s.span) || s.span.length !== 2 || !s.span.every(isNum) || !isNum(s.height)) return null;
+    out.push([s.span[0], s.span[1], s.height]);
+  }
+  return out;
+}
+
+const finOutside = f => f.outside === true;
+const finLimit = f => { const v = finOutside(f) ? f.height : f.core; return isNum(v) ? v : null; };
+
+// a field with the numbers the geometry needs; one that has not is skipped (lint refuses it)
+function finUsable(f) {
+  const sp = finSpan(f), lim = finLimit(f);
+  return !!f && (f.on === 'top' || f.on === 'bottom') && !!sp && sp[0] < sp[1]
+    && isNum(f.rib) && f.rib > 0 && isNum(f.gap) && f.gap > 0 && lim !== null && lim > 0;
+}
+
+function finRibCount(f) {
+  const [a, b] = finSpan(f);
+  return Math.max(0, Math.floor((b - a + f.gap + FIN_TOL) / (f.rib + f.gap)));
+}
+
+// the tips' height at x along the length: the step whose half-open span holds it
+function finStepHeight(f, x) {
+  const st = finSteps(f);
+  if (st) for (const [a, b, h] of st) if (a <= x && x < b) return h;
+  return finLimit(f);
+}
+
+// [{on, outside, x0, x1, height, limit}] for every rib of the usable fields, from the left end
+function finRibs(fins) {
+  const out = [];
+  for (const f of Array.isArray(fins) ? fins : []) {
+    if (!finUsable(f)) continue;
+    const a = finSpan(f)[0], pitch = f.rib + f.gap;
+    for (let i = 0, n = finRibCount(f); i < n; i++) {
+      const x0 = a + i * pitch, x1 = x0 + f.rib;
+      out.push({on: f.on, outside: finOutside(f), x0, x1, height: finStepHeight(f, (x0 + x1) / 2), limit: finLimit(f)});
+    }
+  }
+  return out;
+}
+
+// The section's one edge on the top or the bottom of the box: [x0, x1] across the depth, or null.
+function edgeExtent(pts, side, H) {
+  const y = side === 'top' ? 0 : H, runs = [];
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
+    if (y0 === y1 && Math.abs(y0 - y) <= 0.005 && x0 !== x1) runs.push([Math.min(x0, x1), Math.max(x0, x1)]);
+  }
+  return runs.length === 1 ? runs[0] : null;
+}
+
+// How far the ribs of the outside fields stand beyond the box, above and below it: what the
+// camera fit adds to the box. `chassis` is the published chassis or the device's own; zeros
+// where there are no fins.
+export function finReach(chassis) {
+  const out = {top: 0, bottom: 0};
+  for (const r of finRibs(chassis && chassis.fins)) if (r.outside) out[r.on] = Math.max(out[r.on], r.height);
+  return out;
+}
+
+// The fields of a chassis that has to be seated or built from, or null when there are none.
+function finsOf(fins) {
+  return Array.isArray(fins) && fins.some(finUsable) ? fins.filter(finUsable) : null;
+}
+
+// THE BODY IS THE SECTION CUT BACK. Each inside field takes the rectangle from its edge in to its
+// core out of the polygon, across the edge's whole extent. The polygon is rectilinear, so this is
+// done on the grid its own x and y values and the cuts' make: a cell is solid when it is inside the
+// polygon and in no cut, the boundary between solid and empty cells is chained into loops (solid on
+// the right, clockwise with y down), and a vertex on a straight run is dropped. Normally one loop;
+// a cut that parts the body gives two, and each is built by itself. With no inside field it is the
+// polygon, untouched.
+export function bodyLoops(section, fins, H) {
+  const pts = section.map(p => [Number(p[0]), Number(p[1])]);
+  const cuts = [];
+  for (const f of finsOf(fins) || []) {
+    if (finOutside(f)) continue;
+    const ext = edgeExtent(pts, f.on, H);
+    if (!ext) continue;
+    cuts.push(f.on === 'top' ? [ext[0], 0, ext[1], f.core] : [ext[0], H - f.core, ext[1], H]);
+  }
+  if (!cuts.length) return [pts];
+  const uniq = a => [...new Set(a)].sort((p, q) => p - q);
+  const xs = uniq([...pts.map(p => p[0]), ...cuts.flatMap(c => [c[0], c[2]])]);
+  const ys = uniq([...pts.map(p => p[1]), ...cuts.flatMap(c => [c[1], c[3]])]);
+  const verticals = [];
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
+    if (x0 === x1) verticals.push([x0, Math.min(y0, y1), Math.max(y0, y1)]);
+  }
+  const nx = xs.length - 1, ny = ys.length - 1;
+  const cell = [];
+  for (let i = 0; i < nx; i++) {
+    cell.push([]);
+    for (let j = 0; j < ny; j++) {
+      const cx = (xs[i] + xs[i + 1]) / 2, cy = (ys[j] + ys[j + 1]) / 2;
+      const inPoly = verticals.filter(([x, lo, hi]) => x > cx && lo < cy && cy < hi).length % 2 === 1;
+      cell[i].push(inPoly && !cuts.some(c => cx > c[0] && cx < c[2] && cy > c[1] && cy < c[3]));
+    }
+  }
+  const solid = (i, j) => i >= 0 && j >= 0 && i < nx && j < ny && cell[i][j];
+  const out = new Map();                    // "i,j" of a start vertex -> [[i, j] of the vertices it leads to]
+  const edge = (a, b) => { const k = a.join(','); if (!out.has(k)) out.set(k, []); out.get(k).push(b); };
+  for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
+    if (!cell[i][j]) continue;
+    if (!solid(i, j - 1)) edge([i, j], [i + 1, j]);
+    if (!solid(i + 1, j)) edge([i + 1, j], [i + 1, j + 1]);
+    if (!solid(i, j + 1)) edge([i + 1, j + 1], [i, j + 1]);
+    if (!solid(i - 1, j)) edge([i, j + 1], [i, j]);
+  }
+  const loops = [];
+  for (const k0 of [...out.keys()]) {
+    while (out.get(k0) && out.get(k0).length) {
+      const loop = [];
+      let k = k0;
+      do {
+        const nxt = out.get(k).shift();
+        loop.push(k.split(',').map(Number));
+        k = nxt.join(',');
+      } while (k !== k0 && out.get(k) && out.get(k).length);
+      const world = loop.map(([i, j]) => [xs[i], ys[j]]);
+      // a vertex on a straight run is not a vertex
+      const kept = world.filter((b, n) => {
+        const a = world[(n + world.length - 1) % world.length], c = world[(n + 1) % world.length];
+        return side(a, b, c) !== 0;
+      });
+      if (kept.length >= 4 && area2(kept) > 0) loops.push(kept);
+    }
+  }
+  return loops;
+}
+
 // {positions, normals, uvs, indices, groups: [{start, count, materialIndex}]}.
-// `section` is the published polygon, [[x, y], ...]. Indices, not a vertex per
-// corner of every triangle: a cap shares its polygon's vertices, a facet has
-// four of its own (each looks a different way, so no vertex is shared across
-// the flat shading). Groups are in index units and ascend by material.
-export function sectionArrays(section, W, H, D) {
+// `section` is the published polygon, [[x, y], ...]; `fins` the published `chassis.fins`
+// (or nothing). Indices, not a vertex per corner of every triangle: a cap shares its polygon's
+// vertices, a facet has four of its own (each looks a different way, so no vertex is shared
+// across the flat shading). Groups are in index units and ascend by material.
+export function sectionArrays(section, W, H, D, fins) {
   if (!Array.isArray(section) || section.length < 4) {
     throw new Error('chassis.section: a polygon needs at least four points');
   }
@@ -98,6 +256,11 @@ export function sectionArrays(section, W, H, D) {
   if (area2(pts) <= 0) {
     throw new Error('chassis.section: the polygon is not clockwise with y down');
   }
+  const ribs = finRibs(fins);
+  if (ribs.length > FIN_MAX_RIBS) {
+    throw new Error(`chassis.fins: ${ribs.length} ribs, at most ${FIN_MAX_RIBS} a device`);
+  }
+  const loops = bodyLoops(pts, fins, H);
   const at = (sx, sy, half) => [half, H / 2 - sy, D / 2 - sx];
   const byMat = new Map();
   const add = (mi, quad) => {            // quad: {points: [[x,y,z]...], n}, as triangles
@@ -105,24 +268,50 @@ export function sectionArrays(section, W, H, D) {
     byMat.get(mi).push(quad);
   };
 
-  // the two caps: the polygon's triangles, wound to face along their normal
+  // the two caps: each loop's triangles, wound to face along their normal
   for (const [mi, half, n] of [[FACE_INDEX.right, W / 2, [1, 0, 0]], [FACE_INDEX.left, -W / 2, [-1, 0, 0]]]) {
-    for (const t of earClip(pts)) add(mi, {points: t.map(i => at(pts[i][0], pts[i][1], half)), n});
+    for (const loop of loops) {
+      for (const t of earClip(loop)) add(mi, {points: t.map(i => at(loop[i][0], loop[i][1], half)), n});
+    }
   }
 
   // the facets: a rectangle across the whole width for each edge, looking along
   // the edge's outward normal (dy, -dx) in the section frame
-  for (let i = 0; i < pts.length; i++) {
-    const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
-    const dx = x1 - x0, dy = y1 - y0;
-    if ((dx !== 0 && dy !== 0) || (dx === 0 && dy === 0)) {
-      throw new Error(`chassis.section: the edge from point ${i} is not a straight axis-aligned edge`);
+  for (const loop of loops) {
+    for (let i = 0; i < loop.length; i++) {
+      const [x0, y0] = loop[i], [x1, y1] = loop[(i + 1) % loop.length];
+      const dx = x1 - x0, dy = y1 - y0;
+      if ((dx !== 0 && dy !== 0) || (dx === 0 && dy === 0)) {
+        throw new Error(`chassis.section: the edge from point ${i} is not a straight axis-aligned edge`);
+      }
+      const nx = Math.sign(dy), ny = -Math.sign(dx);
+      // section frame to viewer frame: ny < 0 is toward +y (up); nx > 0 is toward the rear (-z)
+      const mi = ny < 0 ? FACE_INDEX.top : ny > 0 ? FACE_INDEX.bottom : nx > 0 ? FACE_INDEX.rear : FACE_INDEX.front;
+      const n = [0, -ny, -nx];
+      add(mi, {points: [at(x0, y0, -W / 2), at(x1, y1, -W / 2), at(x1, y1, W / 2), at(x0, y0, W / 2)], n, quad: true});
     }
-    const nx = Math.sign(dy), ny = -Math.sign(dx);
-    // section frame to viewer frame: ny < 0 is toward +y (up); nx > 0 is toward the rear (-z)
-    const mi = ny < 0 ? FACE_INDEX.top : ny > 0 ? FACE_INDEX.bottom : nx > 0 ? FACE_INDEX.rear : FACE_INDEX.front;
-    const n = [0, -ny, -nx];
-    add(mi, {points: [at(x0, y0, -W / 2), at(x1, y1, -W / 2), at(x1, y1, W / 2), at(x0, y0, W / 2)], n, quad: true});
+  }
+
+  // the ribs: a slab for each, the edge's whole extent across the depth, from its root on the
+  // surface to its tip. Five faces; the sixth is against the surface and is never seen. In the
+  // section frame y grows down: a top rib's tip is at the smaller y, a bottom rib's at the larger.
+  for (const r of ribs) {
+    const ext = edgeExtent(pts, r.on, H);
+    if (!ext) continue;
+    const top = r.on === 'top';
+    const root = r.outside ? (top ? 0 : H) : (top ? r.limit : H - r.limit);
+    const tip = top ? root - r.height : root + r.height;
+    const [ya, yb] = [Math.min(root, tip), Math.max(root, tip)];
+    const [e0, e1] = ext, hx0 = -W / 2 + r.x0, hx1 = -W / 2 + r.x1;
+    const P = (sx, sy, hx) => at(sx, sy, hx);
+    const tipY = tip;
+    add(top ? FACE_INDEX.top : FACE_INDEX.bottom,
+        {points: [P(e0, tipY, hx0), P(e1, tipY, hx0), P(e1, tipY, hx1), P(e0, tipY, hx1)],
+         n: [0, top ? 1 : -1, 0], quad: true});
+    add(FACE_INDEX.right, {points: [P(e0, ya, hx1), P(e1, ya, hx1), P(e1, yb, hx1), P(e0, yb, hx1)], n: [1, 0, 0], quad: true});
+    add(FACE_INDEX.left, {points: [P(e0, ya, hx0), P(e1, ya, hx0), P(e1, yb, hx0), P(e0, yb, hx0)], n: [-1, 0, 0], quad: true});
+    add(FACE_INDEX.front, {points: [P(e0, ya, hx0), P(e0, ya, hx1), P(e0, yb, hx1), P(e0, yb, hx0)], n: [0, 0, 1], quad: true});
+    add(FACE_INDEX.rear, {points: [P(e1, ya, hx0), P(e1, ya, hx1), P(e1, yb, hx1), P(e1, yb, hx0)], n: [0, 0, -1], quad: true});
   }
 
   const positions = [], normals = [], uvs = [], indices = [], groups = [];
@@ -173,10 +362,25 @@ export function sectionArrays(section, W, H, D) {
 // step takes the outermost of the facets that meet there, and one outside the
 // solid takes 0. The polygon touches all four sides of its box (section.py), so
 // its x runs 0..D and its y 0..H.
-export function surfaceUnder(section, face, at, W, H, D) {
+//
+// WITH FINS (`fins`, the published fields): lint refuses a part on the front or the
+// rear over a field or above its tip line, so this is for one that slips through. The
+// casting is cut back to its core along the whole length, so a row inside an inside
+// field's zone, between its edge and its core, has no wall under it: it is read at the
+// core line instead, the first row of the casting, and the part stands from that wall.
+// A column on the top or the bottom is the polygon's, which is the tip plane the ribs
+// reach: a part there stands on the ribs' tops (lint judges those by the section's rule).
+export function surfaceUnder(section, face, at, W, H, D, fins) {
   const pts = section.map(p => [Number(p[0]), Number(p[1])]);
   const lone = face === 'front' || face === 'rear';
   if (!lone && face !== 'top' && face !== 'bottom') return 0;
+  if (lone) {
+    for (const f of finsOf(fins) || []) {
+      if (finOutside(f)) continue;
+      if (f.on === 'top') at = Math.max(at, f.core);
+      else at = Math.min(at, H - f.core);
+    }
+  }
   const near = [];          // positions along the facet's axis of the facets facing this face
   for (let i = 0; i < pts.length; i++) {
     const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
@@ -199,10 +403,17 @@ export function surfaceUnder(section, face, at, W, H, D) {
 // (+x right, +y up, +z out of the front, the box centred on the origin): a
 // front or rear part's row is its height below the top, a top or bottom part's
 // column its distance behind the front.
-export function seatPoint(section, face, p, W, H, D) {
-  if (face === 'front' || face === 'rear') return surfaceUnder(section, face, H / 2 - p[1], W, H, D);
-  if (face === 'top' || face === 'bottom') return surfaceUnder(section, face, D / 2 - p[2], W, H, D);
+export function seatPoint(section, face, p, W, H, D, fins) {
+  if (face === 'front' || face === 'rear') return surfaceUnder(section, face, H / 2 - p[1], W, H, D, fins);
+  if (face === 'top' || face === 'bottom') return surfaceUnder(section, face, D / 2 - p[2], W, H, D, fins);
   return 0;
+}
+
+// The fields of ribs a part is seated against: the published `chassis.fins` when the chassis
+// builds as a stepped body and states usable ones, else null.
+export function seatFins(chassis, W, H, D) {
+  const b = sectionBody(chassis, W, H, D);
+  return b && b.arrays && finsOf(chassis.fins) ? chassis.fins : null;
 }
 
 // The polygon relief seats parts on: the published section when the chassis
@@ -227,7 +438,7 @@ export function sectionBody(chassis, W, H, D) {
   if (chassis.shell === 'sheet') clash.push('shell: sheet');
   if (clash.length) return {refused: `chassis.section is stated with ${clash.join(', ')}`};
   try {
-    return {arrays: sectionArrays(chassis.section, W, H, D)};
+    return {arrays: sectionArrays(chassis.section, W, H, D, chassis.fins)};
   } catch (e) {
     return {refused: String(e.message || e)};
   }
