@@ -100,7 +100,7 @@ PAIRS["ufispace/s9501-18smt"] = {("right", "ground-screws-1"): (H58_M4, None, (1
 # 192.5 and 208.4 mm from the front (15.9 apart, 0.68 mm per pixel), so the host is centred at
 # 200.45, 22.4 mm below the top edge. Which flank the figure shows is a gap; it stays on the right view.
 PAIRS["ufispace/s9500-30xs"] = {("right", "ground-screws"): (H58_M4, None, (200.45, 22.4), "M4")}
-CASES =[(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
+CASES = [(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
 
 
 def _device(device):
