@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-splice-12-lc-rear
-version: 2.0.0
+version: 2.1.0
 class: cassette
 description: >-
   The back of FS FHD's LC UPC OS2 12-fibre splice cassette (SKU 382907): the
@@ -34,8 +34,17 @@ size-notes: >-
   cassette's edge in 3D. The depth of the body this face closes belongs to the
   cassette that carries it - `body.depth` there - and differs between them.
 attrs: {media: fiber}
+groups:
+  splices:
+    term: Splice tray
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 1 fusion-splice tray on the rear face, where the 12 trunk fibres are spliced to the
+      front adapters, passive
 parts:
-  - {id: splice, ref: common/fibre-splice@1, at: [19.5, 5.5]}
+  - {id: splice, group: splices, ref: common/fibre-splice@1, at: [19.5, 5.5]}
 provenance:
   size: >-
     see size-notes. No image of this part exists.
@@ -50,4 +59,10 @@ provenance:
     no legend, label or fastener is drawn - there is no render or photograph
     of this SKU's rear to read one off, unlike fhd-1mtp6lcd-rear@3's
     three-quarter view of 57016.
+  groups: >-
+    FS's FHD catalogue row for SKU 382907, "FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers", as
+    the front face cites it: twelve fibres, fusion-spliced. No page or drawing of this SKU is held,
+    and the row prints no data rate, so the group states no speed. The role follows the job, the
+    through connection the front adapters end on, so it is traffic; the group's media is the
+    tray's own, fiber.
 skins: [default]
