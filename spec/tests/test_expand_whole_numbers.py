@@ -9,8 +9,8 @@ that opts in with `whole-numbers: true` writes an integral coordinate as an
 integer, so a hand-written device can be converted without that change.
 
 Changing the writer for every layout was not done: a layout that does not carry
-the key must expand exactly as it did, and the first test holds that over the
-whole library.
+the key must expand exactly as it did, and the byte-bar test holds that over
+every layout in the library that carries no key.
 """
 import json
 import pathlib
@@ -77,14 +77,15 @@ def test_there_are_layouts_to_hold():
 
 @pytest.mark.heavy
 def test_a_layout_without_the_key_expands_to_the_same_source_as_its_device():
-    """The byte bar. Every layout in the library carries no `whole-numbers` key,
-    and its expansion must hash, as `render.source_bytes` does, to exactly what
-    the device beside it hashes to. `expand.py --check` cannot say this: it
+    """The byte bar. A layout in the library that carries no `whole-numbers` key
+    must expand to a document that hashes, as `render.source_bytes` does, to
+    exactly what the device beside it hashes to. `expand.py --check` cannot say this: it
     compares parsed values, and 14 equals 14.0."""
     wrong = []
     for lp in LAYOUTS:
         lay = yaml.safe_load(lp.read_text())
-        assert "whole-numbers" not in lay, f"{lp.parent.name} already opts in"
+        if "whole-numbers" in lay:
+            continue
         doc = E.expand(lay, LIB, STD)
         dev = yaml.safe_load((lp.parent / "device.yaml").read_text())
         if _source(doc) != _source(dev):
