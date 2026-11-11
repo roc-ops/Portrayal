@@ -54,7 +54,8 @@ const out = cases.map(c => {
       const split = c.halvesOf ? S.sectionHalves(c.chassis, c.W, c.H, c.D).split : undefined;
       const plan = Hs.housingPlan(c.halves, c.size, split);
       return {ok: {plan, bounds: plan ? Hs.openBounds(plan) : null,
-                   lid: plan && c.corners ? c.corners.map(p => Hs.lidPoint(plan, p)) : null}};
+                   lid: plan && c.corners ? c.corners.map(p => Hs.lidPoint(plan, p)) : null,
+                   plates: plan && c.bays ? ['base', 'lid'].map(n => Hs.bayPlates(plan, n, c.bays)) : null}};
     }
     return {error: 'unknown fn'};
   } catch (e) { return {error: String(e.message || e)}; }
@@ -452,6 +453,27 @@ def test_the_camera_fit_holds_both_parts_ribs_included(angle):
     assert bhi[1] == 40.0                                  # the ribs standing out of the top are in
 
 
+@needs_node
+def test_the_bay_plates_stand_on_the_casting_not_on_the_rib_tips():
+    """A plate is a stand-in for a module on the floor of its half. The floor of a stepped half is
+    the casting's own surface, the core the ribs stand on, not the tips: the top ribs are 29 tall and
+    the bottom ones 48, so the base's plates are 115 (144 - 29) from the middle and the lid's -96."""
+    bays = [{"id": "a", "half": "base", "at": [10.0, 10.0], "size": {"w": 100.0, "h": 60.0}},
+            {"id": "b", "half": "lid", "at": [10.0, 10.0], "size": {"w": 100.0, "h": 60.0}}]
+    got = one({"fn": "plan", "chassis": CHASSIS, "W": W, "H": H, "D": D, "halves": HALVES, "halvesOf": True,
+               "size": {"w": W, "h": H, "d": D}, "bays": bays})
+    base, lid = got["plates"]
+    parts = got["plan"]["split"]
+    top = base[0]["center"][1] + parts["base"]["center"][1] + base[0]["size"][1] / 2
+    bottom = lid[0]["center"][1] + parts["lid"]["center"][1] - lid[0]["size"][1] / 2
+    assert top == pytest.approx(144.0 - 29.0, abs=1e-6)
+    assert bottom == pytest.approx(144.0 - 240.0, abs=1e-6)
+    # and the half's body is the casting, whose bounds are inside the part's
+    for name in ("base", "lid"):
+        body = got["plan"][name]["body"]
+        assert all(b <= p + 1e-6 for b, p in zip(body["size"], got["plan"][name]["size"]))
+
+
 # --- a box with no section is as it was ----------------------------------------------------
 
 CLAM_CHASSIS = yaml.safe_load(CLAM.read_text())["chassis"]
@@ -500,6 +522,28 @@ def test_three_library_devices_get_no_split_and_no_open_state():
     sizes = [{"w": ch["width"], "h": ch["height"], "d": ch["depth"]} for _, ch in devices]
     plans = run([{"fn": "plan", "halves": None, "size": s} for s in sizes])
     assert [p["ok"]["plan"] for p in plans] == [None, None, None]
+
+
+# --- a real build ---------------------------------------------------------------------------
+
+@pytest.mark.heavy
+@needs_node
+def test_the_published_chassis_of_the_fixture_opens_from_its_section(tmp_path):
+    """The build carries `section`, `fins` and `halves` of the device as written, and the kit cuts
+    the body from them: the split of the published chassis is the split of the written one."""
+    import warmrender
+    lib = ROOT / "spec/tests/fixtures/opening-section/lib"
+    out = tmp_path / "o"
+    r = warmrender.run(["python3", str(ROOT / "spec/tools/portrayal/render.py"), str(OPEN), "--library", str(lib),
+                        "--library", str(ROOT / "spec/tests/fixtures/halves/lib"), "--library", str(ROOT / "library"),
+                        "--out", str(out)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr[-2000:]
+    meta = json.loads((out / "stepped-open.configs.json").read_text())
+    chassis = meta["chassis"]
+    assert chassis["halves"] == HALVES and chassis["section"] == SECTION and chassis["fins"] == FINS
+    got = one({"fn": "halves", "chassis": chassis, "W": chassis["w"], "H": chassis["h"], "D": chassis["d"]})
+    assert got["split"]["pivot"] == pytest.approx([0.0, 0.0, -140.5])
+    assert got["split"]["base"]["size"] == pytest.approx(split()["base"]["size"])
 
 
 # --- the viewer applies it, and only when there is a split ---------------------------------

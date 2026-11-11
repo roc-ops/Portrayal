@@ -151,7 +151,14 @@ export function housingPlan(halves, size, split) {
           seam: scale(s, -1), floor: s, stands: ls, pivot, axis, angle,
           quaternion: [axis[0] * sh, axis[1] * sh, axis[2] * sh, Math.cos(angle / 2)]},
   };
-  if (parts) plan.split = parts;
+  if (parts) {
+    plan.split = parts;
+    // where a stand-in for a module is set: against the casting's own surface, the ribs left out
+    for (const name of ['base', 'lid']) {
+      const b = parts[name].body;
+      if (b) plan[name].body = {size: b.size, offset: sub(b.center, parts[name].center)};
+    }
+  }
   return plan;
 }
 
@@ -192,10 +199,12 @@ export function bayPlates(plan, name, bays, thickness = 1) {
   const [u, v] = PLATE_AXES[plan.along];
   const x0 = Math.min(...mine.map(b => b.at[0])), y0 = Math.min(...mine.map(b => b.at[1]));
   const x1 = Math.max(...mine.map(b => b.at[0] + b.size.w)), y1 = Math.max(...mine.map(b => b.at[1] + b.size.h));
-  const fw = Math.abs(dot(u, half.size.map(Math.abs))), fh = Math.abs(dot(v, half.size.map(Math.abs)));
+  // a stepped half (`body`) is floored on its casting, not on the tips of its ribs
+  const room = half.body ? half.body.size : half.size, off = half.body ? half.body.offset : [0, 0, 0];
+  const fw = Math.abs(dot(u, room.map(Math.abs))), fh = Math.abs(dot(v, room.map(Math.abs)));
   const k = Math.min(1, (fw * 0.9) / (x1 - x0), (fh * 0.9) / (y1 - y0));
   const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
-  const depth = scale(half.floor, (Math.abs(dot(half.floor, half.size)) - thickness) / 2);
+  const depth = add(off, scale(half.floor, (Math.abs(dot(half.floor, room)) - thickness) / 2));
   return mine.map(b => {
     const du = ((b.at[0] + b.size.w / 2) - cx) * k, dv = -((b.at[1] + b.size.h / 2) - cy) * k;
     const sz = add(add(scale(absv(u), b.size.w * k), scale(absv(v), b.size.h * k)),

@@ -487,14 +487,22 @@ export function sectionBody(chassis, W, H, D) {
   }
 }
 
-const partOf = arrays => {
+// A part: its arrays, their bounds, and `body`, the bounds of the casting alone, the ribs left out
+// (the loops of the cut-back section, in the box frame): where a stand-in for a module can be set
+// against the casting's own surface rather than the rib tips.
+const partOf = (arrays, loops, W, H, D) => {
   const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
   for (let i = 0; i < arrays.positions.length; i++) {
     const k = i % 3, v = arrays.positions[i];
     if (v < min[k]) min[k] = v;
     if (v > max[k]) max[k] = v;
   }
-  return {arrays, min, max, size: max.map((v, i) => v - min[i]), center: max.map((v, i) => (v + min[i]) / 2)};
+  const pts = loops.flat();
+  const bmin = [-W / 2, H / 2 - Math.max(...pts.map(p => p[1])), D / 2 - Math.max(...pts.map(p => p[0]))];
+  const bmax = [W / 2, H / 2 - Math.min(...pts.map(p => p[1])), D / 2 - Math.min(...pts.map(p => p[0]))];
+  return {arrays, min, max, size: max.map((v, i) => v - min[i]), center: max.map((v, i) => (v + min[i]) / 2),
+          body: {min: bmin, max: bmax, size: bmax.map((v, i) => v - bmin[i]),
+                 center: bmax.map((v, i) => (v + bmin[i]) / 2)}};
 };
 
 // THE BODY CUT AT THE SEAM. `halves` is the published `chassis.halves`. The seam is the row
@@ -502,7 +510,8 @@ const partOf = arrays => {
 // rule): that many rows down from the top for `top`, up from the bottom for `bottom`. The base is the
 // body on the `outer` side of it, the lid the rest, each its own `sectionArrays` with the cap
 // (SEAM_INDEX). Returns
-//   {seam, pivot, base, lid}   base and lid: {arrays, min, max, size, center} in the box frame
+//   {seam, pivot, base, lid}   base and lid: {arrays, min, max, size, center, body} in the box frame,
+//                              `body` the bounds of the casting without its ribs
 // `seam` is the row in the section's frame; `pivot` a point of the line the lid turns about, in the
 // box frame: x = 0, the seam's height, and z at the hinge face's outline in the seam's row, the
 // foremost x of the body there for `front` and the rearmost for `rear`. Throws where the seam cannot
@@ -530,7 +539,7 @@ export function splitSection(section, W, H, D, fins, halves) {
   const clips = outer === 'top' ? {base: upper, lid: lower} : {base: lower, lid: upper};
   const out = {seam};
   for (const name of ['base', 'lid']) {
-    out[name] = partOf(sectionArrays(pts, W, H, D, fins, clips[name]));
+    out[name] = partOf(sectionArrays(pts, W, H, D, fins, clips[name]), bodyLoops(pts, fins, H, clips[name]), W, H, D);
   }
   const xs = bodyLoops(pts, fins, H, clips.base).flat().filter(p => p[1] === seam).map(p => p[0]);
   if (!xs.length) throw new Error('chassis.halves: the body has no outline at the seam');

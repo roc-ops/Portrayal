@@ -11,4 +11,5 @@ casting 14 to 250, a flange 132 to 155 across the whole depth, a lower casting 2
 253) with `halves` added: the base is the upper casting (`outer: top`, `stands: 144`,
 so the seam is 144 down, inside the flange), the lid the lower one, hinged on the rear
 and opened to 180 degrees. The `lid-open` view draws the two halves one above the other
-with their regions and three bays.
+with their regions and three bays, which accept the card of `fixtures/halves`: a build
+or a lint of this device reads both fixture roots.
