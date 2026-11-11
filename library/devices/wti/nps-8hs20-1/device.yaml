@@ -17,19 +17,19 @@ provenance:
   method:
     confidence: estimated
     note: >-
-      THE FIGURES CARRY NO CONNECTOR DIMENSION. Each position is the centre of a drawn outline (a jack's frame, an outlet's box, an inlet's housing, a lamp's disc), converted at one scale on both axes: the figure's drawn outline width taken as the table's 19 in, 482.6 mm (1.5118 mm per point on the front figure, 1.5133 on the back). Heights are measured from the figure's vertical centre and set about the face's centre, because the drawn outline is 9 percent taller than 19 to 1.75, so the figure is not at true proportion. The scale is checked against two library parts: the figure's outlet box is 18.25 points wide, 27.6 mm here, against 27.0 for `std/nema-5-15r`, and its inlet housing is 21.08 points wide, 31.9 mm here, against 32.4 for `std/c20-inlet`. Every position is good to about 1.5 mm. The captions are placed from the figure's glyph positions and sized from its cap heights, to about 0.7 mm. The breakers are drawn from the figure's two boxes (the guide gives no size for a breaker) as plain art, not as a part.
+      THE FIGURES CARRY NO CONNECTOR DIMENSION. Each position is the centre of a drawn outline (a jack's frame, an outlet's box, an inlet's housing, a lamp's disc), converted at one scale on both axes: the figure's drawn outline width taken as the table's 19 in, 482.6 mm (1.5118 mm per point on the front figure, 1.5133 on the back). Heights are measured from the figure's vertical centre and set about the face's centre, because the drawn outline is taller than 19 to 1.75 in proportion (about 5 to 13 percent, depending on whether the stroke is counted), so the figure is not at true proportion. The scale is checked against two library parts: the figure's outlet box is 18.25 points wide, 27.6 mm here, against 27.0 for `std/nema-5-15r`, and its inlet housing is 21.08 points wide, 31.9 mm here, against 32.4 for `std/c20-inlet`. Every position is good to about 1.5 mm. The captions are placed from the figure's glyph positions and sized from its cap heights, to about 0.7 mm. The breakers are drawn from the figure's two boxes (the guide gives no size for a breaker) as plain art, not as a part.
   chassis:
     confidence: datasheet
     note: >-
-      Width 19 in (482.6 mm), depth 8.7 in (220.98 mm) and height 1.75 in (44.45 mm), 1 U, from the specification table. The table's width is the figure's whole faceplate, and no document held says whether the rack ears are inside it or whether the body is narrower. The face is drawn the full 482.6 mm wide. No net weight is stated, only a shipping weight of 11 lb for the 8-outlet models, so none is given.
+      Width 19 in (482.6 mm), depth 8.7 in (220.98 mm) and height 1.75 in (44.45 mm), 1 U, from the specification table. The table's width is the figure's whole faceplate, and no document held says whether the rack ears are inside it or whether the body is narrower. The face is drawn the full 482.6 mm wide. No net weight is stated, only a shipping weight of 11 lb in the table's NPS-8HX20-X row, so none is given.
   colour:
     confidence: photo-measured
     note: >-
-      Median pixels of the specification sheet's photograph of the NPS-8HS20-1: the front face #414043, the rear plate #ffffff with black printing, the buttons #fafafa and the top cover #a8a8a6. The top cover is lit from above in the photograph, so its grey is a lit grey and not a paint colour. The red rule is drawn in #ed1c24, the red the maker prints; the logo is not drawn. The photograph is 860 pixels wide for the two faces and the sides are seen at an angle, so a colour is read only from a flat patch of a face.
+      Each colour is the median of a flat patch of the specification sheet's photograph of the NPS-8HS20-1 (the patch sizes are not recorded): the front face #414043, the rear plate #ffffff with black printing, the buttons #fafafa and the top cover #a8a8a6. The top cover is lit from above in the photograph, so its grey is a lit grey and not a paint colour. The red rule is drawn in #ed1c24, an estimate: no patch of the photograph or the figure was read for it; the logo is not drawn. The photograph is 860 pixels wide for the two faces and the sides are seen at an angle, so a colour is read only from a flat patch of a face.
   ears:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
-      The photograph on the specification sheet shows a bracket at each end of the front, with three slots; it is the only source for the ears. The specification table gives the 19 in width and says nothing of brackets. The ear hole pitch and the ear setback are not stated by any held document. The ears are taken as flush with the faceplate, as the photograph shows them.
+      The photograph on the specification sheet shows a bracket at each end of the front, with three slots; it is the only source for the ears, and nothing about them is measured. The specification table gives the 19 in width and says nothing of brackets. The ear hole pitch and the ear setback are not stated by any held document. The ears are taken as flush with the faceplate, as photographed.
   outlets:
     confidence: datasheet
     note: >-
@@ -53,7 +53,7 @@ provenance:
   ethernet:
     confidence: datasheet
     note: >-
-      One RJ45 network port on the rear, 10/100/1000Base-T (hardware guide, section 2.4, item 4; specification table 'Ethernet Port: 10/100/1000 BaseT'), with a link and an activity lamp that belong to the jack part.
+      One RJ45 network port on the rear, 10/100/1000Base-T (hardware guide, section 2.4, item 4; specification table 'Ethernet Port: 10/100/1000 BaseT'), with a link and an activity lamp that belong to the jack part. The part draws the two lamp windows at the jack's lower corners and the figure puts them at the upper corners (gap ethernet-lamp-windows).
   lamps:
     confidence: drawing
     note: >-
@@ -78,7 +78,7 @@ chassis:
   color: '#414043'
   ears:
     positions:
-    - {name: flush, label: 1U rack bracket as shipped, default: true}
+    - {name: flush, label: 1U rack bracket as photographed, default: true}
   power: ac
 gaps:
 - what: straight-on-photographs
@@ -111,11 +111,23 @@ gaps:
   note: >-
     The guide says each inlet has a cable keeper, pre-installed on the NPS-8HS (section 4); the figure does not draw it and the photograph shows a wire clip on the inlet. It is not drawn.
   wanted: The maker's drawing of the keeper.
+- what: ethernet-lamp-windows
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The Ethernet jack part draws its two lamp windows at the jack's lower corners. Figure 2.4 and the photograph put them at the upper corners, under the ACT and LINK captions. Moving them needs a new version of the shared jack part, which this change does not make.
+  wanted: A version of the jack part with its lamp windows at the upper corners.
+- what: inlet-frame
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    Figure 2.4 draws the inlet with a frame and two hexagon holes beside the housing. Only the library's inlet housing is drawn.
+  wanted: The maker's dimensioned drawing of the inlet area.
 - what: sides
   scope: [bottom, left, right]
   reason: needs-drawing
   note: >-
-    No held document draws or names a side or the underside. The photograph shows the top cover and, at an angle, one side with a row of slots along its top edge, too small to place a slot.
+    The underside and the two sides are drawn as plain outlines at the stated size (482.6 by 220.98 mm and 220.98 by 44.45 mm); no held document draws or names them. The photograph shows the top cover and, at an angle, one side with a row of slots along its top edge, too small to place a slot.
   wanted: A drawing or a straight-on photograph that names each side.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight switched NEMA 5-15R outlets, A1 to A8, all from the one inlet'}
@@ -214,15 +226,15 @@ views:
   bottom:
     size: {w: 482.6, h: 220.98}
     empty: >-
-      Not drawn: no held document shows the underside; the guide draws the front and back panels only and the photograph is taken from above.
+      A plain outline at the stated size: no held document shows the underside; the guide draws the front and back panels only and the photograph is taken from above.
   left:
     size: {w: 220.98, h: 44.45}
     empty: >-
-      Not drawn: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
+      A plain outline at the stated size: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
   right:
     size: {w: 220.98, h: 44.45}
     empty: >-
-      Not drawn: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
+      A plain outline at the stated size: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
 configurations:
   base:
     kind: base
