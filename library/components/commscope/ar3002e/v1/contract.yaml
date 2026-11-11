@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ar3002e
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -22,6 +22,14 @@ attrs:
   slots: 1
   back-plate: BP-A5 or BP-35D4x
 provenance:
+  groups: >-
+    the AR3002E face photograph shows a micro-USB port, and the data sheet prints no word on it. The
+    part already states `role: console`, and the group follows that role, management. CommScope
+    AR3002E (87-11046 Rev F) data sheet: page 1 'Front access -20 dB output test point' and page 2,
+    'RF Output Test Points: G-type male connector (at front panel, -20 dB)'. The test point carries
+    a sample of the signal the module handles, so the role is traffic, as for the test points of the
+    passive modules. No speed is stated: the data sheet prints no data rate for it, and the media is
+    the one the part states.
   size: >-
     photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
     see the ch3000 device); height is the chassis's 130.2 faceplate. The AR3002E data
@@ -61,13 +69,26 @@ elements:
   vent-right: {at: [15.7, 24.5], size: [7.3, 60.9], class: vent}
   test-point: {at: [5.0, 97.3], size: [15.8, 15.8], class: bezel}
   screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b}
+    description: "the front-panel micro-USB port"
+  test-point:
+    term: Test point
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-g}
+    description: "the front-panel -20 dB RF output test point"
 parts:
   - {ref: common/led-dot@1, id: led-status-1, at: [11.9, 29.8], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-2, at: [11.9, 34.1], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [11.9, 38.4], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-access, at: [11.9, 48.6], attrs: {function: activity}}
-  - {ref: std/micro-usb@1, id: usb, at: [7.25, 73.5], rotate: 90, attrs: {role: console}}
-  - {ref: common/g-type-male-port@1, id: rf-tp, at: [9.400, 101.700]}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [7.25, 73.5], rotate: 90, attrs: {role: console}}
+  - {ref: common/g-type-male-port@1, id: rf-tp, group: test-point, at: [9.400, 101.700]}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]

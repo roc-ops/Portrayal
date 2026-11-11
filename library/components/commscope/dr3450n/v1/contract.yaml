@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dr3450n
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -21,6 +21,14 @@ attrs:
   power-draw-max-w: 22
   back-plate: BP3400C, shared by four adjacent receivers
 provenance:
+  groups: >-
+    the DR3450N face photograph shows a micro-USB port, and the data sheet prints no word on it. The
+    part already states `role: console`, and the group follows that role, management. CommScope
+    DR3450N (87-10924 Rev T) data sheet: page 1 'Front access -20 dB RF test point' and page 2, 'RF
+    Output Test Point (selectable for each input port): G-type male connector (front panel, -20
+    dB)'. The test point carries a sample of the signal the module handles, so the role is traffic,
+    as for the test points of the passive modules. No speed is stated: the data sheet prints no data
+    rate for it, and the media is the one the part states.
   size: >-
     photo-measured. Width is one CH3000 slot pitch less the faceplate gap (26.76 - 1.0,
     see the ch3000 device). The DR3450N data sheet's face-on photograph (p1, 351 x 1071, which outlines the plate at 211.5 x 1053 px, 8.21 px/mm across and 8.09 down, within 1.5% of 25.76 x 130.2. The data
@@ -58,17 +66,30 @@ elements:
   select-button: {at: [11.6, 81.7], size: [3.0, 3.0], class: button}
   test-point: {at: [5.3, 96.6], size: [15.6, 15.6], class: bezel}
   screw-bottom: {at: [7.98, 120.3], size: [9.8, 9.8], class: fastener}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b}
+    description: "the front-panel micro-USB port"
+  test-point:
+    term: Test point
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-g}
+    description: "the front-panel -20 dB RF test point, selectable for each input port"
 parts:
   - {ref: common/led-dot@1, id: led-status-1, at: [11.88, 31.70], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-2, at: [11.88, 36.00], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [11.88, 40.40], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-access, at: [11.88, 49.7], attrs: {function: activity}}
-  - {ref: std/micro-usb@1, id: usb, at: [7.75, 59.72], rotate: 90, attrs: {role: console}}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [7.75, 59.72], rotate: 90, attrs: {role: console}}
   - {ref: common/led-dot@1, id: led-tp-1, at: [18.9, 76.00], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-2, at: [18.9, 80.50], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-3, at: [18.9, 85.00], attrs: {function: test-point-select}}
   - {ref: common/led-dot@1, id: led-tp-4, at: [18.9, 89.50], attrs: {function: test-point-select}}
-  - {ref: common/g-type-male-port@1, id: rf-tp, at: [9.600, 100.900]}
+  - {ref: common/g-type-male-port@1, id: rf-tp, group: test-point, at: [9.600, 100.900]}
 connection-points:
   mate: {at: [12.88, 65.1], direction: front}
 skins: [default]
