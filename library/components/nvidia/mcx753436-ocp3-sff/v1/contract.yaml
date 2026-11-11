@@ -1,0 +1,141 @@
+format: 1
+kind: module
+name: mcx753436-ocp3-sff
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-7 MCX753436 dual-port NDR200 InfiniBand / 200GbE QSFP112 adapter, OCP NIC 3.0 small form factor, PCIe Gen5 x16, on its thumbscrew (pull tab) bracket
+size: {w: 82.5, h: 15.1, d: 115.0}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+unplaced: >-
+  no bay in the library lists this card. It is a small form factor card (OCP NIC
+  3.0 Design Specification 1.6.0, Table 5) and the Dell R660's OCP slot is a small
+  form factor slot (Dell technical guide, Table 11), but that bay names the Dell
+  cards it takes and states no interface, so a card of another maker is not in
+  its list. A bay that states `interface: ocp3-sff`, or a list that names this
+  card, would seat it.
+attrs:
+  model: MCX753436
+  part-numbers: 900-9X760-0018-MB2 (MCX753436MC-HEAB), 900-9X760-0078-MB0 (MCX753436MS-HEAB)
+  ports: 2
+  media: qsfp112
+  form-factor: ocp3-sff
+  qsfp112: 2
+  role: nic
+  pcie-generation: 5
+  power-draw-typical-w: 25.9
+  power-input: OCP slot
+groups:
+  qsfp112:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp112, speed: 200g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    NVIDIA ConnectX-7 Cards for OCP Spec 3.0 User Manual: the ordering table
+    (section 1.1, page 5: dual-port QSFP112, "Small Form Factor (SFF)", PCIe 5.0
+    x16, "Thumbscrew (Pull Tab) Bracket"), the specifications for
+    MCX753436MS-HEAB and MCX753436MC-HEAB (section 9.2, page 81), the board
+    drawing (section 9.3.1, page 83, figure 0022) and the bracket drawing
+    (section 9.3.2, page 84, figure 0023), and the LED section (3.2.4, page 20).
+    The outline from OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25. No
+    photograph of the card is held; the face is read off the manual's figures.
+  one-board: >-
+    the manual's specifications table lists the two part numbers under one
+    heading and one drawing; they differ in crypto only (MCX753436MC-HEAB crypto
+    enabled, MCX753436MS-HEAB disabled), so they are one module, as the PCIe cards
+    of this vendor are.
+  size: >-
+    drawing - the face is the manual's thumbscrew bracket, 82.50 x 15.1 (bracket
+    drawing, both printed): a 71.80 plate and a thumbscrew tab on its right. The
+    specifications table's "Adapter Card Height : 0.59 in. (15.1mm)" is the
+    bracket's, and is the height of the Dell SFF cards' bracket. `d` is the
+    table's 115.00 board depth; the board is 76.00 across (board drawing).
+  thickness: >-
+    OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25: SFF Z-height 11.50,
+    board 76.00 x 115.00. The component schema has no key for the Z-height, so it
+    is stated here; ocp3-sff is the standards registry entry.
+  face: >-
+    drawing - vents, windows and lamp holes measured off the bracket drawing on its
+    printed 82.50 width (the measuring script is a staged input): two QSFP windows
+    19.6 and 19.5 wide by 9.96 tall at x 7.58 and 44.62, a block of two rows of
+    four vents between them, and a block of two columns of three at the far end.
+    Good to about half a millimetre: the figure is a raster. The figure also draws
+    a row of small teeth along each long edge of the bracket; they are not drawn.
+  tab: >-
+    drawing - the thumbscrew tab is drawn beside the plate, from x 71.80 to the
+    printed 82.50, with a round knurled knob about 9.8 across centred at x 77.5.
+    Its housing outline is an estimate; the figure draws a curved web between the
+    plate and the knob.
+  port: >-
+    QSFP112 and QSFP56 share the QSFP cage opening and the PCIe cards of this
+    vendor seat std/qsfp56@1 for their QSFP112 cages, so the port is
+    std/qsfp56@1 (20.0 x 10.15) at the centre of each drawn window; the windows
+    read 19.6 x 9.96. No document held gives the QSFP112 cage opening.
+  lamps: >-
+    drawing - four round holes in two pairs, legended LINK and ACT under PORT 1
+    and PORT 2, about 1.0 across, carried as common/led-dot@1 (2.0). Per port the
+    figure on page 20 names the left hole LED0 and the right LED1; the text calls
+    LED0 the bi-colour yellow/green lamp (green solid at full speed, yellow solid
+    below it, green blinking on activity, yellow 1 Hz beacon, 4 Hz yellow
+    blinking on an error) and the single green lamp "LED2" (on at link up and on
+    error, blinking on activity, off for beacon). The text's LED2 and the
+    figure's LED1 are taken as one lamp. Port 1 is the left window, as the
+    figure's legends stand.
+  speed: >-
+    the ordering table prints "InfiniBand: NDR200/HDR Ethernet: 200GbE (Default
+    Mode)" for both part numbers; the port carries 200g, its default Ethernet
+    mode. Which mode a build uses is a configuration, so none is drawn.
+  colour: >-
+    estimated - the manual's bracket figures are grey CAD renderings with a black
+    latch block at the left end; the card behind is not shown from its face. No
+    photograph is held, so the grey is a reading of a rendering, not a measured
+    colour.
+  power: >-
+    datasheet - the specifications table (page 81) gives "Typical power with
+    passive cables in PCIe Gen 5.0 x16" as 25.9 W (MCX753436MC-HEAB) and 24.5 W
+    (MCX753436MS-HEAB); the larger is carried. The manual gives no maximum: it
+    refers to a separate electrical and thermal specification that is not held,
+    so power-draw-max-w is left out rather than estimated.
+body:
+  depth: 115.0
+  color: '#2a2d31'
+parts:
+  - ref: std/qsfp56@1
+    id: port-1
+    at: [7.40, 1.17]
+    group: qsfp112
+    attrs: {media: qsfp112, speed: 200g}
+  - ref: std/qsfp56@1
+    id: port-2
+    at: [44.37, 1.17]
+    group: qsfp112
+    attrs: {media: qsfp112, speed: 200g}
+  - ref: common/led-dot@1
+    id: led-port-1-1
+    at: [29.0, 11.2]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1-2
+    at: [33.0, 11.2]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+  - ref: common/led-dot@1
+    id: led-port-2-1
+    at: [36.9, 11.2]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-2-2
+    at: [41.0, 11.2]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+skins: [default]
