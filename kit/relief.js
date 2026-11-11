@@ -1495,7 +1495,25 @@ function idMap(root) {
   return byId;
 }
 
-export function cablePoints(svg) {
+// THE WIRE POINTS OF A PLUG (#805). A terminal plug does not leave by one
+// cable: it carries one wire per pole, `wire-1` to `wire-N`, and states each
+// `on:` the stub drawn for it where its plug draws one. `cablePoints(svg)`
+// still answers only the `cable` markers, so nothing that reads it today sees
+// a wire. `cablePoints(svg, 'wire')` (or `wirePoints(svg)`) answers the
+// `wire-<n>` markers instead, by the same resolution (position, direction, the
+// feature it sits on, the seat chain), one point per wire, each carrying its
+// number as `wire`. A plug's wires come back together, in number order, in the
+// order the plugs appear. What a wire IS in the cable model - a cable of its
+// own, or one conductor of a cable that fans out at the plug - is not decided
+// here: this only reads where they are. A name is a wire only as `wire-` and a
+// number from 1 with no leading zero; `wire-0`, `wire-01` and `wire-x` are not
+// read.
+const WIRE_NAME = /^wire-([1-9]\d*)$/;
+
+export function cablePoints(svg, kind = 'cable') {
+  if (kind !== 'cable' && kind !== 'wire')
+    throw new Error(`cablePoints: kind is 'cable' or 'wire', not ${JSON.stringify(kind)}`);
+  const wires = kind === 'wire';
   // one map per marker host, for this call. A host asked once keeps the
   // selector (a map is a whole walk, and most hosts hold one cable point's
   // feature); the second ask in the same host builds the map and every later
@@ -1511,7 +1529,8 @@ export function cablePoints(svg) {
     if (byId === null) hostIds.set(host, byId = idMap(host));
     return byId.get(on) || null;
   };
-  const entries = [...svg.querySelectorAll('[data-cp="cable"]')].map(mk => {
+  const entries = [...svg.querySelectorAll(wires ? '[data-cp^="wire-"]' : '[data-cp="cable"]')]
+    .filter(mk => !wires || WIRE_NAME.test(mk.dataset.cp)).map(mk => {
     // The whole attribute, not its first two tokens: "1 2 3" is as malformed
     // as "banana", and silently keeping the 1 and the 2 is the same class of
     // plausible-looking wrong answer as defaulting to the origin.
@@ -1542,11 +1561,12 @@ export function cablePoints(svg) {
         marker.cylLift = own;
       }
       else console.warn(`cablePoints: ${owner ? owner.dataset.path : '(no data-path)'} ` +
-                        `declares its cable point on ${JSON.stringify(on)}, which ` +
+                        `declares its ${kind} point on ${JSON.stringify(on)}, which ` +
                         `carries no data-z-out or data-z-cyl here; z falls back to the part's face`);
     }
     const pt = {...resolveCablePoint(marker, ancestors),
                 path: owner ? owner.dataset.path : '', el: mk};
+    if (wires) pt.wire = +WIRE_NAME.exec(mk.dataset.cp)[1];
     // SAID OUT LOUD, ONCE, WHERE THE OWNER IS STILL KNOWN. `at: null` is
     // enough to stop a cable landing at the origin, but on its own it
     // surfaces as a TypeError in someone else's library with no idea which
@@ -1583,12 +1603,20 @@ export function cablePoints(svg) {
   // aware the other fired. No runtime check for it here: the invariant holds
   // today and a check would be dead code, but a fix that lets the two rules
   // interact would need one.
-  return entries
+  const kept = entries
     .filter(({pt, owner}) =>
       !shadowed(pt.path, paths) &&
       !(owner && chains.some(ch => ch.slice(1).includes(owner))))
     .map(({pt}) => pt);
+  if (!wires) return kept;
+  // a plug's wires together, in number order (the build writes its markers
+  // sorted as text, so `wire-10` would come before `wire-2`)
+  const first = new Map();
+  for (const p of kept) if (!first.has(p.path)) first.set(p.path, first.size);
+  return kept.sort((a, b) => first.get(a.path) - first.get(b.path) || a.wire - b.wire);
 }
+
+export const wirePoints = svg => cablePoints(svg, 'wire');
 
 export function configureRelief(deps, scope) {
   // THREE and the renderer are genuinely per-page and stay module-level. The
