@@ -1,7 +1,7 @@
 """A stepped housing that opens: `chassis.section` together with `chassis.halves`.
 
 A housing that states a `section` builds in 3D as a stepped body, and one that states `halves`
-opens in two. This order lets the two be stated together: the seam is the plane at `base.stands`
+opens in two. This change lets the two be stated together: the seam is the plane at `base.stands`
 from `base.outer`, each half is the part of the stepped body on its side of it, and the lid turns
 about the line where the seam meets the hinge face's outline. This module holds the lint rules
 that make the combination well formed, what the lock asks for, and that a device with no
@@ -277,7 +277,7 @@ def test_the_halves_rules_judge_a_device_with_no_section_as_they_did():
     assert codes_of(bad_sum) == ["L203"]
     bad_region = clam()
     bad_region["views"]["open"]["regions"][0]["half"] = "middle"
-    assert codes_of(bad_region) == ["L201", "L201", "L202"] or "L201" in codes_of(bad_region)
+    assert codes_of(bad_region) == ["L201", "L201"]
 
 
 # --- the lock treats the combination as stated ----------------------------------------------
@@ -300,9 +300,8 @@ def test_stating_halves_on_a_released_section_device_is_a_minor():
 
 def test_the_lock_records_the_halves_of_a_section_device():
     entry = dl.entry(device())
-    assert entry["halves"]["geometry"]["base"] == {"outer": "top", "stands": 144.0} or \
-        entry["halves"]["geometry"]["base"]["outer"] == "top"
-    assert entry["halves"]["geometry"]["lid"]["hinge"] == "rear"
+    # the geometry the lock holds apart is `outer` and `hinge`; `stands` and `angle` are hashed with the surface
+    assert entry["halves"]["geometry"] == {"base": {"outer": "top"}, "lid": {"hinge": "rear"}}
 
 
 def test_the_lock_hash_of_the_stands_is_unchanged_by_the_section():
@@ -310,7 +309,7 @@ def test_the_lock_hash_of_the_stands_is_unchanged_by_the_section():
     device also states."""
     moved = device()
     halves_of(moved)["base"]["stands"] = 146.0
-    assert _bump(device(), moved) in (None, "patch")
+    assert _bump(device(), moved) == "patch"
     assert dl.buckets(device())["surface"] != dl.buckets(moved)["surface"]
     assert dl.buckets(device())["shape"] == dl.buckets(moved)["shape"]
 

@@ -409,6 +409,11 @@ def test_the_lid_ends_up_where_a_hand_computed_turn_puts_it(angle):
     if angle == 90.0:
         assert (min(ys), max(ys)) == pytest.approx((-281.0, 0.0), abs=1e-6)
         assert (min(zs), max(zs)) == pytest.approx((-140.5 - 144.0, -140.5), abs=1e-6)
+    if angle == 110.0:
+        # worked by hand from the flange's rear edge: y' = y cos - z sin, z' = y sin + z cos, with y from
+        # -144 to 0 and z from 0 to 281 about the edge, cos 110 = -0.34202 and sin 110 = 0.93969
+        assert (min(ys), max(ys)) == pytest.approx((-264.05, 49.25), abs=0.01)
+        assert (min(zs), max(zs)) == pytest.approx((-371.92, -140.5), abs=0.01)
     if angle == 180.0:
         assert (min(ys), max(ys)) == pytest.approx((0.0, 144.0), abs=1e-6)
         assert (min(zs), max(zs)) == pytest.approx((-140.5 - 281.0, -140.5), abs=1e-6)
@@ -559,7 +564,7 @@ def test_the_viewer_builds_the_open_halves_from_the_split_only_for_a_section():
     # the split is asked for before the plan, and the box halves are what is built without one
     assert body.index("sectionHalves(") < body.index("housingPlan(")
     assert "new THREE.BoxGeometry(...h.size)" in body              # the box halves, as before
-    assert "BufferGeometry" in body and "plan.split" in body or "split.base" in body
+    assert "BufferGeometry" in body and "plan.split" in body
 
 
 def test_the_viewer_hides_the_cap_as_a_box_half_hides_its_open_face():
