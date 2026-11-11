@@ -74,12 +74,25 @@ def test_no_maker_number_names_two_parts(name, model, variants, watts, ports):
         assert not ({a.get("model")} | _variants(a)) & numbers, other
 
 
+def _accepts_lists(node):
+    """Every `accepts` list in a loaded device, wherever it sits."""
+    if isinstance(node, dict):
+        for key, value in node.items():
+            if key == "accepts" and isinstance(value, list):
+                yield value
+            else:
+                yield from _accepts_lists(value)
+    elif isinstance(node, list):
+        for value in node:
+            yield from _accepts_lists(value)
+
+
 @pytest.mark.parametrize("chassis", CHASSIS)
 def test_every_slot_of_the_sibling_takes_the_new_cards(chassis):
-    text = (DEV / chassis / "device.yaml").read_text()
+    doc = yaml.safe_load((DEV / chassis / "device.yaml").read_text())
     sibling = "juniper/dpce-r-40ge-sfp@2"
-    lines = [ln for ln in text.splitlines() if "accepts:" in ln and sibling in ln]
-    assert lines
-    for ln in lines:
-        assert "juniper/dpce-q-40ge-sfp@1" in ln
-        assert "juniper/dpce-q-4xge-xfp@1" in ln
+    lists = [a for a in _accepts_lists(doc) if sibling in a]
+    assert lists
+    for accepts in lists:
+        assert "juniper/dpce-q-40ge-sfp@1" in accepts
+        assert "juniper/dpce-q-4xge-xfp@1" in accepts
