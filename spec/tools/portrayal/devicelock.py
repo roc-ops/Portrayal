@@ -640,6 +640,11 @@ def _composed(doc, versions):
 # faces and what a part on any face may stand on. Stating one on a released
 # device, or moving a point of it, is a major.
 CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell", "section"}
+# `fins` IS SURFACE, NOT SHAPE, though it is drawn: the ribs stand on a casting whose
+# outline `section` already fixes, and the box every size reads is unchanged by them, so
+# retuning a rib's height, pitch or step on a released device moves nothing a consumer
+# caches a coordinate from. A part mounts on the casting beside them, not on a rib.
+# Stating or retuning it is a patch.
 # `mount` IS NOT A DIMENSION EITHER: it says how the box is installed and moves
 # nothing on the drawing, so stating it on an existing device is a patch (#734).
 # `thickness` IS A STATED GAUGE, like the weight beside it: nothing is drawn or
@@ -674,7 +679,7 @@ CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell", 
 # by `_halves_bump` - see HALF_GEOMETRY. It is not in the shape digest, which
 # cannot tell a box that gained halves (a minor) from one whose slot moved.
 CHASSIS_SURFACE = {"color", "edge", "silk", "weight-kg", "airflow", "power", "mount", "thickness",
-                   "full-depth", "ears", "overhang", "kits", "halves"}
+                   "full-depth", "ears", "overhang", "kits", "halves", "fins"}
 
 # THE KEYS OF ONE HALF, SORTED, and test_opening_halves.py holds the two sets to
 # the schema the way test_lock_chassis_split.py holds the chassis keys: a fifth
