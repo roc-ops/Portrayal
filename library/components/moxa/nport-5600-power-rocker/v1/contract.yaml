@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: nport-5600-power-rocker
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  The rocker power switch set under the AC inlet on the rear of the NPort 5600 rackmount serial device
+  servers. It is a wide, low rocker in a dark bezel. The held figures print no I or O mark on it.
+size: {w: 24.7, h: 8.9}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  identity: >-
+    Moxa NPort 5600 quick installation guide v5.4, page 2, "Rear panel of the NPort 5610/5630/5650 (AC Power)":
+    the rocker below the inlet. The AC models' power module is the inlet and the switch in one frame. The guide
+    does not name the switch or state its ratings.
+  size: >-
+    drawing - read off the AC-model rear elevation on page 6 of the data sheet, drawn to the 440 mm body at
+    3.36 px/mm. The rocker reads 83 px by 30 px, 24.7 by 8.9 mm, good to about 0.5 mm. Neither the guide nor
+    the sheet gives a size for the switch.
+  marks: >-
+    The line art shows a bar across the rocker and no legend. Which side is on is not stated by any held
+    document, so the part draws the rocker at rest and no state.
+elements:
+  rocker: {at: [0.9, 0.9], size: [22.9, 7.1], class: button}
+skins: [default]

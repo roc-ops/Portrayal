@@ -177,13 +177,7 @@ def test_the_ground_marks_follow_their_pair():
         assert _placement(device, view, "ground-symbol")["for"] == pid
 
 
-def test_the_inferred_pitches_say_they_are_inferred():
-    for device in ("edgecore/ais800-64d", "edgecore/ais800-64o"):
-        d = _device(device)
-        note = d["provenance"]["ground-pair"]["note"]
-        assert "INFERRED" in note and "LCDXN2-14AF-E" in note
-        assert d["provenance"]["ground-pair"]["confidence"] == "estimated"
-        assert "ground-pair-pitch" in [g["what"] for g in d["gaps"]]
+def test_the_lmfs_f_pitch_says_it_is_the_rounded_five_eighths():
     note = _device("nokia/lmfs-f")["provenance"]["ground-pair"]["note"]
     assert "16 mm (0.63 in.)" in note and "15.875" in note
 

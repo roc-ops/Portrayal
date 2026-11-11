@@ -14,18 +14,32 @@ description: >-
   optional RunBMC and 12.8 Tbps of switching.
 profile: networking
 stack-exceptions:
-- pairs: [[port-1, port-2], [port-3, port-4], [port-5, port-6], [port-7, port-8], [port-9, port-10],
-    [port-11, port-12], [port-13, port-14], [port-15, port-16]]
+- pairs:
+  - - port-1
+    - port-2
+  - - port-3
+    - port-4
+  - - port-5
+    - port-6
+  - - port-7
+    - port-8
+  - - port-9
+    - port-10
+  - - port-11
+    - port-12
+  - - port-13
+    - port-14
+  - - port-15
+    - port-16
   reason: >-
-    A RECORDED READING (provenance.the-osfp-wall). The installation guide's Front Panel Callouts
-    figure, orthographic at 4.08 px/mm, draws each lower cage as the upper one turned over: the
-    upper cage has its card slot low in the opening and two round retention bumps on its top edge,
-    the lower cage its card slot high and its bumps on its bottom edge. The 18.86 mm row pitch is
-    neither stacked-cage pitch of the OSFP MSA rev 5.22 (14.9, 19.9 - section 7.1, Table 7-1) and
-    leaves room for a host board between the rows: two single cages either side of one board, the
-    MSA's belly-to-belly application (section 7.6), so the lower cage really is turned 180. The
-    product render ds4100-A.png does not contradict it - the lower cage's top edge carries dark
-    notches where the upper cage's carries raised bumps (#799).
+    A RECORDED READING (provenance.the-osfp-wall). The installation guide's Front Panel Callouts figure,
+    orthographic at 4.08 px/mm, draws each lower cage as the upper one turned over: the upper cage has
+    its card slot low in the opening and two round retention bumps on its top edge, the lower cage its
+    card slot high and its bumps on its bottom edge. The 18.86 mm row pitch is neither stacked-cage pitch
+    of the OSFP MSA rev 5.22 (14.9, 19.9 - section 7.1, Table 7-1) and leaves room for a host board between
+    the rows: two single cages either side of one board, the MSA's belly-to-belly application (section
+    7.6), so the lower cage really is turned 180. The product render ds4100-A.png does not contradict
+    it - the lower cage's top edge carries dark notches where the upper cage's carries raised bumps (#799).
 provenance:
   sources:
     confidence: datasheet
@@ -65,10 +79,10 @@ provenance:
       up (L108), and this one is built otherwise. The callout figure draws each lower cage as the upper
       turned over - the upper's card slot low in its opening with two retention bumps on its top edge,
       the lower's card slot high with its bumps on its bottom edge - and the 18.86 row pitch is neither
-      of the OSFP MSA's stacked-cage pitches (14.9, 19.9) but leaves room for the host board between
-      the rows: two single cages either side of one board (OSFP MSA rev 5.22 section 7.6). The render
-      ds4100-A.png agrees as far as it shows: the lower cage's top edge carries dark notches where the
-      upper's carries raised bumps. Each pair is named in stack-exceptions.
+      of the OSFP MSA's stacked-cage pitches (14.9, 19.9) but leaves room for the host board between the
+      rows: two single cages either side of one board (OSFP MSA rev 5.22 section 7.6). The render ds4100-A.png
+      agrees as far as it shows: the lower cage's top edge carries dark notches where the upper's carries
+      raised bumps. Each pair is named in stack-exceptions.
   legends:
     confidence: measured
     note: >-
@@ -184,42 +198,29 @@ provenance:
       no end-of-life notice was found there or on the documentation portal, whose guide was last revised
       3/2026.
 attrs:
-  physical:
-    dimensions-note: W 438.5 x D 657.5 x H 43.1 mm (datasheet and guide)
-  performance:
-    switching-capacity: 12.8 Tbps
-    packet-buffer: 56.83 MB integrated SmartBuffer
-    serdes: 112G PAM4
-    jumbo-frames: up to 9416 bytes
+  physical: {dimensions-note: W 438.5 x D 657.5 x H 43.1 mm (datasheet and guide)}
+  performance: {switching-capacity: 12.8 Tbps, packet-buffer: 56.83 MB integrated SmartBuffer, serdes: 112G
+      PAM4, jumbo-frames: up to 9416 bytes}
   power:
     power-draw-max-w: 1310
     psu-rating-note: 1+1 redundant hot-swap 1500 W PSUs
     input-ac: AC 100 ~ 127 V / 200 ~ 240 V nominal (90-264 V max) at 47-63 Hz
-  thermal:
-    airflow-options: front-to-back and back-to-front (separate SKUs)
-  environmental:
-    operating-temp: 0 to 40 C at 900 m (datasheet); 0 to 40 C at 950 m (guide)
-    humidity: 5% to 95% non-condensing
-  platform:
-    cpu: Intel Xeon-D class, 4 or 8 core, on a COM-E module
-    memory: up to 32 GB ECC DDR4
-    storage: 128 GB or 256 GB SSD
-    bmc: RunBMC option (OpenBMC, 2 GB DDR4, dual 128 MB flash)
-    software: ONIE installer for third-party NOS
-  features:
-    breakout: 8 x 100GbE, 4 x 200GbE or 2 x 400GbE per 800G port
-    optics-osfp: up to 30 W OSFP optics; LPO/LRO support; DAC up to 2.5 m
-    timing: precise timing option (datasheet, unspecified)
-  compliance:
-    emc: EMC CN (GB9254-2008), EU (EN55022, EN55024), FCC, VCCI
-    safety: UL/CSA/IEC/EN 60950-1/62368-1
-    environment: EU RoHS, SVHC requirements of REACH, China RoHS
-  lifecycle:
-    eol: none-announced
+  thermal: {airflow-options: front-to-back and back-to-front (separate SKUs)}
+  environmental: {operating-temp: 0 to 40 C at 900 m (datasheet); 0 to 40 C at 950 m (guide), humidity: 5%
+      to 95% non-condensing}
+  platform: {cpu: 'Intel Xeon-D class, 4 or 8 core, on a COM-E module', memory: up to 32 GB ECC DDR4,
+    storage: 128 GB or 256 GB SSD, bmc: 'RunBMC option (OpenBMC, 2 GB DDR4, dual 128 MB flash)', software: ONIE
+      installer for third-party NOS}
+  features: {breakout: '8 x 100GbE, 4 x 200GbE or 2 x 400GbE per 800G port', optics-osfp: up to 30 W OSFP
+      optics; LPO/LRO support; DAC up to 2.5 m, timing: 'precise timing option (datasheet, unspecified)'}
+  compliance: {emc: 'EMC CN (GB9254-2008), EU (EN55022, EN55024), FCC, VCCI', safety: UL/CSA/IEC/EN 60950-1/62368-1,
+    environment: 'EU RoHS, SVHC requirements of REACH, China RoHS'}
+  lifecycle: {eol: none-announced}
 chassis: {width: 438.5, height: 43.1, depth: 657.5, ru: 1, color: '#2a2a2a', airflow: front-to-back, power: ac}
 gaps:
 - what: osfp-port-lamps
-  scope: [front]
+  scope:
+  - front
   reason: needs-drawing
   wanted: >-
     Where the OSFP ports' own lamps are. The guide's Port Descriptions table gives every OSFP port a lamp
@@ -228,7 +229,8 @@ gaps:
     between the rows carries only the printed legend and the cages' latch notches, and the triangles are
     ink. No lamp is placed rather than one guessed at. A photograph of a powered unit settles it.
 - what: grey-dot-beside-the-sfp-lamp
-  scope: [front]
+  scope:
+  - front
   reason: sources-disagree
   wanted: >-
     What the round grey dot at (104.3, 7.6) on the Front Panel figure is. It sits beside the upper SFP+
@@ -236,27 +238,34 @@ gaps:
     an unlit lamp, a reset pinhole or a drawing artefact. Two small dark squares above the SYS lamp (about
     319.8 and 322.2, y 7.2) are equally unexplained. Neither is drawn.
 - what: dc-supply-face
-  scope: [rear]
+  scope:
+  - rear
   reason: needs-drawing
   wanted: >-
     The DC build's supply. The What's in the Box table lists R4035-F9007-A1, "DC PSU 2x1500W, F2B", and
     the Ground Lug Installation page exists for it ("not applicable to the AC SKU versions"), but no figure
     draws a DC supply's face, so the DC build is not offered as a configuration.
 - what: fan-and-psu-numbering
-  scope: [rear]
+  scope:
+  - rear
   reason: vendor-silent
   wanted: >-
     Which end FAN1 and PSU1 are. The Rear Panel LEDs table names FAN1-FAN7 and PSU1/PSU2 and no figure
     labels a bay. The bays are numbered left to right as seen from the rear because a view has to order
     them somehow; no numeral is printed.
 - what: b2f-finish
-  scope: [rear]
+  scope:
+  - rear
   reason: needs-drawing
   wanted: >-
     What colour the back-to-front build's fan handles and latches are. Only the F2B build is drawn anywhere;
     many vendors mark B2F modules in a second colour, and whether this one does is not shown.
 - what: the-four-undrawn-faces
-  scope: [top, bottom, left, right]
+  scope:
+  - top
+  - bottom
+  - left
+  - right
   reason: needs-drawing
   wanted: >-
     Orthographic drawings of the lid, underside and side walls. The three-quarter renders show a plain
@@ -272,10 +281,7 @@ groups:
       mm gutter, odd ports the upper row and even the lower, as the panel's `N (up)(down) N+1` legends
       say. Each breaks out to 2 x 400G, 4 x 200G or 8 x 100G.
     attrs: {media: osfp, speed: 800g}
-  port-leds:
-    term: LED
-    role: indicator
-    index-origin: 1
+  port-leds: {term: LED, role: indicator, index-origin: 1}
   mgmt:
     term: Port
     role: management
@@ -284,10 +290,7 @@ groups:
       the out-of-band ports: the RJ45 console, the USB 3.0 Type-A and the 1000BASE-T management jack in
       one stacked housing, and the two 10G SFP+ cages the panel legends M1 and M2 and the datasheet calls
       the "2x10G SFP+ Traffic Management port".
-  leds:
-    term: LED
-    role: indicator
-    index-origin: 1
+  leds: {term: LED, role: indicator, index-origin: 1}
   furniture:
     term: Part
     role: furniture
@@ -334,22 +337,22 @@ views:
       - {id: vent-right, at: [424.0, 3.0], size: [9.0, 38.0], pattern: grille, pattern-pitch: [2.25, 3.0],
         vent: 20}
       cutouts:
-      - {id: port-1, at: &id002 [121.32, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-2, at: &id003 [121.32, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-3, at: &id004 [144.56, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-4, at: &id005 [144.56, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-5, at: &id006 [167.8, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-6, at: &id007 [167.8, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-7, at: &id008 [191.04, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-8, at: &id009 [191.04, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-9, at: &id010 [222.8, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-10, at: &id011 [222.8, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-11, at: &id012 [246.04, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-12, at: &id013 [246.04, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-13, at: &id014 [269.28, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-14, at: &id015 [269.28, 24.72], size: [23.1, 13.5], shape: rect}
-      - {id: port-15, at: &id016 [292.52, 5.86], size: [23.1, 13.5], shape: rect}
-      - {id: port-16, at: &id017 [292.52, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-1, at: [121.32, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-2, at: [121.32, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-3, at: [144.56, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-4, at: [144.56, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-5, at: [167.8, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-6, at: [167.8, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-7, at: [191.04, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-8, at: [191.04, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-9, at: [222.8, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-10, at: [222.8, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-11, at: [246.04, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-12, at: [246.04, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-13, at: [269.28, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-14, at: [269.28, 24.72], size: [23.1, 13.5], shape: rect}
+      - {id: port-15, at: [292.52, 5.86], size: [23.1, 13.5], shape: rect}
+      - {id: port-16, at: [292.52, 24.72], size: [23.1, 13.5], shape: rect}
       - {id: mgmt-sfp-1, at: [93.85, 10.55], size: [14.5, 10.0], shape: rect}
       - {id: mgmt-sfp-2, at: [93.85, 23.4], size: [14.5, 10.0], shape: rect}
       - {id: led-sfp-1, at: [97.17, 6.72], size: [2.0, 2.0], shape: circle}
@@ -430,56 +433,161 @@ views:
       for: chassis}
     components:
       placements:
-      - {ref: std/rj45-ganged@2, id: console, at: [330.45, 8.0], rotate: 180, group: mgmt, rel-pos: 1,
-        attrs: {media: rj45-serial, role: console}}
-      - {ref: std/usb-a@1, id: usb, at: [330.8, 20.6], group: mgmt, rel-pos: 2, attrs: {media: usb-a,
-          role: storage, usb: '3.0'}}
-      - {ref: common/rj45-ganged-eth@1, id: mgmt-eth, at: [330.45, 28.2], group: mgmt, rel-pos: 3, attrs: {
-          media: rj45, speed: 1g, role: mgmt}}
-      - {ref: std/sfp@1, id: mgmt-sfp-1, at: [93.85, 10.55], group: mgmt, rel-pos: 4, attrs: {media: sfp-plus,
-          speed: 10g, role: mgmt}}
-      - {ref: std/sfp@1, id: mgmt-sfp-2, at: [93.85, 23.4], rotate: 180, group: mgmt, rel-pos: 5, attrs: {
-          media: sfp-plus, speed: 10g, role: mgmt}}
-      - {ref: common/led-dot@1, id: led-sfp-1, at: [97.17, 6.72], group: port-leds, rel-pos: 1, for: mgmt-sfp-1,
-        states: &id001 ['off', {name: link, color: '#22c55e'}, {name: activity, behavior: blinking, color: '#22c55e'},
-          {name: link-1g, color: '#f59e0b'}, {name: activity-1g, behavior: blinking, color: '#f59e0b'}]}
-      - {ref: common/led-dot@1, id: led-sfp-2, at: [97.17, 35.61], group: port-leds, rel-pos: 2, for: mgmt-sfp-2,
-        states: *id001}
-      - {ref: common/led-indicator@1, id: led-sys, at: [322.15, 10.25], group: leds, rel-pos: 1, for: chassis,
-        states: ['off', {name: normal, behavior: blinking, color: '#22c55e'}]}
-      - {ref: common/led-indicator@1, id: led-fan, at: [322.15, 15.39], group: leds, rel-pos: 2, for: chassis,
-        states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-indicator@1, id: led-psu, at: [322.15, 20.53], group: leds, rel-pos: 3, for: chassis,
-        states: ['off', {name: ok, color: '#22c55e'}, {name: fault, color: '#f59e0b'}]}
-      - {ref: common/led-indicator@1, id: led-alm, at: [322.15, 25.68], group: leds, rel-pos: 4, for: chassis,
-        states: ['off', {name: no-alarm, color: '#22c55e'}, {name: critical, color: '#f59e0b'}, {name: major,
-            behavior: blinking, color: '#f59e0b'}, {name: minor, behavior: blinking, color: '#f59e0b'}]}
-      - {ref: celestica/lug-tag-ridge-23@1, id: lug-tag, at: [382.75, 38.5], group: furniture, rel-pos: 1,
-        attrs: {label: DS4100}}
-      - {ref: std/osfp@1, id: port-1, at: *id002, group: osfp, rel-pos: 1}
-      - {ref: std/osfp@1, id: port-2, at: *id003, rotate: 180, group: osfp, rel-pos: 2}
-      - {ref: std/osfp@1, id: port-3, at: *id004, group: osfp, rel-pos: 3}
-      - {ref: std/osfp@1, id: port-4, at: *id005, rotate: 180, group: osfp, rel-pos: 4}
-      - {ref: std/osfp@1, id: port-5, at: *id006, group: osfp, rel-pos: 5}
-      - {ref: std/osfp@1, id: port-6, at: *id007, rotate: 180, group: osfp, rel-pos: 6}
-      - {ref: std/osfp@1, id: port-7, at: *id008, group: osfp, rel-pos: 7}
-      - {ref: std/osfp@1, id: port-8, at: *id009, rotate: 180, group: osfp, rel-pos: 8}
-      - {ref: std/osfp@1, id: port-9, at: *id010, group: osfp, rel-pos: 9}
-      - {ref: std/osfp@1, id: port-10, at: *id011, rotate: 180, group: osfp, rel-pos: 10}
-      - {ref: std/osfp@1, id: port-11, at: *id012, group: osfp, rel-pos: 11}
-      - {ref: std/osfp@1, id: port-12, at: *id013, rotate: 180, group: osfp, rel-pos: 12}
-      - {ref: std/osfp@1, id: port-13, at: *id014, group: osfp, rel-pos: 13}
-      - {ref: std/osfp@1, id: port-14, at: *id015, rotate: 180, group: osfp, rel-pos: 14}
-      - {ref: std/osfp@1, id: port-15, at: *id016, group: osfp, rel-pos: 15}
-      - {ref: std/osfp@1, id: port-16, at: *id017, rotate: 180, group: osfp, rel-pos: 16}
+      - ref: std/rj45-ganged@2
+        id: console
+        at: [330.45, 8.0]
+        rotate: 180
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/usb-a@1
+        id: usb
+        at: [330.8, 20.6]
+        group: mgmt
+        rel-pos: 2
+        attrs: {media: usb-a, role: storage, usb: '3.0'}
+      - ref: common/rj45-ganged-eth@1
+        id: mgmt-eth
+        at: [330.45, 28.2]
+        group: mgmt
+        rel-pos: 3
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+      - ref: std/sfp@1
+        id: mgmt-sfp-1
+        at: [93.85, 10.55]
+        group: mgmt
+        rel-pos: 4
+        attrs: {media: sfp-plus, speed: 10g, role: mgmt}
+      - ref: std/sfp@1
+        id: mgmt-sfp-2
+        at: [93.85, 23.4]
+        rotate: 180
+        group: mgmt
+        rel-pos: 5
+        attrs: {media: sfp-plus, speed: 10g, role: mgmt}
+      - ref: common/led-dot@1
+        id: led-sfp-1
+        at: [97.17, 6.72]
+        group: port-leds
+        rel-pos: 1
+        for: mgmt-sfp-1
+        states: &id001
+        - 'off'
+        - {name: link, color: '#22c55e'}
+        - {name: activity, behavior: blinking, color: '#22c55e'}
+        - {name: link-1g, color: '#f59e0b'}
+        - {name: activity-1g, behavior: blinking, color: '#f59e0b'}
+      - ref: common/led-dot@1
+        id: led-sfp-2
+        at: [97.17, 35.61]
+        group: port-leds
+        rel-pos: 2
+        for: mgmt-sfp-2
+        states: *id001
+      - ref: common/led-indicator@1
+        id: led-sys
+        at: [322.15, 10.25]
+        group: leds
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - {name: normal, behavior: blinking, color: '#22c55e'}
+      - ref: common/led-indicator@1
+        id: led-fan
+        at: [322.15, 15.39]
+        group: leds
+        rel-pos: 2
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-indicator@1
+        id: led-psu
+        at: [322.15, 20.53]
+        group: leds
+        rel-pos: 3
+        for: chassis
+        states:
+        - 'off'
+        - {name: ok, color: '#22c55e'}
+        - {name: fault, color: '#f59e0b'}
+      - ref: common/led-indicator@1
+        id: led-alm
+        at: [322.15, 25.68]
+        group: leds
+        rel-pos: 4
+        for: chassis
+        states:
+        - 'off'
+        - {name: no-alarm, color: '#22c55e'}
+        - {name: critical, color: '#f59e0b'}
+        - {name: major, behavior: blinking, color: '#f59e0b'}
+        - {name: minor, behavior: blinking, color: '#f59e0b'}
+      - ref: celestica/lug-tag-ridge-23@1
+        id: lug-tag
+        at: [382.75, 38.5]
+        group: furniture
+        rel-pos: 1
+        attrs: {label: DS4100}
+      - {ref: std/osfp@1, id: port-1, at: [121.32, 5.86], group: osfp, rel-pos: 1}
+      - {ref: std/osfp@1, id: port-2, at: [121.32, 24.72], rotate: 180, group: osfp, rel-pos: 2}
+      - {ref: std/osfp@1, id: port-3, at: [144.56, 5.86], group: osfp, rel-pos: 3}
+      - {ref: std/osfp@1, id: port-4, at: [144.56, 24.72], rotate: 180, group: osfp, rel-pos: 4}
+      - {ref: std/osfp@1, id: port-5, at: [167.8, 5.86], group: osfp, rel-pos: 5}
+      - {ref: std/osfp@1, id: port-6, at: [167.8, 24.72], rotate: 180, group: osfp, rel-pos: 6}
+      - {ref: std/osfp@1, id: port-7, at: [191.04, 5.86], group: osfp, rel-pos: 7}
+      - {ref: std/osfp@1, id: port-8, at: [191.04, 24.72], rotate: 180, group: osfp, rel-pos: 8}
+      - {ref: std/osfp@1, id: port-9, at: [222.8, 5.86], group: osfp, rel-pos: 9}
+      - {ref: std/osfp@1, id: port-10, at: [222.8, 24.72], rotate: 180, group: osfp, rel-pos: 10}
+      - {ref: std/osfp@1, id: port-11, at: [246.04, 5.86], group: osfp, rel-pos: 11}
+      - {ref: std/osfp@1, id: port-12, at: [246.04, 24.72], rotate: 180, group: osfp, rel-pos: 12}
+      - {ref: std/osfp@1, id: port-13, at: [269.28, 5.86], group: osfp, rel-pos: 13}
+      - {ref: std/osfp@1, id: port-14, at: [269.28, 24.72], rotate: 180, group: osfp, rel-pos: 14}
+      - {ref: std/osfp@1, id: port-15, at: [292.52, 5.86], group: osfp, rel-pos: 15}
+      - {ref: std/osfp@1, id: port-16, at: [292.52, 24.72], rotate: 180, group: osfp, rel-pos: 16}
     regions:
-    - {id: optics, at: [120.0, 4.5], size: {w: 196.0, h: 35.0}, label: 16 x 800G OSFP, members: [port-1,
-        port-2, port-3, port-4, port-5, port-6, port-7, port-8, port-9, port-10, port-11, port-12, port-13,
-        port-14, port-15, port-16]}
-    - {id: out-of-band, at: [92.5, 6.0], size: {w: 17.0, h: 32.0}, label: '2 x 10G SFP+ (M1, M2)', members: [
-        mgmt-sfp-1, mgmt-sfp-2]}
-    - {id: management, at: [318.0, 6.5], size: {w: 31.5, h: 34.0}, label: 'System LEDs, console, USB and
-        management', members: [led-sys, led-fan, led-psu, led-alm, console, usb, mgmt-eth]}
+    - id: optics
+      at: [120.0, 4.5]
+      size: {w: 196.0, h: 35.0}
+      label: 16 x 800G OSFP
+      members:
+      - port-1
+      - port-2
+      - port-3
+      - port-4
+      - port-5
+      - port-6
+      - port-7
+      - port-8
+      - port-9
+      - port-10
+      - port-11
+      - port-12
+      - port-13
+      - port-14
+      - port-15
+      - port-16
+    - id: out-of-band
+      at: [92.5, 6.0]
+      size: {w: 17.0, h: 32.0}
+      label: 2 x 10G SFP+ (M1, M2)
+      members:
+      - mgmt-sfp-1
+      - mgmt-sfp-2
+    - id: management
+      at: [318.0, 6.5]
+      size: {w: 31.5, h: 34.0}
+      label: System LEDs, console, USB and management
+      members:
+      - led-sys
+      - led-fan
+      - led-psu
+      - led-alm
+      - console
+      - usb
+      - mgmt-eth
   rear:
     size: {w: 438.5, h: 43.1}
     panel:
@@ -487,32 +595,106 @@ views:
       - {id: rear-plate, at: [0.0, 0.0], size: [438.5, 43.1], fill: '#a7a9ac', rx: 0.3, kind: plate}
     components:
       bays:
-      - {id: psu-1, at: [10.85, 2.05], size: {w: 55.2, h: 39.0}, group: psus, rel-pos: 1, accepts: [celestica/psu-1500-ac@1],
-        default: celestica/psu-1500-ac@1}
-      - {id: fan-1, at: [69.85, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 1, accepts: [celestica/fan-40@1],
-        default: celestica/fan-40@1}
-      - {id: fan-2, at: [113.87, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 2, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: fan-3, at: [157.89, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 3, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: fan-4, at: [201.91, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 4, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: fan-5, at: [245.93, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 5, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: fan-6, at: [289.95, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 6, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: fan-7, at: [333.97, 2.05], size: {w: 39.3, h: 39.0}, group: fans, rel-pos: 7, accepts: [
-          celestica/fan-40@1], default: celestica/fan-40@1}
-      - {id: psu-2, at: [377.45, 2.05], size: {w: 55.2, h: 39.0}, group: psus, rel-pos: 2, accepts: [
-          celestica/psu-1500-ac@1], default: celestica/psu-1500-ac@1}
+      - id: psu-1
+        at: [10.85, 2.05]
+        size: {w: 55.2, h: 39.0}
+        group: psus
+        rel-pos: 1
+        accepts:
+        - celestica/psu-1500-ac@1
+        default: celestica/psu-1500-ac@1
+      - id: fan-1
+        at: [69.85, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 1
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-2
+        at: [113.87, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 2
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-3
+        at: [157.89, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 3
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-4
+        at: [201.91, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 4
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-5
+        at: [245.93, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 5
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-6
+        at: [289.95, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 6
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: fan-7
+        at: [333.97, 2.05]
+        size: {w: 39.3, h: 39.0}
+        group: fans
+        rel-pos: 7
+        accepts:
+        - celestica/fan-40@1
+        default: celestica/fan-40@1
+      - id: psu-2
+        at: [377.45, 2.05]
+        size: {w: 55.2, h: 39.0}
+        group: psus
+        rel-pos: 2
+        accepts:
+        - celestica/psu-1500-ac@1
+        default: celestica/psu-1500-ac@1
       placements:
       - {ref: common/screw-head@1, id: ground-screw-1, at: [3.9, 22.3], group: furniture, rel-pos: 2}
       - {ref: common/screw-head@1, id: ground-screw-2, at: [3.9, 31.6], group: furniture, rel-pos: 3}
     regions:
-    - {id: power-1, at: [10.0, 1.3], size: {w: 57.0, h: 40.5}, label: Power supply 1, members: [psu-1]}
-    - {id: exhaust, at: [68.5, 1.3], size: {w: 306.5, h: 40.5}, label: 6+1 fan modules, members: [fan-1,
-        fan-2, fan-3, fan-4, fan-5, fan-6, fan-7]}
-    - {id: power-2, at: [376.5, 1.3], size: {w: 57.0, h: 40.5}, label: Power supply 2, members: [psu-2]}
+    - id: power-1
+      at: [10.0, 1.3]
+      size: {w: 57.0, h: 40.5}
+      label: Power supply 1
+      members:
+      - psu-1
+    - id: exhaust
+      at: [68.5, 1.3]
+      size: {w: 306.5, h: 40.5}
+      label: 6+1 fan modules
+      members:
+      - fan-1
+      - fan-2
+      - fan-3
+      - fan-4
+      - fan-5
+      - fan-6
+      - fan-7
+    - id: power-2
+      at: [376.5, 1.3]
+      size: {w: 57.0, h: 40.5}
+      label: Power supply 2
+      members:
+      - psu-2
   top:
     size: {w: 438.5, h: 657.5}
     empty: >-
@@ -529,8 +711,7 @@ views:
       no perforation - the chassis breathes end to end.
   right:
     size: {w: 657.5, h: 43.1}
-    empty: >-
-      Not drawn orthographically. The other side wall, as the left.
+    empty: Not drawn orthographically. The other side wall, as the left.
 configurations:
   ac-f2b:
     kind: base
@@ -555,5 +736,5 @@ configurations:
     part-numbers:
       R4035-F9005-A1: {part: R4035-F9005-A1}
 references:
-- {title: 'Celestica DS4100 Installation Guide (documentation portal, release 1.3.1, 3/2026)'}
-- {title: Celestica DS4100 1U 16-port 800G Data Center Switch datasheet}
+- title: Celestica DS4100 Installation Guide (documentation portal, release 1.3.1, 3/2026)
+- title: Celestica DS4100 1U 16-port 800G Data Center Switch datasheet

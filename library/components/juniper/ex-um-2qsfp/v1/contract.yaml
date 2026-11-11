@@ -1,0 +1,93 @@
+format: 1
+kind: module
+name: ex-um-2qsfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-2QSFP, the two-port 40 Gbps QSFP+ uplink module of the EX4300-32F switches. It slides
+  into the large uplink module slot at the left end of the front panel. It has two QSFP+ cages side by
+  side, numbered 0 and 1. Each port has a link lamp and a status lamp above the cage, and the module has
+  one ST lamp. Two captive screws hold it. Each port can be a Virtual Chassis port. It ships with a dust
+  cover in one port.
+attrs:
+  model: EX-UM-2QSFP
+  qsfp-plus: 2
+  weight: 0.61 lb (0.28 kg)
+  power-absent: not-published
+  ports-note: two QSFP+ ports at 40 Gbps, usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12), Uplink Modules in
+    EX4300 Switches, Table 13 (PDF pages 73 to 74): the module "can house up to two QSFP+ transceivers" and
+    its ports can be Virtual Chassis ports. Table 16 (PDF page 78) holds Figure 19 (g022137, the module in
+    three-quarter view) and Figure 20 (g022138, the face drawn flat with the ST lamp and the lamps of port 0
+    numbered). Figure 34 (PDF page 89) shows the same lamps. The datasheet ordering table (PDF page 16) lists
+    EX-UM-2QSFP for the EX4300-32F and -32F-DC.
+  size: >-
+    estimated - no document dimensions the module. It fills the 32-port switch's uplink slot, 87.0 x 40.7 mm,
+    which juniper/ex4300-32f-uplink-blank@1 reads off Figure 10 (the method is there). Figure 20's outline is
+    907 x 424 px at 300 dpi, an aspect of 2.14 against the slot's 2.14.
+  elements: >-
+    drawing - Figure 20 is a flat elevation, read as fractions of its outline at 10.43 px per mm and applied to
+    87.0 x 40.7 mm. The two cages are centred on the plate at the 19.0 mm pitch of std/qsfp-ganged, 23.5 mm
+    down. A link lamp and a status lamp for each port stand above the cages, at 30.5 and 36.3 mm for port 0 and
+    50.1 and 55.9 mm for port 1, 20.3 mm down, with the printed words Link and Status above them and the
+    numbers 0 and 1 above those. The ST lamp is at 8.4, 27.9 mm with its legend below it. A captive screw at
+    each end, centred 19.2 mm down; the figure draws it 9.5 mm across with its centre 3.7 mm from the edge, so
+    the head is drawn 8.8 mm across, inside the plate. The legend EX-UM-2QSFP is at the upper right. The
+    figure's hexagonal vents (four at each end) and the three notches at the bottom edge are drawn. No
+    handle is drawn because the figure draws none.
+  colour: >-
+    estimated - no photograph of this module is held. The plate takes the grey of the fitted EX-UM-4X4SFP in
+    the EX4300-24T photograph (#888c92), the nearest held evidence of this family's faceplate; the screws are
+    silver as there.
+  led: >-
+    datasheet - guide Figure 20 callouts 1 to 3 and Table 24 (the port lamps): the ST lamp is the status lamp
+    of the module, and each port has a link activity lamp and a status lamp. The guide gives the ST lamp no
+    table of its own, so no state is stated for it.
+  weight: >-
+    datasheet - guide, Chassis Physical Specifications, PDF page 64: "2-port 40-Gigabit Ethernet QSFP+ uplink
+    module ... 0.61 lb (0.28 kg)".
+  power: >-
+    not published - searched the guide's power budget tables (Tables 32 to 36) and the datasheet for a
+    figure for any uplink module and found none, so the module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp
+      speed: 40g
+    description: the two uplink cages, numbered 0 and 1 as printed
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port above the cage, link activity at the left and status at the right. Numbered
+      in printed order, left to right
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the ST lamp of the module (guide Figure 20, callout 1)
+parts:
+- {ref: std/qsfp-ganged@1, id: port-0, at: [24.5, 23.5], group: qsfp-plus, attrs: {media: qsfp, speed: 40g}}
+- {ref: std/qsfp-ganged@1, id: port-1, at: [43.5, 23.5], group: qsfp-plus, attrs: {media: qsfp, speed: 40g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [29.5, 19.3], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [35.3, 19.3], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [49.1, 19.3], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [54.9, 19.3], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [7.4, 26.9], group: status, attrs: {function: module status}}
+size:
+  w: 87.0
+  h: 40.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

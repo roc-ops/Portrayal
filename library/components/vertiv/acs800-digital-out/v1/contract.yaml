@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: acs800-digital-out
+version: 1.0.0
+class: port
+profile: networking
+interface: screw-terminal-4-relay
+description: >-
+  The DIGITAL OUT connector on the front of the Vertiv Avocent ACS800: a green pluggable screw-terminal header
+  with four pins, drawn along its length. The pins form two relay switches, the two on the left one switch and
+  the two on the right the other.
+size: {w: 16.0, h: 5.6}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  media: relay-terminal
+  poles: 4
+  switches: 2
+  rating-a: 12
+  rating-v: 300
+provenance:
+  sources: >-
+    photo-measured and datasheet - the maker's front photograph of the ACS800 (800 x 600 pixels, 3.24 pixels
+    per millimetre across the 212.7 mm body) for the outline and the four pins; the Vertiv Avocent ACS800/8000
+    Advanced Console System Installer/User Guide, "Digital Out sensors", for the two switches and the rating.
+  size: >-
+    photo-measured - 52 pixels across and 18 down in the front photograph, good to about 0.5 mm. The guide and
+    the data sheet give no dimension for the connector.
+  pins: >-
+    guide and photo - four pins, "Switch 1 (Position 1) uses the two pins on the left and Switch 2 (Position 2)
+    uses the two pins on the right". The pin pitch is read off the photograph at about 3.8 mm and no document
+    states it, so the key claims none. The guide's specification table says "four output signals" and its text
+    says two digital outputs; both fit two switches of two pins.
+  rating: >-
+    guide - "The internal relays support a maximum current of 12A and a maximum voltage of 300V."
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED FOR THE CONNECTOR. The data
+    sheet calls it "Digital-Out port" and the guide "the green connector".
+  colour: photo-measured - a pale green block with a dark opening for each pin, as the front photograph shows it.
+  mate: >-
+    derived - the centre of the block, (8.0, 2.8), facing out. vertiv/acs800-digital-out-plug@1 is the part that
+    mates it.
+  depth: >-
+    NOT STATED. No document gives how far the connector stands out of the front, so the part draws a plan
+    outline only and builds no relief.
+elements:
+  body: {at: [0.0, 0.0], size: [16.0, 5.6], class: connector}
+connection-points:
+  mate: {at: [8.0, 2.8], direction: front}
+skins: [default]

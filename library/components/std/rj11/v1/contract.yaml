@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: rj11
+version: 1.0.0
+class: port
+profile: networking
+conforms: rj11
+interface: rj11
+description: RJ11 six-position modular jack OPENING - the hole a six-position plug
+  enters, in three tiers (body, latch shoulder, latch slot), with two contacts loaded
+  (6P2C). Latch slot down when unrotated. The housing around it is the placing
+  part's; this is the opening and nothing else.
+size: {w: 9.88, h: 11.26, d: 20.57}
+size-confidence: {w: drawing, h: estimated, d: drawing}
+attrs: {media: rj11}
+provenance:
+  size: >-
+    drawing, a MAKER'S - TE Connectivity customer drawing C-1775675 rev C (30 Dec 2014),
+    "Modular Jack, Side Entry, Low Profile, DIP", sheet 1 front view, which prints the
+    opening 9.88 wide. THE MAKER'S DRAWING IS THE SOURCE, NOT THE STANDARD: IEC 60603-7
+    governs the plug interface and is not held, so this is one maker's opening and the
+    standard's own figure is unchecked. The 11.26 is the sum of the three tiers below,
+    each read off the same view, so it is scaled and not printed.
+  depth: >-
+    drawing - TE C-1775675 rev C sheet 1 side view, 20.57 overall for the housing. The
+    drawing dimensions no plug stop, so the cavity is built this deep as std/rj45@2
+    builds its own, and 20.57 is the housing's depth, not how far a plug enters.
+  opening: >-
+    drawing and scaled - TE C-1775675 rev C sheet 1 front view. Only the 9.88 width is
+    printed. The other figures are SCALED off the same view at 55.06 px/mm on that
+    printed 9.88 (a 600 dpi render; the printed 13.34 housing reads 13.33): body 9.88 x
+    6.85, a 6.60 wide shoulder 1.69 high beneath it, and a 4.04 wide latch slot 2.72
+    high. The view also shows the contacts standing in a narrower recess above the body
+    tier, about 6.6 wide; it is not dimensioned and is not drawn here, the contacts
+    are drawn in the body tier. The tiers are the three of std/rj45@2, on the smaller
+    body.
+  pins: >-
+    drawing and scaled - TE C-1775675 rev C: six contact positions, and the 2P loading is
+    listed (the table lists the one housing with 6P, 4P and 2P loaded). The 1.02 pitch is
+    NOT printed on this sheet: the front view's six contacts scale to about 1.0, and 1.02
+    is the pitch std/rj45@2 takes from TE 1734264 detail C. TWO contacts are drawn,
+    positions 3 and 4, 0.46 wide as std/rj45@2 draws them (the width is that drawing's).
+    A jack with four or six loaded is the same opening and would be a second skin.
+  walls: >-
+    the sides of the opening are the housing, drawn solid by the part that places this:
+    it is what grips a plug. The wall colour is the library's own dark housing grey; TE
+    makes its housing black.
+  mate: >-
+    THE CENTRE OF THE BODY TIER, (4.94, 3.425): half of 9.88 across and half of 6.85
+    down, the tier a plug's body fills (scaled as above).
+elements:
+  opening: {at: [0.0, 0.0], size: [9.88, 11.26], class: cutout}
+relief:
+  wall: '#3a3f45'
+  cavity: cavity
+  size: {w: 9.88, h: 11.26}
+connection-points:
+  mate: {at: [4.94, 3.425], direction: front}
+skins: [default]

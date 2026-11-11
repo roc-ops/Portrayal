@@ -451,8 +451,8 @@ RULES = {
     "L116": ("component",  "a component presenting a spanning connector interface really hosts what it spans - the number of bores the registry says, at the standard's pitch, with its own `mate` at their midpoint, its bores at the depth that point presents, and the axis it derives putting a duplex connector's latches on its bores' keyway side - and a component MATING one is drawn on the canonical axis, the pair running across from its own `mate`", "place the bores at the interface pitch spec/schemas/standards.yaml records, put `mate` on their midpoint, and give each bore the `lift` the feature that point sits `on:` stands at - or drop the `interface:`, because an adapter off the pitch presents no duplex connector; compose the bores in the order whose derived axis carries the latch into the keyway, all at one `rotate`; draw a duplex connector itself with its pair ACROSS and its latches up, because the host's own axis arrives with the seat",
              "An adapter whose bores are off the standard pitch, at the wrong depth or the wrong way round would accept a duplex connector it cannot hold, seating it floating, sunk, or with its latches away from the keyway.",
              ERROR),
-    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift",
-             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree.",
+    "L117": ("component",  "a part `on` a facet names a relief feature that declares `facet`, whose node is a declared element, and its projected box lies within that element; a facet does not also declare `out`, `profile` or `profile-y`; a facet sunk below the plate (`lift < 0`) lies inside the box of a `pocket` element at least `-lift` deep; a `pocket` that states a `wall` has `0 < wall < depth`, and a part on a sunk facet in it may run out of the pocket's box only below the wall depth, never above it", "name the facet feature's node in `on`, declare the node in `elements`, move the part onto the facet, or drop the hand-written slope - the renderer derives it; for a sunk facet, declare the recess it stands in as a `pocket` around it, or deepen the pocket to the facet's lift; for a part that runs out of a walled pocket above its wall depth, widen the pocket to the part or lower the `wall` to the plate's real thickness",
+             "A tilted part needs a real slope to stand on: otherwise the 3D view floats it in the air, buries its wedge in a solid face, or takes the slope from two places that disagree. A window in a thin plate is open to the inside of the card below the plate, so a cage may run back under the plate's edge there and nowhere above it.",
              ERROR),
     "L118": ("device",     "power is stated once - on the chassis where the box has one feed, and on a configuration only where it differs", "move it to `chassis.power`, or drop the configuration's copy",
              "Power written on both the chassis and its configurations gives two answers that can drift apart, and a reader cannot tell which one is meant.",
@@ -655,7 +655,7 @@ RULES = {
     "L184": ("component",  "a `supersedes` lists removed component majors: each entry names an `ns/name@major` that is not the part itself and is not in the library any more, carries a `sha256:` signature and the commit it was taken from, and no ref is listed twice", "fix the ref or the signature; remove the entry when the old major is still in the library (it says `superseded-by` instead)",
              "A redirect is read by a saved rack, so a ref that is still published, a self-pointer or a signature that is not one would send a swap to a part that is not what the rack named, or never fire.",
              ERROR),
-    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
+    "L185": ("component",  "a bay's `span` names other bays of the same component, each the same size, `rotate` and `mirror`, following one another along the card's component side (the bay's own +y, turned by its `rotate`, which is 0 or 180; bays that sit side by side, a carrier's MIC windows, follow one another along x, to the right at 0 and to the left at 180) with no gap wider than a bay and no step sideways; a bay whose `accepts` list names a part `n` slots wide names at least `n - 1` of them (a bay that states an `interface` takes a wide part only where its `span` is long enough, and is not an error where it is not); and a part that composes a part wider than one slot is at least that wide itself", "fix the ids or the bays' geometry; add the covered bay to `span`, or take the wide part out of `accepts`; give the composing part the `slot-width` of what it composes",
              "A card two slots wide is drawn across its bay and the next one and covers that one, so a span that names the wrong bay, a bay in the wrong place or none at all puts the card over the wrong opening or offers it where it cannot go.",
              ERROR),
     "L186": ("component, device", "a card wider than one slot and a bay it covers are never both filled - by a configuration, or by what the bays ship", "empty the covered bay (`<carrier>/<bay>: \"\"` in the configuration), or seat a one-slot part; a component does not ship a two-slot default over a bay that ships one too",
@@ -716,6 +716,22 @@ RULES = {
              "correct a `stands` against its source, or the chassis dimension, or state in `provenance` why the closed box is taller than its two shells",
              "Two halves that do not add up to the box they make mean one of the three figures is wrong, and a viewer that opens the lid by the stated stands would leave a gap or an overlap at the seam.",
              WARNING),
+    "L204": ("device", "a housing's `chassis.section` is a polygon the end faces can be drawn from: a closed list of points with no repeated point, no vertex on a straight run, no edge that crosses another, every edge axis-aligned, and clockwise with y down by the sign of its area (error)",
+             "list the corners of the end profile once each, in order, clockwise as the right end face is seen with y down; an edge that is not horizontal or vertical is approximated by steps",
+             "A polygon that crosses itself, doubles back or winds the wrong way has no inside that is the same for every reader, so the end face, the body built from it and the test for a part on it would each pick their own.",
+             ERROR),
+    "L205": ("device", "a housing's `chassis.section` fills the box it is the profile of: inside the `depth` by `height` box, touching all four of its sides, with exactly one edge on the top side and one on the bottom side, and each end face drawn at the chassis's own size (error)",
+             "bring the points inside the box or out to its sides, make the top and the bottom one run each, and drop a `size` on a left or right view that differs from the depth and height",
+             "The box is what the rack, the exports and the lock read, so a profile that does not reach its sides, or notches its top, is a body that is not the size the device states, and an end face drawn at another size puts the outline where the parts are not.",
+             ERROR),
+    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or `halves` (error)",
+             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body, a sheet body and a box that opens each have a way of being drawn that a stepped end does not yet join",
+             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first, and a box that opens has no stated way to cut a stepped housing at its seam.",
+             ERROR),
+    "L207": ("device", "on a device with a `chassis.section`, a part on the left or right face lies wholly inside that face's outline, and a part on the top or bottom face does not straddle a step of the body (error)",
+             "move the part onto the casting it belongs to, away from the transparent corner or the edge of a step; the left face is the right face's mirror",
+             "A port, a bay or a cutout in a corner the profile does not fill is a part floating in air, and one across a step stands partly on a casting and partly on the flange, so no height can be right for the whole of it.",
+             ERROR),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -4869,7 +4885,9 @@ def lint_component_span(path, data, lib_roots):
     another bay of this component - a bay in another riser is not a sibling,
     and a card across two risers would come apart - of the same size, turn and
     hand, and each follows the last along the bay's own +y turned by its
-    `rotate`: below it at 0, above it at 180. A quarter turn is refused until a
+    `rotate`: below it at 0, above it at 180. Bays that sit side by side, as a
+    line card's two MIC windows do, follow one another along x instead: to
+    the right of it at 0, to the left at 180. A quarter turn is refused until a
     riser needs one. And the two sides meet: a bay that accepts a part wider
     than one slot names enough bays to cover, and a card that composes the
     two-slot bracket is two slots wide itself.
@@ -4908,11 +4926,18 @@ def lint_component_span(path, data, lib_roots):
                 px = _bay_box(prev)
                 dx, dy = sx[0] - px[0], sx[1] - px[1]
                 along = dy if turn == 0 else -dy
-                if abs(dx) > SPAN_TOLERANCE_MM or not 0 < along <= bx[3] + SPAN_TOLERANCE_MM:
+                # Bays that sit side by side - a carrier's MIC windows - are
+                # followed along x instead: to the right at 0, to the left at 180.
+                across = dx if turn == 0 else -dx
+                below = abs(dx) <= SPAN_TOLERANCE_MM and 0 < along <= bx[3] + SPAN_TOLERANCE_MM
+                beside = abs(dy) <= SPAN_TOLERANCE_MM and 0 < across <= bx[2] + SPAN_TOLERANCE_MM
+                if not (below or beside):
                     side = "below" if turn == 0 else "above"
+                    flank = "right of" if turn == 0 else "left of"
                     err(path, "L185", f"bays/{bid}: spans {sid}, which is not the next bay "
                         f"{side} {prev_id} - a two-slot card covers the bay on its component "
-                        f"side, here {side} it (offset {dx:g}, {dy:g})")
+                        f"side, here {side} it, or the bay {flank} it when the bays sit side by "
+                        f"side (offset {dx:g}, {dy:g})")
                     break
                 prev, prev_id = sib, sid
         for ref in b.get("accepts") or []:
@@ -5473,12 +5498,16 @@ def _placed_drawn(q, facet, lib_roots):
     return [_turned(b, w, h, q.get("rotate"), facet, q["at"]) for b in local]
 
 
-def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
+def _lint_sunk_facet(path, node, f, data, elements, tol=0.5, lib_roots=()):
     """L117, recessed facets: a facet with `lift < 0` roots below the plate, so it
     has to stand in a hole - an element that is a `pocket` feature, whose box
     holds the facet's box (to within `tol`, as L117 measures parts) and which is
     at least `-lift` deep. Without one, the facet's wedge is buried in a solid
-    face; in a shallow one, its root is below the pocket's floor."""
+    face; in a shallow one, its root is below the pocket's floor.
+
+    A pocket that states its `wall` is cut through a plate that thick, and below
+    the wall it is open to the inside of the part: a well on the facet may run
+    out of the box there (`_lint_wall_exits`)."""
     sunk = -float(f["lift"])
     fx, fy = elements[node]["at"]
     fw, fh = elements[node]["size"]
@@ -5491,17 +5520,53 @@ def _lint_sunk_facet(path, node, f, data, elements, tol=0.5):
         pw, ph = pel["size"]
         if fx >= px - tol and fy >= py - tol and fx + fw <= px + pw + tol \
                 and fy + fh <= py + ph + tol:
-            holding.append((float(p["pocket"]), p["node"]))
+            pdepth, pwall = facets.pocket_depth_wall(p["pocket"])
+            holding.append((float(pdepth), p["node"], pwall))
     if not holding:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) but is "
             "not inside any `pocket` element's box - a facet below the plate has to stand "
             "in a recess, or its wedge is buried in a solid face")
         return
-    depth, pnode = max(holding)
+    depth, pnode, wall = max(holding, key=lambda h: (h[0], h[1]))
     if depth < sunk:
         err(path, "L117", f"facet {node!r} is sunk {sunk:g} mm (lift {f['lift']:g}) in pocket "
             f"{pnode!r}, which is only {depth:g} mm deep - a pocket shallower than the facet "
             "is sunk puts the facet's root below the pocket floor")
+        return
+    if wall is not None and 0 < wall < depth:
+        _lint_wall_exits(path, node, f, data, elements, pnode, float(wall), lib_roots)
+
+
+def _lint_wall_exits(path, node, f, data, elements, pnode, wall, lib_roots, tol=0.05):
+    """L117: a part on a sunk facet, in a pocket that states its wall, may run out
+    of the pocket's box only below the wall. The well goes in along the facet's
+    normal, so it travels sideways as it goes down; where it crosses the box's
+    side tells whether it passes under the plate's solid edge (at or below the
+    wall: the card is open there) or out through the plate itself (above it).
+    A part too short to reach the side never leaves the box."""
+    facet = f["facet"]
+    rect = (*elements[node]["at"], *elements[node]["size"])
+    pel = elements[pnode]
+    pbox = (*pel["at"], *pel["size"])
+    for q in data.get("parts") or []:
+        if q.get("on") != node or not q.get("at"):
+            continue
+        size = _instance_size(q.get("ref"), lib_roots)
+        if not size:
+            continue
+        box = facets.projected_box(q["at"], size[0], size[1], q.get("rotate"), facet)
+        out = facets.leaves_pocket(facet, float(f["lift"]), rect, box, pbox)
+        if out is None:
+            continue
+        depth, travel = out
+        reach = _instance_depth(q.get("ref"), lib_roots)
+        if reach is not None and travel > reach:
+            continue
+        if depth < wall - tol:
+            err(path, "L117", f"part {q.get('id')!r} on sunk facet {node!r} runs out of pocket "
+                f"{pnode!r} at {depth:g} mm deep, above the pocket's wall depth of {wall:g} mm - "
+                "there it comes out through the plate, which is solid; a well may leave the "
+                "pocket's box only below the wall, under the plate's edge")
 
 
 def lint_component_facets(path, data, lib_roots):
@@ -5516,6 +5581,12 @@ def lint_component_facets(path, data, lib_roots):
     feats = {f.get("node"): f for f in (data.get("relief") or {}).get("features") or []}
     elements = data.get("elements") or {}
     for node, f in feats.items():
+        if isinstance(f.get("pocket"), dict):
+            depth, wall = facets.pocket_depth_wall(f["pocket"])
+            if not 0 < wall < depth:
+                err(path, "L117", f"pocket {node!r} states a wall of {wall:g} mm, which is not "
+                    f"shallower than the pocket's depth of {depth:g} mm - the walls stop at the "
+                    "plate's back face, above the floor")
         if f.get("facet"):
             for k in ("out", "profile", "profile-y"):
                 if k in f:
@@ -5526,7 +5597,7 @@ def lint_component_facets(path, data, lib_roots):
                 err(path, "L117", f"facet node {node!r} is not a declared element with a "
                     "size - the renderer needs its front-view rectangle to derive the wedge")
             elif (f.get("lift") or 0) < 0:
-                _lint_sunk_facet(path, node, f, data, elements)
+                _lint_sunk_facet(path, node, f, data, elements, lib_roots=lib_roots)
     for q in data.get("parts") or []:
         on = q.get("on")
         if not on:
@@ -5701,6 +5772,19 @@ def _instance_size(ref, lib_roots):
         return None
     sz = d.get("size")
     return (sz["w"], sz["h"]) if sz else None
+
+
+def _instance_depth(ref, lib_roots):
+    """The depth (`size.d`) of a component, or None when it cannot be resolved or
+    states none."""
+    c = resolve_component(ref, lib_roots) if ref else None
+    if c is None:
+        return None
+    try:
+        d = load_yaml(c) or {}
+    except yaml.YAMLError:
+        return None
+    return (d.get("size") or {}).get("d")
 
 
 def lint_device_mating(path, view_name, view, lib_roots):
@@ -8873,6 +8957,85 @@ def lint_device_halves(path, data):
         else:
             warn(path, "L201", f"`chassis.halves.{name}` is declared and no region of any "
                                         "view states a `half`: the open drawing says nothing of it")
+
+
+# THE CODES OF THE SECTION RULES BY WHAT THEY JUDGE, for the test that reads
+# them. The calls below spell each code out, because the severity guard reads
+# literals; test_chassis_section.py holds the two in step.
+SECTION_CODES = {"polygon": "L204", "fit": "L205", "kind": "L206", "parts": "L207"}
+
+
+def lint_device_section(path, data, lib_roots):
+    """L204-L207: a housing's end profile is a polygon the faces can be drawn
+    from, it fills the box, it is stated where it can be drawn, and parts sit on
+    the casting (docs/modelling-a-device.md, "A housing with a stepped end").
+
+    The schema checks only that `section` is a list of number pairs. What a
+    polygon has to be, to be an outline, is judged here from portrayal.section,
+    the one place that reads it.
+    """
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    if "section" not in ch:
+        return
+    pts = _section.points(ch)
+    if pts is None:
+        return                  # the schema reports a section that is not number pairs
+    for m in _section.polygon_problems(pts):
+        err(path, "L204", f"`chassis.section`: {m}")
+    w, h, d = ch.get("width"), ch.get("height"), ch.get("depth")
+    if not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (w, h, d)):
+        return
+    for m in _section.box_problems(pts, d, h):
+        err(path, "L205", f"`chassis.section`: {m}")
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        size = view.get("size")
+        if (view.get("face") or vname) in _section.END_FACES and size and (
+                abs(size["w"] - d) > 0.01 or abs(size["h"] - h) > 0.01):
+            err(path, "L205", f"{vname}: the view is {size['w']:g} x {size['h']:g} but the "
+                              f"chassis draws this end face {d:g} x {h:g}: an end face of a "
+                              "housing with a section is drawn at the chassis's own size")
+    mount = ch.get("mount", "rack")
+    if mount in ("rack", "rack-face", "rack-side"):
+        err(path, "L206", f"`chassis.section` is stated on a {mount!r} device: a housing with a "
+                          "stepped end is not racked")
+    for key in ("bevel", "rounded", "ears", "overhang", "kits", "halves"):
+        if ch.get(key):
+            err(path, "L206", f"`chassis.section` is stated with `chassis.{key}`, which this "
+                              "version does not join to a stepped end")
+    if ch.get("shell") == "sheet":
+        err(path, "L206", "`chassis.section` is stated with `chassis.shell: sheet`, which this "
+                          "version does not join to a stepped end")
+    if _section.polygon_problems(pts) or _section.box_problems(pts, d, h):
+        return                  # the rest reads a polygon that is one
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        face = view.get("face") or vname
+        if face not in _section.END_FACES + _section.LEVEL_FACES:
+            continue
+        vp = view_parts(view)
+        boxes = []
+        for q in vp["placements"]:
+            if not q.get("at") or q.get("behind"):
+                continue
+            sz = _instance_size(q.get("ref"), lib_roots)
+            if sz:
+                boxes.append((q.get("id", "?"), facets.projected_box(q["at"], *sz, q.get("rotate"), None)))
+        for kind in ("bays", "cutouts"):
+            for q in vp[kind]:
+                at, sz = q.get("at"), q.get("size")
+                if at and isinstance(sz, dict) and "w" in sz:
+                    boxes.append((q.get("id", kind[:-1]), (at[0], at[1], at[0] + sz["w"], at[1] + sz["h"])))
+        outline = _section.outline(face, pts, d)
+        for pid, (x0, y0, x1, y1) in boxes:
+            if outline is not None and not _section.contains_box(outline, (x0, y0, x1, y1)):
+                err(path, "L207", f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}) is not "
+                                  "wholly inside the outline of this end face: parts sit on the "
+                                  "casting, not in a corner the profile leaves empty")
+            elif outline is None and _section.straddles_step(pts, face, d, y0, y1):
+                err(path, "L207", f"{vname}/{pid}: rows {y0:.2f} to {y1:.2f} run over a step of "
+                                  "the body: a part sits on one level of the casting")
 
 
 def _is_kit(ref, lib_roots):
@@ -14896,6 +15059,7 @@ def main():
                 lint_device_mount(f, d)
                 lint_device_poe_pd(f, d)
                 lint_device_halves(f, d)
+                lint_device_section(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

@@ -249,6 +249,26 @@ def test_the_lint_job_installs_only_what_lint_imports(workflow):
         f"the lint job installs pyproject's core dependencies; they are now {core}")
 
 
+def test_the_lint_job_checks_the_locks_against_the_base_and_only_reads(workflow):
+    """A lock that moved with the version where it was is only seen against the
+    base. The step fetches the first parent of the merged commit, one commit
+    deep, runs the tool on a pull request and skips with a line elsewhere. It
+    writes nothing and the job's token stays read-only."""
+    job = workflow["jobs"]["lint"]
+    step = next((s for s in steps(job) if s.get("name") == "devicelock against the base"), None)
+    assert step, "the lint job has no `devicelock against the base` step"
+    body = step["run"]
+    assert "devicelock.py --library library --base" in body
+    assert "git fetch --no-tags --depth=1 origin" in body
+    assert "git cat-file -p HEAD" in body and "base.sha" not in body
+    assert "skipped" in body and step["env"]["EVENT"] == "${{ github.event_name }}"
+    for write in ("git push", "git commit", "gh pr", "gh api", "--update"):
+        assert write not in body, f"the step should only read: {write}"
+    assert "pull_request" in body
+    assert workflow["permissions"] == {"contents": "read"}
+    assert "permissions" not in job and "uses" not in step
+
+
 def test_the_test_extra_covers_what_the_suite_imports_at_collection():
     """A module-scope import in a collected test file is a COLLECTION ERROR - it
     takes the whole suite down rather than skipping one file, which is how the

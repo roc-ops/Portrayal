@@ -178,7 +178,7 @@ A facet's `lift` may be **negative**: its root edge then sits that far below the
 
 The proud edge may end below the plate, flush with it, or above it (a tooth rooted in a pocket that stands out past the plate).
 
-A facet below the plate stands in a **pocket**. `pocket: <depth>` is the existing relief key for a recess in a solid face (render.py compiles it to `data-depth`, and the kit builds walls plus a floor carrying the node's art). The facet's footprint must lie inside a pocket node's footprint, and that pocket must be at least `-lift` deep.
+A facet below the plate stands in a **pocket**. `pocket: <depth>` is the existing relief key for a recess in a solid face (render.py compiles it to `data-depth`, and the kit builds walls plus a floor carrying the node's art). The facet's footprint must lie inside a pocket node's footprint, and that pocket must be at least `-lift` deep. A pocket cut through a thin plate also says how thick the plate is: see "A pocket with a wall" below.
 
 ```yaml
 elements:
@@ -200,6 +200,8 @@ Nothing new in 2D:
 - A part on a sunk facet is foreshortened exactly as on a proud one.
 - The derived profile carries negative heights, and `data-z-*` attributes accept them.
 - The pocket draws as it does today.
+- A part mounted behind the face (an `inset`) lowers every height of its facets by the inset. A facet whose root that takes below the plate keeps the negative root, as a sunk facet does: the profile is not clamped at the plate, and the kit rebuilds the wedge from the profile's lowest height. A facet wholly behind the plate is dropped.
+- A card `in:` a well sinks by the well's floor, and its facets' heights sink with it.
 
 ### Lint (L117, extended)
 
@@ -217,6 +219,7 @@ The v1 checks are unchanged:
 - **The pocket floor is cleared under each facet's footprint**, as v1 clears the flat face and card planes under a facet. Otherwise the floor plane cuts across the cage wells of the parts on the facet.
 - Skirts drop from the surface to the facet's own base (`lift`), not to the plate. The v1 apex rule (no skirt where a same-owner facet neighbour is as tall) still holds between the teeth.
 - **Parts on a sunk facet** stand on its surface through the same tilt frame; `facetZ` already adds `lift`. Their cavities run back along the facet normal.
+- **A part whose box starts before the facet's root edge** stands on the facet's plane carried on past the root in a straight line, below the root's height, as a sunk facet's surface is. `facetZ` does not hold the height at the root. Whether L117's 0.5 mm of overshoot is the right allowance, and whether optics are checked against it, is a lint question this does not settle.
 - **Nothing is clipped.** A cage coming out through the pocket floor, a pocket wall, or the back of a tooth is a geometry error in the model, and stays visible so it gets fixed.
 - A drawing with no negative facet lift builds exactly as before.
 
@@ -229,3 +232,47 @@ The v1 checks are unchanged:
   - the pocket floor raster is cleared at the facet footprint;
   - `facetZ` with a negative lift gives the sunk surface height;
   - the skirt of a sunk facet ends at its base, not at 0.
+
+## A pocket with a wall (addendum)
+
+Status: agreed; implemented. It extends the pocket of the recessed facets above.
+
+### Why
+
+A real faceplate is a thin sheet with a window in it, and behind it is the open inside of the card. A pocket whose walls run from the face to its floor builds a box instead. A cage near the end of a window runs back along its facet's normal, which is below the plate and sideways: it passes under the plate's solid edge. That is fine in the card, which is open there, but a full-depth wall stands in its way. The only way to keep the cage inside the pocket was to run the pocket past the drawn window, and its mouth then cut over printed art beside it (a barcode label).
+
+### Format
+
+`pocket` takes either form:
+
+```yaml
+- {node: window-1, pocket: 28.38}                  # walls all the way to the floor, as before
+- {node: window-1, pocket: {depth: 28.38, wall: 12}}   # walls to 12 mm; open below it
+```
+
+- `depth` is the floor, as the plain number gives it. `wall` is the plate's thickness: the depth of its back face. `0 < wall < depth`.
+- A plain number keeps its meaning. Every existing pocket builds exactly as it did.
+- The wall is published as `data-wall-depth` on the pocket's node, beside `data-depth`. (`data-wall` is the wall colour.)
+
+### Lint (L117, extended)
+
+A sunk facet still lies inside its pocket's box. Where the pocket states `wall`:
+- `wall` must be shallower than `depth`;
+- a part on a sunk facet in it may run out of the pocket's box only **below the wall depth**, under the plate's edge. The check follows the part's trailing edge back along the facet's normal: it moves `sin(deg)` sideways for each mm and `cos(deg)` down, so it leaves the box at the surface's depth there plus `gap / tan(deg)`. If that is shallower than `wall`, the part would come out through the plate, and L117 refuses it. A part too short to reach the box's side never leaves it.
+
+A pocket with no `wall` checks nothing of its parts, as before.
+
+### 3D (kit/relief.js)
+
+- The walls run from the face to `wall` only. The floor and the closed back stay at `depth`, and the sides between the wall and the floor are open.
+- The floor and back are cleared under the facets and where a tilted well crosses them, as above.
+- A sunk tooth's skirt beside the plate: outside the pocket's box the plate is solid from the mouth down to its back face, so no skirt is built there; below the back face the side is open interior, and the tooth's side is skirted from its base up to the plate.
+- A wall at or past the floor, a see-through passage and a sheet body ignore `wall`.
+- A drawing with no `wall` builds exactly as before.
+
+### Testing
+
+- **Schema:** `{depth, wall}` validates; a missing, zero or extra key does not.
+- **Lint:** a part under the plate's edge below the wall is clean; the same part above the wall, and a wall at or past the floor, are errors; a plain pocket checks nothing of its parts.
+- **Render:** the wall goes out as `data-wall-depth`; a plain number publishes none.
+- **Kit, under node:** the shell and the walls' extent, the pocket a facet stands in carrying its wall, and the skirt beside a walled pocket's plate.

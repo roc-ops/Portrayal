@@ -228,7 +228,7 @@ def test_it_is_a_generic_transceiver_of_its_family(ref):
     std = standards()[conforms]
     assert (d["size"]["w"], d["size"]["h"], d["size"]["d"]) == (std["w"], std["h"], std["depth"])
     assert d["size-confidence"] == {"w": "registry", "h": "registry", "d": "registry"}
-    assert d["unplaced"] and d["version"].startswith("1.0.") and d["skins"] == ["default"]
+    assert d["unplaced"] and d["version"].startswith("1.1.") and d["skins"] == ["default"]
     # it seats centre on centre
     assert d["connection-points"]["mate"]["at"] == pytest.approx([d["size"]["w"] / 2, d["size"]["h"] / 2])
     assert doc(f"std/{mates}@2")["interface"] == mates

@@ -31,7 +31,7 @@ SEATS = [("pole-a-pos", [78.3, 6.3]), ("pole-b-pos", [78.3, 15.3]), ("pole-a-neg
 PORTS = [("feed-a", "a", [("pos", "pole-a-pos"), ("neg", "pole-a-neg")]), ("feed-b", "b", [("pos", "pole-b-pos"), ("neg", "pole-b-neg")])]
 ELEMENTS = ["handle", "latch", "led-a", "led-b"]
 # the devices that seat it and the version each takes (a minor)
-DEVICES = {"ex4200-24f": "0.3.0", "ex4200-24t": "0.3.0", "ex4200-48t": "0.3.0"}
+DEVICES = {"ex4200-24f": "0.4.0", "ex4200-24t": "0.4.0", "ex4200-48t": "0.4.0"}
 
 
 def path_of(ref):

@@ -17,7 +17,7 @@
 format: 1
 kind: device
 name: r6615
-version: 0.1.2
+version: 1.0.2
 maturity: draft
 manufacturer: Dell
 model: PowerEdge R6615
@@ -381,7 +381,7 @@ groups:
     role: indicator
     index-origin: 1
     description: the left control panel, a field-replaceable module in the left ear
-  ports:
+  local-access:
     term: Port
     role: management
     index-origin: 1
@@ -505,7 +505,7 @@ groups:
     description: >-
       the rear I/O board position - the board carries the ID button, the iDRAC
       port, two USB and the VGA, which are its own ports
-  leds:
+  port-leds:
     term: LED
     role: indicator
     index-origin: 1
@@ -586,10 +586,10 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
-           group: ports, rel-pos: 2}
-        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: local-access, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
@@ -600,7 +600,7 @@ views:
           id: idrac-direct-led
           at: [459.45, 35.76]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -685,10 +685,10 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
-           group: ports, rel-pos: 2}
-        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: local-access, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
@@ -699,7 +699,7 @@ views:
           id: idrac-direct-led
           at: [459.45, 35.76]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -760,10 +760,10 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
-           group: ports, rel-pos: 2}
-        - {ref: std/vga@1, id: vga, at: [394.5, 1.9], group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [394.5, 1.9], group: local-access, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [416.0, 5.9], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
@@ -774,7 +774,7 @@ views:
           id: idrac-direct-led
           at: [459.45, 35.76]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -851,10 +851,10 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
-           group: ports, rel-pos: 2}
-        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: local-access, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
@@ -865,7 +865,7 @@ views:
           id: idrac-direct-led
           at: [459.45, 35.76]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},
@@ -943,10 +943,10 @@ views:
         - {ref: dell/power-button-14g@1, id: power-btn, at: [459.13, 2.36], for: chassis,
            group: mgmt, rel-pos: 1}
         - {ref: std/usb-a@1, id: usb-1, at: [456.56, 16.32], rotate: 90, skin: usb2,
-           attrs: {usb: '2.0'}, group: ports, rel-pos: 1}
+           attrs: {usb: '2.0'}, group: local-access, rel-pos: 1}
         - {ref: std/micro-usb@1, id: idrac-direct, at: [460.59, 31.20], rotate: 90,
-           group: ports, rel-pos: 2}
-        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: ports, rel-pos: 3}
+           group: local-access, rel-pos: 2}
+        - {ref: std/vga@1, id: vga, at: [437.22, 17.41], rotate: 270, group: local-access, rel-pos: 3}
         - {ref: common/vga-symbol@1, id: mark-vga, at: [444.45, 9.56], for: vga, group: marks, rel-pos: 1}
         - {ref: dell/information-tag-1u-16g@1, id: info-tag, at: [393.6, 40.75], group: tags, rel-pos: 1}
         - {ref: dell/bezel-1u-16g@1, id: bezel, at: [24.3, 0.0],
@@ -957,7 +957,7 @@ views:
           id: idrac-direct-led
           at: [459.45, 35.76]
           for: idrac-direct
-          group: leds
+          group: port-leds
           rel-pos: 1
           states: ['off',
                    {name: connected, color: '#22c55e'},

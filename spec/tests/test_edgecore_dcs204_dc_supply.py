@@ -10,8 +10,7 @@ Positronic's catalog reads as a one-row, three-position, female cable connector.
   - edgecore/psu-48v-650-f@1 and edgecore/psu-48v-650-b@1 are the two FRUs, one maker part number each; each composes the connector,
     states no DC port (a port on a composed connector cannot be published at the connector yet) and exports a power port typed `other`;
   - the AS7726-32X seats the F supply in `dc-f2b` and the B supply in `dc-b2f`; its bays still accept common/psu-dc-650@2;
-  - the AS7326-56X and the AS5912-54X are not touched (no held document gives their DC supply's part number), so the generic supply
-    keeps its record.
+  - the AS7326-56X and the AS5912-54X each seat a supply of their own, because no held document gives either one's part number.
 
 These run against the real library, a components index built by the indexer the build runs, the device lock, the records file and the
 exporter's own functions. They read no library/dist and render nothing.
@@ -38,7 +37,6 @@ SUPPLIES = {
 }
 DEVICE = "edgecore/as7726-32x"
 SEATS = {"dc-f2b": "edgecore/psu-48v-650-f@1", "dc-b2f": "edgecore/psu-48v-650-b@1"}
-CONTROLS = ["edgecore/as5912-54x", "edgecore/as7326-56x"]
 
 
 def contract(ref):
@@ -160,12 +158,6 @@ def test_the_lock_records_the_bays_and_the_composed_parts():
     for bay in ("rear/bays/psu-1", "rear/bays/psu-2"):
         assert set(lock["bay-accepts"][bay]) == {"common/psu-ac-650@3", GENERIC, *SUPPLIES}
     assert {RECEPTACLE, *SUPPLIES} <= set(lock["composed-refs"])
-
-
-@pytest.mark.parametrize("slug", CONTROLS)
-def test_the_other_devices_that_seat_the_generic_supply_still_do(slug):
-    seated = {ref for c in device(slug)["configurations"].values() for ref in (c.get("bays") or {}).values()}
-    assert GENERIC in seated and not seated & set(SUPPLIES)
 
 
 def test_the_new_parts_and_supplies_need_no_record():

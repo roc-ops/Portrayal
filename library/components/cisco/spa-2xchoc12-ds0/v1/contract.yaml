@@ -1,23 +1,18 @@
 format: 1
 kind: module
 name: spa-2xchoc12-ds0
-version: 1.2.0
+version: 1.3.0
 class: line-card
 behaviour: fills
 profile: networking
+slot-width: 2
 description: >-
   Cisco 2-Port Channelized OC-12/DS0 SPA, a double-height shared port adapter for the ASR
   9000 SIP-700. The 2-port channelized OC-12/DS0 SPA takes a small form-factor pluggable
   (SFP) optical transceiver in each port for SONET single-mode and multimode fiber
   connections. Qualified optics: SFP-OC12-MM, -SR, -IR1, -LR1, -LR2.
-  Seats in a SIP-700 SPA subslot; it is a module, not a device.
-unplaced: >-
-  no SIP in this library seats this SPA because it is double-height: the SIP and SPA Hardware
-  Installation Guide, Table 10 p10, lists it as double-height, so it fills two SIP-700
-  subslots side by side, and a module that spans two bays cannot be seated - a bay holds one
-  module sized to itself and has no way to claim its neighbour. The SIP-700 contract lists its
-  single-width SPAs and leaves the two doubles out for this reason. Tracked in
-  roc-ops/Portrayal#262.
+  Seats across two SIP-700 SPA subslots side by side. The left one of a row carries it; it is
+  a module, not a device.
 size: {w: 34.58, h: 167.87}
 attrs:
   oc12: 2

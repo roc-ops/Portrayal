@@ -1,0 +1,99 @@
+format: 1
+kind: kit
+name: dcp-rack-kit
+version: 1.0.0
+description: >-
+  The rack-mount kit of the Smartoptics DCP chassis. One box holds seven kinds of bracket, two of
+  each (right and left): two front brackets, two extensions, two rear brackets and a mid-mount
+  bracket. A four-post rack takes a front bracket, an extension when the rack is deep and a rear
+  bracket, chosen from the rack's depth; the chassis can sit flush with the posts, with its
+  traffic units flush, or recessed. A two-post rack takes the mid-mount bracket alone. Screws, a
+  14 AWG ground lug, an M5 nut and a toothed washer come with it and are hardware, not parts.
+motion: telescoping
+parts:
+  - {ref: smartoptics/dcp-mid-mount-bracket@1, id: mid-mount, count: 2}
+  - {ref: smartoptics/dcp-front-bracket-700@1, id: front-700, count: 2}
+  - {ref: smartoptics/dcp-bracket-extension-270@1, id: extension-270, count: 2}
+  - {ref: smartoptics/dcp-bracket-extension-470@1, id: extension-470, count: 2}
+  - {ref: smartoptics/dcp-rear-bracket-142@1, id: rear-142, count: 2}
+  - {ref: smartoptics/dcp-front-bracket-600@1, id: front-600, count: 2}
+  - {ref: smartoptics/dcp-rear-bracket-42@1, id: rear-42, count: 2}
+configurations:
+  - id: rack-600
+    racks: [4-post]
+    parts: [front-600, rear-42]
+    preset: 600
+  - id: rack-600-700
+    racks: [4-post]
+    parts: [front-600, rear-142]
+    depth: [600, 700]
+  - id: rack-700-820
+    racks: [4-post]
+    parts: [front-700, rear-142]
+    depth: [700, 820]
+  - id: rack-800-900
+    racks: [4-post]
+    parts: [front-700, extension-270, rear-42]
+    depth: [800, 900]
+  - id: rack-840-1000
+    racks: [4-post]
+    parts: [front-700, extension-270, rear-142]
+    depth: [840, 1000]
+  - id: rack-1000-1100
+    racks: [4-post]
+    parts: [front-700, extension-470, rear-42]
+    depth: [1000, 1100]
+  - id: rack-1100-1200
+    racks: [4-post]
+    parts: [front-700, extension-470, rear-142]
+    depth: [1100, 1200]
+provenance:
+  contents: >-
+    The Smartoptics DCP-Series User Manual, release 14.0 A, section 3.2.1 "Rack-mount kit parts
+    list" (page 31), lists eight items: 1 mid-mount, front right and front left (225mm); 2 front
+    mounting bracket, right and left (700mm); 3 front bracket extension (270mm); 4 front bracket
+    extension (470mm); 5 rear-mounting brackets (142mm); 6 front mounting bracket (600mm); 7
+    rear-mounting brackets (42mm); 8 screws, M4x6, Phillips, 20 pieces. The numbers 1 to 7 are the
+    manual's item numbers and the manual prints no maker part number. The seven are parts here and
+    the screws are hardware. Each part's id here is its role and the figure in its name. Section
+    4.1 lists the rack-mount kit in the DCP-2 package.
+  depth: >-
+    The same manual, section 3.2.2.1 "4-Post Rack" (page 32), table "Rack-kit Parts": seven rack
+    depth bands, each with the front bracket, the middle extension and the rear bracket to use. The
+    bands are 600 mm; 600 - 700; 700 - 820; 800 - 900; 840 - 1000; 1000 - 1100 and 1100 - 1200 mm.
+    THE BANDS OVERLAP AS PRINTED (700 - 820 and 800 - 900 share 800 to 820; 800 - 900 and 840 - 1000
+    share 840 to 900) and the manual does not say which set to take in the overlap. Each band is a
+    configuration with the range it prints, the overlaps kept. The first band prints one figure,
+    600 mm, with the manual's inch figure 24 in beside it, so it is stated as a `preset` and not a
+    range. THE LIBRARY'S READING of a `preset`, decided in the rack mounting design note, is the
+    factory setting in mm of rack depth, front post to rear post; the manual does not say what its
+    600 mm measures, and the reading is not checked against a second document. The table of
+    section 3.2.2.1 shows the parts of each band as drawings and prints their item numbers.
+  rack-type: >-
+    Section 3.2 lists four ways to mount: with the chassis flush with the front of the posts, with
+    the transponder flush, and recessed (all three in a four-post rack), and with the posts at the
+    mid-section of the system (a two-post rack). Section 3.2.2.2 says "For a 2-post rack, use part
+    number one". The mid-mount part is therefore in the kit's parts and in no configuration: the
+    schema asks every configuration for a depth or a preset, and a two-post rack has no rack depth
+    to state. The device's ear position for mid-mount names the part.
+  ground: >-
+    Section 3.2.8 (page 35): "The front rack mount brackets include a grounding terminal", on the
+    right-side front bracket, with an unpainted pad, an M5 nut and a toothed washer, and the
+    front brackets swap sides if the terminal is wanted on the left. The terminal is therefore on
+    the front brackets (600, 700) and the mid-mount part, whose figure in section 3.2.2.2 shows
+    one; it is composed in those parts and not in the chassis.
+gaps:
+  - what: depth
+    scope: [rack-600]
+    reason: vendor-silent
+    wanted: >-
+      The rack depth range of the first band. The manual's table prints one figure for it, 600 mm
+      (24 in), and a range for each of the other six. A rack-kit datasheet or the quick
+      installation guide settles it.
+  - what: part-dimensions
+    scope: [mid-mount, front-700, extension-270, extension-470, rear-142, front-600, rear-42]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of each part. The manual's figures are not to scale and print no
+      dimension, and the "(225mm)" to "(42mm)" figures in its parts list are names, not stated
+      lengths. All seven parts carry placeholder envelopes.

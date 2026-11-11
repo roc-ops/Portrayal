@@ -485,14 +485,16 @@ def test_a_device_whose_supply_carries_the_inlet_exports_none_itself():
 # piece of hardware.
 
 def test_a_chassis_timing_jack_says_what_it_is():
-    """The ASR 9001's two SYNC jacks and its ToD port. `other` alone would say
-    only that a port exists; `other` + SYNC says what to plug into it."""
+    """The ASR 9001's two SYNC jacks, its ToD port and its two DIN 1.0/2.3 clock
+    jacks. `other` alone would say only that a port exists; `other` + SYNC says
+    what to plug into it."""
     d = _export("ASR 9001 Router")
     if d is None:
         pytest.skip("the ASR 9001 is not in this library")
     timing = {i["name"]: i.get("label") for i in (d.get("interfaces") or [])
               if i["type"] == "other"}
-    assert timing == {"sync-0": "SYNC", "sync-1": "SYNC", "tod": "TOD"}
+    assert timing == {"clk-10mhz": "1.0/2.3", "clk-1pps": "1.0/2.3",
+                      "sync-0": "SYNC", "sync-1": "SYNC", "tod": "TOD"}
 
 
 def test_the_two_passes_agree_about_std_smb():
@@ -806,6 +808,13 @@ WITHHELD = {
     # position instead - PASS_THROUGH below.
     "Juniper/MX-MPC2E-3D": ["mic0", "mic1"],
     "Juniper/MX-MPC3E-3D": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D-NG": ["mic0", "mic1"],
+    "Juniper/MX-MPC3E-3D-NG": ["mic0", "mic1"],
+    "Juniper/MX-MPC1-3D-Q": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D-Q": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D-P": ["mic0", "mic1"],
+    "Juniper/MX-MPC2E-3D-NG-Q": ["mic0", "mic1"],
+    "Juniper/MX-MPC3E-3D-NG-Q": ["mic0", "mic1"],
     "Nokia/IOM4-e": ["mda-1", "mda-2"],
     "Nokia/IOM4-e-HS": ["mda-1", "mda-2"],
     "Nokia/IOM5-e": ["mda-1", "mda-2"],
@@ -851,8 +860,11 @@ MULTI_DEPTH = sorted([
     # seat, so its bays are anchored and what sits in one is at depth 1.
     "Juniper/MIC-3D-16CHE1-T1-CE", "Juniper/MIC-3D-1OC192-XFP",
     "Juniper/MIC-3D-20GE-SFP", "Juniper/MIC-3D-2XGE-XFP",
-    "Juniper/MIC-3D-4OC3OC12-1OC48", "Juniper/MIC-3D-8DS3-E3",
-    "Juniper/MIC-3D-8OC3OC12-4OC48", "Juniper/MIC-MACSEC-20GE",
+    "Juniper/MIC-3D-4CHOC3-2CHOC12", "Juniper/MIC-3D-4COC3-1COC12-CE",
+    "Juniper/MIC-3D-4OC3OC12-1OC48",
+    "Juniper/MIC-3D-8CHOC3-4CHOC12", "Juniper/MIC-3D-8DS3-E3",
+    "Juniper/MIC-3D-8OC3-2OC12-ATM", "Juniper/MIC-3D-8OC3OC12-4OC48",
+    "Juniper/MIC-MACSEC-20GE",
     "Juniper/MS-MIC-16G", "Juniper/mx-mic-blank",
     # NOT the MPCs the MX2000 adapter seats, nor the MICs only an MPC takes
     # (#917): the adapter's bay is a pass-through, so an MPC in it is at its

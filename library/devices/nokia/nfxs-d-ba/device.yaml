@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: nfxs-d-ba
-version: 1.0.2
+version: 1.1.0
 maturity: modelled
 manufacturer: Nokia
 model: 7360 ISAM FX-16 (NFXS-D BA)
@@ -119,7 +119,9 @@ provenance:
       in a printed box 17.1-51.3 x 571.2-600.9 captioned CRAFT PORT - the "bottom left side" HIM s6.9
       names. Power terminals: four dual-post terminals whose studs sit on a line at 30.2 degrees, 15.9
       apart (the 5/8 in dual-hole lug spacing), stud centres (108.7, 592.7) and (122.45, 584.7) for
-      TB1-1 and repeating every 58.95 across; the angled shrouds that carry them and their legends
+      TB1-1 and repeating every 58.95 across, composed as nokia/fx-16-dc-terminal-block@1 (four
+      pairs turned 30.2 degrees, two DC input feeds) placed at its nut box's top left (102.75,
+      578.75); the angled shrouds that carry them and their legends
       TB1-1 -48V BAT A, TB1-2 BAT RTN A, TB1-3 BAT RTN B, TB1-4 -48V BAT B are traced as printed
       outlines. Alarm plate 348.1-474.9 x 570.4-607.3: six wire-wrap pins in two columns at 357.45 and
       369.5, rows 586.7 / 592.65 / 598.65, captioned NT-A, NT-B and RING / TIP / FRAME GND (UDS Table
@@ -347,6 +349,11 @@ groups:
       the RJ-45 time-of-day and 1 Hz input (UDS Table 15). The BITS wire-wrap pins and the CO alarm
       micro D-sub are management too, but no library part exists for either, so they are panel decor
       and cannot join a group.
+  power:
+    term: Input
+    role: service
+    index-origin: 1
+    description: the four -48 VDC terminals TB1-1 to TB1-4 of the PDBP-C, two feeds A and B (UDS Table 2)
   esd:
     term: Point
     role: furniture
@@ -395,22 +402,6 @@ views:
         - {at: [429.45, 489.55], size: [6.7, 6.7], rx: 3.35, fill: '#9aa1a8', kind: lamp-bezel}
         - {id: craft-plate, at: [17.1, 571.2], size: [34.2, 29.7], stroke: '#2b2f33', stroke-width: 0.3, kind: label-plate}
         - {id: terminal-field, at: [52.0, 579.0], size: [294.0, 40.4], fill: '#b7bbc0', kind: recess}
-        - {id: tb1-1-nut-1, at: [102.75, 586.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-1-post-1, at: [105.5, 589.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-1-nut-2, at: [116.5, 578.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-1-post-2, at: [119.25, 581.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-2-nut-1, at: [161.85, 586.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-2-post-1, at: [164.6, 589.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-2-nut-2, at: [175.6, 578.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-2-post-2, at: [178.35, 581.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-3-nut-1, at: [220.7, 586.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-3-post-1, at: [223.45, 589.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-3-nut-2, at: [234.45, 578.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-3-post-2, at: [237.2, 581.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-4-nut-1, at: [279.6, 586.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-4-post-1, at: [282.35, 589.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
-        - {id: tb1-4-nut-2, at: [293.35, 578.75], size: [11.9, 11.9], rx: 5.95, fill: '#e8eaec', kind: terminal-nut}
-        - {id: tb1-4-post-2, at: [296.1, 581.5], size: [6.4, 6.4], rx: 3.2, fill: '#4a5056', kind: terminal-post}
         - {id: alarm-plate, at: [348.1, 570.4], size: [126.8, 36.9], stroke: '#2b2f33', stroke-width: 0.3, kind: label-plate}
         - {at: [356.9, 586.2], size: [1.1, 1.0], fill: '#2b2f33', kind: wire-wrap-pin}
         - {at: [356.9, 592.15], size: [1.1, 1.0], fill: '#2b2f33', kind: wire-wrap-pin}
@@ -559,6 +550,7 @@ views:
         - {ref: common/led-indicator@1, id: aco, at: [430.8, 490.9], group: leds, rel-pos: 6, for: chassis, states: {lamp: [{name: green, color: '#39b54a'}, 'off']}}
         - {ref: common/power-button@1, id: aco-switch, at: [451.55, 486.9], group: controls, rel-pos: 1, for: aco, description: 'alarm cut-off (ACO) push button'}
         - {ref: common/esd-jack@1, id: esd, at: [72.9, 487.85], group: esd, rel-pos: 1}
+        - {ref: nokia/fx-16-dc-terminal-block@1, id: dc-input, at: [102.75, 578.75], group: power, rel-pos: 1}
         - {ref: common/db9-receptacle@1, id: craft, at: [18.75, 586.4], group: craft, rel-pos: 1, attrs: {media: db9, function: remote craft port}}
         - {ref: std/rj45@2, id: tod, at: [384.1, 586.1], group: timing, rel-pos: 1, attrs: {media: rj45-tod, function: ToD and 1 Hz timing input}}
         - {ref: common/screw-head@1, id: screw-1, at: [8.15, 497.55], group: fasteners, rel-pos: 1}

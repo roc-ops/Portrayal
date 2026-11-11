@@ -1,0 +1,62 @@
+format: 1
+kind: module
+name: lm83x-8sa
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Lantronix 83X-8SA, the 8-port serial expansion module of the LM83X console server. The face has eight RJ45 serial
+  jacks in two rows of four, numbered 1 to 4 over 5 to 8. It has two thumbscrews and the legend SERIAL. It seats in one
+  of the three expansion bays of the LM83X.
+size: {w: 92.9, h: 43.2, d: 128.6}
+size-confidence: {w: datasheet, h: borrowed, d: datasheet}
+attrs:
+  model: 83X-8SA
+provenance:
+  size: >-
+    datasheet - Lantronix LM-Series Expansion Modules and Option Cards product brief, page 1, table "Expansion Modules
+    for LM83X": 83X-8SA, "128.6x92.9x43.7" mm, length x width x height, 143 g. Length is the depth into the chassis and
+    width is the face. The height of 43.7 is 0.5 mm more than the 43.2 mm of the LM83X product brief (MPB-00156 Rev B),
+    so the face takes the height of the bay it seats in (borrowed from the chassis). The printed 43.7 is recorded in this note only; the contract states 43.2.
+  power: >-
+    not published - neither the expansion modules brief nor the LM83X product brief gives a power draw for a module.
+    The lint finding for a module with no draw stays and is recorded in the baseline.
+  layout: >-
+    drawing - the front illustration of the LM83X (5993 x 675 px), read at 11.77 px/mm across, from the 482.6 mm
+    outline of the figure with its ears, and 11.88 px/mm down, from the 43.2 mm face. The module in the third bay of the
+    illustration is this one. The jacks are 16.0 mm apart across (four, measured from the dividers between them) and the
+    rows are 11.7 mm apart down (centres 16.5 and 28.2 mm below the top of the face). Each jack is a cell of the 12.7 by
+    11.0 ganged jack part set on those centres. The maker's jacks read 14.2 by 10.1 mm inside their frames, so the part
+    draws a smaller opening than the figure; the figure and the part are not made to agree.
+  rows: >-
+    drawing - the illustration shows the upper row with its latch notch and lamp tabs at the top of each jack and the
+    lower row with them at the bottom, so the upper row is the part turned 180 degrees and the lower row is not turned.
+  screws: >-
+    photo-measured - the thumbscrews sit at the left and right edges at the height of the upper row (5.8 and 87.1 mm
+    across, 11.9 mm down, about 6 mm across). The photographs show them as black knurled screws with a cross slot. No
+    document gives a thread or a size.
+  printing: >-
+    drawing - numerals 1 to 8 and the two bars in blue, SERIAL and the 10101 mark under the left screw. The bay number
+    printed beside the screw (2, 3 or 4) is not drawn: the brief says a module is sold installed per slot, so one part
+    cannot print all three.
+  lamps: >-
+    drawing - each jack shows a green tab and an amber tab in its keyway corners. No document says what either shows,
+    so no state is claimed beyond off and on.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: eight RJ45 RS-232 serial ports numbered 1 to 8 as printed.
+parts:
+  - {ref: common/rj45-ganged-lamped@1, id: p1, at: [15.61, 11.0], rotate: 180, group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p2, at: [31.63, 11.0], rotate: 180, group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p3, at: [47.64, 11.0], rotate: 180, group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p4, at: [63.62, 11.0], rotate: 180, group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p5, at: [15.61, 22.7], group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p6, at: [31.63, 22.7], group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p7, at: [47.64, 22.7], group: serial, attrs: {media: rj45-serial}}
+  - {ref: common/rj45-ganged-lamped@1, id: p8, at: [63.62, 22.7], group: serial, attrs: {media: rj45-serial}}
+skins: [default]

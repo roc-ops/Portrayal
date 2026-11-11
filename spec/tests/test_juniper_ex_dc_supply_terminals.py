@@ -64,8 +64,8 @@ CENTRES = {
     EX4500: r'<g id="term-(?:neg|pos)">\s*<circle cx="([\d.]+)" cy="([\d.]+)" r="2\.4"',
     EX9253: r'<g id="term-[ab]">\s*<circle cx="([\d.]+)" cy="([\d.]+)" r="4\.3"',
 }
-# the devices that seat them and the version each takes (a minor)
-DEVICES = {"ex4300-32f": "0.3.0", "ex4300-48t": "0.3.0", "ex4500-40f": "0.3.0", "ex9253": "0.2.0"}
+# the devices that seat them and the version each is at (a minor, then patches)
+DEVICES = {"ex4300-32f": "0.4.0", "ex4300-48t": "0.4.0", "ex4500-40f": "0.3.1", "ex9253": "0.2.0"}
 SEATED_BY = {"ex4300-32f": [AFO, AFI], "ex4300-48t": [AFO, AFI], "ex4500-40f": [EX4500], "ex9253": [EX9253]}
 
 

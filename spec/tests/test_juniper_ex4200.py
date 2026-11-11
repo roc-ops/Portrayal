@@ -211,7 +211,7 @@ def test_poe_ports_print_their_numerals_in_orange(dev):
     """The datasheet photographs print the numerals of the PoE ports in orange and the rest white."""
     _, n, poe, *_ = DEVICES[dev]
     d = load(dev)
-    for cfg in set(d["configurations"]) - {"dc"}:
+    for cfg in {c for c, v in d["configurations"].items() if v["kind"] != "example"} - {"dc"}:
         fills = {int(f.split("-")[1]): c for f, _, c in printed(d, cfg)
                  if (f or "").startswith("port-")}
         orange = {k for k, c in fills.items() if c == "#f2a33a"}
@@ -240,9 +240,10 @@ def test_the_front_carries_the_lcd_buttons_lamps_and_the_empty_uplink_slot(dev):
     assert {"EX4200", "ALM", "SYS", "MST"} <= legends
     # the front has no console port: the EX4200's console is on the rear
     assert "console" not in ids
-    # the slot takes only the cover here; the four uplink modules are left for their own slice
+    # the slot takes the cover and the four uplink modules the guide names; the cover is what ships
     slot = bays(d, "front")["uplink"]
-    assert slot["accepts"] == ["juniper/ex4200-uplink-cover@1"]
+    assert slot["accepts"] == ["juniper/ex4200-uplink-cover@1", "juniper/ex-um-4sfp@1", "juniper/ex-um-2x4sfp@1",
+                               "juniper/ex-um-2x4sfp-m@1", "juniper/ex-um-2xfp@1"]
     assert slot["default"] == "juniper/ex4200-uplink-cover@1"
     assert set(bays(d, "front")) == {"uplink"}
 
@@ -330,7 +331,8 @@ def test_the_default_build_ships_what_the_guide_says(dev):
 def test_each_configuration_lists_its_part_numbers(dev):
     d = load(dev)
     want = DEVICES[dev][6]
-    assert set(d["configurations"]) == set(want)
+    # an `example` configuration shows a part in a slot and is no order code
+    assert {c for c, v in d["configurations"].items() if v["kind"] != "example"} == set(want)
     for cfg, pns in want.items():
         got = d["configurations"][cfg]
         assert got["kind"] == "orderable"
@@ -393,7 +395,7 @@ def test_a_poe_model_ships_a_supply_whose_budget_covers_its_ports(dev):
 def test_the_dcim_types_export_one_per_orderable_configuration(target, dev):
     d = load(dev)
     folder = LIB / "exports" / target / "device-types" / "Juniper"
-    for cfg in d["configurations"].values():
+    for cfg in (c for c in d["configurations"].values() if c["kind"] != "example"):
         assert cfg["kind"] == "orderable"
         pn = sorted(cfg["part-numbers"])[0]  # the exporter names a type after the first code
         doc = yaml.safe_load((folder / f"{pn}.yaml").read_text())
@@ -421,7 +423,8 @@ def test_the_exported_type_lists_the_front_ports_and_the_rear_management_ports(d
 
 
 def test_the_new_components_are_family_prefixed():
-    """Every juniper/ part these devices place or seat is the EX4200's own: no shared component."""
+    """Every juniper/ part these devices place or seat is the EX4200's own, or an EX-UM uplink module the
+    EX3200 shares: one maker part number is one component."""
     refs = set()
     for dev in DEVICES:
         d = load(dev)
@@ -431,7 +434,7 @@ def test_the_new_components_are_family_prefixed():
             for b in bays(d, view).values():
                 refs.update(b["accepts"])
     mine = {r for r in refs if r.startswith("juniper/")}
-    assert mine and all(r.startswith("juniper/ex4200-") for r in mine)
+    assert mine and all(r.startswith(("juniper/ex4200-", "juniper/ex-um-")) for r in mine)
 
 
 @pytest.mark.parametrize("comp", sorted(PSUS) + [FAN] + COVERS +

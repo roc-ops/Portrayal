@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cfp2-lc
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: cfp2
@@ -100,9 +100,25 @@ provenance:
     a bare metal head with no coloured part, so the colour is a fact about a
     product and a vendor wrapper sets `latch-color`. The outline follows the
     fill (`data-stroke-derive`).
+  groups: >-
+    Source: Figure 5-10 of the CFP MSA CFP2 Hardware Specification Rev 1.0, the Finisar
+    FTLC1122RDNL Product Specification Rev C1 p8 end view and the Gigalight GF2-S101-LR4C
+    datasheet Rev V3 p12 end view, which draw the two LC bores on the module head
+    (provenance.bores). The role is traffic, this contract's own reading of the job: the
+    module's network port, where its fibre or cable is plugged in. The shape stands for every
+    module of its kind, so the group states no speed: rate, reach and watts belong on the vendor
+    wrapper.
+groups:
+  cfp2:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of a CFP2 module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [15.275, 2.84], rotate: 180, lift: 16}
-  - {ref: std/lc-bore@3, id: rx, at: [21.525, 2.84], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: tx, group: cfp2, at: [15.275, 2.84], rotate: 180, lift: 16}
+  - {ref: std/lc-bore@3, id: rx, group: cfp2, at: [21.525, 2.84], rotate: 180, lift: 16}
 relief:
   features:
     - node: body

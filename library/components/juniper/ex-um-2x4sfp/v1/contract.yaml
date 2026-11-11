@@ -1,0 +1,97 @@
+format: 1
+kind: module
+name: ex-um-2x4sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-2X4SFP, the SFP+ uplink module of the EX3200 and EX4200 switches. It slides into the
+  front-panel uplink module slot behind the flip-up door. It has four SFP cages in one row, numbered 0
+  to 3. In the default 10-gigabit mode only ports 0 and 2 are enabled, and they take SFP+ transceivers.
+  In the 1-gigabit mode all four ports take SFP transceivers. Each cage has a link activity lamp and a
+  status lamp. An operating mode lamp at the right is lit in the 10-gigabit mode.
+attrs:
+  model: EX-UM-2X4SFP
+  sfp-plus: 2
+  sfp: 4
+  ports-note: default mode, SFP+ ports 0 and 2 at 10 Gbps; 1-gigabit mode, four SFP ports at 1 Gbps
+provenance:
+  sources: >-
+    datasheet - EX3200 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Uplink Modules
+    in EX3200 Switches, PDF pages 29 to 32, Figure 6 (g020123) and the note under it. The EX3200 guide
+    prints no model number for the SFP+ module, so the number is the EX4200 guide's: EX4200 Switch
+    Hardware Guide, Uplink Modules in EX4200 Switches, PDF page 30, "The model number of the uplink
+    module is EX-UM-2X4SFP", and Figure 7 on PDF page 32, the same drawing (g020123). Both guides
+    give the same ports and the same operating mode lamp. The EX3200 guide's text says one uplink
+    port is "port 3 (ge-0/1/2)" on PDF page 29 and "port 2 on the uplink module (ge-0/1/2)" on pages
+    29, 30 and 181; the figures number the ports 0 to 3, which this contract follows.
+  size: >-
+    estimated - no document dimensions the module. It is the uplink slot the two chassis' cover panels
+    close, 63.0 x 14.5 mm, read off the product photographs on page 4 of the EX3200 datasheet. The
+    depth is not stated.
+  elements: >-
+    drawing and estimated - Figure 6 is a three-quarter view, so no distance on it is a measurement.
+    It shows four cages in one row, the numbers 0 to 3 printed above them, a round hole at each end
+    of the plate, a keyhole at the centre of its top edge and the operating mode lamp at the right of
+    port 3. The end holes are drawn and the keyhole is not, because the lamps stand where it would.
+    The cages are taken at the SFF-8433 pitch of std/sfp-ganged, 14.25 mm, in one block from 1.8
+    mm in, which leaves the right of the plate for the mode lamp. The figure draws each port's two
+    lamps below the cage and Figure 5 of the same guide draws the SFP module's above it. The 14.5 mm
+    plate has room for one row of lamps and a cage, so both modules take the Figure 5 place, 3.9 and
+    8.8 mm in from each cage's left edge and above it. The printed numbers 0 to 3 and the "10 G" marks
+    on ports 0 and 2 are not drawn, because their place on the plate cannot be measured from the figure.
+  led: >-
+    datasheet - EX3200 guide Figure 12 and Table 10. Each port has a link activity lamp and a status
+    lamp. Status shows the speed - green when the transceiver's speed is the speed the port is
+    configured for, unlit when it is not. The operating mode lamp is lit in the 10-gigabit mode and
+    unlit in the 1-gigabit mode.
+  mode: >-
+    datasheet - EX3200 guide, Figure 6 and the note under it. In 10-gigabit mode only ports 0 and 2
+    are enabled and take SFP+ transceivers. In 1-gigabit mode all four ports are enabled and take
+    SFP transceivers. The contract states the 10-gigabit default: ports 0 and 2 are SFP+ ports at
+    10 Gbps and ports 1 and 3 are SFP ports at 1 Gbps. The mode is a CLI setting and is not a state
+    of the part.
+  colour: >-
+    estimated - no colour photograph of the module is held. The plate is drawn silver, as the XFP
+    module's is in the EX3200 datasheet photograph.
+  power: >-
+    NO FIGURE IS PUBLISHED - neither guide gives the module a weight or a draw.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    mixed: >-
+      the four uplink cages, numbered 0 to 3 as printed. Ports 0 and 2 take SFP+ at 10 Gbps and ports 1 and
+      3 take SFP at 1 Gbps. In the 1-gigabit mode every port takes SFP
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Two lamps for each port - link activity at the left, status at the right, above the cage - then
+      the operating mode lamp. Numbered in printed order, left to right
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [1.8, 4.0], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [16.05, 4.0], group: sfp-plus, attrs: {media: sfp, speed: 1g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [30.3, 4.0], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [44.55, 4.0], group: sfp-plus, attrs: {media: sfp, speed: 1g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [5.7, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [10.6, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [19.95, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [24.85, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-2-link, at: [34.2, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-2-status, at: [39.1, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-3-link, at: [48.45, 1.4], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-3-status, at: [53.35, 1.4], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-mode, at: [59.8, 6.2], group: port-leds, attrs: {function: operating mode}}
+size:
+  w: 63.0
+  h: 14.5
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

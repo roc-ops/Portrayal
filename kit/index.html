@@ -34,8 +34,10 @@
 -->
 <style>
   #mode { display: inline-flex; gap: 2px; margin-right: 8px; }
-  #mode button, #earsbar button { font: inherit; padding: 2px 10px; border: 1px solid #555; background: #222; color: #ddd; cursor: pointer; }
-  #mode button.on, #earsbar button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
+  #mode button, #earsbar button, #housebar button { font: inherit; padding: 2px 10px; border: 1px solid #555; background: #222; color: #ddd; cursor: pointer; }
+  #mode button.on, #earsbar button.on, #housebar button.on { background: #f59e0b; color: #111; border-color: #f59e0b; }
+  #housebar { display: inline-flex; margin-right: 8px; }
+  #housebar[hidden] { display: none; }    /* inline-flex outranks the hidden attribute */
   #mode button:disabled { opacity: .45; cursor: not-allowed; }
   #earsbar { display: inline-flex; margin-right: 8px; }
   #earsbar[hidden] { display: none; }     /* inline-flex outranks the hidden attribute */
@@ -53,6 +55,12 @@
      make the drawing say INIT, because no skin in the library draws glyphs. */
   .chip.ro { cursor: default; }
   .chip.ro:hover { border-color: var(--line); color: var(--dim); }
+  /* The demo colour box on the row of a programmable-colour lamp. */
+  .demo { display: inline-flex; align-items: center; gap: .2rem; margin-left: .3rem; vertical-align: middle; }
+  .demo input[type=color] { width: 1.5rem; height: 1rem; padding: 0; border: 1px solid var(--line);
+          background: none; cursor: pointer; }
+  .demo input[type=color]:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .demo .chip { margin-left: 0; }
 
   /* The kit's palette has no "good" green - the shell never needed one - so the
      met-capability chip brings its own rather than borrowing --accent, which is
@@ -125,12 +133,14 @@
 <body>
 <script type="module">
 import { createShell, esc } from './shell.js';
-import { statesOfEl, messagesOfEl, charactersOfEl, boundLamps, offIsSet } from './states.js';
+import { statesOfEl, messagesOfEl, charactersOfEl, boundLamps, offIsSet,
+         programmableOf, demoHex, demoColours } from './states.js';
 import { encodeSwaps, encodeTurns, searchWith } from './swap.js';
 import { encodeFields } from './fields.js';
 import { positionControl } from './positions.js';
 import { flatDist, packageDist, distResolver, faceFile } from './dist.js';
 import { drawEars, clearEars, earPlan, faceSize, frontWidthOfText } from './ears2d.js';
+import { describeHalves, viewFor } from './housing.js';
 
 // WHERE THE FILES COME FROM. The build directory by default; the npm packages
 // (#528) on `?dist=packages` (a local npm_packages.py run) or `?dist=cdn`.
@@ -227,6 +237,72 @@ shell.on('row', (row, node) => {
   const c = chips(node.el) || reading(node.el);
   if (c) row.querySelector('.nm').after(c);
 });
+
+// ------------------------------------------------------------- a demo colour
+// A DEMO COLOUR FOR A LIGHT THE USER COLOURS (#1271). A lamp the model marks
+// `programmable` is one whose colour the maker lets the user choose, and a grey
+// ring does not show what that means. Its tree row gets a colour box: the
+// choice paints that lamp in the drawing, through the lamp-colour variable every
+// lamp that declares states is painted from (lint rule L74), and in the 3D
+// scene through the viewer's `setLampColors`.
+//
+// A VIEWING CHOICE, NOT A FACT ABOUT THE DEVICE: it lives in this page alone, so
+// no link carries it, and a device loaded afterwards starts without it. The
+// scene is told the colours of every face the shell holds, since the merged tree
+// of 3D lists the lamps of all of them.
+const DEMO = new Map();               // data-path -> '#rrggbb'
+const demoFaces = () => [state.svg, ...Object.values(state.faces || {})].filter(Boolean);
+const demoNow = () => Object.assign({}, ...demoFaces().map(f => demoColours(f, DEMO)));
+function paintDemo(el, hex) {
+  if (hex) el.style.setProperty('--led-color', hex);
+  else el.style.removeProperty('--led-color');
+}
+function pushDemo() {
+  if (mode !== '3d' || !viewer) return;
+  Promise.resolve(viewer.setLampColors(demoNow()))
+    .catch(err => console.warn('[portrayal] 3D lamp colour sync failed', err));
+}
+shell.on('row', (row, node) => {
+  const note = node.el ? programmableOf(node.el) : null;
+  if (note === null) return;
+  const path = node.el.getAttribute('data-path');
+  if (DEMO.has(path)) paintDemo(node.el, DEMO.get(path));
+  const box = document.createElement('span');
+  box.className = 'demo';
+  const input = document.createElement('input');
+  input.type = 'color';
+  input.value = DEMO.get(path) || '#3fb950';
+  input.title = `try a colour on this light${note ? ` (${note})` : ''}; the maker lets the user choose it, and it is shown here only`;
+  input.onclick = ev => ev.stopPropagation();
+  input.oninput = () => {
+    const hex = demoHex(input.value);
+    if (!hex) return;
+    DEMO.set(path, hex);
+    paintDemo(node.el, hex);
+    pushDemo();
+  };
+  const clear = document.createElement('span');
+  clear.className = 'chip';
+  clear.textContent = 'clear';
+  clear.title = 'put this light back as the drawing has it';
+  clear.onclick = ev => {
+    ev.stopPropagation(); ev.preventDefault();
+    DEMO.delete(path);
+    paintDemo(node.el, null);
+    pushDemo();
+  };
+  box.append(input, clear);
+  row.querySelector('.nm').after(box);
+});
+// a face drawn again (another view, a swap) keeps the colours the reader chose
+shell.on('load', () => {
+  for (const [path, hex] of DEMO)
+    for (const f of demoFaces())
+      for (const el of f.querySelectorAll(`[data-path="${CSS.escape(path)}"]`))
+        if (programmableOf(el) !== null) paintDemo(el, hex);
+});
+shell.on('device', () => { DEMO.clear(); });
+// end of the demo colour
 
 // A STATE IS A FACT ABOUT THE DEVICE, not about the drawing that happened to be
 // mounted when it was set, so it has to reach both stages. The chip writes a
@@ -715,6 +791,53 @@ earsBtn.onclick = () => {
 shell.on('load', () => { syncEars().catch(err => console.warn('[portrayal] rack ears', err)); });
 shell.on('change', () => { syncEars().catch(err => console.warn('[portrayal] rack ears', err)); });
 
+// ------------------------------------------------------------ a box that opens
+// A device that states `chassis.halves` is a base and a lid, and this button
+// opens it: in 3D the lid turns about its hinge and the interiors show
+// (viewer3d `setHousing`), in 2D the drawing is the authored open view
+// (housing.js `viewFor`). CLOSED UNTIL THE READER OPENS IT, every load of a
+// device, and not remembered: the closed box is what the device is, the open
+// one a look inside. The button is there only for a box that opens.
+let housing = 'closed';
+const housingBar = document.createElement('span');
+housingBar.id = 'housebar';
+housingBar.hidden = true;
+housingBar.innerHTML = '<button type="button" aria-pressed="false">Open</button>';
+const housingBtn = housingBar.querySelector('button');
+shell.el.fit.before(housingBar);
+
+function syncHousingButton() {
+  const opens = !!state.meta && !!describeHalves(state.meta);
+  housingBar.hidden = !opens;
+  const open = opens && housing === 'open';
+  housingBtn.classList.toggle('on', open);
+  housingBtn.setAttribute('aria-pressed', String(open));
+  housingBtn.textContent = open ? 'Close' : 'Open';
+  housingBtn.title = open ? 'Close the box' : 'Open the box: the lid on its hinge, the inside of each half';
+}
+async function applyHousingState() {
+  syncHousingButton();
+  if (!describeHalves(state.meta)) return;
+  if (viewer) await viewer.setHousing(housing);
+  const want = viewFor(state.meta, housing, state.view);
+  if (want !== state.view) {
+    state.view = want;
+    shell.el.view.value = want;
+    state.module = null;
+    await shell.loadStage();
+  }
+}
+housingBtn.onclick = () => {
+  housing = housing === 'open' ? 'closed' : 'open';
+  applyHousingState().catch(err => console.warn('[portrayal] open the box', err));
+};
+// a device is shown closed when it is loaded; a view change or a swap leaves the choice alone
+shell.on('device', () => {
+  housing = 'closed';
+  syncHousingButton();
+  if (viewer) Promise.resolve(viewer.setHousing('closed')).catch(err => console.warn('[portrayal] close the box', err));
+});
+
 // WHY 3D IS NOT SHOWING, in words a reader can act on. A browser keeps only
 // about sixteen WebGL contexts alive and, after repeated GPU resets, refuses
 // new ones until it restarts; three.js reports either as "Error creating WebGL
@@ -734,6 +857,8 @@ async function ensureViewer() {
     const { createViewer } = await import('./viewer3d.js');
     // the ears as the reader left them; the viewer keeps them across loads
     const v = createViewer(host3d, { dist: DIST, background: shell.stage(), ears: earsOn });
+    // the box as the reader left it, 2D being the only view until now
+    v.setHousing(housing);
     shell.on('stage', c => v.setBackground(c));
     v.on('select', (p, hit) => {
       if (!p) return;
@@ -789,6 +914,7 @@ async function sync3d() {
   // reads them, so a scene comes up already lit instead of flashing dark and
   // repainting itself.
   await Promise.resolve(v.setStates(liveStates())).catch(() => {});
+  await Promise.resolve(v.setLampColors(demoNow())).catch(() => {});
   await Promise.resolve(v.setPulled(livePulled(), liveViews())).catch(() => {});
   // the fields the reader set, the same map 2D painted from (#811)
   await Promise.resolve(v.setFields(state.cfgFields)).catch(() => {});

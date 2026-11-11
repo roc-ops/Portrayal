@@ -517,6 +517,85 @@ the halves on a released device is a minor, changing the base's `outer`, the
 lid's `hinge` or the half a bay is in is a major, and a corrected `angle` or
 `stands` is a patch.
 
+## A housing with a stepped end
+
+A cast or extruded housing whose end is not a rectangle (a narrower upper
+casting, a flange across the whole depth, a narrower lower casting) states that
+end once as `chassis.section` and draws its six faces as usual. The section is a
+closed list of `[x, y]` points in millimetres in the right face's frame: x across
+the depth from the front, y down the height from the top. It is the outline of
+the whole housing, so the top and bottom edges run along the highest and lowest
+things that stand on the casting. Write it clockwise as the right face looks on
+the page, every edge horizontal or vertical, touching all four sides of the
+`depth` by `height` box, with one edge on the top and one on the bottom. The
+rules are L204 to L207 and what they check is in [lint-rules.md](lint-rules.md);
+the format and what the lock asks for are in
+[format-stability.md](format-stability.md).
+
+```yaml
+chassis:
+  width: 600.0
+  height: 288.0
+  depth: 281.0
+  mount: strand
+  section:
+  - [14.0, 0.0]
+  - [250.0, 0.0]
+  - [250.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 155.0]
+  - [253.0, 155.0]
+  - [253.0, 288.0]
+  - [28.0, 288.0]
+  - [28.0, 155.0]
+  - [0.0, 155.0]
+  - [0.0, 132.0]
+  - [14.0, 132.0]
+provenance:
+  chassis.section:
+    confidence: drawing
+    note: >-
+      the maker's name for the document, its revision and the page with the end view,
+      and how the profile was turned to the way the device is installed
+```
+
+- **The right face is the polygon and the left face is its mirror.** Each is drawn
+  with the casting's outline and the corners the profile leaves empty are
+  transparent. Draw the art of an end face inside the outline, one rectangle for
+  each step is enough. Check: the build's right and left faces are paths, not
+  rectangles, and the picture shows the steps.
+- **Parts stay on the casting.** A part on an end face lies wholly inside its
+  outline; a part on the top or bottom does not straddle a step of the body. Check:
+  L207 is silent.
+- **The box is still the box.** `width`, `height` and `depth` are the housing's
+  bounding box and what the rack fit and the exports read. Check: the section
+  touches all four sides, so L205 is silent.
+- **Not with the other body keys.** A housing with a `section` is not racked and
+  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or
+  `halves`. Check: L206 is silent.
+- **State where the profile came from.** `provenance` keyed `chassis.section`
+  names the document and page, and says so when the drawing had to be turned to the
+  way the device is installed.
+
+**In 3D** the viewer builds the body as the section extruded along the width. Each
+side facet takes the drawing of the face it looks toward, projected flat: a facet
+facing up or down shows the top or bottom drawing, one facing the front or rear
+shows that drawing at its own height. Check: look at the box from above, below,
+the front and either end in the viewer; the steps stand out of the casting and
+each end is its outline with clear corners. A part on the front or rear face stands
+at the depth of the casting under the row of its centre; a part on the top or
+bottom face at the height of the casting under the column of its centre; relief
+`out` is measured from there. A part on an end face is not moved, the ends being
+flat. Check: a plug on a recessed casting touches it from the side, and does not
+hang in front of it. A front or rear part that runs across a step (for example the
+flange) has two depths under it and takes the one under its centre row; lint does
+not refuse it, so keep such a part wholly on one level.
+
+**What is not there yet.** Ribs or fins on the housing, relief taken from a fin
+field, and the open state of a housing with a section come in later changes, so a
+modeller should not look for them: a fin is drawn as art on the face for now, and
+a device with a `section` cannot also state `halves`.
+
 ## Stage 2: the cutouts
 
 Declare every hole in `panel.cutouts` before choosing what goes in it.
@@ -557,6 +636,14 @@ face. Either seat something, draw the thing as decor, or do not punch the hole. 
 reports openings nothing fills, checks that no two overlap, that each matches
 the standard its occupant conforms to, and that no legend is printed on one. It
 says nothing about a panel that declares no cutouts at all.
+
+An opening that holds several replaceable units is a frame, not a bay. A
+power shelf, a fan band or a card cage is one cutout with a bay of its own
+for each unit inside it. L39 counts the opening as filled when its bays cover
+half of its area, so the cutout needs no placement of its own id. Do not fold
+the bays into one bay named after the opening; each bay id is published. Make
+a bay of the opening itself only where the opening takes one unit and no bay
+stands in it.
 
 **Gate 2.** Render and overlay again. Every hole lines up with the reference.
 Count them. This is the last cheap moment to fix a pitch error; after
@@ -766,6 +853,11 @@ Gate 4b checks it.
     into the plate, such as teeth behind a window or in a recess, is a sunk
     facet: give it a negative `lift` (its root that far below the plate) and
     declare the recess around it as a `pocket` at least that deep (L117).
+    When the windows are cut through a thin plate, write the pocket as
+    `{depth, wall}` with the plate's thickness as `wall` and fit the pocket to
+    the drawn windows: a cage near a window's end may then run back under the
+    plate's edge below the wall, and L117 refuses one that leaves the box above
+    it.
 7. **Cable management that is part of the product is declared, and drawn
    where it is a part**: a lacer panel and its rings, a tray, a slack spool, a
    bend-radius bracket. A ring declares where cables pass (`guide:` on its

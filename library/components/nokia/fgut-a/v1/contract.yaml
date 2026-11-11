@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fgut-a
-version: 1.4.1
+version: 1.4.2
 class: line-card
 behaviour: fills
 profile: networking
@@ -112,18 +112,31 @@ provenance:
   angled-panel: >-
     estimated - the tooth of nokia/fglt-d@1: ETSI UDS A18 p380 Figure 164 draws the same
     sixteen-tooth sheet, too busy with cage detail for a clean angle fit. DEPTH, read
-    off the left elevation of Figure 164 (3.304 px/mm): the plate is 13.9 mm deep (front
-    line 110 px, back line 156 px) with nothing proud of it, and the tooth tips touch
-    its back. The opening is one pocket, `well`, 36.4 to 364.65 and 22.77 deep; every
+    off the left elevation of Figure 164 (3.306 px/mm): the plate is drawn 13.0 mm deep
+    (front line 110 px, back line 153-154 px; WALL below reads it) with nothing proud of
+    it, and the tooth tips touch its back. The crest depth modelled here, 13.9, is 0.9 mm
+    deeper than that back line and is kept. The opening is one pocket, `well`, 36.4 to 359.53 (the bottom of face-16) and 22.77 deep; every
     facet has `lift` -22.77. Section, plate front at 0: tooth crest -13.9, tooth root
     and pocket floor -22.77. Faces of 30 degrees (face-N, facing up, the cage on it) and
     returns of 60 degrees (return-N, facing down) on the 20.49 pitch: face 15.37 and
     return 5.12 mm of front view. Each face keeps the cage centre Figure 163 gives (45.4
     + 20.49 n), its lower edge 0.5 mm above the crest, so the cage runs back parallel to
     the return below it and passes below the pocket floor before any wall (0.58 mm worst
-    clearance). The PON lamps stay on the flat strip left of the pocket (x 6.2 on). The
-    last return, and so the pocket, runs to 364.65, over the tops of the ESD and hot-
-    surface triangles (from 361.8) (gap).
+    clearance). The PON lamps stay on the flat strip left of the pocket (x 6.2 on). WALL:
+    the pocket states `wall` 13.0, the plate's back face, and below that it is open to
+    the inside of the card, so the lower cage of face-16 runs under the plate's solid
+    edge without coming out through a wall (L117 checks this). The walls stop at the
+    plate; the floor stays at 22.77. The wall is ESTIMATED from this card's own figure:
+    Figure 164's left elevation draws the plate as full-height lines, the front at
+    110-111 px (centre 110.5) and the back, which the tooth tips touch, at 153-154 px
+    (centre 153.5), 43 px apart at 3.306 px/mm (the figure's own scale: the card's 405 mm
+    is 1339 px), 13.0 mm. The figure carries no dimension line, so the depth is good to
+    about 1 mm. The wall stays above the teeth's crests (-13.9, a little deeper than the
+    plate's back line, within the reading's error), as it must: a deeper wall would
+    stand across the teeth. The pocket ends at the bottom of face-16, 359.53, clear of
+    the ESD and hot-surface triangles (from 361.8); return-16, the wedge below it, lies
+    outside the last window, in the plate's thickness, and is no longer a facet (its
+    element stays as plate art).
   thumbscrews: >-
     photo - lab photos of an installed FX-8, 2026-09-24; flush-with-end per the maintainer's reading.
     One family figure for every NT, NTIO and LT card and blank, because every screw goes into
@@ -145,7 +158,7 @@ elements:
   logo-zone: {at: [8.7, 26.6], size: [15.3, 3.8], class: label}
   label-unit: {at: [8.7, 14.4], size: [15.3, 11.5], class: label}
   label-serial: {at: [8.7, 383.2], size: [14.1, 10.9], class: label}
-  well: {at: [6.2, 36.4], size: [17.2, 328.252], class: mechanical}
+  well: {at: [6.2, 36.4], size: [17.2, 323.129], class: mechanical}
   face-1: {at: [6.2, 36.811], size: [17.2, 15.367], class: mechanical}
   return-1: {at: [6.2, 52.178], size: [17.2, 5.124], class: mechanical}
   face-2: {at: [6.2, 57.301], size: [17.2, 15.367], class: mechanical}
@@ -201,9 +214,13 @@ relief:
         edgecore/agr-psu-dc@1 latch - the library's one release-hardware figure, itself
         sourced for arrangement and not proudness
     - node: well
-      pocket: 22.77
+      pocket: {depth: 22.77, wall: 13.0}
       confidence: estimated
-      source: 'ETSI UDS A18 p380 Figure 164 left elevation: plate front 110 px to plate back 156 px = 13.9 mm (3.304 px/mm), the tooth tips touching the back'
+      source: >-
+        ETSI UDS A18 p380 Figure 164 left elevation, this card's own: wall 13.0 is the plate
+        front (the line at 110-111 px) to plate back (the line at 153-154 px that the tooth
+        tips touch), 43 px at 3.306 px/mm; depth 22.77 is the tooth roots. The figure
+        carries no dimension line of its own
     - node: face-1
       facet: {deg: 30, facing: up}
       lift: -22.77
@@ -356,11 +373,6 @@ relief:
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
     - node: face-16
       facet: {deg: 30, facing: up}
-      lift: -22.77
-      confidence: estimated
-      source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'
-    - node: return-16
-      facet: {deg: 60, facing: down}
       lift: -22.77
       confidence: estimated
       source: 'as nokia/fglt-d@1 (30/60); ETSI UDS A18 p380 Figure 164 draws the same 16-tooth sheet, too busy to fit a line'

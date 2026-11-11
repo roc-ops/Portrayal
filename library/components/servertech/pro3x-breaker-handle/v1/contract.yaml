@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: pro3x-breaker-handle
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  A branch breaker of a Server Technology PRO3X Basic PDU whose plate shows a wide opening with a handle behind it.
+  It is a two-pole breaker, fixed to the PDU, not a plug-in part.
+size: {w: 16.1, h: 29.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {poles: 2}
+provenance:
+  method: >-
+    drawing - the Server Technology data sheet of C3B36RL-EPJE0AT4 (page 4, headed Drawings) is a 300 ppi raster, so the
+    opening was measured on it at 0.97 mm a pixel and carries about 1 mm. The drawing lies the PDU down, cord end left;
+    this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - the opening is 29.9 along the PDU by 16.1 across, one to each of the two breaker plates.
+  rating: >-
+    datasheet - the sheet says 2-pole, 20 A trip circuit breakers, rating up to 16 A, 10 kAIC North America and 5 kAIC
+    rest of world, so none is stated on the part: the 20 A is the trip rating of the model, not a figure for each unit.
+  handle: >-
+    not drawn - the plate draws a handle and a small legend behind the opening and no document dimensions them, so
+    only the opening is drawn.
+elements:
+  window: {at: [0, 0], size: [16.1, 29.9], class: breaker}
+skins: [default]

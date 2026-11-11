@@ -1,19 +1,12 @@
 format: 1
 kind: module
 name: mic-3d-10ge-sfp-e
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Juniper 1G/10G Ethernet MIC with SFP+ (10 ports, one PIC). MIC form: the MIC's own 168.8 x 29.2 plate, photo-measured (#261).
-unplaced: >-
-  no carrier in this library takes it. Tables 11 and 12 list it (24.2) under MPC2E-3D-NG,
-  MPC2E-3D-NG-Q, MPC3E-3D-NG and MPC3E-3D-NG-Q only, and Table 10 has no row for it; the
-  carriers in this library that could take it are the base MPC1E, MPC2E and MPC3E SKUs, and roc-
-  ops/Portrayal#417 narrowed each to its own column of the Interface Module Reference MIC/MPC
-  compatibility tables (Tables 10-12), none of which takes it. Modelling an NG carrier as its
-  own part would seat it.
 attrs:
   model: MIC-3D-10GE-SFP-E
   power-draw-max-w: 45
@@ -50,21 +43,36 @@ provenance:
     is the slot geometry of its chassis family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
     usable for this model
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference,
+    '1-Gigabit/10-Gigabit Ethernet MIC with SFP+ (10 Ports)' (printed pages 289 to 293): 'Ten
+    1GbE/10GbE small form-factor pluggable plus (SFP+) ports' for the model MIC-3D-10GE-SFP-E,
+    'throughput on each port at speeds up to 10 Gbps'; Figure 32 labels the ten link LEDs 0 to
+    9. The role is traffic: the book names no role for the ports, and the role follows the job,
+    a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  sfp-plus-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp-plus, speed: 10g, speeds: [1g, 10g]}
+    description: >-
+      the ten SFP+ ports, labelled 0 to 9, each at 1 Gbps or 10 Gbps
 parts:
-- {ref: std/sfp-ganged@1, id: port-0-0, at: [16.40, 4.70], attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-1, at: [16.40, 16.30], rotate: 180, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-2, at: [30.65, 4.70], attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-3, at: [30.65, 16.30], rotate: 180, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-4, at: [44.90, 4.70], attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-5, at: [44.90, 16.30], rotate: 180, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-6, at: [59.15, 4.70], attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-7, at: [59.15, 16.30], rotate: 180, attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-8, at: [73.40, 4.70], attrs: {media: sfp-plus}}
-- {ref: std/sfp-ganged@1, id: port-0-9, at: [73.40, 16.30], rotate: 180, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp-plus-10g, at: [16.40, 4.70], attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp-plus-10g, at: [16.40, 16.30], rotate: 180, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp-plus-10g, at: [30.65, 4.70], attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp-plus-10g, at: [30.65, 16.30], rotate: 180, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-4, group: sfp-plus-10g, at: [44.90, 4.70], attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-5, group: sfp-plus-10g, at: [44.90, 16.30], rotate: 180, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-6, group: sfp-plus-10g, at: [59.15, 4.70], attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-7, group: sfp-plus-10g, at: [59.15, 16.30], rotate: 180, attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-8, group: sfp-plus-10g, at: [73.40, 4.70], attrs: {media: sfp-plus}}
+- {ref: std/sfp-ganged@1, id: port-0-9, group: sfp-plus-10g, at: [73.40, 16.30], rotate: 180, attrs: {media: sfp-plus}}
 size:
   w: 168.8
   h: 29.2
@@ -77,3 +85,11 @@ size-notes: >-
   The guides' MIC rows (6.25 x 6.8 x 1.25 in, the axes assigned differently in different books) do not
   dimension the face and are not used. Until 2.0.0 this was the 168 x 27 'window', an estimate read
   off the carrier.
+# The @1 of this part is gone from the library. A rack file that names it
+# is read as this one: the ids of its parts, its ports and their names are the same.
+supersedes:
+  - ref: juniper/mic-3d-10ge-sfp-e@1
+    # The signature was re-recorded because the SFP+ cage's accepted list has since widened by one
+    # part, and everything the retired major accepted is still accepted.
+    signature: sha256:d6b9675af14ea32016e8eb2e3d5beabc0a2208cd4170aea72f51052b3714eaa0
+    from: 6b4139323a19

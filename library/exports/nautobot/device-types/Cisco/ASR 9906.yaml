@@ -11,6 +11,21 @@ description: Cisco ASR 9906 Router - the 14 RU, six-slot member of the ASR 9900 
 front_image: true
 rear_image: true
 module-bays:
+  - name: fc-0
+    position: fc-0
+    description: 'Accepts: a99-sfc3-t'
+  - name: fc-1
+    position: fc-1
+    description: 'Accepts: a99-sfc3-t'
+  - name: fc-2
+    position: fc-2
+    description: 'Accepts: a99-sfc3-t'
+  - name: fc-3
+    position: fc-3
+    description: 'Accepts: a99-sfc3-t'
+  - name: fc-4
+    position: fc-4
+    description: 'Accepts: a99-sfc3-t'
   - name: ps0-pm-0
     position: ps0-pm-0
     description: 'Accepts: pwr-6kw-ac-v3'
@@ -50,9 +65,12 @@ comments: 'Cisco ASR 9906 Router - the 14 RU, six-slot member of the ASR 9900 ge
 
 
   Configuration `base`: Chassis only - what you spec before deciding what goes in it. The 6 slot bays
-  are EMPTY; the three AC power modules are fitted. Enough to power on and reach the box, which is the
-  question most people ask first and the one `default` used to answer with whatever the drawing happened
-  to be populated with.
+  are EMPTY; the five fabric cards and the three AC power modules are fitted. Enough to power on and reach
+  the box, which is the question most people ask first and the one `default` used to answer with whatever
+  the drawing happened to be populated with.
+
+
+  The ears are 533.7 mm tall, 72.5 mm above the bottom of the chassis.
 
 
   Facts carried in the model that this schema has no field for:
@@ -127,7 +145,7 @@ comments: 'Cisco ASR 9906 Router - the 14 RU, six-slot member of the ASR 9900 ge
   - thermal.fan-trays: two, FT0 above FT1, to the right of the card cage
 
 
-  Drawing version 2.0.4. A major bump means a slot moved or an id was renamed, so anything cached from
+  Drawing version 2.2.2. A major bump means a slot moved or an id was renamed, so anything cached from
   an earlier export may no longer line up.
 
   Model maturity: modelled. Every dimension in the source records where it came from.'

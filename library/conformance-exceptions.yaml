@@ -30,7 +30,7 @@
 # The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
 # whatever the switches say.
 format: 1
-cap: 30
+cap: 24
 rows:
   # Closed by #1354: Earth studs on Cisco, Nokia, MikroTik, Casa, Edgecore and Eaton devices
   - part: edgecore/agr-ground-plate@1
@@ -54,22 +54,10 @@ rows:
     since: 2026-11-01
 
   # Closed by #1358: UfiSpace DC supplies
-  - part: s9511-20ct
-    code: C19
-    why: "a configuration says the device is powered (dc) and no power end is offered"
-    order: "#1358"
-    since: 2026-11-01
   - part: ufispace/psu-102-dc@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1358"
-    since: 2026-11-01
-
-  # Closed by #1359: Edgecore power supplies
-  - part: common/psu-dc-650@2
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1359"
     since: 2026-11-01
 
   # Closed by #1360: Cisco power modules
@@ -88,6 +76,11 @@ rows:
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1360"
     since: 2026-11-01
+  - part: c1300-24p-4g
+    code: C19
+    why: "the held data sheet gives a universal internal supply (100-240 V, 50-60 Hz) and no held document shows a rear inlet for the 24P, so no inlet is drawn"
+    order: "#1360"
+    since: 2026-11-06
 
   # Closed by #1361: Juniper EX power
   - part: juniper/ex8200-pwr-dc2kr@1
@@ -100,21 +93,6 @@ rows:
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1361"
     since: 2026-11-01
-  - part: juniper/jpsu-550-c-dc-afi@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1361"
-    since: 2026-11-01
-  - part: juniper/ex2200-rps-port@1
-    code: C20
-    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
-    order: "#1361"
-    since: 2026-11-01
-  - part: juniper/ex4100-h-terminal-pad@1
-    code: C20
-    why: "a drawn inlet, terminal or stud is not offered as a place to land a cord or lug"
-    order: "#1361"
-    since: 2026-11-01
 
   # Closed by #1362: Juniper QFX and MX power
   - part: juniper/mx2000-psm-dc-v@1
@@ -122,22 +100,7 @@ rows:
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1362"
     since: 2026-11-01
-  - part: juniper/mx240-psu-ac@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
   - part: juniper/mx304-psu-hvacdc@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
-  - part: juniper/qfx5230-jnp-2400w-dc-afi@1
-    code: C19
-    why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
-    order: "#1362"
-    since: 2026-11-01
-  - part: juniper/qfx5230-jnp-3000w-dc-afo@1
     code: C19
     why: "a drawn supply presents no cable end an agent is offered (no inlet, terminal or lug)"
     order: "#1362"
@@ -206,3 +169,11 @@ rows:
     why: "the six keystone slots accept a blank and a jack, which mate the interface and are of class mechanical, and the runner counts only a part of class port or transceiver as a mate"
     order: "#1069"
     since: 2026-11-05
+
+  # Opened by #1668: the DVI-D video jack of the Raritan DSX2-32 has its own key and part, and a plug part for the key
+  # is not in the library. Closes when a part that mates `dvi-d` is added.
+  - part: std/dvi-d-jack@1
+    code: C21
+    why: "the jack presents the registered key dvi-d and publishes a slot, and no DVI-D plug part is in the library to mate it; the data sheet and the user guide name the jack and draw no plug"
+    order: "#1668"
+    since: 2026-11-08

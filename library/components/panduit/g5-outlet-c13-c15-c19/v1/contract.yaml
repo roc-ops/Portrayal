@@ -1,0 +1,52 @@
+format: 1
+kind: component
+name: g5-outlet-c13-c15-c19
+version: 1.0.0
+class: inlet
+profile: power
+interface: panduit-combo
+description: >-
+  The C13/C15/C19 combination outlet of a Panduit G5 intelligent PDU, rated 16 A, 250 V. It is one socket that the
+  drawing's receptacle block calls "C13/C15/C19 COMBO"; the sheet adds C21. A dark well with a grey nose and an earth
+  lobe, two line slots and an earth slot. It takes a C14 or a C20 plug.
+size: {w: 24.0, h: 35.0, d: 20}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {outlet: panduit-c13-c15-c19-combo, media: ac, rating-a: 16}
+provenance:
+  size: >-
+    estimated - read off a rendering of the front view of Panduit customer drawing P42G20M-XXYZ_DC rev 01A at 400
+    dpi: a drawn socket of the lower row is about 35 along the strip and 24 across it, to about 2 mm, the same as
+    the upper row's. No dimension of the outlet is printed on the drawing.
+  identity: >-
+    drawing - the plug and receptacle block of P42G20M-XXYZ_DC names the receptacle "C13/C15/C19 COMBO", "16A, 250V
+    MAX RATED OUTPUT", and draws it as one socket. The G5 iPDU sheet FBSP28 row for P42G20M lists "(21)C13, C15, C19,
+    C21" and its first page "C13/C15/C19/C21 outlet"; the drawing's own text stops at C19. It is a maker's
+    combination socket and no IEC 60320 sheet, so it is a panduit/ part and not a std/ one.
+  rating: >-
+    drawing - "16A, 250V MAX RATED OUTPUT" in the receptacle block.
+  depth: >-
+    estimated - no held document or photograph shows the outlet in section. 20 is the figure the registry's C19 nose
+    gives, as for vertiv/combo-outlet@1.
+  interface: >-
+    `panduit-combo` in spec/schemas/connectors.yaml. Two cord ends mate it and seat at `mate`: generic/c14-plug@1 and
+    generic/c20-plug@1, the plugs a C13 and a C19 part of the socket take. The drawing's name for the socket,
+    "C13/C15/C19 COMBO", also names the C15; the registry holds no C15 plug and none is offered. The key cites no IEC 60320
+    sheet. The Vertiv combination outlet is a different maker's part with its own key.
+  mate: >-
+    estimated - (12.0, 17.5), the centre of the socket's box. One point for two plugs, as on vertiv/combo-outlet@1. No
+    held document shows either plug seated.
+  face: >-
+    drawing - the symbol is a rounded well with a nose, an earth lobe on one side, two line slots and the earth slot,
+    drawn small. The shapes are read from the line drawing and are not measured. No photograph is held.
+  media: >-
+    `media: ac`: an outlet states what it hands on.
+  relief: >-
+    `relief.cavity` names the `recess` outline, so the 3D walls follow it.
+elements:
+  recess: {at: [0, 0], size: [24.0, 35.0], class: inlet}
+relief:
+  wall: '#1a1b1d'
+  cavity: recess
+connection-points:
+  mate: {at: [12.0, 17.5], direction: front}
+skins: [default]

@@ -1,9 +1,9 @@
 format: 1
 kind: component
 name: c14-plug
-version: 1.3.0
+version: 1.7.0
 class: port
-mates: [iec-c13, eaton-c39, servertech-hdot-cx]
+mates: [iec-c13, eaton-c39, servertech-hdot-cx, raritan-hdot-cx, vertiv-combo, enlogic-combo, panduit-combo]
 conforms: c14-plug
 profile: networking
 description: >-
@@ -44,7 +44,20 @@ provenance:
     outlet, which its PRO4X data sheet calls a hybrid of the C13 and C19 that
     takes a C14 or a C20 plug; the plug seats at the `mate` of
     servertech/hdot-cx-outlet@1 as it does in the C39, and the same stand-off
-    applies.
+    applies. `raritan-hdot-cx` is the Raritan PX4 HDOT Cx outlet, which its PX4
+    data sheet calls a hybrid of the C13 and C19 that takes a C14 or a C20 plug;
+    the plug seats at the `mate` of raritan/px4-cx-outlet@1 the same way, and
+    the same stand-off applies. `vertiv-combo` is the Vertiv combination outlet,
+    which Table 2.4 of the PowerIT installer guide SL-71211 Rev E rates with a
+    C14 cord at 10 A; the plug seats at the `mate` of vertiv/combo-outlet@1 and
+    the same stand-off applies. `enlogic-combo` is the Enlogic C13/C15/C19
+    combination outlet, which the maker's customer drawing EN2951-WXYZ_DA rev
+    E3 (sheet 2) rates at 16 A; the plug seats at the `mate` of
+    enlogic/combo-outlet-c13-c15-c19@1 and the same stand-off applies.
+    `panduit-combo` is the Panduit G5 combination outlet, which the P42G20M
+    customer drawing's plug and receptacle block names C13/C15/C19 COMBO at
+    16 A; the plug seats at the `mate` of panduit/g5-outlet-c13-c15-c19@1 and
+    the same stand-off applies.
   no-depth: >-
     NO `size.d`, DELIBERATELY, as on generic/c13-plug@1.
   orientation: >-

@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: os32m2b
-version: 1.0.1
+version: 1.1.0
 class: switch
 behaviour: fills
 profile: optical
@@ -45,6 +45,12 @@ provenance:
     composed beside them, which are the ports and present the registered
     interface sc, so a drawn port stood on the face that presented none.
     Ids, positions, sizes and the skin are unchanged.
+  groups: >-
+    datasheet - CH3000 OS32M2B Optical Switches data sheet (2023), p1 photograph (two switches,
+    each with three adapters legended A, OUT and B and numbered 1 and 2) and p2, General:
+    Optical Connector SC/APC; Dual 2x1 non-latching switches. Role traffic: each switch selects
+    the light on input A or B onto its output. The sheet prints two wavelength windows and no
+    data rate.
 elements:
   screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
   adapter-in-a1: {at: [1.6, 26.95], size: [17.0, 10.3], class: adapter}
@@ -54,13 +60,20 @@ elements:
   adapter-out-2: {at: [1.6, 81.65], size: [17.0, 10.3], class: adapter}
   adapter-in-b2: {at: [1.6, 92.65], size: [17.0, 10.3], class: adapter}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: the six SC/APC ports of two 2x1 optical switches, an input A, an input B and an output for each; the data sheet states no data rate
 parts:
-  - {ref: std/sc-bore@1, id: in-a1, at: [7.30, 27.60], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: out-1, at: [7.30, 38.70], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: in-b1, at: [7.30, 49.70], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: in-a2, at: [7.30, 71.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: out-2, at: [7.30, 82.30], rotate: 90, attrs: {connector: SC/APC}}
-  - {ref: std/sc-bore@1, id: in-b2, at: [7.30, 93.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-a1, group: optical, at: [7.30, 27.60], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out-1, group: optical, at: [7.30, 38.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-b1, group: optical, at: [7.30, 49.70], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-a2, group: optical, at: [7.30, 71.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: out-2, group: optical, at: [7.30, 82.30], rotate: 90, attrs: {connector: SC/APC}}
+  - {ref: std/sc-bore@1, id: in-b2, group: optical, at: [7.30, 93.30], rotate: 90, attrs: {connector: SC/APC}}
   - {ref: common/led-dot@1, id: led-a1, at: [11.3, 19.3], attrs: {function: input}}
   - {ref: common/led-dot@1, id: led-b1, at: [11.3, 23.7], attrs: {function: input}}
   - {ref: common/led-dot@1, id: led-a2, at: [11.3, 62.0], attrs: {function: input}}

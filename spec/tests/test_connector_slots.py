@@ -96,19 +96,27 @@ def test_the_connector_registry_is_not_vacuous():
     # and never the plug that enters it
     # micro-dsub-50/wire-wrap-6: the 50-pin micro D-sub alarm connector (FEMALE on the panel)
     # and the six-pin BITS wire-wrap header of nokia/ngfc-h@1 and nokia/ngfc-g@1
+    # rj45-10p/microsd: the ten-position serial jack of the Digi Connect EZ 16 and 32 and its micro-SD
+    # socket, made slots for generic/rj45-10p-plug@1 and generic/microsd-card@1; vendor
+    # connectors citing no standard
     # keystone: the landscape keystone opening of the FS FHD-FAPM6 panel, presented by
     # common/keystone-clip@3 and mated by the blank and the jack that seat in a clip
-    assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
+    assert set(reg) == {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45", "rj45-10p", "microsd",
                          "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                          "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
                          "nema-5-15r", "nema-5-20r", "eaton-c39", "servertech-hdot-cx",
+                         "raritan-hdot-cx", "vertiv-combo", "enlogic-combo", "panduit-combo",
                          # the CEE 7/3 earthing-pin socket of the Rittal DK 7979 PDUs
                          "cee-7-3",
                          "usb-a", "usb-b", "micro-usb-b", "mini-usb-b", "usb-c",
                          "db9", "hd15", "da15", "db25",
+                         # the DVI-D video receptacle of the Raritan DSX2-32, std/dvi-d-jack@1
+                         "dvi-d",
                          "terminal-508-2", "terminal-508-5", "terminal-508-6",
                          "dc-barrel", "terminal-stud",
                          "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                         # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                         "spade-m4",
                          "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
                          # GPU power and NVLink (P-0028): presented by parts no
@@ -171,9 +179,16 @@ def test_the_connector_registry_is_not_vacuous():
                          "scte-91",
                          # the G-type test points and the stereo-jack RS-232 port of the CH3000 modules
                          "g-type", "g-type-female", "stereo-jack",
+                         # the input of the Ubiquiti USP-RPS redundant power system
+                         "ubiquiti-usp-rps",
                          # the I/O module bay of the Lantronix SLC 8000: a device bay states it
                          # as its `interface`, so no part presents it
-                         "slc-io-module"}
+                         "slc-io-module",
+                         # the G16 module bay of the Perle IOLAN SCG, stated the same way
+                         "scg-g16-module",
+                         # the DIGITAL OUT header of the Vertiv Avocent ACS800, presented by
+                         # vertiv/acs800-digital-out@1 and mated by vertiv/acs800-digital-out-plug@1
+                         "screw-terminal-4-relay"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -191,6 +206,8 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
                                    "stud-pair-5-8", "stud-pair-3-4", "stud-pair-1",
+                                   # the spade terminal on the M4 posts of the Casa C100G power entry module, casa/pem-post@1; generic/spade-lug@1 mates it
+                                   "spade-m4",
                                    "mrj21", "vhdci", "rj11",
                                    # a cover mount, not a connector - see the registry test above
                                    "breaker-1ru-guard",

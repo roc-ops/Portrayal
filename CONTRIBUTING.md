@@ -403,7 +403,7 @@ build; commit `library/exports` after it. It renders nothing, and CI's
 | `skips` | a `pytest.skip`, `skipif` or `importorskip` you added gives a reason [`spec/allowed-skips.txt`](spec/allowed-skips.txt) does not allow. The only other reasons accepted are, word for word, the few that name what CI always provides: `node not installed`, `npm not installed`, and `<output> not built` where `<output>` is `library/dist`, `library/exports`, `dist` or an index build.sh writes (`devices.json`, `components.json` and the rest), optionally followed by `- run ./build.sh` or `./publish.sh` and then `: <value>`. A runtime value as the subject (`f"{part} not built"`) is not accepted, because on CI it is a part name |
 | `private` | a line you added has a machine path, a private address or a personal email: the patterns of `test_no_internal_hosts.py` |
 | `changelog` | `library/`, `spec/` or `kit/` changed with no `changelog.d/` fragment, or a fragment is malformed |
-| `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base |
+| `devicelock` | `devicelock.py` has findings, or a lock you re-recorded no longer matches the bump against the lock on the base. CI's `lint` job runs that comparison on a pull request (`devicelock.py --library library --base <commit>`) |
 | `lint` | lint on the devices you touched and every device that seats a component you touched, plus the library-wide rules a `--device` run skips (L89 when what reaches a component major can have changed), has an error or a warning `library/lint-baseline.json` does not carry |
 | `kit` | `kit/` changed and `npm test` fails, or a `spec/tests/*_js.py` test that names a changed kit module fails |
 | `prose` | never. It warns when a `device.yaml` or `contract.yaml` you changed has a sentence of more than 25 words that the merge base does not have, in a `description` (device, configuration or component) or a string under `attrs` |
@@ -522,6 +522,27 @@ project accepts contributions under the
 [Developer Certificate of Origin](https://developercertificate.org/), and the
 sign-off is your statement that you may submit the work under Apache-2.0. There
 is no CLA.
+
+## Lists many changes add to
+
+A new maker, a new connector key or a part the exporter must name is one entry
+in a list every such change edits: `spec/schemas/vendors.yaml`,
+`spec/schemas/connectors.yaml` and the tables in
+`spec/tools/portrayal/dcim_registers.py` (`NOT_A_DCIM_PORT`,
+`MGMT_NOT_A_DCIM_PORT`, `PART_OUTLET`, `OUTLET_LABEL`, `POWER_LABEL`).
+[`.gitattributes`](.gitattributes) marks those three files `merge=union`, so
+two pull requests that each add an entry at the same place both keep theirs and
+need no merge of main.
+
+- Add the entry and change nothing around it: an edit to an existing entry that
+  another pull request also touches is still an ordinary conflict, and a union
+  merge of two edits of one entry leaves a duplicate that
+  `spec/tests/test_shared_lists_merge.py` fails on.
+- Put logic in `dcim_export.py`. `dcim_registers.py` holds `NAME = <literal>`
+  tables only, because a union merge of two edits of one function would glue
+  them together without a conflict.
+- Write an entry once. A key written twice in any of the three files fails the
+  same test.
 
 ## What will not be merged
 

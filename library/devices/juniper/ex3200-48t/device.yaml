@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex3200-48t
-version: 0.1.0
+version: 0.2.0
 maturity: modelled
 manufacturer: Juniper
 model: EX3200-48T
@@ -135,11 +135,11 @@ provenance:
       Every EX3200 has one front-panel uplink module slot under a flip-up door held by screws; "Uplink
       modules are not part of the standard package and must be ordered separately", and installing one
       begins by removing "the blanking panel covering the empty uplink module slot". The slot is a bay
-      that takes the cover here. THE MODULES ARE NOT MODELLED, because none is in the library: the guide
-      names three, EX-UM-4SFP (4 SFP ports), EX-UM-2X4SFP (2 SFP+ ports, or 4 SFP in 1-gigabit mode; its
-      MACsec variant has no part number in the guide) and the XFP module (2 XFP ports; the datasheet orders
-      it as EX-UM-2XFP). The datasheet photographs show the slot with modules fitted, so they give the
-      opening and not the cover.
+      that takes the cover here. The bay also takes the uplink modules the guide lists: EX-UM-4SFP (4
+      SFP ports), EX-UM-2X4SFP (2 SFP+ ports, or 4 SFP in 1-gigabit mode), its MACsec variant (EX-UM-2X4SFP-M,
+      the number the EX4200 guide prints; this guide gives it none) and the XFP module (2 XFP ports; EX-UM-2XFP).
+      The datasheet photographs show the slot with modules fitted, so they give the opening and not the
+      cover.
   rear:
     confidence: estimated
     note: >-
@@ -311,13 +311,6 @@ gaps:
   reason: vendor-silent
   wanted: >-
     A library component for an LCD display; the LCD panel is a decor rectangle until one exists.
-- what: uplink-modules
-  scope:
-  - front
-  reason: needs-drawing
-  wanted: >-
-    The EX-UM-4SFP, EX-UM-2X4SFP and XFP uplink modules and their ports, left for a later uplink-module
-    slice; the bay takes only the cover panel here.
 - what: fan-power
   scope:
   - rear
@@ -499,6 +492,10 @@ views:
         rel-pos: 0
         accepts:
         - juniper/ex3200-uplink-cover@1
+        - juniper/ex-um-4sfp@1
+        - juniper/ex-um-2x4sfp@1
+        - juniper/ex-um-2x4sfp-m@1
+        - juniper/ex-um-2xfp@1
         default: juniper/ex3200-uplink-cover@1
       placements:
       - ref: common/rj45-ganged-eth@1

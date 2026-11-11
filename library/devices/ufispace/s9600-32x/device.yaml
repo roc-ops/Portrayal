@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9600-32x
-version: 3.1.0
+version: 3.1.2
 maturity: modelled
 manufacturer: UfiSpace
 model: S9600-32X
@@ -224,7 +224,8 @@ provenance:
       section, and unusually BOTH are qualified - 'Testing criteria for maximum power are as
       follows: Temperature 45C, Optics: full populated, Traffic: 100% load' appears under each.
       621.3 is carried as power-max-w because max means the highest, and the 12.3 W difference is
-      recorded here rather than as a conflict: they are two builds, not two readings. The 1600 W
+      recorded here rather than as a conflict: they are two builds, not two readings, and the dc
+      configuration states its own 609. The 1600 W
       that appears beside them is a provisioning instruction ('a reserve of at least 1600 watts on
       each power circuit') and is the supply's rating, not a draw. These are the vendor's figures
       as the vendor states them and are NOT reconciled against the module set; the fans publish no
@@ -327,6 +328,8 @@ chassis:
   color: '#3c3f42'
   weight-kg: 17.73
   airflow: front-to-back
+  kits:
+  - {ref: ufispace/adjustable-rail-771-kit@1, supply: in-box}
 
 gaps:
 - what: dc-terminal-height
@@ -845,6 +848,9 @@ configurations:
       grounding lugs and no power cord with this build. See the
       dc-psu-face-mirrored gap: the vendor's rear render shows this face the other
       way round from the component that draws it.
+    attrs:
+      power:
+        power-max-w: '609'
     bays:
       psu-0: ufispace/psu-162-dc@2
       psu-1: ufispace/psu-162-dc@2

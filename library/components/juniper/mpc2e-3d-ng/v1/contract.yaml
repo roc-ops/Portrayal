@@ -1,0 +1,127 @@
+format: 1
+kind: module
+name: mpc2e-3d-ng
+version: 1.1.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper MPC2E NG carrier (MX-MPC2E-3D-NG) - two MIC slots, 80 Gbps without hierarchical queuing. It is not
+  the MPC2E (MX-MPC2E-3D): it draws more power and its MIC column differs. The queuing SKU MPC2E-3D-NG-Q has
+  the same faceplate and its own wattage and is not this contract. Needs high-capacity fan trays and filter trays,
+  and an SCBE-MX or SCBE2-MX, not the legacy SCB. One card for the MX240, MX480 and MX960, drawn horizontal;
+  the MX960 seats it turned 90.
+attrs:
+  model: MX-MPC2E-3D-NG
+  model-variants: MPC2E-3D-NG
+  power-draw-max-w: 474
+provenance:
+  model: >-
+    datasheet - MX Series Interface Module Reference, Table 4 'MPCs Supported by MX240, MX480, MX960, MX10003,
+    MX10004, MX10016, MX2008, MX2010, and MX2020 Routers' (PDF p. 33): row 'MPC2E NG', MPC Model Number
+    MX-MPC2E-3D-NG. The card's own page (printed p. 164) and the MX240 guide's FRU power table print the number
+    without the MX- prefix, MPC2E-3D-NG, which model-variants keeps.
+  size: >-
+    estimated from the family - not photographed. The plate is 396.0 x 29.5 centred in a 413.5 lever envelope,
+    the figures the library draws every MPC, DPC and SCB at (mpc2e-3d@3, mpc3e-3d@3; plate x px 127.5-1463.5 =
+    396.2 mm on the MX240 front photograph at 3.372 px/mm). The reference's front view of this card (figure
+    g000580, printed p. 164) has no dimensions, so the envelope is the family's and nothing here is resized.
+  power: >-
+    datasheet - MX240 Hardware Guide, Table 93 'FRU Power Requirements' (printed p. 223): '| MPC2E NG | MPC2E-3D-NG
+    | 474 W With MICs and optics: 474 W at 131 F (55 C) ... |'. 474 W is the leading, card-alone figure of the
+    row; the ladder under it is with MICs and optics, a different scope. The module page (printed p. 164) states
+    the same 474 W as its maximum with the highest-power MICs at 55 C.
+  accepts: >-
+    datasheet - MX Series Interface Module Reference, 'MIC/MPC Compatibility', Table 11 'MIC/MPC2 Compatibility'
+    (printed pp. 49-54, PDF pp. 58-63), the 'MPC2E -3D-NG' column, restricted to the MICs this library models. Each listed MIC
+    prints a release in that column: MIC-3D-20GE-SFP, MIC-3D-20GE-SFP-E, MIC-3D-2XGE-XFP, MIC-3D-4XGE-XFP,
+    MIC-3D-1OC192-XFP, MIC-3D-4OC3OC12-1OC48 and MIC-3D-8OC3OC12-4OC48, MIC-3D-8OC3-2OC12-ATM, MIC-3D-8DS3-E3 and
+    MS-MIC-16G (all '14.1R4, 14.2R3 with Junos Continuity 15.1'), MIC-3D-10GE-SFP-E (24.2), MIC-MACSEC-20GE
+    (18.3R1), and MIC-3D-4CHOC3-2CHOC12, MIC-3D-8CHOC3-4CHOC12 and MIC-3D-16CHE1-T1-CE ('15.1 with flexible
+    queuing option', which the bays cannot express). Under that column MIC-3D-4COC3-1COC12-CE is an en dash, so
+    it is not listed; the MIC3 family is excluded by the card's page: 'MPC2E-3D-NG does not support
+    MIC3-3D-10XGE-SFPP, MIC3-3D-1X100GE-CFP, MIC3-3D-1X100GE-CXP, and MIC3-3D-2X40GE-QSFPP'. In the column but not
+    listed: MIC-3D-8CHDS3-E3-B (a variant of the listed mic-3d-8ds3-e3). MIC-3D-40GE-TX prints '14.1R4, 14.2R3
+    with Junos Continuity 15.1' in that column (PDF p. 60, printed p. 51). The module reference calls it a
+    'Dual-wide MIC that installs into 2 slots', so it is in mic0's list only, and mic0 states `span: [mic1]`.
+    MIC3-100G-DWDM has no row in Table 11. The table's note holds for the MS-MIC-16G: only one per MPC.
+  numbering: >-
+    guide - the reference prints small numerals beside every cage, numbered within each PIC segment with a group
+    legend, never flat across the card. The MICs seated in this carrier's two bays draw those numerals; the carrier
+    draws none of its own, as the figure shows none.
+  levers: >-
+    estimated - the figure (g000580) shows one ejector lever at each end of the plate, a rounded body with a round
+    screw head near its tip. Drawn as the library draws every MPC lever, 29.0 x 7.4 centred on the plate with the
+    tip at the envelope edge, measured off the MX240 front photograph for the DPC 40xGE, DPC-R-4XGE and SCB-MX (97
+    px = 28.8 mm long, 25-27 px = 7.4-8.0 mm tall). Not remeasured on this card.
+  model-name: >-
+    estimated - the figure prints the model name in small type under the left lever, its callout reading
+    MPC2E-3D-NG. Placed at card x 11.4, baseline 25.5 below the plate top, where the photographed DPC 40xGE,
+    DPC-R-4XGE and SCB-MX print theirs.
+  status-group: >-
+    estimated - the figure shows one round lamp under the left lever, right of the model name, matching the module
+    page's 'OK/FAIL LED, one bicolor'. Placed as the photographed DPCs place theirs: the OK/FAIL legend vertical at
+    card x 32.3 centred on y 12.7 and the lamp below it at (32.3, 21.5).
+  mic-windows: >-
+    estimated - the figure shows two equal windows abutting at the plate's centre, each with a small latch at both
+    ends and a raised tab above its outer end. Drawn at the MICs' own plate, 168.8 x 29.2, as mpc2e-3d@3 draws them
+    (mic0 37.7 to 206.5, mic1 207.0 to 375.8 in card x; y 0.15), the window the MX2010 front photograph measures
+    on every seated carrier. The latches and tabs are not drawn.
+states:
+- ok
+- fail
+- absent
+bays:
+  mic0:
+    at: [37.7, 0.15]
+    size: [168.8, 29.2]
+    span: [mic1]
+    accepts:
+    - juniper/mic-3d-20ge-sfp@2
+    - juniper/mic-macsec-20ge@2
+    - juniper/mic-3d-2xge-xfp@2
+    - juniper/mic-3d-4xge-xfp@4
+    - juniper/mic-3d-10ge-sfp-e@2
+    - juniper/mic-3d-1oc192-xfp@2
+    - juniper/mic-3d-4oc3oc12-1oc48@2
+    - juniper/mic-3d-8oc3oc12-4oc48@2
+    - juniper/mic-3d-8oc3-2oc12-atm@2
+    - juniper/mic-3d-4choc3-2choc12@2
+    - juniper/mic-3d-8choc3-4choc12@2
+    - juniper/mic-3d-8ds3-e3@2
+    - juniper/mic-3d-16che1-t1-ce@2
+    - juniper/ms-mic-16g@2
+    - juniper/mic-3d-40ge-tx@2
+    - juniper/mx-mic-blank@2
+    default: juniper/mic-3d-20ge-sfp@2
+  mic1:
+    at: [207.0, 0.15]
+    size: [168.8, 29.2]
+    accepts:
+    - juniper/mic-3d-20ge-sfp@2
+    - juniper/mic-macsec-20ge@2
+    - juniper/mic-3d-2xge-xfp@2
+    - juniper/mic-3d-4xge-xfp@4
+    - juniper/mic-3d-10ge-sfp-e@2
+    - juniper/mic-3d-1oc192-xfp@2
+    - juniper/mic-3d-4oc3oc12-1oc48@2
+    - juniper/mic-3d-8oc3oc12-4oc48@2
+    - juniper/mic-3d-8oc3-2oc12-atm@2
+    - juniper/mic-3d-4choc3-2choc12@2
+    - juniper/mic-3d-8choc3-4choc12@2
+    - juniper/mic-3d-8ds3-e3@2
+    - juniper/mic-3d-16che1-t1-ce@2
+    - juniper/ms-mic-16g@2
+    - juniper/mx-mic-blank@2
+    default: juniper/mx-mic-blank@2
+size:
+  w: 413.5
+  h: 29.5
+size-confidence: {w: drawing, h: estimated}
+size-notes: >-
+  w is the lever envelope and h the plate height, of ONE card that every MX240, MX480 and MX960 slot takes - the
+  MX960 seats it turned 90, as its own hardware guide says by stating an MPC/DPC/SCB as one 17 x 22 x 1.25 in part
+  in all three books. The 413.5 is Juniper's Visio stencil, whose every MPC/DPC/SCB master is the same 0.1156 x
+  1.6281 page-inch rectangle at an exactly 1:10 scale (29.36 x 413.54 mm), read as the lever-tip envelope; the
+  plate between the levers is 396.0. The 29.5 is the plate height, estimated: the MX240 photograph reads it
+  28.6-29.0 at 3.37 px/mm and nothing dimensions it.

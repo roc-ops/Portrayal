@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a9k-sip-700-8g
-version: 2.0.0
+version: 2.1.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -166,7 +166,10 @@ provenance:
     guide says 'There are two types of Cisco ASR 9000 SIP-700 available; A9K-SIP-700
     and A9K-SIP-700-8G ... BOTH TYPES ARE IDENTICAL IN APPEARANCE', the two differ in
     memory alone, and all four bays here already carry the twin's geometry to the
-    hundredth of a millimetre. What one takes, the other takes.
+    hundredth of a millimetre. What one takes, the other takes. THE TWO DOUBLES ARE
+    THE TWIN'S TOO: SPA-2XCHOC12/DS0 and SPA-1XCHOC48/DS3 are listed in bay-2 and bay-3
+    only, each of which spans the bay beside it (bay-0, bay-1), and the twin's
+    `accepts-doubles` entry says why.
   capacity: >-
     install guide - Table 3, 'SIP Summary', names this part '20G SPA Interface
     Processor, 8 GB memory'.
@@ -238,14 +241,17 @@ bays:
   bay-2:
     at: [6.77, 27.71]
     size: [17.29, 167.87]
+    span: [bay-0]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchoc48-ds3@1
     - cisco/spa-1xchstm1-oc3@1
     - cisco/spa-1xoc12-atm-v2@1
     - cisco/spa-1xoc3-atm-v2@1
     - cisco/spa-1xoc48pos-rpr@1
     - cisco/spa-24cht1-ce-atm@1
     - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xchoc12-ds0@1
     - cisco/spa-2xoc12-pos@1
     - cisco/spa-2xoc48pos-rpr@1
     - cisco/spa-2xt3e3@1
@@ -290,14 +296,17 @@ bays:
   bay-3:
     at: [6.77, 195.59]
     size: [17.29, 167.87]
+    span: [bay-1]
     accepts:
     - cisco/spa-1choc3-ce-atm@1
+    - cisco/spa-1xchoc48-ds3@1
     - cisco/spa-1xchstm1-oc3@1
     - cisco/spa-1xoc12-atm-v2@1
     - cisco/spa-1xoc3-atm-v2@1
     - cisco/spa-1xoc48pos-rpr@1
     - cisco/spa-24cht1-ce-atm@1
     - cisco/spa-2cht3-ce-atm@1
+    - cisco/spa-2xchoc12-ds0@1
     - cisco/spa-2xoc12-pos@1
     - cisco/spa-2xoc48pos-rpr@1
     - cisco/spa-2xt3e3@1

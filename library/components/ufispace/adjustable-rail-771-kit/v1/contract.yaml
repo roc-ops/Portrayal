@@ -1,0 +1,48 @@
+format: 1
+kind: kit
+name: adjustable-rail-771-kit
+version: 1.0.0
+description: >-
+  The adjustable mounting rail kit in the box of the UfiSpace deep routers and switches whose
+  guide lists a 771 mm rail for four-post racks. It is two sets of three-member slide rail. The inner member hangs on five pins on each side of the chassis. The outer member
+  clips to the front and rear post. The chassis slides out on the middle member and is locked
+  with a screw.
+motion: sliding
+travel: full
+parts:
+  - {ref: ufispace/adjustable-rail-771@1, id: rail, count: 2}
+configurations:
+  - id: four-post
+    racks: [4-post]
+    parts: [rail]
+    depth: [558.8, 838.2]
+provenance:
+  contents: >-
+    UfiSpace S9710-76D Core/Edge Router Hardware Installation Guide (R1.12), section 3.1
+    Accessory List, page 5, item 8: an Adjustable Mounting Rail (for 4 post), quantity 2 sets,
+    3.5 lb (1.589 kg) a set, with a screw kit for it (item 7). Section 5 Rack Mounting, page 11,
+    names the members: an inner rail, a middle rail and an outer rail. The screws are hardware
+    and are not parts here. Each set is one part, because the guide dimensions no member.
+  depth: >-
+    The same guide, item 8, prints "(22"~33" rack depth)", in inches only. The millimetres are
+    a conversion at 25.4 mm to the inch, which is exact: 22 in is 558.8 mm and 33 in is 838.2
+    mm, kept to one decimal with no rounding. The guide does not say what the range measures.
+    THE LIBRARY'S READING is rack depth, front post to rear post, as the rack mounting design
+    note reads a kit's `depth`. It is not checked against a second document.
+  travel: >-
+    Section 5 step 4.1, page 12: "Pull the middle rail fully extended into lock position". The
+    guide prints no travel figure, so `travel` is `full` and not a number.
+  rack-type: >-
+    The accessory list says "for 4 post" and step 3, page 12, clips the outer rail's front and
+    rear brackets to the rack. Two-post use is not described.
+  siblings: >-
+    The same rail, with the same size and range, is printed in the accessory list of the
+    hardware installation guide of each device that lists this kit. Other UfiSpace models print
+    a different rail and are not served by this kit.
+gaps:
+  - what: part-dimensions
+    scope: [rail]
+    reason: needs-drawing
+    wanted: >-
+      A dimensioned drawing of the inner, middle and outer members. The guide prints one size
+      for the whole assembly and none for a member, so the rail is one part drawn as one bar.

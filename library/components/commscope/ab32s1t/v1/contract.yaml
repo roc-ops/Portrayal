@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ab32s1t
-version: 1.0.0
+version: 1.1.0
 class: switch
 behaviour: fills
 profile: optical
@@ -42,13 +42,26 @@ provenance:
   seating: >-
     datasheet - "Occupies one half-depth slot"; accepted by a slot's front bay and its rear
     bay alike.
+  groups: >-
+    datasheet - CH3000 AB32S1G, AB32S1T A/B Alternate Routing Switches data sheet (2021), p1
+    photograph (legends A, OUT and B beside the three jacks) and p2, General: RF Connectors (2
+    inputs and 1 output on front panel), F-type. Role traffic: the switch selects the RF signal
+    on input A or B onto the output. The sheet prints a 46-1002 MHz passband and no data rate.
+    One sheet covers both models; its photograph is of an AB32S1G.
 elements:
   screw-top: {at: [8.48, 0.6], size: [8.8, 8.8], class: fastener}
   screw-bottom: {at: [8.48, 120.8], size: [8.8, 8.8], class: fastener}
+groups:
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f}
+    description: the three F-type RF ports of an A/B alternate routing switch, inputs A and B and the output; the data sheet states no data rate
 parts:
-  - {ref: std/f-type@1, id: rf-in-a, at: [3.15, 40.25], attrs: {role: rf-input}}
-  - {ref: std/f-type@1, id: rf-out, at: [3.15, 61.05], attrs: {role: rf-output}}
-  - {ref: std/f-type@1, id: rf-in-b, at: [3.15, 82.75], attrs: {role: rf-input}}
+  - {ref: std/f-type@1, id: rf-in-a, group: rf, at: [3.15, 40.25], attrs: {role: rf-input}}
+  - {ref: std/f-type@1, id: rf-out, group: rf, at: [3.15, 61.05], attrs: {role: rf-output}}
+  - {ref: std/f-type@1, id: rf-in-b, group: rf, at: [3.15, 82.75], attrs: {role: rf-input}}
   - {ref: common/led-dot@1, id: led-a, at: [11.7, 19.8], attrs: {function: input}}
   - {ref: common/led-dot@1, id: led-b, at: [11.7, 23.7], attrs: {function: input}}
   - {ref: common/led-dot@1, id: led-alarm, at: [11.7, 104.8], attrs: {function: alarm}}

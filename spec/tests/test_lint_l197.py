@@ -24,11 +24,11 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 NAMES = ROOT / "spec/schemas/connector-decor-names.yaml"
 BASELINE = ROOT / "library/lint-baseline.json"
 
-# THE L197 FINDINGS IN library/lint-baseline.json WHEN THIS RULE LANDED. A lower
-# count is progress (a decor connector became a part, or was renamed for what it
-# is); a higher one is a new decor connector, and the fix is a part that
-# presents the interface, not a larger number here.
-BASELINE_L197 = 150
+# THE L197 FINDINGS IN library/lint-baseline.json: 150 when this rule landed, and
+# none since the last decor connectors became parts. A higher count is a new
+# decor connector, and the fix is a part that presents the interface, not a
+# larger number here.
+BASELINE_L197 = 0
 
 
 def _device(tmp_path, decor, placements=()):
@@ -104,8 +104,6 @@ def test_the_l197_count_in_the_baseline_has_not_grown():
     assert count <= BASELINE_L197, \
         f"{count} L197 findings are baselined, over the {BASELINE_L197} recorded: a new decor " \
         "connector; model it as a part that presents its interface"
-    assert count > 0, "the baseline records no L197 finding, so it was not re-recorded"
-
 
 # --- what the prose says ------------------------------------------------------
 

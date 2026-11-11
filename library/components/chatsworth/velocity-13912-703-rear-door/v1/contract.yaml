@@ -1,0 +1,59 @@
+format: 1
+kind: component
+name: velocity-13912-703-rear-door
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  One half-height door of the rear channel of the Chatsworth Velocity 13912-703 double-sided
+  vertical cable manager seen from the rear - a plain plastic cover the full width of the
+  manager, with a hinge rail over each finger wall, that snaps onto the T-shaped cable guides,
+  swings open to the right or left and releases when pulled from a corner
+provenance:
+  size: >-
+    datasheet - the data sheet (page 1) lists four half-height covers that snap onto the
+    T-shaped cable guides for the double-sided manager, two on each face, and the cover on the 6
+    in manager is plastic (page 2). Each is 152 wide, the manager's, and half of its 2045. For
+    the 7 ft manager the guide says the upper section is short and the lower long, and no page
+    gives the lengths, so the half is ESTIMATED there.
+  relief: >-
+    estimated - the plate stands 3 thick at the outside of the 148 well, its rails 5 deep over
+    the 140 the guides reach from the floor. No held page gives the section of the door or its
+    bevel; the rails take the whole of the 8 the door stands past the guides, which is half the
+    table's 422 less the 406 if the two doors are equal.
+  lid: >-
+    datasheet - 'The doors can be hinged open for cable access' and 'pressing firmly until it
+    snaps in place' (installation instructions of the single-sided part, page 5); 'swing open to
+    the right or left' (data sheet, page 2). It is a lid. The format has no hinge, so which side
+    it swings from is a gap.
+  logo-zone: >-
+    not reserved - the data sheet's photographs show a plain face.
+size: {w: 152, h: 1022.5}
+size-confidence: {w: datasheet, h: estimated}
+attrs: {material: Plastic}
+elements:
+  plate: {at: [0, 0], size: [152, 1022.5], class: bezel}
+  rail-left: {at: [0, 0], size: [16.5, 1022.5], class: bezel}
+  rail-right: {at: [135.5, 0], size: [16.5, 1022.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 145
+      out: 148
+      color: '#2f3134'
+      confidence: estimated
+      source: no held page gives the door section; a thin moulding in the data sheet's photographs
+    - node: rail-left
+      lift: 140
+      out: 145
+      color: '#2a2c2e'
+      confidence: estimated
+      source: the single-sided guide (page 5) shows the door snapped onto the hinges on the guides' ends; the rail's depth is the 5 mm between the guides' ends and the plate
+    - node: rail-right
+      lift: 140
+      out: 145
+      color: '#2a2c2e'
+      confidence: estimated
+      source: as rail-left
+skins: [default]

@@ -1075,6 +1075,28 @@ that routes cables may read them itself, so they are part of the format too:
 Renaming one, or changing what it means, is a format change as a rack.json
 key is; adding one is not.
 
+### What a compiled face says about a pocket
+
+A relief `pocket` compiles to `data-depth` on its node (mm to the pocket's
+floor), which the kit builds as a recess with walls and a floor. A pocket
+written `pocket: {depth, wall}` is a window cut through a thin plate and also
+publishes `data-wall-depth` (mm from the face to the plate's back face): the
+kit's walls stop there, and below it the pocket is open to the inside of the
+part. `data-wall` is the walls' colour and is unrelated.
+
+- A plain number publishes `data-depth` alone, with walls all the way to the
+  floor, exactly as before. A node without `data-wall-depth` builds as it
+  always did.
+- `data-wall-depth` is new, and a consumer that does not read it builds the
+  pocket with full-depth walls: the older picture, not a broken one. A
+  library that writes `{depth, wall}` is therefore read correctly only by a
+  kit that knows the attribute, which is why a pocket's schema type widened
+  from a number to a number or an object. Once published, the object form and
+  the attribute's name cannot be taken back without breaking a library that
+  uses them.
+- The wall is shallower than the depth (L117 checks it). A wall at or past the
+  floor is ignored by the kit and builds as a plain pocket.
+
 ## A part that slides
 
 A device may declare a part that slides: a rail panel bolted through slots in
@@ -1182,6 +1204,50 @@ does not list. Files written without them are read as before. A consumer that
 validates a manifest with a copy of the schema updates the copy before it reads
 a device that opens.
 
+## A housing with a stepped end
+
+A device may be a housing that is one end profile extruded along its length
+([modelling-a-device.md](modelling-a-device.md) has a worked example). The format
+gains one optional key and the build gains one field, so `format` stays 1 and
+`contract` stays 2. A device that states no `section` gains no key and no
+attribute: its build is byte for byte what it was.
+
+**In a manifest.** `chassis.section`, a list of at least four `[x, y]` points in
+millimetres, the closed outline of the housing's end seen as the right face is
+drawn: x across the depth from the front, y down the height from the top. It is
+the envelope, so the top and bottom edges run along the tips of anything that
+stands up from the casting. It is clockwise with y down, every edge is
+horizontal or vertical, and it touches all four sides of the `depth` by `height`
+box with exactly one edge on the top side and one on the bottom. The left face is
+its mirror in x. Lint L204 to L207 check it.
+
+**In a compiled face.** On the left and right faces the element with the id
+`chassis-faceplate` is a `<path>` of the polygon (the left face mirrored in x with
+the winding reversed) and not a `<rect>`; the rest of the face is unpainted. The
+front, rear, top and bottom faces are drawn as before. A reader that finds the
+faceplate by its id reads either element.
+
+**In `<device>.configs.json`**, of such a device: `chassis.section`, the points as
+written. It is left out for every other device. The box stays the bounding box,
+and `chassis.w`, `h` and `d`, the rack fit and the exports read it as before.
+
+**What the lock asks for.** `section` is shape, as `bevel` and `rounded` are: it
+sets the outline of a face and what a part may stand on. Stating it on a device
+that was released without it, moving a point of it, or taking it away is a major.
+Renaming the key, or changing the frame or the winding it is read in, is a
+breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states `section`, because `chassis` accepts no key the schema does not list;
+this is the situation `halves` is in. Files written without it are read as
+before. A consumer that validates a manifest with a copy of the schema updates
+the copy before it reads a device that states a section.
+
+**Not in this change.** A fin field on the housing, the 3D body built from the
+section and the open state of a housing with a section are later changes. Until
+they land the section is drawn on the left and right faces only, and a
+device cannot state `section` together with `halves`.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them
@@ -1259,6 +1325,20 @@ in that file, and leaves the key out of every entry that has none. The rack kit
 opens the module type file of the first key in sorted order. Moving a module from `attrs.model` to
 `part-numbers` renames its module type, which is a DCIM-data change in the
 sense above.
+
+**A bay's `seen-through`.** A device bay may carry a list of drawn items, the
+same boxes a panel decor item takes (`at`, `size`, `fill`, `rx`, `shape` of
+`rect` or `slot`, `kind`, `source`), for what the maker's picture shows through
+the opening when the bay is empty. It is an optional key, so it does not raise
+`format`: a file written without it stays valid, and a reader that ignores it
+draws the bay as before. The compiled face writes a group `data-class="seen-through"`
+inside the bay's group, after the opening and before the module, clipped to the
+opening, and hides it with `display="none"` where the configuration seats the
+bay; `kit/swap.js` sets and removes the same attribute when a bay is swapped. It
+is a 2D drawing only, and `contract` does not rise, since the group is new and
+nothing that was read changes. The key is part of the published format from the
+release that carries it: renaming it or changing what it holds after that is a
+breaking change.
 
 ## What is promised before 1.0
 
