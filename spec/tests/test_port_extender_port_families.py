@@ -1,8 +1,8 @@
 """The Port Extender files its ports and lamps under the names of their port families.
 
 The 48 SFP28 tenant ports and the 8 QSFP28 uplinks keep the vendor's one numbering
-(1-56); only the groups they are filed under are named for the family, as
-`arista/7050sx3-48yc8` and `edgecore/as7326-56x` name theirs.
+(1-56); only the groups they are filed under are named for the family, as the
+library's other 48 + 8 devices name theirs.
 """
 import collections
 import pathlib
