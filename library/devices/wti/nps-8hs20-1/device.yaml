@@ -1,0 +1,236 @@
+format: 1
+kind: device
+name: nps-8hs20-1
+version: 0.1.0
+maturity: modelled
+manufacturer: WTI
+model: NPS-8HS20-1
+portfolio: {line: Network power switch, family: NPS-8HS}
+description: >-
+  WTI NPS-8HS20-1 network power switch (switched PDU), 1U. The front carries an RJ45 set-up port, ON and RDY lamps, DEFAULT and RESET buttons, eight output status lamps and two 20 A circuit breakers. The rear carries one IEC C20 inlet, eight switched NEMA 5-15R outlets, A1 to A8, two alarm lamps and a 10/100/1000 Ethernet jack.
+profile: power
+provenance:
+  sources:
+    confidence: drawing
+    note: >-
+      Every position on both faces is read from the vector figures of the NPS Series Hardware Guide (part 14531 rev A): figure 2.3, the NPS-8HS front panel (PDF page 9), and figure 2.4, the NPS-8HS back panel (PDF page 10). The figures are line art with no dimension printed on them. The size is from the NPS specification table (PDF page 2 of the specification sheet): W 19 in (48.3 cm), D 8.7 in (22 cm), H 1.75 in (4.5 cm), 1 U, the row shared by the NPS-8HS, 8HD and 8H20-ATS models. The colours are read from the product photograph of the NPS-8HS20-1 on page 1 of the specification sheet (an angled photograph, front above and back below, 860 by 283 pixels). The guide draws NEMA 5-15R outlets in figure 2.4 and its text says the NPS-8HS20-1 has them, so this model is the one the figures draw. The hardware guide's -2 and -3 models have IEC C13 outlets, which no figure draws.
+  method:
+    confidence: estimated
+    note: >-
+      THE FIGURES CARRY NO CONNECTOR DIMENSION. Each position is the centre of a drawn outline (a jack's frame, an outlet's box, an inlet's housing, a lamp's disc), converted at one scale on both axes: the figure's drawn outline width taken as the table's 19 in, 482.6 mm (1.5118 mm per point on the front figure, 1.5133 on the back). Heights are measured from the figure's vertical centre and set about the face's centre, because the drawn outline is 9 percent taller than 19 to 1.75, so the figure is not at true proportion. The scale is checked against two library parts: the figure's outlet box is 18.25 points wide, 27.6 mm here, against 27.0 for `std/nema-5-15r`, and its inlet housing is 21.08 points wide, 31.9 mm here, against 32.4 for `std/c20-inlet`. Every position is good to about 1.5 mm. The captions are placed from the figure's glyph positions and sized from its cap heights, to about 0.7 mm. The breakers are drawn from the figure's two boxes (the guide gives no size for a breaker) as plain art, not as a part.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Width 19 in (482.6 mm), depth 8.7 in (220.98 mm) and height 1.75 in (44.45 mm), 1 U, from the specification table. The table's width is the figure's whole faceplate, and no document held says whether the rack ears are inside it or whether the body is narrower. The face is drawn the full 482.6 mm wide. No net weight is stated, only a shipping weight of 11 lb for the 8-outlet models, so none is given.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Median pixels of the specification sheet's photograph of the NPS-8HS20-1: the front face #414043, the rear plate #ffffff with black printing, the buttons #fafafa and the top cover #a8a8a6. The top cover is lit from above in the photograph, so its grey is a lit grey and not a paint colour. The red rule and the red mark of the figure's logo are the figure's own red, #ed1c24. The photograph is 860 pixels wide for the two faces and the sides are seen at an angle, so a colour is read only from a flat patch of a face.
+  ears:
+    confidence: datasheet
+    note: >-
+      The specification table gives the 19 in width and the photograph shows a bracket at each end of the front, with three slots. The ear hole pitch and the ear setback are not stated by any held document. The ears are taken as flush with the faceplate, as the photograph shows them.
+  outlets:
+    confidence: datasheet
+    note: >-
+      Hardware guide section 2.4 and figure 2.4: eight switched NEMA 5-15R outlets in one row, A1 to A8, all fed by the one inlet. The specification table says the same for the -1 model, with a (1) 20 Amp input feed and two 20 Amp circuit breakers.
+  inlets:
+    confidence: datasheet
+    note: >-
+      One IEC 60320 C20 inlet (hardware guide, section 2.4, 'NPS-8HS20-1 Units: One IEC 60320 C20 inlet, for 100/120V power'). The table prints the voltage range 85/125V. The power cord is detachable and the table says the -1 model 'Includes 15 Amp Power Cable'; no cord is drawn, as the table is not a drawing of one. The guide says the NPS-8HS inlet carries a pre-installed cable keeper (section 4); it is not drawn.
+  breakers:
+    confidence: datasheet
+    note: >-
+      Hardware guide section 2.3, item 7: two circuit breakers, one for outlets A1 to A4 and one for A5 to A8, each 20 Amp on the NPS-8HS20-1 (also the specification table). Figure 2.3 draws each as a square box with a rocker, captioned 'A1 - A4' and 'A5 - A8'. The photograph shows black rockers with a red mark. They are drawn as art, as the library holds no breaker part for this kind.
+  power:
+    confidence: datasheet
+    note: >-
+      Specification table: AC voltage 85/125V, 50/60 Hz, power distribution '1.3/2 kW' with the footnote '80% Derated', one 20 Amp input feed. The unit's own draw is not stated by any held document, so no power-max-w is given.
+  setup-port:
+    confidence: datasheet
+    note: >-
+      An RJ45 RS232 serial port, DCE configuration (hardware guide, section 2.3, item 1; appendix B), on the front at the left. The specification table gives 'RJ45, RS232C'. The pinout is the guide's appendix B and is not stated on the jack. The jack is drawn latch notch down, as the photograph shows it.
+  ethernet:
+    confidence: datasheet
+    note: >-
+      One RJ45 network port on the rear, 10/100/1000Base-T (hardware guide, section 2.4, item 4; specification table 'Ethernet Port: 10/100/1000 BaseT'), with a link and an activity lamp that belong to the jack part.
+  lamps:
+    confidence: drawing
+    note: >-
+      The lamps are drawn as plain discs, not as states: the guide names them (ON, RDY, output status, alarm) and states no colour for any. The photograph shows the front lamps lit green and yellow; one lit photograph is not a table of colours, so none is claimed.
+attrs:
+  physical:
+    construction: metal
+  power:
+    input-plug: iec-60320-c20
+    input-voltage: 85 to 125 VAC, 50/60 Hz (specification table)
+    input-current-a: 20
+    input-feeds: one inlet for all eight outlets
+    power-distribution: 1.3/2 kW (80% derated, specification table)
+  environmental:
+    operating-temp: 0 to 50 C (specification table)
+    operating-humidity: 10 - 90% RH (specification table)
+chassis:
+  width: 482.6
+  height: 44.45
+  depth: 220.98
+  ru: 1
+  color: '#414043'
+  ears:
+    positions:
+    - {name: flush, label: 1U rack bracket as shipped, default: true}
+  power: ac
+gaps:
+- what: straight-on-photographs
+  scope: [front, rear]
+  reason: needs-photo
+  note: >-
+    Only one angled photograph of the NPS-8HS20-1 is held, 860 pixels wide for both faces. Every position is read from the guide's line art, and no face has been laid over a straight-on photograph.
+  wanted: A straight-on photograph of each face.
+- what: lamp-states
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The guide names the lamps and states no colour or state for them; they are drawn as plain discs.
+  wanted: The maker's lamp table for the front and rear panels.
+- what: ear-holes
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The ears are not dimensioned and no held document says whether they are inside the 19 in width. The photograph shows three slots in each bracket.
+  wanted: A dimensioned drawing of the rack bracket and of the body.
+- what: breaker-size
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The figure draws each breaker as a box and a rocker with no size and no part number. They are drawn at the figure's scale.
+  wanted: The breaker's part number and outline.
+- what: cable-keeper
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The guide says each inlet has a cable keeper, pre-installed on the NPS-8HS (section 4); the figure does not draw it and the photograph shows a wire clip on the inlet. It is not drawn.
+  wanted: The maker's drawing of the keeper.
+- what: sides
+  scope: [bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    No held document draws or names a side or the underside. The photograph shows the top cover and, at an angle, one side with a row of slots along its top edge, too small to place a slot.
+  wanted: A drawing or a straight-on photograph that names each side.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight switched NEMA 5-15R outlets, A1 to A8, all from the one inlet'}
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the one IEC C20 inlet, at the left of the rear as seen from behind'}
+  setup: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial}, description: 'the RJ45 RS232 SetUp port on the front'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the 10/100/1000 Ethernet network port on the rear'}
+views:
+  front:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+      - {id: onrdy-box, kind: lamp-frame, at: [45.35, 23.9], size: [70.59, 16.87], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: output-box, kind: lamp-frame, at: [131.36, 23.9], size: [94.08, 16.87], rx: 1.0, fill: none, stroke: '#d9d9d9', stroke-width: 0.3}
+      - {id: default-button, kind: button, at: [70.72, 26.77], size: [17.2, 11.14], rx: 1.2, fill: '#fafafa'}
+      - {id: reset-button, kind: button, at: [93.14, 26.77], size: [17.2, 11.14], rx: 1.2, fill: '#fafafa'}
+      - {id: red-rule, kind: rule, at: [14.5, 17.05], size: [396.52, 2.42], fill: '#ed1c24'}
+      - {id: lamp-on, kind: lamp, at: [50.38, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-rdy, kind: lamp, at: [60.23, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-1, kind: lamp, at: [136.63, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-2, kind: lamp, at: [147.93, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-3, kind: lamp, at: [159.24, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-4, kind: lamp, at: [170.55, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-5, kind: lamp, at: [181.85, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-6, kind: lamp, at: [193.16, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-7, kind: lamp, at: [204.47, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: lamp-out-8, kind: lamp, at: [215.77, 30.54], size: [3.6, 3.6], rx: 1.8, fill: '#1a1a1a'}
+      - {id: breaker-a1-a4, kind: breaker, at: [419.98, 9.55], size: [19.85, 22.47], rx: 1.0, fill: '#1a1a1a'}
+      - {id: breaker-a1-a4-rocker, kind: breaker-rocker, at: [424.46, 12.47], size: [10.95, 16.6], rx: 0.8, fill: '#2b2b2b'}
+      - {id: breaker-a1-a4-rocker-edge, kind: lamp-frame, at: [424.46, 12.47], size: [10.95, 16.6], rx: 0.8, fill: none, stroke: '#8a8a8a', stroke-width: 0.3}
+      - {id: breaker-a5-a8, kind: breaker, at: [451.31, 9.55], size: [19.87, 22.47], rx: 1.0, fill: '#1a1a1a'}
+      - {id: breaker-a5-a8-rocker, kind: breaker-rocker, at: [455.8, 12.47], size: [10.93, 16.6], rx: 0.8, fill: '#2b2b2b'}
+      - {id: breaker-a5-a8-rocker-edge, kind: lamp-frame, at: [455.8, 12.47], size: [10.93, 16.6], rx: 0.8, fill: none, stroke: '#8a8a8a', stroke-width: 0.3}
+    silkscreen:
+    - {at: [62.03, 15.64], text: 'www.wti.com', font-size: 4.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [373.04, 15.69], text: 'NPS-8', font-size: 5.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [353.04, 27.06], text: 'Network Power Switch', font-size: 4.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [16.3, 43.49], text: 'SETUP PORT', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: setup}
+    - {at: [49.21, 38.44], text: 'ON', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [59.35, 38.44], text: 'RDY', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [71.71, 33.54], text: 'DEFAULT', font-size: 2.8, anchor: start, fill: '#555555', for: chassis}
+    - {at: [96.18, 33.5], text: 'RESET', font-size: 2.8, anchor: start, fill: '#555555', for: chassis}
+    - {at: [178.44, 28.61], text: 'OUTPUT STATUS', font-size: 3.4, anchor: middle, fill: '#f4f4f4', for: chassis}
+    - {at: [136.0, 38.77], text: 'A1', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [147.31, 38.77], text: 'A2', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [158.62, 38.77], text: 'A3', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [169.93, 38.77], text: 'A4', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [181.24, 38.77], text: 'A5', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [192.54, 38.77], text: 'A6', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [203.85, 38.77], text: 'A7', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [215.16, 38.77], text: 'A8', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [423.32, 36.31], text: 'A1 - A4', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    - {at: [454.07, 36.31], text: 'A5 - A8', font-size: 3.4, anchor: start, fill: '#f4f4f4', for: chassis}
+    components:
+      placements:
+      - {ref: std/rj45-ganged@2, id: setup, at: [22.19, 25.68], group: setup, rel-pos: 1, attrs: {media: rj45-serial, role: console}}
+    regions:
+      - {id: logo-zone, at: [14.5, 5.92], size: {w: 22.68, h: 9.72}, label: 'WTI logo; not drawn'}
+  rear:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+      - {id: rear-plate, kind: face-plate, at: [0, 0], size: [482.6, 44.45], fill: '#ffffff'}
+      - {id: alarm-a, kind: lamp, at: [442.88, 17.39], size: [3.4, 3.4], rx: 1.7, fill: '#1a1a1a'}
+      - {id: alarm-b, kind: lamp, at: [442.88, 25.4], size: [3.4, 3.4], rx: 1.7, fill: '#1a1a1a'}
+    silkscreen:
+    - {at: [98.58, 40.71], text: 'A1', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-1}
+    - {at: [143.74, 40.71], text: 'A2', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-2}
+    - {at: [188.91, 40.71], text: 'A3', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-3}
+    - {at: [234.07, 40.71], text: 'A4', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-4}
+    - {at: [279.22, 40.71], text: 'A5', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-5}
+    - {at: [324.39, 40.71], text: 'A6', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-6}
+    - {at: [369.55, 40.71], text: 'A7', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-7}
+    - {at: [414.71, 40.71], text: 'A8', font-size: 3.0, anchor: middle, fill: '#111111', for: outlet-8}
+    - {at: [437.5, 15.07], text: 'ALARM', font-size: 2.4, anchor: start, fill: '#111111', for: chassis}
+    - {at: [439.5, 20.75], text: 'A', font-size: 2.4, anchor: start, fill: '#111111', for: chassis}
+    - {at: [439.47, 28.57], text: 'B', font-size: 2.4, anchor: start, fill: '#111111', for: chassis}
+    - {at: [452.58, 7.43], text: 'ACT', font-size: 2.4, anchor: start, fill: '#111111', for: eth-0}
+    - {at: [466.09, 7.43], text: 'LINK', font-size: 2.4, anchor: start, fill: '#111111', for: eth-0}
+    components:
+      placements:
+      - {ref: std/nema-5-15r@1, id: outlet-1, at: [85.08, 4.68], group: outlets, rel-pos: 1, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-2, at: [130.24, 4.68], group: outlets, rel-pos: 2, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-3, at: [175.41, 4.68], group: outlets, rel-pos: 3, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-4, at: [220.57, 4.68], group: outlets, rel-pos: 4, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-5, at: [265.72, 4.68], group: outlets, rel-pos: 5, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-6, at: [310.89, 4.68], group: outlets, rel-pos: 6, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-7, at: [356.05, 4.68], group: outlets, rel-pos: 7, rotate: 180, fed-by: inlet-1}
+      - {ref: std/nema-5-15r@1, id: outlet-8, at: [401.21, 4.68], group: outlets, rel-pos: 8, rotate: 180, fed-by: inlet-1}
+      - {ref: std/c20-inlet@1, id: inlet-1, at: [22.66, 6.7], group: inlets, rel-pos: 1, rotate: 180}
+      - {ref: common/rj45-eth@1, id: eth-0, at: [455.87, 16.28], group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}}
+  top:
+    size: {w: 482.6, h: 220.98}
+    panel:
+      decor:
+      - {id: top-cover, kind: face-plate, at: [0, 0], size: [482.6, 220.98], fill: '#a8a8a6'}
+  bottom:
+    size: {w: 482.6, h: 220.98}
+    empty: >-
+      Not drawn: no held document shows the underside; the guide draws the front and back panels only and the photograph is taken from above.
+  left:
+    size: {w: 220.98, h: 44.45}
+    empty: >-
+      Not drawn: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
+  right:
+    size: {w: 220.98, h: 44.45}
+    empty: >-
+      Not drawn: no held document names or draws a side; the photograph shows one side at an angle, with a row of slots too small to place.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The unit as the hardware guide's figures 2.3 and 2.4 show it, with NEMA 5-15R outlets. The rack brackets and the 15 Amp power cable are in the box (specification table). The -2 and -3 models of the same housing have IEC C13 outlets and are not modelled here.
+    part-numbers:
+      NPS-8HS20-1: {}
+references:
+- {title: 'WTI NPS Network Power Switch specification table, 2 pages (specs_network-power-switch-ATS)', sha256: b30ff4b4d11761c4115074d2b49e4cb05d6e3f9f8f3881ba40ea2a89476773b7}
+- {title: 'WTI NPS Series Network Power Switches, horizontal mount, Hardware Guide, Part No. 14531 Rev. A', sha256: a0fab273a42ab251a33889a122105dc4998301b4d58a9f1f45b3d359dd05e3af}
