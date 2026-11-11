@@ -1,0 +1,282 @@
+format: 1
+kind: device
+name: px2-2475
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PX2-2475
+description: >-
+  Raritan PX2-2475 rack PDU, 0U: a black strip 52 mm wide, 65 mm deep and 1539 mm long for a rack's vertical channel.
+  It has 24 NEMA 5-20R outlets, 16 A, in three groups of eight. A controller panel with two LED display windows sits
+  between the first and second groups. A 3 m cord leaves near the bottom end and ends in a NEMA L5-20P locking plug.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S PRINTED SIZES AND A READING OF ITS MECHANICAL DRAWING. The technical specification (rev
+      2020-07-01) prints the unit size; its mechanical diagram MPX2-2475C (Rev A, 2 June 2011; PDF page 6) prints the length, the
+      outlet group span and pitch and the mounting buttons, and draws the strip's elevation, from which each position along it
+      is read at 3.09 px per mm to about 1 mm. Its control panel (PDF page 4, 188 x 43 mm) is read at 11.8 px per mm. The
+      library draws the PDU STANDING, cord end down, so a position along the strip is the y of the front view: the drawing
+      is turned a quarter turn, outlet 1 at the top. No vendor stencil was opened and no vendor drawing, photograph or
+      stencil is copied; the figures were read by a person and written down. No photograph of this model is held.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1539 x 52 x 65 mm (60.6 x 2.1 x 2.6 in), the specification's height, width and depth (page 2); the drawing
+      prints 1539.0, 52.2 and 65.3. 4.2 kg, shipping 7.1 kg and 185 x 120 x 1650 mm. `ru: 35` is the height it runs, 1539
+      mm being 34.6 units; it is derived, not printed.
+  colours:
+    confidence: estimated
+    note: >-
+      THE HEX VALUES ARE ESTIMATES OF THE PRINTED COLOUR. The specification gives "Black powder coat (custom colors
+      available)" and no photograph of this model is held, so the chassis is black and the panel, plates and lamps are
+      estimates of dark grey and white; the two display windows are drawn very dark red because the drawing paints them
+      red and no document says what a lit or unlit window looks like. The drawn faces have not been compared with a
+      photograph.
+  mount:
+    confidence: datasheet
+    note: >-
+      datasheet - `rack-side`: a zero-U strip with two mounting buttons on its back (kit G2-RACK-FOR-ZU, page 2; page 7 lists the
+      parts 250-70-0104-00, 250-80-0011-00, 250-70-0007-00 and 250-70-0093-00 without saying which is which).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - outlet centres at 100.6 + 35.0 n mm for outlets 1 to 8, 677.4 + 35.0 n for 9 to 16 and 1067.1 + 35.0 n for 17
+      to 24 (n from 0), read from the small marks on the strip's edge that sit over each outlet's centre; the drawing prints
+      the pitch 35.00 and the span 245.00 of a group of eight (PDF page 6, view B). Outlet 1's mark is not legible and is
+      the second's less 35.0. Positions ACROSS the strip are not printed: each outlet is centred, as the drawing's outlet
+      frames are. The numeral of each outlet stands 17 mm toward the top of the strip from its centre, as the drawing prints it.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the technical specification: (24) NEMA 5-20R, 16 A, remote switching, no metering per outlet and no branch
+      breaker ("Overload Protection N/A", "Metering per Output Receptacle No"). Drawn as std/nema-5-20r@1 in its own
+      orientation: the drawing shows the earth hole at the end toward outlet 1, the T slot toward the face's edge that is
+      the strip's right, and the line slot to its left, which is that part unturned when the strip stands.
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the panel is 188 x 43 mm (page 4) and starts about 396.5 mm from the top end, read from the elevation, to about
+      1 mm. Its contents are read from the page 4 drawing: a reset pinhole, a two-digit window (LINE / CB / UB) with two round
+      buttons under it (UP, BOTH, DOWN), a three-digit window, five lamps labelled SENSOR, UB LOAD (%), POWER (kW), VOLTAGE (V)
+      and CURRENT (A) with one unlabelled lamp beside them, a FEATURE jack over an ETHERNET jack, a USB-B jack, a SENSOR jack,
+      a USB-A jack and a CONSOLE / MODEM D-sub jack. Each jack is turned the way the drawing turns it. The ports' types are
+      read as follows: the D-sub as a DB9, `std/db9@1` (the PX-Series PDU User Guide's comparison of the PX2, PX3 and PXC / PXO
+      gives the PX2 a male DB9 RS-232 CONSOLE / MODEM port, one USB-A port at 12 Mbps, one LAN port at 100 Mbps and an RJ-12
+      SENSOR port), so the USB-A is the USB 2 skin of `std/usb-a@1`; the FEATURE jack is an RJ-45 by the guide's note and is drawn,
+      with the SENSOR jack, as an RJ45 serial jack like the maker's other PDUs (gaps: sensor-jack-type); the USB-B is the
+      maker's USB-B part.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - two mounting buttons 1244.0 apart, the first 45.0 from the top end (PDF page 6, rear view). The button is the
+      maker's PX3 mounting button, its 14.7 head borrowed (gaps: mounting-button-size), centred across, an estimate.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - NEMA L5-20P (2P3W), 3 m (9.84 ft), bottom-front feed, cord retention yes, IP44 cable, maximum input 20 A,
+      100 - 120 V. The maker's drawing titles the input IEC320 C20 instead (gaps: input-conflict).
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - remote outlet switching yes, metering per input line only. So `outlet-switching: true` and each outlet
+      states on and off, and `metering-scope: input`.
+attrs:
+  physical:
+    length-mm: 1539
+    weight-kg: 4.2
+    construction: metal strip
+  power:
+    input-cord: fixed
+    input-plug: nema-l5-20p
+    input-current-a: 20
+    breakers: none (the specification gives overload protection as not applicable)
+  management:
+    metering-scope: input
+    outlet-switching: true
+chassis: {width: 52, height: 1539, depth: 65, ru: 35, mount: rack-side, color: '#1c1c1e', airflow: passive}
+gaps:
+- what: input-conflict
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the technical specification (rev 2020-07-01) gives the input as a NEMA L5-20P plug on a 3 m cord entering at the bottom
+    front, and the maker's mechanical drawing MPX2-2475C (Rev A, 2011) titles the input "IEC320 C20", draws a C20 inlet in the
+    strip's bottom end (view A) and a cord with C19 and C20 ends beside it. The device follows the specification, the later
+    document, which the PXE series data sheet (2016) supports for the same 24-outlet Zero U strip (PXE-1475V, NEMA
+    L5-20P). The drawn inlet is not drawn here.
+  wanted: the maker's statement of which input this part number ships with.
+- what: outlet-lamps
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the drawing shows a small circle beside every outlet and the specification names no lamp per outlet, so none is drawn
+    and none is a part.
+  wanted: a photograph of the strip or the maker's user guide for the PX2.
+- what: unlabelled-lamp
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the control panel drawing shows one lamp that carries no label, between the two display windows and the five labelled
+    lamps. It is drawn as a lamp and its meaning is not stated.
+  wanted: the maker's user guide for the PX2.
+- what: display-windows
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the specification says a "3-digit LED user-selectable display" and the drawing shows two windows, a two-digit one
+    labelled LINE / CB / UB and a three-digit one, both painted red. Each is drawn as a dark window; no digit is drawn and
+    no part is placed.
+  wanted: a photograph of the control panel.
+- what: sensor-jack-type
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the PX-Series PDU User Guide (4.3.11) says in its comparison of the PX2, PX3 and PXC / PXO that the PX2's SENSOR port is
+    an RJ-12 and the PX3's an RJ-45, and the drawing shows the PX2's sensor jack narrower than its feature jack. It is drawn
+    as the RJ45 serial jack part because no jack part of the library is sized as an RJ-12 housing (`std/rj11@1` is the
+    opening alone), so it is drawn wider than the maker's jack. The feature jack is an RJ-45 by the same guide.
+  wanted: a six-position jack part sized as an RJ-12 housing.
+- what: mounting-button-size
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the drawing places the two buttons and does not dimension their heads. They are drawn as the maker's PX3 mounting button,
+    14.7 mm across.
+  wanted: the drawing's rear view dimensioned or the kit's installation sheet.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: >-
+    the drawing's side view (page 6) is a plain 65.3 x 1539 outline with two short stubs where the buttons stand and small
+    steps at the outlets and the panel; none is dimensioned, so none is drawn. No end view is shown.
+  wanted: the drawing's side and end views dimensioned, or photographs of the ends and the sides.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-20r}, description: 'the 24 NEMA 5-20R outlets in three groups of eight, numbered 1 to 24 as the drawing prints them'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 100m}, description: 'the 10/100 BaseT Ethernet jack of the controller (technical specification, networking)'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console jack, the sensor and feature jacks and the two USB jacks of the controller'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the reset pinhole'}
+  lamps: {term: LED, role: indicator, index-origin: 1, description: 'the five labelled lamps of the control panel and the one that is not labelled'}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1539}
+    panel:
+      decor:
+      - {id: controller-panel, at: [4.5, 396.5], size: [43.0, 188.0], fill: '#18191b', kind: controller-panel}
+      - {id: display-window-1, at: [21.2, 436.5], size: [21.9, 14.9], fill: '#2a0c0c', kind: display}
+      - {id: display-window-2, at: [8.8, 460.8], size: [34.3, 15.0], fill: '#2a0c0c', kind: display}
+      - {id: nav-button-up, at: [7.9, 431.4], size: [12.0, 12.0], rx: 6.0, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+      - {id: nav-button-down, at: [7.9, 446.3], size: [12.0, 12.0], rx: 6.0, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+    silkscreen:
+      - {at: [30.8, 83.6], text: '1', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-1}
+      - {at: [30.8, 118.6], text: '2', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-2}
+      - {at: [30.8, 153.6], text: '3', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-3}
+      - {at: [30.8, 188.6], text: '4', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-4}
+      - {at: [30.8, 223.6], text: '5', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-5}
+      - {at: [30.8, 258.6], text: '6', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-6}
+      - {at: [30.8, 293.6], text: '7', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-7}
+      - {at: [30.8, 328.6], text: '8', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-8}
+      - {at: [30.8, 660.4], text: '9', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-9}
+      - {at: [30.8, 695.4], text: '10', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-10}
+      - {at: [30.8, 730.4], text: '11', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-11}
+      - {at: [30.8, 765.4], text: '12', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-12}
+      - {at: [30.8, 800.4], text: '13', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-13}
+      - {at: [30.8, 835.4], text: '14', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-14}
+      - {at: [30.8, 870.4], text: '15', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-15}
+      - {at: [30.8, 905.4], text: '16', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-16}
+      - {at: [30.8, 1050.1], text: '17', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-17}
+      - {at: [30.8, 1085.1], text: '18', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-18}
+      - {at: [30.8, 1120.1], text: '19', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-19}
+      - {at: [30.8, 1155.1], text: '20', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-20}
+      - {at: [30.8, 1190.1], text: '21', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-21}
+      - {at: [30.8, 1225.1], text: '22', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-22}
+      - {at: [30.8, 1260.1], text: '23', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-23}
+      - {at: [30.8, 1295.1], text: '24', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-24}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/nema-5-20r@1, at: [12.5, 87.1], group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/nema-5-20r@1, at: [12.5, 122.1], group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/nema-5-20r@1, at: [12.5, 157.1], group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-20r@1, at: [12.5, 192.1], group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-20r@1, at: [12.5, 227.1], group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-20r@1, at: [12.5, 262.1], group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-20r@1, at: [12.5, 297.1], group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-20r@1, at: [12.5, 332.1], group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: std/nema-5-20r@1, at: [12.5, 663.9], group: outlets, rel-pos: 9, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: std/nema-5-20r@1, at: [12.5, 698.9], group: outlets, rel-pos: 10, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: std/nema-5-20r@1, at: [12.5, 733.9], group: outlets, rel-pos: 11, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: std/nema-5-20r@1, at: [12.5, 768.9], group: outlets, rel-pos: 12, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: std/nema-5-20r@1, at: [12.5, 803.9], group: outlets, rel-pos: 13, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: std/nema-5-20r@1, at: [12.5, 838.9], group: outlets, rel-pos: 14, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: std/nema-5-20r@1, at: [12.5, 873.9], group: outlets, rel-pos: 15, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/nema-5-20r@1, at: [12.5, 908.9], group: outlets, rel-pos: 16, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/nema-5-20r@1, at: [12.5, 1053.6], group: outlets, rel-pos: 17, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/nema-5-20r@1, at: [12.5, 1088.6], group: outlets, rel-pos: 18, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/nema-5-20r@1, at: [12.5, 1123.6], group: outlets, rel-pos: 19, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/nema-5-20r@1, at: [12.5, 1158.6], group: outlets, rel-pos: 20, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-21, ref: std/nema-5-20r@1, at: [12.5, 1193.6], group: outlets, rel-pos: 21, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-22, ref: std/nema-5-20r@1, at: [12.5, 1228.6], group: outlets, rel-pos: 22, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-23, ref: std/nema-5-20r@1, at: [12.5, 1263.6], group: outlets, rel-pos: 23, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-24, ref: std/nema-5-20r@1, at: [12.5, 1298.6], group: outlets, rel-pos: 24, fed-by: input, states: ['on', 'off']}
+        - {id: input, ref: raritan/px2-cord-l5-20p@1, at: [16.0, 1503.0], group: power-input, rel-pos: 1, description: 'the 3 m input cord, ending in a NEMA L5-20P locking plug; only its gland is drawn'}
+        - {id: reset, ref: common/reset-button@1, at: [24.1, 426.8], group: buttons, rel-pos: 1, for: chassis, description: 'reset pinhole, left of the two-digit window'}
+        - {id: lamp-sensor, ref: common/led-dot@1, at: [36.9, 485.2], group: lamps, rel-pos: 1, for: chassis, description: 'lamp labelled SENSOR'}
+        - {id: lamp-ub-load, ref: common/led-dot@1, at: [31.1, 485.2], group: lamps, rel-pos: 2, for: chassis, description: 'lamp labelled UB LOAD (%)'}
+        - {id: lamp-power, ref: common/led-dot@1, at: [25.1, 485.2], group: lamps, rel-pos: 3, for: chassis, description: 'lamp labelled POWER (kW)'}
+        - {id: lamp-voltage, ref: common/led-dot@1, at: [19.1, 485.2], group: lamps, rel-pos: 4, for: chassis, description: 'lamp labelled VOLTAGE (V)'}
+        - {id: lamp-current, ref: common/led-dot@1, at: [13.0, 485.2], group: lamps, rel-pos: 5, for: chassis, description: 'lamp labelled CURRENT (A)'}
+        - {id: lamp-unlabelled, ref: common/led-dot@1, at: [25.0, 479.6], group: lamps, rel-pos: 6, for: chassis, description: 'the lamp the drawing prints no label for'}
+        - {id: feature, ref: std/rj45@2, at: [26.7, 501.4], rotate: 270, group: mgmt, rel-pos: 1, attrs: {media: rj45-serial}, description: 'FEATURE jack, the upper of the two stacked jacks; its type is not published, drawn as a serial jack'}
+        - {id: eth, ref: common/rj45-eth@1, at: [9.8, 501.4], rotate: 90, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'ETHERNET jack, the lower of the two stacked jacks: 10/100 BaseT'}
+        - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [31.6, 519.1], rotate: 90, group: mgmt, rel-pos: 2, description: USB-B}
+        - {id: sensor, ref: std/rj45@2, at: [26.8, 534.3], rotate: 270, group: mgmt, rel-pos: 3, attrs: {media: rj45-serial}, description: 'SENSOR jack (gaps: sensor-jack-type)'}
+        - {id: usb-a, ref: std/usb-a@1, skin: usb2, at: [9.5, 519.3], group: mgmt, rel-pos: 4, description: 'USB-A, one port at 12 Mbps by the PX-Series PDU User Guide'}
+        - {id: console, ref: std/db9@1, at: [5.2, 537.2], rotate: 90, group: mgmt, rel-pos: 5, attrs: {role: console}, description: 'CONSOLE / MODEM jack, a D-sub'}
+  rear:
+    size: {w: 52, h: 1539}
+    components:
+      placements:
+        - {id: button-1, ref: raritan/px3-mounting-button@1, at: [18.65, 37.65], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: raritan/px3-mounting-button@1, at: [18.65, 1281.65], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 52, h: 65}
+    empty: >-
+      no source shows the top end: the maker's drawing gives no end view and the specification publishes no feature on it, so
+      nothing is drawn.
+  bottom:
+    size: {w: 52, h: 65}
+    empty: >-
+      no source shows the bottom end: the maker's drawing gives no end view, the cord leaves by the front face near it, and
+      nothing else on the end is published.
+  left:
+    size: {w: 65, h: 1539}
+    empty: >-
+      the maker's drawing shows this long side as a plain outline with two short stubs where the buttons stand and none of
+      it is dimensioned, so nothing is drawn but the outline (gaps: sides).
+  right:
+    size: {w: 65, h: 1539}
+    empty: >-
+      the maker's drawing shows this long side as a plain outline with two short stubs where the buttons stand and none of
+      it is dimensioned, so nothing is drawn but the outline (gaps: sides).
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
+- {physical: eth, name: Ethernet}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 3 m cord beyond its gland is not drawn.
+    part-numbers:
+      PX2-2475: {}
+datasheet:
+  title: 'Raritan PX2-2475 technical specification (rev 2020-07-01)'
+references:
+  - {title: 'Raritan mechanical drawing MPX2-2475C, Rev A, 2 June 2011'}
+  - {title: 'Raritan PXE metered PDUs data sheet (V1168R1)'}
+  - {title: 'Raritan PX2 and PX3 quick setup guide'}
+  - {title: 'Raritan PX-Series PDU User Guide, PX2, PX3, PXO, PXC (4.3.11)'}
