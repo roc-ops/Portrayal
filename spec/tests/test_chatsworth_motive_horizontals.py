@@ -1,4 +1,4 @@
-"""The Chatsworth Motive horizontal cable managers with black fingers (#1093, part of #1091).
+"""The Chatsworth Motive horizontal cable managers with black fingers (#1093).
 
 Seven devices, one per part number family and height, each with a black and a Glacier White chassis
 and black fingers on both. The sizes and weights are the Motive Cable Management data sheet's ordering
