@@ -1,0 +1,101 @@
+format: 1
+kind: module
+name: ex4550-em-8xsfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+    Juniper EX4550-EM-8XSFP, the eight-port SFP+ expansion module of the EX4550 switches. It slides into the module slot on the front panel or the one on the rear panel. It has eight SFP+ cages in two rows of four, numbered 0 to 7, the even numbers on the upper row. Each cage takes an SFP+ transceiver at 10 Gbps or an SFP transceiver at 1 Gbps. Four arrow lamps between the rows show link activity and status for each pair of ports, and the module has one ST lamp. Two captive screws hold it. It ships with dust covers in the ports and is hot-insertable and hot-removable.
+attrs:
+  model: EX4550-EM-8XSFP
+  sfp-plus: 8
+  weight: 0.74 lb (0.34 kg)
+  power-absent: not-published
+  ports-note: eight SFP+ ports, each at 10 Gbps with SFP+ or 1 Gbps with SFP, usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Expansion Modules in EX4550 Switches: Table 8 (PDF pages 43 to 44) lists the module and its model number; Figure 8 (PDF page 44, the module in three-quarter view) and Figure 11 (PDF page 45, g021424, the face drawn flat with the ST lamp, the lamps and the numbers 0 to 7); Figure 18 (PDF page 52) and Tables 14 and 15 (the port lamps). Installing an Expansion Module (Figure 74) seats it in the EX4550-32F.
+  size: >-
+    estimated - no document dimensions the module. It fills the module slot, 86.5 x 41.0 mm, which juniper/ex4550-em-cover@1 reads
+    off Figures 4 and 6 (the method is there). The figure's outline is read as fractions and applied to 86.5 x 41.0 mm.
+  elements: >-
+    drawing - Figure 11 is a flat elevation, outline 1565 x 725 px at 600 dpi, read as fractions and applied to 86.5 x 41.0 mm. Two rows of four cages: the cells stand 14.98 mm apart (the figure's; the registry's 14.25 mm cage would abut) from 13.8 mm in, the upper row at 6.9 mm and the lower at 23.25 mm, the lower row turned 180 as the library stacks cages (the figure cannot say which way the metal faces: estimated). Four arrow lamps per column sit in the strip between the rows, 20.6 mm down: down arrow and up arrow for link activity of the lower and upper port (callouts 2, 3), then the same pair for status (callouts 4, 5). The ST lamp is at 8.5, 28.6 mm. The numbers print under the block, the even ones higher. A captive screw at each end, 9.2 mm across, the left centred 4.75 mm and the right 7.6 mm from its edge. Eight vent hexagons, three notches along the foot and the legend EX4550-EM-8XSFP at the upper right are drawn. Positions are good to about 0.5 mm.
+  colour: >-
+    estimated - no photograph of this module is held and the figures are line drawings. The plate takes the grey of the
+    nearest held evidence of this maker's module faces (#888c92, the fitted EX-UM-4X4SFP in the EX4300-24T photograph); the
+    screws are silver. A photograph would replace it.
+  led: >-
+    datasheet - guide Figure 11 callouts and Table 9 (PDF page 46): the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and functioning normally. The port lamps are those of the chassis ports (Table 14 link and activity, Table 15 status).
+  weight: >-
+    datasheet - guide, Table 6, Chassis Physical Specifications (PDF page 36): "SFP+ expansion module: 0.74 lb (0.34 kg)".
+  power: >-
+    not published - searched the guide's power tables for a figure for any module and found only whole-switch totals, so the
+    module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      The eight cages, numbered 0 to 7 as printed, the even numbers on the upper row. SFP+ at 10 Gbps, or SFP at 1 Gbps
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four arrow lamps between the rows for each pair of ports: link activity of the lower port, of the upper port, then status of the lower and upper port
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      the ST lamp of the module (guide Table 9)
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [13.8, 6.9], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [13.8, 23.25], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [28.8, 6.9], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [28.8, 23.25], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-4, at: [43.8, 6.9], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-5, at: [43.8, 23.25], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-6, at: [58.8, 6.9], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-7, at: [58.8, 23.25], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/led-arrow-sm@1, id: led-1-link, at: [15.18, 19.64], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-0-link, at: [18.00, 19.64], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-1-status, at: [21.88, 19.64], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-0-status, at: [24.75, 19.64], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-3-link, at: [30.16, 19.64], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-2-link, at: [32.98, 19.64], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-3-status, at: [36.86, 19.64], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-2-status, at: [39.73, 19.64], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-5-link, at: [45.14, 19.64], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-4-link, at: [47.97, 19.64], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-5-status, at: [51.84, 19.64], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-4-status, at: [54.70, 19.64], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-7-link, at: [60.12, 19.64], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-6-link, at: [62.94, 19.64], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-7-status, at: [66.81, 19.64], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-6-status, at: [69.69, 19.64], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [7.46, 27.56], group: status, attrs: {function: module status}}
+elements:
+  screw-left:
+    at: [0.35, 15.10]
+    size: [8.8, 8.8]
+    class: screw
+  screw-right:
+    at: [74.50, 14.80]
+    size: [8.8, 8.8]
+    class: screw
+size:
+  w: 86.5
+  h: 41.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]
