@@ -25,7 +25,7 @@ provenance:
   colour:
     confidence: photo-measured
     note: >-
-      Each colour is the median of a flat patch of the specification sheet's photograph of the NPS-8HS20-1 (the patch sizes are not recorded): the front face #414043, the rear plate #ffffff with black printing, the buttons #fafafa and the top cover #a8a8a6. The top cover is lit from above in the photograph, so its grey is a lit grey and not a paint colour. The red rule is drawn in #ed1c24, an estimate: no patch of the photograph or the figure was read for it; the logo is not drawn. The photograph is 860 pixels wide for the two faces and the sides are seen at an angle, so a colour is read only from a flat patch of a face.
+      Each colour is the median of a flat patch of the specification sheet's photograph of the NPS-8HS20-1 (the patch sizes are not recorded): the front face #414043, the rear plate #ffffff with black printing, the buttons #fafafa and the top cover, lit from above, #a8a8a6. The top is the same black finish as the front seen in brighter light (the enclosure is one painted box with no seam and no separate cover), so it is drawn the front's #414043 and the lit reading is declared in the colour gap. The red rule is drawn in #ed1c24, an estimate: no patch of the photograph or the figure was read for it; the logo is not drawn. The photograph is 860 pixels wide for the two faces and the sides are seen at an angle, so a colour is read only from a flat patch of a face.
   ears:
     confidence: estimated
     note: >-
@@ -78,9 +78,15 @@ chassis:
   color: '#414043'
   ears:
     positions:
-    - {name: flush, label: 1U rack bracket as photographed, default: true}
+    - {name: flush, label: 1U rack bracket as photographed}
   power: ac
 gaps:
+- what: colour
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    The top is drawn the front's #414043, the same black finish as the front. The specification sheet's photograph reads the top plane at #a8a8a6 because it is lit from above; that is the lighting and not a separate finish. The underside and the two sides are drawn the same colour: no patch of the photograph was read for them, as it shows the top and one side at an angle only. No straight-on photograph of the top under neutral light is held.
+  wanted: A photograph of the top and the sides under neutral light.
 - what: straight-on-photographs
   scope: [front, rear]
   reason: needs-photo
@@ -222,7 +228,7 @@ views:
     size: {w: 482.6, h: 220.98}
     panel:
       decor:
-      - {id: top-cover, kind: face-plate, at: [0, 0], size: [482.6, 220.98], fill: '#a8a8a6'}
+      - {id: top-cover, kind: face-plate, at: [0, 0], size: [482.6, 220.98], fill: '#414043'}
   bottom:
     size: {w: 482.6, h: 220.98}
     empty: >-
