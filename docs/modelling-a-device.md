@@ -591,10 +591,84 @@ hang in front of it. A front or rear part that runs across a step (for example t
 flange) has two depths under it and takes the one under its centre row; lint does
 not refuse it, so keep such a part wholly on one level.
 
-**What is not there yet.** Ribs or fins on the housing, relief taken from a fin
-field, and the open state of a housing with a section come in later changes, so a
-modeller should not look for them: a fin is drawn as art on the face for now, and
-a device with a `section` cannot also state `halves`.
+### Ribs on the housing: `chassis.fins`
+
+A housing whose casting carries thick ribs on its top or bottom states them as
+`chassis.fins`, a list of rib fields on the section. A field is on the one edge of
+the section that lies on the top or the bottom of the box (`on`; write the key
+quoted in YAML, `'on': top`, because a bare `on` is read as true). It runs along
+the length from `span[0]` to `span[1]` in millimetres from the left end and puts a
+rib `rib` thick every `rib` plus `gap`, the first at the start of the span.
+
+```yaml
+chassis:
+  section: [...]            # the twelve points above
+  fins:
+  - 'on': top
+    span: [20.0, 587.0]
+    core: 29.0
+    rib: 7.0
+    gap: 7.0
+  - 'on': bottom
+    span: [20.0, 587.0]
+    core: 48.0
+    rib: 7.0
+    gap: 7.0
+    steps:
+    - {span: [20.0, 190.0], height: 48.0}
+    - {span: [190.0, 420.0], height: 32.0}
+    - {span: [420.0, 587.0], height: 48.0}
+provenance:
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      the maker's document and page with the end and side views, and which size
+      figure the ribs are inside
+```
+
+- **`core` is the tallest rib's height.** It is the distance from the section's edge
+  in to the casting's own surface, and the section's edge is the tip line of the
+  tallest rib. So the box and every size stay as stated, and the ribs are inside
+  them. Check: the section is at least as wide as its edge from the edge in to the
+  core (L214 is silent).
+- **The casting is cut back to its core, everywhere along the length.** In the end
+  margins before the first rib and after the last one there are no ribs, and no
+  casting above the core either. Check: from the right end the band between the
+  core and the edge is drawn in a rib tone, standing for the first rib seen behind
+  the cap.
+- **`steps` set a stepped tip line.** Each step is a span and the height of the rib
+  tips above the core surface in it. They tile the span exactly, and one is as tall
+  as the core. A rib takes the height of the step whose half-open span `[from, to)`
+  holds its centre. Check: L211 is silent; the front and rear outlines follow the
+  steps, and the gaps between ribs are filled in the silhouette.
+- **A rib is not a mounting surface.** A part on the front or the rear does not lie
+  above a step's tip line or between the edge and the core (L216). A part on the top
+  or the bottom stands on the rib tops, and the section rule judges it as before.
+- **One inside field to an edge, at most 400 ribs a device.** Fields on one edge do
+  not overlap; a field that cuts the casting back has the edge to itself. A leftover
+  part of a pitch at the end of a span is a warning (L213).
+- **Ribs that stand outside the stated size.** Where the maker's size does not
+  include the ribs, a field states `outside: true`, a `height` and no `core`. The
+  section's edge is then the casting's own surface and the ribs stand out of it by
+  their step heights, up to 60 mm beyond the box. The box and every size read stay
+  the casting's; the picture, the 3D scene and the camera fit include the ribs.
+  Choose the reading by what the maker's figure includes, and say which in
+  `provenance`. An outside field may not share an edge with an inside one.
+- **Art stays inside the outline.** The front and rear outlines follow the steps,
+  so a drawing painted across the whole rectangle covers the cut-back casting. Paint
+  the art inside the outline and the compiled ribs over it.
+
+**In 3D** the body is the section cut back to the core, with each rib a slab
+standing on it up to its step height, all merged into one buffer. A part that slips
+onto a field is read at the core line, where the casting's wall is. Check: look at
+the box from the rear above, from the end and from below; the ribs read as thick
+ribs on a casting, the ends are cut back, and the lower step lies below the tip line
+of its neighbours.
+
+**What is not there yet.** The open state of a housing with a section, relief taken
+from a rib, and a section that varies along the length come in later changes, so a
+modeller should not look for them: a device with a `section` cannot also state
+`halves`, and a ribbed housing is drawn closed.
 
 ## Stage 2: the cutouts
 
