@@ -50,13 +50,14 @@ provenance:
       the button out of the back, and the 70 is the extrusion profile, as the
       DK 7979.130 model reads the same figures. 72.1 is drawn.
   colour:
-    confidence: photo-measured
+    confidence: datasheet
     note: >-
-      THE DATA SHEET AND THE PHOTOGRAPHS DISAGREE. The data sheet (dri1308088en,
-      p.1) says "Aluminium, anodised in RAL 9005 (black, other colours may be
-      configured)"; the photographs held of the basic family show a natural silver
-      side, and none is of this SKU. The body is drawn silver as photographed
-      (#b9bbbe, read by eye, estimated) and the disagreement is a gap.
+      The data sheet (dri1308088en, p.1) says "Aluminium, anodised in RAL 9005
+      (black, other colours may be configured)", so the body is drawn black. The
+      RAL class is the sheet's; the screen value (#0e0e10) is the usual one for
+      RAL 9005 and is estimated, not measured. The photographs held of the basic
+      family show a natural silver side, and none is of this SKU: a unit
+      configured in another finish would differ, and the gap below says so.
   front:
     confidence: drawing
     note: >-
@@ -153,16 +154,18 @@ attrs:
     product-compliance: CE, EAC
   lifecycle:
     eol: none-announced
-chassis: {width: 44, height: 695, depth: 72.1, ru: 16, mount: rack-side, color: '#b9bbbe', airflow: passive}
+chassis: {width: 44, height: 695, depth: 72.1, ru: 16, mount: rack-side, color: '#0e0e10', airflow: passive}
 gaps:
 - what: colour
   scope: [front, rear, left, right]
   reason: sources-disagree
   note: >-
-    the data sheet says black anodised RAL 9005 ("other colours may be configured");
-    the photographs of the basic family show a natural silver extrusion and none is
-    of this SKU. Silver is drawn.
-  wanted: a rating plate or order note naming the finish of this SKU.
+    the data sheet (dri1308088en, p.1) says black anodised RAL 9005 ("other colours may be configured")
+    and black is drawn; the photographs of the basic family show a natural silver
+    extrusion, none of this SKU, so whether a unit of this SKU ships in another
+    finish is not known. The screen value #0e0e10 is the usual one for RAL 9005,
+    estimated.
+  wanted: a photograph of this SKU, or a rating plate or order note naming its finish.
 - what: numbering
   scope: [front]
   reason: needs-photo
