@@ -6,7 +6,9 @@ maturity: modelled
 manufacturer: Eaton
 model: SRCABLEDUCTVRT
 description: >-
-  Eaton Tripp Lite series SmartRack 6 ft vertical cable manager, a double finger duct with cover. It is
+  Eaton Tripp Lite series SmartRack vertical cable manager, a double finger duct with cover, which Eaton
+  names a 6 ft (1.83 m) manager sold as two 3-foot sections. It is drawn at the length its drawing and
+  sheet dimension, 862.6 mm (about 34 in), which is about one section. It is
   a black cold rolled steel channel 40 mm wide on a back plate 48.47 mm wide, 862.6 mm long,
   that hangs on two toolless mounting buttons beside the equipment and stands 71.95 mm deep over
   them. A wall down its left and one down its right each carry 48 slots; a cable is laid through a slot
@@ -18,7 +20,7 @@ provenance:
     confidence: drawing
     note: >-
       THE MAKER'S OWN DOCUMENTS, both read from the Eaton SKU page of SRCABLEDUCTVRT. The specification
-      sheet (skuPage.SRCABLEDUCTVRT.pdf, one page, (c) 2026 Eaton) and the submittal drawing (13-03-167,
+      sheet (skuPage.SRCABLEDUCTVRT.pdf, two pages, the second only the project-name form, (c) 2026 Eaton) and the submittal drawing (13-03-167,
       two pages, (c) 2013 Tripp Lite). No document names terms of use for the drawing; figures were read
       and nothing was copied. The SmartRack Accessories Visio stencil linked on the page was not read.
   size-conflict:
@@ -152,18 +154,30 @@ gaps:
     wanted: the owner's manual, or a dimensioned drawing of the assembled two-piece duct
   - what: two-piece
     scope: [front, left, right]
+    reason: sources-disagree
+    note: >-
+      Eaton names it a 6 ft (1.83 m) manager and the drawing says it is a two piece design, split into
+      two 3-foot sections, but every view dimensions 862.6 mm (33.96 in) and the sheet gives 34.13 in,
+      which is about one 3-foot section, not 6 ft. Nothing says whether the drawing shows one section or
+      the assembled run, and no view shows a joint or how far apart two back plates stand. It is drawn
+      as one length of 862.6 mm with no seam, and is not called 6 ft here.
+    wanted: a dimensioned drawing of one section and of the assembled duct, or the owner's manual
+  - what: weight-basis
+    scope: [front]
     reason: vendor-silent
     note: >-
-      the drawing says the duct is a two piece design, split into two 3-foot sections, and draws the
-      assembled length; no view shows the joint or how far apart the two back plates stand. It is drawn
-      as one length with no seam.
-    wanted: a dimensioned drawing of one section
+      the specification sheet and the drawing give 1.8 kg (4 lb); neither says whether that is one
+      section or both.
+    wanted: the owner's manual, or the shipping weight with the number of sections in the carton
   - what: slot-length
     scope: [left, right]
     reason: sources-disagree
     note: >-
       the side view dimensions a slot 44.99 mm [1.77 in] long, and the slot as drawn measures about 42.8
-      mm at the scale the 62.71 mm overall gives (115 px of 170 at 300 dpi). The dimension is drawn.
+      mm at the scale the 62.71 mm overall gives (115 px of 170 at 300 dpi). The dimension is drawn. The
+      first slot is placed 3.1 mm from the top and the last leaves 5.5 mm at the foot (estimated); the
+      drawing measures about 2.7 mm and 2 mm, against a scale that is not self-consistent. The lip depth,
+      7.72 mm (62.71 less 54.99), is worked out from the dimensions; the picture shows about 10.6 mm.
     wanted: a dimensioned detail of one slot
   - what: rear-features
     scope: [rear, top, bottom]
@@ -172,7 +186,9 @@ gaps:
       the rear view draws the plate narrower at its top end, and the end view draws the button's
       stepped profile and the hooks at the cover's edge; none is drawn (the button is a plain block
       on the end and side faces). The five holes are drawn at an estimated size and no
-      document says what they are for, so no pass-through is declared.
+      document says what they are for, so no pass-through is declared. The rear draws the holes as dark
+      decor, while the cover-off front shows the base's holes cut through; the two faces disagree and
+      the drawing does not settle it.
     wanted: a dimensioned detail of the plate's end and of the button
   - what: button-fit
     scope: [rear]

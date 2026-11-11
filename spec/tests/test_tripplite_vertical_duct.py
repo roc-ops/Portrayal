@@ -1,4 +1,4 @@
-"""Eaton Tripp Lite series SmartRack SRCABLEDUCTVRT, the 6 ft vertical finger duct (roc-ops/Portrayal#1094).
+"""Eaton Tripp Lite series SmartRack SRCABLEDUCTVRT, the vertical finger duct (roc-ops/Portrayal#1094).
 
 The figures are those the maker's submittal drawing dimensions on its views, in inches as printed and
 converted here: 1.91 x 33.96 in for the plate, 2.47 in from the plate to the cover and 2.83 in over the

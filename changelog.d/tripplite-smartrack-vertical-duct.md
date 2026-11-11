@@ -1,5 +1,6 @@
 ### Added
-- Eaton (Tripp Lite series) SmartRack 6 ft vertical cable manager, second slice of #1094 (part of #1091):
+- Eaton (Tripp Lite series) SmartRack vertical cable manager (Eaton names it 6 ft, sold in two 3-foot
+  sections; drawn at the 862.6 mm its drawing dimensions), second slice of #1094 (part of #1091):
   `eaton/srcableductvrt`, a double finger duct with cover that hangs on two toolless mounting buttons
   beside the equipment, modelled as a `rack-side` part from the maker's specification sheet and
   submittal drawing. It is 48.47 x 862.6 x 71.95 mm from the drawing's dimensioned views, which settles
