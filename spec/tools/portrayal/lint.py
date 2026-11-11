@@ -268,7 +268,7 @@ RULES = {
     "L55": ("library",    "every vendor namespace is in spec/schemas/vendors.yaml", "add the vendor to the registry with display, role and source",
             "A namespace missing from the registry breaks the link from the name on the metal to the company that owns it now, so a search under the current name finds nothing.",
             MIXED),
-    "L56": ("listing",    "a listing sits under a software or reseller vendor in spec/schemas/vendors.yaml and lists a device that exists - every configuration it overrides, port it names and component it maps is the hardware's, and a reseller's carries no `nos`, `nos-versions` or `interfaces`", "register the vendor with role software (a NOS) or reseller (hardware sold under its own part numbers), point `hardware` at a device's <namespace>/<directory>, and name only configurations and ids that device declares",
+    "L56": ("listing",    "a listing sits under a software or reseller vendor in spec/schemas/vendors.yaml and lists a device or a rack product that exists - every configuration it overrides, port it names and component it maps is the hardware's, a reseller's carries no `nos`, `nos-versions` or `interfaces`, and the listing of a rack product sits under a reseller and overrides no configuration, port or component", "register the vendor with role software (a NOS) or reseller (hardware sold under its own part numbers), point `hardware` at a device's or a rack product's <namespace>/<directory>, and name only configurations and ids that device declares",
             "A listing that names a port, configuration or part the hardware lacks would export interfaces and modules to a DCIM that no box has.",
             ERROR),
     "L57": ("device",     "exactly one configuration is `kind: base`, and each says whether it is orderable", "set `kind` on every configuration",
@@ -679,8 +679,8 @@ RULES = {
     "L192": ("component, device", "in Portrayal's own library a device or component states no `audience`, or states `public` (error); a project that keeps private entries beside the public library runs lint with `--allow-audience`", "delete the `audience` line, or set it to `public`; move a private entry to the library that holds private entries",
              "The public library is published to everyone, so a part labelled for one customer or kept internal there is either a leak or a label that means nothing; the check stops the label from reaching the published library.",
              ERROR),
-    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
-             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth; a stand-in that is not declared reads as a printed figure.",
+    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, an `enclosure` is stated only on a cabinet form with each door face and each channel `id` once and a `hinge` on a `reversible` door, a channel stands at an attachment point its form has and its slots present an interface the connector registry names, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; state an enclosure only on a cabinet; give each door face and each channel one entry; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
+             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth and names its channels by id; a stand-in that is not declared reads as a printed figure.",
              ERROR),
     "L194": ("component", "a bay that states an `interface` does not also list, in `accepts`, a part that mates it and is wide enough for the bay", "delete the entry from `accepts`: the bay takes it through its `interface` already; keep in `accepts` only the parts that do not mate it, such as a vendor blank",
              "A list kept beside the interface it was written for goes on asserting what the interface already says, and the next card added to the library is then named by hand in one riser and by its interface in the others.",
@@ -8154,6 +8154,43 @@ def _listing_targets(rules, field):
 
 
 FOUR_POST_FORMS = {"4-post-frame", "4-post-cabinet"}
+CABINET_FORMS = {"4-post-cabinet", "wall-cabinet", "wall-cabinet-vertical"}
+# the zero-U attachment points of a form: the corners of a four-post, the sides of the rest
+FOUR_POST_POINTS = ("left-front", "right-front", "left-rear", "right-rear")
+TWO_POST_POINTS = ("left", "right")
+
+
+def lint_rack_cabinet(path, data):
+    """L193, the cabinet keys: an enclosure belongs to a cabinet, a door face and a channel
+    are stated once, a channel stands at a point its form has, and its slots present a
+    mount the connector registry names."""
+    form = data.get("form")
+    enc = data.get("enclosure")
+    if enc and form not in CABINET_FORMS:
+        err(path, "L193", f"form {form!r} is not a cabinet and has no `enclosure`: a frame has no "
+            "doors, panels or roof to state")
+    faces = [d.get("face") for d in (enc or {}).get("doors") or [] if isinstance(d, dict)]
+    for face in sorted({f for f in faces if faces.count(f) > 1}):
+        err(path, "L193", f"the {face} door is stated twice: one entry for each face")
+    for d in (enc or {}).get("doors") or []:
+        if isinstance(d, dict) and d.get("reversible") and not d.get("hinge"):
+            err(path, "L193", f"the {d.get('face')} door is `reversible` and states no `hinge`: say "
+                "which side it ships on")
+    points = FOUR_POST_POINTS if form in FOUR_POST_FORMS else TWO_POST_POINTS
+    ids = [c.get("id") for c in data.get("channels") or [] if isinstance(c, dict)]
+    for cid in sorted({i for i in ids if ids.count(i) > 1}):
+        err(path, "L193", f"the channel {cid!r} is stated twice: a saved rack names a channel by its id")
+    interfaces = _connectors()
+    for c in data.get("channels") or []:
+        if not isinstance(c, dict):
+            continue
+        if c.get("point") not in points:
+            err(path, "L193", f"channel {c.get('id')!r} stands at the point {c.get('point')!r}, and "
+                f"form {form!r} has {', '.join(points)}")
+        iface = (c.get("slots") or {}).get("interface")
+        if iface and interfaces and iface not in interfaces:
+            err(path, "L193", f"channel {c.get('id')!r}: the slot interface {iface!r} is not in the "
+                "connector registry")
 
 
 def lint_rack(path, data, roots):
@@ -8190,6 +8227,7 @@ def lint_rack(path, data, roots):
         f = depth.get("factory")
         if f is not None and lo is not None and hi is not None and not lo <= f <= hi:
             err(path, "L193", f"the factory depth {f} mm is outside the range {lo} to {hi}")
+    lint_rack_cabinet(path, data)
     gaps = {g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
     for key, prov in (data.get("provenance") or {}).items():
         if str(key).split(".")[0] not in data:
@@ -8248,9 +8286,15 @@ def lint_listing(path, data, roots):
                 if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
     dev = load_yaml(man) if man else None
     if not isinstance(dev, dict) or dev.get("kind") != "device":
-        err(path, "L56", f"hardware {hw!r} is not a device in the library. A listing "
-            "points at the device it lists as <namespace>/<directory>, e.g. "
-            "`ufispace/s9510-28dc` - model the hardware first; a listing draws nothing")
+        rack = next((Path(r) / "racks" / hw / "rack.yaml" for r in roots
+                     if (Path(r) / "racks" / hw / "rack.yaml").exists()), None)
+        if rack is not None:
+            lint_rack_listing(path, data, hw, roles)
+            return
+        err(path, "L56", f"hardware {hw!r} is not a device or a rack product in the library. A "
+            "listing points at what it lists as <namespace>/<directory>, e.g. "
+            "`ufispace/s9510-28dc` or a cabinet such as `apc/ar3100b2` - model the "
+            "hardware first; a listing draws nothing")
         return
     cfgs = set((dev.get("configurations") or {}).keys())
     for c in (data.get("configurations") or {}):
@@ -8277,6 +8321,24 @@ def lint_listing(path, data, roots):
                 "place. A component the NOS reports has to land on something drawn - map "
                 "it to `chassis`, a `region:`, or the id the hardware uses")
             break
+
+
+def lint_rack_listing(path, data, hw, roles):
+    """L56, for a listing whose hardware is a rack product (a cabinet a reseller sells).
+
+    Only a reseller lists a rack: a NOS runs on a box, and a cabinet has none. The
+    listing renames the product (`model`, `aliases`) and says where the seller lists
+    it; a rack product has no configurations, interfaces or components for it to
+    override, so the keys that override them are refused rather than ignored.
+    """
+    if "reseller" not in roles:
+        err(path, "L56", f"hardware {hw!r} is a rack product, and only a reseller lists a rack. "
+            "Register the vendor with role reseller, or list the rack under the vendor that sells it")
+    for key in ("configurations", "type-name", "entity-map", "terms", "dumps"):
+        if data.get(key):
+            err(path, "L56", f"`{key}` is stated on a listing of the rack product {hw!r}: a rack "
+                "product has no configurations, ports or components to override, so a listing "
+                "of one says only `model`, `aliases`, `portfolio` and `source`")
 
 
 def lint_breakout_modes(path, data):

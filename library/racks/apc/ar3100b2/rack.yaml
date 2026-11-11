@@ -1,0 +1,223 @@
+format: 1
+kind: rack
+name: ar3100b2
+version: 1.0.0
+maturity: modelled
+manufacturer: APC
+model: AR3100B2
+part-numbers:
+  AR3100B2: APC NetShelter SX Server Rack Gen2, 42U, 600 mm wide, 1070 mm deep, with sides
+description: >-
+  The APC NetShelter SX second-generation cabinet, 42U, 600 mm wide and 1070 mm deep, in black.
+  It has a perforated front door, a split pair of rear doors, two side panels a side, a removable roof
+  and two zero-U accessory channels at the rear. Its rails adjust in 6 mm steps. It stands on four casters
+  and four levelling feet.
+form: 4-post-cabinet
+ru: 42
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+  size: 9.8
+  fixing: M6
+hole-centres: 465
+opening: 450
+rails:
+  - id: front
+  - id: rear
+    depth:
+      min: 190
+      max: 781
+      step: 6
+      factory: 737
+max-device-depth: 915
+outer:
+  w: 600
+  h: 1991
+  d: 1070
+weight-kg: 130.2
+load:
+  static-kg: 1818
+  rolling-kg: 1020.58
+enclosure:
+  doors:
+    - face: front
+      leaves: 1
+      kind: perforated
+      open-area: 80
+      hinge: left
+      reversible: true
+      swing: 180
+      clearance: 60.96
+      lock: key
+    - face: rear
+      leaves: 2
+      kind: perforated
+      open-area: 80
+      swing: 180
+      lock: key
+  panels:
+    per-side: 2
+    split: top-bottom
+    removable: true
+    lock: key
+  roof:
+    removable: true
+base:
+  casters: 4
+  levellers: 4
+channels:
+  - id: left-rear
+    point: left-rear
+    where: inside
+    slots:
+      interface: pdu-button
+      first: 213
+      pitch: 311
+      count: 6
+    moves:
+      front-back: true
+  - id: right-rear
+    point: right-rear
+    where: inside
+    slots:
+      interface: pdu-button
+      first: 213
+      pitch: 311
+      count: 6
+    moves:
+      front-back: true
+datasheet:
+  title: APC NetShelter SX Floor Standing Cabinet Datasheet, FS.com
+  url: https://resource.fs.com/mall/resource/apc-netshelter-sx-floor-standing-cabinet-datasheet.pdf
+references:
+  - title: NetShelter SX 2nd Generation Racks, Installation and Customization, Schneider Electric
+    url: https://resource.fs.com/mall/resource/apc-netshelter-sx-floor-standing-cabinet-user-manual.pdf
+  - title: APC NetShelter SX Server Rack Gen 2, 42U, 600 mm wide x 1070 mm deep, perforated door, submittal drawing AR3100B2 (4 sheets), Schneider Electric
+    url: https://resource.fs.com/mall/resource/apc-netshelter-ar3100b2-floor-standing-cabinet-technical-drawing.pdf
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      "Rack Unit 42U" for item 368069 in the FS datasheet (page 4), and 42 U-space in the manual's
+      specifications table (page 28). Page numbers are the ones printed. The submittal drawing's internal front view (sheet 4) marks the
+      42nd unit at the top of the rails.
+  form:
+    confidence: drawing
+    note: >-
+      A floor-standing cabinet with four vertical mounting rails, a front door, split rear doors and
+      side panels (submittal drawing sheets 1, 2 and 4; manual page 1).
+  numbering:
+    confidence: drawing
+    note: >-
+      The internal front view (submittal drawing sheet 4) labels the lowest unit "1U" and the highest
+      "42U", so the labels run bottom-up from 1. The manual says only that every third hole is
+      numbered.
+  width:
+    confidence: datasheet
+    note: >-
+      "Mounting Width EIA 19''" in the FS datasheet (page 4). The manual's installation pages give no
+      other rail width for the 600 mm cabinet.
+  holes:
+    confidence: drawing
+    note: >-
+      The internal front view (submittal drawing sheet 4) prints the rail holes as 9.8 x 9.8 square, and
+      the FS datasheet says "Square-Punched". The manual ships M6 cage nuts (hardware list, page 5) and
+      says to fit them horizontally (page 27). The same drawing prints 9.5 square for the pattern at the
+      side braces, which is not the rail's.
+  hole-centres:
+    confidence: drawing
+    note: >-
+      "465 hole to hole per EIA-310" on the internal front view (submittal drawing sheet 4).
+  opening:
+    confidence: drawing
+    note: >-
+      "450 min opening per EIA-310" on the section view (submittal drawing sheet 2). The drawing prints
+      it as a minimum, so it is the clear width between the rails at the least.
+  rails:
+    confidence: datasheet
+    note: >-
+      The manual (page 21) says the rails ship at 737 mm and, with the accessory channels fitted, can
+      stand 190 mm at the least and 781 mm at the most; without them 921 mm at the most. The range
+      written is the channels-fitted one, which is how the cabinet ships. The submittal drawing prints
+      the factory position as 737 mm between the rails (outside), the range as 190.5 to 915 mm in 6 mm
+      steps, and 581 mm hole to hole at the factory setting (sheets 2 and 4).
+  max-device-depth:
+    confidence: datasheet
+    note: >-
+      "Maximum Device Depth 36.02'' (915mm)" for item 368069 in the FS datasheet (page 4).
+  outer:
+    confidence: datasheet
+    note: >-
+      1991 x 600 x 1070 mm in the FS datasheet (page 4) and the manual's table (page 28); the
+      submittal drawing's general arrangement (sheet 1) prints the same three figures.
+  weight-kg:
+    confidence: drawing
+    note: >-
+      "Net weight of the unit is 130.2 kg" (287 lb), note 5 of the submittal drawing's general
+      arrangement (sheet 1).
+  load:
+    confidence: datasheet
+    note: >-
+      The manual's specifications table (page 28) rates a 42 to 48 U cabinet at 1818 kg (4000 lb)
+      static, with the levelling feet lowered, and 1020.58 kg (2250 lb) dynamic, on its casters.
+  enclosure:
+    confidence: drawing
+    note: >-
+      Front: one perforated door, 80 per cent open area (manual page 28), "door handle with 3-point
+      locking system" (submittal drawing sheet 1), hinges on the left as shipped and reversible (manual
+      pages 15 and 19), opening 180 degrees (manual page 1; drawing sheet 2 shows 180 with a maximum
+      of 266), 60.96 mm wiring clearance between the door and the vertical rail (manual page 28).
+      Rear: a pair of doors (drawing sheets 1 and 2), opening 180 degrees; the FS datasheet (page 1)
+      says both the front and back doors lock. Side panels: a top and a bottom panel each side,
+      each with a lock, and a key for doors and side panels (manual page 4). Roof: "removed toollessly"
+      (FS datasheet page 2).
+  base:
+    confidence: drawing
+    note: >-
+      "Adjustable leveling feet (4 places)" and "caster (4 places)" on the bottom view (submittal
+      drawing sheet 3).
+  channels:
+    confidence: estimated
+    note: >-
+      A cabinet of this depth ships with two accessory channels, in the rear of the rack by default, and
+      the manual (page 26) says a channel moves along the side rails. Their ids and points follow from
+      that, and the right channel is taken as the left's mirror: the drawing shows the left side only,
+      and the shop photographs of the cabinet show both channels alike. The internal left-side view
+      (submittal drawing sheet 4) draws the "RMPDU mounting bracket" with a repeating group of
+      keyholes, "311 typ." apart, and a dimension chain from the floor of 303, 311, 622 and 311 mm. The
+      pitch is the drawing's. The first slot, 213 mm above the rails' bottom edge, is the 303 mm to the
+      first group less the 90 mm the drawing gives from the floor to the rails; the count of 6 is the
+      chain's groups at that pitch. Both assume each dimension ends on the same feature of its group,
+      which the drawing does not name. That the keyholes take a PDU's mounting button rests on the
+      manual's "toolless mounting capabilities for Rack Power Distribution Units", not on a stated
+      interface.
+gaps:
+  - what: rails
+    reason: sources-disagree
+    note: >-
+      The manual and the submittal drawing measure the rail position differently: 737 mm at the factory
+      setting in both, but 190 to 781 mm (921 without the channels) in the manual and 190.5 to 915 mm
+      in the drawing, which also prints 581 mm hole to hole. Neither says which faces of the rails the
+      737 mm is taken between.
+    wanted: Which faces of the front and rear rails the 737 mm is measured between, from the maker.
+  - what: load
+    reason: sources-disagree
+    note: >-
+      The manual prints 1818 kg for 4000 lb, and the FS datasheet and shop page print 1814 kg for the same
+      4000 lb. The manual's figure is written here.
+    wanted: The rating in kilograms the maker publishes for the current product.
+  - what: channels
+    reason: needs-drawing
+    note: >-
+      The position of the first slot and the number of slots are inferred from a dimension chain whose
+      end points the drawing does not name.
+    wanted: A dimensioned drawing of the accessory channel with each keyhole's centre.
+  - what: rear-door-hinge
+    reason: vendor-silent
+    note: >-
+      The drawing shows the rear as a pair of doors and the manual does not say on which sides they
+      hinge or whether they reverse.
+    wanted: The manual's rear-door section, or a dimensioned rear view.

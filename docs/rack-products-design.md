@@ -695,6 +695,22 @@ cabinets, wall and vertical, and desktop.
    range and step. A ref the catalogue lacks, or whose fixed numbers no longer
    match, loads with a note and is drawn from the file's numbers.
 
+   **Built (#936, the first cabinet):** the schema gains `enclosure` (`doors`
+   with `face`, `leaves`, `kind`, `open-area`, `hinge`, `reversible`, `swing`,
+   `clearance` and `lock`; `panels`; `roof`), `base` (`casters`, `levellers`) and
+   `channels` (`id`, `point`, `where`, `slots` with `interface`, `first`, `pitch`
+   and `count`, and `moves.front-back`), each key only as far as a held document
+   states it for the NetShelter SX AR3100B2, `library/racks/apc/ar3100b2`. L193
+   holds the rules across keys (section 3 and 4). The lock reads a channel as
+   one entry of its own and `enclosure` and `base` as stated figures: a new
+   channel is a minor, a gone, renamed or moved one a major, and a corrected door
+   figure a patch. Not built: `points`, `options` and a depth range's `with`,
+   `baying`, `entries`, `anchors`, a channel's `ru`, `at` and `up-down`, a
+   door's `hinge` on a split pair, and `frames` rows in `rack.json` carrying the
+   new keys. The listing is FS.com's, `library/devices/fs/ar3100b2/listing.yaml`,
+   and `dcim_export.py --racks` files the cabinet under the seller as well as
+   under its maker ([listing-a-nos.md](listing-a-nos.md)).
+
 3. **Hosting.** `hosts:` on devices, `chassis.ears.holes`, and rack file
    version 4 with all of section 9's keys at once; setback (#908 and the
    paused site design) lands in the same version. Fit, describe, inspect and
