@@ -1,0 +1,253 @@
+format: 1
+kind: device
+name: '00404167'
+version: 0.1.0
+maturity: modelled
+manufacturer: NavePoint
+model: '00404167'
+description: '1U horizontal plastic cable management raceway, NavePoint 00404167: a black plastic back
+  plate the full 19 in wide. A channel 46.99 mm deep stands out of it, with a snap cover across it. The
+  page lists a cable pass-through.'
+profile: passive
+provenance:
+  method: {confidence: estimated, note: 'FIGURES FROM A PRODUCT PAGE, NO DRAWING. NavePoint publishes
+      no datasheet or drawing for this part; the held page (NavePoint product page for 00404167 (navepoint-1u-horizontal-plastic-cable-management-raceway-2-inches-deep-black.txt,
+      saved 2026-11-11)) gives "Dimensions: 19"L x 2.36"W x 1.75"H", Color Black, Material Plastic, Rack
+      Units 1U, Number of Channels 1, Channel Cover Type snap, Channel Depth 1.85" and Cable Pass Through
+      Yes. The installation manual the page links is not held. Everything inside the stated outer size
+      (the plate and cover thickness, the walls, the clear opening between the rails) is estimated. No
+      product photograph is held either, so no shape was checked and none was copied.'}
+  chassis: {confidence: datasheet, note: 'page - 482.6 x 44.45 x 59.94 mm from "19"L x 2.36"W x 1.75"H"
+      (the page''s L, H and W are the width, height and depth). The width is the 19 in with the ears,
+      as a rack-face part is its ears and what hangs off them. The depth is the overall projection, cover
+      included.'}
+  mount: {confidence: estimated, note: 'estimated - the page says the raceway mounts on standard 19 in
+      racks and ships four M6 cage nuts, screws and washers, and says nothing of which face. It is taken
+      as a rack-face part that bolts to the rail face and stands out from it, as the other horizontal
+      managers are.'}
+  thickness: {confidence: estimated, note: estimated - the plate 6.47 mm; see the back plate component.}
+  channel: {confidence: datasheet, note: 'page - "Channel Depth: 1.85\"" is 46.99 mm; the duct guide is
+      the clear space between the two walls.'}
+  front: {confidence: estimated, note: 'estimated - the snap cover, fitted, across the channel; the walls
+      and the plate stand behind it.'}
+  rear: {confidence: estimated, note: 'estimated - the back of the plate, plain. The page lists a cable
+      pass-through and shows no place or size for it, so none is drawn (see `gaps`).'}
+  top: {confidence: estimated, note: 'estimated - an elevation, rear at the top: the plate, the wall seen
+      edge-on and the cover across the front. The bottom is the same.'}
+  left: {confidence: estimated, note: 'estimated - the end view: the plate, the two walls and the cover''s
+      face. The right is the same, turned round.'}
+  guides: {confidence: estimated, note: 'estimated - the duct is the channel between the two walls, run
+      across the rack; 450.0 long by 40.45 clear. The page names no fingers, so no finger pitch is stated.'}
+  attrs: {confidence: datasheet, note: 'page - the material, colour and the hardware in the box (four
+      M6 cage nuts, screws and washers).'}
+  color: {confidence: estimated, note: 'estimated - "Black". No photograph is held, so the shades are
+      this library''s render of black plastic.'}
+attrs:
+  physical: {material: Plastic, color: Black, mounting-hardware: '4 x M6 cage nuts, 4 x M6 screws, 4 x
+      M6 washers'}
+chassis: {width: 482.6, height: 44.45, depth: 59.94, ru: 1, mount: rack-face, shell: sheet, thickness: 6.47,
+  color: '#2b2d30'}
+gaps:
+- {what: weight, reason: vendor-silent, note: 'the page states no product weight; the weight in its embedded
+    record is a shipping weight that contradicts the other raceway pages (the 1U 2 in raceway is heavier
+    than the 1U 4 in), so none is recorded.', wanted: a datasheet or the installation manual's weight}
+- what: cable-pass-through
+  scope: [rear, front]
+  reason: needs-drawing
+  note: 'the page lists "Cable Pass Through: Yes" and shows no size or place, so no opening is drawn or
+    declared.'
+  wanted: the installation manual's drawing of the pass-through
+- what: cover-mechanism
+  scope: [front, top, left]
+  reason: sources-disagree
+  note: the table says snap and the bullets say the cover rotates up and down; the format has no hinge,
+    so the cover is one fitted plate that comes off.
+  wanted: the installation manual's drawing of the cover
+- {what: cable-capacity, reason: vendor-silent, note: 'the page states no cable capacity or fill, so none
+    is recorded or estimated.', wanted: a capacity figure and the cable it is stated for}
+groups:
+  body: {term: Back plate, role: furniture, index-origin: 1, description: the plastic back plate with
+      its ears}
+  walls: {term: Wall, role: furniture, index-origin: 1, description: the two side walls of the channel}
+  cover: {term: Cover, role: furniture, index-origin: 1, description: 'the snap cover across the channel,
+      shipped fitted'}
+views:
+  front:
+    size: {w: 482.6, h: 44.45}
+    components:
+      placements:
+      - ref: navepoint/00404167-base@1
+        id: base
+        at: [0.0, 0.0]
+        group: body
+        rel-pos: 1
+      - ref: navepoint/00404167-wall@1
+        id: wall-upper
+        at: [16.3, 0.0]
+        group: walls
+        rel-pos: 1
+        in: base
+        under: cover
+      - ref: navepoint/00404167-wall@1
+        id: wall-lower
+        at: [16.3, 42.45]
+        group: walls
+        rel-pos: 2
+        in: base
+        under: cover
+      - ref: navepoint/00404167-cover@1
+        id: cover
+        at: [16.3, 0.0]
+        group: cover
+        rel-pos: 1
+        in: base
+        lift: 46.99
+        only-in: [base]
+    guides:
+    - id: duct
+      kind: duct
+      at: [16.3, 2.0]
+      size: [450.0, 40.45]
+      run: x
+      confidence: estimated
+      source: 'NavePoint product page 00404167: Channel Depth 1.85"; the length is the opening between
+        the rails and the height is the part''s less two walls'
+  rear:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+      - id: back
+        at: [0, 0]
+        size: [482.6, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        sink: 0.05
+        kind: base
+  top:
+    size: {w: 482.6, h: 59.94}
+    panel:
+      decor: &id001
+      - &id002
+        id: plate
+        at: [0, 0]
+        size: [482.6, 6.47]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id003
+        id: wall
+        at: [16.3, 6.47]
+        size: [450.0, 46.99]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover
+        at: [16.3, 53.46]
+        size: [450.0, 6.48]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  bottom:
+    size: {w: 482.6, h: 59.94}
+    panel:
+      decor: *id001
+  left:
+    size: {w: 59.94, h: 44.45}
+    panel:
+      decor:
+      - &id005
+        id: plate
+        at: [0, 0]
+        size: [6.47, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id006
+        id: wall-upper
+        at: [6.47, 0]
+        size: [46.99, 2.0]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - &id007
+        id: wall-lower
+        at: [6.47, 42.45]
+        size: [46.99, 2.0]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover-face
+        at: [53.46, 0]
+        size: [6.48, 44.45]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  right:
+    size: {w: 59.94, h: 44.45}
+    panel:
+      decor:
+      - &id008
+        id: plate
+        at: [53.47, 0]
+        size: [6.47, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id009
+        id: wall-upper
+        at: [6.48, 0]
+        size: [46.99, 2.0]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - &id010
+        id: wall-lower
+        at: [6.48, 42.45]
+        size: [46.99, 2.0]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover-face
+        at: [0, 0]
+        size: [6.48, 44.45]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  top-open:
+    face: top
+    size: {w: 482.6, h: 59.94}
+    panel:
+      decor: &id004
+      - *id002
+      - *id003
+  bottom-open:
+    face: bottom
+    size: {w: 482.6, h: 59.94}
+    panel:
+      decor: *id004
+  left-open:
+    face: left
+    size: {w: 59.94, h: 44.45}
+    panel:
+      decor:
+      - *id005
+      - *id006
+      - *id007
+  right-open:
+    face: right
+    size: {w: 59.94, h: 44.45}
+    panel:
+      decor:
+      - *id008
+      - *id009
+      - *id010
+configurations:
+  base: {kind: base, default: true, description: 'The raceway as NavePoint ships 00404167, cover fitted.'}
+  cover-off:
+    kind: example
+    description: The same raceway with its snap cover off, the channel open to lay a cable in. The cover
+      comes with the raceway, so this is an illustration and not a device type.
+    views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+datasheet: {title: 'NavePoint 1U Horizontal Plastic Cable Management Raceway 2 inches deep, Black (product
+    page, SKU 00404167, saved 2026-11-11)', url: 'https://navepoint.com/navepoint-1u-horizontal-plastic-cable-management-raceway-2-inches-deep-black/',
+  sha256: 60a792adca8f914b438dac4ea52f95dffa7c90284eda4b5117a578be5f8c2dd8}

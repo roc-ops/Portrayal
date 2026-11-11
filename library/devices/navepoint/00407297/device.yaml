@@ -1,0 +1,233 @@
+format: 1
+kind: device
+name: 00407297
+version: 0.1.0
+maturity: modelled
+manufacturer: NavePoint
+model: 00407297
+description: '44U vertical cable manager, NavePoint 00407297: a black powder coated cold rolled steel
+  channel 1955.8 mm long, with a snap cover across its open side. It stands beside the rack on L-brackets
+  and takes no rack unit.'
+profile: passive
+provenance:
+  method: {confidence: estimated, note: 'FIGURES FROM A PRODUCT PAGE, NO DRAWING. NavePoint publishes
+      no datasheet for this part. The held page (NavePoint product page for 00407297 (44u-vertical-cable-management-black-finish.txt
+      and .html, saved 2026-11-11)) gives the length (77 in) and a 3.72 in width and height in its embedded
+      record, a 3.72 in depth in the description and the table, cold rolled steel with a black powder
+      coat, one channel and a snap cover. The 2D and 3D CAD files the page links are not held. Everything
+      inside the outer size is estimated. No product photograph is held, so the shape was not checked
+      and nothing was copied.'}
+  chassis: {confidence: datasheet, note: 'page - 94.49 x 1955.8 x 94.49 mm; the page gives 3.72 in as
+      both the width and the depth, so the section is square (see `gaps`). The length is the 44 rack units
+      of 1.75 in.'}
+  mount: {confidence: estimated, note: 'estimated - `rack-side`: the page says it is for 19 or 23 in racks
+      and recommends L-brackets (p/n 00407301), two for the 24U and three or four for the 40U and 44U.
+      Which side is a placement''s to say; the brackets are not drawn.'}
+  thickness: {confidence: estimated, note: estimated - the plate 1.5 mm.}
+  front: {confidence: estimated, note: 'estimated - the snap cover, fitted, along the whole length; the
+      plate and the walls stand behind it.'}
+  rear: {confidence: estimated, note: 'estimated - the back of the plate, plain.'}
+  guides: {confidence: estimated, note: 'estimated - the duct is the channel between the two walls, run
+      down the length; no fingers are named.'}
+  attrs: {confidence: datasheet, note: 'page - material, finish, the CE, EIA and ECA 310-E statement.'}
+  color: {confidence: estimated, note: estimated - black powder coat; no photograph is held.}
+attrs:
+  physical: {material: Cold Rolled Steel, finish: Black powder coat, color: Black}
+chassis: {width: 94.49, height: 1955.8, depth: 94.49, ru: 44, mount: rack-side, shell: sheet, thickness: 1.5,
+  color: '#2b2d30'}
+gaps:
+- {what: weight, reason: sources-disagree, note: 'the page''s embedded record states 27 lb for the 24U
+    and 44U and 20 lb for the 40U, which no length explains, and they are shipping weights; none is recorded.',
+  wanted: a datasheet weight}
+- what: section
+  scope: [front, top, left, right]
+  reason: needs-drawing
+  note: the page gives 3.72 in for the width and for the depth, and the same figure for the channel depth,
+    which leaves no wall; the section is drawn 3.72 in square and the walls are estimated.
+  wanted: the 2D CAD drawing the page links
+- what: brackets
+  scope: [rear]
+  reason: needs-drawing
+  note: the L-brackets (00407301) are a separate part and are not drawn; the stand-off from the upright
+    is not stated.
+  wanted: the 2D CAD drawing
+- {what: cable-capacity, reason: vendor-silent, note: 'the page states no cable capacity, so none is recorded
+    or estimated.', wanted: a capacity figure}
+groups:
+  body: {term: Back plate, role: furniture, index-origin: 1, description: the steel back plate}
+  walls: {term: Wall, role: furniture, index-origin: 1, description: the two side walls of the channel}
+  cover: {term: Cover, role: furniture, index-origin: 1, description: 'the snap cover, shipped fitted'}
+views:
+  front:
+    size: {w: 94.49, h: 1955.8}
+    components:
+      placements:
+      - ref: navepoint/00407297-base@1
+        id: base
+        at: [0.0, 0.0]
+        group: body
+        rel-pos: 1
+      - ref: navepoint/00407297-wall@1
+        id: wall-left
+        at: [0.0, 0.0]
+        group: walls
+        rel-pos: 1
+        in: base
+        under: cover
+      - ref: navepoint/00407297-wall@1
+        id: wall-right
+        at: [92.49, 0.0]
+        group: walls
+        rel-pos: 2
+        in: base
+        under: cover
+      - ref: navepoint/00407297-cover@1
+        id: cover
+        at: [2.0, 0.0]
+        group: cover
+        rel-pos: 1
+        in: base
+        lift: 91.49
+        only-in: [base]
+    guides:
+    - id: duct
+      kind: duct
+      at: [2.0, 0.0]
+      size: [90.49, 1955.8]
+      run: y
+      confidence: estimated
+      source: 'NavePoint product page 00407297: width 3.72 in less two estimated walls; the length is
+        the page''s'
+  rear:
+    size: {w: 94.49, h: 1955.8}
+    panel:
+      decor:
+      - id: back
+        at: [0, 0]
+        size: [94.49, 1955.8]
+        rx: 0
+        fill: '#2b2d30'
+        sink: 0.05
+        kind: base
+  top:
+    size: {w: 94.49, h: 94.49}
+    panel:
+      decor: &id001
+      - &id002
+        id: plate
+        at: [0, 0]
+        size: [94.49, 1.5]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id003
+        id: wall-left
+        at: [0, 1.5]
+        size: [2.0, 91.49]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - &id004
+        id: wall-right
+        at: [92.49, 1.5]
+        size: [2.0, 91.49]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover
+        at: [2.0, 92.99]
+        size: [90.49, 1.5]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  bottom:
+    size: {w: 94.49, h: 94.49}
+    panel:
+      decor: *id001
+  left:
+    size: {w: 94.49, h: 1955.8}
+    panel:
+      decor:
+      - &id005
+        id: plate
+        at: [0, 0]
+        size: [1.5, 1955.8]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id006
+        id: wall
+        at: [1.5, 0]
+        size: [91.49, 1955.8]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover-face
+        at: [92.99, 0]
+        size: [1.5, 1955.8]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  right:
+    size: {w: 94.49, h: 1955.8}
+    panel:
+      decor:
+      - &id007
+        id: plate
+        at: [92.99, 0]
+        size: [1.5, 1955.8]
+        rx: 0
+        fill: '#2b2d30'
+        kind: base
+      - &id008
+        id: wall
+        at: [1.5, 0]
+        size: [91.49, 1955.8]
+        rx: 0
+        fill: '#303336'
+        kind: wall
+      - id: cover-face
+        at: [0, 0]
+        size: [1.5, 1955.8]
+        rx: 0
+        fill: '#4a4e53'
+        kind: cover
+  top-open:
+    face: top
+    size: {w: 94.49, h: 94.49}
+    panel:
+      decor:
+      - *id002
+      - *id003
+      - *id004
+  bottom-open:
+    face: bottom
+    size: {w: 94.49, h: 94.49}
+    panel:
+      decor:
+      - *id002
+      - *id003
+      - *id004
+  left-open:
+    face: left
+    size: {w: 94.49, h: 1955.8}
+    panel:
+      decor:
+      - *id005
+      - *id006
+  right-open:
+    face: right
+    size: {w: 94.49, h: 1955.8}
+    panel:
+      decor:
+      - *id007
+      - *id008
+configurations:
+  base: {kind: base, default: true, description: 'The manager as NavePoint ships 00407297, cover fitted.'}
+  cover-off:
+    kind: example
+    description: The same manager with its snap cover off. The cover comes with the manager, so this is
+      an illustration and not a device type.
+    views: {top: top-open, bottom: bottom-open, left: left-open, right: right-open}
+datasheet: {title: '44U Vertical Cable Management, Black Finish (product page, SKU 00407297, saved 2026-11-11)',
+  url: 'https://navepoint.com/44u-vertical-cable-management-black-finish/', sha256: 547fc6c28ada879214913df0b0e61fb2791ddbd7c845e87f5d0250b8291302ba}
