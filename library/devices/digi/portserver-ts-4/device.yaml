@@ -83,8 +83,10 @@ provenance:
   colour:
     confidence: photo-measured
     note: >-
-      The photograph shows a black body (16, 16, 16 read off the top) with white legends and a bright
-      metal jack shield.
+      The photograph shows a black body (16, 16, 16 read off the top) and a bright metal jack shield.
+      The legends ETHERNET, RESET and 9-30V DC 525mA MAX are white. LINK and PWR are green and ACT and
+      READY are yellow. Green about #37855d and yellow about #d9d965 are the medians of the brightest
+      saturated pixels of each word in the 682 px photograph: estimates.
 attrs:
   physical: {weight-kg: 0.189, package-dimensions: not stated}
   power:
@@ -149,7 +151,8 @@ gaps:
   note: >-
     The page names the lamps and no colour or state. The quick start guide gives states for its Power,
     Link, 10/100, ACT and COL lamps and no colour, and its names do not match the photograph's legends,
-    so its states are not mapped to the four lamps drawn.
+    so its states are not mapped to the four lamps drawn. The legend colours are the printing's, not the
+    lamps' lit colours, which no document states.
   wanted: Digi's lamp table.
 - what: legend-text
   scope:
@@ -262,11 +265,11 @@ views:
     size: {w: 84.6, h: 133.4}
     silkscreen:
     - {at: [15.7, 129.6], text: ETHERNET, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {at: [27.2, 123.6], text: LINK, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {at: [27.2, 129.6], text: ACT, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [27.2, 123.6], text: LINK, font-size: 2.2, anchor: middle, fill: '#37855d', for: chassis}
+    - {at: [27.2, 129.6], text: ACT, font-size: 2.2, anchor: middle, fill: '#d9d965', for: chassis}
     - {at: [48.7, 129.6], text: RESET, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {at: [61.8, 123.6], text: PWR, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
-    - {at: [61.8, 129.6], text: READY, font-size: 2.2, anchor: middle, fill: '#f2f2f2', for: chassis}
+    - {at: [61.8, 123.6], text: PWR, font-size: 2.2, anchor: middle, fill: '#37855d', for: chassis}
+    - {at: [61.8, 129.6], text: READY, font-size: 2.2, anchor: middle, fill: '#d9d965', for: chassis}
     - {at: [76.5, 126.6], text: 9-30V DC, font-size: 1.6, anchor: middle, fill: '#f2f2f2', for: chassis}
     - {at: [76.5, 129.6], text: 525mA MAX, font-size: 1.6, anchor: middle, fill: '#f2f2f2', for: chassis}
     - {at: [40.0, 116.0], text: PORTSERVER TS, font-size: 5.0, anchor: middle, fill: '#8a8a8a', for: chassis}
