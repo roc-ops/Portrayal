@@ -87,6 +87,7 @@ def test_the_sources_name_their_pages_and_the_estimates_are_declared(name):
     for needle in ("page 5", "page 83", "page 84", "page 20", "Table 5, page 25"):
         assert needle in text, needle
     assert prov["colour"].startswith("estimated")
+    assert prov["port"].startswith("estimated"), "the cage against the drawn window is an estimate"
     assert "power-draw-max-w" in prov["power"], "the missing maximum is said, not filled"
     assert "not held" in prov["power"]
     assert "No photograph" in prov["sources"]
