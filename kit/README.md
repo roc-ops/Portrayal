@@ -1110,6 +1110,16 @@ kept). With the context:
 - **No redirects in the context, none followed.** A context without
   `redirects`, or a `components.json` from before the key, behaves as before.
 
+**The explorer's loader says what it left out.** `shell.applySwaps(map)`
+answers `{ignored, dropped}`; `dropped` is `droppedSwaps(map, ignored, {compByRef,
+redirects})` from `redirects.js`: for each ignored entry that names a part,
+`{path, ref, why}` with `why` one of `gone` (the ref is not in the library;
+`replacedBy` names the published part that stands in for it), `under` (it sat
+under a `gone` carrier; `carrier` names it) or `refused` (the part is there,
+the slot is not or does not take it). Nothing is followed or seated. The shell
+emits `dropped` with the rows when there are any, and `droppedText(rows)` is
+the sentence for the `gone` ones. A page that reads neither behaves as before.
+
 The page that writes back only the swaps its own slots accept (the Explorer's
 lens) is the site's, and is not changed here: it drops an old ref on its next
 write until it passes `redirects` on.

@@ -16,6 +16,7 @@
 // it, and the comment says which.
 
 import { createDevicePicker } from './devsel.js';
+import { redirectsOf, droppedSwaps, droppedText } from './redirects.js';
 import { nosNameFor } from './nosnames.js';
 import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides, acceptSwaps, decodeSwaps,
          occupantsOf,
@@ -1695,7 +1696,12 @@ export function createShell(opts = {}) {
     seatDetached(seated).then(refreshMerged, warnFaces);
     refreshTree();
     emit('change');
-    return {ignored};
+    // WHAT WAS LEFT OUT, SAID (#1752): which entries named a part the library
+    // no longer holds, and what replaced it. A page that does not listen, or
+    // read `dropped`, behaves as before.
+    const dropped = droppedSwaps(map, ignored, {compByRef, redirects: redirectsOf(COMPONENTS)});
+    if (dropped.length) emit('dropped', dropped);
+    return {ignored, dropped};
   }
 
   // THE TURNS A RELOAD CARRIES (`turn=`, #829), after the swaps - a turn is
@@ -2113,8 +2119,10 @@ export function createShell(opts = {}) {
       await loadDevice(start.name, same ? {config: q.get('config'), view: q.get('view')} : {});
     } catch (err) { if (isSuperseded(err)) return; throw err; }
     if (Object.keys(swaps).length) {
-      const {ignored} = await applySwaps(swaps);
+      const {ignored, dropped} = await applySwaps(swaps);
       if (ignored.length) console.warn('[portrayal] swaps naming nothing on', start.name, ignored);
+      const lost = droppedText(dropped);
+      if (lost) console.warn('[portrayal]', lost);
     }
     if (Object.keys(turns).length) {
       const {ignored} = await applyTurns(turns);
