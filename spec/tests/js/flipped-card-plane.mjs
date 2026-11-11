@@ -1,8 +1,9 @@
 // A module's plane on a flipped face (the underside, flipLX / flipLY): the plane is
 // cut from the face canvas, which that face has mirrored, so a facet's footprint
 // replayed on the cut must be mirrored within the cut's own rect. The numbers are
-// the card of the browser fixture: a card 25 x 100 mm at (37.5, 20) on a 100 x 140
-// face, a facet 25 x 30 mm at (37.5, 60) on it, drawn at 4 px/mm.
+// a card 25 x 100 mm at (37.5, 20) on a 100 x 140 face, a facet 25 x 30 mm at
+// (37.5, 60) on it, drawn at 4 px/mm. These tests reach the helper; the call in the
+// open-back loop is not reached from node (it needs a canvas).
 globalThis.location = { search: '' };
 globalThis.fetch = async () => ({ ok: true, text: async () => '<svg/>' });
 globalThis.CSS = {escape: s => s};

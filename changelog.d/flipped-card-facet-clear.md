@@ -5,4 +5,6 @@
   clear was replayed on it unmirrored, so the hole sat beside the wedge and the
   plane still cut across its cage wells. The clear is now mirrored within the
   plane's own rect, as the pocket-floor clear already is. A flat face, a plane
-  that is not open-backed and every other punch are unchanged (#551).
+  that is not open-backed and every other punch are unchanged. A plane that is
+  restyled afterwards (a lamp, field or state written on the card) is cut again
+  from an unflipped raster and still shows the clear in its authored place (#551).
