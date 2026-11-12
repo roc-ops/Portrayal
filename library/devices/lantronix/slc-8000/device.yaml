@@ -1,15 +1,15 @@
 format: 1
 kind: device
 name: slc-8000
-version: 0.3.1
+version: 0.4.0
 maturity: draft
 manufacturer: Lantronix
 model: SLC 8000
 description: >-
   Lantronix SLC 8000 advanced modular console manager, a 1U chassis that connects up to 48 RJ45 serial or USB
   console ports to a network. The front has an LCD, a keypad, a memory card slot, two USB ports, an RJ45 console
-  port and a modem jack. The rear has two network ports, three bays for I/O modules, and an AC power inlet. This
-  model is the base chassis without I/O modules; the three bays are declared and no module is modelled.
+  port and a modem jack. The rear has two network ports, three bays for I/O modules, and an AC power inlet. The base
+  build leaves the bays empty; four builds seat 16-port RJ45 or USB modules, and the Ethernet switch module is not modelled.
 profile: networking
 provenance:
   size:
@@ -61,7 +61,7 @@ provenance:
       named Bay 1, Bay 2 and Bay 3, and the power inlet at the right, with a rocker switch. "Bay 1 is the slot next
       to the Ethernet ports and Bay 3 is the slot beside the power supply module." The bays read about 112 mm
       wide in Figure 2-2. The three bays are declared at those positions, each stating the class of I/O module it
-      takes; their positions and size are read off the photograph and are estimates. No module is modelled.
+      takes; their positions and size are read off the photograph and are estimates. The RJ45 and USB modules seat in them.
   network:
     confidence: datasheet
     note: >-
@@ -126,14 +126,14 @@ gaps:
 - what: io-modules
   scope: [rear]
   reason: needs-drawing
-  wanted: a dimensioned drawing of an I/O module, and a straight-on photograph of the rear.
+  wanted: a dimensioned drawing of an I/O module, a photograph of the 16-port Ethernet switch module's face and of the 8-port RJ45 module, and a straight-on photograph of the rear.
   note: >-
-    The rear has three I/O module bays; no document gives a module a size. The three bays are declared at the
-    positions and size of the windows read off Figure 2-2, each stating the class of module it takes, and no module
-    is modelled or seated. The I/O Module Install Guide and User Guide Table 3-8 give the module types: a 16-port RJ45
-    module, a 16-port USB module, a 16-port Ethernet switch module and an 8-port RJ45 module for bay 1. Their rules are
-    words only and no tool checks them: the 8-port module goes in bay 1 only, the switch module in bay 2 or 3, never bay 1,
-    and the bays fill in order from bay 1.
+    The rear has three I/O module bays at the positions and size of the windows read off Figure 2-2, each stating the
+    class of module it takes. The 16-port RJ45 module (FRRJ451601) and the 16-port USB module (FRUSB1601) are modelled
+    and seat in them; no document gives either a size, so each takes the size of the bay, with a depth borrowed from
+    the same maker's LM83X module. The 16-port Ethernet switch module (FRETH1601) and the 8-port RJ45 module are not
+    modelled: no held document shows the face of either. Their rules are words only and no tool checks them: the
+    8-port module goes in bay 1 only, the switch module in bay 2 or 3, never bay 1, and the bays fill in order from bay 1.
 - what: network-sfp-and-dc-variants
   scope: [rear]
   reason: needs-photo
@@ -209,9 +209,9 @@ views:
     - {at: [11.7, 43.4], text: 10/100/1000, font-size: 1.6, anchor: middle, fill: '#e8ecef', for: [net-1, net-2]}
     components:
       bays:
-      - {id: io-bay-1, at: [22.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 1}
-      - {id: io-bay-2, at: [137.0, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 2}
-      - {id: io-bay-3, at: [251.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, group: io-bays, rel-pos: 3}
+      - {id: io-bay-1, at: [22.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, accepts: [lantronix/frrj451601@1, lantronix/frusb1601@1], group: io-bays, rel-pos: 1}
+      - {id: io-bay-2, at: [137.0, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, accepts: [lantronix/frrj451601@1, lantronix/frusb1601@1], group: io-bays, rel-pos: 2}
+      - {id: io-bay-3, at: [251.5, 0.5], size: {w: 112.5, h: 43.4}, interface: slc-io-module, accepts: [lantronix/frrj451601@1, lantronix/frusb1601@1], group: io-bays, rel-pos: 3}
       placements:
       - {ref: common/rj45-eth@1, id: net-1, at: [3.8, 3.0], group: network, rel-pos: 1, attrs: {speed: 1g}}
       - {ref: common/rj45-eth@1, id: net-2, at: [3.8, 17.5], group: network, rel-pos: 2, attrs: {speed: 1g}}
@@ -252,6 +252,48 @@ configurations:
       modules fitted, so no part number names this build.
     bays:
       io-bay-1: ''
+      io-bay-2: ''
+      io-bay-3: ''
+  rj45-16:
+    kind: example
+    description: >-
+      Copper network ports, one AC inlet and one 16-port RJ45 module in bay 1.
+    source: >-
+      the maker's product page lists SLC80161201S as the 16-port RJ45 model with single AC power and no SFP. The page
+      does not say which module sits in which bay, so the bays fill in order from bay 1 as the I/O Module Installation
+      Guide requires.
+    bays:
+      io-bay-1: lantronix/frrj451601@1
+      io-bay-2: ''
+      io-bay-3: ''
+  rj45-32:
+    kind: example
+    description: >-
+      Copper network ports, one AC inlet and two 16-port RJ45 modules in bays 1 and 2.
+    source: >-
+      the maker's product page lists SLC80321201S as the 32-port RJ45 model with single AC power and no SFP.
+    bays:
+      io-bay-1: lantronix/frrj451601@1
+      io-bay-2: lantronix/frrj451601@1
+      io-bay-3: ''
+  rj45-48:
+    kind: example
+    description: >-
+      Copper network ports, one AC inlet and three 16-port RJ45 modules.
+    source: >-
+      the maker's product page lists SLC80481201S as the 48-port RJ45 model with single AC power and no SFP.
+    bays:
+      io-bay-1: lantronix/frrj451601@1
+      io-bay-2: lantronix/frrj451601@1
+      io-bay-3: lantronix/frrj451601@1
+  usb-16:
+    kind: example
+    description: >-
+      Copper network ports, one AC inlet and one 16-port USB module in bay 1.
+    source: >-
+      the maker's product page lists SLC81161201S as the 16-port USB model with single AC power and no SFP.
+    bays:
+      io-bay-1: lantronix/frusb1601@1
       io-bay-2: ''
       io-bay-3: ''
 references:
