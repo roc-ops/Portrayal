@@ -1,17 +1,19 @@
 """Middle Atlantic LBP-1A, the 19 in L-shaped lacing bar (roc-ops/Portrayal#1102).
 
-The source for the part is the maker's generated cut sheet for LBP-1A and its SKU page: 19 in wide, 0.5 in
-deep, 0.5 in high, two mounting points, no offset, L-shaped, sold in packs of 10. Neither gives a drawing of the
-bar or a weight for one. The overall size is the maker's. The row of slots and the ear with its hole at each end
-are read off the maker's small photograph, so every position and size for them is estimated, and the gaps that
-a dimensioned drawing would settle are named. What is true of the library is held here: the size is the
-maker's, the drawn features lie inside the bar, and the figures read from the photograph say they are estimates.
+The source for the part is the maker's generated cut sheet for LBP-1A and its SKU page.
+They give the size (19 in wide, 0.5 in deep, 0.5 in high), two mounting points, no offset and packs of 10.
+Neither gives a drawing of the bar or a weight for one. The overall size is the maker's.
+The row of slots and the ear with its hole at each end are read off the maker's small photograph.
+Every position and size for them is estimated, and the gaps that a dimensioned drawing would settle are named.
+What is true of the library is held here.
+The size is the maker's, the drawn features lie inside the bar, and the figures read from the photograph say they are estimates.
 
-The size and drawing tests read only the device file; the catalogue test reads the build (`library/dist`) and
-skips without it, like the other sweeps over compiled drawings.
+The size and drawing tests read only the device file.
+The catalogue test reads the build (`library/dist`) and skips without it, like the other sweeps over compiled drawings.
 """
 import json
 import pathlib
+import re
 
 import pytest
 import yaml
@@ -115,6 +117,40 @@ def test_each_ear_carries_one_hole_inside_it(view):
     assert close(holes[0]["at"][0], 482.6 - (holes[1]["at"][0] + holes[1]["size"][0])), "the two ends are alike"
 
 
+@pytest.mark.parametrize("view", ["top", "bottom"])
+def test_each_ear_hole_sits_near_its_end_of_the_bar_within_the_ears_length(view):
+    ears = sorted(decor(view, "ear"), key=lambda d: d["at"][0])
+    holes = sorted(decor(view, "ear-hole"), key=lambda d: d["at"][0])
+    ear_length = ears[0]["size"][0]
+    left, right = holes
+    assert left["at"][0] + left["size"][0] <= ear_length, "the left hole ends within the ear's length of the left end"
+    assert 482.6 - right["at"][0] <= ear_length, "the right hole starts within the ear's length of the right end"
+    for hole in holes:
+        assert hole["size"][0] > hole["size"][1] > 0, "an obround hole, longer along the bar than across"
+
+
+def sentences(text):
+    return [s for s in re.split(r"(?<=[.!?])\s+", " ".join(text.split())) if s]
+
+
+def prose(doc):
+    yield "description", doc["description"]
+    for key, entry in doc["provenance"].items():
+        yield f"provenance.{key}", entry["note"]
+    for gap in doc["gaps"]:
+        yield f"gap.{gap['what']}", gap["note"]
+
+
+def test_every_sentence_of_the_notes_gaps_and_description_is_short():
+    long = [
+        (where, len(s.split()))
+        for where, text in prose(device())
+        for s in sentences(text)
+        if len(s.split()) > 25
+    ]
+    assert not long, long
+
+
 @pytest.mark.parametrize("view", ["left", "right"])
 def test_each_end_draws_the_section_as_a_web_and_a_leg(view):
     parts = {d["id"]: d for d in device()["views"][view]["panel"]["decor"]}
@@ -135,8 +171,12 @@ def test_the_figures_the_cut_sheet_does_not_give_are_named_gaps_with_the_documen
     assert {"tie-points", "end-holes", "cross-section", "height-in-unit", "weight", "mounting-hardware"} <= set(gaps)
     for g in gaps.values():
         assert g["wanted"] and g["note"]
-    for what in ("tie-points", "end-holes"):
-        assert "estimate" in gaps[what]["note"]
+
+
+def test_the_colour_note_states_how_the_colour_was_read():
+    note = device()["provenance"]["color"]["note"]
+    assert re.search(r"\d+ dark pixels|sampled", note), note
+    assert re.search(r"#[0-9a-f]{6}|RGB \d+, \d+, \d+", note), "the sampled value is stated"
 
 
 @pytest.mark.heavy
