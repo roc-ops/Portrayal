@@ -101,7 +101,7 @@ def _svg(body):
 
 
 def test_a_frame_stood_in_front_of_its_part_is_outside_it():
-    # the shape the solids guard caught: a frame 389 deep, out 389, no lift, on a part 392 deep
+    # the shape the solids test caught: a frame 389 deep, out 389, no lift, on a part 392 deep
     frame = _svg('<g id="frame" data-z-out="389"/>')
     assert outside_by(frame, 392) == ("frame", pytest.approx(389))
 
@@ -166,9 +166,10 @@ def test_every_built_face_of_a_rack_side_or_zero_u_part_stands_inside_it():
         for n, (ident, mm, face, extent) in sorted(unlisted.items()))
     stale = sorted(n for n in PROUD if n not in found)
     assert not stale, f"in PROUD but no longer standing outside any face, delete the entry: {stale}"
-    further = {n: (found[n][1], PROUD[n][0]) for n in PROUD if found[n][1] > PROUD[n][0] + TOL}
+    further = {n: (found[n][0], found[n][1], found[n][2], PROUD[n][0]) for n in PROUD if found[n][1] > PROUD[n][0] + TOL}
     assert not further, "\n".join(
-        f"{n}: stands {got:.2f} mm outside, its PROUD entry says {said}" for n, (got, said) in sorted(further.items()))
+        f"{n}: {ident} stands {got:.2f} mm outside the part on {face}, its PROUD entry says {said}"
+        for n, (ident, got, face, said) in sorted(further.items()))
 
 
 def test_every_proud_entry_says_why():
