@@ -60,6 +60,16 @@ def test_the_two_and_four_port_part_numbers_are_listed():
     assert {"LM4-4S", "LM4-2S"} <= numbers
 
 
+def test_the_second_status_lamp_is_named_for_the_pulse_mark_under_it():
+    lamps = [p["id"] for p in sorted(_in_group(_lm4(), "status-leds"), key=lambda p: p["rel-pos"])]
+    assert lamps == ["led-power", "led-pulse", "led-alert"]
+
+
+def test_the_dc_input_gap_says_no_interface_is_known_so_no_part_is_placed():
+    gap = next(g for g in _lm4()["gaps"] if g["what"] == "dc-input")
+    assert "No interface is known, so no part is" in gap["note"].replace("\n", " ")
+
+
 def test_the_dc_input_is_a_stated_gap_and_not_drawn_as_decoration():
     lm4 = _lm4()
     assert any(g["what"] == "dc-input" for g in lm4["gaps"])
