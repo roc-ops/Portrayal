@@ -115,6 +115,12 @@ def test_the_underside_has_four_round_holes_six_tabs_and_a_plate(slug):
     assert sorted(i for i in bottom if i.startswith("tab-") and not i.endswith("-bar")) == [f"tab-{n}" for n in range(1, 7)]
     plate = bottom["rear-plate"]
     assert plate["size"][0] > 250 and plate["at"][0] + plate["size"][0] <= 440
+    # the sheet draws the underside with the front at the top; the library's has the rear at the top and left and right mirrored,
+    # so the plate sits on the right half, nearer the top (rear) edge, and the tabs on the bottom (front) edge below every hole
+    assert centre(plate)[0] > 440 / 2 and centre(plate)[1] < DEPTH / 2
+    hole_ys = sorted(centre(e)[1] for e in holes)
+    assert hole_ys[1] < DEPTH / 2 < hole_ys[2]
+    assert all(centre(bottom[f"tab-{n}"])[1] > hole_ys[-1] for n in range(1, 7))
 
 
 @pytest.mark.parametrize("slug", MODELS)

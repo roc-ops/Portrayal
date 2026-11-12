@@ -141,7 +141,7 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # The Panduit P36G18M and P42G20M each place one common/ground-screw@1 at the cord end, 29 -> 31 on 19 -> 21 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (33, 23),   # the Moxa NPort 5610-16's and 5630-16's one each (31, 21 before); (27, 17),the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
+    "common/ground-screw@1": (33, 23),   # the Moxa NPort 5610-16's and 5630-16's one each (31, 21 before); (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
