@@ -78,9 +78,11 @@ THREE_LEVEL = [
     # test_nested_cage_seat_js.py: an optic in a MIC in an MPC in the adapter.
     # The adapter's mpc bay also lists five queuing and P carriers (mpc1-3d-q@1,
     # mpc2e-3d-ng-q@1, mpc2e-3d-p@1, mpc2e-3d-q@1, mpc3e-3d-ng-q@1).
+    # The nested-seat row for mpc2e-3d-q@1 is in test_nested_cage_seat_js.py.
     # test_the_adapter_seats_the_card in test_juniper_mx2000_queuing_cards.py
-    # checks only that the adapter's list accepts each. There is no nested-seat
-    # row yet for these five carriers: none seats a MIC in one of them.
+    # covers the adapter's list accepting all five. The other four carriers
+    # (mpc2e-3d-p@1, mpc1-3d-q@1, mpc2e-3d-ng-q@1, mpc3e-3d-ng-q@1) have no
+    # nested-seat row yet.
     "mx2000-lc-adapter/mpc -> juniper/mpc1-3d-q@1",
     "mx2000-lc-adapter/mpc -> juniper/mpc1e-3d@3",
     "mx2000-lc-adapter/mpc -> juniper/mpc2e-3d-ng-q@1",
