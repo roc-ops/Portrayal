@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 9510-1901
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Belden
 model: 9510-1901
@@ -44,8 +44,9 @@ provenance:
   ears:
     confidence: estimated
     note: >-
-      estimated - the ears are the flat ends of the panel and are drawn with it. Their slotted holes are
-      not drawn: no document gives their size or place and the photograph is too small to measure them.
+      estimated - the ears are the flat ends of the panel and are drawn with it. Each has two slotted holes,
+      12 by 5, 12 from the end and 32 apart. Scale: the ear's printed 41.91 height over its 32 px in the
+      photograph, 1.3 mm per px, good to about 3.
   shell:
     confidence: estimated
     note: >-
@@ -77,18 +78,20 @@ provenance:
   rear:
     confidence: estimated
     note: >-
-      estimated - the back of the panel, plain. No Belden document shows the back of the part, and the
-      photograph's screws stand on the front.
+      estimated - the back of the panel with the ears' four slotted holes through it, drawn as on the
+      front. No Belden document shows the back of the part, and the photograph's screws stand on the front.
   top:
     confidence: estimated
     note: >-
-      estimated - an elevation: the plate's edge at the rear and each ring's top bar from above, running
-      out the full 74.7. The bottom is the same from underneath, where each bottom bar stops at its hook.
+      estimated - an elevation: the plate's edge at the rear, the folded top flange (424.6 long, 6 deep,
+      from 29 in at each end) and each ring's top bar from above, running out the full 74.7. The bottom is the same from underneath, where each bottom bar stops at its hook.
   left:
     confidence: estimated
     note: >-
       estimated - an elevation: the plate's edge and a ring's profile in front of it, read off the
-      photograph. The right is the same, turned round.
+      photograph. The top flange is a 6 by 1.5 tab at the plate's top. A tan liner, 49.7 long and 2.5
+      thick, lies under the top bar, 22 from the plate. Its colour is the photograph's mean, 129, 121,
+      105 over 42 px. The right is the same, turned round.
   guides:
     confidence: estimated
     note: >-
@@ -127,26 +130,28 @@ chassis:
   weight-kg: 1.0
   color: '#3c3f43'
 gaps:
-  - what: ear-holes
+  - what: ring-screws
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      the photograph shows one screw head on each ring's back leg, inside the loop. The front leg hides
+      it from the front and every other face sees the strap edge-on, so no face draws it. The rings are a
+      part three devices share, which a new version of the ring would have to carry.
+    wanted: a close picture of the ring, and a new version of the ring that carries the screw
+  - what: ear-hole-size
     scope: [front, rear]
-    reason: vendor-silent
+    reason: needs-drawing
     note: >-
-      the photograph shows a slotted hole in each ear; no document gives its size or position.
+      the two slots in each ear are drawn 12 by 5, 12 from the end and 32 apart, read off the photograph.
+      No Belden document dimensions them.
     wanted: a dimensioned drawing of the panel
-  - what: top-flange
+  - what: flange-size
     scope: [top, left, right]
-    reason: vendor-silent
+    reason: needs-drawing
     note: >-
-      the photograph shows a narrow flange folded back along the panel's top edge; no document
-      dimensions it, and the data sheet's 3.0 in is the overall projection, so none is drawn.
+      the flange along the top edge is drawn 6 deep from 29 in from each end, read off the photograph and
+      kept inside the sheet's 3.0 in depth. No Belden document dimensions it.
     wanted: a side view of the panel
-  - what: ring-liner
-    scope: [front, left, right]
-    reason: vendor-silent
-    note: >-
-      the photograph shows a light strip along the inside of the top bar of the middle rings, which may
-      be a liner or a pad; no document names or sizes it, so it is not drawn.
-    wanted: a close picture of the ring
   - what: cable-capacity
     scope: [front]
     reason: vendor-silent
@@ -188,10 +193,15 @@ views:
     panel:
       decor:
         - {id: panel-back, at: [0, 0], size: [482.6, 41.91], fill: '#3c3f43', kind: panel}
+        - {id: ear-hole-left-top, at: [6, 2.46], size: [12, 5], shape: slot, fill: '#17191c', kind: ear-hole}
+        - {id: ear-hole-left-bottom, at: [6, 34.46], size: [12, 5], shape: slot, fill: '#17191c', kind: ear-hole}
+        - {id: ear-hole-right-top, at: [464.6, 2.46], size: [12, 5], shape: slot, fill: '#17191c', kind: ear-hole}
+        - {id: ear-hole-right-bottom, at: [464.6, 34.46], size: [12, 5], shape: slot, fill: '#17191c', kind: ear-hole}
   top:
     size: {w: 482.6, h: 76.2}
     panel:
       decor:
+        - {id: top-flange, at: [29, 0], size: [424.6, 6], fill: '#4a5058', kind: flange}
         - {id: plate-edge, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', kind: panel}
         - {id: guide-1-top, at: [41.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
         - {id: guide-2-top, at: [119.3, 1.5], size: [10, 74.7], rx: 1, fill: '#59606a', kind: ring}
@@ -221,8 +231,10 @@ views:
     panel:
       decor:
         - {id: plate-edge, at: [0, 0], size: [1.5, 41.91], fill: '#3c3f43', kind: panel}
+        - {id: top-flange, at: [0, 0], size: [6, 1.5], fill: '#4a5058', kind: flange}
         - {id: ring-back, at: [1.5, 0.95], size: [3, 40], fill: '#4a5058', kind: ring}
         - {id: ring-top, at: [1.5, 0.95], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-liner, at: [22, 3.95], size: [49.7, 2.5], fill: '#807969', kind: liner}
         - {id: ring-bottom, at: [19.5, 37.95], size: [56.7, 3], fill: '#3f444b', kind: ring}
         - {id: ring-front, at: [73.2, 0.95], size: [3, 40], fill: '#59606a', kind: ring}
         - {id: ring-hook, at: [19.5, 29.95], size: [3, 8], fill: '#4a5058', kind: ring}
@@ -231,8 +243,10 @@ views:
     panel:
       decor:
         - {id: plate-edge, at: [74.7, 0], size: [1.5, 41.91], fill: '#3c3f43', kind: panel}
+        - {id: top-flange, at: [70.2, 0], size: [6, 1.5], fill: '#4a5058', kind: flange}
         - {id: ring-back, at: [71.7, 0.95], size: [3, 40], fill: '#4a5058', kind: ring}
         - {id: ring-top, at: [0, 0.95], size: [74.7, 3], fill: '#59606a', kind: ring}
+        - {id: ring-liner, at: [3, 3.95], size: [49.7, 2.5], fill: '#807969', kind: liner}
         - {id: ring-bottom, at: [0, 37.95], size: [56.7, 3], fill: '#3f444b', kind: ring}
         - {id: ring-front, at: [0, 0.95], size: [3, 40], fill: '#59606a', kind: ring}
         - {id: ring-hook, at: [53.7, 29.95], size: [3, 8], fill: '#4a5058', kind: ring}
