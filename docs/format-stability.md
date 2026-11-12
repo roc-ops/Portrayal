@@ -1396,7 +1396,9 @@ exists) from a dead one (it says nothing, and fails). The whole mechanism is
 required before 1.0: the marker, a stated support window, and the L89
 distinction; the marker and the distinction are in place, and the window, at
 least one release, is not yet a number of releases or a date.
-DESIGN §9 has the reasoning.
+DESIGN §9 has the reasoning, and
+[`component-retirement-design.md`](component-retirement-design.md) lays out what
+is left to decide.
 
 **A removed ref that a saved rack names** (#1049). A rack file names parts by
 ref, and removing a major leaves its refs dangling there. The replacement can
