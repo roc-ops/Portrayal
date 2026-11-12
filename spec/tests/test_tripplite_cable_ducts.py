@@ -342,7 +342,9 @@ def test_the_rack_catalogue_has_no_capacity_to_compare(name):
 def test_the_finish_is_a_field_each_part_declares_and_the_base_configuration_sets(name):
     prefix = COMPONENT[name]
     attrs = device_yaml(name)["configurations"]["base"]["component-attrs"]
-    assert set(attrs) == {f"{prefix}-{p}" for p in ("base", "fingers", "cover", "cover-plan", "cover-side")}
+    parts = {f"{prefix}-{p}" for p in ("base", "fingers", "cover", "cover-plan", "cover-side")}
+    # the 1U's end views also draw the rear of the duct from a part of their own
+    assert set(attrs) == parts | ({f"{prefix}-end"} if name == "srcableduct1u" else set())
     for part in ("base", "fingers", "cover", "cover-plan", "cover-side"):
         c = contract(name, part)
         assert c["fields"]["finish"]["default"] == attrs[f"{prefix}-{part}"]["finish"]

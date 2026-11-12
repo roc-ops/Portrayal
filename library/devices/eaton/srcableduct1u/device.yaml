@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: srcableduct1u
-version: 0.1.1
+version: 0.2.0
 maturity: modelled
 manufacturer: Eaton
 model: SRCABLEDUCT1U
@@ -61,10 +61,15 @@ provenance:
     confidence: drawing
     note: >-
       drawing - 482.6 x 43.69 x 67.71 (19.00 x 1.72 x 2.67 in): the front view dimensions the
-      first two and the top view the third. The body is narrower than the plate, 39.8 mm across
-      its walls (estimated: read off the side view at 2.59 px/mm, where it is 103 px against
-      113 across the ears), and the cover's lips stand outside the walls, 1.1 mm each, 42.0 mm
-      over them, which agrees with the front view's 42.3.
+      first two and the top view the third. The body is narrower than the plate. It is 39.8 mm
+      across its walls (estimated: read off the side view at 2.59 px/mm, 103 px against 113
+      across the ears). THE COVER'S HEIGHT, 42.0 MM, IS THE LIBRARY'S EARLIER ESTIMATE AND NO
+      DOCUMENT PRINTS IT. The drawing prints the 43.69 plate, the 41.26 ear height and the 431.80
+      cover length. The spec sheet prints only the overall size. Read at 7.96 px/mm the front
+      view gives the cover 40.1 and the side view about 40.0. Printed figures read the same way
+      come out true: the 41.26 ear height reads 41.3 and the 32 mm slot pitch reads 32.0. So the
+      scaled readings are not biased low. 42.0 is kept on the front, top and cover parts.
+      Resizing that family is a larger change than this redraw.
   thickness:
     confidence: estimated
     note: >-
@@ -92,7 +97,10 @@ provenance:
       the top wall and in the wall under the open end, which is why the bottom is drawn as the
       top again; the side view draws two equal walls. The slots are punched, closed at both
       ends, so a finger is held at both ends: no tip is free. A cable is laid along the
-      channel and passes between the walls through a slot.
+      channel and passes between the walls through a slot. The page-1 isometric also shows a
+      small ring at the end of each slot nearer the cover, 24 a wall; its purpose is not stated.
+      It is drawn as a 3.5 mm ring, estimated from the isometric (about 0.45 of the slot's
+      width, read at 300 dpi). It is centred on each slot and set 1.75 mm in from the slot's cover end.
   top:
     confidence: drawing
     note: >-
@@ -104,29 +112,37 @@ provenance:
   left:
     confidence: drawing
     note: >-
-      drawing - the side view: the back plate, the two walls with the channel between them,
-      and the cover's plate and lips over the front, drawn the cover over the walls. The duct
-      is open at both ends and a cable runs out of it there: nothing is built across the ends.
-      The right is the same, turned round.
+      drawing - the side view, read at 12.54 px/mm from the printed 37.57 mm clear between the
+      walls, and estimated. It shows the back plate 1.2 mm thick with a flange 5.0 mm deep along
+      its top and its bottom edge. It shows the channel floor with its corners rounded 2.5 mm.
+      It shows a boss 12.4 mm across pressed 2.4 mm out of the plate behind it. It shows a stud
+      5.0 mm across inside the channel (the `tripplite-duct-1u-end` part). It shows the two walls, and the
+      cover with its plate, return lips, snap tongues and beaks (the `tripplite-duct-1u-cover-side`
+      part). The lips and tongues are drawn as S curves. The duct is open at both ends and a
+      cable runs out of it there: nothing is built across the ends. The right is the same,
+      turned round. NO HELD DOCUMENT SHOWS THE RIGHT END. It is built as the documented side,
+      as no document shows it. The bottom wall is built as the top, for the same reason.
   rear:
     confidence: drawing
     note: >-
-      drawing - the back view: the plate 482.6 long with its ears, five bosses 100 mm apart (400
-      over the five, dimensioned) centred on the duct, and four larger round dimples between
-      them at 50 mm either side of the centre and of the middle boss (the 300 mm dimension,
-      slot to slot of the outer two), each with a slot. Their diameters (11.6 for a boss, 6.0
-      for its inner ring, 26 for a dimple, with a slot 11 x 3.3) are read at 2.41 px/mm and
-      are estimated. THE PURPOSE OF THESE IS NOT STATED by any document and no pass-through is
-      declared: a slot in a dimple reads as a tie slot, which the maker does not say. The
-      small holes round each boss are not drawn.
+      drawing - the back view. It shows the plate 482.6 long with its ears, and five bosses 100 mm
+      apart (400 over the five, dimensioned) centred on the duct. It shows four larger round
+      dimples between them. They stand at 50 mm either side of the centre and of the middle boss.
+      The 300 mm dimension runs slot centre to slot centre of the outer two. Each has a slot set 5.0 mm to the
+      left of its centre. Four small holes stand round each boss, 12.7 mm [0.5 in] from its centre
+      across and along, twenty in all. FIGURES READ AT 7.96 px/mm, the 100 mm boss pitch over 796
+      px of the back view at 600 dpi, and estimated. A boss is 11.9 over its ring and the inner ring
+      is 8.9. A dimple is 25.6, a slot 15.0 x 5.0 and a hole 4.5 (line centres, good to about 0.3).
+      THE PURPOSE OF THESE IS NOT STATED by any document and no pass-through is declared.
+      A slot in a dimple reads as a tie slot, which the maker does not say.
   cover:
     confidence: datasheet
     note: >-
       datasheet - the cover ships fitted (the spec sheet's title, Highlights and Package
       Includes: "finger duct with cover"). The submittal drawing's top and side views draw it
       fitted; no document says how it is held or taken off. It is drawn fitted in `base` and
-      absent in `cover-off`, as a lid (`lid: true`). The format has no clip, so none is
-      drawn.
+      absent in `cover-off`, as a lid (`lid: true`). The side view's return lips and snap
+      tongues are drawn on the end views; how the cover is released is not stated.
   capacity:
     confidence: datasheet
     note: >-
@@ -177,15 +193,15 @@ gaps:
     reason: vendor-silent
     note: >-
       no document says how the cover is held on or removed, so it is drawn as one plate that
-      lifts off; the format has no clip.
+      lifts off. The side view's snap tongues are drawn, but no document says how they release.
     wanted: the owner's manual page that shows the cover fitted
   - what: rear-features
     scope: [rear]
     reason: vendor-silent
     note: >-
-      the back view draws five bosses, four slotted dimples and small holes beside each boss;
-      no document says what they are for. The dimples and bosses are drawn at estimated sizes,
-      the small holes are not drawn, and no pass-through is declared.
+      the back view draws five bosses, four slotted dimples and four small holes beside each
+      boss; no document says what they are for. All are drawn at estimated sizes and no
+      pass-through is declared.
     wanted: the owner's manual or a dimensioned back view
 groups:
   body:
@@ -223,24 +239,44 @@ views:
         - {id: ear-slot-2, at: [2.8, 34.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
         - {id: ear-slot-3, at: [467.8, 2.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
         - {id: ear-slot-4, at: [467.8, 34.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
-        - {id: dimple-1, at: [78.3, 8.845], size: [26, 26], rx: 13, fill: '#464a4f', kind: dimple}
-        - {id: dimple-2, at: [178.3, 8.845], size: [26, 26], rx: 13, fill: '#464a4f', kind: dimple}
-        - {id: dimple-3, at: [278.3, 8.845], size: [26, 26], rx: 13, fill: '#464a4f', kind: dimple}
-        - {id: dimple-4, at: [378.3, 8.845], size: [26, 26], rx: 13, fill: '#464a4f', kind: dimple}
-        - {id: dimple-slot-1, at: [85.8, 20.195], size: [11, 3.3], rx: 1.65, fill: '#14161a', kind: slot}
-        - {id: dimple-slot-2, at: [185.8, 20.195], size: [11, 3.3], rx: 1.65, fill: '#14161a', kind: slot}
-        - {id: dimple-slot-3, at: [285.8, 20.195], size: [11, 3.3], rx: 1.65, fill: '#14161a', kind: slot}
-        - {id: dimple-slot-4, at: [385.8, 20.195], size: [11, 3.3], rx: 1.65, fill: '#14161a', kind: slot}
-        - {id: boss-1, at: [35.5, 16.045], size: [11.6, 11.6], rx: 5.8, fill: '#5a5f65', kind: boss}
-        - {id: boss-2, at: [135.5, 16.045], size: [11.6, 11.6], rx: 5.8, fill: '#5a5f65', kind: boss}
-        - {id: boss-3, at: [235.5, 16.045], size: [11.6, 11.6], rx: 5.8, fill: '#5a5f65', kind: boss}
-        - {id: boss-4, at: [335.5, 16.045], size: [11.6, 11.6], rx: 5.8, fill: '#5a5f65', kind: boss}
-        - {id: boss-5, at: [435.5, 16.045], size: [11.6, 11.6], rx: 5.8, fill: '#5a5f65', kind: boss}
-        - {id: boss-ring-1, at: [38.3, 18.845], size: [6, 6], rx: 3, fill: '#2d3033', kind: boss}
-        - {id: boss-ring-2, at: [138.3, 18.845], size: [6, 6], rx: 3, fill: '#2d3033', kind: boss}
-        - {id: boss-ring-3, at: [238.3, 18.845], size: [6, 6], rx: 3, fill: '#2d3033', kind: boss}
-        - {id: boss-ring-4, at: [338.3, 18.845], size: [6, 6], rx: 3, fill: '#2d3033', kind: boss}
-        - {id: boss-ring-5, at: [438.3, 18.845], size: [6, 6], rx: 3, fill: '#2d3033', kind: boss}
+        - {id: dimple-1, at: [78.5, 9.045], size: [25.6, 25.6], rx: 12.8, fill: '#464a4f', kind: dimple}
+        - {id: dimple-2, at: [178.5, 9.045], size: [25.6, 25.6], rx: 12.8, fill: '#464a4f', kind: dimple}
+        - {id: dimple-3, at: [278.5, 9.045], size: [25.6, 25.6], rx: 12.8, fill: '#464a4f', kind: dimple}
+        - {id: dimple-4, at: [378.5, 9.045], size: [25.6, 25.6], rx: 12.8, fill: '#464a4f', kind: dimple}
+        - {id: dimple-slot-1, at: [78.8, 19.345], size: [15, 5], rx: 2.5, fill: '#14161a', kind: slot}
+        - {id: dimple-slot-2, at: [178.8, 19.345], size: [15, 5], rx: 2.5, fill: '#14161a', kind: slot}
+        - {id: dimple-slot-3, at: [278.8, 19.345], size: [15, 5], rx: 2.5, fill: '#14161a', kind: slot}
+        - {id: dimple-slot-4, at: [378.8, 19.345], size: [15, 5], rx: 2.5, fill: '#14161a', kind: slot}
+        - {id: boss-1, at: [35.35, 15.895], size: [11.9, 11.9], rx: 5.95, fill: '#5a5f65', kind: boss}
+        - {id: boss-2, at: [135.35, 15.895], size: [11.9, 11.9], rx: 5.95, fill: '#5a5f65', kind: boss}
+        - {id: boss-3, at: [235.35, 15.895], size: [11.9, 11.9], rx: 5.95, fill: '#5a5f65', kind: boss}
+        - {id: boss-4, at: [335.35, 15.895], size: [11.9, 11.9], rx: 5.95, fill: '#5a5f65', kind: boss}
+        - {id: boss-5, at: [435.35, 15.895], size: [11.9, 11.9], rx: 5.95, fill: '#5a5f65', kind: boss}
+        - {id: boss-ring-1, at: [36.85, 17.395], size: [8.9, 8.9], rx: 4.45, fill: '#2d3033', kind: boss}
+        - {id: boss-ring-2, at: [136.85, 17.395], size: [8.9, 8.9], rx: 4.45, fill: '#2d3033', kind: boss}
+        - {id: boss-ring-3, at: [236.85, 17.395], size: [8.9, 8.9], rx: 4.45, fill: '#2d3033', kind: boss}
+        - {id: boss-ring-4, at: [336.85, 17.395], size: [8.9, 8.9], rx: 4.45, fill: '#2d3033', kind: boss}
+        - {id: boss-ring-5, at: [436.85, 17.395], size: [8.9, 8.9], rx: 4.45, fill: '#2d3033', kind: boss}
+        - {id: boss-hole-1-ul, at: [26.35, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-1-ur, at: [51.75, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-1-ll, at: [26.35, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-1-lr, at: [51.75, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-2-ul, at: [126.35, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-2-ur, at: [151.75, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-2-ll, at: [126.35, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-2-lr, at: [151.75, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-3-ul, at: [226.35, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-3-ur, at: [251.75, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-3-ll, at: [226.35, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-3-lr, at: [251.75, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-4-ul, at: [326.35, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-4-ur, at: [351.75, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-4-ll, at: [326.35, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-4-lr, at: [351.75, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-5-ul, at: [426.35, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-5-ur, at: [451.75, 6.895], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-5-ll, at: [426.35, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
+        - {id: boss-hole-5-lr, at: [451.75, 32.295], size: [4.5, 4.5], rx: 2.25, fill: '#14161a', kind: hole}
   top:
     size: {w: 482.6, h: 67.71}
     panel:
@@ -272,6 +308,30 @@ views:
         - {id: slot-22, at: [408.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
         - {id: slot-23, at: [426.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
         - {id: slot-24, at: [444.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-ring-1, at: [32.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-2, at: [50.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-3, at: [68.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-4, at: [86.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-5, at: [104.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-6, at: [122.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-7, at: [140.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-8, at: [158.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-9, at: [176.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-10, at: [194.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-11, at: [212.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-12, at: [230.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-13, at: [248.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-14, at: [266.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-15, at: [284.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-16, at: [302.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-17, at: [320.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-18, at: [338.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-19, at: [356.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-20, at: [374.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-21, at: [392.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-22, at: [410.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-23, at: [428.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-24, at: [446.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
     components:
       placements:
         - {ref: eaton/tripplite-duct-1u-cover-plan@1, id: cover-top, at: [25.4, 57.91], group: cover, rel-pos: 2, only-in: [base]}
@@ -306,6 +366,30 @@ views:
         - {id: slot-22, at: [408.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
         - {id: slot-23, at: [426.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
         - {id: slot-24, at: [444.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
+        - {id: slot-ring-1, at: [32.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-2, at: [50.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-3, at: [68.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-4, at: [86.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-5, at: [104.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-6, at: [122.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-7, at: [140.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-8, at: [158.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-9, at: [176.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-10, at: [194.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-11, at: [212.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-12, at: [230.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-13, at: [248.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-14, at: [266.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-15, at: [284.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-16, at: [302.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-17, at: [320.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-18, at: [338.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-19, at: [356.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-20, at: [374.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-21, at: [392.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-22, at: [410.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-23, at: [428.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
+        - {id: slot-ring-24, at: [446.55, 54.41], size: [3.5, 3.5], rx: 1.75, stroke: '#7d848c', stroke-width: 0.4, kind: slot-ring}
     components:
       placements:
         - {ref: eaton/tripplite-duct-1u-cover-plan@1, id: cover-bottom, at: [25.4, 57.91], group: cover, rel-pos: 3, only-in: [base]}
@@ -313,21 +397,21 @@ views:
     size: {w: 67.71, h: 43.69}
     panel:
       decor:
-        - {id: back, at: [0, 0], size: [5.0, 43.69], fill: '#3f4348', sink: 0.05, kind: base}
-        - {id: wall-upper, at: [5.0, 1.95], size: [52.91, 1.1], fill: '#565b61', kind: finger-wall}
-        - {id: wall-lower, at: [5.0, 40.65], size: [52.91, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-upper, at: [9.7, 1.95], size: [48.21, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-lower, at: [9.7, 40.65], size: [48.21, 1.1], fill: '#565b61', kind: finger-wall}
     components:
       placements:
+        - {ref: eaton/tripplite-duct-1u-end@1, id: end-left, at: [0.0, 0.0], group: body, rel-pos: 6}
         - {ref: eaton/tripplite-duct-1u-cover-side@1, id: cover-left, at: [57.91, 0.85], group: cover, rel-pos: 4, only-in: [base]}
   right:
     size: {w: 67.71, h: 43.69}
     panel:
       decor:
-        - {id: back, at: [62.71, 0], size: [5.0, 43.69], fill: '#3f4348', sink: 0.05, kind: base}
-        - {id: wall-upper, at: [9.8, 1.95], size: [52.91, 1.1], fill: '#565b61', kind: finger-wall}
-        - {id: wall-lower, at: [9.8, 40.65], size: [52.91, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-upper, at: [9.8, 1.95], size: [48.21, 1.1], fill: '#565b61', kind: finger-wall}
+        - {id: wall-lower, at: [9.8, 40.65], size: [48.21, 1.1], fill: '#565b61', kind: finger-wall}
     components:
       placements:
+        - {ref: eaton/tripplite-duct-1u-end@1, id: end-right, at: [58.01, 0.0], rotate: 180, group: body, rel-pos: 7}
         - {ref: eaton/tripplite-duct-1u-cover-side@1, id: cover-right, at: [0.0, 0.85], rotate: 180, group: cover, rel-pos: 5, only-in: [base]}
 configurations:
   base:
@@ -338,6 +422,7 @@ configurations:
       SRCABLEDUCT1U: {}
     component-attrs:
       tripplite-duct-1u-base: {finish: '#3a3d41'}
+      tripplite-duct-1u-end: {finish: '#3a3d41'}
       tripplite-duct-1u-fingers: {finish: '#4d5156'}
       tripplite-duct-1u-cover: {finish: '#55595e'}
       tripplite-duct-1u-cover-plan: {finish: '#55595e'}
@@ -346,6 +431,7 @@ configurations:
     kind: example
     component-attrs:
       tripplite-duct-1u-base: {finish: '#3a3d41'}
+      tripplite-duct-1u-end: {finish: '#3a3d41'}
       tripplite-duct-1u-fingers: {finish: '#4d5156'}
     description: >-
       The same duct with the cover taken off, the two slotted walls and the channel between
@@ -354,6 +440,6 @@ configurations:
 datasheet:
   title: 'Tripp Lite SRCABLEDUCT1U spec sheet (SmartRack 1U Horizontal Cable Manager - Finger duct with cover)'
   url: https://assets.tripplite.com/product-pdfs/en/srcableduct1u.pdf
-  sha256: f0c63ff37f2e618bd6734fcdbe80a7d271ed838f511ffa6729cda309c49ace4f
+  sha256: e38f7a93ac78b0a431d67bd47ade99ba6e855ce12059de64d5d2ada3fdf4bd53
 references:
   - {title: 'Tripp Lite SRCABLEDUCT1U submittal drawing (1U Horizontal Cable Manager), 16-08-508', url: 'https://assets.tripplite.com/submittal-drawing/srcableduct1u-submittal-drawing-en.pdf', sha256: 2865d7950caa5c3a3d24bc693288fc01b0da3c289c32a378f717b0e15ef06ccd}
