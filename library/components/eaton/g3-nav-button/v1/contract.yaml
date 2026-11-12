@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: g3-nav-button
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  One of the four navigation buttons of the hot-swappable meter module of an
+  Eaton ePDU G3 rack PDU: a square black button with a raised rim. One skin
+  carries each printed symbol: up (the default), down, esc and enter.
+size: {w: 12.0, h: 11.8}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - Eaton EMIT03-10 and EMIT04-10 specification drawings (rev 002,
+    sheet 1), the front view read at 300 dpi against each sheet's own 482.6
+    overall (9.45 px per mm): each button is 12.0 across by 11.8 down, with a
+    rim about 1 wide. Neither sheet dimensions it and the reading is good to
+    about 0.5.
+  symbols: >-
+    drawing - the sheet prints an up triangle, a down triangle, ESC and an
+    enter arrow. What each does is not stated by any held document; the symbols
+    are the buttons' names.
+  colour: >-
+    borrowed - the drawings are line art. The 1U units photographed on page 3 of
+    the Eaton Rack PDU G3+ brochure (BR155022EN, a later generation than the
+    2015 sheets, model numbers not printed) show light blue buttons with white
+    symbols in a black rim: a median of about #54ade2 over a 14 by 10 px box of
+    the upper button and #89b9e4 on the lower, read off a 250 dpi crop of a
+    small embedded image, so good to about 20 in each channel. The cap is drawn
+    #4aa4de; the rim is a stand-in, not stated.
+elements:
+  cap: {at: [0.3, 0.3], size: [11.4, 11.2], class: button}
+skins: [default, down, esc, enter]

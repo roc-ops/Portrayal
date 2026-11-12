@@ -774,6 +774,13 @@ export function mirrorClears(clears, pc, flipX, flipY) {
     x: flipX ? pc.x + pc.x + pc.w - p.x - p.w : p.x,
     y: flipY ? pc.y + pc.y + pc.h - p.y - p.h : p.y}));
 }
+// A FACE PUNCH AS IT IS REPLAYED ON A MODULE'S CROP OF THE FACE. The crop is cut
+// from the face canvas, which a flipped face (flipLX / flipLY) has mirrored, so a
+// `rect` punch (a facet's footprint) is mirrored within the crop's own rect `pf`;
+// any other punch is returned as it is.
+export function cropPunch(p, pf, flipX, flipY) {
+  return p.kind === 'rect' ? mirrorClears([p], pf, flipX, flipY)[0] : p;
+}
 // clear `rect` punches from a canvas whose origin is (ox, oy) face mm
 export function clearFloor(cvs, clears, ox, oy, pxmm) {
   if (!clears || !clears.length) return cvs;
@@ -4395,7 +4402,8 @@ export async function buildFaceRelief(F, ctx) {
         const x0 = faceCrop.getContext('2d');
         for (const p of facePunch[F.view]) {
           if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
-          await unpunch(x0, p);
+          // the restyle re-cut below is an unflipped raster and replays `p` as drawn
+          await unpunch(x0, cropPunch(p, pf, !!F.flipLX, !!F.flipLY));
         }
       }
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
