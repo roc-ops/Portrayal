@@ -190,6 +190,12 @@ to a device that has none is worthwhile where the face is regular and worth
 nothing where it is not: expand.py passes longhand items through untouched
 precisely so that an irregular block stays written out by hand.
 
+A layout that has to reproduce a hand-written device byte for byte in its
+compiled source says `whole-numbers: true` at its top level, because the
+expander otherwise writes a position of 14 as `14.0` and the source hash moves
+([modelling guide](docs/modelling-a-device.md)). `expand.py --check` cannot see
+this, since it compares parsed values and `14` equals `14.0`.
+
 Reuse before you build. Search `library/components/` for the part before
 drawing it; a QSFP28 cage, an RJ45 jack or a C14 inlet almost certainly exists.
 A new component needs a `contract.yaml` and a skin SVG drawn in millimetres;
