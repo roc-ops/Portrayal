@@ -108,24 +108,29 @@ def test_the_en8400_front_carries_the_orange_label_the_en8100_does_not():
 @pytest.mark.parametrize("slug", NODES)
 def test_the_faces_are_drawn_as_installed_with_the_lid_below(slug):
     views = node(slug)["views"]
-    seam_top, seam_bottom = 136, 152  # the flange band on every closed face
+    seam_top, seam_bottom = 132, 156  # the flange band on every closed face
     for face in ("left", "right"):
         plugs = {p["id"]: p for p in views[face]["components"]["placements"]}
         assert plugs["fibre-plug"]["at"][1] >= seam_bottom, face  # the lid, the lower half
         for name, plug in plugs.items():
             if name != "fibre-plug":  # the RF/AC, AC-only and test plugs are the base's
-                assert plug["at"][1] + 30 <= seam_top, (face, name)
+                size = 24 if name.startswith("test-plug") else 30
+                assert plug["at"][1] + size <= seam_top, (face, name)
     # the two ends are a pair: the same plugs, mirrored left to right
     left = {p["id"]: p["at"] for p in views["left"]["components"]["placements"]}
     right = {p["id"]: p["at"] for p in views["right"]["components"]["placements"]}
     assert left["fibre-plug"][0] < 281 / 2 < right["fibre-plug"][0]
-    for face in ("front", "rear"):
-        fins = {d["id"]: d for d in views[face]["panel"]["decor"] if d.get("kind") == "heat-sink-fins"}
-        tall = [d for i, d in fins.items() if i.startswith("fins-tall")]
-        short = [d for i, d in fins.items() if i.startswith("fins-short")]
-        assert tall and short, face
-        assert all(d["at"][1] >= seam_bottom for d in tall), face  # the lid's tall fins, below
-        assert all(d["at"][1] + d["size"][1] <= seam_top for d in short), face
+    chassis = node(slug)["chassis"]
+    fields = {f["on"]: f for f in chassis["fins"]}
+    # the lid's tall ribs are on the bottom edge, the base's short ribs on the top edge
+    assert fields["bottom"]["core"] > fields["top"]["core"]
+    heights = [s["height"] for s in fields["bottom"]["steps"]]
+    assert heights[0] == heights[3] == fields["bottom"]["core"] and heights[2] < heights[0]
+    # the flange is the widest part of the end, and the seam is inside it
+    points = chassis["section"]
+    widest = [y for x, y in points if x == min(p[0] for p in points)]
+    assert min(widest) < chassis["halves"]["base"]["stands"] < max(widest)
+    assert (min(widest), max(widest)) == (seam_top, seam_bottom)
 
 
 @pytest.mark.parametrize("slug", NODES)

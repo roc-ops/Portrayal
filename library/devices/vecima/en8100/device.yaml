@@ -76,9 +76,44 @@ provenance:
       the lower half here), p41 (an end), p69 (the three closure bolts on the front) and p32 (the
       open halves).
       The maker's drawing of the node, supplied by the maker, shows the opened housing with the
-      bolt bosses, gasket and hinge. The faces are rectangles, so the stepped silhouette is drawn as
-      fin fields of different heights. Fin heights, the flange thickness and the position of the seam
-      are read as fractions and are estimates, as no figure carries a dimension.
+      bolt bosses, gasket and hinge. The end profile and the ribs are stated as `chassis.section`
+      and `chassis.fins`, and the open view draws each half's rim from the maker's drawing: a
+      rounded rectangle whose corner radius is about 6 per cent of its length, a rim about 16 mm
+      wide, a bulge round each of the ten closure bolts, and the gasket in a groove just inside
+      the rim. Every figure is read as a fraction of the photograph or the drawing and is an
+      estimate, as no figure carries a dimension.
+  chassis.section:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p41 (the end of the EN8100, lid up) and p29 (the two closed housings). The end
+      is a stepped profile: a narrower casting carrying the tall ribs, a flange at the seam that is
+      the widest part (about 8 per cent of the height tall, with the closure lugs on it), and a
+      lower casting that narrows a little towards its short ribs. Read from the photograph, the
+      castings are about 0.88 of the flange's width where they meet it, and the profile is
+      symmetrical about the middle of the depth. The photographs show the unit lid up; the profile
+      is drawn as installed, rotated 180 degrees from the guide's photographs (a rotation, not a
+      mirror), so the tall-rib casting, the lid, is the lower part and the short-rib casting, the
+      base, is the upper part. The sloped and rounded corners of the photographs are approximated
+      by steps of 4 to 5 mm, as the format only takes axis-aligned edges. The overall size is the
+      data sheet's: the flange takes the 281 mm depth and the two rib edges the 288 mm height.
+      Every figure is an estimate read as a fraction of the photograph; no document gives a
+      dimension of the profile.
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p29 (the side of the closed housings) and p41 (the end), data sheet p5 (the
+      same photographs). The ribs are thick, with gaps about as wide as the ribs. The tall ribs,
+      on the lid, stand about 17 per cent of the height (49 mm) at the two ends and run along
+      nearly the whole length, with a stepped tip line: a long flat stretch over the middle
+      third about two thirds as tall, and lower again at one end; they are 23 in number, 13 mm thick with 13 mm gaps. The short ribs, on the
+      base, stand about 11 per cent of the height (32 mm), 9.5 mm thick with 9.5 mm gaps, 28 in
+      number. Both fields are inside the stated size, not outside it. The data sheet p7 gives
+      the height as measured from the bottom of the strand and does not exclude the ribs, and
+      the end photograph (p41) has the flange's width at about 1.03 of the whole height with
+      both rib fields in it, close to the data sheet's 11.0 in by 11.3 in (0.97); ribs outside
+      the 288 mm would make the whole noticeably taller than the flange is wide. Rotated 180
+      degrees from the guide's lid-up photographs like the profile, so the tall ribs are on the
+      lower edge and the short ribs on the upper edge as installed.
   bolts:
     confidence: photo-measured
     note: >-
@@ -143,7 +178,8 @@ provenance:
     confidence: estimated
     note: >-
       Half of the 288 mm height. No document gives either half's depth; the seam is read at about
-      the middle of the end (guide p41), so the two halves are taken as equal.
+      the middle of the end (guide p41), in the flange, so the two halves are taken as equal. The
+      flange is the widest part of the section (y 132 to 156 mm), and the seam is at its middle.
   halves.lid.hinge:
     confidence: photo-measured
     note: >-
@@ -194,6 +230,56 @@ chassis:
   color: '#eceeef'
   edge: '#c3c7ca'
   silk: '#3a3f44'
+  section:
+  - [27.0, 0.0]
+  - [254.0, 0.0]
+  - [254.0, 32.0]
+  - [259.0, 32.0]
+  - [259.0, 114.0]
+  - [263.0, 114.0]
+  - [263.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 156.0]
+  - [264.0, 156.0]
+  - [264.0, 246.0]
+  - [260.0, 246.0]
+  - [260.0, 262.0]
+  - [255.0, 262.0]
+  - [255.0, 276.0]
+  - [250.0, 276.0]
+  - [250.0, 288.0]
+  - [31.0, 288.0]
+  - [31.0, 276.0]
+  - [26.0, 276.0]
+  - [26.0, 262.0]
+  - [21.0, 262.0]
+  - [21.0, 246.0]
+  - [17.0, 246.0]
+  - [17.0, 156.0]
+  - [0.0, 156.0]
+  - [0.0, 132.0]
+  - [18.0, 132.0]
+  - [18.0, 114.0]
+  - [22.0, 114.0]
+  - [22.0, 32.0]
+  - [27.0, 32.0]
+  fins:
+  - 'on': top
+    span: [67.0, 589.5]
+    core: 32.0
+    rib: 9.5
+    gap: 9.5
+  - 'on': bottom
+    span: [13.5, 598.5]
+    core: 49.0
+    rib: 13.0
+    gap: 13.0
+    steps:
+    - {span: [13.5, 160.0], height: 49.0}
+    - {span: [160.0, 190.0], height: 40.0}
+    - {span: [190.0, 425.0], height: 32.0}
+    - {span: [425.0, 566.0], height: 49.0}
+    - {span: [566.0, 598.5], height: 36.0}
   halves:
     base: {outer: top, stands: 144.0}
     lid: {hinge: rear, angle: 180.0, stands: 144.0}
@@ -252,11 +338,7 @@ views:
   front:
     panel:
       decor:
-        - {id: fins-tall-left, at: [48, 226], size: [130, 38], pattern: ribs, out: 18, kind: heat-sink-fins, confidence: estimated, source: 'guide p29, closed housing, drawn as installed (rotated 180 degrees from the lid-up photograph): the lid casting steps down at each end and is the lower half'}
-        - {id: fins-tall-centre, at: [178, 226], size: [251, 62], pattern: ribs, out: 26, kind: heat-sink-fins, confidence: estimated, source: 'guide p29, closed housing, drawn as installed (rotated 180 degrees from the lid-up photograph): tall centre section of the lid casting, the lower half'}
-        - {id: fins-tall-right, at: [429, 226], size: [130, 38], pattern: ribs, out: 18, kind: heat-sink-fins, confidence: estimated, source: 'guide p29, closed housing, drawn as installed (rotated 180 degrees from the lid-up photograph): the lid casting steps down at each end and is the lower half'}
-        - {id: fins-short, at: [30, 0], size: [547, 30], pattern: ribs, out: 12, kind: heat-sink-fins, confidence: estimated, source: 'guide p29, closed housing, drawn as installed (rotated 180 degrees from the lid-up photograph): the base fins read shorter than the lid fins and are the upper half'}
-        - {id: seam-flange, at: [0, 136], size: [607, 16], fill: '#e0e3e5', out: 8, kind: flange, confidence: estimated, source: 'guide p29: the flange around the seam stands out of the sides'}
+        - {id: seam-flange, at: [0, 132], size: [607, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'guide p29: the flange around the seam, the widest part of the housing; its depth comes from the chassis section'}
         - {id: gasket-line, at: [4, 143], size: [599, 2], fill: '#3a3d40', kind: gasket, confidence: estimated, source: 'guide p68 step 1: the O-ring at the seam; its section is not stated'}
         - {id: clamp-1, at: [499, 118], size: [18, 40], fill: '#d3d6d9', out: 12, kind: closure-tab, confidence: photo-measured, source: 'guide p69: closure bolt #5 on the front, turned 180 degrees with the face; position from the maker drawing of the node'}
         - {id: clamp-2, at: [297, 118], size: [18, 40], fill: '#d3d6d9', out: 12, kind: closure-tab, confidence: photo-measured, source: 'guide p69: closure bolt #1 on the front, turned 180 degrees with the face; position from the maker drawing of the node'}
@@ -272,11 +354,7 @@ views:
   rear:
     panel:
       decor:
-        - {id: fins-tall-left, at: [48, 226], size: [130, 38], pattern: ribs, out: 18, kind: heat-sink-fins, confidence: estimated, source: 'the same fins as the front, tall on the lower half as installed; this face is not photographed from outside'}
-        - {id: fins-tall-centre, at: [178, 226], size: [251, 62], pattern: ribs, out: 26, kind: heat-sink-fins, confidence: estimated, source: 'the same fins as the front, tall on the lower half as installed; this face is not photographed from outside'}
-        - {id: fins-tall-right, at: [429, 226], size: [130, 38], pattern: ribs, out: 18, kind: heat-sink-fins, confidence: estimated, source: 'the same fins as the front, tall on the lower half as installed; this face is not photographed from outside'}
-        - {id: fins-short, at: [30, 0], size: [547, 30], pattern: ribs, out: 12, kind: heat-sink-fins, confidence: estimated, source: 'the same fins as the front, short on the upper half as installed; this face is not photographed from outside'}
-        - {id: seam-flange, at: [0, 136], size: [607, 16], fill: '#e0e3e5', out: 8, kind: flange, confidence: estimated, source: 'the same flange as the front'}
+        - {id: seam-flange, at: [0, 132], size: [607, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'the same flange as the front'}
         - {id: gasket-line, at: [4, 143], size: [599, 2], fill: '#3a3d40', kind: gasket, confidence: estimated, source: 'the same seam as the front'}
         - {id: hinge-1-knuckle-a, at: [164, 126], size: [10, 36], rx: 3, fill: '#cfd2d5', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.29 of the length'}
         - {id: hinge-1-knuckle-b, at: [176, 126], size: [10, 36], rx: 3, fill: '#b9bdc1', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.29 of the length'}
@@ -288,24 +366,20 @@ views:
     size: {w: 607, h: 281}
     panel:
       decor:
-        - {id: fins-base, at: [48, 24], size: [511, 233], pattern: ribs, out: 24, kind: heat-sink-fins, confidence: estimated, source: 'guide p29: the finned back of the base half; the fin field read as a fraction of the plan'}
         - {id: strand-clamp-1, at: [128, 88], size: [44, 104], fill: '#e6e8ea', out: 14, kind: strand-clamp, confidence: estimated, source: 'guide p61: the top strand clamp, two per node; position and size are estimates'}
         - {id: strand-clamp-2, at: [435, 88], size: [44, 104], fill: '#e6e8ea', out: 14, kind: strand-clamp, confidence: estimated, source: 'guide p61: the top strand clamp, two per node; position and size are estimates'}
         - {id: strand-bolt-1, at: [143, 128], size: [14, 14], rx: 7, fill: '#bfc3c7', out: 20, kind: bolt-head, confidence: photo-measured, source: 'guide p61: the strand clamp bolt, 1/2 inch hex'}
         - {id: strand-bolt-2, at: [450, 128], size: [14, 14], rx: 7, fill: '#bfc3c7', out: 20, kind: bolt-head, confidence: photo-measured, source: 'guide p61: the strand clamp bolt, 1/2 inch hex'}
   bottom:
     size: {w: 607, h: 281}
-    panel:
-      decor:
-        - {id: fins-lid, at: [30, 24], size: [547, 233], pattern: ribs, out: 12, kind: heat-sink-fins, confidence: estimated, source: 'guide p29: the finned back of the lid half; the fin field read as a fraction of the plan'}
   left:
     size: {w: 281, h: 288}
     panel:
       decor:
-        - {id: seam-flange, at: [0, 136], size: [281, 16], fill: '#e0e3e5', out: 8, kind: flange, confidence: estimated, source: 'guide p41: the flange at the seam, about the middle of the end'}
+        - {id: seam-flange, at: [0, 132], size: [281, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'guide p41: the flange at the seam, the widest part of the end, about the middle of its height'}
     components:
       placements:
-        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [7, 211], group: port-plugs, rel-pos: 1}
+        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [18, 211], group: port-plugs, rel-pos: 1}
         - {ref: vecima/en8100-test-plug@1, id: test-plug-1, at: [67, 105], group: port-plugs, rel-pos: 2}
         - {ref: vecima/en8100-test-plug@1, id: test-plug-2, at: [231, 105], group: port-plugs, rel-pos: 3}
         - {ref: vecima/en8100-port-plug@1, id: rfac-plug-1, at: [50, 54], group: port-plugs, rel-pos: 4}
@@ -315,14 +389,14 @@ views:
     size: {w: 281, h: 288}
     panel:
       decor:
-        - {id: seam-flange, at: [0, 136], size: [281, 16], fill: '#e0e3e5', out: 8, kind: flange, confidence: photo-measured, source: 'guide p41: the flange at the seam, about the middle of the end'}
+        - {id: seam-flange, at: [0, 132], size: [281, 24], fill: '#e0e3e5', kind: flange, confidence: photo-measured, source: 'guide p41: the flange at the seam, the widest part of the end, about the middle of its height'}
     silkscreen:
       - {at: [211, 38], text: D, font-size: 5, rotate: 90, for: rfac-plug-1}
       - {at: [128, 38], text: PWR (R), font-size: 4, rotate: 90, for: ac-plug}
       - {at: [46, 38], text: C, font-size: 5, rotate: 90, for: rfac-plug-2}
     components:
       placements:
-        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [244, 211], group: port-plugs, rel-pos: 1}
+        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [233, 211], group: port-plugs, rel-pos: 1}
         - {ref: vecima/en8100-test-plug@1, id: test-plug-1, at: [190, 105], group: port-plugs, rel-pos: 2}
         - {ref: vecima/en8100-test-plug@1, id: test-plug-2, at: [26, 105], group: port-plugs, rel-pos: 3}
         - {ref: vecima/en8100-port-plug@1, id: rfac-plug-1, at: [201, 54], group: port-plugs, rel-pos: 4}
@@ -332,40 +406,60 @@ views:
     size: {w: 607, h: 574}
     panel:
       decor:
-        - {id: base-half, at: [0, 0], size: [607, 281], fill: '#d8dbde', rx: 20, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the base half, with rounded corners'}
-        - {id: base-floor, at: [12, 14], size: [583, 253], fill: '#9da1a5', rx: 6, kind: housing-floor}
-        - {id: base-gasket, at: [13, 21], size: [581, 239], stroke: '#26282b', stroke-width: 2.6, rx: 8, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring round the rim'}
-        - {id: lid-half, at: [0, 293], size: [607, 281], fill: '#d8dbde', rx: 20, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the lid half, with rounded corners'}
-        - {id: lid-floor, at: [12, 307], size: [583, 253], fill: '#9da1a5', rx: 6, kind: housing-floor}
-        - {id: lid-gasket, at: [13, 314], size: [581, 239], stroke: '#26282b', stroke-width: 2.6, rx: 8, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring round the rim'}
-        - {id: lid-strip, at: [14, 309], size: [579, 18], fill: '#1f2124', kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid; its fins are its ribs'}
-        - {id: lid-strip-fins, at: [14, 309], size: [579, 18], pattern: grille, kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid'}
-        - {id: hinge-1-base, at: [164, 273], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
-        - {id: hinge-1-lid, at: [164, 292], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
+        - {id: base-half, at: [0, 7], size: [607, 268], fill: '#d8dbde', rx: 30, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the base half, a rounded rectangle whose corner radius is about 6 per cent of its length, and a rim about 16 mm wide before the gasket groove'}
+        - {id: base-lug-1, at: [90, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt, three along each long edge of a half'}
+        - {id: base-lug-2, at: [292, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-3, at: [495, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-4, at: [90, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-5, at: [292, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-6, at: [495, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-7, at: [0, 54], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-8, at: [0, 197], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-9, at: [588, 54], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-10, at: [588, 197], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-floor, at: [12, 19], size: [583, 244], fill: '#9da1a5', rx: 16, kind: housing-floor}
+        - {id: base-gasket, at: [9.5, 16.5], size: [588, 249], stroke: '#26282b', stroke-width: 5, rx: 19, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove just inside the rim, following the rounded corners'}
+        - {id: lid-half, at: [0, 300], size: [607, 268], fill: '#d8dbde', rx: 30, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the lid half, the same rounded rectangle as the base half'}
+        - {id: lid-lug-1, at: [90, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-2, at: [292, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-3, at: [495, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-4, at: [90, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-5, at: [292, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-6, at: [495, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-7, at: [0, 347], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-8, at: [0, 490], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-9, at: [588, 347], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-10, at: [588, 490], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-floor, at: [12, 309], size: [583, 247], fill: '#9da1a5', rx: 16, kind: housing-floor}
+        - {id: lid-gasket, at: [9.5, 309.5], size: [588, 249], stroke: '#26282b', stroke-width: 5, rx: 19, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove just inside the rim, following the rounded corners'}
+        - {id: lid-strip, at: [24, 311], size: [559, 16], fill: '#1f2124', kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid; its fins are its ribs'}
+        - {id: lid-strip-fins, at: [24, 311], size: [559, 16], pattern: grille, kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid'}
+        - {id: hinge-1-base, at: [164, 272], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
+        - {id: hinge-1-lid, at: [164, 293], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
         - {id: hinge-1-pin, at: [177, 270], size: [4, 34], rx: 2, fill: '#6f7378', kind: hinge-pin, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
-        - {id: hinge-2-base, at: [402, 273], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
-        - {id: hinge-2-lid, at: [402, 292], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
+        - {id: hinge-2-base, at: [402, 272], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
+        - {id: hinge-2-lid, at: [402, 293], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
         - {id: hinge-2-pin, at: [415, 270], size: [4, 34], rx: 2, fill: '#6f7378', kind: hinge-pin, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
-        - {id: base-bolt-1, at: [93, 6], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #5 on the front edge of the base'}
-        - {id: base-bolt-2, at: [295, 6], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #1'}
-        - {id: base-bolt-3, at: [498, 6], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #3'}
-        - {id: base-bolt-4, at: [93, 265], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
-        - {id: base-bolt-5, at: [295, 265], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
-        - {id: base-bolt-6, at: [498, 265], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
-        - {id: base-bolt-7, at: [1, 80], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
-        - {id: base-bolt-8, at: [1, 190], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
-        - {id: base-bolt-9, at: [595, 80], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
-        - {id: base-bolt-10, at: [595, 190], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
-        - {id: lid-bolt-1, at: [93, 298], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
-        - {id: lid-bolt-2, at: [295, 298], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
-        - {id: lid-bolt-3, at: [498, 298], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
-        - {id: lid-bolt-4, at: [93, 556], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
-        - {id: lid-bolt-5, at: [295, 556], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
-        - {id: lid-bolt-6, at: [498, 556], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
-        - {id: lid-bolt-7, at: [1, 373], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
-        - {id: lid-bolt-8, at: [1, 483], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
-        - {id: lid-bolt-9, at: [595, 373], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
-        - {id: lid-bolt-10, at: [595, 483], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: base-bolt-1, at: [93, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #5 on the front edge of the base'}
+        - {id: base-bolt-2, at: [295, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #1'}
+        - {id: base-bolt-3, at: [498, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #3'}
+        - {id: base-bolt-4, at: [93, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-5, at: [295, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-6, at: [498, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-7, at: [4, 58], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
+        - {id: base-bolt-8, at: [4, 201], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: base-bolt-9, at: [592, 58], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: base-bolt-10, at: [592, 201], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-1, at: [93, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-2, at: [295, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-3, at: [498, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-4, at: [93, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-5, at: [295, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-6, at: [498, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-7, at: [4, 351], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
+        - {id: lid-bolt-8, at: [4, 494], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-9, at: [592, 351], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-10, at: [592, 494], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
     silkscreen:
       - {at: [112, 16], text: '5', anchor: middle, font-size: 5}
       - {at: [314, 16], text: '1', anchor: middle, font-size: 5}

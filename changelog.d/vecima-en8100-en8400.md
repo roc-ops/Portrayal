@@ -6,7 +6,9 @@
   module bays say whether they are in the base or the lid. The open drawing shows the housing as the guide and the maker's drawing
   of the node show it: the rim with its gasket, ten bolts to a half, the hinge knuckles, the black finned strip of the lid, and on
   the amplifier modules the orange AC shunt connectors, the black connector blocks, the blue test-port leads and the RF circuit
-  lines; the closed faces show the stepped fin fields, the three numbered closure bolts, the hinge and the strand clamps. Three
+  lines; the closed housing is drawn from its end profile (`chassis.section`: a flange at the seam wider than the two castings
+  either side) with a field of tall stepped ribs on the lid and one of short ribs on the base (`chassis.fins`), and opens in 3D
+  as two halves cut from that profile; the closed faces show the three numbered closure bolts, the hinge and the strand clamps. Three
   arrangements are configurations: 2x4 with and without the forward injection module, and 1x2 with one access module. The EN8400
   is the same housing with its own two port entry modules (`vecima/en8400-pem-rf@1` and `vecima/en8400-pem-ac@1`, screwless
   seizures, rated to 1.8 GHz) and an orange 1.8 GHz label. Twelve components are new for the EN8100 and two for the EN8400. The
