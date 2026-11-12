@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: px2-2475
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Raritan
 model: PX2-2475
@@ -67,12 +67,31 @@ provenance:
       gives the PX2 a male DB9 RS-232 CONSOLE / MODEM port, one USB-A port at 12 Mbps, one LAN port at 100 Mbps and an RJ-12
       SENSOR port), so the USB-A is the USB 2 skin of `std/usb-a@1`; the FEATURE jack is an RJ-45 by the guide's note and is drawn,
       with the SENSOR jack, as an RJ45 serial jack like the maker's other PDUs (gaps: sensor-jack-type); the USB-B is the
-      maker's USB-B part.
+      maker's USB-B part. The panel's corners are rounded 2.2 mm and each window's 1.5 mm (page 4 raster, 11.8 px per mm). Each
+      window carries seven-segment digit outlines as the page 6 elevation draws them: two in the LINE / CB / UB window and three
+      in the other, 8.1 mm wide and 11 mm high, on an 11 mm pitch, each with a point. The elevation is read at 12.4 px per mm.
+      The specification's text says a 3-digit display, the drawing shows five digits in two windows, and the drawing is followed.
+      A hairline edge 0.3 mm outside each window is drawn as the page 4 picture draws it. The console jack's flange, 31.5 by
+      6.6 mm with two holes 25.0 apart, is drawn behind its shell; the picture is scaled from the printed 188 mm panel width.
   rear:
     confidence: drawing
     note: >-
-      drawing - two mounting buttons 1244.0 apart, the first 45.0 from the top end (PDF page 6, rear view). The button is the
-      maker's PX3 mounting button, its 14.7 head borrowed (gaps: mounting-button-size), centred across, an estimate.
+      drawing - two mounting buttons 1244.0 apart, the first 145.0 from the top end (PDF page 6, rear view, read at 2400 dpi;
+      the side view puts the stubs at 147 and 1391 mm). The device stood them at 45.0 and 1289.0, a misreading of the
+      pale printed 1. The button is the maker's PX3 mounting button, its 14.7 head borrowed (gaps: mounting-button-size),
+      centred across, an estimate. A ring 25.2 mm across is drawn round each, the 25.20 that page 7 prints for the button's flange.
+      Hairlines at 1.0, 1.6 and 5.5 mm from each long edge are drawn as the rear view draws them, read at 3.09 px per mm.
+  sides:
+    confidence: estimated
+    note: >-
+      estimated - the left face is the side elevation of page 6, the view below the front elevation, so the strip's left in third
+      angle. It is read at 3.0897 px per mm from the printed 1539.0 mm. It shows 24 outlet bodies 27.8 mm long, standing 5.2 mm
+      proud of the front plane, and a lamp ring beside each, 4.2 mm across and 1.9 proud. It shows a fixing block of 2.6 by 4.5
+      mm at each outlet's centre, three steps at the controller panel, a cap at the bottom end, five lines along the profile, an
+      end plate at each end and 12 round marks with a triangle. The front plane is 63.44 mm in front of the rear plane. What
+      stands beyond the 65 mm depth is cut at it (gaps: side-reach). The right face turns the same parts round, except the 12
+      marks, which no held picture shows on that side. The front elevation shows the fixing blocks end-on, 2.6 mm long at each
+      outlet's centre on both long edges, and an end plate at each end; the rear view shows the end plates.
   input:
     confidence: datasheet
     note: >-
@@ -110,11 +129,11 @@ gaps:
   wanted: the maker's statement of which input this part number ships with.
 - what: outlet-lamps
   scope: [front]
-  reason: needs-drawing
+  reason: vendor-silent
   note: >-
     the drawing shows a small circle beside every outlet, and the quick setup guide says the outlets of a PX2 or PX3 have
-    LEDs. No document gives their size, place or colours, so none is drawn and none is a part.
-  wanted: a photograph of the strip, or the drawing dimensioned at the outlets.
+    LEDs. The rings are drawn; no document gives the colours a lamp shows, so they are not filled and are not a part.
+  wanted: a photograph of the strip, or the guide's description of the outlet lamps.
 - what: unlabelled-lamp
   scope: [front]
   reason: vendor-silent
@@ -123,14 +142,6 @@ gaps:
     lamps. It is drawn as a lamp and its meaning is not stated; the held PX-Series PDU user guide (4.3.11) does not
     describe the panel's lamps.
   wanted: a PX2 front-panel description that names the unlabelled lamp, or a photograph of the controller panel.
-- what: display-windows
-  scope: [front]
-  reason: needs-drawing
-  note: >-
-    the specification says a "3-digit LED user-selectable display" and the drawing shows two windows, a two-digit one
-    labelled LINE / CB / UB and a three-digit one, both painted red. Each is drawn as a dark window; no digit is drawn and
-    no part is placed.
-  wanted: a photograph of the control panel.
 - what: sensor-jack-type
   scope: [front]
   reason: needs-drawing
@@ -145,15 +156,24 @@ gaps:
   reason: needs-drawing
   note: >-
     the drawing places the two buttons and does not dimension their heads. They are drawn as the maker's PX3 mounting button,
-    14.7 mm across.
-  wanted: the drawing's rear view dimensioned or the kit's installation sheet.
-- what: sides
-  scope: [top, bottom, left, right]
+    14.7 mm across. Page 7 dimensions a part 250-80-0011-00 with a 14.00 head and a 25.20 flange; it does not say that part
+    is the button, and the PX3 part is shared with other devices, so it is not changed here.
+  wanted: the kit's installation sheet, which says which of the four parts is the button.
+- what: side-reach
+  scope: [left, right]
   reason: needs-drawing
   note: >-
-    the drawing's side view (page 6) is a plain 65.3 x 1539 outline with two short stubs where the buttons stand and small
-    steps at the outlets and the panel; none is dimensioned, so none is drawn. No end view is shown.
-  wanted: the drawing's side and end views dimensioned, or photographs of the ends and the sides.
+    the side view (page 6) shows the outlet bodies and the panel steps standing up to 5.8 mm beyond the 65 mm depth the
+    specification prints, and the two mounting buttons standing behind the rear plane. A side face is as deep as the depth
+    and clips what lies outside it, so those parts are cut at the face and the buttons are not drawn there.
+  wanted: the maker's statement of the depth with the outlet bodies included.
+- what: ends
+  scope: [top, bottom]
+  reason: needs-drawing
+  note: >-
+    no held picture shows either end of the strip: the drawing has no end view and the specification publishes no feature on
+    an end.
+  wanted: an end view of the strip.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-20r}, description: 'the 24 NEMA 5-20R outlets in three groups of eight, numbered 1 to 24 as the drawing prints them'}
   eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 100m}, description: 'the 10/100 BaseT Ethernet jack of the controller (technical specification, networking)'}
@@ -167,11 +187,91 @@ views:
     size: {w: 52, h: 1539}
     panel:
       decor:
-      - {id: controller-panel, at: [4.5, 396.5], size: [43.0, 188.0], fill: '#18191b', kind: controller-panel}
-      - {id: display-window-1, at: [21.2, 436.5], size: [21.9, 14.9], fill: '#2a0c0c', kind: display}
-      - {id: display-window-2, at: [8.8, 460.8], size: [34.3, 15.0], fill: '#2a0c0c', kind: display}
+      - {id: front-line-1, at: [1.6, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a hairline 1.6 mm from one long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-1, at: [0.0, 99.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-1, at: [50.0, 99.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-2, at: [0.0, 134.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-2, at: [50.0, 134.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-3, at: [0.0, 169.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-3, at: [50.0, 169.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-4, at: [0.0, 204.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-4, at: [50.0, 204.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-5, at: [0.0, 239.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-5, at: [50.0, 239.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-6, at: [0.0, 274.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-6, at: [50.0, 274.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-7, at: [0.0, 309.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-7, at: [50.0, 309.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-8, at: [0.0, 344.30], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-8, at: [50.0, 344.30], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-9, at: [0.0, 676.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-9, at: [50.0, 676.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-10, at: [0.0, 711.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-10, at: [50.0, 711.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-11, at: [0.0, 746.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-11, at: [50.0, 746.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-12, at: [0.0, 781.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-12, at: [50.0, 781.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-13, at: [0.0, 816.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-13, at: [50.0, 816.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-14, at: [0.0, 851.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-14, at: [50.0, 851.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-15, at: [0.0, 886.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-15, at: [50.0, 886.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-16, at: [0.0, 921.10], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-16, at: [50.0, 921.10], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-17, at: [0.0, 1065.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-17, at: [50.0, 1065.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-18, at: [0.0, 1100.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-18, at: [50.0, 1100.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-19, at: [0.0, 1135.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-19, at: [50.0, 1135.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-20, at: [0.0, 1170.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-20, at: [50.0, 1170.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-21, at: [0.0, 1205.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-21, at: [50.0, 1205.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-22, at: [0.0, 1240.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-22, at: [50.0, 1240.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-23, at: [0.0, 1275.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-23, at: [50.0, 1275.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-left-24, at: [0.0, 1310.80], size: [1.6, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: edge-fixing-right-24, at: [50.0, 1310.80], size: [2.0, 2.6], fill: '#2e3136', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: a 2.6 mm block at the outlet centre on the long edge, 3.09 px/mm'}
+      - {id: end-plate-1, at: [0.0, 0.0], size: [52.0, 1.9], stroke: '#3a3d42', stroke-width: 0.15, kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: an end plate 1.9 mm thick at each end'}
+      - {id: end-plate-2, at: [0.0, 1537.1], size: [52.0, 1.9], stroke: '#3a3d42', stroke-width: 0.15, kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, front elevation: an end plate 1.9 mm thick at each end'}
+      - {id: controller-panel, at: [4.5, 396.5], size: [43.0, 188.0], rx: 2.2, fill: '#18191b', kind: controller-panel}
+      - {id: display-window-1, at: [21.2, 436.5], size: [21.9, 14.9], rx: 1.5, fill: '#2a0c0c', kind: display}
+      - {id: display-window-2, at: [8.8, 460.8], size: [34.3, 15.0], rx: 1.5, fill: '#2a0c0c', kind: display}
       - {id: nav-button-up, at: [7.9, 431.4], size: [12.0, 12.0], rx: 6.0, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
       - {id: nav-button-down, at: [7.9, 446.3], size: [12.0, 12.0], rx: 6.0, fill: none, stroke: '#6b7076', stroke-width: 0.3, kind: button}
+      - {id: display-window-1-edge, at: [20.9, 436.2], size: [22.5, 15.5], rx: 1.8, stroke: '#5c5c5c', stroke-width: 0.15, kind: bezel-line}
+      - {id: display-window-2-edge, at: [8.5, 460.5], size: [34.9, 15.6], rx: 1.8, stroke: '#5c5c5c', stroke-width: 0.15, kind: bezel-line}
+      - {id: outlet-lamp-1, at: [36.35, 80.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-2, at: [36.35, 115.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-3, at: [36.35, 150.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-4, at: [36.35, 185.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-5, at: [36.35, 220.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-6, at: [36.35, 255.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-7, at: [36.35, 290.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-8, at: [36.35, 325.75], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-9, at: [36.35, 657.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-10, at: [36.35, 692.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-11, at: [36.35, 727.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-12, at: [36.35, 762.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-13, at: [36.35, 797.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-14, at: [36.35, 832.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-15, at: [36.35, 867.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-16, at: [36.35, 902.55], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-17, at: [36.35, 1047.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-18, at: [36.35, 1082.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-19, at: [36.35, 1117.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-20, at: [36.35, 1152.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-21, at: [36.35, 1187.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-22, at: [36.35, 1222.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-23, at: [36.35, 1257.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: outlet-lamp-24, at: [36.35, 1292.25], size: [4.3, 4.3], rx: 2.15, stroke: '#8a8f96', stroke-width: 0.2, kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, view B: circle 4.3 mm, pitch 35.00 printed'}
+      - {id: console-flange, at: [12.13, 527.15], size: [6.6, 31.5], rx: 3.3, fill: '#9aa1a8', kind: flange, confidence: estimated, source: 'PX2-2475 spec page 4: the D-sub flange 31.5 by 6.6 mm, scaled from the printed 188 mm panel'}
+      - {id: console-screw-hole-1, at: [13.88, 528.85], size: [3.1, 3.1], rx: 1.55, fill: '#0a0b0c', kind: hole, confidence: estimated, source: 'PX2-2475 spec page 4: holes 25.0 apart, scaled from the printed 188 mm panel; TE 24.99 mounting centres'}
+      - {id: console-screw-hole-2, at: [13.88, 553.85], size: [3.1, 3.1], rx: 1.55, fill: '#0a0b0c', kind: hole, confidence: estimated, source: 'PX2-2475 spec page 4: holes 25.0 apart, scaled from the printed 188 mm panel; TE 24.99 mounting centres'}
     silkscreen:
       - {at: [30.8, 83.6], text: '1', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-1}
       - {at: [30.8, 118.6], text: '2', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-2}
@@ -197,6 +297,11 @@ views:
       - {at: [30.8, 1225.1], text: '22', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-22}
       - {at: [30.8, 1260.1], text: '23', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-23}
       - {at: [30.8, 1295.1], text: '24', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-24}
+      - {id: digit-1, at: [22.60, 438.30], path: 'M 1.50 0.00 L 6.60 0.00 L 7.20 0.60 L 6.60 1.20 L 1.50 1.20 L 0.90 0.60 Z M 1.50 4.90 L 6.60 4.90 L 7.20 5.50 L 6.60 6.10 L 1.50 6.10 L 0.90 5.50 Z M 1.50 9.80 L 6.60 9.80 L 7.20 10.40 L 6.60 11.00 L 1.50 11.00 L 0.90 10.40 Z M 0.60 0.90 L 1.20 1.50 L 1.20 4.90 L 0.60 5.50 L 0.00 4.90 L 0.00 1.50 Z M 0.60 5.50 L 1.20 6.10 L 1.20 9.50 L 0.60 10.10 L 0.00 9.50 L 0.00 6.10 Z M 7.50 0.90 L 8.10 1.50 L 8.10 4.90 L 7.50 5.50 L 6.90 4.90 L 6.90 1.50 Z M 7.50 5.50 L 8.10 6.10 L 8.10 9.50 L 7.50 10.10 L 6.90 9.50 L 6.90 6.10 Z M 8.75 10.40 a 0.65 0.65 0 1 0 -1.3 0 a 0.65 0.65 0 1 0 1.3 0 Z', stroke-width: 0.12, fill: '#ff0000', for: chassis}
+      - {id: digit-2, at: [33.60, 438.30], path: 'M 1.50 0.00 L 6.60 0.00 L 7.20 0.60 L 6.60 1.20 L 1.50 1.20 L 0.90 0.60 Z M 1.50 4.90 L 6.60 4.90 L 7.20 5.50 L 6.60 6.10 L 1.50 6.10 L 0.90 5.50 Z M 1.50 9.80 L 6.60 9.80 L 7.20 10.40 L 6.60 11.00 L 1.50 11.00 L 0.90 10.40 Z M 0.60 0.90 L 1.20 1.50 L 1.20 4.90 L 0.60 5.50 L 0.00 4.90 L 0.00 1.50 Z M 0.60 5.50 L 1.20 6.10 L 1.20 9.50 L 0.60 10.10 L 0.00 9.50 L 0.00 6.10 Z M 7.50 0.90 L 8.10 1.50 L 8.10 4.90 L 7.50 5.50 L 6.90 4.90 L 6.90 1.50 Z M 7.50 5.50 L 8.10 6.10 L 8.10 9.50 L 7.50 10.10 L 6.90 9.50 L 6.90 6.10 Z M 8.75 10.40 a 0.65 0.65 0 1 0 -1.3 0 a 0.65 0.65 0 1 0 1.3 0 Z', stroke-width: 0.12, fill: '#ff0000', for: chassis}
+      - {id: digit-3, at: [11.10, 463.10], path: 'M 1.50 0.00 L 6.60 0.00 L 7.20 0.60 L 6.60 1.20 L 1.50 1.20 L 0.90 0.60 Z M 1.50 4.90 L 6.60 4.90 L 7.20 5.50 L 6.60 6.10 L 1.50 6.10 L 0.90 5.50 Z M 1.50 9.80 L 6.60 9.80 L 7.20 10.40 L 6.60 11.00 L 1.50 11.00 L 0.90 10.40 Z M 0.60 0.90 L 1.20 1.50 L 1.20 4.90 L 0.60 5.50 L 0.00 4.90 L 0.00 1.50 Z M 0.60 5.50 L 1.20 6.10 L 1.20 9.50 L 0.60 10.10 L 0.00 9.50 L 0.00 6.10 Z M 7.50 0.90 L 8.10 1.50 L 8.10 4.90 L 7.50 5.50 L 6.90 4.90 L 6.90 1.50 Z M 7.50 5.50 L 8.10 6.10 L 8.10 9.50 L 7.50 10.10 L 6.90 9.50 L 6.90 6.10 Z M 8.75 10.40 a 0.65 0.65 0 1 0 -1.3 0 a 0.65 0.65 0 1 0 1.3 0 Z', stroke-width: 0.12, fill: '#ff0000', for: chassis}
+      - {id: digit-4, at: [22.10, 463.10], path: 'M 1.50 0.00 L 6.60 0.00 L 7.20 0.60 L 6.60 1.20 L 1.50 1.20 L 0.90 0.60 Z M 1.50 4.90 L 6.60 4.90 L 7.20 5.50 L 6.60 6.10 L 1.50 6.10 L 0.90 5.50 Z M 1.50 9.80 L 6.60 9.80 L 7.20 10.40 L 6.60 11.00 L 1.50 11.00 L 0.90 10.40 Z M 0.60 0.90 L 1.20 1.50 L 1.20 4.90 L 0.60 5.50 L 0.00 4.90 L 0.00 1.50 Z M 0.60 5.50 L 1.20 6.10 L 1.20 9.50 L 0.60 10.10 L 0.00 9.50 L 0.00 6.10 Z M 7.50 0.90 L 8.10 1.50 L 8.10 4.90 L 7.50 5.50 L 6.90 4.90 L 6.90 1.50 Z M 7.50 5.50 L 8.10 6.10 L 8.10 9.50 L 7.50 10.10 L 6.90 9.50 L 6.90 6.10 Z M 8.75 10.40 a 0.65 0.65 0 1 0 -1.3 0 a 0.65 0.65 0 1 0 1.3 0 Z', stroke-width: 0.12, fill: '#ff0000', for: chassis}
+      - {id: digit-5, at: [33.10, 463.10], path: 'M 1.50 0.00 L 6.60 0.00 L 7.20 0.60 L 6.60 1.20 L 1.50 1.20 L 0.90 0.60 Z M 1.50 4.90 L 6.60 4.90 L 7.20 5.50 L 6.60 6.10 L 1.50 6.10 L 0.90 5.50 Z M 1.50 9.80 L 6.60 9.80 L 7.20 10.40 L 6.60 11.00 L 1.50 11.00 L 0.90 10.40 Z M 0.60 0.90 L 1.20 1.50 L 1.20 4.90 L 0.60 5.50 L 0.00 4.90 L 0.00 1.50 Z M 0.60 5.50 L 1.20 6.10 L 1.20 9.50 L 0.60 10.10 L 0.00 9.50 L 0.00 6.10 Z M 7.50 0.90 L 8.10 1.50 L 8.10 4.90 L 7.50 5.50 L 6.90 4.90 L 6.90 1.50 Z M 7.50 5.50 L 8.10 6.10 L 8.10 9.50 L 7.50 10.10 L 6.90 9.50 L 6.90 6.10 Z M 8.75 10.40 a 0.65 0.65 0 1 0 -1.3 0 a 0.65 0.65 0 1 0 1.3 0 Z', stroke-width: 0.12, fill: '#ff0000', for: chassis}
     components:
       placements:
         - {id: outlet-1, ref: std/nema-5-20r@1, at: [12.5, 87.1], group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
@@ -239,10 +344,22 @@ views:
         - {id: console, ref: std/db9@1, at: [5.2, 537.2], rotate: 90, group: mgmt, rel-pos: 5, attrs: {role: console}, description: 'CONSOLE / MODEM jack, a D-sub'}
   rear:
     size: {w: 52, h: 1539}
+    panel:
+      decor:
+      - {id: button-1-boss, at: [13.4, 132.4], size: [25.2, 25.2], rx: 12.6, stroke: '#5c5c5c', stroke-width: 0.15, kind: button-boss, confidence: drawing, source: 'PX2-2475 spec page 7, part 250-80-0011-00: flange 25.20; page 6 rear view reads 25.6'}
+      - {id: button-2-boss, at: [13.4, 1376.4], size: [25.2, 25.2], rx: 12.6, stroke: '#5c5c5c', stroke-width: 0.15, kind: button-boss, confidence: drawing, source: 'PX2-2475 spec page 7, part 250-80-0011-00: flange 25.20; page 6 rear view reads 25.6'}
+      - {id: rear-line-1, at: [1.0, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: rear-line-2, at: [1.6, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: rear-line-3, at: [5.5, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: rear-line-4, at: [46.7, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: rear-line-5, at: [50.6, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: rear-line-6, at: [51.2, 0], size: [0.12, 1539], fill: '#2e3136', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: hairlines at 1.0, 1.6 and 5.5 mm from each long edge, 3.09 px/mm'}
+      - {id: end-plate-1, at: [0.0, 0.0], size: [52.0, 1.9], stroke: '#3a3d42', stroke-width: 0.15, kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: an end plate 1.9 mm thick at each end'}
+      - {id: end-plate-2, at: [0.0, 1537.1], size: [52.0, 1.9], stroke: '#3a3d42', stroke-width: 0.15, kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, rear view: an end plate 1.9 mm thick at each end'}
     components:
       placements:
-        - {id: button-1, ref: raritan/px3-mounting-button@1, at: [18.65, 37.65], group: mounting, rel-pos: 1}
-        - {id: button-2, ref: raritan/px3-mounting-button@1, at: [18.65, 1281.65], group: mounting, rel-pos: 2}
+        - {id: button-1, ref: raritan/px3-mounting-button@1, at: [18.65, 137.65], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: raritan/px3-mounting-button@1, at: [18.65, 1381.65], group: mounting, rel-pos: 2}
   top:
     size: {w: 52, h: 65}
     empty: >-
@@ -255,14 +372,215 @@ views:
       nothing else on the end is published.
   left:
     size: {w: 65, h: 1539}
-    empty: >-
-      the maker's drawing shows this long side as a plain outline with two short stubs where the buttons stand and none of
-      it is dimensioned, so nothing is drawn but the outline (gaps: sides).
+    panel:
+      decor:
+      - {id: outlet-body-1, at: [63.44, 86.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-1, at: [63.44, 80.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-1, at: [60.84, 99.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-2, at: [63.44, 121.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-2, at: [63.44, 115.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-2, at: [60.84, 134.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-3, at: [63.44, 156.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-3, at: [63.44, 150.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-3, at: [60.84, 169.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-4, at: [63.44, 191.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-4, at: [63.44, 185.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-4, at: [60.84, 204.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-5, at: [63.44, 226.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-5, at: [63.44, 220.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-5, at: [60.84, 239.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-6, at: [63.44, 261.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-6, at: [63.44, 255.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-6, at: [60.84, 274.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-7, at: [63.44, 296.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-7, at: [63.44, 290.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-7, at: [60.84, 309.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-8, at: [63.44, 331.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-8, at: [63.44, 325.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-8, at: [60.84, 344.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-9, at: [63.44, 663.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-9, at: [63.44, 657.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-9, at: [60.84, 676.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-10, at: [63.44, 698.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-10, at: [63.44, 692.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-10, at: [60.84, 711.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-11, at: [63.44, 733.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-11, at: [63.44, 727.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-11, at: [60.84, 746.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-12, at: [63.44, 768.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-12, at: [63.44, 762.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-12, at: [60.84, 781.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-13, at: [63.44, 803.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-13, at: [63.44, 797.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-13, at: [60.84, 816.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-14, at: [63.44, 838.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-14, at: [63.44, 832.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-14, at: [60.84, 851.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-15, at: [63.44, 873.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-15, at: [63.44, 867.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-15, at: [60.84, 886.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-16, at: [63.44, 908.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-16, at: [63.44, 902.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-16, at: [60.84, 921.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-17, at: [63.44, 1053.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-17, at: [63.44, 1047.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-17, at: [60.84, 1065.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-18, at: [63.44, 1088.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-18, at: [63.44, 1082.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-18, at: [60.84, 1100.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-19, at: [63.44, 1123.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-19, at: [63.44, 1117.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-19, at: [60.84, 1135.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-20, at: [63.44, 1158.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-20, at: [63.44, 1152.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-20, at: [60.84, 1170.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-21, at: [63.44, 1193.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-21, at: [63.44, 1187.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-21, at: [60.84, 1205.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-22, at: [63.44, 1228.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-22, at: [63.44, 1222.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-22, at: [60.84, 1240.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-23, at: [63.44, 1263.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-23, at: [63.44, 1257.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-23, at: [60.84, 1275.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-24, at: [63.44, 1298.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-24, at: [63.44, 1292.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-24, at: [60.84, 1310.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-1, at: [63.44, 432.4], size: [3.2, 11.3], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-2, at: [63.44, 447.3], size: [3.2, 11.3], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-3, at: [63.44, 534.7], size: [5.8, 17.8], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: bottom-cap, at: [63.44, 1478.5], size: [1.6, 60.5], fill: '#26282b', kind: end-cap, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-1, at: [61.5, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-2, at: [59.95, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-3, at: [8.7, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-4, at: [6.5, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-5, at: [2.0, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: end-plate-top, at: [0.0, 0.0], size: [63.44, 1.9], fill: '#3a3d42', kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: end-plate-bottom, at: [0.0, 1537.1], size: [63.44, 1.9], fill: '#3a3d42', kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: round-mark-1-outer, at: [50.29, 5.25], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-1-inner, at: [51.34, 6.3], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-2-outer, at: [40.19, 5.25], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-2-inner, at: [41.24, 6.3], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-3-outer, at: [14.49, 5.25], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-3-inner, at: [15.54, 6.3], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-4-outer, at: [50.29, 307.05], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-4-inner, at: [51.34, 308.1], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-5-outer, at: [50.29, 608.75], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-5-inner, at: [51.34, 609.8], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-6-outer, at: [50.29, 923.35], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-6-inner, at: [51.34, 924.4], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-7-outer, at: [50.29, 1225.15], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-7-inner, at: [51.34, 1226.2], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-8-outer, at: [50.29, 1468.85], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-8-inner, at: [51.34, 1469.9], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-9-outer, at: [50.29, 1481.65], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-9-inner, at: [51.34, 1482.7], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-10-outer, at: [50.29, 1526.95], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-10-inner, at: [51.34, 1528.0], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-11-outer, at: [40.19, 1526.95], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-11-inner, at: [41.24, 1528.0], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-12-outer, at: [14.49, 1526.95], size: [6.3, 6.3], rx: 3.15, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+      - {id: round-mark-12-inner, at: [15.54, 1528.0], size: [4.2, 4.2], rx: 2.1, stroke: '#8a8f96', stroke-width: 0.15, kind: round-mark, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation: two rings and a triangle'}
+    silkscreen:
+    - {id: round-mark-1-triangle, at: [52.54, 7.15], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-2-triangle, at: [42.44, 7.15], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-3-triangle, at: [16.74, 7.15], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-4-triangle, at: [52.54, 308.95], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-5-triangle, at: [52.54, 610.65], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-6-triangle, at: [52.54, 925.25], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-7-triangle, at: [52.54, 1227.05], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-8-triangle, at: [52.54, 1470.75], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-9-triangle, at: [52.54, 1483.55], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-10-triangle, at: [52.54, 1528.85], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-11-triangle, at: [42.44, 1528.85], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
+    - {id: round-mark-12-triangle, at: [16.74, 1528.85], path: 'M 2.20 1.25 L 0 0 L 0 2.50 Z', stroke-width: 0.15, fill: '#8a8f96', for: chassis}
   right:
     size: {w: 65, h: 1539}
-    empty: >-
-      the maker's drawing shows this long side as a plain outline with two short stubs where the buttons stand and none of
-      it is dimensioned, so nothing is drawn but the outline (gaps: sides).
+    panel:
+      decor:
+      - {id: outlet-body-1, at: [-3.64, 86.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-1, at: [-0.34, 80.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-1, at: [-0.34, 99.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-2, at: [-3.64, 121.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-2, at: [-0.34, 115.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-2, at: [-0.34, 134.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-3, at: [-3.64, 156.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-3, at: [-0.34, 150.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-3, at: [-0.34, 169.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-4, at: [-3.64, 191.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-4, at: [-0.34, 185.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-4, at: [-0.34, 204.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-5, at: [-3.64, 226.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-5, at: [-0.34, 220.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-5, at: [-0.34, 239.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-6, at: [-3.64, 261.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-6, at: [-0.34, 255.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-6, at: [-0.34, 274.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-7, at: [-3.64, 296.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-7, at: [-0.34, 290.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-7, at: [-0.34, 309.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-8, at: [-3.64, 331.7], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-8, at: [-0.34, 325.8], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-8, at: [-0.34, 344.3], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-9, at: [-3.64, 663.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-9, at: [-0.34, 657.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-9, at: [-0.34, 676.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-10, at: [-3.64, 698.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-10, at: [-0.34, 692.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-10, at: [-0.34, 711.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-11, at: [-3.64, 733.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-11, at: [-0.34, 727.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-11, at: [-0.34, 746.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-12, at: [-3.64, 768.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-12, at: [-0.34, 762.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-12, at: [-0.34, 781.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-13, at: [-3.64, 803.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-13, at: [-0.34, 797.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-13, at: [-0.34, 816.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-14, at: [-3.64, 838.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-14, at: [-0.34, 832.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-14, at: [-0.34, 851.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-15, at: [-3.64, 873.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-15, at: [-0.34, 867.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-15, at: [-0.34, 886.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-16, at: [-3.64, 908.5], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-16, at: [-0.34, 902.6], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-16, at: [-0.34, 921.1], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-17, at: [-3.64, 1053.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-17, at: [-0.34, 1047.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-17, at: [-0.34, 1065.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-18, at: [-3.64, 1088.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-18, at: [-0.34, 1082.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-18, at: [-0.34, 1100.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-19, at: [-3.64, 1123.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-19, at: [-0.34, 1117.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-19, at: [-0.34, 1135.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-20, at: [-3.64, 1158.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-20, at: [-0.34, 1152.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-20, at: [-0.34, 1170.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-21, at: [-3.64, 1193.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-21, at: [-0.34, 1187.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-21, at: [-0.34, 1205.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-22, at: [-3.64, 1228.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-22, at: [-0.34, 1222.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-22, at: [-0.34, 1240.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-23, at: [-3.64, 1263.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-23, at: [-0.34, 1257.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-23, at: [-0.34, 1275.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-body-24, at: [-3.64, 1298.2], size: [5.2, 27.8], fill: '#26282b', kind: outlet-body, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-lamp-edge-24, at: [-0.34, 1292.3], size: [1.9, 4.2], fill: '#26282b', kind: lamp-ring, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: outlet-fixing-24, at: [-0.34, 1310.8], size: [4.5, 2.6], fill: '#26282b', kind: fixing, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-1, at: [-1.64, 432.4], size: [3.2, 11.3], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-2, at: [-1.64, 447.3], size: [3.2, 11.3], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: panel-step-3, at: [-4.24, 534.7], size: [5.8, 17.8], fill: '#26282b', kind: panel-step, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: bottom-cap, at: [-0.04, 1478.5], size: [1.6, 60.5], fill: '#26282b', kind: end-cap, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-1, at: [3.35, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-2, at: [4.9, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-3, at: [56.15, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-4, at: [58.35, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: profile-line-5, at: [62.85, 0.0], size: [0.15, 1539.0], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: end-plate-top, at: [1.56, 0.0], size: [63.44, 1.9], fill: '#3a3d42', kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
+      - {id: end-plate-bottom, at: [1.56, 1537.1], size: [63.44, 1.9], fill: '#3a3d42', kind: end-plate, confidence: estimated, source: 'PX2-2475 spec page 6, side elevation at 3.0897 px per mm'}
 interfaces:
 - {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
 - {physical: eth, name: Ethernet}

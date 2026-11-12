@@ -142,7 +142,7 @@ def test_the_input_conflict_and_the_silent_places_are_gaps():
     gaps = {g["what"]: g for g in device()["gaps"]}
     assert gaps["input-conflict"]["reason"] == "sources-disagree"
     assert "IEC320 C20" in gaps["input-conflict"]["note"] and "NEMA L5-20P" in gaps["input-conflict"]["note"]
-    for what in ("outlet-lamps", "display-windows", "sensor-jack-type", "mounting-button-size"):
+    for what in ("outlet-lamps", "sensor-jack-type", "mounting-button-size"):
         assert what in gaps
 
 
