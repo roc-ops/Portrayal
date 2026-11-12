@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: port-extender
-version: 3.0.2
+version: 4.0.0
 maturity: modelled
 manufacturer: MaiaEdge
 model: Port Extender
@@ -162,6 +162,9 @@ attrs:
     operating-temp-c: '0 to 45'
     operating-humidity: 5% to 90% non-condensing
     mtbf-hours: 150000
+  features:
+    optics-sfp28: '25G and 10G, in the 48 SFP28 tenant ports (datasheet page 3, "10GbE / 25GbE")'
+    optics-qsfp28: '100G, in the 8 QSFP28 fabric uplinks (datasheet page 3, "100GbE")'
   lifecycle:
     eol: none-announced
 chassis: {width: 438.0, height: 44.0, depth: 520.0, ru: 1, color: '#a9adb1'}
@@ -208,27 +211,27 @@ gaps:
     is on the lid - two recessed finger pulls, a product label near the middle and a yellow
     warning sticker at the rear right corner - but only obliquely, so none of them is placed.
 groups:
-  # ONE GROUP, BECAUSE THE VENDOR NUMBERS ALL 56 IN ONE SPACE. The documentation
-  # addresses tenant ports 41-48 and uplinks 51-56 without ever restarting the
-  # count, so the uplinks are 49-56 and not 1-8 of their own group. `index-origin`
-  # takes only 0 or 1, which is the schema saying exactly this: a group's numbering
-  # starts at its first port, and a second group would have to start again. So the
-  # blocks that generate them share the group, and each port carries its media in
-  # its own attrs.
-  ports:
+  # TWO PORT FAMILIES, ONE NUMBERING. The vendor numbers all 56 in one space: the
+  # documentation addresses tenant ports 41-48 and uplinks 51-56 without ever
+  # restarting the count, so the uplinks are 49-56 and not 1-8. `index-origin` only
+  # fixes where counting starts; the two groups share the vendor's numbering, and
+  # the blocks that generate the uplinks carry `number-from: 49` to continue it.
+  sfp28:
     term: Port
     role: traffic
     index-origin: 1
-    mixed: >-
-      48 SFP28 tenant ports and 8 QSFP28 fabric uplinks, numbered 1-56 in one space.
-      The media differ and the numbering does not, so each port carries its own media
-      and speed rather than taking them from the group.
+    attrs: {media: sfp28, speed: 25g}
     description: >-
-      A tenant port's ROLE is set from the MaiaEdge portal rather than on the box -
-      Customer, Internal Fabric (INNI), External Fabric (ENNI), MaiaConnect or Internet
-      (DIA) - which is what the documentation says distinguishes this switch from the
-      third-party ones that can stand in for it.
-  port-leds: {term: LED, role: indicator, index-origin: 1}
+      The 48 SFP28 tenant ports, numbered 1 to 48 as printed. A tenant port's ROLE is
+      set from the MaiaEdge portal rather than on the box - Customer, Internal Fabric
+      (INNI), External Fabric (ENNI), MaiaConnect or Internet (DIA).
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: qsfp28, speed: 100g}
+  sfp28-leds: {term: LED, role: indicator, index-origin: 1}
+  qsfp28-leds: {term: LED, role: indicator, index-origin: 1}
   mgmt:
     term: Port
     role: management
@@ -295,7 +298,7 @@ views:
       - {ref: common/rack-ear@1, id: ear-left, at: [-14.0, 0.25], skin: left, optional: ears, group: furniture, rel-pos: 1}
       - {ref: common/rack-ear@1, id: ear-right, at: [438.0, 0.25], skin: right, optional: ears, group: furniture, rel-pos: 2}
       blocks:
-        - id: ports
+        - id: sfp28
           ref: std/sfp-ganged@1
           at: [5.04, 9.62]
           count: 16
@@ -309,7 +312,7 @@ views:
           led:
             ref: common/led-dot@1
             id-format: led-port-{n}
-            group: port-leds
+            group: sfp28-leds
             dx: 6.125
             dy-top: -3.66
             dy-bottom: 11.41
@@ -321,7 +324,7 @@ views:
             dy-bottom: -1.12
             font-size: 2.1
             fill: '#e8ebee'
-        - id: ports
+        - id: sfp28
           ref: std/sfp-ganged@1
           at: [122.05, 9.62]
           count: 16
@@ -335,7 +338,7 @@ views:
           led:
             ref: common/led-dot@1
             id-format: led-port-{n}
-            group: port-leds
+            group: sfp28-leds
             dx: 6.125
             dy-top: -3.66
             dy-bottom: 11.41
@@ -347,7 +350,7 @@ views:
             dy-bottom: -1.12
             font-size: 2.1
             fill: '#e8ebee'
-        - id: ports
+        - id: sfp28
           ref: std/sfp-ganged@1
           at: [239.07, 9.62]
           count: 16
@@ -361,7 +364,7 @@ views:
           led:
             ref: common/led-dot@1
             id-format: led-port-{n}
-            group: port-leds
+            group: sfp28-leds
             dx: 6.125
             dy-top: -3.66
             dy-bottom: 11.41
@@ -373,7 +376,7 @@ views:
             dy-bottom: -1.12
             font-size: 2.1
             fill: '#e8ebee'
-        - id: ports
+        - id: qsfp28
           ref: std/qsfp-ganged@1
           at: [356.45, 10.21]
           count: 8
@@ -387,7 +390,7 @@ views:
           led:
             ref: maiaedge/port-extender-lane-leds@1
             id-format: led-port-{n}
-            group: port-leds
+            group: qsfp28-leds
             dx: 1.95
             dy-top: -5.0
             dy-bottom: 10.85

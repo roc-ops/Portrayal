@@ -1,14 +1,14 @@
 format: 1
 kind: component
 name: screw-terminal-2-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: screw-terminal-2
 profile: power
 description: >-
   The two-way screw-clamp cable plug of a two-pole pluggable DC terminal block, wired, seen from the wire side as seated. A green
   body with a wire entry and one insulated wire at each of its two ways. It seats in a `screw-terminal-2` header at its own mate
-  point. It carries one wire per pole, not one cable.
+  point. It carries one wire per pole, all in one cable that ends at its `mate` point.
 size: {w: 10.6, h: 11.0}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -40,9 +40,15 @@ provenance:
     relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [5.30, 5.50], direction: front}
+  cable: {at: [5.30, 5.50], direction: front}
   wire-1: {at: [3.00, 5.80], direction: front}
   wire-2: {at: [7.60, 5.80], direction: front}
 skins: [default]

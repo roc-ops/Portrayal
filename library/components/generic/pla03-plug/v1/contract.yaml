@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: pla03-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: positronic-pla03
 profile: power
@@ -10,8 +10,7 @@ description: >-
   seen from the wire side as a front elevation sees it seated: the blue insulator, upright, with
   a short straight stub of insulated wire leaving each of its three contacts, top to bottom as the
   Edgecore DCS204 quick start guide wires it: DC return, the -36 to -72 VDC feed and ground. Seats
-  in a `positronic-pla03` connector at its own mate point. It carries one wire per contact, not
-  one cable.
+  in a `positronic-pla03` connector at its own mate point. It carries one wire per contact, all in one cable that ends at its `mate` point.
 size: {w: 10.36, h: 22.25}
 size-confidence: {w: drawing, h: drawing}
 size-notes: >-
@@ -71,6 +70,11 @@ provenance:
     common/pla03-receptacle@1 presents at its own face.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 relief:
   features:
@@ -100,6 +104,7 @@ relief:
         see wire-1
 connection-points:
   mate: {at: [5.18, 11.125], direction: front}
+  cable: {at: [5.18, 11.125], direction: front}
   wire-1: {at: [5.18, 6.125], direction: front, 'on': wire-1}
   wire-2: {at: [5.18, 11.125], direction: front, 'on': wire-2}
   wire-3: {at: [5.18, 16.125], direction: front, 'on': wire-3}

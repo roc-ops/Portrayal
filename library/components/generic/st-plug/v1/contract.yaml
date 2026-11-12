@@ -1,0 +1,75 @@
+format: 1
+kind: component
+name: st-plug
+version: 1.0.0
+class: port
+mates: st
+profile: networking
+description: >-
+  An ST (BFOC) fibre plug on its cable, seen from the cable end as a front elevation sees it
+  seated: the round barrel, the strain relief and a short straight stub of cable whose
+  diameter is the cable-od field. Seats in an `st` receptacle at its own mate point.
+size: {w: 7.4, h: 7.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: fiber, connector: st}
+optical: {positions: 1}
+fields:
+  cable-od: {label: Cable outside diameter, type: number, unit: mm, default: 2.0}
+  jacket-color: {label: Jacket colour, type: text, default: '#e0b21b'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  model: >-
+    datasheet - Adtran OSA 5422 data sheet, p6, IRIG/TIMECODE line card: the optical output takes
+    an "ST connector - fiber 62/125um". The data sheet gives no plug dimension, and no ST plug
+    drawing is held.
+  size: >-
+    estimated - NO DRAWING OF THE PLUG IS HELD. It is drawn as large as the receptacle it mates,
+    common/st-receptacle@1 (7.4, itself estimated).
+  needs-drawing: >-
+    a maker's drawing of an ST plug (IEC 61754-2) with its barrel diameter and bayonet.
+  fibre-position: >-
+    element `1` is the one fibre position: the ferrule at the centre of the barrel, 2.5 across (the
+    ST ferrule diameter, IEC 61754-2, which is not held in this checkout, so it is estimated here). Its
+    bounding box is the element, so fibre 1 of this part is drawn at `<part>/1`.
+  stub: >-
+    estimated - the stub rule, docs/connectors-coax-design.md section 5: a straight run of cable 30 long
+    starting where the strain relief ends.
+  cable-od: >-
+    estimated - no cable diameter is held. 2.0 is a reading of a simplex 62.5/125 um patch cord.
+  jacket-colour: >-
+    a FIELD. The default is the orange multimode jacket convention; the data sheet states no colour.
+  frame: >-
+    THE RELIEF IS MEASURED FROM THE LIFT THE HOST PRESENTS, the frame the house plugs use.
+    common/st-receptacle@1 presents at its own face, so 0 is the panel plane. The nose stands
+    2.0 in front of it (estimated, no insertion depth is held).
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract (spec/tests/test_behaviour.py).
+  axis: >-
+    derived - `mate` and `cable` share one point, the centre of the barrel (3.7, 3.7): the cable runs
+    straight through the connector.
+elements:
+  '1': {at: [2.45, 2.45], size: [2.5, 2.5], class: fibre}
+relief:
+  features:
+    - node: shell
+      out: 2.0
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: provenance.size - the nose, 2.0 in front of the port face (estimated)
+    - node: relief-boot
+      lift: 2.0
+      out: 14.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: provenance.stub - the barrel and the strain relief, 14.0 long (estimated)
+    - node: stub
+      lift: 16.0
+      cyl: 30
+      confidence: estimated
+      source: the stub rule, docs/connectors-coax-design.md section 5
+connection-points:
+  mate: {at: [3.7, 3.7], direction: front}
+  cable: {at: [3.7, 3.7], direction: front, 'on': stub}
+skins: [default]

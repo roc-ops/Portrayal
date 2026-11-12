@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: lpwr-f
-version: 1.0.0
+version: 1.1.0
 class: power
 behaviour: fills
 profile: networking
@@ -122,6 +122,44 @@ provenance:
     hides the RET studs. BAT stud centres (25.6, 15.7) and (39.5, 21.6) on Figure 67, 15.1
     apart at about 0.5 a reading, against the 16 hole spacing of the dual-hole M6 lug (USIM
     p265). The terminal plate outline is schematic.
+  seats: >-
+    estimated - each terminal is nokia/lpwr-f-dc-pole@1, a pair of studs on 5/8 in. centres
+    that one dual-hole lug lands across, turned 22.9 degrees clockwise on the face about the
+    midpoint of its studs. THE BAT PAIR stands where the skin draws its two stud rings: centres
+    (25.6, 15.5) and (39.6, 21.4) on the skin, midpoint (32.6, 18.45), the slant the closed-door
+    UDS Figure 67 gives. THE RET PAIR IS ESTIMATED FROM FIGURE 69 AND NOT DRAWN IN THE SKIN: the
+    hazard label hides it. On UDS Figure 69 (p97, the same render as USIM Figure 231, p292) the
+    two pairs are level and parallel (the studs' slants read 20.6 and 21.2 degrees against the
+    22.9 of the skin) and the RET midpoint lies 150.5 px to the right of the BAT midpoint. That
+    distance is 46.3 mm at the 16 mm the figure's own stud spacing stands for (51.3 and 52.6 px)
+    and 48.2 mm at the plate's own scale (613 px for 196.15); the pair stands 47.2 mm from the
+    BAT pair, the middle of the two, so its midpoint is (79.8, 18.5), about 1 mm good. The
+    render looks from above at a block standing 27.95 off the plate, so no scale is exact. A
+    dimensioned elevation of the open block would settle the RET pair. The studs are
+    common/terminal-screw-34@1, a stand-in that claims no thread, lifted 8.0 mm above the
+    terminal plate by the pole, an estimate: no held page gives their height.
+  poles: >-
+    datasheet - UDS p96-97 section 13.4.2: "one (2-stud) RET connector terminal at the right
+    side and one (2-stud) BAT connector terminal at the left side"; USIM p292: "a 2-stud BAT (-)
+    power connector terminal (left) and a 2-stud RET (+) power connector terminal (right)".
+    The roles are the manual's words: `batt` for the BAT terminal (spec/schemas/dc.yaml writes
+    `batt` as -48V and negative (battery)) and `rtn` for the RET terminal (it writes `rtn` as
+    RTN and positive (battery return)), listed left to right as the skin draws them. The
+    module is one feed: one port, two poles. Each terminal is two studs for one dual-hole lug
+    (USIM Procedure 42 p294: "a single 100A two-hole lug (DC) power cable per (two-stud)
+    connection point").
+  port-rating: >-
+    NOT STATED AS ONE FIGURE. UDS p94 gives the AA 80 A and p104 the AB 100 A, and this
+    component is one part for both builds, so the port states no `rating-a`. The breaker's two
+    poles (2 x 40 A or 2 x 50 A) are not two feeds.
+  port-voltage: >-
+    NOT STATED AS A NOMINAL. UDS p94 and p104 print "-48Vdc/-60 Vdc" as the nominal, two
+    figures, and a range of -40.5 to -72 Vdc. A feed is matched on its roles, so the port states
+    no `voltage`.
+  port-awg: >-
+    NOT STATED. USIM p293 recommends a 25 mm2 wire and no AWG size for the power cable, and
+    prints "3AWG" only for the grounding cable (section 4.5.2.2), a different cable. The port
+    states no `awg`.
   hazard-label: >-
     drawing - UDS Figure 67 and Figure 72: a grey label with a yellow warning triangle and
     "ENERGY HAZARD" over "Disconnect before service", printed to read up the label. The
@@ -183,6 +221,18 @@ groups:
     description: the one PWR lamp, under the connector block door
 parts:
   - {ref: common/led-dot@1, id: led-pwr, group: status-leds, at: [19.6, 29.3], states: {lamp: ['off', {name: 'on', color: '#39b54a'}, {name: fault, color: '#d0021b'}]}}
+  # one pole per terminal, each turned about its own centre; the centre of a pair is the
+  # midpoint of its two stud centres, and the part's own top left is that centre less (9.6375, 1.7)
+  - {ref: nokia/lpwr-f-dc-pole@1, id: pole-batt, at: [22.9625, 16.75], rotate: 22.9}
+  - {ref: nokia/lpwr-f-dc-pole@1, id: pole-rtn, at: [70.1625, 16.8], rotate: 22.9, behind: true}
+dc:
+  ports:
+    - id: input
+      direction: input
+      poles:
+        - {role: batt, slot: pole-batt}
+        - {role: rtn, slot: pole-rtn}
+      source: {poles: poles}
 connection-points:
   mate: {at: [98.075, 21.4], direction: rear}
   power: {at: [60.1, 35.2], direction: down}

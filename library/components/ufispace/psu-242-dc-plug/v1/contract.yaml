@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: psu-242-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: ufispace-dc-block-6
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the UfiSpace PSU-242-DEERN supply, wired, seen from the wire side as seated. One
   insulated wire enters each of its six ways, three in the upper row and three in the lower, as the supply
   prints them "V+" and "V-". It seats in a `ufispace-dc-block-6` connector at its own mate point. It carries
-  one wire per contact, not one cable, and its pull handle is not drawn.
+  one wire per contact, all in one cable that ends at its `mate` point, and its pull handle is not drawn.
 size: {w: 22.0, h: 22.6}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -44,9 +44,15 @@ provenance:
     outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [11.0, 11.3], direction: front}
+  cable: {at: [11.0, 11.3], direction: front}
   wire-1: {at: [4.6, 5.6], direction: front}
   wire-2: {at: [11.0, 5.6], direction: front}
   wire-3: {at: [17.4, 5.6], direction: front}

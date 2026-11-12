@@ -38,9 +38,27 @@
 // field's ribs stand out of the section's own edge, beyond the box, and cut nothing.
 // A section with no fins builds exactly as it did.
 //
+// THE OPEN STATE (`chassis.halves`, spec/tools/portrayal/halves.py). A housing that opens is
+// the same body in two parts. The seam is the plane `base.stands` from the base's `outer` face
+// (`top` or `bottom`, so the seam is parallel to the extrusion and each part is a cut of the
+// section), `splitSection` cuts the body of the arrays above at it, ribs included, and each
+// part is its own arrays: the body's faces in materials 0-5 as before, and the cut face closed
+// with a cap of its own, material SEAM_INDEX, planar at the seam. The cap is there so a part is
+// a solid whose volume and area can be held; the viewer shows it as it shows the open face of a
+// box half (housing.js, #1586): not drawn, the inside of the shell seen through it. The lid
+// turns about the LINE where the seam plane meets the hinge face's outline: parallel to the
+// extrusion, at the seam row, at the section's foremost (`front`) or rearmost (`rear`) x there.
+// In a flange that is the flange's edge, the hinge-side edge the maker's hinge drawing shows;
+// in a casting, its wall. A seam that divides nothing (outside the section, or exactly on a
+// horizontal edge) cannot be split: lint refuses it (spec/tools/portrayal/lint.py) and the
+// split here throws.
+//
 // No `three` in here.
 
 import { boxUV, FACE_INDEX } from './bevel.js';
+
+// the material of a part's cut face: after the six faces, the slot bevel.js gives its bevels
+export const SEAM_INDEX = 6;
 
 const EPS = 1e-9;
 const FIN_TOL = 0.01;
@@ -180,7 +198,11 @@ function finsOf(fins) {
 // the right, clockwise with y down), and a vertex on a straight run is dropped. Normally one loop;
 // a cut that parts the body gives two, and each is built by itself. With no inside field it is the
 // polygon, untouched.
-export function bodyLoops(section, fins, H) {
+//
+// `clip` ({lo, hi}, rows of the section's frame; either may be infinite) keeps only the body between
+// those rows: the grid takes the finite ones as lines of its own, a cell outside them is empty, and the
+// loops then have an edge on the clip row wherever the body crosses it.
+export function bodyLoops(section, fins, H, clip) {
   const pts = section.map(p => [Number(p[0]), Number(p[1])]);
   const cuts = [];
   for (const f of finsOf(fins) || []) {
@@ -189,10 +211,11 @@ export function bodyLoops(section, fins, H) {
     if (!ext) continue;
     cuts.push(f.on === 'top' ? [ext[0], 0, ext[1], f.core] : [ext[0], H - f.core, ext[1], H]);
   }
-  if (!cuts.length) return [pts];
+  if (!cuts.length && !clip) return [pts];
   const uniq = a => [...new Set(a)].sort((p, q) => p - q);
+  const rows = clip ? [clip.lo, clip.hi].filter(Number.isFinite) : [];
   const xs = uniq([...pts.map(p => p[0]), ...cuts.flatMap(c => [c[0], c[2]])]);
-  const ys = uniq([...pts.map(p => p[1]), ...cuts.flatMap(c => [c[1], c[3]])]);
+  const ys = uniq([...pts.map(p => p[1]), ...cuts.flatMap(c => [c[1], c[3]]), ...rows]);
   const verticals = [];
   for (let i = 0; i < pts.length; i++) {
     const [x0, y0] = pts[i], [x1, y1] = pts[(i + 1) % pts.length];
@@ -205,7 +228,8 @@ export function bodyLoops(section, fins, H) {
     for (let j = 0; j < ny; j++) {
       const cx = (xs[i] + xs[i + 1]) / 2, cy = (ys[j] + ys[j + 1]) / 2;
       const inPoly = verticals.filter(([x, lo, hi]) => x > cx && lo < cy && cy < hi).length % 2 === 1;
-      cell[i].push(inPoly && !cuts.some(c => cx > c[0] && cx < c[2] && cy > c[1] && cy < c[3]));
+      const inClip = !clip || (cy > clip.lo && cy < clip.hi);
+      cell[i].push(inPoly && inClip && !cuts.some(c => cx > c[0] && cx < c[2] && cy > c[1] && cy < c[3]));
     }
   }
   const solid = (i, j) => i >= 0 && j >= 0 && i < nx && j < ny && cell[i][j];
@@ -245,7 +269,11 @@ export function bodyLoops(section, fins, H) {
 // (or nothing). Indices, not a vertex per corner of every triangle: a cap shares its polygon's
 // vertices, a facet has four of its own (each looks a different way, so no vertex is shared
 // across the flat shading). Groups are in index units and ascend by material.
-export function sectionArrays(section, W, H, D, fins) {
+//
+// `clip` ({lo, hi}, rows of the section's frame) builds only the part of the body between those rows,
+// the ribs cropped to them; the faces the cut makes are one more group, SEAM_INDEX, a cap planar at the
+// clip row, facing out of the part. Without it the arrays are the whole body, as they were.
+export function sectionArrays(section, W, H, D, fins, clip) {
   if (!Array.isArray(section) || section.length < 4) {
     throw new Error('chassis.section: a polygon needs at least four points');
   }
@@ -260,8 +288,9 @@ export function sectionArrays(section, W, H, D, fins) {
   if (ribs.length > FIN_MAX_RIBS) {
     throw new Error(`chassis.fins: ${ribs.length} ribs, at most ${FIN_MAX_RIBS} a device`);
   }
-  const loops = bodyLoops(pts, fins, H);
+  const loops = bodyLoops(pts, fins, H, clip);
   const at = (sx, sy, half) => [half, H / 2 - sy, D / 2 - sx];
+  const cutRow = y => !!clip && (y === clip.lo || y === clip.hi);
   const byMat = new Map();
   const add = (mi, quad) => {            // quad: {points: [[x,y,z]...], n}, as triangles
     if (!byMat.has(mi)) byMat.set(mi, []);
@@ -286,7 +315,8 @@ export function sectionArrays(section, W, H, D, fins) {
       }
       const nx = Math.sign(dy), ny = -Math.sign(dx);
       // section frame to viewer frame: ny < 0 is toward +y (up); nx > 0 is toward the rear (-z)
-      const mi = ny < 0 ? FACE_INDEX.top : ny > 0 ? FACE_INDEX.bottom : nx > 0 ? FACE_INDEX.rear : FACE_INDEX.front;
+      const mi = dy === 0 && cutRow(y0) ? SEAM_INDEX
+        : ny < 0 ? FACE_INDEX.top : ny > 0 ? FACE_INDEX.bottom : nx > 0 ? FACE_INDEX.rear : FACE_INDEX.front;
       const n = [0, -ny, -nx];
       add(mi, {points: [at(x0, y0, -W / 2), at(x1, y1, -W / 2), at(x1, y1, W / 2), at(x0, y0, W / 2)], n, quad: true});
     }
@@ -301,13 +331,23 @@ export function sectionArrays(section, W, H, D, fins) {
     const top = r.on === 'top';
     const root = r.outside ? (top ? 0 : H) : (top ? r.limit : H - r.limit);
     const tip = top ? root - r.height : root + r.height;
-    const [ya, yb] = [Math.min(root, tip), Math.max(root, tip)];
+    const [ra, rb] = [Math.min(root, tip), Math.max(root, tip)];
+    // a part keeps the stretch of the rib between its rows; a rib the seam crosses is cut there and capped
+    const lo = clip ? clip.lo : -Infinity, hi = clip ? clip.hi : Infinity;
+    const ya = Math.max(ra, lo), yb = Math.min(rb, hi);
+    if (yb - ya <= EPS) continue;
     const [e0, e1] = ext, hx0 = -W / 2 + r.x0, hx1 = -W / 2 + r.x1;
     const P = (sx, sy, hx) => at(sx, sy, hx);
     const tipY = tip;
-    add(top ? FACE_INDEX.top : FACE_INDEX.bottom,
-        {points: [P(e0, tipY, hx0), P(e1, tipY, hx0), P(e1, tipY, hx1), P(e0, tipY, hx1)],
-         n: [0, top ? 1 : -1, 0], quad: true});
+    if (tip >= lo && tip <= hi) {
+      add(top ? FACE_INDEX.top : FACE_INDEX.bottom,
+          {points: [P(e0, tipY, hx0), P(e1, tipY, hx0), P(e1, tipY, hx1), P(e0, tipY, hx1)],
+           n: [0, top ? 1 : -1, 0], quad: true});
+    }
+    for (const [row, cut, ny] of [[lo, ya > ra, 1], [hi, yb < rb, -1]]) {
+      if (cut) add(SEAM_INDEX, {points: [P(e0, row, hx0), P(e1, row, hx0), P(e1, row, hx1), P(e0, row, hx1)],
+                                n: [0, ny, 0], quad: true});
+    }
     add(FACE_INDEX.right, {points: [P(e0, ya, hx1), P(e1, ya, hx1), P(e1, yb, hx1), P(e0, yb, hx1)], n: [1, 0, 0], quad: true});
     add(FACE_INDEX.left, {points: [P(e0, ya, hx0), P(e1, ya, hx0), P(e1, yb, hx0), P(e0, yb, hx0)], n: [-1, 0, 0], quad: true});
     add(FACE_INDEX.front, {points: [P(e0, ya, hx0), P(e0, ya, hx1), P(e0, yb, hx1), P(e0, yb, hx0)], n: [0, 0, 1], quad: true});
@@ -325,7 +365,8 @@ export function sectionArrays(section, W, H, D, fins) {
       if (reuse && shared.has(k)) return shared.get(k);
       positions.push(...p);
       normals.push(...n);
-      uvs.push(...boxUV(mi, p, W, H, D));
+      // a cap has no drawing of its own; its UV is unused but present, as a bevel's is
+      uvs.push(...(mi === SEAM_INDEX ? [0, 0] : boxUV(mi, p, W, H, D)));
       if (reuse) shared.set(k, vertex);
       return vertex++;
     };
@@ -430,15 +471,93 @@ export function sectionSeat(chassis, W, H, D) {
 //   {refused: 'reason'}      a section that cannot be built, or that is stated
 //                            with another body key; the caller warns and builds
 //                            what it built before there was a section
-// Lint refuses a section together with bevel, rounded, ears and halves, and a
-// sheet shell is no extrusion, so these are guards, not a feature.
+// Lint refuses a section together with bevel, rounded and ears, and a sheet
+// shell is no extrusion, so these are guards, not a feature. `halves` is no
+// clash: the closed body of a housing that opens is this body; the open state
+// is `sectionHalves`.
 export function sectionBody(chassis, W, H, D) {
   if (!chassis || !Array.isArray(chassis.section) || !chassis.section.length) return null;
-  const clash = ['solid', 'bevel', 'rounded', 'halves'].filter(k => chassis[k]);
+  const clash = ['solid', 'bevel', 'rounded'].filter(k => chassis[k]);
   if (chassis.shell === 'sheet') clash.push('shell: sheet');
   if (clash.length) return {refused: `chassis.section is stated with ${clash.join(', ')}`};
   try {
     return {arrays: sectionArrays(chassis.section, W, H, D, chassis.fins)};
+  } catch (e) {
+    return {refused: String(e.message || e)};
+  }
+}
+
+// A part: its arrays, their bounds, and `body`, the bounds of the casting alone, the ribs left out
+// (the loops of the cut-back section, in the box frame): where a stand-in for a module can be set
+// against the casting's own surface rather than the rib tips.
+const partOf = (arrays, loops, W, H, D) => {
+  const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
+  for (let i = 0; i < arrays.positions.length; i++) {
+    const k = i % 3, v = arrays.positions[i];
+    if (v < min[k]) min[k] = v;
+    if (v > max[k]) max[k] = v;
+  }
+  const pts = loops.flat();
+  const bmin = [-W / 2, H / 2 - Math.max(...pts.map(p => p[1])), D / 2 - Math.max(...pts.map(p => p[0]))];
+  const bmax = [W / 2, H / 2 - Math.min(...pts.map(p => p[1])), D / 2 - Math.min(...pts.map(p => p[0]))];
+  return {arrays, min, max, size: max.map((v, i) => v - min[i]), center: max.map((v, i) => (v + min[i]) / 2),
+          body: {min: bmin, max: bmax, size: bmax.map((v, i) => v - bmin[i]),
+                 center: bmax.map((v, i) => (v + bmin[i]) / 2)}};
+};
+
+// THE BODY CUT AT THE SEAM. `halves` is the published `chassis.halves`. The seam is the row
+// `base.stands` from the base's `outer` face (spec/tools/portrayal/section.py seam_row reads the same
+// rule): that many rows down from the top for `top`, up from the bottom for `bottom`. The base is the
+// body on the `outer` side of it, the lid the rest, each its own `sectionArrays` with the cap
+// (SEAM_INDEX). Returns
+//   {seam, pivot, base, lid}   base and lid: {arrays, min, max, size, center, body} in the box frame,
+//                              `body` the bounds of the casting without its ribs
+// `seam` is the row in the section's frame; `pivot` a point of the line the lid turns about, in the
+// box frame: x = 0, the seam's height, and z at the hinge face's outline in the seam's row, the
+// foremost x of the body there for `front` and the rearmost for `rear`. Throws where the seam cannot
+// divide the body: a face that does not open a section, a seam outside it or on a horizontal edge.
+export function splitSection(section, W, H, D, fins, halves) {
+  const base = halves && halves.base, lid = halves && halves.lid;
+  const outer = base && base.outer, hinge = lid && lid.hinge;
+  if (outer !== 'top' && outer !== 'bottom') {
+    throw new Error(`chassis.halves: a housing with a section opens from its top or bottom, not '${outer}'`);
+  }
+  if (hinge !== 'front' && hinge !== 'rear') {
+    throw new Error(`chassis.halves: a housing with a section is hinged on its front or rear, not '${hinge}'`);
+  }
+  if (!isNum(base.stands) || base.stands <= 0) throw new Error('chassis.halves.base.stands is not a positive number');
+  const pts = section.map(p => [Number(p[0]), Number(p[1])]);
+  const seam = outer === 'top' ? base.stands : H - base.stands;
+  const rows = pts.map(p => p[1]);
+  if (!(seam > Math.min(...rows) + 0.005 && seam < Math.max(...rows) - 0.005)) {
+    throw new Error(`chassis.halves: the seam, ${seam} mm down the section, is outside it: one half would be empty`);
+  }
+  if (rows.some(y => Math.abs(y - seam) <= 0.005)) {
+    throw new Error(`chassis.halves: the seam, ${seam} mm down the section, is on a horizontal edge of it`);
+  }
+  const upper = {lo: -Infinity, hi: seam}, lower = {lo: seam, hi: Infinity};
+  const clips = outer === 'top' ? {base: upper, lid: lower} : {base: lower, lid: upper};
+  const out = {seam};
+  for (const name of ['base', 'lid']) {
+    out[name] = partOf(sectionArrays(pts, W, H, D, fins, clips[name]), bodyLoops(pts, fins, H, clips[name]), W, H, D);
+  }
+  const xs = bodyLoops(pts, fins, H, clips.base).flat().filter(p => p[1] === seam).map(p => p[0]);
+  if (!xs.length) throw new Error('chassis.halves: the body has no outline at the seam');
+  const x = hinge === 'front' ? Math.min(...xs) : Math.max(...xs);
+  out.pivot = [0, H / 2 - seam, D / 2 - x];
+  return out;
+}
+
+// What viewer3d.js asks about a chassis that opens (the `chassis` of configs.json):
+//   null                 no section or no halves: the halves are boxes, as housing.js builds them
+//   {split}              splitSection of the body, for housingPlan and the open state
+//   {refused: 'reason'}  halves the body cannot be split at; the caller warns and builds the boxes
+export function sectionHalves(chassis, W, H, D) {
+  if (!chassis || !Array.isArray(chassis.section) || !chassis.section.length || !chassis.halves) return null;
+  const body = sectionBody(chassis, W, H, D);
+  if (!body || body.refused) return body && {refused: body.refused};
+  try {
+    return {split: splitSection(chassis.section, W, H, D, chassis.fins, chassis.halves)};
   } catch (e) {
     return {refused: String(e.message || e)};
   }
