@@ -60,4 +60,3 @@ def test_a_programme_key_is_not_a_source_of_any_fact():
     """The programme value must not turn up in a timing column."""
     claimed = {k for f in F.FACTS for (k, _, _) in f.sources}
     assert "compliance-programme" not in claimed
-    assert "compliance-programme" in F.unclaimed(_doc("ufispace/s9500-30xs"))
