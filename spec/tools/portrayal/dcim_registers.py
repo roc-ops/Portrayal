@@ -41,6 +41,7 @@ POWER_LABEL = {
     "servertech/pro3x-cord-60309-2pe": "IEC 60309 2P+E 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "eaton/g3-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
