@@ -1,0 +1,262 @@
+format: 1
+kind: device
+name: lm4
+version: 0.1.0
+maturity: draft
+manufacturer: Lantronix
+model: LM4
+description: >-
+  Lantronix LM4 compact advanced serial console server, a small chassis with four RJ45 serial ports. The front has one
+  10/100/1000 Ethernet port, an RJ45 console port, one SFP port and two USB-A ports. It has no expansion bay. No held
+  document shows its rear.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      Lantronix LM4 product brief (MPB-00246 Rev A), page 2, System Specifications, Dimensions and Weight: "44.45 mm
+      (1.75 in.) x 158.75 mm (6.25 in.) x 158.75 mm (6.25 in.)", height, width and depth. The width is one third of the
+      482.6 mm rack opening.
+  layout-source:
+    confidence: estimated
+    note: >-
+      The only picture of the front is the angled photograph on page 1 of the brief (1550 x 1358 px, taken from the left
+      and above). Every position is read from it. The four corner screws are the control points of a projective map to
+      the 158.75 by 44.45 mm face; their place on the face (4.5 mm in from each side and 3.6 mm from top and bottom) is
+      itself read from the plate edges in the same photograph. Each position is read by eye to about 5 px, and the face
+      reads 16 per cent taller at its left edge than at its right (177 against 152 px between the screws), so every position is good to about 2 mm.
+      The rows of each column are drawn level where the photograph reads them 1.5 mm apart. The photograph's serial
+      jacks read about 15.8 mm wide and the ganged jack part is 12.7 mm wide; the part is placed on the photograph's
+      centres and the two widths are not made to agree.
+  serial:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "Supports up to 4 devices via serial (RS-232)". The photograph shows four RJ45 jacks in two
+      rows of two numbered 1 and 2 over 3 and 4 under blue bars. The fact sheet says the ports are "RJ-45 wired as DCE".
+      The brief lists LM4-2S as a 2-port model and a "1 serial port activation" licence; no document says whether the
+      2-port unit has two jacks or four, so every build is drawn with four.
+  network:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "One 10/100/1000 BaseT Ethernet interface" and "One 1-Gbps SFP port". The photograph prints E1
+      under the RJ45 jack and E2 under the SFP cage. The maker's product page says "2 Ethernet Ports" for each model,
+      which counts the two.
+  console:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "one RS-232 console port", "Two USB-A ports". The jack at the top of the column of three, with
+      the two USB-A ports under it, carries a prompt mark and is the console jack. The brief does not say what either
+      USB port is for beyond "an external cellular modem connected over USB" on page 2.
+  leds:
+    confidence: estimated
+    note: >-
+      The photograph shows three small lamps and a round button, with marks under them. No document says what a lamp
+      shows or what the button does. The marks are not drawn.
+  power:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "DC input: 9 to 60 VDC", "Power consumption: Less than 24W", and an external AC to DC supply
+      "AC Input: 100-240VAC, 50-60HZ, 1.4A", "DC Output: 12VDC, 3A". The photograph shows a four-position connector at
+      the lower left of the front, over a direct-current mark. No document names its type, pitch or the plug that
+      mates it, so it is not drawn as a part.
+  body:
+    confidence: estimated
+    note: >-
+      The photograph shows a black front plate and lid and a silver left flank with three screws, and a block of
+      slots at the top left of the front. The colours are read from the photograph. The two USB-A ports show a pale
+      tongue, drawn with the library's pale-tongue skin; the brief does not give a USB version. The right flank, the underside and
+      the rear are not shown.
+  mount:
+    confidence: estimated
+    note: >-
+      The maker's product page lists "Rack Mount Ear" and "2 Mounting Screws" in the box, and the brief calls the unit
+      small and for IDFs and kiosks. No document shows an ear, a bracket or a position, so the unit is stated as a
+      desktop device.
+attrs:
+  physical: {weight-kg: 1.42}
+  power:
+    input: dc
+    power-max-w: 24
+    power-input: 9 to 60 VDC; the box holds an external AC adapter, 100 to 240 VAC in, 12 VDC 3 A out
+  environmental:
+    operating-temp-c: 0 to 55
+    storage-temp-c: -30 to 60
+    humidity-pct: 10 to 90 non-condensing in operation
+  features:
+    optics-sfp: one 1-Gbps SFP port; no held document names an optic type or reach
+  platform:
+    storage: 16 GB eMMC flash, TCG Opal 2.0, 256-bit AES encryption
+  compliance:
+    emissions: FCC class A subpart B
+    safety: UL
+    rohs: RoHS compliant
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 158.75
+  height: 44.45
+  depth: 158.75
+  mount: desktop
+  color: '#2b2e33'
+gaps:
+- what: dc-input
+  scope: [front]
+  reason: vendor-silent
+  wanted: the maker's name for the DC input connector, its pitch and the plug that mates it, from a hardware guide.
+  note: >-
+    The photograph shows a four-position housing at the lower left of the front. The brief gives the input range and
+    the external adapter's output and names no connector, so no part is placed and the position is left bare.
+- what: rear-panel
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph or a drawing of the rear of the LM4.
+  note: >-
+    No held document shows the rear.
+- what: front-positions
+  scope: [front]
+  reason: needs-drawing
+  wanted: a straight front elevation or a hardware guide figure with dimensions.
+  note: >-
+    The positions are read from an angled photograph and are good to about 2 mm.
+- what: indicator-led
+  scope: [front]
+  reason: vendor-silent
+  wanted: a table of what the three lamps and the round button show and do, and the marks beside them.
+  note: >-
+    No held LM4 document describes a lamp or a button. The lamps are drawn with no state.
+- what: mounting
+  scope: [front]
+  reason: vendor-silent
+  wanted: a drawing of the rack mount ear and the screw positions.
+  note: >-
+    The product page lists "Rack Mount Ear" in the box. No held document shows it or says where it fits.
+- what: envelope-faces-undetailed
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  wanted: photographs of the lid, the underside and both flanks.
+  note: >-
+    The four faces draw the envelope only. The photograph shows slats on the lid at the left, three screws on the left
+    flank and nothing of the right flank or the underside, at a size that gives no position.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: four RJ45 RS-232 serial ports.
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the RJ45 10/100/1000 Ethernet port E1.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 1-Gbps SFP port, printed E2.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 RS-232 console port.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the two USB-A ports.
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+views:
+  front:
+    size: {w: 158.75, h: 44.45}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [158.75, 44.45], fill: '#2b2e33', kind: bezel}
+      - {id: screw-tl, at: [3.0, 2.1], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: screw-tr, at: [153.25, 2.1], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: screw-bl, at: [3.0, 39.35], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: screw-br, at: [153.25, 39.35], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: heatsink-opening, at: [11.0, 0.0], size: [30.1, 29.0], fill: '#16181b', kind: vent}
+      - {id: heatsink-slat-1, at: [16.0, 1.0], size: [0.7, 27.0], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-2, at: [21.2, 1.0], size: [0.7, 27.0], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-3, at: [26.4, 1.0], size: [0.7, 27.0], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-4, at: [31.6, 1.0], size: [0.7, 27.0], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-5, at: [36.8, 1.0], size: [0.7, 27.0], fill: '#3a3d42', kind: vent}
+      - {id: button, at: [22.9, 29.9], size: [7.0, 7.0], fill: '#4a4d52', shape: circle, kind: push-button}
+      - {id: bar-e1, at: [45.7, 38.0], size: [16.2, 0.6], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e2, at: [65.7, 38.0], size: [18.8, 0.6], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-serial-top, at: [115.5, 4.2], size: [33.5, 0.6], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-bottom, at: [115.0, 40.2], size: [33.5, 0.6], fill: '#29a8e0', kind: legend-bar}
+    silkscreen:
+    - {at: [63.0, 9.1], text: LANTRONIX, font-size: 6.6, anchor: middle, fill: '#f0f2f4', for: chassis}
+    - {at: [63.0, 16.0], text: LM4, font-size: 4.6, anchor: middle, fill: '#f0f2f4', for: chassis}
+    - {at: [54.0, 42.4], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
+    - {at: [76.6, 42.4], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-2}
+    - {at: [90.6, 14.5], text: '>_', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: console}
+    - {at: [123.7, 3.2], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
+    - {at: [141.4, 3.2], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
+    - {at: [123.7, 43.9], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
+    - {at: [141.4, 43.9], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: net-1, at: [46.1, 24.3], group: network, rel-pos: 1, attrs: {speed: 1g}}
+      - {ref: std/sfp@1, id: port-2, at: [69.35, 27.0], group: sfp, rel-pos: 1}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [94.6, 4.05], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: std/usb-a@1, id: usb-1, at: [94.7, 22.65], skin: usb2, group: usb, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [94.7, 33.05], skin: usb2, group: usb, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [117.35, 7.2], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [135.1, 7.2], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [117.35, 27.3], group: serial, rel-pos: 3, attrs: {media: rj45-serial}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [135.1, 27.3], group: serial, rel-pos: 4, attrs: {media: rj45-serial}}
+      - {ref: common/led-dot@1, id: led-power, at: [21.05, 35.4], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-link, at: [35.9, 31.9], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-alert, at: [40.1, 36.4], for: chassis, group: status-leds, rel-pos: 3}
+  rear:
+    size: {w: 158.75, h: 44.45}
+    empty: >-
+      No held document shows the rear. The product brief gives the dimensions and the power supply and says nothing of the
+      rear panel, and its one photograph shows the front.
+  top:
+    size: {w: 158.75, h: 158.75}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [158.75, 158.75], fill: '#2b2e33', kind: envelope}
+  bottom:
+    size: {w: 158.75, h: 158.75}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [158.75, 158.75], fill: '#2b2e33', kind: envelope}
+  left:
+    size: {w: 158.75, h: 44.45}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [158.75, 44.45], fill: '#a9adb1', kind: envelope}
+  right:
+    size: {w: 158.75, h: 44.45}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [158.75, 44.45], fill: '#2b2e33', kind: envelope}
+configurations:
+  ac-4s:
+    kind: orderable
+    default: true
+    description: >-
+      The four-port unit with its external AC adapter. The brief lists LM4-4S and says AC plug options are available.
+      The product page lists LM4-4S-NA, LM4-4S-UK and LM4-4S-EU, which differ by the power cord and adapter plug. They
+      are not drawn as separate builds.
+    part-numbers:
+      LM4-4S: {}
+  ac-2s:
+    kind: orderable
+    description: >-
+      The two-port unit with its external AC adapter. The brief lists LM4-2S. The product page lists LM4-2S-NA, LM4-2S-UK
+      and LM4-2S-EU, which differ by the power cord and adapter plug. It is drawn with four jacks. The brief lists a
+      serial port activation licence, and no document says how many jacks a 2-port unit has.
+    part-numbers:
+      LM4-2S: {}
+references:
+- title: >-
+    LM4 Compact & Inexpensive Advanced Console Server product brief, MPB-00246 Rev A (2024)
+- title: >-
+    LM-Series Technical Fact Sheet, MPB-00186 Rev A (2023)
