@@ -24,14 +24,17 @@ provenance:
       each side and 3.6 mm from top and bottom. The screw centres, re-read in the native photograph, are top-left
       383,725, top-right 1029,619, bottom-left 383,897 and bottom-right 1029,777 (x,y in px). The left screws are 172 px
       apart and the right screws 158 px apart. The photograph was resampled to the face at 20 px per mm. The heatsink
-      opening and its fins, the legend bars, the logo, the two pale housing blocks, the screws, the lamps, the console
-      and USB column and the colours were then read from threshold masks on that image, to about 0.2 mm of edge blur.
-      The control points are themselves estimated, so every figure keeps about 1 mm of the method's own error. Every
-      other position is read by eye from the photograph. The placements were made from an earlier reading of the same
-      four screws, within 7 px of these. The rows of each column are drawn level where the photograph reads them 1.5 mm
-      apart.
-      The photograph's serial jacks read about 15.8 mm wide and the ganged jack part is 12.7 mm wide. The part is placed
-      on the photograph's centres and the two widths are not made to agree.
+      opening, its fins, the legend bars and the logo zone were then read from threshold masks on that image. So were
+      the two pale housing blocks, the screws, the lamps, the marks, the jacks, E1, the SFP cage and the colours. The
+      edge blur is about 0.2 mm. The control points are themselves estimated, so every figure keeps about 1 mm of the
+      method's own error. In the same image the plate's lower edge reads 1.8 to 2.4 mm below the face's lower edge.
+      A figure near the bottom may be that much too low. Every other position is read by eye from the photograph.
+      The placements were made from an earlier reading of the same four screws, within 7 px of these. The rows of each
+      column are drawn level where the photograph reads them 1.5 mm apart.
+      The photograph's serial jacks read about 16.5 mm wide, shell included, and the ganged jack part is 12.7 mm wide.
+      A placement cannot change a part's width. Each part is placed on the centre of its photographed opening.
+      The lid and the left flank were resampled the same way, with corners read from the photograph's own edges. The
+      lid is seen at a grazing angle. Its figures hold to about 2 mm across and about 5 mm in depth, and are estimated.
   serial:
     confidence: datasheet
     note: >-
@@ -59,10 +62,12 @@ provenance:
       document says what a lamp shows or what the button does. The photograph shows more marks. Above E1 is a network
       icon and above E2 an antenna icon. Beside E1 and E2 are a link icon and an arrows icon. The console jack has a
       prompt icon in a boxed outline. To the right of the serial jacks is a "10101" mark. Under the four-position
-      housing is a DC mark. The photograph also shows a larger dark hole between the lamps and a small dark dot on each
-      side of the SFP, one between E1 and E2 and one to the right of E2. None is drawn, except that the prompt icon is
-      drawn as the bare text >_ with no box. A silkscreen path can draw a small mark, so leaving them out is a choice
-      of this drawing and not a limit of the format.
+      housing is a DC mark. Each is drawn as a silkscreen path, simplified, in the mean colour of its pixels. Its place
+      and size are read from the resampled photograph. The link icon and the lower arrow run past the face's lower edge
+      under that map. They are moved up by 1.6 and 1.0 mm to stay on the face. The photograph also shows a larger dark
+      hole between the lamps and a small dark dot on each side of the SFP. They are drawn as round dark decor. The
+      small dark dot inside each box of the network icon is not drawn. The registered mark beside the wordmark is not
+      drawn. Its ring reads about 9 px across and its letter about 4 px in the photograph.
   storage:
     confidence: datasheet
     note: >-
@@ -79,23 +84,24 @@ provenance:
     confidence: estimated
     note: >-
       The photograph shows a black front plate and lid and a silver left flank with three screws. At the top left of
-      the front it shows a heatsink block of six fins and seven slots. The fins read 1.3 mm wide at a pitch of 4.6 mm,
-      from the dark and grey runs of one row of the resampled photograph (the row at y 6.0 gives six runs of 1.25 to 1.3
-      mm). The colours are read from the photograph. The plate reads (67,65,70) over 92800 px, but unevenly: about
+      the front it shows a heatsink block of six fins and seven slots. The fins read 1.3 mm wide at a pitch of 4.6 mm.
+      They come from the dark and grey runs of one row of the resampled photograph. The row at y 6.0 gives six runs of
+      1.25 to 1.3 mm. The colours are read from the photograph. The plate reads (67,65,70) over 92800 px, but unevenly: about
       (71,69,74) at the left and (31,29,28) at the right, in shadow. The drawn plate is #2b2e33 and stays, between the
-      two. In the photograph the console jack and the two USB-A ports sit in one pale housing block, and the four serial
-      jacks in another, with a band between the two rows. They are drawn as two rectangles in the housing colour behind
-      the parts. The housing colour reads (229,217,207), #e5d9cf, over 270177 pale pixels counted inside the two blocks
-      themselves: 122619 px at (226,216,209) in the console block and 147558 px at (231,217,205) in the serial block.
-      The six RJ45 jacks (E1, the console and the four serial jacks) are drawn in that colour through their finish
+      two. In the photograph the console jack and the two USB-A ports sit in one pale housing block. The four serial
+      jacks sit in another, with a band between the two rows. They are drawn as two rectangles in the housing colour
+      behind the parts. The housing colour reads (229,217,207), #e5d9cf, over 270177 pale pixels counted inside the two
+      blocks themselves. The console block gives 122619 px at (226,216,209). The serial block gives 147558 px at
+      (231,217,205). The six RJ45 jacks (E1, the console and the four serial jacks) are drawn in that colour through their finish
       field. E1's shell was not counted. The two USB-A ports show a dark grey tongue with a small pale slider at the
-      lip, (33,32,32) over 12320 px. The drawn tongue is pale where the photograph's is dark. The library's skin for
-      this port in a device that does not claim 3.0 is the white one, usb2, and its other skin is blue; neither is
-      dark. The skin is a colour match only where it matches, which is the opening and not the tongue, and it is not a
-      statement of the USB version, which the brief does not give. The right flank, the underside and the rear are not shown. The
-      LANTRONIX wordmark is a logo and is not drawn: its place is the region logo-zone, read from the photograph. The
+      lip, (33,32,32) over 12320 px. The drawn tongue is pale where the photograph's is dark. For a device that does
+      not claim 3.0 the library's skin for this port is the white one, usb2. Its other skin is blue. Neither is dark.
+      The skin matches in colour at the opening and not at the tongue. It is not a statement of the USB version, which
+      the brief does not give. The right flank, the underside and the rear are not shown. The LANTRONIX wordmark is a logo and is not drawn: its place is the region logo-zone, read from the photograph. The
       plain text LM4 stays. The button and the four corner screws are round in the photograph and are drawn round, by
-      a corner radius of half their side. The screws read about 5.6 mm across and the button 7 mm.
+      a corner radius of half their side. The screws read about 5.6 mm across and the button 7 mm. The lid carries six
+      ridges in seven slots at the left, read as 1.3 mm wide at a pitch of 4.6 mm like the front's. The left flank
+      carries three round screws about 5.8 mm across, level at about 22.5 mm from the lid.
   mount:
     confidence: estimated
     note: >-
@@ -132,7 +138,7 @@ gaps:
   reason: vendor-silent
   wanted: the maker's name for the DC input connector, its pitch and the plug that mates it, from a hardware guide.
   note: >-
-    The photograph shows a black four-position housing at the lower left of the front, with a latch tab above it and a
+    The photograph shows a black four-position housing at the lower left of the front. A latch tab is above it and a
     direct-current mark under it. The brief gives the input range and the adapter's output, and names no connector. No
     interface is known, so no part is placed and the position is left bare. A connector is a part, so it is not drawn
     as decor.
@@ -148,19 +154,32 @@ gaps:
   wanted: a straight front elevation or a hardware guide figure with dimensions.
   note: >-
     The positions are read from an angled photograph. Those read from threshold masks hold to about 1 mm, the error of
-    the four estimated control points. After the parts were moved to their measured places these offsets remain: E1
-    and the SFP cage sit 0.9 and 1.8 mm left of the photograph's centres (read by eye), the button's centre is 0.4 mm
-    left and 0.2 mm low, and the serial jacks, whose photographed jacks are 15.8 mm wide against the part's 12.7, stand on the
-    photograph's centres. Every other position is read by eye and its error was not measured.
+    the four estimated control points. In the same image the plate's lower edge reads 1.8 to 2.4 mm below the face's
+    lower edge. So the front's y figures may be stretched by up to about 10 percent. After the parts were moved to
+    their measured places these differences remain. The button's centre is 0.4 mm left and 0.2 mm low. The serial jacks read about 16.5 mm
+    wide against the part's 12.7, and a placement cannot change a part's width. Their lamps read about 3 mm wide against
+    the part's 2.0. Each jack stands on the centre of its opening. The USB openings read about 6.2 mm tall against the
+    part's 4.5. Every other position is read by eye and its error was not measured.
 - what: indicator-led
   scope: [front]
   reason: vendor-silent
   wanted: a table of what the three lamps and the round button show and do, and the marks beside them.
   note: >-
     No held LM4 document describes a lamp or a button. The photograph shows a lit green lamp on the left and a lit
-    yellow lamp on the right of the console jack and of each serial jack. The format declares lamp states, and the
-    part's lamp windows declare off and on. The built face draws each of these lamps in its off state, so none is
-    drawn lit, and the three small status lamps are drawn off as well.
+    yellow lamp on the right of the console and serial jacks. The lamps are drawn in their off state by default. Their
+    on states carry the colours the photograph shows, which a viewer sets. With a strict mask, serial green is 5464 px, mean
+    (77,132,76), and serial yellow 4098 px, mean (189,172,16). Console green is 1159 px, mean (106,134,90), and console
+    yellow 793 px, mean (148,138,51); a looser mask read them, so they are less certain. A second sample of the serial
+    yellow with a looser mask came out darker, so that figure depends on the mask. The three small status lamps are dark
+    in the photograph and are drawn off.
+- what: registered-mark
+  scope: [front]
+  reason: needs-photo
+  wanted: a larger photograph of the wordmark, to place the registered mark beside it.
+  note: >-
+    The registered mark sits at the upper right of the wordmark and reads about 2.1 mm across. Its ring is about 9 px
+    across in the photograph and its letter about 4 px. That is too small to place honestly. The logo zone covers its
+    place.
 - what: mounting
   scope: [front]
   reason: vendor-silent
@@ -172,10 +191,10 @@ gaps:
   reason: needs-photo
   wanted: photographs of the lid, the underside and both flanks.
   note: >-
-    The four faces draw the envelope only. The photograph shows about eight diagonal slats on the lid at the left and
-    three screws on the left flank, at a grazing angle. It shows nothing of the right flank or the underside. Decor
-    can draw both a slat and a screw, so leaving them out is a choice of this drawing and not a limit of the format. A
-    straight picture of the lid and the flank would place them.
+    The lid draws six ridges in seven slots and the left flank three screws, from views at a grazing angle. They are
+    estimated, to about 2 mm across and about 5 mm in depth. The photograph shows nothing of the right flank or the
+    underside, so those two draw the envelope only. A straight picture of the lid and the flanks would place every
+    feature on them.
 groups:
   serial:
     term: Port
@@ -227,30 +246,45 @@ views:
       - {id: housing-console-usb, at: [93.2, 3.2], size: [18.5, 33.4], fill: '#e5d9cf', kind: housing}
       - {id: housing-serial, at: [116.4, 7.15], size: [33.1, 30.15], fill: '#e5d9cf', kind: housing}
       - {id: button, at: [22.9, 29.9], size: [7.0, 7.0], rx: 3.5, fill: '#222222', kind: push-button}
+      - {id: hole-lamps, at: [36.65, 31.65], size: [2.75, 2.75], rx: 1.375, fill: '#040304', kind: hole}
+      - {id: dot-e1-e2, at: [66.85, 36.25], size: [1.75, 1.75], rx: 0.875, fill: '#060606', kind: hole}
+      - {id: dot-e2-right, at: [88.4, 36.23], size: [1.7, 1.7], rx: 0.85, fill: '#060606', kind: hole}
       - {id: bar-e1, at: [46.7, 39.75], size: [17.75, 1.55], fill: '#f0d41c', kind: legend-bar}
       - {id: bar-e2, at: [67.25, 39.75], size: [22.95, 1.55], fill: '#f0d41c', kind: legend-bar}
-      - {id: bar-serial-top, at: [116.85, 4.0], size: [32.35, 1.65], fill: '#29a8e0', kind: legend-bar}
-      - {id: bar-serial-bottom, at: [116.55, 38.4], size: [32.5, 1.7], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-top, at: [116.8, 3.95], size: [32.45, 1.8], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-bottom, at: [116.5, 38.3], size: [32.6, 1.9], fill: '#29a8e0', kind: legend-bar}
     silkscreen:
     - {at: [66.0, 16.1], text: LM4, font-size: 5.6, anchor: middle, fill: '#f0f2f4', for: chassis}
-    - {at: [54.0, 44.3], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
-    - {at: [76.6, 44.3], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-2}
-    - {at: [90.6, 14.5], text: '>_', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: console}
-    - {at: [123.7, 3.2], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
-    - {at: [141.4, 3.2], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
-    - {at: [123.7, 43.9], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
-    - {at: [141.4, 43.9], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
+    - {at: [55.35, 44.3], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
+    - {at: [79.75, 44.3], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-2}
+    - {id: mark-prompt, at: [88.1, 12.0], path: 'M 0.75 0.15 H 3.35 A 0.6 0.6 0 0 1 3.95 0.75 V 3.95 A 0.6 0.6 0 0 1 3.35 4.55 H 0.75 A 0.6 0.6 0 0 1 0.15 3.95 V 0.75 A 0.6 0.6 0 0 1 0.75 0.15 Z M 0.9 1.58 L 1.73 2.4 L 1.0 3.33 M 2.15 3.5 H 3.23', stroke-width: 0.3, fill: '#5eb3cf', for: console}
+    - {id: mark-dc, at: [11.6, 41.45], path: 'M 0 0.275 H 5.95 M 0 2.125 H 1.2 M 2.3 2.125 H 3.6 M 4.6 2.125 H 5.9', stroke-width: 0.55, fill: '#c6c8cc', for: chassis}
+    - {id: mark-power, at: [21.9, 42.95], path: 'M -0.746 -1.065 A 1.3 1.3 0 1 0 0.746 -1.065 M 0 -1.95 V 0.15', stroke-width: 0.45, fill: '#cbcdd1', for: led-power}
+    - {id: mark-pulse, at: [32.35, 40.85], path: 'M 0 1.95 H 1.0 L 1.55 0 L 1.8 3.5 L 2.1 1.95 H 2.25 M 2.85 1.95 A 0.3 0.3 0 1 0 2.25 1.95 A 0.3 0.3 0 1 0 2.85 1.95', stroke-width: 0.35, fill: '#c9cbcf', for: led-pulse}
+    - {id: mark-warning, at: [40.55, 41.15], path: 'M 1.8 0 L 3.6 3.25 H 0 Z M 1.6 1.2 H 2.0 V 2.3 H 1.6 Z M 1.6 2.6 H 2.0 V 3.0 H 1.6 Z', filled: true, fill-rule: evenodd, fill: '#dddfe3', for: led-alert}
+    - {id: mark-network, at: [53.0, 17.97], path: 'M 1.63 0 H 2.97 V 1.4 H 1.63 Z M 2.08 1.0 H 2.58 V 1.5 H 2.08 Z M 0 1.4 H 4.67 V 1.96 H 0 Z M 0.42 1.9 H 1.67 V 3.45 H 0.42 Z M 2.75 1.9 H 4.33 V 3.45 H 2.75 Z', filled: true, fill: '#d3d3d6', for: net-1}
+    - {id: mark-antenna-arcs, at: [76.8, 22.2], path: 'M 0.825 0.2 A 1.02 1.2 0 0 0 0.825 2.2 M 2.325 0.2 A 1.02 1.2 0 0 1 2.325 2.2', stroke-width: 0.7, fill: '#d6d8d9', for: port-2}
+    - {id: mark-antenna-stem, at: [76.8, 22.2], path: 'M 1.55 1.8 V 3.1 M 0 3.3 H 3.0', stroke-width: 0.5, fill: '#d6d8d9', for: port-2}
+    - {id: mark-antenna-dot, at: [76.8, 22.2], path: 'M 0.83 1.2 A 0.72 0.72 0 1 0 2.27 1.2 A 0.72 0.72 0 1 0 0.83 1.2 Z', filled: true, fill: '#d6d8d9', for: port-2}
+    - {id: mark-link, at: [66.25, 41.0], path: 'M 1.649 2.017 L 1.083 1.451 L -0.049 2.583 L 0.517 3.149 Z M 2.799 0.867 L 2.233 0.301 L 1.101 1.433 L 1.667 1.999 Z', stroke-width: 0.3, fill: '#d1d3d7', for: port-2}
+    - {id: mark-arrows-shaft, at: [87.2, 41.05], path: 'M 0 0.8 H 2.5 M 0.9 2.55 H 3.0', stroke-width: 0.4, fill: '#ccced1', for: port-2}
+    - {id: mark-arrows-head, at: [87.2, 41.05], path: 'M 2.0 0 L 3.45 0.8 L 2.0 1.6 Z M 1.5 1.75 L 0.2 2.55 L 1.5 3.35 Z', filled: true, fill: '#ccced1', for: port-2}
+    - {id: mark-10101, at: [151.15, 22.2], path: 'M 0.325 0 V 2.2 M 3.55 0 V 2.2 M 6.75 0 V 2.2 M 1.155 1.1 A 0.725 0.725 0 1 0 2.605 1.1 A 0.725 0.725 0 1 0 1.155 1.1 M 4.325 1.05 A 0.725 0.725 0 1 0 5.775 1.05 A 0.725 0.725 0 1 0 4.325 1.05', stroke-width: 0.65, fill: '#58c0dd', for: [serial-1, serial-2, serial-3, serial-4]}
+    - {at: [125.0, 3.2], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
+    - {at: [141.2, 3.2], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
+    - {at: [125.0, 43.9], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
+    - {at: [141.2, 43.9], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
     components:
       placements:
-      - {ref: common/rj45-eth@1, id: net-1, at: [46.1, 24.3], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g, finish: '#e5d9cf'}}
-      - {ref: std/sfp@1, id: port-2, at: [69.35, 27.0], group: sfp, rel-pos: 1}
-      - {ref: common/rj45-ganged-lamped@1, id: console, at: [96.3, 4.05], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/rj45-eth@1, id: net-1, at: [47.45, 23.1], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g, finish: '#e5d9cf'}}
+      - {ref: std/sfp@1, id: port-2, at: [72.5, 28.1], group: sfp, rel-pos: 1}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [96.3, 4.05], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#948a33'}], led-b: ['off', {name: 'on', color: '#6a865a'}]}}
       - {ref: std/usb-a@1, id: usb-1, at: [96.5, 21.25], skin: usb2, group: usb, rel-pos: 1}
       - {ref: std/usb-a@1, id: usb-2, at: [96.5, 30.85], skin: usb2, group: usb, rel-pos: 2}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [117.35, 7.2], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [135.1, 7.2], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [117.35, 27.3], group: serial, rel-pos: 3, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [135.1, 27.3], group: serial, rel-pos: 4, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [118.65, 8.25], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#bdac10'}], led-b: ['off', {name: 'on', color: '#4d844c'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [134.85, 8.25], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#bdac10'}], led-b: ['off', {name: 'on', color: '#4d844c'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [118.65, 25.45], group: serial, rel-pos: 3, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#4d844c'}], led-b: ['off', {name: 'on', color: '#bdac10'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [134.85, 25.45], group: serial, rel-pos: 4, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#4d844c'}], led-b: ['off', {name: 'on', color: '#bdac10'}]}}
       - {ref: common/led-dot@1, id: led-power, at: [21.2, 36.1], for: chassis, group: status-leds, rel-pos: 1}
       - {ref: common/led-dot@1, id: led-pulse, at: [33.0, 36.1], for: chassis, group: status-leds, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-alert, at: [41.05, 36.1], for: chassis, group: status-leds, rel-pos: 3}
@@ -269,6 +303,13 @@ views:
     panel:
       decor:
       - {id: top-envelope, at: [0.0, 0.0], size: [158.75, 158.75], fill: '#2b2e33', kind: envelope}
+      - {id: lid-opening, at: [11.6, 5.2], size: [32.0, 147.3], fill: '#16181b', kind: vent}
+      - {id: lid-slat-1, at: [15.4, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-2, at: [20.0, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-3, at: [24.8, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-4, at: [29.4, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-5, at: [34.2, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-6, at: [38.8, 6.2], size: [1.3, 145.3], fill: '#3a3d42', kind: vent}
   bottom:
     size: {w: 158.75, h: 158.75}
     panel:
@@ -279,6 +320,9 @@ views:
     panel:
       decor:
       - {id: left-envelope, at: [0.0, 0.0], size: [158.75, 44.45], fill: '#a9adb1', kind: envelope}
+      - {id: flank-screw-1, at: [2.85, 19.0], size: [5.8, 5.8], rx: 2.9, fill: '#a9a29e', kind: case-screw}
+      - {id: flank-screw-2, at: [64.2, 20.15], size: [5.8, 5.8], rx: 2.9, fill: '#6c6662', kind: case-screw}
+      - {id: flank-screw-3, at: [144.75, 19.6], size: [5.8, 5.8], rx: 2.9, fill: '#726d69', kind: case-screw}
   right:
     size: {w: 158.75, h: 44.45}
     panel:
