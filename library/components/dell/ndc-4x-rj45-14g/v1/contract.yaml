@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ndc-4x-rj45-14g
-version: 1.2.1
+version: 1.3.0
 class: nic
 behaviour: fills
 profile: server
@@ -106,6 +106,21 @@ provenance:
   composed-jack-shrank: >-
     1.1.0: the composed jack shrank from the 17 x 14.9 bezel plate to the 15.8 x
     13.2 housing; each anchor moved 0.6, 0.85 so its centre did not.
+  groups: >-
+    PowerEdge R740xd Installation and Service Manual (printed page 15, Figure 8 and Table 9 item 6): the NIC ports
+    are "integrated on the network daughter card (NDC)", the system's network connectivity, so the four jacks are
+    one group of traffic ports. The group states the media the four parts state, `rj45`, and no speed: the ports
+    are not all at one rate (two 10 Gb, two 1 Gb, each stated on its own part from the faceplate legends), and the
+    manual's table defers the supported configurations to the maker's website. The numbering is the part ids' own,
+    from 1; the manual prints no label for an individual port.
+groups:
+  ports:
+    term: Port
+    role: traffic
+    index-origin: 1
+    mixed: the four network ports of one daughter card, two at 10 Gb and two at 1 Gb
+    attrs: {media: rj45}
+    description: the four RJ45 ports of the network daughter card, two 10 Gb and two 1 Gb
 parts:
   # FOUR DELL PORTS, not four drawings of one. Each carries its own
   # two lamps and ISM table 11 with them.
@@ -114,9 +129,9 @@ parts:
   # PLACEMENT because it is a fact about this position on this card, not about
   # the jack - the same dell/rj45-port-14g sits in all four. See
   # provenance/port-speeds.
-  - {ref: dell/rj45-port-14g@1, id: port-1, at: [2.57, 0.55], attrs: {media: rj45, speed: 10g}}
-  - {ref: dell/rj45-port-14g@1, id: port-2, at: [24.77, 0.55], attrs: {media: rj45, speed: 10g}}
-  - {ref: dell/rj45-port-14g@1, id: port-3, at: [46.97, 0.55], attrs: {media: rj45, speed: 1g}}
-  - {ref: dell/rj45-port-14g@1, id: port-4, at: [69.17, 0.55], attrs: {media: rj45, speed: 1g}}
+  - {ref: dell/rj45-port-14g@1, id: port-1, at: [2.57, 0.55], group: ports, attrs: {media: rj45, speed: 10g}}
+  - {ref: dell/rj45-port-14g@1, id: port-2, at: [24.77, 0.55], group: ports, attrs: {media: rj45, speed: 10g}}
+  - {ref: dell/rj45-port-14g@1, id: port-3, at: [46.97, 0.55], group: ports, attrs: {media: rj45, speed: 1g}}
+  - {ref: dell/rj45-port-14g@1, id: port-4, at: [69.17, 0.55], group: ports, attrs: {media: rj45, speed: 1g}}
 size: {w: 90.3, h: 14.5, d: 60.0}
 skins: [default]
