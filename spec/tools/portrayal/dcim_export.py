@@ -771,6 +771,11 @@ PART_POWER = {
     "generic/nema-l5-20p-plug": "nema-l5-20p",
     "generic/nema-5-20p-plug": "nema-5-20p",
     "generic/cs8365c-plug": "cs8365c",
+    # THE NEMA 6-15P AND 6-20P PLUG FACES. `nema-6-15p` and `nema-6-20p` are NetBox power-port type slugs
+    # that have not been checked against a target's source file, so each is `other` and POWER_LABEL
+    # (dcim_registers.py) names the plug; the slug replaces `other` once it is read from the source.
+    "generic/nema-6-15p-plug": "other",
+    "generic/nema-6-20p-plug": "other",
     # A GPU CARD'S AUXILIARY POWER INLET (P-0028, docs/connectors-gpu-design.md).
     # Neither target has a type for these: PowerPortTypeChoices in
     # netbox-community/netbox (netbox/dcim/choices.py at main, 2026-10-14) holds
