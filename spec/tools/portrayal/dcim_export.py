@@ -753,6 +753,11 @@ PART_POWER = {
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
     # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
     "eaton/tripplite-cord-l5-30p": "other",
+    # THE ePDU G3 METERED INPUT EMIT03-10's FIXED 10 ft CORD ENDS IN A NEMA L5-30P: `other`, as the cord above, for the
+    # same reason; the EMIT04-10's ends in a NEMA L6-30P, `nema-l6-30p`, as the CyberPower cord above (TYPE_NEMA_L630P;
+    # not checked against a target's source file here).
+    "eaton/g3-cord-l5-30p": "other",
+    "eaton/g3-cord-l6-30p": "nema-l6-30p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
