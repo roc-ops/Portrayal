@@ -748,6 +748,8 @@ PART_POWER = {
     # against a target's source file here.
     "cyberpower/pdu-cord-l6-30p": "nema-l6-30p",
     "cyberpower/pdu-cord-5-15p": "nema-5-15p",
+    # The StarTech.com 8NS8-RACK-MOUNT-PDU's 8 ft cord and the RKPW081915's 6 ft cord end in a NEMA 5-15P: the same slug.
+    "startech/pdu-cord-5-15p": "nema-5-15p",
     # The Vertiv Geist VP9562's fixed 10 ft cord ends in a NEMA 5-15P: the same slug as the two cords above.
     "vertiv/rpdu-cord-5-15p": "nema-5-15p",
     # The APC AP7900B's fixed 11.98 ft cord ends in a NEMA 5-15P: `nema-5-15p`, as the two cords above.
