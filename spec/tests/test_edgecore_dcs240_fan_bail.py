@@ -56,6 +56,14 @@ def test_the_drawn_face_is_unchanged(contract):
     assert contract["size"] == {"w": 48.5, "h": 40.0}
 
 
+def test_the_tube_diameter_is_stated_as_the_sibling_trays_state_it(contract, handle):
+    # unstated, the viewer draws the thinner side of the element (3.2 mm); the siblings say 6.2
+    assert handle["dia"] == 6.2
+    assert handle["uhandle"] == 24
+    assert handle["confidence"] == "estimated"
+    assert "flattened band" in words(contract["provenance"]["the-handle-is-a-bail"])
+
+
 def test_the_provenance_records_the_figure(contract):
     note = words(contract["provenance"]["the-handle-is-a-bail"])
     assert "page 1" in note
