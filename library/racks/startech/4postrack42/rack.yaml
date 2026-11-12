@@ -1,7 +1,7 @@
 format: 1
 kind: rack
 name: 4postrack42
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: StarTech.com
 model: 4POSTRACK42
@@ -9,12 +9,14 @@ part-numbers:
   4POSTRACK42: 42U 4-Post Server Rack, 19in Open Frame Rack
 description: >-
   The StarTech.com 42U open frame rack, four posts in black steel with L-shape
-  rails that have square holes for cage nuts. The rails are adjustable from 22
-  to 40 in of mounting depth. It ships flat pack with four casters and four
-  leveling feet, and has a base plate with floor-anchoring holes and a
-  grounding lug. It is not wall-mountable. The casters, feet and base plate
+  rails that have square holes for cage nuts. The corner beams slide along
+  the centre beam and set in one-inch steps from 22 to 40 in of mounting depth. It ships
+  flat pack with four casters and four leveling feet, and has a base plate with
+  floor-anchoring holes, an M6 grounding hole inside the base with four
+  grounding wires, and 24 cable management hooks that screw on along the back of
+  the rack. It is not wall-mountable. The casters, feet, base plate and hooks
   are described here and are not data yet: the rack product has no key for a
-  base.
+  base or for cable management.
 form: 4-post-frame
 ru: 42
 numbering:
@@ -32,6 +34,7 @@ rails:
     depth:
       min: 558.8
       max: 1016.0
+      step: 25.4
 outer:
   w: 600
   h: 2040
@@ -41,124 +44,156 @@ load:
   static-kg: 600.10
   rolling-kg: 360.06
 datasheet:
-  title: StarTech.com 4POSTRACK42 product page, printed 2026-11-05
-  url: https://www.startech.com/en-us/server-management/4postrack42
+  title: StarTech.com 4POSTRACK42 data sheet, 42U 4-Post Server Rack, 19in Open Frame Rack
+  url: https://media.startech.com/cms/pdfs/4postrack42_datasheet.pdf
+references:
+  - title: StarTech.com 4POSTRACK42 user manual, 42U Adjustable 4 Post Open Frame Server Rack, revision 11/16/2023
+    url: https://sgcdn.startech.com/005329/media/sets/4POSTRACK42_Manual/4POSTRACK42.pdf
+    sha256: 6b0582c3f702da802f0120b5c19c0d760c83e0da059afb87952ed32ab0210bdf
+  - title: StarTech.com 4POSTRACK42 product page, printed 2026-11-05
+    url: https://www.startech.com/en-us/server-management/4postrack42
 provenance:
   ru:
     confidence: datasheet
     note: >-
-      The U Height row of the StarTech.com 4POSTRACK42 product page, printed
-      2026-11-05, page 1, says 42U.
+      The U Height row of the data sheet (page 3) and of the manual's
+      Specifications table (printed page 18) says 42U.
   form:
     confidence: datasheet
     note: >-
-      The Rack Type row (4-Post) and the Frame Type row (Open Frame) on page 1.
-      The box list on page 2 has two left and two right vertical rails joined by
-      corner and center sections and brackets.
+      The Rack Type row (4-Post) and the Frame Type row (Open Frame) of the data
+      sheet and of the manual's Specifications table. The manual's Product
+      Diagram (printed page 3) shows two left and two right vertical rails joined
+      by corner and center beams, with top and base brackets.
   width:
     confidence: datasheet
     note: >-
-      The product listing line on page 3 says 19in Open Frame Rack, and the
-      Industry Standards row on page 2 says EIA/ECA-310-E.
+      The data sheet's title says 19in Open Frame Rack, and its Industry
+      Standards row says EIA/ECA-310-E.
   holes:
     confidence: datasheet
     note: >-
-      The Mounting Hole Types row on page 2 says Square (For Cage Nut), and the
-      box holds 50 M6 cage nuts. The page does not say those are the nuts for the
-      rails, so no thread is written, and it prints no hole size.
+      The Mounting Hole Types row of the data sheet says Square (For Cage Nut),
+      and the box holds 50 M6 cage nuts. The documents do not say those are the
+      nuts for the rails, so no thread is written, and they print no hole size.
   rails:
     confidence: datasheet
     note: >-
-      Page 1 prints the Minimum Mounting Depth as 22.0 in [56 cm], written as
-      558.8 mm. The Maximum Mounting Depth row prints 3.3 ft [1.0 m], and the
-      page title and the listing line on page 3 print 40 in. Not a conflict:
-      40 in is 3.33 ft, which rounds to 3.3 ft, and 40 in is written, 1016.0 mm.
-      That is a reading of the rounded row. The rear rail adjusts between the
-      two; the page prints no step.
+      The manual's Mounting Depth Chart (printed page 17) lists every inch from
+      22 in to 40 in, 19 settings, each with a pair of index numbers (0 and 0 up
+      to 9 and 9) read off the centre beam. The range is 558.8 mm to 1016.0 mm in
+      25.4 mm steps, each converted once at 25.4 mm to the inch. The
+      Specifications table (printed page 18) prints the same two ends, 22 in
+      (558.8 mm) and 40 in (1016 mm). The data sheet prints the ends as 22.0 in
+      [56 cm] and 3.3 ft [1.0 m], its title as 40in (101cm), and its text and
+      features as 56,0 - 101,7cm; 40 in is 3.33 ft and 101.6 cm, so these are
+      roundings of the manual's figures, the coarsest ([1.0 m]) 16 mm from 1016.0
+      mm, and the manual's are written. The manual prints two index numbers and does not say
+      which beam each belongs to; they are read as one for each of the two
+      corner beams and are not stored. Two settings, 22 in and 40 in, use half of the
+      beam bolts; the manual says the rack is still rated for its full weight.
+      Neither document says which face of each rail the depth runs between.
   outer:
     confidence: datasheet
     note: >-
-      Page 1 prints the Product Length as 3.7 ft [1.1 m], the Product Width as
-      23.6 in [60.0 cm], the Product Height as 6.5 ft [2.0 m] and Height with
-      Casters as 6.7 ft [2.0 m]. The lengths and heights are in feet to one
-      decimal, good to about 15 mm, so they are readings and are written to the
-      nearest 10 mm: d 1130 and h 2040, the height with the casters fitted. The
-      height without them is 6.5 ft, about 1980 mm. The width is 600 mm from
-      the metric print. Length is read as front to back, as the sheet labels
-      width and height beside it.
+      Width 600 mm: the data sheet's 23.6 in [60.0 cm] and the manual's 600 mm.
+      Height 2040 mm with the casters fitted: the data sheet's features give 80.3
+      in (204 cm), 2039.6 mm, with casters and 78 in (198 cm), 1981 mm, without.
+      Depth 1130 mm: the data sheet's Product Length, 3.7 ft [1.1 m], printed in
+      feet to one decimal and good to about 15 mm, read as front to back at the
+      40 in setting. The manual's Specifications table prints
+      23.6x80.5x26 in (600x2045x662 mm); its 2045 mm height and 662 mm depth
+      are not written and are named in the outer-size gap. Length is read as
+      front to back, as the data sheet labels width and height beside it.
   weight-kg:
     confidence: datasheet
     note: >-
-      Page 1 prints Weight of Product as 84.9 lb [38.5 kg]. The page prints
-      inches and pounds first. The pounds figure converted, 38.51 kg, is the
-      finer and is written.
+      The data sheet's Weight of Product and the manual's Weight both print 84.9
+      lb (38.5 kg). The pounds figure converted, 38.51 kg, is the finer and is
+      written.
   load:
     confidence: datasheet
     note: >-
-      Page 1 prints Weight Capacity (Stationary) as 1323.0 lb [600 kg] and
-      Weight Capacity (Rolling) as 793.8 lb [360 kg]. The pounds figures
+      The data sheet's table prints Weight Capacity (Stationary) as 1323.0 lb
+      [600 kg] and Weight Capacity (Rolling) as 793.8 lb [360 kg]; its text says
+      1322lbs and its features 1320lb, each 600 kg. The table's pounds figures
       converted, 600.10 and 360.06 kg, are the finer and are written.
   numbering:
     confidence: estimated
     note: >-
-      A stand-in. The page lists U-Markings and does not say which way the
+      A stand-in. The data sheet lists U-Markings and does not say which way the
       labels run; bottom-up from 1 is the default of the rack file.
   hole-centres:
     confidence: estimated
     note: >-
       A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312
-      in). The page names the standard as EIA/ECA-310-E and prints no hole
+      in). The data sheet names the standard as EIA/ECA-310-E and prints no hole
       spacing.
   opening:
     confidence: estimated
     note: >-
       A stand-in for the EIA-310 minimum clear opening between the rails, 450.85
-      mm (17.75 in). The page prints no figure for it.
+      mm (17.75 in). The documents print no figure for it.
 gaps:
   - what: numbering
     reason: vendor-silent
-    note: The page lists U-Markings and does not say which way they run.
+    note: The data sheet lists U-Markings and does not say which way they run.
     wanted: A photograph of the rail showing the unit labels, or a dimensioned drawing.
   - what: hole-centres
     reason: vendor-silent
-    note: The page prints no spacing between the hole lines.
+    note: The documents print no spacing between the hole lines.
     wanted: A dimensioned front view of the vertical mounting rails.
   - what: opening
     reason: vendor-silent
-    note: The page prints no clear opening between the rails.
+    note: The documents print no clear opening between the rails.
     wanted: A dimensioned front view, or a measurement between the rails.
   - what: hole-size
     reason: vendor-silent
-    note: The page says the holes are square for a cage nut and prints no size.
+    note: The documents say the holes are square for a cage nut and print no size.
     wanted: A dimensioned drawing of the rail, or a measurement of a square hole.
-  - what: rail-depth-step
-    reason: vendor-silent
-    note: >-
-      The page prints the two ends of the depth range and no step, so the Rack
-      Builder takes any depth between them.
-    wanted: The step, or the positions of the adjustment holes, from the maker.
   - what: outer-size
-    reason: needs-drawing
+    reason: sources-disagree
     note: >-
-      The depth and the heights are printed in feet to one decimal, good to
-      about 15 mm, and the page has no drawing. d 1130 and h 2040 are readings
-      to the nearest 10 mm.
-    wanted: A dimensioned drawing, or the sizes in millimetres, from the maker.
+      The manual's Specifications table prints 23.6x80.5x26 in (600x2045x662 mm)
+      for width, height and depth. The data sheet prints a height of 80.3 in (204
+      cm) with casters and 78 in (198 cm) without, written as 2040 mm with
+      casters, and a Product Length of 3.7 ft [1.1 m], written as 1130 mm. The
+      heights differ by 5 mm, and neither document says whether the manual's
+      80.5 in has the casters fitted. The depths differ by 468 mm, which is
+      about the 457.2 mm the rear rails travel: 662 mm is read as the frame at
+      the 22 in setting, 103 mm more than the rail depth, and 1130 mm as the
+      frame at the 40 in setting, 114 mm more. That is a reading, and the
+      manual's 26 in and 662 mm differ by 1.6 mm between themselves. Each
+      document's figure is stated here and nothing is averaged.
+    wanted: StarTech's dimensioned drawing, or its statement of whether 80.5 in has the casters fitted and which rail setting 662 mm is.
   - what: max-device-depth
     reason: vendor-silent
-    note: The page prints no usable depth for a device, so none is written.
+    note: The documents print no usable depth for a device, so none is written.
     wanted: The usable depth between the rails, from the maker.
   - what: casters
     reason: needs-drawing
     note: >-
-      The frame ships with four casters, and the rack product has no key for a
-      base yet, so they are in the description only. The page prints no caster
-      size.
+      The frame ships with four casters, mounted by four M6 bolts each at the
+      caster mounting holes on the bottom of the rack (manual, printed page 13),
+      and the rack product has no key for a base yet, so they are in the
+      description only. The documents print no caster size.
     wanted: A base key in the rack product, and the caster size from the maker.
   - what: leveling-feet-and-base-plate
     reason: needs-drawing
     note: >-
-      The page lists four leveling feet, a base plate with floor-anchoring holes
-      and a grounding lug. They are in the description only, for the same reason
-      as the casters, and the page prints no position or size for them.
+      The documents list four leveling feet, which screw into the leveler
+      mounting holes on the bottom of the rack (manual, printed page 14), and a
+      base plate with floor-anchoring holes and a grounding lug. They are in the
+      description only, for the same reason as the casters, and no document
+      prints a position or size for them.
     wanted: A base key in the rack product, and a dimensioned drawing of the base plate.
+  - what: cable-management
+    reason: vendor-silent
+    note: >-
+      The data sheet lists Built-in Cable Management among its special features,
+      and the box holds 24 cable management hooks with 24 screws that go into the
+      cable management screw holes along the back of the rack (manual, printed
+      page 15). The documents print no hook size and no hole positions, and the
+      rack product has no key for cable management, so they are in the
+      description only.
+    wanted: A dimensioned drawing of the rear rails with the hook holes, and a key for cable management in the rack product.
