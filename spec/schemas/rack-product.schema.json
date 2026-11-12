@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://portrayal.dev/schemas/v1/rack-product.schema.json",
   "title": "Portrayal rack product (v1) - a frame or cabinet the library models",
-  "description": "A RACK PRODUCT IS A RACK OR A CABINET AS A MAKER SELLS IT. It lives at racks/<vendor>/<name>/rack.yaml, is versioned by the rack.lock.json beside it, and is referenced as <vendor>/<name>@<major>. It is not a device (a device is placed in a rack; a rack is not) and it is not the Rack Builder's file (`rack.schema.json`, the rack someone built). This first version holds the frame: height, numbering, posts, holes and the rails. Channels, doors, panels, the base and baying come with the cabinets, as additive keys; until then an unknown key is refused, never ignored.",
+  "description": "A RACK PRODUCT IS A RACK OR A CABINET AS A MAKER SELLS IT. It lives at racks/<vendor>/<name>/rack.yaml, is versioned by the rack.lock.json beside it, and is referenced as <vendor>/<name>@<major>. It is not a device (a device is placed in a rack; a rack is not) and it is not the Rack Builder's file (`rack.schema.json`, the rack someone built). It holds the frame (height, numbering, posts, holes and the rails) and, for a cabinet, its enclosure (doors, side panels and roof), its base and its zero-U channels. Further parts of a cabinet arrive as additive keys; until then an unknown key is refused, never ignored.",
   "type": "object",
   "required": [
     "format",
@@ -324,6 +324,243 @@
         "rolling-kg": {
           "type": "number",
           "exclusiveMinimum": 0
+        }
+      }
+    },
+    "enclosure": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "what closes a cabinet in: its doors, its side panels and its roof. Only a cabinet form has one (L193); an open frame has none. Each part is written only where a document states it",
+      "properties": {
+        "doors": {
+          "type": "array",
+          "minItems": 1,
+          "description": "the doors of the cabinet, one entry for each face that has any",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "face",
+              "leaves",
+              "kind"
+            ],
+            "properties": {
+              "face": {
+                "enum": [
+                  "front",
+                  "rear"
+                ],
+                "description": "the face of the cabinet the door closes, once each (L193)"
+              },
+              "leaves": {
+                "enum": [
+                  1,
+                  2
+                ],
+                "description": "how many separate leaves the door is: 2 is a split pair that opens from the middle"
+              },
+              "kind": {
+                "enum": [
+                  "perforated",
+                  "solid",
+                  "glass",
+                  "mesh"
+                ],
+                "description": "what the leaf is made of: a perforated or mesh leaf lets air through, a solid or glass one does not"
+              },
+              "open-area": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100,
+                "description": "the percentage of a perforated or mesh leaf that is open, as the maker prints it. It says how much air the door passes"
+              },
+              "hinge": {
+                "enum": [
+                  "left",
+                  "right"
+                ],
+                "description": "the side the hinges are on as the door ships, seen from the face. A split pair states none"
+              },
+              "reversible": {
+                "type": "boolean",
+                "description": "true when the maker says the hinges and the latch can be swapped to the other side. Needs a `hinge` to say which side it ships on (L193)"
+              },
+              "swing": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 360,
+                "description": "degrees the door opens to, as the maker prints it. A viewer that draws the door open turns it by this much"
+              },
+              "clearance": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "mm of wiring space between the door and the vertical rail behind it. A device whose face stands proud of the rail by more than this would stop the door closing"
+              },
+              "lock": {
+                "enum": [
+                  "key"
+                ],
+                "description": "how the door is locked: `key` is a handle that locks with a key"
+              }
+            }
+          }
+        },
+        "panels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "per-side"
+          ],
+          "description": "the panels that close each long side of the cabinet",
+          "properties": {
+            "per-side": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "how many panels close one side"
+            },
+            "split": {
+              "enum": [
+                "top-bottom"
+              ],
+              "description": "how a side with two panels is divided: `top-bottom` is an upper and a lower panel"
+            },
+            "removable": {
+              "type": "boolean",
+              "description": "true when a panel can be taken off without taking the cabinet apart"
+            },
+            "lock": {
+              "enum": [
+                "key"
+              ],
+              "description": "how a panel is locked: `key` is a lock that takes a key"
+            }
+          }
+        },
+        "roof": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "description": "the roof panel of the cabinet",
+          "properties": {
+            "removable": {
+              "type": "boolean",
+              "description": "true when the roof comes off without tools or without taking the cabinet apart, as the maker says"
+            }
+          }
+        }
+      }
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "description": "what the cabinet stands on. Each count is written only where a document states it",
+      "properties": {
+        "casters": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "how many casters the cabinet rolls on"
+        },
+        "levellers": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "how many adjustable levelling feet it stands on once in place"
+        }
+      }
+    },
+    "channels": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "the zero-U channels inside the cabinet: vertical strips beside the rails that a rack PDU or a cable accessory hangs from. A rack file names the channel a part stands in by its `id`, so a part in a channel and one outside the cabinet never meet",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "point",
+          "where"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "description": "the channel's name, unique within the product (L193). A saved rack names the channel by it, so it is never reused for another channel"
+          },
+          "point": {
+            "enum": [
+              "left",
+              "right",
+              "left-front",
+              "right-front",
+              "left-rear",
+              "right-rear"
+            ],
+            "description": "the zero-U attachment point the channel belongs to, one the form has: `left` and `right` on a two-post frame, the four corner points on a four-post one (L193)"
+          },
+          "where": {
+            "enum": [
+              "inside",
+              "outside"
+            ],
+            "description": "`inside` is between the posts, behind the side panel; `outside` is against the outer face of an upright"
+          },
+          "slots": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "interface"
+            ],
+            "description": "the column of slots a hanging part's mounting buttons enter. `first`, `pitch` and `count` are stated together or not at all",
+            "properties": {
+              "interface": {
+                "type": "string",
+                "description": "the mount the slots present, a key of the connector registry (L193): `pdu-button` is the keyhole that takes the shoulder button on the back of a zero-U PDU"
+              },
+              "first": {
+                "type": "number",
+                "minimum": 0,
+                "description": "mm from the bottom of the rails to the first slot"
+              },
+              "pitch": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "mm from one slot to the next, up the channel"
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "how many slots the column has"
+              }
+            },
+            "dependentRequired": {
+              "first": [
+                "pitch",
+                "count"
+              ],
+              "pitch": [
+                "first",
+                "count"
+              ],
+              "count": [
+                "first",
+                "pitch"
+              ]
+            }
+          },
+          "moves": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "description": "the ways the maker says the channel can be moved from where it ships",
+            "properties": {
+              "front-back": {
+                "type": "boolean",
+                "description": "true when the channel slides forward and back along the side rails"
+              }
+            }
+          }
         }
       }
     },
