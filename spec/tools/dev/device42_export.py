@@ -26,8 +26,10 @@ a model. If the box it names has no file of its own under that maker, the
 relisting is written once as that maker's model, with the model name the line
 gives and the size of the file that carried it.
 
-THE COLUMN HEADERS ARE STAND-INS: the issue's own field names, not read from the
-import page. Nothing here is confirmed against it.
+THE HEADERS: the three columns written here (`name`, `size`, `manufacturer`) are
+parameters Device42's import page names for a hardware model. The sample file's
+row 3, which holds the exact spelling, is not held. The rack-side headers the
+pages do not name are stand-ins; docs/device42-export-design.md lists each.
 """
 import argparse
 import csv
@@ -38,11 +40,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 SOURCE = ROOT / "library/exports/netbox/device-types"
 
-# STAND-INS, from the issue's report of the import page: `name` is required,
-# `size` (in U) and `manufacturer` are optional. `type` is optional too and is
-# not written: the device-type files hold no kind of device to take it from.
+# The import page names `name` (required) and `type`, `size` (in U) and
+# `manufacturer` (optional) for a hardware model. `type` is not written: the
+# device-type files hold no kind of device to take it from. `device` and
+# `start_at` are the page's names for the devices-to-racks sheet. The rack-side
+# headers the pages do not name are stand-ins.
 COLUMNS = ("name", "size", "manufacturer")
-STAND_INS = ("name", "type", "size", "manufacturer", "building", "room", "hardware", "rack", "start_at")
+NAMED = ("name", "type", "size", "manufacturer", "device", "start_at")
+STAND_INS = ("building", "room", "hardware", "rack")
 
 LISTS = re.compile(r"^(?P<nos>.+?) lists (?P<hw>.+?)(?: \(NOS: [^)]*\))?\.?$")
 KEYS = ("manufacturer", "model", "u_height")
@@ -128,24 +133,30 @@ this sheet is the fourth.
 |---|---|
 | `hardware-models.csv` | one per model, sorted by maker then model |
 
-## The headers are stand-ins
+## Which headers Device42's pages name
 
-Device42's import page was not read for this sheet. Every header below is the
-issue's own field name, from the issue's report of the page, and is
-**not confirmed against the import page**. A real header that differs changes
-every file.
+Three pages of Device42's documentation were read: "Importing Data from
+Existing Spreadsheets", "Spreadsheet Imports and Exports" and "Tutorial:
+Loading Data Using Spreadsheets". The sample spreadsheets they point to, which
+hold each sheet's endpoint, method and column headings, were not held.
+
+Named on a page:
 
 - `name` (required): the model as its maker prints it, for example `S8901-54XC`.
-- `size`: the device type's `u_height`, written as it is. A half unit is `0.5`
-  or `2.5`; whether the import takes a fraction is not confirmed.
+- `size`: the device type's `u_height`, written as it is. The page says a size
+  in U is needed to put a device in a rack. A half unit is `0.5` or `2.5`;
+  whether the import takes a fraction is not confirmed.
 - `manufacturer`: the maker that built the box.
-- `type`: not written. The device-type files hold no kind of device to take it
-  from, and the values the import allows are not confirmed.
-- `building`, `room`, `hardware` (the model a device is), `rack` and `start_at`
-  belong to the rack-side sheets and are stand-ins too. The issue names `name`,
-  `type`, `size`, `manufacturer`, `room` and `start_at`; `building`, `hardware`
-  and `rack` are the least certain, since the issue names the sheets and not
-  their columns.
+- `type`: named as optional and not written. The device-type files hold no kind
+  of device to take it from, and the values the import allows are not given.
+- `device` and `start_at` belong to the devices-to-racks sheet, which the Rack
+  Builder writes. The page spells them as that sheet's required fields.
+
+Stand-ins, **not confirmed against the import page**: `building`, `room`,
+`hardware` (the model a device is) and `rack` belong to the rack-side sheets.
+The pages say "building name" and "room name" and name no parameter for them,
+or for the model a device is, or for the rack a device goes in. A real header
+that differs changes every file of that sheet.
 
 ## One model, once, under its real maker
 
@@ -164,8 +175,13 @@ manufacturers is not confirmed.
 
 - ports and interfaces, images and cables: no import is described for them;
 - the device type's depth, weight, airflow and part number;
-- `.xls` and `.xlsx`: the sheets are CSV, which the issue reports a newer
-  generic importer takes.
+- `.xls` and `.xlsx`: the pages say "Save the file as .xls or .xlsx" and name
+  no other format, so the sheets, which are CSV, may not load as they are;
+- the sample file's first three rows, "API endpoint, request method, and column
+  headings", which Device42 says not to change: not written. The pages give the
+  endpoint of the buildings sheet only (`/api/1.0/buildings/`, POST);
+- a vendors sheet: the tutorial loads vendors between rooms and racks. No
+  header for it is named.
 
 Nothing here has been loaded into a Device42 instance.
 """
