@@ -1,0 +1,255 @@
+format: 1
+kind: device
+name: ipc-1c
+version: 1.0.0
+maturity: modelled
+manufacturer: ReadyLinks
+model: IPC-1C
+description: >-
+  One-port ReadyLink coax client for the room end of a coax run. A ReadyLink F-connector port
+  takes the coax from a GL host switch, and one 10/100/1000/2.5G RJ45 port hands the room
+  Ethernet. It is powered by USB Type-C, and carries a system lamp and a factory-reset button.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      ReadyLinks, IPC-1C 1-Port ReadyLink Coax Client product datasheet (August 2026, 4 pages):
+      page 1 for the overview, page 3 for the dimensions, ports and power, page 4 for the ports
+      and dimensions figure. The maker's 3D model (ipc-1c.glb) gives the body as separate cover and
+      base plastics; the maker's stock photograph shows the Ethernet end and the colour.
+  chassis:
+    confidence: drawing
+    note: >-
+      the maker's 3D model: the cover and base plastics (COVER-PLASTIC, BASE-PLASTIC) are each 37.0
+      wide and 71.7 long, 14.0 and 16.4 high; with the 1.3 they overlap they span 29.1; the F connector
+      stands 12.3 beyond the body, so the model is 84.0 overall. The data sheet's page 3 prints
+      30 mm (H) x 37 mm (W) x 85 mm (D), which is the same box rounded and measured over the
+      connector. The body is drawn at the model's size and the sheet's overall size is kept as
+      an attribute. The page 4 figure's end views show the housing 26.3 mm tall with the rubber feet
+      below it, 29.05 mm in all, which is the model's 29.1: the feet are inside the 29.1.
+  power:
+    confidence: datasheet
+    note: >-
+      datasheet page 3: power input USB Type C; max power consumption 3 W. No USB Power
+      Delivery profile, voltage or current is printed, and no 802.3 standard, because the unit
+      is not a PoE powered device. The label beside the USB-C port in the page 4 figure reads
+      USB-PD. No PoE output is stated either: the page 2 diagram's PoE label is the poe-out gap.
+  end-views:
+    confidence: drawing
+    note: >-
+      every position on the two ends is measured on the two straight-on end views of the page 4
+      figure (the embedded image, extracted at its own resolution). On the coax end view the
+      37 mm housing width is 446 px, 12.05 px per mm, on the Ethernet end view 420 px, 11.35 px per
+      mm; a point is its centre in mm from the housing's top left corner, good to about 0.5 mm
+      because the view carries a slight perspective. Coax end: F connector (11.5, 13.6), SYS lamp
+      (24.9, 8.4), the pinhole under it (24.9, 11.4), USB Type-C receptacle (32.3, 12.7); the RL,
+      SYS and USB-PD legends are centred at x 11.3, 24.7 and 30.1. Ethernet end: jack
+      centre (18.3, 13.25); GE and 10/100/1000/2500BT centred on the jack. The model's own bounding
+      boxes put the F connector at 11.75 right and 12.85 down, the USB-C at 31.5 and 14.25 and the
+      RJ45 at 18.5 and 14.4: they agree with the figure within 0.8 mm across and, down the face,
+      within 0.8 (F connector), 1.5 (USB-C) and 1.2 mm (RJ45). The figure is drawn from, because it
+      shows where the visible feature is and a bounding box also holds what stands behind it.
+  coax-end:
+    confidence: drawing
+    note: >-
+      the F connector is the library's own std/f-type@1 (9.7 x 7.9), the part the GL-12xC line card
+      places, so a coax run lands at both ends; the figure shows the hex nut about 16 mm across
+      corners, wider than that part. The SYS lamp is the library's 2 mm lamp (the figure's is about
+      2.6 mm). The figure labels one point System LED and Reset Button and shows a pinhole under the
+      lamp, drawn as a 1.5 mm hole; the library's reset-button part is a 4 mm pinhole and is not
+      used for that reason. The USB Type-C opening: the library's std/usb-c@1 is 8.34 x 2.56 mm and is
+      placed turned to 2.56 wide and 8.34 high; the model's opening is 3.2 x 8.9 mm
+      (TYPE_C-14PIN-XC_3); the figure's, with its rim, is about 3.9 x 9.3 mm. The library part's size is
+      the one drawn.
+  ethernet-end:
+    confidence: drawing
+    note: >-
+      the jack is drawn with the library's own RJ45 part (15.8 x 13.2); the figure's opening with
+      its surround is about 17.4 wide and 15 high. The legends GE and 10/100/1000/2500BT are read
+      from the stock photograph and the page 4 figure. The photograph's amber and green jack lamps
+      are not drawn. A small flat tab under the housing between
+      the feet is not drawn.
+  end-plates:
+    confidence: drawing
+    note: >-
+      both end views show the plate carrying the ports set in from the housing by a thin border:
+      on the coax end about 1.9 mm in from the left, 1.8 from the right, 1.0 from the top, and ending
+      25.1 mm down; on the Ethernet end 1.8, 1.8, 1.2 and 25.4. Drawn as a 0.2 mm outline. The maker's
+      3D model prints a film on each end plate (F_FILM and B_FILM, each 32.4 x 22.8 mm, 2.3 mm in from
+      each side and 1.2 mm from the top, ending 24.0 mm down). The drawn plate is larger than the film
+      because the figure's outline is the edge of the inset plate, and the film is read as the printed
+      area inside that edge (an inference: no document says so).
+  seam:
+    confidence: drawing
+    note: >-
+      the cover and base plastics meet in a thin line on both long sides and show as a bright
+      glint in the figure's end views, 13.1 mm below the top on the coax end view and 12.9 on the
+      Ethernet end view. The model brackets it: the cover's lower edge is 14.0 below the top and
+      the base's rim 12.7 below it. The line is drawn at 13.0, 0.4 mm thick, by eye.
+  feet:
+    confidence: estimated
+    note: >-
+      the figure shows four round rubber feet under the housing. On the end views each is
+      6.7 mm across and 2.8 mm high (from the housing's lower edge at 26.3 down to the 29.1 total),
+      and the two on an end sit with centres 7.5 and 29.3 mm from the left edge, symmetric about the
+      centre line. How far they sit in from the ends is not in an end view; 9.0 mm is read by eye
+      from the three-quarter view and is the least certain figure here. Their round plan is read
+      from the same view. The model carries no named foot: they are inside its base plastic.
+  chassis-colour:
+    confidence: photo-measured
+    note: >-
+      the median of the lit side faces of the cover and the base in the stock photograph (1920 x 1080
+      px), #38393a and #373737, taken as #383838. Measured again on two blocks of the lit side, the
+      cover's 210 x 35 px at x 800 to 1010, y 450 to 485 (7350 px) and the base's 210 x 30 px at
+      y 525 to 555 (6300 px), the medians are #383839 and #363637, within two levels of those. The photograph's top
+      reads #59595b, which is the lighting. The figure renders the same plastic darker (about #232325), and its feet about
+      0.77 of its body, which on the photograph's body is #2b2b2b.
+attrs:
+  physical:
+    overall-dimensions: 30 x 37 x 85 mm (datasheet)
+    weight: under 0.5 lb (datasheet)
+  power:
+    power-max-w: 3
+    power-input: USB Type-C
+  environmental:
+    operating-temp-c: -5 to 40
+    operating-humidity: 5 to 95 percent noncondensing
+  management:
+    interfaces: ReadyView cloud; ReadyLinks switch
+    button-functions: factory reset
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 37.0
+  height: 29.1
+  depth: 71.7
+  mount: desktop
+  color: '#383838'
+  edge: '#2a2a2a'
+  silk: '#e8e8e8'
+gaps:
+- what: mount
+  scope: [top, bottom, left, right]
+  reason: vendor-silent
+  wanted: >-
+    How the unit is fixed: the datasheet says it goes behind a TV, in a closet or at a camera,
+    and shows rubber feet in the figure, but prints no mounting method.
+- what: foot-positions
+  scope: [bottom, left, right]
+  reason: vendor-silent
+  wanted: >-
+    A dimensioned drawing of the underside: the feet's distance from the ends and their
+    diameter. The figure shows them in elevation only; the placement along the length is read
+    by eye from its three-quarter view.
+- what: poe-out
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    the datasheet's page 2 diagram draws the link below the IPC-1C as "1G PoE" under the legend
+    "Ethernet + PoE", with a wall-plate access point at its end; page 3 prints power input USB Type C,
+    max power 3 W, and no PoE output or budget. Its page 3 diagram draws the IPC-1C's own link as
+    plain "1G" Ethernet and the IPC-2C's as "2.5G PoE++". A 3 W unit cannot feed an access point, so the diagram
+    is read as a generic reference and no PoE output is stated.
+  wanted: >-
+    Whether the Ethernet port supplies PoE, and at which standard and budget: a figure on the
+    specifications table or a statement of the port's PoE role.
+- what: top-texture
+  scope: [top]
+  reason: vendor-silent
+  wanted: >-
+    The size and place of the textured patch on the top face, which the photograph and the
+    figure show faintly and no document dimensions.
+groups:
+  readylink:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-f}
+    description: >-
+      the ReadyLink coax port, an F connector, labelled RL. The datasheet's page 2 diagram labels
+      the link from the GL-6xC "1G"; no port rate is printed in a table, so none is stated here.
+  lan:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 2.5g}
+    description: the 10/100/1000/2.5G Ethernet port, labelled GE
+  usbc-power:
+    term: Inlet
+    role: service
+    index-origin: 1
+    attrs: {media: usb-c}
+    description: the USB Type-C power input, labelled USB-PD
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+views:
+  front:
+    size: {w: 37.0, h: 29.1}
+    panel:
+      decor:
+      - {at: [1.9, 1.0], size: [33.3, 24.1], stroke: '#4a4a4a', stroke-width: 0.2, rx: 1.0, kind: end-plate, confidence: drawing, source: 'datasheet page 4 figure, coax end view'}
+      - {at: [24.15, 10.65], size: [1.5, 1.5], fill: '#1c1c1c', rx: 0.75, kind: reset-pinhole, confidence: drawing, source: 'datasheet page 4 figure, coax end view'}
+      - {at: [4.3, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: drawing, source: 'datasheet page 4 figure, coax end view'}
+      - {at: [26.0, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: drawing, source: 'datasheet page 4 figure, coax end view'}
+    silkscreen:
+    - {at: [11.3, 5.1], text: RL, font-size: 2.2, anchor: middle, for: chassis}
+    - {at: [24.7, 5.2], text: SYS, font-size: 2.2, anchor: middle, for: chassis}
+    - {at: [30.1, 21.3], text: USB-PD, font-size: 2.2, anchor: middle, for: chassis}
+    components:
+      placements:
+      - {ref: std/f-type@1, id: rl, at: [6.65, 9.65], group: readylink, rel-pos: 1, attrs: {impedance: 75}}
+      - {ref: common/led-dot@1, id: led-sys, at: [23.9, 7.4], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: std/usb-c@1, id: usb-pd, at: [28.13, 11.42], rotate: 90, group: usbc-power, rel-pos: 1}
+  rear:
+    size: {w: 37.0, h: 29.1}
+    panel:
+      decor:
+      - {at: [1.8, 1.2], size: [33.4, 24.2], stroke: '#4a4a4a', stroke-width: 0.2, rx: 1.0, kind: end-plate, confidence: drawing, source: 'datasheet page 4 figure, Ethernet end view'}
+      - {at: [4.3, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: drawing, source: 'datasheet page 4 figure, Ethernet end view'}
+      - {at: [26.0, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: drawing, source: 'datasheet page 4 figure, Ethernet end view'}
+    silkscreen:
+    - {at: [18.3, 4.4], text: GE, font-size: 2.2, anchor: middle, for: eth}
+    - {at: [18.3, 24.0], text: 10/100/1000/2500BT, font-size: 2.2, anchor: middle, for: eth}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: eth, at: [10.4, 6.65], group: lan, rel-pos: 1}
+  left:
+    size: {w: 71.7, h: 29.1}
+    panel:
+      decor:
+      - {at: [0.0, 12.8], size: [71.7, 0.4], fill: '#1f1f1f', kind: cover-base-seam, confidence: drawing, source: "datasheet page 4 figure end views, bracketed by the model's cover and base plastics"}
+      - {at: [5.65, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+      - {at: [59.35, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+  right:
+    size: {w: 71.7, h: 29.1}
+    panel:
+      decor:
+      - {at: [0.0, 12.8], size: [71.7, 0.4], fill: '#1f1f1f', kind: cover-base-seam, confidence: drawing, source: "datasheet page 4 figure end views, bracketed by the model's cover and base plastics"}
+      - {at: [5.65, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+      - {at: [59.35, 26.3], size: [6.7, 2.8], fill: '#2b2b2b', rx: 1.2, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+  top:
+    size: {w: 37.0, h: 71.7}
+    empty: >-
+      the photograph and the page 4 figure show a faint textured patch on the top and no
+      document gives its size or place; it is a gap, and the rest of the top is the plain cover
+  bottom:
+    size: {w: 37.0, h: 71.7}
+    panel:
+      decor:
+      - {at: [4.3, 5.65], size: [6.7, 6.7], fill: '#2b2b2b', rx: 3.35, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+      - {at: [26.0, 5.65], size: [6.7, 6.7], fill: '#2b2b2b', rx: 3.35, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+      - {at: [4.3, 59.35], size: [6.7, 6.7], fill: '#2b2b2b', rx: 3.35, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+      - {at: [26.0, 59.35], size: [6.7, 6.7], fill: '#2b2b2b', rx: 3.35, kind: rubber-foot, confidence: estimated, source: datasheet page 4 figure}
+configurations:
+  base:
+    kind: base
+    description: IPC-1C 1-port ReadyLink coax client
+    default: true
+    part-numbers:
+      IPC-1C: {}
+datasheet:
+  title: 'ReadyLinks IPC-1C datasheet'
+  sha256: 9da7180ac1a3d9f7999baec8096aed5e07b123010ea9fa7b1c3bf6ac4fe0eb72
