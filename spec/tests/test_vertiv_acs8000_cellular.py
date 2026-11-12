@@ -4,8 +4,8 @@ Sources: the Avocent ACS8000 Advanced Console Server data sheet (AV-12339, 08/22
 dimensions, the power figures and the cellular type, the Installer/User Guide (Figure 1.1 and Table 1.1: the
 cellular antennas, the SIM card slot, the dual power supply) and the maker's product photograph of the cellular
 front. No drawing is held and the antennas stand in front of both antenna jacks in the photograph, so every
-position is an estimate and the tests hold the counts, the ids, the parts, the order along the face and the
-declarations, not a coordinate.
+position is an estimate and the tests hold the counts, the ids, the parts, the order along the face, the
+declarations and loose bounds on the two jacks (no exact coordinate).
 """
 from pathlib import Path
 
@@ -150,3 +150,18 @@ def test_each_device_type_is_exported_for_both_targets(name):
         path = EXPORTS / target / "device-types" / "Vertiv" / f"{model}.yaml"
         assert path.is_file(), path
         assert f"model: {model}" in path.read_text()
+
+
+@pytest.mark.parametrize("name", MODELS)
+def test_only_the_jacks_horizontal_position_is_claimed_as_measured(name):
+    prov = load(name)["provenance"]
+    assert "not a measurement" in prov["method"]["note"]
+    gap = {g["what"]: g for g in load(name)["gaps"]}["antennas"]["note"]
+    assert "not a measurement" in gap
+
+
+@pytest.mark.parametrize("name", MODELS)
+def test_the_quick_installation_guide_step_is_cited_and_the_certification_names_its_edition(name):
+    d = load(name)
+    assert "Quick Installation Guide page 2, step 10" in d["provenance"]["sources"]["note"]
+    assert "APAC edition" in d["attrs"]["compliance"]["certification"]
