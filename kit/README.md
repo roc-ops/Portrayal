@@ -950,6 +950,15 @@ a cable with no DC end says and returns what it did.
   poles the part's provenance lists are not named: the kit does not read provenance. Every other
   loose sentence is unchanged.
 
+**Next release: the cells of a tray, and the coil a stored loop makes in one.** `rack/coil.js` gives
+`cellsOf(tray)` (the floor between the rings), `turnLimits` (the shortest and longest turn of a cable
+in a cell, or null where none can turn), `stackOf` and `capacityOf` (turns at a stack; the stack
+default is `FILL_LIMIT`, an estimate and not a measurement of any tray), `solveTurns` and `coilIn`
+(a coil of a stored length with two legs from the cord's lay line). `spareCoils(rack, cable, ctx)` in
+`rack/slack.js` gives the coil of each tray loop an entry of the cable names. The legs and turns are
+part of the spare: no path, need, stock size, export or finding changes. **A page that draws stored
+spare as a coil calls `spareCoils`; one that does not changes nothing.**
+
 **New in 0.51.0: the relief detail pass asks for each raster once.** `rasterKey` rewrites a face's
 shared `<style>` and `<defs>` once and keys a node by that and its own art (`rasterKeyText` is the
 whole-text rewrite; no two texts it tells apart share a key), and `svgCanvas` returns the kept raster instead of a copy: draw on
