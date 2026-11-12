@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpc-r-4xge-xfp
-version: 3.1.0
+version: 3.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
 attrs:
   xfp-10g: 4
   model: DPC-R-4XGE-XFP
+  model-variants: DPCE-R-4XGE-XFP, DPCE-X-4XGE-XFP
   power-draw-max-w: 310
   lifecycle-note: EOL per PSN-TSB14931; modelled because it is the card the reference photograph 
     carries
@@ -31,6 +32,11 @@ provenance:
     by x' = 8.75 + (x - 26.15) * 396.0 / 394.85, the old plate run 26.15-421.0 onto the new 8.75-404.75;
     y is unchanged. Only the levers, the model name and the status group were placed afresh (provenance
     below). 
+  model-variants: >-
+    MX240 Hardware Guide, Table 93 (printed p. 228) prints 310 W for DPC-R-4XGE-XFP and for DPCE-R-4XGE-XFP
+    with DPCE-X-4XGE-XFP; the module reference (printed pp. 92 to 100) gives each four ports and
+    6.46 A @ 48 V (310 W). Figure 7 (printed p. 95) shows the DPCE-R-4XGE-XFP face with four XFP cages and the
+    same lever and lamp. The three share this part; its face is the photograph of the DPC-R card.
   power: 'guide Table 93 DPC section: DPC-R-4XGE-XFP 310 W maximum; ambient unqualified by the vendor
     - max is our reading, recorded here'
   covers: 'photo - the reference unit ships with bright XFP dust covers seated; they are DELIBERATELY
