@@ -2,6 +2,7 @@
 - Raritan PX2-2475: draws the shapes its specification's pictures show. The controller panel and both display windows have
   rounded corners. The windows carry ten seven-segment digit outlines, each about 5.5 by 8.3 mm. One window has four, in
   two rows of two. The other has six, in three rows of two. Each row has one point.
+  Their top and bottom edges slope as the drawing draws them: 8.4 degrees at a row's left digit, 10.6 at its right one.
   The panel also draws the T-shaped line between the two round buttons. It draws a ring round each screw hole of the D-sub.
   It draws one outline round the FEATURE and ETHERNET jacks. It draws the reset button as a ring with no pinhole.
   Each of the 24 outlets has the small ring the elevation draws beside it.

@@ -3,6 +3,8 @@
 The specification's controller-panel picture shows rounded corners on the panel and on both display windows.
 Its elevation shows two rows of two seven-segment digits in one window and three rows of two in the other.
 That makes ten digits, each about 5.5 mm wide and 8.3 mm high, with one point at the upper right of each row.
+Their top and bottom edges slope down to the right: about 8 degrees at a row's left digit and 11 at its right one.
+Their sides stand upright to within 1.5 degrees, and the window edges are straight.
 The elevation also shows a small ring beside each of the 24 outlets.
 The panel picture also shows a T-shaped line between the two round buttons.
 It shows a ring round each of the console jack's two screw holes.
@@ -15,6 +17,7 @@ What is true of the library once the device draws them:
   - the windows carry ten digits, each wholly inside its own window.
     Four are in the first, in two rows of two. Six are in the second, in three rows of two.
     Each row has one point, at the right-hand digit.
+    The segments slope at the angle measured for the digit's place in its row, and their sides stay upright.
   - the T line stands in the gap between the two round buttons.
     The screw-hole rings are centred on the holes.
     One outline holds both stacked jacks. The reset button is a plain ring with no pinhole part.
@@ -26,6 +29,7 @@ What is true of the library once the device draws them:
 
 These read the device source and its contracts. They read no library/dist and render nothing.
 """
+import math
 import re
 from pathlib import Path
 
@@ -107,6 +111,38 @@ def test_the_digits_stand_in_rows_of_two_and_each_row_has_one_point():
         assert all(abs((b - a) - 10.6) < 0.05 for a, b in zip(xs, xs[1:])), window  # the row pitch the picture gives
 
 
+def digit_slopes(mark):
+    """(slope of each of the three horizontal segments, lean of each of the four vertical ones), in degrees.
+
+    The view runs the drawing a quarter turn: a segment's long edge is the second side of its outline.
+    A horizontal segment of the drawing runs along y of the view, so its slope is the shift in x over the run in y.
+    A vertical one runs along x, so its lean is the shift in y over the run in x.
+    """
+    parts = [p for p in re.split(r"(?=M )", mark["path"]) if p.strip() and " a " not in p]
+    slopes, leans = [], []
+    for n, p in enumerate(parts):
+        (ax, ay), (bx, by) = [(float(x), float(y)) for x, y in re.findall(r"[ML] (-?\d+\.?\d*) (-?\d+\.?\d*)", p)][1:3]
+        if n < 3:
+            slopes.append(math.degrees(math.atan2(ax - bx, by - ay)))
+        else:
+            leans.append(abs(math.degrees(math.atan2(by - ay, abs(bx - ax)))))
+    return slopes, leans
+
+
+def test_the_digits_are_sheared_as_the_drawing_draws_them():
+    marks = {i: m for i, m in front_marks().items() if i.startswith("digit-")}
+    every = []
+    for i, m in marks.items():
+        slopes, leans = digit_slopes(m)
+        assert len(slopes) == 3 and len(leans) == 4, i
+        left_of_row = int(i.split("-")[1]) % 2 == 1  # digit-1, 3, 5, 7 and 9 are the left-hand digits
+        for a in slopes:
+            assert abs(a - (8.4 if left_of_row else 10.6)) <= 1.5, (i, a)  # measured on the page: 8.4 and 10.6 degrees
+        assert max(leans) <= 1.5, (i, leans)  # the sides are upright to within the 1.5 degrees measured
+        every += slopes
+    assert abs(sum(every) / len(every) - 9.5) <= 1.0  # the mean over the ten digits
+
+
 def test_the_t_line_stands_between_the_two_round_buttons():
     decor = front_decor()
     up, down = decor["nav-button-up"], decor["nav-button-down"]
@@ -183,8 +219,9 @@ def side_decor(view):
 
 
 def test_the_side_views_hold_nothing_wholly_beyond_the_65_mm_depth():
-    # the depth dimension's extension lines end on the outermost body line, 65.3 from the rear; the outlet bodies,
-    # their rings and the panel steps stand on it, so they lie beyond the depth the face is drawn to
+    # The depth dimension's extension lines end on the outermost body line, 65.3 from the rear.
+    # The outlet bodies, their rings and the panel steps stand on it.
+    # So they lie beyond the depth the face is drawn to.
     for view in ("left", "right"):
         decor = side_decor(view)
         depth = device()["views"][view]["size"]["w"]
