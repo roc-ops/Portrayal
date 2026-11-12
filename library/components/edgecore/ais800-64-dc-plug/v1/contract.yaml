@@ -1,14 +1,14 @@
 format: 1
 kind: component
 name: ais800-64-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: edgecore-ais800-dc-block-6
 profile: power
 description: >-
   The cable connector of the Edgecore AIS800-64D and AIS800-64O 3000 W DC supply, wired, seen from the wire side as seated. A grey
   body with one insulated wire entering each of its six ways. It seats in an `edgecore-ais800-dc-block-6` connector at its own mate
-  point. It carries one wire per contact, not one cable.
+  point. It carries one wire per contact, all in one cable that ends at its `mate` point.
 size: {w: 26.79, h: 22.19}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -44,9 +44,15 @@ provenance:
     no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [13.395, 11.095], direction: front}
+  cable: {at: [13.395, 11.095], direction: front}
   wire-1: {at: [7.48, 4.00], direction: front}
   wire-2: {at: [15.55, 4.00], direction: front}
   wire-3: {at: [23.63, 4.00], direction: front}
