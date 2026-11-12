@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: g3-breaker-20a-1p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of one outlet section of an Eaton ePDU G3 metered input rack
+  PDU with 120 V sections - a 20 A one-pole breaker with a round handle on a
+  plate held by one screw, and the section's letter on a tile in the section's
+  colour. Fixed to the PDU, not a plug-in part.
+size: {w: 59.2, h: 19.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 1}
+provenance:
+  size: >-
+    drawing - Eaton EMIT03-10 specification drawing (rev 002, sheet 1), the
+    front view read at 300 dpi against its own 482.6 overall (9.45 px per mm):
+    the plate is 59.2 across by 19.5 down, with a screw 8.7 from its left end,
+    a round handle 16.2 across centred 24.4 from the left end, and the letter
+    tile from 33.5 to the right end. The sheet dimensions none of it and the
+    reading is good to about 0.5.
+  rating: >-
+    drawing - EMIT03-10 CIRCUIT BREAKERS: "(2) 20A 1-POLE UL LISTED".
+  colour: >-
+    drawing and photo - the sheet draws the tile outline and letter in yellow
+    (A) and blue (B); the Eaton Rack PDU G3+ brochure (BR155022EN, page 3) shows
+    the same two hues on the lettered tiles of its 1U units (read off a 250 dpi
+    crop of a small embedded image: about #f4f270 for A, with the white letter
+    mixed in, and #00a7e9 for B). The tint is a field and is drawn with the
+    values the G4 section tile carries, which sit within the photograph's
+    reading; the plate's grey and the handle's black are not stated by any held
+    document.
+  not-drawn: >-
+    the handle's slot and the printing on it are not drawn; no held figure
+    shows them larger than 1.5.
+fields:
+  section-color: {label: Section colour, type: text, default: '#f4d440'}
+  section: {label: Section letter, type: text, default: A}
+elements:
+  handle: {at: [16.3, 1.7], size: [16.2, 16.2], class: breaker, states: ['on', 'off']}
+skins: [default]
