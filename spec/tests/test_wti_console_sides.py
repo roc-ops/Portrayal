@@ -1,7 +1,7 @@
 """The top and the left side of the WTI CPM-800, CPM-1600 and DSM-8 families.
 
-The maker's one-page dimensional drawing of each family shows the top cover with its screws and one side with a row of vent slots,
-a cover plate and screws. What is true of the library once those faces are drawn:
+The maker's one-page dimensional drawing of each family shows the top cover with its screws.
+It also shows one side with a row of vent slots, a cover plate and screws. What is true of the library once those faces are drawn:
 
   - the top carries one screw head per screw the drawing shows, each with its cross mark;
   - the left carries the vent slots in the count the drawing shows, the plate, and the screws, each with its cross mark;
@@ -11,6 +11,7 @@ a cover plate and screws. What is true of the library once those faces are drawn
 
 These read the device sources. They read no library/dist and render nothing.
 """
+import re
 from pathlib import Path
 
 import pytest
@@ -92,12 +93,13 @@ def test_the_gaps_name_what_is_missing_and_the_old_one_is_gone(name):
     assert gaps["side-identity"]["scope"] == ["left"]
 
 
-# Where the side view stands on the maker's sheet: below the top view on the four CPM sheets, beside it on the DSM-8 sheet.
+# The side view stands below the top view as the file opens on the four CPM sheets.
+# It stands beside the top view on the DSM-8 sheet.
 SHEET_PLACE = {
-    "cpm-800-1": "below the top view and lines up with it",
-    "cpm-800-2": "below the top view and lines up with it",
-    "cpm-1600-1": "below the top view and lines up with it",
-    "cpm-1600-2": "below the top view and lines up with it",
+    "cpm-800-1": "below the top view and lines up with it as the file opens",
+    "cpm-800-2": "below the top view and lines up with it as the file opens",
+    "cpm-1600-1": "below the top view and lines up with it as the file opens",
+    "cpm-1600-2": "below the top view and lines up with it as the file opens",
     "dsm-8": "beside the top view",
 }
 
@@ -114,6 +116,16 @@ def test_the_cpm_1600_note_states_the_printed_and_the_drawn_depth(name):
     note = " ".join(device(name)["provenance"]["top-and-left"]["note"].split())
     assert "good to about one millimetre" in note
     assert "12.50" in note and "10.4" in note
+
+
+@pytest.mark.parametrize("name", sorted(DRAWN))
+def test_no_sentence_of_the_side_notes_runs_over_25_words(name):
+    d = device(name)
+    texts = [d["provenance"]["top-and-left"]["note"]]
+    texts += [g["note"] for g in d["gaps"] if g["what"] in ("side-identity", "top-beyond-outline", "side-bottom-fold")]
+    for text in texts:
+        for sentence in re.split(r"(?<=[.!?;:])\s+", " ".join(text.split())):
+            assert len(sentence.split()) <= 25, sentence
 
 
 @pytest.mark.parametrize("name", sorted(DRAWN))
