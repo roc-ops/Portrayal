@@ -304,6 +304,7 @@ NOT_A_DCIM_PORT = {
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
     "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
+    "servertech/pro1-dc-output-block": "the four output circuits (eight screw terminals) of one block of a PRO1 -48VDC PDU, placed as one part; a power outlet is one circuit with its own feed, so one row cannot state four, and each circuit would need its own placement and `fed-by`",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).
