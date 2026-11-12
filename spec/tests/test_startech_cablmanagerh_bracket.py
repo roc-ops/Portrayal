@@ -1,8 +1,9 @@
-"""StarTech.com CABLMANAGERH: each of the five D-rings stands on a bracket across the panel's height
-and each of the four holes has a raised collar, as the maker's own drawing draws them.
+"""StarTech.com CABLMANAGERH: each of the five D-rings stands on a bracket across the panel's height.
+Each of the four holes has a raised collar, as the maker's own drawing draws them.
 
-The sizes are scaled off the drawing (it says "DO NOT SCALE") and are estimated; the tests pin the
-count, the pitch and the place of each part, not a figure the drawing does not state.
+The sizes are scaled off the drawing (it says "DO NOT SCALE"). They are estimated.
+The tests pin the count, the pitch and the place of each part, not a figure the drawing does not state.
+The rivet is a dome centred on its ring and the collar is a dome. Each is a rounded rectangle.
 """
 import pathlib
 import xml.etree.ElementTree as ET
@@ -66,10 +67,42 @@ def test_the_top_and_bottom_views_draw_the_brackets_and_collars(view):
 
 
 @pytest.mark.parametrize("view", ["top", "bottom"])
-def test_the_top_and_bottom_views_draw_a_rivet_head_beside_each_ring_base(view):
+def test_the_collar_dome_is_3_6_high_the_mean_of_the_four_readings(view):
+    decor = {d["id"]: d for d in DEV["views"][view]["panel"]["decor"]}
+    for k in range(1, 5):
+        assert decor[f"collar-{k}-side"]["size"] == [29.0, 3.6]
+        assert decor[f"collar-{k}-side"]["rx"] == 1.8, "a rounded rectangle is the kit's nearest to a dome"
+
+
+@pytest.mark.parametrize("view", ["top", "bottom"])
+def test_the_rivet_is_a_dome_centred_on_each_ring_at_the_foot_base(view):
     decor = {d["id"]: d for d in DEV["views"][view]["panel"]["decor"]}
     for k in range(1, 6):
-        assert decor[f"rivet-{k}-side"]["size"] == [3.0, 3.0]
+        rivet = decor[f"rivet-{k}-side"]
+        assert rivet["size"] == [8.4, 2.5] and rivet["rx"] == 1.25
+        assert abs(rivet["at"][0] + rivet["size"][0] / 2 - (41.3 + 100.0 * (k - 1))) < 0.01, "centred on the ring"
+        assert rivet["at"][1] == 7.41, "standing on the plate"
+
+
+@pytest.mark.parametrize("view", ["top", "bottom"])
+def test_each_foot_draws_the_inner_box_of_its_stepped_lip(view):
+    decor = {d["id"]: d for d in DEV["views"][view]["panel"]["decor"]}
+    lips = [d for i, d in decor.items() if i.startswith("foot-lip-")]
+    assert len(lips) == 5
+    for k in range(1, 6):
+        foot, lip = decor[f"bracket-{k}-side"], decor[f"foot-lip-{k}-side"]
+        assert lip["size"] == [32.0, 4.1] and "fill" not in lip and "stroke" in lip, "an outline"
+        assert foot["at"][0] < lip["at"][0] and lip["at"][0] + 32.0 < foot["at"][0] + foot["size"][0]
+        assert foot["at"][1] <= lip["at"][1] and lip["at"][1] + 4.1 <= foot["at"][1] + foot["size"][1]
+
+
+def test_the_panels_folded_strip_is_the_side_views_strip_and_the_gap_says_so():
+    flange = yaml.safe_load((LIB / "components/startech/cablmanagerh-flange/v1/contract.yaml").read_text())
+    at = next(p for p in DEV["views"]["top"]["components"]["placements"] if "flange" in p["ref"])["at"][0]
+    assert abs(at - 29.6) < 3.0 and abs((482.6 - at - flange["size"]["w"]) - 30.0) < 3.0, "extent along the panel"
+    assert abs((flange["size"]["h"] - 1.2) - 6.21) < 0.5, "depth: the printed 6.21"
+    gap = next(g for g in DEV["gaps"] if g["what"] == "front-edge-strip")
+    assert "side view" in gap["note"] and "fold" in gap["note"]
 
 
 def test_the_strap_is_centred_on_the_bracket():
