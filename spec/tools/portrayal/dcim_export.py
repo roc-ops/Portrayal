@@ -793,6 +793,9 @@ PART_POWER = {
     # type for it has been read from a held source, so it is `other` and POWER_LABEL
     # says which connector.
     "rittal/pdu-cord-cee-16a": "other",
+    # THE SINGLE-PHASE DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) 1P plug (the
+    # DK 7979.110 circuit diagram, "CEE 16 A/1P"); `other`, as the three-phase cord is.
+    "rittal/pdu-cord-cee-16a-1p": "other",
     # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
