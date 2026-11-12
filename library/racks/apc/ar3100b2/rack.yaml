@@ -74,7 +74,7 @@ channels:
     where: inside
     slots:
       interface: pdu-button
-      first: 213
+      first: 163
       pitch: 311
       count: 6
     moves:
@@ -84,7 +84,7 @@ channels:
     where: inside
     slots:
       interface: pdu-button
-      first: 213
+      first: 163
       pitch: 311
       count: 6
     moves:
@@ -166,14 +166,16 @@ provenance:
   enclosure:
     confidence: drawing
     note: >-
-      Front: one perforated door, 80 per cent open area (manual page 28), "door handle with 3-point
-      locking system" (submittal drawing sheet 1), hinges on the left as shipped and reversible (manual
-      pages 15 and 19), opening 180 degrees (manual page 1; drawing sheet 2 shows 180 with a maximum
-      of 266), 60.96 mm wiring clearance between the door and the vertical rail (manual page 28).
-      Rear: a pair of doors (drawing sheets 1 and 2), opening 180 degrees; the FS datasheet (page 1)
-      says both the front and back doors lock. Side panels: a top and a bottom panel each side,
-      each with a lock, and a key for doors and side panels (manual page 4). Roof: "removed toollessly"
-      (FS datasheet page 2).
+      Front: one perforated door, 80 per cent open area (manual page 28, whose table prints one figure,
+      "Door Perforation pattern", and names no door), "door handle with 3-point locking system"
+      (submittal drawing sheet 1), hinges on the left as shipped and reversible (manual pages 15 and 19),
+      opening 180 degrees (manual page 1; drawing sheet 2 shows 180 with a maximum of 266), 60.96 mm
+      wiring clearance between the door and the vertical rail (manual page 28). Rear: a pair of doors,
+      labelled "PERFORATED DOOR" on the rear view (drawing sheet 1) and drawn open on sheet 2, opening
+      180 degrees; the same 80 per cent is taken for them, an inference, because the manual's one figure
+      names no door; the FS datasheet (page 1) says both the front and back doors lock. Side panels: a
+      top and a bottom panel each side, each with a lock, and a key for doors and side panels (manual
+      page 4). Roof: "removed toollessly" (FS datasheet page 2).
   base:
     confidence: drawing
     note: >-
@@ -188,12 +190,14 @@ provenance:
       and the shop photographs of the cabinet show both channels alike. The internal left-side view
       (submittal drawing sheet 4) draws the "RMPDU mounting bracket" with a repeating group of
       keyholes, "311 typ." apart, and a dimension chain from the floor of 303, 311, 622 and 311 mm. The
-      pitch is the drawing's. The first slot, 213 mm above the rails' bottom edge, is the 303 mm to the
-      first group less the 90 mm the drawing gives from the floor to the rails; the count of 6 is the
-      chain's groups at that pitch. Both assume each dimension ends on the same feature of its group,
-      which the drawing does not name. That the keyholes take a PDU's mounting button rests on the
-      manual's "toolless mounting capabilities for Rack Power Distribution Units", not on a stated
-      interface.
+      pitch is the drawing's. Each dimension line ends on the top edge of a keyhole group, level with the
+      top of the group's lower cutout, not on a keyhole. The first slot, 163 mm above the rails' bottom
+      edge, is read from the drawing at 400 dpi: the lowest keyholes' centres stand about 51 mm below the
+      303 mm line (the sheet's own dimensions give about 1.08 px per mm), which puts them about 252 mm
+      above the floor, less the 90 mm the drawing gives from the floor to the rails; it is good to about
+      10 mm. The count of 6 is the chain's groups at that pitch. That the keyholes take a PDU's mounting
+      button rests on the manual's "toolless mounting capabilities for Rack Power Distribution Units",
+      not on a stated interface.
 gaps:
   - what: rails
     reason: sources-disagree
@@ -212,9 +216,12 @@ gaps:
   - what: channels
     reason: needs-drawing
     note: >-
-      The position of the first slot and the number of slots are inferred from a dimension chain whose
-      end points the drawing does not name.
-    wanted: A dimensioned drawing of the accessory channel with each keyhole's centre.
+      The position of the first slot and the number of slots are read from a dimension chain whose lines end
+      on the top edge of each keyhole group, not on a keyhole: the first slot is the centre of the lowest
+      keyholes, read at about 163 mm above the rails' bottom edge, good to about 10 mm. The slots'
+      interface, `pdu-button`, is a guess: no held document says the maker's keyholes take that mounting
+      button, only that the channels give toolless mounting for rack power distribution units.
+    wanted: A dimensioned drawing of the accessory channel with each keyhole's centre, and the maker's statement of what its keyholes take.
   - what: rear-door-hinge
     reason: vendor-silent
     note: >-

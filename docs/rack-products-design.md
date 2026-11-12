@@ -703,8 +703,11 @@ cabinets, wall and vertical, and desktop.
    states it for the NetShelter SX AR3100B2, `library/racks/apc/ar3100b2`. L193
    holds the rules across keys (section 3 and 4). The lock reads a channel as
    one entry of its own and `enclosure` and `base` as stated figures: a new
-   channel is a minor, a gone, renamed or moved one a major, and a corrected door
-   figure a patch. Not built: `points`, `options` and a depth range's `with`,
+   channel is a minor, and any change to an existing one, or its removal, a
+   major; stating `enclosure` or `base` where there was none is a minor and any
+   change inside one a patch (the list under "The lock" above calls a new door
+   option a minor; the lock reads it as a patch). Not built: `points`, `options`
+   and a depth range's `with`,
    `baying`, `entries`, `anchors`, a channel's `ru`, `at` and `up-down`, a
    door's `hinge` on a split pair, and `frames` rows in `rack.json` carrying the
    new keys. The listing is FS.com's, `library/devices/fs/ar3100b2/listing.yaml`,

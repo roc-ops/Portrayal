@@ -1,5 +1,5 @@
 ### Added
-- **Cabinets in the rack product format** (#935, #936,
+- **Cabinets in the rack product format** (#936,
   `spec/schemas/rack-product.schema.json`, republished under the same `$id`).
   A rack product may now state an `enclosure` (`doors` with `face`, `leaves`,
   `kind`, `open-area`, `hinge`, `reversible`, `swing`, `clearance` and `lock`;
@@ -10,9 +10,11 @@
   outside attachment points, roof and floor entries, anchors) is still refused.
   L193 holds what the schema cannot: an enclosure only on a cabinet form, a door
   face and a channel id once, a channel at a point its form has, and slots that
-  present a registered mount. The product lock takes a channel as one entry of
-  its own (a new one is a minor, a gone or moved one a major) and the enclosure
-  and base as stated figures; no lock on file changes.
+  present a registered mount. The product lock takes each channel as one entry of
+  its own: a new channel is a minor, and a change to an existing one, or its
+  removal, a major. It takes the enclosure and the base each as one stated
+  figure: stating one where there was none is a minor, a change inside one a
+  patch, and removing one a major. No lock on file changes.
 - **The APC NetShelter SX AR3100B2** (`library/racks/apc/ar3100b2`), the first
   cabinet: a 42U, 600 x 1070 mm four-post cabinet with its doors, side panels,
   roof, base and two rear zero-U channels. The slot positions of its channels are
