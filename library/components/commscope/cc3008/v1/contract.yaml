@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: cc3008
-version: 1.0.0
+version: 1.1.0
 class: supervisor
 behaviour: fills
 profile: optical
@@ -15,6 +15,10 @@ attrs:
   model: CC3008
   role: controller
 provenance:
+  groups: >-
+    the CC3008 face photograph shows a micro-USB port, and the data sheet prints no word on it. The
+    part already states `role: console`, and the group follows that role, management. No speed is
+    stated: the data sheet prints no data rate for it, and the media is the one the part states.
   size: >-
     photo-measured on p1 of the HT3580H data sheet (2024), the face-on CH3000 front at
     2.727 px/mm: in all six carriers the face runs from the carrier's top band (13.9 below
@@ -42,8 +46,15 @@ provenance:
     their legend's function and no colour.
 elements:
   screw: {at: [44.1, 2.1], size: [6.6, 6.6], class: fastener}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b}
+    description: "the front-panel micro-USB port"
 parts:
-  - {ref: std/micro-usb@1, id: usb, at: [9.15, 8.03], attrs: {role: console}}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [9.15, 8.03], attrs: {role: console}}
   - {ref: common/led-dot@1, id: led-status-1, at: [18.9, 10.3], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-2, at: [23.4, 10.3], attrs: {function: status}}
   - {ref: common/led-dot@1, id: led-status-3, at: [27.8, 10.3], attrs: {function: status}}

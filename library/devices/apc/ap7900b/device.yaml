@@ -1,0 +1,278 @@
+format: 1
+kind: device
+name: ap7900b
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AP7900B
+description: >-
+  APC by Schneider Electric NetShelter switched rack PDU, 1U horizontal: a 445 mm black metal box, 108 mm deep. A fixed
+  3.65 m cord with a NEMA 5-15P plug takes in 100 to 120 V at 15 A. Eight NEMA 5-15R outlets stand in one row. The
+  outlet face has the cord at the left end. At the right end it has a two-digit current display, a round button, two jacks and small
+  lamps. The other face is plain. Rack mounting brackets are supplied.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING EXISTS AND THE ONLY PICTURES ARE 369 PX DATASHEET PHOTOGRAPHS, so every position is an estimate read off a
+      photograph. Searched: the APC AP7900B data sheet (4 pp, all pages looked at); no installation guide, drawing, stencil
+      or CAD file is held. The outlet face is the data sheet's p.1 photograph, near front-on: the face spans about 293 of
+      its 369 px for 445 mm (1.52 mm per pixel across) and about 29 px for 44 mm (1.53 down), the two agreeing to under one
+      percent, so a position is good to about 3 mm. The eight outlets repeat at about 36.2 mm; that pitch is measured on
+      this face only. The p.4 photograph of the same face at an angle agrees with the order, count and kind of the parts.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - AP7900B data sheet: Height 1.7 in (44 mm), Width 17.5 in (445 mm), Depth 4.3 in (108 mm), net weight 5.004
+      lb (2.27 kg), 1U (p.1 and p.2). Colour estimated: the photograph reads about #3a3a3a on the outlet face and #494949
+      on the plain face, lit and lifted, and #2c2e30 is drawn as for the maker's other 1U PDUs; no document names a colour.
+  ears:
+    confidence: estimated
+    note: >-
+      NOT DRAWN. The data sheet lists "Horizontal mounting brackets" and "Cord retention bracket(s)" as supplied and states
+      "Mounting Location Front Rear", "Mounting position Horizontal" (p.1). No document says where on the body the brackets
+      bolt, how they are shaped or how many positions there are, so one `flush` position is written without a figure, as
+      the generic ear is drawn, and it is a stand-in (gaps: ears).
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the plain face, the data sheet's p.4 photograph at the foot of the page, front-on: the slab spans about 333
+      by 33 px, an aspect of 10.1 against 10.11 for 445 by 44, and shows an unmarked dark face with nothing on it. The
+      photograph has no feature of known printing to test that against, so what it cannot resolve (a mark, a label, a logo) is
+      not read as absent (gaps: plain-face-marks). Nothing is drawn on it.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the outlet face, read off the data sheet's p.1 photograph, mm from the face's left and top: the cord's
+      strain relief centred at 22.8 across and 19.1 down, eight outlets with their left edges from 39.2 on a 36.2 pitch and
+      their tops at 5.5, numbered 1 to 8 under their mouths as printed, the display's window from 343.8 to 365.1 across and
+      10.2 to 28.0 down, the round button centred at 375.5 across, two jacks at 387.6 across, the logo right of them, and
+      small lamps. Every figure is an estimate.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - "Number of power socket outlets 8 NEMA 5-15R" (p.1); each is std/nema-5-15r@1, drawn with the earth hole to
+      the right and two slots to its left as the photograph shows them. The data sheet gives no per-outlet rating, no bank
+      and no breaker ("Protection type" is not listed for this model).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Input Connection Type NEMA 5-15P", input 100 V 120 V, 50/60 Hz, input current limit 15 A, rated current
+      12 A, max current draw 15 A, load capacity 1440 VA, one cable of 3.65 m (p.1). The photograph shows the cord leaving
+      the left end of the outlet face; only the strain relief is drawn.
+  display:
+    confidence: estimated
+    note: >-
+      estimated - apc/ap78-display@1; the data sheet's prose names "a local current monitoring display" (p.1). The p.1
+      photograph shows a pale two-digit window with the legend "Amps" under it.
+  buttons:
+    confidence: estimated
+    note: >-
+      estimated - apc/ap78-button@1, placed on the centre of the round grey disc beside the display. The disc reads about
+      12 mm across in the p.1 photograph and the part is 7 mm, a difference of two estimates (gaps: button-size).
+  jacks:
+    confidence: estimated
+    note: >-
+      estimated - two jacks shaped like RJ45 jacks at the right end (p.1 photograph); their labels are not legible and the
+      data sheet says only "Network management capabilities" (p.1), so what each is for is not stated. Each is std/rj45@2,
+      without a role.
+  dcim:
+    confidence: datasheet
+    note: >-
+      datasheet - the input is a NEMA 5-15P power port and each outlet a `nema-5-15r` power outlet fed by it. The outlets are
+      named as the unit prints them, 1 to 8.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - sold as a switched rack PDU with "remote individual outlet control" and a local current monitoring
+      display (p.1): `outlet-switching: true`. Nothing says outlets or banks are metered, so `metering-scope: input` is the
+      finest level the display could carry; a source naming per-outlet metering would change it.
+attrs:
+  physical:
+    weight-kg: 2.27
+    construction: metal
+  power:
+    input-ac: 100/120 V, 12 A rated (limit 15 A), 1440 VA, 50/60 Hz
+    input-plug: nema-5-15p
+    input-cord: fixed
+    input-voltage-v: 120
+    input-current-a: 12
+    output-voltage: 120 V
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 45 C (32 to 113 F)
+    storage-temp: -25 to 65 C (-13 to 149 F)
+    humidity: 0 to 95 %
+  management:
+    metering-scope: input
+    outlet-switching: true
+    metering: local current monitoring display
+    network-interface: network management capabilities (datasheet p.1)
+  compliance:
+    certifications: cUL Listed, UL Listed, FCC Part 15 class A, ICES-003
+chassis:
+  width: 445
+  height: 44
+  depth: 108
+  ru: 1
+  color: '#2c2e30'
+  airflow: passive
+  weight-kg: 2.27
+  ears:
+    color: '#2c2e30'
+    positions:
+      - {name: flush, label: 'rack mounting brackets, position not stated (datasheet p.1)', default: true}
+gaps:
+- what: face-names
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    the data sheet says "Mounting Location Front Rear" and names no face as the front. The face with the outlets is drawn as
+    `rear` and the plain face as `front`, the usual way a horizontal PDU is racked; no held document says so.
+  wanted: the installation guide's mounting figure.
+- what: face-positions
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    every position on the outlet face is read off a 369 px photograph and is an estimate good to about 3 mm.
+  wanted: a dimensioned drawing or a straight-on photograph with a scale.
+- what: plain-face-marks
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the plain face is a front-on photograph of an unmarked dark slab with nothing of known printing in it to test against, so
+    a hole, a mark or a label too small for 369 px would not show. Nothing is drawn.
+  wanted: a close photograph of the plain face.
+- what: lamp-colours
+  scope: [lamps]
+  reason: needs-photo
+  note: >-
+    small lamps stand over the display and beside the upper jack, some lit in the photograph; their count, colours and
+    meanings were not read off the pixels and no document names them, so three are drawn unlit and uncoloured.
+  wanted: the user manual's description of the status lamps.
+- what: button-size
+  scope: [button]
+  reason: needs-photo
+  note: >-
+    the round disc beside the display reads about 12 mm across in this photograph; apc/ap78-button@1 is 7 mm, an estimate
+    made for the AP7821B and AP7921B, and is not changed here.
+  wanted: a close photograph of the button or the user manual.
+- what: jack-function
+  scope: [jack-1, jack-2]
+  reason: vendor-silent
+  note: >-
+    the labels under the two jacks are not legible and the data sheet names no port; neither is stated as an Ethernet,
+    console or sensor port.
+  wanted: the user manual, or a close photograph of the jacks.
+- what: jack-speed
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    no document held names the two rear jacks or prints a speed for them, so none is stated.
+  wanted: the user manual's port specification.
+- what: end-screws
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    a small ring stands near each end of the outlet face, two at each end, 2 to 3 mm across. They are drawn as unidentified
+    marks; nothing says whether they are fixings of the brackets.
+  wanted: the installation guide.
+- what: ears
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: >-
+    the data sheet lists horizontal mounting brackets and a cord retention bracket and gives no figure; no photograph shows
+    them.
+  wanted: the installation guide's mounting figures.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no held document shows the top, the bottom or an end.
+  wanted: straight-on photographs of the top, the bottom and an end.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight NEMA 5-15R outlets, numbered 1 to 8 from the left as seen from the outlet face, as printed; each switchable'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: service, index-origin: 1}
+  jacks: {term: Port, role: management, index-origin: 1, description: 'the two jacks at the right end of the outlet face; their use is not stated'}
+  lamps: {term: LED, role: indicator, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 445, h: 44}
+    empty: >-
+      the data sheet's p.4 photograph shows this face front-on as an unmarked dark slab; nothing is drawn on it. Searched: the data
+      sheet's four pages and its three pictures.
+  rear:
+    size: {w: 445, h: 44}
+    panel:
+      decor:
+      - {id: ring-left-top, at: [3.5, 11.6], size: [2.2, 2.2], rx: 1.1, fill: '#0a0a09', kind: unidentified}
+      - {id: ring-left-bottom, at: [3.5, 33.7], size: [2.2, 2.2], rx: 1.1, fill: '#0a0a09', kind: unidentified}
+      - {id: ring-right-top, at: [440.5, 11.6], size: [2.2, 2.2], rx: 1.1, fill: '#0a0a09', kind: unidentified}
+      - {id: ring-right-bottom, at: [440.5, 33.7], size: [2.2, 2.2], rx: 1.1, fill: '#0a0a09', kind: unidentified}
+    silkscreen:
+      - {at: [57.7, 38.0], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
+      - {at: [93.9, 38.0], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
+      - {at: [130.1, 38.0], text: '3', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-3}
+      - {at: [166.3, 38.0], text: '4', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-4}
+      - {at: [202.5, 38.0], text: '5', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-5}
+      - {at: [238.7, 38.0], text: '6', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-6}
+      - {at: [274.9, 38.0], text: '7', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-7}
+      - {at: [311.1, 38.0], text: '8', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-8}
+    components:
+      placements:
+        - {id: input, ref: apc/pdu-cord-5-15p@1, at: [12.8, 9.1], group: power-input, rel-pos: 1, description: 'the fixed 3.65 m input cord, ending in a NEMA 5-15P plug; only its strain relief is drawn'}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [39.2, 5.5], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [75.4, 5.5], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [111.6, 5.5], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [147.8, 5.5], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [184.0, 5.5], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [220.2, 5.5], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [256.4, 5.5], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [292.6, 5.5], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: display, ref: apc/ap78-display@1, at: [343.8, 10.2], group: display, rel-pos: 1, for: chassis}
+        - {id: button, ref: apc/ap78-button@1, at: [372.0, 15.2], group: buttons, rel-pos: 1, for: display, description: 'round button beside the display; what it does is not stated'}
+        - {id: jack-1, ref: std/rj45@2, at: [387.6, 5.2], group: jacks, rel-pos: 1, description: 'upper jack; its use is not stated'}
+        - {id: jack-2, ref: std/rj45@2, at: [387.6, 27.2], group: jacks, rel-pos: 2, description: 'lower jack; its use is not stated'}
+        - {id: lamp-status, ref: common/led-dot@1, at: [353.0, 4.5], group: lamps, rel-pos: 1, for: chassis}
+        - {id: lamp-jack-1, ref: common/led-dot@1, at: [405.5, 7.0], group: lamps, rel-pos: 2, for: chassis}
+        - {id: lamp-jack-2, ref: common/led-dot@1, at: [405.5, 15.0], group: lamps, rel-pos: 3, for: chassis}
+    regions:
+      - {id: logo-zone, at: [410.0, 17.7], size: {w: 27.0, h: 9.0}, label: 'APC logo; not drawn'}
+  top:
+    size: {w: 445, h: 108}
+    empty: >-
+      no source shows the top straight on: the data sheet has no view of it and the photograph sees the lid at a steep angle, a
+      plain black plane with nothing that can be measured. Searched: the data sheet's pictures.
+  bottom:
+    size: {w: 445, h: 108}
+    empty: >-
+      no source shows the bottom: none of the data sheet's photographs looks at it, and no installation guide is held. Searched:
+      the data sheet's pictures.
+  left:
+    size: {w: 108, h: 44}
+    empty: >-
+      no source shows the left end straight on; the photograph sees it at a steep angle and no installation guide is held.
+      Searched: the data sheet's pictures.
+  right:
+    size: {w: 108, h: 44}
+    empty: >-
+      no source shows the right end straight on; the photograph sees it at a steep angle and no installation guide is held.
+      Searched: the data sheet's pictures.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The rack mounting brackets and the cord retention bracket are in the box and are not drawn. The cord is
+      drawn only as the strain relief it leaves by.
+    part-numbers:
+      AP7900B: {}
+datasheet:
+  title: 'Schneider Electric APC NetShelter Switched Rack PDU AP7900B product data sheet (11 Nov 2026 copy)'
+  url: https://apc.com/us/en/product/download-pdf/AP7900B
+  sha256: 61dd4da01aba40717b2da762327ef0453570f9f131c81dce9745ba83c8e26bc3

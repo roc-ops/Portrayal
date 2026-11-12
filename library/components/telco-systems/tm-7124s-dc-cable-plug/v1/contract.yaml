@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: tm-7124s-dc-cable-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: screw-terminal-4
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the Telco Systems TM-7124S's four-pole DC feed header, wired, seen from the
   wire side as seated. A green block at the outline of the header it seats in, with one insulated wire
   entering each of its four poles. It seats in a `screw-terminal-4` connector at its own mate point.
-  It carries one wire per pole, not one cable.
+  It carries one wire per pole, all in one cable that ends at its `mate` point.
 size: {w: 18.3, h: 42.2}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -35,9 +35,15 @@ provenance:
     plan outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [5.7, 20.0], direction: front}
+  cable: {at: [5.7, 20.0], direction: front}
   wire-1: {at: [5.7, 12.2], direction: front}
   wire-2: {at: [5.7, 17.33], direction: front}
   wire-3: {at: [5.7, 22.46], direction: front}

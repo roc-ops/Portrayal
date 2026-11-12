@@ -9,10 +9,11 @@ generic/terminal-508-6-plug@1 mate them. These run against the real library, a
 components.json the indexer builds here and device copies rendered here, never
 a possibly stale dist.
 
-A TERMINAL PLUG CARRIES ONE WIRE PER POLE, NOT ONE CABLE, and most of what is
-below holds the parts to that: a stub and a named point per pole, at the
-header's pitch, numbered as the header numbers its contacts, every stub sized
-by one `wire-od` field and painted by one `wire-color` field.
+A TERMINAL PLUG CARRIES ONE WIRE PER POLE, ALL IN ONE CABLE THAT ENDS AT ITS
+`mate` POINT, and most of what is below holds the parts to that: a stub and a
+named point per pole, at the header's pitch, numbered as the header numbers its
+contacts, every stub sized by one `wire-od` field and painted by one
+`wire-color` field.
 
 THE SEATED DEPTH IS A RULING: each plug stands 10 in front of the face its
 header presents, the 22 less 12 of the manufacturer's mated figure. No plug
@@ -358,8 +359,8 @@ def test_there_is_one_stub_and_one_point_per_pole(ref):
     nodes = skin(ref)
     assert sorted(i for i in nodes if i.startswith("wire-")) == sorted(wires(ref))
     cps = d["connection-points"]
-    assert sorted(cps) == sorted(["mate"] + wires(ref))
-    assert "cable" not in cps, "a terminal plug carries wires, not one cable"
+    assert sorted(cps) == sorted(["mate", "cable"] + wires(ref))
+    assert cps["cable"] == cps["mate"], "the one cable of a terminal plug ends at its mate point"
     assert len(wires(ref)) == n > 0
 
 

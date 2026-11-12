@@ -69,6 +69,9 @@ NO_RATING_STATED |= {"mikrotik/crs504-4xq-in"}
 # the CRS510-8XS-2XQ-IN: its brochure gives the jack's voltage (36-57 V) and no current or barrel size, so the
 # placement carries `input-voltage` alone
 NO_RATING_STATED |= {"mikrotik/crs510-8xs-2xq-in"}
+# the three PortServer TS devices: the product page gives the input as 9-30 VDC and no current or barrel size,
+# so the placement carries `input-voltage` alone
+NO_RATING_STATED |= {"digi/portserver-ts-1", "digi/portserver-ts-2", "digi/portserver-ts-4"}
 # the two ReadyLinks access points: each datasheet's Power input names a DC connector (2.1 mm / 5.5 mm at 48 V,
 # 2.5 mm / 5.5 mm at 54 V) and the stock figure draws and legends the DC jack
 WALL_AND_CEILING_APS = {"readylinks/ipc-apwf6-poe-wp", "readylinks/ipc-apwf7-poe-cl"}
@@ -156,8 +159,8 @@ def test_the_jack_states_no_rating_of_its_own():
 @pytest.mark.heavy
 def test_the_jack_is_placed_on_exactly_these_devices():
     """The census: every placement of the jack in the library, and nothing
-    composes it inside another part. Twenty-one: seven state a rating here, the four
-    CM8000 devices, the four OM1300 devices, the CRS504-4XQ-IN, the CRS510-8XS-2XQ-IN and the Connect IT 4 state none, two access points carry their own (48 V and 54 V)
+    composes it inside another part. Twenty-four: seven state a rating here, the four
+    CM8000 devices, the four OM1300 devices, the CRS504-4XQ-IN, the CRS510-8XS-2XQ-IN, the Connect IT 4 and the three PortServer TS devices state none, two access points carry their own (48 V and 54 V)
     and the ACS800 states a voltage."""
     found = set()
     for f in sorted((LIB / "devices").glob("*/*/device.yaml")):
@@ -166,7 +169,7 @@ def test_the_jack_is_placed_on_exactly_these_devices():
             for p in ((view or {}).get("components") or {}).get("placements") or []:
                 if p.get("ref") == JACK:
                     found.add(f"{f.parts[-3]}/{f.parts[-2]}")
-    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS | VOLTAGE_ONLY and len(found) == 21
+    assert found == set(PLACED) | NO_RATING_STATED | WALL_AND_CEILING_APS | VOLTAGE_ONLY and len(found) == 24
     composed = []
     for f in sorted((LIB / "components").glob("*/*/v*/contract.yaml")):
         c = yaml.safe_load(f.read_text())

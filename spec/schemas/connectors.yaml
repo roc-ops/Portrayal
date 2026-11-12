@@ -40,6 +40,11 @@ interfaces:
     note: two LC bores at the 6.25 duplex pitch, presented by the adapter itself
     spans: {interface: lc, count: 2}
   sc: {standard: sc-simplex-receptacle}
+  # ST (BFOC) bayonet fibre receptacle, as the optical output of the Oscilloquartz IRIG-B card carries it
+  # (OSA 5422 data sheet, IRIG/TIMECODE line card: "ST connector - fiber 62/125um", 820 nm multimode).
+  # No standard is held for the receptacle, so the entry cites none; common/st-simplex-adapter@1, an FS
+  # panel adapter whose aperture is an estimate, presents no key and is not this entry's part.
+  st: {note: 'the ST (BFOC) bayonet receptacle of the optical output of the Oscilloquartz IRIG-B card (Adtran OSA 5422 data sheet, IRIG/TIMECODE line card, p6: "ST connector - fiber 62/125um", "wavelength 820nm multimode"). One fibre, one bayonet; common/st-receptacle@1 presents it and generic/st-plug@1 mates it. The data sheet gives no dimension for the receptacle, so this key claims none. No standard is held for it'}
   rj45: {standard: rj45, note: 'an 8P8C modular jack; generic/rj45-plug@1 mates it (#610)'}
   keystone: {standard: keystone-opening, note: 'the landscape keystone opening of the FS FHD-FAPM6 panel and the clip FS ships in it (FS figures, not a standard); common/keystone-blank@2 and fs/keystone-rj45-cat6@1 mate it'}
   rj45-10p: {note: 'the ten-position modular serial jack Digi calls "RJ45 10-pin" (Digi Connect EZ 16/32 product page); generic/rj45-10p-plug@1 mates it. An eight-position RJ45 plug is a different interface. No standard is held for it, so the entry cites none'}
@@ -123,6 +128,7 @@ interfaces:
   terminal-508-2: {standard: terminal-508-2-header, note: 'two-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/..-G-5,08 and equivalents); generic/terminal-508-2-plug@1 mates it'}
   terminal-508-5: {standard: terminal-508-5-header, note: 'the five-position mating face of a pluggable header on a 5.08 mm pitch (Phoenix Contact MSTB 2,5 and equivalents), which a flanged or a plain header presents and a flanged or a plain plug mates; generic/terminal-508-5-plug@1, the screw-flange plug, mates it, because the one header placed (common/terminal-header-508-5f@2) is flanged'}
   terminal-508-6: {standard: terminal-508-6-header, note: 'six-position plain pluggable header on a 5.08 mm pitch (Phoenix Contact MSTBA 2,5/ 6-G-5,08 and equivalents); generic/terminal-508-6-plug@1 mates it'}
+  terminal-250-3: {note: 'the three-position pluggable terminal block on a 2.50 mm pitch of the alarm/pulse relay of the Oscilloquartz IRIG-B card (Adtran OSA 5422 data sheet, IRIG/TIMECODE line card, p6: "Connector: WR-TBL 3-pin Serie 382 - 2.50 mm", relay contact NC/NO, 50 VDC at 250 mA). The data sheet gives no dimension, part number or gender for it; common/terminal-header-250-3@1 presents the header on the card and generic/terminal-250-3-plug@1, a stand-in for the cable plug, mates it. No standard is held for it'}
   # The DC barrel jack (#789, docs/connectors-dc-terminal-design.md). ONE
   # INTERFACE, BY RULING: see the note.
   dc-barrel: {standard: barrel-jack, note: 'the library treats the DC barrel jack as ONE nominal connector. Barrel diameters vary by product, and of the seven devices that place common/dc-barrel@1 only the CSS326-24G-2S+RM and CRS309-1G-8S+IN quick guides state one (5.5 mm outside, 2 mm inside), so the interface claims no diameter. The rating is carried as attributes of each placement of the jack (input-voltage, current-max-a) and not by the interface. generic/dc-barrel-plug@1, drawn at the common 5.5 mm barrel, mates it'}
