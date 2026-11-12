@@ -1,7 +1,7 @@
 """The Lantronix SLC 8000 base chassis is in the library: six faces and its fixed parts.
 
-The device is the chassis as it ships, without I/O modules, so the rear declares its three module bays, each stating the class of
-module it takes, and seats nothing in them: no document gives a module a size. The front carries a display, a keypad, a console jack, two USB ports and a modem jack. Its
+The base build is the chassis without I/O modules, so the rear declares its three module bays, each stating the class of
+module it takes, and the base build seats nothing in them. The front carries a display, a keypad, a console jack, two USB ports and a modem jack. Its
 parts are Lantronix's own: the display and the keypad. Each figure the documents do not give is declared an estimate in the
 contract that carries it.
 
@@ -50,7 +50,10 @@ def test_the_rear_declares_three_bays_that_state_the_module_class_and_seat_nothi
     bays = rear_bays(device)
     assert [b["id"] for b in bays] == ["io-bay-1", "io-bay-2", "io-bay-3"]
     assert {b["interface"] for b in bays} == {"slc-io-module"}
-    assert not [b for b in bays if b.get("accepts") or b.get("default")]
+    assert not [b for b in bays if b.get("default")]
+    # each bay lists the two modules it takes: the exporter's readers read the authored list alone, so a bay that states an
+    # interface and is mated by parts must list what it offers (test_cards_by_interface)
+    assert {tuple(b.get("accepts") or []) for b in bays} == {("lantronix/frrj451601@1", "lantronix/frusb1601@1")}
     assert {b["group"] for b in bays} == {"io-bays"}
     assert [b["rel-pos"] for b in bays] == [1, 2, 3]
     assert device["groups"]["io-bays"]["role"] == "traffic"
@@ -73,7 +76,8 @@ def test_the_module_class_is_a_registered_key_that_cites_the_guide():
 def test_the_module_gap_says_what_is_drawn_and_keeps_the_module_rules_as_words(device):
     gap = {g["what"]: g for g in device["gaps"]}["io-modules"]
     text = " ".join(gap["note"].split()).lower()
-    assert "declared" in text and "no module is modelled" in text
+    assert "declared" in text or "stating the class of module it takes" in text
+    assert "are not modelled" in text
     for rule in ("8-port", "bay 1 only", "bay 2 or 3, never bay 1", "in order"):
         assert rule in text, rule
 

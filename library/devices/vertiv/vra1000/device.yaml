@@ -1,0 +1,221 @@
+format: 1
+kind: device
+name: vra1000
+version: 0.1.0
+maturity: modelled
+manufacturer: Vertiv
+model: VRA1000
+description: >-
+  1U horizontal cable organizer with metal D rings, Vertiv VRA1000: a flat black plate the full
+  width of the rack with four metal D rings that stand out of it and three oval openings between them. The
+  rings hold bundles running along the plate. Sized, drawn and spaced from the maker's selection guide
+  alone, which gives no dimension, so every figure of the drawing is an estimate.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      ESTIMATED FROM A SELECTION GUIDE. Vertiv's VR Rack selection guide, publication SL-11367 (Vertiv) (PDF page 7 for the part's picture and
+      description, page 16 for its fit table) names the part "1U horizontal cable organizer with metal D rings (Qty. 1)", "Color: Black", and
+      "19 in rack mounted". It prints no dimension, no weight and no drawing. The only picture is a
+      raster of 198 x 117 px, a render seen at an angle, so the plate, the rings and the openings are read
+      off it against the 19 in width and are estimates; where the picture does not show a feature
+      (the plate's edges, the ring's fixing) none is drawn.
+  chassis:
+    confidence: estimated
+    note: >-
+      estimated - 482.6 x 44.45 x 76.5. Width is the 19 in of the guide's text (EIA-310), height the
+      EIA-310 unit pitch for "1U", depth the ring reach scaled off the render (75.0) and a 1.5 mm
+      plate. The plate is the whole width of the rack, its two ends the ears, so the face is drawn whole
+      (L43 stands down above 480 mm).
+  ears:
+    confidence: estimated
+    note: >-
+      estimated - `positions` states where the ears bolt, for the Rack Builder: the ears are the flat ends
+      of the plate, so the ear plane is the plate's back face and the rings stand 76.5 mm in front of it.
+      This states a placement; no dimension changed.
+  full-depth:
+    confidence: estimated
+    note: >-
+      `full-depth: false` - the rings stand in front of the plate and nothing stands behind it, so the rear
+      face of its rack unit stays free for another part.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - no page states a gauge. 1.5 mm is taken for the plate and 5.0 mm for the ring rod.
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the plate seen from the ring side: four rings end-on, 134.0 mm apart about the middle,
+      and three oval openings midway between them, read off the guide's picture. All three openings show in the picture, partly behind the rings; they are drawn equal in length, where the picture's differ through perspective.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the plate: the four ear slots and the three openings. The picture does not
+      show the back; it is the front's holes seen from behind, with no feature added.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - an elevation, rear at the top of the drawing: the plate's edge and the four rings from
+      above, each 10 mm across and standing 75 out of the plate's front face. The bottom is the same
+      from underneath. The picture shows no edge fold, so none is drawn.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - the side view: the plate's edge and a ring's profile in front of it, a frame 36.45 high
+      with a foot, two rods and a closed end. The right is the same turned round.
+  guides:
+    confidence: estimated
+    note: >-
+      estimated - the four rings are the guides: each a component with a `ring` guide (see its contract),
+      cables passing along the plate through each in turn.
+  passes:
+    confidence: estimated
+    note: >-
+      estimated - the three oval openings: a cable crosses through each from one side of the plate to the
+      other. Their places and sizes are scaled off the picture. The guide states no limit on the cable that
+      fits.
+  capacity:
+    confidence: estimated
+    note: >-
+      no page states a cable capacity: the guide is silent, so none is stated and a gap says so.
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the colour (black) and the use ("cable routing panels with D rings", "in the front or
+      rear of your rack") are the guide's text. The guide says only that the D rings are "metal" (page 7) and names no
+      material for the plate, so `material` is not stated.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Color: Black". The picture is a render, so the shades are this library's render of a black
+      plate, the rings a little lighter than the plate and the screw heads the grey the picture shows.
+attrs:
+  physical:
+    color: Black
+chassis:
+  width: 482.6
+  height: 44.45
+  depth: 76.5
+  ru: 1
+  full-depth: false
+  ears:
+    positions:
+      - {name: proud, at: 76.5, default: true}
+  shell: sheet
+  thickness: 1.5
+  color: '#1b1d20'
+gaps:
+  - what: dimensions
+    scope: [front, rear, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the selection guide states no dimension of the part: the plate, the rings, the openings and the ear
+      holes are scaled off one picture of of 198 x 117 px.
+    wanted: a dimensioned drawing or a data sheet of the VRA1000
+  - what: weight
+    reason: vendor-silent
+    note: the selection guide states no weight.
+    wanted: the part's data sheet
+  - what: cable-capacity
+    reason: vendor-silent
+    note: >-
+      the selection guide states no cable capacity, no fill and no cable count.
+    wanted: a cable capacity table, or a stated fill, for the D-ring organizer
+  - what: ring-extent
+    scope: [front, left, right]
+    reason: needs-drawing
+    note: >-
+      the picture shows each hook hanging below the plate's lower edge, by about a third of the plate's
+      height scaled off the picture; the face of a part is bounded by its rack units, so the ring is drawn
+      inside the plate's height and the part below it is not drawn.
+    wanted: a dimensioned side view of the ring
+  - what: ring-opening
+    scope: [front, top, bottom, left, right]
+    reason: needs-drawing
+    note: >-
+      the picture shows each ring as a rod bent to a hook with an open end; the format has no slit, and no
+      page says how wide the opening is, so the loop is drawn closed.
+    wanted: a close view or a section of a ring
+groups:
+  body:
+    term: Plate
+    role: furniture
+    index-origin: 1
+    description: the flat plate, its ears and its three oval openings
+  guides:
+    term: Ring
+    role: furniture
+    index-origin: 1
+    description: four metal D rings, cables passing along the plate through each
+views:
+  front:
+    size: {w: 482.6, h: 44.45}
+    components:
+      placements:
+        - {ref: vertiv/vra1000-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
+        - {ref: vertiv/vra1000-ring@1, id: guide-1, at: [35.3, 4], group: guides, rel-pos: 1, in: panel}
+        - {ref: vertiv/vra1000-ring@1, id: guide-2, at: [169.3, 4], group: guides, rel-pos: 2, in: panel}
+        - {ref: vertiv/vra1000-ring@1, id: guide-3, at: [303.3, 4], group: guides, rel-pos: 3, in: panel}
+        - {ref: vertiv/vra1000-ring@1, id: guide-4, at: [437.3, 4], group: guides, rel-pos: 4, in: panel}
+  rear:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+        - {id: panel-back, at: [0, 0], size: [482.6, 44.45], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: slot-1, at: [67.3, 10.225], size: [80, 24], rx: 12, fill: '#0a0b0c', kind: hole}
+        - {id: slot-2, at: [201.3, 10.225], size: [80, 24], rx: 12, fill: '#0a0b0c', kind: hole}
+        - {id: slot-3, at: [335.3, 10.225], size: [80, 24], rx: 12, fill: '#0a0b0c', kind: hole}
+        - {id: ear-hole-1, at: [3.75, 3.1], size: [10, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-hole-2, at: [3.75, 34.85], size: [10, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-hole-3, at: [468.85, 3.1], size: [10, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+        - {id: ear-hole-4, at: [468.85, 34.85], size: [10, 6.5], rx: 3.25, fill: '#0a0b0c', kind: hole}
+    passes:
+      - {id: pass-through-1, at: [67.3, 10.225], size: [80, 24], shape: obround, cover: open}
+      - {id: pass-through-2, at: [201.3, 10.225], size: [80, 24], shape: obround, cover: open}
+      - {id: pass-through-3, at: [335.3, 10.225], size: [80, 24], shape: obround, cover: open}
+  top:
+    size: {w: 482.6, h: 76.5}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-top, at: [35.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-2-top, at: [169.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-3-top, at: [303.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-4-top, at: [437.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+  bottom:
+    size: {w: 482.6, h: 76.5}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [482.6, 1.5], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: guide-1-bottom, at: [35.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-2-bottom, at: [169.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-3-bottom, at: [303.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: guide-4-bottom, at: [437.3, 1.5], size: [10, 75], rx: 1.1, fill: '#40454c', kind: ring}
+  left:
+    size: {w: 76.5, h: 44.45}
+    panel:
+      decor:
+        - {id: plate-edge, at: [0, 0], size: [1.5, 44.45], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [1.5, 4], size: [5, 36.45], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-top, at: [1.5, 4], size: [75, 5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-bottom, at: [1.5, 35.45], size: [75, 5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-tip, at: [71.5, 4], size: [5, 36.45], rx: 0, fill: '#40454c', kind: ring}
+  right:
+    size: {w: 76.5, h: 44.45}
+    panel:
+      decor:
+        - {id: plate-edge, at: [75, 0], size: [1.5, 44.45], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: ring-base, at: [70, 4], size: [5, 36.45], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-top, at: [0, 4], size: [75, 5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-bar-bottom, at: [0, 35.45], size: [75, 5], rx: 0, fill: '#40454c', kind: ring}
+        - {id: ring-tip, at: [0, 4], size: [5, 36.45], rx: 0, fill: '#40454c', kind: ring}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The cable organizer as Vertiv sells VRA1000, four rings fitted.'
+datasheet:
+  title: 'Vertiv VR Rack selection guide, SL-11367 (cable management, page 7; accessory table, pages 16 and 17)'
+  url: https://www.vertiv.com/4a85ed/globalassets/shared/vertiv-vr-rack-selection-guide-sl-11367_0.pdf
+  sha256: f33ff9fdbcdf3810eee20c1aed51dd97e1e45cbad0ca8f104a127648fbe55e6d
