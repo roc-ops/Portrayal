@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: hlx-tgv
-version: 4.0.0
+version: 4.0.1
 maturity: modelled
 manufacturer: Halny
 model: HLX-TGV
@@ -37,10 +37,59 @@ provenance:
       silkscreen[] means ink on the moulding. It is now a region, which is what this project has
       for author annotation, so the drawing no longer claims the vendor printed something it did
       not
+  jack-finish:
+    confidence: photo-measured
+    note: >-
+      photo-measured (IMG_2099, the rear face, and the guide's Fig. 2 on page 5, agree): the LAN
+      jack's housing is yellow plastic and the 10G jack's is black. The yellow is the median of the
+      yellow pixels of the LAN jack in IMG_2099, #ccb339, taken under a warm light (the white body
+      reads #d2ccbf in the same frame), so it is the photograph's yellow and not a maker's colour
+      code. The black is the library's own #2b2f33 for a black jack.
+  side-screws:
+    confidence: estimated
+    note: >-
+      estimated - IMG_2097 and IMG_2098 (the same face twice) show a cross-head screw near each end
+      of the right face, one at the rear end near the top edge and one at the front end near the
+      bottom edge, a diagonal pair. Places read off IMG_2097 at the face's own scale (115 mm is 880
+      px): centres 107.8 mm from the front and 7.4 mm down, and 8.5 mm from the front and 31.0 mm
+      down, each good to about 2 mm. The head is about 5 mm across by the same scale. The left
+      face is not photographed, so none is drawn there (see the gap).
+  rear-pon-caption:
+    confidence: estimated
+    note: >-
+      estimated - IMG_2099 shows "PON" printed on the rear face beside the fibre-bay notch, below
+      ON/OFF. Place read off the photograph at the face's own scale (172 mm is 810 px), about 2 mm
+      good; the size is the other rear captions'. The underside carries no such print (IMG_2095).
+  environment:
+    confidence: datasheet
+    note: >-
+      datasheet - operating 0 to 45 C is printed in both the leaflet (page 2, Hardware
+      Specification) and the guide (page 9); storage -20 to 70 C only in the leaflet. Humidity is
+      not carried because the two differ (see the gap).
+  physical:
+    confidence: datasheet
+    note: >-
+      datasheet - the Quick Installation Guide, page 9, prints "<500g" and no figure the leaflet
+      repeats. A bound is not a weight, so it is carried as a note and `weight-kg` is not stated.
 
 attrs:
+  physical:
+    weight-note: under 500 g (Quick Installation Guide, page 9, "Weight <500g")
+  power:
+    power-input: 100 to 240 V AC, 50 to 60 Hz, the power adapter (Quick Installation Guide, page 9)
+    power-note: standard power consumption under 24 W (Quick Installation Guide, page 9)
+  environmental:
+    operating-temp: 0 to 45 C (32 to 113 F)
+    storage-temp: -20 to 70 C (-4 to 158 F)
+  performance:
+    pon-rate: 9.953 Gbps downstream and 9.953 Gbps upstream (leaflet, page 2)
+    pon-reach: up to 20 km (Quick Installation Guide, page 3, 2.1)
+    pon-tx-power: 4 to 9 dBm (leaflet, page 2, printed as "GPON Tx")
+    pon-rx-power: -10 to -27 dBm (leaflet, page 2, printed as "GPON Rx")
   platform:
     cpu: dual-core-1ghz
+    system-memory: 256 MB
+    onboard-storage: 128 MB flash (leaflet, page 2, "Flash / RAM 128MB / 256MB")
   features:
     wan: xgs-pon
 chassis:
@@ -51,6 +100,55 @@ chassis:
   color: '#eceef0'
   edge: '#c2c7cc'
   silk: '#4a4f55'
+gaps:
+  - what: dimensions-disagree
+    reason: sources-disagree
+    note: >-
+      The leaflet (page 2) prints "172 x 115 x 40mm (W x D x H)", which the chassis carries. The
+      Quick Installation Guide (page 9) prints "L x W x H: 112mm x 162mm x 42mm". The two share
+      neither a length nor a height. The photographs show a top face about 1.5 times as long as it
+      is wide, which fits 172 / 115 = 1.50 better than 162 / 112 = 1.45, but the top face stands
+      above the ruler in them and the scale is not the ruler's, so they do not settle it.
+    wanted: The unit measured with a rule or calliper, or the maker's mechanical drawing.
+  - what: dc-in-current-disagrees
+    scope: [dc-in]
+    reason: sources-disagree
+    note: >-
+      Three figures for one 12 V DC input. The leaflet (page 2, Power Supply) prints "DC +12V /
+      1.0A", which the jack carries as `current-max-a`. The Quick Installation Guide (page 9,
+      "Whole-device power supply") prints "12V DC / 2A". The unit's own rating label (IMG_2095,
+      IMG_2096, dated 2022.12) prints "12V" and "1.5A". The voltage agrees in all three.
+    wanted: Which of 1.0 A, 1.5 A and 2 A is the rating of the adapter shipped with a current unit.
+  - what: humidity-disagrees
+    reason: sources-disagree
+    note: >-
+      Operating humidity is "10% - 95% (non-condensing)" in the leaflet (page 2) and "10%~90%
+      (non-condensing)" in the Quick Installation Guide (page 9). Neither is carried.
+    wanted: The maker's answer, or the later of the two documents confirmed as current.
+  - what: left-face-unphotographed
+    scope: [left]
+    reason: needs-photo
+    note: >-
+      The only side face photographed is the right one (IMG_2097, IMG_2098). The left face is drawn
+      as ribs alone and no screw is claimed on it.
+    wanted: A photograph of the left face, square on, with a rule beside it.
+  - what: right-face-vents
+    scope: [right]
+    reason: needs-drawing
+    note: >-
+      IMG_2097 shows the right face with a solid band at each end (about 16 mm at the front end
+      and 15 mm at the rear end, where the screws are), the slots only in a middle band, and ribs
+      that run out to the lower edge. The face is drawn as ribs from end to end, which the
+      photograph does not show. The slot and rib sizes are not read here.
+    wanted: A square-on photograph of the right face with a rule beside it, to draw the bands, slots and ribs.
+  - what: fxs-jack-colour
+    scope: [fxs]
+    reason: needs-drawing
+    note: >-
+      IMG_2099 shows both telephone jacks in a grey housing. common/rj11-jack@1 has no finish
+      field, so the drawing keeps the part's own colour; changing it is an edit to a part many
+      devices place.
+    wanted: A finish field on the telephone jack, once the colour is checked against a second device.
 groups:
   rj45-10g:
     term: Port
@@ -118,11 +216,12 @@ views:
       - {at: [115.0, 22.6], text: RESET, font-size: 1.9, for: reset}
       - {at: [130.0, 28.6], text: TEL2, font-size: 1.9, for: tel-2}
       - {at: [149.0, 28.6], text: TEL1, font-size: 1.9, for: tel-1}
+      - {at: [20.4, 32.8], text: PON, font-size: 1.9, for: chassis}
     components:
       placements:
         - {ref: common/power-button@1, id: power-btn, at: [12, 13], for: chassis, group: mgmt, rel-pos: 1}
         - {ref: common/dc-barrel@1, id: dc-in, at: [32, 12.5], group: inlets, rel-pos: 1, attrs: {input-voltage: 12 VDC, current-max-a: 1.0}}
-        - {ref: common/rj45-eth@1, id: eth-10g, at: [68.1, 11.65], attrs: {speed: 10g}, group: rj45-10g, rel-pos: 1}
+        - {ref: common/rj45-eth@1, id: eth-10g, at: [68.1, 11.65], attrs: {speed: 10g, finish: '#2b2f33'}, group: rj45-10g, rel-pos: 1}
         # UNDO THE FLIP. common/rj45-jack@2 (the retired part) declared
         # "pins down, clip notch up" as its own default, which is what the
         # sweep tool's turnover-preserving rotate: 180 was protecting - but
@@ -139,8 +238,8 @@ views:
         # at rotate 0, matching the old led-eth-lan-l at x 92.3, so no
         # states: swap is needed (none was ever declared on this placement).
         # The old part's photo-derived `skin: yellow` has no equivalent on
-        # rj45-eth@1 (skins: [default] only) and is no longer drawn.
-        - {ref: common/rj45-eth@1, id: eth-lan, at: [91.1, 11.5], attrs: {speed: 1g}, group: rj45-1g, rel-pos: 1}
+        # rj45-eth@1 (skins: [default] only); its yellow is the `finish` below.
+        - {ref: common/rj45-eth@1, id: eth-lan, at: [91.1, 11.5], attrs: {speed: 1g, finish: '#ccb339'}, group: rj45-1g, rel-pos: 1}
         - {ref: common/reset-button@1, id: reset, at: [113, 16], for: chassis, group: mgmt, rel-pos: 2}
         - {ref: common/rj11-jack@1, id: tel-2, at: [123, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 2, group: fxs}
         - {ref: common/rj11-jack@1, id: tel-1, at: [142, 12.5], rotate: 180, attrs: {role: fxs}, rel-pos: 1, group: fxs}
@@ -227,6 +326,12 @@ views:
       decor:
         - {at: [2, 1], size: [111, 38], pattern: ribs}
         - {at: [19, 31], size: [12, 8], fill: '#17191c', rx: 2}
+        - {at: [105.3, 4.9], size: [5, 5], rx: 2.5, fill: '#9ea3a8'}
+        - {at: [106.2, 7.15], size: [3.2, 0.5], fill: '#5d6268'}
+        - {at: [107.55, 5.8], size: [0.5, 3.2], fill: '#5d6268'}
+        - {at: [6.0, 28.5], size: [5, 5], rx: 2.5, fill: '#9ea3a8'}
+        - {at: [6.9, 30.75], size: [3.2, 0.5], fill: '#5d6268'}
+        - {at: [8.25, 29.4], size: [0.5, 3.2], fill: '#5d6268'}
 configurations:
   eu:
     kind: orderable

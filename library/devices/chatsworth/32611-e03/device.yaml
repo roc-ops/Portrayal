@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 32611-e03
-version: 1.0.0
+version: 2.0.0
 maturity: modelled
 manufacturer: Chatsworth Products
 model: '32611-E03'
@@ -185,6 +185,14 @@ gaps:
       gives its width or how far it stands from the rear; it is drawn as a strip the full depth of
       the frame.
     wanted: a section through the manager
+  - what: side-assembly
+    scope: [front, rear]
+    reason: vendor-silent
+    note: >-
+      no held page dimensions a side assembly: it is drawn as a plate 1.5 thick under its guides, the
+      length of the manager and the width of a guide, which is an estimate; the guides stand on it
+      and in front of the central section.
+    wanted: a section through the manager
   - what: accessories
     scope: [front, rear]
     reason: vendor-silent
@@ -245,7 +253,7 @@ views:
     components:
       placements:
         - {ref: chatsworth/motive-vcm-base-ss-200@1, id: base, at: [0, 0], group: body, rel-pos: 2}
-        - {ref: chatsworth/motive-32611-e03-frame@2, id: frame, at: [0, 0], group: body, rel-pos: 1, in: base, under: [guide-left-1, guide-left-2, guide-left-3, guide-left-4, guide-left-5, guide-left-6, guide-left-7, guide-left-8, guide-left-9, guide-left-10, guide-left-11, guide-left-12, guide-left-13, guide-left-14, guide-left-15, guide-left-16, guide-left-17, guide-left-18, guide-left-19, guide-left-20, guide-left-21, guide-left-22, guide-left-23, guide-left-24, guide-left-25, guide-left-26, guide-left-27, guide-left-28, guide-left-29, guide-left-30, guide-left-31, guide-left-32, guide-left-33, guide-left-34, guide-left-35, guide-left-36, guide-left-37, guide-left-38, guide-left-39, guide-left-40, guide-left-41, guide-left-42, guide-left-43, guide-left-44, guide-left-45, guide-left-46, guide-left-47, guide-left-48, guide-right-1, guide-right-2, guide-right-3, guide-right-4, guide-right-5, guide-right-6, guide-right-7, guide-right-8, guide-right-9, guide-right-10, guide-right-11, guide-right-12, guide-right-13, guide-right-14, guide-right-15, guide-right-16, guide-right-17, guide-right-18, guide-right-19, guide-right-20, guide-right-21, guide-right-22, guide-right-23, guide-right-24, guide-right-25, guide-right-26, guide-right-27, guide-right-28, guide-right-29, guide-right-30, guide-right-31, guide-right-32, guide-right-33, guide-right-34, guide-right-35, guide-right-36, guide-right-37, guide-right-38, guide-right-39, guide-right-40, guide-right-41, guide-right-42, guide-right-43, guide-right-44, guide-right-45, guide-right-46, guide-right-47, guide-right-48, door]}
+        - {ref: chatsworth/motive-32611-e03-frame@3, id: frame, at: [0, 0], group: body, rel-pos: 1, in: base, under: [guide-left-1, guide-left-2, guide-left-3, guide-left-4, guide-left-5, guide-left-6, guide-left-7, guide-left-8, guide-left-9, guide-left-10, guide-left-11, guide-left-12, guide-left-13, guide-left-14, guide-left-15, guide-left-16, guide-left-17, guide-left-18, guide-left-19, guide-left-20, guide-left-21, guide-left-22, guide-left-23, guide-left-24, guide-left-25, guide-left-26, guide-left-27, guide-left-28, guide-left-29, guide-left-30, guide-left-31, guide-left-32, guide-left-33, guide-left-34, guide-left-35, guide-left-36, guide-left-37, guide-left-38, guide-left-39, guide-left-40, guide-left-41, guide-left-42, guide-left-43, guide-left-44, guide-left-45, guide-left-46, guide-left-47, guide-left-48, guide-right-1, guide-right-2, guide-right-3, guide-right-4, guide-right-5, guide-right-6, guide-right-7, guide-right-8, guide-right-9, guide-right-10, guide-right-11, guide-right-12, guide-right-13, guide-right-14, guide-right-15, guide-right-16, guide-right-17, guide-right-18, guide-right-19, guide-right-20, guide-right-21, guide-right-22, guide-right-23, guide-right-24, guide-right-25, guide-right-26, guide-right-27, guide-right-28, guide-right-29, guide-right-30, guide-right-31, guide-right-32, guide-right-33, guide-right-34, guide-right-35, guide-right-36, guide-right-37, guide-right-38, guide-right-39, guide-right-40, guide-right-41, guide-right-42, guide-right-43, guide-right-44, guide-right-45, guide-right-46, guide-right-47, guide-right-48, door]}
         - {ref: chatsworth/motive-vcm-guide@1, id: guide-left-1, at: [0, 0], group: guides, rel-pos: 1, in: base, under: [door]}
         - {ref: chatsworth/motive-vcm-guide@1, id: guide-left-2, at: [0, 44.45], group: guides, rel-pos: 2, in: base, under: [door]}
         - {ref: chatsworth/motive-vcm-guide@1, id: guide-left-3, at: [0, 88.9], group: guides, rel-pos: 3, in: base, under: [door]}

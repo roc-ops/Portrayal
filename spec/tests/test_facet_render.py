@@ -1,13 +1,14 @@
 """render.py draws a part on a facet foreshortened and marks it for 3D."""
 import math
 import re
-import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import yaml
 import pytest
+
+import warmrender
 
 ROOT = Path(__file__).resolve().parents[2]
 SPEC, LIB = ROOT / "spec", ROOT / "library"
@@ -157,7 +158,7 @@ def plant_card(tmp, rotate=None, occupant=False, card_rotate=None,
                             "components": {"placements": placements}}}}, sort_keys=False))
     out = tmp / "o"
     out.mkdir()
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(lib), "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
@@ -386,7 +387,7 @@ def plant_two_facet_card(tmp, chained=False, p2_rotate=None):
     dev.write_text(yaml.safe_dump(device, sort_keys=False))
     out = tmp / "o"
     out.mkdir()
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(lib), "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
@@ -495,7 +496,7 @@ def test_a_facet_feature_shifts_with_an_inset(tmp_path):
     dev.write_text(yaml.safe_dump(device, sort_keys=False))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(lib), "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
@@ -545,7 +546,7 @@ def test_a_sunk_facet_shifts_with_an_inset_unclamped(tmp_path):
     }, sort_keys=False))
     out = tmp_path / "o"
     out.mkdir()
-    r = subprocess.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
+    r = warmrender.run([sys.executable, str(SPEC / "tools/portrayal/render.py"), str(dev),
                         "--library", str(lib), "--library", str(LIB), "--out", str(out)],
                        capture_output=True, text=True)
     assert r.returncode == 0, r.stderr

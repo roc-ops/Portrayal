@@ -159,7 +159,21 @@ product's. The type's comments say `<seller> lists <maker> <model>.`, the
 seller's other names, and `Listed per:` the source, with the NOS line a NOS
 listing also gets left out.
 
-**The planned first use** is the APC cabinets in FS's catalogue, under
-FS's namespace once cabinets are library products (#935); its entry
-changes from `role: hardware` to `[hardware, reseller]` with that first
-listing, and not before.
+**A cabinet is listed the same way.** `hardware` may name a rack product
+(`library/racks/<vendor>/<name>`, `apc/ar3100b2`) as well as a device; L56 looks
+for a device first and then for a rack product. The listing stays where every
+listing sits, `library/devices/<seller>/<id>/listing.yaml`, because the seller
+files its catalogue under its own namespace whatever it sells. A rack product has
+no configurations, ports or components, so its listing says only `model`,
+`aliases`, `portfolio` and `source` (L56 refuses `configurations`, `type-name`,
+`entity-map`, `terms` and `dumps`), and only a reseller lists one: a NOS runs on
+a box, and a cabinet has none. `dcim_export.py --racks` writes the product's
+rack type under its maker and once more under each seller that lists it: the
+NetBox rack type `FS.com/AR3100B2` beside `APC/AR3100B2`, and the same pair of
+Nautobot rack fields, the seller's carrying the opening comment lines of a
+listed type. Two types under one manufacturer with one model are refused.
+
+**The first use** is FS.com's listing of the APC NetShelter SX AR3100B2
+(`library/devices/fs/ar3100b2/listing.yaml`): FS's entry is `role: [hardware,
+reseller]`, its `model` is the part number FS prints on the product page, and
+the FS item number, 368069, is an alias.
