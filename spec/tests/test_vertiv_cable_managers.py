@@ -95,6 +95,19 @@ def test_four_rings_stand_on_the_plate_each_a_ring_guide_along_it(name):
 
 
 @pytest.mark.parametrize("name", PARTS)
+def test_every_ring_feature_stands_out_past_its_own_lift(name):
+    """`out` is a distance from the plate, not a thickness: a feature lifted `lift` off the plate that stands `out` from it
+    needs out above lift, or it is built inside out. The sweep over the compiled drawings reads the build; this reads the source."""
+    features = contract(f"{name}-ring")["relief"]["features"]
+    for f in features:
+        assert f["out"] > float(f.get("lift") or 0), f["node"]
+    # the screw heads stand 1.5 proud of the 5 mm foot they sit on
+    heads = [f for f in features if f["node"].startswith("screw-")]
+    assert len(heads) == PARTS[name][3]
+    assert all(f["lift"] == 5 and f["out"] == 6.5 for f in heads)
+
+
+@pytest.mark.parametrize("name", PARTS)
 def test_three_oval_openings_between_the_rings_are_passes_and_open_holes_in_the_plate(name):
     _ru, h, _rh, _s, w, sh = PARTS[name]
     doc = device_yaml(name)
