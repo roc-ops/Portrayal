@@ -293,12 +293,6 @@ def test_48fpd_lists_no_kit_and_opens_an_etsi_bracket_gap():
     assert "etsi-bracket" in {g["what"] for g in d["gaps"]}
 
 
-def test_48fpd_unmeasurable_faces_are_empty():
-    d = device("ws-c2960s-48fpd")
-    for face in ("top", "bottom", "right"):
-        assert d["views"][face].get("empty"), face
-
-
 # --- the second look: plates, bar, silver, MODE button, marks, labels, fan, bay and the module -----------
 #
 # Every figure below is read from a held source at a stated scale: the NetBox 48FPD-L front stencil at

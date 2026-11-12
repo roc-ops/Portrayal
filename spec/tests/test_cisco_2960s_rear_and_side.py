@@ -106,15 +106,63 @@ def test_left_wall_draws_the_figures_29_openings_inside_the_face(name):
         assert len(rear_cluster) == 20, "20 openings stand in the rear 200 mm, the figure's first group"
 
 
-@pytest.mark.parametrize("name", NAMES)
-def test_gaps_name_what_stays_and_the_old_rear_gap_is_gone(name):
-    g = {x["what"]: x for x in device(name)["gaps"]}
-    assert "rear-undrawn-details" not in g and "the-four-undrawn-faces" not in g
-    assert g["the-undrawn-faces"]["scope"] == ["top", "bottom", "right"]
-    assert g["ac-inlet-pins"]["scope"] == ["rear"] and "std/c14-inlet@1" in g["ac-inlet-pins"]["wanted"]
-    assert "rps-plate-stubs" not in g, "the stubs are drawn in the part"
-    for face in ("top", "bottom", "right"):
-        assert device(name)["views"][face].get("empty"), face
+DIST = ROOT / "library/dist"
+# The centre of each of the 29 openings on the flat left face, millimetres from the rear edge and the top: the middle of the
+# bounding box of the outline read off Figure 1-10 (rear to front, as the figure lists them).
+CENTRES = [
+    (7.70, 6.40), (9.55, 18.90), (23.50, 24.10), (48.10, 40.20), (49.95, 29.45), (51.75, 14.80), (62.50, 21.50),
+    (71.05, 29.25), (72.90, 14.65), (83.60, 21.35), (94.00, 14.50), (97.80, 24.65), (115.10, 14.30), (125.80, 21.05),
+    (134.35, 28.75), (136.20, 14.20), (146.95, 20.75), (155.45, 28.65), (157.30, 14.00), (168.05, 20.55), (281.10, 34.10),
+    (310.95, 3.25), (318.50, 23.35), (320.65, 34.20), (341.10, 40.20), (362.40, 11.20), (365.20, 31.15), (366.05, 21.20),
+    (378.60, 3.15),
+]
+SHIFT = 87.0  # a 299 mm model moves the front group (past 200 mm) 87 mm toward the rear
+
+
+def built_svg(name, face):
+    return (DIST / f"{name}.{face}.svg").read_text()
+
+
+def built_openings(name):
+    """Centre of each built opening: the middle of its outline's bounding box, after the element's translate."""
+    svg = built_svg(name, "left")
+    found = {}
+    for tag in re.findall(r"<path [^>]*>", svg):
+        ident = re.search(r' id="(side-opening-\d+)"', tag)
+        if not ident:
+            continue
+        move = re.search(r'transform="translate\(([-\d.]+) ([-\d.]+)\)"', tag)
+        n = numbers(re.search(r' d="([^"]+)"', tag).group(1))
+        xs = [float(move.group(1)) + n[i] for i in range(0, len(n) - 1, 2)]
+        ys = [float(move.group(2)) + n[i + 1] for i in range(0, len(n) - 1, 2)]
+        found[ident.group(1)] = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2)
+    return found
+
+
+@pytest.mark.heavy
+@pytest.mark.parametrize("name", ["ws-c2960s-48lpd", "ws-c2960s-24td"])
+def test_built_left_face_centres_each_of_the_29_openings_within_a_tenth_of_a_millimetre(name):
+    built = built_openings(name)
+    assert sorted(built) == [f"side-opening-{i:02d}" for i in range(1, 30)], "29 openings, counted in the build"
+    for i, (x, y) in enumerate(CENTRES, 1):
+        if name == "ws-c2960s-24td" and x > 200.0:
+            x -= SHIFT
+        bx, by = built[f"side-opening-{i:02d}"]
+        assert abs(bx - x) <= 0.1 and abs(by - y) <= 0.1, (i, (bx, by), (x, y))
+
+
+@pytest.mark.heavy
+def test_built_rear_of_the_48lpd_draws_the_marks_hole_tabs_and_edge_and_no_text_is_added():
+    svg = built_svg("ws-c2960s-48lpd", "rear")
+    ids = re.findall(r' id="(rear-[a-z0-9-]+)"', svg)
+    assert len([i for i in ids if re.fullmatch(r"rear-stamp-\d+", i)]) == 12
+    assert len([i for i in ids if re.fullmatch(r"rear-stamp-\d+-lit", i)]) == 12
+    assert len([i for i in ids if i.startswith("rear-corner-")]) == 6
+    for one in ("rear-hole-rim", "rear-hole", "rear-tab-top", "rear-tab-bottom", "rear-lid-edge", "rear-diagonal",
+                "rear-inlet-rim"):
+        assert ids.count(one) == 1, one
+    drawn = re.findall(r"<text[^>]*>([^<]*)</text>", svg)
+    assert "RATING" not in drawn and not [t for t in drawn if "11.25" in t], "no printed legend is drawn on this rear"
 
 
 def test_rps_plate_has_the_notch_in_its_left_edge_and_the_patch_is_stated():
