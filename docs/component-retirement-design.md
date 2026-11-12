@@ -16,14 +16,14 @@ it is built".
 | --- | --- |
 | A retired major says where it went: `superseded-by: <ns/name@major>` on its contract, the key the schema already has. No second `deprecated:` key. | `spec/schemas/component.schema.json`, `spec/DESIGN.md` section 9 |
 | The ref is a different major that exists, and a kit's successor is a kit. | L101 |
-| A retired major that still ships is not "dead": L89 accepts it when its marker names a different major that exists, and still fails a superseded major that nothing seats, nothing names and that says nothing. | L89, `docs/lint-rules.md` |
+| A retired major that still ships is not "dead": L89 accepts a major that a higher live major of the same name has superseded when its marker names a different major that exists, and still fails such a major that nothing seats, nothing names and that says nothing. | L89, `docs/lint-rules.md` |
 | At 0.x a superseded major may be removed, and every removal is listed in `CHANGELOG.md` with the ref that replaces it. | `spec/DESIGN.md` section 9, `docs/format-stability.md`, `library/components/README.md`, `CHANGELOG.md` |
 | The build publishes the marker: `components.json` carries `superseded-by` on every major, and the DCIM module export leaves a retired major out, because its model is its successor's. | `spec/tools/portrayal/components_index.py`, `spec/tools/portrayal/dcim_export.py` |
 | A removed major that a saved rack names can be redirected by `supersedes:` on its replacement. | `docs/format-stability.md`, L184 |
 
 ## What is measured today
 
-- 92 of the 2,691 component contracts carry `superseded-by:`: 8 Cisco, 3 common,
+- 92 of the 2,749 component contracts carry `superseded-by:`: 8 Cisco, 3 common,
   1 Edgecore, 2 generic, 73 Juniper and 5 UfiSpace.
 - Of those 92, one retired major names a successor that is itself retired:
   `juniper/mic-3d-4xge-xfp@2` names `@3`, whose own marker names `@4`; and
