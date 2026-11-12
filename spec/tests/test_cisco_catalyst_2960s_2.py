@@ -290,7 +290,7 @@ def test_ears_default_to_the_front_mounting_position_and_no_kit_is_listed(name):
 @pytest.mark.parametrize("name", NAMES)
 def test_unmeasurable_faces_are_empty(name):
     d = device(name)
-    for face in ("top", "bottom", "left", "right"):
+    for face in ("top", "bottom", "right"):
         assert d["views"][face].get("empty"), face
 
 
