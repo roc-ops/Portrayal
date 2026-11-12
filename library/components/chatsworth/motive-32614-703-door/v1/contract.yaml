@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: motive-32614-703-door
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 lid: true
@@ -25,12 +25,46 @@ provenance:
     instructions, page 3). It is a lid. The format has no hinge, so which side it swings from is a
     gap.
   logo-zone: >-
-    not reserved - the installation instructions (page 3) say the front door has the logo at the
-    top, and no held page gives its size or position.
+    estimated - the installation instructions (page 3) say the front door has the logo at the top. The
+    data sheet's page 1 photograph of the single-sided manager shows a silver plate down the door's
+    upper part, with a white block at its top that carries the maker's mark. The plate is drawn
+    (`door-plate`). The block's place is reserved and paints nothing, because a vendor mark is not
+    reproduced. The scale is the nominal 2133.6 over the door's 763 px in the photograph (2.796 mm per
+    px); across the door each figure is its fraction of the door's 86 px width. The plate is 186.2 wide
+    from 96.9, 738 high from 378; the reserved block is 204 high at its top. The photograph is of
+    a part read as 10 in wide: its 86 px door width is 241 mm at that scale, 4 percent under 250
+    mm. Each across-the-door figure is that fraction applied to this width: an estimate, not a
+    reading of this part's own width. The photograph is turned slightly, so the left-hand
+    fractions are mirrored to the right; the same fractions are taken for every width and for both colours. The black render on
+    page 3 puts the plate's top at 0.16 of the door and its height at 0.35, which agrees within the
+    reading. The plate's shade is the photograph's on a white part (a gradient from light at the top
+    to dark at the bottom) and the render's on a black part (a flat grey, lighter than the door).
+  seams: >-
+    estimated - the photograph shows two vertical seams that divide the door into three panels, at
+    0.21 and 0.79 of its width (luminance dips at x 390 and 433 of the door's 372 to 458). Each is
+    drawn 1 wide.
+  latches: >-
+    estimated - the installation instructions (page 3) say the door has two blue latches on its back
+    and draw them on the rear door seen from inside: a housing at each side edge and a handle, about
+    0.473 down the door. The figure is not to scale along the door, so only that fraction is read.
+    The housing is drawn 17 by 120 and the handle 17 by 45, the figure's proportions (8 to 1, 2.7 to
+    1) on a width of the 20 mm side assembly less 3; the device draws them on its rear, left and
+    right faces, where the back of the door is seen. The black render on page 3 shows the tip of
+    one handle as a blue dot at the door's edge, so each handle's tip is drawn 2 wide at its edge of
+    the front.
+  hook: >-
+    not drawn - the data sheet (page 1) lists a hook on the inside of the front door for a test meter;
+    no held picture shows it.
 size: {w: 380, h: 2133.6}
 size-confidence: {w: estimated, h: estimated}
 elements:
   plate: {at: [0, 0], size: [380, 2133.6], class: bezel}
+  seam-left: {at: [79.3, 0.6], size: [1, 2132.4], class: bezel}
+  seam-right: {at: [299.7, 0.6], size: [1, 2132.4], class: bezel}
+  door-plate: {at: [96.9, 378], size: [186.2, 738], class: bezel}
+  logo-zone: {at: [96.9, 378], size: [186.2, 204], class: bezel}
+  latch-tip-left: {at: [0, 987], size: [2, 45], class: bezel}
+  latch-tip-right: {at: [378, 987], size: [2, 45], class: bezel}
 relief:
   features:
     - node: plate
