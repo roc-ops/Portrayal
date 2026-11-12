@@ -65,6 +65,22 @@ def test_the_top_and_bottom_views_draw_the_brackets_and_collars(view):
     assert {f"bracket-{k}-side" for k in range(1, 6)} <= ids and {f"collar-{k}-side" for k in range(1, 5)} <= ids
 
 
+@pytest.mark.parametrize("view", ["top", "bottom"])
+def test_the_top_and_bottom_views_draw_a_rivet_head_beside_each_ring_base(view):
+    decor = {d["id"]: d for d in DEV["views"][view]["panel"]["decor"]}
+    for k in range(1, 6):
+        assert decor[f"rivet-{k}-side"]["size"] == [3.0, 3.0]
+
+
+def test_the_strap_is_centred_on_the_bracket():
+    root = ET.parse(PANEL / "skins/default.svg").getroot()
+    for g in root.iter(f"{NS}g"):
+        if (g.get("id") or "").startswith("bracket-"):
+            plate, strap = g.findall(f"{NS}rect")
+            centre = lambda r: float(r.get("y")) + float(r.get("height")) / 2
+            assert abs(centre(plate) - centre(strap)) < 0.01
+
+
 @pytest.mark.parametrize("view", ["left", "right"])
 def test_the_end_views_draw_the_bracket_foot(view):
     assert any(d["id"] == "bracket-foot" for d in DEV["views"][view]["panel"]["decor"])
