@@ -33,7 +33,7 @@ AC = "common/psu-ac-650@3"
 SCREW = "common/terminal-screw-34@1"
 LUG = "generic/ring-lug@1"
 SCREWS = [("pole-rtn", [32.6, 8.7], "rtn"), ("pole-batt", [32.6, 18.0], "batt"), ("pole-gnd", [32.6, 27.0], "gnd")]
-DEVICES = {"edgecore/agr110": "8.3.0", "edgecore/agr130": "0.2.0"}
+DEVICES = {"edgecore/agr110": "9.0.0", "edgecore/agr130": "1.0.0"}
 
 
 def contract(ref):

@@ -1,0 +1,446 @@
+format: 1
+kind: device
+name: iolan-scg18-r
+version: 0.1.0
+maturity: modelled
+manufacturer: Perle
+model: IOLAN SCG18 R
+aliases:
+- {name: IOLAN SCG18 R Console Server, kind: marketing}
+portfolio: {line: IOLAN, family: Console Server, series: IOLAN SCG R/U}
+description: >-
+  Perle IOLAN SCG18 R console server, 1U, with 16 RJ45 RS-232 serial ports in the first of its three G16
+  module bays. It has dual AC power and two network pairs of RJ45 and SFP. The front carries the display,
+  the keypad, the power button, the ready lamp and the card slot. It also has the RJ45 and micro-USB admin
+  ports, two USB 3.0 ports and the reset hole. The rear carries the network pairs at the left, the module
+  bays and the two inlets, each with a rocker switch. Modelled as the dual-AC build with no cellular parts,
+  as the R/U product page lists none.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Perle, IOLAN SCG Hardware Installation Guide, Expandable Models (5500427-10, Sept 2021): page 7
+      (the unit, 1U), page 9 (labelled front and rear photographs of an SCG50 RRU-LAWM, RRR-LAWM and UUU-LAWM),
+      page 10 (modules, the bays), pages 11 to 13 (network ports, inlets, power button), page 27 (specifications)
+      and page 35 (Appendix D, the mechanical drawing). Perle, the IOLAN SCG R/U product page (the IOLAN
+      SCG18 R row: description, part numbers, Specifications tab). No data sheet, CAD model or stencil
+      is held.
+  size:
+    confidence: drawing
+    note: >-
+      Guide page 35 (and the fixed-model guide, 5500438-10, page 20): the drawing's labels read 436MM,
+      44MM and 262MM, so the body is 436 wide, 44 high and 262 deep. The product page prints "26.4 x 43.4
+      x 4.4 (cm)", which differs by 2 mm in depth and width; the drawing is taken because it labels its
+      axes. Height 44 against the 1U rack unit of 44.45 is the drawing's rounding. The drawing's front
+      view is orthographic: 1935 px for the 436 mm body and 194 px for the face, 4.44 px/mm across and
+      4.44 down.
+  front-layout:
+    confidence: drawing
+    note: >-
+      Every front position is read off the front view of the drawing on guide page 35 at 400 dpi (4.44
+      px/mm, the body's left edge as origin), and checked against the labelled photograph on page 9. The
+      drawing prints no dimension for any feature, so each is good to about 0.5 mm. The drawing also draws
+      a SIM slot, three antenna connectors and a modem jack. The guide says the SIM slot and the modem
+      apply to certain models and the R/U product page lists no cellular or modem feature, so none is
+      drawn here.
+  rear-layout:
+    confidence: photo-measured
+    note: >-
+      Every rear position is read off the labelled rear photograph of an SCG50 RRR-LAWM on guide page
+      9, 1278 px for the 436 mm body (2.93 px/mm across, 2.9 down). The photograph is slightly angled,
+      so each position is estimated to within about 2 mm. The jack pitch reads 14.3 mm and the gap between
+      modules 2.0 mm beyond one pitch; the registry's ganged-jack pitch of 13.97 does not fit the photograph's
+      24 columns. The two inlets, the rockers, the network cluster and the bays are placed the same way.
+      The module bays are one module apart, 8 jack pitches and the 2.0 mm gap, which is 116.4 mm; the
+      third bay is placed where the photograph shows it and the second is one module to its left, an estimate.
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      Product page row: "16 x RS232 RJ45 interfaces" is the model's own count, the one fitted module's.
+      Guide page 27: "shielded RJ45 ports". Page 9 prints each column's two numbers as "1^ 2v" above it,
+      odd above even. The ports are RS-232 with software selectable Cisco pinouts (the page).
+  network:
+    confidence: datasheet
+    note: >-
+      Guide page 11: "two Ethernet combo pairs (RJ45 and SFP) identified as Ethernet 1 and 2"; only one
+      port of each pair is active at a time. The photograph shows an SFP cage above an RJ45 on each pair,
+      numbered 1 and 2.
+  power:
+    confidence: datasheet
+    note: >-
+      Guide page 12: two inlets on the back, each with its own rocker switch. Guide page 27: "100-240
+      VAC, 50-60 Hz, 1.5 Amps max". The page: "IEC320-C13 to NEMA 5-15P line cord" and four other countries,
+      so the inlet is a C14 (inferred from the cord end; the inlet's own type is not named). The R/U page
+      prints 15.5 W typical and 47-63 Hz; the guide's 50-60 Hz is the one recorded.
+  colour:
+    confidence: photo-measured
+    note: >-
+      The median of bare plate in the page 9 photographs is #1d1e20 on the front and #1d1e21 on the rear,
+      a near black. Lettering on the rear is white; the front is lettered in a gold that is not drawn.
+attrs:
+  physical:
+    weight-note: >-
+      R/U product page: 3.25 kg for the SCG18 dual AC chassis; the page weighs by chassis size and power
+      type, not by model
+  power: {input: ac, power-input-ac: '100-240 VAC, 50-60 Hz, 1.5 A max (guide page 27)'}
+  features:
+    optics-sfp: >-
+      SERDES 100/1000Base-X SFP modules, provided by the user (guide page 11) and supplied by Perle, Cisco
+      or other makers of MSA-compliant SFPs (guide page 27: "2 SFP slots supporting SERDES 100/1000Base-X
+      SFP modules")
+  environmental: {operating-temp-c: 0 to 55}
+chassis:
+  width: 436
+  height: 44
+  depth: 262
+  ru: 1
+  color: '#1e1f21'
+  power: ac
+  ears:
+    positions:
+    - {name: flush, label: front, default: true}
+gaps:
+- what: g16-modules
+  scope:
+  - rear
+  reason: needs-drawing
+  wanted: a dimensioned drawing of a G16 module and a larger straight-on photograph of the rear.
+  note: >-
+    The 1 fitted module is drawn as the chassis's own jacks: no document dimensions a G16 module or its
+    face plate, so no module is modelled and no bay is declared where one is fitted (a bay may not overlap
+    a placement). The three bays take the 16-port RS-232 RJ45, USB or multi-protocol RJ45 G16 module in
+    consecutive order from Bay 1 (guide pages 9 and 10); that rule is words only and no tool checks it.
+- what: side-vents
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  wanted: >-
+    the side view of guide page 35 read for its vent slots and holes, which the drawing does not dimension.
+  note: >-
+    The lower view of the drawing shows a field of vent slots and a pattern of screw holes, undimensioned,
+    and the guide does not say which side it is. The two sides draw the envelope only.
+- what: front-trim
+  scope:
+  - front
+  reason: needs-photo
+  wanted: a larger photograph of the front's left end.
+  note: >-
+    The page 9 photograph shows an orange trim line and diagonal gold stripes at the left of the front;
+    the drawing shows the stripes as hatching. They are not drawn.
+- what: rack-ears
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: the rack kit's part number, the ear positions and the rear brackets' size.
+  note: >-
+    The drawing shows two ears with two slots each at the front. The guides say only "Rack mount kit"
+    and the page "front and rear mounting hardware included"; no document names the kit or places an ear
+    along the depth.
+- what: lamps-and-labels
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: a photograph of each face at a size where the lamps and labels read.
+  note: >-
+    The network jacks' lamps, the module lamps and every label under the front connectors are not resolved
+    at the size held. The system-ready lamp is drawn dark.
+- what: empty-bay-plate
+  scope:
+  - rear
+  reason: needs-photo
+  wanted: >-
+    A straight-on photograph of the rear with the second and third bays' face plates on, and what the
+    plates print. The bays are declared and show nothing; the plates that close them are not drawn.
+  note: >-
+    The installation guide page 10 shows the face plate removed from a bay that holds no module and says
+    the bays are filled in order from Bay 1, so Bays 2 and 3 are the empty ones. The 200 px product photograph
+    shows a dark area there. No document dimensions the plates or shows their faces.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  eth:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+  sfp:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: the RJ45 and micro-USB admin ports on the
+      front}
+  usb-front:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, usb: '3.0'}
+  storage: {term: Slot, role: management, index-origin: 1}
+  module-bays: {term: Bay, role: traffic, index-origin: 1}
+  displays: {term: Display, role: indicator, index-origin: 1}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 436, h: 44}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [436, 44], fill: '#1d1e20', kind: bezel}
+    silkscreen:
+    - {at: [23.7, 14.2], text: perle, font-size: 6.0, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [174.4, 37.2], text: SYSTEM READY, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: ready}
+    - {at: [196.7, 37.2], text: SD CARD, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: card-slot}
+    - {at: [230.0, 37.2], text: ADMIN, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: console}
+    - {at: [358.6, 37.2], text: USB, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: usb-a}
+    - {at: [384.0, 37.2], text: RESET, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: reset}
+    components:
+      placements:
+      - {ref: perle/scg-power-button@1, id: power-button, at: [51.1, 17.8], group: furniture, rel-pos: 1,
+        for: chassis}
+      - {ref: perle/scg-lcd@1, id: display, at: [66.5, 13.3], for: chassis, group: displays, rel-pos: 1}
+      - {ref: perle/scg-keypad@1, id: keypad, at: [141.4, 8.3], for: chassis, group: furniture, rel-pos: 2}
+      - {ref: common/led-dot@1, id: ready, at: [173.4, 30.5], group: leds, rel-pos: 1, for: chassis, states: [
+          'off', 'on']}
+      - {ref: perle/scg-sd-slot@1, id: card-slot, at: [189.4, 29.2], group: storage, rel-pos: 1}
+      - ref: std/rj45@2
+        id: console
+        at: [216.65, 19.0]
+        group: mgmt
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: std/micro-usb@1
+        id: console-usb
+        at: [235.55, 29.4]
+        group: mgmt
+        rel-pos: 2
+        attrs: {role: console}
+      - {ref: std/usb-a@1, id: usb-a, at: [352.6, 16.9], group: usb-front, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-b, at: [352.6, 25.2], group: usb-front, rel-pos: 2}
+      - {ref: common/reset-button@1, id: reset, at: [382.0, 28.4], group: mgmt, rel-pos: 3, for: chassis}
+  rear:
+    size: {w: 436, h: 44}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0.0, 0.0], size: [436, 44], fill: '#1d1e21', kind: bezel}
+      cutouts:
+      - {id: port-1, at: [40.75, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [40.75, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [55.05, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [55.05, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [69.35, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [69.35, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [83.65, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [83.65, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [97.95, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [97.95, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [112.25, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [112.25, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [126.55, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [126.55, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [140.85, 6.8], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [140.85, 20.8], size: [12.7, 11.0], shape: rect}
+      - {id: net1-sfp, at: [6.4, 5.5], size: [14.5, 10.0], shape: rect}
+      - {id: net2-sfp, at: [6.4, 21.5], size: [14.5, 10.0], shape: rect}
+      - {id: net1-rj45, at: [22.5, 6.8], size: [15.8, 13.2], shape: rect}
+      - {id: net2-rj45, at: [22.5, 21.0], size: [15.8, 13.2], shape: rect}
+      - {id: switch-1, at: [393.35, 32.7], size: [15.5, 6.0], shape: rect}
+      - {id: switch-2, at: [417.75, 32.7], size: [15.5, 6.0], shape: rect}
+    silkscreen:
+    - {at: [28.0, 3.4], text: ETHERNET, font-size: 1.5, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [2.3, 12.0], text: '1', font-size: 1.8, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [2.3, 27.0], text: '2', font-size: 1.8, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [47.1, 3.6], text: 1^ 2v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [61.4, 3.6], text: 3^ 4v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [75.7, 3.6], text: 5^ 6v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [90.0, 3.6], text: 7^ 8v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [104.3, 3.6], text: 9^ 10v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [118.6, 3.6], text: 11^ 12v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [132.9, 3.6], text: 13^ 14v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [147.2, 3.6], text: 15^ 16v, font-size: 1.7, anchor: middle, fill: '#d8dadc', for: chassis}
+    components:
+      bays:
+      - id: bay-2
+        at: [155.4, 0.5]
+        size: {w: 115.0, h: 43.0}
+        interface: scg-g16-module
+        group: module-bays
+        rel-pos: 2
+      - id: bay-3
+        at: [271.8, 0.5]
+        size: {w: 115.0, h: 43.0}
+        interface: scg-g16-module
+        group: module-bays
+        rel-pos: 3
+      placements:
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-1
+        at: [40.75, 6.8]
+        group: serial
+        rel-pos: 1
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-2
+        at: [40.75, 20.8]
+        group: serial
+        rel-pos: 2
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-3
+        at: [55.05, 6.8]
+        group: serial
+        rel-pos: 3
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-4
+        at: [55.05, 20.8]
+        group: serial
+        rel-pos: 4
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-5
+        at: [69.35, 6.8]
+        group: serial
+        rel-pos: 5
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-6
+        at: [69.35, 20.8]
+        group: serial
+        rel-pos: 6
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-7
+        at: [83.65, 6.8]
+        group: serial
+        rel-pos: 7
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-8
+        at: [83.65, 20.8]
+        group: serial
+        rel-pos: 8
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-9
+        at: [97.95, 6.8]
+        group: serial
+        rel-pos: 9
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-10
+        at: [97.95, 20.8]
+        group: serial
+        rel-pos: 10
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-11
+        at: [112.25, 6.8]
+        group: serial
+        rel-pos: 11
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-12
+        at: [112.25, 20.8]
+        group: serial
+        rel-pos: 12
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-13
+        at: [126.55, 6.8]
+        group: serial
+        rel-pos: 13
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-14
+        at: [126.55, 20.8]
+        group: serial
+        rel-pos: 14
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-15
+        at: [140.85, 6.8]
+        group: serial
+        rel-pos: 15
+        attrs: {media: rj45-serial}
+      - ref: common/rj45-ganged-eth-plain@1
+        id: port-16
+        at: [140.85, 20.8]
+        group: serial
+        rel-pos: 16
+        attrs: {media: rj45-serial}
+      - {ref: std/sfp@1, id: net1-sfp, at: [6.4, 5.5], group: sfp, rel-pos: 1}
+      - {ref: std/sfp@1, id: net2-sfp, at: [6.4, 21.5], rotate: 180, group: sfp, rel-pos: 2}
+      - ref: common/rj45-eth@1
+        id: net1-rj45
+        at: [22.5, 6.8]
+        group: eth
+        rel-pos: 1
+        attrs: {speed: 1g}
+      - ref: common/rj45-eth@1
+        id: net2-rj45
+        at: [22.5, 21.0]
+        group: eth
+        rel-pos: 2
+        attrs: {speed: 1g}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [387.1, 5.1], rotate: 270, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [411.5, 5.1], rotate: 270, group: inlets, rel-pos: 2}
+      - {ref: perle/scg-power-rocker@1, id: switch-1, at: [393.35, 32.7], group: switches, rel-pos: 1,
+        for: inlet-1}
+      - {ref: perle/scg-power-rocker@1, id: switch-2, at: [417.75, 32.7], group: switches, rel-pos: 2,
+        for: inlet-2}
+  top:
+    size: {w: 436, h: 262}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [436, 262], fill: '#1e1f21', kind: envelope}
+  bottom:
+    size: {w: 436, h: 262}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [436, 262], fill: '#1e1f21', kind: envelope}
+  left:
+    size: {w: 262, h: 44}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [262, 44], fill: '#1e1f21', kind: envelope}
+  right:
+    size: {w: 262, h: 44}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [262, 44], fill: '#1e1f21', kind: envelope}
+interfaces:
+- {physical: net1-rj45, name: Ethernet 1}
+- {physical: net1-sfp, name: Ethernet 1 SFP}
+- {physical: net2-rj45, name: Ethernet 2}
+- {physical: net2-sfp, name: Ethernet 2 SFP}
+configurations:
+  ac:
+    kind: base
+    default: true
+    bays: {bay-2: '', bay-3: ''}
+    part-numbers:
+      04032834: {}
+      04032831: {}
+      04032832: {}
+      04032835: {}
+      04032836: {}
+      04032838: {}
+    description: >-
+      IOLAN SCG18 R, dual AC, with 1 RJ45 RS-232 module. The six part numbers differ by power cord. In
+      the page's order and labels they are 04032834 USA, 04032831 UK, 04032832 EU, 04032835 South Africa,
+      04032836 Australia, 04032838 none.
+references:
+- title: >-
+    IOLAN SCG Hardware Installation Guide, Expandable Models, 5500427-10 (Perle Systems, Sept 2021)
+- title: >-
+    IOLAN SCG Hardware Installation Guide, fixed models, 5500438-10 (Perle Systems, Sept 2021)
+- {title: IOLAN SCG R/U console server product page (Perle Systems)}

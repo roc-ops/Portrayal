@@ -826,6 +826,44 @@ millimetres, `bendLookup(types)` gives a cable's installed radius from its
 cable names in its own `type` (never its media's), and `loadCableTypes(dist)` fetches the file and
 refuses any `format` but 1.
 
+## The DIN rail profiles file
+
+`din-rails.json` names the DIN rail profiles, each figure with the document and
+the page it is read from. `din_rails_index.py` writes it from
+`spec/schemas/din-rails.yaml` and refuses a table that fails its checks, so the
+build stops. It is new at `contract: 2` and did not raise it. It states one
+profile, `ts35x7.5`; the others are added as minors once every figure of one has
+a page behind it.
+
+```json
+{"format": 1, "version": "1.0.0", "generated-from": "spec/schemas/din-rails.yaml",
+ "sources": {"automationdirect": {"title": "...", "url": "https://...", "pages": 6}},
+ "profiles": {"ts35x7.5": {"id": "ts35x7.5", "label": "TS 35 x 7.5, symmetrical top hat",
+   "section": {"width": {"mm": 35.0, "sources": [{"id": "automationdirect", "page": 1}]}},
+   "slot": {"pitch": {"mm": 25.0, "sources": [{"id": "itc", "page": 2}]}}}}}
+```
+
+`format` is 1 and versions the shape: a removed or renamed key raises it, a new
+key does not. `version` versions the table's contents: a corrected figure or a
+new profile is a minor, a removed profile or a changed id is a major, and a
+published profile id is addressing from the release that carries it.
+
+Each profile, keyed by its `id`, always carries `label`; `standards`, the names
+the makers give (each with its sources); `section`: `width`, `height`,
+`thickness`, `crown-outer`, `crown-inner` and `flange`, each `{mm, sources}`;
+`slot`: `width`, `length`, `pitch`, `end-to-arc-centre` and `first-centre`;
+`mass-kg-per-m`: `plain` and `slotted`; `stock`: `slotted` and `unslotted`, the
+variants real rails come in; and `finishes`, named and not coloured. Every
+`sources` entry is `{id, page}`: a key of `sources` and a page of that PDF, and
+the build refuses an id the table does not name or a page the document does not
+have. A figure the makers' drawings do not agree on is not stated.
+`first-centre` is a derived figure (`basis: derived`), half the pitch, and says
+so. `din_rails_index.slot_centres(profile, length)` is the slot rule: centres
+from `first-centre`, one `pitch` each, a slot present only if the whole of it
+lies inside the length. It is sourced for a length that is a multiple of the
+pitch, and the table's header says the rest is proposed. Nothing reads the
+file yet: no device, lab or lint rule names a profile.
+
 ## The lint rules file
 
 `lint-rules.json` is the linter's rule table, for a page that lists the rules.
@@ -1243,8 +1281,8 @@ this is the situation `halves` is in. Files written without it are read as
 before. A consumer that validates a manifest with a copy of the schema updates
 the copy before it reads a device that states a section.
 
-**Not in this change.** The open state of a housing with a section is a later
-change. Until it lands a device cannot state `section` together with `halves`.
+**Opening.** A housing with a section may state `halves`; see "A housing with a
+stepped end that opens" below.
 
 ## Ribs on a stepped housing
 
@@ -1295,8 +1333,51 @@ is the situation `section` and `halves` are in. A consumer that validates a
 manifest with a copy of the schema updates the copy before it reads a device that
 states ribs.
 
-**Not in this change.** The open state of a housing with ribs, and relief taken
-from a rib, are later changes. A device with `fins` cannot yet state `halves`.
+**Not in this change.** Relief taken from a rib is a later change. A housing with
+ribs may state `halves`; see "A housing with a stepped end that opens" below.
+
+## A housing with a stepped end that opens
+
+A housing that states a `chassis.section` may also state `chassis.halves`. No key
+is added and no file changes, so `format` stays 1 and `contract` stays 2; what
+changes is which statements are allowed and what they mean. A device that states
+no `section` is read as before: every rule for its halves, and its open state of
+two plain boxes, are unchanged.
+
+**Stating `halves` with `section` is a one-way change.** Once a device on the main
+branch states both, these cannot be taken back or reinterpreted without a break:
+
+- the combination itself, which the earlier rule refused;
+- `base.outer` is `top` or `bottom`, so the seam is parallel to the length the
+  section is extruded along and each half is a cut of the section (L217);
+- `lid.hinge` is `front` or `rear`, the long face the seam meets (L217);
+- the seam is the plane `base.stands` from the base's `outer` face: `stands`
+  stays the one authority, and the lid's `stands` is still stated and still
+  checked against the height as before (L203);
+- the lid turns about the line where the seam plane meets the hinge face's
+  outline: parallel to the length, at the seam, at the section's foremost
+  (`front`) or rearmost (`rear`) edge in that row, which in a flange is the
+  flange's edge;
+- the open state is cut from the section: each half is the stepped body on its
+  side of the seam, with its ribs.
+
+A seam that lies outside the section, exactly on a horizontal edge of it, or in a
+stretch the ribs have cut away is refused (L219). A seam where the section is not
+at its widest is a warning (L218), because a flange is expected there.
+
+**What the lock asks for.** Nothing new. The lock records and hashes the halves
+exactly as before, so the hash of `halves.stands` is unchanged, and stating
+`halves` on a released housing with a section is a minor like stating them on any
+other device. A change to `section` that moves the widest line relative to
+`base.stands`, or any other change to it, is already a major by the shape class
+`section` is in. Changing `outer` or `hinge` is a major as before.
+
+**In `<device>.configs.json`** nothing is added: `chassis.section`, `chassis.fins`
+and `chassis.halves` are carried as written, and a viewer cuts the body from them.
+
+**An older viewer** that does not know the combination builds the housing as a
+plain box, without its section, and opens it as two plain boxes. A validator holding
+the schema from before refuses nothing new, because the keys already existed.
 
 ## What else a consumer holds
 
@@ -1315,7 +1396,9 @@ exists) from a dead one (it says nothing, and fails). The whole mechanism is
 required before 1.0: the marker, a stated support window, and the L89
 distinction; the marker and the distinction are in place, and the window, at
 least one release, is not yet a number of releases or a date.
-DESIGN §9 has the reasoning.
+DESIGN §9 has the reasoning, and
+[`component-retirement-design.md`](component-retirement-design.md) lays out what
+is left to decide.
 
 **A removed ref that a saved rack names** (#1049). A rack file names parts by
 ref, and removing a major leaves its refs dangling there. The replacement can

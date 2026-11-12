@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: fhd-fapm6-rj45-rear
-version: 1.0.0
+version: 1.1.0
 class: adapter-panel
 description: >-
   The back of the FAPM6 loaded with six Cat6 RJ45 keystone jacks
@@ -14,13 +14,22 @@ size-notes: >-
   footprint), seen from behind. NO DEPTH IS DECLARED: a face is a drawing of a
   back, and the depth belongs to the panel, as `body.depth`.
 attrs: {media: idc}
+groups:
+  terminations:
+    term: Termination
+    role: traffic
+    index-origin: 1
+    attrs: {media: idc}
+    description: >-
+      the 6 punch-down (IDC) terminations on the rear face, one behind each front jack, numbered
+      as the jacks are
 parts:
-  - {id: b1, ref: common/idc-termination@1, at: [62.04, 18.595]}
-  - {id: b2, ref: common/idc-termination@1, at: [62.04, 1.695]}
-  - {id: b3, ref: common/idc-termination@1, at: [35.95, 18.595]}
-  - {id: b4, ref: common/idc-termination@1, at: [35.95, 1.695]}
-  - {id: b5, ref: common/idc-termination@1, at: [9.86, 18.595]}
-  - {id: b6, ref: common/idc-termination@1, at: [9.86, 1.695]}
+  - {id: b1, group: terminations, ref: common/idc-termination@1, at: [62.04, 18.595]}
+  - {id: b2, group: terminations, ref: common/idc-termination@1, at: [62.04, 1.695]}
+  - {id: b3, group: terminations, ref: common/idc-termination@1, at: [35.95, 18.595]}
+  - {id: b4, group: terminations, ref: common/idc-termination@1, at: [35.95, 1.695]}
+  - {id: b5, group: terminations, ref: common/idc-termination@1, at: [9.86, 18.595]}
+  - {id: b6, group: terminations, ref: common/idc-termination@1, at: [9.86, 1.695]}
 provenance:
   size: >-
     drawing - see size-notes.
@@ -38,4 +47,14 @@ provenance:
   face-detail-gap: >-
     FS shows no render of the loaded panel's back; the steel behind the jacks
     is painted as one dark field.
+  groups: >-
+    FS FHD-FAPM6 Multimedia Modular Panel Datasheet, page 2 (section I: "Number of Port 6"; copper
+    insert style, inline coupler or keystone jack) and page 5 (Keystone Jacks, Cat6 RJ45
+    unshielded, #72818, the jack behind which each termination sits); FS Cat6 Punchdown Keystone
+    Jack Datasheet, page 1 (the module terminates 4-pair, 23-26 AWG twisted pair cable). The panel
+    has six openings and each jack has one termination, `bN` behind `pN`, numbered as the front
+    jacks are. Neither datasheet prints a data rate, and neither names a role for the
+    terminations; the role follows the job, the cable end of the through connection the front
+    jacks present, so it is traffic, and no speed is stated. The group's media is the
+    terminations' own, idc.
 skins: [default]

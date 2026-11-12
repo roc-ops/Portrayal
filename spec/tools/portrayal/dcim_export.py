@@ -590,6 +590,9 @@ def rj45_timing_label(part):
 PART_POWER = {
     "std/c14-inlet": "iec-60320-c14",
     "std/c20-inlet": "iec-60320-c20",
+    # THE PRO1 -48VDC PDU'S INPUT BLOCK: three stud pairs a two-hole lug lands across (+RTN, GND, -48VDC), the same
+    # `dc-terminal` row as the other DC stud blocks below. Each block is one DC feed, so a device with two exports two.
+    "servertech/pro1-dc-input-block": "dc-terminal",
     # NOT AN IEC CONNECTOR, AND UPSTREAM HAS A ROW FOR IT ANYWAY. Anderson's
     # Saf-D-Grid takes 20 A at 600 V through the space an IEC C14 uses for 10 A
     # at 250, which is why Cisco's 1600 W ASR 9901 supply takes one and why
@@ -748,11 +751,22 @@ PART_POWER = {
     # against a target's source file here.
     "cyberpower/pdu-cord-l6-30p": "nema-l6-30p",
     "cyberpower/pdu-cord-5-15p": "nema-5-15p",
+    # The StarTech.com 8NS8-RACK-MOUNT-PDU's 8 ft cord and the RKPW081915's 6 ft cord end in a NEMA 5-15P: the same slug.
+    "startech/pdu-cord-5-15p": "nema-5-15p",
+    # The Vertiv Geist VP9562's fixed 10 ft cord ends in a NEMA 5-15P: the same slug as the two cords above.
+    "vertiv/rpdu-cord-5-15p": "nema-5-15p",
+    # The APC AP7900B's fixed 11.98 ft cord ends in a NEMA 5-15P: `nema-5-15p`, as the two cords above.
+    "apc/pdu-cord-5-15p": "nema-5-15p",
     # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
     "eaton/g3-cord-l5-20p": "nema-l5-20p",
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
     # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
     "eaton/tripplite-cord-l5-30p": "other",
+    # THE ePDU G3 METERED INPUT EMIT03-10's FIXED 10 ft CORD ENDS IN A NEMA L5-30P: `other`, as the cord above, for the
+    # same reason; the EMIT04-10's ends in a NEMA L6-30P, `nema-l6-30p`, as the CyberPower cord above (TYPE_NEMA_L630P;
+    # not checked against a target's source file here).
+    "eaton/g3-cord-l5-30p": "other",
+    "eaton/g3-cord-l6-30p": "nema-l6-30p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -766,6 +780,11 @@ PART_POWER = {
     "generic/nema-l5-20p-plug": "nema-l5-20p",
     "generic/nema-5-20p-plug": "nema-5-20p",
     "generic/cs8365c-plug": "cs8365c",
+    # THE NEMA 6-15P AND 6-20P PLUG FACES. `nema-6-15p` and `nema-6-20p` are NetBox power-port type slugs
+    # that have not been checked against a target's source file, so each is `other` and POWER_LABEL
+    # (dcim_registers.py) names the plug; the slug replaces `other` once it is read from the source.
+    "generic/nema-6-15p-plug": "other",
+    "generic/nema-6-20p-plug": "other",
     # A GPU CARD'S AUXILIARY POWER INLET (P-0028, docs/connectors-gpu-design.md).
     # Neither target has a type for these: PowerPortTypeChoices in
     # netbox-community/netbox (netbox/dcim/choices.py at main, 2026-10-14) holds
@@ -781,6 +800,9 @@ PART_POWER = {
     # type for it has been read from a held source, so it is `other` and POWER_LABEL
     # says which connector.
     "rittal/pdu-cord-cee-16a": "other",
+    # THE SINGLE-PHASE DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) 1P plug (the
+    # DK 7979.110 circuit diagram, "CEE 16 A/1P"); `other`, as the three-phase cord is.
+    "rittal/pdu-cord-cee-16a-1p": "other",
     # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
@@ -800,6 +822,9 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # A RARITAN PX2-2475'S CORD ends in a NEMA L5-20P (the technical specification): `nema-l5-20p`, the value the Tripp Lite and
+    # ePDU G3 cords above export, a PowerPortTypeChoices value in both targets.
+    "raritan/px2-cord-l5-20p": "nema-l5-20p",
     # A PANDUIT PDU'S FIXED CORD ends in an IEC 60309 plug: the G5 intelligent unit's in a 2P+E 6h 32 A plug and the
     # basic unit's in a 3P+E 9h 60 A plug. No power-port type of the two targets is held for either in this tree, so
     # each is `other`, and POWER_LABEL says which connector.
@@ -1467,6 +1492,11 @@ def device_console_row(p, a):
         return {"name": "AUX", "type": "rj-45"}
     if role == "console" and ref.startswith("std/usb-c"):
         return {"name": "Console (USB-C)", "type": "usb-c"}
+    # A D-SUB CONSOLE PLACED AS THE REGISTRY'S OWN DB9, std/db9: the PX2-2475's CONSOLE / MODEM jack. `de-9` is the type
+    # `route_part` writes for a card's. The placement has to SAY console, as for the USB jacks above. A db9-receptacle
+    # placement is not read here: that part's register entry, NOT_A_DCIM_PORT, is for the alarm and craft ports on it.
+    if role == "console" and ref.split("@")[0] == "std/db9":
+        return {"name": "Console", "type": "de-9"}
     # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
     # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
     if role == "console" and ref.startswith("std/usb-a"):
@@ -3116,6 +3146,53 @@ def _rack_facts(doc):
         lines.append(f"{label} {doc[key]:g} mm"
                      + (" (a stand-in, not confirmed against the standard or a maker's sheet)"
                         if stand_in else ""))
+    return lines + _cabinet_facts(doc)
+
+
+def _door_line(door):
+    n = door.get("leaves")
+    bits = [f"{door['face']} door: {n} {'leaf' if n == 1 else 'leaves'}, {door['kind']}"]
+    if door.get("open-area") is not None:
+        bits.append(f"{door['open-area']:g}% open")
+    if door.get("hinge"):
+        bits.append(f"hinged {door['hinge']}")
+    if door.get("swing") is not None:
+        bits.append(f"opens {door['swing']:g} degrees")
+    if door.get("clearance") is not None:
+        bits.append(f"wiring clearance {door['clearance']:g} mm")
+    return ", ".join(bits)
+
+
+def _cabinet_facts(doc):
+    """What a cabinet has that neither DCIM has a field for: its doors, panels, roof,
+    base and zero-U channels, one line each."""
+    lines = []
+    enc = doc.get("enclosure") or {}
+    lines += [_door_line(d) for d in enc.get("doors") or []]
+    panels = enc.get("panels")
+    if panels:
+        lines.append(f"side panels: {panels['per-side']} per side"
+                     + (", split top and bottom" if panels.get("split") == "top-bottom" else "")
+                     + (", removable" if panels.get("removable") else "")
+                     + (", locked with a key" if panels.get("lock") == "key" else ""))
+    if (enc.get("roof") or {}).get("removable"):
+        lines.append("roof: removable")
+    base = doc.get("base") or {}
+    parts = [f"{base[k]} {label}" for k, label in (("casters", "casters"), ("levellers", "levelling feet"))
+             if base.get(k) is not None]
+    if parts:
+        lines.append("base: " + ", ".join(parts))
+    channels = doc.get("channels") or []
+    if channels:
+        lines.append("zero-U channels: " + ", ".join(c["id"] for c in channels))
+        stand_in = ((doc.get("provenance") or {}).get("channels") or {}).get("confidence") == "estimated"
+        for c in channels:
+            s = c.get("slots")
+            if s and s.get("pitch") is not None:
+                lines.append(f"channel {c['id']}: {s['interface']} slots, {s['count']} from "
+                             f"{s['first']:g} mm, every {s['pitch']:g} mm"
+                             + (" (positions are a stand-in, not read from a dimension)"
+                                if stand_in else ""))
     return lines
 
 
@@ -3173,22 +3250,70 @@ def rack_type(doc, target):
     return out
 
 
+def apply_rack_listing(out, doc, listing, target):
+    """File a rack type again, under the reseller that lists the product.
+
+    A rack product is modelled once under its maker, and the reseller's type is the same
+    cabinet under the reseller's name: its `model` (else the maker's), the type's slug or
+    name from them, and the listing's head lines ahead of the facts the maker's type has.
+    """
+    display = listing.get("manufacturer") or listing.get("ns")
+    model = str(listing.get("model") or doc["model"])
+    if target == "netbox":
+        out["manufacturer"], out["model"] = display, model
+        out["slug"] = slugify(f"{display}-{model}")
+    else:
+        out["name"] = f"{display} {model}"
+    head = listing_head(listing, display, doc["manufacturer"], doc["model"])
+    out["comments"] = "\n".join(head) + ("\n\n" + out["comments"] if out.get("comments") else "")
+    return out, display, model
+
+
+def _rack_listings(dist):
+    """{`<vendor>/<name>` of a rack: [listing, ...]} from a build's listings.json, in key order."""
+    f = Path(dist) / "listings.json"
+    found = json.loads(f.read_text()).get("listings") or {} if f.exists() else {}
+    out = {}
+    for key, listing in sorted(found.items()):
+        out.setdefault(listing.get("hardware"), []).append((key, listing))
+    return out
+
+
+def _write_rack_type(root, target, manufacturer, model, doc):
+    d = Path(root) / target / "rack-types" / manufacturer_dir(manufacturer)
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / (str(model).replace("/", "-") + ".yaml")
+    p.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False, width=100,
+                                     default_flow_style=False))
+    return p
+
+
 def export_racks(dist, out_root):
-    """Write a rack type per rack product of a build, for each target. Returns the files."""
+    """Write a rack type per rack product of a build, for each target, and one more under
+    each reseller that lists it. Returns the files."""
     dist = Path(dist)
     f = dist / "rack-products.json"
     rows = json.loads(f.read_text())["racks"] if f.exists() else []
-    wrote = []
+    listings = _rack_listings(dist)
+    wrote, filed = [], {}
     for row in rows:
         doc = json.loads((dist / row["file"]).read_text())
         for target in TARGETS:
-            d = Path(out_root) / target / "rack-types" / manufacturer_dir(doc["manufacturer"])
-            d.mkdir(parents=True, exist_ok=True)
-            p = d / (str(doc["model"]).replace("/", "-") + ".yaml")
-            p.write_text("---\n" + yaml.dump(rack_type(doc, target), Dumper=Indented,
-                                             sort_keys=False, width=100,
-                                             default_flow_style=False))
-            wrote.append(p)
+            filed[(target, doc["manufacturer"], str(doc["model"]))] = row["ref"]
+    for row in rows:
+        doc = json.loads((dist / row["file"]).read_text())
+        for target in TARGETS:
+            wrote.append(_write_rack_type(out_root, target, doc["manufacturer"], doc["model"],
+                                          rack_type(doc, target)))
+            for lkey, listing in listings.get(f"{row['vendor']}/{row['name']}", []):
+                out, display, model = apply_rack_listing(rack_type(doc, target), doc, listing, target)
+                # two types under one manufacturer with one model would write one file twice
+                # and keep the second: refuse it, as the device export does
+                if (target, display, model) in filed:
+                    raise SystemExit(f"{display}/{model}: the listing {lkey} and {filed[(target, display, model)]} "
+                                     "export the same rack type. Give one a `model` of its own")
+                filed[(target, display, model)] = lkey
+                wrote.append(_write_rack_type(out_root, target, display, model, out))
     return wrote
 
 
@@ -3255,8 +3380,17 @@ def apply_listing(doc, listing, cfg_name, label=None):
     doc["slug"] = slugify(f"{display}-{model}")
     # SAY WHAT METAL THIS IS. The document is the NOS vendor's, and the one fact
     # it cannot state in a field is whose hardware it lists.
+    head = listing_head(listing, display, hw_manufacturer, hw_model,
+                        over.get("aliases") or [])
+    doc["comments"] = "\n".join(head) + ("\n\n" + doc["comments"] if doc.get("comments") else "")
+    return doc
+
+
+def listing_head(listing, display, hw_manufacturer, hw_model, more_aliases=()):
+    """The opening lines of a listed type's comments: whose hardware it is, what the
+    lister also calls it, and where it lists it. One answer for a device and a rack."""
     names = [listing.get("model")] if listing.get("model") else []
-    names += [a["name"] for a in (listing.get("aliases") or []) + (over.get("aliases") or [])
+    names += [a["name"] for a in (listing.get("aliases") or []) + list(more_aliases)
               if isinstance(a, dict) and a.get("name")]
     head = [f"{display} lists {hw_manufacturer} {hw_model}"
             + (f" (NOS: {listing['nos']})" if listing.get("nos") else "") + "."]
@@ -3264,8 +3398,7 @@ def apply_listing(doc, listing, cfg_name, label=None):
         head.append(f"{display} also calls it: " + ", ".join(dict.fromkeys(names)) + ".")
     if listing.get("source"):
         head.append("Listed per: " + " ".join(str(listing["source"]).split()))
-    doc["comments"] = "\n".join(head) + ("\n\n" + doc["comments"] if doc.get("comments") else "")
-    return doc
+    return head
 
 
 # EVERY FILE THIS RUN HAS WRITTEN, and which device and configuration wrote it.

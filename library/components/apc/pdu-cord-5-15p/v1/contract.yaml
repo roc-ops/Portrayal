@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: pdu-cord-5-15p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA 5-15P plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of the APC AP7900B, 11.98 ft (3.65 m) long with a NEMA 5-15P plug. It leaves the left end of the
+  outlet face through a round strain relief. Only the strain relief is drawn, as the data sheet photograph shows it.
+size: {w: 20.0, h: 20.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-5-15p, cord-length-ft: 11.98}
+provenance:
+  size: >-
+    ESTIMATED. The only picture is the near front-on product photograph on page 1 of the AP7900B data sheet (369 px, the
+    445 mm face about 293 px wide, so about 1.5 mm per pixel), where the strain relief reads about 13 px across and the cord
+    falls away to the left, so it is drawn 20.0. needs-drawing: a straight-on photograph of the left end, or a dimensioned
+    drawing.
+  plug: >-
+    datasheet - AP7900B data sheet, page 1: "Input Connection Type NEMA 5-15P", "Number of cables 1" and "Cable length 11.98
+    ft (3.65 m)". The plug style is not stated.
+  not-drawn: >-
+    THE CORD BEYOND THE STRAIN RELIEF AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands for
+    the power input a DCIM records, a NEMA 5-15P power port.
+elements:
+  relief: {at: [0, 0], size: [20.0, 20.0], class: inlet}
+skins: [default]

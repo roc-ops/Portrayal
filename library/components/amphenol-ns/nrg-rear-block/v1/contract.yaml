@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: nrg-rear-block
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: power
 description: >-
@@ -43,15 +43,35 @@ provenance:
     `alarm-b` and `alarm-a`, centred in the box the element drew (that drew
     12.5 and 12.2 wide, the part is the card's 11.0 by 5.5, the better-sourced
     drawing of the same header).
+  groups: >-
+    The 300CB08 installation guide 149722-2 A9 draws the block (p39, Fig. 3-7) and prints the legends ALARM A and
+    ALARM B over the relay terminals of the controller and sensor panels (p34, Fig. 2-30), and the 300CB08 datasheet
+    (p1) gives Form C alarm relay contacts: the two headers are the group `alarms`, in the role the devices that place
+    this block already give it, management. The two nrgNET connectors, a removable 5-pin connector with screw-down
+    terminals (p12 and p34, table 2.9.2), link a panel to the controller or to the next panel; they are the group
+    `nrgnet`, also management. Neither the guide nor the nrgSMART controller datasheet prints a rate for the nrgNET link,
+    and neither prints one for a relay contact, so no group states a speed; the parts state no media, so no group
+    does either. The two temperature jacks are still elements of the skin, not parts, and join no group.
 attrs: {nrgnet-pins: 5, nrgnet-bus: RS485}
+groups:
+  alarms:
+    term: Alarm
+    role: management
+    index-origin: 1
+    description: the two alarm relay headers, side A and side B, each carrying Form C alarm contacts
+  nrgnet:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the nrgNET connectors, IN over OUT, the panel-to-panel link to the controller
 elements:
   temp-1: {at: [23.8, 12.0], size: [10.7, 9.5], class: port}
   temp-2: {at: [23.8, 24.9], size: [10.7, 10.2], class: port}
 parts:
-  - {ref: amphenol-ns/alarm-header@1, id: alarm-b, at: [3.65, 2.35]}
-  - {ref: amphenol-ns/alarm-header@1, id: alarm-a, at: [23.8, 2.35]}
-  - {ref: amphenol-ns/nrgnet-header@1, id: nrgnet-in, at: [1.0, 13.9]}
-  - {ref: amphenol-ns/nrgnet-header@1, id: nrgnet-out, at: [1.0, 27.7]}
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-b, at: [3.65, 2.35], group: alarms}
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-a, at: [23.8, 2.35], group: alarms}
+  - {ref: amphenol-ns/nrgnet-header@1, id: nrgnet-in, at: [1.0, 13.9], group: nrgnet}
+  - {ref: amphenol-ns/nrgnet-header@1, id: nrgnet-out, at: [1.0, 27.7], group: nrgnet}
 relief:
   features:
     - node: temp-1

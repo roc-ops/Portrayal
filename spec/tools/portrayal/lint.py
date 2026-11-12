@@ -268,7 +268,7 @@ RULES = {
     "L55": ("library",    "every vendor namespace is in spec/schemas/vendors.yaml", "add the vendor to the registry with display, role and source",
             "A namespace missing from the registry breaks the link from the name on the metal to the company that owns it now, so a search under the current name finds nothing.",
             MIXED),
-    "L56": ("listing",    "a listing sits under a software or reseller vendor in spec/schemas/vendors.yaml and lists a device that exists - every configuration it overrides, port it names and component it maps is the hardware's, and a reseller's carries no `nos`, `nos-versions` or `interfaces`", "register the vendor with role software (a NOS) or reseller (hardware sold under its own part numbers), point `hardware` at a device's <namespace>/<directory>, and name only configurations and ids that device declares",
+    "L56": ("listing",    "a listing sits under a software or reseller vendor in spec/schemas/vendors.yaml and lists a device or a rack product that exists - every configuration it overrides, port it names and component it maps is the hardware's, a reseller's carries no `nos`, `nos-versions` or `interfaces`, and the listing of a rack product sits under a reseller and overrides no configuration, port or component", "register the vendor with role software (a NOS) or reseller (hardware sold under its own part numbers), point `hardware` at a device's or a rack product's <namespace>/<directory>, and name only configurations and ids that device declares",
             "A listing that names a port, configuration or part the hardware lacks would export interfaces and modules to a DCIM that no box has.",
             ERROR),
     "L57": ("device",     "exactly one configuration is `kind: base`, and each says whether it is orderable", "set `kind` on every configuration",
@@ -679,8 +679,8 @@ RULES = {
     "L192": ("component, device", "in Portrayal's own library a device or component states no `audience`, or states `public` (error); a project that keeps private entries beside the public library runs lint with `--allow-audience`", "delete the `audience` line, or set it to `public`; move a private entry to the library that holds private entries",
              "The public library is published to everyone, so a part labelled for one customer or kept internal there is either a leak or a label that means nothing; the check stops the label from reaching the published library.",
              ERROR),
-    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
-             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth; a stand-in that is not declared reads as a printed figure.",
+    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, an `enclosure` is stated only on a cabinet form with each door face and each channel `id` once and a `hinge` on a `reversible` door, a channel stands at an attachment point its form has and its slots present an interface the connector registry names, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; state an enclosure only on a cabinet; give each door face and each channel one entry; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
+             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth and names its channels by id; a stand-in that is not declared reads as a printed figure.",
              ERROR),
     "L194": ("component", "a bay that states an `interface` does not also list, in `accepts`, a part that mates it and is wide enough for the bay", "delete the entry from `accepts`: the bay takes it through its `interface` already; keep in `accepts` only the parts that do not mate it, such as a vendor blank",
              "A list kept beside the interface it was written for goes on asserting what the interface already says, and the next card added to the library is then named by hand in one riser and by its interface in the others.",
@@ -724,9 +724,9 @@ RULES = {
              "bring the points inside the box or out to its sides, make the top and the bottom one run each, and drop a `size` on a left or right view that differs from the depth and height",
              "The box is what the rack, the exports and the lock read, so a profile that does not reach its sides, or notches its top, is a body that is not the size the device states, and an end face drawn at another size puts the outline where the parts are not.",
              ERROR),
-    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or `halves` (error)",
-             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body, a sheet body and a box that opens each have a way of being drawn that a stepped end does not yet join",
-             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first, and a box that opens has no stated way to cut a stepped housing at its seam.",
+    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (error)",
+             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body and a sheet body each have a way of being drawn that a stepped end does not yet join",
+             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first.",
              ERROR),
     "L207": ("device", "on a device with a `chassis.section`, a part on the left or right face lies wholly inside that face's outline, and a part on the top or bottom face does not straddle a step of the body (error)",
              "move the part onto the casting it belongs to, away from the transparent corner or the edge of a step; the left face is the right face's mirror",
@@ -767,6 +767,18 @@ RULES = {
     "L216": ("device", "on a device with `chassis.fins`, a part on the front or the rear face lies inside the silhouette and not over a field of ribs: not above a step's tip line and not between the edge and the core (error)",
              "move the part down onto the casting, below the core line and clear of the ribs",
              "A rib is not a mounting surface, and above the tip line or in the end margin the casting has been cut back to its core, so a part there floats in the air in front of the ribs.",
+             ERROR),
+    "L217": ("device", "on a device with a `chassis.section` and `chassis.halves`, the base's `outer` is `top` or `bottom` and the lid's `hinge` is `front` or `rear` (error)",
+             "put the base on the top or the bottom of the housing and the hinge on one of its long faces; a housing that opens along another face is a later change",
+             "The housing is an extrusion along its width, so only a seam parallel to that axis cuts it into two parts that are each a cut of the same end profile, and only a hinge on a long face is a line parallel to the extrusion for the lid to turn about.",
+             ERROR),
+    "L218": ("device", "on a device with a `chassis.section` and `chassis.halves`, the section is at its widest at the seam, the plane `base.stands` from the base's `outer` face (warning)",
+             "move the seam into the flange, or correct `base.stands` or the section against the drawing; say in `provenance` why the housing opens elsewhere",
+             "A cast housing opens at a flange that is its widest part, so a seam where the profile is narrower either has a wrong `stands` or a section that leaves the flange out, and the open state would turn a lid whose rim is not where the maker's is.",
+             WARNING),
+    "L219": ("device", "on a device with a `chassis.section` and `chassis.halves`, the seam cuts the section into two parts that each have outline: it is inside the section's height, not exactly on a horizontal edge of it, and not in a stretch the fins cut back to their core where the section is no wider than the field (error)",
+             "move the seam off the edge with `base.stands`, into the casting it divides, and keep it inside the section's height and below the ribs' core",
+             "A seam outside the section, or where the ribs' field has cut the casting away, leaves one half empty, and one exactly on a horizontal edge does not say which half the edge belongs to, so the two parts a viewer builds would depend on how it rounds.",
              ERROR),
 }
 
@@ -8154,6 +8166,43 @@ def _listing_targets(rules, field):
 
 
 FOUR_POST_FORMS = {"4-post-frame", "4-post-cabinet"}
+CABINET_FORMS = {"4-post-cabinet", "wall-cabinet", "wall-cabinet-vertical"}
+# the zero-U attachment points of a form: the corners of a four-post, the sides of the rest
+FOUR_POST_POINTS = ("left-front", "right-front", "left-rear", "right-rear")
+TWO_POST_POINTS = ("left", "right")
+
+
+def lint_rack_cabinet(path, data):
+    """L193, the cabinet keys: an enclosure belongs to a cabinet, a door face and a channel
+    are stated once, a channel stands at a point its form has, and its slots present a
+    mount the connector registry names."""
+    form = data.get("form")
+    enc = data.get("enclosure")
+    if enc and form not in CABINET_FORMS:
+        err(path, "L193", f"form {form!r} is not a cabinet and has no `enclosure`: a frame has no "
+            "doors, panels or roof to state")
+    faces = [d.get("face") for d in (enc or {}).get("doors") or [] if isinstance(d, dict)]
+    for face in sorted({f for f in faces if faces.count(f) > 1}):
+        err(path, "L193", f"the {face} door is stated twice: one entry for each face")
+    for d in (enc or {}).get("doors") or []:
+        if isinstance(d, dict) and d.get("reversible") and not d.get("hinge"):
+            err(path, "L193", f"the {d.get('face')} door is `reversible` and states no `hinge`: say "
+                "which side it ships on")
+    points = FOUR_POST_POINTS if form in FOUR_POST_FORMS else TWO_POST_POINTS
+    ids = [c.get("id") for c in data.get("channels") or [] if isinstance(c, dict)]
+    for cid in sorted({i for i in ids if ids.count(i) > 1}):
+        err(path, "L193", f"the channel {cid!r} is stated twice: a saved rack names a channel by its id")
+    interfaces = _connectors()
+    for c in data.get("channels") or []:
+        if not isinstance(c, dict):
+            continue
+        if c.get("point") not in points:
+            err(path, "L193", f"channel {c.get('id')!r} stands at the point {c.get('point')!r}, and "
+                f"form {form!r} has {', '.join(points)}")
+        iface = (c.get("slots") or {}).get("interface")
+        if iface and interfaces and iface not in interfaces:
+            err(path, "L193", f"channel {c.get('id')!r}: the slot interface {iface!r} is not in the "
+                "connector registry")
 
 
 def lint_rack(path, data, roots):
@@ -8190,6 +8239,7 @@ def lint_rack(path, data, roots):
         f = depth.get("factory")
         if f is not None and lo is not None and hi is not None and not lo <= f <= hi:
             err(path, "L193", f"the factory depth {f} mm is outside the range {lo} to {hi}")
+    lint_rack_cabinet(path, data)
     gaps = {g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
     for key, prov in (data.get("provenance") or {}).items():
         if str(key).split(".")[0] not in data:
@@ -8248,9 +8298,15 @@ def lint_listing(path, data, roots):
                 if (Path(r) / "devices" / hw / "device.yaml").exists()), None)
     dev = load_yaml(man) if man else None
     if not isinstance(dev, dict) or dev.get("kind") != "device":
-        err(path, "L56", f"hardware {hw!r} is not a device in the library. A listing "
-            "points at the device it lists as <namespace>/<directory>, e.g. "
-            "`ufispace/s9510-28dc` - model the hardware first; a listing draws nothing")
+        rack = next((Path(r) / "racks" / hw / "rack.yaml" for r in roots
+                     if (Path(r) / "racks" / hw / "rack.yaml").exists()), None)
+        if rack is not None:
+            lint_rack_listing(path, data, hw, roles)
+            return
+        err(path, "L56", f"hardware {hw!r} is not a device or a rack product in the library. A "
+            "listing points at what it lists as <namespace>/<directory>, e.g. "
+            "`ufispace/s9510-28dc` or a cabinet such as `apc/ar3100b2` - model the "
+            "hardware first; a listing draws nothing")
         return
     cfgs = set((dev.get("configurations") or {}).keys())
     for c in (data.get("configurations") or {}):
@@ -8277,6 +8333,24 @@ def lint_listing(path, data, roots):
                 "place. A component the NOS reports has to land on something drawn - map "
                 "it to `chassis`, a `region:`, or the id the hardware uses")
             break
+
+
+def lint_rack_listing(path, data, hw, roles):
+    """L56, for a listing whose hardware is a rack product (a cabinet a reseller sells).
+
+    Only a reseller lists a rack: a NOS runs on a box, and a cabinet has none. The
+    listing renames the product (`model`, `aliases`) and says where the seller lists
+    it; a rack product has no configurations, interfaces or components for it to
+    override, so the keys that override them are refused rather than ignored.
+    """
+    if "reseller" not in roles:
+        err(path, "L56", f"hardware {hw!r} is a rack product, and only a reseller lists a rack. "
+            "Register the vendor with role reseller, or list the rack under the vendor that sells it")
+    for key in ("configurations", "type-name", "entity-map", "terms", "dumps"):
+        if data.get(key):
+            err(path, "L56", f"`{key}` is stated on a listing of the rack product {hw!r}: a rack "
+                "product has no configurations, ports or components to override, so a listing "
+                "of one says only `model`, `aliases`, `portfolio` and `source`")
 
 
 def lint_breakout_modes(path, data):
@@ -9036,7 +9110,7 @@ def lint_device_section(path, data, lib_roots):
     if mount in ("rack", "rack-face", "rack-side"):
         err(path, "L206", f"`chassis.section` is stated on a {mount!r} device: a housing with a "
                           "stepped end is not racked")
-    for key in ("bevel", "rounded", "ears", "overhang", "kits", "halves"):
+    for key in ("bevel", "rounded", "ears", "overhang", "kits"):
         if ch.get(key):
             err(path, "L206", f"`chassis.section` is stated with `chassis.{key}`, which this "
                               "version does not join to a stepped end")
@@ -9072,6 +9146,71 @@ def lint_device_section(path, data, lib_roots):
             elif outline is None and _section.straddles_step(pts, face, d, y0, y1):
                 err(path, "L207", f"{vname}/{pid}: rows {y0:.2f} to {y1:.2f} run over a step of "
                                   "the body: a part sits on one level of the casting")
+
+
+# THE CODES OF THE RULES FOR A STEPPED HOUSING THAT OPENS BY WHAT THEY JUDGE, for the
+# test that reads them. The calls below spell each code out, because the severity guard
+# reads literals; test_section_opens.py holds the two in step.
+SECTION_OPENS_CODES = {"faces": "L217", "widest": "L218", "seam": "L219"}
+
+
+def lint_device_section_opens(path, data):
+    """L217-L219: a housing that states a `chassis.section` and `chassis.halves` opens
+    along its extrusion (docs/modelling-a-device.md, "A housing with a stepped end").
+
+    The seam is the plane `base.stands` from the base's `outer` face; each half is the
+    part of the stepped body on its side of it. A device without a `section` keeps the
+    halves rules (L200-L203) exactly: nothing here reads it."""
+    from portrayal import halves as _halves
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    declared = _halves.declared(data)
+    if "section" not in ch or not declared:
+        return
+    base, lid = declared.get("base"), declared.get("lid")
+    base = base if isinstance(base, dict) else {}
+    lid = lid if isinstance(lid, dict) else {}
+    outer, hinge = base.get("outer"), lid.get("hinge")
+    ok = True
+    if outer in _halves.FACES and outer not in ("top", "bottom"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.base.outer` is {outer!r}: a housing with a section opens "
+                          "along its extrusion, so the base's outer face is `top` or `bottom`")
+    if hinge in _halves.FACES and hinge not in ("front", "rear"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.lid.hinge` is {hinge!r}: a housing with a section is hinged "
+                          "on a long face, `front` or `rear`")
+    pts = _section.points(ch)
+    height = ch.get("height")
+    if (not ok or pts is None or _section.polygon_problems(pts)
+            or isinstance(height, bool) or not isinstance(height, (int, float))):
+        return                  # the rest reads a seam and a polygon that are one
+    row = _section.seam_row(declared, height)
+    if row is None:
+        return
+    problems = _section.seam_problems(pts, row)
+    at = _section.width_at(pts, row)
+    # an inside field cuts the casting back to its core over its edge's extent: a seam in that
+    # stretch, where the section is no wider than the edge, divides a body that is not there
+    for f in ch.get("fins") or []:
+        if not isinstance(f, dict) or f.get("outside") or at is None:
+            continue
+        core, on = f.get("core"), f.get("on")
+        if on not in ("top", "bottom") or isinstance(core, bool) or not isinstance(core, (int, float)):
+            continue
+        ext = _section.edge_extent(pts, on, height)
+        in_zone = row < core if on == "top" else row > height - core
+        if ext and in_zone and at[0] >= ext[0] - _section.TOL and at[1] <= ext[1] + _section.TOL:
+            problems.append(f"the seam is {row:g} mm down the section, in the stretch the ribs on the "
+                            f"{on} cut back to their core ({core:g} mm), where the body has nothing: "
+                            "one half would be empty")
+    for m in problems:
+        err(path, "L219", f"`chassis.halves`: {m}")
+    if problems:
+        return
+    if at is not None and _section.widest(pts) - (at[1] - at[0]) > _section.TOL:
+        warn(path, "L218", f"the section is {at[1] - at[0]:g} mm across at the seam, {row:g} mm down, "
+                           f"and {_section.widest(pts):g} mm at its widest: a flange is expected at the seam")
 
 
 # THE CODES OF THE FIN RULES BY WHAT THEY JUDGE, for the test that reads them. The calls
@@ -15270,6 +15409,7 @@ def main():
                 lint_device_poe_pd(f, d)
                 lint_device_halves(f, d)
                 lint_device_section(f, d, args.library)
+                lint_device_section_opens(f, d)
                 lint_device_fins(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)

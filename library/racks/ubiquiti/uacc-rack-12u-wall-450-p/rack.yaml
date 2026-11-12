@@ -1,0 +1,149 @@
+format: 1
+kind: rack
+name: uacc-rack-12u-wall-450-p
+version: 1.0.0
+maturity: modelled
+manufacturer: Ubiquiti
+model: UACC-Rack-12U-Wall-450-P
+part-numbers:
+  UACC-Rack-12U-Wall-450-P: 12U Rack Cabinet, perforated door
+description: >-
+  The Ubiquiti 12U wall-mount rack cabinet with a perforated front door, 450 mm
+  deep, in white powder-coated SPCC steel. The door swings out to the left and
+  is reversible. It has two solid, removable, lockable side panels, a door lock,
+  four side panel locks and two keys, two pre-installed 120 x 120 x 38 mm AC
+  fans, and grounding lugs. The cable openings are 350 x 100 mm in the rear wall
+  and 336.5 x 52.5 mm in the top and in the bottom. The mounting depth of the
+  square-holed posts is 283 mm as shipped and adjusts to 305 mm in a 22 mm
+  pitch. The door, the panels, the fans and the cable openings are described
+  here and are not data yet: the rack product has no key for an enclosure.
+form: wall-cabinet
+ru: 12
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+max-device-depth: 325
+outer:
+  w: 550
+  h: 635
+  d: 450
+weight-kg: 17.8
+load:
+  static-kg: 50
+datasheet:
+  title: UACC-Rack-12U-Wall-450-P, 12U Rack Cabinet (UniFi techspecs)
+  url: https://techspecs.ui.com/unifi/accessories/uacc-rack-12u-wall-450-p
+provenance:
+  ru:
+    confidence: datasheet
+    note: The techspecs page prints "U Height 12U".
+  form:
+    confidence: datasheet
+    note: >-
+      The page prints "Rack Type 4 post, enclosed cabinet" and "Mounting Wall
+      mount". A wall cabinet states the front rail alone; the posts' depth is
+      the `rail-depth` gap.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. The page says nothing about unit numbering; bottom-up from 1
+      is the default of the rack file.
+  width:
+    confidence: estimated
+    note: >-
+      A stand-in. The page prints the standard EIA/ECA-310-E and no rail width,
+      so the 19 in of that standard is written.
+  holes:
+    confidence: datasheet
+    note: The page prints "Mounting Hole Type Square". It prints no hole size and no fixing.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312
+      in). The page prints no hole spacing.
+  opening:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 minimum clear opening between the rails, 450.85
+      mm (17.75 in). The page prints no figure for it.
+  rails:
+    confidence: datasheet
+    note: The posts' front rail is the only one stated; see the `rail-depth` gap.
+  max-device-depth:
+    confidence: datasheet
+    note: >-
+      The page prints "Compatible with Ubiquiti rack-mount devices up to 325 mm
+      in depth", and a note that a 325 mm device fits at the 305 mm maximum
+      mounting depth and then leaves no room for DC power backup. The 325 mm is
+      the depth of a device, written as the usable depth; the posts' own
+      mounting depth is 283 mm default, 305 mm maximum.
+  outer:
+    confidence: datasheet
+    note: >-
+      The page prints "Rack: 550 x 450 x 635 mm (21.7 x 17.7 x 25")" and labels
+      no axes. 635 mm is 25 in, the height of 12U, and 450 mm is the shallow
+      depth the product is named for, so the order is read as width, depth and
+      height and written w 550, h 635, d 450.
+  weight-kg:
+    confidence: datasheet
+    note: 'The page prints "Weight Rack: 17.8 kg (39.2 lb)". The packed weight is 22 kg.'
+  load:
+    confidence: datasheet
+    note: >-
+      The page prints "Max. Weight Capacity 50 kg (110 lb)" and does not say
+      whether it includes the cabinet. A wall cabinet carries no rolling load,
+      and the figure is written as the static load.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: The page does not say whether the units are numbered, or which way.
+    wanted: A photograph of the post showing the unit labels, or the installation guide.
+  - what: width
+    reason: vendor-silent
+    note: The page names the standard and prints no rail width; 19 in is that standard's.
+    wanted: A dimensioned front view of the posts, or the installation guide.
+  - what: hole-centres
+    reason: vendor-silent
+    note: The page prints no spacing between the hole lines.
+    wanted: A dimensioned front view of the posts.
+  - what: opening
+    reason: vendor-silent
+    note: The page prints no clear opening between the posts.
+    wanted: A dimensioned front view, or a measurement between the posts.
+  - what: hole-size
+    reason: vendor-silent
+    note: The page says the holes are square and prints no size or fixing.
+    wanted: A dimensioned drawing of the post, or the installation guide.
+  - what: rail-depth
+    reason: vendor-silent
+    note: >-
+      The posts are 283 mm from the front as shipped and adjust to 305 mm in a
+      22 mm pitch, the page's "Adjustable Mounting Depth". A wall cabinet in the
+      rack product states the front rail alone, so no rear rail range is
+      written, and the page does not say what the lowest position is.
+    wanted: The lowest position of the posts, and a rear rail depth range for a wall cabinet in the rack product.
+  - what: outer-axes
+    reason: needs-drawing
+    note: >-
+      The page prints the three sizes of the rack without naming the axes; the
+      reading is in the `outer` provenance.
+    wanted: A dimensioned drawing with the three sizes marked, or the installation guide.
+  - what: load-basis
+    reason: vendor-silent
+    note: The page does not say whether the 50 kg is the equipment alone or with the cabinet.
+    wanted: The maker's statement of what the weight capacity covers.
+  - what: enclosure
+    reason: needs-drawing
+    note: >-
+      The perforated door (left-hand outswing, reversible), the two solid side
+      panels with their locks, the two pre-installed fans and the three cable
+      openings are in the description only: the rack product has no key for an
+      enclosure.
+    wanted: An enclosure key in the rack product.

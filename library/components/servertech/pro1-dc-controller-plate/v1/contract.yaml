@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: pro1-dc-controller-plate
+version: 1.0.0
+class: nic
+profile: power
+description: >-
+  The controller plate on the rear of a Server Technology PRO1 -48VDC Switched PDU. It carries a link
+  jack (LNK), a serial jack (SER) and an Ethernet jack (NET). It also has two temperature and humidity
+  jacks (TAM2, TAM1). Each jack is printed with its name. The plate has a reset hole.
+size: {w: 134.0, h: 44.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {module: PRO1 controller plate}
+provenance:
+  size: >-
+    estimated - no drawing held shows the rear. A photograph of the sibling model 4811, which has the same
+    layout, shows the plate about 0.31 of the rear face's width and about half its height. Taken against
+    the 432 by 88 body this gives 134 by 44. The photograph looks from one side, so the figures
+    are estimated to within several millimetres. It is not a photograph of this model.
+  jacks: >-
+    datasheet and photo-measured - the data sheet lists RJ-45 Ethernet and RS-232 serial on RJ-45, two
+    4P4C temperature/humidity inputs and an RJ-12 Link port. The photograph of the sibling shows the
+    order LNK, SER, NET, TAM2, TAM1 from the left, with the labels above. Positions are fractions of the
+    plate read off that photograph and are estimated.
+  jack-keys: >-
+    common/rj45-eth@1 for NET and std/rj45@2 for SER, as the RJ45 family rules ask (the serial jack
+    carries media rj45-telemetry, which keeps it out of the Ethernet interfaces). common/rj11-jack@1 for
+    LNK, the six-position jack the registry key rj11 names. The two 4P4C jacks are not drawn as parts:
+    the registry's rj11 note says the four-position jack is another interface, and no key exists for it.
+    They are art in the skin. The device states the gap `sensor-jacks`.
+  colour: >-
+    estimated by eye - the sibling photograph shows a black plate set into a black rear face, the SER and NET
+    jack housings white and the LNK and the two TAM jacks black. The legends are white. No pixel count was
+    taken. No photograph is copied here.
+  power: >-
+    no document held states the controller's own draw, but the data sheet gives "Quiescent / Unloaded
+    Power Draw: < 10W for all configurations" for the whole unit; L27 stands as the record for the plate.
+groups:
+  network: {term: Port, role: management, index-origin: 1, mixed: 'the Ethernet, serial and PDU link jacks of the controller'}
+elements:
+  reset: {at: [4.0, 4.0], size: [2.0, 2.0], class: decor}
+parts:
+  - {ref: common/rj11-jack@1, id: lnk, at: [21.0, 8.0], group: network, attrs: {function: pdu-link}}
+  - {ref: std/rj45@2, id: ser, at: [36.0, 8.0], group: network, attrs: {media: rj45-telemetry, function: serial}}
+  - {ref: common/rj45-eth@1, id: net, at: [55.0, 8.0], group: network, attrs: {media: rj45, speed: 1g}}
+skins: [default]

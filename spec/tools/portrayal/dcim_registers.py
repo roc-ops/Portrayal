@@ -36,11 +36,13 @@ POWER_LABEL = {
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "rittal/pdu-cord-cee-16a-1p": "CEE (IEC 60309) 16 A plug, 1P (L, N, PE)",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "servertech/pro3x-cord-60309": "IEC 60309 3P+G 9h plug on a fixed cord",
     "servertech/pro3x-cord-60309-2pe": "IEC 60309 2P+E 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "eaton/g3-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
@@ -48,6 +50,8 @@ POWER_LABEL = {
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
     "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
     "enlogic/pdu-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
+    "generic/nema-6-15p-plug": "NEMA 6-15P plug",
+    "generic/nema-6-20p-plug": "NEMA 6-20P plug",
 }
 
 PART_OUTLET = {
@@ -256,6 +260,12 @@ NOT_A_DCIM_PORT = {
     "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
                                  "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
                                  "a port type for such a header",
+    "common/st-receptacle": "the ST receptacle of the optical IRIG output of the Oscilloquartz IRIG-B card - "
+                            "a time-code signal on 62/125 um fibre at 820 nm, not an Ethernet or "
+                            "serial port; neither DCIM has a port type for a time-code output",
+    "common/terminal-header-250-3": "the three-position alarm/pulse relay terminal block of the Oscilloquartz "
+                                    "IRIG-B card - dry contacts for an external alarm loop; neither DCIM has "
+                                    "a port type for an alarm contact",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
@@ -294,6 +304,7 @@ NOT_A_DCIM_PORT = {
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
     "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
+    "servertech/pro1-dc-output-block": "the four output circuits (eight screw terminals) of one block of a PRO1 -48VDC PDU, placed as one part; a power outlet is one circuit with its own feed, so one row cannot state four, and each circuit would need its own placement and `fed-by`",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).

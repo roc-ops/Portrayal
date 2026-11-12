@@ -3,8 +3,8 @@
 Device42's spreadsheet import takes a hardware model by name, with a type, a
 size and a manufacturer all optional. The sheet lists each model once, under
 the maker that built it: a NOS vendor's relisting of a box is the same metal
-and is not a second model. The column headers are the issue's own field names,
-declared as stand-ins in the README until the import page is read.
+and is not a second model. The README says which column headers Device42's
+import pages name and which are stand-ins the pages do not settle.
 
 The sheet is not committed: these tests read the committed device types, write
 into a temporary folder and compare structure, never a row count or a version.
@@ -136,14 +136,52 @@ def test_nothing_is_written_unless_the_tool_is_told_where(capsys):
     assert not (ROOT / "library/exports/device42").exists()
 
 
-def test_the_readme_names_every_stand_in_header(written):
+def test_the_readme_names_every_header_as_named_on_the_page_or_as_a_stand_in(written):
     text = (written / "README.md").read_text(encoding="utf-8")
-    for column in D.STAND_INS:
+    assert not set(D.NAMED) & set(D.STAND_INS), "a header is both named and a stand-in"
+    for column in D.NAMED + D.STAND_INS:
         assert f"`{column}`" in text, column
     assert "not confirmed against the import page" in text
     for left_out in ("ports", "images", "cables"):
         assert left_out in text
     assert "`type`" in text, "the README says why no type column is written"
+
+
+def test_the_sheet_columns_are_headers_the_page_names():
+    # the hardware-model sheet writes only parameters the import page names
+    assert set(D.COLUMNS) <= set(D.NAMED)
+    assert "type" in D.NAMED and "type" not in D.COLUMNS
+
+
+def test_the_readme_says_what_the_pages_do_not_settle(written):
+    text = (written / "README.md").read_text(encoding="utf-8")
+    # the sheets are CSV; the pages name .xls and .xlsx and no other format
+    assert ".xlsx" in text and "CSV" in text
+    # the sample files' first three rows are not written
+    assert "API endpoint, request method" in text
+    assert "not written" in text
+
+
+NOTE = ROOT / "docs/device42-export-design.md"
+
+
+def test_the_design_note_rests_on_the_three_pages_it_cites():
+    text = NOTE.read_text(encoding="utf-8")
+    assert "was **not read**" not in text
+    for title in ("Importing Data from Existing Spreadsheets",
+                  "Spreadsheet Imports and Exports",
+                  "Tutorial: Loading Data Using Spreadsheets"):
+        assert title in text, title
+    # what the pages say of the first three rows, the formats and the order
+    for phrase in ("/api/1.0/buildings/", "Save the file as .xls or .xlsx", "Add Vendors"):
+        assert phrase in text, phrase
+
+
+def test_the_design_note_lists_each_header_as_named_or_a_stand_in():
+    text = NOTE.read_text(encoding="utf-8")
+    for column in D.NAMED + D.STAND_INS:
+        assert f"`{column}`" in text, column
+    assert "stand-in" in text
 
 
 def test_a_model_name_shared_by_two_makers_is_counted():
