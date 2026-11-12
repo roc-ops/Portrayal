@@ -817,6 +817,9 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # A RARITAN PX2-2475'S CORD ends in a NEMA L5-20P (the technical specification): `nema-l5-20p`, the value the Tripp Lite and
+    # ePDU G3 cords above export, a PowerPortTypeChoices value in both targets.
+    "raritan/px2-cord-l5-20p": "nema-l5-20p",
     # A PANDUIT PDU'S FIXED CORD ends in an IEC 60309 plug: the G5 intelligent unit's in a 2P+E 6h 32 A plug and the
     # basic unit's in a 3P+E 9h 60 A plug. No power-port type of the two targets is held for either in this tree, so
     # each is `other`, and POWER_LABEL says which connector.
@@ -1484,6 +1487,11 @@ def device_console_row(p, a):
         return {"name": "AUX", "type": "rj-45"}
     if role == "console" and ref.startswith("std/usb-c"):
         return {"name": "Console (USB-C)", "type": "usb-c"}
+    # A D-SUB CONSOLE PLACED AS THE REGISTRY'S OWN DB9, std/db9: the PX2-2475's CONSOLE / MODEM jack. `de-9` is the type
+    # `route_part` writes for a card's. The placement has to SAY console, as for the USB jacks above. A db9-receptacle
+    # placement is not read here: that part's register entry, NOT_A_DCIM_PORT, is for the alarm and craft ports on it.
+    if role == "console" and ref.split("@")[0] == "std/db9":
+        return {"name": "Console", "type": "de-9"}
     # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
     # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
     if role == "console" and ref.startswith("std/usb-a"):
