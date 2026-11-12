@@ -1,0 +1,34 @@
+format: 1
+kind: component
+name: rpdu-cord-5-15p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA 5-15P plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a Vertiv Geist basic horizontal rack PDU with a NEMA 5-15P plug. It leaves the
+  rear face through a grey rounded bushing with a dark rectangular bore and a small tab at its upper right.
+  Drawn as the rear image shows it; the cord and plug beyond it are not.
+size: {w: 27.5, h: 26.4}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {plug: nema-5-15p, cord-length-ft: 10}
+provenance:
+  size: >-
+    photo-measured - the rear image on page 1 of the Vertiv Geist rPDU data sheet SL-26159 (VP9562), 815 px wide,
+    in which the 19 in ear-to-ear width reads 791 px (1.639 px per mm; the 1U height reads 73 px, 44.5 mm, and the
+    ear holes 52 px apart, 31.7 mm, which confirm the scale). The bushing reads 45 px across and 43 px high, 27.5 by
+    26.4 mm, good to about 1 mm.
+  cord: >-
+    datasheet - Vertiv Geist rPDU data sheet SL-26159, page 2: "Power Cable Length 10ft", "Power Cable Wire Gauge
+    14/3", "Plug Type NEMA 5-15P". The bushing's bore is drawn as the rectangle the image shows (11.2 by 8.5 mm,
+    photo-measured); what passes through it is not drawn.
+  plug: >-
+    datasheet - the same sheet, page 1 "Plug Form 5-15P" and page 2 "Plug Type NEMA 5-15P". No held document
+    dimensions the plug, so the plug face is not drawn here.
+  not-drawn: >-
+    THE CORD BEYOND THE BUSHING AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part
+    stands for the power input a DCIM records, a NEMA 5-15P power port. The tab at the bushing's upper right is
+    drawn as a small ring and its use is not stated.
+elements:
+  bushing: {at: [0, 0], size: [27.5, 26.4], class: inlet}
+skins: [default]
