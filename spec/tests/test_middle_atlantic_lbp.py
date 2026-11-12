@@ -55,10 +55,10 @@ def test_the_envelope_is_the_cut_sheets_and_the_bar_bolts_to_the_rail_face():
     assert len(doc["datasheet"]["sha256"]) == 64
 
 
-def test_no_weight_is_recorded_because_no_document_gives_one_for_this_bar():
-    doc = device()
-    assert "weight-kg" not in doc["chassis"] and "weight-kg" not in doc["attrs"]["physical"]
-    assert "weight" in {g["what"] for g in doc["gaps"]}
+def test_the_weight_is_a_named_gap_with_the_document_it_needs():
+    gaps = {g["what"]: g for g in device()["gaps"]}
+    assert "weight" in gaps
+    assert gaps["weight"]["wanted"]
 
 
 def decor(view, kind):
@@ -142,13 +142,12 @@ def prose(doc):
 
 
 def test_every_sentence_of_the_notes_gaps_and_description_is_short():
-    long = [
-        (where, len(s.split()))
+    longest = max(
+        (len(s.split()), where)
         for where, text in prose(device())
         for s in sentences(text)
-        if len(s.split()) > 25
-    ]
-    assert not long, long
+    )
+    assert longest[0] <= 25, longest
 
 
 @pytest.mark.parametrize("view", ["left", "right"])
