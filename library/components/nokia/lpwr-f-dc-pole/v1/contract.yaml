@@ -1,0 +1,72 @@
+format: 1
+kind: component
+name: lpwr-f-dc-pole
+version: 1.0.0
+class: mechanical
+# THE PAIR IS ITSELF A SLOT (docs/connectors-dc-terminal-design.md section 13.7): one
+# two-hole lug lands across both studs, at their midpoint. That slot and the two stud slots
+# below are mutually exclusive, as a duplex adapter's slot and its two bores are.
+interface: stud-pair-5-8
+behaviour: mounts
+profile: networking
+description: >-
+  One two-stud power terminal of the Lightspan MF-8 LPWR-F power module. It is the BAT
+  terminal at the left or the RET terminal at the right of the connector block. Two studs
+  stand side by side on 5/8 in. (15.875) centres, the landing one dual-hole power lug takes.
+  nokia/lpwr-f@1 composes two.
+size: {w: 19.275, h: 3.4}
+size-confidence: {w: datasheet, h: estimated}
+size-notes: >-
+  the two studs' own boxes, 15.875 apart centre to centre, side by side: the width is the
+  pitch and one stud, the height one stud
+attrs: {connector: stud-pair-5-8}
+provenance:
+  size: >-
+    datasheet and estimated - the 5/8 in. pitch is the interface's (spec/schemas/standards.yaml
+    `two-hole-lug-5-8`, 15.875); each stud is common/terminal-screw-34@1, whose own 3.4 across
+    is an estimate.
+  pitch: >-
+    THE PITCH IS THE LUG'S, READ AS 5/8 IN. The Lightspan MF-8 User, Safety and Installation
+    Manual 26.9 (3HH-92647-AAAA-RJZZA Issue 09), page 293, lists the dimensions a customer's
+    own cable lug has to meet and prints "Inter-hole distance = 16 mm (0.63 in.)"; the same
+    manual (section 4.5.2.2) prints "16 mm (0.63 in.)" for the grounding lug, beside a 1/4 in.
+    stud hole. 0.63 in. is 5/8 in. (0.625) rounded to two places and 16 mm is that rounding
+    converted, so the pair is the registry's 5/8 in. one, composed at 15.875, 0.125 under the
+    printed 16. The same reading is already the shelf's own for its two-stud grounding point.
+    No held page dimensions the studs themselves: they are taken to stand where the lug's
+    holes do.
+  thread: >-
+    NOT CLAIMED. No held page states the thread of the terminal studs or the size of their
+    nuts; the Manual says only "Unscrew all four (two times two) studs" and "torque 4 Nm"
+    (Procedure 42, page 294). The studs are common/terminal-screw-34@1, a head 3.4 across that
+    claims no thread: a STAND-IN, declared.
+  lug: >-
+    THE DOCUMENTED LUG IS NOT THE ONE OFFERED. The Manual's Figure 232 (page 292) draws a
+    dual-hole lug power cable, 100 A rated, with a 25 mm2 wire recommendation (page 293);
+    generic/two-hole-lug-5-8@1, which mates this interface, is the library's nominal lug on
+    #6 AWG wire and stands in for it.
+  axis: >-
+    THE STUDS ARE COMPOSED LEFT TO RIGHT, so the pair runs along +x, the canonical axis a
+    two-hole lug is drawn on, and a lug seated here leaves its wire to the right
+    (manifest.spanning_axis). The module that composes this pole turns it to the slant its
+    figures draw. The Lightspan MF-8 Unit Data Sheet Guide 26.9 (3HH-92646-AAAA-TQZZA Issue
+    09), Figure 70 on page 97, shows the cables leaving down through two guide openings in
+    the foot of the block; it states no direction for the lug.
+  seat: >-
+    THE PAIR PRESENTS AT THE TOP OF ITS STUDS. `mate` is the midpoint of the two studs' own
+    `mate` points and states `seat-out: 9.2`, the height each stud presents at (its lift 8.0
+    and its 1.2 head), so a lug across the pair lies exactly where a one-hole lug on either
+    stud would. L116 holds the two to one figure. THE LIFT 8.0 IS AN ESTIMATE: no held page
+    gives the height of the studs above the terminal plate, so 8.0, and the 9.2 built on it,
+    stand in, declared, and are not a reading.
+elements: {}
+parts:
+  # FIRST STUD, then second: the order is the axis (provenance.axis). Each is a slot of its
+  # own, `<pole>/1` and `<pole>/2`, which the ring lug still seats in.
+  - {ref: common/terminal-screw-34@1, id: '1', at: [0, 0], lift: 8.0}
+  - {ref: common/terminal-screw-34@1, id: '2', at: [15.875, 0], lift: 8.0}
+connection-points:
+  # WHERE A TWO-HOLE LUG SEATS: the midpoint of the studs' own mate points, (1.7, 1.7) and
+  # (17.575, 1.7), at the height they present.
+  mate: {at: [9.6375, 1.7], direction: front, seat-out: 9.2}
+skins: [default]

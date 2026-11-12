@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: osa-5420-quartz
-version: 0.1.4
+version: 0.1.5
 maturity: modelled
 manufacturer: Oscilloquartz
 model: OSA 5420 Quartz
@@ -283,13 +283,14 @@ gaps:
     expansion-slot blank is modelled from that text alone (oscilloquartz/osa542x-lc-blank@1,
     art estimated); the PSU blank is not modelled, so a pulled supply draws as its opening.
   wanted: a photograph or drawing of the expansion-slot and PSU blank plates.
-- what: optical-irig-connector
+- what: irig-card-connectors
   scope: [lc-1, lc-2]
   reason: vendor-silent
   note: >-
-    The IRIG-B card's optical output is a round barrel 7.4 across in a 375 px render;
-    no document names the connector type.
-  wanted: the IRIG-B card's own data sheet or a newer install manual.
+    The IRIG-B card's isolated IRIG input and ten IRIG outputs are drawn as elements of the
+    card. The OSA 5422 data sheet (IRIG/TIMECODE line card) names the outputs only as a "Fanout
+    cable (10x BNC female 50 ohms) or patch panel" and gives no connector for the input.
+  wanted: a manual or drawing of the IRIG-B card that names the connector of the IRIG input and of the ten IRIG outputs.
 - what: card-and-psu-part-numbers
   scope: [psu-1, psu-2, lc-1, lc-2]
   reason: vendor-silent

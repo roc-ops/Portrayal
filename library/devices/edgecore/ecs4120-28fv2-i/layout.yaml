@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ecs4120-28fv2-i
-version: 2.0.5
+version: 3.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: ECS4120-28Fv2-I
@@ -189,6 +189,7 @@ groups:
     index-origin: 1
     attrs: {media: sfp-plus, speed: 10g}
   port-leds: {term: LED, role: indicator, index-origin: 1}
+  rj45-combo-leds: {term: LED, role: indicator, index-origin: 1}
   mgmt:
     term: Port
     role: management
@@ -390,7 +391,7 @@ views:
           led:
             ref: common/led-dot@1
             id-format: led-copper-{n}
-            group: port-leds
+            group: rj45-combo-leds
             dx-by-row: [3.85, 9.95]
             dy-top: 26.6
             dy-bottom: 13.4

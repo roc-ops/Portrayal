@@ -1,0 +1,550 @@
+format: 1
+kind: device
+name: cm8132
+version: 0.1.0
+maturity: modelled
+manufacturer: Opengear
+model: CM8132
+description: >-
+  Opengear CM8132 Console Manager, a 1RU rack appliance with 32 RJ45 RS-232 serial ports on the front.
+  A console RJ45 port, two USB 3.0 ports and two 1G RJ45 network ports are on the front. Two IEC C14 inlets
+  on the rear feed dual AC power.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Opengear CM8100 High Density Console Manager datasheet (November 06, 2026): console specifications,
+      interfaces, power requirements, physical dimensions and model table. Opengear CM8100 Quick Start
+      Guide v1 (October 2026), p.5, "In the Box": the front and rear of the CM8100 appliance. The CM8132
+      front photograph published with the family. No dimensioned drawing is held.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, p.2, Dimensions and Weight: 17.3 x 9.25 x 1.75 in, 9.5 lbs, 440 x 235 x 44 mm, 4.5 kg;
+      Form Factor 1 RU. The rack kit 590037 ships in the box but no source dimensions it, so the body
+      is drawn alone.
+  front-layout:
+    confidence: estimated
+    note: >-
+      Method: the CM8132 front photograph (2560 x 1711, a slight downward view that shows the top) is
+      measured against the data sheet width: the face is 1893 px wide at the scale of the displayed copy
+      for 440 mm, 4.30 px/mm. The serial pitch (14.1 mm) and the gutter between gangs of eight (3.7 mm)
+      are taken from the CM8148-10G-USB face of the same jack block, the photograph agreeing to about
+      0.5 mm. Positions are good to about 1.5 mm.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      Method: the Quick Start Guide p.5 rear figure shows the logo, the CM8100 mark and two inlets at
+      the right; the positions are those of the CM8148-10G-USB rear, whose photograph is held, with no
+      USB-C bank. The inlet openings in the figure are smaller than the library's C14 part; the part is
+      drawn as it is.
+  serial:
+    confidence: datasheet
+    note: >-
+      Data sheet p.1: "16, 32 or 48 x RJ45 RS-232 Cisco straight X2 pinout", 50 to 230,400 bps. The photograph
+      numbers the ports 1, 3 to 31 over 2, 4 to 32.
+  console:
+    confidence: datasheet
+    note: 'Data sheet p.1: "1 x RJ45 RS-232 Console Port - Cisco rolled X1 pinout, baud rate 9600".'
+  network:
+    confidence: datasheet
+    note: >-
+      Data sheet p.1: "2 x 10/100/1000 Ethernet port". The photograph prints NET1 over NET2 on two stacked
+      RJ45 jacks.
+  usb:
+    confidence: datasheet
+    note: >-
+      Data sheet p.1: "2 x USB 3.0 host ports". The photograph shows two USB-A jacks and the SuperSpeed
+      mark.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet p.1: dual socket universal IEC C14 inlet 100-240 V AC; "Less than 15 W (51 BTU/h) typical"
+      for the CM81xx family. Quick Start Guide p.8 step 6: the power lamp is green with two supplies and
+      amber with one.
+  livery:
+    confidence: estimated
+    note: >-
+      The red face, the charcoal panel with its diagonal edge and two stripes and the wordmark are read
+      off the photograph and the guide figure and are painted livery, not parts.
+  sides:
+    confidence: estimated
+    note: >-
+      Data sheet p.1: "Passive Cooling - can be forward or reverse mounted". No held source shows a top,
+      bottom or side as a drawing, so those faces are stated empty.
+attrs:
+  power:
+    power-input: two IEC C14 inlets, 100-240 V AC; two C14 power cables in the box
+    power-typ-w: 15
+  thermal: {cooling: passive; forward or reverse mounted}
+  environmental: {operating-temp-c: 5 to 50, humidity-pct: 5 to 90 non-condensing}
+  physical: {weight-kg: 4.5}
+  platform: {cpu: 1.6 GHz dual-core ARM Cortex-A9, memory: 2 GB DDR4, storage: 32 GB eMMC, tpm: TPM 2.0}
+  lifecycle: {eol: none-announced}
+chassis: {width: 440.0, height: 44.0, depth: 235.0, ru: 1, color: '#3a3a3d', power: ac}
+gaps:
+- what: rack-kit
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    The data sheet lists Rack Mount Kit 590037 in the box. No held document dimensions the ears or says
+    where they sit, so no ear or kit is modelled.
+  wanted: The installation guide for rack mount kit 590037.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: thirty-two RJ45 RS-232 serial ports, Cisco straight X2 pinout.
+  net-rj45:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two 1G RJ45 ports NET1 and NET2.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: two USB 3.0 ports.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 local console port, Cisco rolled X1 pinout.
+  controls: {term: Control, role: management, index-origin: 1, description: the ERASE pinhole.}
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    attrs: {input-voltage: 100-240 V AC}
+    description: the two IEC C14 power inlets.
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face, kind: livery, at: [1.1, 1.7], size: [436.4, 35.7], fill: '#b9172b'}
+      - id: vents
+        kind: vent-row
+        at: [4.3, 39.8]
+        size: [421.2, 3.0]
+        pattern: motif
+        pattern-offset: [4.3, 39.8]
+        pattern-pitch: [5.9, 3.0]
+        pattern-cells:
+        - - [1.9, 0.1]
+          - [3.7, 0.1]
+          - [3.2, 2.9]
+          - [1.4, 2.9]
+        vent: 1.0
+      - id: livery-dark
+        kind: livery
+        at: [335.4, 1.7]
+        size: [103.5, 35.7]
+        fill: '#231f20'
+        pattern: motif
+        pattern-offset: [335.4, 1.7]
+        pattern-pitch: [103.5, 35.7]
+        pattern-cells:
+        - - [0, 0]
+          - [103.5, 0]
+          - [103.5, 35.7]
+          - [23.2, 35.7]
+      - id: livery-stripes
+        kind: livery
+        at: [321.1, 1.7]
+        size: [28.6, 35.7]
+        fill: '#26181a'
+        pattern: motif
+        pattern-offset: [321.1, 1.7]
+        pattern-pitch: [28.6, 35.7]
+        pattern-cells:
+        - - [0, 0]
+          - [0.6, 0]
+          - [23.8, 35.7]
+          - [23.2, 35.7]
+        - - [4.8, 0]
+          - [5.4, 0]
+          - [28.6, 35.7]
+          - [28.0, 35.7]
+      - {id: serial-frame, kind: label-plate, at: [4.8, 6.4], size: [231.0, 30.8], fill: '#1a1a1a'}
+    silkscreen:
+    - {at: [14.2, 8.1], text: '1', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-1}
+    - {at: [14.2, 36.5], text: '2', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-2}
+    - {at: [28.3, 8.1], text: '3', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-3}
+    - {at: [28.3, 36.5], text: '4', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-4}
+    - {at: [42.4, 8.1], text: '5', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-5}
+    - {at: [42.4, 36.5], text: '6', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-6}
+    - {at: [56.5, 8.1], text: '7', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-7}
+    - {at: [56.5, 36.5], text: '8', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-8}
+    - {at: [70.6, 8.1], text: '9', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-9}
+    - {at: [70.6, 36.5], text: '10', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-10}
+    - {at: [84.7, 8.1], text: '11', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-11}
+    - {at: [84.7, 36.5], text: '12', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-12}
+    - {at: [98.8, 8.1], text: '13', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-13}
+    - {at: [98.8, 36.5], text: '14', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-14}
+    - {at: [112.9, 8.1], text: '15', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-15}
+    - {at: [112.9, 36.5], text: '16', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-16}
+    - {at: [130.7, 8.1], text: '17', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-17}
+    - {at: [130.7, 36.5], text: '18', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-18}
+    - {at: [144.8, 8.1], text: '19', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-19}
+    - {at: [144.8, 36.5], text: '20', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-20}
+    - {at: [158.9, 8.1], text: '21', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-21}
+    - {at: [158.9, 36.5], text: '22', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-22}
+    - {at: [173.0, 8.1], text: '23', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-23}
+    - {at: [173.0, 36.5], text: '24', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-24}
+    - {at: [187.1, 8.1], text: '25', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-25}
+    - {at: [187.1, 36.5], text: '26', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-26}
+    - {at: [201.2, 8.1], text: '27', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-27}
+    - {at: [201.2, 36.5], text: '28', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-28}
+    - {at: [215.3, 8.1], text: '29', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-29}
+    - {at: [215.3, 36.5], text: '30', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-30}
+    - {at: [229.4, 8.1], text: '31', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-31}
+    - {at: [229.4, 36.5], text: '32', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-32}
+    - {at: [420.0, 5.0], path: M -2.4 -1.8 L 0.1 -2.9 L 2.4 0.8 L 0.1 2.9 Z, filled: true, fill: '#e8e8e8',
+      for: chassis}
+    - {at: [437.2, 6.0], text: opengear, font-size: 2.8, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [437.2, 10.0], text: CM8100, font-size: 2.7, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [389.8, 6.0], text: NET1, font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net1-rj45}
+    - {at: [389.8, 36.1], text: NET2, font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net2-rj45}
+    - {at: [358.4, 1.9], text: RJ45, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [370.0, 1.9], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [382.0, 1.9], text: USB, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: usb-a}
+    - {at: [422.3, 36.4], text: ERASE, font-size: 1.4, anchor: middle, fill: '#f0f0f0', for: erase}
+    - {at: [437.8, 23.9], path: M -0.5 -0.4 A 0.6 0.6 0 1 0 0.5 -0.4 M 0 -0.9 L 0 -0.1, stroke-width: 0.2,
+      fill: '#f0f0f0', for: led-power}
+    - at: [437.8, 26.5]
+      path: M -1.1 0.1 L -0.5 0.1 L -0.2 -0.8 L 0.1 0.8 L 0.4 0.1 L 1.1 0.1
+      stroke-width: 0.2
+      fill: '#f0f0f0'
+      for: led-heartbeat
+    - {at: [437.8, 29.5], text: IOIO, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: led-ioio}
+    - at: [437.8, 31.8]
+      path: M 0 -0.9 V -0.2 M -0.9 -0.2 H 0.9 M -0.9 -0.2 V 0.4 M 0 -0.2 V 0.4 M 0.9 -0.2 V 0.4
+      stroke-width: 0.2
+      fill: '#f0f0f0'
+      for: led-network
+    components:
+      placements:
+      - ref: std/rj45-ganged@2
+        id: serial-1
+        at: [7.85, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 1
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-2
+        at: [7.85, 23.35]
+        group: serial
+        rel-pos: 2
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-3
+        at: [21.95, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 3
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-4
+        at: [21.95, 23.35]
+        group: serial
+        rel-pos: 4
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-5
+        at: [36.05, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 5
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-6
+        at: [36.05, 23.35]
+        group: serial
+        rel-pos: 6
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-7
+        at: [50.15, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 7
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-8
+        at: [50.15, 23.35]
+        group: serial
+        rel-pos: 8
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-9
+        at: [64.25, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 9
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-10
+        at: [64.25, 23.35]
+        group: serial
+        rel-pos: 10
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-11
+        at: [78.35, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 11
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-12
+        at: [78.35, 23.35]
+        group: serial
+        rel-pos: 12
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-13
+        at: [92.45, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 13
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-14
+        at: [92.45, 23.35]
+        group: serial
+        rel-pos: 14
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-15
+        at: [106.55, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 15
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-16
+        at: [106.55, 23.35]
+        group: serial
+        rel-pos: 16
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-17
+        at: [124.35, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 17
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-18
+        at: [124.35, 23.35]
+        group: serial
+        rel-pos: 18
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-19
+        at: [138.45, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 19
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-20
+        at: [138.45, 23.35]
+        group: serial
+        rel-pos: 20
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-21
+        at: [152.55, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 21
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-22
+        at: [152.55, 23.35]
+        group: serial
+        rel-pos: 22
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-23
+        at: [166.65, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 23
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-24
+        at: [166.65, 23.35]
+        group: serial
+        rel-pos: 24
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-25
+        at: [180.75, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 25
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-26
+        at: [180.75, 23.35]
+        group: serial
+        rel-pos: 26
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-27
+        at: [194.85, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 27
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-28
+        at: [194.85, 23.35]
+        group: serial
+        rel-pos: 28
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-29
+        at: [208.95, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 29
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-30
+        at: [208.95, 23.35]
+        group: serial
+        rel-pos: 30
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-31
+        at: [223.05, 8.55]
+        rotate: 180
+        group: serial
+        rel-pos: 31
+        attrs: {media: rj45-serial}
+      - ref: std/rj45-ganged@2
+        id: serial-32
+        at: [223.05, 23.35]
+        group: serial
+        rel-pos: 32
+        attrs: {media: rj45-serial}
+      - ref: std/rj45@2
+        id: console
+        at: [362.1, 4.2]
+        rotate: 180
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+        description: 'the local console: Cisco rolled X1 pinout'
+      - ref: std/usb-a@1
+        id: usb-a
+        at: [363.9, 18.75]
+        group: usb
+        rel-pos: 1
+        attrs: {media: usb-a}
+      - ref: std/usb-a@1
+        id: usb-b
+        at: [363.9, 27.55]
+        group: usb
+        rel-pos: 2
+        attrs: {media: usb-a}
+      - {ref: common/rj45-eth@1, id: net1-rj45, at: [381.9, 7.8], rotate: 180, group: net-rj45, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: net2-rj45, at: [381.9, 21.1], group: net-rj45, rel-pos: 2}
+      - {ref: common/reset-button@1, id: erase, at: [420.3, 30.5], group: controls, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-power, at: [431.0, 22.9], group: status-leds, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-heartbeat, at: [431.0, 25.5], group: status-leds, rel-pos: 2,
+        for: chassis}
+      - {ref: common/led-dot@1, id: led-ioio, at: [431.0, 28.1], group: status-leds, rel-pos: 3, for: chassis}
+      - {ref: common/led-dot@1, id: led-network, at: [431.0, 30.6], group: status-leds, rel-pos: 4, for: chassis}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face, kind: livery, at: [1.6, 7.7], size: [381.2, 35.6], fill: '#a80d27'}
+      - id: vents
+        kind: vent-row
+        at: [4.9, 1.2]
+        size: [366.0, 4.0]
+        pattern: motif
+        pattern-offset: [4.9, 1.2]
+        pattern-pitch: [6.0, 4.0]
+        pattern-cells:
+        - - [1.9, 0.1]
+          - [3.7, 0.1]
+          - [3.3, 3.9]
+          - [1.5, 3.9]
+        vent: 1.0
+      - id: livery-dark
+        kind: livery
+        at: [303.7, 7.5]
+        size: [79.1, 35.6]
+        fill: '#231f20'
+        pattern: motif
+        pattern-offset: [303.7, 7.5]
+        pattern-pitch: [79.1, 35.6]
+        pattern-cells:
+        - - [0, 0]
+          - [79.1, 0]
+          - [79.1, 35.6]
+          - [27.1, 35.6]
+      - id: livery-stripes
+        kind: livery
+        at: [288.8, 7.5]
+        size: [34.0, 35.6]
+        fill: '#26181a'
+        pattern: motif
+        pattern-offset: [288.8, 7.5]
+        pattern-pitch: [34.0, 35.6]
+        pattern-cells:
+        - - [0, 0]
+          - [0.6, 0]
+          - [27.7, 35.6]
+          - [27.1, 35.6]
+        - - [6.2, 0]
+          - [6.8, 0]
+          - [33.8, 35.6]
+          - [33.2, 35.6]
+      - {id: inlet-shroud-1, kind: label-tab, at: [388.8, 9.4], size: [24.1, 32.3], rx: 1.0, fill: '#2c2c2e'}
+      - {id: inlet-shroud-2, kind: label-tab, at: [413.4, 9.4], size: [23.2, 32.3], rx: 1.0, fill: '#2c2c2e'}
+    silkscreen:
+    - {at: [325.0, 14.0], path: M -6.5 -6.0 L 1.0 -8.5 L 6.5 3.0 L 1.0 8.5 Z, filled: true, fill: '#e8e8e8',
+      for: chassis}
+    - {at: [380.8, 20.4], text: opengear, font-size: 9.0, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [380.3, 29.6], text: CM8100, font-size: 5.6, anchor: end, fill: '#e4e4e6', for: chassis}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [386.5, 15.7], rotate: -90, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [410.3, 15.7], rotate: -90, group: inlets, rel-pos: 2}
+  top:
+    size: {w: 440.0, h: 235.0}
+    empty: >-
+      No held source shows the top face as a drawing; the CM8132 photograph shows it at a slant, a plain
+      panel with screws, and gives no position.
+  bottom:
+    size: {w: 440.0, h: 235.0}
+    empty: >-
+      No held source shows the bottom face: the data sheet and the guide show the front or the rear only.
+  left:
+    size: {w: 235.0, h: 44.0}
+    empty: >-
+      No held source shows the left side: the data sheet and the guide show the front or the rear only.
+  right:
+    size: {w: 235.0, h: 44.0}
+    empty: >-
+      No held source shows the right side: the data sheet and the guide show the front or the rear only.
+datasheet:
+  title: CM8100 High Density Console Manager with Smart Out-of-Band Management
+  sha256: a1d69122288e9bedfc6bddeabe6989a85e41d17d5fe6271741477913ef76918a

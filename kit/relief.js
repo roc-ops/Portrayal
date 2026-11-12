@@ -13,6 +13,7 @@
 import { paintFields, unpaintFields, paintAdjustments } from './fields.js';
 import { paintDisplays } from './displays.js';
 import { boundLamps, expandStates } from './states.js';
+import { fetchDist } from './dist.js';
 
 let THREE, renderer, PXMM, FRU_PATHS;
 
@@ -772,6 +773,13 @@ export function mirrorClears(clears, pc, flipX, flipY) {
   return clears.map(p => ({...p,
     x: flipX ? pc.x + pc.x + pc.w - p.x - p.w : p.x,
     y: flipY ? pc.y + pc.y + pc.h - p.y - p.h : p.y}));
+}
+// A FACE PUNCH AS IT IS REPLAYED ON A MODULE'S CROP OF THE FACE. The crop is cut
+// from the face canvas, which a flipped face (flipLX / flipLY) has mirrored, so a
+// `rect` punch (a facet's footprint) is mirrored within the crop's own rect `pf`;
+// any other punch is returned as it is.
+export function cropPunch(p, pf, flipX, flipY) {
+  return p.kind === 'rect' ? mirrorClears([p], pf, flipX, flipY)[0] : p;
 }
 // clear `rect` punches from a canvas whose origin is (ox, oy) face mm
 export function clearFloor(cvs, clears, ox, oy, pxmm) {
@@ -1681,8 +1689,15 @@ export function svgSource(url, scope) {
   // instead of throwing: `''.matchAll` yields nothing, `innerHTML = ''` empties
   // the node, `parseFromString('')` raises a parsererror the caller already
   // checks for, and a Blob of '' fails the image load exactly as a 404 page did.
-  if (!SVG_CACHE.has(url))
-    SVG_CACHE.set(url, fetch(url).then(r => r.ok ? r.text() : ''));
+  //
+  // A REJECTED FETCH IS DROPPED, and only that. The drawings of a device read
+  // from a pack share one fetch, so a network failure remembered here would
+  // blank every one of them for the page. The '' above stays: it is an answer.
+  if (!SVG_CACHE.has(url)) {
+    const hit = fetchDist(url).then(r => r.ok ? r.text() : '');
+    SVG_CACHE.set(url, hit);
+    hit.catch(() => { if (SVG_CACHE.get(url) === hit) SVG_CACHE.delete(url); });
+  }
   return SVG_CACHE.get(url);
 }
 export function clearSvgCache() { SVG_CACHE.clear(); }
@@ -4387,7 +4402,8 @@ export async function buildFaceRelief(F, ctx) {
         const x0 = faceCrop.getContext('2d');
         for (const p of facePunch[F.view]) {
           if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
-          await unpunch(x0, p);
+          // the restyle re-cut below is an unflipped raster and replays `p` as drawn
+          await unpunch(x0, cropPunch(p, pf, !!F.flipLX, !!F.flipLY));
         }
       }
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
@@ -4591,8 +4607,10 @@ export async function buildFaceRelief(F, ctx) {
   // front cover's plate where it reaches over the flange - had nowhere to be
   // painted once the face was cropped to itself, so it is painted on a plane
   // the size of the drawing with the face cut out of it. A sheet body builds
-  // nothing from its faces (sheetShell), and nothing here either.
-  if (beyond && !ctx.sheet) {
+  // nothing from its faces (sheetShell), and nothing here either. Nor does a body whose ribs
+  // stand outside the box (`noWing`): they are geometry there, and the plane would stand a flat
+  // copy of them, gaps filled, in front of them.
+  if (beyond && !ctx.sheet && !ctx.noWing) {
     const wing = document.createElement('canvas');
     wing.width = beyond.cv.width; wing.height = beyond.cv.height;
     const wx = wing.getContext('2d');

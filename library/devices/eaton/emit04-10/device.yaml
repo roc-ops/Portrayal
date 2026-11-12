@@ -1,0 +1,354 @@
+format: 1
+kind: device
+name: emit04-10
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: EMIT04-10
+description: >-
+  Eaton ePDU G3 metered input rack PDU, 1U horizontal, 200 to 240 V. A 19 in black
+  metal box, 203.2 mm deep, that takes a single-phase 200 to 240 V feed (a fixed
+  10 ft cord ending in a NEMA L6-30P, 24 A) and hands it on to 8 IEC C13 and 4 IEC
+  C19 outlets in two colour-coded sections of six, each on its own 20 A two-pole
+  breaker, A (yellow) and B (blue). The controls end carries the hot-swappable meter
+  module (two RJ-45 ports (serial and daisy-chain), a network RJ-45, a USB-A port, a pixel display
+  and four buttons), the two breakers and outlets A1 and A2; the other end carries
+  the cord gland and the remaining ten outlets. The meter reads the input and each
+  section.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S SPECIFICATION DRAWING, MEASURED, NOT DIMENSIONED.
+      Eaton EMIT04-10 ("ePDU G3 SPECIFICATION DRAWING FOR EMIT04-10", part
+      EMI3MTB5JDQ13A1, revision 002, 21 Jan 2016, one D-size sheet) is a vector
+      sheet that dimensions only the overall: 482.6 [19.00] wide, 42.9 [1.69] high
+      and 203.2 [8.00] deep. Every other figure was read off a 300 dpi render
+      against the 482.6, 9.45 px per mm, good to about 0.5 mm. The sheet says "DO
+      NOT SCALE DRAWING". It has the same four views as the EMIT03-10's sheet, and
+      THE CORD FACE IS TURNED HALF A TURN ON THE SHEET (its labels are upside down)
+      and is drawn here as it stands, seen from behind. No photograph of this model
+      is held. The brochure (Rack PDU G3+, BR155022EN, 2019, EMEA) has two small
+      photographs of 1U horizontal G3+ units on its page 3 (their model numbers are not
+      printed) and larger ones of vertical units on page 2; they show the meter module,
+      the buttons, the display and the section colours, and are the colour reference
+      here, not photographs of this model.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 42.9 high, 203.2 deep, 482.6 over the ears; the body reads 444.4
+      between the ears' inner edges, so it is 444.5 and each ear 19.05. "BLACK
+      CHASSIS"; the hex #1f2022 is a stand-in. No weight is stated by any held
+      document (gaps: weight).
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - as the EMIT03-10: an L flange with a slot at each end of the
+      controls face. The library's generic ear stands for them (`chassis.ears`).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - mm from the body's left and top, as seen from the front. The meter
+      module is the same as the EMIT03-10's (plate 21.9 to 166.7 across; serial
+      and daisy-chain ports at 33.6; network port at (57.2, 13.4); USB-A (57.2, 25.1); buttons at
+      96.8 and 153.8; display at (110.2, 4.2)). Breaker A's plate stands at 188.5
+      across and 21.2 down and breaker B's at 250.7, each 59.2 by 19.4 with two
+      mounting screws 9.0 above it. Outlets A1 and A2 are C13s centred 364.6 and
+      389.1 across and 19.5 down, in a yellow-edged block 348.7 to 401.8 across;
+      their labels A1 and A2 at 344.9 and 405.3. The module's labels and the
+      left-hand earth point are as the EMIT03-10's.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the cord face, seen from behind, so x runs the other way from the
+      front: mm from the left as seen from behind. The cord gland (32.8 across flats,
+      37.9 across corners) centred 36.6 across. Then A3 and A4 (C13, yellow block,
+      63.6 to 115.3) centred 77.0 and 102.2; B1 to B4 (C13, blue block, 121.7 to
+      222.2) centred 134.7, 159.4, 184.4 and 208.9; then four C19, A5 and A6 (yellow)
+      and B5 and B6 (blue), each in its own edged plate 47.9 wide, centred 252.6,
+      304.1, 354.0 and 404.9. The C13s are centred 17.4 down and the C19s 23.9 down.
+      Screws 6.2 from each end. THE DRAWN OUTLET FACES ARE NARROWER THAN THE PARTS: the
+      C19 well reads 32.5 across where std/c19-outlet@1 is 35.6, and the part is placed
+      on the drawn centre.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - "OUTPUT (8) IEC 60320 C13 GRIP, (4) IEC 60320 C19 GRIP", OUTPUT RATING
+      "200-240V~; 15A PER C13; 16A PER C19; 16A MAX PER SECTION; 24A MAX TOTAL". A1 to
+      A4 are the C13s of section A, A5 and A6 its C19s; B1 to B4 the C13s of section
+      B, B5 and B6 its C19s. Only the C19s' labels and the ends of each C13 run are
+      printed (B4 and B1, A4 and A3); the other C13s take their numbers from the
+      run, which the sheet's order of printing implies and does not state (gaps:
+      outlet-numbers). C13s are drawn with the earth slot to the right on the
+      controls face and, turned half a turn on the sheet, to the left as drawn there,
+      which is to the right as they stand seen from behind; the C19s have their earth
+      slot up on the sheet and so down as they stand.
+  breakers:
+    confidence: drawing
+    note: >-
+      drawing - "CIRCUIT BREAKERS (2) 20A 2-POLE UL LISTED"; the one-line diagram puts
+      each of A and B across L1 and L2.
+  module:
+    confidence: drawing
+    note: >-
+      drawing and datasheet - the same meter module as the EMIT03-10's (see its
+      provenance; the product overview PA155003EN calls it hot-swappable); not modelled
+      as a bay (gaps: meter-module-bay).
+  input:
+    confidence: drawing
+    note: >-
+      drawing - INPUT "NEMA L6-30 PLUG", "10FT 10AWG / 3C POWERCORD"; INPUT RATING
+      "200-240V~", "2W+PE", "24A", "50/60HZ". The cord is fixed. `input-plug` is the
+      slug the cord exports, `nema-l6-30p`.
+  capability:
+    confidence: drawing
+    note: >-
+      drawing - "CURRENT, POWER AND ENERGY METERING FOR INPUT & BRANCH": `metering-scope:
+      branch`, `outlet-switching: false`.
+  dcim:
+    confidence: drawing
+    note: >-
+      the input is one `nema-l6-30p` power port (eaton/g3-cord-l6-30p@1); each C13 outlet
+      is an `iec-60320-c13` power outlet and each C19 an `iec-60320-c19` power outlet fed
+      by it, named as printed.
+attrs:
+  power:
+    input-ac: 200-240 V single-phase (2W+PE), 24 A, 50/60 Hz
+    input-plug: nema-l6-30p
+    input-cord: fixed
+    input-phase: single
+    input-current-a: 24
+    plug-rating-a: 30
+    output-voltage: 200-240 V
+    output-rating: 15 A per C13; 16 A per C19; 16 A per section; 24 A total
+    breakers: two 20 A two-pole breakers, one per section
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 60 C (32 to 140 F)
+  management:
+    metering-scope: branch
+    outlet-switching: false
+    metering: current, power and energy for the input and each branch
+    network-interface: hot-swappable meter module, RJ-45 network port, RJ-45 serial and daisy-chain ports, USB-A
+  compliance:
+    certifications: UL listed (cULus)
+chassis:
+  width: 444.5
+  height: 42.9
+  depth: 203.2
+  ru: 1
+  color: '#1f2022'
+  airflow: passive
+  ears:
+    color: '#1f2022'
+    positions:
+      - {name: flush, label: 'ears flush with the controls face, as the specification drawing draws them', default: true}
+gaps:
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no held document states the weight of the EMIT04-10: the drawing gives none and the overview and brochure give
+    none per model.
+  wanted: the maker's specification sheet for the EMIT04-10 with its unit weight.
+- what: colours
+  scope: [front, rear, top]
+  reason: needs-photo
+  note: >-
+    no photograph of this model is held. The sheet says "BLACK CHASSIS" and its section outlines are yellow and blue;
+    the brochure's page 3 photographs of 1U G3+ units (a later generation than the 2015 sheet) show a black chassis
+    and module, yellow (A) and blue (B) lettered tiles, light blue buttons with white symbols and a lit blue-violet
+    screen. The buttons' light blue and the tiles' two hues are taken from them and are borrowed, not measured on this
+    model. The chassis hex, the unlit display's dark blue and the breaker handles' pale colour are stand-ins.
+  wanted: a photograph of the EMIT04-10.
+- what: ground-point
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet draws a round 12.9 point at the left end of the controls face with the earth symbol under it, and
+    names no part. It is placed as a ground screw on a washer (common/ground-screw-washer@1, 11.0); the size and the
+    kind of fixing are not stated.
+  wanted: a dimensioned detail or a photograph of the controls end.
+- what: meter-module-bay
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the meter is hot-swappable but no held document draws it apart from the faceplate, so no bay and no module
+    component stand for it; the ports, display and buttons are placed on the face.
+  wanted: a drawing or photograph of the module and its slot.
+- what: outlet-grips
+  scope: [rear, front]
+  reason: needs-drawing
+  note: >-
+    the sheet draws a plate above each C13 and beside each C19 with a lever, crosses, a triangle and a ring, the
+    outlet's grip (the overview lists "Integrated IEC outlet grips prevent accidental disconnects"), and no figure
+    dimensions them. They are not drawn.
+  wanted: a dimensioned detail of the grip or a photograph.
+- what: outlet-numbers
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the sheet prints the numbers of the four C19s and the end numbers of each C13 run only; the C13s between
+    take their numbers from the run (B4 to B1 left to right on the sheet, A4 then A3).
+  wanted: a photograph of the cord face.
+- what: top-features
+  scope: [top]
+  reason: needs-drawing
+  note: >-
+    the plan shows two bands along the rear and front edges and six screws, and no figure gives their relief. Only
+    the screws are drawn.
+  wanted: a section through the lid.
+- what: module-port-order
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the quick start (P-164000314_2, July 2014, page 2) names a serial or EMP port, an Ethernet port, a USB port, a
+    reset button and a daisy chain port for the module, and its drawing is too small to tell which of the sheet's
+    stacked pair of RJ-45 sockets is the serial port and which the daisy chain. The upper is drawn as the serial
+    port and the lower, under the chain symbol, as the daisy chain; the order is an assumption. The quick start
+    allows four units on a chain where the product overview (PA155003EN, 2018) says eight.
+  wanted: a photograph of the module with its labels, or the module's operations manual.
+- what: module-legends
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the sheet prints the chain, network and USB symbols, the small legend above the network port and the Eaton
+    wordmark on the module, as outlines a millimetre or two high; none is drawn (the wordmark is the `logo-zone`
+    region). The ground point drawn here is a screw on a washer where the sheet draws an empty circle.
+  wanted: a photograph of the module.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 12 outlets, A1 to A6 and B1 to B6 as printed; A1 to A4 and B1 to B4 are IEC C13 and A5, A6, B5 and B6 are IEC C19; A1 and A2 on the controls face'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'two 20 A two-pole breakers, A and B, one per section'}
+  serial: {term: Port, role: management, index-origin: 1, description: 'the serial / environmental probe (EMP) RJ-45 port of the meter module'}
+  chain: {term: Port, role: management, index-origin: 1, description: 'the daisy-chain RJ-45 port of the meter module'}
+  reset: {term: Button, role: management, index-origin: 1}
+  network: {term: Port, role: management, index-origin: 1}
+  usb: {term: Port, role: management, index-origin: 1}
+  display: {term: Display, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 444.5, h: 42.9}
+    panel:
+      decor:
+      - {id: screw-fl, at: [3.4, 4.4], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-fl2, at: [3.4, 33.8], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-fr, at: [434.3, 4.4], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-fr2, at: [434.3, 33.3], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: module-plate, at: [21.9, 1.7], size: [144.8, 37.8], rx: 0.5, fill: '#121214', kind: plate}
+      - {id: edge-a12, at: [348.7, 1.0], size: [53.1, 40.9], rx: 1.5, fill: '#f4d440', kind: ring}
+      - {id: edge-a12-in, at: [349.9, 2.2], size: [50.7, 38.5], rx: 1.0, fill: '#1f2022', kind: plate}
+    silkscreen:
+      - {at: [344.9, 6.7], text: 'A1', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-a1}
+      - {at: [405.3, 36.7], text: 'A2', font-size: 3.4, anchor: middle, fill: '#e8e8e6', for: outlet-a2}
+      - {id: earth-symbol, at: [10.2, 26.6], path: 'M 0 0 L 0 2.0 M -2.2 2.0 L 2.2 2.0 M -1.5 3.3 L 1.5 3.3 M -0.7 4.6 L 0.7 4.6', stroke-width: 0.35, for: ground}
+    components:
+      placements:
+        - {id: outlet-a1, ref: std/c13-outlet@1, at: [349.4, 8.5], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, through: breaker-a}
+        - {id: outlet-a2, ref: std/c13-outlet@1, at: [373.9, 8.5], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, through: breaker-a}
+        - {id: breaker-a, ref: eaton/g3-breaker-20a-2p@1, at: [188.5, 9.5], group: breakers, rel-pos: 1, lines: [L1, L2], attrs: {section-color: '#f4d440', section: A}, description: 'Breaker A, 20 A two-pole: protects section A, outlets A1 to A6'}
+        - {id: breaker-b, ref: eaton/g3-breaker-20a-2p@1, at: [250.7, 9.5], group: breakers, rel-pos: 2, lines: [L1, L2], attrs: {section-color: '#48c2f4', section: B}, description: 'Breaker B, 20 A two-pole: protects section B, outlets B1 to B6'}
+        - {id: serial, ref: std/rj45@2, at: [25.7, 4.3], rotate: 180, group: serial, rel-pos: 1, attrs: {role: console, media: rj45-serial}, description: 'the serial or environmental probe (EMP) RJ-45 port (quick start P-164000314_2, item 1); the upper of the stacked pair is an assumption (gaps: module-port-order)'}
+        - {id: daisy-chain, ref: common/rj45-eth@1, at: [25.7, 20.8], group: chain, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: daisy-chain}, description: 'the daisy chain RJ-45 port (quick start P-164000314_2, item 9), under the chain symbol; the lower of the stacked pair is an assumption (gaps: module-port-order)'}
+        - {id: network, ref: common/rj45-eth@1, at: [49.3, 6.8], rotate: 180, group: network, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'the network RJ-45 port (the sheet prints a network symbol beside it)'}
+        - {id: usb, ref: std/usb-a@1, at: [51.2, 22.85], group: usb, rel-pos: 1, description: 'the USB port under the network port, used for firmware upgrade (quick start P-164000314_2, item 8)'}
+        - {id: reset, ref: common/reset-button@1, at: [68.9, 22.9], group: reset, rel-pos: 1, for: network, description: 'the reset button of the network module: press it with a probe for 3 seconds to restart the module; it does not reset power to the outlets (quick start P-164000314_2, item 7)'}
+        - {id: display, ref: eaton/g3-display@1, at: [110.2, 4.2], group: display, rel-pos: 1, for: chassis}
+        - {id: button-up, ref: eaton/g3-nav-button@1, at: [90.8, 2.9], group: buttons, rel-pos: 1, for: chassis}
+        - {id: button-down, ref: eaton/g3-nav-button@1, skin: down, at: [90.8, 26.7], group: buttons, rel-pos: 2, for: chassis}
+        - {id: button-esc, ref: eaton/g3-nav-button@1, skin: esc, at: [147.8, 2.9], group: buttons, rel-pos: 3, for: chassis}
+        - {id: button-enter, ref: eaton/g3-nav-button@1, skin: enter, at: [147.8, 26.7], group: buttons, rel-pos: 4, for: chassis}
+        - {id: ground, ref: common/ground-screw-washer@1, at: [4.7, 11.2], group: grounding, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [77.1, 16.7], size: {w: 19.2, h: 6.9}, label: 'Eaton wordmark; not drawn'}
+  rear:
+    size: {w: 444.5, h: 42.9}
+    panel:
+      decor:
+      - {id: screw-rl, at: [3.4, 4.4], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-rl2, at: [3.4, 32.9], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-rr, at: [435.5, 4.4], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-rr2, at: [435.5, 32.9], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: edge-a34, at: [63.6, 1.2], size: [51.7, 40.5], rx: 1.5, fill: '#f4d440', kind: ring}
+      - {id: edge-a34-in, at: [64.8, 2.4], size: [49.3, 38.1], rx: 1.0, fill: '#1f2022', kind: plate}
+      - {id: edge-b14, at: [121.7, 1.2], size: [100.5, 40.5], rx: 1.5, fill: '#48c2f4', kind: ring}
+      - {id: edge-b14-in, at: [122.9, 2.4], size: [98.1, 38.1], rx: 1.0, fill: '#1f2022', kind: plate}
+      - {id: edge-a5, at: [227.2, 6.7], size: [47.9, 35.2], rx: 1.5, fill: '#f4d440', kind: ring}
+      - {id: edge-a5-in, at: [228.4, 7.9], size: [45.5, 32.8], rx: 1.0, fill: '#1f2022', kind: plate}
+      - {id: edge-a6, at: [278.4, 6.7], size: [47.9, 35.2], rx: 1.5, fill: '#f4d440', kind: ring}
+      - {id: edge-a6-in, at: [279.6, 7.9], size: [45.5, 32.8], rx: 1.0, fill: '#1f2022', kind: plate}
+      - {id: edge-b5, at: [329.0, 6.7], size: [47.9, 35.2], rx: 1.5, fill: '#48c2f4', kind: ring}
+      - {id: edge-b5-in, at: [330.2, 7.9], size: [45.5, 32.8], rx: 1.0, fill: '#1f2022', kind: plate}
+      - {id: edge-b6, at: [380.3, 6.7], size: [47.9, 35.2], rx: 1.5, fill: '#48c2f4', kind: ring}
+      - {id: edge-b6-in, at: [381.5, 7.9], size: [45.5, 32.8], rx: 1.0, fill: '#1f2022', kind: plate}
+    silkscreen:
+      - {at: [59.8, 8.4], text: 'A3', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-a3}
+      - {at: [118.5, 36.0], text: 'A4', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-a4}
+      - {at: [118.5, 8.4], text: 'B1', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-b1}
+      - {at: [225.5, 36.0], text: 'B4', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-b4}
+      - {at: [252.6, 5.2], text: 'A5', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-a5}
+      - {at: [304.1, 5.2], text: 'A6', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-a6}
+      - {at: [354.0, 5.2], text: 'B5', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-b5}
+      - {at: [404.9, 5.2], text: 'B6', font-size: 3.2, anchor: middle, fill: '#e8e8e6', for: outlet-b6}
+    components:
+      placements:
+        - {id: input, ref: eaton/g3-cord-l6-30p@1, at: [17.65, 5.05], group: power-input, rel-pos: 1, description: 'the fixed 10 ft input cord, ending in a NEMA L6-30P locking plug'}
+        - {id: outlet-a3, ref: std/c13-outlet@1, at: [61.8, 6.4], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, through: breaker-a}
+        - {id: outlet-a4, ref: std/c13-outlet@1, at: [87.0, 6.4], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, through: breaker-a}
+        - {id: outlet-b1, ref: std/c13-outlet@1, at: [119.5, 6.4], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, through: breaker-b}
+        - {id: outlet-b2, ref: std/c13-outlet@1, at: [144.2, 6.4], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, through: breaker-b}
+        - {id: outlet-b3, ref: std/c13-outlet@1, at: [169.2, 6.4], rotate: 90, group: outlets, rel-pos: 9, fed-by: input, through: breaker-b}
+        - {id: outlet-b4, ref: std/c13-outlet@1, at: [193.7, 6.4], rotate: 90, group: outlets, rel-pos: 10, fed-by: input, through: breaker-b}
+        - {id: outlet-a5, ref: std/c19-outlet@1, at: [234.8, 10.05], rotate: 180, group: outlets, rel-pos: 5, fed-by: input, through: breaker-a}
+        - {id: outlet-a6, ref: std/c19-outlet@1, at: [286.3, 10.05], rotate: 180, group: outlets, rel-pos: 6, fed-by: input, through: breaker-a}
+        - {id: outlet-b5, ref: std/c19-outlet@1, at: [336.2, 10.05], rotate: 180, group: outlets, rel-pos: 11, fed-by: input, through: breaker-b}
+        - {id: outlet-b6, ref: std/c19-outlet@1, at: [387.1, 10.05], rotate: 180, group: outlets, rel-pos: 12, fed-by: input, through: breaker-b}
+  top:
+    size: {w: 444.5, h: 203.2}
+    panel:
+      decor:
+      - {id: screw-t1, at: [127.2, 17.7], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t2, at: [262.2, 17.7], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t3, at: [3.7, 98.5], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t4, at: [431.7, 98.5], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t5, at: [173.2, 178.3], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t6, at: [308.8, 178.3], size: [5.6, 5.6], rx: 2.8, fill: '#2a2b2d', kind: screw-head}
+  bottom:
+    size: {w: 444.5, h: 203.2}
+    empty: >-
+      the sheet draws no view of the underside; the plan and the faces are all it gives, so nothing on the bottom can
+      be measured.
+  left:
+    size: {w: 203.2, h: 42.9}
+    empty: >-
+      the sheet draws no side view; its pictorial, a third of the scale, shows a plain side with the ear flange at the
+      controls end, and nothing on it can be measured.
+  right:
+    size: {w: 203.2, h: 42.9}
+    empty: >-
+      the sheet draws no side view; its pictorial, a third of the scale, shows a plain side with the ear flange at the
+      controls end, and nothing on it can be measured.
+interfaces:
+- {physical: 'outlet-a{n}', name: 'A{n}', range: 1-6}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: 1-6}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The installation kit (SPK021) and the network kit (SPK013) are listed as included and are
+      not drawn; the environmental probe (EMP001) is optional and is not drawn.
+    part-numbers:
+      EMIT04-10: {}
+datasheet:
+  title: 'Eaton ePDU G3 specification drawing for EMIT04-10 (EMI3MTB5JDQ13A1), revision 002'
+  url: https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-metered-input-rack-pdu/EMIT04-10.pdf
+  sha256: 94e3261d4691dbf047e4511d0f47fdaa950073a8c8e3d226766d0cdfb1229c88
+references:
+  - {title: 'Eaton ePDU G3 product overview, PA155003EN, December 2018', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-product-overview-pa155003en.pdf', sha256: d06961a975d8a357b9a4b8e462156f912caafb1e7cf88186202d0c83f72987fc}
+  - {title: 'Eaton Rack PDU G3+ brochure, BR155022EN, 2019 (EMEA)', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/ES-EMEA-PQED-Brochure-RackPDU-G3plus-BR155022EN-en-gb.pdf', sha256: bf6e0432524ba452b9a65e869e3e434365bd2b7df024c72690230daabb5e3869}
+  - {title: 'Eaton ePDU G3 installation and connectivity quick start, P-164000314_2, July 2014', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-network-connectivity-quick-start-guide-p-164000314.pdf', sha256: d5047a1ca87b0b56242fe8df1d31639d67c4a3999b1ca8eec30b72fbc5a53064}
+  - {title: 'Eaton ePDU G3 1U and 2U rackmount installation addendum, SB155038EN, 10 February 2016', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-1u-2u-installation-addendum-sb155038en.pdf', sha256: ba7a164af034e9a7b3859a52d33ebed33105b58d782f2141f64aef15621cfbb6}
