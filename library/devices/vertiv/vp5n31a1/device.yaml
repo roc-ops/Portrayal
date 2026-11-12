@@ -1,0 +1,335 @@
+format: 1
+kind: device
+name: vp5n31a1
+version: 0.1.1
+maturity: modelled
+manufacturer: Vertiv
+model: VP5N31A1
+description: >-
+  Vertiv PowerIT switched rack PDU with unit-level monitoring, 1U horizontal.
+  It has a fixed input cord with an L6-30P plug and twelve combination C13/C19 outlets on the rear.
+  The outlets sit in two groups of six, and each group has a circuit breaker on the front.
+  The front also has twelve outlet lamps.
+  An IMD-5M monitoring module has two Ethernet ports, a sensor port, a serial port, a USB port and a touchscreen.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DRAWING EXISTS, SO EVERY POSITION IS READ OFF THE TWO STRAIGHT-ON PHOTOGRAPHS. Searched: the SKU page,
+      the rack PDU brochure SL-20881, the product line comparison SL-70599, the installer/user guide SL-71211
+      Rev E (whose mounting figures 3.1 to 3.14 carry no dimension) and the quick installation guide SL-70646;
+      none dimensions a face. vertiv-geist-switched-vp5n31a1_front.jpg and _rear.jpg are 1000 px square. The body
+      reads 752 px across on the front and 764 on the rear for the SKU page's 17 in (431.8 mm), 1.74 and 1.77 px
+      per mm. The face reads 71 to 73 px high for 1.72 in, 1.65 to 1.67 px per mm: the photographs look slightly
+      down on the box, so vertical positions are good to about 1.5 mm and horizontal ones to about 0.7 mm. Nothing
+      of known size is in frame to prove the scale a second way beyond the IMD-5M's RJ45 jacks, which read 16.6
+      wide against the part's 15.8.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - the SKU page's table: "Height 1.72 in", "Width 17 in", "Depth 12 in" (43.7, 431.8 and 304.8 mm).
+      No weight is stated in a maker document. The 17 in is the body between the ear folds, because both photographs show
+      a body with no flange; the 19 in rack face is the ears, which are not drawn. The rack unit count is not
+      stated for the SKU; the brochure p7 says the line is "1U and 2U Horizontal" and 1.72 in is a 1U height.
+      Colour photo-measured: the face's median is about #3f3f3d on the front and #313131 on the rear.
+  ears:
+    confidence: datasheet
+    note: >-
+      NOT DRAWN, AND NO POSITION IS STATED. SL-71211 Rev E section 3 has fourteen bracket figures (3.1 to 3.14)
+      and says a horizontal PDU takes brackets (7 in-lb), but none names a position as the unit ships or
+      dimensions one (gaps: ear-positions).
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - front photograph, mm from the face's left and top. Two breakers whose frames are 32.1 wide
+      and start 31.6 and 104.1 from the left, number tabs above them. Twelve outlet lamps in two rows, 14.5 and 29.7
+      down, on a pitch of 8.6 from 254.3, numbered 1 to 6 above the upper row and 7 to 12 below the lower, with an
+      orange bar 5.4 high at 19.4 down from 218 to 307 and a white disc, the maker's mark, centred at 235.9, on a label plate
+      from 217.6 to 307.2 whose grey (#333331) is a shade darker than the face's #41413f. The
+      IMD-5M plate from 308.8 across to 416.2. Four rivets round each breaker at the corners of a 41.9 by 19.8
+      rectangle.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - rear photograph, mm from the face's left as seen from behind and from its top. The cord
+      gland centred 23.0 across. Twelve combination outlets, 20.0 wide and 27.0 high, in two groups of six, the first
+      outlet's left edge at 66.3 and the seventh's at 255.1, each group on a pitch of 27.0 (the six steps read 27.0
+      on both groups, and one empty pitch stands between the groups). A grey tray round each group, 60.5 to 227.2 and
+      252.7 to 416.6 across, with an orange or green tab above and below the outlets. 1 and 6 printed at the ends of
+      the first group and 7 and 12 at the ends of the second.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the SKU page table "Combination C13/C19 (12)", the brochure p4 "(12) C13/C19 Combo". The page's
+      meta description says "(36)", which is the brochure's figure for a vertical SKU and not this one; the rear
+      photograph shows twelve. Each is vertiv/combo-outlet@1 (Table 2.4 and 3.2.2 of SL-71211 Rev E), numbered as printed.
+  numbering:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the rear prints 1 and 6 at the corners of the first group and 7 and 12 at the corners of
+      the second; the front prints 1 to 12 over and under its lamps. Outlets 2 to 5 and 8 to 11 carry no number on the rear
+      and are numbered by the front's sequence. THE LAMPS ARE `for: chassis`, NOT FOR THEIR OUTLETS: the lamps are on the front and
+      the outlets on the rear, and L14 takes a `for` only in the same view, so a state set on an outlet does not reach its lamp.
+  breakers:
+    confidence: photo-measured
+    note: >-
+      photo-measured and estimated - the front shows two breakers, numbered 2 (green tab) at the left and 1 (orange
+      tab) at the right. The rear shows the outlets in two groups whose tabs are orange for 1 to 6 and green for 7
+      to 12. THAT EACH GROUP RUNS THROUGH THE BREAKER OF ITS COLOUR IS A READING OF THE TWO PHOTOGRAPHS: no sentence
+      held says it. The rating of the breakers is not stated in any held document.
+  colours:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the rear tabs read #fb5311 (orange) and #177734 (green); the front's orange bar #fb6b0c. The
+      outlet nose reads #777674 and the well #040404; the tray's top bezel #7f7976. The front card's plate and the
+      breaker frames are dark grey, #232222 to #2b2b2a. Those two are estimates from a lit photograph.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the brochure p4 calls it "Switched, Unit-Level Monitoring", and the comparison sheet SL-70599 marks the
+      LCD for Monitored and Switched. So `metering-scope: input` (unit level) and `outlet-switching: true`, the
+      class `switched-metered-input` (docs/pdu-model-design.md section 2.2). The IMD-5M's text says "phase, line, and
+      circuit current values" on the touchscreen (SL-71211 Rev E p35); no document says branch metering is per
+      breaker for this SKU, so the scope stays at the unit.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - the SKU page prints "(30A, 200-240V)", a "power cord with a L6-30P plug" and "delivers 4.9 kW of power"
+      in its description, and 50/60Hz in its table; the brochure p4 gives the input L6-30P. The cord is fixed because it
+      leaves through a gland in the rear photograph, and `input-plug` is the slug the cord exports. The page does not
+      say whether 30 A is the unit's or the plug's rating, so it is written as the unit's input current as printed. The
+      brochure p7 calls the line "single phase electrical".
+  module:
+    confidence: datasheet
+    note: >-
+      datasheet - the module is vertiv/imd-5m@1 in a bay: SL-71211 Rev E 5.1.3 says all Monitored and Switched rPDUs ship
+      with it. The SKU page's own image (vp51301_front.jpg) shows a different, LED-display card with three
+      buttons; Rev C of the guide says previous versions shipped other modules. Which one a given unit carries is
+      not stated (gaps: module-variant).
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one power port from vertiv/rpdu-cord-l6-30p@1 (type `other`, label NEMA L6-30P, as no type is held
+      for the plug, so `input-plug: other`; L167) and each outlet a power outlet from vertiv/combo-outlet@1 (type `other`, label Vertiv combination
+      C13/C19). NO feed_leg IS WRITTEN: a single-phase PDU is on whatever leg its plug is on
+      (docs/pdu-model-design.md section 5.2). The module's ports export on its own module type.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      no held document announces an end of life. Not searched on the web: nothing is fetched for this model.
+attrs:
+  power:
+    input-ac: 200-240 V, 50/60 Hz, a fixed cord with an L6-30P plug
+    input-plug: other
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 240
+    input-current-a: 30
+    capacity-kw: 4.9
+    capacity-scope: the load the PDU can hand on, from the SKU page; it is not what the PDU draws itself
+    frequency: 50/60 Hz
+  environmental: {operating-temp: 60 C}
+  management:
+    metering-scope: input
+    outlet-switching: true
+    network-module: IMD-5M, dual Ethernet, RJ-12 sensor port, RS-232 serial on an RJ-45, USB, touchscreen
+  physical: {construction: 'black powder-coat finish'}
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 431.8
+  height: 43.7
+  depth: 304.8
+  ru: 1
+  color: '#383836'
+  airflow: passive
+gaps:
+- what: ear-positions
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    SL-71211 Rev E section 3 and its figures 3.1 to 3.14 show brackets and none is dimensioned or names the position
+    the unit ships in. The ears are not drawn and no position is stated.
+  wanted: a dimensioned outline drawing, or the mounting section of the SKU's data sheet.
+- what: weight
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no held maker document states a weight for any PDU. A community listing says 6.35 kg, which is not the maker's.
+  wanted: the SKU's data sheet.
+- what: module-variant
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    SL-71211 Rev E and the comparison sheet say Switched units carry the IMD-5M, drawn here; the SKU page's own image
+    shows a four-digit LED display with three buttons.
+  wanted: which module the SKU ships with.
+- what: outlet-lamp-colour
+  scope: [outlet-leds]
+  reason: vendor-silent
+  note: >-
+    no held document says what colour an outlet lamp shows or what it means; the photographs show them unlit and white.
+    The `on` state is declared with no colour.
+  wanted: a photograph of a powered unit.
+- what: breaker-rating
+  scope: [breakers]
+  reason: vendor-silent
+  note: >-
+    the rating, poles and trip curve of the two breakers are in no held document.
+  wanted: the SKU's data sheet or nameplate.
+- what: tray-and-outlet-depth
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the outlet trays and the outlets' depth are drawn flat. No view shows the trays in section or from the side.
+  wanted: a side photograph or a dimensioned drawing.
+- what: unnamed-socket
+  scope: [module]
+  reason: vendor-silent
+  note: >-
+    Figure 5.2 shows a socket with a network symbol, a socket under the USB port (callout 5, "Redundant power input") and a
+    vertical slot. No held text names the first or the slot or the connector of the second, so they are drawn as shapes.
+  wanted: the IMD-5M's data sheet.
+- what: display-class
+  scope: [module]
+  reason: vendor-silent
+  note: >-
+    the touchscreen states 128 by 128 and no character count; it is drawn as a screen without the display vocabulary,
+    which needs one.
+  wanted: the IMD-5M's data sheet.
+- what: top-bottom-sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no held photograph shows the top, the bottom or a side straight on; the front photograph shows the lid at a steep
+    angle (a plain black lid). The four faces are drawn bare at the table's size.
+  wanted: straight-on photographs of the four faces.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: vertiv-combo}, description: 'the PDU''s 12 combination C13/C19 outlets, 1 to 6 and 7 to 12, numbered as printed; each switchable'}
+  outlet-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: 'one lamp per outlet on the front; the colour and meaning are not stated'
+    states: ['on', 'off']
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'circuit breakers 1 and 2, each for one group of six outlets'}
+  module: {term: Slot, role: management, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 431.8, h: 43.7}
+    panel:
+      decor:
+      - {id: label-plate, at: [217.6, 0.0], size: [89.6, 43.7], fill: '#333331', kind: label-plate}
+      - {id: stripe, at: [218.0, 19.4], size: [89.0, 5.4], fill: '#fb6b0c', kind: stripe}
+      - {id: mark, at: [225.9, 11.9], size: [20.0, 20.0], rx: 10.0, fill: '#fefdfb', kind: logo-disc}
+      - {id: rivet-2a, at: [25.2, 12.2], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-2b, at: [67.1, 12.2], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-2c, at: [26.0, 32.0], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-2d, at: [67.7, 32.0], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-1a, at: [97.7, 12.2], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-1b, at: [139.6, 12.2], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-1c, at: [98.5, 32.0], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+      - {id: rivet-1d, at: [140.2, 32.0], size: [2.0, 2.0], rx: 1.0, fill: '#0e0e0e', kind: rivet}
+    silkscreen:
+      - {at: [254.3, 10.8], text: '1', font-size: 3.4, anchor: middle, for: led-1}
+      - {at: [262.9, 10.8], text: '2', font-size: 3.4, anchor: middle, for: led-2}
+      - {at: [271.5, 10.8], text: '3', font-size: 3.4, anchor: middle, for: led-3}
+      - {at: [280.1, 10.8], text: '4', font-size: 3.4, anchor: middle, for: led-4}
+      - {at: [288.7, 10.8], text: '5', font-size: 3.4, anchor: middle, for: led-5}
+      - {at: [297.3, 10.8], text: '6', font-size: 3.4, anchor: middle, for: led-6}
+      - {at: [254.3, 38.0], text: '7', font-size: 3.4, anchor: middle, for: led-7}
+      - {at: [262.9, 38.0], text: '8', font-size: 3.4, anchor: middle, for: led-8}
+      - {at: [271.5, 38.0], text: '9', font-size: 3.4, anchor: middle, for: led-9}
+      - {at: [280.1, 38.0], text: '10', font-size: 3.4, anchor: middle, for: led-10}
+      - {at: [288.7, 38.0], text: '11', font-size: 3.4, anchor: middle, for: led-11}
+      - {at: [297.3, 38.0], text: '12', font-size: 3.4, anchor: middle, for: led-12}
+    components:
+      bays:
+        - {id: module, at: [308.8, 0.0], size: {w: 107.4, h: 43.7}, accepts: [vertiv/imd-5m@1], default: vertiv/imd-5m@1, group: module, rel-pos: 1}
+      placements:
+        - {id: breaker-2, ref: vertiv/rpdu-breaker@1, at: [31.6, 8.7], group: breakers, rel-pos: 2, attrs: {tab-color: '#177734', number: '2'}}
+        - {id: breaker-1, ref: vertiv/rpdu-breaker@1, at: [104.1, 8.7], group: breakers, rel-pos: 1, attrs: {tab-color: '#fb5311', number: '1'}}
+        - {id: led-1, ref: common/led-dot@1, at: [253.3, 13.5], group: outlet-leds, rel-pos: 1, for: chassis}
+        - {id: led-2, ref: common/led-dot@1, at: [261.9, 13.5], group: outlet-leds, rel-pos: 2, for: chassis}
+        - {id: led-3, ref: common/led-dot@1, at: [270.5, 13.5], group: outlet-leds, rel-pos: 3, for: chassis}
+        - {id: led-4, ref: common/led-dot@1, at: [279.1, 13.5], group: outlet-leds, rel-pos: 4, for: chassis}
+        - {id: led-5, ref: common/led-dot@1, at: [287.7, 13.5], group: outlet-leds, rel-pos: 5, for: chassis}
+        - {id: led-6, ref: common/led-dot@1, at: [296.3, 13.5], group: outlet-leds, rel-pos: 6, for: chassis}
+        - {id: led-7, ref: common/led-dot@1, at: [253.3, 28.7], group: outlet-leds, rel-pos: 7, for: chassis}
+        - {id: led-8, ref: common/led-dot@1, at: [261.9, 28.7], group: outlet-leds, rel-pos: 8, for: chassis}
+        - {id: led-9, ref: common/led-dot@1, at: [270.5, 28.7], group: outlet-leds, rel-pos: 9, for: chassis}
+        - {id: led-10, ref: common/led-dot@1, at: [279.1, 28.7], group: outlet-leds, rel-pos: 10, for: chassis}
+        - {id: led-11, ref: common/led-dot@1, at: [287.7, 28.7], group: outlet-leds, rel-pos: 11, for: chassis}
+        - {id: led-12, ref: common/led-dot@1, at: [296.3, 28.7], group: outlet-leds, rel-pos: 12, for: chassis}
+    regions:
+      - {id: logo-zone, at: [225.9, 11.9], size: {w: 20.0, h: 20.0}, label: 'Vertiv mark; drawn as a plain disc'}
+  rear:
+    size: {w: 431.8, h: 43.7}
+    panel:
+      decor:
+      - {id: tray-a, at: [60.5, 0.0], size: [166.7, 43.7], rx: 1.5, fill: '#6f6b69', kind: outlet-tray}
+      - {id: tray-b, at: [252.7, 0.0], size: [163.9, 43.7], rx: 1.5, fill: '#6f6b69', kind: outlet-tray}
+      - {id: tab-a-top, at: [62.5, 1.2], size: [162.7, 3.2], fill: '#fb5311', kind: tab}
+      - {id: tab-a-bottom, at: [62.5, 39.9], size: [162.7, 3.2], fill: '#fb5311', kind: tab}
+      - {id: tab-b-top, at: [254.7, 1.2], size: [159.9, 3.2], fill: '#177734', kind: tab}
+      - {id: tab-b-bottom, at: [254.7, 39.9], size: [159.9, 3.2], fill: '#177734', kind: tab}
+    silkscreen:
+      - {at: [54.8, 8.2], text: '1', font-size: 3.4, anchor: middle, for: outlet-1}
+      - {at: [233.5, 39.0], text: '6', font-size: 3.4, anchor: middle, for: outlet-6}
+      - {at: [244.2, 9.0], text: '7', font-size: 3.4, anchor: middle, for: outlet-7}
+      - {at: [421.1, 39.0], text: '12', font-size: 3.4, anchor: middle, for: outlet-12}
+    components:
+      placements:
+        - {id: input, ref: vertiv/rpdu-cord-l6-30p@1, at: [6.3, 9.3], group: power-input, rel-pos: 1, description: 'the fixed input cord, ending in a NEMA L6-30P plug'}
+        - {id: outlet-1, ref: vertiv/combo-outlet@1, at: [66.3, 7.5], group: outlets, rel-pos: 1, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-2, ref: vertiv/combo-outlet@1, at: [93.3, 7.5], group: outlets, rel-pos: 2, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-3, ref: vertiv/combo-outlet@1, at: [120.3, 7.5], group: outlets, rel-pos: 3, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-4, ref: vertiv/combo-outlet@1, at: [147.3, 7.5], group: outlets, rel-pos: 4, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-5, ref: vertiv/combo-outlet@1, at: [174.3, 7.5], group: outlets, rel-pos: 5, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-6, ref: vertiv/combo-outlet@1, at: [201.3, 7.5], group: outlets, rel-pos: 6, fed-by: input, through: breaker-1, states: ['on', 'off']}
+        - {id: outlet-7, ref: vertiv/combo-outlet@1, at: [255.1, 7.5], group: outlets, rel-pos: 7, fed-by: input, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-8, ref: vertiv/combo-outlet@1, at: [282.1, 7.5], group: outlets, rel-pos: 8, fed-by: input, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-9, ref: vertiv/combo-outlet@1, at: [309.1, 7.5], group: outlets, rel-pos: 9, fed-by: input, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-10, ref: vertiv/combo-outlet@1, at: [336.1, 7.5], group: outlets, rel-pos: 10, fed-by: input, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-11, ref: vertiv/combo-outlet@1, at: [363.1, 7.5], group: outlets, rel-pos: 11, fed-by: input, through: breaker-2, states: ['on', 'off']}
+        - {id: outlet-12, ref: vertiv/combo-outlet@1, at: [390.1, 7.5], group: outlets, rel-pos: 12, fed-by: input, through: breaker-2, states: ['on', 'off']}
+  top:
+    size: {w: 431.8, h: 304.8}
+    empty: >-
+      no held photograph or drawing shows the top straight on; the front photograph sees the lid at a steep angle
+      (a plain black lid). Searched: the SKU page, the brochure, SL-71211 Rev E and the three photographs.
+  bottom:
+    size: {w: 431.8, h: 304.8}
+    empty: >-
+      no held photograph or drawing shows the bottom. Searched: the SKU page, the brochure, SL-71211 Rev E and the
+      three photographs.
+  left:
+    size: {w: 304.8, h: 43.7}
+    empty: >-
+      no held photograph or drawing shows a side straight on. Searched: the SKU page, the brochure, SL-71211 Rev E's
+      bracket figures 3.1 to 3.14 (not dimensioned) and the three photographs.
+  right:
+    size: {w: 304.8, h: 43.7}
+    empty: >-
+      no held photograph or drawing shows a side straight on. Searched: the SKU page, the brochure, SL-71211 Rev E's
+      bracket figures 3.1 to 3.14 (not dimensioned) and the three photographs.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-12'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the IMD-5M module in its slot. The mounting brackets are not drawn.
+    bays:
+      module: vertiv/imd-5m@1
+    part-numbers:
+      VP5N31A1: {}
+datasheet:
+  title: 'Vertiv VP5N31A1 product page, specifications table'
+  url: https://www.vertiv.com/en-us/products-catalog/critical-power/power-distribution/vp5n31a1/
+  sha256: 4a81d402e20e38633306fc0f33c5af51bdcd14e6016f5f396c45f6b5e8b418bf
+references:
+  - {title: 'Vertiv PowerIT Rack Power Distribution Unit Installer/User Guide, SL-71211 Rev E', url: 'https://www.vertiv.com/4a8147/globalassets/shared/vertiv-powerit-rack-power-distribution-unit-installer-user-guide-sl-71211.pdf', sha256: 55542710dc90746e2a79e8cfd6e093c2c51fd23e431563851d739ccbd922daf0}
+  - {title: 'Vertiv PowerIT Rack PDUs brochure, SL-20881', url: 'https://www.vertiv.com/4a83c3/globalassets/shared/vertiv-rack-pdu-br-en-na-sl-20881_238947_01.pdf', sha256: 7ba9185c04ec9b756e8a8f2764777794e09fccdbd1cc568bafbfe55ee647ece3}
+  - {title: 'Vertiv PowerIT rPDU product line comparison, SL-70599', url: 'https://www.vertiv.com/4a83ac/globalassets/shared/vertiv-powerit-rpdu-product-line-comparison-ds-en-na-sl-70599-web-1.pdf', sha256: 796e1bec7c4da27108ac8496617f05010ce4c7ab4b6da7dbf61261aa389f3a54}

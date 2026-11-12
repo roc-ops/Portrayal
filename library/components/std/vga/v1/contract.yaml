@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: vga
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: networking
 conforms: hd15
@@ -45,6 +45,12 @@ provenance:
     R740xd rear reference, where the port had been rendering as large as its own
     hole. An earlier skin painted the cutout outline solid, which is where the
     extra 0.9 of height came from.
+  insulator-colour: >-
+    photo-measured - the `insulator` field sets the insulator's fill and outline
+    in the face drawing and its fill in the 3D relief, which follows the skin's
+    paint. An unset field keeps the blue. The Juniper MX104 front photograph
+    shows a dark insulator on the ALARM port that the Juniper Networks MX104
+    Universal Routing Platform Hardware Guide describes, so its placement sets it.
   insert: >-
     estimated - the insulator is a separate path from the shell because it is a
     separate part, and 0.90 inside it is proportional rather than dimensioned.
@@ -52,6 +58,11 @@ provenance:
     LEVEL with the shell's front, which is why `top` equals the full 6.73 cavity
     and why this port reads flat where std/db9 reads recessed. Neither document
     held here dimensions either setback.
+fields:
+  insulator:
+    label: Insulator colour
+    type: text
+    default: '#1f4f9e'
 elements:
   opening: {at: [0.0, 0.0], size: [20.47, 11.40], class: cutout}
 relief:
@@ -76,7 +87,6 @@ relief:
   - node: insert
     out: 6.73
     shape: true
-    color: '#1f4f9e'
     confidence: estimated
     source: >-
       6.73 is this contract's `d`, so the insert face lands level with the shell

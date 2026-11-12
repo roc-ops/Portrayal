@@ -36,11 +36,14 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
+import { sectionBody, sectionSeat, seatPoint, seatFins, finReach, sectionHalves, SEAM_INDEX } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
 import { createLamps } from './lamps.js';
 import { openingView } from './camera-fit.js';
+import { OPENING_DIR } from './camera-fit.js';
+import { housingPlan, bayPlates, faceIndexOf, describeHalves, normalizeHousing, openBounds } from './housing.js';
 
 const CLS_LABEL = {fan: 'Fan module', psu: 'Power supply', tab: 'Info tab'};
 // box-face shading, in +x -x +y -y +z -z order: sides darker, lid lifted,
@@ -98,6 +101,10 @@ export function createViewer(container, opts = {}) {
   // device without its ears, and so does this scene by default. `setEars`
   // turns them on and off without a rebuild.
   let EARS = !!opts.ears;
+  // A BOX THAT OPENS (housing.js), closed unless the caller asks. Only a device
+  // that states `chassis.halves` has an open state; for every other device,
+  // and while this is 'closed', the scene is the one it always was.
+  let HOUSING = normalizeHousing(opts.housing);
 
   let DEV = null, CFG = null, disposed = false;
   // Runtime bay swaps, bay id -> ref (or null for an emptied bay). The 3D scene
@@ -396,6 +403,8 @@ export function createViewer(container, opts = {}) {
   const SCOPE = createReliefScope();
   let box = null, reliefGroup = null, gen = 0;
   let earGroup = null, earPlan = null;   // the generic ears, when they are on
+  let housingGroup = null;               // the two halves, when the box is open
+  let fitState = 'closed';               // which box the camera was last fitted to
   const faceGroups = {};        // view -> the group buildFaceRelief filled
   // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
   // R740xd's front is the 482.6 mm rack face over a 434 mm body; relief is laid
@@ -633,6 +642,20 @@ export function createViewer(container, opts = {}) {
     // the wells cut in each face and the air openings declared on each, for
     // the pass below that shows a face's vents on the well wall behind it
     const wells = [], apertures = {};
+    // A STEPPED HOUSING'S PARTS STAND ON THE FACET UNDER THEM (relief.js
+    // partSeats): relief is handed the polygon the body is extruded from, and a
+    // device with no section, or one the body cannot be built from, is handed
+    // none and is placed on the flat planes
+    const seatPoly = COMP ? null : sectionSeat(devIndex && devIndex.chassis, W, H, D);
+    // (a part that slips onto a field of ribs is read at the core line: section.js surfaceUnder)
+    const seatRibs = COMP ? null : seatFins(devIndex && devIndex.chassis, W, H, D);
+    // RIBS THAT STAND OUTSIDE THE BOX GROW THE DRAWING PAST ITS FACE, and the face is cropped back to
+    // itself; the ink beyond it is painted on a flat plane (relief.js, WHAT IS DRAWN PAST THE FACE). The
+    // ribs are real geometry in this body, so that plane would only stand a flat copy of them, gaps filled,
+    // in front of the real ones: it is not painted.
+    const reachRibs = COMP ? {top: 0, bottom: 0} : finReach(devIndex && devIndex.chassis);
+    const ribsOutside = reachRibs.top > 0 || reachRibs.bottom > 0;
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -640,6 +663,7 @@ export function createViewer(container, opts = {}) {
                                 meshes, FRU_GROUPS, FRU_META, BODY_META, D, deep: F.deep(),
                                 bodyBoxMesh, dist: distAt, backSource,
                                 sheet: !!(devIndex && sheetShell(devIndex.chassis)),
+                                section: seatSection, noWing: ribsOutside,
                                 restyle: RESTYLE, scope: SCOPE});
       // a face with no drawing falls back to flat colour and contributes no group
       if (meshes.length > before) built[F.view] = meshes[meshes.length - 1];
@@ -728,6 +752,12 @@ export function createViewer(container, opts = {}) {
     for (const k of Object.keys(faceGroups)) delete faceGroups[k];
     Object.assign(faceGroups, built);
     const fp = COMP && COMP_ENTRY.body && COMP_ENTRY.body.footprint;
+    // a section the body can be extruded from, or null; a section stated with
+    // another body key, or one that cannot be built, is said and built as it was
+    const secBody = COMP ? null : sectionBody(devIndex && devIndex.chassis, W, H, D);
+    if (secBody && secBody.refused) {
+      console.warn(`viewer3d: ${secBody.refused}; building the box without the section`);
+    }
     if (bodyBox) {
       // A BODY IN PIECES: the face on a thin plate and each box behind it
       // where the part says it is - the riser alone shows its PCB and its
@@ -820,6 +850,22 @@ export function createViewer(container, opts = {}) {
       scene.add(box);
       box.userData.bodyBox = bodyBox;
       scene.add(bodyBox);
+    } else if (secBody && secBody.arrays) {
+      // A STEPPED HOUSING (`chassis.section`, section.js): the end profile
+      // extruded along the width. Each facet takes the UV it would have on the
+      // box face it looks toward and that face's material, so the six face
+      // textures stay at indices 0-5 in FACE_OF_INDEX order and picking, the
+      // face frames and level of detail read this body as they read a box. Its
+      // bounds are the chassis box's, so the camera fit above is the box's.
+      const a = secBody.arrays;
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+      geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+      geo.setIndex(a.indices);
+      for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+      box = new THREE.Mesh(geo, mats);
+      scene.add(box);
     } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
       // A BEVELLED BODY (#735): the polygons render.py published, each face
       // mapped the way BoxGeometry maps it so the face textures land exactly
@@ -900,6 +946,7 @@ export function createViewer(container, opts = {}) {
     meshes.forEach(m => reliefGroup.add(m));
     scene.add(reliefGroup);
     buildEars();
+    applyHousing();
     await syncLamps(null);
   }
 
@@ -947,7 +994,100 @@ export function createViewer(container, opts = {}) {
   }
   const setEars = on => serialise(async () => {
     EARS = !!on;
-    return box ? buildEars() : 0;
+    if (!box) return 0;
+    const n = buildEars();
+    applyHousing();      // new ears are visible; an open box hides them
+    return n;
+  });
+
+  // THE BOX OPEN (housing.js housingPlan): the closed body, its relief and its
+  // ears are hidden, not rebuilt, and a group of its own stands in their place -
+  // each half a shell open at the seam, seen from both sides so the inside
+  // shows, the lid turned about its hinge edge, and the bays of each half as
+  // plates on its floor (the open drawing's regions are not published, so they
+  // are placed by where they are to each other). Closed, or a box with no
+  // halves, shows what was always shown. The halves are no pick target.
+  //
+  // A HOUSING WITH A SECTION (section.js sectionHalves) opens as the stepped body cut at the seam:
+  // each half is that part of the body, ribs and all, and the lid turns about the line where the seam
+  // meets the hinge face's outline. The part's cut face is not drawn, as the open face of a box half
+  // is not: the inside of the shell shows through it, and what the lid's inside looks like is the
+  // authored open drawing's. A device with no section, or whose halves the body cannot be cut at,
+  // gets the two boxes it always had.
+  const HALF_BAY = {base: '#4b8f6b', lid: '#c07a2c'};
+  function applyHousing() {
+    if (housingGroup) { scene.remove(housingGroup); disposeTree(housingGroup); housingGroup = null; }
+    // (cut only when it is wanted: a closed box builds none of this)
+    const cut = (!COMP && devIndex && devIndex.chassis && HOUSING === 'open')
+      ? sectionHalves(devIndex.chassis, W, H, D) : null;
+    if (cut && cut.refused) {
+      console.warn(`viewer3d: ${cut.refused}; opening the box without the section`);
+    }
+    const plan = (!COMP && devIndex && devIndex.chassis)
+      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}, cut && cut.split) : null;
+    const shown = !(plan && HOUSING === 'open');
+    for (const o of [box, box && box.userData.bodyBox, reliefGroup, earGroup]) if (o) o.visible = shown;
+    if (!plan || HOUSING !== 'open') {
+      // closing a box that was framed open: back to the closed box
+      if (fitState === 'open') { fitState = 'closed'; frameBox(W, H, D, [0, 0, 0]); }
+      return false;
+    }
+    const shell = () => new THREE.MeshLambertMaterial({color: '#3a3f44', side: THREE.DoubleSide});
+    const rows = Object.values(devIndex.bays || {}).flat();
+    housingGroup = new THREE.Group();
+    housingGroup.name = 'housing-open';
+    for (const name of ['base', 'lid']) {
+      const h = plan[name];
+      let mats, geo;
+      const part = plan.split && plan.split[name];
+      if (part) {
+        // the stepped part, in the box frame: moved so its bounds' centre is the half's origin
+        const a = part.arrays;
+        geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+        geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+        geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+        geo.setIndex(a.indices);
+        for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+        geo.translate(-part.center[0], -part.center[1], -part.center[2]);
+        mats = Array.from({length: SEAM_INDEX + 1}, shell);
+        mats[SEAM_INDEX] = new THREE.MeshBasicMaterial({visible: false});           // the cut face
+      } else {
+        mats = Array.from({length: 6}, shell);
+        mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
+        geo = new THREE.BoxGeometry(...h.size);
+      }
+      const half = new THREE.Mesh(geo, mats);
+      half.name = `half-${name}`;
+      half.position.set(...h.center);
+      if (name === 'lid') half.quaternion.set(...h.quaternion);
+      half.raycast = () => {};
+      for (const p of bayPlates(plan, name, rows)) {
+        const plate = new THREE.Mesh(new THREE.BoxGeometry(...p.size),
+                                     new THREE.MeshLambertMaterial({color: HALF_BAY[name]}));
+        plate.name = `bay-${p.id}`;
+        plate.position.set(...p.center);
+        plate.raycast = () => {};
+        half.add(plate);
+      }
+      housingGroup.add(half);
+    }
+    scene.add(housingGroup);
+    // frame what is open, once per change of state: a rebuild (another config,
+    // the ears) leaves the reader's camera where it is
+    if (fitState !== 'open') {
+      fitState = 'open';
+      const b = openBounds(plan);
+      frameBox(b.size[0], b.size[1], b.size[2], b.center);
+    }
+    return true;
+  }
+  // 'open' or 'closed'; a box with no halves stays closed whatever is asked.
+  // Resolves to the state the scene is in.
+  const setHousing = state => serialise(async () => {
+    HOUSING = normalizeHousing(state);
+    if (box) applyHousing();
+    return housingGroup ? 'open' : 'closed';
   });
 
   // hit-testing: hidden inline SVGs give us component boxes in mm via getBBox/CTM
@@ -1313,6 +1453,24 @@ export function createViewer(container, opts = {}) {
     controls.target.set(0, 0, 0);
   }
 
+  // The same fit for a box of w x h x d centred on `centre`, seen from where the
+  // camera is now (so the reader's direction is kept): used when the box opens
+  // or closes, since the open state is not the closed box's size or place. The
+  // limits that follow the camera move with it as they do in openOn.
+  function frameBox(w, h, d, centre) {
+    const dir = camera.position.clone().sub(controls.target);
+    const len = Math.hypot(OPENING_DIR[0], OPENING_DIR[1], OPENING_DIR[2]);
+    const dirV = dir.length() > 1e-6 ? dir.normalize().multiplyScalar(len) : null;
+    const v = openingView({W: w, H: h, D: d, fov: camera.fov, aspect: camera.aspect,
+                           span: Math.max(w, h, d), ...(dirV ? {dir: [dirV.x, dirV.y, dirV.z]} : {})});
+    controls.maxDistance = v.maxDistance;
+    camera.far = v.far;
+    camera.updateProjectionMatrix();
+    controls.target.set(...centre);
+    camera.position.set(centre[0] + v.position[0], centre[1] + v.position[1], centre[2] + v.position[2]);
+    controls.update();
+  }
+
   // The component index does NOT depend on the device, so loading it does not
   // belong behind either mode's "did the subject change" guard - that is what
   // made every device switch pull 2 MB of device-independent data down again.
@@ -1349,6 +1507,12 @@ export function createViewer(container, opts = {}) {
       // The same framing the component path below already uses, rather than a
       // third set of constants: one opening view, two callers.
       openOn(W, H, D);
+      // RIBS THAT STAND OUTSIDE THE BOX (section.js finReach) are drawn and exported but are in no
+      // size: the box is what every reader measures, the camera fits what is drawn. The box is
+      // centred on the origin, so the fit takes the taller of the two reaches both ways.
+      const reach = finReach(devIndex.chassis);
+      if (reach.top || reach.bottom) openOn(W, H + 2 * Math.max(reach.top, reach.bottom), D);
+      fitState = 'closed';      // the box is framed closed; applyHousing frames it open
     }
     CFG = config || devIndex.default;
     await build(CFG);
@@ -1367,6 +1531,7 @@ export function createViewer(container, opts = {}) {
       D = COMP_ENTRY.body ? COMP_ENTRY.body.depth : Math.max(COMP_ENTRY.size.d || 2, 2);
       camera.near = 5;
       openOn(W, H, D, Math.max(W, H));   // a component's span has never counted its depth
+      fitState = 'closed';
     }
     CFG = skin || COMP_ENTRY.skins[0];
     await build(CFG);
@@ -1810,6 +1975,9 @@ export function createViewer(container, opts = {}) {
     // the generic rack ears (#909): on or off, and the plan drawn (null when
     // they are off or the device gets none - see relief.js genericEars)
     setEars, ears: () => (earPlan ? JSON.parse(JSON.stringify(earPlan)) : null),
+    // a box that opens (housing.js): set the state, read the state the scene
+    // is in, and the halves with each bay's half (null for a box that does not open)
+    setHousing, housing: () => (housingGroup ? 'open' : 'closed'), halves: () => describeHalves(devIndex),
     // what a host needs to rebuild the chrome this module gave up
     frus, toggleFru, download, exportData, exportName,
     // every path select() can find, for a host without its own tree

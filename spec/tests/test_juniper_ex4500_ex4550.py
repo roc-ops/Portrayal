@@ -286,19 +286,20 @@ def test_the_ex4550_has_one_module_slot_on_each_panel_with_a_cover_panel(name):
     rear = {b["id"]: b for b in bays(d, "rear")}
     assert list(front) == ["em-1"] and "em-2" in rear
     for b in (front["em-1"], rear["em-2"]):
-        assert [ref_name(r) for r in b["accepts"]] == ["ex4550-em-cover"]
+        assert [ref_name(r) for r in b["accepts"]] == ["ex4550-em-cover", "ex4550-em-8xsfp", "ex4550-em-8xt",
+                                                       "ex4550-em-2qsfp", "ex4550-vc-128g"]
         assert ref_name(b["default"]) == "ex4550-em-cover"
     assert front["em-1"]["size"] == rear["em-2"]["size"]
 
 
 @pytest.mark.parametrize("name", ["ex4550-32f", "ex4550-32t"])
-def test_the_four_modules_the_guide_lists_are_named_and_not_built(name):
-    """Table 3 lists four modules. This slice builds no module family, so the bays take the cover alone."""
+def test_the_four_modules_the_guide_lists_are_named_and_built(name):
+    """Table 3 lists four modules. The bays take the cover and each of them."""
     text = provenance_text(load_device(name))
     for module in ("EX4550-EM-8XSFP", "EX4550-EM-8XT", "EX4550-EM-2QSFP", "EX4550-VC-128G"):
         assert module in text
-    assert not [p.name for p in COMP.iterdir() if p.name.startswith(("ex4550-em-", "ex4550-vc"))
-                and p.name != "ex4550-em-cover"]
+    assert {p.name for p in COMP.iterdir() if p.name.startswith(("ex4550-em-", "ex4550-vc"))} >= {
+        "ex4550-em-cover", "ex4550-em-8xsfp", "ex4550-em-8xt", "ex4550-em-2qsfp", "ex4550-vc-128g"}
 
 
 def test_the_4500_has_two_uplink_slots_with_cover_panels_and_a_rear_slot_for_two_modules():
@@ -307,11 +308,11 @@ def test_the_4500_has_two_uplink_slots_with_cover_panels_and_a_rear_slot_for_two
     assert sorted(front) == ["uplink-1", "uplink-2"]
     assert front["uplink-1"]["at"][0] < front["uplink-2"]["at"][0]
     for b in front.values():
-        assert [ref_name(r) for r in b["accepts"]] == ["ex4500-uplink-cover"]
+        assert [ref_name(r) for r in b["accepts"]] == ["ex4500-uplink-cover", "ex4500-uplink-sfp-plus"]
         assert ref_name(b["default"]) == "ex4500-uplink-cover"
     rear = {b["id"]: b for b in bays(d, "rear")}
     assert {ref_name(r) for r in rear["module-3"]["accepts"]} == {"ex4500-lb", "ex4500-vc1"}
-    assert "4-port SFP+" in " ".join(g["wanted"] for g in d["gaps"] if g["what"] == "uplink-modules")
+    assert "uplink-modules" not in {g["what"] for g in d["gaps"]}
 
 
 # --- the supplies and the fans ------------------------------------------------

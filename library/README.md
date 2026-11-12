@@ -81,6 +81,14 @@ the index last, so it never names a version npm does not have yet. A plain
 run, as `publish.sh` makes, compares against nothing: it lays the packages out
 and fails on one over the size limit, and publishes nothing.
 
+**Packs, if you want them.** A consumer that serves a build from a file server
+that limits the number of files can make the drawings into a few files per device
+with `spec/tools/dev/dist_packs.py --dist library/dist --out <new folder>`. The
+packs are an optional, derived form of the files above. They are not part of
+`dist/` or of the npm packages, `build.sh` and `publish.sh` do not make them,
+and the tool never writes inside the dist it reads. `kit/dist.js` `packedDist`
+and `fetchDist` read them (`kit/README.md`).
+
 **Ports in the drawing.** Every port is a `<g data-class="port">`, and the
 facts about it (`data-media`, `data-speed`, `data-group`, `data-group-role`)
 sit on that element. A composed port, such as `common/rj45-eth@1` around a

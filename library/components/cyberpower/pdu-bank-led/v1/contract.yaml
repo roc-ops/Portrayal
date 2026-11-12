@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: pdu-bank-led
+version: 1.0.0
+class: led
+profile: power
+description: >-
+  The round green bank lamp of the CyberPower PDU30BHVT8R basic PDU, printed BANK 1 and BANK 2 beside it.
+size: {w: 6.0, h: 6.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  existence: >-
+    datasheet - CyberPower PDU30BHVT8R data sheet, page 1: the front photograph shows two green lamps labelled BANK 1
+    and BANK 2, and the specification lists "Bank 1 (Green) - Bank 2 (Green)" LED indicators on page 2.
+  size: >-
+    photo-measured - the straight-on front photograph on page 1 of the data sheet, read at 3.96 px per mm across its
+    445 mm body: each lamp is 24 px across, 6.0 mm with its glow. It is a photograph, so the figure is good to about
+    1 mm.
+  colour: >-
+    photo - the lamp is green in the data sheet photograph, read as #3ddc3a at its centre.
+  states: >-
+    datasheet - the data sheet names the lamps "Bank 1 (Green)" and "Bank 2 (Green)". It states no other colour, so only
+    off and on (green) are drawn.
+elements:
+  lamp: {at: [0.5, 0.5], size: [5.0, 5.0], class: led, states: ['off', 'on']}
+relief:
+  features:
+    - node: lamp
+      dome: 0.4
+      confidence: estimated
+      source: >-
+        no document gives how far the lamp stands; 0.4 mm is a stand-in for a domed lens, declared an estimate.
+skins: [default]

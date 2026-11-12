@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ws-c2960s-48td
-version: 1.0.0
+version: 1.0.2
 maturity: modelled
 manufacturer: Cisco
 model: WS-C2960S-48TD-L
@@ -72,6 +72,20 @@ provenance:
       48TD-L stencil matches in layout and in every colour sampled above. The stencil is a community artist's flat render
       and these are that artist's palette; no photograph from Cisco of the front is held. The yellow outline stays round
       the white ring because the figure is isometric and too small to tell a ring from a frame.
+  front-console-end:
+    confidence: estimated
+    note: >-
+      The shapes at the console end are read from the NetBox front elevations of the WS-C2960S-48FPD-L, -48TD-L,
+      -24PD-L and -24TD-L (cisco-ws-c2960s-<model>-l.front.png, 5475 x 503 px, 11.345 px per mm, the chassis starting
+      216 px in, so one pixel is 0.09 mm). The four agree on every shape here. A model whose own stencil is another
+      product is read from them. The legend band's left end slopes from (384.2, 2.1) to (394.5, 4.6) mm: the first teal
+      pixel of each row runs from 4584 to 4683 px over rows 26 to 50. The dark panel's top-right corner is rounded at
+      about 2.2 mm: the teal ends at 5191 px in row 53 and at 5213 px from row 77. The console surround stops at
+      24.42 mm under the mini-B jack and at 21.24 mm under the RJ-45 jack, with the step at 402.1 mm, so the surround
+      and its dark panel are two rectangles each, and the port lamp below stands on the panel. The stencil rounds the
+      inside of the step by about 0.9 mm and it is drawn square here. The mini-B's lower corners show the surround's
+      teal in the stencil, so two teal triangles, 0.8 by 1.2 mm, cover the hole's black beside the part's bevels.
+
   numbering:
     confidence: drawing
     note: >-
@@ -216,7 +230,7 @@ gaps:
   wanted: >-
     The RPS connector is the part cisco/rps2300-connector@2, drawn open where the photograph puts it. The part draws the
     plate, its two screw holes, the shroud with its dark top edge, the housing and the two rows of eleven cavities with
-    a contact in each; it does not draw the chamfered lower corners of the cells or the slot in the screws, which the
+    a contact in each; it draws the cells with their chamfered lower corners and does not draw the slot in the screws, which the
     photograph shows at about one pixel. The rating strip stays chassis art. The guide says the cover (two Phillips
     pan-head screws, Figure 1-15) goes on when no RPS is connected.
 - what: faceplate-colour
@@ -407,12 +421,16 @@ views:
       - {id: bezel-bottom, kind: bezel, at: [0, 42.35], size: [444.5, 2.1], rx: 0, fill: '#255e6d'}
       - {id: bezel-left, kind: bezel, at: [0, 0], size: [18.7, 44.45], rx: 0, fill: '#255e6d'}
       - {id: bezel-right, kind: bezel, at: [440.5, 0], size: [4.0, 44.45], rx: 0, fill: '#255e6d'}
-      - {id: legend-band, kind: bezel, at: [386.0, 0], size: [56.6, 4.6], rx: 0, fill: '#255e6d'}
+      - {id: legend-band, kind: bezel, at: [384.2, 0], size: [58.4, 4.6], rx: 0, fill: '#255e6d'}
+      - {id: panel-corner-ne-teal, kind: bezel, at: [438.3, 4.6], size: [2.2, 2.2], rx: 0, fill: '#255e6d'}
+      - {id: panel-corner-ne, kind: panel, at: [430.0, 4.6], size: [10.5, 8.0], rx: 2.2, fill: '#404040'}
       - {id: lamp-block, kind: panel, at: [3.2, 2.1], size: [13.0, 34.5], rx: 1.8, fill: '#404040'}
       - {id: lamp-block-foot, kind: panel, at: [3.2, 36.0], size: [5.9, 6.2], rx: 1.0, fill: '#404040'}
       - {id: usb-surround, kind: bezel, at: [379.4, 4.8], size: [7.9, 17.4], rx: 0.8, fill: '#255e6d'}
-      - {id: console-surround, kind: bezel, at: [387.9, 6.0], size: [31.6, 18.6], rx: 2.2, fill: '#bad4d7'}
-      - {id: console-panel, kind: panel, at: [389.0, 7.1], size: [29.4, 16.4], rx: 1.6, fill: '#404040'}
+      - {id: console-surround, kind: bezel, at: [387.9, 6.0], size: [31.6, 15.24], rx: 2.2, fill: '#bad4d7'}
+      - {id: console-surround-foot, kind: bezel, at: [387.9, 6.0], size: [14.2, 18.42], rx: 2.2, fill: '#bad4d7'}
+      - {id: console-panel, kind: panel, at: [389.0, 7.1], size: [29.4, 13.04], rx: 1.6, fill: '#404040'}
+      - {id: console-panel-foot, kind: panel, at: [389.0, 7.1], size: [12.0, 16.22], rx: 1.6, fill: '#404040'}
       - {id: console-usb-surround, kind: bezel, at: [389.0, 13.9], size: [11.6, 9.4], rx: 1.0, fill: '#255e6d'}
       - {id: jack-ring-1, kind: jack-plate, at: [20.66, 10.9], size: [89.2, 27.6], rx: 2.5, fill: '#ffffff'}
       - {id: jack-channel-1, kind: panel, at: [21.77, 11.72], size: [87.17, 26.09], rx: 1.8, fill: '#404040'}
@@ -514,6 +532,8 @@ views:
        filled: false, stroke-width: 0.16, fill: '#ffffff', for: chassis}
     - {id: usb-symbol-heads, at: [377.8, 3.75], path: 'M 0 0 L 0.34 0.56 H -0.35 Z M -0.4 3.73 a 0.4 0.4 0 1 0 0.8 0 a 0.4 0.4 0 1 0 -0.8 0 Z M -1.12 1.82 a 0.42 0.42 0 1 0 0.84 0 a 0.42 0.42 0 1 0 -0.84 0 Z M 0.29 1.26 a 0.41 0.41 0 1 0 0.82 0 a 0.41 0.41 0 1 0 -0.82 0 Z',
        fill: '#ffffff', for: chassis}
+    - {id: legend-band-slope, at: [384.2, 2.1], path: 'M 0 0 L 10.3 2.5 H 0 Z', filled: true, fill: '#404040', for: chassis}
+    - {id: console-usb-wedges, at: [390.65, 17.0], path: 'M -0.2 2.7 H 0 L 0.8 3.9 H -0.2 Z M 7.9 2.7 H 7.7 L 6.9 3.9 H 7.9 Z', filled: true, fill: '#255e6d', for: chassis}
     - id: lamp-hole-cover
       at: [0, 0]
       path: >-

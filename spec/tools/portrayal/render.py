@@ -46,6 +46,8 @@ from portrayal import capability
 from portrayal import ears as ears_mod
 from portrayal import halves as _halves
 from portrayal import bevel as _bevel
+from portrayal import section as _section
+from portrayal import fins as _fins
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
 TOOL_VERSION = "0.2.0"
@@ -960,9 +962,12 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     the wedge and the plate it sits on disagree about where the panel is.
     Hand-written profiles are untouched - only a feature THIS BUILD expanded
     from a `facet` is shifted here, guarded by `raw_feat.get("facet")`.
-    Clamped at 0: an inset larger than the wedge's own proud extent must not
-    read as a negative depth - EXCEPT on a sunk facet (`lift < 0`), whose
-    heights are below the plate on purpose and pass through unclamped.
+    Never clamped at 0. A wedge whose root the inset takes behind the plate
+    keeps that negative root, as a sunk facet's does: clamped, the profile lost
+    the inset (its slope flattened) and the kit, which rebuilds the wedge from
+    the profile's lowest height, stood the proud edge up by the whole inset.
+    `kit/swap.js` `insetFeature` ports `_inset_feature` and not this: it moves
+    only `out` and `lift`, and a profile it does not see is untouched.
     """
     if not raw_feat.get("facet") or pre_out is None or feat is None or feat.get("out") is None:
         return feat
@@ -972,9 +977,7 @@ def _inset_facet_profile(raw_feat, pre_out, feat):
     pkey = "profile-y" if raw_feat["facet"]["facing"] in ("up", "down") else "profile"
     if feat.get(pkey):
         feat = dict(feat)
-        floor = None if (raw_feat.get("lift") or 0) < 0 else 0.0
-        feat[pkey] = [[x, round(o + shift, 4) if floor is None else max(floor, round(o + shift, 4))]
-                      for x, o in feat[pkey]]
+        feat[pkey] = [[x, round(o + shift, 4)] for x, o in feat[pkey]]
     return feat
 
 
@@ -2170,7 +2173,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -2318,7 +2328,14 @@ def instance_group(lib, ref, inst_id, at, label, attrs, group, rel_pos, skin_nam
                     # walls and a floor taken from that node's own art, so this
                     # needs no new geometry - only a way for a feature to say it
                     # is a hole in a face rather than a lump on one.
-                    node.set("data-depth", str(feat["pocket"]))
+                    # `{depth, wall}` is a window in a thin plate: the floor is
+                    # still `data-depth`, and the plate's back face goes out as
+                    # `data-wall-depth` (`data-wall` is the wall COLOUR). A plain
+                    # number publishes exactly what it always did.
+                    depth, wall = _facets.pocket_depth_wall(feat["pocket"])
+                    node.set("data-depth", str(depth))
+                    if wall is not None:
+                        node.set("data-wall-depth", f"{wall:g}")
                     if (contract.get("relief") or {}).get("wall"):
                         node.set("data-wall", contract["relief"]["wall"])
                 if feat.get("shape"):
@@ -2767,6 +2784,125 @@ def bevel_face(svg, faceplate, ch, face, w, h):
         strip.set("stroke", ch.get("edge", "#22262a")); strip.set("stroke-width", "0.25")
 
 
+def section_face(faceplate, ch, face, w, h):
+    """Draw a housing's end profile on its left and right faces.
+
+    `chassis.section` is the profile in the right face's frame. The faceplate
+    becomes a <path> of the polygon with the same id, which is all relief.js and
+    the kit look it up by, and the rest of the face is left unpainted: transparent
+    corners, as a sheet body's face is. The left face is the polygon mirrored in x
+    with the winding reversed (section.outline). The front, rear, top and bottom
+    keep the full rectangle.
+
+    A bevelled face is a convex solid and bevel_face takes its outline from a hull;
+    a stepped profile is not convex, so the path is the polygon's own points in
+    order, which is all a path of straight edges needs. L206 refuses a section
+    with a bevel, so the two never meet.
+    """
+    pts = _section.points(ch)
+    if pts is None or face not in _section.END_FACES:
+        return
+    if (w, h) != (ch["depth"], ch["height"]):
+        return       # L205 refuses an end face drawn at another size
+    faceplate.tag = f"{{{SVG_NS}}}path"
+    for k in ("x", "y", "width", "height", "rx"):
+        faceplate.attrib.pop(k, None)
+    outline = _section.outline(face, pts, ch["depth"])
+    faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
+
+
+def fins_face(faceplate, ch, face, w, h):
+    """Draw the ribs of `chassis.fins` on this face (docs/modelling-a-device.md, "A housing
+    with a stepped end"), and say what is left to paint over the face's own art.
+
+    The front and the rear take the silhouette the fields give: at the core outside every
+    span of an inside field, at the step's tip line within it, so the gaps between ribs are
+    filled; an outside field stands out of the casting's edge by its step heights. The
+    faceplate becomes a <path> of it with the same id, and the ribs are painted inside, one
+    rect each, in a tone by their step. The top and the bottom stay the full rectangle and carry
+    a stripe for each rib of the field on their edge. An end face keeps the section's outline
+    and takes, where an inside field has cut the end cap back to the core, a band in a rib tone
+    that stands for the first rib seen behind the cap; an outside field's tallest rib is
+    painted end-on beyond the edge.
+
+    Returns `{"rects": [...], "box": (x0, y0, x1, y1)}`, the rects as `(x, y, w, h, fill, edge)`
+    for the group that is appended last (so the art cannot cover it) and the box the face now
+    draws (so the viewBox can grow past the face for ribs that stand outside it), or None for
+    a device without fins or a face they do not touch.
+    """
+    fields = [f for f in _fins.fields(ch) if _fins.usable(f)]
+    pts = _section.points(ch)
+    if not fields or pts is None:
+        return None
+    W, H, D = ch["width"], ch["height"], ch["depth"]
+    if (w, h) != {"front": (W, H), "rear": (W, H), "top": (W, D), "bottom": (W, D),
+                  "right": (D, H), "left": (D, H)}.get(face):
+        return None                     # a face drawn at another size is not this one
+    color = ch.get("color", _fins.DEFAULT_COLOR)
+    rects, boxes = [], []
+    mirror = face in ("rear", "bottom")
+
+    def put(x0, y0, rw, rh, fill, edge):
+        rects.append((x0, y0, rw, rh, fill, edge))
+        boxes.append((x0, y0, x0 + rw, y0 + rh))
+
+    for f in fields:
+        top = _fins.tallest(f)
+        ext = _fins.edge_extent(pts, f["on"], H)
+        if face in _fins.OUTLINE_FACES:
+            for x0, x1, tip in _fins.ribs(f):
+                if _fins.is_outside(f):
+                    y0 = -tip if f["on"] == "top" else H
+                else:
+                    y0 = (_fins.limit(f) - tip) if f["on"] == "top" else H - _fins.limit(f)
+                put(W - x1 if mirror else x0, y0, x1 - x0, tip, _fins.tone(color, tip, top), f["on"])
+        elif face in ("top", "bottom") and f["on"] == face and ext is not None:
+            for x0, x1, tip in _fins.ribs(f):
+                put(W - x1 if mirror else x0, D - ext[1], x1 - x0, ext[1] - ext[0],
+                    _fins.tone(color, tip, top), f["on"])
+        elif face in _section.END_FACES and ext is not None:
+            ex0, ex1 = ext if face == "right" else (D - ext[1], D - ext[0])
+            if _fins.is_outside(f):
+                y0 = -top if f["on"] == "top" else H
+                put(ex0, y0, ex1 - ex0, top, _fins.tone(color, top, top), f["on"])
+            else:
+                core = _fins.limit(f)
+                y0 = 0.0 if f["on"] == "top" else H - core
+                put(ex0, y0, ex1 - ex0, core, _fins.tone(color, top, top), f["on"])
+    outline = _fins.silhouette(face, ch)
+    if outline is not None:
+        outline_box = (min(x for x, _ in outline), min(y for _, y in outline),
+                       max(x for x, _ in outline), max(y for _, y in outline))
+        if [outline_box[1], outline_box[3]] != [0.0, float(H)] or len(outline) != 4:
+            faceplate.tag = f"{{{SVG_NS}}}path"
+            for k in ("x", "y", "width", "height", "rx"):
+                faceplate.attrib.pop(k, None)
+            faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
+            boxes.append(outline_box)
+    if not rects and outline is None:
+        return None
+    return {"rects": rects,
+            "box": (min(b[0] for b in boxes), min(b[1] for b in boxes),
+                    max(b[2] for b in boxes), max(b[3] for b in boxes)) if boxes else None}
+
+
+def fins_group(svg, art):
+    """The ribs of `fins_face`, as a group painted over the face's art and taking no click.
+    No member carries a `data-path`: they are paint and not parts."""
+    g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+    g.set("id", "chassis-fins")
+    g.set("data-path", "chassis/fins")
+    g.set("pointer-events", "none")
+    for x, y, rw, rh, fill, edge in art["rects"]:
+        r = ET.SubElement(g, f"{{{SVG_NS}}}rect")
+        r.set("data-class", "fin")
+        r.set("data-fin-on", edge)
+        r.set("x", f"{x:g}"); r.set("y", f"{y:g}")
+        r.set("width", f"{rw:g}"); r.set("height", f"{rh:g}")
+        r.set("fill", fill); r.set("stroke", "none")
+    return g
+
+
 def _shift_heights(node, by):
     """Move a node's absolute heights by `by` mm: its `out`, and its profile.
 
@@ -3003,6 +3139,8 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
     if not sheet:
         faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
+    section_face(faceplate, ch, view.get("face") or view_name, w, h)
+    fin_art = fins_face(faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
     palette = {}
@@ -3849,6 +3987,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             silk_g.append(t)
 
     extents = [0.0, 0.0, w, h]
+    # RIBS THAT STAND OUTSIDE THE BOX grow the viewBox as a part beyond the face does
+    # (data-face-w/-h below says which rectangle is the face)
+    if fin_art and fin_art["box"]:
+        fx0, fy0, fx1, fy1 = fin_art["box"]
+        extents = [min(0.0, fx0), min(0.0, fy0), max(float(w), fx1), max(float(h), fy1)]
     # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one - see
     # well_floor. Defined ahead of the mate-to resolution below, which reads
     # it: a host standing in a well hands its sink to what seats on it.
@@ -4255,7 +4398,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                     if (k.startswith("data-z-") or k.startswith("data-cp")
                             or k in ("data-depth", "data-body-depth",
                                      "data-ref", "data-behaviour",
-                                     "data-vent", "data-groove")
+                                     "data-vent", "data-groove", "data-wall-depth")
                             or k.startswith("data-guide")):
                         del node.attrib[k]
         # WHAT THE BLOCK IS FOR travels with every member, because the consumer
@@ -4546,6 +4689,44 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             if opening.get("data-depth") is None:
                 opening.set("data-depth", f"{occupant_depth(b):g}")
                 opening.set("data-wall", "#2a2e31")
+        # WHAT IS SEEN THROUGH THE OPENING WHEN IT IS EMPTY. Panel decor lies
+        # under every bay's opening, so a bar standing behind a frame, or a
+        # spool inside a tray, drawn as decor is hidden at the slot mouths in
+        # every configuration. The mark is the bay's own: it follows the
+        # opening, inside the bay's group, so it paints over the dark of the
+        # hole and under the module the group goes on to hold. It is always
+        # written, and hidden (`display`) when the configuration seats the bay,
+        # so a swap that empties the bay has something to show again
+        # (kit/swap.js toggles the same attribute). 2D only: the 3D scene
+        # builds what stands behind the opening as parts.
+        if b.get("seen-through"):
+            seen_g = ET.SubElement(bay_g, f"{{{SVG_NS}}}g")
+            seen_g.set("id", f"{b['id']}--seen-through")
+            seen_g.set("data-class", "seen-through")
+            if default:
+                seen_g.set("display", "none")
+            clip = ET.SubElement(seen_g, f"{{{SVG_NS}}}clipPath")
+            clip.set("id", f"{b['id']}--seen-through-clip")
+            clip_r = ET.SubElement(clip, f"{{{SVG_NS}}}rect")
+            for k, v in (("x", f"{ox:g}"), ("y", f"{oy:g}"),
+                         ("width", f"{op['w']:g}"), ("height", f"{op['h']:g}")):
+                clip_r.set(k, v)
+            items_g = ET.SubElement(seen_g, f"{{{SVG_NS}}}g")
+            items_g.set("clip-path", f"url(#{b['id']}--seen-through-clip)")
+            for n_, it in enumerate(b["seen-through"]):
+                dx, dy = it["at"]; dw, dh = it["size"]
+                slot = it.get("shape") == "slot"
+                el = ET.SubElement(items_g, f"{{{SVG_NS}}}{'path' if slot else 'rect'}")
+                el.set("id", f"{b['id']}--seen-{it.get('id') or n_}")
+                el.set("data-kind", it.get("kind") or "seen-through")
+                if slot:
+                    el.set("d", _slot_path(dx, dy, dw, dh))
+                else:
+                    el.set("x", f"{dx:g}"); el.set("y", f"{dy:g}")
+                    el.set("width", f"{dw:g}"); el.set("height", f"{dh:g}")
+                    if it.get("rx"):
+                        el.set("rx", f"{it['rx']:g}")
+                el.set("fill", it["fill"])
         if default:
             # THE BAY'S CENTRE, and nothing else. instance_group hangs the
             # occupant by its own middle, so there is no origin to solve for and
@@ -4793,6 +4974,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 el.set("width", f"{pw_:g}"); el.set("height", f"{ph_:g}")
             el.set("fill", "none")
             el.set("stroke", "none")
+
+    # THE RIBS ARE PAINTED LAST, over the face's own art, and take no click
+    if fin_art and fin_art["rects"]:
+        fins_group(svg, fin_art)
 
     meta_payload = {
         "generator": {"tool": "portrayal-render", "version": TOOL_VERSION},
@@ -6384,6 +6569,13 @@ def main():
                              # so the site reads one file (#907)
                              **({"kits": published_kits(ch["kits"], lib)}
                                 if ch.get("kits") else {}),
+                             # the end profile of a stepped housing, as
+                             # written; absent on a box
+                             **({"section": [list(p) for p in ch["section"]]}
+                                if ch.get("section") else {}),
+                             # the ribs on that housing, as written; absent
+                             # where the device states none
+                             **({"fins": copy.deepcopy(ch["fins"])} if ch.get("fins") else {}),
                              # the two halves of a box that opens, as written;
                              # absent on a box that does not
                              **({"halves": _halves.published(device)} if _halves.declared(device) else {})},

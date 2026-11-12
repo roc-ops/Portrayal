@@ -138,6 +138,40 @@ jobs:
       - name: lint
         run: python3 spec/tools/portrayal/lint.py --schemas spec/schemas --library library
 
+      # A LOCK THAT MOVED NEEDS A VERSION THAT MOVED, AGAINST THE BASE. The
+      # `devicelock` step in `dist` compares each lock with the device as it is
+      # now, and after `devicelock.py --update` the two always agree: a branch
+      # that re-recorded a lock and left `version:` where the base had it
+      # passed it. This step puts the base's lock beside the branch's.
+      #
+      # THE BASE IS THE CHECKED-OUT COMMIT'S FIRST PARENT, not the event's
+      # `base.sha`. On a pull request the checkout is the merge of the head
+      # into the base's tip and holds only that one commit, whose text names
+      # its parents. The first parent is the base the merged tree was built
+      # on, so it stays right when the base moves between two pushes; `base.sha`
+      # is the tip when the event fired, and a pull request that is behind would
+      # then show the base's own newer locks as its own. The commit alone is
+      # fetched (one commit, `contents: read`), and a tree diff between two
+      # commits needs no history.
+      #
+      # ONLY A PULL REQUEST HAS A BASE. A push, a dispatch and the nightly say
+      # so and pass.
+      - name: devicelock against the base
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "devicelock against the base: skipped, a $EVENT has no base to compare with"
+            exit 0
+          fi
+          base=$(git cat-file -p HEAD | sed -n '/^parent /{s///p;q}')
+          if [ -z "$base" ]; then
+            echo "devicelock against the base: HEAD is not a merge commit, so the base is unknown"
+            exit 1
+          fi
+          git fetch --no-tags --depth=1 origin "$base"
+          python3 spec/tools/portrayal/devicelock.py --library library --base "$base"
+
   # THE BUILD IS THREE JOBS NOW, AND `build` IS STILL THE ONE THAT ANSWERS.
   # `dist` builds and publishes once; four `tests` jobs each run a quarter of
   # the suite against that build; `build` reads all four and is the check that
@@ -326,11 +360,16 @@ jobs:
       - run: pip install -e ".[test]"
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
-      # thing this workflow exists to stop happening quietly.
+      # thing this workflow exists to stop happening quietly. The runners cannot
+      # reach Ubuntu's package hosts, so poppler comes from conda-forge, which
+      # the runner image's Miniconda installs from.
       - name: poppler
         run: |
-          command -v pdftoppm \
-            || { sudo apt-get update && sudo apt-get install -y poppler-utils; }
+          command -v pdftoppm && exit 0
+          : "${CONDA:?CONDA is not set: this runner has no Miniconda, and apt is not used}"
+          "$CONDA/bin/conda" create -y -p "$RUNNER_TEMP/poppler-env" -c conda-forge poppler
+          "$RUNNER_TEMP/poppler-env/bin/pdftoppm" -v
+          echo "$RUNNER_TEMP/poppler-env/bin" >> "$GITHUB_PATH"
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
         with:

@@ -24,7 +24,7 @@
 // what every other caller sees. Treat all of it as read-only.
 
 import {faceUrl} from './faces.js';
-import {jdist, readIndex} from '../../dist.js';
+import {jdist, readIndex, fetchDist} from '../../dist.js';
 import {seatFace} from '../../swap.js';
 import {paintFields} from '../../fields.js';
 import {readSvg, portsOf} from '../../zones.js';
@@ -92,7 +92,7 @@ function skinText(url) {
   let hit = SKINS.get(url);
   if (!hit) {
     const drop = () => { if (SKINS.get(url) === hit) SKINS.delete(url); };
-    hit = fetch(url).then(r => { if (r.ok) return r.text(); drop(); return null; })
+    hit = fetchDist(url).then(r => { if (r.ok) return r.text(); drop(); return null; })
       .catch(err => { drop(); throw err; });
     SKINS.set(url, hit);
   }
@@ -176,7 +176,7 @@ function faceText(url) {
   if (hit) TEXTS.delete(url);   // re-insert: Map order is recency
   else {
     // a failure drops its own entry only: by then the URL may hold a later ask's
-    hit = fetch(url).then(r => (r.ok ? r.text() : null))
+    hit = fetchDist(url).then(r => (r.ok ? r.text() : null))
       .catch(err => { if (TEXTS.get(url) === hit) TEXTS.delete(url); throw err; });
   }
   TEXTS.set(url, hit);

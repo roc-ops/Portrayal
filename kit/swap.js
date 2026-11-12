@@ -302,7 +302,7 @@ export function seatModule(ownerDoc, bayId, bay, ref, comp, skinText, idBase = b
 // what a projection does not carry: relief, refs, behaviour, connection points
 const projectionDrops = n => n.startsWith('data-z-') || n.startsWith('data-cp')
   || ['data-depth', 'data-body-depth', 'data-ref', 'data-behaviour',
-      'data-vent', 'data-groove'].includes(n);
+      'data-vent', 'data-groove', 'data-wall-depth'].includes(n);
 
 // A GROUP MADE A PROJECTION, as render.py makes one: `data-path` becomes
 // `data-of` (the path is already the part's own), and everything
@@ -706,7 +706,7 @@ export function pyG(v) {
 const INSET_KEYS = ['out', 'lift', 'cyl', 'bar', 'uhandle'];
 const FEATURE_ATTRS = ['top', 'sink', 'out', 'dome', 'vent', 'cyl', 'lift', 'bar', 'uhandle',
                        'dia', 'profile', 'profile-y', 'color', 'hole-color', 'shape', 'knurl',
-                       'thread'].map(k => `data-z-${k}`).concat(['data-depth', 'data-wall']);
+                       'thread'].map(k => `data-z-${k}`).concat(['data-depth', 'data-wall', 'data-wall-depth']);
 
 // EVERY FEATURE BELOW A SEATED OCCUPANT, MOVED AS THE BUILD MOVES IT. The skin
 // the kit copies is the component's STANDALONE drawing, built at back 0; the
@@ -1485,6 +1485,15 @@ export async function applyOverrides(rootEl, bays, overrides, loadSkin, isCurren
     const loaded = ref ? await loadSkin(ref) : null;
     if (!isCurrent(bay.id)) continue;         // a newer swap owns this bay
     g.querySelector(`[id="${CSS.escape(idBase)}--module"]`)?.remove();
+    // WHAT IS SEEN THROUGH THE EMPTY OPENING (render.py `seen-through`) belongs
+    // to the empty opening: a seated part hides it, an emptied bay shows it. The
+    // build writes it either way, hidden by `display`, and this toggles the same
+    // attribute. An unknown ref leaves the bay open, so it leaves the mark.
+    const seatedNow = !!(ref && loaded);
+    for (const s of g.querySelectorAll(':scope > [data-class="seen-through"]')) {
+      if (seatedNow) s.setAttribute('display', 'none');
+      else s.removeAttribute('display');
+    }
     applied++;
     if (bay.span?.length) markSpan(rootEl, bay, ref && loaded ? loaded.comp : null);
     if (!ref) continue;                       // deliberately empty

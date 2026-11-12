@@ -65,7 +65,8 @@ def test_the_registry_lets_a_lug_turn_freely_on_a_stud_and_names_no_other_turns(
     # the pair and never across it; every other interface allows 0 alone
     pairs = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
     assert all(reg[k]["turns"] == [0, 180] for k in pairs)
-    assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", *pairs])
+    # a spade terminal slides on from any side, so `spade-m4` names the four right angles, as `terminal-stud` does
+    assert sorted(k for k, v in reg.items() if "turns" in v) == sorted(["terminal-stud", "spade-m4", *pairs])
 
 
 @pytest.mark.heavy
@@ -433,7 +434,15 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # the Cisco ASR 9000 grounding pad's two 10-32 screws, on the ten chassis that place it (thirteen placements): 26 ring seats (down 20, left 4, right 2)
 # the grounding screw on its washer, placed by the ten AurCore AIS switches and the Eaton PDUMH20NET: eleven ring seats (down 11)
 # the Cisco C9300-24S's and C9300-48S's two rear ground screws each: two more seats down and two left
-WANT = {"down": 225, "left": 61, "up": 37, "right": 44}   # the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
+# 228 -> 230: one more down on each of the Panduit P24B14M and P32E06M
+# 230 -> 231: one more down on the CyberPower PDU30BHVT8R's one external site ground
+# 231 -> 232: one more down on the Enlogic EB0803's ground screw
+# 232 -> 234: one more down on each of the Moxa NPort 5650-16 and 5650-16-T
+# 234 -> 235: one more down on the CyberPower PDU15M2F12R's external site ground
+# 235 -> 237: one more down on each of the Enlogic EN2951's and EN6952's ground screw
+# 237 -> 239: one more down on each of the Panduit P36G18M and P42G20M
+# 239 -> 241: one more down on each of the Eaton EMIT03-10 and EMIT04-10's ground screw on its washer
+WANT = {"down": 241, "left": 61, "up": 37, "right": 44}   # 228: the MikroTik CRS510's earth stud, one more down (227 before); 227: the MikroTik CRS504-4XQ-IN earth stud, one more down (226 before); one more down: the Eaton EPBZ77's inner ground stud; the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of
 # the eleven Amphenol 300CB08 panels, one on each AIS800, the seven MX, the
 # LMFS-F, two on the FX-16, one on the FX-8 and FX-4, the SR-1-DC block's
@@ -455,7 +464,7 @@ WANT = {"down": 225, "left": 61, "up": 37, "right": 44}   # the 24 terminal pads
 # the Nokia SR-1e, SR-2e and SR-3e 10-32 pairs lead down, the SR-12's 1/4-20 pair leads left
 # the Cisco ASR 9000 grounding pad: 13 pair seats on 10 devices (left 7, right 5, up 1)
 # the Amphenol Network Solutions 300CB08 input terminals: four pair seats on each of eight devices, leading down
-WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 30}   # left: one more on each of the four Juniper EX3200
+WANT_PAIRS = {"down": 89, "left": 33, "up": 3, "right": 34}   # left: one more on each of the four Juniper EX3200; right: the four terminals of the Nokia FX-16 shelf, turned 30.2 degrees by their block and named for the nearest right angle
 NAMES = {0: "right", 90: "down", 180: "left", 270: "up"}
 LEADS = {"right": 0, "down": 90, "left": 180, "up": 270}
 PAIR_IFACES = ("stud-pair-5-8", "stud-pair-3-4", "stud-pair-1")
@@ -504,7 +513,14 @@ HARD_RESIDUAL = {("juniper/mx150", "rear", "ground-studs"): ("left", 1, 0),
                  ("juniper/ex4100-f-24p", "rear", "ground-pair"): ("right", 2, 0),
                  ("juniper/ex4100-f-24t", "rear", "ground-pair"): ("right", 1, 0),
                  ("juniper/ex4100-f-48p", "rear", "ground-pair"): ("right", 2, 0),
-                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0)}
+                 ("juniper/ex4100-f-48t", "rear", "ground-pair"): ("right", 1, 0),
+                 # the FX-16 shelf's four dual-post terminals stand 58.95 apart on a 30.2 degree slant; the least bad
+                 # way along a pair still lies across the next terminal or its shroud (the elevation's geometry, not
+                 # the rule's)
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-1"): ("right", 1, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-2"): ("right", 2, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-3"): ("right", 1, 0),
+                 ("nokia/nfxs-d-ba", "front", "dc-input/tb1-4"): ("right", 1, 0)}
 # the crossings the seat's own direction made, which the default must not.
 # The MX150's second stud is `ground-stud-1` of main, one level into its pair.
 CROSSED_BEFORE = {("supermicro/sys-111e-fwtr", "front", "ground-stud"),
@@ -534,7 +550,7 @@ def census():
                 box = R.occupant_box(seat["mate"], lug, absolute)
                 box0 = R.occupant_box(seat["mate"], lug, seat["rotate"])
                 rows[(slug, v, key)] = dict(
-                    lug=ref, dir=NAMES[(absolute + lead) % 360], turn=t,
+                    lug=ref, dir=NAMES[(round((absolute + lead) / 90) * 90) % 360], turn=t,
                     hard=sum(R._crosses(box, o) for o in seat["obstacles"]),
                     soft=sum(R._crosses(box, o) for o in seat["legends"]),
                     hard0=sum(R._crosses(box0, o) for o in seat["obstacles"]))
@@ -553,7 +569,7 @@ def _pairs(census):
 def test_the_default_distribution_is_pinned(census):
     ring, pairs = _ring(census), _pairs(census)
     assert dict(collections.Counter(r["dir"] for r in ring.values())) == WANT
-    assert len({k[0] for k in ring}) == 162   # the two Digi Connect EZ 16 and 32 earth studs, and 160: the Cisco C9300-24S and C9300-48S, and 158: 154 and the four Juniper EX3200: the ten AurCore AIS switches and the Eaton PDUMH20NET (11 devices), and 143: the ten Cisco ASR 9000 chassis that place the grounding pad, and 133: the Nokia SR-12, SR-1e, SR-2e and SR-3e and the MikroTik CRS309, CRS326 and CSS326 earth studs (7 devices), and the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
+    assert len({k[0] for k in ring}) == 178   # 178 with the Eaton EMIT03-10 and EMIT04-10's ground screw on its washer (176 before); 176 with the Panduit P36G18M and P42G20M (174 before); 174 with the Enlogic EN2951's and EN6952's ground screw (172 before); 172 with the CyberPower PDU15M2F12R (171 before); 171 with the Moxa NPort 5650-16 and 5650-16-T (169 before); 169 with the Enlogic EB0803's ground screw (168 before); 168 with the CyberPower PDU30BHVT8R (167 before); 167 with the Panduit P24B14M and P32E06M (165 before); 165 with the MikroTik CRS510's earth stud (164 before); 164 with the MikroTik CRS504-4XQ-IN earth stud (163 before), and the Eaton EPBZ77: 162 the two Digi Connect EZ 16 and 32 earth studs, and 160: the Cisco C9300-24S and C9300-48S, and 158: 154 and the four Juniper EX3200: the ten AurCore AIS switches and the Eaton PDUMH20NET (11 devices), and 143: the ten Cisco ASR 9000 chassis that place the grounding pad, and 133: the Nokia SR-12, SR-1e, SR-2e and SR-3e and the MikroTik CRS309, CRS326 and CSS326 earth studs (7 devices), and the 23 Juniper earthing terminals of this change (21 pair devices and the EX2300-24MP and -48MP), and 103: 63, the Cisco C9300-48P and C9300-48T, the Cisco C9300-24P, C9300-24U and C9300-48U, the Juniper EX9204, EX9208 and EX9214, the Arista 7280CR3A-48D6 and -72, the Juniper QFX5241-64OD and -64QD, the Arista 7050CX4M-48D8, the Arista 7280CR3-96 (as the DR3A-36), the Arista 7280DR3A-36, and the Eaton EVMI2130X, EVMA8365X and PDU12IEC, the seven ReadyLinks GL-x siblings, the four Juniper EX3400, the four Juniper EX3300, the Arista 7010TX-48, the Juniper QFX5200-48Y, the Juniper QFX5120-32C, the Juniper QFX5240-64OD and -64QD, the Juniper EX9251 and the Juniper QFX5700
     assert dict(collections.Counter(r["dir"] for r in pairs.values())) == WANT_PAIRS
     assert len({k[0] for k in pairs}) == 90   # 86 and the four Juniper EX3200: the same ten Cisco chassis, and 76: the Nokia SR-12, SR-1e, SR-2e and SR-3e (4 devices), and the 21 Juniper earthing pairs of this change, and 51: the Juniper EX9204, EX9208 and EX9214 pair hosts, the four Juniper EX3300, the two Juniper QFX5240 earthing pads, the Juniper QFX5700's and the two on the QFX5241-64OD and -64QD
     # a pair is turned only along itself

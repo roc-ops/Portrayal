@@ -189,13 +189,20 @@ def pairs():
     return out
 
 
+# the six-way LC holders and their rears are @3: their @1 and their @2 both redirect there
+SIX_WAY_LC = ("xmi1021ca", "xmi1021da", "xmi1021ga", "xmi1021ha", "xmi1031ga")
+
+
 def test_the_forty_fibrain_refs_of_1046_are_redirected():
     got = {old: new for new, s in pairs() for old in [s["ref"]] if old.startswith("fibrain/")}
     want = {}
     for name in sorted(p.name for p in (ROOT / "library/components/fibrain").iterdir()
                        if p.name.startswith(("xmi", "xmn"))):
-        want[f"fibrain/{name}@1"] = f"fibrain/{name}@2"
-    assert got == want and len(want) == 40, sorted(set(want) ^ set(got))
+        newest = 3 if name.removesuffix("-rear") in SIX_WAY_LC else 2
+        want[f"fibrain/{name}@1"] = f"fibrain/{name}@{newest}"
+        if newest == 3:
+            want[f"fibrain/{name}@2"] = f"fibrain/{name}@3"
+    assert got == want and len(want) == 50, sorted(set(want) ^ set(got))
 
 
 def test_the_retired_juniper_mic_is_redirected():
@@ -213,7 +220,7 @@ def test_every_recorded_signature_matches_the_published_replacement():
     assert R.problems(components) == []
     by_ref = {f"{c['ns']}/{c['name']}@{c['major'].lstrip('v')}": c for c in components}
     for new, s in pairs():
-        assert by_ref[new]["supersedes"][0]["ref"] == s["ref"]
+        assert s["ref"] in [c["ref"] for c in by_ref[new]["supersedes"]]
         assert R.signature(by_ref[new]) == s["signature"], new
 
 

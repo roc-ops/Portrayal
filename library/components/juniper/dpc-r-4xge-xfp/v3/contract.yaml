@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dpc-r-4xge-xfp
-version: 3.0.0
+version: 3.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -12,6 +12,7 @@ description: >-
 attrs:
   xfp-10g: 4
   model: DPC-R-4XGE-XFP
+  model-variants: DPCE-R-4XGE-XFP, DPCE-X-4XGE-XFP
   power-draw-max-w: 310
   lifecycle-note: EOL per PSN-TSB14931; modelled because it is the card the reference photograph 
     carries
@@ -31,6 +32,11 @@ provenance:
     by x' = 8.75 + (x - 26.15) * 396.0 / 394.85, the old plate run 26.15-421.0 onto the new 8.75-404.75;
     y is unchanged. Only the levers, the model name and the status group were placed afresh (provenance
     below). 
+  model-variants: >-
+    MX240 Hardware Guide, Table 93 (printed p. 228) prints 310 W for DPC-R-4XGE-XFP and for DPCE-R-4XGE-XFP
+    with DPCE-X-4XGE-XFP; the module reference (printed pp. 92 to 100) gives each four ports and
+    6.46 A @ 48 V (310 W). Figure 7 (printed p. 95) shows the DPCE-R-4XGE-XFP face with four XFP cages and the
+    same lever and lamp. The three share this part; its face is the photograph of the DPC-R card.
   power: 'guide Table 93 DPC section: DPC-R-4XGE-XFP 310 W maximum; ambient unqualified by the vendor
     - max is our reading, recorded here'
   covers: 'photo - the reference unit ships with bright XFP dust covers seated; they are DELIBERATELY
@@ -72,15 +78,30 @@ provenance:
     its lamp from y 17.9 up (to about 7.1 and 12.0). Set at 2.6 mm, the size the printed lengths give
     (PORT 0/0 12.4 mm, TUNNEL 10.8, LINK 5.9). The MX480's later DPC 4x10GE prints 0/0 rather than
     PORT 0/0 on the same layout; this card is the MX240's.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '10-Gigabit
+    Ethernet DPC with XFP' (printed pages 92 to 94): 'Four 10-Gigabit Ethernet ports' for the
+    model DPC-R-4XGE-XFP and 'throughput on each port at speeds up to 10 Gbps'; the ports are
+    PICs 0 through 3 of one port each, and the link LEDs are labelled top to bottom 0/0 through
+    3/0. The role is traffic: the book names no role for the ports, and the role follows the
+    job, a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  xfp-10g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: xfp, speed: 10g}
+    description: >-
+      the four XFP ports, labelled 0/0 to 3/0 by PIC and port, each at up to 10 Gbps
 parts:
-- {ref: std/xfp@1, id: port-0, at: [95.80, 14.00]}
-- {ref: std/xfp@1, id: port-1, at: [171.95, 14.00]}
-- {ref: std/xfp@1, id: port-2, at: [248.05, 14.00]}
-- {ref: std/xfp@1, id: port-3, at: [324.05, 14.00]}
+- {ref: std/xfp@1, id: port-0, group: xfp-10g, at: [95.80, 14.00]}
+- {ref: std/xfp@1, id: port-1, group: xfp-10g, at: [171.95, 14.00]}
+- {ref: std/xfp@1, id: port-2, group: xfp-10g, at: [248.05, 14.00]}
+- {ref: std/xfp@1, id: port-3, group: xfp-10g, at: [324.05, 14.00]}
 elements:
   lever-left:
     at: [0.0, 11.05]

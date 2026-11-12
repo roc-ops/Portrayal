@@ -1,18 +1,13 @@
 format: 1
 kind: module
 name: mic3-100g-dwdm
-version: 2.0.0
+version: 2.2.0
 class: line-card
 behaviour: fills
 profile: networking
+slot-width: 2
 description: >-
-  Juniper 100G DWDM OTN MIC3 with CFP2-ACO (one port). Dual-wide: one 338.1 x 29.2 plate across both MIC slots of its MPC, the span of the two photo-measured MIC windows (#261).
-unplaced: >-
-  no MPC in this library accepts it. It is DUAL-WIDE - the module reference's 'Dual-wide MIC
-  that installs into two MIC slots' - and the MPC3E models two single-wide MIC bays, so no bay is
-  shaped like this card. Seating it needs a way to say that one module fills two bays, which the
-  format does not have (roc-ops/Portrayal#34). Until #261 it sat in the MPC3E's single-wide bays,
-  drawn at single width.
+  Juniper 100G DWDM OTN MIC3 with CFP2-ACO (one port). Dual-wide: one 338.1 x 29.2 plate across both MIC slots of its MPC, the span of the two photo-measured MIC windows. It plugs into the MPC's first MIC slot and covers the second.
 attrs:
   model: MIC3-100G-DWDM
   power-draw-max-w: 91
@@ -45,12 +40,27 @@ provenance:
     is the slot geometry of its chassis family; positions are laid out from the module reference port
     description and registry cage sizes, NOT measured from a faceplate drawing. No faceplate figure was
     usable for this model
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    DWDM OTN MIC with CFP2-ACO' (printed pages 312 to 316): 'One 100-Gigabit DWDM OTN port' for
+    the model MIC3-100G-DWDM, a dual-wide MIC that 'Supports CFP2 analog coherent optics
+    (CFP2-ACO)'; 'The port is labeled Port 0.' The only rate the book prints for the port is 100
+    Gigabit; the OTN line rate is not stated. The role is traffic: the book names no role for
+    the ports, and the role follows the job, a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  cfp2-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cfp2, speed: 100g}
+    description: >-
+      the one CFP2-ACO port, labelled Port 0, at 100 Gbps
 parts:
-- {ref: std/cfp2@2, id: port-0-0, at: [16.40, 7.45], attrs: {media: cfp2}}
+- {ref: std/cfp2@2, id: port-0-0, group: cfp2-100g, at: [16.40, 7.45], attrs: {media: cfp2}}
 size:
   w: 338.1
   h: 29.2

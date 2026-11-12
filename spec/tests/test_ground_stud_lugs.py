@@ -131,10 +131,18 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # face, the guide's "ground connectors", 6 -> 10 on 3 -> 5 devices.
 # The Cisco C9300-24P, C9300-24U and C9300-48U each place the same two, 10 -> 16 on 5 -> 8 devices.
 # The Cisco C9300-24S and C9300-48S each place the same two, 16 -> 20 on 8 -> 10 devices.
+# The Eaton EPBZ77 places one common/ground-stud@1, its inner ground stud, 11 -> 12 on 11 -> 12 devices.
+# The Panduit P24B14M and P32E06M each place one common/ground-screw@1 at the cord end, 20 -> 22 on 10 -> 12 devices.
+# The CyberPower PDU30BHVT8R places one common/ground-screw@1, its external site ground, 22 -> 23 on 12 -> 13 devices.
+# The Enlogic EB0803 places one common/ground-screw@1, 23 -> 24 on 13 -> 14 devices.
+# The Moxa NPort 5650-16 and 5650-16-T each place one ground screw on their rear face, 24 -> 26 on 14 -> 16 devices.
+# The CyberPower PDU15M2F12R places one common/ground-screw@1, its external site ground, 26 -> 27 on 16 -> 17 devices.
+# The Enlogic EN2951 and EN6952 each place one common/ground-screw@1, 27 -> 29 on 17 -> 19 devices.
+# The Panduit P36G18M and P42G20M each place one common/ground-screw@1 at the cord end, 29 -> 31 on 19 -> 21 devices.
 CENSUS = {
     "common/ground-lug@1": (31, 22),
-    "common/ground-screw@1": (20, 10),
-    "common/ground-stud@1": (13, 13),
+    "common/ground-screw@1": (31, 21),   # (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
+    "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -428,6 +436,11 @@ COMPOSED = {
     ("edgecore/fsj033-610g@1", "ground-stud"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afi@1", "earth"): "common/ground-screw@1",
     ("juniper/ex4300-jpsu-550-dc-afo@1", "earth"): "common/ground-screw@1",
+    # the earth stud of the Smartoptics DCP rack kit sits on its front brackets and its mid-mount
+    # bracket, which are parts of a kit and not placements on a chassis face.
+    ("smartoptics/dcp-front-bracket-600@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-front-bracket-700@1", "earth"): "common/ground-stud@1",
+    ("smartoptics/dcp-mid-mount-bracket@1", "earth"): "common/ground-stud@1",
 }
 
 
@@ -460,10 +473,25 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
     # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
-    assert sum(n for n, _ in got.values()) == 65
+    # 65 -> 66 with the Eaton EPBZ77's ground stud
+    # 66 -> 68 with the Panduit P24B14M and P32E06M's ground screw each
+    # 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
+    # 69 -> 70 with the Enlogic EB0803's one ground screw
+    # 70 -> 72 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+    # 72 -> 73 with the CyberPower PDU15M2F12R's external site ground
+    # 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
+    # 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
+    assert sum(n for n, _ in got.values()) == 77
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    # 44 -> 46 with the Digi Connect EZ 16 and 32
-    assert len({where for where, _, _ in placed}) == 46
+    # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
+    # 47 -> 49 with the Panduit P24B14M and P32E06M
+    # 49 -> 50 with the CyberPower PDU30BHVT8R
+    # 50 -> 51 with the Enlogic EB0803
+    # 51 -> 53 with the Moxa NPort 5650-16 and 5650-16-T
+    # 53 -> 54 with the CyberPower PDU15M2F12R
+    # 54 -> 56 with the Enlogic EN2951 and EN6952
+    # 56 -> 58 with the Panduit P36G18M and P42G20M
+    assert len({where for where, _, _ in placed}) == 58
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -509,7 +537,15 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
     # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
     # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
-    assert seen == 64
+    # 64 -> 65 with the Eaton EPBZ77's ground stud
+    # 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
+    # 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
+    # 68 -> 69 with the Enlogic EB0803's one ground screw
+    # 69 -> 71 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+    # 71 -> 72 with the CyberPower PDU15M2F12R's external site ground
+    # 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
+    # 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
+    assert seen == 76
 
 
 @pytest.mark.heavy

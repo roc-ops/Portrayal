@@ -87,12 +87,12 @@ CARDS = [
         "cfp2-rate": ["Two 100-Gigabit Ethernet CFP2 ports"]}),
     ("mic6-100g-cxp", "v1", {"cxp": 4}, {
         "cxp-rate": ["Four 100-Gigabit Ethernet ports", "Supports 100GBASE-SR10 over CXP pluggable optics"]}),
-    ("mic-mrate", "v1", {"qsfp": 12}, {
+    ("mic-mrate", "v2", {"qsfp": 12}, {
         "qsfp-rate": ["Twelve Gigabit Ethernet ports that support quad small form-factor pluggable plus "
                       "(QSFP+) transceivers",
                       "Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports",
                       "4 ports out of the total 12 support 100-Gigabit Ethernet speed"]}),
-    ("mic-macsec-mrate", "v1", {"qsfp": 12}, {
+    ("mic-macsec-mrate", "v2", {"qsfp": 12}, {
         "qsfp-rate": ["Twelve Gigabit Ethernet QSFP+ ports",
                       "Port numbers 0 through 3, and 6 through 9 are the eight 100-Gigabit Ethernet ports",
                       "Four ports out of the total twelve ports support 100-Gigabit Ethernet speed"]}),
@@ -198,7 +198,7 @@ def test_the_drawing_notes_say_the_drawing_is_left():
 
 def test_the_lc2103_is_left_as_it_was():
     c = yaml.safe_load((COMP / "jnp10003-lc2103/v1/contract.yaml").read_text())
-    assert c["attrs"]["qsfp"] == 6 and c["version"] == "1.3.1"
+    assert c["attrs"]["qsfp"] == 6 and c["version"] == "1.4.0"
 
 
 def test_no_card_states_a_count_key_outside_the_libraries_port_keys():

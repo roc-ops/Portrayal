@@ -434,6 +434,21 @@ standards:
       between the two parts is the insert and the gender, and on equipment VGA
       is a female receptacle where the alarm and serial DE-9s are usually male.
       Neither changes the hole.
+  dvi-d:
+    registry: Digital Display Working Group, Digital Visual Interface (DVI) - DVI-D receptacle, on the face of the jack in the Raritan Dominion SX II data sheet photograph
+    w: 26.8
+    h: 9.8
+    confidence: estimated
+    source: >-
+      ESTIMATED from a photograph: Raritan, "Dominion SX II" data sheet V1209R3 (2021), page 4, the labelled rear
+      photograph of the DSX2-32, the jack labelled "DVI-D Video". The shell reads 247 by 90 pixels on the page
+      rendered at 600 dpi, 9.21 pixels per millimetre, so 26.8 by 9.8 mm to about 1 mm. The DVI standard is not
+      held: no document gives the receptacle's outline or its contacts.
+    notes: >-
+      THE JACK AS A PANEL SHOWS IT, not a cutout from a drawing. Three rows of eight contact cells and the flat
+      blade slot, and no group of four analogue pins around the blade, so it is a DVI-D jack and not DVI-I. The
+      contact pitch (about 2.1 mm) and the blade are read off the same photograph and are estimates. No depth:
+      no held document states it, so the part is a flat face.
   da15:
     registry: TE 114-40010 Rev G, D-subminiature shell size A (DA-15)
     w: 28.80
@@ -2357,6 +2372,28 @@ standards:
     notes: >-
       The same 20 A twist-lock body as the L6-20P; the configurations differ
       in where the blades sit.
+  nema-6-15p-plug:
+    registry: NEMA WD 6 configuration 6-15P (250 V 15 A straight blade), as Volex VS205S draws it
+    w: 31.2
+    h: 29.6
+    confidence: drawing
+    source: >-
+      Volex "Power Products catalogue" (Aug-2025), VS205S "NEMA 6-15P Straight Plug", PDF page 164:
+      the body 31.2 by 29.6, the blades 15.88 min and the earth pin 21.40 max proud.
+    notes: >-
+      THE BODY, face on. No depth is modelled: the sheet prints the body behind the face as 56.34 +-1 long.
+      NEMA WD 6 is not held.
+  nema-6-20p-plug:
+    registry: NEMA WD 6 configuration 6-20P (250 V 20 A straight blade), as Volex PS620 draws it
+    w: 31.2
+    h: 29.6
+    confidence: drawing
+    source: >-
+      Volex "Power Products catalogue" (Aug-2025), PS620 "NEMA 6-20P Straight Plug", PDF page 166:
+      the body 31.2 by 29.6, the blades 15.88 min and the earth pin 21.41 max proud.
+    notes: >-
+      THE BODY, face on. No depth is modelled: the sheet prints the body behind the face as 56.34 +-1 long.
+      NEMA WD 6 is not held.
   nema-5-20p-plug:
     registry: NEMA WD 6 configuration 5-20P (125 V 20 A straight blade), as Leviton CATSTD-05366-00C-D01 rev 1 draws catalogue no. 5366-C
     w: 38.9
@@ -2887,24 +2924,37 @@ standards:
       A connector of another position count is not in SFF-8441 and is not
       this entry.
   rj11:
-    registry: TE Connectivity customer drawing C-1775675 rev C (30 Dec 2014), "Modular Jack, Side Entry, Low Profile, DIP", sheet 1
+    registry: TE Connectivity customer drawing C-1775675 rev C (30 Dec 2014), "Modular Jack, Side Entry, Low Profile, DIP", sheet 1; IEC 60603-7 governs the plug interface and is not held
+    w: 9.88
+    h: 11.26
+    radius: 0
     confidence: drawing
     depth: 20.57
     depth-confidence: drawing
+    cavity: {w: 9.88, h: 11.26}
+    cavity-confidence: drawing
+    tiers:
+      - {name: body, w: 9.88, h: 6.85, confidence: estimated}
+      - {name: shoulder, w: 6.60, h: 1.69, confidence: estimated}
+      - {name: slot, w: 4.04, h: 2.72, confidence: estimated}
     source: >-
       TE C-1775675 rev C, sheet 1: a six-position modular jack housing 13.34
-      wide (15.7 across its two side lugs) and 12.6 high above the board,
-      20.57 deep, with a plug opening 9.88 wide. The one housing is listed
-      with six, four or two contacts loaded (6P, 4P, 2P).
+      wide (15.7 across its two side lugs) and 15.0 high, 20.57 deep, with a
+      plug opening 9.88 wide. The 12.6 the front view prints is the height of
+      the side lugs, not of the housing. The one housing is listed with six,
+      four or two contacts loaded (6P, 4P, 2P).
     notes: >-
-      THE SIX-POSITION MODULAR JACK, the body a telephone line uses: RJ11 is
-      the name of the wiring with two contacts loaded, RJ14 with four and
-      RJ12 or RJ25 with six, and one plug body fits all of them. NO ENVELOPE
-      IS CLAIMED: the `rj11` interface cites this entry for what the connector
-      is; common/rj11-jack@1, the one part that presents it, draws this
-      entry's 9.88 opening (its tiers scaled off the same front view) and its
-      20.57 depth (#837), in a housing photo-measured at 14.0 x 13.5 off a
-      different maker's jack, and so states no `conforms`.
+      THE SIX-POSITION MODULAR JACK's PLUG OPENING, the body a telephone line
+      uses: RJ11 is the name of the wiring with two contacts loaded, RJ14 with
+      four and RJ12 or RJ25 with six, and one plug body fits all of them. `w`
+      and `h` are the OPENING's bounding box, not a housing: TE's housing is
+      13.34 wide and 15.0 high, and a different maker's jack is a different
+      housing round the same plug. Only the 9.88 width is printed; the three
+      tiers (body 9.88 x 6.85, a 6.60 wide shoulder 1.69 high, a 4.04 wide latch
+      slot 2.72 high) are scaled off the front view, which is why each carries
+      an estimated confidence, and `h` is their sum. A MAKER'S DRAWING IS THE
+      SOURCE: IEC 60603-7 is not held, so the standard's own figure is unchecked.
+      std/rj11@1 draws this opening and common/rj11-jack@1 composes it.
       The four-position handset jack (4P4C) and the eight-position RJ45 are
       different bodies and are not this entry. The cable plug that mates it
       is `rj11-plug`.

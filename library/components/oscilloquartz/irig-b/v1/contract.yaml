@@ -1,14 +1,14 @@
 format: 1
 kind: module
 name: irig-b
-version: 1.0.0
+version: 1.1.0
 class: line-card
 behaviour: fills
 profile: networking
 description: >-
   Oscilloquartz IRIG-B - the OSA 542x time-code expansion card: an isolated IRIG input
-  on BNC, an IRIG optical output, ten IRIG outputs on a high-density D-sub, an
-  alarm/pulse relay on a pluggable terminal block and an RS-422 output on RJ-45.
+  on BNC, an IRIG optical output on an ST receptacle, ten IRIG outputs on a high-density D-sub, an
+  alarm/pulse relay on a three-position 2.50 mm pluggable terminal block and an RS-422 output on RJ-45.
 size: {w: 113.5, h: 20.6}
 size-confidence: {w: borrowed, h: borrowed}
 attrs:
@@ -20,11 +20,20 @@ groups:
     index-origin: 1
     attrs: {media: rj45-sync}
     description: >-
-      the card's time-code interfaces. Only the RS-422 output composes a library part;
-      the isolated IRIG input (BNC), the IRIG optical output, the ten IRIG outputs (a
-      high-density D-sub) and the alarm/pulse relay (a terminal block) are drawn in the
-      card's own art as addressable elements, because no library part draws them as
-      they look (2023 data sheet, IRIG line card).
+      the card's time-code interfaces. The RS-422 output composes a library part; the
+      isolated IRIG input (BNC) and the ten IRIG outputs (a high-density D-sub) are drawn in
+      the card's own art as addressable elements, because no page held names their connectors
+      and no library part draws them as they look (2023 data sheet, IRIG line card).
+  optical:
+    term: Port
+    role: traffic
+    index-origin: 1
+    description: the IRIG optical output, an ST receptacle for 62/125 um fibre at 820 nm (OSA 5422 data sheet p6)
+  relay:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the alarm/pulse relay, a three-position terminal block on a 2.50 mm pitch (OSA 5422 data sheet p6)
 provenance:
   identity: >-
     data sheet - 2023 OSA 5420 Series, Line cards table, IRIG: "1x IRIG isolated input,
@@ -52,12 +61,23 @@ provenance:
     VGA blue with no field to change it, and this shell is black in every image of the
     card. Ten IRIG outputs on fifteen contacts leaves grounds; the pin-out is not held.
   optical-output: >-
-    NOT IDENTIFIED. A round metal barrel with a central bore, 7.4 across; no document
-    names the connector. Drawn as what it looks like and recorded as a gap on the device
-    rather than composed as an ST or any other adapter.
+    datasheet - Adtran OSA 5422 data sheet, p6, IRIG/TIMECODE line card: "1x IRIG optical output",
+    "ST connector - fiber 62/125um", wavelength 820 nm multimode. The same card is in the 2023
+    OSA 5420 Series data sheet Line cards table, which names no connector, and its picture is
+    on p8 of the 5422 sheet (BNC, a round barrel, the D-sub, a green three-position block and a
+    jack, under the same legends). Composed as common/st-receptacle@1 at the barrel's place,
+    7.4 across as before.
   terminal-block: >-
-    photo-measured - green, three positions at about 3.4 pitch, the pluggable kind with
-    its screws on top. The relay's pin-out is not held.
+    datasheet - OSA 5422 data sheet p6: "Alarm/pulse relay", "Connector: WR-TBL 3-pin Serie 382 -
+    2.50 mm", relay contact NC/NO 50 VDC at 250 mA. Composed as common/terminal-header-250-3@1 at
+    the block's place, 10.1 x 6.5 as photo-measured before, with the contacts at the sheet's 2.50
+    pitch: the earlier about 3.4 was read off a 375 px render and the sheet's p8 picture reads about
+    2.3 (the pins are 20 px apart at 8.6 px/mm). The relay's pin-out is not held.
+  rs-422: >-
+    NOT CHANGED. The OSA 5422 data sheet p6 says "RS422 output, RJ11 Connector" and, on p5, "RS422
+    over shielded RJ-45" for the unit's own ToD ports. The p8 picture of the card draws a jack as wide
+    as an RJ-45 shell (about 12.4 mm against the D-sub's 16.2), wider than the green block. The
+    jack stays the RJ-45 this card was drawn with, std/rj45-ganged@2, until the disagreement is settled.
   lamp-states: >-
     manual - Table 2, expansion card PWR and STA (the manual predates this card; the
     lamps are the same pair in the same place as on the HD cards).
@@ -67,11 +87,9 @@ states: [absent]
 elements:
   thumbscrew: {at: [0.1, 9.15], size: [6.4, 6.4], class: fastener}
   irig-in: {at: [18.95, 5.25], size: [7.9, 7.9], class: port}
-  optical-out: {at: [34.0, 5.5], size: [7.4, 7.4], class: port}
   post-l: {at: [46.6, 6.6], size: [4.0, 4.0], class: fastener}
   post-r: {at: [72.5, 6.6], size: [4.0, 4.0], class: fastener}
   irig-out: {at: [53.7, 4.6], size: [16.2, 8.3], class: port}
-  alarm-pulse: {at: [79.7, 6.9], size: [10.1, 6.5], class: port}
   handle: {at: [105.3, 0.55], size: [7.0, 19.25], class: handle}
 parts:
   - ref: common/led-indicator@1
@@ -82,6 +100,10 @@ parts:
     id: led-sta
     at: [11.6, 10.8]
     states: {lamp: ['off', {name: normal, color: '#39b54a'}, {name: initializing, color: '#39b54a', behavior: blinking}, {name: power-up, color: '#e0b21b'}, {name: loading, color: '#e0b21b', behavior: blinking}, {name: fail, color: '#d0342c'}]}
+  - {ref: common/st-receptacle@1, id: optical-out, at: [34.0, 5.5], group: optical,
+     attrs: {function: "IRIG optical output, 820 nm multimode, 62/125 um fibre"}}
+  - {ref: common/terminal-header-250-3@1, id: alarm-pulse, at: [79.7, 6.9], group: relay,
+     attrs: {function: "alarm/pulse relay, contact NC/NO, 50 VDC at 250 mA"}}
   - {ref: std/rj45-ganged@2, id: rs-422-out, at: [91.5, 4.65], group: timing, attrs: {media: rj45-sync}}
 connection-points:
   mate: {at: [56.75, 10.3], direction: rear}

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: sfp-lc
-version: 1.1.0
+version: 1.2.0
 class: transceiver
 behaviour: occupies
 mates: sfp
@@ -151,9 +151,24 @@ provenance:
     unlatched) - common/sfp-lc-duplex@1's length key, carried verbatim. The
     bail's reach past the body stays estimated: no MSA dimensions how far a
     bail stands off, same as common/sfp-lc-duplex@1's own bail figure below.
+  groups: >-
+    Source: SFF-8432 Rev 5.2a Table 4-3 for the SFP module envelope; the LINK-PP LS-SM311G-10C
+    front view and the AutomationDirect SFP-30K-FSF drawing and its STEP solid for the two LC
+    bores (provenance.bores and provenance.lc-spacing). The role is traffic, this contract's own
+    reading of the job: the module's network port, where its fibre or cable is plugged in. The
+    shape stands for every module of its kind, so the group states no speed: rate, reach and
+    watts belong on the vendor wrapper.
+groups:
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of an SFP-family module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [1.25, 1.75], lift: 10.0, rotate: 180}
-  - {ref: std/lc-bore@3, id: rx, at: [7.60, 1.75], lift: 10.0, rotate: 180}
+  - {ref: std/lc-bore@3, id: tx, group: sfp, at: [1.25, 1.75], lift: 10.0, rotate: 180}
+  - {ref: std/lc-bore@3, id: rx, group: sfp, at: [7.60, 1.75], lift: 10.0, rotate: 180}
 relief:
   features:
     - node: body

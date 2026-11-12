@@ -1,0 +1,641 @@
+format: 1
+kind: device
+name: p24b14m
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: P24B14M
+description: >-
+  Panduit P24B14M basic rack PDU, 0U full: a 1750 mm strip for a cabinet's vertical channel. It has a fixed 3 m
+  cord ending in an IEC 60309 3P+E 9h 60 A plug, three-phase delta, 200-240 V. It has 24 outlets, 12 IEC C13 and
+  12 IEC C19, in six blocks of four. Each block is on a 20 A double-pole breaker across two of the three lines.
+  It has no display, no network jack and no metering.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S VECTOR DRAWING. Panduit customer drawing P24B14M_DC rev 01B (08/21/2017) is a vector
+      sheet drawn to no stated scale, with a front, rear, top (long side) and side (cord) view. Its scale was taken
+      from its own 1750.0 overall dimension (the 1555.0 between the buttons agrees), and every position was read
+      off renderings of the front view at 600 and 800 dpi, to about 1 mm across and 3 mm along the strip. The library
+      draws the PDU STANDING, cord end down, so a position along the drawing becomes 1750 minus that, and a position
+      across becomes x. No photograph and no 3D model of the part is held.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`: the strip stands beside a rack's upright on two mounting buttons on its back, 1555.0 apart and
+      40.5 from the cord end (rear view). The drawing says 'VERTICAL, 0U FULL' and gives no count of units; `ru:
+      39` is the whole units the 1750 mm length covers (39.4) and is not stated by any document.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1750.0 long (top view) and 53.0 deep (top view, beside the far end); the sheet's 'Basic Power Distribution
+      Units' table gives 2.0 in (50.8 mm) wide and 2.1 in (53.34) deep, and the drawing's 52.0 is dimensioned on
+      the cord's side view. The width is taken as the 52.0 and the depth as the 53.0; the drawing does not say which
+      of its figures is the body width (gaps: body-width). Weight 10.8 kg is the drawing's.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view. From the cord end: a plate with the maker's wordmark, two small screws and the earth
+      screw with its symbol; then, in three pairs, two breaker plates followed by two outlet blocks of four. Each
+      block is a moulding with a lamp window beside every outlet. The outlet and plate positions are read from the
+      front view; the outlet pitch is not dimensioned.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - 'OUTLET QTY&TYPE: (12) C13, (12) C19' and the receptacle block, 'IEC 60320/C19 16 A' and 'IEC 60320/C13
+      10 A'. Each outlet is std/c13-outlet@1 or std/c19-outlet@1. The kind and the way up of each is read off the
+      front view; the C19s of the first block of a pair are drawn earth side to the left and those of the second
+      block earth side to the right. THE DRAWN OUTLET SYMBOLS ARE SMALLER THAN THE REGISTRY'S WELLS (a drawn C19
+      pair is 32.9 apart against a 35.6 well, a drawn C13 27 across against a 30.4 well), so the library's wells
+      cannot all stand on the drawn centres: the C19 pairs are drawn 35.7 apart, the C13 pairs 0.1 to 1.6 mm from
+      their drawn centres, an ESTIMATE of the drawing's own reading error and not a source (gaps: outlet-size).
+  banks:
+    confidence: drawing
+    note: >-
+      drawing - the front view labels each of the six outlet blocks 'B1' to 'B6' with a colour, [DARK GRAY], [LIGHT
+      GRAY], [WHITE], [DARK GRAY], [LIGHT GRAY], [WHITE], and each of the six breaker plates 'B1' to 'B6'. THAT
+      BLOCK Bk IS FED BY BREAKER Bk IS A READING OF THE LABELS: no sentence held says it. Each plate prints the
+      lines it is across: L1-L2, L2-L3, L3-L1, L1-L2, L2-L3, L3-L1. The three greys are drawn as #55585c, #9a9da1
+      and #e4e5e7 and are estimates of the words: no photograph is held.
+  colour:
+    confidence: estimated
+    note: >-
+      estimated - the drawing's title block says MATERIAL/COLOR: N/A and the sheet states no housing colour, so
+      the body is drawn a dark neutral. THE PLATE, MOULDING, SCREW AND LAMP-WINDOW COLOURS ARE NOT CHECKED against
+      any source; no photograph is held.
+  input:
+    confidence: drawing
+    note: >-
+      drawing - 'INPUT PLUG: IEC 60309 3P+E 9H 60A', 'INPUT CORD LENGTH: 3m [10']', 'INPUT VOLTAGE: 200-240VAC,
+      DELTA', 'INPUT CURRENT: 60A (48A DERATED)', 'RATED POWER: 17.3kVA'. The cord is one part at the cord end;
+      its length and the plug's face are not drawn. A kW figure (note 5, 'MAXIMUM ALLOWABLE INPUT POWER = 17.3 kW')
+      and the kVA figure differ in unit and are not reconciled, so no capacity is stated.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the drawing's unit type is BASIC and the 'Basic Power Distribution Units (PDUs)' sheet lists no
+      metering or switching for the basic line, so `metering-scope: none` and `outlet-switching: false`.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view: two buttons 40.5 from the cord end and 1555.0 apart, on the strip's centre line.
+      '(2) PL 24.0' locates two further marks and '(2) PL O18.4' the buttons; the further marks are not drawn (gaps:
+      rear-marks).
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the top view is the long side; it draws a row of small marks, not read here. The side view is the
+      cord's, not the strip's.
+  ends:
+    confidence: drawing
+    note: >-
+      drawing - the cord end carries the gland and cord; the far end is a plain closed line. The cord end is drawn
+      as the gland alone.
+attrs:
+  physical: {length-mm: 1750, weight-kg: 10.8}
+  power: {input-ac: 'three-phase delta, 200-240 V, 60 A (48 A derated), 17.3 kVA (drawing note 1)', input-plug: other,
+    input-cord: fixed, input-phase: three, input-wiring: delta, input-current-a: 48, plug-rating-a: 60, breakers: six
+      20 A double-pole electromechanical switches and breakers}
+  management: {metering-scope: none, outlet-switching: false}
+chassis: {width: 52, height: 1750, depth: 53, ru: 39, mount: rack-side, color: '#232528', airflow: passive, weight-kg: 10.8}
+gaps:
+- what: body-width
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the drawing dimensions 52.0 on the cord's side view and 53.0 on the top view, and the Basic PDU sheet gives
+    2.0 in (50.8) wide and 2.1 in (53.34) deep; no document says which drawn figure is the body's width. The strip
+    is drawn 52 wide and 53 deep.
+  wanted: a dimensioned end view of the strip, or a measured unit.
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no photograph of any face is held, so no colour, finish, printing or plate shape is checked against a photograph.
+  wanted: a photograph of each face of the P24B14M.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    no dimension of an outlet, a lamp window or a plate on the front view is stated; the positions are read off
+    the drawing at its own 1750.0 scale.
+  wanted: a dimensioned front view.
+- what: outlet-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the drawn outlet symbols are smaller than the registry's C13 and C19 wells, so the drawn centres could not be
+    kept for four C19 and eight C13 outlets; they are moved by 0.1 to 1.6 mm. No document dimensions Panduit's own
+    outlet.
+  wanted: a dimensioned outlet drawing from Panduit.
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the rear view's '(2) PL 24.0' and '(8) PL 32.0' locate marks beside the buttons and along the strip, and no
+    document says what they are.
+  wanted: the maker's installation drawing for the basic line.
+- what: wordmark-and-earth-symbol
+  scope: [front]
+  reason: needs-photo
+  note: the wordmark, the earth symbol and the legends beside the lamp windows are not drawn.
+  wanted: a photograph of the cord end.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: >-
+      the PDU's 24 outlets, numbered 1 to 24 from the cord end - twelve IEC C13 and twelve IEC C19 in six blocks
+      of four, each block on its own breaker
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'six 20 A double-pole breakers, B1 to B6,
+      each feeding one block of four outlets'}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1750}
+    panel:
+      decor:
+      - id: moulding-1
+        at: [1.0, 1203.2]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-1
+        at: [37.0, 1305.25]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-2
+        at: [37.0, 1268.45]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-3
+        at: [35.4, 1212.65]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-4
+        at: [9.2, 1237.95]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-2
+        at: [1.0, 1065.0]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-5
+        at: [37.8, 1159.75]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-6
+        at: [9.2, 1182.35]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-7
+        at: [10.5, 1127.6]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-8
+        at: [10.5, 1090.5]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-3
+        at: [1.0, 680.5]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#e4e5e7'
+        kind: outlet-moulding
+      - id: lamp-window-9
+        at: [37.0, 782.55]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-10
+        at: [37.0, 745.75]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-11
+        at: [35.4, 689.95]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-12
+        at: [9.2, 715.25]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-4
+        at: [1.0, 542.4]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#55585c'
+        kind: outlet-moulding
+      - id: lamp-window-13
+        at: [37.8, 637.15]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-14
+        at: [9.2, 659.75]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-15
+        at: [10.5, 605.0]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-16
+        at: [10.5, 567.9]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-5
+        at: [1.0, 158.1]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#9a9da1'
+        kind: outlet-moulding
+      - id: lamp-window-17
+        at: [37.0, 260.15]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-18
+        at: [37.0, 223.35]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-19
+        at: [35.4, 167.55]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-20
+        at: [9.2, 192.85]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: moulding-6
+        at: [1.0, 20.0]
+        size: [50.0, 138.2]
+        rx: 2.0
+        fill: '#e4e5e7'
+        kind: outlet-moulding
+      - id: lamp-window-21
+        at: [37.8, 114.75]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-22
+        at: [9.2, 137.35]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-23
+        at: [10.5, 82.6]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: lamp-window-24
+        at: [10.5, 45.5]
+        size: [3.8, 11.5]
+        fill: '#0b0b0c'
+        kind: lamp-window
+      - id: plate-screw-1
+        at: [4.7, 1728.6]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: plate-screw-2
+        at: [40.3, 1728.6]
+        size: [4.4, 4.4]
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+    components:
+      placements:
+      - id: outlet-1
+        ref: std/c19-outlet@1
+        at: [-2.2, 1296.05]
+        rotate: 270
+        group: outlets
+        rel-pos: 1
+        fed-by: input
+        through: breaker-1
+      - id: outlet-2
+        ref: std/c19-outlet@1
+        at: [-2.2, 1260.35]
+        rotate: 270
+        group: outlets
+        rel-pos: 2
+        fed-by: input
+        through: breaker-1
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [21.6, 1229.9]
+        group: outlets
+        rel-pos: 3
+        fed-by: input
+        through: breaker-1
+      - id: outlet-4
+        ref: std/c13-outlet@1
+        at: [0.0, 1207.5]
+        rotate: 180
+        group: outlets
+        rel-pos: 4
+        fed-by: input
+        through: breaker-1
+      - id: outlet-5
+        ref: std/c13-outlet@1
+        at: [20.4, 1175.6]
+        group: outlets
+        rel-pos: 5
+        fed-by: input
+        through: breaker-2
+      - id: outlet-6
+        ref: std/c13-outlet@1
+        at: [0.0, 1153.5]
+        rotate: 180
+        group: outlets
+        rel-pos: 6
+        fed-by: input
+        through: breaker-2
+      - id: outlet-7
+        ref: std/c19-outlet@1
+        at: [18.4, 1118.7]
+        rotate: 90
+        group: outlets
+        rel-pos: 7
+        fed-by: input
+        through: breaker-2
+      - id: outlet-8
+        ref: std/c19-outlet@1
+        at: [18.4, 1082.9]
+        rotate: 90
+        group: outlets
+        rel-pos: 8
+        fed-by: input
+        through: breaker-2
+      - id: outlet-9
+        ref: std/c19-outlet@1
+        at: [-2.2, 773.35]
+        rotate: 270
+        group: outlets
+        rel-pos: 9
+        fed-by: input
+        through: breaker-3
+      - id: outlet-10
+        ref: std/c19-outlet@1
+        at: [-2.2, 737.65]
+        rotate: 270
+        group: outlets
+        rel-pos: 10
+        fed-by: input
+        through: breaker-3
+      - id: outlet-11
+        ref: std/c13-outlet@1
+        at: [21.6, 707.2]
+        group: outlets
+        rel-pos: 11
+        fed-by: input
+        through: breaker-3
+      - id: outlet-12
+        ref: std/c13-outlet@1
+        at: [0.0, 684.8]
+        rotate: 180
+        group: outlets
+        rel-pos: 12
+        fed-by: input
+        through: breaker-3
+      - id: outlet-13
+        ref: std/c13-outlet@1
+        at: [20.4, 653.0]
+        group: outlets
+        rel-pos: 13
+        fed-by: input
+        through: breaker-4
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [0.0, 630.9]
+        rotate: 180
+        group: outlets
+        rel-pos: 14
+        fed-by: input
+        through: breaker-4
+      - id: outlet-15
+        ref: std/c19-outlet@1
+        at: [18.4, 596.1]
+        rotate: 90
+        group: outlets
+        rel-pos: 15
+        fed-by: input
+        through: breaker-4
+      - id: outlet-16
+        ref: std/c19-outlet@1
+        at: [18.4, 560.3]
+        rotate: 90
+        group: outlets
+        rel-pos: 16
+        fed-by: input
+        through: breaker-4
+      - id: outlet-17
+        ref: std/c19-outlet@1
+        at: [-2.2, 250.95]
+        rotate: 270
+        group: outlets
+        rel-pos: 17
+        fed-by: input
+        through: breaker-5
+      - id: outlet-18
+        ref: std/c19-outlet@1
+        at: [-2.2, 215.25]
+        rotate: 270
+        group: outlets
+        rel-pos: 18
+        fed-by: input
+        through: breaker-5
+      - id: outlet-19
+        ref: std/c13-outlet@1
+        at: [21.6, 184.8]
+        group: outlets
+        rel-pos: 19
+        fed-by: input
+        through: breaker-5
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at: [0.0, 162.4]
+        rotate: 180
+        group: outlets
+        rel-pos: 20
+        fed-by: input
+        through: breaker-5
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at: [20.4, 130.6]
+        group: outlets
+        rel-pos: 21
+        fed-by: input
+        through: breaker-6
+      - id: outlet-22
+        ref: std/c13-outlet@1
+        at: [0.0, 108.5]
+        rotate: 180
+        group: outlets
+        rel-pos: 22
+        fed-by: input
+        through: breaker-6
+      - id: outlet-23
+        ref: std/c19-outlet@1
+        at: [18.4, 73.7]
+        rotate: 90
+        group: outlets
+        rel-pos: 23
+        fed-by: input
+        through: breaker-6
+      - id: outlet-24
+        ref: std/c19-outlet@1
+        at: [18.4, 37.9]
+        rotate: 90
+        group: outlets
+        rel-pos: 24
+        fed-by: input
+        through: breaker-6
+      - id: breaker-1
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 1489.8]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: Breaker B1, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B1, lines: L1-L2}
+      - id: breaker-2
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 1387.2]
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        description: Breaker B2, a 20 A double-pole switch and breaker across L2-L3
+        attrs: {label: B2, lines: L2-L3}
+      - id: breaker-3
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 967.6]
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        description: Breaker B3, a 20 A double-pole switch and breaker across L3-L1
+        attrs: {label: B3, lines: L3-L1}
+      - id: breaker-4
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 865.9]
+        group: breakers
+        rel-pos: 4
+        lines: [L1, L2]
+        description: Breaker B4, a 20 A double-pole switch and breaker across L1-L2
+        attrs: {label: B4, lines: L1-L2}
+      - id: breaker-5
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 445.0]
+        group: breakers
+        rel-pos: 5
+        lines: [L2, L3]
+        description: Breaker B5, a 20 A double-pole switch and breaker across L2-L3
+        attrs: {label: B5, lines: L2-L3}
+      - id: breaker-6
+        ref: panduit/g5-breaker-20a@1
+        at: [2.4, 342.4]
+        group: breakers
+        rel-pos: 6
+        lines: [L3, L1]
+        description: Breaker B6, a 20 A double-pole switch and breaker across L3-L1
+        attrs: {label: B6, lines: L3-L1}
+      - id: ground
+        ref: common/ground-screw@1
+        at: [36.9, 1689.1]
+        group: grounding
+        rel-pos: 1
+    regions:
+    - id: bank-1
+      label: Bank B1 - four outlets on breaker B1, lines L1-L2
+      members: [outlet-1, outlet-2, outlet-3, outlet-4, breaker-1]
+    - id: bank-2
+      label: Bank B2 - four outlets on breaker B2, lines L2-L3
+      members: [outlet-5, outlet-6, outlet-7, outlet-8, breaker-2]
+    - id: bank-3
+      label: Bank B3 - four outlets on breaker B3, lines L3-L1
+      members: [outlet-9, outlet-10, outlet-11, outlet-12, breaker-3]
+    - id: bank-4
+      label: Bank B4 - four outlets on breaker B4, lines L1-L2
+      members: [outlet-13, outlet-14, outlet-15, outlet-16, breaker-4]
+    - id: bank-5
+      label: Bank B5 - four outlets on breaker B5, lines L2-L3
+      members: [outlet-17, outlet-18, outlet-19, outlet-20, breaker-5]
+    - id: bank-6
+      label: Bank B6 - four outlets on breaker B6, lines L3-L1
+      members: [outlet-21, outlet-22, outlet-23, outlet-24, breaker-6]
+  rear:
+    size: {w: 52, h: 1750}
+    components:
+      placements:
+      - id: button-1
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 1700.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: panduit/g5-mounting-button@1
+        at: [16.8, 145.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 53}
+    empty: >-
+      the far end of the strip: neither drawing draws it as an end view, and each shows the strip's end as a plain
+      closed line; searched the front, rear, left, right and bottom views and the sheet's notes.
+  bottom:
+    size: {w: 52, h: 53}
+    components:
+      placements:
+      - id: input
+        ref: panduit/g5-cord-60309-3pe-9h@1
+        at: [10.0, 10.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 3P+E 9h plug rated 60 A
+  left:
+    size: {w: 53, h: 1750}
+    empty: >-
+      the long side of the strip: P24B14M_DC draws it as a top view with a row of small marks along it whose purpose
+      and positions this model does not read; searched every view of P24B14M_DC and the PUSP26 sheet.
+  right:
+    size: {w: 53, h: 1750}
+    empty: >-
+      the long side of the strip: P24B14M_DC draws it as a top view with a row of small marks along it whose purpose
+      and positions this model does not read; searched every view of P24B14M_DC and the PUSP26 sheet.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships.
+    part-numbers:
+      P24B14M: {}
+datasheet: {title: Panduit Basic Power Distribution Units (PDUs) specification sheet PUSP26-WW-ENG 5/2024, url: 'https://www.panduit.com/PanProductResource/en/P24B14M/SpecificationSheets2.pdf',
+  sha256: bf787943e04a7d17e0d0c4176e8fa726f704d37c0eca86a1bde3bed492450bb6}
+references:
+- {title: 'Panduit customer drawing P24B14M_DC, basic series PDU P24B14M, rev 01B 08/21/2017', url: 'https://www.panduit.com/PanProductResource/en/P24B14M/PartDrawings.pdf',
+  sha256: 5e8c37081a094940b6e34479853abdeb67e933a34483ad9e81f271d388281f19}

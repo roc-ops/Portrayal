@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: px2-cord-l5-20p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L5-20P locking plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The input cord of a Raritan PX2-2475, 3 m long, ending in a NEMA L5-20P locking plug (IP44). It leaves the strip
+  through a round gland on the front face near the bottom end. Only the gland is drawn.
+size: {w: 20.0, h: 20.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-l5-20p, cord-length-m: 3}
+provenance:
+  size: >-
+    estimated - THE GLAND'S DIAMETER IS NOT PUBLISHED. 20.0 is the figure the maker's PX3 gland part uses, chosen to
+    sit inside the 52 mm strip. Its place along the strip is where the maker's mechanical drawing MPX2-2475C (Rev A)
+    draws its bottom-end input, 1496 to 1530 mm from the other end, read to about 2 mm.
+  plug: >-
+    datasheet - the technical specification (rev 2020-07-01) prints "Input Plug NEMA L5-20P (2P3W)", a 3 m (9.84 ft)
+    cord as standard, bottom-front feed and cord retention. The maker's drawing MPX2-2475C instead titles the input
+    IEC320 C20 and draws a C20 inlet at that end (gaps: input-conflict in the device); the specification is the later
+    document and the PXE series data sheet gives its Zero U 24-outlet sibling the same plug.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands for
+    the power input a DCIM records, one power port labelled as a NEMA L5-20P plug.
+elements:
+  gland: {at: [0, 0], size: [20.0, 20.0], class: inlet}
+skins: [default]

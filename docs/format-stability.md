@@ -1075,6 +1075,28 @@ that routes cables may read them itself, so they are part of the format too:
 Renaming one, or changing what it means, is a format change as a rack.json
 key is; adding one is not.
 
+### What a compiled face says about a pocket
+
+A relief `pocket` compiles to `data-depth` on its node (mm to the pocket's
+floor), which the kit builds as a recess with walls and a floor. A pocket
+written `pocket: {depth, wall}` is a window cut through a thin plate and also
+publishes `data-wall-depth` (mm from the face to the plate's back face): the
+kit's walls stop there, and below it the pocket is open to the inside of the
+part. `data-wall` is the walls' colour and is unrelated.
+
+- A plain number publishes `data-depth` alone, with walls all the way to the
+  floor, exactly as before. A node without `data-wall-depth` builds as it
+  always did.
+- `data-wall-depth` is new, and a consumer that does not read it builds the
+  pocket with full-depth walls: the older picture, not a broken one. A
+  library that writes `{depth, wall}` is therefore read correctly only by a
+  kit that knows the attribute, which is why a pocket's schema type widened
+  from a number to a number or an object. Once published, the object form and
+  the attribute's name cannot be taken back without breaking a library that
+  uses them.
+- The wall is shallower than the depth (L117 checks it). A wall at or past the
+  floor is ignored by the kit and builds as a plain pocket.
+
 ## A part that slides
 
 A device may declare a part that slides: a rail panel bolted through slots in
@@ -1182,6 +1204,143 @@ does not list. Files written without them are read as before. A consumer that
 validates a manifest with a copy of the schema updates the copy before it reads
 a device that opens.
 
+## A housing with a stepped end
+
+A device may be a housing that is one end profile extruded along its length
+([modelling-a-device.md](modelling-a-device.md) has a worked example). The format
+gains one optional key and the build gains one field, so `format` stays 1 and
+`contract` stays 2. A device that states no `section` gains no key and no
+attribute: its build is byte for byte what it was.
+
+**In a manifest.** `chassis.section`, a list of at least four `[x, y]` points in
+millimetres, the closed outline of the housing's end seen as the right face is
+drawn: x across the depth from the front, y down the height from the top. It is
+the envelope, so the top and bottom edges run along the tips of anything that
+stands up from the casting. It is clockwise with y down, every edge is
+horizontal or vertical, and it touches all four sides of the `depth` by `height`
+box with exactly one edge on the top side and one on the bottom. The left face is
+its mirror in x. Lint L204 to L207 check it.
+
+**In a compiled face.** On the left and right faces the element with the id
+`chassis-faceplate` is a `<path>` of the polygon (the left face mirrored in x with
+the winding reversed) and not a `<rect>`; the rest of the face is unpainted. The
+front, rear, top and bottom faces are drawn as before. A reader that finds the
+faceplate by its id reads either element.
+
+**In `<device>.configs.json`**, of such a device: `chassis.section`, the points as
+written. It is left out for every other device. The box stays the bounding box,
+and `chassis.w`, `h` and `d`, the rack fit and the exports read it as before.
+
+**What the lock asks for.** `section` is shape, as `bevel` and `rounded` are: it
+sets the outline of a face and what a part may stand on. Stating it on a device
+that was released without it, moving a point of it, or taking it away is a major.
+Renaming the key, or changing the frame or the winding it is read in, is a
+breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states `section`, because `chassis` accepts no key the schema does not list;
+this is the situation `halves` is in. Files written without it are read as
+before. A consumer that validates a manifest with a copy of the schema updates
+the copy before it reads a device that states a section.
+
+**Opening.** A housing with a section may state `halves`; see "A housing with a
+stepped end that opens" below.
+
+## Ribs on a stepped housing
+
+A housing that states a `chassis.section` may also state its ribs. The format
+gains one optional key and the build gains no new file, so `format` stays 1 and
+`contract` stays 2. A device that states no `fins` gains no key and no element:
+its build is byte for byte what it was.
+
+**In a manifest.** `chassis.fins`, a list of rib fields. Each is
+`{on, span, rib, gap}` and either `core` (an inside field) or `outside: true` with a
+`height` (an outside field), and optionally `steps`, a list of `{span, height}`.
+`on` is `top` or `bottom`, naming the one edge of the section on that side of the
+box; write it quoted in YAML (`'on': top`), because a bare `on` is read as true.
+`span` is where the field runs along the length, in millimetres from the left end.
+`rib` and `gap` are a rib's thickness and the gap after it; the first rib starts at
+`span[0]`. `core` is the height of the tallest rib: the distance from the section's
+edge in to the casting's own surface. The `steps` tile the span, and a rib takes the
+height of the step whose half-open span holds its centre. An outside field has no
+`core`: the section's edge is the casting's surface and the ribs stand out of it by
+their step heights (or by `height`), at most 60 mm beyond the box. Lint L208 to L216
+check it. A device has at most 400 ribs.
+
+**In a compiled face.** The front and rear faceplate (the `chassis-faceplate`
+element, a `<path>` now) is the silhouette: at the core outside every span, at the
+step's tip line within one, so the gaps are filled; for an outside field it stands
+out of the casting's edge and the drawing's `viewBox` grows past the face as it does
+for a part beyond it, with `data-face-w` and `data-face-h` naming the face. The top
+and bottom faces stay full rectangles. A group with the id `chassis-fins` holds a `rect`
+for each rib on the front and rear, a stripe for each rib on the top or bottom, and
+on an end face a band in a rib tone where the casting is cut back to its core. It is painted last and takes no click. A device with no `fins`
+has no such group.
+
+**In `<device>.configs.json`**, of such a device: `chassis.fins`, the fields as
+written. It is left out for every other device. The box stays the bounding box and
+`chassis.w`, `h` and `d`, the rack fit and the exports read it as before, so ribs
+that stand outside it count in none of them; the 3D scene and its export include
+them.
+
+**What the lock asks for.** `fins` is surface, as `mount` and `kits` are: the ribs
+stand on a casting whose outline `section` already fixes, and no size changes.
+Stating it, retuning a rib's height or a step, or taking it away on a released
+device is a patch. Renaming the key or a field, or changing what `core` or a step
+means, is a breaking change.
+
+**An older validator** holding the schema from before this change refuses a file
+that states `fins`, because `chassis` accepts no key the schema does not list; this
+is the situation `section` and `halves` are in. A consumer that validates a
+manifest with a copy of the schema updates the copy before it reads a device that
+states ribs.
+
+**Not in this change.** Relief taken from a rib is a later change. A housing with
+ribs may state `halves`; see "A housing with a stepped end that opens" below.
+
+## A housing with a stepped end that opens
+
+A housing that states a `chassis.section` may also state `chassis.halves`. No key
+is added and no file changes, so `format` stays 1 and `contract` stays 2; what
+changes is which statements are allowed and what they mean. A device that states
+no `section` is read as before: every rule for its halves, and its open state of
+two plain boxes, are unchanged.
+
+**Stating `halves` with `section` is a one-way change.** Once a device on the main
+branch states both, these cannot be taken back or reinterpreted without a break:
+
+- the combination itself, which the earlier rule refused;
+- `base.outer` is `top` or `bottom`, so the seam is parallel to the length the
+  section is extruded along and each half is a cut of the section (L217);
+- `lid.hinge` is `front` or `rear`, the long face the seam meets (L217);
+- the seam is the plane `base.stands` from the base's `outer` face: `stands`
+  stays the one authority, and the lid's `stands` is still stated and still
+  checked against the height as before (L203);
+- the lid turns about the line where the seam plane meets the hinge face's
+  outline: parallel to the length, at the seam, at the section's foremost
+  (`front`) or rearmost (`rear`) edge in that row, which in a flange is the
+  flange's edge;
+- the open state is cut from the section: each half is the stepped body on its
+  side of the seam, with its ribs.
+
+A seam that lies outside the section, exactly on a horizontal edge of it, or in a
+stretch the ribs have cut away is refused (L219). A seam where the section is not
+at its widest is a warning (L218), because a flange is expected there.
+
+**What the lock asks for.** Nothing new. The lock records and hashes the halves
+exactly as before, so the hash of `halves.stands` is unchanged, and stating
+`halves` on a released housing with a section is a minor like stating them on any
+other device. A change to `section` that moves the widest line relative to
+`base.stands`, or any other change to it, is already a major by the shape class
+`section` is in. Changing `outer` or `hinge` is a major as before.
+
+**In `<device>.configs.json`** nothing is added: `chassis.section`, `chassis.fins`
+and `chassis.halves` are carried as written, and a viewer cuts the body from them.
+
+**An older viewer** that does not know the combination builds the housing as a
+plain box, without its section, and opens it as two plain boxes. A validator holding
+the schema from before refuses nothing new, because the keys already existed.
+
 ## What else a consumer holds
 
 Three more things reach a consumer outside this repository, and none of them
@@ -1259,6 +1418,33 @@ in that file, and leaves the key out of every entry that has none. The rack kit
 opens the module type file of the first key in sorted order. Moving a module from `attrs.model` to
 `part-numbers` renames its module type, which is a DCIM-data change in the
 sense above.
+
+**A bay's `seen-through`.** A device bay may carry a list of drawn items, the
+same boxes a panel decor item takes (`at`, `size`, `fill`, `rx`, `shape` of
+`rect` or `slot`, `kind`, `source`), for what the maker's picture shows through
+the opening when the bay is empty. It is an optional key, so it does not raise
+`format`: a file written without it stays valid, and a reader that ignores it
+draws the bay as before. The compiled face writes a group `data-class="seen-through"`
+inside the bay's group, after the opening and before the module, clipped to the
+opening, and hides it with `display="none"` where the configuration seats the
+bay; `kit/swap.js` sets and removes the same attribute when a bay is swapped. It
+is a 2D drawing only, and `contract` does not rise, since the group is new and
+nothing that was read changes. The key is part of the published format from the
+release that carries it: renaming it or changing what it holds after that is a
+breaking change.
+
+**Packs of a built dist.** `spec/tools/dev/dist_packs.py` writes, into a folder of
+its own, a derived form of `library/dist/` for a file server that limits the number of
+files: `devices/<device>.json` (`{"more", "files"}`, the faces the default
+configuration names), `devices/<device>.more.json` (`{"files"}`, every other
+face a configuration names), `components/<namespace>.<k>.json` (`{"files"}`, a
+namespace's skins in chunks whose file is at most 1 MB, by byte order of the file
+name) and `components/index.json` (`{<namespace>: [first skin of each chunk
+after the first]}`). They are not part of `dist/` or of the npm packages, and
+`contract` does not rise, since nothing in `dist/` changes. The tool is run by a
+consumer, never by the build. A consumer that makes packs holds them as its own
+format, and reads them with `kit/dist.js` `packedDist` and `fetchDist`, which
+are new exports and change none that was there.
 
 ## What is promised before 1.0
 

@@ -1,0 +1,125 @@
+format: 1
+kind: component
+name: spade-lug
+version: 1.0.0
+class: port
+mates: spade-m4
+profile: networking
+description: >-
+  A spade (fork) terminal crimped on its wire. It is seen in plan, as a front
+  elevation sees it slid onto an M4 post. It draws the tongue with its open
+  slot and the yellow sleeve over the crimp barrel. A short stub of insulated
+  wire leaves the sleeve in the plane of the face. Seats on a `spade-m4`
+  terminal with the closed end of its slot on the post. The Casa C100G Hardware
+  Installation Guide asks for it on the power entry module. It is drawn at the
+  largest outside diameter the guide allows, and is not the terminal of any
+  one maker.
+size: {w: 9.3, h: 39.4}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  the width is the outside diameter the Casa guide allows at most, 9.3, drawn
+  at that limit; the length is a rule and not a reading (provenance.size)
+attrs: {media: spade-lug, connector: spade-m4}
+fields:
+  wire-color: {label: Wire colour, type: text, default: '#1c1c1c'}
+  barrel-color: {label: Sleeve colour, type: text, default: '#fcdc14'}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated. THE WIDTH IS A LIMIT, DRAWN AT THE LIMIT: Casa C100G Hardware
+    Installation Guide (07/08/2022), page 6-20 (PDF page 134), "Required
+    terminals": "Maximum outside diameter: 9.3mm". The guide's chapter 6, "DC
+    power sources and requirements", item 8, says 9.2 mm for the same
+    terminal; this part takes the figure of the procedure page, the one that
+    says what to buy for the connection, and records the other here. A
+    terminal can be narrower than either. THE LENGTH IS ESTIMATED: no spade
+    terminal drawing or catalogue is held, so the terminal, 29.4 long from tip
+    to the end of the sleeve, is the JST FV2-MS3 ring terminal's overall
+    length, 17.4 (JST solderless terminals catalogue, sheet of 23-06-08),
+    scaled by the ratio of the two widths, 9.3 over 5.5, and the 10 of wire
+    the library draws on a stub in the plane of the face is added: 39.4. The
+    sleeve (15.2 long, 7.6 across) and the tongue (14.2 long) are the same
+    ratio of the JST sleeve (9.0 long, 4.5 across). Wanted: a catalogue
+    drawing of a spade terminal for AWG 10 wire and M4.
+  slot: >-
+    estimated. The slot is 4.0 wide, the nominal diameter of an M4 thread (the
+    guide: "spade terminals for screw M4"), the least a post can pass, with
+    its closed end half round and its centre 4.65, half of the tongue's
+    width, from the tip. No document held gives the slot of any spade
+    terminal.
+  wire: >-
+    The guide asks for AWG 10 wire ("Required wire size: AWG10", PDF page
+    134). The stub is estimated: a straight run 10 long from the end of the
+    sleeve, in the plane of the face, the rule generic/ring-lug@1 gives, and
+    2.6 across, the conductor of AWG 10 (the AWG definition, 0.127 mm times
+    92 to the power of (36 - 10) over 39, 2.59). The insulation is not added:
+    the one wire sheet held (Waskoenig + Walter H07V-K, status 05.10.2026)
+    lists 1.5 and 2.5 mm2 only. Wanted: the outside diameter of an AWG 10
+    wire.
+  thickness: >-
+    estimated - generic/ring-lug@1's tongue, 0.8, which is the JST FV2-MS3
+    sheet's material thickness T for a ring terminal; no document held gives
+    that of a spade terminal. The sleeve is built as a plain tube, as the ring
+    lug's is.
+  sleeve-colour: >-
+    a FIELD, `barrel-color`. The default is the yellow the guide's Figure 6-12
+    ("Connecting DC power cables to the PEM", PDF page 136) pictures on the
+    terminals of the cables Casa supplies, sampled from the figure. Another
+    maker's terminal has another colour.
+  wire-colour: >-
+    a FIELD, `wire-color`. Black is the default. Figure 6-12 draws the feed
+    cables blue and the return cables black, which is a fact about the cables
+    Casa supplies and not about the terminal.
+  nominal: >-
+    A NOMINAL TERMINAL CHOSEN FOR THE LIBRARY. It is the one the Casa guide
+    describes, in the only words held for it ("spade terminals for screw M4",
+    at most 9.3 mm outside, AWG 10 wire, 10 inch-pounds on the locking nut),
+    and no catalogue figure beyond those. That it is the right terminal for a
+    given post is not claimed.
+  media: >-
+    `spade-lug`, and the registry key is `spade-m4`. Lint L62 reads a `class:
+    port` part's media as a connector word.
+  orientation: >-
+    THE WIRE LEAVES DOWNWARD in the lug's own unrotated frame, the tongue at
+    the top. The interface allows the four right angles because the guide
+    states no direction; a configuration turns the lug where the guide draws
+    it.
+  seated-depth: >-
+    KNOWN TO BE WRONG BY ONE NUT. The guide puts the terminal between two flat
+    washers, under the locking nut. The lug lies on the top of the host's nut
+    instead, as generic/ring-lug@1 lies on the top of a screw head, so it
+    stands one nut and one washer higher than the metal does.
+  cable-point: >-
+    `cable` is at the free end of the stub and points down, along the wire.
+    It states no `on:`: the wire is a `bar`.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on generic/ring-lug@1: every class port contract
+    states none.
+elements: {}
+relief:
+  features:
+    - node: tongue
+      out: 0.8
+      shape: true
+      color: '#c9cdd1'
+      confidence: estimated
+      source: >-
+        generic/ring-lug@1's tongue thickness, 0.8, which is the JST FV2-MS3
+        sheet's T for a ring terminal and not a figure for a spade terminal;
+        none is held (provenance.thickness).
+    - node: sleeve
+      bar: 7.6
+      confidence: estimated
+      source: >-
+        the JST FV2-MS3 sleeve diameter, 4.5, scaled by 9.3 over 5.5; its
+        underside is level with the underside of the tongue (provenance.size).
+    - node: wire
+      lift: 2.5
+      bar: 2.6
+      confidence: estimated
+      source: >-
+        the conductor of AWG 10, 2.6, centred on the sleeve (provenance.wire).
+connection-points:
+  mate: {at: [4.65, 4.65], direction: front}
+  cable: {at: [4.65, 39.4], direction: down}
+skins: [default]

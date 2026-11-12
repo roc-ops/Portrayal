@@ -1,0 +1,116 @@
+format: 1
+kind: module
+name: ex-um-8x8sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-8X8SFP, the eight-port 1/10 Gbps SFP+ uplink module of the EX4300-32F switches. It slides
+  into the large uplink module slot at the left end of the front panel. It has eight SFP+ cages in two rows
+  of four, numbered 0 to 7, the even numbers on the upper row. Each cage takes an SFP+ transceiver at 10
+  Gbps or an SFP transceiver at 1 Gbps. Arrow lamps between the rows show link activity and status for each
+  port, and the module has one ST lamp. Two captive screws hold it. It ships with dust covers in the ports.
+attrs:
+  model: EX-UM-8X8SFP
+  sfp-plus: 8
+  weight: 0.74 lb (0.34 kg)
+  power-absent: not-published
+  ports-note: eight SFP+ ports, each at 10 Gbps with SFP+ or 1 Gbps with SFP, usable as Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12), Uplink Modules in
+    EX4300 Switches, Table 13 (PDF pages 73 to 74): the module can house "up to eight SFP+ transceivers,
+    eight SFP transceivers" or a mix, and its ports can be Virtual Chassis ports. Table 16 (PDF page 79)
+    holds Figure 21 (g022135, the module in three-quarter view) and Figure 22 (g022136, the face drawn flat
+    with the ST lamp, the lamps and the numbers 0 to 7). Figure 35 (PDF page 89) shows the lamps. The
+    datasheet ordering table (PDF page 16) lists EX-UM-8X8SFP for the EX4300-32F and -32F-DC.
+  size: >-
+    estimated - no document dimensions the module. It fills the 32-port switch's uplink slot, 87.0 x 40.7 mm,
+    which juniper/ex4300-32f-uplink-blank@1 reads off Figure 10 (the method is there). Figure 22's outline is
+    900 x 421 px at 300 dpi, an aspect of 2.14 against the slot's 2.14.
+  elements: >-
+    drawing - Figure 22 is a flat elevation, read as fractions of its outline at 10.34 px per mm and applied to
+    87.0 x 40.7 mm. Two rows of four cages: the columns stand 15.2 mm apart from 13.5 mm in and the rows 15.0
+    mm apart from 7.3 mm down, the row pitch the 32F's own stacked SFP block has. The figure's block is 61 mm
+    wide, which four 14.25 mm cages at 15.2 mm pitch fill, so the cages do not abut as in std/sfp-ganged
+    blocks. Four arrow lamps for each column of two ports sit in a strip between the rows, 19.6 mm down, at 2.6,
+    5.3, 9.8 and 12.6 mm from the column's left edge: down arrow and up arrow for link activity of the lower
+    and upper port, then the same pair for status (callouts 2 to 5). The ST lamp is at 8.5, 28.1 mm with its
+    legend. The numbers 0 to 7 print under the block, the even ones higher. A captive screw at each end,
+    centred 19.6 mm down; the figure draws it 9.7 mm across at 4.8 mm from the edge, so the head is drawn 9.0
+    mm across, inside the plate. The legend EX-UM-8X8SFP is at the upper right. The figure's hexagonal vents
+    and the three notches at the bottom edge are drawn. No handle is drawn because the figure draws none.
+  colour: >-
+    estimated - no photograph of this module is held. The plate takes the grey of the fitted EX-UM-4X4SFP in
+    the EX4300-24T photograph (#888c92), the nearest held evidence of this family's faceplate; the screws are
+    silver as there.
+  led: >-
+    datasheet - guide Figure 22 callouts 1 to 5 and Table 23 (the SFP+ port lamps): callout 1 is the status lamp
+    of the module, 2 and 3 the link activity lamps of the lower and upper port, 4 and 5 their status lamps. The
+    guide gives the ST lamp no table of its own, so no state is stated for it.
+  weight: >-
+    datasheet - guide, Chassis Physical Specifications, PDF page 64: "8-port 1-Gigabit Ethernet/10-Gigabit
+    Ethernet SFP+ uplink module ... 0.74 lb (0.34 kg)".
+  power: >-
+    not published - searched the guide's power budget tables (Tables 32 to 36) and the datasheet for a
+    figure for any uplink module and found none, so the module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: sfp-plus
+      speed: 10g
+    description: >-
+      The eight uplink cages, numbered 0 to 7 as printed, the even numbers on the upper row. SFP+ at 10
+      Gbps, or SFP at 1 Gbps with an SFP transceiver
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four arrow lamps between the rows for each pair of ports: link activity of the lower port, link
+      activity of the upper port, status of the lower port, status of the upper port. Numbered in printed
+      order, left to right
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: the ST lamp of the module (guide Figure 22, callout 1)
+parts:
+- {ref: std/sfp-ganged@1, id: port-0, at: [13.5, 7.3], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-1, at: [13.5, 22.3], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-2, at: [28.7, 7.3], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-3, at: [28.7, 22.3], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-4, at: [43.9, 7.3], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-5, at: [43.9, 22.3], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-6, at: [59.1, 7.3], group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: std/sfp-ganged@1, id: port-7, at: [59.1, 22.3], rotate: 180, group: sfp-plus, attrs: {media: sfp-plus, speed: 10g}}
+- {ref: common/led-arrow-sm@1, id: led-1-link, at: [14.975, 18.6], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-0-link, at: [17.675, 18.6], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-1-status, at: [22.175, 18.6], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-0-status, at: [24.975, 18.6], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-3-link, at: [30.175, 18.6], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-2-link, at: [32.875, 18.6], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-3-status, at: [37.375, 18.6], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-2-status, at: [40.175, 18.6], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-5-link, at: [45.375, 18.6], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-4-link, at: [48.075, 18.6], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-5-status, at: [52.575, 18.6], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-4-status, at: [55.375, 18.6], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-7-link, at: [60.575, 18.6], skin: down, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-6-link, at: [63.275, 18.6], skin: up, group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-arrow-sm@1, id: led-7-status, at: [67.775, 18.6], skin: down, group: port-leds, attrs: {function: status}}
+- {ref: common/led-arrow-sm@1, id: led-6-status, at: [70.575, 18.6], skin: up, group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [7.5, 27.1], group: status, attrs: {function: module status}}
+size:
+  w: 87.0
+  h: 40.7
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

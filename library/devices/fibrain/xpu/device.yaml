@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: xpu
-version: 0.2.2
+version: 1.0.0
 maturity: modelled
 manufacturer: Fibrain
 model: XPU00
@@ -98,13 +98,16 @@ provenance:
       it there, in the rear 29 of the frame; the reading is not a
       measurement. A CABLE DOES NOT RUN STRAIGHT BACK THROUGH IT: the upright
       stands across the middle 19 of the height, in line with the inner rows
-      of a 12-way holder and with the one row of a 6-way, about 198 behind their
-      backs, and a cable is dressed over or under the bar and tied to it.
-      NOT DRAWN ON THE FRONT, where the maker draws it: a slot mouth is
-      painted over the panel decor, so decor there is hidden in every
-      configuration, and a part painted over a mouth is painted over a seated
-      holder too. Nothing here can show a thing seen through an empty slot
-      and covered by a seated part.
+      of a 12-way holder and, by the ferrule axis (the holder's top plus its
+      slot's top at 1.00 or 22.00), with the one row of a 6-way LC holder
+      only in an upper slot: 12.95 from the top of the frame against the
+      band's 12.5 to 31.5, where a 6-way in a lower slot is at 33.95. It is
+      about 198 behind their backs, and a cable is dressed over or under the
+      bar and tied to it. The SC holders' rows were not worked.
+      DRAWN ON THE FRONT AS WHAT AN EMPTY SLOT SHOWS: each slot's `seen-through`
+      carries the band and the slots of it that fall in that opening, as the
+      maker draws them. A seated holder covers them and the configurations that
+      seat holders hide them; the 3D scene builds the bar at the rear instead.
   grounding:
     confidence: estimated
     note: >-
@@ -137,7 +140,7 @@ provenance:
       behind each slot through which a seated holder shows its back. THE REAR
       CABLE BAR ITSELF IS NOT DRAWN HERE, though it is what stands nearest in
       this view: its upright would lie across the passages, over the backs
-      the holders show there. The top and side views draw it, and it is built.
+      the holders show there. The top, bottom and side views draw it, and it is built.
   plan:
     confidence: estimated
     note: >-
@@ -212,13 +215,14 @@ gaps:
       side and top views of XPS00 from the maker, whose CAD archive shows
       they exist.
   - what: cross-member
-    scope: [front, rear, top]
+    scope: [rear, top, bottom]
     reason: needs-drawing
     note: >-
       the front elevation shows a slotted band 19 high at mid height behind
       the posts and nothing says how far back it stands. It is read as the
-      upright of the rear cable bar and built there; it is not drawn on the
-      front, where a slot mouth hides panel decor. See provenance.cross-member.
+      upright of the rear cable bar and built there; the front draws it as the
+      band an empty slot shows, and the top and bottom views draw the bar
+      itself. See provenance.cross-member.
     wanted: >-
       a side or top view of the frame, or a photograph from behind.
   - what: floor
@@ -287,11 +291,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -308,6 +312,11 @@ views:
           group: slots
           rel-pos: 1
           rear: {view: rear, cutout: back-1}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-1, at: [43.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: twelve slots 20 x 4 on a 34.4 pitch at mid height, the first at x 43.10'}
+            - {id: band-slot-2, at: [77.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 2 of 12'}
+            - {id: band-slot-3, at: [111.9, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 3 of 12'}
         - id: slot-2
           at: [138.805, 1]
           size: {w: 100.0, h: 21.0}
@@ -317,11 +326,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -338,6 +347,11 @@ views:
           group: slots
           rel-pos: 2
           rear: {view: rear, cutout: back-2}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-4, at: [146.3, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 4 of 12'}
+            - {id: band-slot-5, at: [180.7, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 5 of 12'}
+            - {id: band-slot-6, at: [215.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 6 of 12'}
         - id: slot-3
           at: [245.805, 1]
           size: {w: 100.0, h: 21.0}
@@ -347,11 +361,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -368,6 +382,11 @@ views:
           group: slots
           rel-pos: 3
           rear: {view: rear, cutout: back-3}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-7, at: [249.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 7 of 12'}
+            - {id: band-slot-8, at: [283.9, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 8 of 12'}
+            - {id: band-slot-9, at: [318.3, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 9 of 12'}
         - id: slot-4
           at: [352.805, 1]
           size: {w: 100.0, h: 21.0}
@@ -377,11 +396,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -398,6 +417,11 @@ views:
           group: slots
           rel-pos: 4
           rear: {view: rear, cutout: back-4}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-10, at: [352.7, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 10 of 12'}
+            - {id: band-slot-11, at: [387.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 11 of 12'}
+            - {id: band-slot-12, at: [421.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 12 of 12'}
         - id: slot-5
           at: [31.805, 22]
           size: {w: 100.0, h: 21.0}
@@ -407,11 +431,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -428,6 +452,11 @@ views:
           group: slots
           rel-pos: 5
           rear: {view: rear, cutout: back-5}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-1, at: [43.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: twelve slots 20 x 4 on a 34.4 pitch at mid height, the first at x 43.10'}
+            - {id: band-slot-2, at: [77.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 2 of 12'}
+            - {id: band-slot-3, at: [111.9, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 3 of 12'}
         - id: slot-6
           at: [138.805, 22]
           size: {w: 100.0, h: 21.0}
@@ -437,11 +466,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -458,6 +487,11 @@ views:
           group: slots
           rel-pos: 6
           rear: {view: rear, cutout: back-6}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-4, at: [146.3, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 4 of 12'}
+            - {id: band-slot-5, at: [180.7, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 5 of 12'}
+            - {id: band-slot-6, at: [215.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 6 of 12'}
         - id: slot-7
           at: [245.805, 22]
           size: {w: 100.0, h: 21.0}
@@ -467,11 +501,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -488,6 +522,11 @@ views:
           group: slots
           rel-pos: 7
           rear: {view: rear, cutout: back-7}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-7, at: [249.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 7 of 12'}
+            - {id: band-slot-8, at: [283.9, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 8 of 12'}
+            - {id: band-slot-9, at: [318.3, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 9 of 12'}
         - id: slot-8
           at: [352.805, 22]
           size: {w: 100.0, h: 21.0}
@@ -497,11 +536,11 @@ views:
             - fibrain/xmn1041gb@2
             - fibrain/xmi1051ga@2
             - fibrain/xmi1041ga@2
-            - fibrain/xmi1021ca@2
-            - fibrain/xmi1021da@2
-            - fibrain/xmi1021ha@2
-            - fibrain/xmi1021ga@2
-            - fibrain/xmi1031ga@2
+            - fibrain/xmi1021ca@3
+            - fibrain/xmi1021da@3
+            - fibrain/xmi1021ha@3
+            - fibrain/xmi1021ga@3
+            - fibrain/xmi1031ga@3
             - fibrain/xmi1041ca@2
             - fibrain/xmi1041da@2
             - fibrain/xmi1041ha@2
@@ -518,6 +557,11 @@ views:
           group: slots
           rel-pos: 8
           rear: {view: rear, cutout: back-8}
+          seen-through:
+            - {id: band, at: [33.4, 12.5], size: [417.8, 19.0], fill: '#2a2e32', kind: cable-bar, confidence: drawing, source: 'the maker front elevation, band layer: 19.0 high, 12.5 to 31.5 from the top, x 33.40 to 451.20; colour estimated: the maker line drawing has none, taken from the bar upright on the side faces'}
+            - {id: band-slot-10, at: [352.7, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 10 of 12'}
+            - {id: band-slot-11, at: [387.1, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 11 of 12'}
+            - {id: band-slot-12, at: [421.5, 20.0], size: [20.0, 4.0], fill: '#101214', kind: cable-bar-slot, confidence: drawing, source: 'the maker front elevation, band layer: slot 12 of 12'}
       placements:
         - {ref: fibrain/xpu-ear@1, id: ear-left, at: [0.0, 0.05], group: frame, rel-pos: 1}
         - {ref: fibrain/xpu-ear@1, id: ear-right, at: [459.9, 0.05], rotate: 180, group: frame, rel-pos: 2}
@@ -578,7 +622,57 @@ views:
     size: {w: 484.6, h: 250}
     panel:
       decor:
-        - {id: rear-bar, at: [24.8, 0], size: [435, 29], fill: '#1b1e21', kind: cable-bar}
+        - {id: bar-upper, at: [24.8, 0], size: [435, 14.5], fill: '#1b1e21', kind: cable-bar, confidence: estimated, source: 'the rear cable bar of the top view (fibrain/xpu-cable-bar@1: its elements and skin), drawn here MIRRORED ACROSS THE WIDTH because the underside is seen from below: the upper strip, at the rear'}
+        - {id: bar-lower, at: [24.8, 14.5], size: [435, 14.5], fill: '#22262a', kind: cable-bar, confidence: estimated, source: 'the rear cable bar of the top view (fibrain/xpu-cable-bar@1: its elements and skin), drawn here MIRRORED ACROSS THE WIDTH because the underside is seen from below: the lower strip, in front of it'}
+        - {id: bar-upright, at: [33.4, 13.9], size: [417.8, 1.2], fill: '#0c0d0e', kind: cable-bar, confidence: estimated, source: 'the rear cable bar of the top view (fibrain/xpu-cable-bar@1: its elements and skin), drawn here MIRRORED ACROSS THE WIDTH because the underside is seen from below: the upright, a line in plan'}
+        - {id: bar-upper-slot-1, at: [444.8, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 1 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-2, at: [430.8, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 2 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-3, at: [409.38, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 3 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-4, at: [395.38, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 4 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-5, at: [373.97, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 5 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-6, at: [359.97, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 6 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-7, at: [338.55, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 7 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-8, at: [324.55, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 8 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-9, at: [303.13, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 9 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-10, at: [289.13, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 10 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-11, at: [267.72, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 11 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-12, at: [253.72, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 12 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-13, at: [232.3, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 13 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-14, at: [218.3, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 14 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-15, at: [196.88, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 15 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-16, at: [182.88, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 16 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-17, at: [161.47, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 17 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-18, at: [147.47, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 18 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-19, at: [126.05, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 19 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-20, at: [112.05, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 20 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-21, at: [90.63, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 21 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-22, at: [76.63, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 22 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-23, at: [55.22, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 23 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-upper-slot-24, at: [41.22, 3], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 24 of 24 on the upper strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-1, at: [444.8, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 1 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-2, at: [430.8, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 2 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-3, at: [409.38, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 3 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-4, at: [395.38, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 4 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-5, at: [373.97, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 5 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-6, at: [359.97, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 6 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-7, at: [338.55, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 7 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-8, at: [324.55, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 8 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-9, at: [303.13, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 9 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-10, at: [289.13, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 10 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-11, at: [267.72, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 11 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-12, at: [253.72, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 12 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-13, at: [232.3, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 13 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-14, at: [218.3, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 14 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-15, at: [196.88, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 15 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-16, at: [182.88, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 16 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-17, at: [161.47, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 17 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-18, at: [147.47, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 18 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-19, at: [126.05, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 19 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-20, at: [112.05, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 20 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-21, at: [90.63, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 21 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-22, at: [76.63, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 22 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-23, at: [55.22, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 23 of 24 on the lower strip, counted from the left of the top view'}
+        - {id: bar-lower-slot-24, at: [41.22, 18], size: [4, 8], fill: '#0b0c0d', kind: cable-bar-slot, confidence: estimated, source: 'the tie slots of the top view (fibrain/xpu-cable-bar@1: 24 on each strip, 4 x 8; the plan on page 2 of Fibrain DSH-XPU00 rev 2 and DSH-XPS00 rev 1 shows 48 in twelve groups of four), mirrored across the width; the count is read, the size and spacing are estimated, and the colour of each opening is that of the interior of the frame: slot 24 of 24 on the lower strip, counted from the left of the top view'}
         - {id: arm-left, at: [24.8, 29], size: [0.8, 169], fill: '#1b1e21', kind: frame}
         - {id: arm-right, at: [459, 29], size: [0.8, 169], fill: '#1b1e21', kind: frame}
         - {id: floor, at: [24.8, 219.5], size: [435, 30.5], fill: '#1b1e21', kind: frame}
@@ -639,12 +733,12 @@ configurations:
     bays:
       slot-1: fibrain/xmn1021gb@2
       slot-2: fibrain/xmn1051gb@2
-      slot-3: fibrain/xmi1021ga@2
+      slot-3: fibrain/xmi1021ga@3
       slot-4: fibrain/xmi1051ga@2
       slot-5: fibrain/xmn1051gb@2
       slot-6: fibrain/xmn1021gb@2
       slot-7: fibrain/xmi1051ga@2
-      slot-8: fibrain/xmi1021ga@2
+      slot-8: fibrain/xmi1021ga@3
   copper-mixed:
     kind: example
     description: >-

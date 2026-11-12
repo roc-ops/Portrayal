@@ -61,6 +61,57 @@ served from: another CDN, or `library/packages/` after `./publish.sh` to try
 the packages locally. The explorer does that with `?dist=packages`, and reads
 jsDelivr with `?dist=cdn` (and `&index=<version>`).
 
+### Reading a build served as packs
+
+**Next release: `fetchDist` and `packedDist`.** A build holds one file per
+drawing, which is right for a build and costly on a file server that limits the
+number of files. `spec/tools/dev/dist_packs.py --dist library/dist --out <new folder>`
+packs a built dist into a few files per device. Nothing builds them by default:
+`library/dist/` and the npm packages are as they were, and a consumer that wants
+packs makes them and serves them under `<base>packs/`. `packedDist` reads them:
+
+```js
+import { packedDist, fetchDist } from '@portrayal/kit/dist';
+
+const dist = await packedDist('/portrayal/dist/');   // base of the build and its packs/
+createShell({ dist });
+const res = await fetchDist(dist('acme-box.default.front.svg'));   // a Response, as fetch gives
+```
+
+`packedDist(base)` resolves once `packs/components/index.json` has loaded, so
+the `dist` it returns is ready to use. Its function maps a device's
+`configs.json` and `source.json`, the library-wide JSON and `racks/…` to the
+plain files under `base`. It maps a device's drawing to the URL of that
+device's pack with the drawing's path as the fragment
+(`<base>packs/devices/<device>.json#<face file>`), and a skin to the chunk of
+its namespace that holds it
+(`<base>packs/components/<namespace>.<k>.json#components/<skin>`), found by
+binary search in the index.
+
+**Read every URL of a dist with `fetchDist(url, init)`.** It has the contract
+of `fetch`. A plain URL is passed to `fetch` as it is. A pack URL is answered
+from its pack, as a new `Response` on every call, typed by the file name; a
+drawing that no pack holds is a new 404. A bare `fetch` of a pack URL gets the
+whole pack. The kit reads through `fetchDist` everywhere, so a `dist` from
+`packedDist`, from `layeredDist` over those, or from `flatDist` all work in the
+shell, the viewer and the rack view.
+
+- **Routing.** A device has a pack of the faces its default configuration draws
+  and, when another configuration draws a face of its own, a second pack
+  (`<device>.more.json`). `fetchDist` reads the device's `configs.json` from
+  `jdist`'s memo (and waits for a read that is still on its way) and goes
+  straight to the pack that holds the face; a face no configuration names is a
+  miss with no request. When `configs.json` is not there, failed, or has no
+  `files`, it tries the first pack and then the second if the first says
+  `"more": true`.
+- **Fetching.** Each pack is fetched once per page and shared. A network
+  failure or a 5xx is tried once more and not remembered; a pack that is not
+  there (404) is remembered for the page.
+- `svgSource` (`relief.js`) forgets a fetch that was rejected, so a failure does
+  not blank every drawing of a device for the page. A missing drawing is still
+  remembered as `''`.
+- `clearDistCache()` forgets the packs as well as the JSON.
+
 ## Modules
 
 | module | what it does |
@@ -69,10 +120,11 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
+| `section.js` | the 3D body of a housing that states `chassis.section`: the end profile extruded along the width (cut back to its core where `chassis.fins` says, with the ribs merged into the same buffer, and `finReach`, how far ribs stand outside the box), each facet mapped like the box face it looks toward, and `surfaceUnder` / `seatPoint`, the depth of the casting under a part's centre that `relief.js` seats the part at; no THREE in it, so it runs under node (used by `viewer3d.js` and `relief.js`) |
 | `camera-fit.js` | the 3D opening view fitted to the chassis box: the nearest distance at which all eight corners sit inside the frame for the lens and the frame's aspect (never nearer than the old two spans), with the dolly limit and far plane that follow it; no THREE in it, so it runs under node (used by `viewer3d.js`) |
 | `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
 | `marks.js` | annotation and callouts |
-| `states.js` | state toggling (LEDs, link states) and what a display can read; an outlet's state shown on its lamp: the lamps `for:` binds to a part that declares states (`boundLamps`), a `{path: classes}` state map with each bound lamp given its outlet's classes (`expandStates`, which `marks.js`, `relief.js` and `viewer3d.js` apply), and whether an `off` chip sets `state-off` or clears (`offIsSet`) |
+| `states.js` | state toggling (LEDs, link states) and what a display can read; an outlet's state shown on its lamp: the lamps `for:` binds to a part that declares states (`boundLamps`), a `{path: classes}` state map with each bound lamp given its outlet's classes (`expandStates`, which `marks.js`, `relief.js` and `viewer3d.js` apply), and whether an `off` chip sets `state-off` or clears (`offIsSet`); a light whose colour the user chooses: whether an element is one and the maker's name for it (`programmableOf`), a colour a reader chose as `#rrggbb` (`demoHex`), and the `{path: colour}` a scene is given for the marked lamps of a drawing (`demoColours`) |
 | `share.js` | GLB and USDZ export |
 | `gif.js` | GIF capture |
 | `swap.js` | swapping a component into a bay, or an occupant into a slot at the turn it takes there (`seatTurn`); the `swap=` and `turn=` location strings (`encodeSwaps`, `decodeSwaps`, `encodeTurns`, `decodeTurns`) |
@@ -87,6 +139,7 @@ jsDelivr with `?dist=cdn` (and `&index=<version>`).
 | `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |
 | `omnigraffle.js` | OmniGraffle: a `.gstencil` with a named, magnetised shape per port, or one live drawing as a stencil (`toGraffle`) |
 | `ears2d.js` | generic rack ears over a published face in 2D (`drawEars`, `clearEars`), from the plan the 3D viewer builds (`earPlan`); see [Rack ears](#rack-ears) |
+| `housing.js` | a box that opens in two halves (`chassis.halves`): the open state as numbers (`housingPlan`, `bayPlates`), what a page or an agent is told (`describeHalves`, `openViewOf`, `viewFor`), no three.js and no DOM. `createViewer(el, {housing: 'open'})` or `viewer.setHousing('open')` draws it; closed is the default and the only state of a box with no halves |
 | `positions.js` | the Explorer's control for a part that slides (`positionControl`): a slider over the range, a button for each named stop and a reset, written through the shell's `setFields`; see [A part that slides](#a-part-that-slides) |
 
 Plain ES modules. No bundler, no build step.

@@ -1,0 +1,115 @@
+format: 1
+kind: module
+name: ex-um-2qsfp-mr
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper EX-UM-2QSFP-MR, the two-port 40/100 Gbps QSFP+/QSFP28 uplink module of the EX4300-48MP
+  switches. It slides into the uplink module slot below the status block at the right end of the front
+  panel. It has two QSFP28 cages side by side, numbered 0 and 1. Each takes a QSFP+ transceiver at 40
+  Gbps or a QSFP28 transceiver at 100 Gbps. Each port has four link activity lamps above its cage, for the
+  four 10 Gbps channels of a breakout cable. Two captive screws hold it and a handle along the bottom pulls
+  it out.
+attrs:
+  model: EX-UM-2QSFP-MR
+  qsfp28: 2
+  weight: 0.57 lb (0.26 kg)
+  power-absent: not-published
+  ports-note: two ports, each QSFP+ at 40 Gbps or QSFP28 at 100 Gbps; the ports cannot be Virtual Chassis ports
+provenance:
+  sources: >-
+    datasheet - EX4300 Switch Hardware Guide (Juniper Networks, published 2025-08-12), Uplink Modules in
+    EX4300 Switches, Table 14 (PDF pages 75 to 76): two QSFP+ transceivers, two QSFP28 transceivers or one of
+    each, and the ports "cannot" be configured as Virtual Chassis ports. Table 17 (PDF page 80) holds Figure
+    23 (g022453, the module in three-quarter view) and Figure 24 (g022455, the face drawn flat with the lamps,
+    screws and handle numbered). Figure 36 and its text (PDF page 90) say each port has four lamps. The
+    datasheet ordering table (PDF page 16) lists EX-UM-2QSFP-MR for the EX4300-48MP.
+  size: >-
+    photo-measured - it fills the EX4300-48MP's uplink slot, 66.6 x 24.5 mm, which Juniper's straight-on studio
+    photograph of the EX4300-48MP front shows covered (juniper/ex4300-48mp-uplink-blank@1 carries the method).
+    Figure 24's outline is 712 x 267 px at 400 dpi, an aspect of 2.67 against the slot's 2.72. The guide
+    gives no module size. The depth is not stated.
+  elements: >-
+    drawing - Figure 24 is a flat elevation, read as fractions of its outline at 10.69 px per mm and applied
+    to 66.6 x 24.5 mm. Two cages centred on the plate at the 19.0 mm pitch of std/qsfp-ganged, 8.1 mm down.
+    Four round lamps for each port in a row above the cage, 5.05 mm down, at 17.6, 21.7, 25.8 and 29.7 mm for
+    port 0 and 36.7, 40.6, 44.6 and 48.7 mm for port 1. The numbers 0 and 1 print under the cages. A slotted
+    captive screw at each upper end, placed as juniper/ex4300-48mp-uplink-blank@1 places them. A handle bar
+    along the bottom, 10.3 to 55.9 mm across, 2.1 mm high. A small round hole at the lower left and a
+    sample of the hexagonal vents (five at the left and six at the right, where the figure shows many more)
+    are drawn; the row of small hexagons along the top edge and the two side notches are not drawn.
+  colour: >-
+    estimated - no photograph of this module is held. The plate takes the grey of the fitted EX-UM-4X4SFP in
+    the EX4300-24T photograph (#888c92), the nearest held evidence of this family's faceplate; the handle is
+    drawn light grey because no held document shows its colour.
+  led: >-
+    datasheet - guide Figure 24 callouts 2 to 5 and Figure 36's text: with breakout cables the four lamps of a
+    port show the link activity of its four 10 Gbps interfaces; at 40 or 100 Gbps the first lamp shows the
+    port.
+  weight: >-
+    datasheet - guide, Chassis Physical Specifications, PDF page 64: "2-port 40-Gigabit Ethernet QSFP+/100-Gigabit
+    Ethernet QSFP28 uplink module ... 0.57 lb (0.26 kg)".
+  power: >-
+    not published - searched the guide's power budget tables (Tables 32 to 36) and the datasheet for a
+    figure for any uplink module and found none, so the module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp28:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp28
+      speed: 100g
+    description: >-
+      The two uplink cages, numbered 0 and 1 as printed. Each takes a QSFP28 transceiver at 100 Gbps or a QSFP+
+      transceiver at 40 Gbps, and channelizes to four 10 Gbps interfaces with a breakout cable
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      Four lamps for each port above the cage. The first shows the port at 40 or 100 Gbps and all four show the
+      links of a 4 x 10 Gbps breakout. Numbered in printed order, left to right
+parts:
+- {ref: std/qsfp-ganged@1, id: port-0, at: [14.3, 8.1], group: qsfp28, attrs: {media: qsfp28, speed: 100g}}
+- {ref: std/qsfp-ganged@1, id: port-1, at: [33.3, 8.1], group: qsfp28, attrs: {media: qsfp28, speed: 100g}}
+- {ref: common/led-dot@1, id: led-0-a, at: [16.6, 4.05], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-b, at: [20.7, 4.05], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-0-c, at: [24.8, 4.05], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-0-d, at: [28.7, 4.05], group: port-leds, attrs: {function: channel 4}}
+- {ref: common/led-dot@1, id: led-1-a, at: [35.7, 4.05], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-b, at: [39.6, 4.05], group: port-leds, attrs: {function: channel 2}}
+- {ref: common/led-dot@1, id: led-1-c, at: [43.6, 4.05], group: port-leds, attrs: {function: channel 3}}
+- {ref: common/led-dot@1, id: led-1-d, at: [47.7, 4.05], group: port-leds, attrs: {function: channel 4}}
+elements:
+  screw-left:
+    at: [1.7, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+  screw-right:
+    at: [61.2, 1.4]
+    size: [5.0, 5.0]
+    class: screw
+size:
+  w: 66.6
+  h: 24.5
+size-confidence: {w: photo-measured, h: photo-measured}
+relief:
+  features:
+  - node: screw-left
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+  - node: screw-right
+    cyl: 2.5
+    knurl: true
+    confidence: estimated
+    source: installation text names captive screws; projection estimated
+skins: [default]

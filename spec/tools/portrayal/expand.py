@@ -35,6 +35,15 @@ MEASURED AGAINST THE LIBRARY BEFORE IT WAS WRITTEN: the bank/rows/pitch/gang/
 gutter model reproduces 39 of 56 existing port blocks to the 0.01mm the files
 carry, and 48 of 56 to within 0.11mm - the residue being independent rounding in
 hand-authored numbers rather than disagreement about the shape.
+
+`spec/tools/dev/layout_fit.py` re-measures this: before any device was converted,
+8 of the 180 longhand devices with a repeated block fit as the generator stands,
+and 4 of those 8 are now authored as layouts (a coordinate written as a whole
+number comes out as a float, which changes the compiled source, unless the layout
+says `whole-numbers: true`; and one device's column positions are rounded by no
+single pitch). The blocks it cannot write fail
+mostly on the keys a placement carries, numbering, gaps, rows, `rel-pos` and
+file order; the tool prints the table.
 """
 import argparse
 import copy
@@ -706,10 +715,36 @@ def _splice(seq, made):
     return out
 
 
+def _whole(value):
+    return int(value) if isinstance(value, float) and value.is_integer() else value
+
+
+def _write_whole(items):
+    """Write an integral `at` and `size` of generated items as an integer.
+
+    WHY A KEY AND NOT THE DEFAULT. Every coordinate above comes out of `round()`
+    as a float, so a position of 14 is written `14.0` where a hand-written device
+    says `14`. The two parse equal, but `render.source_bytes` hashes the document
+    as JSON, so the source hash and everything compiled from it move although the
+    drawing did not. A layout that has to reproduce a hand-written device says
+    `whole-numbers: true`. A layout that does not say it is written as it always
+    was, because changing the writer for all of them would move the hash of every
+    generated device. Only `at` and `size`, the numbers this tool computes, are
+    changed; what the author wrote is copied as written.
+    """
+    for item in items:
+        for key in ("at", "size"):
+            if key in item:
+                item[key] = [_whole(v) for v in item[key]]
+
+
 def expand(layout, library, standards):
     """layout.yaml -> the device dict a consumer reads."""
     doc = copy.deepcopy(layout)
     doc.pop("layout-format", None)
+    whole = doc.pop("whole-numbers", False)
+    if not isinstance(whole, bool):
+        raise SystemExit(f"whole-numbers must be true or false, got {whole!r}")
     for view in (doc.get("views") or {}).values():
         # named marks expand on every view, whether or not it has blocks
         if view.get("silkscreen"):
@@ -728,6 +763,9 @@ def expand(layout, library, standards):
             else:
                 p, c, s = block_items(b, library, standards)
                 d = []
+            if whole:
+                for made in (p, c, s, d):
+                    _write_whole(made)
             made_p.setdefault(key, []).extend(p)
             made_c.setdefault(key, []).extend(c)
             made_s.setdefault(key, []).extend(s)

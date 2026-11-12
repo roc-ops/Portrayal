@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: nport-5600-keys
+version: 1.0.0
+class: button
+profile: networking
+description: >-
+  The four round push buttons on the front of the standard-temperature NPort 5600 rackmount serial device
+  servers, marked MENU, up, down and SEL. They move through the settings the LCD panel shows and edit the IP
+  address. The wide-temperature models do not have them.
+size: {w: 58.6, h: 13.4}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  identity: >-
+    Moxa NPort 5600 Series data sheet v1.9, page 2 callouts "IP Configuration Buttons" and page 4: "Push buttons
+    for configuration (standard temp. models only)". Quick installation guide v5.4, page 2: the front panel
+    figure marks the four buttons MENU, up, down and SEL.
+  size: >-
+    drawing - read off the standard-model front elevation on page 6 of the data sheet, drawn to the 440 mm body
+    at 3.36 px/mm. The four rings are 45 px across, 13.4 mm, and their centres read 15.5, 14.5 and 15.2 mm
+    apart; they are drawn on one pitch of 15.07 mm, the mean, because the scatter is the line art's.
+  colour: >-
+    The ring is the teal of the buttons in the printed render on page 1 of the data sheet and in the guide's
+    front panel figure. Both are printed art, not calibrated photographs, so the colour is not compared with a
+    photograph of the unit.
+elements:
+  menu: {at: [0.7, 0.7], size: [12.0, 12.0], class: button, label-anchor: below}
+  up: {at: [15.77, 0.7], size: [12.0, 12.0], class: button, label-anchor: below}
+  down: {at: [30.84, 0.7], size: [12.0, 12.0], class: button, label-anchor: below}
+  sel: {at: [45.9, 0.7], size: [12.0, 12.0], class: button, label-anchor: below}
+relief:
+  features:
+  - node: menu
+    out: 0.8
+    confidence: estimated
+    source: the guide's figure shows raised round buttons and no document states how far they stand
+  - node: up
+    out: 0.8
+    confidence: estimated
+    source: the guide's figure shows raised round buttons and no document states how far they stand
+  - node: down
+    out: 0.8
+    confidence: estimated
+    source: the guide's figure shows raised round buttons and no document states how far they stand
+  - node: sel
+    out: 0.8
+    confidence: estimated
+    source: the guide's figure shows raised round buttons and no document states how far they stand
+skins: [default]

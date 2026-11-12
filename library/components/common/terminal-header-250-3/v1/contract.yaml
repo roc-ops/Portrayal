@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: terminal-header-250-3
+version: 1.0.0
+class: port
+profile: networking
+interface: terminal-250-3
+description: >-
+  A three-position pluggable terminal block on a 2.50 mm pitch, seen face on: a green housing
+  with three wire entries and a contact above each, as the Oscilloquartz IRIG-B card carries it for
+  its alarm/pulse relay. A three-position terminal plug seats at its mate point.
+size: {w: 10.1, h: 6.5}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: terminal-block, positions: 3, pitch-mm: 2.5}
+provenance:
+  model: >-
+    datasheet - Adtran OSA 5422 data sheet, p6, IRIG/TIMECODE line card: "Alarm/pulse relay",
+    "Connector: WR-TBL 3-pin Serie 382 - 2.50 mm", "Relay contact NC/NO - 50VDC @ 250mA". The
+    p8 line card picture shows a green three-position block under the "Alarm/Pulse" legend. The
+    data sheet gives no body dimension, part number or gender.
+  pitch: >-
+    datasheet - 2.50, the series pitch the data sheet prints. The first draw of the card put the
+    positions about 3.4 apart from a 375 px render; the p8 picture of the same card reads the three
+    screws about 2.3 apart at its 8.6 px/mm, so 2.50 is the pitch drawn. The contacts sit 2.50 apart
+    about the middle of the housing.
+  size: >-
+    estimated - THE DATA SHEET PRINTS NO DIMENSION. It is drawn as the card's own art measured the
+    block, 10.1 x 6.5 (oscilloquartz/irig-b@1 provenance elements, 3.25 px/mm); the p8 picture reads
+    it about 9.5 wide.
+  interface: >-
+    datasheet - the `terminal-250-3` key of spec/schemas/connectors.yaml. The mate point is the
+    centre of the housing, facing out.
+  colour: >-
+    estimated - the housing #6fbf4a, its edge #3f7d2a and the contacts #c9a86a are the card
+    skin's own, read off the same render and checked against the green of the p8 picture.
+elements:
+  body: {at: [0.0, 0.0], size: [10.1, 6.5], class: connector}
+connection-points:
+  mate: {at: [5.05, 3.25], direction: front}
+skins: [default]

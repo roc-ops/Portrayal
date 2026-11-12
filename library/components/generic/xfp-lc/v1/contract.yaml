@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: xfp-lc
-version: 1.0.0
+version: 1.1.0
 class: transceiver
 behaviour: occupies
 mates: xfp
@@ -94,9 +94,24 @@ provenance:
     stands for every product of its shape (L99). The grey is in no row of
     that table. A vendor wrapper sets `latch-color`. The outline follows the
     fill (`data-stroke-derive`).
+  groups: >-
+    Source: XFP MSA INF-8077i Rev 4.5 Figure 31, which draws the end view with two bores, the
+    Approved Networks XFP-LR data sheet REV 4.2 p3 and the FS 10GBASE-LR XFP datasheet p9 end
+    view (provenance.bores). The role is traffic, this contract's own reading of the job: the
+    module's network port, where its fibre or cable is plugged in. The shape stands for every
+    module of its kind, so the group states no speed: rate, reach and watts belong on the vendor
+    wrapper.
+groups:
+  xfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the two LC duplex bores of an XFP module, transmit and receive
 parts:
-  - {ref: std/lc-bore@3, id: tx, at: [3.70, 0.30], rotate: 180, lift: 9.0}
-  - {ref: std/lc-bore@3, id: rx, at: [9.95, 0.30], rotate: 180, lift: 9.0}
+  - {ref: std/lc-bore@3, id: tx, group: xfp, at: [3.70, 0.30], rotate: 180, lift: 9.0}
+  - {ref: std/lc-bore@3, id: rx, group: xfp, at: [9.95, 0.30], rotate: 180, lift: 9.0}
 relief:
   features:
     - node: body

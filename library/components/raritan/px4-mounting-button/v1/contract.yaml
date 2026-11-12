@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: px4-mounting-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  A mounting button on the back of a Raritan PX4 zero-U strip: a flat head that hooks into a keyhole in the rack
+  frame.
+size: {w: 14.7, h: 14.7}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    estimated and borrowed - THE PX4 BUTTON'S HEAD IS NOT PUBLISHED. 14.7 is the head of the M5 x 10 flat screw that
+    the PX3-1045 drawing prints for that model's button, a different model of the same maker. No flange, shoulder or
+    height is drawn.
+  how-it-mounts: >-
+    drawing - the mechanical drawing MPX4 (Rev 0C) gives two mounting buttons 1244.0 mm apart. The Raritan PX4 quick
+    start guide shows a button pressed into a flat bracket at each end of the rear.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot in a bracket or a cabinet channel
+    presents. The button seats at its `mate`, the centre of its head.
+  colour: >-
+    UNCHECKED ESTIMATE - no document states the colour; a light metal grey.
+elements:
+  head: {at: [0, 0], size: [14.7, 14.7], class: mount}
+connection-points:
+  mate: {at: [7.35, 7.35], direction: front}
+skins: [default]

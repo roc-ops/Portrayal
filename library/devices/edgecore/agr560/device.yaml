@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 3.0.4
+version: 4.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -379,6 +379,8 @@ groups:
       and the panel is followed.
     attrs: {media: qsfp-dd, speed: 400g}
   port-leds: {term: LED, role: indicator, index-origin: 0}
+  qsfp28-leds: {term: LED, role: indicator, index-origin: 0}
+  qsfpdd-leds: {term: LED, role: indicator, index-origin: 0}
   mgmt:
     term: Port
     role: management
@@ -877,7 +879,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-0
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 0
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-1-speed
@@ -885,7 +887,7 @@ views:
         skin: down
         states: *id002
         for: qsfp28-1
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 1
       - {ref: std/qsfp-ganged@1, id: qsfp28-2, at: [47.54, 50.44], group: qsfp28, rel-pos: 2}
       - {ref: std/qsfp-ganged@1, id: qsfp28-3, at: [47.54, 65.85], rotate: 180, group: qsfp28, rel-pos: 3}
@@ -900,7 +902,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-2
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 2
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-3-speed
@@ -908,7 +910,7 @@ views:
         skin: down
         states: *id003
         for: qsfp28-3
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 3
       - {ref: std/qsfp-ganged@1, id: qsfp28-4, at: [66.44, 20.51], group: qsfp28, rel-pos: 4}
       - {ref: std/qsfp-ganged@1, id: qsfp28-5, at: [66.44, 35.92], rotate: 180, group: qsfp28, rel-pos: 5}
@@ -923,7 +925,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-4
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 4
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-5-speed
@@ -931,7 +933,7 @@ views:
         skin: down
         states: *id004
         for: qsfp28-5
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 5
       - {ref: std/qsfp-ganged@1, id: qsfp28-6, at: [66.44, 50.44], group: qsfp28, rel-pos: 6}
       - {ref: std/qsfp-ganged@1, id: qsfp28-7, at: [66.44, 65.85], rotate: 180, group: qsfp28, rel-pos: 7}
@@ -946,7 +948,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-6
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 6
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-7-speed
@@ -954,7 +956,7 @@ views:
         skin: down
         states: *id005
         for: qsfp28-7
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 7
       - {ref: std/qsfp-ganged@1, id: qsfp28-8, at: [92.93, 20.51], group: qsfp28, rel-pos: 8}
       - {ref: std/qsfp-ganged@1, id: qsfp28-9, at: [92.93, 35.92], rotate: 180, group: qsfp28, rel-pos: 9}
@@ -969,7 +971,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-8
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 8
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-9-speed
@@ -977,7 +979,7 @@ views:
         skin: down
         states: *id006
         for: qsfp28-9
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 9
       - {ref: std/qsfp-ganged@1, id: qsfp28-10, at: [92.93, 50.44], group: qsfp28, rel-pos: 10}
       - {ref: std/qsfp-ganged@1, id: qsfp28-11, at: [92.93, 65.85], rotate: 180, group: qsfp28, rel-pos: 11}
@@ -992,7 +994,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-10
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 10
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-11-speed
@@ -1000,7 +1002,7 @@ views:
         skin: down
         states: *id007
         for: qsfp28-11
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 11
       - {ref: std/qsfp-ganged@1, id: qsfp28-12, at: [111.83, 20.51], group: qsfp28, rel-pos: 12}
       - {ref: std/qsfp-ganged@1, id: qsfp28-13, at: [111.83, 35.92], rotate: 180, group: qsfp28, rel-pos: 13}
@@ -1015,7 +1017,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-12
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 12
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-13-speed
@@ -1023,7 +1025,7 @@ views:
         skin: down
         states: *id008
         for: qsfp28-13
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 13
       - {ref: std/qsfp-ganged@1, id: qsfp28-14, at: [111.83, 50.44], group: qsfp28, rel-pos: 14}
       - {ref: std/qsfp-ganged@1, id: qsfp28-15, at: [111.83, 65.85], rotate: 180, group: qsfp28, rel-pos: 15}
@@ -1038,7 +1040,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-14
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 14
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-15-speed
@@ -1046,7 +1048,7 @@ views:
         skin: down
         states: *id009
         for: qsfp28-15
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 15
       - {ref: std/qsfp-ganged@1, id: qsfp28-16, at: [138.22, 20.51], group: qsfp28, rel-pos: 16}
       - {ref: std/qsfp-ganged@1, id: qsfp28-17, at: [138.22, 35.92], rotate: 180, group: qsfp28, rel-pos: 17}
@@ -1061,7 +1063,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-16
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 16
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-17-speed
@@ -1069,7 +1071,7 @@ views:
         skin: down
         states: *id010
         for: qsfp28-17
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 17
       - {ref: std/qsfp-ganged@1, id: qsfp28-18, at: [138.22, 50.44], group: qsfp28, rel-pos: 18}
       - {ref: std/qsfp-ganged@1, id: qsfp28-19, at: [138.22, 65.85], rotate: 180, group: qsfp28, rel-pos: 19}
@@ -1084,7 +1086,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-18
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 18
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-19-speed
@@ -1092,7 +1094,7 @@ views:
         skin: down
         states: *id011
         for: qsfp28-19
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 19
       - {ref: std/qsfp-ganged@1, id: qsfp28-20, at: [157.12, 20.51], group: qsfp28, rel-pos: 20}
       - {ref: std/qsfp-ganged@1, id: qsfp28-21, at: [157.12, 35.92], rotate: 180, group: qsfp28, rel-pos: 21}
@@ -1107,7 +1109,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-20
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 20
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-21-speed
@@ -1115,7 +1117,7 @@ views:
         skin: down
         states: *id012
         for: qsfp28-21
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 21
       - {ref: std/qsfp-ganged@1, id: qsfp28-22, at: [157.12, 50.44], group: qsfp28, rel-pos: 22}
       - {ref: std/qsfp-ganged@1, id: qsfp28-23, at: [157.12, 65.85], rotate: 180, group: qsfp28, rel-pos: 23}
@@ -1130,7 +1132,7 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfp28-22
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 22
       - ref: common/led-arrow-sm@1
         id: led-qsfp28-23-speed
@@ -1138,7 +1140,7 @@ views:
         skin: down
         states: *id013
         for: qsfp28-23
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 23
       - {ref: std/qsfp-dd@1, id: qsfpdd-0, at: [189.13, 35.98], group: qsfp-dd, rel-pos: 0}
       - {ref: std/qsfp-dd@1, id: qsfpdd-1, at: [189.13, 50.14], rotate: 180, group: qsfp-dd, rel-pos: 1}
@@ -1162,84 +1164,84 @@ views:
         - {name: link-25g, color: '#22d3ee'}
         - {name: link-10g, color: '#fbbf24'}
         for: qsfpdd-0
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 0
       - ref: common/led-dot@1
         id: led-qsfpdd-1-speed
         at: [185.25, 51.58]
         states: *id014
         for: qsfpdd-1
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 1
       - ref: common/led-dot@1
         id: led-qsfpdd-2-speed
         at: [228.87, 40.6]
         states: *id014
         for: qsfpdd-2
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 2
       - ref: common/led-dot@1
         id: led-qsfpdd-3-speed
         at: [228.87, 51.58]
         states: *id014
         for: qsfpdd-3
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 3
       - ref: common/led-dot@1
         id: led-qsfpdd-4-speed
         at: [238.68, 40.6]
         states: *id014
         for: qsfpdd-4
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 4
       - ref: common/led-dot@1
         id: led-qsfpdd-5-speed
         at: [238.68, 51.58]
         states: *id014
         for: qsfpdd-5
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 5
       - ref: common/led-dot@1
         id: led-qsfpdd-6-speed
         at: [282.3, 40.6]
         states: *id014
         for: qsfpdd-6
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 6
       - ref: common/led-dot@1
         id: led-qsfpdd-7-speed
         at: [282.3, 51.58]
         states: *id014
         for: qsfpdd-7
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 7
       - ref: common/led-dot@1
         id: led-qsfpdd-8-speed
         at: [292.11, 40.6]
         states: *id014
         for: qsfpdd-8
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 8
       - ref: common/led-dot@1
         id: led-qsfpdd-9-speed
         at: [292.11, 51.58]
         states: *id014
         for: qsfpdd-9
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 9
       - ref: common/led-dot@1
         id: led-qsfpdd-10-speed
         at: [335.73, 40.6]
         states: *id014
         for: qsfpdd-10
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 10
       - ref: common/led-dot@1
         id: led-qsfpdd-11-speed
         at: [335.73, 51.58]
         states: *id014
         for: qsfpdd-11
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 11
       - ref: common/led-arrow-sm@1
         id: led-port-0-link
@@ -1289,7 +1291,7 @@ views:
         id: led-qsfp28-0-link
         at: [63.02, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 200
         for: qsfp28-0
         states:
@@ -1300,7 +1302,7 @@ views:
         id: led-qsfp28-1-link
         at: [60.7, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 201
         for: qsfp28-1
         states:
@@ -1311,7 +1313,7 @@ views:
         id: led-qsfp28-2-link
         at: [63.02, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 202
         for: qsfp28-2
         states:
@@ -1322,7 +1324,7 @@ views:
         id: led-qsfp28-3-link
         at: [60.7, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 203
         for: qsfp28-3
         states:
@@ -1333,7 +1335,7 @@ views:
         id: led-qsfp28-4-link
         at: [81.91, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 204
         for: qsfp28-4
         states:
@@ -1344,7 +1346,7 @@ views:
         id: led-qsfp28-5-link
         at: [79.59, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 205
         for: qsfp28-5
         states:
@@ -1355,7 +1357,7 @@ views:
         id: led-qsfp28-6-link
         at: [81.91, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 206
         for: qsfp28-6
         states:
@@ -1366,7 +1368,7 @@ views:
         id: led-qsfp28-7-link
         at: [79.59, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 207
         for: qsfp28-7
         states:
@@ -1377,7 +1379,7 @@ views:
         id: led-qsfp28-8-link
         at: [108.41, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 208
         for: qsfp28-8
         states:
@@ -1388,7 +1390,7 @@ views:
         id: led-qsfp28-9-link
         at: [106.09, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 209
         for: qsfp28-9
         states:
@@ -1399,7 +1401,7 @@ views:
         id: led-qsfp28-10-link
         at: [108.41, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 210
         for: qsfp28-10
         states:
@@ -1410,7 +1412,7 @@ views:
         id: led-qsfp28-11-link
         at: [106.09, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 211
         for: qsfp28-11
         states:
@@ -1421,7 +1423,7 @@ views:
         id: led-qsfp28-12-link
         at: [127.31, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 212
         for: qsfp28-12
         states:
@@ -1432,7 +1434,7 @@ views:
         id: led-qsfp28-13-link
         at: [124.98, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 213
         for: qsfp28-13
         states:
@@ -1443,7 +1445,7 @@ views:
         id: led-qsfp28-14-link
         at: [127.31, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 214
         for: qsfp28-14
         states:
@@ -1454,7 +1456,7 @@ views:
         id: led-qsfp28-15-link
         at: [124.98, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 215
         for: qsfp28-15
         states:
@@ -1465,7 +1467,7 @@ views:
         id: led-qsfp28-16-link
         at: [153.69, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 216
         for: qsfp28-16
         states:
@@ -1476,7 +1478,7 @@ views:
         id: led-qsfp28-17-link
         at: [151.38, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 217
         for: qsfp28-17
         states:
@@ -1487,7 +1489,7 @@ views:
         id: led-qsfp28-18-link
         at: [153.69, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 218
         for: qsfp28-18
         states:
@@ -1498,7 +1500,7 @@ views:
         id: led-qsfp28-19-link
         at: [151.38, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 219
         for: qsfp28-19
         states:
@@ -1509,7 +1511,7 @@ views:
         id: led-qsfp28-20-link
         at: [172.59, 31.99]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 220
         for: qsfp28-20
         states:
@@ -1520,7 +1522,7 @@ views:
         id: led-qsfp28-21-link
         at: [170.28, 31.99]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 221
         for: qsfp28-21
         states:
@@ -1531,7 +1533,7 @@ views:
         id: led-qsfp28-22-link
         at: [172.59, 61.76]
         skin: up
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 222
         for: qsfp28-22
         states:
@@ -1542,7 +1544,7 @@ views:
         id: led-qsfp28-23-link
         at: [170.28, 61.76]
         skin: down
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 223
         for: qsfp28-23
         states:
@@ -1552,7 +1554,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-0-link
         at: [185.25, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 300
         for: qsfpdd-0
         states:
@@ -1562,7 +1564,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-1-link
         at: [185.25, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 301
         for: qsfpdd-1
         states:
@@ -1572,7 +1574,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-2-link
         at: [229.03, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 302
         for: qsfpdd-2
         states:
@@ -1582,7 +1584,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-3-link
         at: [229.03, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 303
         for: qsfpdd-3
         states:
@@ -1592,7 +1594,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-4-link
         at: [238.68, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 304
         for: qsfpdd-4
         states:
@@ -1602,7 +1604,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-5-link
         at: [238.68, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 305
         for: qsfpdd-5
         states:
@@ -1612,7 +1614,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-6-link
         at: [282.46, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 306
         for: qsfpdd-6
         states:
@@ -1622,7 +1624,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-7-link
         at: [282.46, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 307
         for: qsfpdd-7
         states:
@@ -1632,7 +1634,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-8-link
         at: [292.31, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 308
         for: qsfpdd-8
         states:
@@ -1642,7 +1644,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-9-link
         at: [292.31, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 309
         for: qsfpdd-9
         states:
@@ -1652,7 +1654,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-10-link
         at: [336.09, 43.6]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 310
         for: qsfpdd-10
         states:
@@ -1662,7 +1664,7 @@ views:
       - ref: common/led-dot@1
         id: led-qsfpdd-11-link
         at: [336.09, 54.47]
-        group: port-leds
+        group: qsfpdd-leds
         rel-pos: 311
         for: qsfpdd-11
         states:

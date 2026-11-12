@@ -836,6 +836,82 @@
       }
      }
     },
+    "section": {
+     "type": "array",
+     "minItems": 4,
+     "description": "THE END PROFILE OF A HOUSING THAT IS AN EXTRUSION, for a cast or extruded body that is not a plain box: a narrower upper casting, a flange across the whole depth, a narrower lower casting. A closed polygon `[[x, y], ...]` in millimetres in the RIGHT end face's frame - x across the depth, from the front, and y down the height, from the top - that is the ENVELOPE of the housing, fins included. The profile runs the whole `width`. The left face is its mirror in x. Clockwise with y down, every edge axis-aligned, inside the `depth` by `height` box and touching all four of its sides, with exactly one edge on the top side and one on the bottom (L204, L205). The box stays the bounding box: rack fit, exports and the lock read `width`, `height` and `depth`. The right and left faces are drawn as the polygon and the rest of each is transparent; the front, rear, top and bottom are drawn as before. A part on an end face lies inside its outline, and a part on the top or bottom does not straddle a step of the body (L207). Not on a rack device, and not with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (L206). It may be stated with `halves`: the housing then opens as the stepped body cut at the seam, with the base on the top or bottom and the hinge on the front or rear (L217 to L219). It is shape: stating or changing it is a major.",
+     "items": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "number"}
+     }
+    },
+    "fins": {
+     "type": "array",
+     "description": "THE RIBS OF A CAST HOUSING, a list of rib fields on the housing's `section`. Each field is on the one edge of the section that lies on the top or the bottom of the box (`on`), runs along the length from `span[0]` to `span[1]` in millimetres from the left end, and puts a rib `rib` thick every `rib` plus `gap`, the first at the start of the span; a part of a pitch left at the end is a warning. A field is one of two kinds. An INSIDE field states `core`: the height of its tallest rib, which is how far the casting's own surface lies in from the edge. The section's edge is then the tip line of the tallest rib, the box and every size stay as stated, and the casting is cut back to its core surface everywhere along the length, with the ribs standing on it. `steps` lower the tips: each is a `span` and the `height` of the rib tips above the core surface in it, the steps tile the field's span exactly, every height is at most `core` and one equals it, and a rib takes the height of the step whose span `[from, to)` holds its centre; without steps every tip is at `core`. An OUTSIDE field (`outside: true`) states `height` and no `core`: the section's edge is the casting's own surface and the ribs stand out of it, by their step heights or by `height`, up to 60 mm beyond the box; the box and every size read stay the casting's, so the ribs count in none of them. Fields on one edge may not overlap, an inside field is alone on its edge, and a device has at most 400 ribs. A part on the front or the rear does not lie above a step's tip line or over a field. It needs a `section`. It is surface: retuning a rib's height is a patch. A validator that does not know the key refuses a device that states it.",
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["on", "span", "rib", "gap"],
+      "properties": {
+       "on": {
+        "enum": ["top", "bottom"],
+        "description": "The side of the box whose edge of the section carries the ribs. In YAML write the key quoted, `'on': top`: a bare `on` is read as true."
+       },
+       "span": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "number"},
+        "description": "Where the field runs along the length, `[from, to]` in millimetres from the left end, inside `[0, width]`."
+       },
+       "core": {
+        "type": "number",
+        "description": "Inside fields: the height of the tallest rib, the distance from the edge in to the casting's core surface, in millimetres. Not stated on an outside field."
+       },
+       "height": {
+        "type": "number",
+        "description": "Outside fields: how far the tallest rib stands out of the casting's edge, in millimetres, at most 60. Not stated on an inside field."
+       },
+       "rib": {
+        "type": "number",
+        "description": "The thickness of one rib along the length, in millimetres."
+       },
+       "gap": {
+        "type": "number",
+        "description": "The gap after each rib along the length, in millimetres."
+       },
+       "outside": {
+        "type": "boolean",
+        "description": "True for ribs that stand out of the casting's edge instead of cutting into it, beyond the size the box states."
+       },
+       "steps": {
+        "type": "array",
+        "minItems": 1,
+        "description": "A stepped tip line: spans that tile the field's span, each with the height of the rib tips in it.",
+        "items": {
+         "type": "object",
+         "additionalProperties": false,
+         "required": ["span", "height"],
+         "properties": {
+          "span": {
+           "type": "array",
+           "minItems": 2,
+           "maxItems": 2,
+           "items": {"type": "number"},
+           "description": "`[from, to]` along the length, in millimetres from the left end; a rib belongs to the step whose half-open span holds its centre."
+          },
+          "height": {
+           "type": "number",
+           "description": "The height of the rib tips in this step above the core surface (inside), or above the edge (outside), in millimetres."
+          }
+         }
+        }
+       }
+      }
+     }
+    },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. `top-to-bottom` is air drawn in at the top face and pushed out of the bottom, as a rack fan tray blowing down through the rack does. The enums differ on purpose: `side`, `passive` and `top-to-bottom` are chassis answers a configuration cannot give, because a fanless enclosure, a side-breathing modular chassis and a fan tray offer no airflow option to choose between. L91 checks the division.",
      "enum": [
@@ -1726,6 +1802,56 @@
             }
            },
            "description": "the HOLE IN THE SHEET METAL, when it differs from `size`. `size` is the space the slot RESERVES - what the occupant is placed into and checked against - and on a card cage that is the card including its ejector brackets. The hole the card's plate covers is smaller, and it is the hole you see when the bay is empty. On an ASR 9006 they are 395.70 and 352.59: painting the reserved space dark would put 21.5 mm of opening over metal at each end. Absent means the two are the same, which is the common case. Measured only - never inferred from the occupant."
+          },
+          "seen-through": {
+           "type": "array",
+           "minItems": 1,
+           "description": "WHAT THE MAKER'S PICTURE SHOWS THROUGH THIS BAY'S OPENING WHEN IT IS EMPTY, and a seated part covers: a bar standing behind the frame, a spool inside the tray. Panel `decor` cannot say it, because a bay's opening is painted over the decor and the decor under the opening is hidden in every configuration. The items are drawn inside the opening, in the face's own coordinates (the same `at` as a panel decor item), clipped to the opening, over the dark of the hole and under whatever the bay holds. A configuration that seats a part in the bay, and a swap that does, hides them; emptying the bay shows them again. A 2D picture: it builds no 3D geometry of its own, because the 3D scene builds what stands behind the opening as parts. State only what a held source shows, with its `source`.",
+           "items": {
+            "type": "object",
+            "required": [
+             "at",
+             "size",
+             "fill"
+            ],
+            "additionalProperties": false,
+            "properties": {
+             "id": {
+              "type": "string",
+              "description": "name this item in the drawing"
+             },
+             "kind": {
+              "type": "string",
+              "description": "what this item IS - cable-bar, slack-spool. It reaches the drawing as data-kind"
+             },
+             "at": {
+              "$ref": "#/$defs/xy"
+             },
+             "size": {
+              "$ref": "#/$defs/xy"
+             },
+             "fill": {
+              "type": "string"
+             },
+             "rx": {
+              "type": "number"
+             },
+             "shape": {
+              "enum": [
+               "rect",
+               "slot"
+              ],
+              "default": "rect"
+             },
+             "confidence": {
+              "$ref": "#/$defs/confidence"
+             },
+             "source": {
+              "type": "string",
+              "description": "where precisely, in one phrase"
+             }
+            }
+           }
           },
           "accepts": {
            "type": "array",

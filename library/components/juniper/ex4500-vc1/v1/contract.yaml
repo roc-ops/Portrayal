@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ex4500-vc1
-version: 1.1.0
+version: 1.2.0
 class: fabric
 behaviour: fills
 profile: networking
@@ -44,6 +44,15 @@ provenance:
     estimated - not stated. No depth is written.
   power: >-
     estimated - not published. The module declares power-absent so that the missing figure is a statement.
+  groups: >-
+    Juniper Networks, EX4500 Switch Hardware Guide (modified 2017-10-18), 'Virtual Chassis
+    Module in EX4500 Switches' (printed page 28, Figure 12) and Figure 70 (printed page 218):
+    the module 'has two dedicated Virtual Chassis ports (VCPs)', and the figure labels one
+    VCP-0. No page prints a rate, a media or a number for them, and the 128G in the model name
+    is not stated as a port rate, so the group states none of them; the ids vcp-0 and vcp-1 are
+    numbered from 0 as the legend is. The role follows the job: the page names no role for the
+    ports, and the role is traffic because the library files the same connector on the EX4200,
+    which joins the same Virtual Chassis, as traffic.
 states: [absent]
 elements:
   led-status:
@@ -68,9 +77,16 @@ elements:
     at: [333.1, 10.3]
     size: [8.0, 8.0]
     class: screw
+groups:
+  vcp:
+    term: Port
+    role: traffic
+    index-origin: 0
+    description: >-
+      the two dedicated Virtual Chassis ports, VCP-0 and VCP-1
 parts:
-  - {ref: juniper/ex4200-vcp-port@1, id: vcp-0, at: [79.9, 7.25]}
-  - {ref: juniper/ex4200-vcp-port@1, id: vcp-1, at: [143.9, 7.25]}
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-0, group: vcp, at: [79.9, 7.25]}
+  - {ref: juniper/ex4200-vcp-port@1, id: vcp-1, group: vcp, at: [143.9, 7.25]}
 size:
   w: 345.9
   h: 21.7

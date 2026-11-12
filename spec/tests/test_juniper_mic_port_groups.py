@@ -59,7 +59,7 @@ def ids(case):
 
 
 def test_the_families_cover_every_contract_of_the_thirteen_names():
-    assert len(CONTRACTS) == 20
+    assert len(CONTRACTS) == 22
     assert len({name for name, _, _ in CONTRACTS}) == 13
 
 

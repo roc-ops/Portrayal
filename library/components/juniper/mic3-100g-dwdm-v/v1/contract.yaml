@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: mic3-100g-dwdm-v
-version: 1.1.2
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: networking
@@ -36,12 +36,27 @@ provenance:
   numbering: 'guide - ports number within each PIC group with an n/ group
     legend, per the module reference port-numbering figures (g000930,
     g100786); the exact print positions are layout-derived'
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, '100-Gigabit
+    DWDM OTN MIC with CFP2-ACO' (printed pages 312 to 316): 'One 100-Gigabit DWDM OTN port' for
+    the model MIC3-100G-DWDM, a dual-wide MIC that 'Supports CFP2 analog coherent optics
+    (CFP2-ACO)'; 'The port is labeled Port 0.' The only rate the book prints for the port is 100
+    Gigabit; the OTN line rate is not stated. The role is traffic: the book names no role for
+    the ports, and the role follows the job, a network interface a transceiver is plugged into.
 states:
 - ok
 - fail
 - absent
+groups:
+  cfp2-100g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: cfp2, speed: 100g}
+    description: >-
+      the one CFP2-ACO port, labelled Port 0, at 100 Gbps
 parts:
-- {ref: std/cfp2@2, id: port-0-0, at: [-7.25, 26.40], rotate: 90, attrs: {media: cfp2}}
+- {ref: std/cfp2@2, id: port-0-0, group: cfp2-100g, at: [-7.25, 26.40], rotate: 90, attrs: {media: cfp2}}
 size:
   w: 27.0
   h: 168.0

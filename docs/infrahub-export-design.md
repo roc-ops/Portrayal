@@ -337,8 +337,11 @@ Files (new; no existing exporter changes):
   manufacturer for device types and module types (`objects/<manufacturer>.yml`).
   Racks, placed devices and cables are produced by the Rack Builder, as the
   NetBox files are, not committed.
-- `kit/rack/infrahub.js`: the rack-side writer for `LocationRack`, `DcimDevice`,
-  `DcimModule` and `DcimCable`, beside `dcim-rules.js`.
+- `kit/rack/infrahub.js`: the rack-side writer, beside `dcim-rules.js`. It writes
+  `LocationSite`, `LocationRack` and `DcimDevice` (sections 3.3 and 3.4). It does
+  not yet write `DcimModule` or `DcimCable`, nor interfaces: each needs a fact about
+  the object file format that is not held, and each is a later slice. The type
+  exporter is `spec/tools/dev/infrahub_export.py`.
 
 Tests (ordinary pytest, no Infrahub install):
 

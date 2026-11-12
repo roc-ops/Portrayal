@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: mx104
-version: 5.1.3
+version: 6.0.0
 maturity: modelled
 manufacturer: Juniper
 model: MX104
@@ -42,7 +42,12 @@ provenance:
       the MX104 front photograph on the checked scale (#901): x = (px - 74.5) / 3.090 over the 437.0
       mm body, y = (px - 8.5) / 3.067 down the 154.7 mm height (the issue's 3.061 is the same reading
       from a different edge pixel). The panel's lower edge meets the upper MIC plates at y 42.4. ALARM
-      DB-15 shell 36.0-55.4 x 21.6-32.4. The four XE SFP+ cages are DISCRETE cages on a 17.2 mm pitch,
+      DE-15 shell 36.0-55.4 x 21.6-32.4 (guide, MX104 Alarm Contact Port Overview: a 15-pin D-type
+      connector taking a DE-15 alarm cable): `std/vga@1`, centred on that shell, an estimate from the
+      photograph, and its panel hole takes the part's own 20.47 x 11.4 (the shell measured 19.4 x 10.8
+      in the photograph, within its reading of about 2 mm); its insulator reads dark grey in the
+      photograph, so the placement sets it. A threaded hole either side, 25.0 apart and 2.4 across, is
+      drawn as two dark discs of decor. The four XE SFP+ cages are DISCRETE cages on a 17.2 mm pitch,
       each in its own bezel, not a ganged row: centres 98.0, 115.3, 132.4, 149.5 at y 28.2 (bezels
       90.4-157.1 by 22.9-33.5), legends 2/0/0-2/0/3 above each and XE over a bracket at 123.8, so they
       are std/sfp, not std/sfp-ganged. ONLINE/OFFLINE button at (166.8, 30.0) with its legend under it,
@@ -176,11 +181,6 @@ gaps:
       and supplies carry figures on their own contracts. No document in the intake rates the
       RE-S-MX104, which is the module L29 reports.
     wanted: a power figure for the RE-S-MX104 Routing Engine.
-  - what: alarm-connector
-    scope: [mgmt]
-    reason: needs-drawing
-    wanted: a DB-15 standard part - the ALARM connector is drawn as a plain
-      cutout with its legend.
 groups:
   xe:
     term: Port
@@ -214,8 +214,7 @@ groups:
     term: Port
     role: management
     index-origin: 0
-    mixed: the ALARM DB-15 and the SYS OK lamp / ONLINE-OFFLINE button
-      cluster on the fixed panel
+    description: the ALARM connector and the ONLINE/OFFLINE button on the fixed panel
   status-leds:
     term: LED
     role: indicator
@@ -242,8 +241,10 @@ views:
       decor:
         - {at: [0.0, 0.0], size: [437.0, 42.4], rx: 0.0, fill: '#84888d'}
         - {at: [365.5, 42.4], size: [71.5, 112.3], rx: 0.8, fill: '#84888d'}
+        - {at: [32.0, 25.8], size: [2.4, 2.4], rx: 1.2, fill: '#2a2c2d', confidence: estimated, source: 'threaded hole beside the ALARM connector, front photograph; position and size estimated'}
+        - {at: [57.0, 25.8], size: [2.4, 2.4], rx: 1.2, fill: '#2a2c2d', confidence: estimated, source: 'threaded hole beside the ALARM connector, front photograph; position and size estimated'}
       cutouts:
-        - {id: alarm, at: [36.0, 21.6], size: [19.4, 10.8]}
+        - {id: alarm, at: [35.465, 21.3], size: [20.47, 11.4]}
         - {id: xe-0, at: [90.75, 23.2], size: [14.5, 10.0]}
         - {id: xe-1, at: [108.05, 23.2], size: [14.5, 10.0]}
         - {id: xe-2, at: [125.15, 23.2], size: [14.5, 10.0]}
@@ -312,6 +313,8 @@ views:
            accepts: [juniper/mx104-re@1], default: juniper/mx104-re@1,
            group: res, rel-pos: 0}
       placements:
+        - {id: alarm, ref: std/vga@1, at: [35.465, 21.3], group: mgmt, rel-pos: 1,
+           attrs: {media: hd15, role: alarm-io, function: alarm contacts, insulator: '#2a2c2d'}}
         - {id: xe-0, ref: std/sfp@1, at: [90.75, 23.2], group: xe, rel-pos: 0}
         - {id: xe-1, ref: std/sfp@1, at: [108.05, 23.2], group: xe, rel-pos: 1}
         - {id: xe-2, ref: std/sfp@1, at: [125.15, 23.2], group: xe, rel-pos: 2}

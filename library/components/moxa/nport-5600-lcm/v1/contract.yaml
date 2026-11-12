@@ -1,0 +1,40 @@
+format: 1
+kind: component
+name: nport-5600-lcm
+version: 1.0.0
+class: display
+profile: networking
+description: >-
+  The LCD panel on the front of the standard-temperature NPort 5600 rackmount serial device servers. It sits
+  to the left of the Reset button and the four push buttons and is used to set the IP address. The wide-temperature
+  models do not have it.
+size: {w: 53.2, h: 14.9}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  identity: >-
+    Moxa NPort 5600 Series data sheet v1.9, page 4: "LCD panel display (standard temp. models only)", and page 1:
+    "Easy IP address configuration with LCD panel (excluding wide-temperature models)". Quick installation
+    guide v5.4, page 2: "The wide temperature model does not come with LCM display panels or push buttons."
+  size: >-
+    drawing - read off the standard-model front elevation on page 6 of the data sheet, which is drawn to the
+    440 mm body (1480 px across at 600 dpi, 3.36 px/mm, and 153 px for the 45.5 mm height, 3.36 px/mm, so the
+    figure is square to 0.1%). The window is 179 px by 50 px, 53.2 by 14.9 mm, good to about 0.5 mm. The
+    sheet dimensions the body and not the window.
+  screen: >-
+    The element is `class: screen`, not `display`, because no held document states how many characters the
+    panel shows, and a character display must state a count. The colour is the pale blue-grey glass of the
+    printed render on page 1 of the data sheet, which is not a calibrated photograph and is not compared
+    with one.
+elements:
+  screen:
+    at: [0.0, 0.0]
+    size: [53.2, 14.9]
+    class: screen
+    description: the LCD glass; it shows the unit's IP settings, which the push buttons edit
+relief:
+  features:
+  - node: screen
+    pocket: 0.5
+    confidence: estimated
+    source: the drawing shows the window and no document states how far it is set back
+skins: [default]

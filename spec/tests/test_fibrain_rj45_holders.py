@@ -65,8 +65,8 @@ JACK_BODY_X, JACK_BODY_Y = 1.35, 6.50
 
 OLD_ACCEPTS = [
     "fibrain/xbcs0@1", "fibrain/xmn1051gb@2", "fibrain/xmn1041gb@2", "fibrain/xmi1051ga@2",
-    "fibrain/xmi1041ga@2", "fibrain/xmi1021ca@2", "fibrain/xmi1021da@2", "fibrain/xmi1021ha@2",
-    "fibrain/xmi1021ga@2", "fibrain/xmi1031ga@2", "fibrain/xmi1041ca@2", "fibrain/xmi1041da@2",
+    "fibrain/xmi1041ga@2", "fibrain/xmi1021ca@3", "fibrain/xmi1021da@3", "fibrain/xmi1021ha@3",
+    "fibrain/xmi1021ga@3", "fibrain/xmi1031ga@3", "fibrain/xmi1041ca@2", "fibrain/xmi1041da@2",
     "fibrain/xmi1041ha@2", "fibrain/xmn1021cb@2", "fibrain/xmn1021db@2", "fibrain/xmn1021hb@2",
     "fibrain/xmn1021gb@2", "fibrain/xmn1031gb@2", "fibrain/xmn1041cb@2", "fibrain/xmn1041db@2",
     "fibrain/xmn1041hb@2",

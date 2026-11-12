@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: jpsu-550-c-dc-afi
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
@@ -11,8 +11,10 @@ description: >-
   and EX4400-48T-DC-AFI, and takes the 550 W DC units for the EX4400-24X and
   -48F as well. Up to two fit in the rear slots 0 and 1, and a second unit
   gives 1+1 redundancy. The face is that of the front-to-back unit with a blue
-  (Juniper Azure Blue) handle across the fan. Do not mix AC and DC supplies,
-  or supplies with different airflow, in one chassis.
+  (Juniper Azure Blue) handle across the fan. Like that unit it has a D-sub 3W3
+  DC input with two jackscrew standoffs, a DC OK lamp and an ejector lever. Do
+  not mix AC and DC supplies, or supplies with different airflow, in one
+  chassis.
 attrs:
   role: dc-power-supply
   power-output-w: 550
@@ -47,12 +49,30 @@ provenance:
     datasheet - Table 76 gives the rated operating voltage -48 VDC through -60 VDC and the input
     current rating 13 A. The section on the DC power cable says the supplies need a D-sub 3W3
     type connector whose three pins carry the -48 VDC input (-), the return (+) and the
-    ground. The connector is drawn in the skin, because the library has no D-sub 3W3 power
-    part.
+    ground. The connector is the part juniper/ex4400-dc-header@1, composed here as `dc-header`.
   elements: >-
     borrowed - from jpsu-550-c-dc-afo@1, which was read off the rear render of the DC build of the
     EX4400-24T (Figure 10, g022649). The guide shows no back-to-front supply, so only the handle
-    colour differs. The estimated positions are those of the front-to-back unit.
+    colour differs. The estimated positions are those of the front-to-back unit; the connector
+    part is placed at 58.9 across and 2.2 down, where that unit places it.
+  connector: >-
+    borrowed - from jpsu-550-c-dc-afo@1. The guide's text on the DC power cable (the supplies "require
+    a D-Sub 3W3- type connector") covers both 550 W DC supplies, and its Table 73 lists JPSU-550-C-DC-AFI
+    beside the AFO unit under one set of figures, but no figure draws the AFI unit, so the connector is
+    drawn where and as the AFO unit has it. The guide names the cable CBL-JNP-PWR-DSUB (Table 79), a
+    whole cable and not a connector part, and no maker or part number for the connector, so
+    juniper/ex4400-dc-header@1 is a declared stand-in (its own provenance). It presents the registered
+    key dc-connector-3w3, and juniper/qfx10002-dc-plug@1 mates it.
+  roles: >-
+    guide - EX4400 DC Power Cable Specification: the three pins carry the "-48 VDC input (-)", the
+    "return (+)" and the ground. WHICH CONTACT OF THE SHELL IS WHICH IS NOT STATED: no figure of this
+    guide prints a mark beside the contacts, so no contact is given a role. Table 76 gives a range, -48
+    to -60 VDC rated, and no nominal.
+  no-dc-port: >-
+    THE DC INPUT PORT IS NOT STATED HERE, ON PURPOSE, for the reason jpsu-550-c-dc-afo@1 gives: a port
+    whose poles are a connector's contacts is offered only where that path's part is itself the
+    connector, and on a supply in a bay it is the supply. The roles above are recorded for the port a
+    later change can state for both 550 W DC supplies together.
   colour: >-
     estimated - the guide names the handle Juniper Azure Blue and shows no picture of it. The
     blue is the one used for the back-to-front fan module, ex4400-fan-afi@1.
@@ -88,14 +108,12 @@ elements:
     at: [0.3, 17.9]
     size: [43.3, 5.4]
     class: handle
-  dc-input:
-    at: [58.9, 2.0]
-    size: [10.1, 34.9]
-    class: inlet
   latch:
     at: [74.4, 9.3]
     size: [6.1, 17.9]
     class: latch
+parts:
+- {ref: juniper/ex4400-dc-header@1, id: dc-header, at: [58.9, 2.2]}
 size:
   w: 83.06
   h: 40.39
