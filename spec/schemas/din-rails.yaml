@@ -1,0 +1,102 @@
+# DIN rail profiles, compiled by din_rails_index.py into the published
+# library/dist/din-rails.json (#736, the first slice of docs/din-rail-design.md).
+#
+# WHY HERE. A rail profile is a table of measurements with a drawing behind
+# each one: no art of its own, no version history of its own, nothing a lock
+# would have to compare. It is vocabulary, like cable-types.yaml beside it, and
+# not a component, so it does not live under library/components/, and no
+# manifest names it yet.
+#
+# EVERY FIGURE HAS A SOURCE. A figure is a mapping with a `sources` list; each
+# entry is `{id, page}`: a key of the `sources` table below and a page of that
+# PDF (the PDF's own page, counted from 1). The IEC text is paywalled and was
+# not read: the figures are those the makers print, and where a maker prints a
+# figure another prints differently, the profile states neither (the design
+# note's section 3.1 lists them).
+#
+# THE ID is lower case. `ts35x7.5` is the spelling already used in the clip and
+# the rail components, and carries no namespace.
+#
+# MILLIMETRES. Every length is in millimetres. `crown-outer` is the width of
+# the hat's top measured on the outside of the sheet and `crown-inner` the same
+# width on the inside: the drawings print both (27 and 25), and the two differ
+# by the sheet twice, so they are one measurement, not two.
+#
+# THE SLOT RULE. A slot's centres are `first-centre`, then one `pitch` each, from
+# one end; a slot is present only if the whole of it lies inside the length.
+# AutomationDirect p4 draws the cut end at 6.7 from the nearest end arc centre
+# of the last slot, an 18 long slot with 6.3 wide ends, which puts the slot's own
+# centre at 6.7 + 5.85 = 12.55 from the end: half the pitch, to the drawing's
+# precision. `first-centre` is that, a derived figure. For a length that is not
+# a multiple of the pitch no held drawing states how the cut end is left; the
+# rule above is a proposal (docs/din-rail-design.md, Q5) and not a sourced figure.
+#
+# VERSION. `version` is the table's own: a corrected figure or a new profile is
+# a minor, a removed profile or a changed id is a major. `format` is the shape
+# of the published file, and only a removed or renamed key raises it.
+format: 1
+version: 1.0.0
+
+sources:
+  automationdirect:
+    title: AutomationDirect, DINnectors Accessories - Steel DIN Rail (One-Meter Length) and Steel DIN Rail (Pre-Cut Lengths), pages tTBL-123 to tTBL-128
+    url: https://cdn.automationdirect.com/static/specs/dinrails.pdf
+    pages: 6
+  entrelec:
+    title: Entrelec (ABB), Mounting rails - Symmetrical DIN 3, Asymmetrical DIN 1, Symmetrical DIN 2, with its rail tolerances
+    url: https://files.kempstoncontrols.com/files/8de077c0866b2f99bd31d7823afc7e4b/TS32.pdf
+    pages: 5
+  itc:
+    title: ITC Electrical Components, DIN Rail and accessories catalogue
+    url: https://cdn-e.soneparcanada.io/PIM_Docs/Docs/STEP_ASSETS_PDF/13048389.pdf
+    pages: 12
+  rs-pro:
+    title: RS PRO, Din Rail 80mm x 35mm x 7.5mm, RS Stock No. 2258322
+    url: https://docs.rs-online.com/03d3/A700000008066772.pdf
+    pages: 3
+
+profiles:
+  ts35x7.5:
+    label: TS 35 x 7.5, symmetrical top hat
+    standards:
+      - name: EN 60715
+        sources: [{id: automationdirect, page: 1}, {id: itc, page: 2}, {id: rs-pro, page: 2}]
+      - name: EN 50022 (DIN 46277-3)
+        sources: [{id: entrelec, page: 1}]
+    section:
+      width: {mm: 35.0, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 1}, {id: itc, page: 2}, {id: rs-pro, page: 3}]}
+      height: {mm: 7.5, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 1}, {id: entrelec, page: 3}, {id: itc, page: 2}, {id: rs-pro, page: 3}]}
+      thickness: {mm: 1.0, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 1}, {id: entrelec, page: 3}, {id: itc, page: 2}, {id: rs-pro, page: 3}]}
+      crown-outer: {mm: 27.0, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 3}, {id: itc, page: 2}, {id: rs-pro, page: 3}]}
+      crown-inner: {mm: 25.0, sources: [{id: entrelec, page: 1}]}
+      flange: {mm: 4.0, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}]}
+    slot:
+      width: {mm: 6.3, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 1}, {id: itc, page: 2}]}
+      length: {mm: 18.0, sources: [{id: automationdirect, page: 1}, {id: automationdirect, page: 4}, {id: entrelec, page: 1}, {id: itc, page: 2}]}
+      pitch: {mm: 25.0, sources: [{id: automationdirect, page: 1}, {id: entrelec, page: 1}, {id: itc, page: 2}]}
+      end-to-arc-centre: {mm: 6.7, sources: [{id: automationdirect, page: 4}]}
+      first-centre:
+        mm: 12.5
+        basis: derived
+        note: half the pitch; 6.7 + (18 - 6.3) / 2 = 12.55 on the drawing
+        sources: [{id: automationdirect, page: 4}]
+    mass-kg-per-m:
+      plain: 0.35
+      slotted: 0.315
+      sources: [{id: itc, page: 2}]
+    stock:
+      slotted: {sources: [{id: automationdirect, page: 1}, {id: entrelec, page: 1}, {id: itc, page: 2}]}
+      unslotted: {sources: [{id: automationdirect, page: 1}, {id: entrelec, page: 1}, {id: itc, page: 2}, {id: rs-pro, page: 1}]}
+    finishes:
+      zinc-plated:
+        label: zinc plated and chromated (electrolytic zinc, 6 micrometres minimum)
+        sources: [{id: automationdirect, page: 1}, {id: itc, page: 2}]
+      zinc-bichromate:
+        label: zinc bichromate plated steel
+        sources: [{id: entrelec, page: 1}]
+      passivated-galvanized:
+        label: white passivated galvanized steel
+        sources: [{id: entrelec, page: 1}]
+      hot-dip-galvanized:
+        label: hot-dip galvanized by the Sendzimir process
+        sources: [{id: rs-pro, page: 1}]

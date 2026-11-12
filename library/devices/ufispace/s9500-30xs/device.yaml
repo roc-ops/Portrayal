@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: s9500-30xs
-version: 3.1.0
+version: 4.0.0
 maturity: modelled
 manufacturer: UfiSpace
 model: S9500-30XS
@@ -190,12 +190,12 @@ provenance:
     note: >-
       estimated. No held figure dimensions either side wall. The HIG's rack-mounting section fixes
       the chassis to the posts through the two 50.4 x 43 mm brackets and says nothing about side
-      features, and the grounding section puts the lug on the RIGHT side wall (HIG Figures 19-22
-      and the fig-0011 inset, which magnifies a two-hole lug on the chassis's right rear corner).
-      Both side faces therefore carry only the bracket screws and, on the right, the grounding lug
-      - positions estimated, and LEFT has x = 0 at the REAR while RIGHT has x = 0 at the FRONT,
-      stated here because both faces carry only symmetric content and nothing else would expose
-      the convention.
+      features, and the grounding section says only that the lug goes 'on the side of the router'
+      (HIG Figures 20-22). Both side faces therefore carry only the bracket screws and, on the right,
+      the grounding pair - which flank it is on is a gap (grounding-flank), its position along the
+      depth is read from Figure 22 (ground-pair) - and LEFT has x = 0 at the REAR while RIGHT has
+      x = 0 at the FRONT, stated here because both faces carry only symmetric content and nothing
+      else would expose the convention.
   attrs:
     confidence: datasheet
     note: >-
@@ -224,8 +224,24 @@ provenance:
     note: >-
       the hardware installation guide lists, in its package contents, a screw kit for the grounding
       lug of 2 x M4*L8.0mm screws, and its grounding steps lock the grounding lug to the designated
-      grounding location with 2 M4 screws: the `stud-size` of ground-lug, which is drawn once for both
-      holes. The accessory lug is one two-hole lug held by both screws.
+      grounding location with 2 M4 screws: the `stud-size` of ground-screws, one pair of holes at the
+      location drawn. The accessory lug is one two-hole lug held by both screws.
+  ground-pair:
+    confidence: drawing
+    note: >-
+      ONE TWO-HOLE LANDING, NOT ONE NOMINAL STUD (#918). The accessory grounding lug (50 x 11.1 x 7.5 mm,
+      #6 AWG) is fixed with two M4 screws at either of two designated locations. The landing is
+      common/ground-stud-pair-5-8-m4@1: two M4 pan heads on 5/8 in. (15.875) centres, unturned because the
+      holes lie along the depth. Read from this chassis's own HIG Figure 22, a flank elevation. Its chassis
+      bar is 445 px for the 302 mm depth and its printed 50 mm lug plate is 74 px, so each pixel is 0.68 mm
+      and every number here is good to about a pixel. The rearward location's holes are at 192.5 and 208.4
+      mm from the front end (15.9 apart) and the forward location's at 8.4 and 24.0 (15.6 apart): the 5/8
+      in. pattern within the reading. Only the rearward location is drawn, because one lug ships and the
+      lug placement this replaces, at 264.5 from the front, lay nearer it. The host is centred on its two
+      holes, at 200.45 mm along and 22.4 mm below the top edge (the bar is 64.9 px tall for 43.5 mm; its
+      top edge is at 41.0 px and the holes' centre line at 74.3 px). AXIS: x = 0 is the FRONT on a right view. Formerly one
+      common/ground-lug@1, `ground-lug`, whose stud sat at 268.0, 24.3: its earth symbol, 6.6 above the
+      stud, is now a silkscreen mark over the pair, as the S9501-18SMT draws its own.
 
 attrs:
   performance:
@@ -370,6 +386,28 @@ gaps:
     and from no held PDF, so orderable SKUs almost certainly exist. The configurations
     carry no part-numbers rather than invented ones.
   wanted: a UfiSpace ordering guide, or the standard/premium SKU strings
+- what: grounding-flank
+  scope: [ground-screws]
+  reason: vendor-silent
+  note: >-
+    HIG section 8 says the designated grounding location 'is located on the side of the
+    router' and never says which side. Figure 22 is an unlabelled flank elevation with the
+    front end at the left and the rear fan handle at the right. Read from outside, that is
+    the router's LEFT flank, but a mirrored figure cannot be ruled out, so the pair stays on
+    the RIGHT view where this device has always drawn it. Its position along the depth is
+    measured from the figure and is the same from the front on either flank; a left view
+    measures from the rear, where it would be 101.55.
+  wanted: a photograph of the real unit's flanks, or a figure captioned with the side
+- what: ground-pair-pitch
+  scope: [ground-screws]
+  reason: vendor-silent
+  note: >-
+    No held document dimensions the grounding holes. The hardware installation guide names the
+    screws (two M4) and the accessory lug (50 x 11.1 x 7.5 mm, #6 AWG) and draws the holes;
+    Figure 22 reads them 15.9 and 15.6 apart at 0.68 mm per pixel, and the landing is drawn at
+    the 5/8 in. (15.875) that reading and the two-hole lug both point at. Of the two designated
+    locations only the rearward one is drawn.
+  wanted: a dimensioned drawing of the flank, or the lug's drawing with its hole spacing
 groups:
   psus:
     term: PSU
@@ -733,13 +771,23 @@ views:
       w: 302
       h: 43.5
     silkscreen:
-      - {at: [268.0, 12.0], text: GND, font-size: 2.4, anchor: middle, for: ground-lug}
+      - {at: [200.45, 10.1], text: GND, font-size: 2.4, anchor: middle, for: ground-screws}
+      # the circled earth symbol the lug drew, 6.6 above the pair's centre: a ring 2.7 in radius and the
+      # four bars of common/ground-symbol@1's art, the ring at 0.3 and the bars at 0.32, as main drew them
+      - {at: [200.45, 15.8], for: ground-screws, fill: '#c7ccd1', stroke-width: 0.3,
+         path: 'M -2.7 0 A 2.7 2.7 0 1 0 2.7 0 A 2.7 2.7 0 1 0 -2.7 0'}
+      - {at: [200.45, 15.8], for: ground-screws, fill: '#c7ccd1', stroke-width: 0.32,
+         path: 'M 0 -1.7 L 0 -0.2 M -1.5 -0.2 L 1.5 -0.2 M -1 0.7 L 1 0.7 M -0.5 1.6 L 0.5 1.6'}
     components:
       placements:
         - {ref: common/screw-head@1, id: screw-r1, at: [52.2, 8.0], group: furniture, rel-pos: 5}
         - {ref: common/screw-head@1, id: screw-r2, at: [52.2, 20.0], group: furniture, rel-pos: 6}
         - {ref: common/screw-head@1, id: screw-r3, at: [52.2, 32.0], group: furniture, rel-pos: 7}
-        - {ref: common/ground-lug@1, id: ground-lug, at: [264.5, 14.5], group: grounding, rel-pos: 2, attrs: {stud-size: M4}}
+        - {ref: common/ground-stud-pair-5-8-m4@1, id: ground-screws, at: [188.5125, 18.4], group: grounding, rel-pos: 2,
+           description: 'HIG Figure 22 Location-2, the rearward of the two designated
+             grounding locations - two tapped M4 holes, measured 15.9 apart, for the
+             accessory grounding lug (50 x 11.1 x 7.5 mm, #6 AWG, 2 x M4*L8.0 screws and
+             4 lock washers): one two-hole landing', attrs: {stud-size: M4}}
 configurations:
   base:
     kind: base
