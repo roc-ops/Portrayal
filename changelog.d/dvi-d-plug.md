@@ -5,7 +5,8 @@
   has no form beyond its outline, the shell's depth, the cable's diameter and the colours are estimates, and each says so in the
   part. Which of the 24 contacts a cable populates is not stated by the specification and is not claimed. The contacts are not
   drawn from the cable end. They and the flat blade slot are drawn on the rear face, `generic/dvi-d-plug-mating@1`, at the figure's
-  printed grid; the contact size and the slot are estimated from the figure and say so in the part.
+  printed grid, with the figure's numerals, its second outline line, the shell's lip line and the jackscrews' crosshairs; the contact
+  size, the slot and those extra lines are estimated from the figure and say so in the part.
 
 ### Changed
 - The `dvi-d` registry entry and the `dvi-d` standards entry no longer say that no plug part is in the library or that the

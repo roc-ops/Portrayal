@@ -97,7 +97,7 @@ def test_the_jackscrews_are_32_51_apart_level_and_centred_on_the_mate_point():
     assert float(left.get("cy")) == float(right.get("cy")) == 7.565
     mate = contract()["connection-points"]["mate"]["at"]
     assert abs((float(left.get("cx")) + float(right.get("cx"))) / 2 - mate[0]) < 0.005
-    assert float(left.get("r")) == float(right.get("r")) == 1.7
+    assert float(left.get("r")) == float(right.get("r")) == 1.6
 
 
 def test_the_stub_leaves_from_the_mate_point():
@@ -194,11 +194,11 @@ def test_the_contacts_are_the_estimated_size_and_sit_in_the_shell():
 def test_the_blade_slot_is_one_flat_slot_left_of_the_field_level_with_the_middle_row():
     ids = mating_skin()
     slot = ids["blade-slot"]
-    assert (float(slot.get("width")), float(slot.get("height"))) == (2.6, 0.45)
+    assert (float(slot.get("width")), float(slot.get("height"))) == (2.57, 0.44)
     cx, cy = centre(slot)
     assert abs(cx - 11.47) < 0.005
     assert abs(cy - pins()[9][1]) < 0.005 and abs(cy - 7.565) < 0.005
-    assert cx + 1.3 < pins()[8][0] - 0.7
+    assert cx + 1.285 < pins()[8][0] - 0.7
     assert not [i for i in ids if re.fullmatch(r"c[1-5]|cross.*", i)]
 
 
@@ -210,15 +210,79 @@ def test_the_mating_face_has_the_outline_shell_and_jackscrews_of_the_cable_end()
     left, right = ids["screw-l"], ids["screw-r"]
     assert abs(float(right.get("cx")) - float(left.get("cx")) - 32.51) < 0.005
     assert float(left.get("cy")) == float(right.get("cy")) == 7.565
+    assert float(left.get("r")) == float(right.get("r")) == float(skin()["screw-l"].get("r")) == 1.6
+
+
+def path_numbers(d):
+    return [float(t) for t in re.findall(r"-?\d+\.?\d*", d)]
+
+
+def test_the_jackscrews_carry_the_crosshairs_the_figure_draws():
+    ids = mating_skin()
+    for side in ("l", "r"):
+        screw = ids[f"screw-{side}"]
+        cx, cy = float(screw.get("cx")), float(screw.get("cy"))
+        x1, y1, x2, y2, x3, y3, x4, y4 = path_numbers(ids[f"screw-hair-{side}"].get("d"))
+        assert (y1, y2) == (cy, cy) and (x3, x4) == (cx, cx)
+        assert abs((x1 + x2) / 2 - cx) < 0.005 and abs((y3 + y4) / 2 - cy) < 0.005
+        assert abs((x2 - x1) - 0.6) < 0.005 and abs((y4 - y3) - 0.6) < 0.005
+
+
+def test_the_figures_second_outline_line_is_drawn_1_3_inside_the_outline():
+    ids = mating_skin()
+    inner, hood = ids["hood-inner"], ids["hood"]
+    inset = float(inner.get("x"))
+    assert inset == float(inner.get("y")) == 1.3
+    assert abs(float(inner.get("width")) - (float(hood.get("width")) - 2 * inset)) < 0.005
+    assert abs(float(inner.get("height")) - (float(hood.get("height")) - 2 * inset)) < 0.005
+    assert inner.get("fill") == "none"
+
+
+def test_the_shells_lip_line_is_25_3_by_9_0_around_the_printed_edge():
+    ids = mating_skin()
+    x0, y0, x1, y1 = shell_box(ids)
+    lx0, ly0, lx1, ly1 = shell_box({"shell": ids["shell-lip"]})
+    assert abs((lx1 - lx0) - 25.3) < 0.005 and abs((ly1 - ly0) - 9.0) < 0.005
+    assert abs((lx0 + lx1) / 2 - (x0 + x1) / 2) < 0.005 and abs((ly0 + ly1) / 2 - (y0 + y1) / 2) < 0.005
+    assert ids["shell-lip"].get("fill") == "none"
+
+
+def test_the_numerals_1_to_24_stand_above_each_contact_as_the_figure_prints_them():
+    ids = mating_skin()
+    for n, (cx, cy) in pins().items():
+        t = ids[f"num-{n}"]
+        assert t.text == str(n)
+        assert abs(float(t.get("x")) - cx) < 0.005
+        assert 0.6 < cy - float(t.get("y")) < 0.9, n
+
+
+def test_every_slant_crosses_its_contact_box_about_0_3_above_and_below():
+    ids = mating_skin()
+    segs = re.findall(r"M(-?[\d.]+) (-?[\d.]+) L(-?[\d.]+) (-?[\d.]+)", ids["slants"].get("d"))
+    assert len(segs) == 24
+    boxes = [(float(ids[f"pin-{n}"].get("x")), float(ids[f"pin-{n}"].get("y"))) for n in range(1, 25)]
+    for x0, y0, x1, y1 in ((float(v) for v in s) for s in segs):
+        bx, by = next(b for b in boxes if b[0] < (x0 + x1) / 2 < b[0] + 1.4 and by_row(b[1], (y0 + y1) / 2))
+        assert bx < x0 < x1 < bx + 1.4
+        assert abs((y1 - y0) - 1.2) < 0.005
+        assert 0.25 < by - y0 < 0.45 and 0.25 < (y1 - (by + 0.5)) < 0.45
+
+
+def by_row(box_y, slant_mid_y):
+    return abs(box_y + 0.25 - slant_mid_y) < 0.005
 
 
 def test_the_mating_face_states_what_is_printed_and_what_is_estimated_in_short_sentences():
     prov = mating_contract()["provenance"]
     for key in ("size", "contacts", "blade", "shell", "jackscrews", "method"):
         assert key in prov, key
-    assert "2.6" in prov["blade"] and "3.3" not in prov["blade"]
+    assert "2.57" in prov["blade"] and "3.3" not in prov["blade"] and "key" in prov["blade"]
     assert "ESTIMATED" in prov["contacts"] and "ESTIMATED" in prov["blade"]
-    for key, text in list(prov.items()) + [("plug-shell", contract()["provenance"]["shell"])]:
+    assert "INNER line" in prov["shell"] and "lip" in prov["shell"] and "1.3" in prov["shell"]
+    assert "3.2" in prov["jackscrews"] and "3.4" not in prov["jackscrews"]
+    texts = list(prov.items()) + [("plug-shell", contract()["provenance"]["shell"])]
+    texts += [("description", mating_contract()["description"]), ("plug-description", contract()["description"])]
+    for key, text in texts:
         for sentence in re.split(r"(?<=[.;:])\s+", " ".join(text.split())):
             assert len(sentence.split()) <= 25, (key, sentence)
 
