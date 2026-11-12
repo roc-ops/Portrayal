@@ -31,10 +31,11 @@ provenance:
   ears:
     confidence: drawing
     note: >-
-      The drawing shows two ways to fit the included brackets (MB-0005-0026), Option A at the front and
+      The drawing shows two ways to fit the included brackets, Option A at the front and
       Option B at the rear, with 482.00 over the ears, 455.80 minimum and 469.00 maximum, the ear slots
       44.50 and 76.30 from the centre line. Option A puts the ears flush with the faceplate. Option B puts
-      them at the rear; no figure gives how far back, so no `at` is written for it (gaps: rack-ears).
+      them at the rear; no figure gives how far back, so no `at` is written for it (gaps: rack-ears). Neither the drawing nor the guide
+      says which option ships, so neither is marked as the default.
   front:
     confidence: drawing
     note: >-
@@ -47,7 +48,9 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - "(2) x 1/4-20 dual-studs on 5/8 in. centers (100A max)", 200 A, 9.6 kW at -48 V.
-      The studs stand 15.875 apart as that line says. The PRO1 DC User Guide (301-4800-3), PDF page 9
+      The (2) counts the two input blocks, not studs: the PRO1 DC User Guide (301-4800-3), PDF page 206
+      (printed 206 of 211), says each block holds three terminal positions, and its PDF page 9 figure
+      shows three dual-stud rows in a block. The studs stand 15.875 apart as that line says. The PRO1 DC User Guide (301-4800-3), PDF page 9
       (printed 9 of 211), "Terminal Stud Spacing", labels the same spacing 16.0 in its figure, a
       0.125 difference that the data sheet's inch figure settles. The legends read +RTN, GND and -48VDC
       from the top, on the plan view.
@@ -58,12 +61,13 @@ provenance:
       wiring drawing on PDF page 4 of the data sheet labels the upper left block FUSE A1 to A4 and the
       lower left block FUSE A5 to A8, with B1 to B8 on the right, so each block carries four numerals.
   colours:
-    confidence: photo-measured
+    confidence: estimated
     note: >-
-      photo-measured on the sibling 4811 (front and rear photographs, same layout): the body is black, the
-      output blocks are green with black latch ears, the input blocks are black under clear covers, the
-      lamps are green and the NET jack housing is white. The photographs are of another model, so the
-      colours are the sibling's.
+      estimated by eye from the sibling 4811's front and rear photographs (same layout); no pixel count was
+      taken: the body is black, the output blocks are green with black latch ears, the input blocks are black
+      under clear covers and the lamps are green. On the rear plate the SER and NET jack housings read white
+      and the LNK and the two TAM jacks black. The photographs are of another model, so the colours are the
+      sibling's.
   rear:
     confidence: estimated
     note: >-
@@ -88,7 +92,7 @@ attrs:
     mounting: 19 inch brackets included
   power:
     input-voltage: -48 VDC
-    input-dc: two inputs, each two 1/4-20 dual studs on 5/8 in. centres, 100 A maximum
+    input-dc: two inputs, each three dual-stud positions (+RTN, GND, -48VDC) of two 1/4-20 studs on 5/8 in. centres, 100 A maximum
     input-current-a: 200
     input-power-capacity-kw: 9.6
     output-current-max-a: 10
@@ -115,7 +119,7 @@ chassis:
   airflow: passive
   ears:
     positions:
-    - {name: flush, label: Option A, at: 0, default: true}
+    - {name: flush, label: Option A, at: 0}
     - {name: rear, label: Option B}
 gaps:
 - what: output-terminals
@@ -145,10 +149,12 @@ gaps:
   scope: [front, rear]
   reason: vendor-silent
   note: >-
-    the drawing shows the ear at the rear for Option B and gives no distance from the faceplate. The
-    brackets MB-0005-0026 are included, and the bracket guide the data sheet points to is not held, so no
-    kit is listed.
-  wanted: the Mounting Bracket Guide.
+    the drawing shows the ear at the rear for Option B and gives no distance from the faceplate. The data
+    sheet says only "mounting brackets included" and points to the Mounting Bracket Guide, which is not
+    held; it names no bracket part number. The held PDU Mounting Solutions data sheet lists 2U horizontal
+    19 in. L-bracket kits (for example KIT-MB2U-4B, bracket MB-0005-0026-20) for the PRO2, PRO3X and PRO4X
+    families; it does not name this model, so no kit is listed.
+  wanted: the Mounting Bracket Guide, or a statement of which bracket kit ships with this model.
 - what: lamp-meaning
   scope: [front]
   reason: vendor-silent
