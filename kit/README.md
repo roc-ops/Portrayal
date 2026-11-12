@@ -138,6 +138,7 @@ shell, the viewer and the rack view.
 | `zones.js` | the ports and bays of a compiled face, each with its box in millimetres - what the diagram exports put a connectable shape over |
 | `drawio.js` | draw.io: a shape library, a rack elevation, or one live drawing as a `.drawio` (`toDrawio`), with a named connection point per port |
 | `omnigraffle.js` | OmniGraffle: a `.gstencil` with a named, magnetised shape per port, or one live drawing as a stencil (`toGraffle`) |
+| `visio.js` | Visio: a `.vsdx` with a named shape per port and bay, each with a centre connection point and its address in Shape Data, or one live drawing as a one-page document (`toVisio`) |
 | `ears2d.js` | generic rack ears over a published face in 2D (`drawEars`, `clearEars`), from the plan the 3D viewer builds (`earPlan`); see [Rack ears](#rack-ears) |
 | `housing.js` | a box that opens in two halves (`chassis.halves`): the open state as numbers (`housingPlan`, `bayPlates`), what a page or an agent is told (`describeHalves`, `openViewOf`, `viewFor`), no three.js and no DOM. `createViewer(el, {housing: 'open'})` or `viewer.setHousing('open')` draws it; closed is the default and the only state of a box with no halves |
 | `positions.js` | the Explorer's control for a part that slides (`positionControl`): a slider over the range, a button for each named stop and a reset, written through the shell's `setFields`; see [A part that slides](#a-part-that-slides) |
@@ -2048,6 +2049,29 @@ const { text, notes: n } = toDrawio(shell.state.svg, doc, { cables });
   as `portrayal-cable`, `portrayal-media`, `portrayal-purpose` and
   `portrayal-length` attributes, so a cable can still be identified after the
   file is edited and saved in draw.io. The same input writes the same bytes.
+
+## Exporting to Visio
+
+`toVisio` writes the same representation as the two exports above, as a `.vsdx`
+(a zip of XML in Visio's format; no Visio is needed to write it). The face is a
+picture. Over it, one invisible shape for every port and bay is named by its
+`data-path` (`port-12`, `slot-2/module/p0`), carries that path again as a row of
+its Shape Data (`portrayal-path`, with `portrayal-class` and the media, speed,
+group and model the drawing states), and has one connection point at its
+centre, written as a formula so that it stays centred when the shape is resized.
+A script reading the file finds a port by its name or by its data.
+
+```js
+import { toVisio } from '@portrayal/kit/visio';
+
+const {bytes} = await toVisio(shell.state.svg, doc);   // a .vsdx, one page
+```
+
+`buildVsdx(items)` writes one page for each item, with the items that
+`omnigraffle.js`'s `buildStencil` takes, from faces already read. Reading a face
+and drawing its picture need a browser; writing the file from zones does not.
+The geometry is the library's own: nothing is taken from a vendor's stencil. The
+file draws no cable yet.
 
 ## Rack ears
 

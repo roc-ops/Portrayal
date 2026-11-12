@@ -23,7 +23,7 @@ The toolkit is the product. The Explorer, Rack Builder, Annotate and the export 
 - **Rack products** (#935, #1104): open frames and generic shapes are in `library/racks/`. No maker's cabinet is yet.
 - **Named types** (#897): cable types are published. Optic types are a proposal with nothing built, so a generic optic does not know SR from LR.
 - **Power** (#1045, #934): cords, DC feeds and ground wires can land in a rack. Outlet states are not drawn yet, and nothing totals a rack's power.
-- **More exports** (#1111, #11): Device42 and Infrahub writers exist and are unpublished. dcTrack, Nlyte and Visio do not exist.
+- **More exports** (#1111, #11): Device42 and Infrahub writers exist and are unpublished. dcTrack and Nlyte do not exist. The kit writes Visio (`kit/visio.js`), and no page offers it yet.
 
 **Limits an idea has to respect**
 
