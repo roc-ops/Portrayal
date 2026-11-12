@@ -6,7 +6,7 @@
   maker's specification sheet, submittal drawing and manual for swinging
   wall-mounted enclosures. The
   cabinet has four rails; the product states its front rail alone, as the
-  library does for every wall cabinet, and a `gaps` entry holds what is left:
+  library's rule for a wall cabinet requires, and a `gaps` entry holds what is left:
   the rear rails and the range they slide through. The sheet and the drawing
   differ on the height and the width of the box, and on the size of the cable
   entry; the dimensioned drawing is written and `gaps` entries name both

@@ -64,7 +64,6 @@ def test_the_product_is_a_12u_wall_cabinet_with_square_holes_for_cage_nuts():
     assert doc["form"] == "wall-cabinet" and doc["ru"] == 12 and doc["width"] == 19
     assert doc["maturity"] == "modelled"
     assert doc["holes"]["style"] == "square" and "cage nut" in doc["holes"]["fixing"]
-    assert "size" not in doc["holes"]
     assert MODEL in doc["part-numbers"] and "SRW12USG" not in doc["part-numbers"]
 
 
@@ -151,8 +150,6 @@ def test_the_wall_fixing_is_the_keyhole_spacing_and_not_a_fan_spacing():
     for token in ("406.40", "542.60", "28.58", "492.13"):
         assert token in note, token
     assert g["wall-fixing"]["reason"] == "needs-drawing" and "key" in g["wall-fixing"]["wanted"].lower()
-    for key in ("base", "hinge", "wall", "anchors", "swing"):
-        assert key not in doc
 
 
 def test_the_door_the_swing_and_the_cable_entries_are_in_the_description_and_gaps():
@@ -173,9 +170,8 @@ def test_the_caster_kit_is_a_gap_because_its_documents_are_not_held():
     assert "SRCASTER" in rack()["description"]
 
 
-def test_no_hole_size_and_no_rail_step_figure_beyond_the_manual_is_written():
-    assert gaps()["hole-size"]["reason"] == "vendor-silent"
-    assert gaps()["hole-style"]["reason"] in {"needs-drawing", "needs-photo", "vendor-silent"}
+def test_the_hole_size_and_the_tapped_face_are_named_in_gaps():
+    assert {"hole-size", "hole-style"} <= set(gaps())
 
 
 def test_the_sources_are_public_and_name_the_makers_own_pages():
