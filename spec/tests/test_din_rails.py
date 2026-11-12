@@ -72,7 +72,7 @@ def test_the_ts35x7_5_figures_are_the_ones_the_drawings_print(built):
     # AutomationDirect p1 and p4 (35.0, 7.5, 1.0, 27.0, 4.0 SYM.), RS PRO p3 (35, 7.5, 1, 27)
     assert (s["width"]["mm"], s["height"]["mm"], s["thickness"]["mm"]) == (35.0, 7.5, 1.0)
     assert (s["crown-outer"]["mm"], s["crown-inner"]["mm"], s["flange"]["mm"]) == (27.0, 25.0, 4.0)
-    # 6.3 x 18 on 25 (AutomationDirect p1 and p4, Entrelec p1, ITC p2)
+    # 6.3 x 18 on 25 (AutomationDirect p1, Entrelec p1, ITC p2; p4 prints the 6.3 x 18, not the pitch)
     sl = p["slot"]
     assert (sl["width"]["mm"], sl["length"]["mm"], sl["pitch"]["mm"]) == (6.3, 18.0, 25.0)
     # ITC p2: 0.35 kg per metre plain, 0.315 slotted
