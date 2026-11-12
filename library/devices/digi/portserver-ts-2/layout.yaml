@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: portserver-ts-2
-version: 1.0.0
+version: 1.0.1
 maturity: draft
 manufacturer: Digi
 model: PortServer TS 2
@@ -60,6 +60,27 @@ provenance:
       PORTSERVER and TS near the front edge and, on the edge itself, the legends ETHERNET, LINK, ACT,
       RESET, PWR, READY and 9-30V DC 525mA MAX. The photograph is in perspective, so the legends take
       the x of the part each one labels in the line art, and the wordmark is placed to about 5 mm.
+  side-wall:
+    confidence: photo-measured
+    note: >-
+      The angled photograph shows four holes in the left wall, a larger and a smaller one near each end.
+      Each is placed as a fraction of the wall's length, good to about 3 mm. The larger one is an oval
+      long along the wall, drawn 3.0 by 2.0; the smaller is round at 1.2. Heights are read at mid-wall.
+      The cover meets the base in a seam. It reads as a dark line about 8 per cent of the wall's
+      height below its top edge. It is drawn 2.0 down and 0.4 thick. The cover overhangs past the front end; that lies
+      outside the face outline and is not drawn.
+  end-rim:
+    confidence: drawing
+    note: >-
+      The line art draws an inner outline inside each end: 1.5 mm in on the front, and on the back
+      2.0 mm in at the sides, 2.3 at the top and 1.4 at the bottom. The back's legend sits inside it,
+      so it moves up to 21.0. Each is drawn as an outline.
+  tabs:
+    confidence: estimated
+    note: >-
+      The line art shows tabs under each end: three on the front and four on the back, 3 to 4 mm
+      deep. Their place across is read from it, mirrored for the underside. Each is drawn 10 mm long
+      at its own end; no held picture shows its length.
   ports:
     confidence: datasheet
     note: >-
@@ -115,13 +136,20 @@ chassis:
   power: dc
 gaps:
 - what: side-and-bottom-faces
-  scope: [bottom, left, right]
+  scope: [bottom, right]
   reason: needs-photo
   note: >-
-    The held photograph is angled and shows the top and a corner of the left wall, with two small holes
-    in it whose size and place cannot be read. The line art shows the two ends only. The bottom and the
-    two walls are sized from the page and drawn empty.
-  wanted: A photograph or drawing of the sides and the underside.
+    The held photograph shows the left wall only. The right wall is sized from the page and drawn empty.
+    The underside is drawn with the seven tabs and nothing else.
+  wanted: A photograph or drawing of the right wall and the underside.
+- what: tab-length
+  scope: [bottom]
+  reason: needs-drawing
+  note: >-
+    The seven tabs are estimated and each is drawn 10 mm long as a stand-in. The line art files
+    lineart_pstsfam_fr.gif and lineart_pstsfam_bk.gif, from Digi's PortServer TS page, show their count,
+    place across and thickness. No held picture shows an underside, so none gives how far a tab runs.
+  wanted: A photograph or drawing of the underside.
 - what: wall-and-din-mounts
   scope: [bottom]
   reason: needs-drawing
@@ -199,6 +227,8 @@ views:
     panel:
       decor:
       - {id: aux-slot, kind: slot, at: [31.6, 15.3], size: [11.6, 3.4]}
+      - {id: end-rim, kind: bezel, at: [1.5, 1.5], size: [81.6, 21.2], stroke: '#2e2e2e',
+        stroke-width: 0.3, confidence: drawing, source: 'Digi PortServer TS family line art, front: inner outline'}
       cutouts:
       - {id: eth, at: [7.8, 4.3], size: [15.8, 13.2], shape: rect}
       - {id: led-link, at: [26.2, 9.2], size: [2.0, 2.0], shape: circle}
@@ -219,11 +249,14 @@ views:
   rear:
     size: {w: 84.6, h: 24.2}
     panel:
+      decor:
+      - {id: end-rim, kind: bezel, at: [2.0, 2.3], size: [80.6, 20.5], stroke: '#2e2e2e',
+        stroke-width: 0.3, confidence: drawing, source: 'Digi PortServer TS family line art, back: inner outline'}
       cutouts:
       - {block: serial}
     silkscreen:
     - {block: serial}
-    - {at: [23.4, 22.4], text: RJ-45 Serial, font-size: 1.7, anchor: middle, fill: '#d4d6d9', for: serial-1}
+    - {at: [23.4, 21.0], text: RJ-45 Serial, font-size: 1.7, anchor: middle, fill: '#d4d6d9', for: serial-1}
     components:
       blocks:
       - id: serial
@@ -255,14 +288,29 @@ views:
     - {id: logo-zone, at: [6.0, 8.0], size: {w: 24.0, h: 10.0}, label: 'Vendor logo; not drawn'}
   bottom:
     size: {w: 84.6, h: 133.4}
-    empty: >-
-      No held source shows the bottom face: the line art draws the two ends and the photograph shows the
-      top.
+    panel:
+      decor:
+      - {id: tab-front-1, kind: tab, at: [76.0, 123.4], size: [5.0, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-front-2, kind: tab, at: [66.9, 123.4], size: [9.1, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-front-3, kind: tab, at: [4.5, 123.4], size: [13.7, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-rear-1, kind: tab, at: [3.7, 0.0], size: [5.0, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-rear-2, kind: tab, at: [8.7, 0.0], size: [8.8, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-rear-3, kind: tab, at: [66.2, 0.0], size: [8.8, 10.0], fill: '#2a2a2a', confidence: estimated}
+      - {id: tab-rear-4, kind: tab, at: [75.0, 0.0], size: [4.6, 10.0], fill: '#2a2a2a', confidence: estimated}
   left:
     size: {w: 133.4, h: 24.2}
-    empty: >-
-      No held source shows the left wall clearly: the one photograph shows two small holes in it whose
-      size and place cannot be read.
+    panel:
+      decor:
+      - {id: cover-seam, kind: seam, at: [0.0, 2.0], size: [133.4, 0.4], fill: '#3a3a36', confidence: estimated,
+        source: 'Digi PortServer TS photograph: where the cover meets the base'}
+      - {id: wall-hole-rear-a, kind: hole, at: [13.0, 11.0], size: [3.0, 2.0], rx: 1.0, fill: '#000000',
+        stroke: '#55554f', stroke-width: 0.2, confidence: photo-measured}
+      - {id: wall-hole-rear-b, kind: hole, at: [17.4, 11.4], size: [1.2, 1.2], rx: 0.6, fill: '#000000',
+        stroke: '#55554f', stroke-width: 0.2, confidence: photo-measured}
+      - {id: wall-hole-front-a, kind: hole, at: [120.2, 11.0], size: [3.0, 2.0], rx: 1.0, fill: '#000000',
+        stroke: '#55554f', stroke-width: 0.2, confidence: photo-measured}
+      - {id: wall-hole-front-b, kind: hole, at: [124.8, 11.4], size: [1.2, 1.2], rx: 0.6, fill: '#000000',
+        stroke: '#55554f', stroke-width: 0.2, confidence: photo-measured}
   right:
     size: {w: 133.4, h: 24.2}
     empty: >-

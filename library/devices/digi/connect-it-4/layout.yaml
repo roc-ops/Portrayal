@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: connect-it-4
-version: 1.0.0
+version: 1.0.1
 maturity: draft
 manufacturer: Digi
 model: Connect IT 4
@@ -46,9 +46,15 @@ provenance:
       From the rear photograph: the power jack centred at 12.2, the erase button at 30.7, the WAN jack
       centred at 49.9, the LAN jack at 72.5, four serial jacks from 96.9 on a 16.3 pitch, and the SIM
       select button at 162.4. The jacks are on one centreline 10.6 from the top. The serial jacks sit
-      in one metal frame; each opening is drawn as the library's ganged RJ-45 cell, 12.7 wide, and
-      the frame itself is not drawn. The erase and SIM select buttons are small round marks in the
+      in one metal frame. It is drawn from 88.9 to 153.6 across and 4.5 to 17.5 down. Each opening is the
+      library's ganged RJ-45 cell, 12.7 wide. The erase and SIM select buttons are small round marks in the
       photograph, drawn as the library's recessed pinhole button; the page does not describe either.
+  front-panel:
+    confidence: photo-measured
+    note: >-
+      The front photograph shows a rounded inner panel inside the plate, read at the face's scale
+      across and as a fraction of its height down: 6.1 from the left, 2.4 from the top, 216.0 wide,
+      20.7 high, corner radius about 2. It is good to about 1.5 mm.
   ports:
     confidence: datasheet
     note: >-
@@ -160,6 +166,9 @@ views:
   front:
     size: {w: 228.0, h: 25.0}
     panel:
+      decor:
+      - {id: face-panel, kind: recess, at: [6.1, 2.4], size: [216.0, 20.7], rx: 2.0, stroke: '#c9ccc8',
+        stroke-width: 0.3, confidence: photo-measured, source: 'Digi Connect IT 4 front photograph: the rounded inner panel'}
       cutouts:
       - {id: led-pwr, at: [76.1, 11.5], size: [2.0, 2.0], shape: circle}
       - {id: led-online, at: [85.7, 11.5], size: [2.0, 2.0], shape: circle}
@@ -201,6 +210,9 @@ views:
   rear:
     size: {w: 228.0, h: 25.0}
     panel:
+      decor:
+      - {id: serial-frame, kind: frame, at: [88.9, 4.5], size: [64.7, 13.0], fill: '#90928a',
+        confidence: photo-measured, source: 'Digi Connect IT 4 rear photograph: the metal frame round the four serial jacks'}
       cutouts:
       - {id: dc-in, at: [6.2, 4.7], size: [12.0, 13.0], shape: rect}
       - {id: btn-erase, at: [28.7, 11.5], size: [4.0, 4.0], shape: rect}
