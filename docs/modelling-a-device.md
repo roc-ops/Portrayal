@@ -571,8 +571,8 @@ provenance:
   bounding box and what the rack fit and the exports read. Check: the section
   touches all four sides, so L205 is silent.
 - **Not with the other body keys.** A housing with a `section` is not racked and
-  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or
-  `halves`. Check: L206 is silent.
+  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`.
+  It may state `halves`; see "A housing that opens" below. Check: L206 is silent.
 - **State where the profile came from.** `provenance` keyed `chassis.section`
   names the document and page, and says so when the drawing had to be turned to the
   way the device is installed.
@@ -591,10 +591,126 @@ hang in front of it. A front or rear part that runs across a step (for example t
 flange) has two depths under it and takes the one under its centre row; lint does
 not refuse it, so keep such a part wholly on one level.
 
-**What is not there yet.** Ribs or fins on the housing, relief taken from a fin
-field, and the open state of a housing with a section come in later changes, so a
-modeller should not look for them: a fin is drawn as art on the face for now, and
-a device with a `section` cannot also state `halves`.
+### Ribs on the housing: `chassis.fins`
+
+A housing whose casting carries thick ribs on its top or bottom states them as
+`chassis.fins`, a list of rib fields on the section. A field is on the one edge of
+the section that lies on the top or the bottom of the box (`on`; write the key
+quoted in YAML, `'on': top`, because a bare `on` is read as true). It runs along
+the length from `span[0]` to `span[1]` in millimetres from the left end and puts a
+rib `rib` thick every `rib` plus `gap`, the first at the start of the span.
+
+```yaml
+chassis:
+  section: [...]            # the twelve points above
+  fins:
+  - 'on': top
+    span: [20.0, 587.0]
+    core: 29.0
+    rib: 7.0
+    gap: 7.0
+  - 'on': bottom
+    span: [20.0, 587.0]
+    core: 48.0
+    rib: 7.0
+    gap: 7.0
+    steps:
+    - {span: [20.0, 190.0], height: 48.0}
+    - {span: [190.0, 420.0], height: 32.0}
+    - {span: [420.0, 587.0], height: 48.0}
+provenance:
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      the maker's document and page with the end and side views, and which size
+      figure the ribs are inside
+```
+
+- **`core` is the tallest rib's height.** It is the distance from the section's edge
+  in to the casting's own surface, and the section's edge is the tip line of the
+  tallest rib. So the box and every size stay as stated, and the ribs are inside
+  them. Check: the section is at least as wide as its edge from the edge in to the
+  core (L214 is silent).
+- **The casting is cut back to its core, everywhere along the length.** In the end
+  margins before the first rib and after the last one there are no ribs, and no
+  casting above the core either. Check: from the right end the band between the
+  core and the edge is drawn in a rib tone, standing for the first rib seen behind
+  the cap.
+- **`steps` set a stepped tip line.** Each step is a span and the height of the rib
+  tips above the core surface in it. They tile the span exactly, and one is as tall
+  as the core. A rib takes the height of the step whose half-open span `[from, to)`
+  holds its centre. Check: L211 is silent; the front and rear outlines follow the
+  steps, and the gaps between ribs are filled in the silhouette.
+- **A rib is not a mounting surface.** A part on the front or the rear does not lie
+  above a step's tip line or between the edge and the core (L216). A part on the top
+  or the bottom stands on the rib tops, and the section rule judges it as before.
+- **One inside field to an edge, at most 400 ribs a device.** Fields on one edge do
+  not overlap; a field that cuts the casting back has the edge to itself. A leftover
+  part of a pitch at the end of a span is a warning (L213).
+- **Ribs that stand outside the stated size.** Where the maker's size does not
+  include the ribs, a field states `outside: true`, a `height` and no `core`. The
+  section's edge is then the casting's own surface and the ribs stand out of it by
+  their step heights, up to 60 mm beyond the box. The box and every size read stay
+  the casting's; the picture, the 3D scene and the camera fit include the ribs.
+  Choose the reading by what the maker's figure includes, and say which in
+  `provenance`. An outside field may not share an edge with an inside one.
+- **Art stays inside the outline.** The front and rear outlines follow the steps,
+  so a drawing painted across the whole rectangle covers the cut-back casting. Paint
+  the art inside the outline and the compiled ribs over it.
+
+**In 3D** the body is the section cut back to the core, with each rib a slab
+standing on it up to its step height, all merged into one buffer. A part that slips
+onto a field is read at the core line, where the casting's wall is. Check: look at
+the box from the rear above, from the end and from below; the ribs read as thick
+ribs on a casting, the ends are cut back, and the lower step lies below the tip line
+of its neighbours.
+
+### A housing that opens: `chassis.section` with `chassis.halves`
+
+A housing with a section may state `halves` as a box does (the rules above, L200
+to L203, still apply) and then opens in 3D as the stepped body in two parts, with
+the ribs on the half they stand on.
+
+```yaml
+chassis:
+  section: [...]            # the twelve points above
+  fins: [...]
+  halves:
+    base: {outer: top, stands: 144.0}      # the seam is 144 down, inside the flange
+    lid:  {hinge: rear, angle: 180.0, stands: 144.0}
+views:
+  lid-open: {...}           # drawn by hand, with a region for each half, as for a box
+```
+
+- **The base is the top or the bottom, the hinge a long face.** `base.outer` is
+  `top` or `bottom` and `lid.hinge` is `front` or `rear` (L217). The housing is an
+  extrusion along its length, so only a seam parallel to the length leaves each half
+  a cut of the same end profile, and only a hinge on a long face is a line parallel
+  to it.
+- **`stands` places the seam.** The seam is the plane `base.stands` from the base's
+  `outer` face, so the seam is that many millimetres down the section from the top
+  (`top`) or up from the bottom (`bottom`). Put it where the maker's housing splits.
+  Check: it lies in the flange, the widest part, or L218 warns; and it cuts the
+  section in two parts that each have outline, so not outside the section, not
+  exactly on a horizontal edge of it and not in the stretch the ribs cut back (L219).
+- **The lid turns about the hinge-side edge at the seam.** The line is parallel to
+  the length, at the seam, at the section's rearmost edge in that row for `rear` and
+  its foremost for `front`. With a flange that is the flange's edge, which is where
+  a maker's hinge is drawn. `angle` is 0 to 180 degrees and 180 when not stated.
+  Check: open the box in the viewer at the angle the maker draws and see the lid
+  turn about that edge.
+- **What the open state shows.** Each half is a plain shell of the stepped body on
+  its side of the seam, ribs and ribs that stand outside the box included, seen from
+  both sides. The cut face is not drawn: you look into the shell through it, as with
+  a box half. **The inside of a half, its rim, gasket groove, bolt lugs and the
+  modules, is not drawn from the section; it is the authored open drawing's job**
+  (the `lid-open` view and its regions), as for any box that opens. Bays appear as
+  stand-in plates on the half that holds them. The camera frames both parts.
+- **A device without a `section` is unchanged:** its halves are the two boxes they
+  were.
+
+**What is not there yet.** Relief taken from a rib and a section that varies along
+the length come in later changes, so a modeller should not look for them.
 
 ## Stage 2: the cutouts
 
@@ -1298,3 +1414,16 @@ holds two kinds of block, and each is placed in the face's lists by a
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.
+
+**`whole-numbers: true`** is an optional key at the top of a `layout.yaml`, level
+with `views`. The expander computes every coordinate it writes, so a position of
+14 comes out as `14.0`, where a device written by hand says `14`. The two parse
+equal, but the compiled source is hashed as JSON, so the source hash and every
+face compiled from it change although the drawing does not. With the key, an
+`at` or a `size` that the expander computes and that is a whole number is
+written as an integer; `14.0` becomes `14` and `17.6` stays `17.6`. Use it
+when a layout reproduces a hand-written device and a whole number would
+otherwise change its hash. The key touches only the numbers the expander
+computes: longhand items, the non-view keys, and a block's own figures such as a
+numeral's `font-size` are copied as written. It is not written to `device.yaml`,
+it must be `true` or `false`, and a layout without it expands exactly as before.

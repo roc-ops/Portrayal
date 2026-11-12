@@ -1,0 +1,175 @@
+format: 1
+kind: rack
+name: rk1219walloh
+version: 1.0.0
+maturity: modelled
+manufacturer: StarTech.com
+model: RK1219WALLOH
+part-numbers:
+  RK1219WALLOH: 4-Post 12U Hinged Wall-Mount Network Rack, 19" Open Frame Server Rack with 19.8in Mounting Depth
+description: >-
+  The StarTech.com 12U hinged open frame wall rack, in black steel with L-shape
+  rails that have square holes for cage nuts. The frame has two front vertical
+  rails and two rear vertical rails, and ships fully assembled with 48 #10-32 cage
+  nuts and screws.
+  Four anchor points on the rear panel fix it to a wall, 16 in apart centre to
+  centre. Two latches hold the front frame to the wall bracket. With the latches
+  released the whole frame swings out toward its hinge for rear access. The wall
+  fixing, the hinge and the swing are described here and are not data yet: the
+  rack product has no key for them.
+form: wall-frame
+ru: 12
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+  fixing: "#10-32 cage nut"
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+max-device-depth: 502
+outer:
+  w: 555
+  h: 647
+  d: 602
+weight-kg: 22.73
+load:
+  static-kg: 63.37
+datasheet:
+  title: 4-Post 12U Hinged Wall-Mount Network Rack, 19" Open Frame Server Rack with 19.8in Mounting Depth
+  url: https://media.startech.com/cms/pdfs/rk1219walloh_datasheet.pdf
+references:
+  - title: Hinged Open Frame Wall-Mount Server Rack (6U, 8U and 12U Models), Quick-Start Guide
+    url: https://sgcdn.startech.com/005329/media/sets/RKx19WALLOH_Manual/RKx19WALLOH.pdf
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      The U Height row of the RK1219WALLOH specification sheet, page 3, says 12U.
+  form:
+    confidence: datasheet
+    note: >-
+      The Wallmountable row on page 2 says Yes, and the Frame Type row on page 3
+      says Open Frame. The Rack Type row says 4-Post, and the quick-start guide,
+      page 1, lists two front and two rear vertical rails. The product is written
+      as a wall frame with its front rail alone, the shape the library gives that
+      form; the gap below asks about the rear rails.
+  width:
+    confidence: datasheet
+    note: >-
+      Page 1 says the rack mounts 19-inch wide equipment, and page 3 names the
+      standard EIA/ECA-310-E. The sheet prints no rail width figure.
+  holes:
+    confidence: datasheet
+    note: >-
+      The Mounting Hole Types row on page 3 says Square (For Cage Nut). The
+      quick-start guide, page 1, says the front and rear vertical rails have
+      square cage nut holes, and page 2 says the nuts and screws are #10-32. The
+      sheet prints no hole size, so none is written.
+  rails:
+    confidence: datasheet
+    note: >-
+      The quick-start guide, page 1, names Front Vertical Rails (x2) and Rear
+      Vertical Rails (x2). Only the front rail is written, as the library lists
+      for a wall frame. The sheet prints no distance between the front and rear
+      rails.
+  max-device-depth:
+    confidence: datasheet
+    note: >-
+      Page 2 prints the Maximum Mounting Depth as 19.8 in [50.2 cm], and page 1
+      says the same in its text. The metric print is finer and is written, 502
+      mm, and the inch figure lies inside its rounding. It is read as the depth
+      available to equipment, which is a reading; the gap below says so.
+  outer:
+    confidence: datasheet
+    note: >-
+      Page 2 labels its sizes Product Length 23.7 in [60.2 cm], Product Width 21.9
+      in [55.5 cm] and Product Height 25.5 in [64.7 cm]. The sheet draws no axes.
+      Length is read as front to back, wall to the front of the frame, because the
+      Maximum Mounting Depth of 19.8 in is shorter than it and the other two are
+      named width and height. Written in mm from the metric prints, d 602, w 555
+      and h 647.
+  weight-kg:
+    confidence: datasheet
+    note: >-
+      Page 2 prints Weight of Product as 50.1 lb [22.7 kg]. The sheet prints
+      inches and pounds first. The pounds figure converted, 22.73 kg, is the finer
+      and is written.
+  load:
+    confidence: datasheet
+    note: >-
+      Page 2 prints Weight Capacity (No Casters) as 139.7 lb [63.4 kg], and the
+      quick-start guide, page 1, says up to 139.7 lb [63.4 kg] for the 12U model.
+      The pounds figure converted, 63.37 kg, is the finer. The sheet words the
+      row as a rating without casters and the frame has none, so it is written as
+      the static load.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. Neither document says anything about unit numbering; bottom-up
+      from 1 is the default of the rack file.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312 in).
+      The sheet names the standard as EIA/ECA-310-E and prints no hole spacing.
+  opening:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 minimum clear opening between the rails, 450.85
+      mm (17.75 in). Neither document prints a figure for it.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: Neither document says whether the units are numbered, or which way.
+    wanted: A photograph of the rail showing the unit labels, or a dimensioned drawing.
+  - what: hole-centres
+    reason: vendor-silent
+    note: The sheet prints no spacing between the hole lines.
+    wanted: A dimensioned front view of the vertical mounting rails.
+  - what: opening
+    reason: vendor-silent
+    note: Neither document prints a clear opening between the rails.
+    wanted: A dimensioned front view, or a measurement between the rails.
+  - what: hole-size
+    reason: vendor-silent
+    note: The sheet says the holes are square for a cage nut and prints no size.
+    wanted: A dimensioned drawing of the rail, or a measurement of a square hole.
+  - what: outer-axes
+    reason: needs-drawing
+    note: >-
+      The sheet labels Product Length, Width and Height and draws no axes. Length
+      is read as front to back.
+    wanted: A dimensioned drawing with the three sizes marked.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: >-
+      The sheet prints a Maximum Mounting Depth and not where it is measured from.
+      It is written as the depth for equipment, from the front rail.
+    wanted: A dimensioned side view, or the usable depth between the rails from the maker.
+  - what: rear-rail
+    reason: needs-drawing
+    note: >-
+      The guide lists two rear vertical rails with cage nut holes. A wall frame in
+      this library lists the front rail alone and a rear rail with its depth range
+      belongs to the four-post forms, so the rear rails and their distance from the
+      front are not written.
+    wanted: A decision on the form of a four-post wall frame, and a dimensioned side view with the rail spacing.
+  - what: wall-fixing
+    reason: needs-drawing
+    note: >-
+      The guide, page 2, says four anchor points on the rear panel, 16 in from
+      centre to centre for wooden studs. It prints no hole size and no vertical
+      spacing, and the rack product has no key for a wall fixing, so they are in
+      the description only.
+    wanted: A wall-fixing key in the rack product, and a dimensioned drawing of the rear panel.
+  - what: hinge
+    reason: needs-drawing
+    note: >-
+      The guide, page 2, says the frame swings outward toward the hinge and does
+      not say which side the hinge is on. It prints no swing angle or clearance,
+      and the rack product has no key for a hinge or a swing.
+    wanted: A hinge key in the rack product, the hinge side, and the swing clearance from the maker.

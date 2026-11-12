@@ -24,7 +24,7 @@ import { nestedBays, applyOverrides, applyOccupantOverrides, applyRearOverrides,
          freshBaysUnder, seatFace, faceQueue, swapOverrides, faceEntries, faceTree, ownerPath,
          builtTurns, turnOverrides, acceptTurns, decodeTurns, seatTurn, turnable,
          slotOptions, slotResolver, spanWhy, coveredBy, slotWidth } from './swap.js';
-import { jdist, faceFile, distResolver, readIndex } from './dist.js';
+import { jdist, faceFile, distResolver, readIndex, fetchDist } from './dist.js';
 import { paintFields, unpaintFields, fieldRows, fieldAccepts, decodeFields, drawnField,
          adjustmentsOf, adjustmentAccepts, paintAdjustments } from './fields.js';
 import { paintDisplays } from './displays.js';
@@ -1373,7 +1373,7 @@ export function createShell(opts = {}) {
     try { c = compByRef(ref); } catch (e) { return null; }   // not ns/name@major
     if (!c) return null;
     const skin = c.skins?.includes('default') ? 'default' : c.skins?.[0];
-    const r = await fetch(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
+    const r = await fetchDist(distAt(`components/${c.ns}--${c.name}--${c.major}--${skin}.svg`));
     return r.ok ? {comp: c, text: await r.text()} : null;
   }
 
@@ -1799,7 +1799,7 @@ export function createShell(opts = {}) {
       live: () => state.facesFor === key && !state.module,
       has: view => !!state.faces[view],
       fetch: async view => {
-        const r = await fetch(distAt(faceFile(state.meta, state.cfg, view)));
+        const r = await fetchDist(distAt(faceFile(state.meta, state.cfg, view)));
         if (!r.ok) return null;
         const doc = new DOMParser().parseFromString(await r.text(), 'image/svg+xml');
         return document.importNode(doc.documentElement, true);
@@ -1917,7 +1917,7 @@ export function createShell(opts = {}) {
     } else {
       file = distAt(faceFile(state.meta, state.cfg, state.view));
     }
-    const res = await fetch(file);
+    const res = await fetchDist(file);
     stillNewest(gen);
     const txt = await res.text();
     stillNewest(gen);

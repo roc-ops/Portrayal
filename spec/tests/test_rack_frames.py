@@ -19,7 +19,7 @@ LIB = ROOT / "library"
 
 REFS = ["apc/ar201@1", "apc/ar203a@1", "fs/fs-or4p-45u@1", "fs/fs-or4p-xxu@1",
         "chatsworth/13853-x03@1", "chatsworth/55053-x03@1",
-        "startech/4postrack12a@1", "startech/4postrack42@2",
+        "startech/4postrack12a@1", "startech/4postrack42@2", "startech/rk1219walloh@1",
         "generic/2-post-frame@1", "generic/4-post-frame@1", "generic/4-post-cabinet@1"]
 
 # what a row says of a product besides its numbers

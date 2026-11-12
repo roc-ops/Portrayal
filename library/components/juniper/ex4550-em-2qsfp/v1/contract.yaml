@@ -1,0 +1,83 @@
+format: 1
+kind: module
+name: ex4550-em-2qsfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+    Juniper EX4550-EM-2QSFP, the two-port 40 Gbps QSFP+ expansion module of the EX4550 switches. It slides into the module slot on the front panel or the one on the rear panel. It has two QSFP+ cages side by side, numbered 0 and 1, each taking a 40 Gbps QSFP+ transceiver. A Link lamp and a Status lamp for each port sit above the cages, and the module has one ST lamp. Two captive screws hold it. It ships with dust covers in the ports and is hot-insertable and hot-removable.
+attrs:
+  model: EX4550-EM-2QSFP
+  qsfp: 2
+  weight: 0.61 lb (0.28 kg)
+  power-absent: not-published
+  ports-note: two QSFP+ ports at 40 Gbps, usable as Virtual Chassis ports from Junos OS 13.2X50-D15
+provenance:
+  sources: >-
+    datasheet - EX4550 Switch Hardware Guide (Juniper Networks, published 2020-12-15), Expansion Modules in EX4550 Switches: Table 8 (PDF pages 43 to 44) lists the module and its model number; Figure 10 (PDF page 45, the module in three-quarter view) and Figure 13 (PDF page 46, g021481, the face drawn flat); Figure 20 (PDF page 52) and Tables 14 and 16 (the port lamps). Installing an Expansion Module (Figure 76) seats it in the EX4550-32T.
+  size: >-
+    estimated - no document dimensions the module. It fills the module slot, 86.5 x 41.0 mm, which juniper/ex4550-em-cover@1 reads
+    off Figures 4 and 6 (the method is there). The figure's outline is read as fractions and applied to 86.5 x 41.0 mm.
+  elements: >-
+    drawing - Figure 13 is a flat elevation, outline 1576 x 727 px at 600 dpi, read as fractions and applied to 86.5 x 41.0 mm. Two cages 19.0 mm apart (the registry's pitch; the figure reads 19.2) from 24.3 mm in and 23.7 mm down, in a frame 39.4 mm wide. Above each cage a Link lamp and a Status lamp, round, 20.6 mm down, with the legends Link and Status above them and the numbers 0 and 1 above those. The ST lamp is at 8.6, 28.5 mm. Screws, vents, notches and the legend EX4550-EM-2QSFP are drawn as on the 8XSFP.
+  colour: >-
+    estimated - no photograph of this module is held and the figures are line drawings. The plate takes the grey of the
+    nearest held evidence of this maker's module faces (#888c92, the fitted EX-UM-4X4SFP in the EX4300-24T photograph); the
+    screws are silver. A photograph would replace it.
+  led: >-
+    datasheet - guide Figure 13 callouts and Table 9 (PDF page 46): the ST lamp is unlit when the module is offline or the chassis is
+    off, and green when the module is online and functioning normally. Each port has a Link lamp (callout 2, link and activity) and a Status lamp (callout 3).
+  weight: >-
+    datasheet - guide, Table 6, Chassis Physical Specifications (PDF page 36): "QSFP+ expansion module port: 0.61 lb (0.28 kg)". The page prints the word port; the figure is read as the module's weight.
+  power: >-
+    not published - searched the guide's power tables for a figure for any module and found only whole-switch totals, so the
+    module declares power-absent.
+states:
+- ok
+- fail
+- absent
+groups:
+  qsfp-plus:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs:
+      media: qsfp
+      speed: 40g
+    description: >-
+      The two cages, numbered 0 and 1 as printed. QSFP+ at 40 Gbps
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      A link and a status lamp for each port, above its cage: link of port 0, status of port 0, link of port 1, status of port 1
+  status:
+    term: LED
+    role: indicator
+    index-origin: 0
+    description: >-
+      the ST lamp of the module (guide Table 9)
+parts:
+- {ref: std/qsfp-ganged@1, id: port-0, at: [24.3, 23.7], group: qsfp-plus, attrs: {media: qsfp, speed: 40g}}
+- {ref: std/qsfp-ganged@1, id: port-1, at: [43.3, 23.7], group: qsfp-plus, attrs: {media: qsfp, speed: 40g}}
+- {ref: common/led-dot@1, id: led-0-link, at: [29.80, 19.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-0-status, at: [35.80, 19.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-1-link, at: [49.00, 19.60], group: port-leds, attrs: {function: link activity}}
+- {ref: common/led-dot@1, id: led-1-status, at: [54.70, 19.60], group: port-leds, attrs: {function: status}}
+- {ref: common/led-dot@1, id: led-st, at: [7.56, 27.50], group: status, attrs: {function: module status}}
+elements:
+  screw-left:
+    at: [0.43, 15.17]
+    size: [8.8, 8.8]
+    class: screw
+  screw-right:
+    at: [77.30, 15.17]
+    size: [8.8, 8.8]
+    class: screw
+size:
+  w: 86.5
+  h: 41.0
+size-confidence: {w: estimated, h: estimated}
+skins: [default]

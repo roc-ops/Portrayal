@@ -158,6 +158,7 @@ LEFT = {
     "cisco/ncs-5011": {"mgmt"},                    # vendor-silent: the guide names the interface, no rate
     "apc/ap7821b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
     "apc/ap7921b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
+    "apc/ap7900b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
 }
 # THE CEILING ONLY GOES DOWN. It was 123 when L113 was written, and #511's
 # device sweep took it to the entries above.
@@ -166,7 +167,8 @@ LEFT = {
 # One more for the NCS 5011 management jack (10), the same gap.
 # Four more for the APC AP7821B and AP7921B rear jacks (14): no APC document names the two jacks or states a rate,
 # recorded as the gap jack-speed on each.
-CEILING = 14
+# Two more for the APC AP7900B rear jacks (16): the same gap, jack-speed.
+CEILING = 16
 
 
 def _findings():
