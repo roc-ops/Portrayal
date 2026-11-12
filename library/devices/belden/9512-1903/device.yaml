@@ -1,27 +1,28 @@
 format: 1
 kind: device
 name: 9512-1903
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Belden
 model: 9512-1903
 description: >-
   1U rack-mount lacing bar, Belden 9512-1903. A black powder-coated steel bar the full 19 in width
-  that bolts to the rack rails and stands 0.5 in out, for tying cables to. It is drawn as the
-  maker's overall size and nothing inside it, and no tie point is placed: no document gives one.
+  that bolts to the rack rails, for tying cables to. It is a thin flat strip 12.7 mm across with
+  one slotted hole near each end. No tie point is placed: no document gives one.
 profile: passive
 provenance:
   method:
     confidence: datasheet
     note: >-
       FIGURES FROM A DATA SHEET TABLE AND ONE PHOTOGRAPH. The 9512-1903 technical data sheet
-      (revision 0.41, 05-31-2024, page 1) states the rack units, the overall height, width and
-      depth, the weight, the material, the finish and the colour, and carries one 430 px photograph
+      (revision 0.41, 05-31-2024, page 1) states the rack units, the overall height and width, the
+      depth (in its Variants table only), the weight, the material, the finish and the colour, and carries one 430 px photograph
       of the bar with its two screws lying beside it. The maker's product page held here is text
-      with no dimension in it. NO BELDEN DOCUMENT HOLDS A DIMENSIONED DRAWING, so nothing inside the
-      overall size is drawn: no hole, no tie point, no cut-out. Nothing was copied from the
-      photograph; the data sheet's footer ("provided on an AS IS basis") grants no licence to reuse
-      its artwork.
+      with no dimension in it. NO BELDEN DOCUMENT HOLDS A DIMENSIONED DRAWING. The two end holes and
+      the thin flat section are read off the photograph and are `estimated`: the scale is the
+      printed 12.7 mm face over its 9.8 px width at the middle of the bar, 1.3 mm per px, and the
+      length is the printed 482.6 over 438 px. Nothing was copied from the photograph; the data
+      sheet's footer ("provided on an AS IS basis") grants no licence to reuse its artwork.
   chassis:
     confidence: datasheet
     note: >-
@@ -42,8 +43,8 @@ provenance:
     confidence: estimated
     note: >-
       estimated - `sheet`, as the line's other managers: the data sheet says "Steel" and the
-      photograph shows a flat strip. The section of the bar is not stated, so each face below is a
-      plain outline of the overall size.
+      photograph shows a flat strip. The strip is drawn 12.7 across and 1.5 thick, its edge on the
+      rail side. The sheet's 0.5 in depth is kept as the overall size.
   thickness:
     confidence: estimated
     note: >-
@@ -57,23 +58,25 @@ provenance:
   front:
     confidence: datasheet
     note: >-
-      datasheet - the bar's face as a plain 482.6 by 12.7 strip, the overall width and height. The
-      photograph shows a slotted hole near each end; their size and place are not stated and they are
-      not drawn (`end-holes` gap).
+      estimated - the bar's face as a 482.6 by 12.7 strip, the overall width and height, with one
+      slotted hole at each end. Each hole is 10 by 4, its centre 13 from the end and 6.35 from the
+      edge, read off the photograph: the centre sits 12 px from the end at 1.1 mm per px along the
+      bar. The size is good to about 3.
   rear:
-    confidence: datasheet
+    confidence: estimated
     note: >-
-      datasheet - the back of the same strip, plain. No Belden document shows the bar from behind.
+      estimated - the back of the same strip, with the same two holes through it. No Belden document
+      shows the bar from behind.
   top:
-    confidence: datasheet
+    confidence: estimated
     note: >-
-      datasheet - the overall 482.6 by 12.7 depth as one outline. This is the envelope, not a
-      measured section (`cross-section` gap). The bottom is the same.
+      estimated - the strip's edge, 482.6 long and 1.5 thick, on the rail side of the 12.7 depth.
+      The bottom is the same.
   left:
-    confidence: datasheet
+    confidence: estimated
     note: >-
-      datasheet - the end of the bar as the 12.7 by 12.7 overall size, an outline and not a measured
-      section. The right is the same.
+      estimated - the end of the strip, 12.7 across and 1.5 thick, on the rail side of the 12.7
+      depth. The right is the same.
   guides:
     confidence: datasheet
     note: >-
@@ -115,20 +118,12 @@ gaps:
       the data sheet and the product page say the part is a rack-mount lacing bar and give no tie
       point, slot or cut-out along it, so none is drawn and no cable is told where to be tied.
     wanted: a Belden drawing, or a square-on photograph, that marks where a cable is tied
-  - what: end-holes
-    scope: [front, rear]
-    reason: vendor-silent
-    note: >-
-      the photograph shows one slotted hole near each end, and the data sheet gives neither their
-      size nor their place, nor the hole pattern against the rack unit.
-    wanted: a dimensioned drawing of the bar
   - what: cross-section
     scope: [top, bottom, left, right]
     reason: vendor-silent
     note: >-
-      the data sheet gives 0.5 in for the height and 0.5 in for the depth and does not say whether
-      the bar is a flat strip, an angle or a solid section. The photograph shows a thin strip, so the
-      two figures may be a packing size. The sides are drawn as the overall size only.
+      the sheet gives 0.5 in for the height and for the depth. The photograph shows a thin flat strip,
+      drawn 1.5 thick from the line's stand-in gauge. Which edge of the 12.7 depth it sits on is unknown.
     wanted: a dimensioned drawing, or an end-on photograph, of the bar
   - what: height-in-unit
     scope: [front]
@@ -140,7 +135,8 @@ gaps:
     scope: [front]
     reason: vendor-silent
     note: >-
-      the photograph shows two screws beside the bar; no document gives their size, thread or head.
+      the photograph shows two loose screws beside the bar. They are not on any face and the format has
+      no shape for a loose part beside a device. No document gives their size, thread or head.
     wanted: the mounting hardware's part list
 views:
   front:
@@ -148,31 +144,35 @@ views:
     panel:
       decor:
         - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: end-hole-left, at: [8, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+        - {id: end-hole-right, at: [464.6, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
   rear:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
         - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: end-hole-left, at: [8, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+        - {id: end-hole-right, at: [464.6, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
   top:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: strip, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
   bottom:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: strip, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
   left:
     size: {w: 12.7, h: 12.7}
     panel:
       decor:
-        - {id: bar, at: [0, 0], size: [12.7, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: strip, at: [0, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
   right:
     size: {w: 12.7, h: 12.7}
     panel:
       decor:
-        - {id: bar, at: [0, 0], size: [12.7, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: strip, at: [11.2, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
 configurations:
   base:
     kind: base

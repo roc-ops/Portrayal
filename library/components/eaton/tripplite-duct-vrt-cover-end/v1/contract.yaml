@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: tripplite-duct-vrt-cover-end
+version: 1.0.0
+class: mechanical
+description: >-
+  The cover of the Tripp Lite SmartRack SRCABLEDUCTVRT vertical finger duct seen from the top or the
+  bottom end - the plate edge-on across the front and the two lips folded back over the walls, 7.72
+  mm deep. The same cover as tripplite-duct-vrt-cover, drawn on the end views: it comes off with it.
+provenance:
+  size: >-
+    drawing - the end view of the SRCABLEDUCTVRT submittal drawing (13-03-167, page 2): the
+    channel is 40 mm [1.57 in] across, and the lips run 7.72 mm back from the front edge
+    (the side view's 62.71 less the slots' end at 54.99). The plate's thickness,
+    1.1 mm, is the wall's (estimated).
+  color: >-
+    datasheet - "Cold rolled steel" and "Color: Black"; the shade is this library's render, the
+    cover's.
+size: {w: 40, h: 7.72}
+size-confidence: {w: drawing, h: drawing}
+attrs: {material: Cold rolled steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#55595e'
+elements:
+  lip-left: {at: [0.0, 0.0], size: [1.1, 7.72], class: bezel}
+  lip-right: {at: [38.9, 0.0], size: [1.1, 7.72], class: bezel}
+  plate: {at: [0.0, 6.62], size: [40, 1.1], class: bezel}
+skins: [default]

@@ -590,6 +590,9 @@ def rj45_timing_label(part):
 PART_POWER = {
     "std/c14-inlet": "iec-60320-c14",
     "std/c20-inlet": "iec-60320-c20",
+    # THE PRO1 -48VDC PDU'S INPUT BLOCK: three stud pairs a two-hole lug lands across (+RTN, GND, -48VDC), the same
+    # `dc-terminal` row as the other DC stud blocks below. Each block is one DC feed, so a device with two exports two.
+    "servertech/pro1-dc-input-block": "dc-terminal",
     # NOT AN IEC CONNECTOR, AND UPSTREAM HAS A ROW FOR IT ANYWAY. Anderson's
     # Saf-D-Grid takes 20 A at 600 V through the space an IEC C14 uses for 10 A
     # at 250, which is why Cisco's 1600 W ASR 9901 supply takes one and why
