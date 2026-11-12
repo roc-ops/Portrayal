@@ -46,11 +46,11 @@ provenance:
       Data sheet page 6, Standard Model and Wide Temp. Model front elevations, and quick installation
       guide page 2, 'Front panel of the NPort 5600 Series' (which prints 'NPort 5650-16'; this nameplate
       takes this model's number, an estimate). Left to right: end cap with the maker mark, the LCD panel,
-      the Reset button, four push buttons, the NPort 5650-16 nameplate, two rows of 16 lamps (Tx above
-      Rx) under the port numerals, a Ready lamp, a LAN lamp and a PWR lamp. The window and push-button
-      sizes are read off the line art; the lamps (2.0 mm) and the Reset button (4.0 mm) take the shared
-      parts' sizes, and the rings the line art draws are larger. The lamp colours and what each lamp shows
-      are not in a held document.
+      the Reset button, four push buttons, the nameplate, two rows of 16 lamps (Tx above Rx) under the
+      port numerals, a Ready lamp, a LAN lamp and a PWR lamp. The window and push-button sizes are read
+      off the line art; the lamps (2.0 mm) and the Reset button (4.0 mm) take the shared parts' sizes,
+      and the rings the line art draws are larger. The lamp colours and what each lamp shows are not in
+      a held document.
   serial-ports:
     confidence: drawing
     note: >-
@@ -111,10 +111,14 @@ provenance:
     note: >-
       The sheet's left and right views, rendered at 300 dpi: the body is 1163 px for 198.25 mm and 268
       px for 45.5 mm, 5.87 and 5.89 px/mm. The sheet prints no hole position on a side, so every position
-      is read at that scale and is good to about 1 mm. Each side shows a plate 56.9 mm long at the front
-      with two rows of three holes at a 20.1 mm pitch, two rows of two holes and one larger dot toward
-      the rear, and two small holes at the rear edge. The right side is the left one mirrored in depth.
-      What the holes take (rivet nuts, screws or bare holes) is not stated, so they are drawn as holes.
+      is read at that scale and is good to about 1 mm; the hole sizes are read at the same scale. Each
+      side shows at the front a plate 56.9 mm long with two rows of three holes at a 20.1 mm pitch and
+      a fold at the front end. That plate is read as the rack ear's own leg: it matches the 57 mm leg
+      of the L-shaped rack plates (45 x 57 mm) the data sheet lists on page 8, and a rack ear is drawn
+      once, by the ear position, so the plate is not drawn on the side. Toward the rear each side shows
+      two rows of two holes and one larger dot, and two small holes at the rear edge, which are drawn.
+      The right side is the left one mirrored in depth. What the holes take (rivet nuts, screws or bare
+      holes) is not stated, so they are drawn as holes.
   bottom:
     confidence: estimated
     note: >-
@@ -136,8 +140,9 @@ provenance:
       two slots 12.2 x 7.2 mm. The printed 31.80 is the distance between the two slot centres of an ear,
       and 457.00 and 468.20 are the spans between the slot end centres across the unit. The top view puts
       the back of the flange about 7.9 mm behind the front face, read at 400 dpi against the 440 mm width.
-      The sheet's 57 mm plate is drawn on the sides. The ears are stated as an ear position and not drawn
-      on the faces.
+      The sheet's 57 mm plate at the front of each side view is read as the ear's own leg, so it is not
+      drawn on the sides: the ear is stated as an ear position and drawn once, by that position, and not
+      on any face.
 attrs:
   physical:
     weight-kg: 2.56
@@ -675,27 +680,6 @@ views:
       decor:
       - {id: side-plate, kind: envelope, at: [0.0, 0.0], size: [198.25, 45.5], fill: '#3a3e47'}
       - {id: fold-rear, kind: seam, at: [13.3, 0.9], size: [1.7, 43.7], fill: '#2c2f35'}
-      - {id: fold-front, kind: fold, at: [189.6, 0.0], size: [8.65, 45.5], fill: '#2c2f35'}
-      - {id: ear-leg, kind: plate, at: [132.7, 0.0], size: [56.9, 45.5], fill: '#44484f', rx: 5.0}
-      - {id: ear-leg-front, kind: plate, at: [181.6, 0.0], size: [8.0, 45.5], fill: '#44484f'}
-      - {id: ear-hole-1, kind: hole, at: [137.1, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-1-bore, kind: hole, at: [138.5, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-1-pin, kind: hole, at: [139.8, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-2, kind: hole, at: [157.2, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-2-bore, kind: hole, at: [158.6, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-2-pin, kind: hole, at: [159.9, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-3, kind: hole, at: [177.4, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-3-bore, kind: hole, at: [178.8, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-3-pin, kind: hole, at: [180.1, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-4, kind: hole, at: [137.1, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-4-bore, kind: hole, at: [138.5, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-4-pin, kind: hole, at: [139.8, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-5, kind: hole, at: [157.2, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-5-bore, kind: hole, at: [158.6, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-5-pin, kind: hole, at: [159.9, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-6, kind: hole, at: [177.4, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-6-bore, kind: hole, at: [178.8, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-6-pin, kind: hole, at: [180.1, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
       - {id: body-hole-1, kind: hole, at: [25.2, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
       - {id: body-hole-1-centre, kind: hole, at: [27.05, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
       - {id: body-hole-2, kind: hole, at: [45.5, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
@@ -713,27 +697,6 @@ views:
       decor:
       - {id: side-plate, kind: envelope, at: [0.0, 0.0], size: [198.25, 45.5], fill: '#3a3e47'}
       - {id: fold-rear, kind: seam, at: [183.25, 0.9], size: [1.7, 43.7], fill: '#2c2f35'}
-      - {id: fold-front, kind: fold, at: [0.0, 0.0], size: [8.65, 45.5], fill: '#2c2f35'}
-      - {id: ear-leg, kind: plate, at: [8.65, 0.0], size: [56.9, 45.5], fill: '#44484f', rx: 5.0}
-      - {id: ear-leg-front, kind: plate, at: [8.65, 0.0], size: [8.0, 45.5], fill: '#44484f'}
-      - {id: ear-hole-1, kind: hole, at: [53.95, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-1-bore, kind: hole, at: [55.35, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-1-pin, kind: hole, at: [56.65, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-2, kind: hole, at: [33.85, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-2-bore, kind: hole, at: [35.25, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-2-pin, kind: hole, at: [36.55, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-3, kind: hole, at: [13.65, 12.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-3-bore, kind: hole, at: [15.05, 13.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-3-pin, kind: hole, at: [16.35, 14.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-4, kind: hole, at: [53.95, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-4-bore, kind: hole, at: [55.35, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-4-pin, kind: hole, at: [56.65, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-5, kind: hole, at: [33.85, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-5-bore, kind: hole, at: [35.25, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-5-pin, kind: hole, at: [36.55, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
-      - {id: ear-hole-6, kind: hole, at: [13.65, 27.1], size: [7.2, 7.2], fill: '#14171a', rx: 3.6}
-      - {id: ear-hole-6-bore, kind: hole, at: [15.05, 28.5], size: [4.4, 4.4], fill: '#44484f', rx: 2.2}
-      - {id: ear-hole-6-pin, kind: hole, at: [16.35, 29.8], size: [1.8, 1.8], fill: '#14171a', rx: 0.9}
       - {id: body-hole-1, kind: hole, at: [167.65, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
       - {id: body-hole-1-centre, kind: hole, at: [169.5, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
       - {id: body-hole-2, kind: hole, at: [147.35, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}

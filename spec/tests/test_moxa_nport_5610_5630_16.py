@@ -90,21 +90,20 @@ def test_all_six_faces_are_drawn_and_none_is_left_empty(slug):
 
 
 @pytest.mark.parametrize("slug", MODELS)
-def test_each_side_has_the_ear_leg_with_six_holes_and_the_right_is_the_left_mirrored_in_depth(slug):
+def test_each_side_draws_the_body_only_and_the_right_is_the_left_mirrored_in_depth(slug):
     d = device(slug)
     left, right = decor(d, "left"), decor(d, "right")
     for face in (left, right):
-        assert [n for n in range(1, 7) if f"ear-hole-{n}" in face] == list(range(1, 7))
-        assert {"ear-leg", "body-dot", "body-hole-1", "body-hole-4", "rear-hole-1", "rear-hole-2"} <= set(face)
+        assert {"side-plate", "fold-rear", "body-dot", "body-hole-1", "body-hole-4", "rear-hole-1", "rear-hole-2"} <= set(face)
+        # the rack ear's own leg is drawn once, by the ear position, and never again on a face
+        assert not [i for i in face if i.startswith("ear-") or i == "fold-front"], sorted(face)
+    assert set(left) == set(right)
     for i, e in left.items():
         if e["kind"] in ("hole", "plate", "seam", "fold") and i in right:
             lx, ly = centre(e)
             rx, ry = centre(right[i])
             assert lx + rx == pytest.approx(DEPTH, abs=0.02), i
             assert ly == pytest.approx(ry, abs=0.01), i
-    # the six ear holes are two rows of three, one pitch apart along the depth
-    xs = sorted({round(centre(left[f"ear-hole-{n}"])[0], 1) for n in range(1, 7)})
-    assert len(xs) == 3 and xs[1] - xs[0] == pytest.approx(20.1, abs=0.2)
 
 
 @pytest.mark.parametrize("slug", MODELS)
