@@ -7,3 +7,4 @@
   - `ports` becomes `sfp28` (`port-1` to `port-48`) and `qsfp28` (`port-49` to `port-56`), which keep the vendor's one numbering of
     1 to 56.
   - `port-leds` becomes `sfp28-leds` (`led-port-1` to `led-port-48`) and `qsfp28-leds` (`led-port-49` to `led-port-56`).
+- The device also records which optics each port group takes, `optics-sfp28` and `optics-qsfp28`, from the data sheet's port rows.
