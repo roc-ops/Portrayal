@@ -47,9 +47,9 @@ def test_the_plug_mates_the_key_the_jack_presents():
     assert c["connection-points"]["mate"]["direction"] == "front"
 
 
-def shell_box():
+def shell_box(ids=None):
     """The bounding box of the shell path: the end point of every M, L and A segment."""
-    tokens = re.findall(r"[MLAZ]|-?\d+\.?\d*", skin()["shell"].get("d"))
+    tokens = re.findall(r"[MLAZ]|-?\d+\.?\d*", (ids or skin())["shell"].get("d"))
     xs, ys, i = [], [], 0
     while i < len(tokens):
         cmd = tokens[i]
@@ -111,10 +111,116 @@ def test_the_stub_leaves_from_the_mate_point():
     assert cable["at"] == mate and cable["on"] == "stub"
 
 
-def test_the_contacts_are_recorded_and_not_drawn():
+def test_the_cable_end_draws_no_contacts_and_the_contract_records_them():
     c = contract()
     assert "contacts" in c["provenance"]
-    assert not [i for i in skin() if i.startswith(("pin-", "cell-"))]
+    assert not [i for i in skin() if i.startswith(("pin-", "cell-", "blade"))]
+
+
+MATING_DIR = LIB / "components/generic/dvi-d-plug-mating/v1"
+
+
+def mating_contract():
+    return yaml.safe_load((MATING_DIR / "contract.yaml").read_text())
+
+
+def mating_skin():
+    root = ET.parse(MATING_DIR / "skins/default.svg").getroot()
+    return {e.get("id"): e for e in root.iter() if e.get("id")}
+
+
+def centre(e):
+    return (float(e.get("x")) + float(e.get("width")) / 2, float(e.get("y")) + float(e.get("height")) / 2)
+
+
+def pins():
+    ids = mating_skin()
+    return {n: centre(ids[f"pin-{n}"]) for n in range(1, 25)}
+
+
+def test_the_plug_shows_its_mating_face_as_the_rear_face_component():
+    c = contract()
+    assert c["faces"] == {"rear": {"ref": "generic/dvi-d-plug-mating@1"}}
+    m = mating_contract()
+    assert (m["name"], m["version"]) == ("dvi-d-plug-mating", "1.0.0")
+    assert m["size"] == c["size"] == {"w": 39.5, "h": 15.13}
+
+
+def test_the_mating_face_has_24_contacts_in_three_rows_of_eight():
+    ids = mating_skin()
+    assert sorted(i for i in ids if i.startswith("pin-")) == sorted(f"pin-{n}" for n in range(1, 25))
+    rows = sorted({round(y, 3) for _, y in pins().values()})
+    assert len(rows) == 3
+    for ry in rows:
+        assert len([1 for _, y in pins().values() if round(y, 3) == ry]) == 8
+
+
+def test_the_contacts_are_numbered_as_the_figure_numbers_them():
+    p = pins()
+    top, mid, bot = (sorted(y for _, y in p.values())[i] for i in (0, 8, 16))
+    for n in range(1, 25):
+        row = (n - 1) // 8 if n <= 8 else 1 if n <= 16 else 2
+        assert abs(p[n][1] - (top, mid, bot)[row]) < 0.005, n
+    # top row 8..1, middle 16..9, bottom 24..17, left to right: pin 1 upper right, pin 24 lower left
+    for first in (1, 9, 17):
+        xs = [p[first + k][0] for k in range(8)]
+        assert xs == sorted(xs, reverse=True)
+    assert p[1][0] == max(x for x, _ in p.values()) and p[1][1] == top
+    assert p[24][0] == min(x for x, _ in p.values()) and p[24][1] == bot
+
+
+def test_the_contact_grid_is_the_pitch_and_the_field_the_size_the_figure_prints():
+    p = pins()
+    xs = [p[n][0] for n in range(1, 9)]
+    assert all(abs((a - b) - 1.91) < 0.01 for a, b in zip(xs, xs[1:]))
+    assert abs(p[1][0] - p[8][0] - 13.34) < 0.01
+    assert abs(p[17][1] - p[1][1] - 3.81) < 0.01
+    assert abs((p[9][1] - p[1][1]) - 1.91) < 0.01 and abs((p[17][1] - p[9][1]) - 1.91) < 0.01
+    for n in (8, 16, 24):
+        assert p[n][0] == p[8][0]
+    assert abs(p[8][0] - 15.93) < 0.005
+
+
+def test_the_contacts_are_the_estimated_size_and_sit_in_the_shell():
+    ids = mating_skin()
+    x0, y0, x1, y1 = shell_box(mating_skin())
+    for n in range(1, 25):
+        r = ids[f"pin-{n}"]
+        assert (float(r.get("width")), float(r.get("height"))) == (1.4, 0.5)
+        cx, cy = pins()[n]
+        assert x0 < cx < x1 and y0 < cy < y1
+
+
+def test_the_blade_slot_is_one_flat_slot_left_of_the_field_level_with_the_middle_row():
+    ids = mating_skin()
+    slot = ids["blade-slot"]
+    assert (float(slot.get("width")), float(slot.get("height"))) == (2.6, 0.45)
+    cx, cy = centre(slot)
+    assert abs(cx - 11.47) < 0.005
+    assert abs(cy - pins()[9][1]) < 0.005 and abs(cy - 7.565) < 0.005
+    assert cx + 1.3 < pins()[8][0] - 0.7
+    assert not [i for i in ids if re.fullmatch(r"c[1-5]|cross.*", i)]
+
+
+def test_the_mating_face_has_the_outline_shell_and_jackscrews_of_the_cable_end():
+    ids = mating_skin()
+    hood = ids["hood"]
+    assert (float(hood.get("width")), float(hood.get("height"))) == (39.5, 15.13)
+    assert shell_box(ids) == shell_box(skin())
+    left, right = ids["screw-l"], ids["screw-r"]
+    assert abs(float(right.get("cx")) - float(left.get("cx")) - 32.51) < 0.005
+    assert float(left.get("cy")) == float(right.get("cy")) == 7.565
+
+
+def test_the_mating_face_states_what_is_printed_and_what_is_estimated_in_short_sentences():
+    prov = mating_contract()["provenance"]
+    for key in ("size", "contacts", "blade", "shell", "jackscrews", "method"):
+        assert key in prov, key
+    assert "2.6" in prov["blade"] and "3.3" not in prov["blade"]
+    assert "ESTIMATED" in prov["contacts"] and "ESTIMATED" in prov["blade"]
+    for key, text in list(prov.items()) + [("plug-shell", contract()["provenance"]["shell"])]:
+        for sentence in re.split(r"(?<=[.;:])\s+", " ".join(text.split())):
+            assert len(sentence.split()) <= 25, (key, sentence)
 
 
 def test_every_estimate_of_the_plug_is_declared():

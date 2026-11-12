@@ -9,8 +9,9 @@ profile: networking
 description: >-
   A DVI digital cable plug, seen from the cable end as a front elevation sees it seated. It is the male connector,
   with 24 contact positions in three rows of eight, a flat blade slot and a jackscrew either side. The body outline,
-  the two jackscrews and a short straight stub of cable are drawn; the shell and the contacts are behind them. Seats
-  on a `dvi-d` jack at its own mate point; the cable leaves from the far end of the stub.
+  the two jackscrews and a short straight stub of cable are drawn; the shell and the contacts are behind them, and
+  are drawn on its rear face, the mating face. Seats on a `dvi-d` jack at its own mate point; the cable leaves from
+  the far end of the stub.
 size: {w: 39.5, h: 15.13}
 size-confidence: {w: drawing, h: drawing}
 size-notes: both figures are printed as maxima of the plug's outline in the specification's mating interface drawing, 39.50 MAX and 15.13 MAX
@@ -34,7 +35,7 @@ provenance:
     two are one 0.075 inch pitch. All 24 positions are drawn in the figure. Which of them a cable populates is not
     printed: pins 4, 5, 12, 13, 20 and 21 carry the second link (Data3, Data4 and Data5 of Table 5-1), and the
     specification does not say that a plug omits them. The contacts are on the mating face and are not drawn from
-    the cable end.
+    the cable end. They are drawn on the rear face, `generic/dvi-d-plug-mating@1`.
   jackscrews: >-
     drawing - Figure 5-5: the two jackscrews are 32.51 apart, centred on the shell and level with the middle row of
     contacts, as Figure 5-1 (page 45) and the panel cutout of Figure 5-7 (page 48) give them. THE KNOB DIAMETER, 3.4,
@@ -43,10 +44,10 @@ provenance:
     0.3 mm; 3.4 is drawn, at the top of that range. The thread is #4-40 UNC on the receptacle (Figure 5-1).
   shell: >-
     drawing and estimated - Figure 5-5: the D-shaped shell is 24.16 across and 7.90 high, centred between the
-    jackscrews. THE CORNERS ARE ESTIMATED: the drawing draws the two lower corners cut and the upper corners
-    rounded and dimensions neither, so they are drawn as 1.0 radii and 2.0 cuts. The flat blade slot, drawn to the
-    left of the contacts, scales to 3.3 by 0.45 about 1.7 from the left edge of the shell; it is not drawn from the
-    cable end.
+    jackscrews. THE CORNERS ARE ESTIMATED. The figure draws the lower corners cut and the upper corners rounded.
+    It dimensions neither, so they are drawn as 1.0 radii and 2.0 cuts. The flat blade slot is left of the
+    contacts. It is ESTIMATED at 2.6 by 0.45, from 46 by 8 px on the 300 dpi page. It is drawn on the rear face,
+    not from the cable end.
   depth: >-
     not stated - the side view of Figure 5-5 is cut by break lines and carries no dimension. The shell is built 6.5
     long, ESTIMATED from the 6.50 that Figure 5-1 prints for the shell of the receptacle, which is another part's
@@ -93,4 +94,7 @@ relief:
 connection-points:
   mate: {at: [19.75, 7.565], direction: front}
   cable: {at: [19.75, 7.565], direction: front, 'on': stub}
+faces:
+  rear:
+    ref: generic/dvi-d-plug-mating@1
 skins: [default]
