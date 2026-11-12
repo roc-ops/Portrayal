@@ -24,10 +24,12 @@ provenance:
       each side and 3.6 mm from top and bottom. The screw centres, re-read in the native photograph, are top-left
       383,725, top-right 1029,619, bottom-left 383,897 and bottom-right 1029,777 (x,y in px). The left screws are 172 px
       apart and the right screws 158 px apart. The photograph was resampled to the face at 20 px per mm. The heatsink
-      opening, the legend bars, the logo and the colours were then read from threshold masks on that image, to about 0.2
-      mm of edge blur. Every other position is read by eye from the photograph, and its error was not measured. The
-      placements were made from an earlier reading of the same four screws, within 7 px of these. The rows of each
-      column are drawn level where the photograph reads them 1.5 mm apart.
+      opening and its fins, the legend bars, the logo, the two pale housing blocks, the screws, the lamps, the console
+      and USB column and the colours were then read from threshold masks on that image, to about 0.2 mm of edge blur.
+      The control points are themselves estimated, so every figure keeps about 1 mm of the method's own error. Every
+      other position is read by eye from the photograph. The placements were made from an earlier reading of the same
+      four screws, within 7 px of these. The rows of each column are drawn level where the photograph reads them 1.5 mm
+      apart.
       The photograph's serial jacks read about 15.8 mm wide and the ganged jack part is 12.7 mm wide. The part is placed
       on the photograph's centres and the two widths are not made to agree.
   serial:
@@ -35,9 +37,8 @@ provenance:
     note: >-
       LM4 product brief: "Supports up to 4 devices via serial (RS-232)". The photograph shows four RJ45 jacks in two
       rows of two numbered 1 and 2 over 3 and 4 under blue bars. The LM-Series fact sheet says the ports are "RJ-45 wired as DCE". It does not name the LM4.
-      The brief lists LM4-2S as a 2-port model and a "1 serial port activation" licence. No held document says how many
-      jacks the 2-port unit has. Every build is drawn with four jacks, so the LM4-2S export lists four ports. That is
-      not a statement of the maker's.
+      The brief lists "LM4-2S: LM4, 2 serial ports" and a "1 serial port activation" licence. Every build is drawn with
+      four jacks, so the LM4-2S export lists four ports. That is a drawing choice and not the maker's count of two.
   network:
     confidence: datasheet
     note: >-
@@ -58,9 +59,10 @@ provenance:
       document says what a lamp shows or what the button does. The photograph shows more marks. Above E1 is a network
       icon and above E2 an antenna icon. Beside E1 and E2 are a link icon and an arrows icon. The console jack has a
       prompt icon in a boxed outline. To the right of the serial jacks is a "10101" mark. Under the four-position
-      housing is a DC mark. The photograph also shows a larger dark hole between the lamps and a small dark dot beside
-      each of E1 and E2. None is drawn, except that the prompt icon is drawn as the bare text >_ with no box. Leaving
-      them out is a choice for this drawing. The format can draw a small printed mark as a silkscreen path.
+      housing is a DC mark. The photograph also shows a larger dark hole between the lamps and a small dark dot on each
+      side of the SFP, one between E1 and E2 and one to the right of E2. None is drawn, except that the prompt icon is
+      drawn as the bare text >_ with no box. A silkscreen path can draw a small mark, so leaving them out is a choice
+      of this drawing and not a limit of the format.
   storage:
     confidence: datasheet
     note: >-
@@ -77,18 +79,23 @@ provenance:
     confidence: estimated
     note: >-
       The photograph shows a black front plate and lid and a silver left flank with three screws. At the top left of
-      the front it shows a heatsink block of six fins, counted in a zoomed crop of the photograph. The colours are read
-      from the photograph. The plate reads (67,65,70) over 92800 px, but unevenly: about (71,69,74) at the left and
-      (31,29,28) at the right, in shadow. The drawn plate is #2b2e33 and stays, between the two. The jack housings read
-      (237,223,214), #eddfd6, over 57815 px, counted on the console and serial housings. The six RJ45 jacks (E1, the
-      console and the four serial jacks) are drawn in that colour through their finish field. E1's shell was not counted.
-      The two USB-A ports show a dark grey tongue, (33,32,32) over 12320 px. The library's two USB-A skins are a
-      white tongue and a blue one, and neither is dark. The skin usb2 is used because it is not the blue one. It is a
-      colour choice and not a statement of the USB version, which the brief does not give. The right flank, the
-      underside and the rear are not shown. The LANTRONIX wordmark is a logo and is not drawn: its place is the region
-      logo-zone, read from the photograph. The plain text LM4 stays. The button and the four corner screws are round in
-      the photograph. The drawing format has no circle shape for decor and draws round decor as a rounded square, so
-      they are drawn as rounded squares.
+      the front it shows a heatsink block of six fins and seven slots. The fins read 1.3 mm wide at a pitch of 4.6 mm,
+      from the dark and grey runs of one row of the resampled photograph (the row at y 6.0 gives six runs of 1.25 to 1.3
+      mm). The colours are read from the photograph. The plate reads (67,65,70) over 92800 px, but unevenly: about
+      (71,69,74) at the left and (31,29,28) at the right, in shadow. The drawn plate is #2b2e33 and stays, between the
+      two. In the photograph the console jack and the two USB-A ports sit in one pale housing block, and the four serial
+      jacks in another, with a band between the two rows. They are drawn as two rectangles in the housing colour behind
+      the parts. The housing colour reads (229,217,207), #e5d9cf, over 270177 pale pixels counted inside the two blocks
+      themselves: 122619 px at (226,216,209) in the console block and 147558 px at (231,217,205) in the serial block.
+      The six RJ45 jacks (E1, the console and the four serial jacks) are drawn in that colour through their finish
+      field. E1's shell was not counted. The two USB-A ports show a dark grey tongue with a small pale slider at the
+      lip, (33,32,32) over 12320 px. The drawn tongue is pale where the photograph's is dark. The library's skin for
+      this port in a device that does not claim 3.0 is the white one, usb2, and its other skin is blue; neither is
+      dark. The skin is a colour match only where it matches, which is the opening and not the tongue, and it is not a
+      statement of the USB version, which the brief does not give. The right flank, the underside and the rear are not shown. The
+      LANTRONIX wordmark is a logo and is not drawn: its place is the region logo-zone, read from the photograph. The
+      plain text LM4 stays. The button and the four corner screws are round in the photograph and are drawn round, by
+      a corner radius of half their side. The screws read about 5.6 mm across and the button 7 mm.
   mount:
     confidence: estimated
     note: >-
@@ -125,9 +132,10 @@ gaps:
   reason: vendor-silent
   wanted: the maker's name for the DC input connector, its pitch and the plug that mates it, from a hardware guide.
   note: >-
-    The photograph shows a black four-position housing at the lower left of the front, with a latch tab above it. The
-    brief gives the input range and the adapter's output, and names no connector. No interface is known, so no part is
-    placed and the position is left bare.
+    The photograph shows a black four-position housing at the lower left of the front, with a latch tab above it and a
+    direct-current mark under it. The brief gives the input range and the adapter's output, and names no connector. No
+    interface is known, so no part is placed and the position is left bare. A connector is a part, so it is not drawn
+    as decor.
 - what: rear-panel
   scope: [rear]
   reason: needs-photo
@@ -139,7 +147,11 @@ gaps:
   reason: needs-drawing
   wanted: a straight front elevation or a hardware guide figure with dimensions.
   note: >-
-    The positions are read by eye from an angled photograph, and their error was not measured.
+    The positions are read from an angled photograph. Those read from threshold masks hold to about 1 mm, the error of
+    the four estimated control points. After the parts were moved to their measured places these offsets remain: E1
+    and the SFP cage sit 0.9 and 1.8 mm left of the photograph's centres (read by eye), the button's centre is 0.4 mm
+    left and 0.2 mm low, and the serial jacks, whose photographed jacks are 15.8 mm wide against the part's 12.7, stand on the
+    photograph's centres. Every other position is read by eye and its error was not measured.
 - what: indicator-led
   scope: [front]
   reason: vendor-silent
@@ -148,7 +160,7 @@ gaps:
     No held LM4 document describes a lamp or a button. The photograph shows a lit green lamp on the left and a lit
     yellow lamp on the right of the console jack and of each serial jack. The format declares lamp states, and the
     part's lamp windows declare off and on. The built face draws each of these lamps in its off state, so none is
-    drawn lit.
+    drawn lit, and the three small status lamps are drawn off as well.
 - what: mounting
   scope: [front]
   reason: vendor-silent
@@ -160,8 +172,10 @@ gaps:
   reason: needs-photo
   wanted: photographs of the lid, the underside and both flanks.
   note: >-
-    The four faces draw the envelope only. The photograph shows slats on the lid at the left and three screws on the
-    left flank. It shows nothing of the right flank or the underside. Its size gives no position.
+    The four faces draw the envelope only. The photograph shows about eight diagonal slats on the lid at the left and
+    three screws on the left flank, at a grazing angle. It shows nothing of the right flank or the underside. Decor
+    can draw both a slat and a screw, so leaving them out is a choice of this drawing and not a limit of the format. A
+    straight picture of the lid and the flank would place them.
 groups:
   serial:
     term: Port
@@ -199,18 +213,20 @@ views:
     panel:
       decor:
       - {id: faceplate, at: [0.0, 0.0], size: [158.75, 44.45], fill: '#2b2e33', kind: bezel}
-      - {id: screw-tl, at: [3.0, 2.1], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
-      - {id: screw-tr, at: [153.25, 2.1], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
-      - {id: screw-bl, at: [3.0, 39.35], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
-      - {id: screw-br, at: [153.25, 39.35], size: [3.0, 3.0], fill: '#16181b', shape: circle, kind: case-screw}
+      - {id: screw-tl, at: [1.7, 0.8], size: [5.6, 5.6], rx: 2.8, fill: '#16181b', kind: case-screw}
+      - {id: screw-tr, at: [151.45, 0.8], size: [5.6, 5.6], rx: 2.8, fill: '#16181b', kind: case-screw}
+      - {id: screw-bl, at: [1.7, 38.05], size: [5.6, 5.6], rx: 2.8, fill: '#16181b', kind: case-screw}
+      - {id: screw-br, at: [151.45, 38.05], size: [5.6, 5.6], rx: 2.8, fill: '#16181b', kind: case-screw}
       - {id: heatsink-opening, at: [10.2, 0.0], size: [32.3, 23.6], fill: '#16181b', kind: vent}
-      - {id: heatsink-slat-1, at: [14.95, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: heatsink-slat-2, at: [19.25, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: heatsink-slat-3, at: [23.55, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: heatsink-slat-4, at: [27.85, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: heatsink-slat-5, at: [32.15, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: heatsink-slat-6, at: [36.45, 1.0], size: [0.7, 20.9], fill: '#3a3d42', kind: vent}
-      - {id: button, at: [22.9, 29.9], size: [7.0, 7.0], fill: '#222222', shape: circle, kind: push-button}
+      - {id: heatsink-slat-1, at: [13.55, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-2, at: [18.15, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-3, at: [22.7, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-4, at: [27.3, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-5, at: [31.85, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-6, at: [36.3, 1.0], size: [1.3, 20.9], fill: '#3a3d42', kind: vent}
+      - {id: housing-console-usb, at: [93.2, 3.2], size: [18.5, 33.4], fill: '#e5d9cf', kind: housing}
+      - {id: housing-serial, at: [116.4, 7.15], size: [33.1, 30.15], fill: '#e5d9cf', kind: housing}
+      - {id: button, at: [22.9, 29.9], size: [7.0, 7.0], rx: 3.5, fill: '#222222', kind: push-button}
       - {id: bar-e1, at: [46.7, 39.75], size: [17.75, 1.55], fill: '#f0d41c', kind: legend-bar}
       - {id: bar-e2, at: [67.25, 39.75], size: [22.95, 1.55], fill: '#f0d41c', kind: legend-bar}
       - {id: bar-serial-top, at: [116.85, 4.0], size: [32.35, 1.65], fill: '#29a8e0', kind: legend-bar}
@@ -226,18 +242,18 @@ views:
     - {at: [141.4, 43.9], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
     components:
       placements:
-      - {ref: common/rj45-eth@1, id: net-1, at: [46.1, 24.3], group: network, rel-pos: 1, attrs: {speed: 1g, finish: '#eddfd6'}}
+      - {ref: common/rj45-eth@1, id: net-1, at: [46.1, 24.3], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g, finish: '#e5d9cf'}}
       - {ref: std/sfp@1, id: port-2, at: [69.35, 27.0], group: sfp, rel-pos: 1}
-      - {ref: common/rj45-ganged-lamped@1, id: console, at: [94.6, 4.05], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, finish: '#eddfd6'}}
-      - {ref: std/usb-a@1, id: usb-1, at: [94.7, 22.65], skin: usb2, group: usb, rel-pos: 1}
-      - {ref: std/usb-a@1, id: usb-2, at: [94.7, 33.05], skin: usb2, group: usb, rel-pos: 2}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [117.35, 7.2], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial, finish: '#eddfd6'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [135.1, 7.2], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial, finish: '#eddfd6'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [117.35, 27.3], group: serial, rel-pos: 3, attrs: {media: rj45-serial, finish: '#eddfd6'}}
-      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [135.1, 27.3], group: serial, rel-pos: 4, attrs: {media: rj45-serial, finish: '#eddfd6'}}
-      - {ref: common/led-dot@1, id: led-power, at: [21.05, 36.2], for: chassis, group: status-leds, rel-pos: 1}
-      - {ref: common/led-dot@1, id: led-pulse, at: [32.2, 36.2], for: chassis, group: status-leds, rel-pos: 2}
-      - {ref: common/led-dot@1, id: led-alert, at: [39.9, 36.2], for: chassis, group: status-leds, rel-pos: 3}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [96.3, 4.05], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: std/usb-a@1, id: usb-1, at: [96.5, 21.25], skin: usb2, group: usb, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [96.5, 30.85], skin: usb2, group: usb, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [117.35, 7.2], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [135.1, 7.2], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [117.35, 27.3], group: serial, rel-pos: 3, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [135.1, 27.3], group: serial, rel-pos: 4, attrs: {media: rj45-serial, finish: '#e5d9cf'}}
+      - {ref: common/led-dot@1, id: led-power, at: [21.2, 36.1], for: chassis, group: status-leds, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-pulse, at: [33.0, 36.1], for: chassis, group: status-leds, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-alert, at: [41.05, 36.1], for: chassis, group: status-leds, rel-pos: 3}
     regions:
     - id: logo-zone
       at: [45.9, 2.5]
@@ -281,10 +297,13 @@ configurations:
   ac-2s:
     kind: orderable
     description: >-
-      The two-port unit with its external AC adapter. The brief lists LM4-2S. The product page lists LM4-2S-NA, LM4-2S-UK
-      and LM4-2S-EU, which differ by the power cord and adapter plug. It is drawn with four jacks because no held
-      document says how many jacks the 2-port unit has, so its export lists four ports. That is a drawing choice and not
-      a statement of the maker's. The brief lists a serial port activation licence.
+      The two-port unit with its external AC adapter. The brief lists "LM4-2S: LM4, 2 serial ports". The product page
+      lists LM4-2S-NA, LM4-2S-UK and LM4-2S-EU, which differ by the power cord and adapter plug. It is drawn with four
+      jacks like the four-port unit, so its export lists four ports. That is a drawing choice and not the maker's count
+      of two. The brief lists a serial port activation licence.
+    export-description: >-
+      Lantronix LM4-2S console server. The maker lists two serial ports. This drawing has four jacks, so the port list
+      shows four. That is a drawing choice, not the maker's count.
     part-numbers:
       LM4-2S: {}
 references:
