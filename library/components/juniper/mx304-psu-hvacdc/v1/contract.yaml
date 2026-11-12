@@ -1,16 +1,16 @@
 format: 1
 kind: module
 name: mx304-psu-hvacdc
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: networking
 description: >-
   Juniper MX304 high-voltage AC/DC universal power supply module. Two stack
-  at the rear left, 1+1 redundant and hot-swappable. 2200 W output from
+  at the rear left, 1+1 redundant and hot-swappable. Output is 2200 W from
   200-277 VAC or 240-380 VDC nominal input (operating 180-305 VAC / 190-410
-  VDC) through a keyed high-voltage coupler; fan grille and orange pull
-  handle at the left, single STATUS lamp.
+  VDC). An Anderson Saf-D-Grid inlet stands at the right; fan grille and
+  orange pull handle at the left, single STATUS lamp.
 attrs:
   envelope: 73.5 x 40.1 x 198.5 mm (Table 22)
   model: MX304 HVAC/DC PSU
@@ -27,15 +27,38 @@ provenance:
   power-output-w: 'guide HVAC/DC power specifications: "Maximum output power
     | 2200W"'
   face: 'drawing - guide Figures 23/24 (High-Voltage Universal Power Supply)
-    show a rectangular keyed HV coupler where the AC unit has its C20; the
-    coupler is drawn schematically from that line art (no std/ part exists
-    for the Saf-D-Grid-style connector and no dimension is published -
-    estimated). Guide Figure (NEMA L7-20P region) covers the cord end, not
-    this face. Colour borrowed from the AC photograph'
+    show the fan, the pull handle and the inlet; the handle colour is
+    borrowed from the AC photograph. The inlet is composed (see
+    inlet-part), not drawn'
   leds: 'guide Table 15 mirrors Table 13''s single STATUS lamp vocabulary'
-  wanted: 'dimensions and identity of the high-voltage coupler - the guide
-    draws it without naming a connector standard; a photo or the connector
-    datasheet would let it become a std/ part'
+  inlet-part: 'COMPOSED, NOT DRAWN. The inlet is std/saf-d-grid@1, the
+    library''s Anderson Saf-D-Grid receptacle (key saf-d-grid, mate
+    generic/saf-d-grid-plug@1). WHY THAT PART: the guide calls it "an AC
+    anderson inlet" (Hardware Guide, High-Voltage AC/DC Universal System
+    Power Description) and its cord "Anderson APP-400" (High-Voltage Cable
+    Specifications, Table 33, 30 A 400 VAC, CBL-PWR2-BARE); Figure 57
+    (Connecting the HVAC/DC Power Cord) prints "Saf-D-Grid 2007G" and "APP"
+    on the inlet housing; the MX960 Hardware Guide says of its HVAC/HVDC
+    supply "Input receptacle is APP 2007G type from Anderson rated 30 A
+    400V" and lists "SAF-D-GRID 400" cords at the same 30 A 400 VAC rating.
+    TURN, READ FROM A FLAT FIGURE: Figure 24 (High-Voltage Universal Power
+    Supply Components, a front elevation) shows the keyed cavity upright
+    with its two chamfered corners and the ground bar''s head on the left
+    and the bar''s stem running right, which is the part turned 270; Figure
+    57 agrees. PLACE, ESTIMATED: no dimension is printed. The inlet''s frame
+    in Figure 24 is scaled by taking the figure''s outline as the 73.5 x
+    40.1 mm envelope (Table 22) with the 66.0 mm drawn face centred in it,
+    3.75 mm a side, which puts the fan centre where this contract draws it;
+    the aperture then centres about 50.7 mm from the left edge and 18.4 mm
+    from the top. The bezel in the skin is the part''s own 31.0 x 24.0
+    flange turned upright and centred on the aperture; the figure''s frame
+    measures about 24 x 29, so the height is the part''s, not read.
+    Colours: the bezel is a dark grey chosen by eye (estimated); no
+    photograph of this supply is held'
+  wanted: 'a dimensioned drawing or photograph of the HVAC/DC supply''s
+    face, which would fix the inlet''s place and the bezel colour; Figure
+    24 also puts the status lamp right of the inlet, about 65.7 mm from the
+    left edge and 11 mm down, where this skin draws it at x 35'
 states:
 - ok
 - fault
@@ -45,10 +68,8 @@ elements:
     at: [1.2, 24.4]
     size: [10.5, 13.0]
     class: latch
-  hv-inlet:
-    at: [36.0, 12.0]
-    size: [26.0, 16.0]
-    class: cutout
+parts:
+- {ref: std/saf-d-grid@1, id: inlet, at: [37.3, 8.45], rotate: 270}
 size:
   w: 66.0
   h: 40.1
@@ -60,9 +81,3 @@ relief:
     color: '#e8731f'
     confidence: estimated
     source: photo (AC unit) - the orange pull handle stands proud
-  - node: hv-inlet
-    out: 2.4
-    color: '#101214'
-    confidence: estimated
-    source: drawing - the HV coupler housing stands proud; raised as the group
-      carrying its socket detail

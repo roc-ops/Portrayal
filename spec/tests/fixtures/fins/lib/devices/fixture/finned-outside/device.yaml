@@ -1,0 +1,88 @@
+format: 1
+kind: device
+name: finned-outside
+version: 1.0.0
+maturity: draft
+manufacturer: Fixture
+model: FINNED-OUTSIDE
+description: >-
+  Test fixture: a plain 60 long, 40 high and 50 deep casting whose ribs stand out of its top and bottom
+  edges, beyond the size the box states.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      a test fixture for ribs that stand outside the box; every number is chosen for the tests.
+  chassis.section:
+    confidence: estimated
+    note: >-
+      a test fixture: the four corners of the box.
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      a test fixture: seven ribs standing out of the top, in two heights, and seven out of the bottom.
+chassis:
+  width: 60.0
+  height: 40.0
+  depth: 50.0
+  mount: strand
+  color: "#4a5058"
+  section:
+  - [0.0, 0.0]
+  - [50.0, 0.0]
+  - [50.0, 40.0]
+  - [0.0, 40.0]
+  fins:
+  - 'on': top
+    outside: true
+    span: [4.0, 56.0]
+    height: 20.0
+    rib: 4.0
+    gap: 4.0
+    steps:
+    - {span: [4.0, 30.0], height: 20.0}
+    - {span: [30.0, 56.0], height: 12.0}
+  - 'on': bottom
+    outside: true
+    span: [4.0, 56.0]
+    height: 10.0
+    rib: 4.0
+    gap: 4.0
+views:
+  front:
+    size: {w: 60.0, h: 40.0}
+    panel:
+      decor:
+      - {id: front-art, at: [0.0, 0.0], size: [60.0, 40.0], fill: "#7d858c"}
+  rear:
+    size: {w: 60.0, h: 40.0}
+    panel:
+      decor:
+      - {id: rear-art, at: [0.0, 0.0], size: [60.0, 40.0], fill: "#6f777e"}
+  right:
+    size: {w: 50.0, h: 40.0}
+    panel:
+      decor:
+      - {id: right-art, at: [0.0, 0.0], size: [50.0, 40.0], fill: "#8a9299"}
+  left:
+    size: {w: 50.0, h: 40.0}
+    panel:
+      decor:
+      - {id: left-art, at: [0.0, 0.0], size: [50.0, 40.0], fill: "#8a9299"}
+  top:
+    size: {w: 60.0, h: 50.0}
+    panel:
+      decor:
+      - {id: top-art, at: [0.0, 0.0], size: [60.0, 50.0], fill: "#939ba2"}
+  bottom:
+    size: {w: 60.0, h: 50.0}
+    panel:
+      decor:
+      - {id: bottom-art, at: [0.0, 0.0], size: [60.0, 50.0], fill: "#6a7279"}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The box as drawn.

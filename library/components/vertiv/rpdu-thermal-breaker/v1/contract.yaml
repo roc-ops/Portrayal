@@ -1,0 +1,25 @@
+format: 1
+kind: component
+name: rpdu-thermal-breaker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The thermal circuit breaker of a Vertiv Geist basic horizontal rack PDU. A round push button in a ring, with the
+  current rating, 15, printed on its face. Fixed to the PDU, not a plug-in part.
+size: {w: 13.9, h: 13.9}
+size-confidence: {w: photo-measured, h: photo-measured}
+provenance:
+  size: >-
+    photo-measured - the front image on page 1 of the Vertiv Geist rPDU data sheet SL-26159 (VP9562), 815 px wide, in
+    which the 19 in ear-to-ear width reads 800 px (1.658 px per mm). The ring reads 23 px across, 13.9 mm, good to
+    about 1 mm.
+  rating: >-
+    datasheet - the same sheet, page 2: "Over Current Protection 15A Thermal Breaker", "Switch No". The 15 on the
+    button is the figure the sheet gives.
+  states: >-
+    estimated - a thermal breaker trips and is reset by its button, so `off` stands for tripped. No held document
+    describes the button's travel or says what the button shows when tripped, so the skin does not change.
+elements:
+  button: {at: [0, 0], size: [13.9, 13.9], class: breaker, states: ['on', 'off']}
+skins: [default]

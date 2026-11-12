@@ -7,6 +7,7 @@
 // It reads the compiled SVG and nothing else.
 
 import { toSvg } from './marks.js';
+import { fetchDist } from './dist.js';
 
 // ── reading the compiled drawing ─────────────────────────────────────────
 // A real transform stack, because the compiled output is not only translates.
@@ -245,7 +246,7 @@ export function within(zones, vb) {
 const SEEN = new Map();
 export async function loadFace(url) {
   if (!SEEN.has(url)) {
-    SEEN.set(url, fetch(url).then(async r => {
+    SEEN.set(url, fetchDist(url).then(async r => {
       if (!r.ok) throw new Error(`${url}: HTTP ${r.status}`);
       const text = await r.text();
       const {vb, zones} = readSvg(text);

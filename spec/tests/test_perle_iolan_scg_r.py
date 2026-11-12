@@ -1,6 +1,6 @@
-"""The Perle IOLAN SCG34 R and SCG50 R console servers are in the library: six faces, the module bays and the fixed parts.
+"""The Perle IOLAN SCG18 R, SCG34 R and SCG50 R console servers are in the library: six faces, the module bays and the fixed parts.
 
-Both are the AC build of the R/U product page: 32 or 48 RJ45 RS-232 serial ports in G16 modules in the three rear bays, two
+All are the AC build of the R/U product page: 16, 32 or 48 RJ45 RS-232 serial ports in G16 modules in the three rear bays, two
 network pairs (RJ45 and SFP), two AC inlets with a rocker each, and a front with a display, a keypad, a power button, a
 card slot, an RJ45 and a micro-USB admin port, two USB ports and a reset. No module is modelled: an empty bay states the
 module class it takes and a bay that holds a module is not declared. Each figure the documents do not give is declared an estimate in the contract
@@ -18,7 +18,8 @@ LIB = ROOT / "library"
 CONNECTORS = ROOT / "spec" / "schemas" / "connectors.yaml"
 VENDORS = ROOT / "spec" / "schemas" / "vendors.yaml"
 
-MODELS = {"iolan-scg50-r": 48, "iolan-scg34-r": 32}
+MODELS = {"iolan-scg50-r": 48, "iolan-scg34-r": 32, "iolan-scg18-r": 16}
+SCG18_PART_NUMBERS = {"04032834", "04032831", "04032832", "04032835", "04032836", "04032838"}
 NEW_PARTS = ["perle/scg-lcd", "perle/scg-keypad", "perle/scg-power-button", "perle/scg-sd-slot",
              "perle/scg-power-rocker"]
 
@@ -108,6 +109,26 @@ def test_each_model_lists_its_six_part_numbers_one_per_power_cord(device):
     assert len(parts) == 6 and all(p.isdigit() and len(p) == 8 for p in parts)
 
 
+def test_the_scg18_lists_the_six_part_numbers_of_the_product_page():
+    parts = {p for cfg in load("iolan-scg18-r")["configurations"].values() for p in cfg.get("part-numbers", {})}
+    assert parts == SCG18_PART_NUMBERS
+
+
+def test_the_empty_bays_sit_a_module_apart_and_clear_of_the_fitted_jacks(device):
+    rear = device["views"]["rear"]["components"]
+    bays = sorted(rear.get("bays", []), key=lambda b: b["at"][0])
+    for b in bays:
+        assert b["size"] == {"w": 115.0, "h": 43.0}
+    for a, b in zip(bays, bays[1:]):
+        assert b["at"][0] - a["at"][0] == pytest.approx(116.4, abs=0.05)
+    inlets = [p["at"][0] for p in rear["placements"] if p.get("ref") == "std/c14-inlet@1"]
+    for b in bays:
+        assert b["at"][0] + b["size"]["w"] <= min(inlets)
+    jacks = [p["at"][0] for p in rear["placements"] if p.get("group") == "serial"]
+    assert len(jacks) == MODELS[device["name"]]
+    assert not bays or bays[0]["at"][0] >= max(jacks) + 14.3 - 2.0
+
+
 @pytest.mark.parametrize("name", NEW_PARTS)
 def test_each_new_part_says_which_of_its_figures_are_estimates(name):
     d = contract(name)
@@ -130,7 +151,8 @@ def test_the_device_says_what_its_figures_rest_on(device):
 
 
 @pytest.mark.parametrize("export", ["netbox", "nautobot"])
-@pytest.mark.parametrize("model,size", [("iolan-scg50-r", "SCG50"), ("iolan-scg34-r", "SCG34")])
+@pytest.mark.parametrize("model,size", [("iolan-scg50-r", "SCG50"), ("iolan-scg34-r", "SCG34"),
+                                        ("iolan-scg18-r", "SCG18")])
 def test_the_device_type_lists_the_serial_ports_and_the_empty_bay(export, model, size):
     docs = [yaml.safe_load(p.read_text()) for p in (LIB / "exports" / export / "device-types" / "Perle").glob("*.yaml")]
     doc = next(d for d in docs if f"IOLAN {size} R" in d["description"])

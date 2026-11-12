@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ex4550-32f
-version: 0.3.0
+version: 0.4.0
 maturity: modelled
 manufacturer: Juniper
 model: EX4550-32F
@@ -111,9 +111,9 @@ provenance:
       Figures 1 to 6: the switch has two module slots, one on the front panel at the left and one on the
       rear panel, and Table 3 lists the four modules each takes, EX4550-EM-8XSFP, EX4550-EM-8XT,
       EX4550-EM-2QSFP and EX4550-VC-128G. Every model ships with a cover panel in each slot; the modules
-      are ordered separately. THE MODULES ARE NOT MODELLED. This slice builds no module family, so each
-      slot is a bay that accepts the cover panel alone, and the four modules are named here and in a gap.
-      The slot is 86.5 mm wide: Figure 6 gives 86.2 mm and Figure 4 gives 88.9 mm; 86.5 is used.
+      are ordered separately. Each slot is a bay that takes the cover panel, which ships, and the four
+      modules; the modules are drawn from Figures 11 to 15 of the guide's module topics. The slot is 86.5
+      mm wide: Figure 6 gives 86.2 mm and Figure 4 gives 88.9 mm; 86.5 is used.
   rear-layout:
     confidence: drawing
     note: >-
@@ -230,13 +230,13 @@ gaps:
   wanted: >-
     The part number of the mounting kit and the ear positions. The guide describes the front mount
     brackets and prints no part number for them.
-- what: expansion-modules
+- what: module-connector
   scope: [front, rear]
   reason: needs-drawing
   wanted: >-
-    The four modules a slot takes (EX4550-EM-8XSFP, EX4550-EM-8XT, EX4550-EM-2QSFP and EX4550-VC-128G) are
-    not modelled. Each slot accepts its cover panel only. A later slice can add the modules as
-    components that this bay then accepts.
+    The connector between each module and the chassis. No registered connector key names it and no figure of the guide
+    draws it, so the modules are drawn from their faces only. A document that draws the module's edge connector and a key
+    for it would add it.
 - what: datasheet
   scope: [front, rear]
   reason: vendor-silent
@@ -429,7 +429,7 @@ views:
           states: ['off', {name: enabled, color: '#22c55e'}, {name: speed-1g, color: '#22c55e', behavior: blinking}]
       bays:
       - {id: em-1, at: [2.5, 1.35], size: {w: 86.5, h: 41.0}, group: expansion, rel-pos: 0,
-         accepts: ['juniper/ex4550-em-cover@1'], default: 'juniper/ex4550-em-cover@1'}
+         accepts: ['juniper/ex4550-em-cover@1', 'juniper/ex4550-em-8xsfp@1', 'juniper/ex4550-em-8xt@1', 'juniper/ex4550-em-2qsfp@1', 'juniper/ex4550-vc-128g@1'], default: 'juniper/ex4550-em-cover@1'}
       placements:
       - {block: sfp-plus}
       - {ref: juniper/ex4300-lcd-button@1, id: btn-menu, skin: menu, at: [414.25, 8.05], for: chassis, group: lcd-buttons, rel-pos: 0,
@@ -490,7 +490,7 @@ views:
          accepts: ['juniper/ex4600-jpsu-650-ac-afo@1', 'juniper/ex4600-jpsu-650-ac-afi@1', 'juniper/ex4600-jpsu-650-dc-afo@1', 'juniper/ex4600-jpsu-650-dc-afi@1', 'juniper/ex4550-psu-cover@1'],
          default: 'juniper/ex4550-psu-cover@1'}
       - {id: em-2, at: [178.2, 1.85], size: {w: 86.5, h: 41.0}, group: expansion, rel-pos: 1,
-         accepts: ['juniper/ex4550-em-cover@1'], default: 'juniper/ex4550-em-cover@1'}
+         accepts: ['juniper/ex4550-em-cover@1', 'juniper/ex4550-em-8xsfp@1', 'juniper/ex4550-em-8xt@1', 'juniper/ex4550-em-2qsfp@1', 'juniper/ex4550-vc-128g@1'], default: 'juniper/ex4550-em-cover@1'}
       - {id: fan-1, at: [286.9, 1.9], size: {w: 41.6, h: 40.0}, group: fans, rel-pos: 0,
          accepts: ['juniper/ex4550-fan-afo@1', 'juniper/ex4550-fan-afi@1'], default: 'juniper/ex4550-fan-afo@1'}
       - {id: fan-2, at: [342.0, 1.9], size: {w: 41.6, h: 40.0}, group: fans, rel-pos: 1,
@@ -585,5 +585,23 @@ configurations:
       order code.
     bays:
       psu-1: juniper/ex4600-jpsu-650-ac-afo@1
+  em-8xsfp:
+    kind: example
+    description: >-
+      The switch as shipped, with EX4550-EM-8XSFP seated in em-1 in place of the cover. An illustration, not an order code.
+    bays:
+      em-1: juniper/ex4550-em-8xsfp@1
+  em-2qsfp:
+    kind: example
+    description: >-
+      The switch as shipped, with EX4550-EM-2QSFP seated in em-1 in place of the cover. An illustration, not an order code.
+    bays:
+      em-1: juniper/ex4550-em-2qsfp@1
+  vc-128g:
+    kind: example
+    description: >-
+      The switch as shipped, with EX4550-VC-128G seated in em-2 in place of the cover. An illustration, not an order code.
+    bays:
+      em-2: juniper/ex4550-vc-128g@1
 references:
 - {title: 'Juniper EX4550 Switch Hardware Guide (published 2020-12-15), from the EX Series documentation archive', url: 'https://www.juniper.net/documentation/en_US/release-independent/downloads/ex-series/ex-series-doc-archives.zip', sha256: 9e06c214c24f165ba939c87923a428ad79e4922591dae4aa198bf1d9fd29b545}
