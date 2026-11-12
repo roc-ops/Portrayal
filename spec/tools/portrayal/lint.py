@@ -724,9 +724,9 @@ RULES = {
              "bring the points inside the box or out to its sides, make the top and the bottom one run each, and drop a `size` on a left or right view that differs from the depth and height",
              "The box is what the rack, the exports and the lock read, so a profile that does not reach its sides, or notches its top, is a body that is not the size the device states, and an end face drawn at another size puts the outline where the parts are not.",
              ERROR),
-    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or `halves` (error)",
-             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body, a sheet body and a box that opens each have a way of being drawn that a stepped end does not yet join",
-             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first, and a box that opens has no stated way to cut a stepped housing at its seam.",
+    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (error)",
+             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body and a sheet body each have a way of being drawn that a stepped end does not yet join",
+             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first.",
              ERROR),
     "L207": ("device", "on a device with a `chassis.section`, a part on the left or right face lies wholly inside that face's outline, and a part on the top or bottom face does not straddle a step of the body (error)",
              "move the part onto the casting it belongs to, away from the transparent corner or the edge of a step; the left face is the right face's mirror",
@@ -767,6 +767,18 @@ RULES = {
     "L216": ("device", "on a device with `chassis.fins`, a part on the front or the rear face lies inside the silhouette and not over a field of ribs: not above a step's tip line and not between the edge and the core (error)",
              "move the part down onto the casting, below the core line and clear of the ribs",
              "A rib is not a mounting surface, and above the tip line or in the end margin the casting has been cut back to its core, so a part there floats in the air in front of the ribs.",
+             ERROR),
+    "L217": ("device", "on a device with a `chassis.section` and `chassis.halves`, the base's `outer` is `top` or `bottom` and the lid's `hinge` is `front` or `rear` (error)",
+             "put the base on the top or the bottom of the housing and the hinge on one of its long faces; a housing that opens along another face is a later change",
+             "The housing is an extrusion along its width, so only a seam parallel to that axis cuts it into two parts that are each a cut of the same end profile, and only a hinge on a long face is a line parallel to the extrusion for the lid to turn about.",
+             ERROR),
+    "L218": ("device", "on a device with a `chassis.section` and `chassis.halves`, the section is at its widest at the seam, the plane `base.stands` from the base's `outer` face (warning)",
+             "move the seam into the flange, or correct `base.stands` or the section against the drawing; say in `provenance` why the housing opens elsewhere",
+             "A cast housing opens at a flange that is its widest part, so a seam where the profile is narrower either has a wrong `stands` or a section that leaves the flange out, and the open state would turn a lid whose rim is not where the maker's is.",
+             WARNING),
+    "L219": ("device", "on a device with a `chassis.section` and `chassis.halves`, the seam cuts the section into two parts that each have outline: it is inside the section's height, not exactly on a horizontal edge of it, and not in a stretch the fins cut back to their core where the section is no wider than the field (error)",
+             "move the seam off the edge with `base.stands`, into the casting it divides, and keep it inside the section's height and below the ribs' core",
+             "A seam outside the section, or where the ribs' field has cut the casting away, leaves one half empty, and one exactly on a horizontal edge does not say which half the edge belongs to, so the two parts a viewer builds would depend on how it rounds.",
              ERROR),
 }
 
@@ -9036,7 +9048,7 @@ def lint_device_section(path, data, lib_roots):
     if mount in ("rack", "rack-face", "rack-side"):
         err(path, "L206", f"`chassis.section` is stated on a {mount!r} device: a housing with a "
                           "stepped end is not racked")
-    for key in ("bevel", "rounded", "ears", "overhang", "kits", "halves"):
+    for key in ("bevel", "rounded", "ears", "overhang", "kits"):
         if ch.get(key):
             err(path, "L206", f"`chassis.section` is stated with `chassis.{key}`, which this "
                               "version does not join to a stepped end")
@@ -9072,6 +9084,71 @@ def lint_device_section(path, data, lib_roots):
             elif outline is None and _section.straddles_step(pts, face, d, y0, y1):
                 err(path, "L207", f"{vname}/{pid}: rows {y0:.2f} to {y1:.2f} run over a step of "
                                   "the body: a part sits on one level of the casting")
+
+
+# THE CODES OF THE RULES FOR A STEPPED HOUSING THAT OPENS BY WHAT THEY JUDGE, for the
+# test that reads them. The calls below spell each code out, because the severity guard
+# reads literals; test_section_opens.py holds the two in step.
+SECTION_OPENS_CODES = {"faces": "L217", "widest": "L218", "seam": "L219"}
+
+
+def lint_device_section_opens(path, data):
+    """L217-L219: a housing that states a `chassis.section` and `chassis.halves` opens
+    along its extrusion (docs/modelling-a-device.md, "A housing with a stepped end").
+
+    The seam is the plane `base.stands` from the base's `outer` face; each half is the
+    part of the stepped body on its side of it. A device without a `section` keeps the
+    halves rules (L200-L203) exactly: nothing here reads it."""
+    from portrayal import halves as _halves
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    declared = _halves.declared(data)
+    if "section" not in ch or not declared:
+        return
+    base, lid = declared.get("base"), declared.get("lid")
+    base = base if isinstance(base, dict) else {}
+    lid = lid if isinstance(lid, dict) else {}
+    outer, hinge = base.get("outer"), lid.get("hinge")
+    ok = True
+    if outer in _halves.FACES and outer not in ("top", "bottom"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.base.outer` is {outer!r}: a housing with a section opens "
+                          "along its extrusion, so the base's outer face is `top` or `bottom`")
+    if hinge in _halves.FACES and hinge not in ("front", "rear"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.lid.hinge` is {hinge!r}: a housing with a section is hinged "
+                          "on a long face, `front` or `rear`")
+    pts = _section.points(ch)
+    height = ch.get("height")
+    if (not ok or pts is None or _section.polygon_problems(pts)
+            or isinstance(height, bool) or not isinstance(height, (int, float))):
+        return                  # the rest reads a seam and a polygon that are one
+    row = _section.seam_row(declared, height)
+    if row is None:
+        return
+    problems = _section.seam_problems(pts, row)
+    at = _section.width_at(pts, row)
+    # an inside field cuts the casting back to its core over its edge's extent: a seam in that
+    # stretch, where the section is no wider than the edge, divides a body that is not there
+    for f in ch.get("fins") or []:
+        if not isinstance(f, dict) or f.get("outside") or at is None:
+            continue
+        core, on = f.get("core"), f.get("on")
+        if on not in ("top", "bottom") or isinstance(core, bool) or not isinstance(core, (int, float)):
+            continue
+        ext = _section.edge_extent(pts, on, height)
+        in_zone = row < core if on == "top" else row > height - core
+        if ext and in_zone and at[0] >= ext[0] - _section.TOL and at[1] <= ext[1] + _section.TOL:
+            problems.append(f"the seam is {row:g} mm down the section, in the stretch the ribs on the "
+                            f"{on} cut back to their core ({core:g} mm), where the body has nothing: "
+                            "one half would be empty")
+    for m in problems:
+        err(path, "L219", f"`chassis.halves`: {m}")
+    if problems:
+        return
+    if at is not None and _section.widest(pts) - (at[1] - at[0]) > _section.TOL:
+        warn(path, "L218", f"the section is {at[1] - at[0]:g} mm across at the seam, {row:g} mm down, "
+                           f"and {_section.widest(pts):g} mm at its widest: a flange is expected at the seam")
 
 
 # THE CODES OF THE FIN RULES BY WHAT THEY JUDGE, for the test that reads them. The calls
@@ -15270,6 +15347,7 @@ def main():
                 lint_device_poe_pd(f, d)
                 lint_device_halves(f, d)
                 lint_device_section(f, d, args.library)
+                lint_device_section_opens(f, d)
                 lint_device_fins(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)

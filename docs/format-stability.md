@@ -1243,8 +1243,8 @@ this is the situation `halves` is in. Files written without it are read as
 before. A consumer that validates a manifest with a copy of the schema updates
 the copy before it reads a device that states a section.
 
-**Not in this change.** The open state of a housing with a section is a later
-change. Until it lands a device cannot state `section` together with `halves`.
+**Opening.** A housing with a section may state `halves`; see "A housing with a
+stepped end that opens" below.
 
 ## Ribs on a stepped housing
 
@@ -1295,8 +1295,51 @@ is the situation `section` and `halves` are in. A consumer that validates a
 manifest with a copy of the schema updates the copy before it reads a device that
 states ribs.
 
-**Not in this change.** The open state of a housing with ribs, and relief taken
-from a rib, are later changes. A device with `fins` cannot yet state `halves`.
+**Not in this change.** Relief taken from a rib is a later change. A housing with
+ribs may state `halves`; see "A housing with a stepped end that opens" below.
+
+## A housing with a stepped end that opens
+
+A housing that states a `chassis.section` may also state `chassis.halves`. No key
+is added and no file changes, so `format` stays 1 and `contract` stays 2; what
+changes is which statements are allowed and what they mean. A device that states
+no `section` is read as before: every rule for its halves, and its open state of
+two plain boxes, are unchanged.
+
+**Stating `halves` with `section` is a one-way change.** Once a device on the main
+branch states both, these cannot be taken back or reinterpreted without a break:
+
+- the combination itself, which the earlier rule refused;
+- `base.outer` is `top` or `bottom`, so the seam is parallel to the length the
+  section is extruded along and each half is a cut of the section (L217);
+- `lid.hinge` is `front` or `rear`, the long face the seam meets (L217);
+- the seam is the plane `base.stands` from the base's `outer` face: `stands`
+  stays the one authority, and the lid's `stands` is still stated and still
+  checked against the height as before (L203);
+- the lid turns about the line where the seam plane meets the hinge face's
+  outline: parallel to the length, at the seam, at the section's foremost
+  (`front`) or rearmost (`rear`) edge in that row, which in a flange is the
+  flange's edge;
+- the open state is cut from the section: each half is the stepped body on its
+  side of the seam, with its ribs.
+
+A seam that lies outside the section, exactly on a horizontal edge of it, or in a
+stretch the ribs have cut away is refused (L219). A seam where the section is not
+at its widest is a warning (L218), because a flange is expected there.
+
+**What the lock asks for.** Nothing new. The lock records and hashes the halves
+exactly as before, so the hash of `halves.stands` is unchanged, and stating
+`halves` on a released housing with a section is a minor like stating them on any
+other device. A change to `section` that moves the widest line relative to
+`base.stands`, or any other change to it, is already a major by the shape class
+`section` is in. Changing `outer` or `hinge` is a major as before.
+
+**In `<device>.configs.json`** nothing is added: `chassis.section`, `chassis.fins`
+and `chassis.halves` are carried as written, and a viewer cuts the body from them.
+
+**An older viewer** that does not know the combination builds the housing as a
+plain box, without its section, and opens it as two plain boxes. A validator holding
+the schema from before refuses nothing new, because the keys already existed.
 
 ## What else a consumer holds
 

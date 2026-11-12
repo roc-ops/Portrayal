@@ -383,10 +383,20 @@ def test_a_chassis_with_a_section_gets_the_arrays_and_one_without_gets_none():
 
 @needs_node
 @pytest.mark.parametrize("extra", [{"solid": {"polygons": []}}, {"bevel": [{"edges": ["front-left"], "size": 5}]},
-                                   {"rounded": 4}, {"shell": "sheet"}, {"halves": {"hinge": "rear"}}])
+                                   {"rounded": 4}, {"shell": "sheet"}])
 def test_a_section_with_another_body_key_falls_back_with_a_reason(extra):
     got = body_of({**CHASSIS, **extra})["ok"]
     assert got["refused"] and "arrays" not in got
+
+
+@needs_node
+def test_a_section_with_halves_builds_the_closed_body_as_it_does_without_them():
+    """`halves` is no longer a clash: the closed body of a housing that opens is the stepped body,
+    the same arrays as without the key (the open state is built apart, from the split)."""
+    halves = {"base": {"outer": "top", "stands": 144.0}, "lid": {"hinge": "rear", "stands": 144.0}}
+    got = body_of({**CHASSIS, "halves": halves})["ok"]
+    assert "refused" not in got
+    assert got["arrays"] == body_of({**CHASSIS})["ok"]["arrays"]
 
 
 @needs_node
