@@ -124,6 +124,20 @@ def test_a_plan_outline_that_is_not_a_list_of_bands_is_refused(value):
     assert schema_errors(doc)
 
 
+@pytest.mark.parametrize("value", [
+    [{"heights": [0.0, HEIGHT], "points": []}],                           # no point at all
+    [{"heights": [0.0, HEIGHT], "points": [[0, 0], [1, 0]]}],             # two points
+    [{"heights": [0.0, HEIGHT], "points": [[0, 0], [1]]}],                # not number pairs
+    [{"heights": [0.0], "points": [[0, 0], [1, 0], [1, 1]]}],             # one height
+    ["band"],                                                             # not a band
+])
+def test_lint_does_not_crash_on_bands_the_schema_refuses(value):
+    """The lint walk goes on after a schema error, so it has to read what the schema refuses."""
+    doc = device()
+    doc["chassis"]["plan-outline"] = value
+    found(doc)
+
+
 # --- lint: the fixture and the catalogue ---------------------------------------------------
 
 def test_the_fixture_is_quiet():

@@ -45,8 +45,8 @@ def bands(chassis):
         h, pts = b.get("heights"), b.get("points")
         if not isinstance(h, (list, tuple)) or len(h) != 2 or not all(_number(v) for v in h):
             return None
-        if not isinstance(pts, list):
-            return None
+        if not isinstance(pts, list) or len(pts) < 3:
+            return None             # fewer than three points is no polygon; the schema reports it
         poly = []
         for p in pts:
             if not isinstance(p, (list, tuple)) or len(p) != 2 or not all(_number(v) for v in p):
