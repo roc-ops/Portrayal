@@ -1,12 +1,13 @@
 """Middle Atlantic LBP-1A, the 19 in L-shaped lacing bar (roc-ops/Portrayal#1102).
 
-The one source for the part is the maker's generated cut sheet for LBP-1A and its SKU page: 19 in wide, 0.5 in
+The source for the part is the maker's generated cut sheet for LBP-1A and its SKU page: 19 in wide, 0.5 in
 deep, 0.5 in high, two mounting points, no offset, L-shaped, sold in packs of 10. Neither gives a drawing of the
-bar or a weight for one, so the bar is modelled as its overall size and nothing inside it: no slot, no end hole
-and no section is drawn, and each is a named gap. What is true of the library is held here: the size is the
-maker's, no figure the cut sheet does not give is drawn or recorded, and the gaps that say so are present.
+bar or a weight for one. The overall size is the maker's. The row of slots and the ear with its hole at each end
+are read off the maker's small photograph, so every position and size for them is estimated, and the gaps that
+a dimensioned drawing would settle are named. What is true of the library is held here: the size is the
+maker's, the drawn features lie inside the bar, and the figures read from the photograph say they are estimates.
 
-The size and gap tests read only the device file; the catalogue test reads the build (`library/dist`) and
+The size and drawing tests read only the device file; the catalogue test reads the build (`library/dist`) and
 skips without it, like the other sweeps over compiled drawings.
 """
 import json
@@ -58,23 +59,84 @@ def test_no_weight_is_recorded_because_no_document_gives_one_for_this_bar():
     assert "weight" in {g["what"] for g in doc["gaps"]}
 
 
+def decor(view, kind):
+    return [d for d in device()["views"][view]["panel"]["decor"] if d.get("kind") == kind]
+
+
 @pytest.mark.parametrize("view", ["front", "rear", "top", "bottom", "left", "right"])
-def test_each_side_is_drawn_as_the_overall_size_and_nothing_the_cut_sheet_does_not_give(view):
-    doc = device()
-    v = doc["views"][view]
+def test_each_side_keeps_the_overall_size_and_every_drawn_feature_lies_inside_it(view):
+    v = device()["views"][view]
     w, h = v["size"]["w"], v["size"]["h"]
     assert (w, h) in ((482.6, 12.7), (12.7, 12.7))
-    assert not v.get("components") and "guides" not in v, "no part and no tie point: no document places one"
     for d in v["panel"]["decor"]:
-        assert d["kind"] == "base", "only the bar's outline: no slot, no hole and no cut-out is dimensioned"
-        assert d["size"] == [w, h] and d["at"] == [0, 0]
+        x, y = d["at"]
+        dw, dh = d["size"]
+        assert x >= 0 and y >= 0 and x + dw <= w + 1e-6 and y + dh <= h + 1e-6, d["id"]
+
+
+@pytest.mark.parametrize("view", ["front", "rear", "top", "bottom"])
+def test_the_bar_draws_ten_evenly_spaced_slots_between_its_ends(view):
+    slots = sorted(decor(view, "tie-slot"), key=lambda d: d["at"][0])
+    assert len(slots) == 10
+    xs = [d["at"][0] for d in slots]
+    pitches = {round(b - a, 3) for a, b in zip(xs, xs[1:])}
+    assert len(pitches) == 1 and pitches.pop() > slots[0]["size"][0], "evenly spaced, with a web between slots"
+    assert close(xs[0], 482.6 - (xs[-1] + slots[-1]["size"][0]), 1.0), "the row is centred on the bar"
+    assert len({tuple(d["size"]) for d in slots}) == 1 and len({d["at"][1] for d in slots}) == 1
+
+
+def test_the_slots_of_the_web_and_of_the_leg_sit_at_the_same_places_along_the_bar():
+    front = [d["at"][0] for d in decor("front", "tie-slot")]
+    assert len(front) == 10
+    for view in ("rear", "top", "bottom"):
+        assert [d["at"][0] for d in decor(view, "tie-slot")] == front
+
+
+@pytest.mark.parametrize("view", ["front", "rear", "top", "bottom"])
+def test_each_end_has_an_ear_that_reaches_the_end_of_the_bar_and_the_web_starts_where_it_stops(view):
+    ears = sorted(decor(view, "ear"), key=lambda d: d["at"][0])
+    assert len(ears) == 2
+    left, right = ears
+    assert left["at"][0] == 0 and close(right["at"][0] + right["size"][0], 482.6)
+    assert close(left["size"][0], right["size"][0])
+    body = [d for d in device()["views"][view]["panel"]["decor"] if d["kind"] == "base"]
+    assert len(body) == 1
+    assert close(body[0]["at"][0], left["size"][0]) and close(body[0]["at"][0] + body[0]["size"][0], right["at"][0])
+
+
+@pytest.mark.parametrize("view", ["top", "bottom"])
+def test_each_ear_carries_one_hole_inside_it(view):
+    ears = sorted(decor(view, "ear"), key=lambda d: d["at"][0])
+    holes = sorted(decor(view, "ear-hole"), key=lambda d: d["at"][0])
+    assert len(holes) == 2
+    for ear, hole in zip(ears, holes):
+        assert ear["at"][0] <= hole["at"][0] and hole["at"][0] + hole["size"][0] <= ear["at"][0] + ear["size"][0]
+        assert ear["at"][1] <= hole["at"][1] and hole["at"][1] + hole["size"][1] <= ear["at"][1] + ear["size"][1]
+    assert close(holes[0]["at"][0], 482.6 - (holes[1]["at"][0] + holes[1]["size"][0])), "the two ends are alike"
+
+
+@pytest.mark.parametrize("view", ["left", "right"])
+def test_each_end_draws_the_section_as_a_web_and_a_leg(view):
+    parts = {d["id"]: d for d in device()["views"][view]["panel"]["decor"]}
+    assert set(parts) == {"web", "leg"}
+    assert parts["web"]["size"][1] == 12.7 and parts["leg"]["size"][0] == 12.7
+    assert parts["web"]["size"][0] == parts["leg"]["size"][1]
+
+
+def test_the_figures_read_from_the_photograph_say_they_are_estimates():
+    prov = device()["provenance"]
+    for key in ("slots", "ears", "left", "front", "top"):
+        assert prov[key]["confidence"] == "estimated"
+        assert "estimated" in prov[key]["note"]
 
 
 def test_the_figures_the_cut_sheet_does_not_give_are_named_gaps_with_the_document_each_needs():
     gaps = {g["what"]: g for g in device()["gaps"]}
     assert {"tie-points", "end-holes", "cross-section", "height-in-unit", "weight", "mounting-hardware"} <= set(gaps)
     for g in gaps.values():
-        assert g["reason"] == "vendor-silent" and g["wanted"]
+        assert g["wanted"] and g["note"]
+    for what in ("tie-points", "end-holes"):
+        assert "estimate" in gaps[what]["note"]
 
 
 @pytest.mark.heavy
@@ -83,4 +145,3 @@ def test_the_build_carries_the_envelope_to_the_rack_catalogue():
     r = json.loads((DIST / "rack.json").read_text())["devices"][NAME]
     assert (r["ru"], r["w"], r["mount"]) == (1, 482.6, "rack-face")
     assert close(r["d"], 12.7) and close(r["h"], 12.7)
-    assert not r.get("guides"), "no tie point is placed"
