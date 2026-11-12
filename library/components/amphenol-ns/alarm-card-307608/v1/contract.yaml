@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: alarm-card-307608
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: power
 description: >-
@@ -26,10 +26,22 @@ provenance:
     pins are that part's drawing, moved out of this skin unchanged, and its 6.0
     of height is that part's relief. It presents the `wire-wrap-3` interface;
     this part states no interface of its own.
+  groups: >-
+    The 300CB08 installation guide 149722-2 A9 (p39, Fig. 3-6) draws the two three-pin headers, one each side of the
+    centre screw, and the 300CB08 datasheet (p1) gives Form C alarm relay contacts. They carry alarm contacts out of
+    the panel to external equipment, so the role is management: the role the devices that place this card already
+    give the rear centre block. No media and no speed is stated: the headers carry relay contacts, not data, and
+    neither document prints a rate for them.
 attrs: {vendor-sku: '307608'}
+groups:
+  alarms:
+    term: Alarm
+    role: management
+    index-origin: 1
+    description: the two alarm relay headers, side A and side B, each carrying Form C alarm contacts
 parts:
-  - {ref: amphenol-ns/alarm-header@1, id: alarm-b, at: [5.0, 6.5]}
-  - {ref: amphenol-ns/alarm-header@1, id: alarm-a, at: [23.0, 6.5]}
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-b, at: [5.0, 6.5], group: alarms}
+  - {ref: amphenol-ns/alarm-header@1, id: alarm-a, at: [23.0, 6.5], group: alarms}
 relief:
   features:
     - node: screw

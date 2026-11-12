@@ -751,6 +751,8 @@ PART_POWER = {
     # against a target's source file here.
     "cyberpower/pdu-cord-l6-30p": "nema-l6-30p",
     "cyberpower/pdu-cord-5-15p": "nema-5-15p",
+    # The StarTech.com 8NS8-RACK-MOUNT-PDU's 8 ft cord and the RKPW081915's 6 ft cord end in a NEMA 5-15P: the same slug.
+    "startech/pdu-cord-5-15p": "nema-5-15p",
     # The Vertiv Geist VP9562's fixed 10 ft cord ends in a NEMA 5-15P: the same slug as the two cords above.
     "vertiv/rpdu-cord-5-15p": "nema-5-15p",
     # The APC AP7900B's fixed 11.98 ft cord ends in a NEMA 5-15P: `nema-5-15p`, as the two cords above.
@@ -3144,6 +3146,53 @@ def _rack_facts(doc):
         lines.append(f"{label} {doc[key]:g} mm"
                      + (" (a stand-in, not confirmed against the standard or a maker's sheet)"
                         if stand_in else ""))
+    return lines + _cabinet_facts(doc)
+
+
+def _door_line(door):
+    n = door.get("leaves")
+    bits = [f"{door['face']} door: {n} {'leaf' if n == 1 else 'leaves'}, {door['kind']}"]
+    if door.get("open-area") is not None:
+        bits.append(f"{door['open-area']:g}% open")
+    if door.get("hinge"):
+        bits.append(f"hinged {door['hinge']}")
+    if door.get("swing") is not None:
+        bits.append(f"opens {door['swing']:g} degrees")
+    if door.get("clearance") is not None:
+        bits.append(f"wiring clearance {door['clearance']:g} mm")
+    return ", ".join(bits)
+
+
+def _cabinet_facts(doc):
+    """What a cabinet has that neither DCIM has a field for: its doors, panels, roof,
+    base and zero-U channels, one line each."""
+    lines = []
+    enc = doc.get("enclosure") or {}
+    lines += [_door_line(d) for d in enc.get("doors") or []]
+    panels = enc.get("panels")
+    if panels:
+        lines.append(f"side panels: {panels['per-side']} per side"
+                     + (", split top and bottom" if panels.get("split") == "top-bottom" else "")
+                     + (", removable" if panels.get("removable") else "")
+                     + (", locked with a key" if panels.get("lock") == "key" else ""))
+    if (enc.get("roof") or {}).get("removable"):
+        lines.append("roof: removable")
+    base = doc.get("base") or {}
+    parts = [f"{base[k]} {label}" for k, label in (("casters", "casters"), ("levellers", "levelling feet"))
+             if base.get(k) is not None]
+    if parts:
+        lines.append("base: " + ", ".join(parts))
+    channels = doc.get("channels") or []
+    if channels:
+        lines.append("zero-U channels: " + ", ".join(c["id"] for c in channels))
+        stand_in = ((doc.get("provenance") or {}).get("channels") or {}).get("confidence") == "estimated"
+        for c in channels:
+            s = c.get("slots")
+            if s and s.get("pitch") is not None:
+                lines.append(f"channel {c['id']}: {s['interface']} slots, {s['count']} from "
+                             f"{s['first']:g} mm, every {s['pitch']:g} mm"
+                             + (" (positions are a stand-in, not read from a dimension)"
+                                if stand_in else ""))
     return lines
 
 
@@ -3201,22 +3250,70 @@ def rack_type(doc, target):
     return out
 
 
+def apply_rack_listing(out, doc, listing, target):
+    """File a rack type again, under the reseller that lists the product.
+
+    A rack product is modelled once under its maker, and the reseller's type is the same
+    cabinet under the reseller's name: its `model` (else the maker's), the type's slug or
+    name from them, and the listing's head lines ahead of the facts the maker's type has.
+    """
+    display = listing.get("manufacturer") or listing.get("ns")
+    model = str(listing.get("model") or doc["model"])
+    if target == "netbox":
+        out["manufacturer"], out["model"] = display, model
+        out["slug"] = slugify(f"{display}-{model}")
+    else:
+        out["name"] = f"{display} {model}"
+    head = listing_head(listing, display, doc["manufacturer"], doc["model"])
+    out["comments"] = "\n".join(head) + ("\n\n" + out["comments"] if out.get("comments") else "")
+    return out, display, model
+
+
+def _rack_listings(dist):
+    """{`<vendor>/<name>` of a rack: [listing, ...]} from a build's listings.json, in key order."""
+    f = Path(dist) / "listings.json"
+    found = json.loads(f.read_text()).get("listings") or {} if f.exists() else {}
+    out = {}
+    for key, listing in sorted(found.items()):
+        out.setdefault(listing.get("hardware"), []).append((key, listing))
+    return out
+
+
+def _write_rack_type(root, target, manufacturer, model, doc):
+    d = Path(root) / target / "rack-types" / manufacturer_dir(manufacturer)
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / (str(model).replace("/", "-") + ".yaml")
+    p.write_text("---\n" + yaml.dump(doc, Dumper=Indented, sort_keys=False, width=100,
+                                     default_flow_style=False))
+    return p
+
+
 def export_racks(dist, out_root):
-    """Write a rack type per rack product of a build, for each target. Returns the files."""
+    """Write a rack type per rack product of a build, for each target, and one more under
+    each reseller that lists it. Returns the files."""
     dist = Path(dist)
     f = dist / "rack-products.json"
     rows = json.loads(f.read_text())["racks"] if f.exists() else []
-    wrote = []
+    listings = _rack_listings(dist)
+    wrote, filed = [], {}
     for row in rows:
         doc = json.loads((dist / row["file"]).read_text())
         for target in TARGETS:
-            d = Path(out_root) / target / "rack-types" / manufacturer_dir(doc["manufacturer"])
-            d.mkdir(parents=True, exist_ok=True)
-            p = d / (str(doc["model"]).replace("/", "-") + ".yaml")
-            p.write_text("---\n" + yaml.dump(rack_type(doc, target), Dumper=Indented,
-                                             sort_keys=False, width=100,
-                                             default_flow_style=False))
-            wrote.append(p)
+            filed[(target, doc["manufacturer"], str(doc["model"]))] = row["ref"]
+    for row in rows:
+        doc = json.loads((dist / row["file"]).read_text())
+        for target in TARGETS:
+            wrote.append(_write_rack_type(out_root, target, doc["manufacturer"], doc["model"],
+                                          rack_type(doc, target)))
+            for lkey, listing in listings.get(f"{row['vendor']}/{row['name']}", []):
+                out, display, model = apply_rack_listing(rack_type(doc, target), doc, listing, target)
+                # two types under one manufacturer with one model would write one file twice
+                # and keep the second: refuse it, as the device export does
+                if (target, display, model) in filed:
+                    raise SystemExit(f"{display}/{model}: the listing {lkey} and {filed[(target, display, model)]} "
+                                     "export the same rack type. Give one a `model` of its own")
+                filed[(target, display, model)] = lkey
+                wrote.append(_write_rack_type(out_root, target, display, model, out))
     return wrote
 
 
@@ -3283,8 +3380,17 @@ def apply_listing(doc, listing, cfg_name, label=None):
     doc["slug"] = slugify(f"{display}-{model}")
     # SAY WHAT METAL THIS IS. The document is the NOS vendor's, and the one fact
     # it cannot state in a field is whose hardware it lists.
+    head = listing_head(listing, display, hw_manufacturer, hw_model,
+                        over.get("aliases") or [])
+    doc["comments"] = "\n".join(head) + ("\n\n" + doc["comments"] if doc.get("comments") else "")
+    return doc
+
+
+def listing_head(listing, display, hw_manufacturer, hw_model, more_aliases=()):
+    """The opening lines of a listed type's comments: whose hardware it is, what the
+    lister also calls it, and where it lists it. One answer for a device and a rack."""
     names = [listing.get("model")] if listing.get("model") else []
-    names += [a["name"] for a in (listing.get("aliases") or []) + (over.get("aliases") or [])
+    names += [a["name"] for a in (listing.get("aliases") or []) + list(more_aliases)
               if isinstance(a, dict) and a.get("name")]
     head = [f"{display} lists {hw_manufacturer} {hw_model}"
             + (f" (NOS: {listing['nos']})" if listing.get("nos") else "") + "."]
@@ -3292,8 +3398,7 @@ def apply_listing(doc, listing, cfg_name, label=None):
         head.append(f"{display} also calls it: " + ", ".join(dict.fromkeys(names)) + ".")
     if listing.get("source"):
         head.append("Listed per: " + " ".join(str(listing["source"]).split()))
-    doc["comments"] = "\n".join(head) + ("\n\n" + doc["comments"] if doc.get("comments") else "")
-    return doc
+    return head
 
 
 # EVERY FILE THIS RUN HAS WRITTEN, and which device and configuration wrote it.
