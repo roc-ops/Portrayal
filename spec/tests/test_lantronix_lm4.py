@@ -49,6 +49,8 @@ def test_the_serial_and_console_jacks_are_serial_media_and_the_network_jack_is_n
     lm4 = _lm4()
     for p in _in_group(lm4, "serial") + _in_group(lm4, "console"):
         assert p["attrs"]["media"] == "rj45-serial"
+    assert lm4["groups"]["serial"]["attrs"]["media"] == "rj45-serial"
+    assert lm4["groups"]["console"]["attrs"]["media"] == "rj45-serial"
     assert all("media" not in p.get("attrs", {}) for p in _in_group(lm4, "network"))
 
 
