@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ar7722
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: APC
 model: AR7722
@@ -124,9 +124,15 @@ gaps:
   - rear
   reason: vendor-silent
   note: the set is two lengths, 23U and 20U; they are drawn end to end and the joint is not dimensioned. Which of
-    the two stands higher is read off the installation sheet's figures (the 23U above, page 2).
+    the two stands higher is read off the installation sheet's figures (the 23U above, page 2). Both stand in one
+    well 45 deep, the depth of the part.
   wanted: a drawing of the two lengths fitted to one side
 groups:
+  body:
+    term: Well
+    role: furniture
+    index-origin: 1
+    description: the well the two lengths stand in
   lengths:
     term: Length
     role: furniture
@@ -139,6 +145,13 @@ views:
       h: 1911.35
     components:
       placements:
+      - ref: apc/nsx-vcm-ar7722-base@1
+        id: base
+        at:
+        - 0.0
+        - 0.0
+        group: body
+        rel-pos: 1
       - ref: apc/nsx-vcm-23u@1
         id: length-23u
         at:
@@ -146,6 +159,7 @@ views:
         - 0.0
         group: lengths
         rel-pos: 1
+        in: base
       - ref: apc/nsx-vcm-20u@1
         id: length-20u
         at:
@@ -153,6 +167,7 @@ views:
         - 1022.3499999999999
         group: lengths
         rel-pos: 2
+        in: base
     guides:
     - id: duct
       kind: duct

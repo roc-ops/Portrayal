@@ -47,6 +47,7 @@ from portrayal import ears as ears_mod
 from portrayal import halves as _halves
 from portrayal import bevel as _bevel
 from portrayal import section as _section
+from portrayal import fins as _fins
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
 TOOL_VERSION = "0.2.0"
@@ -2810,6 +2811,98 @@ def section_face(faceplate, ch, face, w, h):
     faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
 
 
+def fins_face(faceplate, ch, face, w, h):
+    """Draw the ribs of `chassis.fins` on this face (docs/modelling-a-device.md, "A housing
+    with a stepped end"), and say what is left to paint over the face's own art.
+
+    The front and the rear take the silhouette the fields give: at the core outside every
+    span of an inside field, at the step's tip line within it, so the gaps between ribs are
+    filled; an outside field stands out of the casting's edge by its step heights. The
+    faceplate becomes a <path> of it with the same id, and the ribs are painted inside, one
+    rect each, in a tone by their step. The top and the bottom stay the full rectangle and carry
+    a stripe for each rib of the field on their edge. An end face keeps the section's outline
+    and takes, where an inside field has cut the end cap back to the core, a band in a rib tone
+    that stands for the first rib seen behind the cap; an outside field's tallest rib is
+    painted end-on beyond the edge.
+
+    Returns `{"rects": [...], "box": (x0, y0, x1, y1)}`, the rects as `(x, y, w, h, fill, edge)`
+    for the group that is appended last (so the art cannot cover it) and the box the face now
+    draws (so the viewBox can grow past the face for ribs that stand outside it), or None for
+    a device without fins or a face they do not touch.
+    """
+    fields = [f for f in _fins.fields(ch) if _fins.usable(f)]
+    pts = _section.points(ch)
+    if not fields or pts is None:
+        return None
+    W, H, D = ch["width"], ch["height"], ch["depth"]
+    if (w, h) != {"front": (W, H), "rear": (W, H), "top": (W, D), "bottom": (W, D),
+                  "right": (D, H), "left": (D, H)}.get(face):
+        return None                     # a face drawn at another size is not this one
+    color = ch.get("color", _fins.DEFAULT_COLOR)
+    rects, boxes = [], []
+    mirror = face in ("rear", "bottom")
+
+    def put(x0, y0, rw, rh, fill, edge):
+        rects.append((x0, y0, rw, rh, fill, edge))
+        boxes.append((x0, y0, x0 + rw, y0 + rh))
+
+    for f in fields:
+        top = _fins.tallest(f)
+        ext = _fins.edge_extent(pts, f["on"], H)
+        if face in _fins.OUTLINE_FACES:
+            for x0, x1, tip in _fins.ribs(f):
+                if _fins.is_outside(f):
+                    y0 = -tip if f["on"] == "top" else H
+                else:
+                    y0 = (_fins.limit(f) - tip) if f["on"] == "top" else H - _fins.limit(f)
+                put(W - x1 if mirror else x0, y0, x1 - x0, tip, _fins.tone(color, tip, top), f["on"])
+        elif face in ("top", "bottom") and f["on"] == face and ext is not None:
+            for x0, x1, tip in _fins.ribs(f):
+                put(W - x1 if mirror else x0, D - ext[1], x1 - x0, ext[1] - ext[0],
+                    _fins.tone(color, tip, top), f["on"])
+        elif face in _section.END_FACES and ext is not None:
+            ex0, ex1 = ext if face == "right" else (D - ext[1], D - ext[0])
+            if _fins.is_outside(f):
+                y0 = -top if f["on"] == "top" else H
+                put(ex0, y0, ex1 - ex0, top, _fins.tone(color, top, top), f["on"])
+            else:
+                core = _fins.limit(f)
+                y0 = 0.0 if f["on"] == "top" else H - core
+                put(ex0, y0, ex1 - ex0, core, _fins.tone(color, top, top), f["on"])
+    outline = _fins.silhouette(face, ch)
+    if outline is not None:
+        outline_box = (min(x for x, _ in outline), min(y for _, y in outline),
+                       max(x for x, _ in outline), max(y for _, y in outline))
+        if [outline_box[1], outline_box[3]] != [0.0, float(H)] or len(outline) != 4:
+            faceplate.tag = f"{{{SVG_NS}}}path"
+            for k in ("x", "y", "width", "height", "rx"):
+                faceplate.attrib.pop(k, None)
+            faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
+            boxes.append(outline_box)
+    if not rects and outline is None:
+        return None
+    return {"rects": rects,
+            "box": (min(b[0] for b in boxes), min(b[1] for b in boxes),
+                    max(b[2] for b in boxes), max(b[3] for b in boxes)) if boxes else None}
+
+
+def fins_group(svg, art):
+    """The ribs of `fins_face`, as a group painted over the face's art and taking no click.
+    No member carries a `data-path`: they are paint and not parts."""
+    g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+    g.set("id", "chassis-fins")
+    g.set("data-path", "chassis/fins")
+    g.set("pointer-events", "none")
+    for x, y, rw, rh, fill, edge in art["rects"]:
+        r = ET.SubElement(g, f"{{{SVG_NS}}}rect")
+        r.set("data-class", "fin")
+        r.set("data-fin-on", edge)
+        r.set("x", f"{x:g}"); r.set("y", f"{y:g}")
+        r.set("width", f"{rw:g}"); r.set("height", f"{rh:g}")
+        r.set("fill", fill); r.set("stroke", "none")
+    return g
+
+
 def _shift_heights(node, by):
     """Move a node's absolute heights by `by` mm: its `out`, and its profile.
 
@@ -3047,6 +3140,7 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
     section_face(faceplate, ch, view.get("face") or view_name, w, h)
+    fin_art = fins_face(faceplate, ch, view.get("face") or view_name, w, h)
 
     resolved = {}
     palette = {}
@@ -3893,6 +3987,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             silk_g.append(t)
 
     extents = [0.0, 0.0, w, h]
+    # RIBS THAT STAND OUTSIDE THE BOX grow the viewBox as a part beyond the face does
+    # (data-face-w/-h below says which rectangle is the face)
+    if fin_art and fin_art["box"]:
+        fx0, fy0, fx1, fy1 = fin_art["box"]
+        extents = [min(0.0, fx0), min(0.0, fy0), max(float(w), fx1), max(float(h), fy1)]
     # HOW DEEP A WELL'S FLOOR IS, for whatever says it is `in:` one - see
     # well_floor. Defined ahead of the mate-to resolution below, which reads
     # it: a host standing in a well hands its sink to what seats on it.
@@ -4875,6 +4974,10 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
                 el.set("width", f"{pw_:g}"); el.set("height", f"{ph_:g}")
             el.set("fill", "none")
             el.set("stroke", "none")
+
+    # THE RIBS ARE PAINTED LAST, over the face's own art, and take no click
+    if fin_art and fin_art["rects"]:
+        fins_group(svg, fin_art)
 
     meta_payload = {
         "generator": {"tool": "portrayal-render", "version": TOOL_VERSION},
@@ -6470,6 +6573,9 @@ def main():
                              # written; absent on a box
                              **({"section": [list(p) for p in ch["section"]]}
                                 if ch.get("section") else {}),
+                             # the ribs on that housing, as written; absent
+                             # where the device states none
+                             **({"fins": copy.deepcopy(ch["fins"])} if ch.get("fins") else {}),
                              # the two halves of a box that opens, as written;
                              # absent on a box that does not
                              **({"halves": _halves.published(device)} if _halves.declared(device) else {})},

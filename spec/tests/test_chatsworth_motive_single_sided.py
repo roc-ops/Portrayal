@@ -45,7 +45,11 @@ def device_yaml(name):
 
 
 def contract(ref):
-    return yaml.safe_load((LIB / "components" / ref.split("@")[0] / "v1" / "contract.yaml").read_text())
+    """A component's contract: the major its ref names, else the newest the library holds."""
+    name, _, major = ref.partition("@")
+    folder = LIB / "components" / name
+    major = f"v{major}" if major else max((p.name for p in folder.glob("v*")), key=lambda v: int(v[1:]))
+    return yaml.safe_load((folder / major / "contract.yaml").read_text())
 
 
 def placements(doc, stem):

@@ -620,8 +620,10 @@ refused.
   The two brackets that hold the shelf to the posts are drawn too, from the
   shelf's own `chassis.ears.rolled` (a bar across against each edge and an ear
   on each post, alike at 90 and 270); they take no units of their own.
-  Not built: the lug size and cable exit as facts of the mounting, the kit
-  as a contract, and the 3D solid and cables of a turned device. A
+  Not built: the lug size and cable exit as facts of the mounting (designed
+  in [mounting-facts-design.md](mounting-facts-design.md): an optional
+  `chassis.mountings` list on the device), the kit as a contract, and the 3D
+  solid and cables of a turned device. A
   `wall-frame-vertical` product (FS-SVWM-1U and -4U) hangs every device face
   down; the frame states it and the elevation is drawn from above. `roll` is
   reserved by this note; the cable lay note proposes it for version 4 with a

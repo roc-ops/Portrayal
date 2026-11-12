@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: pro4x-smart-pops-4t16a
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: Server Technology
 model: PRO4X Smart POPS 4T16A
@@ -53,7 +53,10 @@ provenance:
     confidence: drawing
     note: >-
       drawing - read from a render, not text extraction. Detail A prints 36, 35, 34 at the cord end and 19
-      beside the controller; the far bank prints 18 beside the controller and 1 at the far end.
+      beside the controller; the far bank prints 18 beside the controller and 1 at the far end. Outlet 1 is drawn
+      at the far end from the cord. The per-SKU data sheets (page 2) for the five SKUs of this family ending
+      BD2FE1 print "Outlet #1 opposite the power input", the numbering drawn. The data sheet for the SKU ending
+      BD2EE1 prints "Outlet #1 at the power input", the opposite end. That SKU is not listed here.
   breakers:
     confidence: drawing
     note: >-
@@ -125,9 +128,13 @@ gaps:
   note: >-
     the maker's outline drawing 810-03-1596-00 is titled C4x36RA-GPBD2FE1, so its body, outlet layout and cord
     end are the maker's own for all four 16 A families. The controller panel is the 4G16A's part, drawn from the
-    one photograph that is the same file on all four family pages. No held document says this family's panel
-    looks like the 4G16A's, so it is borrowed and unverified here.
-  wanted: a photograph of this family's controller panel, or the PRO4X user guide.
+    one photograph that is the same file on all four family pages. The PRO4X Quick Setup Guide shows one
+    controller, the iX9, and says port locations may vary by model. The PRO4X User Guide lists one set of ports
+    for the series and says port layouts and labels may vary by model. The User Guide also names iX7 and iX12
+    controllers without saying which models carry them. The controller drawn here is the iX9, and no held document shows a
+    different controller for this family. The guides do not say which model carries which controller. No
+    photograph of this family's own unit is held, so the panel is not checked against the unit.
+  wanted: a photograph of this family's own controller panel, or a document naming the controller each model carries.
 - what: cord-and-plug
   scope: [bottom]
   reason: vendor-silent
@@ -161,9 +168,15 @@ gaps:
   scope: [front]
   reason: vendor-silent
   note: >-
-    no held document labels the controller's jack stacks. The stack by the LCD is taken as Ethernet from the
-    data sheet's list, and the other as the link and sensor ports in its order.
-  wanted: the PRO4X user guide or a close photograph of the controller.
+    the PRO4X Quick Setup Guide prints ETH 1 and ETH 2 beside the Ethernet jacks, each digit in a circle (page 8
+    figure, page 6). It prints USB-A 1, USB-A 2, USB-B, PDU LINK and SENSOR beside the other jacks. The PRO4X User
+    Guide (page 68) lists the ports as ETH1/ETH2, USB-A, USB-B, PDU LINK and SENSOR. The figure puts the Ethernet
+    jacks by the screen and the USB ports in the middle. It puts the link jack over the sensor jack at the far
+    side; these positions are read off the figure. The controller part counts its two Ethernet jacks from 0, as
+    eth0 and eth1, where the maker prints ETH 1 and ETH 2. The pairing of eth0 with ETH 1 is by order and not a
+    printed label. The other ids are link, sensor, usb-a-1 and usb-a-2, and the USB-B jack has no id. No id is
+    renamed here, and the controller's skin draws no jack labels.
+  wanted: a document that pairs the library's jack ids with the printed names, or a drawing of the controller with its labels.
 - what: breaker-handle
   scope: [front]
   reason: vendor-silent

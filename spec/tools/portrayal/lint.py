@@ -724,13 +724,61 @@ RULES = {
              "bring the points inside the box or out to its sides, make the top and the bottom one run each, and drop a `size` on a left or right view that differs from the depth and height",
              "The box is what the rack, the exports and the lock read, so a profile that does not reach its sides, or notches its top, is a body that is not the size the device states, and an end face drawn at another size puts the outline where the parts are not.",
              ERROR),
-    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or `halves` (error)",
-             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body, a sheet body and a box that opens each have a way of being drawn that a stepped end does not yet join",
-             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first, and a box that opens has no stated way to cut a stepped housing at its seam.",
+    "L206": ("device", "`chassis.section` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (error)",
+             "drop the other key, or leave the section out: a rack device, a bevelled or rounded body and a sheet body each have a way of being drawn that a stepped end does not yet join",
+             "Each of those keys cuts or fills the same end face the section draws, so a device stating both would be drawn by whichever reader looked first.",
              ERROR),
     "L207": ("device", "on a device with a `chassis.section`, a part on the left or right face lies wholly inside that face's outline, and a part on the top or bottom face does not straddle a step of the body (error)",
              "move the part onto the casting it belongs to, away from the transparent corner or the edge of a step; the left face is the right face's mirror",
              "A port, a bay or a cutout in a corner the profile does not fill is a part floating in air, and one across a step stands partly on a casting and partly on the flange, so no height can be right for the whole of it.",
+             ERROR),
+    "L208": ("device", "`chassis.fins` is stated only with a `chassis.section`: the ribs stand on an edge of the end profile (error)",
+             "state the section the ribs stand on, or leave the fins out",
+             "A rib field is placed on the top or the bottom edge of the end profile, so without a profile there is no edge to stand it on and the body, the silhouette and the stripes have nothing to be built from.",
+             ERROR),
+    "L209": ("device", "each field of `chassis.fins` is `on` a side of the box where the section has an edge, and its `span` goes forward and stays inside `[0, width]` (error)",
+             "name the top or the bottom as the section has it, and give a span from the left end that starts before it ends and fits in the width",
+             "A field on a side with no edge has no surface to start from, and a span that runs backwards or off the box puts ribs in the air beyond the casting's ends.",
+             ERROR),
+    "L210": ("device", "a field's `rib` and `gap` are positive and it is one of two kinds: an inside field states a positive `core` and no `height`, an outside field (`outside: true`) states a positive `height` of at most 60 mm and no `core` (error)",
+             "state the numbers the kind needs and no other: `core` for ribs inside the stated size, `height` for ribs that stand out of it",
+             "The two kinds read the same edge two ways, as the tallest rib's height from the casting's surface or as the tips' height above the edge, so a field that states both, or neither, leaves the body and the silhouette to guess which; a rib that stands more than 60 mm beyond the box is no longer a rib of the casting.",
+             ERROR),
+    "L211": ("device", "a field's `steps` tile its `span` exactly (to 0.01 mm), every height is positive and at most the field's `core` (or `height`), and at least one step reaches it (error)",
+             "make each step start where the one before ends, begin at the span's start and end at its end, and give the tallest one the core",
+             "The core is the height of the tallest rib, so a step above it or none at it contradicts the figure, and a gap or an overlap between steps leaves some ribs with no height or two.",
+             ERROR),
+    "L212": ("device", "a device states at most 400 ribs in all its fields (error)",
+             "thicken the ribs or the gap, or shorten the spans: the field is one body and a viewer builds each rib",
+             "Every rib is geometry the viewer builds and the face draws, so a device of thousands would make one housing slower to open than the rest of a rack.",
+             ERROR),
+    "L213": ("device", "a field's span ends on a rib: no part of a pitch is left over at the end (warning)",
+             "move the end of the span to a rib's far edge, or change the gap",
+             "Ribs are placed every pitch from the start of the span, so a remainder at the far end is either a missing rib or a span stated a little too long.",
+             WARNING),
+    "L214": ("device", "an inside field's ribs do not overhang the section: from the edge in to `core` the section is at least as wide as the edge (error)",
+             "reduce the core to where the casting is as wide as the edge, or widen the section there",
+             "A rib stands on the core surface across the whole width of the edge, so where the profile is narrower than the edge between the edge and the core, the rib's root hangs over empty air.",
+             ERROR),
+    "L215": ("device", "the fields on one edge do not overlap, and an inside field has its edge to itself (error)",
+             "separate the spans, or give each edge one inside field",
+             "An inside field cuts the casting back to its core along the whole length, so a rib of another field on that edge has no surface to stand on, and two fields sharing a stretch would give it two heights.",
+             ERROR),
+    "L216": ("device", "on a device with `chassis.fins`, a part on the front or the rear face lies inside the silhouette and not over a field of ribs: not above a step's tip line and not between the edge and the core (error)",
+             "move the part down onto the casting, below the core line and clear of the ribs",
+             "A rib is not a mounting surface, and above the tip line or in the end margin the casting has been cut back to its core, so a part there floats in the air in front of the ribs.",
+             ERROR),
+    "L217": ("device", "on a device with a `chassis.section` and `chassis.halves`, the base's `outer` is `top` or `bottom` and the lid's `hinge` is `front` or `rear` (error)",
+             "put the base on the top or the bottom of the housing and the hinge on one of its long faces; a housing that opens along another face is a later change",
+             "The housing is an extrusion along its width, so only a seam parallel to that axis cuts it into two parts that are each a cut of the same end profile, and only a hinge on a long face is a line parallel to the extrusion for the lid to turn about.",
+             ERROR),
+    "L218": ("device", "on a device with a `chassis.section` and `chassis.halves`, the section is at its widest at the seam, the plane `base.stands` from the base's `outer` face (warning)",
+             "move the seam into the flange, or correct `base.stands` or the section against the drawing; say in `provenance` why the housing opens elsewhere",
+             "A cast housing opens at a flange that is its widest part, so a seam where the profile is narrower either has a wrong `stands` or a section that leaves the flange out, and the open state would turn a lid whose rim is not where the maker's is.",
+             WARNING),
+    "L219": ("device", "on a device with a `chassis.section` and `chassis.halves`, the seam cuts the section into two parts that each have outline: it is inside the section's height, not exactly on a horizontal edge of it, and not in a stretch the fins cut back to their core where the section is no wider than the field (error)",
+             "move the seam off the edge with `base.stands`, into the casting it divides, and keep it inside the section's height and below the ribs' core",
+             "A seam outside the section, or where the ribs' field has cut the casting away, leaves one half empty, and one exactly on a horizontal edge does not say which half the edge belongs to, so the two parts a viewer builds would depend on how it rounds.",
              ERROR),
 }
 
@@ -9000,7 +9048,7 @@ def lint_device_section(path, data, lib_roots):
     if mount in ("rack", "rack-face", "rack-side"):
         err(path, "L206", f"`chassis.section` is stated on a {mount!r} device: a housing with a "
                           "stepped end is not racked")
-    for key in ("bevel", "rounded", "ears", "overhang", "kits", "halves"):
+    for key in ("bevel", "rounded", "ears", "overhang", "kits"):
         if ch.get(key):
             err(path, "L206", f"`chassis.section` is stated with `chassis.{key}`, which this "
                               "version does not join to a stepped end")
@@ -9036,6 +9084,245 @@ def lint_device_section(path, data, lib_roots):
             elif outline is None and _section.straddles_step(pts, face, d, y0, y1):
                 err(path, "L207", f"{vname}/{pid}: rows {y0:.2f} to {y1:.2f} run over a step of "
                                   "the body: a part sits on one level of the casting")
+
+
+# THE CODES OF THE RULES FOR A STEPPED HOUSING THAT OPENS BY WHAT THEY JUDGE, for the
+# test that reads them. The calls below spell each code out, because the severity guard
+# reads literals; test_section_opens.py holds the two in step.
+SECTION_OPENS_CODES = {"faces": "L217", "widest": "L218", "seam": "L219"}
+
+
+def lint_device_section_opens(path, data):
+    """L217-L219: a housing that states a `chassis.section` and `chassis.halves` opens
+    along its extrusion (docs/modelling-a-device.md, "A housing with a stepped end").
+
+    The seam is the plane `base.stands` from the base's `outer` face; each half is the
+    part of the stepped body on its side of it. A device without a `section` keeps the
+    halves rules (L200-L203) exactly: nothing here reads it."""
+    from portrayal import halves as _halves
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    declared = _halves.declared(data)
+    if "section" not in ch or not declared:
+        return
+    base, lid = declared.get("base"), declared.get("lid")
+    base = base if isinstance(base, dict) else {}
+    lid = lid if isinstance(lid, dict) else {}
+    outer, hinge = base.get("outer"), lid.get("hinge")
+    ok = True
+    if outer in _halves.FACES and outer not in ("top", "bottom"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.base.outer` is {outer!r}: a housing with a section opens "
+                          "along its extrusion, so the base's outer face is `top` or `bottom`")
+    if hinge in _halves.FACES and hinge not in ("front", "rear"):
+        ok = False
+        err(path, "L217", f"`chassis.halves.lid.hinge` is {hinge!r}: a housing with a section is hinged "
+                          "on a long face, `front` or `rear`")
+    pts = _section.points(ch)
+    height = ch.get("height")
+    if (not ok or pts is None or _section.polygon_problems(pts)
+            or isinstance(height, bool) or not isinstance(height, (int, float))):
+        return                  # the rest reads a seam and a polygon that are one
+    row = _section.seam_row(declared, height)
+    if row is None:
+        return
+    problems = _section.seam_problems(pts, row)
+    at = _section.width_at(pts, row)
+    # an inside field cuts the casting back to its core over its edge's extent: a seam in that
+    # stretch, where the section is no wider than the edge, divides a body that is not there
+    for f in ch.get("fins") or []:
+        if not isinstance(f, dict) or f.get("outside") or at is None:
+            continue
+        core, on = f.get("core"), f.get("on")
+        if on not in ("top", "bottom") or isinstance(core, bool) or not isinstance(core, (int, float)):
+            continue
+        ext = _section.edge_extent(pts, on, height)
+        in_zone = row < core if on == "top" else row > height - core
+        if ext and in_zone and at[0] >= ext[0] - _section.TOL and at[1] <= ext[1] + _section.TOL:
+            problems.append(f"the seam is {row:g} mm down the section, in the stretch the ribs on the "
+                            f"{on} cut back to their core ({core:g} mm), where the body has nothing: "
+                            "one half would be empty")
+    for m in problems:
+        err(path, "L219", f"`chassis.halves`: {m}")
+    if problems:
+        return
+    if at is not None and _section.widest(pts) - (at[1] - at[0]) > _section.TOL:
+        warn(path, "L218", f"the section is {at[1] - at[0]:g} mm across at the seam, {row:g} mm down, "
+                           f"and {_section.widest(pts):g} mm at its widest: a flange is expected at the seam")
+
+
+# THE CODES OF THE FIN RULES BY WHAT THEY JUDGE, for the test that reads them. The calls
+# below spell each code out, because the severity guard reads literals;
+# test_chassis_fins.py holds the two in step.
+FINS_CODES = {"needs": "L208", "edge": "L209", "numbers": "L210", "steps": "L211",
+              "count": "L212", "leftover": "L213", "fit": "L214", "overlap": "L215",
+              "parts": "L216"}
+
+
+def _part_boxes(view, lib_roots):
+    """`[(id, (x0, y0, x1, y1))]` for what a view places: its placements, sized by the
+    component each names, and its bays and cutouts."""
+    vp = view_parts(view)
+    boxes = []
+    for q in vp["placements"]:
+        if not q.get("at") or q.get("behind"):
+            continue
+        sz = _instance_size(q.get("ref"), lib_roots)
+        if sz:
+            boxes.append((q.get("id", "?"), facets.projected_box(q["at"], *sz, q.get("rotate"), None)))
+    for kind in ("bays", "cutouts"):
+        for q in vp[kind]:
+            at, sz = q.get("at"), q.get("size")
+            if at and isinstance(sz, dict) and "w" in sz:
+                boxes.append((q.get("id", kind[:-1]), (at[0], at[1], at[0] + sz["w"], at[1] + sz["h"])))
+    return boxes
+
+
+def lint_device_fins(path, data, lib_roots):
+    """L208-L216: the ribs of a housing stand on its section, are numbers a body can be
+    built from, and no part is mounted on them (docs/modelling-a-device.md, "A housing with
+    a stepped end").
+
+    The schema checks only the shape of each field. What the numbers have to be, to be
+    ribs, is judged here from portrayal.fins, the one place that reads the key.
+    """
+    from portrayal import fins as _fins
+    from portrayal import section as _section
+    ch = data.get("chassis") or {}
+    if "fins" not in ch:
+        return
+    if not isinstance(ch["fins"], list):
+        return                  # the schema reports a fins that is not a list
+    pts = _section.points(ch)
+    if not ch.get("section"):
+        err(path, "L208", "`chassis.fins` is stated without a `chassis.section`: the ribs stand "
+                          "on an edge of the end profile")
+        return
+    w, h, d = ch.get("width"), ch.get("height"), ch.get("depth")
+    if pts is None or not all(isinstance(v, (int, float)) and not isinstance(v, bool) for v in (w, h, d)):
+        return                  # the schema reports a section that is not number pairs
+    profile_ok = not (_section.polygon_problems(pts) or _section.box_problems(pts, d, h))
+    fs = ch["fins"]
+    for i, f in enumerate(fs):
+        if not isinstance(f, dict):
+            continue
+        where = f"`chassis.fins[{i}]`"
+        outside = _fins.is_outside(f)
+        side, sp = f.get("on"), _fins.span(f)
+        if side in _fins.SIDES and _fins.edge_count(pts, side, h) == 0:
+            err(path, "L209", f"{where}: the section has no edge on the {side} side of the box to "
+                              "stand ribs on")
+        if sp is not None:
+            if sp[0] >= sp[1]:
+                err(path, "L209", f"{where}: the span runs from {sp[0]:g} to {sp[1]:g}: it has to "
+                                  "go forward")
+            if sp[0] < -_fins.TOL or sp[1] > w + _fins.TOL:
+                err(path, "L209", f"{where}: the span {sp[0]:g} to {sp[1]:g} is not inside the "
+                                  f"width, 0 to {w:g}")
+        for key in ("rib", "gap"):
+            v = f.get(key)
+            if isinstance(v, (int, float)) and not isinstance(v, bool) and v <= 0:
+                err(path, "L210", f"{where}: `{key}` is {v:g}: it has to be positive")
+        if outside:
+            if "core" in f:
+                err(path, "L210", f"{where}: an outside field has no `core`: the casting's edge is "
+                                  "the surface the ribs stand out of, and `height` is how far they stand")
+            top = f.get("height")
+            if not isinstance(top, (int, float)) or isinstance(top, bool):
+                err(path, "L210", f"{where}: an outside field states its `height`")
+            elif top <= 0:
+                err(path, "L210", f"{where}: `height` is {top:g}: it has to be positive")
+            elif top > _fins.MAX_OUTSIDE + _fins.TOL:
+                err(path, "L210", f"{where}: the ribs stand {top:g} mm beyond the box; at most "
+                                  f"{_fins.MAX_OUTSIDE:g} mm is allowed")
+        else:
+            core = f.get("core")
+            if not isinstance(core, (int, float)) or isinstance(core, bool):
+                err(path, "L210", f"{where}: an inside field states its `core`, the height of its "
+                                  "tallest rib from the casting's surface")
+            elif core <= 0:
+                err(path, "L210", f"{where}: `core` is {core:g}: it has to be positive")
+            if "height" in f:
+                err(path, "L210", f"{where}: an inside field has a `core`, not a `height`: say "
+                                  "`outside: true` for ribs that stand out of the edge")
+        top = _fins.limit(f)
+        if "steps" in f and isinstance(f["steps"], list) and f["steps"]:
+            st = _fins.steps(f)
+            name = "height" if outside else "core"
+            if st is None:
+                err(path, "L211", f"{where}: a step is a span of two numbers and a height")
+            elif sp is not None:
+                if abs(st[0][0] - sp[0]) > _fins.TOL:
+                    err(path, "L211", f"{where}: the first step starts at {st[0][0]:g}, not at the "
+                                      f"span's start, {sp[0]:g}")
+                if abs(st[-1][1] - sp[1]) > _fins.TOL:
+                    err(path, "L211", f"{where}: the last step ends at {st[-1][1]:g}, not at the "
+                                      f"span's end, {sp[1]:g}")
+                for k, (a, b, hh) in enumerate(st):
+                    if a >= b:
+                        err(path, "L211", f"{where}: step {k} runs from {a:g} to {b:g}: it has to "
+                                          "go forward")
+                    if k and abs(a - st[k - 1][1]) > _fins.TOL:
+                        err(path, "L211", f"{where}: step {k} starts at {a:g} but the one before "
+                                          f"ends at {st[k - 1][1]:g}: the steps leave a gap or overlap")
+                    if hh <= 0:
+                        err(path, "L211", f"{where}: step {k} has height {hh:g}: it has to be positive")
+                    elif top is not None and hh > top + _fins.TOL:
+                        err(path, "L211", f"{where}: step {k} is {hh:g} tall, over the field's "
+                                          f"{name}, {top:g}")
+                if top is not None and not any(abs(hh - top) <= _fins.TOL for _a, _b, hh in st):
+                    err(path, "L211", f"{where}: no step is as tall as the {name}, {top:g}: the "
+                                      "tallest rib stands at it")
+        if _fins.usable(f):
+            rest = _fins.leftover(f)
+            if rest > _fins.TOL:
+                warn(path, "L213", f"{where}: {rest:g} mm of the span is left after the last of its "
+                                   f"{_fins.rib_count(f)} ribs: the pitch is {f['rib'] + f['gap']:g}")
+        if (profile_ok and not outside and _fins.usable(f)
+                and _fins.edge_count(pts, side, h) == 1):
+            ext = _fins.edge_extent(pts, side, h)
+            core = f["core"]
+            box = (ext[0], 0.0, ext[1], core) if side == "top" else (ext[0], h - core, ext[1], h)
+            if not _section.contains_box(pts, box):
+                err(path, "L214", f"{where}: from the {side} edge in to the core, {core:g} mm, the "
+                                  f"section is narrower than the edge ({ext[0]:g} to {ext[1]:g} "
+                                  "across the depth): a rib would overhang the casting")
+    total = _fins.count_all(ch)
+    if total > _fins.MAX_RIBS:
+        err(path, "L212", f"`chassis.fins` states {total} ribs: at most {_fins.MAX_RIBS} a device")
+    for side in _fins.SIDES:
+        mine = [(i, f) for i, f in enumerate(fs) if isinstance(f, dict) and f.get("on") == side
+                and _fins.span(f) is not None]
+        for n, (i, f) in enumerate(mine):
+            for j, g in mine[n + 1:]:
+                a, b = _fins.span(f), _fins.span(g)
+                over = min(a[1], b[1]) - max(a[0], b[0])
+                inside = not (_fins.is_outside(f) and _fins.is_outside(g))
+                if over > _fins.TOL:
+                    err(path, "L215", f"`chassis.fins[{i}]` and `chassis.fins[{j}]` overlap on the "
+                                      f"{side} edge, {max(a[0], b[0]):g} to {min(a[1], b[1]):g}")
+                elif inside:
+                    err(path, "L215", f"`chassis.fins[{i}]` and `chassis.fins[{j}]` are on the {side} "
+                                      "edge and one of them is an inside field: it cuts the casting "
+                                      "back along the whole length, so it has the edge to itself")
+    if not profile_ok:
+        return
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        face = view.get("face") or vname
+        if face not in _fins.OUTLINE_FACES:
+            continue
+        outline = _fins.silhouette(face, {"width": w, "height": h, "fins": fs})
+        cut = _fins.zones(face, {"width": w, "height": h, "fins": fs})
+        for pid, (x0, y0, x1, y1) in _part_boxes(view, lib_roots):
+            if not _section.contains_box(outline, (x0, y0, x1, y1)):
+                err(path, "L216", f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}) is not "
+                                  "wholly inside the silhouette: above a step's tip line, or in an "
+                                  "end margin where the casting is cut back to its core")
+            elif any(min(x1, zx1) - max(x0, zx0) > _section.TOL and min(y1, zy1) - max(y0, zy0) > _section.TOL
+                     for zx0, zy0, zx1, zy1 in cut):
+                err(path, "L216", f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f}) is over a "
+                                  "field of ribs: a rib is not a mounting surface")
 
 
 def _is_kit(ref, lib_roots):
@@ -15060,6 +15347,8 @@ def main():
                 lint_device_poe_pd(f, d)
                 lint_device_halves(f, d)
                 lint_device_section(f, d, args.library)
+                lint_device_section_opens(f, d)
+                lint_device_fins(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)
