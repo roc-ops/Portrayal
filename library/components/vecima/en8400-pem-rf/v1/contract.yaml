@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: en8400-pem-rf
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8400 RF port entry module (PEM), the board under each power entry cover that takes an
+  RF-and-AC port's stinger on a screwless seizure and passes the signal on. It replaces the EN8100
+  RF port entry module in the EN8400 and is rated to 1.8 GHz, where the node's RF amplifier modules
+  are still the 1.2 GHz ones. The node holds four, two at each end beside the power PEM.
+size: {w: 36.0, h: 75.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8400 RF port entry module
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.2 and the
+    EN8400 PEM figure on p35: "The PEM installed in the EN8400 features screwless stinger seizures
+    as well as increased capacity for downstream channels", 1.2 GHz to 1.8 GHz. The guide shows one
+    figure for the EN8400 PEM and does not say which of the three boards is the RF one; the order
+    follows the EN8100's (RF, power, RF) and is an inference. No part number is printed.
+  size: >-
+    estimated - no document held states a size for any module. The same 36 x 75 as the EN8100
+    board, which the EN8400 figure on p35 shows at the same size and position.
+  elements: >-
+    photo-measured - a green board with a screened seizure block and a black connector block, from
+    the EN8400 figure on p35. The screwless seizure has no screw to draw. Nothing else is drawn.
+elements: {}
+connection-points:
+  mate: {at: [18.0, 37.5], direction: front}
+skins: [default]

@@ -477,13 +477,17 @@ AS_TODAY = ["cisco/c9300-24p", "aurcore/ais4001", "fs/cmh-6dr1u"]
 
 
 @pytest.mark.heavy
-def test_no_library_device_states_a_section():
+def test_only_the_two_cast_nodes_state_a_section():
     paths = libwalk.iter_devices([LIB])
     assert len(paths) > 100
+    stating = []
     for path in paths:
         text = path.read_text()
         if "section" in text:         # only a file that says the word can state the key
-            assert "section" not in (yaml.safe_load(text).get("chassis") or {}), path
+            if "section" in (yaml.safe_load(text).get("chassis") or {}):
+                stating.append(f"{path.parent.parent.name}/{path.parent.name}")
+    # the two cast nodes are the only housings that state one; every other body is as it was
+    assert sorted(stating) == ["vecima/en8100", "vecima/en8400"]
 
 
 @pytest.mark.heavy
