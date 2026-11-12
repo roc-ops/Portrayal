@@ -1,14 +1,14 @@
 format: 1
 kind: component
 name: agr560-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: edgecore-agr-dc-block-2
 profile: power
 description: >-
   The cable connector of the Edgecore AGR560 48 VDC supply, wired, seen from the wire side as seated. A dark body with
   one insulated wire entering each of its two ways. It seats in an `edgecore-agr-dc-block-2` connector at its own
-  mate point. It carries one wire per contact, not one cable.
+  mate point. It carries one wire per contact, all in one cable that ends at its `mate` point.
 size: {w: 16.1, h: 29.0}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -42,9 +42,15 @@ provenance:
     outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [8.05, 16.25], direction: front}
+  cable: {at: [8.05, 16.25], direction: front}
   wire-1: {at: [6.9, 9.4], direction: front}
   wire-2: {at: [6.9, 23.1], direction: front}
 skins: [default]

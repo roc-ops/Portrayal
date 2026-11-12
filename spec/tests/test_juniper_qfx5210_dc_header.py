@@ -77,7 +77,7 @@ def test_the_header_presents_the_key_and_says_its_size_is_an_estimate():
 
 def test_the_plug_is_a_declared_stand_in_and_mates_the_key():
     d = contract(PLUG)
-    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.0.0")
+    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.1.0")
     assert d["size"] == contract(HEADER)["size"]
     assert "STAND-IN" in d["provenance"]["model"]
     points = d["connection-points"]

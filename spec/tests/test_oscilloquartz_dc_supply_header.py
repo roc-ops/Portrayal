@@ -84,7 +84,7 @@ def test_the_header_presents_the_key_and_says_its_size_is_an_estimate():
 
 def test_the_plug_is_the_manuals_cable_connector_and_mates_the_key():
     d = contract(PLUG)
-    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.0.0")
+    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.1.0")
     assert d["size"] == {"w": 13.7, "h": 10.3}
     points = d["connection-points"]
     assert points["mate"]["at"] == contract(HEADER)["connection-points"]["mate"]["at"]
