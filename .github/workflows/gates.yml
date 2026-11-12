@@ -360,11 +360,16 @@ jobs:
       - run: pip install -e ".[test]"
 
       # pdftoppm gates the OCR tests. Without it they SKIP, which is the one
-      # thing this workflow exists to stop happening quietly.
+      # thing this workflow exists to stop happening quietly. The runners cannot
+      # reach Ubuntu's package hosts, so poppler comes from conda-forge, which
+      # the runner image's Miniconda installs from.
       - name: poppler
         run: |
-          command -v pdftoppm \
-            || { sudo apt-get update && sudo apt-get install -y poppler-utils; }
+          command -v pdftoppm && exit 0
+          : "${CONDA:?CONDA is not set: this runner has no Miniconda, and apt is not used}"
+          "$CONDA/bin/conda" create -y -p "$RUNNER_TEMP/poppler-env" -c conda-forge poppler
+          "$RUNNER_TEMP/poppler-env/bin/pdftoppm" -v
+          echo "$RUNNER_TEMP/poppler-env/bin" >> "$GITHUB_PATH"
 
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
         with:

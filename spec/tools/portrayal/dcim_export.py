@@ -750,11 +750,20 @@ PART_POWER = {
     "cyberpower/pdu-cord-5-15p": "nema-5-15p",
     # The StarTech.com 8NS8-RACK-MOUNT-PDU's 8 ft cord and the RKPW081915's 6 ft cord end in a NEMA 5-15P: the same slug.
     "startech/pdu-cord-5-15p": "nema-5-15p",
+    # The Vertiv Geist VP9562's fixed 10 ft cord ends in a NEMA 5-15P: the same slug as the two cords above.
+    "vertiv/rpdu-cord-5-15p": "nema-5-15p",
+    # The APC AP7900B's fixed 11.98 ft cord ends in a NEMA 5-15P: `nema-5-15p`, as the two cords above.
+    "apc/pdu-cord-5-15p": "nema-5-15p",
     # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
     "eaton/g3-cord-l5-20p": "nema-l5-20p",
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held
     # source, so it is `other`, as the connectors below are, and POWER_LABEL says which connector.
     "eaton/tripplite-cord-l5-30p": "other",
+    # THE ePDU G3 METERED INPUT EMIT03-10's FIXED 10 ft CORD ENDS IN A NEMA L5-30P: `other`, as the cord above, for the
+    # same reason; the EMIT04-10's ends in a NEMA L6-30P, `nema-l6-30p`, as the CyberPower cord above (TYPE_NEMA_L630P;
+    # not checked against a target's source file here).
+    "eaton/g3-cord-l5-30p": "other",
+    "eaton/g3-cord-l6-30p": "nema-l6-30p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
@@ -768,6 +777,11 @@ PART_POWER = {
     "generic/nema-l5-20p-plug": "nema-l5-20p",
     "generic/nema-5-20p-plug": "nema-5-20p",
     "generic/cs8365c-plug": "cs8365c",
+    # THE NEMA 6-15P AND 6-20P PLUG FACES. `nema-6-15p` and `nema-6-20p` are NetBox power-port type slugs
+    # that have not been checked against a target's source file, so each is `other` and POWER_LABEL
+    # (dcim_registers.py) names the plug; the slug replaces `other` once it is read from the source.
+    "generic/nema-6-15p-plug": "other",
+    "generic/nema-6-20p-plug": "other",
     # A GPU CARD'S AUXILIARY POWER INLET (P-0028, docs/connectors-gpu-design.md).
     # Neither target has a type for these: PowerPortTypeChoices in
     # netbox-community/netbox (netbox/dcim/choices.py at main, 2026-10-14) holds
@@ -783,6 +797,9 @@ PART_POWER = {
     # type for it has been read from a held source, so it is `other` and POWER_LABEL
     # says which connector.
     "rittal/pdu-cord-cee-16a": "other",
+    # THE SINGLE-PHASE DK 7979 PDU'S FIXED CORD ends in a 16 A CEE (IEC 60309) 1P plug (the
+    # DK 7979.110 circuit diagram, "CEE 16 A/1P"); `other`, as the three-phase cord is.
+    "rittal/pdu-cord-cee-16a-1p": "other",
     # THE PRO4X'S FIXED CORD ENDS IN AN IEC 60309 3P+N+G 6h PLUG (the SKU page of C4G36RA-GPBD2FE1). No power-port type
     # of the two targets is held for it in this tree, so it is `other`, as the connectors above are, and POWER_LABEL
     # says which connector.
@@ -802,6 +819,9 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # A RARITAN PX2-2475'S CORD ends in a NEMA L5-20P (the technical specification): `nema-l5-20p`, the value the Tripp Lite and
+    # ePDU G3 cords above export, a PowerPortTypeChoices value in both targets.
+    "raritan/px2-cord-l5-20p": "nema-l5-20p",
     # A PANDUIT PDU'S FIXED CORD ends in an IEC 60309 plug: the G5 intelligent unit's in a 2P+E 6h 32 A plug and the
     # basic unit's in a 3P+E 9h 60 A plug. No power-port type of the two targets is held for either in this tree, so
     # each is `other`, and POWER_LABEL says which connector.
@@ -1469,6 +1489,11 @@ def device_console_row(p, a):
         return {"name": "AUX", "type": "rj-45"}
     if role == "console" and ref.startswith("std/usb-c"):
         return {"name": "Console (USB-C)", "type": "usb-c"}
+    # A D-SUB CONSOLE PLACED AS THE REGISTRY'S OWN DB9, std/db9: the PX2-2475's CONSOLE / MODEM jack. `de-9` is the type
+    # `route_part` writes for a card's. The placement has to SAY console, as for the USB jacks above. A db9-receptacle
+    # placement is not read here: that part's register entry, NOT_A_DCIM_PORT, is for the alarm and craft ports on it.
+    if role == "console" and ref.split("@")[0] == "std/db9":
+        return {"name": "Console", "type": "de-9"}
     # A USB-A CONSOLE BESIDE THE RJ45 ONE: the XM-8424H prints CONSOLE over both, and the
     # data sheet lists a "USB console". `usb-a` is a console-port type in both targets.
     if role == "console" and ref.startswith("std/usb-a"):

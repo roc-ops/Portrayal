@@ -36,7 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat, seatPoint, seatFins, finReach } from './section.js';
+import { sectionBody, sectionSeat, seatPoint, seatFins, finReach, sectionHalves, SEAM_INDEX } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -1007,11 +1007,24 @@ export function createViewer(container, opts = {}) {
   // plates on its floor (the open drawing's regions are not published, so they
   // are placed by where they are to each other). Closed, or a box with no
   // halves, shows what was always shown. The halves are no pick target.
+  //
+  // A HOUSING WITH A SECTION (section.js sectionHalves) opens as the stepped body cut at the seam:
+  // each half is that part of the body, ribs and all, and the lid turns about the line where the seam
+  // meets the hinge face's outline. The part's cut face is not drawn, as the open face of a box half
+  // is not: the inside of the shell shows through it, and what the lid's inside looks like is the
+  // authored open drawing's. A device with no section, or whose halves the body cannot be cut at,
+  // gets the two boxes it always had.
   const HALF_BAY = {base: '#4b8f6b', lid: '#c07a2c'};
   function applyHousing() {
     if (housingGroup) { scene.remove(housingGroup); disposeTree(housingGroup); housingGroup = null; }
+    // (cut only when it is wanted: a closed box builds none of this)
+    const cut = (!COMP && devIndex && devIndex.chassis && HOUSING === 'open')
+      ? sectionHalves(devIndex.chassis, W, H, D) : null;
+    if (cut && cut.refused) {
+      console.warn(`viewer3d: ${cut.refused}; opening the box without the section`);
+    }
     const plan = (!COMP && devIndex && devIndex.chassis)
-      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}) : null;
+      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}, cut && cut.split) : null;
     const shown = !(plan && HOUSING === 'open');
     for (const o of [box, box && box.userData.bodyBox, reliefGroup, earGroup]) if (o) o.visible = shown;
     if (!plan || HOUSING !== 'open') {
@@ -1025,9 +1038,26 @@ export function createViewer(container, opts = {}) {
     housingGroup.name = 'housing-open';
     for (const name of ['base', 'lid']) {
       const h = plan[name];
-      const mats = Array.from({length: 6}, shell);
-      mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
-      const half = new THREE.Mesh(new THREE.BoxGeometry(...h.size), mats);
+      let mats, geo;
+      const part = plan.split && plan.split[name];
+      if (part) {
+        // the stepped part, in the box frame: moved so its bounds' centre is the half's origin
+        const a = part.arrays;
+        geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+        geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+        geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+        geo.setIndex(a.indices);
+        for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+        geo.translate(-part.center[0], -part.center[1], -part.center[2]);
+        mats = Array.from({length: SEAM_INDEX + 1}, shell);
+        mats[SEAM_INDEX] = new THREE.MeshBasicMaterial({visible: false});           // the cut face
+      } else {
+        mats = Array.from({length: 6}, shell);
+        mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
+        geo = new THREE.BoxGeometry(...h.size);
+      }
+      const half = new THREE.Mesh(geo, mats);
       half.name = `half-${name}`;
       half.position.set(...h.center);
       if (name === 'lid') half.quaternion.set(...h.quaternion);
