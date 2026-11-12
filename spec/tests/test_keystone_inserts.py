@@ -115,7 +115,7 @@ def test_every_insert_fills_the_opening_and_lands_centred_in_the_clip():
     clip = _contract(f"common/keystone-clip@{_newest('common', 'keystone-clip')}")
     for ref, doc in _inserts().items():
         assert doc["behaviour"] == "occupies", ref
-        assert doc["size"] == clip["size"], ref
+        assert (doc["size"]["w"], doc["size"]["h"]) == (clip["size"]["w"], clip["size"]["h"]), ref
         assert doc["conforms"] == "keystone-opening", ref
         assert doc["connection-points"]["mate"]["at"] == clip["connection-points"]["mate"]["at"], ref
         assert (COMP / ref.split("/")[0] / doc["name"] / f"v{ref.split('@')[1]}" / "skins/default.svg").exists(), ref
@@ -148,6 +148,18 @@ def test_the_jack_composes_one_rj45_port_a_plug_lands_on():
     cages = _index()["fs/keystone-rj45-cat6@1"]["cages"]
     assert [(g["id"], g["interface"], g["kind"]) for g in cages] == [("rj45", "rj45", "connector")]
     assert cages[0]["accepts"] == ["generic/rj45-plug@1"]
+
+
+def test_the_jack_states_the_figures_its_datasheet_prints_and_carries_none_over_unread():
+    """the jack's own datasheet draws its housing, rear cap and length, and gives its wire range"""
+    doc = _contract("fs/keystone-rj45-cat6@1")
+    assert doc["size"]["d"] == 35.2 and doc["size-confidence"]["d"] == "datasheet"
+    # the envelope stays the opening it fills (see test_every_insert_fills_the_opening...)
+    assert (doc["size"]["w"], doc["size"]["h"]) == (16.5, 14.9)
+    text = " ".join([doc["size-notes"]] + [str(v) for v in doc["provenance"].values()])
+    for figure in ("16.4", "19.6", "14.5", "16.1", "22.25", "9.9", "35.2", "23 to 26 AWG"):
+        assert figure in text, f"the contract does not state {figure}"
+    assert "unread" not in text and "is not held" not in text
 
 
 @pytest.mark.parametrize("name", ENCLOSURES)
