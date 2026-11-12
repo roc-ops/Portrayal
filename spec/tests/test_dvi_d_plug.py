@@ -279,12 +279,25 @@ def test_the_mating_face_states_what_is_printed_and_what_is_estimated_in_short_s
     assert "2.57" in prov["blade"] and "3.3" not in prov["blade"] and "key" in prov["blade"]
     assert "ESTIMATED" in prov["contacts"] and "ESTIMATED" in prov["blade"]
     assert "INNER line" in prov["shell"] and "lip" in prov["shell"] and "1.3" in prov["shell"]
-    assert "3.2" in prov["jackscrews"] and "3.4" not in prov["jackscrews"]
-    texts = list(prov.items()) + [("plug-shell", contract()["provenance"]["shell"])]
+    for name, jackscrews in (("mating", prov["jackscrews"]), ("plug", contract()["provenance"]["jackscrews"])):
+        assert "3.2" in jackscrews and "3.4" not in jackscrews, name
+    assert "straight line" in prov["contacts"] and "outline" in prov["contacts"]
+    texts = list(prov.items()) + [("plug-" + k, v) for k, v in contract()["provenance"].items()]
     texts += [("description", mating_contract()["description"]), ("plug-description", contract()["description"])]
     for key, text in texts:
-        for sentence in re.split(r"(?<=[.;:])\s+", " ".join(text.split())):
+        flat = " ".join(text.split())
+        for sentence in re.split(r"(?<=\.)\s+", flat):
             assert len(sentence.split()) <= 25, (key, sentence)
+        for sentence in re.split(r"(?<=[.;:])\s+", flat):
+            assert len(sentence.split()) <= 25, (key, sentence)
+
+
+def test_the_hood_note_names_the_pages_of_the_molex_sheet():
+    hood = " ".join(contract()["provenance"]["hood"].split())
+    sentences = re.split(r"(?<=\.)\s+", hood)
+    for page, what in (("page 4", "exploded"), ("page 2", "grid"), ("page 3", "thread")):
+        assert any(page in s and what in s for s in sentences), (page, what)
+    assert "pages 1 to 5, prints exploded" not in hood
 
 
 def test_every_estimate_of_the_plug_is_declared():
