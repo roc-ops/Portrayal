@@ -90,3 +90,32 @@ def test_the_gaps_name_what_is_missing_and_the_old_one_is_gone(name):
     assert gaps["underside"]["scope"] == ["bottom"]
     assert gaps["right-side"]["scope"] == ["right"]
     assert gaps["side-identity"]["scope"] == ["left"]
+
+
+# Where the side view stands on the maker's sheet: below the top view on the four CPM sheets, beside it on the DSM-8 sheet.
+SHEET_PLACE = {
+    "cpm-800-1": "below the top view and lines up with it",
+    "cpm-800-2": "below the top view and lines up with it",
+    "cpm-1600-1": "below the top view and lines up with it",
+    "cpm-1600-2": "below the top view and lines up with it",
+    "dsm-8": "beside the top view",
+}
+
+
+@pytest.mark.parametrize("name", sorted(DRAWN))
+def test_the_side_identity_hint_says_where_the_view_stands_on_the_sheet(name):
+    note = " ".join({g["what"]: g for g in device(name)["gaps"]}["side-identity"]["note"].split())
+    assert SHEET_PLACE[name] in note
+    assert ("stands beside" in note) == (name == "dsm-8")
+
+
+@pytest.mark.parametrize("name", ["cpm-1600-1", "cpm-1600-2"])
+def test_the_cpm_1600_note_states_the_printed_and_the_drawn_depth(name):
+    note = " ".join(device(name)["provenance"]["top-and-left"]["note"].split())
+    assert "good to about one millimetre" in note
+    assert "12.50" in note and "10.4" in note
+
+
+@pytest.mark.parametrize("name", sorted(DRAWN))
+def test_the_slots_are_outlines_as_the_drawings_show_them(name):
+    assert {s.get("fill") for s in decor(name, "left", "vent-slot")} == {"none"}
