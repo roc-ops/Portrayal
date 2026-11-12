@@ -38,7 +38,7 @@ SIZES = {
 # name -> (slots a wall, slot gap, finger pitch, walls, face width mm, duct length mm)
 FINGERS = {
     "srcableduct1u": (24, 8.0, 18.0, 2, 482.6, 431.8),
-    "srcableduct1uhd": (9, 34.0, 46.0, 2, 482.6, 431.8),
+    "srcableduct1uhd": (10, 34.0, 40.9, 2, 482.6, 431.8),
     "srcableduct1ufc": (24, 8.0, 18.0, 2, 494.79, 431.8),
 }
 COMPONENT = {"srcableduct1u": "tripplite-duct-1u", "srcableduct1uhd": "tripplite-duct-1uhd",

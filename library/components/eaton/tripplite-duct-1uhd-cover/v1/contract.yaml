@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: tripplite-duct-1uhd-cover
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 lid: true
@@ -22,10 +22,21 @@ provenance:
     datasheet - the spec sheet calls it a "finger duct with dual-hinge cover" and its photographs
     show a front plate on hinges. THE FORMAT HAS NO HINGE, AND NONE IS INVENTED: the dual-hinge
     cover is a lid that lifts off, drawn as one plate (`lid: true`), and the hinges are a gap.
+  tabs: >-
+    estimated - FOUR TABS AND A LABEL PLATE READ ON THE MAKER'S 500 px PHOTOGRAPH, counted twice.
+    There are four ribbed rectangles on the cover's face, two high and two low. The first two are on
+    the left and the other two on the right. A plate in the middle carries the maker's mark.
+    Their sizes are read off the picture by one method. The ten rim specks fix a perspective term.
+    The cover's two end edges fix the rest. The cover's top and bottom edge fix the height as a
+    fraction of its 51.82. Each figure is rounded to 1 mm and good to about 6 mm.
+    The first tab has a bright strap across its top, 2.5 mm of which is drawn.
+    The ribbing, the maker's mark on the plate and any rise of the tabs off the plate are not drawn.
+    The picture gives them too few pixels.
   color: >-
     datasheet - "Cold rolled steel with black finish". The shade is this library's render of
     black steel, a little lighter than the walls so the cover reads apart from them, and its
-    top lip lighter again so the part has an edge on the explorer's dark stage.
+    top lip lighter again so the part has an edge on the explorer's dark stage. The tabs are a
+    little darker than the plate, as the photograph shows them, and the label plate darker again.
 size: {w: 431.8, h: 51.82}
 size-confidence: {w: estimated, h: datasheet}
 attrs: {material: Cold rolled steel}
@@ -38,6 +49,12 @@ elements:
   plate: {at: [0.0, 0.0], size: [431.8, 51.82], class: bezel}
   lip-top: {at: [0.0, 0.0], size: [431.8, 1.1], class: bezel}
   lip-bottom: {at: [0.0, 50.72], size: [431.8, 1.1], class: bezel}
+  tab-1: {at: [72.0, 3.0], size: [24.0, 24.0], class: bezel}
+  tab-1-strap: {at: [70.0, 0.0], size: [23.0, 2.5], class: bezel}
+  tab-2: {at: [116.0, 30.0], size: [21.0, 21.82], class: bezel}
+  tab-3: {at: [291.0, 28.0], size: [19.0, 22.0], class: bezel}
+  tab-4: {at: [335.0, 2.0], size: [24.0, 24.0], class: bezel}
+  label: {at: [204.0, 9.0], size: [36.0, 38.6], class: bezel}
 relief:
   features:
     - {node: plate, lift: 112.06, out: 113.16, confidence: estimated, source: 'no document dimensions the cover section; the plate is taken as thick as the wall'}
