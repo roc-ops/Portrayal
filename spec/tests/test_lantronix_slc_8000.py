@@ -50,7 +50,10 @@ def test_the_rear_declares_three_bays_that_state_the_module_class_and_seat_nothi
     bays = rear_bays(device)
     assert [b["id"] for b in bays] == ["io-bay-1", "io-bay-2", "io-bay-3"]
     assert {b["interface"] for b in bays} == {"slc-io-module"}
-    assert not [b for b in bays if b.get("accepts") or b.get("default")]
+    assert not [b for b in bays if b.get("default")]
+    # each bay lists the two modules it takes: the exporter's readers read the authored list alone, so a bay that states an
+    # interface and is mated by parts must list what it offers (test_cards_by_interface)
+    assert {tuple(b.get("accepts") or []) for b in bays} == {("lantronix/frrj451601@1", "lantronix/frusb1601@1")}
     assert {b["group"] for b in bays} == {"io-bays"}
     assert [b["rel-pos"] for b in bays] == [1, 2, 3]
     assert device["groups"]["io-bays"]["role"] == "traffic"
