@@ -43,7 +43,8 @@ list of things to do.
 - **A relative is not evidence.** A convention established for one product
   family (an airflow colour, a lamp order) is not a reading of a different
   device. If the documents for this device are silent, the file says so and
-  opens a gap.
+  opens a gap. An estimate with its method stated is evidence of a declared
+  kind. Leaving a shown feature out is not.
 - **Nothing private.** No vendor material, no person named as the decider, no
   path into an untracked directory, no reference to a tool a public reader
   cannot use.
@@ -54,6 +55,14 @@ list of things to do.
 - **The comparison was made, for every face that has a reference.** The pull
   request carries the sentence Gate 5 asks for, and a face with no reference
   image is named as such. Ask for the sentence before believing the file.
+- **Count picture to picture, before reading the notes.** List what the
+  reference picture shows on each face (the profile or section, each row of
+  repeated features with its count, ears, holes, marks, the colour), then count
+  the same in the built picture. A feature the reference shows and the face
+  does not draw is a finding, even when a note or a gap names it. It is
+  dismissed only by an answered question of the maintainer on that feature,
+  linked in the pull request, or by a stated limit (the kit has no shape for it,
+  the picture is too small) that is itself put to the maintainer.
 - **Look at every face and every module, zoomed.** Overlap is the defect a
   person catches most and a gate catches least: decor over a port, text over a
   vent, a lever over a label, a part out of its rotated cutout. Look again
