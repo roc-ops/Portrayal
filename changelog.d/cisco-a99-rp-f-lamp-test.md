@@ -6,5 +6,5 @@
   an L beside the button stay unmodelled: no Cisco document held names them, and the contract's provenance says what was
   searched and what would settle it.
 - The ASR 9902 (2.0.3 to 2.0.4) and ASR 9903 (2.0.4 to 2.0.5) each take a patch, because each seats two of these cards. The
-  lock and the drawing version line of their exported device types move with it, and the card's module types carry contract
+  drawing version line of their exported device types moves with it, and the card's module types carry contract
   version 2.2.0.
