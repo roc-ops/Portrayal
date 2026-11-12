@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: a99-rp-f
-version: 2.1.1
+version: 2.2.0
 class: supervisor
 behaviour: fills
 profile: networking
@@ -9,8 +9,8 @@ description: >-
   Cisco ASR 9900 Fixed Chassis Route Processor. The RP for the ASR 9902 and ASR 9903,
   two per chassis. A compact landscape module: two BITS timing ports, a time-of-day
   port, two management Ethernet ports, console and auxiliary serial ports, a Class A USB
-  port, 10 MHz and 1 PPS GPS clock inputs, and nine status lamps in a hex-vented
-  faceplate.
+  port, 10 MHz and 1 PPS GPS clock inputs, nine status lamps and a LAMP TEST push button
+  in a hex-vented faceplate.
 size: {w: 221.84, h: 39.52}
 attrs:
   model: 'A99-RP-F'
@@ -38,7 +38,8 @@ provenance:
     A HANDFUL PER PART. This face carries: 9 panel lamps at dome 0.3 (one number, carried by
     120 Cisco contracts); 2 ejector brackets, their levers and the grip flanges at out 4.2
     (one number, carried by 61 Cisco contracts); 2 vent fields at vent 26 (one number,
-    carried by 9 Cisco contracts). EVERY MAGNITUDE BELOW IS ESTIMATED, AND THAT IS A
+    carried by 9 Cisco contracts); 1 pushbutton at cyl 1.2 (the one pushbutton number
+    the other Cisco route processors carry). EVERY MAGNITUDE BELOW IS ESTIMATED, AND THAT IS A
     DELIBERATE READING OF WHAT RELIEF IS FOR. The owner's ruling: 'the whole 3d part is kind
     of interpolated anyway... It's just to give it a realistic view instead of just being a
     flat 2d... All of the 3d stuff is going to be mostly conjecture unless the vendor
@@ -165,13 +166,54 @@ provenance:
     carries those tables because the ASR 9901's figure calls a matrix out, and this card
     does not carry them because its chassis' figure does not.
   lamp-test: >-
-    NOT MODELLED, AND DRAWN BY CISCO. The master and the photograph both show a round
-    LAMP TEST push button at the right of the face, with five small square apertures in an
-    L beside it, and neither is in `elements`. Found while establishing that the matrix is
-    absent; recorded here rather than added, because what the five apertures ARE is not
-    stated anywhere in the intake and a button placed beside four unknowns is half a
-    reading. cisco/a9k-rsp@2 models its own lamp-test button and is the shape this would
-    take.
+    MODELLED AT 2.2.0, ITS PLACE ESTIMATED. Cisco's master draws a round LAMP TEST push
+    button at the right of the face, two concentric circles (an outer bezel and an inner
+    plunger) with the legend LAMP over TEST under it and to its left. What it does is
+    Cisco Overview and Reference Guide, "Push Buttons": when the Lamp Test button is
+    pushed the status LEDs light until it is released. That section speaks of the RSP/RP
+    card front panel in general and does not name this card, and the fixed-port guide's
+    Figures 10 and 165 do not call the button out, so the master's own printed legend is
+    what names it here. The card has no ACO button; the master draws none.
+    HOW THE PLACE WAS FOUND. The master's art box is 208.96 x 37.85 mm and this contract's
+    frame is 221.84 x 39.52, so the render's width alone is not a scale (the aspects are
+    5.521 and 5.613; provenance.size, which calls the box the art box, is read against
+    this and not changed here). The frame was fitted instead. Along x, the left edges of the five jack bezels in the art against the
+    same jacks in this contract give x = 1.0676 art + 1.05, every jack inside 0.2 mm; the
+    two boxes' ratio gives 1.0616, and over the 20 mm beyond the last jack the two differ
+    by 0.8 mm, so the button is placed from the AUX jack's right edge at the middle slope,
+    1.0646. Along y, the ratio of the two boxes, 1.0441, with the jack tops inside 0.3 mm.
+    In the art the bezel measures 5.16 mm across and the plunger 3.3 mm, centred at 163.51,
+    28.44; in this frame that is a 5.4 mm bezel and a 3.5 mm plunger centred at 175.4,
+    29.65. The legend is read the same
+    way: LAMP and TEST centred at 170.2, a millimetre left of where the same fit puts
+    them so that the legend clears the bezel, baselines 33.0 and 35.3. EVERY FIGURE HERE IS
+    ESTIMATED from a drawing through two fitted axes, good to about 0.7 mm along x and
+    0.3 along y, and none is a dimension Cisco prints. The pushbutton's
+    proudness is the library's one pushbutton figure and is estimated like the other
+    reliefs. A photograph is held and was read for arrangement and colour only: Figure 165
+    of the fixed-port guide, "Cisco ASR 9902 Router Chassis Front Panel", is a picture of
+    this card and shows the same button, a light grey disc in a dark ring, the legend
+    LAMP over TEST under and left of it, and the button just right of the USB port's
+    centre, as the master draws it. It is a small bitmap with keystone in it, so nothing
+    was measured from it. THE USB PORT IS NOT THE ANCHOR: the port below stands about 2 mm
+    nearer the jacks than the master puts it against the jacks and the vent field, so
+    the button is placed from the AUX jack and the vent field, where the two agree, and
+    not from the USB port.
+  apertures: >-
+    NOT MODELLED, AND DRAWN BY CISCO. The master and Figure 165 of the fixed-port guide
+    both show five identical small dark apertures in an L immediately left of the
+    button, each in a pale bezel: three in a row and two more below the leftmost. In the
+    art they measure 2.65 x 2.35 mm on a pitch of 3.3 mm across and 3.3 mm down; in this
+    frame about 2.8 x 2.4 on 3.5 and 3.4. SEARCHED AND NOT EXPLAINED. No held Cisco
+    document names them: the lamps are the nine of the guide's Table 24, all beside their
+    own legends elsewhere on the face; Figure 165's eight callouts and the callouts of
+    Figures 10 and 11 do not number them; the Overview and Reference Guide's Push
+    Buttons section names two buttons and no aperture; the held ASR 9902 data sheets and
+    the fixed-port guide carry no word for an aperture, pinhole or push button of this
+    card. They are not the LED matrix (no lattice) and not the capsule lenses of the
+    nine lamps. A pinhole, an unlabelled lamp and a vent detail are all possible and none
+    is chosen. WHAT WOULD SETTLE IT: a Cisco figure or table that names them, a
+    photograph of a powered card, or a ruler on one real card.
 elements:
   active:
     at: [57.79, 31.54]
@@ -265,6 +307,14 @@ elements:
     - {name: red, color: '#d0021b'}
     - {name: amber, color: '#f5a623'}
     - 'off'
+  lamp-test:
+    at: [172.7, 26.95]
+    size: [5.4, 5.4]
+    class: button
+    description: >-
+      the LAMP TEST momentary push button. While it is held the status lamps light.
+      Modelled as a button and not as decoration for that reason; its place is
+      estimated, see provenance.lamp-test.
 relief:
   wall: '#4a4f55'
   features:
@@ -292,6 +342,12 @@ relief:
       source: >-
         edgecore/agr-fan@1 grille - the library's one vent-cavity figure, described in that
         contract by appearance and not by depth
+    - node: lamp-test
+      cyl: 1.2
+      confidence: estimated
+      source: >-
+        casa/pem@1 hs-button - 'NO PRECEDENT - a panel pushbutton. Invented here'. Reused
+        rather than re-invented so the library carries ONE pushbutton number
     - node: active
       dome: 0.3
       confidence: estimated
