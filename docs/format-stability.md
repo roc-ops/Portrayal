@@ -1336,6 +1336,61 @@ states ribs.
 **Not in this change.** Relief taken from a rib is a later change. A housing with
 ribs may state `halves`; see "A housing with a stepped end that opens" below.
 
+## The plan outline of a housing
+
+A housing that states a `chassis.section` may also state the outline it has seen from
+above. The format gains one optional key and the build gains no new file, so `format`
+stays 1 and `contract` stays 2. A device that states no `plan-outline` gains no key: its
+build is byte for byte what it was. **Nothing is drawn from the key yet.** The faces and
+the 3D body do not follow it, so no device states it yet; a test fails if a library
+device does.
+
+**In a manifest.** `chassis.plan-outline`, a list of bands. Each band is
+`{heights: [from, to], points: [[x, y], ...]}`. `heights` is a range of heights in
+millimetres down from the top of the box; the bands tile `[0, height]` exactly (to 0.01
+mm), listed from the top, and a range includes its `from` and not its `to`. One band
+`[0, height]` is a housing with one outline at every height. `points` is a closed
+polygon in millimetres in the top face's frame: x along the width from the left, y down
+the drawing with the rear at the top and the front at the bottom, so a point at depth
+`sx` from the front is at `y = depth - sx`. The bottom face is its mirror in x with the
+points in reverse order. Each polygon is the outer envelope of the housing at those
+heights seen from above. It is clockwise with y down by the sign of its area; slanted
+edges are allowed (a rounded corner is its arc in short straight steps, a lobe is its
+points); it has no self-crossing, no repeated point and no edge shorter than 0.1 mm;
+and it lies inside the `width` by `depth` box (to 0.01 mm). A band has at most 512
+points, a device at most 16 bands and 2048 points in all. Lint L220 to L225 check it.
+
+**What it means.** The section is the most the housing can be and the plan only
+removes: a band's polygon is cut against the section for those heights, and a plan
+point outside the section there is clipped away, never added. A later change defines
+the cut, and with it a rule that a point or an edge within 0.5 mm of an edge of the
+section or of a side of the box is read as lying on it. The box stays the bounding
+box, and `chassis.w`, `h` and `d`, the rack fit and the exports read it as before.
+A housing with a plan outline may state `halves` and `fins`; each half takes the
+band on its own side of the seam. It is not stated on a rack device or together with
+`bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (L221).
+
+**In `<device>.configs.json`**, of such a device: `chassis.plan-outline`, the bands as
+written. It is left out for every other device. Compiled faces are unchanged.
+
+**What the lock asks for.** `plan-outline` is shape, as `section` is: it sets the
+outline of the top and bottom faces and the body. Stating it on a device that was
+released without it, moving a point, changing a band or taking it away is a major.
+
+**One way.** Once a device on the main branch states the key, these cannot be taken
+back or reinterpreted without a break: the key's name; the band shape (`heights`,
+`points`); the frame (the top face's, the bottom its mirror in x); the clockwise
+winding; the meaning "the outer envelope from above, the section the maximum, the plan
+only removes"; the caps (512 points a band, 16 bands, 2048 points in all; raising one
+later is compatible, lowering one is not); the half-open `[from, to)` band convention;
+the 0.5 mm rule above; and each half's own seam outline, the polygon of the band on
+that half's side of the seam.
+
+**An older validator** holding the schema from before this change refuses a file that
+states `plan-outline`, because `chassis` accepts no key the schema does not list; this
+is the situation `section` and `halves` are in. A consumer that validates a manifest
+with a copy of the schema updates the copy before it reads a device that states one.
+
 ## A housing with a stepped end that opens
 
 A housing that states a `chassis.section` may also state `chassis.halves`. No key
