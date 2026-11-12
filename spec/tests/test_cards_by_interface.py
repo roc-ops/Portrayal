@@ -6,11 +6,12 @@ part is TAKEN by a bay when the bay's `accepts` names it, or the bay's
 `interface` is in the part's `mates` and the part is wide enough
 (manifest.takes). Every reader of a bay asks that one question.
 
-No library part states either yet, so the cases are built on a small library
-in tmp_path: a riser shaped like the R740xd's riser 1A (slot 1 spans slot 2,
-slot 3 spans nothing), cards that mate `pcie-fh`, a low-profile card, a
-two-slot card and a vendor filler. The last section holds the real library to
-the one thing this slice promises: no bay's published list moves.
+The cases are built on a small library in tmp_path: a riser shaped like the
+R740xd's riser 1A (slot 1 spans slot 2, slot 3 spans nothing), cards that mate
+`pcie-fh`, a low-profile card, a two-slot card and a vendor filler. Only the
+full-height cards of riser 1A state `mates` in the real library (see
+test_riser_1a_interface.py). The last section holds the real library to what
+its bays publish: the list the predicate offers, and the interface they state.
 """
 import json
 import pathlib
@@ -484,7 +485,7 @@ def test_a_dcim_bay_row_says_the_interface_and_a_row_without_one_is_unchanged():
     assert "description" not in dcim.bay_row("slot-3")
 
 
-# --- the real library: nothing moved -----------------------------------------------
+# --- the real library: what its bays publish ---------------------------------------
 
 def _authored_bays(contract):
     return {bid: b for bid, b in (contract.get("bays") or {}).items() if isinstance(b, dict)}
@@ -495,17 +496,14 @@ def test_a_bay_that_states_an_interface_takes_no_part_beyond_its_list():
     """THIS TEST HOLDS A FACT THE READERS RELY ON. Some readers of a bay's `accepts` still read the
     authored list alone: in dcim_export.py `_chassis_seated`, `_chassis_seats`,
     `pass_through_bays`, `anchored_bays`, `seating_depths` and the device-bay
-    rows, and `manifest.component_refs` (the incremental build's dependency
-    graph). A bay may state the class of module it takes as its `interface`
+    rows. A device bay may state the class of module it takes as its `interface`
     while no part mates that interface, and those readers lose nothing. The
-    change that first lets a part mate such an interface routes them through
-    `manifest.offers` first, and only then does this test move."""
+    change that first lets a part mate a device bay's interface routes them
+    through `manifest.offers` first, and only then does this test move. A
+    component bay may take parts by `mates` now (riser 1A), and its published
+    list is held by the test below."""
     lib = render.Library([str(LIB)])
     found = []
-    for cf in libwalk.iter_components([LIB]):
-        for bid, b in _authored_bays(load_yaml(cf) or {}).items():
-            if b.get("interface") and lib.offers(b) != list(b.get("accepts") or []):
-                found.append(f"{cf.parent.parent.name}/{cf.parent.name}:{bid}")
     for df in libwalk.iter_devices([LIB]):
         for view in ((load_yaml(df) or {}).get("views") or {}).values():
             for b in manifest.view_parts(view or {})["bays"]:
@@ -514,16 +512,11 @@ def test_a_bay_that_states_an_interface_takes_no_part_beyond_its_list():
     assert found == [], found
 
 
-def test_no_part_in_the_library_mates_either_key_yet():
-    found = [str(cf) for cf in libwalk.iter_components([LIB])
-             if {"pcie-fh", "pcie-lp"} & set(mates_of(load_yaml(cf) or {}))]
-    assert found == [], found
-
-
 def test_a_published_component_bay_list_is_the_list_the_contract_states():
     f = LIB / "dist" / "components.json"
     if not f.exists():
         pytest.skip("components.json not built")
+    lib = render.Library([str(LIB)])
     checked = 0
     for c in json.loads(f.read_text())["components"]:
         cf = LIB / "components" / c["ns"] / c["name"] / c["major"] / "contract.yaml"
@@ -531,8 +524,8 @@ def test_a_published_component_bay_list_is_the_list_the_contract_states():
             continue
         for bid, b in _authored_bays(load_yaml(cf) or {}).items():
             published = c["bays"][bid]
-            assert published["accepts"] == (b.get("accepts") or []), (cf, bid)
-            assert "interface" not in published
+            assert published["accepts"] == lib.offers(b), (cf, bid)
+            assert published.get("interface") == b.get("interface"), (cf, bid)
             checked += 1
     assert checked > 50, f"read {checked} bays"
 
