@@ -25,9 +25,9 @@ provenance:
   chassis:
     confidence: datasheet
     note: >-
-      Entra EN8100/8400 Hardware Unit Data Sheet (revision 1, 03/26/2024) p7, Dimensions (H x W x D)
-      "11.3" x 11.0" x 23.9" (28.8 cm x 28.1 cm x 60.7 cm)", with the notes "Length excludes port
-      plugs" and "Height measured from the bottom of the strand". The data sheet does not say which
+      Entra EN8100/8400 Hardware Unit Data Sheet (revision 1, 03/26/2024) p7, the dimensions row:
+      11.3 x 11.0 x 23.9 in (28.8 x 28.1 x 60.7 cm), with notes that the length leaves out the
+      port plugs and that the height is measured from the bottom of the strand. The data sheet does not say which
       face is which; the 60.7 cm is the long axis, the ends carry the ports (guide p41), and the
       node is drawn lying on that axis, so chassis width is 607, height 288 and depth 281. The
       sheet's own W and D labels are therefore not the chassis' width and depth, and the height
@@ -52,15 +52,15 @@ provenance:
   mount:
     confidence: datasheet
     note: >-
-      The data sheet p7 lists "Mounting options" as strand, pedestal and wall. The device is written
-      `strand` because the guide ships the strand clamps with the node (p61, "2 x Top Strand Clamp
-      (included with each EN8100)") and sells the wall bracket and the pedestal kit as options
+      The data sheet p7 lists strand, pedestal and wall as the mounting options. The device is written
+      `strand` because the guide ships two top strand clamps with each node (p61)
+      and sells the wall bracket and the pedestal kit as options
       (p57, p62). The pedestal and wall mounts are stated here and not modelled: the bracket and rod
       kits have no list to stand in on a device that is not a rack device.
   power:
     confidence: estimated
     note: >-
-      STAND-IN. Data sheet p7: "Input Voltage 45-90 VAC, 50/60 Hz", "AC Current Passing 15 A max".
+      STAND-IN. Data sheet p7: input 45-90 VAC at 50/60 Hz, and 15 A of passing current at most.
       The node is fed through its RF/AC and AC-only ports (guide p41, p87), not through a mains
       inlet, and the feed vocabulary has no word for power carried on the coaxial plant, so `ac` is
       the nearest existing one.
@@ -71,14 +71,14 @@ provenance:
       has no front. `front` is the long side shown on guide p29 and p69 (the side with the closure
       bolts), `rear` the opposite long side (the hinge side, not photographed from outside), `top`
       the back of the base half, where the strand clamps are (guide p61), `bottom` the back of the
-      lid half, and `left`/`right` the two ends. The guide calls the ends "left hand side" and
-      "right hand side" (p41, p87). The faces are drawn as installed: base up, clamped to the
+      lid half, and `left`/`right` the two ends. The guide names the ends the left hand and right
+      hand sides (p41, p87). The faces are drawn as installed: base up, clamped to the
       strand, lid swinging down and so on the bottom. The guide's closed-node photographs (p29,
       p41) show the unit lid up, so each face is drawn rotated 180 degrees from its photograph:
       the fibre plug and the tall stepped fins, which the photographs show on the upper casting
       (the lid), are on the lower half here. This is an inference from three passages, not a
-      statement of the guide: the fibre entry ports are "on the bottom of the unit, 1 on each
-      side" (p42), the lid "will swing down" on a horizontal mount (p59, p65), and the lid holds
+      statement of the guide: the fibre entry ports are on the bottom of the unit, one on each
+      side (p42), the lid swings down on a horizontal mount (p59, p65), and the lid holds
       the LDM and the fibre tray (p59).
   outline:
     confidence: photo-measured
@@ -100,8 +100,8 @@ provenance:
       Guide Rev_15 p41 (the end of the EN8100, lid up) and p29 (the two closed housings; the
       EN8400 is shown in the same chassis). The end is a stepped profile: a narrower casting
       carrying the tall ribs, a flange at the seam that is the widest part (about 8 per cent of
-      the height tall, with the closure lugs on it), and a lower casting that narrows a little
-      towards its short ribs. Read from the photograph, the castings are about 0.88 of the
+      the height tall, with the closure lugs on it), and the casting that carries the short ribs,
+      which narrows a little towards them. Read from the photograph, the castings are about 0.88 of the
       flange's width where they meet it, and the profile is symmetrical about the middle of the
       depth. The photographs show the unit lid up; the profile is drawn as installed, rotated
       180 degrees from the guide's photographs (a rotation, not a mirror), so the tall-rib
@@ -118,7 +118,8 @@ provenance:
       same photographs). The ribs are thick, with gaps about as wide as the ribs. The tall ribs,
       on the lid, stand about 17 per cent of the height (49 mm) at the two ends and run along
       nearly the whole length, with a stepped tip line: a long flat stretch over the middle
-      third about two thirds as tall, and lower again at one end; they are 23 in number, 13 mm thick with 13 mm gaps. The short ribs, on the
+      third about two thirds as tall, and lower again at one end. They are 23 in number, 13 mm
+      thick with 13 mm gaps. The short ribs, on the
       base, stand about 11 per cent of the height (32 mm), 9.5 mm thick with 9.5 mm gaps, 28 in
       number. Both fields are inside the stated size, not outside it. The data sheet p7 gives
       the height as measured from the bottom of the strand and does not exclude the ribs, and
@@ -130,14 +131,14 @@ provenance:
   bolts:
     confidence: photo-measured
     note: >-
-      Guide p68: "10 captive clamping bolts", numbered on the enclosure and closed in order from #1
+      Guide p68: ten captive clamping bolts, numbered on the enclosure and closed in order from #1
       to #10. Guide p69 shows #5, #1 and #3 along the front, left to right. The maker's drawing of
       the node shows three bolt bosses on each long edge and two on each end of each half, ten in
       all. The numbers of the other seven are not shown in any document held and are not drawn.
   gasket:
     confidence: photo-measured
     note: >-
-      Guide p68 step 1, "Ensure the flange and O-ring are free of debris", and the maker's drawing
+      Guide p68 step 1, which has the installer check the flange and O-ring are clean, and the maker's drawing
       of the node, which shows a dark ring round the rim of each half. Its section is not stated.
   hinge:
     confidence: photo-measured
@@ -185,7 +186,7 @@ provenance:
     confidence: photo-measured
     note: >-
       Guide p61 and p58 to p59: the strand clamps, the wall bracket and the pedestal bracket all
-      fit to the base, "the portion that contains the LDM and the Fiber Management Tray" being the
+      fit to the base, the part holding the LDM and the fibre management tray being the
       lid. The base's back, the face with the clamps, is drawn as `top`.
   halves.base.stands:
     confidence: estimated
@@ -387,6 +388,9 @@ views:
         - {id: strand-bolt-2, at: [450, 128], size: [14, 14], rx: 7, fill: '#bfc3c7', out: 20, kind: bolt-head, confidence: photo-measured, source: 'guide p61: the strand clamp bolt, 1/2 inch hex'}
   bottom:
     size: {w: 607, h: 281}
+    panel:
+      decor:
+        - {id: lid-back, at: [0, 31], size: [607, 219], fill: '#e3e5e7', kind: casting-web, confidence: estimated, source: 'guide p29 and p41: the back of the lid casting the tall ribs stand on, as wide as the bottom edge of the chassis section'}
   left:
     size: {w: 281, h: 288}
     panel:
