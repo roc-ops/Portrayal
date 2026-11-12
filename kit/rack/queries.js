@@ -16,7 +16,7 @@ import {RU} from './rails.js';
 import {configFacts} from './catalog.js';
 import {settableOf} from './states.js';
 import {waypointLanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText, bendFindingsOf, coverFindingsOf, ringFindingsOf, ductsThrough,
-  zeroUPathways, pathwaysAt, windowsOf} from './route.js';
+  unreachedFindings, unreachedFindingsOf, zeroUPathways, pathwaysAt, windowsOf} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {slackOf, slackFindings, sparePlaces, holdsSpare, spareExports, trayText, mText, labelOf} from './slack.js';
 import {GONE, CABLE_GONE, ZERO_GONE, BUNDLE_GONE, dcFactsReader} from './commands.js';
@@ -122,6 +122,8 @@ function findingsText(rack, ctx) {
   if (!ctx?.route) return sides.length ? `Findings: ${sides.join('; ')}.` : null;
   let bodies = 0, bends = 0, covers = 0, worst = null, most = null, cabled = false;
   const rings = [], cords = [];
+  let gone = [];
+  try { gone = unreachedFindings(rack, ctx.route).map(f => f.cable); } catch { gone = []; }
   try {
     for (const c of rack.cables || []) {
       const path = routePath(rack, c, ctx.route);
@@ -153,6 +155,8 @@ function findingsText(rack, ctx) {
       rings.length > 3 ? `${rings.slice(0, 3).join(', ')} and ${rings.length - 3} more` : rings.join(', ')})`] : []),
     ...(bends ?[`${count(bends, 'cable')} ${bends === 1 ? 'has' : 'have'} a tight bend (${bends === 1 ? '' : 'the worst '}${worst.id}, ${worst.short} mm short)`] : []),
     ...(covers ? [`${count(covers, 'cable')} cross${covers === 1 ? 'es' : ''} in front of other ports (${covers === 1 ? '' : 'the most '}${most.id}, ${count(most.n, 'port')}${cabled ? '; only ports that hold a cable were judged' : ''})`] : []),
+    ...(gone.length ? [`${count(gone.length, 'cable')} ${gone.length === 1 ? 'has' : 'have'} an end that cannot be reached (${
+      gone.length > 3 ? `${gone.slice(0, 3).join(', ')} and ${gone.length - 3} more` : gone.join(', ')})`] : []),
     ...(cords.length ? [`${count(cords.length, 'cord')} ${cords.length === 1 ? 'is' : 'are'} shorter than ${cords.length === 1 ? 'its' : 'their'} route needs (${cords.length === 1 ? '' : 'the worst '}${worstCord.id}, ${mText(worstCord.short)} short)`] : []),
     ...sides];
   return parts.length ? `Findings: ${parts.join('; ')}.` : null;
@@ -635,7 +639,7 @@ async function cableInfo(rack, cable, ctx) {
   const edited = cable.routeEdited === true;
   // A route context's readers come from the page's drawings and may throw; a
   // measure that fails is "not measured", never an error.
-  let routed = null, waypoints = edited ? cable.route || [] : [], windows = [], rings = null, crosses = null, rests = null, bends = null, covers = null, ringNote = null;
+  let routed = null, waypoints = edited ? cable.route || [] : [], windows = [], rings = null, crosses = null, rests = null, bends = null, covers = null, ringNote = null, unreached = null;
   if (ctx.route) {
     try {
       waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
@@ -674,7 +678,10 @@ async function cableInfo(rack, cable, ctx) {
       const over = coverFindingsOf(rack, cable, ctx.route, label, path)[0];
       if (over) covers = {count: over.count, ports: over.ports, between: over.between, judged: over.judged,
         ...(over.estimated ? {estimated: true} : {}), text: over.text};
-    } catch { routed = null; rings = null; crosses = null; rests = null; bends = null; covers = null; ringNote = null; }
+      // an end the catalogue accepts and nothing places (route.js unreachedFindings)
+      const gone = unreachedFindingsOf(rack, cable, ctx.route, label)[0];
+      if (gone) unreached = {ends: gone.ends, text: gone.text};
+    } catch { routed = null; rings = null; crosses = null; rests = null; bends = null; covers = null; ringNote = null; unreached = null; }
   }
   // slack: the cable's own length less the routed one, in metres
   // (only metres and feet convert; any other unit leaves slack unknown)
@@ -732,7 +739,7 @@ async function cableInfo(rack, cable, ctx) {
     // how it was laid by hand in a pathway, as the file has it (`cable.lay`)
     ...(Array.isArray(cable.lay) && cable.lay.length ? {lay: cable.lay} : {}),
     route: {edited, waypoints, text: routeText(waypoints, label, rack.frame, ductsThrough(rack, ctx.chassisOf, label, windows)), ...(rings ? {rings} : {}), ...(crosses ? {crosses} : {}), ...(rests ? {rests} : {}),
-            ...(bends ? {bends} : {}), ...(covers ? {covers} : {}), ...(ringNote ? {ring_findings: ringNote} : {})}, lanes: waypointLanesOf(rack.frame), passes,
+            ...(bends ? {bends} : {}), ...(covers ? {covers} : {}), ...(ringNote ? {ring_findings: ringNote} : {}), ...(unreached ? {unreached} : {})}, lanes: waypointLanesOf(rack.frame), passes,
     loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 
