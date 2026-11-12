@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ap7821b
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: APC
 model: AP7821B
@@ -161,11 +161,12 @@ gaps:
     them.
   wanted: the installation guide's mounting figures.
 - what: sides
-  scope: [top, bottom, left, right]
+  scope: [top, bottom, right]
   reason: needs-photo
   note: >-
-    no held document shows the top, the bottom or an end.
-  wanted: straight-on photographs of the top, the bottom and an end.
+    no held photograph shows the bottom or the inlet end, and the top is a plain lid in the angled photograph. The
+    display end (`left`, seen from behind) draws the marks the angled photograph shows, borrowed from the AP7921B.
+  wanted: straight-on photographs of the top, the bottom and the inlet end.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the eight C13 outlets, numbered 1 to 8 from the left as seen from the outlet face, as printed'}
   display: {term: Display, role: indicator, index-origin: 1}
@@ -186,6 +187,12 @@ views:
       - {id: label-zone, at: [411.0, 26.0], size: {w: 22.0, h: 9.0}, label: 'product label, text partly legible; not drawn'}
   rear:
     size: {w: 444, h: 44}
+    panel:
+      decor:
+      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
+      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
+      - {id: end-screw-3, at: [437.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
+      - {id: end-screw-4, at: [437.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
     silkscreen:
       - {at: [54.9, 38.5], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
       - {at: [91.0, 38.5], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
@@ -226,9 +233,14 @@ views:
       no source shows the bottom: none of the datasheet's photographs looks at it, and no installation guide is held.
   left:
     size: {w: 102, h: 44}
-    empty: >-
-      no source shows the left end straight on; the photograph sees it at a steep angle and no installation guide is
-      held.
+    panel:
+      decor:
+      - {id: end-screw-1, at: [24.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-2, at: [49.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-3, at: [75.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-4, at: [24.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-5, at: [49.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-6, at: [75.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
   right:
     size: {w: 102, h: 44}
     empty: >-
