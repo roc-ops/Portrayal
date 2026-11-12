@@ -40,6 +40,7 @@ def _numbers(doc):
     return out - {""}
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("name", CARDS)
 def test_the_adapter_seats_the_card(name):
     bay = _latest(ADAPTER)["bays"]["mpc"]
