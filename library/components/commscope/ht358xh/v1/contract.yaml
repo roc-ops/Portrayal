@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ht358xh
-version: 1.1.0
+version: 1.2.0
 class: line-card
 behaviour: fills
 profile: optical
@@ -27,6 +27,12 @@ attrs:
   wavelengths: ITU channels 20-62, 100 GHz grid
   power-draw-max-w: 6
 provenance:
+  groups: >-
+    CommScope HT3580H (Z1511670 Rev G) data sheet: page 1 states a front-access -20 dB input test
+    point; page 4, the RF test point is 75 ohm with an 'MCX female' connector located on the front
+    panel. The test point carries a sample of the signal the module handles, so the role is traffic,
+    as for the test points of the passive modules. No speed is stated: the data sheet prints no data
+    rate for it, and the media is the one the part states.
   size: >-
     photo-measured on p1 of the HT3580H data sheet (2024), the face-on CH3000 front at
     2.727 px/mm, where six CA3008 carriers each hold eight of these. The eight MCX test
@@ -71,9 +77,16 @@ elements:
   vent: {at: [15.1, 1.0], size: [20.9, 7.7], class: vent}
   latch: {at: [36.3, 0.8], size: [15.4, 8.1], class: latch}
   test-point: {at: [8.7, 1.73], size: [6.2, 6.2], class: bezel}
+groups:
+  test-point:
+    term: Test point
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-mcx}
+    description: "the front-panel -20 dB RF input test point (75 ohm MCX female)"
 parts:
   - {ref: common/led-dot@1, id: led-status, at: [27.7, 4.2], attrs: {function: status}}
-  - {ref: std/mcx@1, id: rf-tp, at: [9.325, 2.580]}
+  - {ref: std/mcx@1, id: rf-tp, group: test-point, at: [9.325, 2.580]}
 connection-points:
   mate: {at: [25.96, 4.83], direction: front}
 skins: [default]
