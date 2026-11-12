@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: fhd-splice-12-lc
-version: 3.1.0
+version: 3.2.0
 class: cassette
 behaviour: fills
 description: >-
@@ -40,13 +40,22 @@ body:
   # - see its own size-notes. It is what a pulled cassette's box is drawn as,
   # and what its rear face is painted on.
   footprint: {at: [4.985, 2.025], size: [99.0, 31.0]}
+groups:
+  adapters:
+    term: Adapter
+    role: traffic
+    index-origin: 1
+    attrs: {media: fiber}
+    description: >-
+      the 6 LC duplex adapters on the front face, OS2 single-mode LC UPC, 12 fibres, fusion-spliced
+      behind the face, passive
 parts:
-  - {id: lc1, ref: common/lc-duplex-v-adapter@6, at: [17.545, 10.65]}
-  - {id: lc2, ref: common/lc-duplex-v-adapter@6, at: [30.465, 10.65]}
-  - {id: lc3, ref: common/lc-duplex-v-adapter@6, at: [43.385, 10.65]}
-  - {id: lc4, ref: common/lc-duplex-v-adapter@6, at: [56.305, 10.65]}
-  - {id: lc5, ref: common/lc-duplex-v-adapter@6, at: [69.225, 10.65]}
-  - {id: lc6, ref: common/lc-duplex-v-adapter@6, at: [82.145, 10.65]}
+  - {id: lc1, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [17.545, 10.65]}
+  - {id: lc2, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [30.465, 10.65]}
+  - {id: lc3, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [43.385, 10.65]}
+  - {id: lc4, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [56.305, 10.65]}
+  - {id: lc5, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [69.225, 10.65]}
+  - {id: lc6, group: adapters, ref: common/lc-duplex-v-adapter@6, at: [82.145, 10.65]}
 faces:
   rear: {ref: fs/fhd-splice-12-lc-rear@2}
 optical:
@@ -126,4 +135,10 @@ provenance:
     contract's numbering is a placeholder so the paths schema (which requires
     at least one path and a reason for any unused position) has something
     coherent to hold, not a sourced fact about this SKU.
+  groups: >-
+    FS's FHD catalogue row for SKU 382907, "FHD Fiber Splice Cassette, LC UPC, OS2, 12 Fibers": LC
+    connectors, OS2 fibre, twelve fibres, so six duplex adapters, numbered 1 to 6 as the part ids
+    are. No page or drawing of this SKU is held, and the catalogue row prints no data rate, so the
+    group states no speed. The role follows the job, a through connection a patch cord is plugged
+    into, so it is traffic; the group's media is the adapters' own, fiber.
 skins: [default]
