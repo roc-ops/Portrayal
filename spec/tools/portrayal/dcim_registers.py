@@ -49,6 +49,8 @@ POWER_LABEL = {
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
     "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
     "enlogic/pdu-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
+    "generic/nema-6-15p-plug": "NEMA 6-15P plug",
+    "generic/nema-6-20p-plug": "NEMA 6-20P plug",
 }
 
 PART_OUTLET = {
