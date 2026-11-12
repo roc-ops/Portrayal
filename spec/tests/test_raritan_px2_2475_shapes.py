@@ -1,22 +1,27 @@
 """The Raritan PX2-2475 draws the shapes its specification's pictures show.
 
-The specification's controller-panel picture shows rounded corners on the panel and on both display windows; its
-elevation shows two rows of two seven-segment digits in one window and three rows of two in the other (ten digits,
-each about 5.5 mm wide and 8.3 mm high, with one point at the upper right of each row) and a small ring beside each of
-the 24 outlets; the panel picture also shows a T-shaped line between the two round buttons, a ring round each of the
-console jack's two screw holes, one outline round the FEATURE and ETHERNET jacks and a ring for the reset button; its
-rear view prints the first mounting button 145.0 mm from the end; its depth dimension, 65.3 mm, ends on the outermost
-body line of the side view. What is true of the library once the device draws them:
+The specification's controller-panel picture shows rounded corners on the panel and on both display windows.
+Its elevation shows two rows of two seven-segment digits in one window and three rows of two in the other.
+That makes ten digits, each about 5.5 mm wide and 8.3 mm high, with one point at the upper right of each row.
+The elevation also shows a small ring beside each of the 24 outlets.
+The panel picture also shows a T-shaped line between the two round buttons.
+It shows a ring round each of the console jack's two screw holes.
+It shows one outline round the FEATURE and ETHERNET jacks, and a ring for the reset button.
+Its rear view prints the first mounting button 145.0 mm from the end.
+Its depth dimension, 65.3 mm, ends on the outermost body line of the side view.
+What is true of the library once the device draws them:
 
-  - the panel and the two display windows have rounded corners;
-  - the windows carry ten digits, each wholly inside its own window: four in the first, in two rows of two, and six in
-    the second, in three rows of two; each row has one point, at the right-hand digit;
-  - the T line stands in the gap between the two round buttons, the screw-hole rings are centred on the holes, one
-    outline holds both stacked jacks, and the reset button is a plain ring with no pinhole part;
-  - each outlet has one ring of the same size, at the same place beside it, and it stands between its outlet and the
-    one before (or the end of the strip);
-  - the side faces draw the lines of the profile up to the outermost body line, put their front plane at 65.3 mm, and
-    hold nothing that lies wholly beyond the 65 mm depth;
+  - the panel and the two display windows have rounded corners.
+  - the windows carry ten digits, each wholly inside its own window.
+    Four are in the first, in two rows of two. Six are in the second, in three rows of two.
+    Each row has one point, at the right-hand digit.
+  - the T line stands in the gap between the two round buttons.
+    The screw-hole rings are centred on the holes.
+    One outline holds both stacked jacks. The reset button is a plain ring with no pinhole part.
+  - each outlet has one ring of the same size, at the same place beside it.
+    The ring stands between its outlet and the one before (or the end of the strip).
+  - the side faces draw the lines of the profile up to the outermost body line, and put their front plane at 65.3 mm.
+    They hold nothing that lies wholly beyond the 65 mm depth.
   - the two mounting buttons are centred 145.0 and 1389.0 mm from the top end.
 
 These read the device source and its contracts. They read no library/dist and render nothing.
