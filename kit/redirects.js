@@ -105,6 +105,50 @@ export function unknownSwaps(swaps, ctx) {
     .map(([path, ref]) => ({path, ref}));
 }
 
+// WHAT A LOADER LEFT OUT, SAID. `acceptSwaps` returns the keys it ignored and
+// nothing about why; a page that wants to tell the visitor asks here, with the
+// map it gave and the keys that came back ignored. One row per ignored key
+// that names a part: `why` is
+//   gone     the ref is not in the library (and a catalogue was read), with
+//            `replacedBy` when a published part stands in for it
+//   under    its carrier was dropped as gone, so nothing could be seated in it
+//   refused  the part is there but the slot does not exist or does not take it
+// An entry that empties a slot names no part and gets no row. Reads only; the
+// map is not changed, and nothing is followed (a replacement is named, not
+// seated).
+export function droppedSwaps(swaps, ignored, ctx = {}) {
+  if (!plain(swaps) || !Array.isArray(ignored)) return [];
+  const named = ignored.filter(path => typeof swaps[path] === 'string' && swaps[path]);
+  // the loader does not follow a redirect, so a replaced ref is gone here too
+  const read = ctx?.redirects?.catalogued && typeof ctx.compByRef === 'function';
+  const gone = new Set(read ? named.filter(path => !known(ctx, swaps[path])) : []);
+  const carriers = [...gone];
+  const out = [];
+  for (const path of named) {
+    const ref = swaps[path];
+    if (gone.has(path)) {
+      const row = {path, ref, why: 'gone'};
+      const to = ctx.redirects.follow(ref);   // read is true, so redirects exists
+      if (to !== ref && known(ctx, to)) row.replacedBy = to;
+      out.push(row);
+      continue;
+    }
+    const carrier = carriers.find(c => underCarrier(path, c));
+    out.push(carrier ? {path, ref, why: 'under', carrier} : {path, ref, why: 'refused'});
+  }
+  return out;
+}
+
+// The sentence for the parts the library no longer holds (`gone` rows); '' when
+// there are none. A refused or sheltered entry is not a part the library lost.
+export function droppedText(rows) {
+  const gone = (Array.isArray(rows) ? rows : []).filter(r => r.why === 'gone');
+  if (!gone.length) return '';
+  const by = new Map();
+  for (const r of gone) by.set(r.ref, {to: r.replacedBy, where: [...(by.get(r.ref)?.where ?? []), r.path]});
+  return [...by].map(([ref, {to, where}]) => `${ref} (${where.length > 4 ? `${where.slice(0, 4).join(', ')} and ${where.length - 4} more` : where.join(', ')}) is no longer in the library${to ? `; ${pairText(ref, to)}` : ''}.`).join(' ');
+}
+
 // THE KEPT ENTRIES OF A MAP being written back whole (patch): every entry that
 // names a gone ref on a slot that exists (`slotAt(path)` says), and everything
 // seated under it, which no slot can be resolved for while its carrier is not
