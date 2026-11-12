@@ -50,6 +50,8 @@ FIBRE_CONNECTORS = [
     # the sixteen-fibre plug: the MPO-12 housing with an offset key, mating
     # `mpo16` (docs/pluggables-mpo-bidi-pon-design.md)
     "generic/mpo16-plug/v1",
+    # the ST plug of the Oscilloquartz IRIG-B card's optical output, mating `st`
+    "generic/st-plug/v1",
 ]
 
 

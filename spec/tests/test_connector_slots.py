@@ -143,6 +143,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "iec-c16",
                          # the alarm and BITS connectors of the Nokia general facilities cards
                          "micro-dsub-50", "wire-wrap-6",
+                         # the optical output and the alarm/pulse relay of the Oscilloquartz IRIG-B card
+                         "st", "terminal-250-3",
                          # the DC input connector of the Edgecore PSU-48V-650-F and -B
                          "positronic-pla03",
                          # the DC power connector of the Juniper JPSU-150-DC-AFO supplies
@@ -234,6 +236,9 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
                                    # the alarm and BITS connectors of the Nokia general
                                    # facilities cards
                                    "micro-dsub-50", "wire-wrap-6",
+                                   # the optical output and the alarm/pulse relay of the
+                                   # Oscilloquartz IRIG-B card
+                                   "st", "terminal-250-3",
                                    # the DC input connector of the Edgecore PSU-48V-650-F
                                    # and -B
                                    "positronic-pla03",
