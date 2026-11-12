@@ -90,7 +90,7 @@ provenance:
       shown. Each sample is a count and a mean over the pixels under a colour mask. The mask for green is G of at
       least 90 and at least R and B plus 30. The mask for yellow is R and G of at least 150 and B at most R minus 80.
       The mask for red is R of at least 150, G under 90 and B under R minus 60. Green, count 3, mean #509049, is the
-      colour of `lamp-status`, the green load lamp. Yellow, count 2, mean #cad314, is the colour of `lamp-load-warning`. Red, count 2,
+      colour of `lamp-load-ok`, the green load lamp. Yellow, count 2, mean #cad314, is the colour of `lamp-load-warning`. Red, count 2,
       mean #d92244, is the colour of `lamp-load-overload`. The Link-RX/TX and Status windows at the right edge of the
       upper jack are pale and unlit in the photograph. They use the library's green #39b54a and orange #f5a623, as
       nokia/sr-1-ac does. The upper lamp, `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is Status, item 4, as in the figure.
@@ -165,7 +165,9 @@ gaps:
   note: >-
     The count and place of the lamps are read off a 369 px photograph and the states come from the guide of an older
     series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings beside
-    the round button, the Status check and cross marks, Amps, Reset and the logo. They belong to the later marks part.
+    the round button, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status label,
+    which the guide draws as a check and a cross icon. They are read as icons, not lamps, an estimate, and are not drawn. All of these belong
+    to the later marks part.
   wanted: the guide of the B models (990-5569E) or a straight-on photograph of the display end with a scale.
 - what: jack-function
   scope: [jack-1, jack-2]
@@ -246,7 +248,7 @@ views:
         - {id: button, ref: apc/ap78-button@1, at: [372.5, 15.0], group: buttons, rel-pos: 1, for: display, description: 'the round input selector beside the display, item 2 of the Metered Rack PDU guide (PDF p.15)'}
         - {id: jack-1, ref: std/rj45@2, at: [389.1, 6.4], group: jacks, rel-pos: 1, description: 'upper jack: the 10/100 Base-T network port, item 3 of the Metered Rack PDU guide (PDF p.15), matched by position'}
         - {id: jack-2, ref: std/rj45@2, at: [388.1, 25.4], group: jacks, rel-pos: 2, description: 'lower jack: the RJ-12 serial port, item 6 of the Metered Rack PDU guide (PDF p.15), matched by position'}
-        - {id: lamp-status, ref: common/led-dot@1, at: [345.8, 1.4], group: lamps, rel-pos: 1, for: chassis, description: 'load indicator, green: normal (guide PDF p.17); this id is older than the guide and is not the Status lamp, which is lamp-jack-2', states: ['off', {name: normal, color: '#509049'}]}
+        - {id: lamp-load-ok, ref: common/led-dot@1, at: [345.8, 1.4], group: lamps, rel-pos: 1, for: chassis, description: 'load indicator, green: normal (guide PDF p.17)', states: ['off', {name: normal, color: '#509049'}]}
         - {id: lamp-load-warning, ref: common/led-dot@1, at: [345.8, 3.9], group: lamps, rel-pos: 4, for: chassis, description: 'load indicator, yellow: near overload warning (guide PDF p.17)', states: ['off', {name: near-overload, color: '#cad314'}]}
         - {id: lamp-load-overload, ref: common/led-dot@1, at: [345.8, 6.4], group: lamps, rel-pos: 5, for: chassis, description: 'load indicator, red: overload (guide PDF p.17)', states: ['off', {name: overload, color: '#d92244'}]}
         - {id: lamp-jack-1, ref: common/led-dot@1, at: [405.1, 6.1], group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}

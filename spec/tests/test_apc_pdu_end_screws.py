@@ -84,12 +84,12 @@ GREEN, YELLOW, ORANGE, RED = "#39b54a", "#e5d800", "#f5a623", "#e02020"
 # the colour, else the library's colour for the state.
 LOAD = {
     "ap7821b": {
-        "lamp-status": ([345.8, 1.4], "normal", "#509049"),
+        "lamp-load-ok": ([345.8, 1.4], "normal", "#509049"),
         "lamp-load-warning": ([345.8, 3.9], "near-overload", "#cad314"),
         "lamp-load-overload": ([345.8, 6.4], "overload", "#d92244"),
     },
     "ap7921b": {
-        "lamp-status": ([346.9, 2.0], "normal", "#507a3d"),
+        "lamp-load-ok": ([346.9, 2.0], "normal", "#507a3d"),
         "lamp-load-warning": ([346.9, 4.2], "near-overload", YELLOW),
         "lamp-load-overload": ([346.9, 6.4], "overload", RED),
     },
@@ -134,8 +134,9 @@ def lamps(sku):
 @pytest.mark.parametrize("sku", sorted(SKUS))
 def test_the_display_end_places_five_lamps_with_their_identities(sku):
     assert sorted(lamps(sku)) == sorted(
-        ["lamp-jack-1", "lamp-jack-2", "lamp-status", "lamp-load-warning", "lamp-load-overload"]
+        ["lamp-jack-1", "lamp-jack-2", "lamp-load-ok", "lamp-load-warning", "lamp-load-overload"]
     )
+    assert "lamp-status" not in placements(sku), "the Status LED is lamp-jack-2"
     for p in lamps(sku).values():
         assert p["group"] == "lamps"
 
@@ -146,7 +147,7 @@ def test_the_load_lamps_stand_in_a_column_above_the_display(sku):
     for lamp_id, (at, state, color) in LOAD[sku].items():
         assert placed[lamp_id]["at"] == at, f"{sku} {lamp_id}"
         assert placed[lamp_id]["states"] == ["off", {"name": state, "color": color}], f"{sku} {lamp_id}"
-    ys = [placed[i]["at"][1] for i in ("lamp-status", "lamp-load-warning", "lamp-load-overload")]
+    ys = [placed[i]["at"][1] for i in ("lamp-load-ok", "lamp-load-warning", "lamp-load-overload")]
     assert ys == sorted(ys) and all(y < 10 for y in ys), "above the display window, which starts at 10 mm"
     assert len({placed[i]["at"][0] for i in LOAD[sku]}) == 1, "one column"
 
