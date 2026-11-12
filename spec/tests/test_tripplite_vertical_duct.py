@@ -141,6 +141,6 @@ def test_the_cable_capacity_is_a_named_gap_and_no_figure_is_recorded():
 @pytest.mark.parametrize("config", ["base", "cover-off"])
 def test_the_compiled_left_face_has_all_its_slots(config):
     path = DIST / f"{NAME}.{config}.left.svg"
-    assert path.is_file(), f"{path} is missing - run build.sh"
+    assert path.is_file(), f"{path} is missing; run ./build.sh"
     root = ET.parse(path).getroot()
     assert sum(1 for e in root.iter() if e.get("data-kind") == "finger-gap") == 48
