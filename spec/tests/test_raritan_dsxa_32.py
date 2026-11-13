@@ -62,10 +62,32 @@ def test_the_rear_carries_two_inlets_with_switches_a_modem_a_db9_and_one_etherne
 
 def test_every_lamp_is_drawn_off_and_has_a_lit_state(dev):
     lamps = [p for v in ("front", "rear") for p in placements(dev, v).values() if p["ref"].startswith("common/led-dot")]
-    assert len(lamps) == 5
+    assert len(lamps) == 4
+    assert len(placements(dev, "rear")) and sum(p["ref"].startswith("common/led-dot") for p in placements(dev, "rear").values()) == 3
+    assert [p["id"] for p in placements(dev, "front").values() if p["ref"].startswith("common/led-dot")] == ["led-front"]
     for p in lamps:
         assert p["states"][0] == "off" and len(p["states"]) > 1
+        assert "behavior" not in str(p["states"])
 
 
 def test_the_front_and_the_sides_declare_their_source_and_the_missing_photograph(dev):
     assert "front-photo" in {g["what"] for g in dev["gaps"]}
+
+
+def test_the_three_vents_are_drawn_as_patterns_and_declared_as_air(dev):
+    front = {d["id"]: d for d in dev["views"]["front"]["panel"]["decor"]}["bezel-vent"]
+    assert (front["pattern"], front["pattern-pitch"], front["vent"]) == ("holes", [5.6, 3.9], 1.0)
+    for view in ("left", "right"):
+        side = {d["id"]: d for d in dev["views"][view]["panel"]["decor"]}["side-vent"]
+        assert (side["pattern"], side["pattern-pitch"], side["vent"]) == ("slots-h", [9.0, 4.0], 1.0)
+        assert side["size"][1] == 12.0 and "fill" not in side
+
+
+def test_no_legend_is_drawn_that_the_pictures_of_this_model_cannot_read(dev):
+    texts = [s.get("text") for s in dev["views"]["rear"].get("silkscreen", []) if "text" in s]
+    assert "TERMINAL" not in texts and "RESET" not in texts
+    assert "printed TERMINAL" not in str(dev["groups"])
+
+
+def test_every_feature_left_out_has_a_gap_row(dev):
+    assert {"front-holes", "side-slot-rows", "legends", "lid-tabs", "top-and-bottom", "db9-colour"} <= {g["what"] for g in dev["gaps"]}

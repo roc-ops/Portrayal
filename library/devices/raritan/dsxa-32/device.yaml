@@ -9,7 +9,7 @@ portfolio: {line: Console servers, family: Dominion SX}
 description: >-
   Raritan Dominion SX DSXA-32, a 32-port serial console server with dual AC power, one Ethernet port and
   a built-in modem, 1U. The rear carries two AC inlets, each with a power switch, and a modem jack. It
-  has a DB9 TERMINAL port, a 10/100 Ethernet jack, three lamps and a reset hole. Thirty-two RJ45 serial
+  has a DB9 terminal port, a 10/100 Ethernet jack, three lamps and a reset hole. Thirty-two RJ45 serial
   ports sit in four groups of two rows of four.
 profile: networking
 provenance:
@@ -48,14 +48,14 @@ provenance:
       Medians of the data sheet photograph rendered at 600 dpi. The rear face reads #a39ea5 from 900 pixels
       and the modem plate #8f8e96 from 1200 pixels. The inlet recesses read #2d2c30 from 800 pixels and
       the DB9 shell #0d618c from 1500 pixels. The serial bank plates read #c7bfbc from 200 pixels. The
-      photograph shows a light grey box, not the black of the SX II. The vent panels read #818181 from
-      1200 pixels of the oblique photograph.
+      photograph shows a light grey box, not the black of the SX II. The three vents are drawn as hole
+      and slot patterns on the face colour.
   rear-layout:
     confidence: estimated
     note: >-
       From the data sheet photograph and the quick setup guide's figure, read from the left. Two AC inlets
       come first, each with a rocker switch above it. Then the modem plate with an RJ11 jack, and the
-      DB9 TERMINAL port with a jackscrew at each end. Below the DB9 sits the Ethernet jack, with three
+      DB9 terminal port with a jackscrew at each end. Below the DB9 sits the Ethernet jack, with three
       lamps to its left and the reset hole to its right. The serial ports follow in four groups of two
       rows of four. The jack under the modem plate is the built-in modem the data sheet lists for this
       model (key B in the guide).
@@ -73,8 +73,10 @@ provenance:
     note: >-
       Quick Setup Guide page 3, command line setup step 1, says: "This port is a DB9 male port on all
       models except" some. The exceptions are models with two power connectors and two LAN interfaces.
-      The DSXA-32 has one LAN interface, so its Terminal port is the DB9 male port. User Guide Appendix
-      A (printed pp. 261 to 262) gives its pins and calls it TERMINAL on the DSX16 and DSX32 models.
+      The DSXA-32 has one LAN interface, so its terminal port is the DB9 male port. The photograph has
+      a caption under the DB9 and another under the reset hole. Each is about 2 embedded pixels tall,
+      1.7 mm, too small to read. The guide's wording for other models is not evidence of this one, so
+      neither legend is drawn (gaps: legends).
   lamps:
     confidence: datasheet
     note: >-
@@ -91,21 +93,27 @@ provenance:
     note: >-
       Read from the oblique photograph on the quick setup guide's page 1, 398 pixels wide, of a unit labelled
       SX16. It shows one perforated vent panel. The Raritan logo sits at its left end and a model label
-      at its right end. A blue mark sits at the right end of the vent. The vent band is about 235 by 40
-      pixels and one hole is about 2 pixels across. The holes are too small to count, so one panel is
-      drawn. The logo mark is about 25 pixels wide there and the label about 30. Both are regions without
-      text. The photograph shows one blue mark, at about 84 percent of the face width, and none at the
-      left. The right lamp is drawn off at that mark. The left lamp is drawn off at the left end as its
-      mirror, and no picture shows it. The blue reads #5a7d82 from the 12 bluest of 360 pixels, so a library
-      blue is used.
+      at its right end. A blue mark sits at the right end of the vent. The perforated band runs from pixel
+      column 31 to 268 and is about 23 pixel rows tall at its middle. One hole is about 2 pixels across.
+      The holes repeat every 4 pixels along the band, read from an autocorrelation of four pixel rows
+      (peak 0.72 to 0.77). The photograph is oblique, so the row pitch is only about 3 pixels. The panel
+      is drawn as a hole pattern with a tile of 5.6 by 3.9 mm. The photograph's lattice is staggered and
+      the tile is square, so the hole count is not exact. The logo mark is about 25 pixels wide there
+      and the label about 30. Both are regions without text. The photograph shows one blue mark, at about
+      84 percent of the face width, and none at the left. One lamp is drawn off at that mark. The blue
+      reads #5a7d82 from the 12 bluest of 360 pixels, so a library blue is used.
   side-walls:
     confidence: estimated
     note: >-
       The right wall is read from the oblique photograph on the quick setup guide's page 1, which shows
-      slotted vents on that wall. The slots run from about 20 to 85 percent of the depth, which is x 58
-      to 247 mm on the right view. Each slot is about 2 pixels tall there. One vent panel is drawn over
-      that span, as the slot rows cannot be counted at that size. The left wall is built as the documented
-      side, as no document shows this one. The source is that same photograph of the right wall.
+      slotted vents on that wall. There are three rows of dashed slots on the wall of the upper unit.
+      The slot pattern runs from pixel column 337 to 385. The wall itself runs from about column 327 to
+      392 and the picture ends at column 397, so the pattern stops inside the picture. That is about 15
+      to 89 percent of the depth, estimated from an oblique view. It is drawn as x 44 to 258 mm on the
+      right view. Each slot is about 2 pixels tall and the dash pitch cannot be read. The rows use the
+      smallest tile the picture supports, 9 by 4 mm, so the dash count is not exact. The left wall is
+      built as the documented side, as no document shows this one. The source is that same photograph
+      of the right wall.
   power:
     confidence: datasheet
     note: >-
@@ -119,7 +127,7 @@ attrs:
     power-input: 110 to 240 VAC auto-switching, 50 to 60 Hz, dual-feed, two C14 inlets (data sheet)
   environmental: {operating-temp-c: 0 to 40, operating-humidity: 20% to 85% non-condensing}
   features: {serial-pinout: RJ45 pins in user guide Appendix A, modem: built-in modem, ethernet: one 10/100
-      RJ45, terminal: 'DB9 male, TERMINAL'}
+      RJ45, terminal: DB9 male terminal port}
 chassis:
   width: 440
   height: 44
@@ -194,9 +202,43 @@ gaps:
   - bottom
   reason: needs-photo
   note: >-
-    No held page shows the top or the bottom straight on. The rear photographs show a banded logo area
-    on the lid. It is not drawn.
+    No held page shows the top or the bottom straight on, so neither is drawn. The rear photographs show
+    a banded logo area on the lid. It is a mark and is not drawn.
   wanted: Photographs or a drawing of the top and the bottom.
+- what: front-holes
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    The bezel holes are drawn as a pattern, but their exact count and pitch are unknown. The photograph
+    is oblique and 398 pixels wide, with holes 2 pixels across at a 4 pixel pitch.
+  wanted: A straight-on front photograph of the DSXA-32, to count the holes.
+- what: side-slot-rows
+  scope:
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    The side slots are drawn as a pattern, but the dash count and pitch are unknown. The slots are 2 pixels
+    tall in a 398 pixel photograph. No picture shows the left wall.
+  wanted: A straight-on photograph of each side wall.
+- what: legends
+  scope:
+  - rear
+  reason: needs-photo
+  note: >-
+    The captions under the DB9 and the reset hole are about 2 pixels tall in the embedded photograph and
+    cannot be read. The guide's text for the DSX16 and DSX32 is not evidence of this model, so no legend
+    is drawn.
+  wanted: A close photograph of the DB9 and the reset hole.
+- what: db9-colour
+  scope:
+  - rear
+  reason: needs-drawing
+  note: >-
+    The photograph shows the DB9 shell blue, #0d618c from 1500 pixels. The shared DB9 part has a grey
+    skin and a teal skin only.
+  wanted: A blue skin for the shared DB9 part, if the maintainer wants one.
 - what: lid-tabs
   scope:
   - rear
@@ -222,7 +264,7 @@ groups:
     role: management
     index-origin: 1
     attrs: {media: db9}
-    description: the DB9 male terminal port printed TERMINAL
+    description: the DB9 male terminal port
   lan:
     term: Port
     role: management
@@ -232,8 +274,8 @@ groups:
   buttons: {term: Button, role: service, index-origin: 1, description: the recessed reset hole}
   status-leds: {term: LED, role: indicator, index-origin: 1, description: the three lamps beside the Ethernet
       jack}
-  front-leds: {term: LED, role: indicator, index-origin: 1, description: 'the front lamps, one at each
-      end'}
+  front-leds: {term: LED, role: indicator, index-origin: 1, description: 'the one blue front lamp, at
+      the right end of the bezel'}
   serial-1-4:
     term: Port
     role: management
@@ -287,24 +329,23 @@ views:
     size: {w: 440, h: 44}
     panel:
       decor:
-      - {id: bezel-vent, kind: vent, at: [30.0, 8.0], size: [330.0, 28.0], rx: 6.0, fill: '#818181'}
+      - id: bezel-vent
+        at: [30.0, 8.0]
+        size: [330.0, 28.0]
+        pattern: holes
+        pattern-pitch: [5.6, 3.9]
+        pattern-offset: [30.0, 8.0]
+        vent: 1.0
+        confidence: estimated
+        source: Quick setup guide page 1, band at pixel columns 31 to 268, hole pitch 4 pixels
     components:
       placements:
       - ref: common/led-dot@1
-        id: led-front-left
-        at: [14.0, 20.0]
-        for: chassis
-        group: front-leds
-        rel-pos: 1
-        states:
-        - 'off'
-        - {name: 'on', color: '#2f6fd6'}
-      - ref: common/led-dot@1
-        id: led-front-right
+        id: led-front
         at: [366.0, 30.0]
         for: chassis
         group: front-leds
-        rel-pos: 2
+        rel-pos: 1
         states:
         - 'off'
         - {name: 'on', color: '#2f6fd6'}
@@ -331,8 +372,6 @@ views:
       - {id: bank-3, kind: jack-plate, at: [304.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
       - {id: bank-4, kind: jack-plate, at: [371.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
     silkscreen:
-    - {at: [141.63, 19.6], text: TERMINAL, font-size: 1.6, anchor: middle, fill: '#3a3a3a', for: console}
-    - {at: [159.4, 40.2], text: RESET, font-size: 1.8, anchor: middle, fill: '#3a3a3a', for: reset}
     - {at: [178.3, 39.9], text: '1', font-size: 2.0, anchor: middle, fill: '#3a3a3a', for: serial-1}
     - {at: [192.27, 39.9], text: '2', font-size: 2.0, anchor: middle, fill: '#3a3a3a', for: serial-2}
     - {at: [206.24, 39.9], text: '3', font-size: 2.0, anchor: middle, fill: '#3a3a3a', for: serial-3}
@@ -619,9 +658,7 @@ views:
         attrs: {media: rj45-serial}
   top:
     size: {w: 440, h: 290}
-    empty: >-
-      No held page shows the top straight on. The oblique photographs show a plain lid, so nothing can
-      be measured.
+    empty: No held picture looks at the top straight on, so the top face is not drawn.
   bottom:
     size: {w: 440, h: 290}
     empty: 'No held page shows the underside: no photograph, drawing or guide figure looks at it.'
@@ -629,12 +666,29 @@ views:
     size: {w: 290, h: 44}
     panel:
       decor:
-      - {id: side-vent, kind: vent, at: [43.0, 12.0], size: [189.0, 20.0], rx: 1.0, fill: '#818181'}
+      - id: side-vent
+        at: [32.0, 14.0]
+        size: [214.0, 12.0]
+        pattern: slots-h
+        pattern-pitch: [9.0, 4.0]
+        pattern-offset: [32.0, 14.0]
+        vent: 1.0
+        confidence: estimated
+        source: Quick setup guide page 1, mirrored from the right wall; no picture shows this wall
   right:
     size: {w: 290, h: 44}
     panel:
       decor:
-      - {id: side-vent, kind: vent, at: [58.0, 12.0], size: [189.0, 20.0], rx: 1.0, fill: '#818181'}
+      - id: side-vent
+        at: [44.0, 14.0]
+        size: [214.0, 12.0]
+        pattern: slots-h
+        pattern-pitch: [9.0, 4.0]
+        pattern-offset: [44.0, 14.0]
+        vent: 1.0
+        confidence: estimated
+        source: >-
+          Quick setup guide page 1, slot pattern at pixel columns 337 to 385 of the upper unit wall
 configurations:
   base:
     kind: base
