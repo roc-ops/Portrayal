@@ -11,6 +11,7 @@
   full-height lines of the front view, the grooves and ridge of the back, and
   the five section lines of the controller plate. The grooves and ridge run
   to the strip ends. Each button carries its two cross lines. Three devices
-  draw the three circles of the gland. The connector registry gains the key `pdu-io-header` for the
+  draw the three circles of the gland, the inner one as the new part
+  `rittal/pdu-gland-ring@1`. The connector registry gains the key `pdu-io-header` for the
   two small headers. The library gains seven device rows and no existing row
   changes.

@@ -431,11 +431,17 @@ def test_the_gland_circles_of_the_page_are_drawn_where_the_page_has_them(sku):
         assert not rings
         return
     cx, cy = GLAND[sku]
-    assert set(rings) == {"gland-ring-12", "gland-ring-30", "gland-ring-35"}
-    for key, size in (("gland-ring-12", 12.0), ("gland-ring-30", 30.0), ("gland-ring-35", 35.5)):
+    assert set(rings) == {"gland-ring-30", "gland-ring-35"}
+    for key, size in (("gland-ring-30", 30.0), ("gland-ring-35", 35.5)):
         ring = rings[key]
         assert ring["size"] == [size, size] and ring["rx"] == size / 2 and "fill" not in ring
         assert abs(ring["at"][0] + size / 2 - cx) < 0.02 and abs(ring["at"][1] + size / 2 - cy) < 0.02
+    # the 12.0 mm circle is a part placed after the cord part: decor is drawn under every component, and the cord's disc is 26 mm
+    placements = _placements(sku)
+    order = [p["id"] for p in placements]
+    ring = placements[order.index("gland-ring-12")]
+    assert ring["ref"] == "rittal/pdu-gland-ring@1" and order.index("gland-ring-12") > order.index("input")
+    assert abs(ring["at"][0] + 6.0 - cx) < 0.02 and abs(ring["at"][1] + 6.0 - cy) < 0.02
 
 
 @pytest.mark.parametrize("sku", SKUS)

@@ -285,6 +285,7 @@ groups:
   power-input: {term: Input, role: service, index-origin: 1}
   control: {term: Controller, role: furniture, index-origin: 1}
   cover: {term: Cover, role: furniture, index-origin: 1}
+  gland: {term: Gland, role: furniture, index-origin: 1}
   ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'ETH2 and ETH1, the two redundant network jacks'}
   serial: {term: Port, role: management, index-origin: 1, description: 'the RS232 serial jack'}
   can-bus: {term: Port, role: management, index-origin: 1, description: 'the CAN bus jack for CMC III sensors'}
@@ -314,9 +315,8 @@ views:
       - {id: blank-1, at: [0, 1274.42], size: [44, 23.73], fill: '#1b1b1d', kind: spacer}
       - {id: cord-cell, at: [0, 1298.15], size: [44, 123.75], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 1421.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
-      - {id: gland-ring-12, at: [15.92, 1451.98], size: [12.0, 12.0], rx: 6.0, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'page 16 front view, a circle 12.0 across at the gland, read from the vector paths'}
-      - {id: gland-ring-30, at: [6.92, 1442.98], size: [30.0, 30.0], rx: 15.0, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'as gland-ring-12, 30.0 across'}
-      - {id: gland-ring-35, at: [4.17, 1440.23], size: [35.5, 35.5], rx: 17.75, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'as gland-ring-12, 35.5 across'}
+      - {id: gland-ring-30, at: [6.92, 1442.98], size: [30.0, 30.0], rx: 15.0, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'page 16 front view, a circle 30.0 across at the gland, read from the vector paths'}
+      - {id: gland-ring-35, at: [4.17, 1440.23], size: [35.5, 35.5], rx: 17.75, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'as gland-ring-30, 35.5 across'}
       - {id: c19-frame-1, at: [4.94, 28.1], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'page 16 front view, the outer frame of a C19, read twice'}
       - {id: c19-frame-2, at: [4.94, 70.6], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
       - {id: c19-frame-3, at: [4.94, 603.2], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
@@ -419,6 +419,7 @@ views:
         - {id: outlet-29, ref: std/c19-outlet@1, at: [4.2, 77.8], rotate: 90, group: outlets-l3, rel-pos: 9, fed-by: input, lines: [L3, N]}
         - {id: outlet-30, ref: std/c19-outlet@1, at: [4.2, 35.63], rotate: 90, group: outlets-l3, rel-pos: 10, fed-by: input, lines: [L3, N]}
         - {id: cover-plate, ref: rittal/pdu-cover-plate@1, at: [2.1, 1306.35], group: cover, rel-pos: 1}
+        - {id: gland-ring-12, ref: rittal/pdu-gland-ring@1, at: [15.92, 1451.98], group: gland, rel-pos: 1, description: 'the 12.0 mm circle of the gland, drawn over the cord part'}
         - {id: controller, ref: rittal/pdu-controller@1, at: [2.57, 378.93], group: control, rel-pos: 1}
         - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 496.43], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 495.93], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
