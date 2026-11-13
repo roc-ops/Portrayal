@@ -1,10 +1,10 @@
 """Belden 9512-1903, the rack-mount lacing bar (roc-ops/Portrayal#1103, part of #1091).
 
 The one source is Belden's technical data sheet (revision 0.41, 05-31-2024): 1U, 0.5 in high, 19 in wide,
-0.5 in deep, 0.5 lb, steel, black powder-coated. It holds no drawing of the bar, so the bar is modelled as
-its overall size and nothing inside it: no tie point, no hole and no cut-out is drawn, and each is a named
-gap. What is true of the library is held here: the size is the data sheet's, no figure the sheet does not
-give is drawn, and the gaps that say so are present.
+0.5 in deep, 0.5 lb, steel, black powder-coated. It holds no drawing of the bar. The sheet's photograph
+shows a thin flat strip with a slotted hole near each end, and both are drawn, estimated, in
+test_belden_photo_redraw.py. No tie point is placed, and each figure no document gives is a named gap.
+What is true of the library is held here: the size is the data sheet's and the gaps that say so are present.
 
 The size and gap tests read only the device file; the catalogue test reads the build (`library/dist`) and
 skips without it, like the other sweeps over compiled drawings.
@@ -48,20 +48,23 @@ def test_the_envelope_is_the_data_sheets_and_the_bar_bolts_to_the_rail_face():
 
 
 @pytest.mark.parametrize("view", ["front", "rear", "top", "bottom", "left", "right"])
-def test_each_side_is_drawn_as_the_overall_size_and_nothing_the_data_sheet_does_not_give(view):
+def test_each_side_is_drawn_from_the_photograph_and_no_tie_point_is_placed(view):
     doc = device()
     v = doc["views"][view]
     w, h = v["size"]["w"], v["size"]["h"]
     assert (w, h) in ((482.6, 12.7), (12.7, 12.7))
     assert not v.get("components") and "guides" not in v, "no part and no tie point: no document places one"
-    for d in v["panel"]["decor"]:
-        assert d["kind"] == "base", "only the bar's outline: no hole, no slot and no cut-out is dimensioned"
-        assert d["size"] == [w, h] and d["at"] == [0, 0]
+    kinds = [d["kind"] for d in v["panel"]["decor"]]
+    if view in ("front", "rear"):
+        assert kinds == ["base", "end-hole", "end-hole"], "the face and the two slotted holes the photograph shows"
+    else:
+        assert kinds == ["base"] and v["panel"]["decor"][0]["size"] in ([482.6, 1.5], [1.5, 12.7]), "the strip's edge"
 
 
-def test_the_figures_the_data_sheet_does_not_give_are_named_gaps_with_the_document_each_needs():
+def test_the_figures_no_document_gives_are_named_gaps_with_the_document_each_needs():
     gaps = {g["what"]: g for g in device()["gaps"]}
-    assert {"tie-points", "end-holes", "cross-section", "height-in-unit", "mounting-screws"} <= set(gaps)
+    assert {"tie-points", "cross-section", "height-in-unit", "mounting-screws"} <= set(gaps)
+    assert "end-holes" not in gaps, "the two end holes are drawn"
     for g in gaps.values():
         assert g["reason"] == "vendor-silent" and g["wanted"]
 

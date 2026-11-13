@@ -17,6 +17,7 @@ import pathlib
 import pytest
 
 from portrayal import libwalk
+from portrayal.manifest import load_yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 LIB = ROOT / "library"
@@ -80,7 +81,8 @@ def test_the_rack_builders_catalogue_gains_frames_and_nothing_else(dist):
     assert set(cat) == {"format", "generated-from", "devices", "frames"}
     assert "racks" not in cat
     assert sorted(cat["frames"]) == sorted(
-        f"{libwalk.rack_key(p)}@1" for p in libwalk.iter_racks([LIB]))
+        f"{libwalk.rack_key(p)}@{str(load_yaml(p)['version']).split('.')[0]}"
+        for p in libwalk.iter_racks([LIB]))
 
 
 def test_components_json_lists_no_rack(dist):

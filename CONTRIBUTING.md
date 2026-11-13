@@ -228,6 +228,15 @@ against, at what scale, what agreed, what did not, and what you did about it.
 2.2 px/mm, port pitch and PSU cut-out agree, the status lamp sits 0.6 mm low,
 recorded as estimated" is.
 
+A feature the reference shows is drawn. If no length, count or position is
+printed, draw it from the picture and mark it estimated with the method (the
+picture's scale, the count, how the position was read); that is how this library
+states a stand-in. "Recorded as a gap" is not what you did about a feature the
+reference shows. A face may draw less than its reference shows only where the
+kit has no shape for the feature (say which shape is missing) or the picture is
+too small to place it, and then the pull request asks the maintainer, in a
+question, whether to leave it out; the answer is quoted in the pull request.
+
 ### 5. Run the gates
 
 In this order, because the second one asks a question the third one erases:

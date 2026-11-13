@@ -1,0 +1,270 @@
+format: 1
+kind: device
+name: pro1-48dcwc-16-2x100-a0
+version: 0.1.0
+maturity: modelled
+manufacturer: Server Technology
+model: 48DCWC-16-2X100-A0
+description: >-
+  Server Technology PRO1 -48VDC Switched PDU, Primary unit, 2U. It has two input blocks, A and B, each
+  with three stud pairs for +RTN, GND and -48VDC. It has 16 screw-down outputs in four green blocks, with
+  GMT fuses. The rear carries the controller plate with Ethernet, serial, link and two sensor jacks.
+  Each input takes up to 100 A, and the box is rated 200 A at -48 V.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM A RASTER DRAWING. Server Technology data sheet 48DCWC-16-2X100-A0 (Primary) and
+      48DCXC-16-2X100-A0 (Link), PDF page 4 "Drawings", is a 748 ppi raster (extracted with pdfimages).
+      Its plan view was read at 3.3 px/mm, the scale that puts the 432.00 body on the view, with the
+      origin at the body's top left. A raster carries about 1 mm, so every figure read from it is that
+      good and no better. The sibling model 4811, which has the same layout, was photographed from the
+      front and the rear; those photographs give colours and counts only. No photograph or drawing is
+      copied here.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - "3.5in tall x 17.0in wide x 12.0in deep [89mm x 432mm x 305mm]". The drawing gives the
+      body as 432.00 wide, 304.80 deep and 88.00 high, and 482.00 over the ears, so the body is modelled
+      at 432.0 by 88.0 by 304.8, the drawing's figures. The data sheet's 89 is the same 3.5 in, rounded.
+  ears:
+    confidence: drawing
+    note: >-
+      The drawing shows two ways to fit the included brackets, labelled MB-0005-0026 on both options, Option A
+      at the front and Option B at the rear, with 482.00 over the ears, 455.80 minimum and 469.00 maximum, the
+      ear slots 44.50 and 76.30 from the centre line. Option A puts the ears flush with the faceplate. Option B
+      puts them at the rear; no figure gives how far back, so no `at` is written for it (gaps: rack-ears).
+      Neither the drawing nor the guide says which option ships, so neither is marked as the default.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the plan view. From the left: input block A (43.9 by 76.5, 9.4 from the left edge and 5.8
+      from the top), a perforated field, the lamp and letter A, two output blocks one above the other, the
+      centre perforated field with the maker's address label, two more output blocks, a perforated field,
+      the letter and lamp B, and input block B, which mirrors A. Every position was read from the raster at
+      3.3 px/mm and carries about 1 mm. The face is symmetric about the centre line to within the reading.
+  inputs:
+    confidence: datasheet
+    note: >-
+      datasheet - "(2) x 1/4-20 dual-studs on 5/8 in. centers (100A max)", 200 A, 9.6 kW at -48 V.
+      The (2) counts the two input blocks, not studs: the PRO1 DC User Guide (301-4800-3), PDF page 206
+      (printed 206 of 211), says each block holds three terminal positions, and its PDF page 9 figure
+      shows three dual-stud rows in a block. The studs stand 15.875 apart as that line says. The PRO1 DC
+      User Guide (301-4800-3), PDF page 9 (printed 9 of 211), "Terminal Stud Spacing", labels the same
+      spacing 16.0 in its figure, a 0.125 difference that the data sheet's inch figure settles. The legends
+      read +RTN, GND and -48VDC from the top, on the plan view.
+  outputs:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - "(16) x Screw-down terminals (10A max)", four blocks of four outputs. The
+      wiring drawing on PDF page 4 of the data sheet labels the upper left block FUSE A1 to A4 and the
+      lower left block FUSE A5 to A8, with B1 to B8 on the right, so each block carries four numerals.
+  colours:
+    confidence: estimated
+    note: >-
+      estimated by eye from the sibling 4811's front and rear photographs (same layout); no pixel count was
+      taken: the body is black, the output blocks are green with black latch ears, the input blocks are black
+      under clear covers and the lamps are green. On the rear plate the SER and NET jack housings read white
+      and the LNK and the two TAM jacks black. The photographs are of another model, so the colours are the
+      sibling's.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - no drawing held shows the rear, only the photograph of the sibling 4811. The controller
+      plate is placed 13.5 from the left and 40 from the top, 134 by 44, and the perforated field at 152
+      to 405 across, moved right of the plate where the photograph's angle overlaps them and 14 to 70 down, each read as a fraction of the face off that photograph. The
+      photograph looks from one side, so these carry several millimetres (gaps: rear-plate).
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view gives the depth as 304.80 and the height as 88.00. Six screw holes stand
+      on a 50.80 pitch, 25.40 from each end, 45 from the top. The perforated band runs about 22 from the
+      front to 19 from the rear and lies 8 to 36 below the top. The left side is the right's mirror.
+  top-bottom:
+    confidence: estimated
+    note: >-
+      estimated - the iso view on PDF page 4 shows the top as plain sheet with a few screw heads near
+      the edges. Nothing is drawn on the top or the bottom, which no drawing held shows.
+attrs:
+  physical:
+    overall-mm: 432 x 88 x 305 (17.0 x 3.5 x 12.0 in), 482 over the ears
+    mounting: 19 inch brackets included
+  power:
+    input-voltage: -48 VDC
+    input-dc: two inputs, each three dual-stud positions (+RTN, GND, -48VDC) of two 1/4-20 studs on 5/8 in. centres, 100 A maximum
+    input-current-a: 200
+    input-power-capacity-kw: 9.6
+    output-current-max-a: 10
+    branch-protection: GMT fuses included
+    quiescent-power: less than 10 W for all configurations
+  environmental:
+    operating-temp: 0 C to 50 C, 8% to 90% RH non-condensing, to 2 km
+    storage-temp: -30 C to 80 C, 8% to 90% RH non-condensing, to 15 km
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+    comms-interfaces: 10/100/1000 Ethernet (RJ-45), RS-232 serial (RJ-45), RJ-12 Link, two 4P4C temperature and humidity inputs
+  compliance:
+    safety: UL 62368-1, CSA C22.2 No. 62368-1, EN IEC 62368-1
+    emc: FCC Part 15 Class A, CAN ICES-003 Class A, EN 55032, EN 55035
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 432.0
+  height: 88.0
+  depth: 304.8
+  ru: 2
+  color: '#1c1d1f'
+  airflow: passive
+  ears:
+    positions:
+    - {name: flush, label: Option A, at: 0}
+    - {name: rear, label: Option B}
+gaps:
+- what: output-terminals
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the 16 output screw-down terminals are drawn as art in four green blocks. The registry holds no key
+    for a high-density screw-down block and no document held prints its pitch or its maker, so no
+    connector part and no mate exist. The data sheet and the guide say bare stripped wire, 14 AWG at most.
+  wanted: a drawing of the output block with its pitch, or the block's maker part number.
+- what: sensor-jacks
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the two temperature and humidity inputs TAM1 and TAM2 are 4P4C jacks. The registry's rj11 note says the
+    four-position jack is another interface, and no key exists for it, so both are drawn as art.
+  wanted: a registry key for the 4P4C jack, and the probe cable's connector.
+- what: rear-plate
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    no drawing of the rear is held. The plate, its jacks and the perforated field are estimated from a
+    photograph of the sibling 4811. The Link variant's rear plate, in Detail A of the drawing, is not
+    modelled here.
+  wanted: a rear drawing of this model, or a straight-on photograph of its rear.
+- what: rack-ears
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    the drawing shows the ear at the rear for Option B and gives no distance from the faceplate. The
+    drawing labels the bracket MB-0005-0026 on both options but names no kit, and the data sheet says only
+    "mounting brackets included" and points to the Mounting Bracket Guide, which is not held. The held PDU
+    Mounting Solutions data sheet lists 2U horizontal 19 in. L-bracket kits (for example KIT-MB2U-4B, bracket
+    MB-0005-0026-20) for the PRO2, PRO3X and PRO4X families; it does not name this model, so no document
+    held ties the bracket to a kit and no kit is listed.
+  wanted: the Mounting Bracket Guide, or a statement of which bracket kit ships with this model.
+- what: lamp-meaning
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    lamps A and B and the lamp over each output are drawn as lit green in the sibling photograph. The
+    guide on PDF page 206 says a lit output lamp means power is supplied; it gives no meaning for lamps A
+    and B, so no state is stated for them.
+  wanted: the PRO1 DC User Guide section on the input lamps.
+groups:
+  inputs: {term: Input, role: service, index-origin: 1, description: 'the two -48 V input blocks, A and B, each with three stud pairs'}
+  outputs: {term: Block, role: traffic, index-origin: 1, mixed: 'the four green output blocks of four screw-down outputs each, 16 in all'}
+  lamps: {term: Lamp, role: indicator, index-origin: 1}
+  controller: {term: Module, role: management, index-origin: 1}
+views:
+  front:
+    size: {w: 432.0, h: 88.0}
+    panel:
+      decor:
+      - {id: grille-a, at: [74.8, 5.5], size: [43.0, 51.5], fill: '#0b0b0c', pattern: holes, pattern-pitch: [4.5, 4.5], vent: 1.0}
+      - {id: grille-centre, at: [194.2, 6.0], size: [43.0, 51.0], fill: '#0b0b0c', pattern: holes, pattern-pitch: [4.5, 4.5], vent: 1.0}
+      - {id: grille-b, at: [314.2, 5.5], size: [43.0, 51.5], fill: '#0b0b0c', pattern: holes, pattern-pitch: [4.5, 4.5], vent: 1.0}
+      - {id: address-label, at: [195.8, 67.0], size: [40.9, 7.5], rx: 1.5, fill: '#2b2d30', kind: label}
+    silkscreen:
+    - {at: [63.9, 17.8], text: '+RTN', font-size: 2.6, anchor: middle, for: input-a, fill: '#d9dbde'}
+    - {at: [63.9, 44.9], text: 'GND', font-size: 2.6, anchor: middle, for: input-a, fill: '#d9dbde'}
+    - {at: [63.9, 71.9], text: '-48VDC', font-size: 2.6, anchor: middle, for: input-a, fill: '#d9dbde'}
+    - {at: [368.1, 17.8], text: '+RTN', font-size: 2.6, anchor: middle, for: input-b, fill: '#d9dbde'}
+    - {at: [368.1, 44.9], text: 'GND', font-size: 2.6, anchor: middle, for: input-b, fill: '#d9dbde'}
+    - {at: [368.1, 71.9], text: '-48VDC', font-size: 2.6, anchor: middle, for: input-b, fill: '#d9dbde'}
+    - {at: [216.2, 72.4], text: 'www.servertech.com', font-size: 2.2, anchor: middle, for: chassis, fill: '#d9dbde'}
+    - {at: [79.9, 71.6], text: 'A', font-size: 6.0, anchor: middle, for: lamp-a, fill: '#d9dbde'}
+    - {at: [352.1, 71.6], text: 'B', font-size: 6.0, anchor: middle, for: lamp-b, fill: '#d9dbde'}
+    - {at: [141.8, 19.6], text: 'A1', font-size: 1.8, anchor: middle, for: out-a1, fill: '#d9dbde'}
+    - {at: [151.4, 19.6], text: 'A2', font-size: 1.8, anchor: middle, for: out-a1, fill: '#d9dbde'}
+    - {at: [161.0, 19.6], text: 'A3', font-size: 1.8, anchor: middle, for: out-a1, fill: '#d9dbde'}
+    - {at: [170.6, 19.6], text: 'A4', font-size: 1.8, anchor: middle, for: out-a1, fill: '#d9dbde'}
+    - {at: [141.8, 51.4], text: 'A5', font-size: 1.8, anchor: middle, for: out-a2, fill: '#d9dbde'}
+    - {at: [151.4, 51.4], text: 'A6', font-size: 1.8, anchor: middle, for: out-a2, fill: '#d9dbde'}
+    - {at: [161.0, 51.4], text: 'A7', font-size: 1.8, anchor: middle, for: out-a2, fill: '#d9dbde'}
+    - {at: [170.6, 51.4], text: 'A8', font-size: 1.8, anchor: middle, for: out-a2, fill: '#d9dbde'}
+    - {at: [260.2, 19.6], text: 'B1', font-size: 1.8, anchor: middle, for: out-b1, fill: '#d9dbde'}
+    - {at: [269.8, 19.6], text: 'B2', font-size: 1.8, anchor: middle, for: out-b1, fill: '#d9dbde'}
+    - {at: [279.4, 19.6], text: 'B3', font-size: 1.8, anchor: middle, for: out-b1, fill: '#d9dbde'}
+    - {at: [289.0, 19.6], text: 'B4', font-size: 1.8, anchor: middle, for: out-b1, fill: '#d9dbde'}
+    - {at: [260.2, 51.4], text: 'B5', font-size: 1.8, anchor: middle, for: out-b2, fill: '#d9dbde'}
+    - {at: [269.8, 51.4], text: 'B6', font-size: 1.8, anchor: middle, for: out-b2, fill: '#d9dbde'}
+    - {at: [279.4, 51.4], text: 'B7', font-size: 1.8, anchor: middle, for: out-b2, fill: '#d9dbde'}
+    - {at: [289.0, 51.4], text: 'B8', font-size: 1.8, anchor: middle, for: out-b2, fill: '#d9dbde'}
+    components:
+      placements:
+      - {id: input-a, ref: servertech/pro1-dc-input-block@1, at: [9.4, 5.8], group: inputs, rel-pos: 1}
+      - {id: input-b, ref: servertech/pro1-dc-input-block@1, at: [378.7, 5.8], mirror: true, group: inputs, rel-pos: 2}
+      - {id: out-a1, ref: servertech/pro1-dc-output-block@1, at: [121.5, 20.9], group: outputs, rel-pos: 1}
+      - {id: out-a2, ref: servertech/pro1-dc-output-block@1, at: [121.5, 52.7], group: outputs, rel-pos: 2}
+      - {id: out-b1, ref: servertech/pro1-dc-output-block@1, at: [239.9, 20.9], group: outputs, rel-pos: 3}
+      - {id: out-b2, ref: servertech/pro1-dc-output-block@1, at: [239.9, 52.7], group: outputs, rel-pos: 4}
+      - {id: lamp-a, ref: common/led-indicator@1, at: [77.9, 74.4], group: lamps, rel-pos: 1, for: input-a}
+      - {id: lamp-b, ref: common/led-indicator@1, at: [350.1, 74.4], group: lamps, rel-pos: 2, for: input-b}
+  rear:
+    size: {w: 432.0, h: 88.0}
+    panel:
+      decor:
+      - {id: grille-rear, at: [152.0, 14.0], size: [253.0, 56.0], fill: '#0b0b0c', pattern: holes, pattern-pitch: [3.0, 3.0], vent: 1.0}
+    silkscreen:
+    - {at: [13.5, 14.0], text: 'Sentry VDC Remote Power Manager', font-size: 3.4, anchor: start, for: chassis, fill: '#d9dbde'}
+    - {at: [28.0, 30.0], text: 'Server Technology, Inc.', font-size: 4.2, anchor: start, for: chassis, fill: '#d9dbde'}
+    components:
+      placements:
+      - {id: controller, ref: servertech/pro1-dc-controller-plate@1, at: [13.5, 40.0], group: controller, rel-pos: 1}
+  top:
+    size: {w: 432.0, h: 304.8}
+    empty: >-
+      plain sheet. The iso view on PDF page 4 of the data sheet shows no opening on the top, and no
+      figure held dimensions its few screw heads, so none is drawn.
+  bottom:
+    size: {w: 432.0, h: 304.8}
+    empty: >-
+      no drawing or photograph held shows the underside. The plan and iso views of the data sheet show no
+      opening on it, so it is left plain.
+  left:
+    size: {w: 304.8, h: 88.0}
+    panel:
+      decor:
+      - {id: vent, at: [19.0, 8.0], size: [264.0, 28.0], fill: '#0b0b0c', pattern: holes, pattern-pitch: [3.0, 3.0], vent: 1.0}
+      - {id: screw-1, at: [277.6, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-2, at: [226.8, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-3, at: [176.0, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-4, at: [125.2, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-5, at: [74.4, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-6, at: [23.6, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+  right:
+    size: {w: 304.8, h: 88.0}
+    panel:
+      decor:
+      - {id: vent, at: [22.0, 8.0], size: [264.0, 28.0], fill: '#0b0b0c', pattern: holes, pattern-pitch: [3.0, 3.0], vent: 1.0}
+      - {id: screw-1, at: [23.6, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-2, at: [74.4, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-3, at: [125.2, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-4, at: [176.0, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-5, at: [226.8, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+      - {id: screw-6, at: [277.6, 43.2], size: [3.6, 3.6], rx: 1.8, fill: '#44464a', kind: screw-head}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, with GMT fuses fitted.
+    part-numbers:
+      48DCWC-16-2X100-A0: {}
+references:
+  - {title: 'Server Technology data sheet 48DCWC-16-2X100-A0 (Primary) and 48DCXC-16-2X100-A0 (Link), generated 10-NOV-2026', sha256: 65bd6c79a94506a13cd7dd5ccd713847cb50d7b090d44f6b36778ed777c95c58}
+  - {title: 'Server Technology PRO1 Sentry Switched DC PDU User Guide 301-4800-3', sha256: e955126f15f42f74e0355be79ee90e87298d1dbaa7d541fe0293dc0f86648f5f}

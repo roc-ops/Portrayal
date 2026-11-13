@@ -1,0 +1,48 @@
+format: 1
+kind: component
+name: tripplite-duct-vrt-cover
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The cover of the Tripp Lite SmartRack SRCABLEDUCTVRT vertical finger duct, seen from the front - a
+  steel plate across the whole front of the channel with a lip folded back over the front of each wall.
+  It ships fitted and lifts off.
+provenance:
+  size: >-
+    drawing - the end view of the SRCABLEDUCTVRT submittal drawing (13-03-167, page 2) dimensions
+    the channel 40 mm [1.57 in] wide and the cover is that width. Its 853.6 mm is
+    the 862.6 of the duct less 4.5 at each end, estimated from the inner outline of the
+    front view.
+  relief: >-
+    drawing - the side view: the cover takes the front 7.72 mm of the 62.71, from the
+    front edge to where the slots end (54.99 from the back), as the lip over each wall; it
+    stands in the well, so its plate lies 61.4 to 62.5 above the floor and
+    its lips 54.99 to 62.5. The plate and the lips are 1.1 mm, estimated.
+  lid: >-
+    datasheet - the specification sheet's title and the drawing's package contents call it a
+    "finger duct with cover". No document describes how it is held or taken off, so no clip is
+    drawn. It is taken as a lid (`lid: true`): a cover on a duct whose point is to lay cable in
+    is a part that comes off.
+  color: >-
+    datasheet - "Cold rolled steel" and "Color: Black"; the shade is this library's render, a
+    little lighter than the walls so the cover reads apart from them.
+size: {w: 40, h: 853.6}
+size-confidence: {w: drawing, h: estimated}
+attrs: {material: Cold rolled steel}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#55595e'
+elements:
+  plate: {at: [0.0, 0.0], size: [40, 853.6], class: bezel}
+  lip-left: {at: [0.0, 0.0], size: [1.1, 853.6], class: bezel}
+  lip-right: {at: [38.9, 0.0], size: [1.1, 853.6], class: bezel}
+relief:
+  features:
+    - {node: plate, lift: 61.4, out: 62.5, confidence: estimated, source: 'no view dimensions the cover section; the plate is taken as thick as the wall'}
+    - {node: lip-left, lift: 54.99, out: 62.5, color: '#6b7076', confidence: drawing, source: 'the side view of the SRCABLEDUCTVRT submittal drawing, the cover over the front of the walls'}
+    - {node: lip-right, lift: 54.99, out: 62.5, color: '#464a4f', confidence: drawing, source: 'the same view, the other wall under the same cover'}
+skins: [default]
