@@ -83,8 +83,8 @@ provenance:
     confidence: estimated
     note: >-
       estimated - each long edge of the plate turns back into a lip, away from the side the foot is on.
-      Each lip is about 5 mm clear of the plate and runs the plate's whole 135. The hook at the end of the
-      dimensioned render is about 3.8 mm. The two perspective photographs give 4.6 to 5.1 below the plate's
+      Each lip is about 5 mm clear of the plate and runs the plate's whole 135. The hook at the end of each
+      lip reaches 3.2 to 3.5 mm past the plate's end (gap `lip-end-tabs`). The two perspective photographs give 4.6 to 5.1 below the plate's
       underside. In the front and the rear view each lip is a bar beside the plate's edge. One is at the top
       and one at the bottom of the 88.4. The top and the bottom view show the upper and the lower lip as a strip
       along the plate (fs/fs-pdubk-lip-plan@1). The view from the side away from the foot shows both as bars
@@ -186,19 +186,22 @@ gaps:
   reason: needs-drawing
   note: >-
     each lip ends in a small hook past the plate's free end, one at each long edge (x6, g5, x7, g2, g3).
-    On x6 each hook reaches 3.0 to 3.2 mm past the plate end and stands 2.4 to 2.7 mm high.
+    Each hook reaches 3.2 to 3.5 mm past the plate end and stands 2.4 to 2.7 mm high.
+    The reach is read on the two plan pictures, each at the scale of a dimension in it.
+    On x6 it reads 20 to 21 px at 6.04 to 6.18 px per mm, from its printed 135 line and its printed 31.5 pitch.
+    On g5 it reads 21 to 22 px at 6.52 to 6.56 px per mm, from the plate's 135 and the same pitch.
+    The perspective pictures x7, g2 and g3 show the hooks but give no usable reach.
     A dark band about 1.2 mm wide runs down the end edge between them.
     In the built views the plate and its lips end flush at 135.
-    The hooks are not drawn, because the kit has no shape for a part outside the box.
-    The schema says of a view `size`, "view dimensions in mm when not the chassis front elevation", with `w` and `h` only.
-    It says of `overhang`, "Only on a `rack` device (L125)", and this bracket is not one.
-    The one way round it, widening the four views to 138, passed lint but dropped the bracket from level 4 to level 2.
-    The capability check requires left.w, right.w, top.h, bottom.h and chassis.depth to agree.
-    The level check printed, "working tree level 2 faced", then "blocked 3 solid - chassis depth disagrees: left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135".
-    The committed bracket prints "HEAD level 4 addressable".
+    The 135 is printed on x6, the product page's dimensioned drawing, as 5.3" (135mm). The quick start guide prints no dimension.
+    The kit can hold the hooks if the four views and the chassis depth all read 139.
+    A trial with the depth and the four views at 139 printed "HEAD level 4 addressable" then "working tree level 4 addressable".
+    The device lint passed. The device lock then asked for a version beyond 1.0.0, and the built views were not tested.
+    Widening only the four views to 138 dropped the bracket from level 4 to level 2.
+    It printed "blocked 3 solid - chassis depth disagrees: left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135".
     A test asserts "an inconsistent box must not reach solid".
-    The chassis depth stays 135, because the guide prints it.
-  wanted: a decision that the kit may hold a part beyond the box, or a drawing from above or the side that dimensions the hooks
+    The depth stays at the printed 135 and the hooks are not drawn, because a stated dimension is the maintainer's to change.
+  wanted: the maintainer's yes that the stated depth may read 139 so the hooks can be drawn, or a drawing that dimensions the hooks
 groups:
   foot: {term: Foot, role: furniture, index-origin: 1, description: 'the sheet that lies against the post, bolted through four holes'}
   plate: {term: Plate, role: furniture, index-origin: 1, description: 'the sheet that stands out from the foot, with the keyholes and the square holes'}

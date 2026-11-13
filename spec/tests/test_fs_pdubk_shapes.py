@@ -145,17 +145,23 @@ def test_the_lip_end_tabs_are_a_named_gap_with_a_reason():
     assert gaps["lip-end-tabs"]["reason"] == "needs-drawing"
     assert gaps["lip-end-tabs"]["scope"] == ["left", "right", "top", "bottom"]
     note = " ".join(gaps["lip-end-tabs"]["note"].split())
-    # the measured facts, the two schema lines, the capability rule and the level check's line
+    # the measured facts at each picture's own scale, the source of the 135, the probe's result and the level check's lines
     for words in (
-        "3.0 to 3.2 mm",
+        "3.2 to 3.5 mm",
         "2.4 to 2.7 mm",
         "flush at 135",
-        "Only on a `rack` device",
-        "widening the four views to 138",
+        "On x6 it reads 20 to 21 px at 6.04 to 6.18 px per mm",
+        "On g5 it reads 21 to 22 px at 6.52 to 6.56 px per mm",
+        '5.3" (135mm)',
+        "The quick start guide prints no dimension",
+        "all read 139",
+        "working tree level 4 addressable",
         "level 4 to level 2",
         "chassis depth disagrees",
         "left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135",
         "an inconsistent box must not reach solid",
+        "a version beyond 1.0.0",
     ):
         assert words in note, words
-    assert "dimensions the hooks" in gaps["lip-end-tabs"]["wanted"]
+    assert "the guide prints it" not in note
+    assert "may read 139" in gaps["lip-end-tabs"]["wanted"]
