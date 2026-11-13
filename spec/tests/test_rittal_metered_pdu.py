@@ -55,11 +55,14 @@ def test_the_device_is_new_and_the_strip_the_drawing_gives(sku):
 
 
 @pytest.mark.parametrize("sku", SKUS)
-def test_every_face_is_stated(sku):
+def test_every_face_is_drawn_and_none_is_declared_empty(sku):
     views = _device(sku)["views"]
     assert set(views) == {"front", "rear", "top", "bottom", "left", "right"}
     for face in ("top", "bottom", "left", "right"):
-        assert views[face].get("empty"), f"{face} states neither parts nor why it is empty"
+        assert "empty" not in views[face], f"{face} is declared empty"
+        assert views[face]["panel"]["decor"], f"{face} draws nothing"
+    gaps = {g["what"] for g in _device(sku)["gaps"]}
+    assert "ends" not in gaps
 
 
 @pytest.mark.parametrize("sku", SKUS)
@@ -472,6 +475,60 @@ def test_the_notes_say_the_ends_the_cross_lines_the_usb_and_the_lamps(sku):
     assert "neither straddles the plate's section line" in notes["lamps"]
     if sku != "210":
         assert "reaches 1.7 to 2.6 mm into the outermost" in notes["phase-plates"]
+
+
+# sku -> where each notch of the side view's front edge starts along the strip, mm from the head end (vector paths, read twice)
+SIDE_NOTCHES = {
+    "210": [10.42, 18.92, 42.92, 68.98, 215.7, 242.91, 288.42, 469.02, 649.62, 773.21],
+    "230": [10.27, 16.02, 61.52, 107.02, 152.52, 178.78, 325.48, 352.53, 398.02, 443.52, 489.01, 534.52, 580.02, 625.52, 649.52,
+            773.11],
+    "235": [10.28, 20.28, 65.81, 246.44, 273.48, 420.2, 446.43, 491.94, 672.54, 718.03, 898.64, 1022.24],
+    "236": [10.39, 16.74, 26.74, 117.33, 350.23, 376.03, 403.14, 549.77, 576.03, 601.82, 692.43, 925.33, 951.13, 1041.73, 1274.63,
+            1298.62, 1422.22],
+    "238": [10.28, 17.51, 27.53, 37.54, 128.17, 218.75, 399.34, 443.76, 469.99, 616.63, 643.75, 688.15, 778.76, 869.33, 1049.93,
+            1094.33, 1184.93, 1275.53, 1456.13, 1500.53, 1624.23],
+    "240": [10.37, 17.61, 27.61, 118.2, 298.8, 479.4, 523.8, 549.93, 696.67, 723.79, 768.19, 858.79, 1039.4, 1219.95, 1310.59,
+            1491.19, 1671.84, 1699.65, 1823.25],
+    "242": [10.44, 15.75, 196.34, 429.24, 473.64, 499.71, 646.44, 673.65, 854.25, 1087.14, 1267.74, 1500.63, 1624.25],
+}
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_side_faces_draw_the_outline_and_the_notches_of_the_front_edge(sku):
+    length = DEVICES[sku][0]
+    for face in ("left", "right"):
+        decor = _device(sku)["views"][face]["panel"]["decor"]
+        outline = [d for d in decor if d["kind"] == "side-outline"]
+        assert len(outline) == 1 and outline[0]["size"] == [71.88, round(length - 0.22, 2)]
+        notches = [d for d in decor if d["kind"] == "cell-tick"]
+        assert [d["at"][1] for d in notches] == SIDE_NOTCHES[sku]
+        for d in notches:
+            assert d["size"][0] == 2.1 and 0.2 <= d["size"][1] <= 0.36, "a notch 2.1 mm deep and 0.2 to 0.36 wide"
+            # The front edge is at x = 72.1 on the left face, whose x = 0 is the rear. On the right face it is at x = 0.
+            assert abs(d["at"][0] + d["size"][0] - 72.1) < 0.06 if face == "left" else d["at"][0] < 0.06
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_end_faces_draw_the_section_outline(sku):
+    for face in ("top", "bottom"):
+        decor = _device(sku)["views"][face]["panel"]["decor"]
+        assert [(d["kind"], d["at"], d["size"]) for d in decor] == [("section-outline", [0.11, 0.11], [43.78, 71.88])]
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_notes_name_what_stands_outside_the_side_and_end_faces(sku):
+    notes = {k: v["note"] for k, v in _device(sku)["provenance"].items() if "note" in v}
+    assert "stand outside that rectangle, past the face" in notes["side-views"] and "(L150)" in notes["side-views"]
+    assert "the other is built the same, mirrored" in notes["side-views"].replace("\n", " ")
+    assert "109 mm in all" in notes["end-views"]
+    text = (LIB / "devices" / "rittal" / f"dk-7979-{sku}" / "device.yaml").read_text().lower()
+    assert "straight on" not in text and "no photograph looks" not in text
+    if sku != "230":
+        assert "chamfers of 6.5 mm and the nose 5.0 mm" in notes["c13-frames"].replace("\n", " ")
+        assert "device.schema.json line 1496" in notes["c13-frames"]
+    if sku in ("235", "236"):
+        measured = {"235": "1.17 to 1.22 mm nearer the head", "236": "0.87 to 0.98 mm nearer the head"}[sku]
+        assert measured in notes["plate-sections"].replace("\n", " ")
 
 
 def _flatten(node, out=None):

@@ -156,6 +156,9 @@ provenance:
       read from the page's vector paths, twice. std/c13-outlet@1 draws the well, nose and contacts inside each frame.
       The six C13 under the plug have no frame in the drawing, so theirs are estimated at the outlet centres. The
       outlets stand up to 0.32 mm from their frame centre and are not moved.
+      Pages 3 and 18 give the well chamfers of 6.5 mm and the nose 5.0 mm, read twice at the upper and lower corner. The shared part draws 5.4 and 4.5, so its diagonals stand 0.78 and 0.37 mm from the drawing's. The
+      well's corner stands 3.1 mm from the frame's end and 2.9 mm from its side. Decor has no chamfer or polyline shape
+      (device.schema.json line 1496 lists `rect`, `d-sub` and `slot`) and the part is shared, so they are not changed.
   cell-lines:
     confidence: drawing
     note: >-
@@ -167,8 +170,9 @@ provenance:
     note: >-
       The controller plate in the front view of page 15 has five full-height section lines. They are at 74.0, 104.0, 131.0,
       142.7 and 160.0 mm from the head end of the plate. They were read from the vector paths and from a 1800 dpi render.
-      The first is in rittal/pdu-controller@1 and the other four are drawn here. The plate stands 1.2 mm nearer the head
-      than the drawing's plate, and the lines keep their spacing from it.
+      The first is in rittal/pdu-controller@1 and the other four are drawn here. Measured again on the page's vector paths,
+      after the USB and lamp moves. The built lines stand 1.17 to 1.22 mm nearer the head than the drawing's, and the
+      doubled line 1.02 mm. The plate is not moved and the lines keep their spacing from it.
   usb-port:
     confidence: photo-measured
     note: >-
@@ -180,6 +184,22 @@ provenance:
     note: >-
       The plan view of page 15 shows no small circle on the centre line, read twice at 600 dpi. The plan views of the
       other metered SKUs show one to four. Nothing is drawn on the back for this SKU.
+  side-views:
+    confidence: drawing
+    note: >-
+      The side view of page 15 draws the body as a 72.1 by 1094 rectangle. Its front edge has a notch, 2.1 mm deep and
+      0.2 to 0.35 wide, at each cell line. The outline and the notches were read from the vector paths, twice, and are
+      drawn as decor. The gland, the label cover, the outlet bars and the two button feet stand outside that rectangle,
+      past the face. Decor is clipped to the face (L150) and the depth stays 72.1, so they are not drawn on it. The cover
+      and the buttons stand out in 3D as the relief of their parts. The drawing shows one side and the other is built
+      the same, mirrored.
+  end-views:
+    confidence: drawing
+    note: >-
+      The end view of page 15 draws the 44.0 by 72.1 mm section of the body, plain. Its outline is drawn on the top and
+      the bottom face. The gland, the cover and the button stand outside the section, 109 mm in all. They are not drawn
+      on the face, for the reason given for the side views. The view does not tell the two ends apart, so both are built
+      from it.
   dcim:
     confidence: estimated
     note: >-
@@ -267,13 +287,6 @@ gaps:
   note: >-
     the mounting adaptor 7000.688 and the universal mounting kit are named and not drawn.
   wanted: a drawing of the adaptor.
-- what: ends
-  scope: [top, bottom, left, right]
-  reason: needs-photo
-  note: >-
-    the end view draws the strip's section with the gland and the button and no detail. No photograph looks at an
-    end or a side straight on.
-  wanted: straight-on photographs of an end and a side.
 groups:
   outlets-l1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the seven outlets of phase L1, counted from the cable foot: six IEC C13 and one IEC C19'}
   outlets-l2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the seven outlets of phase L2, counted from the cable foot: six IEC C13 and one IEC C19'}
@@ -418,25 +431,48 @@ views:
         - {id: button-2, ref: rittal/pdu-metered-button@1, at: [4.47, 67.77], group: mounting, rel-pos: 2}
   top:
     size: {w: 44, h: 72.1}
-    empty: >-
-      no source shows the head end straight on. The end view of the drawing (page 15) is the section of the strip
-      with the gland and the button. No photograph looks at it straight on.
+    panel:
+      decor:
+      - {id: section-outline, at: [0.11, 0.11], size: [43.78, 71.88], stroke: '#55585c', stroke-width: 0.22, kind: section-outline, confidence: drawing, source: 'page 15 end view, the 44.0 by 72.1 mm section of the body, read from the vector paths'}
   bottom:
     size: {w: 44, h: 72.1}
-    empty: >-
-      no source shows the foot end straight on. The end view of the drawing (page 15) draws the section of the
-      strip. The cord leaves the front, not the end, as its side view shows.
+    panel:
+      decor:
+      - {id: section-outline, at: [0.11, 0.11], size: [43.78, 71.88], stroke: '#55585c', stroke-width: 0.22, kind: section-outline, confidence: drawing, source: 'as the top face: the end view shows one section'}
   left:
     size: {w: 72.1, h: 1094}
-    empty: >-
-      the side view of the drawing (page 15) draws the side as a plain rectangle. The gland and the outlet
-      mouldings stand out of its front edge. Nothing is drawn on the face and no photograph looks at a side
-      straight on.
+    panel:
+      decor:
+      - {id: side-outline, at: [0.11, 0.11], size: [71.88, 1093.78], stroke: '#55585c', stroke-width: 0.22, kind: side-outline, confidence: drawing, source: 'page 15 side view, the body outline 72.1 by 1094, read from the vector paths'}
+      - {id: side-tick-1, at: [70.0, 10.28], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick, confidence: drawing, source: 'page 15 side view, the notches of the front edge, one at each cell line, read from the vector paths'}
+      - {id: side-tick-2, at: [70.0, 20.28], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-3, at: [70.0, 65.81], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-4, at: [70.0, 246.44], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-5, at: [70.0, 273.48], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-6, at: [70.0, 420.2], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-7, at: [70.0, 446.43], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-8, at: [70.0, 491.94], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-9, at: [70.0, 672.54], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-10, at: [70.0, 718.03], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-11, at: [70.0, 898.64], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-12, at: [70.0, 1022.24], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
   right:
     size: {w: 72.1, h: 1094}
-    empty: >-
-      the side view of the drawing (page 15) draws the side as a plain rectangle. No photograph looks at the other
-      side and nothing is drawn on the face.
+    panel:
+      decor:
+      - {id: side-outline, at: [0.11, 0.11], size: [71.88, 1093.78], stroke: '#55585c', stroke-width: 0.22, kind: side-outline, confidence: drawing, source: 'as the left face: the drawing shows one side'}
+      - {id: side-tick-1, at: [0.0, 10.28], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-2, at: [0.0, 20.28], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-3, at: [0.0, 65.81], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-4, at: [0.0, 246.44], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-5, at: [0.0, 273.48], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-6, at: [0.0, 420.2], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-7, at: [0.0, 446.43], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-8, at: [0.0, 491.94], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-9, at: [0.0, 672.54], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-10, at: [0.0, 718.03], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-11, at: [0.0, 898.64], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-12, at: [0.0, 1022.24], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
 configurations:
   base:
     kind: base
