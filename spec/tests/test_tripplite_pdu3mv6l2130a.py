@@ -72,36 +72,100 @@ def round_decor(face):
     return {m[0]: (m[1], *(float(v) for v in m[2:])) for m in re.findall(pat, svg)}
 
 
+def stacks(face, tol=0.06):
+    """The square decor of a built face grouped by centre: a list of [centre x, centre y, widths widest first]."""
+    out = []
+    for _, x, y, w, h, _ in sorted(round_decor(face).values(), key=lambda s: -s[3]):
+        if abs(w - h) > 0.01:
+            continue
+        cx, cy = x + w / 2, y + h / 2
+        for s in out:
+            if abs(s[0] - cx) < tol and abs(s[1] - cy) < tol:
+                s[2].append(w)
+                break
+        else:
+            out.append([cx, cy, [w]])
+    return out
+
+
+def count_stacks(found, want, tol=0.06):
+    """How many stacks have exactly these ring widths, each within tol."""
+    return sum(1 for _, _, ws in found if len(ws) == len(want) and all(abs(a - b) < tol for a, b in zip(ws, want)))
+
+
 # The drawing's side view shows eight round marks inside its 42.78 deep body. Two are at the top end and six are on
-# a column near the front edge. Read from the vector page: the ring is 6.2 across and the inner ring 3.4. The six sit
-# 312.22 apart. The side view's own end lines are 572.45 points apart for 1776.44, so its scale is 3.103 per point.
-# A right face has x = 0 at the front. The left face is its mirror, 42.78 minus x.
+# a column near the front edge. Read from the vector page: each mark is four concentric circles, 6.21, 3.38, about 3.1
+# and 2.55 across. The top one has three, without the 2.55. Marks 3 and 6 carry a slot 2.55 long. The six sit 312.22 apart.
+# The side view's own end lines are 572.45 points apart for 1776.44, so its scale is 3.103 per point. The front wall is the
+# line at x 200.46 pt; the marks stand 3.94 mm from it (the top one 12.69 mm). A right face has x = 0 at the front. The left face
+# is its mirror, 42.78 minus x.
 SIDE_MARK_Y = [6.21, 13.98, 202.64, 514.86, 827.07, 1139.29, 1451.50, 1763.72]
-SIDE_MARK_X = {"right": [13.46] + [4.75] * 7, "left": [29.32] + [38.03] * 7}
+FRONT_EDGE_MM = [12.69] + [3.94] * 7
+MARK_RINGS = [[6.2, 3.4, 3.1]] + [[6.2, 3.4, 3.1, 2.55]] * 7
+# The plate in the side view (x 185.08 to 198.64 pt, y 112.61 to 131.63 pt) is 42.08 by 59.02 mm. It starts 4.96 mm behind the back
+# line and ends 37.12 mm in. Its screw cluster is five concentric circles, 23.55 mm from the back line and 118.10 mm from the top
+# end. A cross 4.8 mm long and 1.0 mm wide sits in them.
+PLATE = {"w": 42.08, "h": 59.02, "y": 88.55, "back": -4.96, "front_gap": 5.66}
+PLATE_RINGS = [25.4, 17.5, 9.3, 8.75, 7.9]
+PLATE_CLUSTER = (23.55, 118.10)
 
 
 @pytest.mark.heavy
 @pytest.mark.parametrize("face", ["right", "left"])
-def test_each_side_draws_the_eight_round_marks_of_the_drawings_side_view(face):
-    found = round_decor(face)
-    rings = [v for n, v in found.items() if n.startswith("side-mark-") and not n.endswith("-ring")]
-    inner = [v for n, v in found.items() if n.startswith("side-mark-") and n.endswith("-ring")]
-    assert len(rings) == 8 and len(inner) == 8, "eight marks, each a ring and an inner ring"
-    assert len(found) == 16, "nothing else is drawn on the side"
-    for group in (rings, inner):
-        size = 6.2 if group is rings else 3.4
-        assert all(abs(w - size) < 0.05 and abs(h - size) < 0.05 and abs(rx - size / 2) < 0.05
-                   for _, _, _, w, h, rx in group), "round, and as wide as the drawing's ring"
-    centres = sorted((y + h / 2, x + w / 2) for _, x, y, w, h, _ in rings)
-    inner_centres = sorted((y + h / 2, x + w / 2) for _, x, y, w, h, _ in inner)
-    for (cy, cx), (iy, ix), want_y, want_x in zip(centres, inner_centres, SIDE_MARK_Y, SIDE_MARK_X[face]):
-        assert abs(cy - want_y) < 0.1 and abs(cx - want_x) < 0.1, (face, cy, cx, want_y, want_x)
-        assert abs(iy - cy) < 0.05 and abs(ix - cx) < 0.05, "the inner ring is concentric"
-    assert [c[0] < 20 for c in centres] == [True] * 2 + [False] * 6, "two at the top end and six on the column"
-    column = [c[0] for c in centres[2:]]
-    assert len({round(c[1], 2) for c in centres[1:]}) == 1, "the column and the lower top-end mark share an x"
-    assert all(abs((b - a) - 312.22) < 0.1 for a, b in zip(column, column[1:])), "the column's pitch"
-    assert all(0 <= x and x + w <= 42.78 and 0 <= y and y + h <= 1776.44 for _, x, y, w, h, _ in rings), "inside the body"
+def test_each_side_draws_the_eight_marks_with_their_circles_and_the_plate_with_its_screw_cluster(face):
+    found = stacks(face)
+    flat = decor(face)
+    mirror = (lambda x: x) if face == "right" else (lambda x: 42.78 - x)
+    for n, (cy, edge, rings) in enumerate(zip(SIDE_MARK_Y, FRONT_EDGE_MM, MARK_RINGS), 1):
+        cx = mirror(edge)
+        here = [ws for sx, sy, ws in found if abs(sx - cx) < 0.06 and abs(sy - cy) < 0.06]
+        assert len(here) == 1 and len(here[0]) == len(rings) and all(abs(a - b) < 0.06 for a, b in zip(here[0], rings)), (face, n, here)
+    slots = sorted(round(y + h / 2, 2) for x, y, w, h in flat.values() if (round(w, 2), round(h, 2)) == (2.55, 0.9))
+    assert slots == [202.64, 1139.29], "a slot on marks 3 and 6 only"
+    column = sorted(cy for _, cy, ws in found if abs(ws[0] - 6.2) < 0.06 and cy > 100)
+    assert len(column) == 6 and all(abs((b - a) - 312.22) < 0.1 for a, b in zip(column, column[1:])), "the column's pitch"
+    cx_cluster = PLATE_CLUSTER[0] if face == "left" else 42.78 - PLATE_CLUSTER[0]
+    cluster = [ws for sx, sy, ws in found if abs(sx - cx_cluster) < 0.06 and abs(sy - PLATE_CLUSTER[1]) < 0.06]
+    assert len(cluster) == 1 and len(cluster[0]) == 5 and all(abs(a - b) < 0.06 for a, b in zip(cluster[0], PLATE_RINGS)), (face, cluster)
+    plates = [v for v in flat.values() if abs(v[2] - PLATE["w"]) < 0.06 and abs(v[3] - PLATE["h"]) < 0.06]
+    assert len(plates) == 1 and abs(plates[0][1] - PLATE["y"]) < 0.06, "one plate, level with the keyhole plate on the rear"
+    x, _, w, _ = plates[0]
+    if face == "left":
+        assert abs(x - PLATE["back"]) < 0.06 and abs(42.78 - (x + w) - PLATE["front_gap"]) < 0.06
+    else:
+        assert abs(x - PLATE["front_gap"]) < 0.06 and abs(x + w - (42.78 - PLATE["back"])) < 0.06
+    cross = sorted((round(w, 2), round(h, 2)) for x, y, w, h in flat.values()
+                   if abs(x + w / 2 - cx_cluster) < 0.06 and abs(y + h / 2 - PLATE_CLUSTER[1]) < 0.06 and min(w, h) < 1.5)
+    assert cross == [(1.0, 4.8), (4.8, 1.0)], "the cross is two bars 4.8 by 1.0"
+    assert len(flat) == 1 + 31 + 2 + 1 + 5 + 2, "the body, 31 mark circles, 2 slots, the plate, 5 circles and the cross"
+    marks = [(cx, cy) for cx, cy, ws in found if abs(ws[0] - 6.2) < 0.06]
+    assert all(0 <= x - 3.1 and x + 3.1 <= 42.78 and 0 <= y - 3.1 and y + 3.1 <= 1776.44 for x, y in marks), "inside the body"
+
+
+@pytest.mark.heavy
+def test_the_front_screws_and_holes_carry_the_drawings_inner_rings_and_the_seam_lines_cross_the_face():
+    found = stacks("front")
+    assert count_stacks(found, [3.95, 2.82]) == 12, "the twelve small holes"
+    assert count_stacks(found, [4.2]) == 4, "four plain holes"
+    assert count_stacks(found, [5.5, 4.2]) == 1, "the plain hole at the foot has its ring"
+    assert count_stacks(found, [5.5, 3.54]) == 6, "the six middle screws are 5.5 across with a ring"
+    assert count_stacks(found, [4.8, 3.67, 2.68]) == 12, "the other twelve screws have two inner rings"
+    assert count_stacks(found, [4.9, 3.81, 3.52, 2.68]) == 2, "the two plate screws"
+    seams = sorted((round(y + h / 2, 1), round(w, 1)) for k, (x, y, w, h) in decor("front").items() if k.startswith("seam-line"))
+    assert seams == [(1397.8, 54.9), (1410.5, 56.0), (1410.9, 54.9)], "the seam lines of the breaker end"
+
+
+@pytest.mark.heavy
+def test_the_rear_marks_and_holes_carry_their_rings_and_the_bracket_plates_run_to_the_right_edge():
+    found = stacks("rear")
+    assert count_stacks(found, [5.5, 3.53]) == 2, "the two marks"
+    assert count_stacks(found, [4.5, 3.94, 3.24]) == 4 and count_stacks(found, [4.5]) == 4, "four holes with two rings, four plain"
+    shapes = decor("rear")
+    for n, top, tab in ((1, 280.7, 283.2), (2, 1525.4, 1527.8)):
+        x, y, w, h = shapes[f"bracket-plate-{n}"]
+        assert abs(x - 2.55) < 0.06 and abs(x + w - 56.0) < 0.06 and abs(y - top) < 0.06 and abs(h - 47.0) < 0.06, (n, x, y, w, h)
+        tx, ty, tw, th = shapes[f"bracket-tab-{n}"]
+        assert abs(tx) < 0.06 and abs(tw - 1.7) < 0.06 and abs(th - 42.2) < 0.06 and abs(ty - tab) < 0.06, (n, tx, ty, tw, th)
 
 
 @pytest.mark.heavy
@@ -176,8 +240,8 @@ def test_the_rear_draws_the_keyhole_plate_the_two_bracket_plates_and_four_seam_t
         assert plate[0] <= x and x + w <= plate[0] + plate[2] and plate[1] <= y and y + h <= plate[1] + plate[3], part
     assert sorted(round(shapes[n][1], 1) for n in shapes if n.startswith("seam-tick")) == [1398.5, 1398.5, 1453.4, 1453.4]
     assert len([n for n in shapes if n.startswith("bracket-plate")]) == 2
-    assert len([n for n in shapes if n.startswith("bracket-hole")]) == 8
-    assert len([n for n in shapes if n.startswith("rear-mark")]) == 2
+    assert len([n for n in shapes if re.fullmatch(r"bracket-hole-\d+", n)]) == 8
+    assert len([n for n in shapes if re.fullmatch(r"rear-mark-\d+", n)]) == 2
 
 
 @pytest.mark.heavy
