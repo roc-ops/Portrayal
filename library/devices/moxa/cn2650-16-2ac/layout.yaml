@@ -12,8 +12,8 @@ profile: networking
 provenance:
   sources:
     confidence: datasheet
-    note: 'Three Moxa documents. CN2600 Series data sheet v2.0: page 4 serial interface, page 5 power and dimensions, page 6 environment and package,
-      page 7 dimensions and ordering table. CN2600 Series quick installation guide v6.4: page 3 rear panels. The maker''s 2D CAD sheet from the
+    note: 'Three Moxa documents. CN2600 Series data sheet v2.0: page 4 serial interface, page 5 power, dimensions and environment, page 6 safety and package.
+      Its page 7 has the dimensions and ordering table. CN2600 Series quick installation guide v6.4: page 3 rear panels. The maker''s 2D CAD sheet from the
       CN2600 downloads. No photograph or stencil is read.'
   size:
     confidence: datasheet
@@ -39,7 +39,7 @@ provenance:
   serial-ports:
     confidence: drawing
     note: 'Data sheet page 4: 16 ports on an 8-pin RJ45, RS-232/422/485. The rear figures draw two blocks of eight, numbered 1 to 8 and 9 to 16.
-      The CAD sheet''s jack pitch is 13.97 mm, the registry''s ganged pitch, and the jack''s latch side is up.'
+      The CAD sheet''s jack pitch is 13.97 mm, the registry''s ganged pitch, and the jack''s latch side is down. The data sheet''s rear view draws it down as well.'
   console:
     confidence: datasheet
     note: 'Data sheet page 4: an RS-232 console port on an 8-pin RJ45. The rear figures label the left jack of the three Console. Its pinout differs
@@ -63,7 +63,7 @@ provenance:
   ground:
     confidence: drawing
     note: A round screw at the left end of the rear, in the data sheet and CAD sheet rear views. The data sheet and the guide print a ground symbol above it and the CAD sheet does not. Its size is not
-      stated; the nominal unsized ground screw is placed.
+      stated; the nominal unsized ground screw is placed. The data sheet also draws a dashed ring about 9 mm across round it. The kit has no dash, so it is not drawn.
   top:
     confidence: drawing
     note: The CAD sheet's top view draws three sets of louvre openings and three screws. The NPort 5650-16 top has the same, so it is reused.
@@ -161,11 +161,13 @@ gaps:
   scope:
   - top
   - bottom
+  - left
+  - right
   reason: needs-drawing
-  wanted: a ruling on drawing the AC inlets that stand about 3.05 mm past the rear edge in the sheet's top and underside views.
-  note: The CAD sheet draws each inlet past the rear edge. Widening both views to 202 mm passed lint, but the size test refused it.
-    The kit states the convention "top = width x depth", and lint says decor "is clipped and never drawn outside the face".
-    The views stay 440 x 198 mm and the inlets are not drawn there.
+  wanted: a ruling on drawing the AC inlets that stand about 3 mm past the rear edge in the sheet's top, underside, left and right views.
+  note: The CAD sheet draws each inlet past the rear edge in the top and underside views. It draws a strip past it in the left and right views.
+    The schema allows a reach beyond a face "Only on a `rack` device (L125)." Widening the top and underside views to 202 mm passed lint.
+    The module's size test refused it, because it asserts the top view is 440 x 198 mm and the left view 198 x 45.5 mm. The views stay that size and the inlets are not drawn.
 - what: lifecycle
   scope:
   - front

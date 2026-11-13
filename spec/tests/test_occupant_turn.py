@@ -443,6 +443,7 @@ def test_l147_fails_a_widening_a_point_that_is_not_presented_and_no_interface():
 # 237 -> 239: one more down on each of the Panduit P36G18M and P42G20M
 # 239 -> 241: one more down on each of the Eaton EMIT03-10 and EMIT04-10's ground screw on its washer
 # 241 -> 242: the S9500-30XS's lug, one seat down, became a pair host whose two studs are two seats down
+
 # 242 -> 246 down with the four Moxa CN2600 16-port terminal servers' ground screw
 WANT = {"down": 246, "left": 61, "up": 37, "right": 44}   # 228: the MikroTik CRS510's earth stud, one more down (227 before); 227: the MikroTik CRS504-4XQ-IN earth stud, one more down (226 before); one more down: the Eaton EPBZ77's inner ground stud; the 24 terminal pads of the Juniper EX4100-H-24F and -24MP (down 10, left 2, up 8, right 4); then: the Juniper EX9204 and EX9208 stud pairs, drawn as the MX240's and MX480's; two more down on each of the four Juniper EX3200; the earth studs of the Digi Connect EZ 16 and 32 (two, one each, up)
 # THE TWO-HOLE LUG on a pair host: 59 seats on 33 devices - three on each of

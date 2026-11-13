@@ -94,6 +94,22 @@ def test_the_ears_are_stated_once_and_the_sides_and_underside_are_drawn(slug):
 
 
 @pytest.mark.parametrize("slug", MODELS)
+def test_the_notes_state_the_latch_side_down_and_the_environment_on_page_five(slug):
+    notes = device(slug)["provenance"]
+    assert "latch side is down" in notes["serial-ports"]["note"]
+    assert "page 5 power, dimensions and environment" in notes["sources"]["note"]
+    assert "page 6 safety and package" in notes["sources"]["note"]
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_rear_inlets_gap_covers_the_four_views_that_show_the_inlet_strip(slug):
+    gap = {g["what"]: g for g in device(slug)["gaps"]}["rear-inlets"]
+    assert gap["reason"] == "needs-drawing"
+    assert sorted(gap["scope"]) == ["bottom", "left", "right", "top"]
+    assert "left and right" in gap["note"]
+
+
+@pytest.mark.parametrize("slug", MODELS)
 def test_the_right_side_is_the_left_mirrored_in_depth(slug):
     d = device(slug)
     left, right = decor(d, "left"), decor(d, "right")

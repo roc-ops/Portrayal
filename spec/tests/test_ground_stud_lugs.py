@@ -485,6 +485,7 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
     # 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
     # 77 -> 76 with the S9500-30XS's lug becoming a pair host
+
     # 76 -> 80 with the four Moxa CN2600 16-port terminal servers' ground screw
     assert sum(n for n, _ in got.values()) == 80
     # 42 -> 44 with the Cisco C9300-24S and C9300-48S
@@ -497,6 +498,7 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     # 54 -> 56 with the Enlogic EN2951 and EN6952
     # 56 -> 58 with the Panduit P36G18M and P42G20M
     # 58 -> 57 with the S9500-30XS's lug becoming a pair host
+
     # 57 -> 61 with the four Moxa CN2600 16-port terminal servers' ground screw
     assert len({where for where, _, _ in placed}) == 61
     # the MX stud is still a part, composed twice by each MX pair host, and no
@@ -553,6 +555,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
     # 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
     # 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
     # 76 -> 75 with the S9500-30XS's lug becoming a pair host
+
     # 75 -> 79 with the four Moxa CN2600 16-port terminal servers' ground screw
     assert seen == 79
 
