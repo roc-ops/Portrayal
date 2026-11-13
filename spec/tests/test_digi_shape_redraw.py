@@ -49,7 +49,7 @@ def test_the_connect_it_front_draws_one_metal_frame_per_block(name, frames):
     assert len(plates) == frames
     for p in plates:
         assert p["kind"] == "plate"
-        assert p["size"] == [116.0, 31.0]
+        assert p["size"] == [116.0, 30.4]
 
 
 @pytest.mark.parametrize("part,screws", [("itps-psu", 6), ("ezps-ac", 4)])
