@@ -112,11 +112,13 @@ provenance:
   sides:
     confidence: drawing
     note: >-
-      drawing - the side view draws the body 42.78 deep with the breaker end 67.40 deep. Every other part
-      it draws stands outside that depth. They are a row of ticks along the front edge, the paddle tips,
-      the button profiles and the removable brackets (gaps: side-projections). Nothing is built into the
-      metal, so both sides are plain faces. The standing PDU's right side is the one the drawing shows.
-      The left side is built as the documented side, as no document shows this one.
+      drawing - the side view draws the body 42.78 deep with the breaker end 67.40 deep. Each side shows
+      the body and eight round marks inside it. Two are at the top end and six stand in a column near
+      the front edge, 310.5 apart. Each mark is a ring 6.2 across with an inner ring 3.4 across, read
+      from the vector page at 3.0867 per point. Four things stand outside that depth and are not drawn.
+      They are the row of ticks along the front edge, the paddle tips, the button profiles and the removable
+      brackets (gaps: side-projections). The standing PDU's right side is the one the drawing shows. The
+      left side is built as the documented side, as no document shows this one, with the marks mirrored.
   input:
     confidence: datasheet
     note: >-
@@ -560,14 +562,44 @@ views:
       - {id: input, ref: eaton/tripplite-cord-l21-30p@1, at: [8.95, 2.34], group: power-input, rel-pos: 1}
   right:
     size: {w: 42.78, h: 1776.44}
-    empty: >-
-      the drawing's side view shows a plain body. The parts that stand out of it are not drawn (gaps:
-      side-projections). Nothing is built into the metal.
+    panel:
+      decor:
+      - {id: side-mark-1, at: [10.36, 3.07], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-1-ring, at: [11.76, 4.47], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-2, at: [1.65, 10.81], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-2-ring, at: [3.05, 12.21], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-3, at: [1.65, 198.45], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-3-ring, at: [3.05, 199.85], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-4, at: [1.65, 509.0], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-4-ring, at: [3.05, 510.4], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-5, at: [1.65, 819.55], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-5-ring, at: [3.05, 820.95], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-6, at: [1.65, 1130.1], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-6-ring, at: [3.05, 1131.5], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-7, at: [1.65, 1440.65], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-7-ring, at: [3.05, 1442.05], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-8, at: [1.65, 1751.2], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-8-ring, at: [3.05, 1752.6], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
   left:
     size: {w: 42.78, h: 1776.44}
-    empty: >-
-      built as the documented side, as no document shows this one. The drawing's side view is one side
-      only. It shows nothing built into the metal.
+    panel:
+      decor:
+      - {id: side-mark-1, at: [26.22, 3.07], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-1-ring, at: [27.62, 4.47], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-2, at: [34.93, 10.81], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-2-ring, at: [36.33, 12.21], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-3, at: [34.93, 198.45], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-3-ring, at: [36.33, 199.85], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-4, at: [34.93, 509.0], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-4-ring, at: [36.33, 510.4], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-5, at: [34.93, 819.55], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-5-ring, at: [36.33, 820.95], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-6, at: [34.93, 1130.1], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-6-ring, at: [36.33, 1131.5], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-7, at: [34.93, 1440.65], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-7-ring, at: [36.33, 1442.05], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
+      - {id: side-mark-8, at: [34.93, 1751.2], size: [6.2, 6.2], rx: 3.1, fill: '#1f2022', kind: screw-head}
+      - {id: side-mark-8-ring, at: [36.33, 1752.6], size: [3.4, 3.4], rx: 1.7, fill: '#111213', kind: hole}
 configurations:
   base:
     kind: base

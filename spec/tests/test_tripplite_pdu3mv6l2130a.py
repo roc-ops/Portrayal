@@ -65,10 +65,50 @@ def test_every_face_is_built_and_the_body_is_the_drawings_56_by_1776_44():
     assert manifest["chassis"]["mount"] == "rack-side"
 
 
+def round_decor(face):
+    """The round decor of a built face: id -> (kind, x, y, w, h, rx)."""
+    svg = (DIST / f"{NAME}.{face}.svg").read_text()
+    pat = r'<rect id="([^"]+)" data-kind="([^"]+)" x="([-\d.]+)" y="([-\d.]+)" width="([\d.]+)" height="([\d.]+)" rx="([\d.]+)"'
+    return {m[0]: (m[1], *(float(v) for v in m[2:])) for m in re.findall(pat, svg)}
+
+
+# The drawing's side view shows eight round marks inside its 42.78 deep body. Two are at the top end and six are on
+# a column near the front edge. Read from the vector page: the ring is 6.2 across and the inner ring 3.4. The six sit
+# 310.55 apart. A right face has x = 0 at the front. The left face is its mirror, 42.78 minus x.
+SIDE_MARK_Y = [6.17, 13.91, 201.55, 512.10, 822.65, 1133.20, 1443.75, 1754.30]
+SIDE_MARK_X = {"right": [13.46] + [4.75] * 7, "left": [29.32] + [38.03] * 7}
+
+
 @pytest.mark.heavy
-def test_the_top_and_both_sides_carry_nothing_but_the_body():
-    for face in ("top", "left", "right"):
-        assert [e["class"] for e in elements(face)] == ["chassis"], face
+@pytest.mark.parametrize("face", ["right", "left"])
+def test_each_side_draws_the_eight_round_marks_of_the_drawings_side_view(face):
+    found = round_decor(face)
+    rings = [v for n, v in found.items() if n.startswith("side-mark-") and not n.endswith("-ring")]
+    inner = [v for n, v in found.items() if n.startswith("side-mark-") and n.endswith("-ring")]
+    assert len(rings) == 8 and len(inner) == 8, "eight marks, each a ring and an inner ring"
+    assert len(found) == 16, "nothing else is drawn on the side"
+    for group in (rings, inner):
+        size = 6.2 if group is rings else 3.4
+        assert all(abs(w - size) < 0.05 and abs(h - size) < 0.05 and abs(rx - size / 2) < 0.05
+                   for _, _, _, w, h, rx in group), "round, and as wide as the drawing's ring"
+    centres = sorted((y + h / 2, x + w / 2) for _, x, y, w, h, _ in rings)
+    inner_centres = sorted((y + h / 2, x + w / 2) for _, x, y, w, h, _ in inner)
+    for (cy, cx), (iy, ix), want_y, want_x in zip(centres, inner_centres, SIDE_MARK_Y, SIDE_MARK_X[face]):
+        assert abs(cy - want_y) < 0.1 and abs(cx - want_x) < 0.1, (face, cy, cx, want_y, want_x)
+        assert abs(iy - cy) < 0.05 and abs(ix - cx) < 0.05, "the inner ring is concentric"
+    assert [c[0] < 20 for c in centres] == [True] * 2 + [False] * 6, "two at the top end and six on the column"
+    column = [c[0] for c in centres[2:]]
+    assert len({round(c[1], 2) for c in centres[1:]}) == 1, "the column and the lower top-end mark share an x"
+    assert all(abs((b - a) - 310.55) < 0.1 for a, b in zip(column, column[1:])), "the column's pitch"
+    assert all(0 <= x and x + w <= 42.78 and 0 <= y and y + h <= 1776.44 for _, x, y, w, h, _ in rings), "inside the body"
+
+
+@pytest.mark.heavy
+@pytest.mark.parametrize("face", ["top", "bottom"])
+def test_the_top_and_bottom_carry_only_the_body_as_decor(face):
+    assert list(decor(face)) == ["chassis-faceplate"], face
+    if face == "top":
+        assert [e["class"] for e in elements(face)] == ["chassis"]
 
 
 @pytest.mark.heavy
@@ -130,6 +170,9 @@ def test_the_rear_draws_the_keyhole_plate_the_two_bracket_plates_and_four_seam_t
     plate = shapes["keyhole-plate"]
     assert plate[1] < button["y"] + button["h"] / 2 < plate[1] + plate[3], "the keyhole plate holds the top button"
     assert not [n for n, s in shapes.items() if n.startswith("keyhole") and s[1] > 1000], "the lower button has none"
+    for part in ("keyhole-slot", "keyhole-bulb"):
+        x, y, w, h = shapes[part]
+        assert plate[0] <= x and x + w <= plate[0] + plate[2] and plate[1] <= y and y + h <= plate[1] + plate[3], part
     assert sorted(round(shapes[n][1], 1) for n in shapes if n.startswith("seam-tick")) == [1398.5, 1398.5, 1453.4, 1453.4]
     assert len([n for n in shapes if n.startswith("bracket-plate")]) == 2
     assert len([n for n in shapes if n.startswith("bracket-hole")]) == 8
