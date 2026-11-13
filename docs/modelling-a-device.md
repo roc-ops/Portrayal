@@ -739,13 +739,58 @@ chassis:
 Check: lint L220 to L225 (it needs a section; it is not on a rack device or with
 `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`; the bands tile; each
 polygon is clockwise, simple, has no edge under 0.1 mm and lies inside the box; the
-caps). The key is shape, so stating it on a released device is a major.
+caps) and L226 to L234, which cut each band against the section. The key is shape, so
+stating it on a released device is a major.
 
-**The drawings and the 3D body do not follow the key yet.** The faces are drawn as
-before and the body is still the extruded section, so a device that stated it would
-look the same and its lock would carry a major for nothing. **State it on no device
-yet.** A test fails if a library device does; the later changes that draw and build
-from it remove that test.
+**What is left of the body.** A band's polygon is cut to the section's rows at the
+band's heights: the plan only removes. A point within half a millimetre of a side of the
+box or of a wall of the section is moved onto it before the cut, so a run measured a few
+tenths inside a wall is the wall; L232 names each move over a hundredth of a millimetre.
+The body that is left has to reach all four sides of the box (L226), so a lobe whose tip
+stands where the section has no body does not count and the warning L231 names the lost
+point. Where two bands meet at a height that is not a row of the section and their
+outlines differ, the wall has a ledge in it (L233); a stretch of the section that no x of
+the plan reaches is named by L234.
+
+**How the faces follow it (2D).**
+
+- **Top and bottom.** The faceplate is a path of the union of the bands' polygons, the
+  corners transparent, with the same id `chassis-faceplate`. The bottom is its mirror in
+  x, wound the other way so it stays clockwise. The step between bands is a line inside
+  the outline, in a group `chassis-plan` painted over the art, so the face's own art has
+  to stop at the outline: a rectangle of art across the whole face would paint the
+  corners.
+- **Rib stripes.** Each rib's rectangle is cut to the pieces of every band it crosses and
+  joined into one path, with no clip element. A rib in several pieces gets ids `fin-3-a`,
+  `fin-3-b`; a rib the plan removes is not drawn and keeps its number; L230 warns.
+- **Front and rear.** The outline is the fins' silhouette cut to the x-extent of the body
+  at each row of the section: an inset casting is narrower than the flange, and a rounded
+  corner narrows the outline only at a row whose depth lies inside the corner. Where a
+  row has several runs of x the outline keeps each, and does not close over the gap.
+- **End faces.** An end face stays the section's silhouette (with its fins). The part of
+  it where the plan leaves no cap, which is where a casting is inset from the end, is
+  shaded in the plain tone, so you can see where a part cannot stand.
+- **Parts (L227).** A part on the top or bottom stands wholly on one level inside the
+  outline (not across a step or a rounded edge); a part on the front or rear lies where
+  its wall is present at its heights; a part on an end face lies on a cap.
+- **A housing that opens (L228, L229).** Each half's rim, the band on its side of the seam
+  cut to the section there, is one piece and not empty, and reaches the line where the
+  hinge face meets the seam, so the lid turns on the body.
+
+The cut is portrayal/plan.py; its answers for small cases are worked by hand in
+`spec/tests/fixtures/plan_outline/sweep-cases.json`, which the kit's version will read too.
+
+**The 3D body does not follow the key yet.** The faces are drawn from it, and the body is
+still the extruded section, so a kit that has the new faces and not the new body shows
+holes in the top and bottom of the box. **State it on no device yet.** A test fails if a
+library device does; the later change that builds the body from it, and the site's
+re-vendoring of the kit, come first.
+
+**The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
+export keeps the alpha: the corners are fully transparent, and the `background` option
+fills them. The draw.io export embeds the face as an SVG image whose path faceplate
+carries the same transparent corners, and the OmniGraffle stencil holds a PNG with its
+alpha. None of them paints a background of its own.
 
 ## Stage 2: the cutouts
 
