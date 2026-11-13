@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 32620-703
-version: 2.0.0
+version: 3.0.0
 maturity: modelled
 manufacturer: Chatsworth Products
 model: '32620-703'
@@ -89,7 +89,9 @@ provenance:
       that the doors exist is printed, but no page prints a size of a door, so each is drawn as one
       plate of the manager's nominal width and height (the door components carry the method). A door
       opens to the right or to the left and lifts off; the format has no hinge, so the side is a
-      gap. The front door has a logo and the rear door is plain; neither logo is drawn.
+      gap. The front door has a latch tip at each edge and, on the 12 in width, two seams and a plate. The rear door is its own
+      plain part with a latch tip at each edge. The two latches on the back of each door show on the sides. Each door
+      component carries its figures.
   spine:
     confidence: estimated
     note: >-
@@ -230,16 +232,62 @@ gaps:
       the double-sided manager; it is not part of the manager as shipped, so the centre is drawn
       open.
     wanted: a drawing of the manager as shipped
-  - what: door-features
-    scope: [front, rear]
+  - what: door-hook
+    scope: [front]
     reason: vendor-silent
     note: >-
-      the front door has a logo plate at the top and both doors have two blue latches on the back
-      (installation instructions, page 3), the figure on that page shows a hook on the inside of the
-      front door, and the data sheet's page 1 photograph shows a lighter vertical strip down the
-      front door; no held page gives their size or position, so the logo plate, the blue latches and
-      the inside hook are not drawn and the two doors are the same plain plate.
-    wanted: a dimensioned door
+      the data sheet (page 1, key features) names a hook on the inside of the front door for a test meter,
+      in text only. The installation figure (page 3) shows a hinge lug and the rear door's latches, not a
+      hook. No held picture shows the hook, so it is not drawn.
+    wanted: a photograph of the inside of the front door
+  - what: end-caps
+    scope: [front, rear, top]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph shows two dark rounded caps on the top of the manager and the page 3 render
+      shows four. No held page gives their size. They belong to this device's own frame part, which a
+      following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the top of the frame
+  - what: feet
+    scope: [front, rear, bottom]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph shows dark feet and a base plate with small holes at the bottom of the manager.
+      The page 3 render shows four feet. No held page gives their size. They belong to this device's own
+      frame part, which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the bottom of the frame
+  - what: door-hinge-tabs
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the installation figure (page 3) shows four hinge tabs, one at each corner of the rear door's back. It
+      also shows a central rib and two cross bars. It gives no size. They belong to this device's own frame
+      part, which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the door's back
+  - what: side-plate-holes
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the page 3 render shows holes on the side plate, some near the top and some near the bottom. The page
+      1 photograph shows dots on the side plate. No held page gives their size or place. They belong to this
+      device's own frame part, which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the side plate
+  - what: track-rungs
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph and the page 3 render show a row of rungs down the central track. No held page
+      gives their pitch or size. They belong to this device's own frame part, which a following change
+      draws, so they are not drawn here.
+    wanted: a dimensioned view of the central track
+  - what: centre-plate
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the page 3 render shows a flat plate between the two channels. The page 6 mid panel kit is sold apart,
+      so the library draws the centre open. The pages disagree. They belong to this device's own frame part,
+      which a following change draws, so they are not drawn here.
+    wanted: a drawing of the manager as shipped, seen from the side
   - what: door-bevel
     scope: [top, bottom, left, right]
     reason: vendor-silent
@@ -487,7 +535,7 @@ views:
         - {ref: chatsworth/motive-vcm-tshape-ds@1, id: rear-guide-right-46, at: [130, 2000.25], group: guides, rel-pos: 190, in: rear-base, under: [rear-door]}
         - {ref: chatsworth/motive-vcm-tshape-ds@1, id: rear-guide-right-47, at: [130, 2044.7], group: guides, rel-pos: 191, in: rear-base, under: [rear-door]}
         - {ref: chatsworth/motive-vcm-tshape-ds@1, id: rear-guide-right-48, at: [130, 2089.15], group: guides, rel-pos: 192, in: rear-base, under: [rear-door]}
-        - {ref: chatsworth/motive-32620-703-door@1, id: rear-door, at: [0, 0], group: door, rel-pos: 2, in: rear-base}
+        - {ref: chatsworth/motive-32620-703-rear-door@1, id: rear-door, at: [0, 0], group: door, rel-pos: 2, in: rear-base}
     guides:
       - {id: rear-duct, kind: duct, at: [20, 0], size: [110, 2133.6], run: y, finger-pitch: 44.45, finger-gap: 32.45, confidence: estimated, source: 'Motive data sheet page 1 (guides align with rack units) and page 3 (nominal width); the channel and the gap are the width less an estimated side assembly and the pitch less an estimated arm'}
   top:
@@ -528,6 +576,10 @@ views:
     size: {w: 600, h: 2133.6}
     panel:
       decor:
+        - {id: rear-latch-housing, at: [3, 973.94], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: rear-latch-handle, at: [3, 987], size: [15, 45], fill: '#2796bf', kind: latch}
+        - {id: front-latch-housing, at: [582, 973.94], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: front-latch-handle, at: [582, 987], size: [15, 45], fill: '#2796bf', kind: latch}
         - {id: rear-arm-1, at: [17, 16.23], size: [184, 12], fill: '#26282a', kind: finger}
         - {id: rear-head-1, at: [3, 7.23], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: front-arm-1, at: [399, 16.23], size: [184, 12], fill: '#26282a', kind: finger}
@@ -726,6 +778,10 @@ views:
     size: {w: 600, h: 2133.6}
     panel:
       decor:
+        - {id: rear-latch-housing, at: [3, 973.94], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: rear-latch-handle, at: [3, 987], size: [15, 45], fill: '#2796bf', kind: latch}
+        - {id: front-latch-housing, at: [582, 973.94], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: front-latch-handle, at: [582, 987], size: [15, 45], fill: '#2796bf', kind: latch}
         - {id: rear-arm-1, at: [399, 16.23], size: [184, 12], fill: '#26282a', kind: finger}
         - {id: rear-head-1, at: [583, 7.23], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: front-arm-1, at: [17, 16.23], size: [184, 12], fill: '#26282a', kind: finger}
