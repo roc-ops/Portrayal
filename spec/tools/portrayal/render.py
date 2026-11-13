@@ -6576,6 +6576,11 @@ def main():
                              # the ribs on that housing, as written; absent
                              # where the device states none
                              **({"fins": copy.deepcopy(ch["fins"])} if ch.get("fins") else {}),
+                             # the outline of that housing seen from above, as
+                             # written: the bands, each a range of heights and a
+                             # polygon; absent where the device states none
+                             **({"plan-outline": copy.deepcopy(ch["plan-outline"])}
+                                if ch.get("plan-outline") else {}),
                              # the two halves of a box that opens, as written;
                              # absent on a box that does not
                              **({"halves": _halves.published(device)} if _halves.declared(device) else {})},
