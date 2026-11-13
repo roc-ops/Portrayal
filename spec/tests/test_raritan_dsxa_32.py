@@ -77,10 +77,31 @@ def test_the_front_and_the_sides_declare_their_source_and_the_missing_photograph
 def test_the_three_vents_are_drawn_as_patterns_and_declared_as_air(dev):
     front = {d["id"]: d for d in dev["views"]["front"]["panel"]["decor"]}["bezel-vent"]
     assert (front["pattern"], front["pattern-pitch"], front["vent"]) == ("holes", [5.6, 3.9], 1.0)
-    for view in ("left", "right"):
-        side = {d["id"]: d for d in dev["views"][view]["panel"]["decor"]}["side-vent"]
-        assert (side["pattern"], side["pattern-pitch"], side["vent"]) == ("slots-h", [9.0, 4.0], 1.0)
-        assert side["size"][1] == 12.0 and "fill" not in side
+    right = {d["id"]: d for d in dev["views"]["right"]["panel"]["decor"]}["side-vent"]
+    left = {d["id"]: d for d in dev["views"]["left"]["panel"]["decor"]}["side-vent"]
+    assert (right["pattern"], right["pattern-pitch"], right["vent"]) == ("slots-h", [12.0, 5.6], 1.0)
+    assert (left["pattern"], left["pattern-pitch"], left["vent"]) == ("holes", [9.6, 5.6], 1.0)
+    for side in (left, right):
+        assert side["size"][1] == 16.8 and "fill" not in side
+    assert right["at"] == [45.5, 16.9] and left["at"] == [17.0, 18.6]
+    assert right["size"][0] == 204.0 and left["size"][0] == 228.0
+
+
+def test_the_two_side_walls_are_drawn_from_their_own_pictures_and_not_mirrored(dev):
+    left = {d["id"]: d for d in dev["views"]["left"]["panel"]["decor"]}["side-vent"]
+    right = {d["id"]: d for d in dev["views"]["right"]["panel"]["decor"]}["side-vent"]
+    assert (left["pattern"], left["pattern-pitch"], left["at"]) != (right["pattern"], right["pattern-pitch"], right["at"])
+    assert left["pattern"] != right["pattern"]
+    text = (str(dev["gaps"]) + str(dev["provenance"])).lower()
+    assert "no picture shows the left wall" not in text and "no document shows this one" not in text
+
+
+def test_the_three_lid_tabs_are_drawn_on_the_top_edge_of_the_rear(dev):
+    tabs = [d for d in dev["views"]["rear"]["panel"]["decor"] if d["id"].startswith("lid-tab-")]
+    assert [t["id"] for t in tabs] == ["lid-tab-1", "lid-tab-2", "lid-tab-3"]
+    assert [t["at"] for t in tabs] == [[85.6, 1.7], [215.4, 1.7], [345.3, 1.7]]
+    assert all(t["size"] == [10.0, 1.7] for t in tabs)
+    assert tabs[1]["at"][0] - tabs[0]["at"][0] == pytest.approx(tabs[2]["at"][0] - tabs[1]["at"][0], abs=0.2)
 
 
 def test_no_legend_is_drawn_that_the_pictures_of_this_model_cannot_read(dev):
@@ -91,3 +112,5 @@ def test_no_legend_is_drawn_that_the_pictures_of_this_model_cannot_read(dev):
 
 def test_every_feature_left_out_has_a_gap_row(dev):
     assert {"front-holes", "side-slot-rows", "legends", "lid-tabs", "top-and-bottom", "db9-colour"} <= {g["what"] for g in dev["gaps"]}
+    tabs = next(g for g in dev["gaps"] if g["what"] == "lid-tabs")
+    assert "none is placed" not in tabs["note"] and "too small" not in tabs["note"]

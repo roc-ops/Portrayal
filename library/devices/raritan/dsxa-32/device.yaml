@@ -105,15 +105,18 @@ provenance:
   side-walls:
     confidence: estimated
     note: >-
-      The right wall is read from the oblique photograph on the quick setup guide's page 1, which shows
-      slotted vents on that wall. There are three rows of dashed slots on the wall of the upper unit.
-      The slot pattern runs from pixel column 337 to 385. The wall itself runs from about column 327 to
-      392 and the picture ends at column 397, so the pattern stops inside the picture. That is about 15
-      to 89 percent of the depth, estimated from an oblique view. It is drawn as x 44 to 258 mm on the
-      right view. Each slot is about 2 pixels tall and the dash pitch cannot be read. The rows use the
-      smallest tile the picture supports, 9 by 4 mm, so the dash count is not exact. The left wall is
-      built as the documented side, as no document shows this one. The source is that same photograph
-      of the right wall.
+      Both walls are read from the oblique photograph on the quick setup guide's page 1, which shows two
+      stacked units. The upper unit is seen from the front and the lower unit from the rear, so the picture
+      shows opposite walls of the two. Left and right are as seen from the front. The upper unit's wall
+      is the right wall, with the front at its left as the right view runs. The lower unit's wall is the
+      left wall, with the rear at its left as the left view runs. Each wall has three rows, 4.7 pixels
+      apart, about 5.6 mm. The right wall rows read as dashes at a pitch of 2.9 pixels, about 12 mm, from
+      pixel column 336 to 384. That is x 45.5 to 253 mm, drawn as 17 whole dashes. The left wall rows
+      read as dots at a pitch of 2.4 pixels, about 9.6 mm, from column 330 to 383. That is x 17 to 245
+      mm, drawn as 23 dots. The depth scale is 4.33 mm per pixel, from wall corners 67 pixels apart. The
+      pattern stops inside the picture on both walls. The unit above hides the top of the lower wall.
+      Its rows are placed from its bottom edge, and only the visible extent is drawn. A mark is 1 to 2
+      pixels, so its size is the pattern's own proportion at the pitch.
   power:
     confidence: datasheet
     note: >-
@@ -219,8 +222,9 @@ gaps:
   - right
   reason: needs-photo
   note: >-
-    The side slots are drawn as a pattern, but the dash count and pitch are unknown. The slots are 2 pixels
-    tall in a 398 pixel photograph. No picture shows the left wall.
+    Each side wall is drawn as a pattern from its own wall in the photograph, but the mark size and the
+    exact pitch are estimates. A mark is 1 to 2 pixels in a 398 pixel photograph. The unit above hides
+    the top of the left wall, so its rows are placed from its bottom edge.
   wanted: A straight-on photograph of each side wall.
 - what: legends
   scope:
@@ -244,10 +248,10 @@ gaps:
   - rear
   reason: needs-photo
   note: >-
-    The data sheet photograph shows three small tabs on the top edge of the rear face. They sit over the
-    modem plate and after the first and second serial groups. Each is about 11 by 2 pixels in the embedded
-    photograph, so none is placed.
-  wanted: A close photograph of the top edge of the rear face.
+    The three tabs on the rear face's top edge are drawn as flat rectangles, 10 by 1.7 mm. They are read
+    from the data sheet photograph. Their depth and shape are unknown. The photograph shows only a 2 pixel
+    step in the shadow line of the lip.
+  wanted: A close photograph of the top edge of the rear face, to show the tab shape.
 groups:
   inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two AC inlets, numbered 1 and
       2 from the left'}
@@ -371,6 +375,28 @@ views:
       - {id: bank-2, kind: jack-plate, at: [237.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
       - {id: bank-3, kind: jack-plate, at: [304.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
       - {id: bank-4, kind: jack-plate, at: [371.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
+      - id: lid-tab-1
+        at: [85.6, 1.7]
+        size: [10.0, 1.7]
+        fill: '#6a656c'
+        confidence: estimated
+        source: >-
+          Data sheet page 4 photograph, embedded columns 114 to 124, 2 pixel step in the lip line, centre
+          90.6 mm from the left edge
+      - id: lid-tab-2
+        at: [215.4, 1.7]
+        size: [10.0, 1.7]
+        fill: '#6a656c'
+        confidence: estimated
+        source: >-
+          Data sheet page 4 photograph, embedded columns 264 to 275, centre 220.4 mm from the left edge
+      - id: lid-tab-3
+        at: [345.3, 1.7]
+        size: [10.0, 1.7]
+        fill: '#6a656c'
+        confidence: estimated
+        source: >-
+          Data sheet page 4 photograph, embedded columns 415 to 425, centre 350.3 mm from the left edge
     silkscreen:
     - {at: [178.3, 39.9], text: '1', font-size: 2.0, anchor: middle, fill: '#3a3a3a', for: serial-1}
     - {at: [192.27, 39.9], text: '2', font-size: 2.0, anchor: middle, fill: '#3a3a3a', for: serial-2}
@@ -667,28 +693,31 @@ views:
     panel:
       decor:
       - id: side-vent
-        at: [32.0, 14.0]
-        size: [214.0, 12.0]
-        pattern: slots-h
-        pattern-pitch: [9.0, 4.0]
-        pattern-offset: [32.0, 14.0]
+        at: [17.0, 18.6]
+        size: [228.0, 16.8]
+        pattern: holes
+        pattern-pitch: [9.6, 5.6]
+        pattern-offset: [17.0, 18.6]
         vent: 1.0
         confidence: estimated
-        source: Quick setup guide page 1, mirrored from the right wall; no picture shows this wall
+        source: >-
+          Quick setup guide page 1, the wall of the lower unit seen from the rear: 3 dotted rows at pixel
+          columns 330 to 383, visible extent only
   right:
     size: {w: 290, h: 44}
     panel:
       decor:
       - id: side-vent
-        at: [44.0, 14.0]
-        size: [214.0, 12.0]
+        at: [45.5, 16.9]
+        size: [204.0, 16.8]
         pattern: slots-h
-        pattern-pitch: [9.0, 4.0]
-        pattern-offset: [44.0, 14.0]
+        pattern-pitch: [12.0, 5.6]
+        pattern-offset: [45.5, 16.9]
         vent: 1.0
         confidence: estimated
         source: >-
-          Quick setup guide page 1, slot pattern at pixel columns 337 to 385 of the upper unit wall
+          Quick setup guide page 1, the wall of the upper unit seen from the front: 3 dashed rows at pixel
+          columns 336 to 384
 configurations:
   base:
     kind: base
