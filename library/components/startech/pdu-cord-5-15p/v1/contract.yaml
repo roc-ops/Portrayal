@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: pdu-cord-5-15p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of a StarTech 1U PDU, ending in a NEMA 5-15P plug; the plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of a StarTech.com horizontal 1U PDU with a NEMA 5-15P plug (the 8NS8-RACK-MOUNT-PDU, 8 ft, and the
+  RKPW081915, 6 ft). It leaves the face through a strain relief; only the strain relief is drawn. The length is the device's to
+  state, so one part serves both.
+size: {w: 16.0, h: 16.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-5-15p}
+provenance:
+  size: >-
+    ESTIMATED. The Quick-Start Guide of the 8NS8-RACK-MOUNT-PDU (Manual Revision September 5, 2024), page 1, rear diagram, component 4
+    "Built-in Power Cable", draws the relief about 9 mm across at the panel and about 17 mm across where it meets the cord, with no scale
+    of its own; it is read against the 482.6 mm rack face the diagram spans. Drawn 16.0, the size of the library's other PDU cord
+    reliefs. needs-drawing: a dimensioned drawing of the cord's end.
+  plug: >-
+    datasheet - 8NS8-RACK-MOUNT-PDU data sheet, page 1 and 2: "Built-in 8ft. (2.4m) NEMA 5-15P power cord", "Connector 1 NEMA 5-15 (125V
+    AC, 15A)"; RKPW081915 data sheet, page 2: "Cable Length 6.0 ft [1.8 m]", "Connector 1 NEMA 5-15 (125V AC, 15A)".
+  not-drawn: >-
+    THE CORD BEYOND THE STRAIN RELIEF AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part. This part stands for
+    the power input a DCIM records, a NEMA 5-15P power port.
+elements:
+  relief: {at: [0, 0], size: [16.0, 16.0], class: inlet}
+skins: [default]

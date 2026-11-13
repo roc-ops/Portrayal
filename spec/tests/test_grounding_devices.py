@@ -96,6 +96,10 @@ PAIRS.update({f"ufispace/{m}": {(view, "ground-screws"): (H58_M4, None, c, "M4")
 # height the lug placements had (21.8).
 PAIRS["ufispace/s9501-18smt"] = {("right", "ground-screws-1"): (H58_M4, None, (17.3, 21.8), "M4"),
                                  ("right", "ground-screws-2"): (H58_M4, None, (201.15, 21.8), "M4")}
+# #918: the S9500-30XS's one landing: its own HIG Figure 22 reads the rearward location's holes
+# 192.5 and 208.4 mm from the front (15.9 apart, 0.68 mm per pixel), so the host is centred at
+# 200.45, 22.4 mm below the top edge. Which flank the figure shows is a gap; it stays on the right view.
+PAIRS["ufispace/s9500-30xs"] = {("right", "ground-screws"): (H58_M4, None, (200.45, 22.4), "M4")}
 CASES = [(d, v, i) for d, pairs in sorted(PAIRS.items()) for (v, i) in sorted(pairs)]
 
 

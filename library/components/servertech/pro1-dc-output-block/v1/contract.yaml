@@ -1,0 +1,43 @@
+format: 1
+kind: component
+name: pro1-dc-output-block
+version: 1.0.0
+class: inlet
+profile: power
+description: >-
+  One output block of a Server Technology PRO1 -48VDC Switched PDU. It is a green screw-down terminal
+  block with a latch ear at each end. It has eight terminal positions, a + and a - for each of four
+  outputs, and one lamp above each output. A bare stripped wire lands in each position. A face has four.
+size: {w: 70.6, h: 22.7}
+size-confidence: {w: drawing, h: drawing}
+attrs: {outputs: 4, terminals: 8, output-current-max-a: 10}
+provenance:
+  size: >-
+    drawing - Server Technology data sheet 48DCWC-16-2X100-A0 (Primary), PDF page 4 "Drawings", the plan
+    view: the block with its two ears is 70.6 by 22.7, read from the 748 ppi raster at 3.3 px/mm, the
+    scale that puts the 432.00 body on the view. The drawing is a raster, so each figure carries about 1 mm.
+  terminals: >-
+    datasheet and drawing - the data sheet prints "(16) x Screw-down terminals (10A max)": four blocks
+    of four outputs. The drawing shows eight screw heads on a block, marked - + - + - + - +. The PRO1 DC
+    User Guide (301-4800-3), PDF page 206 (printed 206 of 211), "Outlet Connections": bare stripped wire
+    for high-density screw-down blocks. PDF page 9 (printed 9 of 211): up to 14 AWG wire, stripped 13 to 15 mm.
+  mate: >-
+    NOT MODELLED AS A CONNECTOR. The registry holds no key for a high-density screw-down block and no
+    document held gives its pitch, so the eight positions are art in the skin at an even spacing read off
+    the drawing (estimated). The device states the gap `output-terminals`.
+  colour: >-
+    estimated by eye - a photograph of the sibling model 4811, which has the same layout, shows a green
+    terminal body between black latch ears, with a green lamp over each output; no pixel count was taken. It
+    is not a photograph of this model. No photograph is copied here.
+  lamps: >-
+    estimated - the photograph of the sibling model 4811 shows a lamp over each of the four outputs. No held
+    document prints their spacing, so the 9.6 between them is an estimate. They are drawn in the skin as art;
+    the maker's documents held give no state meaning for them.
+  power: >-
+    the block passes current and draws none of its own.
+unmated: >-
+  The registry holds no key for a high-density screw-down terminal block and no held document prints its
+  pitch or its maker, so no connector interface or mate part exists for it. The wire is bare and stripped.
+elements:
+  body: {at: [13.0, 8.5], size: [44.6, 13.3], class: decor}
+skins: [default]

@@ -58,12 +58,18 @@ DEVICES = [
     # #261: a card TURNED INSIDE A CARD. The MX2000's adapter seats the MX240
     # card in a component bay at rotate 90, so the cage's turn comes from a
     # nested bay, not the device's - at depth 2 (the MPC's own cages) and at
-    # depth 3 (a MIC in the turned MPC).
+    # depth 3 (a MIC in the turned MPC). The MX2000's adapter also seats five
+    # queuing and P carriers. A MIC is seated in `mpc2e-3d-q@1` below; `mpc2e-3d-p@1`,
+    # `mpc1-3d-q@1`, `mpc2e-3d-ng-q@1` and `mpc3e-3d-ng-q@1` have no row yet.
     ("juniper", "mx2010", "base",
      {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc4e-3d-32xge-sfpp@2"},
      {"fpc0/mpc/port-0-0": SFP, "fpc0/mpc/port-0-1": SFP}, "juniper/mpc4e-3d-32xge-sfpp@2"),
     ("juniper", "mx2020", "base",
      {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d@3",
+      "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@3"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-0-3": XFP}, "juniper/mic-3d-4xge-xfp@3"),
+    ("juniper", "mx2008", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d-q@1",
       "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@3"},
      {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-0-3": XFP}, "juniper/mic-3d-4xge-xfp@3"),
 ]
@@ -293,7 +299,7 @@ def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
             assert want["children"], f"{where}: the build's optic has no children - vacuous"
             assert have["children"] == want["children"], f"{where}: children differ"
             n += 1
-    assert n == sum(len(c["built"]) for c in cases) == 10, n
+    assert n == sum(len(c["built"]) for c in cases) == 12, n
     print(f"nested cage parity: {len(cases)} devices, {n} cages, max error {worst:.3g}")
 
 

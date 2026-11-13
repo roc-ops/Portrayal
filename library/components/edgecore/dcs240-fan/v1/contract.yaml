@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: dcs240-fan
-version: 1.0.3
+version: 1.1.0
 class: fan
 behaviour: fills
 profile: networking
@@ -64,6 +64,17 @@ provenance:
     "Install back-to-front (B2F) airflow fan trays (blue handles) and PSUs (blue release
     latches)". So the handle fill is a default overridden per configuration, as
     common/fan-module@1 and edgecore/dcs201-fan@1 both do. See roc-ops/Portrayal#277.
+  the-handle-is-a-bail: >-
+    The quick start guide's Fan Tray Replacement figure, page 1, draws one tray part-way out
+    with a red moulded loop swung away from the face, and the loops of the trays beside it
+    drawn on their faces: a bail you hook a finger under, not a straight grip. The rear
+    elevation shows the stowed loop's crossbar only, which is the pull bar this part drew.
+    The figure is an isometric render with no scale, so it fixes the shape and not how far
+    the loop stands off the face; that figure stays an estimate.
+    The loop's thickness is not dimensioned either. By a rough measure on the figure, which has
+    no scale, the loop is about a fifth of the tray's width, and it is a flattened band with
+    slotted grips. The relief draws a round tube of 6.2 mm, the figure the sibling trays state,
+    which is thinner than the figure shows; the guide gives no diameter.
   elements: >-
     photo-measured in x against the same scale, estimated in y. The honeycomb reads 32.45 mm
     wide on every one of the six and the pull bar 38.75; both are centred on the module. The
@@ -87,12 +98,20 @@ relief:
         edgecore/dcs240-fan@1's own grille key - the honeycomb's extent is measured off the
         rear elevation and the depth of the cavity behind it is not stated anywhere.
     - node: handle
-      bar: 3.0
-      lift: 1.0
+      uhandle: 24
+      dia: 6.2
       confidence: estimated
       source: >-
-        edgecore/dcs240-fan@1's own handle key - a pull bar's outline is read off the
-        elevation and its projection is not.
+        The grip is a closed U-loop on two pivots, which is what `uhandle` builds: the quick
+        start guide's Fan Tray Replacement figure (page 1) draws the tray with the loop swung
+        out. How far it stands off the face is not dimensioned in any document held, so 24 is
+        an estimate. It sits inside the 24 to 26 mm that edgecore/dcs520-fan@1 and
+        edgecore/fan-2u-1x1sn@1 give their loops.
+        THE TUBE DIAMETER IS ESTIMATED TOO. The guide gives no diameter. 6.2 mm is the figure
+        the sibling trays state (edgecore/dcs520-fan@1 6.2 mm, edgecore/fan-2u-1x1sn@1 6.0 mm),
+        taken as an estimate; left unstated, the viewer would draw the thinner side of the
+        handle element, 3.2 mm. The guide's loop looks thicker still, and it is a flattened
+        band with slotted grips, which a round tube does not draw.
 skins: [default]
 body:
   depth: 56

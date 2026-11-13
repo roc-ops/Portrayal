@@ -1482,7 +1482,16 @@ def update_listings(library: pathlib.Path):
 RACK_LOCK_NAME = "rack.lock.json"
 RACK_FRAME = ("form", "ru", "numbering", "holes", "rails", "max-device-depth")
 RACK_GEOMETRY = ("hole-centres", "opening")
-RACK_STATED = ("outer", "weight-kg", "load.static-kg", "load.rolling-kg")
+RACK_STATED = ("outer", "weight-kg", "load.static-kg", "load.rolling-kg", "enclosure", "base")
+# A CABINET'S CHANNELS are named by id in a saved rack file, so a channel is one entry of
+# its own: a new one is an addition (minor); one gone, renamed or moved is major. Doors,
+# panels, roof and base are stated like the outer box: a figure stated where there was
+# none is minor, a corrected one a patch, a gone one major.
+
+
+def _rack_channels(doc):
+    return {c["id"]: _digest(c) for c in doc.get("channels") or []
+            if isinstance(c, dict) and c.get("id")}
 
 
 def _rack_stated(doc):
@@ -1499,12 +1508,16 @@ def rack_entry(doc):
     frame = {k: doc.get(k) for k in RACK_FRAME}
     frame["width"] = doc.get("width", 19)
     held = set(RACK_FRAME) | set(RACK_GEOMETRY) | {"width", "version", "load", "outer",
-                                                   "weight-kg"}
-    return {"version": str(doc.get("version") or ""),
-            "frame": _digest(frame),
-            "geometry": {k: _digest(doc[k]) for k in RACK_GEOMETRY if k in doc},
-            "stated": _rack_stated(doc),
-            "surface": _digest({k: v for k, v in doc.items() if k not in held})}
+                                                   "weight-kg", "enclosure", "base", "channels"}
+    entry = {"version": str(doc.get("version") or ""),
+             "frame": _digest(frame),
+             "geometry": {k: _digest(doc[k]) for k in RACK_GEOMETRY if k in doc},
+             "stated": _rack_stated(doc),
+             "surface": _digest({k: v for k, v in doc.items() if k not in held})}
+    # written only when the rack has channels, so a lock on file for a frame is unchanged
+    if _rack_channels(doc):
+        entry["channels"] = _rack_channels(doc)
+    return entry
 
 
 def rack_bump(old, new):
@@ -1527,6 +1540,11 @@ def rack_bump(old, new):
     if any(k in now and now[k] != v for k, v in was.items()) \
             or old.get("surface") != new["surface"]:
         needs.append("patch")
+    was, now = old.get("channels") or {}, new.get("channels") or {}
+    if any(k not in now or now[k] != v for k, v in was.items()):
+        needs.append("major")
+    if set(now) - set(was):
+        needs.append("minor")
     return max(needs, key=RANK.get) if needs else None
 
 
