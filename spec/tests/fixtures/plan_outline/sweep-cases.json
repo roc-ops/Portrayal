@@ -1,0 +1,118 @@
+{
+ "about": "The x-sweep that cuts a plan outline against a section. Python reads this in spec/tests/test_plan_sweep.py and the kit's JavaScript version reads the same file, so the two cannot disagree. Every expected answer was worked by hand. Coordinates are millimetres in the top face's frame (x along the width from the left, y down the drawing with the rear at the top).",
+ "rules": {
+  "merge": "Abscissae are sorted; the smallest of a cluster is kept and any value within 0.001 mm of the last one kept is dropped.",
+  "round": "A coordinate is written to 6 decimals; compare with a tolerance of 1e-6.",
+  "snap": "Each coordinate within 0.5 mm (inclusive) of a target moves to the nearest target, one coordinate at a time; a point that then repeats the one before it is dropped; a move of more than 0.01 mm is listed as [index, axis, from, to].",
+  "piece": "A convex piece is a polygon clockwise with y down starting at its left end's top, a point dropped where two coincide.",
+  "loop": "An outline is a loop clockwise with y down starting at its smallest x, then its smallest y, with no point on a straight run.",
+  "heights": "A band covers the heights [from, to) and a section row is cut to it; a band edge within 0.01 mm of a row's edge is on it."
+ },
+ "cases": [
+  {
+   "name": "near-coincident abscissae",
+   "kind": "abscissae",
+   "input": [0, 4, 4.0004, 9.9996, 10],
+   "expected": [0, 4, 9.9996]
+  },
+  {
+   "name": "a slanted edge between two abscissae a fifth of a thousandth apart",
+   "kind": "clip",
+   "polygon": [[0, 0], [5, 0], [5.0004, 6], [0, 6]],
+   "width": 12,
+   "intervals": [[0, 6]],
+   "expected": [[[0, 0], [5, 0], [5, 6], [0, 6]]]
+  },
+  {
+   "name": "a rectangle cut to one interval",
+   "kind": "clip",
+   "polygon": [[0, 0], [10, 0], [10, 6], [0, 6]],
+   "width": 12,
+   "intervals": [[1, 4]],
+   "expected": [[[0, 1], [10, 1], [10, 4], [0, 4]]]
+  },
+  {
+   "name": "a lobe on an end, whole",
+   "kind": "clip",
+   "polygon": [[0, 0], [10, 0], [10, 2], [12, 3], [10, 4], [10, 6], [0, 6]],
+   "width": 12,
+   "intervals": [[0, 6]],
+   "expected": [[[0, 0], [10, 0], [10, 6], [0, 6]], [[10, 2], [12, 3], [10, 4]]]
+  },
+  {
+   "name": "a lobe on an end, cut by two intervals that leave its middle out",
+   "kind": "clip",
+   "polygon": [[0, 0], [10, 0], [10, 2], [12, 3], [10, 4], [10, 6], [0, 6]],
+   "width": 12,
+   "intervals": [[0, 2.5], [3.5, 6]],
+   "expected": [[[0, 0], [10, 0], [10, 2.5], [0, 2.5]], [[0, 3.5], [10, 3.5], [10, 6], [0, 6]],
+                [[10, 2], [11, 2.5], [10, 2.5]], [[10, 3.5], [11, 3.5], [10, 4]]]
+  },
+  {
+   "name": "two crossing bands: the union adds the abscissa where their edges cross",
+   "kind": "union",
+   "polygons": [[[0, 0], [8, 4], [0, 4]], [[0, 2], [8, 2], [8, 6], [0, 6]]],
+   "expected": [[[0, 0], [4, 2], [8, 2], [8, 6], [0, 6]]]
+  },
+  {
+   "name": "two overlapping rectangles: the wall is split where the other begins",
+   "kind": "union",
+   "polygons": [[[0, 0], [8, 0], [8, 4], [0, 4]], [[4, 2], [12, 2], [12, 6], [4, 6]]],
+   "expected": [[[0, 0], [8, 0], [8, 2], [12, 2], [12, 6], [4, 6], [4, 4], [0, 4]]]
+  },
+  {
+   "name": "two rectangles that do not touch are two outlines",
+   "kind": "union",
+   "polygons": [[[0, 0], [3, 0], [3, 3], [0, 3]], [[5, 1], [9, 1], [9, 4], [5, 4]]],
+   "expected": [[[0, 0], [3, 0], [3, 3], [0, 3]], [[5, 1], [9, 1], [9, 4], [5, 4]]]
+  },
+  {
+   "name": "snap onto the box sides, a point at exactly 0.5 mm included",
+   "kind": "snap",
+   "polygon": [[0.3, 0.4], [9.6, 0.2], [10.2, 5.9], [0.4, 6.3], [0.5, 3]],
+   "targets": {"x": [0, 10], "y": [0, 6]},
+   "expected": [[0, 0], [10, 0], [10, 6], [0, 6], [0, 3]],
+   "snaps": [[0, "x", 0.3, 0], [0, "y", 0.4, 0], [1, "x", 9.6, 10], [1, "y", 0.2, 0],
+             [2, "x", 10.2, 10], [2, "y", 5.9, 6], [3, "x", 0.4, 0], [3, "y", 6.3, 6],
+             [4, "x", 0.5, 0]]
+  },
+  {
+   "name": "a move of a hundredth or less is made and not listed",
+   "kind": "snap",
+   "polygon": [[0.004, 0], [10, 0], [10, 6]],
+   "targets": {"x": [0, 10], "y": [0, 6]},
+   "expected": [[0, 0], [10, 0], [10, 6]],
+   "snaps": []
+  },
+  {
+   "name": "a point that lands on the one before it is dropped",
+   "kind": "snap",
+   "polygon": [[0, 0], [0.3, 0.2], [10, 0], [10, 6]],
+   "targets": {"x": [0, 10], "y": [0, 6]},
+   "expected": [[0, 0], [10, 0], [10, 6]],
+   "snaps": [[1, "x", 0.3, 0], [1, "y", 0.2, 0]]
+  },
+  {
+   "name": "a stepped body, asymmetric in x and y, a lobe on an end of a casting and one on the flange",
+   "kind": "body",
+   "width": 12,
+   "depth": 8,
+   "height": 6,
+   "section": [[1, 0], [7, 0], [7, 2], [8, 2], [8, 4], [6, 4], [6, 6], [2, 6], [2, 4], [0, 4], [0, 2], [1, 2]],
+   "plan": [
+    {"heights": [0, 3], "points": [[1, 1], [9, 1], [10, 2], [10, 6], [9, 7], [1, 7], [0, 4]]},
+    {"heights": [3, 6], "points": [[0.7, 0], [11, 0], [11, 2], [12, 4], [11, 6], [11, 8], [0.7004, 8]]}
+   ],
+   "expected": [
+    {"band": 0, "heights": [0, 2], "pieces": [
+      [[0, 4], [1, 1], [1, 7]], [[1, 1], [9, 1], [9, 7], [1, 7]], [[9, 1], [10, 2], [10, 6], [9, 7]]]},
+    {"band": 0, "heights": [2, 3], "pieces": [
+      [[0, 4], [1, 1], [1, 7]], [[1, 1], [9, 1], [9, 7], [1, 7]], [[9, 1], [10, 2], [10, 6], [9, 7]]]},
+    {"band": 1, "heights": [3, 4], "pieces": [
+      [[0.7, 0], [11, 0], [11, 8], [0.7, 8]], [[11, 2], [12, 4], [11, 6]]]},
+    {"band": 1, "heights": [4, 6], "pieces": [
+      [[0.7, 2], [11, 2], [11, 6], [0.7, 6]], [[11, 2], [12, 4], [11, 6]]]}
+   ]
+  }
+ ]
+}

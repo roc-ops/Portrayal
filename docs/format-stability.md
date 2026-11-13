@@ -1371,7 +1371,17 @@ band on its own side of the seam. It is not stated on a rack device or together 
 `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (L221).
 
 **In `<device>.configs.json`**, of such a device: `chassis.plan-outline`, the bands as
-written. It is left out for every other device. Compiled faces are unchanged.
+written. It is left out for every other device.
+
+**In the compiled faces**, of such a device only (a device that states no `plan-outline`
+is compiled byte for byte as before). The top and bottom faceplate, and the front and rear
+faceplate where the body is narrower than the box, are a `<path>` with the id
+`chassis-faceplate` and the corners unpainted, where they were a `<rect>`. The group
+`chassis-plan` holds the step lines between bands and, on an end face, the shading of the
+region with no cap. A rib stripe is a `<path>` in `chassis-fins` with an id `fin-N`
+(`fin-N-a`, `fin-N-b` where the plan leaves it in several pieces) where it was a `<rect>`
+with none. All of it is additive, so `contract` stays 2, and none of it is one-way: the
+drawn shapes can be refined while the key's meaning stays.
 
 **What the lock asks for.** `plan-outline` is shape, as `section` is: it sets the
 outline of the top and bottom faces and the body. Stating it on a device that was
