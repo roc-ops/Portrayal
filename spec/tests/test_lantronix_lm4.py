@@ -285,6 +285,20 @@ def test_the_dc_housing_opening_is_drawn_as_decor_with_four_cells_and_no_part_is
     assert "The DC housing at the lower left is drawn as decor" in note
 
 
+def test_each_corner_screw_has_a_plus_recess_and_the_sfp_cage_has_its_green_pull_tab():
+    decor = _decor(_lm4())
+    for corner in ("tl", "tr", "bl", "br"):
+        screw, bar_h, bar_v = decor["screw-" + corner], decor[f"screw-cross-{corner}-h"], decor[f"screw-cross-{corner}-v"]
+        centre = (screw["at"][0] + 3.25, screw["at"][1] + 3.25)
+        for bar in (bar_h, bar_v):
+            assert abs(bar["at"][0] + bar["size"][0] / 2 - centre[0]) < 0.01
+            assert abs(bar["at"][1] + bar["size"][1] / 2 - centre[1]) < 0.01
+    tab = decor["sfp-pull-tab"]
+    assert tab["fill"].startswith("#") and 5.0 < tab["size"][0] < 7.0
+    port = _placed(_lm4())["port-2"]
+    assert port["at"][0] <= tab["at"][0] and tab["at"][0] + tab["size"][0] <= port["at"][0] + 14.5
+
+
 def test_the_sources_that_disagree_are_each_said_in_the_notes():
     notes = " ".join(" ".join(p["note"].split()) for p in _lm4()["provenance"].values())
     assert "The dimensions figure draws the console lamps yellow at the left and green at the right" in notes
