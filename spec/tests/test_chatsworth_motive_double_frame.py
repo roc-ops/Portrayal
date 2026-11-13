@@ -75,10 +75,12 @@ def test_sides_draw_caps_feet_rim_centre_plate_and_holes(model, view):
     plate = d["centre-plate"]
     assert plate["at"][0] == 201 and plate["size"][0] == 198
     if view == "left":
-        assert len(of_kind(d, "hole")) == 4 + 4 + 3 + 2 and len(of_kind(d, "slot")) == 2
+        assert len(of_kind(d, "hole")) == 4 + 4 + 3 + 2 + 1 and len(of_kind(d, "slot")) == 2
     else:
-        assert len(of_kind(d, "hole")) == 3 + 4 + 3 + 2 and len(of_kind(d, "slot")) == 2 + 2
-    assert len(of_kind(d, "mounting-hole")) == 5 and len(of_kind(d, "screw")) == 4
+        assert len(of_kind(d, "hole")) == 3 + 4 + 3 + 2 + 1 and len(of_kind(d, "slot")) == 2 + 2
+    assert len(of_kind(d, "mounting-hole")) == 5 + 4 and len(of_kind(d, "screw")) == 4
+    round_holes = [d[f"centre-plate-hole-{w}-{i}"] for w in ("top", "bottom") for i in (1, 2, 3, 4) if f"centre-plate-hole-{w}-{i}" in d]
+    assert all(h["size"] == [11, 11] for h in round_holes if h["id"] != "centre-plate-hole-top-1" or view == "left")
     ids = {v["id"] for v in d.values()}
     assert {"end-cap-rear", "end-cap-front", "foot-rear", "foot-front"} <= ids
     rear_cap, front_cap = d["end-cap-rear"], d["end-cap-front"]
@@ -97,8 +99,8 @@ FRAME_KINDS = {"end-cap", "foot", "base-plate", "hole", "slot", "centre-plate", 
 def test_each_view_carries_the_counted_number_of_frame_items(model):
     dev = load(model)
     counts = {view: len([v for v in decor(dev, view).values() if v["kind"] in FRAME_KINDS]) for view in ("top", "bottom", "left", "right")}
-    assert counts == {"top": 8, "bottom": 11, "left": 30, "right": 31}
-    assert sum(counts.values()) == 80
+    assert counts == {"top": 8, "bottom": 11, "left": 35, "right": 36}
+    assert sum(counts.values()) == 90
 
 
 def centre(v):
@@ -136,10 +138,32 @@ def test_the_right_face_draws_the_far_plates_head_pattern_not_the_near_plates(mo
     d = decor(load(model), "right")
     assert [k for k in d if k.startswith("centre-plate-hole-top-")] == [f"centre-plate-hole-top-{i}" for i in (1, 2, 3)]
     close([c for i in (1, 2, 3) for c in centre(d[f"centre-plate-hole-top-{i}"])], [218.3, 47.9, 267.3, 111.9, 309.6, 134.4])
+    assert d["centre-plate-hole-top-1"]["size"] == [14.9, 14.9]
+    assert d["centre-plate-hole-top-2"]["size"] == [11, 11] and d["centre-plate-hole-top-3"]["size"] == [11, 11]
     close([c for i in (1, 2) for c in centre(d[f"centre-plate-slot-head-{i}"])], [264.8, 130.8, 331.6, 133.2])
     left = decor(load(model), "left")
     assert not any(k.startswith("centre-plate-slot-head-") for k in left)
     assert "centre-plate-hole-top-4" in left and "centre-plate-hole-top-4" not in d
+
+
+@pytest.mark.parametrize("view", ["left", "right"])
+@pytest.mark.parametrize("model", MODELS)
+def test_the_foot_slots_the_fifth_dot_and_the_page_3_squares(model, view):
+    dev = load(model)
+    d = decor(dev, view)
+    height = dev["chassis"]["height"]
+    mirror = view == "right"
+
+    def x_of(x):
+        return 600 - x if mirror else x
+
+    close([c for i in (1, 2) for c in centre(d[f"centre-plate-slot-{i}"])], [x_of(334.8), height - 147.5, x_of(281.3), height - 145.8])
+    assert all(d[f"centre-plate-slot-{i}"]["size"] == [20, 8] for i in (1, 2))
+    close(centre(d["centre-plate-dot-1"]), [x_of(222.4), height - 151.3])
+    assert d["centre-plate-dot-1"]["size"] == [11, 11]
+    close(sorted(centre(d[f"page3-square-{w}-{i}"])[0] for w in ("head", "mid") for i in (1, 2)), sorted(x_of(x) for x in (275.2, 330.6, 275.2, 330.6)))
+    close([centre(d["page3-square-head-1"])[1], centre(d["page3-square-mid-1"])[1]], [456.8, 1040.7])
+    assert all(d[f"page3-square-{w}-{i}"]["size"] == [14.1, 14.1] for w in ("head", "mid") for i in (1, 2))
 
 
 @pytest.mark.parametrize("model", MODELS)
@@ -170,7 +194,8 @@ def test_the_frame_note_states_its_scales_and_method(model):
     note = " ".join(load(model)["provenance"]["frame"]["note"].split())
     for text in ("2.624 mm per pixel", "2.679 mm per pixel", "12 in reading", "every width", "stand-in", "10.3 mm per pixel", "4.4 mm per pixel", "cross tube",
                  "three feet and the photograph two", "inferred", "28 columns and 8 rows", "22 columns and 5 rows", "3.7 mm per pixel",
-                 "44 percent", "0.744 mm per pixel", "four pale marks"):
+                 "44 percent", "0.744 mm per pixel", "four pale marks", "7 pixels wide, 31 mm", "11 across", "14.9 across",
+                 "two pairs of squares", "fifth dot"):
         assert text in note, text
     assert "four feet" not in note and "cross tube at the front" not in note
     assert load(model)["provenance"]["frame"]["confidence"] == "estimated"
