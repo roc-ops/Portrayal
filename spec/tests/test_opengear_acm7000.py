@@ -74,7 +74,7 @@ def test_all_six_faces_exist_and_the_four_unseen_sides_are_plain_outlines(slug):
     views = device["views"]
     assert set(views) == {"front", "rear", "top", "bottom", "left", "right"}
     for name in ("top", "bottom", "left", "right"):
-        assert not views[name].get("empty"), name
+        assert views[name].get("empty"), name
         assert views[name]["size"], name
     gap = next(g for g in device["gaps"] if g["what"] == "sides")
     assert gap["reason"] == "needs-photo"
