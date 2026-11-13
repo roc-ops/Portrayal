@@ -1,0 +1,1803 @@
+format: 1
+kind: device
+name: eb0952
+version: 0.1.0
+maturity: modelled
+manufacturer: Enlogic
+model: EB0952
+description: 'Enlogic EB basic PDU, 0U: a 1780 mm dark strip, 56 mm wide and 75 mm deep. It hangs on two toolless buttons
+  beside a rack. It hands a three-phase 208 V delta feed on to 42 unswitched outlets, 21 C13/C15 and 21 C13/C15/C19 combination
+  outlets in 21 columns of two. The feed is a fixed 1.8 m cord with an IEC 60309 3P+E 9h plug, 60 A derated to 48 A, 17.3
+  kVA. Six 20 A double-pole breakers feed the columns. No meter, no display, no network interface.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S VECTOR DRAWING. Enlogic drawing EB0952-WXYZ_DA rev E2,
+      2022/10/08 (three A3 sheets) and the EB0952 data sheet (page 1 read). Sheet 1 is vector: the front view''s paths were
+      read in points at 2.4232 mm per pt. That is the scale of the printed 1780.0 overall. The end lines are 734.58 pt apart,
+      at 191.48 and 926.06. The printed 56.0 width reads 23.04 pt over the outer lines, 55.8 mm, so the scale checks. The
+      strip is drawn lying with the cord end left. The library draws it standing, cord end up. A drawing x along the strip
+      becomes y down from the cord end, and the drawing''s top edge becomes the right edge. Every count below was made twice,
+      once from clusters of touching paths and once from 400 to 1000 dpi renders of the same view.'}
+  recount: {confidence: drawing, note: 'Recounted twice. The 21 columns, the 42 wells, the six plates with four screws each
+      and the two buttons agree with the order''s counts. Two figures differ. The plate outline reads 23.10 pt, 56.0 mm,
+      where the order''s first draft had 56.4 from a crop that included an arrow. The order counted two marks beside each
+      well, and the vector gives two tabs and two numerals per column, so 42 tabs and 42 numerals. The round mark on the
+      centre line before B1 is one ring 6.5 mm across, below the line.'}
+  mount: {confidence: drawing, note: '`rack-side`, on the two toolless buttons of the rear view (VERTICAL, 0U FULL; 1555.0
+      between them, the first 40.5 from the cord end). `ru: 40` is the 1780 it runs, 1780 / 44.45. No source sells it by
+      rack units. Note 3 of the drawing names a universal mounting bracket provided with the unit. No held view draws it.'}
+  chassis: {confidence: drawing, note: 'drawing and datasheet - 1780.0 long, 56.0 wide and 75.0 deep. The data sheet gives
+      ''Chassis Dimensions (L x W x D) 1780.0 x 56.0 x 75.0 mm'' and ''Depth At Circuit Breaker 75 mm''. The drawing''s
+      side view shows the outlet columns standing 5.4 mm proud of the body. The body is drawn dark: the drawing''s identification
+      table lists ''BLACK'' as the default chassis colour, so #202020 is a stand-in.'}
+  colour: {confidence: photo-measured, note: 'the data sheet''s page-1 thumbnail (937 by 469 px, a vendor render) reads
+      plate B1 #e3e3e3, plate B2 #686a69 and plate B3 #2c2c2f. Each is the median of nine pixels. The drawing names B1 and
+      B4 WHITE, B2 and B5 LIGHT GRAY, B3 and B6 DARK GRAY. The outlet columns follow their plate''s colour. No photograph
+      of a unit is held, so these are the render''s colours.'}
+  front: {confidence: drawing, note: 'drawing - the front view, mm from the cord end and from the left edge as the strip
+      stands. First come a ground screw with its earth symbol, the enLOGIC label, a round mark and plates B1 to B3. Then
+      come nine columns of outlets in three groups of three and a long gap. Plates B4 to B6 and twelve columns in four groups
+      of three close the strip. A column is an upper well (C13/C15) over a lower well (C13/C15/C19), 34.4 along the strip,
+      and a pitch of 15.45 pt, 37.4 mm. Each column carries two numerals, two tabs and two small labels printed 10A 250V~
+      and 16A 250V~.'}
+  outlets: {confidence: datasheet, note: 'datasheet and drawing - ''OUTLET QTY & TYPE (21)C13/C15, (21)C13/C15/C19''; data
+      sheet ''Outlet Configuration 21(C13/C15),21(4-in-1 Combo)''. 21 wells of each kind, enlogic/combo-outlet-c13-c15@1
+      (10 A) and enlogic/combo-outlet-c13-c15-c19@1 (16 A). No outlet is switched (''Remote Outlet Switching No''). The
+      unit prints the numbers 1 to 42, one pair per column, the upper well first. The outlets run `through` the breaker
+      of their column''s colour, a reading of the front view and the wiring sheet.'}
+  input: {confidence: datasheet, note: 'datasheet and drawing - ''Input Plug Type 460P9 (IP44)'', ''Acceptable Input Voltage
+      208VAC, 3-phase''. The data sheet also gives ''Input Current (Phase) 60A (48A DERATED)'', ''Max Input Power 17.3 kVA''
+      and ''Input Cord Length 1.8m (5.91'')''. The drawing prints ''IEC 60309, 3P 4W, 9H'' with an optional IP67 plug and
+      ''THREE-PHASE,DELTA''. The unit has a fixed cord and no inlet. It is the cord part of the EN6952.'}
+  breakers: {confidence: datasheet, note: 'datasheet and drawing - ''(6)2-pole,20A,5 kAIC'' and ''20 AMP, DOUBLE-POLE ELECTRO
+      MECHANICAL SWITCH / BREAKER (6) PLACES''. Each plate prints its bank and its lines (B1 L1-L2, B2 L2-L3, B3 L3-L1,
+      then the same for B4 to B6). The drawing''s colour labels say B1 [WHITE] 3 PLACES and B4 [WHITE] 4 PLACES, so a colour
+      marks every third column. The wiring sheet feeds three-column blocks J1 to J7 from the six breakers. B1 is read as
+      feeding columns 1, 4 and 7 and B4 columns 10, 13, 16 and 19.'}
+  plates: {confidence: drawing, note: 'drawing - the six plates are 20.64 pt along by 18.54 pt across by their straight
+      edge, 50.0 by 44.9 mm. By their outline they are 23.10 pt along, 56.0 mm. The EN2951''s plate is 20.64 pt by 18.48
+      at 2.4306 mm per pt, 50.2 by 44.9 mm. By its outline it is 56.3 mm along. The two are the same module, so the part
+      is enlogic/en-breaker-20a-2p@1.'}
+  rear: {confidence: drawing, note: 'drawing - the rear view: two toolless buttons, O18.4, 1555.0 apart, the first 40.5
+      from the cord end, on the width''s centre line.'}
+  sides: {confidence: drawing, note: 'drawing - the side view gives the right face. It has seven screw heads 6.8 across
+      and four rings 5.4 across at the dimensioned button places. The 21 outlet columns stand 5.4 proud. Positions are mm
+      along from the cord end and from the front. No held view shows the left face, which is built as the documented side,
+      as no document shows this one.'}
+  dcim: {confidence: datasheet, note: 'the input is one power port from the cord part and each outlet a power outlet it
+      feeds: `iec-60320-c13` for the C13/C15 wells and `iec-60320-c19` for the C13/C15/C19 wells, a reading. Each outlet
+      runs `through` its breaker. No feed_leg is written: a delta input has no neutral.'}
+  lifecycle: {confidence: datasheet, note: 'only the held documents were read: none announces an end of life. No web search
+      was made.'}
+attrs:
+  physical: {length-mm: 1780, construction: 'metal strip, dark'}
+  power: {input-ac: '208 V three-phase delta, 60 A (48 A derated), 50/60 Hz', input-plug: other, input-cord: fixed, input-phase: three,
+    input-wiring: delta, input-voltage-v: 208, input-current-a: 48, plug-rating-a: 60, max-input-power: 17.3 kVA, output-voltage: 200-240
+      V, output-rating: 10 A per C13/C15 well; 16 A per C13/C15/C19 well, breakers: 'six 20 A two-pole, 5 kAIC, hydraulic-magnetic',
+    frequency: 50/60 Hz}
+  environmental: {operating-temp: -5 to 60 C (23 to 140 F), storage-temp: -20 to 60 C (-4 to 140 F), humidity: '5-90 %%
+      RH operating, 5-95 %% storage, non-condensing', altitude: 3000 m (9840 ft) maximum operating elevation}
+  management: {metering-scope: none, outlet-switching: false}
+  compliance: {product-compliance: 'RoHS, REACH; IEC 62368 listed'}
+  lifecycle: {eol: none-announced}
+chassis: {width: 56, height: 1780, depth: 75, ru: 40, mount: rack-side, color: '#202020', airflow: passive}
+gaps:
+- what: weight
+  scope: [front, rear, left, right]
+  reason: vendor-silent
+  note: 'no held document states a weight: the drawing''s title block has no field and the data sheet has none.'
+  wanted: a weight from the maker.
+- what: colour
+  scope: [front, rear, left, right]
+  reason: needs-photo
+  note: the only colour source is the data sheet's small face render. No photograph of a unit, and no view of the back,
+    the sides or the ends in colour, is held.
+  wanted: photographs of a unit, front, back, sides and ends.
+- what: metering-list
+  scope: [front]
+  reason: sources-disagree
+  note: the data sheet says 'Metering Attributes N/A' and 'Metering Accuracy N/A'. The drawing's table lists 'METERING ACCURACY
+    +-1% TO ISO/ IEC 62052-21' and attributes, but also 'METERED COMPONENTS N/A'. No metering is stated.
+  wanted: the maker's word on whether the unit meters.
+- what: outlet-banks
+  scope: [front]
+  reason: sources-disagree
+  note: the front view's colour labels give B4 to B6 four places each. The wiring sheet draws seven three-column blocks
+    J1 to J7 from six breakers. The colour reading is used for `through`.
+  wanted: the maker's wiring diagram.
+- what: ip67-option
+  scope: [top]
+  reason: vendor-silent
+  note: the drawing's sheet 2 offers an IP67 (watertight) 60 A plug as an option, with the IP44 plug as the default. Only
+    the default is drawn.
+  wanted: none.
+- what: bracket
+  scope: [rear]
+  reason: needs-drawing
+  note: note 3 of the drawing names a universal mounting bracket, 'provided with the unit'. No held view draws it.
+  wanted: a drawing of the bracket.
+- what: button-locations
+  scope: [rear, right]
+  reason: needs-drawing
+  note: the side view's '2X 24.0' pairs and '(4) PL 48.0' mark places the vector draws as four rings 5.4 across, 52.1 from
+    the front. Only the two rear circles are buttons. The 48.0 is not matched to a drawn feature.
+  wanted: a drawing that dimensions the other button places.
+- what: outlet-turn
+  scope: [front]
+  reason: needs-drawing
+  note: the close-ups of the outlet wells on sheet 2 are undimensioned. No turn is claimed for any outlet, and the wells
+    are drawn to the combination parts' shapes.
+  wanted: a dimensioned drawing of each well.
+- what: warning-triangles
+  scope: [front]
+  reason: needs-drawing
+  note: each printed rating label carries a small warning triangle, about 1.0 pt (2.4 mm) wide, which the label text is
+    drawn without.
+  wanted: a close-up of the label.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: the drawing's side view and end view are outlines with round heads. The left face is built as the documented side.
+    No photograph looks at an end or a side.
+  wanted: straight-on photographs of an end and a side.
+groups:
+  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of the columns 1, 4, 7, counted from
+      the cord end: 3 C13/C15 and 3 C13/C15/C19, behind breaker B1'}
+  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of the columns 2, 5, 8, counted from
+      the cord end: 3 C13/C15 and 3 C13/C15/C19, behind breaker B2'}
+  outlets-b3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 6 outlets of the columns 3, 6, 9, counted from
+      the cord end: 3 C13/C15 and 3 C13/C15/C19, behind breaker B3'}
+  outlets-b4: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of the columns 10, 13, 16, 19, counted
+      from the cord end: 4 C13/C15 and 4 C13/C15/C19, behind breaker B4'}
+  outlets-b5: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of the columns 11, 14, 17, 20, counted
+      from the cord end: 4 C13/C15 and 4 C13/C15/C19, behind breaker B5'}
+  outlets-b6: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of the columns 12, 15, 18, 21, counted
+      from the cord end: 4 C13/C15 and 4 C13/C15/C19, behind breaker B6'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'B1 to B6, each 20 A double-pole and each feeding
+      the outlet columns of its colour'}
+  marks: {term: Mark, role: furniture, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1780}
+    panel:
+      decor:
+      - id: ground-boss
+        at: [42.1, 28.06]
+        size: [12.07, 12.07]
+        rx: 6.03
+        fill: '#8c8f91'
+        kind: boss
+      - id: centre-mark
+        at: [10.14, 65.98]
+        size: [6.5, 6.5]
+        rx: 3.25
+        fill: '#2a2c2f'
+        kind: mark
+      - id: column-1
+        at: [1.1, 353.59]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-1-1
+        at: [47.43, 385.57]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-1-2
+        at: [30.71, 385.57]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-2
+        at: [1.1, 390.95]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-2-1
+        at: [47.43, 422.94]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-2-2
+        at: [30.71, 422.94]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-3
+        at: [1.1, 428.39]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-3-1
+        at: [47.43, 460.37]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-3-2
+        at: [30.71, 460.37]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-4
+        at: [1.1, 483.44]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-4-1
+        at: [47.43, 515.43]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-4-2
+        at: [30.71, 515.43]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-5
+        at: [1.1, 521.07]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-5-1
+        at: [47.43, 553.06]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-5-2
+        at: [30.71, 553.06]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-6
+        at: [1.1, 558.51]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-6-1
+        at: [47.43, 590.5]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-6-2
+        at: [30.71, 590.5]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-7
+        at: [1.1, 613.69]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-7-1
+        at: [47.43, 645.67]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-7-2
+        at: [30.71, 645.67]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-8
+        at: [1.1, 651.13]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-8-1
+        at: [47.43, 683.11]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-8-2
+        at: [30.71, 683.11]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-9
+        at: [1.1, 688.56]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-9-1
+        at: [47.43, 720.55]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-9-2
+        at: [30.71, 720.55]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-10
+        at: [1.1, 1265.61]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-10-1
+        at: [47.43, 1297.6]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-10-2
+        at: [30.71, 1297.6]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-11
+        at: [1.1, 1303.05]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-11-1
+        at: [47.43, 1335.04]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-11-2
+        at: [30.71, 1335.04]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-12
+        at: [1.1, 1340.42]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-12-1
+        at: [47.43, 1372.4]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-12-2
+        at: [30.71, 1372.4]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-13
+        at: [1.1, 1395.66]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-13-1
+        at: [47.43, 1427.65]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-13-2
+        at: [30.71, 1427.65]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-14
+        at: [1.1, 1433.1]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-14-1
+        at: [47.43, 1465.09]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-14-2
+        at: [30.71, 1465.09]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-15
+        at: [1.1, 1470.54]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-15-1
+        at: [47.43, 1502.52]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-15-2
+        at: [30.71, 1502.52]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-16
+        at: [1.1, 1525.79]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-16-1
+        at: [47.43, 1557.77]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-16-2
+        at: [30.71, 1557.77]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-17
+        at: [1.1, 1563.15]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-17-1
+        at: [47.43, 1595.14]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-17-2
+        at: [30.71, 1595.14]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-18
+        at: [1.1, 1600.59]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-18-1
+        at: [47.43, 1632.58]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-18-2
+        at: [30.71, 1632.58]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: column-19
+        at: [1.1, 1655.84]
+        size: [53.94, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: tab-19-1
+        at: [47.43, 1687.82]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-19-2
+        at: [30.71, 1687.82]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-20
+        at: [1.1, 1693.28]
+        size: [53.94, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: tab-20-1
+        at: [47.43, 1725.26]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: tab-20-2
+        at: [30.71, 1725.26]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#555856'
+        kind: tab
+      - id: column-21
+        at: [1.1, 1730.64]
+        size: [53.94, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: tab-21-1
+        at: [47.43, 1762.63]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+      - id: tab-21-2
+        at: [30.71, 1762.63]
+        size: [3.39, 4.36]
+        rx: 1.0
+        fill: '#4a4d51'
+        kind: tab
+    silkscreen:
+    - at: [43.81, 389.69]
+      text: '1'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-1
+    - at: [36.3, 389.69]
+      text: '2'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-2
+    - at: [53.93, 384.85]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-1
+    - at: [0.99, 384.85]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-2
+    - at: [43.81, 427.06]
+      text: '3'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-3
+    - at: [36.3, 427.06]
+      text: '4'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-4
+    - at: [53.93, 422.21]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-3
+    - at: [0.99, 422.21]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-4
+    - at: [43.81, 464.49]
+      text: '5'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-5
+    - at: [36.3, 464.49]
+      text: '6'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-6
+    - at: [53.93, 459.65]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-5
+    - at: [0.99, 459.65]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-6
+    - at: [43.81, 519.55]
+      text: '7'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-7
+    - at: [36.3, 519.55]
+      text: '8'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-8
+    - at: [53.93, 514.7]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-7
+    - at: [0.99, 514.7]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-8
+    - at: [43.81, 557.18]
+      text: '9'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-9
+    - at: [36.3, 557.18]
+      text: '10'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-10
+    - at: [53.93, 552.33]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-9
+    - at: [0.99, 552.33]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-10
+    - at: [43.81, 594.62]
+      text: '11'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-11
+    - at: [36.3, 594.62]
+      text: '12'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-12
+    - at: [53.93, 589.77]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-11
+    - at: [0.99, 589.77]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-12
+    - at: [43.81, 649.79]
+      text: '13'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-13
+    - at: [36.3, 649.79]
+      text: '14'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-14
+    - at: [53.93, 644.95]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-13
+    - at: [0.99, 644.95]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-14
+    - at: [43.81, 687.23]
+      text: '15'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-15
+    - at: [36.3, 687.23]
+      text: '16'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-16
+    - at: [53.93, 682.38]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-15
+    - at: [0.99, 682.38]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-16
+    - at: [43.81, 724.67]
+      text: '17'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-17
+    - at: [36.3, 724.67]
+      text: '18'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-18
+    - at: [53.93, 719.82]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-17
+    - at: [0.99, 719.82]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-18
+    - at: [43.81, 1301.72]
+      text: '19'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-19
+    - at: [36.3, 1301.72]
+      text: '20'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-20
+    - at: [53.93, 1296.87]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-19
+    - at: [0.99, 1296.87]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-20
+    - at: [43.81, 1339.16]
+      text: '21'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-21
+    - at: [36.3, 1339.16]
+      text: '22'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-22
+    - at: [53.93, 1334.31]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-21
+    - at: [0.99, 1334.31]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-22
+    - at: [43.81, 1376.52]
+      text: '23'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-23
+    - at: [36.3, 1376.52]
+      text: '24'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-24
+    - at: [53.93, 1371.67]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-23
+    - at: [0.99, 1371.67]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-24
+    - at: [43.81, 1431.77]
+      text: '25'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-25
+    - at: [36.3, 1431.77]
+      text: '26'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-26
+    - at: [53.93, 1426.92]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-25
+    - at: [0.99, 1426.92]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-26
+    - at: [43.81, 1469.21]
+      text: '27'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-27
+    - at: [36.3, 1469.21]
+      text: '28'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-28
+    - at: [53.93, 1464.36]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-27
+    - at: [0.99, 1464.36]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-28
+    - at: [43.81, 1506.64]
+      text: '29'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-29
+    - at: [36.3, 1506.64]
+      text: '30'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-30
+    - at: [53.93, 1501.8]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-29
+    - at: [0.99, 1501.8]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-30
+    - at: [43.81, 1561.89]
+      text: '31'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-31
+    - at: [36.3, 1561.89]
+      text: '32'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-32
+    - at: [53.93, 1557.05]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-31
+    - at: [0.99, 1557.05]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-32
+    - at: [43.81, 1599.26]
+      text: '33'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-33
+    - at: [36.3, 1599.26]
+      text: '34'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-34
+    - at: [53.93, 1594.41]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-33
+    - at: [0.99, 1594.41]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-34
+    - at: [43.81, 1636.69]
+      text: '35'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-35
+    - at: [36.3, 1636.69]
+      text: '36'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-36
+    - at: [53.93, 1631.85]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-35
+    - at: [0.99, 1631.85]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-36
+    - at: [43.81, 1691.94]
+      text: '37'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-37
+    - at: [36.3, 1691.94]
+      text: '38'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-38
+    - at: [53.93, 1687.1]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-37
+    - at: [0.99, 1687.1]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-38
+    - at: [43.81, 1729.38]
+      text: '39'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-39
+    - at: [36.3, 1729.38]
+      text: '40'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-40
+    - at: [53.93, 1724.53]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-39
+    - at: [0.99, 1724.53]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-40
+    - at: [43.81, 1766.75]
+      text: '41'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-41
+    - at: [36.3, 1766.75]
+      text: '42'
+      font-size: 2.4
+      anchor: middle
+      rotate: 90
+      for: outlet-42
+    - at: [53.93, 1761.9]
+      text: 10A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-41
+    - at: [0.99, 1761.9]
+      text: 16A 250V~
+      font-size: 1.8
+      anchor: middle
+      rotate: 90
+      for: outlet-42
+    components:
+      placements:
+      - id: outlet-1
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 353.81]
+        group: outlets-b1
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-2
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 355.11]
+        group: outlets-b1
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-3
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 391.17]
+        group: outlets-b2
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-4
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 392.47]
+        group: outlets-b2
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-5
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 428.61]
+        group: outlets-b3
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-6
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 429.91]
+        group: outlets-b3
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-7
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 483.66]
+        group: outlets-b1
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-8
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 484.96]
+        group: outlets-b1
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-9
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 521.29]
+        group: outlets-b2
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-10
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 522.59]
+        group: outlets-b2
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-11
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 558.73]
+        group: outlets-b3
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-12
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 560.03]
+        group: outlets-b3
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-13
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 613.91]
+        group: outlets-b1
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-14
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 615.21]
+        group: outlets-b1
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b1
+      - id: outlet-15
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 651.34]
+        group: outlets-b2
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-16
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 652.64]
+        group: outlets-b2
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b2
+      - id: outlet-17
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 688.78]
+        group: outlets-b3
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-18
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 690.08]
+        group: outlets-b3
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b3
+      - id: outlet-19
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1265.83]
+        group: outlets-b4
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-20
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1267.13]
+        group: outlets-b4
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-21
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1303.27]
+        group: outlets-b5
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-22
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1304.57]
+        group: outlets-b5
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-23
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1340.63]
+        group: outlets-b6
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-24
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1341.93]
+        group: outlets-b6
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-25
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1395.88]
+        group: outlets-b4
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-26
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1397.18]
+        group: outlets-b4
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-27
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1433.32]
+        group: outlets-b5
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-28
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1434.62]
+        group: outlets-b5
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-29
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1470.76]
+        group: outlets-b6
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-30
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1472.06]
+        group: outlets-b6
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-31
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1526.01]
+        group: outlets-b4
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-32
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1527.31]
+        group: outlets-b4
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-33
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1563.37]
+        group: outlets-b5
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-34
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1564.67]
+        group: outlets-b5
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-35
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1600.81]
+        group: outlets-b6
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-36
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1602.11]
+        group: outlets-b6
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-37
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1656.06]
+        group: outlets-b4
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-38
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1657.36]
+        group: outlets-b4
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b4
+      - id: outlet-39
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1693.49]
+        group: outlets-b5
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-40
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1694.79]
+        group: outlets-b5
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b5
+      - id: outlet-41
+        ref: enlogic/combo-outlet-c13-c15@1
+        at: [30.2, 1730.86]
+        group: outlets-b6
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b6
+      - id: outlet-42
+        ref: enlogic/combo-outlet-c13-c15-c19@1
+        at: [4.15, 1732.16]
+        group: outlets-b6
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b6
+      - id: breaker-b1
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 120.0]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: 'Breaker B1 (white), 20 A double-pole across L1 and L2: protects the outlet columns of its colour'
+        attrs: {bank-color: '#e3e3e3', ink: '#202020', bank: B1, lines: L1-L2}
+      - id: breaker-b2
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 196.04]
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        description: 'Breaker B2 (light gray), 20 A double-pole across L2 and L3: protects the outlet columns of its colour'
+        attrs: {bank-color: '#686a69', ink: '#e6e6e6', bank: B2, lines: L2-L3}
+      - id: breaker-b3
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 272.08]
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        description: 'Breaker B3 (dark gray), 20 A double-pole across L3 and L1: protects the outlet columns of its colour'
+        attrs: {bank-color: '#2c2c2f', ink: '#e6e6e6', bank: B3, lines: L3-L1}
+      - id: breaker-b4
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1036.97]
+        group: breakers
+        rel-pos: 4
+        lines: [L1, L2]
+        description: 'Breaker B4 (white), 20 A double-pole across L1 and L2: protects the outlet columns of its colour'
+        attrs: {bank-color: '#e3e3e3', ink: '#202020', bank: B4, lines: L1-L2}
+      - id: breaker-b5
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1113.01]
+        group: breakers
+        rel-pos: 5
+        lines: [L2, L3]
+        description: 'Breaker B5 (light gray), 20 A double-pole across L2 and L3: protects the outlet columns of its colour'
+        attrs: {bank-color: '#686a69', ink: '#e6e6e6', bank: B5, lines: L2-L3}
+      - id: breaker-b6
+        ref: enlogic/en-breaker-20a-2p@1
+        at: [5.55, 1189.05]
+        group: breakers
+        rel-pos: 6
+        lines: [L3, L1]
+        description: 'Breaker B6 (dark gray), 20 A double-pole across L3 and L1: protects the outlet columns of its colour'
+        attrs: {bank-color: '#2c2c2f', ink: '#e6e6e6', bank: B6, lines: L3-L1}
+      - id: ground-symbol
+        ref: common/ground-symbol@1
+        at: [44.68, 18.95]
+        group: marks
+        rel-pos: 1
+      - id: ground
+        ref: common/ground-screw@1
+        at: [45.34, 31.29]
+        group: grounding
+        rel-pos: 1
+    regions:
+    - id: logo-zone
+      at: [35.49, 42.62]
+      size: {w: 13.5, h: 70.56}
+      label: the maker's printed label, a black rounded plate with its wordmark; not drawn
+  rear:
+    size: {w: 56, h: 1780}
+    components:
+      placements:
+      - id: button-1
+        ref: enlogic/pdu-mounting-button@1
+        at: [18.8, 31.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: enlogic/pdu-mounting-button@1
+        at: [18.8, 1586.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 56, h: 75}
+    components:
+      placements:
+      - id: input
+        ref: enlogic/pdu-cord-60309-3pe-9h@1
+        at: [5.0, 14.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed 1.8 m cord with an IEC 60309 3P+E 9h plug, the cord part of the EN6952. It leaves the cord
+          end of the strip through a cable gland
+  bottom:
+    size: {w: 56, h: 75}
+    empty: the bottom view of the drawing (EB0952-WXYZ_DA) draws this end as the plug and cord outline, and no photograph
+      looks at it.
+  left:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - id: front-void
+        at: [69.6, 0.0]
+        size: [5.4, 1780]
+        fill: '#121314'
+        kind: step-void
+      - id: bump-1
+        at: [69.6, 353.59]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-2
+        at: [69.6, 390.95]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-3
+        at: [69.6, 428.39]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-4
+        at: [69.6, 483.44]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-5
+        at: [69.6, 521.07]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-6
+        at: [69.6, 558.51]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-7
+        at: [69.6, 613.69]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-8
+        at: [69.6, 651.13]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-9
+        at: [69.6, 688.56]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-10
+        at: [69.6, 1265.61]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-11
+        at: [69.6, 1303.05]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-12
+        at: [69.6, 1340.42]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-13
+        at: [69.6, 1395.66]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-14
+        at: [69.6, 1433.1]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-15
+        at: [69.6, 1470.54]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-16
+        at: [69.6, 1525.79]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-17
+        at: [69.6, 1563.15]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-18
+        at: [69.6, 1600.59]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-19
+        at: [69.6, 1655.84]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-20
+        at: [69.6, 1693.28]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-21
+        at: [69.6, 1730.64]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: screw-1
+        at: [4.64, 26.03]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-2
+        at: [20.19, 37.8]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: button-3
+        at: [20.19, 61.94]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: screw-4
+        at: [4.64, 228.27]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [4.63, 468.29]
+        size: [6.84, 6.84]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-6
+        at: [4.64, 728.56]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-7
+        at: [4.64, 1013.67]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-8
+        at: [4.64, 1253.85]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-9
+        at: [4.64, 1510.03]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-10
+        at: [20.19, 1593.76]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: button-11
+        at: [20.2, 1617.76]
+        size: [5.37, 5.37]
+        rx: 2.69
+        fill: '#2e3033'
+        kind: button-location
+  right:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - id: front-void
+        at: [0.0, 0.0]
+        size: [5.4, 1780]
+        fill: '#121314'
+        kind: step-void
+      - id: bump-1
+        at: [0.0, 353.59]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-2
+        at: [0.0, 390.95]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-3
+        at: [0.0, 428.39]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-4
+        at: [0.0, 483.44]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-5
+        at: [0.0, 521.07]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-6
+        at: [0.0, 558.51]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-7
+        at: [0.0, 613.69]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-8
+        at: [0.0, 651.13]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-9
+        at: [0.0, 688.56]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-10
+        at: [0.0, 1265.61]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-11
+        at: [0.0, 1303.05]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-12
+        at: [0.0, 1340.42]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-13
+        at: [0.0, 1395.66]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-14
+        at: [0.0, 1433.1]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-15
+        at: [0.0, 1470.54]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-16
+        at: [0.0, 1525.79]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-17
+        at: [0.0, 1563.15]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-18
+        at: [0.0, 1600.59]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: bump-19
+        at: [0.0, 1655.84]
+        size: [5.4, 37.44]
+        fill: '#e3e3e3'
+        kind: outlet-moulding
+      - id: bump-20
+        at: [0.0, 1693.28]
+        size: [5.4, 37.44]
+        fill: '#686a69'
+        kind: outlet-moulding
+      - id: bump-21
+        at: [0.0, 1730.64]
+        size: [5.4, 37.44]
+        fill: '#2c2c2f'
+        kind: outlet-moulding
+      - id: screw-1
+        at: [63.54, 26.03]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-2
+        at: [49.43, 37.8]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: button-3
+        at: [49.43, 61.94]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: screw-4
+        at: [63.54, 228.27]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [63.53, 468.29]
+        size: [6.84, 6.84]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-6
+        at: [63.54, 728.56]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-7
+        at: [63.54, 1013.67]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-8
+        at: [63.54, 1253.85]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-9
+        at: [63.54, 1510.03]
+        size: [6.83, 6.83]
+        rx: 3.42
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-10
+        at: [49.43, 1593.76]
+        size: [5.39, 5.39]
+        rx: 2.7
+        fill: '#2e3033'
+        kind: button-location
+      - id: button-11
+        at: [49.44, 1617.76]
+        size: [5.37, 5.37]
+        rx: 2.69
+        fill: '#2e3033'
+        kind: button-location
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as the drawing shows its default: a black chassis, the IP44 plug, a 1.8 m cord and top feed. The
+      other plugs, colours, cord lengths and bottom feed of the identification table are options and are not drawn.'
+    part-numbers:
+      EB0952: {}
+datasheet: {title: 'Enlogic EB0952, Basic PDU data sheet - EB series (2 pages read of 3)', url: 'https://nvent.widen.net/content/ujfevec1za/original/eb0952-spec-sheet-1.pdf',
+  sha256: 712513c17cf67750833fa1df6a97b4ad14c8b3e24303ab449d14a9d1964e6c32}
+references:
+- {title: 'Enlogic EB0952 customer drawing EB0952-WXYZ_DA, rev E2, 2022/10/08 (three A3 sheets)', url: 'https://nvent.widen.net/content/fo8shnfcss/original/eb0952-wxyz_da_e2_released.pdf',
+  sha256: 688bc79850157bd4a1290de8202fa64bed9186ce009e986e7ad25fc7166dc17f}
+- {title: 'Enlogic EB 2.0 Series PDU, Quick Start Installation Guide (page 2 only; titled for another series)', url: 'https://nvent.widen.net/content/rmg6v3jpv0/original/enlogic-installation-guide-pdu.pdf',
+  sha256: 694ccb32a01adcb3785e63744b614e0aa6a6d84500bfa753f17b584490359956}
