@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: acm7000-dc-plug
+version: 1.0.0
+class: port
+mates: opengear-acm-dc-block-4
+profile: power
+description: >-
+  The four-chamber square connector at the end of an Opengear ACM7000 power supply, seen from the front as seated:
+  a black body round four contacts. The part seats in an `opengear-acm-dc-block-4` housing at its own mate point.
+size: {w: 9.3, h: 11.5}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the housing it seats in, opengear/acm7000-dc-header@1, 9.3 by 11.5. No document gives a dimension
+  of the supply's connector.
+attrs: {media: acm7000-dc-block, connector: four-chamber square, positions: 4}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. The ACM7000 data sheet lists the supplies 450037 and 450039 with
+    "Four Chamber Square Connector" and "4-pin connector". It shows neither. The part is drawn as large as the
+    housing it seats in and claims no maker, series or part number.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - a black body. No document shows the connector.
+  far-end: >-
+    NOT DRAWN. The other end is the supply, which is not a part of the gateway.
+  depth: >-
+    NOT STATED. No document gives how far the connector enters the housing, so the part draws a plan outline only
+    and builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [4.65, 5.75], direction: front}
+skins: [default]

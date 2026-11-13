@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: sim-slot-2ff
+version: 1.0.0
+class: port
+profile: networking
+interface: sim-card-2ff
+description: >-
+  A mini (2FF) SIM card slot on the front of an Opengear ACM7000 cellular model. It is a narrow dark opening under
+  the card symbol and the slot number. The quick start guide says to slide the carrier's mini SIM into it with the
+  contacts facing up. It seats the card at its own mate point.
+size: {w: 17.3, h: 1.8}
+size-confidence: {w: photo-measured, h: estimated}
+attrs: {media: sim, form-factor: 2ff}
+provenance:
+  size: >-
+    photo-measured and estimated. The ACM7004-2-L front photograph (Resilience Gateway Quick Start Guide, page 2)
+    is read at 5.5 pixels per millimetre across the 130 mm body. It shows the slot as a dark bar 95 pixels wide. 17.3 is that bar
+    read to about 0.5 mm. The 1.8 mm height is an estimate read off the same photograph.
+  interface: >-
+    `sim-card-2ff` in spec/schemas/connectors.yaml. The ACM7000 quick starts say to "slide your carrier-provided
+    mini SIM into the SIM slot with contacts facing up". The slot takes the bare card.
+  mate: >-
+    estimated - the centre of the bar. The card enters from the front.
+  depth: >-
+    NOT STATED. No document gives the depth of the slot, so the part claims none.
+elements: {}
+connection-points:
+  mate: {at: [8.65, 0.9], direction: front}
+skins: [default]

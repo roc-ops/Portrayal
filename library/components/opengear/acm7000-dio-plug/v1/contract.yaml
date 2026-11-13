@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: acm7000-dio-plug
+version: 1.0.0
+class: port
+mates: opengear-acm-dio-block-8
+profile: networking
+description: >-
+  The black eight-position terminal block that ships with an Opengear ACM7000, seen from the front as seated. It
+  is a black body with a screw over each position. The part seats in an `opengear-acm-dio-block-8` header at its
+  own mate point.
+size: {w: 22.4, h: 5.7}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, opengear/acm7000-dio-header@1, 22.4 by 5.7. The quick start guide shows
+  the block only in the box and no document dimensions it.
+attrs: {media: acm7000-dio-block, connector: terminal block, positions: 8}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. The ACM700x-2 Quick Start Guide lists "Digital I/O converter
+    (terminal block)", not available separately, and the ACM7000 data sheet lists a "Black terminal block". No
+    document dimensions it or says its pitch, so the part claims no maker, series or part number.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - a black body, as the box photograph shows it.
+  far-end: >-
+    NOT DRAWN. The other end lands on the sensors the site connects.
+  depth: >-
+    NOT STATED. No document gives how far the block enters the header, so the part draws a plan outline only and
+    builds no relief.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [11.2, 2.85], direction: front}
+skins: [default]
