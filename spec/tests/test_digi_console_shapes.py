@@ -98,6 +98,40 @@ def test_the_right_wall_is_still_a_stated_gap(name):
     assert device(name)["views"]["right"].get("empty")
 
 
+def note(name, key):
+    return device(name)["provenance"][key]["note"]
+
+
+@pytest.mark.parametrize("name", TS)
+def test_the_front_outline_note_states_its_insets_as_ranges(name):
+    text = note(name, "end-rim")
+    assert "one inset of 1.5 mm on all four sides" in text
+    assert "1.5 to 2.0 mm" in text and "1.0 to 2.0 mm" in text
+    assert "good to about 0.5 mm" in text
+    assert "1.6 to 1.9" not in text and "0.6 mm" not in text
+
+
+@pytest.mark.parametrize("name", TS)
+def test_the_tab_note_states_the_front_depth_as_a_range(name):
+    text = note(name, "tabs")
+    assert "The front tabs read 1.5 to 4 mm deep" in text
+    assert "The underside draws no depth." in text
+    assert "2.5 to 4" not in text
+
+
+@pytest.mark.parametrize("name", TS)
+def test_the_oval_note_calls_its_orientation_a_convention(name):
+    text = note(name, "side-wall")
+    assert "a convention" in text
+    assert "perspective gives" not in text
+
+
+def test_the_connect_it_4_note_states_the_right_inset_as_a_range():
+    text = note("connect-it-4", "front-panel")
+    assert "4.5 to 5.4 mm" in text and "drawn at 5.9 mm" in text
+    assert "least certain figure" in text
+
+
 def test_the_connect_it_4_front_has_its_rounded_inner_panel():
     d = device("connect-it-4")
     panel = decor("connect-it-4", "front")["face-panel"]
