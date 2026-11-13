@@ -5,24 +5,25 @@ A plate runs down its upper part.
 A white block at the plate's top carries the maker's mark.
 The installation instructions (page 3) say the door has two blue latches on its back.
 They draw them on the door seen from inside.
-These tests hold, for the ten parts (32610 to 32614, each in -703 and -E03):
-
-- The plate, the two seams and the reserved logo place are drawn on the 10 in width only (32612).
-  The photograph is read as showing that width.
-  The held pictures put the middle strip and the plate at widths that do not agree in millimetres
-  at any listed width.
-  The other eight doors do not draw them and keep a gap that says so.
-- On the 10 in door the seams are at 0.234 and 0.729 of the width as read from the photograph.
-  The right seam is read, not mirrored from the left.
-  The plate is 112.3 wide from 68.5 and 738 high from 378.
-  Its corners are rounded as each picture shows: the bottom of the white plate, the top of the black one.
-- Every door has both handle tips at its edges.
-  The notes say the render shows one dot, at the right edge.
-  They say the left tip is built as the right.
-- The device draws the latches on its rear, left and right faces.
-  The housing is at the proportion read from the installation figure, 4.7 to 1.
-  The side housing is 15 by 70.5, the same proportion at the same width.
-  The device keeps one gap for the hook, which no held picture shows.
+These tests cover the ten parts, 32610 to 32614, each in -703 and -E03.
+The plate, the two seams and the reserved logo place are drawn on the 10 in width only (32612).
+The photograph is read as showing that width.
+The held pictures put the middle strip and the plate at widths that do not agree in millimetres at any listed width.
+The other eight doors do not draw them and keep a gap that says so.
+On the 10 in door the seams are at 0.234 and 0.729 of the width as read from the photograph.
+The right seam is read, not mirrored from the left.
+The plate is 109.4 wide from 65.8 and 740 high from 380.
+Its edges stand about 7 mm from each seam, measured on the photograph at 2.804 mm per pixel.
+The corners are rounded as each picture shows.
+The white plate is rounded at the bottom and the black one at the top.
+Every door has both handle tips at its edges.
+The notes say the render shows one dot, at the right edge.
+They say the left tip is built as the right.
+The device draws the latches on its rear, left and right faces.
+Both housings are at the proportion read from the installation figure, 4.7 to 1, each at its own width.
+The rear housing is 17 by 80 and the side housing is 15 by 70.5.
+The device keeps one gap for the hook, which no held picture shows.
+Five more gaps name what each device's own frame part draws in a following change.
 """
 import pathlib
 import re
@@ -44,6 +45,14 @@ HOUSING_H = 80.0
 SIDE_W = 15.0
 SIDE_H = 70.5
 SENTENCE_LIMIT = 25
+OLD_SCALE = "2.79" + "6"
+FRAME_GAPS = {
+    "end-caps": ["front"],
+    "feet": ["front"],
+    "door-hinge-tabs": ["rear"],
+    "side-plate-holes": ["left", "right"],
+    "track-rungs": ["rear", "left", "right"],
+}
 
 
 def width(part):
@@ -88,17 +97,22 @@ def test_the_pictured_width_draws_the_seams_and_the_plate_read_from_the_photogra
     assert zone["fill"] == "none" and "stroke" not in zone, "the maker's mark is reserved, never painted"
     el = door(part)["elements"]
     assert width(part) == 250.0
-    # the seams: 0.234 and 0.729 of the door (20.3 and 63.3 px of 86.8), the right one read and not mirrored
+    # The seams are at 0.234 and 0.729 of the door, 20.3 and 63.3 px of 86.8. The right one is read, not mirrored.
     left = float(rects["seam-left"]["x"]) + float(rects["seam-left"]["width"]) / 2
     right = float(rects["seam-right"]["x"]) + float(rects["seam-right"]["width"]) / 2
     assert left == pytest.approx(58.5, abs=0.3)
     assert right == pytest.approx(182.3, abs=0.3)
     assert right != pytest.approx(250 - left, abs=3), "the right seam is read from the picture, not mirrored"
-    # the plate: 39 of 86.8 px wide from 23.8, 738 high from 378 (264 px at 2.796 mm per px)
-    assert el["door-plate"]["at"] == [68.5, 378] and el["door-plate"]["size"] == [112.3, 738]
+    # The plate is 39 px wide and 264 px high at 2.804 mm per px. It stands 2.6 and 2.5 px, about 7 mm, from the seams.
+    plate_left = el["door-plate"]["at"][0]
+    plate_right = plate_left + el["door-plate"]["size"][0]
+    assert plate_left - left == pytest.approx(7.3, abs=0.5), "the plate stands about 7 mm from the left seam"
+    assert right - plate_right == pytest.approx(7.1, abs=0.5), "the plate stands about 7 mm from the right seam"
+    assert el["door-plate"]["at"] == [65.8, 380] and el["door-plate"]["size"] == [109.4, 740]
     assert el["logo-zone"]["at"] == el["door-plate"]["at"]
-    assert el["logo-zone"]["size"] == [112.3, 204]
-    assert zone["x"] == "68.5" and zone["y"] == "378"
+    assert el["logo-zone"]["size"] == [109.4, 204]
+    assert zone["x"] == "65.8" and zone["y"] == "380"
+    assert "1120" in rects["door-plate"]["d"], "the plate's foot is 380 + 740"
 
 
 @pytest.mark.parametrize("part", PICTURED)
@@ -111,9 +125,9 @@ def test_the_plate_corners_are_rounded_as_each_picture_shows(part):
     assert all(float(a) == radius and float(b) == radius for a, b in arcs)
     first = plate["d"].split("A")[0]
     if part.endswith("e03"):
-        assert first.startswith("M68.5 378"), "the white plate's top is square"
+        assert first.startswith("M65.8 380"), "the white plate's top is square"
     else:
-        assert not first.startswith("M68.5 378"), "the black plate's top corners are rounded"
+        assert not first.startswith("M65.8 380"), "the black plate's top corners are rounded"
 
 
 @pytest.mark.parametrize("part", OTHERS)
@@ -170,6 +184,8 @@ def test_the_pictured_width_says_it_is_read_as_10_in(part):
     text = " ".join(door(part)["provenance"]["logo-zone"].split())
     assert "read as 10 in" in text and "inferred" in text
     assert "shows one 10 in" not in text
+    assert "2.804 mm per px" in text and OLD_SCALE not in text, "one scale, derived once"
+    assert "about 7 mm from each seam" in text
 
 
 @pytest.mark.parametrize("part", PARTS)
@@ -197,8 +213,33 @@ def test_the_latches_are_drawn_where_the_back_of_the_door_is_seen(part):
 
 
 @pytest.mark.parametrize("part", PARTS)
-def test_the_gaps_keep_only_the_hook(part):
+def test_the_gaps_name_the_hook_and_what_the_frame_part_draws_later(part):
     gaps = {g["what"]: g for g in device(part)["gaps"]}
     assert "door-features" not in gaps
     assert gaps["door-hook"]["scope"] == ["rear"]
     assert "no held picture shows it" in gaps["door-hook"]["note"]
+    for what, scope in FRAME_GAPS.items():
+        gap = gaps[what]
+        note = " ".join(gap["note"].split())
+        assert gap["scope"] == scope and gap["reason"] == "vendor-silent" and gap["wanted"]
+        assert "each device's own frame part, which a following change draws" in note, what
+        assert "shared frame" not in note and "next part for this family" not in note
+        assert all(len(s.split()) <= SENTENCE_LIMIT for s in sentences(note)), note
+    assert "side-plate-holes" in gaps and "track-rungs" in gaps
+    assert "a plate that carries two holes" in " ".join(gaps["feet"]["note"].split())
+
+
+@pytest.mark.parametrize("part", PARTS)
+def test_no_note_of_the_change_carries_the_old_scale_or_the_shared_frame(part):
+    texts = [(door_dir(part) / "contract.yaml").read_text(),
+             (LIB / "devices" / "chatsworth" / part / "device.yaml").read_text(),
+             (ROOT / "changelog.d" / "chatsworth-motive-door-features.md").read_text()]
+    for text in texts:
+        assert OLD_SCALE not in text and "shared frame" not in text and "twenty devices" not in text
+
+
+def test_this_modules_docstring_has_no_list_and_no_long_sentence():
+    doc = __doc__
+    assert not re.search(r"^\s*[-*] ", doc, re.M), "no bullets: a list counts as one long sentence"
+    assert not re.search(r":\s*$", doc, re.M), "no line ends in a colon"
+    assert all(len(s.split()) <= SENTENCE_LIMIT for s in sentences(doc))

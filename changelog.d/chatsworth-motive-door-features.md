@@ -11,6 +11,8 @@
 - The other eight doors (32610, 32611, 32613 and 32614) do not draw the plate or the seams.
   Three pictures show them, and measured in millimetres they do not agree at any listed width.
   Each of those devices names the gap.
+- Five gaps on each device name what its own frame part draws in a following change.
+  They are the end caps, feet, hinge tabs, side plate holes and track rungs.
 - The tip of each handle shows at the door's edge on the front of all ten doors.
   The data sheet's render shows one dot, at the right edge.
   The left tip is built as the right tip, as no picture shows it.
