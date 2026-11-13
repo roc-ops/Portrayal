@@ -26,13 +26,13 @@ provenance:
     confidence: drawing
     note: >-
       `rack-side`: the strip stands beside a rack's upright on two mounting buttons, 137.6 from the cord end and 622.0
-      apart (top view). The drawing says 'VERTICAL, 0U HALF, 2-SIDED' and gives no count of units. The maker's page says
-      0U MID, and the drawing is used for the part's own record. `ru: 20` is the whole units the 915 mm length covers (20.6) and is not stated by any document.
+      apart (top view). The drawing says 'VERTICAL, 0U HALF, 2-SIDED' and gives no count of units.
+      `ru: 20` is the whole units the 915 mm length covers (20.6) and is not stated by any document.
   chassis:
     confidence: drawing
     note: >-
       drawing - 915.0 long and 112.0 deep (top view). The SIDE VIEW prints 52.0 [2.05"] beside the body, at the lower
-      right of the sheet. The width is 52.0, dimensioned. The maker's page prints 52 mm and agrees. The sheet PUSP26 (page 3)
+      right of the sheet. The width is 52.0, dimensioned. Panduit's product page 'P24B32M - Panduit' prints 52 mm wide and agrees. The sheet PUSP26 (page 3)
       gives 2.0 in (50.8) for the 0U MID, HALF and FULL forms. That is the family's nominal figure and not this part's width.
       Weight 9.6 kg is the drawing's.
   front:
@@ -46,7 +46,6 @@ provenance:
     confidence: drawing
     note: >-
       drawing - 'OUTLET QTY&TYPE: (18) C13, (6) C19' and the receptacle block, 'IEC 60320/C19 16 A' and 'IEC 60320/C13 10 A'.
-      The maker's page heading says (12)C13, (12)C19 and its own table says (18)C13, (6)C19; the drawing and the table are used.
       Each outlet is std/c13-outlet@1 or std/c19-outlet@1. The C19 sockets of the odd banks are unturned.
       Those of the even banks are turned a half turn, as the lamp windows sit on the outer side. THE DRAWN OUTLET SYMBOLS ARE SMALLER THAN THE
       REGISTRY'S WELLS, so the drawn centres are an estimate (gaps: outlet-pitch). The outlets are numbered 1 to 24 along
@@ -61,7 +60,7 @@ provenance:
   colour:
     confidence: estimated
     note: >-
-      estimated - the title block says MATERIAL/COLOR: N/A and the maker's page states no colour, so the body is drawn a
+      estimated - the title block says MATERIAL/COLOR: N/A, so the body is drawn a
       dark neutral. THE PLATE, MOULDING, SCREW AND LAMP-WINDOW COLOURS ARE NOT CHECKED against any source. No photograph is held.
   lamps:
     confidence: drawing
@@ -83,7 +82,10 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the rear view shows six breaker plates B1 to B6. Each has four crosshair screws, a vertical line legend and a rocker.
-      The earth screw with its symbol is near the cord end. The plate is drawn about 58.6 along by 39 across and the part
+      The earth screw with its symbol is near the cord end. Its head is 12.04 across and carries one slot, 7.95 long and
+      0.98 wide, that runs along the strip. The slot is drawn as decor under the placed part. That part,
+      common/ground-screw@1, draws a cross cap 5.6 across over it, as the library has no slotted ground screw.
+      The plate is drawn about 58.6 along by 39 across and the part
       is 70.2 by 46.6 (gaps: breaker-plate-size). The plate's vertical legend and crosshair screws differ from the part (gaps: breaker-plate-design).
   sides:
     confidence: estimated
@@ -97,7 +99,10 @@ provenance:
   ends:
     confidence: drawing
     note: >-
-      drawing - the cord end carries the gland and cord. The far end is a plain closed line. The cord end is drawn as the gland alone.
+      drawing - the SIDE VIEW is the cord end seen end-on, 52.0 by 112. It prints two Torx screws 6.9 across and a
+      rectangle 19.09 square. They are drawn as decor, on the 2.039 mm to the point of the printed 52.0. The cord part is
+      placed over the rectangle. The stepped outline and the tab above the body are not drawn, as a face is a box.
+      The far end is a plain closed line.
 attrs:
   physical: {length-mm: 915, weight-kg: 9.6}
   power: {input-ac: 'three-phase delta, 200-240 V, 60 A (48 A derated), 17.3 kVA (drawing note 1)', input-plug: other,
@@ -272,6 +277,10 @@ views:
       members: [outlet-21, outlet-22, outlet-23, outlet-24]
   rear:
     size: {w: 52, h: 915}
+    panel:
+      decor:
+      - {id: earth-screw-head, at: [29.18, 747.88], size: [12.04, 12.04], rx: 6.02, fill: '#565b60', kind: screw-head, confidence: estimated, source: 'P24B32M_DC, REAR VIEW, the earth screw head read from the vector paths'}
+      - {id: earth-screw-slot, at: [34.7, 749.925], size: [1.0, 7.95], fill: '#17191c', kind: screw-slot, confidence: estimated, source: 'P24B32M_DC, REAR VIEW, one slot along the strip read from the vector paths'}
     components:
       placements:
       - {id: breaker-1, ref: 'panduit/g5-breaker-20a@1', at: [1.7, 633.8], group: breakers, rel-pos: 1, lines: [L1, L2], description: 'Breaker B1, a 20 A double-pole switch and breaker across L1-L2', attrs: {label: B1, lines: L1-L2}}
@@ -284,10 +293,17 @@ views:
   top:
     size: {w: 52, h: 112}
     empty: >-
-      the far end of the strip. No view draws it as an end view, and each shows the strip's
-      end as a plain closed line. Searched every view of P24B32M_DC and the PUSP26 sheet.
+      the far end of the strip. No view draws it end-on, as the SIDE VIEW is the cord end, and
+      the other views show this end as a plain closed line. Searched every view of P24B32M_DC and the PUSP26 sheet.
   bottom:
     size: {w: 52, h: 112}
+    panel:
+      decor:
+      - {id: end-screw-1, at: [3.34, 64.3], size: [6.9, 6.9], rx: 3.45, fill: '#565b60', kind: screw-head, confidence: estimated, source: 'P24B32M_DC, SIDE VIEW, a Torx screw head read from the vector paths'}
+      - {id: end-screw-2, at: [41.48, 64.3], size: [6.9, 6.9], rx: 3.45, fill: '#565b60', kind: screw-head, confidence: estimated, source: 'P24B32M_DC, SIDE VIEW, a Torx screw head read from the vector paths'}
+      - {id: end-screw-torx-1, at: [4.92, 65.24], size: [3.74, 4.96], pattern: motif, pattern-cells: &torx [[[1.87, 0], [1.11, 0.96], [0, 1.24], [0.35, 2.48], [0, 3.72], [1.11, 4.0], [1.87, 4.96], [2.63, 4.0], [3.74, 3.72], [3.39, 2.48], [3.74, 1.24], [2.63, 0.96]]], pattern-pitch: [3.74, 4.96], confidence: estimated, source: 'P24B32M_DC, SIDE VIEW, the six-lobed recess read from the vector paths'}
+      - {id: end-screw-torx-2, at: [43.06, 65.24], size: [3.74, 4.96], pattern: motif, pattern-cells: *torx, pattern-pitch: [3.74, 4.96], confidence: estimated, source: 'P24B32M_DC, SIDE VIEW, the six-lobed recess read from the vector paths'}
+      - {id: cord-window, at: [16.34, 92.32], size: [19.09, 19.09], rx: 1.04, stroke: '#6b7076', stroke-width: 0.4, kind: cord-window, confidence: estimated, source: 'P24B32M_DC, SIDE VIEW, the rectangle beside the cord read from the vector paths'}
     components:
       placements:
       - id: input

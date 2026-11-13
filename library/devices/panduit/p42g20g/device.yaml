@@ -26,27 +26,27 @@ provenance:
     confidence: drawing
     note: >-
       `rack-side`: the strip stands beside a rack's upright on two mounting buttons on its back, 1555.0 apart and
-      40.5 from the cord end (rear view). The drawing says 'VERTICAL, 0U FULL' and gives no count of units. The maker's
-      product page says 40 rack units, which is the whole units the 1780 mm length covers (40.04).
+      40.5 from the cord end (rear view). The drawing says 'VERTICAL, 0U FULL' and gives no count of units. `ru: 40` is
+      the whole units the 1780 mm length covers (40.04), and no held page states it.
   chassis:
     confidence: drawing
     note: >-
-      drawing - 1780.0 long (front view) and 56.0 and 75.0 on the bottom view. The maker's product page prints 56 mm
-      wide, 1,780 mm high and 75 mm deep, and agrees. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750 and
+      drawing - 1780.0 long (front view) and 56.0 and 75.0 on the bottom view. Panduit's product page 'P42G20G - Panduit'
+      prints 56 mm wide, 1,780 mm high and 75 mm deep, and agrees. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750 and
       no form at 1780 (gaps: body-size). The drawing's figures are used. Weight 11.5 kg is on sheet 2's part table only.
   front:
     confidence: drawing
     note: >-
       drawing - the front view. From the cord end: a plate with the external ground, three breaker plates B1 to B3, and three
-      blocks of four columns of two outlets. Then come a blank plate with six marks, the controller and breaker plates
-      B4 to B6. Three blocks of three columns run to the far end. Plate, block and outlet positions match the P42G20M's
+      blocks of four columns of two outlets. Then come a blank plate with five hexagon-head marks and a ring, the controller
+      and breaker plates B4 to B6. The marks sit in a 2, 1, 2 layout along the plate. Three blocks of three columns run to the far end. Plate, block and outlet positions match the P42G20M's
       to 1 mm, checked against the 300 dpi rendering. The outlet pitch is not dimensioned. The column pitch is 37.1
       in the first half, as on the P42G20M, and kept in the second.
   outlets:
     confidence: drawing
     note: >-
       drawing - '(21)C13/C15, (21)C13/C15/C19'. The receptacle block draws each as ONE SOCKET named 'C13/C15 COMBO 10A'
-      and 'C13/C15/C19 COMBO 16A', so each is one outlet. The maker's page prints the second as C13/C15/C19/C21. The
+      and 'C13/C15/C19 COMBO 16A', so each is one outlet. The sheet PUSP97 prints the second as C13/C15/C19/C21. The
       upper row of the front view is the C13/C15 and the lower row the C13/C15/C19 (x = 4 and 28). The outlets are
       numbered 1 to 42 column by column from the cord end, the upper socket first. THE NUMBERING IS AN ASSUMPTION, as
       the drawing prints no outlet numeral (gaps: outlet-numerals). THE WAY UP OF EACH SOCKET IS NOT READ.
@@ -62,32 +62,33 @@ provenance:
   colour:
     confidence: drawing
     note: >-
-      drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P42G20G, and the maker's page says Black. It is
-      drawn here as the RAL's #0e0e10 on the body. THE PLATE, MOULDING AND SCREW COLOURS ARE NOT CHECKED against any
-      source. No photograph is held, and the page's loaded images were all under 200 px, so no colour is sampled.
+      drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P42G20G. It is drawn here as the RAL's #0e0e10
+      on the body. THE PLATE, MOULDING AND SCREW COLOURS ARE NOT CHECKED against any source. No photograph is held, so no
+      colour is sampled.
   controller:
     confidence: drawing
     note: >-
       drawing - the controller plate is drawn between the blank plate and the fourth breaker plate, about 142 along
       against the component's 127.8. The bay is centred on it. P42G20G is composed with panduit/g6-controller@1 in a bay
-      because the sheet PUSP97 calls the controller hot swappable. The maker's page counts one RJ45 network, two sensor
-      and two daisy-chain jacks and a USB port. The plate prints other labels, and the part names each jack by its label.
+      because the sheet PUSP97 calls the controller hot swappable. The part names each jack by the label the plate prints.
   lamps:
     confidence: datasheet
     note: >-
-      datasheet - the maker's page says 'Green LED indicates outlet is on', one per outlet. The outlet parts carry
-      no lamp, so none is drawn on the strip. No photograph is held, so no lit colour is sampled.
+      datasheet - Panduit's product page 'P42G20G - Panduit' lists 'Green LED indicates outlet is on'. That is a green
+      LED per outlet. No held picture shows the lamp and the outlet parts carry none, so none is drawn on the strip
+      (gaps: outlet-lamps). No photograph is held, so no lit colour is sampled.
   input:
     confidence: drawing
     note: >-
-      drawing - 'INPUT PLUG: IEC 60309 3P+E (IP44)' and plug 'IEC 60309, 3P 4W, 9H', 'INPUT VOLTAGE: 200-240VAC',
-      'INPUT CURRENT: 60A (48A DERATED)', 'INPUT PHASE: THREE-PHASE, DELTA', 'RATED POWER: 17.3 kVA'. Sheet 2 gives the
+      drawing - 'INPUT PLUG: IEC 60309 3P+E (IP44)' and plug 'IEC 60309, 3P 4W, 9H'. It also prints 'INPUT VOLTAGE:
+      200-240VAC' and 'INPUT CURRENT: 60A (48A DERATED)'. It prints 'INPUT PHASE: THREE-PHASE, DELTA' and
+      'RATED POWER: 17.3 kVA'. Sheet 2 gives the
       plain part number a 3 m cord. The cord is one part at the cord end; its length and the plug's face are not drawn.
   capability:
-    confidence: datasheet
+    confidence: drawing
     note: >-
-      datasheet - the drawing's unit type is MONITORED & SWITCHED PER OUTLET, and the maker's page lists it the
-      same way. So `metering-scope: outlet` and `outlet-switching: true`.
+      drawing - the unit type is MONITORED & SWITCHED PER OUTLET. So `metering-scope: outlet` and
+      `outlet-switching: true`.
   rear:
     confidence: drawing
     note: >-
@@ -125,7 +126,7 @@ gaps:
   scope: [front]
   reason: sources-disagree
   note: >-
-    the drawing and the maker's page give 56 by 75 by 1780. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750.
+    the drawing and Panduit's product page 'P42G20G - Panduit' give 56 by 75 by 1780. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750.
     The drawing's figures are used.
   wanted: the maker's statement of which form the P42G20G is.
 - what: photographs
@@ -192,6 +193,13 @@ gaps:
     the earth symbol of the cord-end plate, the boxed 1/2 on each block, the rating triangles and the small boxes
     are not drawn. The breaker legends and the controller's wordmark are drawn.
   wanted: a photograph of the cord end and a block.
+- what: outlet-lamps
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    Panduit's product page 'P42G20G - Panduit' lists 'Green LED indicates outlet is on'. No held picture shows the lamp,
+    so none is drawn.
+  wanted: a photograph of the outlet face.
 - what: part-number-variants
   scope: [front, rear]
   reason: vendor-silent
@@ -220,12 +228,18 @@ views:
       - {id: moulding-5, at: [1.0, 149.2], size: [54.0, 114.3], rx: 2.0, fill: '#9a9da1', kind: outlet-moulding}
       - {id: moulding-6, at: [1.0, 13.2], size: [54.0, 114.3], rx: 2.0, fill: '#e4e5e7', kind: outlet-moulding}
       - {id: blank-plate, at: [1.5, 795.0], size: [53.0, 157.0], rx: 1.5, fill: '#1e2023', kind: blank-plate, confidence: estimated}
-      - {id: blank-plate-screw-1, at: [5.15, 813.8], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
-      - {id: blank-plate-screw-2, at: [42.25, 813.8], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
-      - {id: blank-plate-screw-3, at: [5.15, 855.2], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
-      - {id: blank-plate-screw-4, at: [9.25, 920.2], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
-      - {id: blank-plate-screw-5, at: [42.25, 854.9], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
-      - {id: blank-plate-screw-6, at: [42.25, 920.2], size: [4.5, 4.5], rx: 2.25, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-hex-1, at: [6.12, 915.8], size: [5.52, 4.82], pattern: motif, pattern-cells: &hex [[[0, 2.41], [1.38, 0], [4.14, 0], [5.52, 2.41], [4.14, 4.82], [1.38, 4.82]]], pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-2, at: [44.29, 915.8], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-3, at: [43.33, 847.17], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-4, at: [6.12, 813.69], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-5, at: [44.29, 813.69], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-bolt-1, at: [6.65, 915.98], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-2, at: [44.82, 915.98], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-3, at: [43.86, 847.35], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-4, at: [6.65, 813.87], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-5, at: [44.82, 813.87], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-ring, at: [9.885, 938.655], size: [5.87, 5.87], rx: 2.935, stroke: '#565b60', stroke-width: 0.3, kind: ring, confidence: estimated}
+      - {id: blank-plate-ring-inner, at: [10.585, 939.355], size: [4.47, 4.47], rx: 2.235, stroke: '#565b60', stroke-width: 0.3, kind: ring, confidence: estimated}
       - {id: end-screw, at: [40.0, 1707.7], size: [4.0, 4.0], rx: 2.0, fill: '#565b60', kind: screw-head, confidence: estimated}
       - {id: controller-bracket-1, at: [24.7, 781.2], size: [6.6, 6.6], rx: 3.3, fill: '#565b60', kind: screw-head}
       - {id: controller-bracket-2, at: [24.7, 644.2], size: [6.6, 6.6], rx: 3.3, fill: '#565b60', kind: screw-head}
