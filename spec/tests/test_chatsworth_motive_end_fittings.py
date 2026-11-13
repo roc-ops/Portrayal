@@ -41,6 +41,11 @@ def test_rear_draws_two_caps_two_feet_the_rim_and_four_tabs(model):
     assert d["door-rib"]["at"][1] + d["door-rib"]["size"][1] < plates[1]["at"][1] + 1e-6
     assert abs(d["door-rib"]["at"][0] + d["door-rib"]["size"][0] / 2 - width / 2) < 0.06 * width
     assert all(v["at"][1] == 0 for v in caps)
+    assert all(v["size"][1] == 25 for v in caps)
+    assert all(v["size"][1] == 13 for v in feet)
+    assert all(v["size"][1] == 50 for v in tabs)
+    assert all(v["size"][1] == 116 for v in plates)
+    assert d["base-rim"]["size"][1] == 8
     assert all(abs(v["size"][0] - 0.425 * width) < 0.06 for v in caps)
     assert all(abs(v["size"][0] - 0.19 * width) < 0.06 for v in feet)
     assert all(abs(v["at"][1] + v["size"][1] - height) < 1e-6 for v in feet)
