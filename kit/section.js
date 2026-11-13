@@ -341,9 +341,10 @@ function ringTriangles(points, n) {
 // The face a wall that is no section wall looks toward, for picking: a plan wall carries no texture of
 // its own, so a hit on one answers as the long face whose side it is on (the larger horizontal
 // component of its normal), a front or rear wall slanted at 45 degrees as the front or rear. `n` is the
-// triangle's normal in the box frame.
+// triangle's normal in the box frame: three's vector (x, y, z) or an array.
 export function planWallFace(n) {
-  return Math.abs(n[2]) >= Math.abs(n[0]) ? (n[2] >= 0 ? 'front' : 'rear') : (n[0] >= 0 ? 'right' : 'left');
+  const [x, z] = typeof n.x === 'number' ? [n.x, n.z] : [n[0], n[2]];
+  return Math.abs(z) >= Math.abs(x) ? (z >= 0 ? 'front' : 'rear') : (x >= 0 ? 'right' : 'left');
 }
 
 // The colour of a plan wall: the chassis faceplate's fill, from the first face drawing that states one

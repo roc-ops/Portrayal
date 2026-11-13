@@ -548,6 +548,19 @@ def test_a_plan_wall_picks_as_the_face_it_faces():
 
 
 @needs_node
+def test_a_plan_wall_picks_from_a_vector_normal_as_it_does_from_an_array():
+    # the viewer hands over three's face normal, a vector with x, y and z fields (this page does not load
+    # three, so a plain object with those fields stands for it); an array answers the same
+    normals = [(0, 0, 1), (0, 0, -1), (1, 0, 0), (-1, 0, 0), (0.6, 0, 0.8), (0.8, 0, -0.6),
+               (0.7071, 0, 0.7071), (-0.7071, 0, -0.7071), (-0.2, 0, -0.98), (0.3, 0.1, 0.95)]
+    want = ["front", "rear", "right", "left", "front", "right", "front", "rear", "rear", "front"]
+    as_vector = run([{"fn": "face", "n": {"x": x, "y": y, "z": z}} for x, y, z in normals])
+    as_array = run([{"fn": "face", "n": [x, y, z]} for x, y, z in normals])
+    assert [g["ok"] for g in as_vector] == want
+    assert [g["ok"] for g in as_array] == want
+
+
+@needs_node
 def test_the_wall_colour_is_the_faceplate_fill_of_the_first_face_that_states_one():
     svg = {"front": '<svg><path id="chassis-faceplate" d="M0,0 L1,1" fill="#8a9299"/></svg>',
            "rear": '<svg><rect fill="#111111" id="chassis-faceplate"/></svg>'}
