@@ -1,7 +1,8 @@
 """The five Catalyst 2960-S: the rear's stamped marks, tabs, hole and corner edge, the left wall's openings and the RPS plate's notch.
 
-The rear figures are read off the NetBox rear photograph of the WS-C2960S-48LPD-L at 3.41 px per mm, the left wall off
-Figure 1-10 of the Catalyst 2960-S Switch Hardware Installation Guide (OL-19732-04); every one is estimated.
+The rear figures are read off the NetBox rear photograph of the WS-C2960S-48LPD-L at 3.41 px per mm.
+The left wall is placed from two photographs of the product. Figure 1-10 of the Catalyst 2960-S Switch Hardware
+Installation Guide (OL-19732-04) gives its pattern. Every figure is estimated.
 """
 import re
 from pathlib import Path
@@ -107,16 +108,18 @@ def test_left_wall_draws_the_figures_29_openings_inside_the_face(name):
 
 
 DIST = ROOT / "library/dist"
-# The centre of each of the 29 openings on the flat left face, millimetres from the rear edge and the top: the middle of the
-# bounding box of the outline read off Figure 1-10 (rear to front, as the figure lists them).
+# The centre of each of the 29 openings on a 299 mm model's flat left face, in millimetres from the rear edge and the top.
+# It is the middle of the opening's bounding box, placed from two photographs of the product.
+# The openings run rear to front, in the order Figure 1-10 lists them.
 CENTRES = [
-    (7.70, 6.40), (9.55, 18.90), (23.50, 24.10), (48.10, 40.20), (49.95, 29.45), (51.75, 14.80), (62.50, 21.50),
-    (71.05, 29.25), (72.90, 14.65), (83.60, 21.35), (94.00, 14.50), (97.80, 24.65), (115.10, 14.30), (125.80, 21.05),
-    (134.35, 28.75), (136.20, 14.20), (146.95, 20.75), (155.45, 28.65), (157.30, 14.00), (168.05, 20.55), (281.10, 34.10),
-    (310.95, 3.25), (318.50, 23.35), (320.65, 34.20), (341.10, 40.20), (362.40, 11.20), (365.20, 31.15), (366.05, 21.20),
-    (378.60, 3.15),
+    (17.3, 6.0), (14.0, 19.0), (23.9, 22.1), (52.6, 38.5), (46.4, 24.3), (45.9, 10.7), (53.7, 17.5),
+    (61.6, 24.3), (61.1, 10.4), (68.9, 17.5), (76.4, 10.5), (83.4, 22.2), (93.0, 11.1), (100.8, 17.9),
+    (108.6, 24.8), (108.3, 11.0), (116.2, 17.8), (123.9, 24.7), (123.7, 11.0), (131.5, 17.8), (183.4, 33.1),
+    (197.3, 5.1), (205.9, 21.9), (217.6, 33.4), (233.1, 38.1), (264.8, 10.2), (265.1, 31.4), (266.6, 21.8),
+    (280.5, 5.4),
 ]
-SHIFT = 87.0  # a 299 mm model moves the front group (past 200 mm) 87 mm toward the rear
+TOP_ROW = [6, 9, 11, 13, 16, 19]  # the six peanut slots along the top, as numbered in CENTRES
+SHIFT = 87.0  # a 386 mm model's front group (openings 21 to 29) sits 87 mm farther from the rear than a 299 mm model's
 
 
 def built_svg(name, face):
@@ -139,16 +142,69 @@ def built_openings(name):
     return found
 
 
+def drawn_centres(name):
+    """Centre of each left-face opening in the device file: the middle of its outline's bounding box."""
+    marks = silk(device(name), "left")
+    out = []
+    for i in range(1, 30):
+        pts = corners(marks[f"side-opening-{i:02d}"])
+        xs, ys = [p[0] for p in pts], [p[1] for p in pts]
+        out.append(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2))
+    return out
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_left_wall_openings_sit_where_the_photographs_put_them(name):
+    for i, ((x, y), (dx, dy)) in enumerate(zip(CENTRES, drawn_centres(name)), 1):
+        if i >= 21:
+            x += DEPTH[name] - 299.0
+        assert abs(dx - x) <= 0.1 and abs(dy - y) <= 0.1, (i, (dx, dy), (x, y))
+
+
+@pytest.mark.parametrize("name", NAMES)
+def test_left_wall_top_row_of_slots_is_15_mm_apart(name):
+    row = [drawn_centres(name)[i - 1][0] for i in TOP_ROW]
+    pitches = [b - a for a, b in zip(row, row[1:])]
+    assert abs(sum(pitches) / len(pitches) - 15.0) <= 1.0, "the photographs put the slots about 15 mm apart"
+    assert all(abs(p - 15.0) <= 2.0 for p in pitches), pitches
+
+
+def plain_stretch(name):
+    """Distance along the wall from the rear group's last edge to the front group's first edge."""
+    marks = silk(device(name), "left")
+    edges = {i: [x for x, _ in corners(marks[f"side-opening-{i:02d}"])] for i in range(1, 30)}
+    return min(min(edges[i]) for i in range(21, 30)) - max(max(edges[i]) for i in range(1, 21))
+
+
+def test_a_386_mm_model_has_a_plain_stretch_87_mm_longer_than_a_299_mm_model():
+    short = {plain_stretch(n) for n in SHORT}
+    assert len(short) == 1 and abs(short.pop() - 44.0) <= 0.3
+    for n in LONG:
+        assert abs(plain_stretch(n) - plain_stretch(SHORT[0]) - SHIFT) <= 0.05, n
+        assert abs(plain_stretch(n) - 131.0) <= 0.3, n
+
+
 @pytest.mark.heavy
 @pytest.mark.parametrize("name", ["ws-c2960s-48lpd", "ws-c2960s-24td"])
 def test_built_left_face_centres_each_of_the_29_openings_within_a_tenth_of_a_millimetre(name):
     built = built_openings(name)
     assert sorted(built) == [f"side-opening-{i:02d}" for i in range(1, 30)], "29 openings, counted in the build"
     for i, (x, y) in enumerate(CENTRES, 1):
-        if name == "ws-c2960s-24td" and x > 200.0:
-            x -= SHIFT
+        if name == "ws-c2960s-48lpd" and i >= 21:
+            x += SHIFT
         bx, by = built[f"side-opening-{i:02d}"]
         assert abs(bx - x) <= 0.1 and abs(by - y) <= 0.1, (i, (bx, by), (x, y))
+
+
+@pytest.mark.heavy
+def test_built_top_row_is_15_mm_apart_and_a_386_mm_model_has_an_87_mm_longer_plain_stretch():
+    long, short = built_openings("ws-c2960s-48lpd"), built_openings("ws-c2960s-24td")
+    for built in (long, short):
+        row = [built[f"side-opening-{i:02d}"][0] for i in TOP_ROW]
+        pitches = [b - a for a, b in zip(row, row[1:])]
+        assert abs(sum(pitches) / len(pitches) - 15.0) <= 1.0, pitches
+    gap = lambda built: built["side-opening-21"][0] - built["side-opening-20"][0]
+    assert abs((gap(long) - gap(short)) - SHIFT) <= 0.2, (gap(long), gap(short))
 
 
 @pytest.mark.heavy
