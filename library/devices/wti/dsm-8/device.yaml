@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dsm-8
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: WTI
 model: DSM-8
@@ -50,6 +50,10 @@ provenance:
     confidence: drawing
     note: >-
       The lamps of both faces are drawn as plain discs, not as states: the hardware guide names them (port activity, plug activity or status) and does not state a colour or a state for any, so none is claimed.
+  top-and-left:
+    confidence: estimated
+    note: >-
+      Source: DSM-8 dimensional drawing, one page: top view and the side view at the right. The drawing carries no dimension for a screw or a slot. Positions are read from its vector figure at the scale that makes the drawn cover 17.15 inches wide, and are good to about one millimetre. Slot counts are counted twice on the 600 dpi page. The side is drawn as the left, which is an estimate.
 attrs:
   physical:
     construction: metal
@@ -102,12 +106,36 @@ gaps:
   note: >-
     The drawing shows the second Ethernet jack and the phone jack and says a label is added for units without them; the documents do not say whether a jack sits behind the label. Both are drawn as the drawing shows them.
   wanted: Which part numbers carry the second Ethernet jack and the phone jack.
-- what: sides
-  scope: [top, bottom, left, right]
+- what: underside
+  scope: [bottom]
   reason: needs-drawing
   note: >-
-    The drawing shows the top cover and one side with vent slots and screws, and does not say which side it is. They are not drawn. The underside is not shown.
-  wanted: A drawing that names each side.
+    No held page shows the underside.
+  wanted: A drawing or photograph of the underside.
+- what: right-side
+  scope: [right]
+  reason: needs-drawing
+  note: >-
+    The drawing shows one side only, and no held page shows the other.
+  wanted: A drawing or photograph of the other side.
+- what: side-identity
+  scope: [left]
+  reason: vendor-silent
+  note: >-
+    The drawing does not say which side its side view shows. It is drawn as the left, an estimate. Three hints point that way and none states it. The hardware guide puts the SIM card cover panel on the left hand side, adjacent to the cellular antenna. The guide says 'Side vents' in the plural. The view stands beside the top view on the sheet.
+  wanted: A drawing or photograph that names the side.
+- what: top-beyond-outline
+  scope: [top]
+  reason: needs-drawing
+  note: >-
+    The drawing's top view also shows, beyond the cover's outline, the two ears edge on and two rear bodies (the inlets). These are not drawn. A face is a width by height box (the view `size`, device schema lines 1352 to 1367). The kit has no shape for a part outside it.
+  wanted: A kit shape for a part beyond a face's box.
+- what: side-bottom-fold
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    The side view's bottom edge is a rounded fold. It is not drawn. The `bevel` (device schema line 797) is a flat 45 degree cut. The `rounded` (line 820) rounds plan corners. So the kit has no rounded-fold shape.
+  wanted: A kit shape for a rounded fold along an edge.
 groups:
   inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C14 inlets A and B at the left of the back'}
   serial: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'the RJ45 RS-232 serial ports, port 1 marked SETUP'}
@@ -204,20 +232,62 @@ views:
       - {ref: common/rj45-eth@1, id: eth-1, at: [411.94, 22.34], group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}}
   top:
     size: {w: 435.6, h: 166.37}
-    empty: >-
-      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+    panel:
+      decor:
+      - {id: top-screw-1, kind: screw, at: [53, 7], size: [5.5, 5.5], rx: 2.75, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: top-screw-2, kind: screw, at: [383, 7], size: [5.5, 5.5], rx: 2.75, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: top-screw-3, kind: screw, at: [131, 154], size: [5.5, 5.5], rx: 2.75, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: top-screw-4, kind: screw, at: [306, 154], size: [5.5, 5.5], rx: 2.75, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+    silkscreen:
+    - {at: [55.75, 9.75], path: 'M -1.38 -1.38 L 1.38 1.38 M -1.38 1.38 L 1.38 -1.38', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [385.75, 9.75], path: 'M -1.38 -1.38 L 1.38 1.38 M -1.38 1.38 L 1.38 -1.38', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [133.75, 156.75], path: 'M -1.38 -1.38 L 1.38 1.38 M -1.38 1.38 L 1.38 -1.38', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [308.75, 156.75], path: 'M -1.38 -1.38 L 1.38 1.38 M -1.38 1.38 L 1.38 -1.38', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
   bottom:
     size: {w: 435.6, h: 166.37}
     empty: >-
-      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+      Not drawn: no held page shows the underside; the drawing's views are the top, the front, the back and one side.
   left:
     size: {w: 166.37, h: 44.45}
-    empty: >-
-      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+    panel:
+      decor:
+      - {id: vent-1, kind: vent-slot, at: [18.25, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-2, kind: vent-slot, at: [24.35, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-3, kind: vent-slot, at: [30.45, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-4, kind: vent-slot, at: [36.55, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-5, kind: vent-slot, at: [42.65, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-6, kind: vent-slot, at: [48.75, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-7, kind: vent-slot, at: [54.85, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-8, kind: vent-slot, at: [60.95, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-9, kind: vent-slot, at: [67.05, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-10, kind: vent-slot, at: [73.15, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-11, kind: vent-slot, at: [79.25, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-12, kind: vent-slot, at: [85.35, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-13, kind: vent-slot, at: [91.45, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-14, kind: vent-slot, at: [97.55, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-15, kind: vent-slot, at: [103.65, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-16, kind: vent-slot, at: [109.75, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-17, kind: vent-slot, at: [115.85, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-18, kind: vent-slot, at: [121.95, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-19, kind: vent-slot, at: [128.05, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-20, kind: vent-slot, at: [134.15, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-21, kind: vent-slot, at: [140.25, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: vent-22, kind: vent-slot, at: [146.35, 4], size: [2.5, 9], rx: 1.25, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: front-flange, kind: flange, at: [151.5, 1], size: [13.5, 41.5], fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: side-plate, kind: recess, at: [100.5, 14], size: [51, 15], fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: side-screw-1, kind: screw, at: [22, 18.5], size: [7, 7], rx: 3.5, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: side-screw-2, kind: screw, at: [55, 18.5], size: [7, 7], rx: 3.5, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: side-screw-3, kind: screw, at: [104.5, 18.5], size: [7, 7], rx: 3.5, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+      - {id: side-screw-4, kind: screw, at: [137.5, 18.5], size: [7, 7], rx: 3.5, fill: none, stroke: '#8a8a8a', stroke-width: 0.2}
+    silkscreen:
+    - {at: [25.5, 22], path: 'M -1.75 -1.75 L 1.75 1.75 M -1.75 1.75 L 1.75 -1.75', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [58.5, 22], path: 'M -1.75 -1.75 L 1.75 1.75 M -1.75 1.75 L 1.75 -1.75', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [108, 22], path: 'M -1.75 -1.75 L 1.75 1.75 M -1.75 1.75 L 1.75 -1.75', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
+    - {at: [141, 22], path: 'M -1.75 -1.75 L 1.75 1.75 M -1.75 1.75 L 1.75 -1.75', stroke-width: 0.2, fill: '#8a8a8a', for: chassis}
   right:
     size: {w: 166.37, h: 44.45}
     empty: >-
-      Not drawn: the drawing's top view and side view are not given a face name beyond the cover, and no photograph is held.
+      Not drawn: the drawing shows one side only, drawn here as the left, and no held page shows the other side.
 configurations:
   base:
     kind: base

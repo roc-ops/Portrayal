@@ -712,6 +712,41 @@ views:
 **What is not there yet.** Relief taken from a rib and a section that varies along
 the length come in later changes, so a modeller should not look for them.
 
+### The housing seen from above: `chassis.plan-outline`
+
+The section is one end profile run the whole width, so the housing seen from above is
+always a rectangle. A cast housing has rounded corners and lobes. `chassis.plan-outline`
+states the outline seen from above (a top view, not a bay's plan) as a list of bands:
+each is a range of heights down from the top and a polygon in the top face's frame (x
+from the left, y down the drawing, the rear at the top), clockwise with y down. The
+bands tile the height from 0 to `height`, and one band `[0, height]` is a housing whose
+outline is the same at every height. A rounded corner is its arc in short straight
+steps; a lobe is its points. The section is the most the housing can be and the plan
+only removes from it.
+
+```yaml
+chassis:
+  section: [...]
+  plan-outline:
+  - heights: [0, 132]               # the upper casting, inset from the flange
+    points: [[20, 43], [21.61, 37], ...]
+  - heights: [132, 155]             # the flange, with a lobe on an end
+    points: [[0, 32], [1.83, 22.82], ...]
+  - heights: [155, 288]
+    points: [[32, 37], [33.21, 32.5], ...]
+```
+
+Check: lint L220 to L225 (it needs a section; it is not on a rack device or with
+`bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`; the bands tile; each
+polygon is clockwise, simple, has no edge under 0.1 mm and lies inside the box; the
+caps). The key is shape, so stating it on a released device is a major.
+
+**The drawings and the 3D body do not follow the key yet.** The faces are drawn as
+before and the body is still the extruded section, so a device that stated it would
+look the same and its lock would carry a major for nothing. **State it on no device
+yet.** A test fails if a library device does; the later changes that draw and build
+from it remove that test.
+
 ## Stage 2: the cutouts
 
 Declare every hole in `panel.cutouts` before choosing what goes in it.

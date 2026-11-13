@@ -780,6 +780,30 @@ RULES = {
              "move the seam off the edge with `base.stands`, into the casting it divides, and keep it inside the section's height and below the ribs' core",
              "A seam outside the section, or where the ribs' field has cut the casting away, leaves one half empty, and one exactly on a horizontal edge does not say which half the edge belongs to, so the two parts a viewer builds would depend on how it rounds.",
              ERROR),
+    "L220": ("device", "`chassis.plan-outline` is stated only with a `chassis.section`: the plan only takes away from the end profile's body (error)",
+             "state the section the plan is cut from, or leave the plan outline out",
+             "The plan outline is cut from the body the section extrudes and can only remove from it, so without a section there is no body for it to cut and a reader would have to invent one.",
+             ERROR),
+    "L221": ("device", "`chassis.plan-outline` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (error)",
+             "drop the other key, or leave the plan outline out: a rack device, a bevelled or rounded body and a sheet body each have a way of being drawn that a rounded plan does not yet join",
+             "Each of those keys already shapes the outline the plan outline would shape, so a device stating both would be drawn by whichever reader looked first.",
+             ERROR),
+    "L222": ("device", "the bands of `chassis.plan-outline` tile the box's height exactly (to 0.01 mm): the first starts at 0, each starts where the one before ends, the last ends at `height`, and each goes forward (error)",
+             "list the bands from the top down, each starting at the height the one before ends, from 0 to the chassis `height`; one band `[0, height]` is a housing with one outline",
+             "A height that no band covers has no outline and one that two bands cover has two, so the body built at that height would depend on which band a reader happened to look at first.",
+             ERROR),
+    "L223": ("device", "each polygon of `chassis.plan-outline` is an outline a body can be cut from: clockwise with y down by the sign of its area, no edge that crosses or touches another, no repeated point and no edge shorter than 0.1 mm (error)",
+             "list the points once each, in order, clockwise as the top face is seen with the rear at the top; take out a point that repeats another and merge points less than 0.1 mm apart",
+             "A polygon that crosses itself or winds the wrong way has no inside that is the same for every reader, and an edge of a hair's width is a rounding error that would be built into a wall.",
+             ERROR),
+    "L224": ("device", "`chassis.plan-outline` has at most 16 bands, at most 512 points in a band and at most 2048 points in all (error)",
+             "use fewer chords for each arc, or fewer bands: a corner needs a handful of chords, not hundreds",
+             "Every point is a wall the body is built from and a vertex the drawing is clipped at, so a plan of thousands would make one housing slower to open than the rest of a rack.",
+             ERROR),
+    "L225": ("device", "each polygon of `chassis.plan-outline` lies inside the box seen from above, `width` by `depth`, to 0.01 mm (error)",
+             "bring the points inside the box, or correct `width` or `depth` against the maker's drawing",
+             "The box is what the rack, the exports and the lock read, so a lobe that stands outside it makes a body larger than the size the device states.",
+             ERROR),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -9213,6 +9237,59 @@ def lint_device_section_opens(path, data):
                            f"and {_section.widest(pts):g} mm at its widest: a flange is expected at the seam")
 
 
+# THE CODES OF THE PLAN OUTLINE RULES BY WHAT THEY JUDGE, for the test that reads them. The
+# calls below spell each code out, because the severity guard reads literals;
+# test_chassis_plan_outline.py holds the two in step.
+PLAN_OUTLINE_CODES = {"needs": "L220", "kind": "L221", "tile": "L222", "polygon": "L223",
+                      "caps": "L224", "box": "L225"}
+
+
+def lint_device_plan_outline(path, data):
+    """L220-L225: a housing's outline seen from above is stated where it can be drawn, its
+    bands tile the height, and each polygon is an outline inside the box (docs/format-stability.md,
+    "The plan outline of a housing").
+
+    These are the rules that need no clipping. The rules that cut the plan against the section
+    (the body it leaves, a polygon that reaches outside the section, the parts and the seam) come
+    with the code that does the clipping. The schema checks only the shape of the bands; what a
+    polygon has to be is judged from portrayal.plan_outline, the one place that reads the key."""
+    from portrayal import plan_outline as _plan
+    ch = data.get("chassis") or {}
+    if "plan-outline" not in ch:
+        return
+    if "section" not in ch:
+        err(path, "L220", "`chassis.plan-outline` is stated without a `chassis.section`: the plan "
+                          "is cut from the body the section extrudes")
+    mount = ch.get("mount", "rack")
+    if mount in ("rack", "rack-face", "rack-side"):
+        err(path, "L221", f"`chassis.plan-outline` is stated on a {mount!r} device: a housing with "
+                          "a rounded plan is not racked")
+    for key in ("bevel", "rounded", "ears", "overhang", "kits"):
+        if ch.get(key):
+            err(path, "L221", f"`chassis.plan-outline` is stated with `chassis.{key}`, which this "
+                              "version does not join to a rounded plan")
+    if ch.get("shell") == "sheet":
+        err(path, "L221", "`chassis.plan-outline` is stated with `chassis.shell: sheet`, which this "
+                          "version does not join to a rounded plan")
+    plan = _plan.bands(ch)
+    if plan is None:
+        return                  # the schema reports bands that are not bands
+    for m in _plan.cap_problems(plan):
+        err(path, "L224", f"`chassis.plan-outline`: {m}")
+    w, h, d = ch.get("width"), ch.get("height"), ch.get("depth")
+    if _plan._number(h):
+        for m in _plan.tiling_problems(plan, h):
+            err(path, "L222", f"`chassis.plan-outline`: {m}")
+    for i, band in enumerate(plan):
+        if len(band["points"]) > _plan.MAX_POINTS:
+            continue            # the cap is reported above; the walk below is quadratic
+        for m in _plan.polygon_problems(band["points"]):
+            err(path, "L223", f"`chassis.plan-outline` band {i}: {m}")
+        if _plan._number(w) and _plan._number(d):
+            for m in _plan.box_problems(band["points"], w, d):
+                err(path, "L225", f"`chassis.plan-outline` band {i}: {m}")
+
+
 # THE CODES OF THE FIN RULES BY WHAT THEY JUDGE, for the test that reads them. The calls
 # below spell each code out, because the severity guard reads literals;
 # test_chassis_fins.py holds the two in step.
@@ -15411,6 +15488,7 @@ def main():
                 lint_device_section(f, d, args.library)
                 lint_device_section_opens(f, d)
                 lint_device_fins(f, d, args.library)
+                lint_device_plan_outline(f, d)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

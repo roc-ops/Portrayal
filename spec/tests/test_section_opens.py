@@ -95,9 +95,10 @@ def test_the_new_rules_are_in_the_catalogue_with_a_why_and_a_fix():
 
 
 def test_the_codes_follow_the_last_rule_taken():
-    taken = sorted(int(c[1:]) for c in lint.RULES if c.startswith("L2") and len(c) == 4)
+    # three codes in a row, each a rule in the catalogue; later rules take the numbers after them
     new = sorted(int(c[1:]) for c in codes().values())
-    assert new == list(range(taken[-1] - 2, taken[-1] + 1)), (taken[-3:], new)
+    assert new == list(range(new[0], new[0] + 3)), new
+    assert all(f"L{n}" in lint.RULES for n in new), new
 
 
 # --- L206 no longer refuses halves ---------------------------------------------------------
