@@ -1,0 +1,1318 @@
+format: 1
+kind: device
+name: rlnk-p915r-sp
+version: 0.1.0
+maturity: modelled
+manufacturer: Middle Atlantic
+model: RLNK-P915R-SP
+description: Middle Atlantic Premium+ PDU with RackLink RLNK-P915R-SP, a 1U horizontal rack PDU in black steel. It is 441 mm wide between the
+  ear folds, 44 mm high and 250 mm deep. A detachable cord takes IEC C14 input at 15 A. The rear holds eight NEMA 5-15R outlets in one row, each
+  switchable, with a status lamp under each. The rear also holds the network, USB, console and sensor ports. The front holds a power button, a
+  touch strip with an OLED display and a ninth outlet that is not switched. Surge protection is series.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: 'Searched: specification sheet 190174, 5 pages, all looked at at 150 dpi. Also searched: user manual I-00826, pages 15 to 20 and 234
+      to 238, and quick start I-00827, all 8 printed pages. The size is printed. Every position inside it is read off the p.2 elevations at the
+      scale of the printed 441 mm body. Each is good to about 2 mm. The maker''s 3D CAD zip is not opened.'
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - specification sheet 190174 p.2 prints 17.38 in [441] between the ear folds and 19.00 in [483] with the ears. It prints
+      1.74 in [44] high and 9.83 in [250] deep. Page 1 says phosphate pre-treated steel with a black powder coat. The colour #2c2e30 is the library''s
+      black. The p.1 photographs read nearer #2d3f42.'
+  ears:
+    confidence: estimated
+    note: 'estimated - the rack ears are the two mounting brackets of quick start I-00827 p.4, four screws each. The sheet''s top view shows the
+      flange at the front plane, so one flush position is stated. Each documented ear carries two obround holes (specification sheet 190174 p.2
+      front elevation). They are not drawn. The schema line for `chassis.ears` is: "WHERE THE EARS ARE AND WHERE THEY CAN PUT THE FACEPLATE, for
+      a rack device." It has no key for an ear''s holes. The generic ear stands in.'
+  front:
+    confidence: estimated
+    note: 'estimated - specification sheet 190174 p.2 front elevation, counted twice at 800 and 1600 dpi. A blue-edged recess 375 by 40 mm holds
+      7 rows of staggered slots, 4.7 mm apart and about 15.9 mm along. The slot tile is the library''s, so each slot is shorter than the sheet''s.
+      The illuminated power button is at the left. The touch strip holds the logo, numerals 1 to 8, two arrows and the OLED display. The ninth
+      outlet stands in a dark surround at the right. The user manual I-00826 p.15 and p.17 show the same face. The blue marks read #34a0ee (4293
+      pixels of the sheet''s front elevation).'
+  rear:
+    confidence: estimated
+    note: 'estimated - specification sheet 190174 p.2 rear elevation and user manual I-00826 pp.15, 19 and 20. From the left stand the inlet,
+      the breaker, the ground stud and eight outlets on a 27.9 mm pitch. Each outlet has a lamp under it and a numeral 1 to 8. Then come the reset
+      hole, two Ethernet jacks, two USB-A, one USB-B and four more RJ45 jacks. Four round marks sit at the corners of that port block, and one
+      dark window below the reset hole. The manual p.19 says the yellow LED of ETH2 has no function, and the window is drawn dark. The two holes
+      either side of the inlet are the cord retainer''s (quick start I-00827 p.5, figure D). The lit green lamp reads #1fde2e (365 pixels of the
+      user manual I-00826 p.20 photograph). No held picture shows a lit red lamp.'
+  port-legends:
+    confidence: estimated
+    note: estimated - the port legends are read off the user manual I-00826 p.19 photograph. It is 720 by 241 pixels, about 4.5 px per mm. Its
+      capitals are about 11 pixels tall, so each legend is placed to about 2 mm.
+  top:
+    confidence: estimated
+    note: estimated - the sheet's top view shows four round screw heads and one square hole at the front left. The scale is the printed 441 mm.
+      A round head reads 6.5 mm and the square hole 8 mm. The depth axis is measured from the front plane, where the ear flange stands.
+  end:
+    confidence: estimated
+    note: 'estimated - the sheet''s end view shows seven round holes: two near the rear, one at the middle and four on the front bracket. The
+      scale is the printed 250 mm. The rear is at the top of that view and the device''s bottom is at its left. A round head reads 6.5 mm. The
+      cord retainer''s wire loop stands behind the body there.'
+  other-sides:
+    confidence: estimated
+    note: estimated - the bottom and the second end are built as the documented side, as no document shows this one. The documents are the sheet's
+      top view and end view. The bottom repeats the top view's holes. The second end mirrors the end view's holes.
+  left-out:
+    confidence: estimated
+    note: 'not drawn: the cord retainer clip stands below the 44 mm body (specification sheet 190174 p.2, rear and end views). The schema line
+      for `chassis.overhang` says: "`left` and `right` are as seen from the front." It reaches no further than that. The clip is left out and
+      only its two holes are drawn. Not drawn: the two edge tabs of the front elevation, which stand outside the 44 mm body. Not drawn: the logo
+      on the touch strip, too small to trace on the sheet. Not drawn: the printed legends of the rear''s outlet block and breaker, which the user
+      manual I-00826 p.15 photograph prints at 911 by 83 pixels. Its capitals are about 3 pixels tall.'
+  outlets:
+    confidence: datasheet
+    note: datasheet - user manual I-00826 p.234 and p.236 give 9 outlets in total, 8 controlled, type NEMA 5-15R. Each is std/nema-5-15r@1. The
+      outlet rating is 12 A and the breaker 15 A (specification sheet 190174 p.2 table).
+  input:
+    confidence: datasheet
+    note: 'datasheet - specification sheet 190174 p.2 table gives IEC C14, 15 A, 120 V, 60 Hz and a 9 ft [2.75 m] cord. The cord comes detachable
+      with a retainer (quick start I-00827 p.4). The user manual I-00826 p.237 gives the SP models'' cord as 10 ft, SignalSAFE IEC to NEMA 5-15P
+      (gaps: cord-length).'
+  capability:
+    confidence: datasheet
+    note: datasheet - specification sheet 190174 p.1 gives 8 individually controllable outlets, a web server, data logging and metering. So `outlet-switching`
+      is true. Per-outlet metering is not stated.
+attrs:
+  physical:
+    weight-kg: 3.1
+    construction: metal
+  power:
+    input-ac: 120 V, 12 A rated (15 A maximum), 60 Hz
+    input-cord: detachable
+    input-voltage-v: 120
+    input-current-a: 12
+    output-voltage: 120 V
+    frequency: 60 Hz
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    humidity: 0 to 95 %, non-condensing
+  management:
+    metering-scope: input
+    outlet-switching: true
+    metering: data logging and metering
+    network-interface: two Ethernet, integrated web server
+    outlet-count: 9
+  compliance:
+    certifications: UL 60950-1, CSA C22.2 No.60950-1, FCC Part 15 Class B
+chassis:
+  width: 441
+  height: 44
+  depth: 250
+  ru: 1
+  color: '#2c2e30'
+  airflow: passive
+  weight-kg: 3.1
+  ears:
+    color: '#2c2e30'
+    positions:
+    - name: flush
+      at: 0
+      default: true
+      label: front brackets (quick start I-00827 p.4)
+gaps:
+- what: weight
+  scope: []
+  reason: sources-disagree
+  note: The specification sheet 190174 p.3 and p.4 print "Weight" as 13.2 lb, with no word that says what it covers. The user manual I-00826 p.236
+    and p.238 print "Product Weight" as 6.84 lb (3.1 kg). They print "Shipping Weight" as 9.92 and 10.58 lb. Both manual tables name the non-SP
+    models only. The manual's product weight is used for all four.
+  wanted: the maker's word on the weight.
+- what: face-positions
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: Every position is read off line drawings at a reduced scale and is good to about 2 mm. No dimensioned drawing of the faces is held.
+  wanted: a dimensioned drawing, or the 3D CAD zip once its terms allow.
+- what: expansion-port
+  scope:
+  - rear
+  reason: vendor-silent
+  note: user manual I-00826 p.19 describes FEATURE (reserved) and the others but gives no row for EXPANSION.
+  wanted: the maker's word on the expansion port.
+- what: display-part
+  scope:
+  - front
+  reason: needs-drawing
+  note: The OLED display is drawn with the library's two-digit seven-segment part as a stand-in. That is not what the strip shows.
+  wanted: an OLED display part of the strip's size.
+- what: breaker-shape
+  scope:
+  - rear
+  reason: needs-drawing
+  note: The specification sheet 190174 p.2 rear elevation shows a rectangular push-to-reset breaker about 14 by 16 mm. The library's push-to-reset
+    part is round, and no rectangular part of that size exists.
+  wanted: a rectangular push-to-reset breaker part.
+- what: cord-length
+  scope:
+  - rear
+  reason: sources-disagree
+  note: The specification sheet 190174 p.2 gives 9 ft [2.75 m] for every model. The user manual I-00826 p.237 gives 10 ft (3 m) for the SP models.
+  wanted: the maker's word on the SP cord.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    attrs:
+      outlet: nema-5-15r
+    description: outlets 1 to 8 on the rear, as printed, each switchable; outlet 9 on the front, not switched
+  lamps:
+    term: LED
+    role: indicator
+    index-origin: 1
+  breakers:
+    term: Breaker
+    role: service
+    index-origin: 1
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  buttons:
+    term: Button
+    role: service
+    index-origin: 1
+  display:
+    term: Display
+    role: indicator
+    index-origin: 1
+  eth-1g:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs:
+      media: rj45
+      speed: 1g
+  eth-100m:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs:
+      media: rj45
+      speed: 100m
+  usb-a:
+    term: Port
+    role: management
+    index-origin: 1
+  usb-b:
+    term: Port
+    role: management
+    index-origin: 1
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+  aux:
+    term: Port
+    role: management
+    index-origin: 1
+    description: 'FEATURE, EXPANSION and SENSOR: RJ45 jacks that are not Ethernet or serial consoles'
+  power-input:
+    term: Input
+    role: service
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 441
+      h: 44
+    panel:
+      decor:
+      - id: grille-recess
+        at:
+        - 12.6
+        - 2.0
+        size:
+        - 375.0
+        - 40.0
+        rx: 2.5
+        fill: '#14181b'
+        stroke: '#34a0ee'
+        stroke-width: 0.5
+        kind: grille-recess
+        confidence: estimated
+      - id: grille-slots-odd
+        at:
+        - 14.0
+        - 3.3
+        size:
+        - 370.0
+        - 37.7
+        pattern: slots-h
+        pattern-pitch:
+        - 15.9
+        - 9.43
+        pattern-offset:
+        - 13.96
+        - 3.285
+        vent: 1.0
+        confidence: estimated
+      - id: grille-slots-even
+        at:
+        - 14.0
+        - 8.0
+        size:
+        - 370.0
+        - 28.3
+        pattern: slots-h
+        pattern-pitch:
+        - 15.9
+        - 9.43
+        pattern-offset:
+        - 21.91
+        - 8.0
+        vent: 1.0
+        confidence: estimated
+      - id: power-bezel
+        at:
+        - 21.0
+        - 11.5
+        size:
+        - 21.0
+        - 21.0
+        rx: 1.5
+        fill: '#0a0c0e'
+        stroke: '#34a0ee'
+        stroke-width: 0.5
+        kind: button-bezel
+        confidence: estimated
+      - id: touch-strip
+        at:
+        - 144.5
+        - 15.3
+        size:
+        - 237.3
+        - 13.7
+        rx: 0.5
+        fill: '#0a1218'
+        kind: touch-panel
+        confidence: estimated
+      - id: outlet-bezel
+        at:
+        - 396.0
+        - 6.3
+        size:
+        - 34.0
+        - 31.4
+        rx: 1.2
+        fill: '#0a0c0e'
+        kind: outlet-surround
+        confidence: estimated
+    silkscreen:
+    - at:
+      - 176.0
+      - 23.4
+      text: '1'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 193.4
+      - 23.4
+      text: '2'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 210.8
+      - 23.4
+      text: '3'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 228.2
+      - 23.4
+      text: '4'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 245.6
+      - 23.4
+      text: '5'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 263.0
+      - 23.4
+      text: '6'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 280.4
+      - 23.4
+      text: '7'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 297.8
+      - 23.4
+      text: '8'
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 318.0
+      - 23.4
+      text: v
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    - at:
+      - 335.4
+      - 23.4
+      text: ^
+      font-size: 2.4
+      anchor: middle
+      fill: '#34a0ee'
+      for: chassis
+    components:
+      placements:
+      - id: power-button
+        ref: common/power-button@1
+        at:
+        - 25.5
+        - 16.0
+        group: buttons
+        rel-pos: 1
+        for: chassis
+        description: 'the illuminated power button: amber is off, white is on (user manual I-00826 p.15)'
+      - id: display
+        ref: common/seven-segment-dual@1
+        at:
+        - 345.0
+        - 16.0
+        group: display
+        rel-pos: 1
+        for: chassis
+        description: stand-in for the OLED display at the right end of the touch strip (specification sheet 190174 p.2); see gaps
+      - id: outlet-9
+        ref: std/nema-5-15r@1
+        at:
+        - 399.5
+        - 8.5
+        rotate: 180
+        group: outlets
+        rel-pos: 9
+        fed-by: input
+        description: 'the ninth outlet, on the front and not switched (specification sheet 190174 p.1 text: 9 total, 8 controllable)'
+  rear:
+    size:
+      w: 441
+      h: 44
+    panel:
+      decor:
+      - id: panel-mark-1
+        at:
+        - 334.95
+        - 3.25
+        size:
+        - 4.5
+        - 4.5
+        rx: 2.25
+        fill: '#0a0a09'
+        kind: panel-screw
+        confidence: estimated
+      - id: panel-mark-2
+        at:
+        - 431.25
+        - 3.25
+        size:
+        - 4.5
+        - 4.5
+        rx: 2.25
+        fill: '#0a0a09'
+        kind: panel-screw
+        confidence: estimated
+      - id: panel-mark-3
+        at:
+        - 334.95
+        - 34.25
+        size:
+        - 4.5
+        - 4.5
+        rx: 2.25
+        fill: '#0a0a09'
+        kind: panel-screw
+        confidence: estimated
+      - id: panel-mark-4
+        at:
+        - 431.25
+        - 34.25
+        size:
+        - 4.5
+        - 4.5
+        rx: 2.25
+        fill: '#0a0a09'
+        kind: panel-screw
+        confidence: estimated
+      - id: retainer-hole-1
+        at:
+        - 7.3
+        - 26.2
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0a0a09'
+        kind: retainer-hole
+        confidence: estimated
+      - id: retainer-hole-2
+        at:
+        - 52.2
+        - 26.2
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0a0a09'
+        kind: retainer-hole
+        confidence: estimated
+      - id: eth-2-led-window
+        at:
+        - 336.9
+        - 24.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#1a1a19'
+        kind: led-window
+        confidence: estimated
+    silkscreen:
+    - at:
+      - 97.2
+      - 42.2
+      text: '1'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-1
+    - at:
+      - 125.1
+      - 42.2
+      text: '2'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-2
+    - at:
+      - 153.0
+      - 42.2
+      text: '3'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-3
+    - at:
+      - 180.9
+      - 42.2
+      text: '4'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-4
+    - at:
+      - 208.8
+      - 42.2
+      text: '5'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-5
+    - at:
+      - 236.7
+      - 42.2
+      text: '6'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-6
+    - at:
+      - 264.6
+      - 42.2
+      text: '7'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-7
+    - at:
+      - 292.5
+      - 42.2
+      text: '8'
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: outlet-8
+    - at:
+      - 323.0
+      - 7.2
+      text: ETH1
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: eth-1
+    - at:
+      - 324.7
+      - 11.2
+      text: 10/100/1000
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: eth-1
+    - at:
+      - 334.0
+      - 21.4
+      text: RESET
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: reset
+    - at:
+      - 323.0
+      - 26.3
+      text: ETH2
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: eth-2
+    - at:
+      - 324.7
+      - 32.2
+      text: 10/100
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: eth-2
+    - at:
+      - 372.3
+      - 15.0
+      text: USB-A
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: usb-a-1
+    - at:
+      - 372.3
+      - 40.0
+      text: USB-B
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: usb-b
+    - at:
+      - 394.8
+      - 4.0
+      text: FEATURE
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: feature
+    - at:
+      - 415.2
+      - 4.0
+      text: EXPANSION
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: expansion
+    - at:
+      - 394.8
+      - 40.0
+      text: CONSOLE
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: console
+    - at:
+      - 415.2
+      - 40.0
+      text: SENSOR
+      font-size: 2.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: sensor
+    components:
+      placements:
+      - id: input
+        ref: std/c14-inlet@1
+        at:
+        - 17.6
+        - 19.0
+        group: power-input
+        rel-pos: 1
+        description: the IEC C14 inlet at the left of the rear (quick start I-00827 p.5, figure D shows the retainer holes beside it)
+      - id: breaker
+        ref: common/breaker-push-reset@1
+        at:
+        - 51.5
+        - 4.7
+        group: breakers
+        rel-pos: 1
+        attrs:
+          rating-a: 15
+        description: 'the 15 A push-to-reset breaker, drawn with a round part (gaps: breaker-shape) (specification sheet 190174 p.2 table; user
+          manual I-00826 p.20)'
+      - id: ground
+        ref: common/ground-stud@1
+        at:
+        - 61.9
+        - 28.3
+        group: grounding
+        rel-pos: 1
+        description: the round ground stud right of the breaker (user manual I-00826 p.20 photograph)
+      - id: outlet-1
+        ref: std/nema-5-15r@1
+        at:
+        - 83.7
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-2
+        ref: std/nema-5-15r@1
+        at:
+        - 111.6
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-3
+        ref: std/nema-5-15r@1
+        at:
+        - 139.5
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 3
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-4
+        ref: std/nema-5-15r@1
+        at:
+        - 167.4
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 4
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-5
+        ref: std/nema-5-15r@1
+        at:
+        - 195.3
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 5
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-6
+        ref: std/nema-5-15r@1
+        at:
+        - 223.2
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 6
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-7
+        ref: std/nema-5-15r@1
+        at:
+        - 251.1
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 7
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-8
+        ref: std/nema-5-15r@1
+        at:
+        - 279.0
+        - 8.5
+        rotate: 270
+        group: outlets
+        rel-pos: 8
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: lamp-1
+        ref: common/led-dot@1
+        at:
+        - 103.7
+        - 38.0
+        group: lamps
+        rel-pos: 1
+        for: outlet-1
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 1 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-2
+        ref: common/led-dot@1
+        at:
+        - 131.6
+        - 38.0
+        group: lamps
+        rel-pos: 2
+        for: outlet-2
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 2 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-3
+        ref: common/led-dot@1
+        at:
+        - 159.5
+        - 38.0
+        group: lamps
+        rel-pos: 3
+        for: outlet-3
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 3 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-4
+        ref: common/led-dot@1
+        at:
+        - 187.4
+        - 38.0
+        group: lamps
+        rel-pos: 4
+        for: outlet-4
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 4 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-5
+        ref: common/led-dot@1
+        at:
+        - 215.3
+        - 38.0
+        group: lamps
+        rel-pos: 5
+        for: outlet-5
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 5 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-6
+        ref: common/led-dot@1
+        at:
+        - 243.2
+        - 38.0
+        group: lamps
+        rel-pos: 6
+        for: outlet-6
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 6 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-7
+        ref: common/led-dot@1
+        at:
+        - 271.1
+        - 38.0
+        group: lamps
+        rel-pos: 7
+        for: outlet-7
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 7 status lamp (user manual I-00826 p.16 table)
+      - id: lamp-8
+        ref: common/led-dot@1
+        at:
+        - 299.0
+        - 38.0
+        group: lamps
+        rel-pos: 8
+        for: outlet-8
+        states:
+        - 'off'
+        - name: outlet-off-power-available
+          color: '#e5483b'
+        - name: on-and-live
+          color: '#1fde2e'
+        - name: on-over-warning-threshold
+          color: '#1fde2e'
+          behavior: blinking
+        description: outlet 8 status lamp (user manual I-00826 p.16 table)
+      - id: reset
+        ref: common/reset-button@1
+        at:
+        - 335.2
+        - 14.4
+        group: buttons
+        rel-pos: 1
+        for: chassis
+        description: the reset button in a small hole above the label (user manual I-00826 p.19)
+      - id: eth-1
+        ref: common/rj45-eth@1
+        at:
+        - 342.7
+        - 6.6
+        group: eth-1g
+        rel-pos: 1
+        attrs:
+          media: rj45
+          speed: 1g
+          role: mgmt
+        description: ETH 10/100/1000, the upper RJ45 (specification sheet 190174 p.2; user manual I-00826 p.19)
+      - id: eth-2
+        ref: common/rj45-eth@1
+        at:
+        - 342.7
+        - 22.4
+        group: eth-100m
+        rel-pos: 1
+        attrs:
+          media: rj45
+          speed: 100m
+          role: mgmt
+        description: ETH 10/100, the lower RJ45 (specification sheet 190174 p.2; user manual I-00826 p.19)
+      - id: usb-a-1
+        ref: common/usb-a@2
+        at:
+        - 363.8
+        - 5.7
+        group: usb-a
+        rel-pos: 1
+        description: the upper of two USB-A host ports (specification sheet 190174 p.2; user manual I-00826 p.19)
+      - id: usb-a-2
+        ref: common/usb-a@2
+        at:
+        - 363.8
+        - 16.9
+        group: usb-a
+        rel-pos: 2
+        description: the lower of two USB-A host ports
+      - id: usb-b
+        ref: raritan/pxo-usb-b@1
+        at:
+        - 366.2
+        - 24.0
+        group: usb-b
+        rel-pos: 1
+        description: the USB-B port for a computer (user manual I-00826 p.19). The part is the library's only USB-B jack. The sheet's jack reads
+          about the same size.
+      - id: feature
+        ref: std/rj45@2
+        at:
+        - 386.9
+        - 6.6
+        group: aux
+        rel-pos: 1
+        description: FEATURE, reserved for future use (user manual I-00826 p.19)
+      - id: console
+        ref: std/rj45@2
+        at:
+        - 386.9
+        - 22.4
+        group: console
+        rel-pos: 1
+        attrs:
+          role: console
+          media: rj45-serial
+        description: CONSOLE, a serial connection to a computer through a third-party RJ45 to DB9 cable (user manual I-00826 p.19)
+      - id: expansion
+        ref: std/rj45@2
+        at:
+        - 407.3
+        - 6.6
+        group: aux
+        rel-pos: 2
+        description: 'EXPANSION; the manual''s table does not describe it (gaps: expansion-port)'
+      - id: sensor
+        ref: std/rj45@2
+        at:
+        - 407.3
+        - 22.4
+        group: aux
+        rel-pos: 3
+        description: SENSOR, the environmental sensors' RJ45 (user manual I-00826 p.19)
+  top:
+    size:
+      w: 441
+      h: 250
+    panel:
+      decor:
+      - id: top-screw-1
+        at:
+        - 144.55
+        - 222.45
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-2
+        at:
+        - 290.55
+        - 222.45
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-3
+        at:
+        - 144.55
+        - 19.75
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-4
+        at:
+        - 290.55
+        - 19.75
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-tab-hole
+        at:
+        - 53.5
+        - 221.1
+        size:
+        - 8.0
+        - 8.0
+        fill: '#0a0a09'
+        kind: square-hole
+        confidence: estimated
+  bottom:
+    size:
+      w: 441
+      h: 250
+    panel:
+      decor:
+      - id: top-screw-1
+        at:
+        - 144.55
+        - 222.45
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-2
+        at:
+        - 290.55
+        - 222.45
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-3
+        at:
+        - 144.55
+        - 19.75
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-4
+        at:
+        - 290.55
+        - 19.75
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-tab-hole
+        at:
+        - 53.5
+        - 221.1
+        size:
+        - 8.0
+        - 8.0
+        fill: '#0a0a09'
+        kind: square-hole
+        confidence: estimated
+  left:
+    size:
+      w: 250
+      h: 44
+    panel:
+      decor:
+      - id: side-hole-1
+        at:
+        - 224.75
+        - 4.55
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-2
+        at:
+        - 224.75
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-3
+        at:
+        - 122.75
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-4
+        at:
+        - 31.75
+        - 12.85
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-5
+        at:
+        - 31.75
+        - 25.35
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-6
+        at:
+        - 20.45
+        - 4.55
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-7
+        at:
+        - 20.45
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+  right:
+    size:
+      w: 250
+      h: 44
+    panel:
+      decor:
+      - id: side-hole-1
+        at:
+        - 18.75
+        - 4.55
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-2
+        at:
+        - 18.75
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-3
+        at:
+        - 120.75
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-4
+        at:
+        - 211.75
+        - 12.85
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-5
+        at:
+        - 211.75
+        - 25.35
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-6
+        at:
+        - 223.05
+        - 4.55
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: side-hole-7
+        at:
+        - 223.05
+        - 32.95
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+interfaces:
+- physical: outlet-{n}
+  name: '{n}'
+  range: 1-9
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as it ships: the unit, two mounting brackets with their screws, a cord retainer and a power cord. Only the unit is drawn.'
+    part-numbers:
+      RLNK-P915R-SP: {}
+datasheet:
+  title: Middle Atlantic Premium+ Rack Mount PDU with RackLink A&E specification 190174 rev b
+  url: https://res.cloudinary.com/avd/image/upload/v134389368/Resources/Middle Atlantic/Power/Specifications/190174-Premium-RackMount.pdf
+  sha256: 238d7dfc3e789f78720662839dd36f4cc080bd0b35dfdc37d4365953834f3565
