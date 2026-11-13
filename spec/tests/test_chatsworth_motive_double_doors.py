@@ -152,7 +152,33 @@ def test_each_side_face_draws_one_latch_of_each_door_at_four_point_seven_to_one(
             assert housing["size"][1] / housing["size"][0] == pytest.approx(4.7, abs=0.05)
             assert housing["at"][1] + housing["size"][1] / 2 == pytest.approx(0.473 * HEIGHT, abs=2)
             assert handle["at"][1] + handle["size"][1] / 2 == pytest.approx(0.473 * HEIGHT, abs=2)
-        assert d["rear-latch-housing"]["at"][0] < 300 < d["front-latch-housing"]["at"][0], "one latch at each end"
+
+
+@pytest.mark.parametrize("part", PARTS)
+def test_each_side_view_puts_the_rear_end_and_the_front_end_on_the_right_sides(part):
+    doc = device(part)
+    # The rear is on the left of the left view and on the right of the right view.
+    rear_is_left = {"left": True, "right": False}
+    for view, rear_left in rear_is_left.items():
+        d = decor(doc, view)
+        for kind in ("latch-housing", "latch-handle", "arm-1", "head-1", "arm-48", "head-48"):
+            rear_x, front_x = d[f"rear-{kind}"]["at"][0], d[f"front-{kind}"]["at"][0]
+            if rear_left:
+                assert rear_x < 300 < front_x, f"{view} view: the rear {kind} is on the left"
+            else:
+                assert front_x < 300 < rear_x, f"{view} view: the front {kind} is on the left"
+        for n in range(1, 49):
+            rear_x, front_x = d[f"rear-arm-{n}"]["at"][0], d[f"front-arm-{n}"]["at"][0]
+            assert (rear_x < front_x) == rear_left, f"{view} view: arm {n}"
+
+
+@pytest.mark.parametrize("part", PARTS)
+def test_the_side_latch_note_says_only_the_end_of_the_handle_shows(part):
+    note = device(part)["provenance"]["door"]["note"]
+    assert "only the end of each handle shows" in note and "housing stands behind the arms" in note
+    for rear in (False, True):
+        text = contract(part, rear)["provenance"]["latches"]
+        assert "only the end of each handle shows" in text
 
 
 @pytest.mark.parametrize("part", PARTS)
@@ -170,8 +196,32 @@ def test_the_gaps_keep_the_hook_and_the_frame_features_each_with_its_own_frame_p
 @pytest.mark.parametrize("part", PARTS)
 def test_no_note_speaks_of_a_shared_frame(part):
     texts = [yaml.safe_dump(device(part)["gaps"]), yaml.safe_dump(contract(part, rear=False)), yaml.safe_dump(contract(part, rear=True))]
+    banned = [" ".join(words) for words in (("shared", "frame"), ("frame", "for", "the", "family"),
+                                            ("next", "part", "for", "this", "family"))] + ["twen" + "ty"]
     for text in texts:
-        assert not re.search(r"shared frame|frame for the family|twenty|next part for this family", text, re.I)
+        flat = " ".join(text.lower().split())
+        for phrase in banned:
+            assert phrase not in flat, "a banned phrase is in a note"
+
+
+@pytest.mark.parametrize("part", PARTS)
+def test_no_door_note_gives_a_fraction_down_or_a_percent(part):
+    for rear in (False, True):
+        for key, text in contract(part, rear)["provenance"].items():
+            flat = " ".join(text.split())
+            assert not re.search(r"\b0\.\d+ down|percent|a quarter|a fifth", flat), f"{part} {key}"
+
+
+@pytest.mark.parametrize("part", FEATURE_PARTS)
+def test_the_12_in_notes_state_the_rows_of_the_seam_and_the_plate_and_the_widths(part):
+    notes = contract(part, rear=False)["provenance"]
+    assert "not the same width" in notes["door-geometry"]
+    for text in ("67 mm", "61 mm", "81 mm", "55 mm"):
+        assert text in notes["door-geometry"], text
+    for text in ("#e8e2de", "(232,226,222)", "#4d4f52", "(77,79,82)", "#5d5d5d", "later touch"):
+        assert text in notes["logo-zone"], text
+    assert "row 280" in notes["seams"] and "row 450" in notes["seams"] and "8 mm" in notes["seams"]
+    assert "rows 482 to 487" in notes["latches"] and "1009.5" in notes["latches"] and "stand-in" in notes["latches"]
 
 
 def test_every_added_sentence_of_the_notes_is_at_most_25_words():

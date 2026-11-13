@@ -4,7 +4,7 @@
   The installation instructions say the rear door is a plain flat door with no logo.
 - Every front door and rear door draws the tip of each latch handle at its edge.
   The data sheet's photograph shows a speck at the left edge and its render a handle at the right edge.
-  The tip is drawn 2 wide at both edges.
+  The tip is drawn 2 wide at both edges, and its 45 mm height is a stand-in.
 - The 12 in front doors (32623-703 and 32623-E03) also draw two vertical seams and a plate down the upper part.
   The photograph reads as 12 in, because no page prints its width.
   Each figure is in millimetres at the scale the door contract states.
@@ -13,8 +13,10 @@
   Each door contract says so.
 - The left and right faces draw the two blue latches the installation instructions describe.
   Each door gives one latch to each side, a housing and a handle.
-  The housing is drawn at the proportion measured on the installation figure, 4.7 to 1, as 15 by 70.5.
-  The sizes are stand-ins.
+  The arms and heads stand in front of the housing, so only the end of each handle shows.
+  The housing is 15 by 70.5 mm, the proportion 4.7 to 1 measured on the installation figure.
+  The figure's own housing is about 25 by 118 mm, so the sizes are stand-ins.
+  On the right face the rear end is at the right, and the rear latch is placed there.
 - Each front door takes a minor version and each device a major version.
   The new rear door makes the lock ask for the major.
   The `door-features` gap of each device is replaced by a `door-hook` gap.
@@ -29,4 +31,5 @@
   It checks that every front and rear door has both handle tips.
   It checks that the rear door is its own plain part.
   It checks that each device draws one latch of each door on both sides, at the measured proportion.
+  It checks that the rear end is on the left of the left face and on the right of the right face.
   It checks that the hook and the frame features stay gaps.
