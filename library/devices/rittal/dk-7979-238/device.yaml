@@ -21,7 +21,7 @@ provenance:
       and a front view, with the circuit diagram below. The cell lines of the front view were read from a 600 dpi
       render at the drawing's own scale. The 1696 overall length reads 1.937 px per mm. Each cell edge is a
       full-height line. Good to about 1 mm. The housings of an outlet block were read from the lines inside it.
-      The outlets sit in their housings as the DK 7979.138 model places them.
+      Each outlet sits in its housing at the lines the drawing shows inside the block.
   mount:
     confidence: drawing
     note: >-
@@ -48,7 +48,7 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the front view of page 18, mm from the foot end. The foot cell is 0 to 72.1 with the gland ring.
-      The cord cell runs to 195.4 with a flat cover plate in it. A blank cell runs to 239.8. Phase 1 is 239.8 to
+      The cord cell runs to 195.4 with a raised label cover in it. A blank cell runs to 239.8. Phase 1 is 239.8 to
       601.73 and a spacer runs to 646.13. Phase 2 is 646.13 to 1007.79 and a spacer runs to 1052.19. The controller
       runs to 1252.25 and a spacer runs to 1296.65. Phase 3 is 1296.65 to 1658.57 and the head cap runs to 1696.
       Each phase is a block of six C13 cells, 180.7 long, and two cells of two C19, 90.4 long. Outlets count from
@@ -81,11 +81,13 @@ provenance:
     confidence: estimated
     note: >-
       Instructions p.18 to 19, tables 1 to 4. Every lamp is drawn dark and states its colours. POWER is green. The
-      multi-LED STATUS lamp is green, orange or red. It blinks for the flashing codes, which cycle colours in the table and are shown here in one colour. It is blue for a
-      changed position and white for a sensor update. The CAN jack has a green and a red lamp and each Ethernet jack a
-      green and an orange one. Fig. 21 shows no lit lamp. Its green #3baa39 over 2251 pixels is the ETH1 jack body. Its yellow
-      #f0f130 over 287 pixels, in a 200 dpi render of page 18. All lit colours here are the library's own
-      usual values, estimated.
+      multi-LED STATUS lamp is green, orange or red. It is blue for a changed position and white for a sensor update.
+      Two flashing codes cycle colours in the table. Device-detected cycles green, orange and red. Device-lost
+      alternates red and blue. Each is stated here as one colour, green and red, which is a single-colour
+      approximation of the printed cycle. The CAN jack has a green and a red lamp and each Ethernet jack a green
+      and an orange one. Fig. 21 shows no lit lamp. Its green #3baa39 over 2251 pixels is the ETH1 jack body. Its
+      yellow #f0f130 over 287 pixels is a contact pad, in a 200 dpi render of page 18. The lit colours here are the
+      library's usual values, estimated.
   outlets:
     confidence: datasheet
     note: >-
@@ -120,9 +122,37 @@ provenance:
   phase-plates:
     confidence: photo-measured
     note: >-
-      The instructions (7979204) mark the phases "L1 pink, L2 black, L3 white". In photograph 78_2802 the pink plate reads #ee488f over 15335
-      pixels and the white plate #fefefe over 15569 pixels. The black plate is not sampled and is drawn #1f1f21 as
-      the basic family is. The photograph is of another SKU and the plate edges are not measured.
+      The instructions (7979204) mark the phases "L1: pink, L2: black, L3: white". They do so in the table of technical
+      data and in the section on phases and slots. The data sheet (dri1308088en, p.1) says "Pink, black, white". The
+      metered drawing document (dri2108029en) states neither. In photograph 78_2802 the pink reads #ee488f over 15335
+      pixels and the white #fefefe over 15569 pixels. Both show as a thin margin round each outlet block. Three sample
+      lines run across the strip, 81 px for the 44 mm face. They read the pink margin at 1.1 mm on the far side and 5.8
+      mm on the near side. The white reads about 12 px on the far side. Each is drawn as a frame 3.5 mm wide, the mean, round each block of the
+      drawing's cell lines, on a dark plate. The width is estimated. The black plate is not sampled and is drawn
+      #1f1f21 as the basic family is. The photograph is of another SKU and the block edges are not measured.
+  label-cover:
+    confidence: drawing
+    note: >-
+      The label cover in the cord cell is the part rittal/pdu-cover-plate@1. The front view gives its rectangle. The
+      side view draws it as a trapezoid 13.2 mm proud, read at 600 and 1200 dpi. The part builds the sloped ends.
+  plate-outline:
+    confidence: drawing
+    note: >-
+      The controller plate steps in by 0.6 mm on each side over the last 23.0 mm of each end. An inner rim line runs
+      1.4 mm inside each end section. Both are read from a 1800 dpi render of page 18. The foot end is drawn by the
+      device and the head end by the controller part.
+  usb-port:
+    confidence: photo-measured
+    note: >-
+      The data sheet (dri1308088en, p.1) calls the port "USB 2.0 port (USB-A)", so it is std/usb-a@1 in its
+      white-tongue skin. Fig. 21 item 15 and photograph 78_2802 show a silver-white shell and no trident. The shell
+      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port.
+  plan-circles:
+    confidence: estimated
+    note: >-
+      The plan view of page 18 shows two small circles on the centre line, at 381.3 and 1314.6 mm from the foot.
+      They read 2.4 mm across, twice at 600 dpi. Nothing says what they are. They are drawn on the back as dark
+      discs, each marked as estimated.
   logo:
     confidence: estimated
     note: >-
@@ -169,8 +199,10 @@ gaps:
   scope: [front, rear, left, right]
   reason: sources-disagree
   note: >-
-    the data sheet says black anodised RAL 9005 ("other colours may be configured"). The photographs of the
-    metered family show a natural silver-grey extrusion and dark graphite plates. Black is drawn.
+    the two sources disagree. The data sheet says black anodised RAL 9005 ("other colours may be configured"), drawn
+    as #0e0e10. The photographs of the metered family show a natural silver-grey extrusion, median #8a8a8a over
+    383777 pixels of photograph 78_2802, and dark graphite plates. Black is drawn, as the data sheet states. Nine of
+    the ten basic Rittal devices on main draw silver, #b9bbbe.
   wanted: a rating plate or order note naming the finish of this SKU.
 - what: phase-modules
   scope: [front]
@@ -196,8 +228,8 @@ gaps:
   scope: [front]
   reason: needs-photo
   note: >-
-    the plates are drawn in the colours of photograph 78_2802, which is of another SKU. The edges of each plate
-    are not measured.
+    the phase frames are drawn in the colours of photograph 78_2802, which is of another SKU. Their width and the
+    block edges are estimated from three sample lines.
   wanted: a straight-on photograph of the front with a scale.
 - what: mounting-adaptor
   scope: [rear]
@@ -218,6 +250,7 @@ groups:
   outlets-l3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 10 outlets of phase L3, counted from the cable foot: six IEC C13 and four IEC C19'}
   power-input: {term: Input, role: service, index-origin: 1}
   control: {term: Controller, role: furniture, index-origin: 1}
+  cover: {term: Cover, role: furniture, index-origin: 1}
   ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'ETH2 and ETH1, the two redundant network jacks'}
   serial: {term: Port, role: management, index-origin: 1, description: 'the RS232 serial jack'}
   can-bus: {term: Port, role: management, index-origin: 1, description: 'the CAN bus jack for CMC III sensors'}
@@ -231,18 +264,31 @@ views:
     panel:
       decor:
       - {id: head-cap, at: [0, 0], size: [44, 37.43], fill: '#1d1d1f', kind: end-cap}
-      - {id: plate-l3, at: [0, 37.43], size: [44, 361.92], fill: '#fefefe', kind: phase-plate}
+      - {id: plate-l3, at: [0, 37.43], size: [44, 361.92], fill: '#1d1d1f', kind: phase-plate}
+      - {id: frame-l3-1, at: [1.75, 39.18], size: [40.5, 87.11], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l3-2, at: [1.75, 129.79], size: [40.5, 87.11], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l3-3, at: [1.75, 220.4], size: [40.5, 177.2], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
       - {id: spacer-3, at: [0, 399.35], size: [44, 44.4], fill: '#1b1b1d', kind: spacer}
       - {id: controller-cell, at: [0, 443.75], size: [44, 200.06], fill: '#1d1d1f', kind: controller-cell}
       - {id: spacer-2, at: [0, 643.81], size: [44, 44.4], fill: '#1b1b1d', kind: spacer}
       - {id: plate-l2, at: [0, 688.21], size: [44, 361.66], fill: '#1f1f21', kind: phase-plate}
       - {id: spacer-1, at: [0, 1049.87], size: [44, 44.4], fill: '#1b1b1d', kind: spacer}
-      - {id: plate-l1, at: [0, 1094.27], size: [44, 361.93], fill: '#ee488f', kind: phase-plate}
+      - {id: plate-l1, at: [0, 1094.27], size: [44, 361.93], fill: '#1d1d1f', kind: phase-plate}
+      - {id: frame-l1-1, at: [1.75, 1096.02], size: [40.5, 87.12], stroke: '#ee488f', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l1-2, at: [1.75, 1186.64], size: [40.5, 87.11], stroke: '#ee488f', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l1-3, at: [1.75, 1277.25], size: [40.5, 177.2], stroke: '#ee488f', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
       - {id: blank-1, at: [0, 1456.2], size: [44, 44.4], fill: '#1b1b1d', kind: spacer}
       - {id: cord-cell, at: [0, 1500.6], size: [44, 123.3], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 1623.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
-      - {id: cover-plate, at: [2.1, 1508.8], size: [40.2, 107.3], fill: '#2e2e31', kind: cover-plate}
       - {id: plate-lower, at: [2.57, 546.81], size: [39.1, 93.05], fill: '#3c3d40', kind: controller-plate}
+      - {id: notch-foot-1, at: [2.57, 616.86], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
+      - {id: notch-foot-2, at: [41.07, 616.86], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
+      - {id: rim-foot-a, at: [4.145, 615.56], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'page 18 front view, the inner line at the foot end, 1800 dpi'}
+      - {id: rim-foot-b, at: [39.745, 615.56], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-c, at: [4.145, 632.64], size: [35.95, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-d, at: [2.57, 615.39], size: [1.75, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-e, at: [40.095, 615.39], size: [1.575, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: usb-shell, at: [7.7, 619.31], size: [13.2, 5.7], rx: 0.4, fill: '#c5c5c5', kind: port-shell, confidence: photo-measured, source: 'fig. 21 item 15, #c5c5c5 over 309 pixels of a 200 dpi render'}
       - {id: screw-1, at: [6.44, 632.74], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
       - {id: screw-2, at: [31.5, 632.74], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
       - {id: eth2-body, at: [3.9, 552.81], size: [16.9, 24.0], fill: '#ececec', kind: jack-body}
@@ -252,7 +298,7 @@ views:
       - {at: [31.07, 550.01], text: ETH1, font-size: 1.8, anchor: middle, for: eth1}
       - {at: [12.55, 588.41], text: RS232, font-size: 1.8, anchor: middle, for: rs232}
       - {at: [30.9, 588.41], text: CAN, font-size: 1.8, anchor: middle, for: can}
-      - {at: [12.8, 616.31], text: USB, font-size: 1.8, anchor: middle, for: usb}
+      - {at: [14.3, 616.31], text: USB, font-size: 1.8, anchor: middle, for: usb}
     components:
       placements:
         - {id: input, ref: rittal/pdu-cord-cee-16a@1, at: [5.5, 1646.5], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord with a 16 A CEE plug, leaving the foot cell through a cable gland'}
@@ -286,6 +332,7 @@ views:
         - {id: outlet-28, ref: std/c19-outlet@1, at: [4.2, 136.84], rotate: 90, group: outlets-l3, rel-pos: 8, fed-by: input, lines: [L3, N]}
         - {id: outlet-29, ref: std/c19-outlet@1, at: [4.2, 91.54], rotate: 90, group: outlets-l3, rel-pos: 9, fed-by: input, lines: [L3, N]}
         - {id: outlet-30, ref: std/c19-outlet@1, at: [4.2, 46.23], rotate: 90, group: outlets-l3, rel-pos: 10, fed-by: input, lines: [L3, N]}
+        - {id: cover-plate, ref: rittal/pdu-cover-plate@1, at: [2.1, 1508.8], group: cover, rel-pos: 1}
         - {id: controller, ref: rittal/pdu-controller@1, at: [2.57, 446.81], group: control, rel-pos: 1}
         - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 564.31], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 563.81], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
@@ -293,7 +340,7 @@ views:
         - {id: can, ref: std/rj45@2, at: [23.0, 591.71], group: can-bus, rel-pos: 1, attrs: {media: rj45-telemetry, function: can-bus}}
         - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 605.61], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
         - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 605.61], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
-        - {id: usb, ref: common/usb-a@2, at: [4.3, 618.66], group: usb, rel-pos: 1}
+        - {id: usb, ref: std/usb-a@1, at: [8.3, 619.91], skin: usb2, group: usb, rel-pos: 1, attrs: {function: USB}}
         - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 607.76], group: signal, rel-pos: 1}
         - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 618.06], group: signal, rel-pos: 2}
         - {id: lamp-power, ref: common/led-dot@1, at: [7.5, 529.91], for: controller, group: lamps, rel-pos: 1, states: ['off', {name: 'on', color: '#22c55e'}]}
@@ -305,6 +352,8 @@ views:
       - {id: groove-1, at: [12.4, 2.6], size: [2.6, 1690.8], fill: '#8e9094', kind: groove}
       - {id: ridge, at: [21.8, 2.6], size: [0.8, 1690.8], fill: '#6f7173', kind: ridge}
       - {id: groove-2, at: [30.4, 2.6], size: [2.6, 1690.8], fill: '#8e9094', kind: groove}
+      - {id: mark-1, at: [21.0, 1313.5], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 18 plan view, a small circle on the centre line at 381.3 mm, read twice at 600 dpi'}
+      - {id: mark-2, at: [21.0, 380.2], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 18 plan view, a small circle on the centre line at 1314.6 mm, read twice at 600 dpi'}
     components:
       placements:
         - {id: button-1, ref: rittal/pdu-mounting-button@1, at: [3.7, 1613.2], group: mounting, rel-pos: 1}

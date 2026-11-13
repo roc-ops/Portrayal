@@ -88,7 +88,9 @@ def test_the_controller_carries_three_rj45_one_rj12_one_usb_and_two_headers(sku)
     refs = Counter(p["ref"] for p in by_id.values())
     assert refs["common/rj45-eth@1"] == 2 and refs["std/rj45@2"] == 1
     assert refs["common/rj11-jack@1"] == 1
-    assert refs["common/usb-a@2"] == 1
+    assert refs["std/usb-a@1"] == 1 and by_id["usb"]["skin"] == "usb2", "USB 2.0, a white tongue, and no trident part"
+    shell = [d for d in _device(sku)["views"]["front"]["panel"]["decor"] if d.get("kind") == "port-shell"]
+    assert [d["fill"] for d in shell] == ["#c5c5c5"]
     assert refs["rittal/pdu-controller@1"] == 1
     assert refs["rittal/pdu-digital-input@1"] == 1 and refs["rittal/pdu-alarm-relay@1"] == 1
     assert {"eth1", "eth2", "can", "rs232", "usb", "digital-input", "alarm-relay"} <= set(by_id)
@@ -125,6 +127,87 @@ def test_the_front_is_tiled_end_to_end_by_the_cells(sku):
     assert abs(edge - length) < 0.15
 
 
+# sku -> outlet blocks in one phase plate, as the drawing's cell lines group them
+BLOCKS = {"210": 0, "230": 1, "235": 2, "236": 2, "238": 3, "240": 3, "242": 2}
+# sku -> the small circles on the plan view's centre line, mm from the foot (drawing, read twice at 600 dpi)
+CIRCLES = {
+    "210": [422.5],
+    "230": [422.2],
+    "235": [],
+    "236": [435.4, 746.4, 1057.5],
+    "238": [381.3, 1314.6],
+    "240": [191.9, 458.7, 1436.4, 1703.2],
+    "242": [381.4, 1314.6],
+}
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_pink_and_white_plates_are_frames_round_each_outlet_block(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    frames = [d for d in decor if d.get("kind") == "phase-frame"]
+    strokes = Counter(d["stroke"] for d in frames)
+    want = BLOCKS[sku]
+    assert strokes == (Counter({"#ee488f": want, "#fefefe": want}) if want else Counter())
+    assert all(d["stroke-width"] == 3.5 and d["confidence"] == "estimated" for d in frames)
+    assert not [d for d in decor if d.get("fill") in ("#ee488f", "#fefefe")], "a plate is a solid pink or white"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_label_cover_is_a_raised_part_not_bare_decor(sku):
+    device = _device(sku)
+    assert not [d for d in device["views"]["front"]["panel"]["decor"] if d.get("kind") == "cover-plate"]
+    cover = _by_id(sku)["cover-plate"]
+    assert cover["ref"] == "rittal/pdu-cover-plate@1" and cover["at"][0] == 2.1
+    contract = yaml.safe_load((LIB / "components" / "rittal" / "pdu-cover-plate" / "v1" / "contract.yaml").read_text())
+    feature = contract["relief"]["features"][0]
+    assert feature["out"] == 13.2 and feature["profile-y"][1][1] == 13.2 and contract["size"] == {"w": 40.2, "h": 107.3}
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_plan_view_circles_sit_on_the_centre_line(sku):
+    length = DEVICES[sku][0]
+    marks = [d for d in _device(sku)["views"]["rear"]["panel"]["decor"] if d.get("kind") == "centre-mark"]
+    got = sorted(round(length - (d["at"][1] + d["size"][1] / 2), 1) for d in marks)
+    assert len(got) == len(CIRCLES[sku])
+    assert all(abs(a - b) < 0.3 for a, b in zip(got, CIRCLES[sku]))
+    assert all(d["size"] == [2.4, 2.4] and abs(d["at"][0] + 1.2 - 22.2) < 0.01 for d in marks)
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_controller_plate_steps_in_at_each_end_and_has_a_rim_there(sku):
+    decor = {d["id"]: d for d in _device(sku)["views"]["front"]["panel"]["decor"]}
+    foot = decor["plate-lower"]["at"][1] + decor["plate-lower"]["size"][1]
+    for name in ("notch-foot-1", "notch-foot-2"):
+        assert decor[name]["size"] == [0.6, 23.0] and abs(decor[name]["at"][1] - (foot - 23.0)) < 0.01
+    # an inner rim open toward the middle: two side lines, a closing line 7.05 from the end, and a jog at each side
+    for side in ("rim-foot-a", "rim-foot-b"):
+        assert decor[side]["size"] == [0.35, 17.25] and abs(decor[side]["at"][1] - (foot - 24.3)) < 0.01
+    assert decor["rim-foot-c"]["size"] == [35.95, 0.35] and abs(decor["rim-foot-c"]["at"][1] - (foot - 7.225)) < 0.01
+    assert decor["rim-foot-d"]["size"][0] == 1.75 and decor["rim-foot-e"]["size"][0] == 1.575
+    assert "rim-foot" not in decor, "a closed box would draw a line across the plate that the drawing does not"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_notes_name_their_sources_and_say_what_is_estimated(sku):
+    device = _device(sku)
+    notes = {k: v["note"] for k, v in device["provenance"].items() if "note" in v}
+    assert "The instructions (7979204) mark the phases" in notes["phase-plates"] or sku == "210"
+    assert "dri2108029en) states neither" in notes["phase-plates"] or sku == "210"
+    lamps = notes["lamps"]
+    assert "ETH1 jack body" in lamps and "contact pad" in lamps and "approximation" in lamps
+    assert "lit lamp" not in lamps.replace("no lit lamp", "")
+    assert "as the DK 7979.110" not in " ".join(notes.values())
+    colour = next(g for g in device["gaps"] if g["what"] == "colour")
+    assert colour["reason"] == "sources-disagree" and "RAL 9005" in colour["note"] and "#8a8a8a" in colour["note"]
+
+
+def test_the_controller_part_draws_the_lamp_slots_at_the_drawings_size_and_the_head_end_notch():
+    skin = (LIB / "components" / "rittal" / "pdu-controller" / "v1" / "skins" / "default.svg").read_text()
+    assert skin.count('width="4.5" height="1.9"') == 2
+    assert 'id="notch-head-1"' in skin and 'id="notch-head-2"' in skin
+    assert '<path id="rim-head" d="M 0.6 24.3 H 1.75 V 1.0 H 37.35 V 24.3 H 38.5"' in skin, "open toward the middle"
+
+
 def test_the_controller_part_carries_no_port():
     contract = yaml.safe_load((LIB / "components" / "rittal" / "pdu-controller" / "v1" / "contract.yaml").read_text())
     assert contract["version"] == "1.0.0" and "parts" not in contract
@@ -138,6 +221,8 @@ def test_the_two_headers_share_the_registered_key_and_their_plugs_mate_it():
     for name in ("pdu-digital-input", "pdu-alarm-relay"):
         path = LIB / "components" / "rittal" / name / "v1" / "contract.yaml"
         assert yaml.safe_load(path.read_text())["interface"] == "pdu-io-header"
+        assert 'fill="#838788"' in (path.parent / "skins" / "default.svg").read_text()
+        assert "pixels" in yaml.safe_load(path.read_text())["provenance"]["colour"], "a colour read off a picture needs a count"
         plug = LIB / "components" / "rittal" / f"{name}-plug" / "v1" / "contract.yaml"
         assert yaml.safe_load(plug.read_text())["mates"] == "pdu-io-header"
 

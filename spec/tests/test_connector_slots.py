@@ -119,6 +119,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "spade-m4",
                          "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
+                         # the two small pluggable headers of the Rittal PDU metered controller
+                         "pdu-io-header",
                          # GPU power and NVLink (P-0028): presented by parts no
                          # device places yet, so none is a slot below
                          "eps12v-8pin", "pcie-8pin", "pcie-12vhpwr", "pcie-12v-2x6",
