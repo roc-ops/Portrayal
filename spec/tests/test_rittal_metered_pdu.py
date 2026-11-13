@@ -369,7 +369,7 @@ def test_the_notes_say_the_c13_frames_lines_and_grooves_are_drawn(sku):
 
 def test_the_label_cover_carries_its_rim_and_the_button_its_three_rings_and_bands():
     cover = (LIB / "components" / "rittal" / "pdu-cover-plate" / "v1" / "skins" / "default.svg").read_text()
-    assert 'id="rim"' in cover and cover.count("M 0.61 2.0 V 104.52") == 1
+    assert 'id="rim"' in cover and cover.count("M 0.61 2.69 V 105.29") == 1 and "H 13.94" not in cover, "the end lines run the whole width"
     part = LIB / "components" / "rittal" / "pdu-metered-button" / "v1"
     contract = yaml.safe_load((part / "contract.yaml").read_text())
     assert contract["mates"] == "pdu-button" and contract["size"] == {"w": 35.0, "h": 25.0}
@@ -387,6 +387,85 @@ def test_the_controller_keys_are_the_two_rings_the_drawing_shows_and_the_headers
         svg = (LIB / "components" / "rittal" / name / "v1" / "skins" / "default.svg").read_text()
         assert svg.count('width="5.65" height="3.1" rx="1.8"') == holes
         assert svg.count('r="0.8"') == holes
+
+
+# sku -> (head segment length, where the foot segment starts, its length): the grooves and ridge run on to the strip ends
+END_RUN = {"210": (95.59, 746.4, 95.6), "230": (95.59, 746.4, 95.6), "235": (64.26, 1026.21, 64.79),
+           "236": (108.95, 1382.06, 108.94), "238": (54.12, 1638.37, 54.63), "240": (131.39, 1760.09, 131.91),
+           "242": (54.12, 1638.37, 54.63)}
+# sku -> the gland circle's centre across and along the strip, for the three devices whose page draws three circles
+GLAND = {"210": (21.94, 808.99), "230": (22.0, 808.99), "236": (21.92, 1457.98)}
+# sku -> the USB shell's place and size from the vector paths, and where the port's `at` x stands
+USB = {"210": (6.49, 218.62, 5.11, 6.75), "230": (6.54, 328.32, 5.11, 6.79), "235": (6.59, 423.08, 5.11, 6.85),
+       "236": (6.47, 552.67, 5.11, 6.73), "238": (6.59, 619.54, 5.11, 6.83), "240": (6.59, 699.5, 5.13, 6.84),
+       "242": (6.59, 649.32, 5.13, 6.85)}
+# sku -> where the two CAN lamps stand along the strip, 1.6 mm toward the head of the first estimate
+CAN_LAMP_Y = {"210": 202.8, "230": 312.49, "235": 406.3, "236": 536.12, "238": 604.0, "240": 683.66, "242": 633.48}
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_grooves_and_ridge_run_on_to_the_strip_ends(sku):
+    decor = {d["id"]: d for d in _device(sku)["views"]["rear"]["panel"]["decor"]}
+    head, foot_at, foot = END_RUN[sku]
+    for key, x, w in (("groove-1", 10.77, 3.0), ("groove-2", 30.18, 3.0), ("ridge", 21.2, 1.55), ("ridge-crest", 21.88, 0.2)):
+        h, f = decor[f"{key}-head"], decor[f"{key}-foot"]
+        assert h["at"] == [x, 3.51] and h["size"] == [w, head]
+        assert f["at"] == [x, foot_at] and f["size"] == [w, foot]
+        assert abs(f["at"][1] + f["size"][1] - (DEVICES[sku][0] - 3.0)) < 0.02, "the foot segment stops 3.0 mm short of the end"
+    buttons = {p["id"]: p for p in _placements(sku, "rear") if p["id"].startswith("button-")}
+    assert abs(buttons["button-2"]["at"][1] - (3.51 + head)) < 0.02, "the head segment meets the button plate"
+    assert abs(buttons["button-1"]["at"][1] + 25.0 - foot_at) < 0.02, "the foot segment starts at the button plate"
+
+
+def test_each_button_has_the_two_24_mm_cross_lines_under_its_rings():
+    skin = (LIB / "components" / "rittal" / "pdu-metered-button" / "v1" / "skins" / "default.svg").read_text()
+    assert skin.count('id="cross-lines" d="M 5.5 12.5 H 29.5 M 17.5 0.5 V 24.5"') == 1
+    assert skin.index('r="7.5"') < skin.index('id="cross-lines"') < skin.index('r="3.75"'), "the lines stop at the smallest ring"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_gland_circles_of_the_page_are_drawn_where_the_page_has_them(sku):
+    decor = {d["id"]: d for d in _device(sku)["views"]["front"]["panel"]["decor"]}
+    rings = {k: v for k, v in decor.items() if v.get("kind") == "gland-ring"}
+    if sku not in GLAND:
+        assert not rings
+        return
+    cx, cy = GLAND[sku]
+    assert set(rings) == {"gland-ring-12", "gland-ring-30", "gland-ring-35"}
+    for key, size in (("gland-ring-12", 12.0), ("gland-ring-30", 30.0), ("gland-ring-35", 35.5)):
+        ring = rings[key]
+        assert ring["size"] == [size, size] and ring["rx"] == size / 2 and "fill" not in ring
+        assert abs(ring["at"][0] + size / 2 - cx) < 0.02 and abs(ring["at"][1] + size / 2 - cy) < 0.02
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_usb_shell_and_tongue_stand_where_the_vector_paths_put_them(sku):
+    x, y, h, port_x = USB[sku]
+    decor = {d["id"]: d for d in _device(sku)["views"]["front"]["panel"]["decor"]}
+    assert decor["usb-shell"]["at"] == [x, y] and decor["usb-shell"]["size"] == [12.5, h]
+    assert _by_id(sku)["usb"]["at"][0] == port_x
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_can_lamps_stand_clear_of_the_plates_section_line(sku):
+    by_id = _by_id(sku)
+    for key, x in (("lamp-can-green", 25.0), ("lamp-can-red", 34.8)):
+        assert by_id[key]["at"] == [x, CAN_LAMP_Y[sku]]
+    sections = [d for d in _device(sku)["views"]["front"]["panel"]["decor"] if d.get("kind") == "plate-section"]
+    for line in sections:
+        top, bottom = line["at"][1], line["at"][1] + line["size"][1]
+        assert not (CAN_LAMP_Y[sku] < bottom and CAN_LAMP_Y[sku] + 1.9 > top), "no CAN lamp straddles a section line"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_notes_say_the_ends_the_cross_lines_the_usb_and_the_lamps(sku):
+    notes = {k: v["note"] for k, v in _device(sku)["provenance"].items() if "note" in v}
+    assert "from each strip end to its plate" in notes["rear"]
+    assert "Two lines of 24.0 mm cross" in notes["button-plates"]
+    assert "place and size from the vector paths" in notes["usb-port"] or "takes its place and size from the vector paths" in notes["usb-port"]
+    assert "neither straddles the plate's section line" in notes["lamps"]
+    if sku != "210":
+        assert "reaches 1.7 to 2.6 mm into the outermost" in notes["phase-plates"]
 
 
 def _flatten(node, out=None):

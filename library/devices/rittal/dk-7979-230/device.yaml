@@ -68,7 +68,7 @@ provenance:
       Two flashing codes cycle colours in the table. Device-detected cycles green, orange and red. Device-lost
       alternates red and blue. Each is stated here as one colour, green and red, which is a single-colour
       approximation of the printed cycle. The CAN jack has a green and a red lamp and each Ethernet jack a green
-      and an orange one. Fig. 21 shows no lit lamp. Its green #3baa39 over 2251 pixels is the ETH1 jack body. Its
+      and an orange one. The two CAN lamps are estimated and stand 1.6 mm toward the head, so neither straddles the plate's section line. The drawing shows no lamp there. Fig. 21 shows no lit lamp. Its green #3baa39 over 2251 pixels is the ETH1 jack body. Its
       yellow #f0f130 over 287 pixels is a contact pad, in a 200 dpi render of page 18. The lit colours here are the
       library's usual values, estimated.
   outlets:
@@ -90,7 +90,7 @@ provenance:
     note: >-
       The plan view of page 10 draws each button plate 25.0 along the strip and 35.0 across. Two lines stand 5.0 mm in
       from its ends and three rings, 15.0, 7.5 and 3.7 across, sit at its centre. They are the part
-      rittal/pdu-metered-button@1, read from the vector paths. The label cover carries its double rim, read the same way.
+      rittal/pdu-metered-button@1, read from the vector paths. Two lines of 24.0 mm cross at its centre, one across the strip and one along it, under the rings. The label cover carries its double rim, read the same way.
   mounting-buttons:
     confidence: drawing
     note: >-
@@ -101,7 +101,8 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the plan view of page 10 draws two grooves 3.0 wide and a ridge 1.55 wide with a line along its crest.
-      It also draws two buttons. The grooves and the ridge run 597.3 mm, from 124.1 to 721.4 from the head end. They were read
+      It also draws two buttons. The grooves and the ridge run 597.3 mm between the plates, from 124.1 to 721.4 from the head end.
+      They also run from each strip end to its plate. The head run starts 3.51 mm from the head end. The foot run stops 3.0 mm short of the foot end. They were read
       from the vector paths, twice. The mid circle is drawn by `mark-1`.
   phase-plates:
     confidence: photo-measured
@@ -112,7 +113,7 @@ provenance:
       pixels and the white #fefefe over 15569 pixels. Both show as a thin margin round each outlet block. Three sample
       lines run across the strip, 81 px for the 44 mm face. They read the pink margin at 1.1 mm on the far side and 5.8
       mm on the near side. The white reads about 12 px on the far side. Each is drawn as a frame 3.5 mm wide, the mean,
-      round each block of the drawing's cell lines, on a dark plate. The width is estimated. The black plate is not
+      round each block of the drawing's cell lines, on a dark plate. The width is estimated. The frame's inner edge reaches 1.7 to 2.6 mm into the outermost C13 or C19 frame at a block end. The drawing shows no phase frame, and the photograph reads the margin at 1.1 to 5.8 mm, so the overlap is inside what was measured. The outlet frame line is drawn over the pink band. The black plate is not
       sampled and is drawn #1f1f21 as the basic family is. The photograph is of another SKU and the block edges are
       not measured.
   label-cover:
@@ -157,7 +158,7 @@ provenance:
     note: >-
       The data sheet (dri1308088en, p.1) calls the port "USB 2.0 port (USB-A)", so it is std/usb-a@1 in its
       white-tongue skin. Fig. 21 item 15 and photograph 78_2802 show a silver-white shell and no trident. The shell
-      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port, as the device's own decor. No shared part draws a USB-A metal shell, and the white-tongue part is reused for the tongue.
+      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port, as the device's own decor. No shared part draws a USB-A metal shell, and the white-tongue part is reused for the tongue. The shell takes its place and size from the vector paths, 12.5 by 5.11 mm. The part's tongue is 10.2 mm wide against 11.1 drawn, so its centre stands on the drawn centre.
   plan-circles:
     confidence: estimated
     note: >-
@@ -281,6 +282,9 @@ views:
       - {id: blank-1, at: [0, 625.1], size: [44, 24.01], fill: '#1b1b1d', kind: spacer}
       - {id: cord-cell, at: [0, 649.11], size: [44, 123.79], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 772.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: gland-ring-12, at: [16.0, 802.99], size: [12.0, 12.0], rx: 6.0, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'page 10 front view, a circle 12.0 across at the gland, read from the vector paths'}
+      - {id: gland-ring-30, at: [7.0, 793.99], size: [30.0, 30.0], rx: 15.0, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'as gland-ring-12, 30.0 across'}
+      - {id: gland-ring-35, at: [4.25, 791.24], size: [35.5, 35.5], rx: 17.75, stroke: '#55585c', stroke-width: 0.3, kind: gland-ring, confidence: drawing, source: 'as gland-ring-12, 35.5 across'}
       - {id: c19-frame-1, at: [4.94, 17.51], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'page 10 front view, the outer frame of a C19, read twice'}
       - {id: c19-frame-2, at: [4.94, 63.0], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
       - {id: c19-frame-3, at: [4.94, 108.51], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
@@ -302,7 +306,7 @@ views:
       - {id: rim-foot-c, at: [4.145, 341.13], size: [35.95, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
       - {id: rim-foot-d, at: [2.57, 323.88], size: [1.75, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
       - {id: rim-foot-e, at: [40.095, 323.88], size: [1.575, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
-      - {id: usb-shell, at: [7.7, 327.8], size: [13.2, 5.7], rx: 0.4, fill: '#c5c5c5', kind: port-shell, confidence: photo-measured, source: 'fig. 21 item 15, #c5c5c5 over 309 pixels of a 200 dpi render'}
+      - {id: usb-shell, at: [6.54, 328.32], size: [12.5, 5.11], rx: 0.4, fill: '#c5c5c5', kind: port-shell, confidence: photo-measured, source: 'fig. 21 item 15, #c5c5c5 over 309 pixels of a 200 dpi render; place and size from the vector paths of page 10'}
       - {id: screw-1, at: [6.44, 341.23], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
       - {id: screw-2, at: [31.5, 341.23], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
       - {id: socket-1, at: [8.24, 343.03], size: [2.4, 2.4], rx: 1.2, fill: '#2a2b2e', kind: screw-socket}
@@ -327,7 +331,7 @@ views:
       - {at: [31.07, 258.5], text: ETH1, font-size: 1.8, anchor: middle, for: eth1}
       - {at: [12.55, 296.9], text: RS232, font-size: 1.8, anchor: middle, for: rs232}
       - {at: [30.9, 296.9], text: CAN, font-size: 1.8, anchor: middle, for: can}
-      - {at: [14.3, 324.8], text: USB, font-size: 1.8, anchor: middle, for: usb}
+      - {at: [12.79, 324.8], text: USB, font-size: 1.8, anchor: middle, for: usb}
     components:
       placements:
         - {id: input, ref: rittal/pdu-cord-cee-16a@1, at: [5.5, 795.5], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord with a 16 A CEE plug, leaving the foot cell through a cable gland'}
@@ -346,9 +350,9 @@ views:
         - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 272.3], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: rs232, ref: common/rj11-jack@1, at: [5.55, 301.35], group: serial, rel-pos: 1}
         - {id: can, ref: std/rj45@2, at: [23.0, 300.2], group: can-bus, rel-pos: 1, attrs: {media: rj45-telemetry, function: can-bus}}
-        - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 314.1], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
-        - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 314.1], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
-        - {id: usb, ref: std/usb-a@1, at: [8.3, 328.4], skin: usb2, group: usb, rel-pos: 1, attrs: {function: USB}}
+        - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 312.49], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
+        - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 312.49], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
+        - {id: usb, ref: std/usb-a@1, at: [6.79, 328.4], skin: usb2, group: usb, rel-pos: 1, attrs: {function: USB}}
         - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 316.25], group: signal, rel-pos: 1}
         - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 326.55], group: signal, rel-pos: 2}
         - {id: lamp-power, ref: common/led-dot@1, at: [7.5, 238.4], for: controller, group: lamps, rel-pos: 1, states: ['off', {name: 'on', color: '#22c55e'}]}
@@ -361,6 +365,14 @@ views:
       - {id: ridge, at: [21.2, 124.1], size: [1.55, 597.3], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'page 10 plan view, two lines 1.56 apart'}
       - {id: ridge-crest, at: [21.88, 124.1], size: [0.2, 597.3], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'page 10 plan view, the line between the two'}
       - {id: groove-2, at: [30.18, 124.1], size: [3.0, 597.3], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1'}
+      - {id: groove-1-head, at: [10.77, 3.51], size: [3.0, 95.59], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 10 plan view, from the head end to the button plate, read from the vector paths'}
+      - {id: ridge-head, at: [21.2, 3.51], size: [1.55, 95.59], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'as groove-1-head'}
+      - {id: ridge-crest-head, at: [21.88, 3.51], size: [0.2, 95.59], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'as groove-1-head'}
+      - {id: groove-2-head, at: [30.18, 3.51], size: [3.0, 95.59], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1-head'}
+      - {id: groove-1-foot, at: [10.77, 746.4], size: [3.0, 95.6], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 10 plan view, from the button plate to 3.0 mm short of the foot end, read from the vector paths'}
+      - {id: ridge-foot, at: [21.2, 746.4], size: [1.55, 95.6], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'as groove-1-foot'}
+      - {id: ridge-crest-foot, at: [21.88, 746.4], size: [0.2, 95.6], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'as groove-1-foot'}
+      - {id: groove-2-foot, at: [30.18, 746.4], size: [3.0, 95.6], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1-foot'}
       - {id: mark-1, at: [21.0, 421.6], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 10 plan view, a small circle on the centre line at 422.2 mm, read twice at 600 dpi'}
     components:
       placements:
