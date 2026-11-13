@@ -302,6 +302,80 @@ def test_the_two_headers_share_the_registered_key_and_their_plugs_mate_it():
         assert yaml.safe_load(plug.read_text())["mates"] == "pdu-io-header"
 
 
+# sku -> C13 frames the drawing shows, and the ones under the plug that are estimated
+C13_FRAMES = {"210": (12, 0), "230": (0, 0), "235": (12, 6), "236": (24, 0), "238": (13, 5), "240": (30, 6), "242": (35, 7)}
+# sku -> full-height lines other than the head-cap ribs
+CELL_LINES = {"210": 7, "230": 13, "235": 8, "236": 13, "238": 15, "240": 14, "242": 10}
+# sku -> where the plan view's grooves and ridge start along the strip, and how long they are
+REAR_RUN = {"210": (124.1, 597.3), "230": (124.1, 597.3), "235": (92.76, 908.46), "236": (137.46, 1219.6),
+            "238": (82.63, 1530.75), "240": (159.89, 1575.2), "242": (82.63, 1530.75)}
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_each_c13_sits_in_the_outer_frame_the_drawing_shows(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    frames = sorted((d for d in decor if d.get("kind") == "c13-flange"), key=lambda d: d["at"][1])
+    assert len(frames) == DEVICES[sku][1]
+    assert sum(1 for f in frames if f["confidence"] == "estimated") == C13_FRAMES[sku][1]
+    assert len(frames) - C13_FRAMES[sku][1] == C13_FRAMES[sku][0]
+    outlets = sorted((p for p in _placements(sku) if p["ref"] == C13), key=lambda p: p["at"][1])
+    for frame, outlet in zip(frames, outlets):
+        assert frame["at"][0] == 4.1 and frame["size"] == [35.8, 28.0] and frame["rx"] == 2.5
+        assert frame["stroke"] == "#55585c" and frame["stroke-width"] == 0.3 and "fill" not in frame
+        assert abs((frame["at"][1] + 14.0) - (outlet["at"][1] + 11.0)) < 1.0, "the frame is round its outlet"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_full_height_lines_of_the_drawing_are_drawn(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    lines = [d for d in decor if d.get("kind") == "cell-line"]
+    assert len(lines) == CELL_LINES[sku]
+    for line in lines:
+        assert line["at"][0] == 0 and line["size"][0] == 44 and line["size"][1] in (0.2, 0.35)
+        assert line["fill"] == "#55585c" and line["confidence"] == "drawing"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_grooves_and_ridge_are_the_vector_paths_of_the_plan_view(sku):
+    decor = {d["id"]: d for d in _device(sku)["views"]["rear"]["panel"]["decor"]}
+    start, run = REAR_RUN[sku]
+    for key, x, w in (("groove-1", 10.77, 3.0), ("groove-2", 30.18, 3.0), ("ridge", 21.2, 1.55), ("ridge-crest", 21.88, 0.2)):
+        d = decor[key]
+        assert d["at"][0] == x and d["size"][0] == w
+        assert abs(d["at"][1] - start) < 0.05 and abs(d["size"][1] - run) < 0.05
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_two_foot_screws_carry_the_socket_the_head_screws_have(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    heads = [d for d in decor if d.get("kind") == "screw-head"]
+    sockets = [d for d in decor if d.get("kind") == "screw-socket"]
+    assert len(heads) == len(sockets) == 2
+    for head, socket in zip(heads, sockets):
+        assert socket["size"] == [2.4, 2.4] and socket["rx"] == 1.2
+        assert abs((socket["at"][0] + 1.2) - (head["at"][0] + 3)) < 0.01
+        assert abs((socket["at"][1] + 1.2) - (head["at"][1] + 3)) < 0.01
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_notes_say_the_c13_frames_lines_and_grooves_are_drawn(sku):
+    notes = {k: v["note"] for k, v in _device(sku)["provenance"].items() if "note" in v}
+    assert ("c13-frames" in notes) == bool(DEVICES[sku][1])
+    if DEVICES[sku][1]:
+        assert "outer" in notes["c13-frames"] and "R2.5" in notes["c13-frames"]
+    assert "full-height" in notes["cell-lines"] and "block" in notes["cell-lines"]
+    assert "3.0 wide" in notes["rear"] and "vector" in notes["rear"]
+
+
+def test_the_controller_keys_are_the_two_rings_the_drawing_shows_and_the_headers_hold_their_holes():
+    skin = (LIB / "components" / "rittal" / "pdu-controller" / "v1" / "skins" / "default.svg").read_text()
+    assert skin.count('r="3.245"') == 4 and skin.count('r="4.0"') == 4
+    for name, holes in (("pdu-digital-input", 2), ("pdu-alarm-relay", 3)):
+        svg = (LIB / "components" / "rittal" / name / "v1" / "skins" / "default.svg").read_text()
+        assert svg.count('width="5.65" height="3.1" rx="1.8"') == holes
+        assert svg.count('r="0.8"') == holes
+
+
 def _flatten(node, out=None):
     out = {} if out is None else out
     if isinstance(node, dict):

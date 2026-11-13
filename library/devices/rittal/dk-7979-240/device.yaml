@@ -112,8 +112,9 @@ provenance:
   rear:
     confidence: drawing
     note: >-
-      drawing - the plan view draws the same two long grooves, ridge and two buttons as the basic devices, from 2.6
-      in of each end.
+      drawing - the plan view of page 20 draws two grooves 3.0 wide and a ridge 1.55 wide with a line along its crest.
+      It also draws two buttons. The grooves and the ridge run 1575.2 mm, from 159.89 to 1735.09 from the head end. They were
+      read from the vector paths, twice. The mid circles are drawn by the `mark-N` entries.
   phase-plates:
     confidence: photo-measured
     note: >-
@@ -151,6 +152,20 @@ provenance:
       It is the mouth that std/c19-outlet@1 draws at 35.6 by 27.7, so it is not drawn twice. The two C19s of a pair are 42.5 mm
       apart in the drawing, so each stands at its frame's centre. The outer frames were read from the page's vector paths
       and from a 1800 dpi render.
+  c13-frames:
+    confidence: drawing
+    note: >-
+      Each C13 of the front view of page 20 sits in a rounded outer frame, 28.0 along the strip and 35.8 across, with
+      R2.5 corners. It is drawn here as decor. Neighbouring frames stand 28.35 apart and nearly touch. The frames were
+      read from the page's vector paths, twice. std/c13-outlet@1 draws the well, nose and contacts inside each frame.
+      The six C13 under the plug have no frame in the drawing, so theirs are estimated at the outlet centres. The
+      outlets stand up to 0.59 mm from their frame centre and are not moved.
+  cell-lines:
+    confidence: drawing
+    note: >-
+      The front view of page 20 draws full-height lines across the strip at the ends of each block of outlets. They are
+      drawn as 0.2 mm lines, or 0.35 mm where the drawing doubles a line 0.2 mm apart. They were read from the vector
+      paths. Between two C13 the drawing has no line, only the frames.
   plate-sections:
     confidence: drawing
     note: >-
@@ -325,8 +340,60 @@ views:
       - {id: usb-shell, at: [7.7, 698.97], size: [13.2, 5.7], rx: 0.4, fill: '#c5c5c5', kind: port-shell, confidence: photo-measured, source: 'fig. 21 item 15, #c5c5c5 over 309 pixels of a 200 dpi render'}
       - {id: screw-1, at: [6.44, 712.4], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
       - {id: screw-2, at: [31.5, 712.4], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
+      - {id: socket-1, at: [8.24, 714.2], size: [2.4, 2.4], rx: 1.2, fill: '#2a2b2e', kind: screw-socket}
+      - {id: socket-2, at: [33.3, 714.2], size: [2.4, 2.4], rx: 1.2, fill: '#2a2b2e', kind: screw-socket}
       - {id: eth2-body, at: [3.9, 632.47], size: [16.9, 24.0], fill: '#ececec', kind: jack-body}
       - {id: eth1-body, at: [22.0, 640.17], size: [18.3, 16.3], fill: '#3baa39', kind: jack-body}
+      - {id: c13-frame-1, at: [4.1, 121.14], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'page 20 front view, the outer frame of a C13, read twice'}
+      - {id: c13-frame-2, at: [4.1, 149.44], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-3, at: [4.1, 177.74], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-4, at: [4.1, 206.04], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-5, at: [4.1, 234.34], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-6, at: [4.1, 262.64], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-7, at: [4.1, 301.74], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-8, at: [4.1, 330.04], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-9, at: [4.1, 358.34], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-10, at: [4.1, 386.64], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-11, at: [4.1, 414.94], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-12, at: [4.1, 443.24], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-13, at: [4.1, 861.73], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-14, at: [4.1, 890.04], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-15, at: [4.1, 918.33], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-16, at: [4.1, 946.62], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-17, at: [4.1, 974.95], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-18, at: [4.1, 1003.25], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-19, at: [4.1, 1042.34], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-20, at: [4.1, 1070.64], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-21, at: [4.1, 1098.94], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-22, at: [4.1, 1127.24], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-23, at: [4.1, 1155.55], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-24, at: [4.1, 1183.85], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-25, at: [4.1, 1313.43], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-26, at: [4.1, 1341.73], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-27, at: [4.1, 1370.02], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-28, at: [4.1, 1398.32], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-29, at: [4.1, 1426.62], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-30, at: [4.1, 1454.92], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-31, at: [4.1, 1493.47], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-6, under the plug in the drawing'}
+      - {id: c13-frame-32, at: [4.1, 1521.83], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-5, under the plug in the drawing'}
+      - {id: c13-frame-33, at: [4.1, 1550.17], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-4, under the plug in the drawing'}
+      - {id: c13-frame-34, at: [4.1, 1578.53], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-3, under the plug in the drawing'}
+      - {id: c13-frame-35, at: [4.1, 1606.88], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-2, under the plug in the drawing'}
+      - {id: c13-frame-36, at: [4.1, 1635.22], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-1, under the plug in the drawing'}
+      - {id: cell-line-1, at: [0, 27.10], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'page 20 front view, a full-height line at 27.27 mm'}
+      - {id: cell-line-2, at: [0, 117.70], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-3, at: [0, 298.30], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-4, at: [0, 478.89], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-5, at: [0, 523.25], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-6, at: [0, 723.30], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-7, at: [0, 767.69], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-8, at: [0, 858.29], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-9, at: [0, 1038.88], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-10, at: [0, 1219.44], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-11, at: [0, 1310.09], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-12, at: [0, 1490.69], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-13, at: [0, 1595.19], size: [44, 0.2], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-14, at: [0, 1596.99], size: [44, 0.2], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
     silkscreen:
       - {at: [12.37, 629.67], text: ETH2, font-size: 1.8, anchor: middle, for: eth2}
       - {at: [31.07, 629.67], text: ETH1, font-size: 1.8, anchor: middle, for: eth1}
@@ -395,9 +462,10 @@ views:
     size: {w: 44, h: 1895}
     panel:
       decor:
-      - {id: groove-1, at: [12.4, 2.6], size: [2.6, 1889.8], fill: '#8e9094', kind: groove}
-      - {id: ridge, at: [21.8, 2.6], size: [0.8, 1889.8], fill: '#6f7173', kind: ridge}
-      - {id: groove-2, at: [30.4, 2.6], size: [2.6, 1889.8], fill: '#8e9094', kind: groove}
+      - {id: groove-1, at: [10.77, 159.89], size: [3.0, 1575.2], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 20 plan view, two lines 3.0 apart, read from the vector paths'}
+      - {id: ridge, at: [21.2, 159.89], size: [1.55, 1575.2], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'page 20 plan view, two lines 1.56 apart'}
+      - {id: ridge-crest, at: [21.88, 159.89], size: [0.2, 1575.2], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'page 20 plan view, the line between the two'}
+      - {id: groove-2, at: [30.18, 159.89], size: [3.0, 1575.2], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1'}
       - {id: mark-1, at: [21.0, 1701.9], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 20 plan view, a small circle on the centre line at 191.9 mm, read twice at 600 dpi'}
       - {id: mark-2, at: [21.0, 1435.1], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 20 plan view, a small circle on the centre line at 458.7 mm, read twice at 600 dpi'}
       - {id: mark-3, at: [21.0, 457.4], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 20 plan view, a small circle on the centre line at 1436.4 mm, read twice at 600 dpi'}
