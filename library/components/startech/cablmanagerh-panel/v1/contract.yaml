@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: cablmanagerh-panel
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 description: >-
   The steel panel of the StarTech.com CABLMANAGERH 1U five-ring manager seen from the front -
@@ -27,13 +27,36 @@ provenance:
     back face, where the ears bolt, is 88.79 from the tips; the sheet is taken as 1.2 mm
     (estimated: the maker's CMBRUSH1U section gives its panel as t=1.2, and no CABLMANAGERH
     document states a gauge), so the well, from the tips to the plate's front face, is 87.59.
+  brackets: >-
+    estimated - the drawing's front view shows each ring on a bracket across the panel's height.
+    Its side view shows a foot 7.4 mm high. Neither is dimensioned ("DO NOT SCALE"). Each is
+    scaled against the drawing's own 100.0 mm ring pitch and 465.00 slot spacing. The width is
+    40.0 (readings 38.5 and 40.2). The maker's note says about 40. The height is 42.0 against the
+    panel's 43.69. A strap 8.3 mm high is centred on the bracket (two lines about 8 mm apart).
+    A rivet circle 3.0 mm across is at the centre. Five, 100.0 apart, centred on the rings (41.3
+    from the left end). Counted twice. The plan view shows no rivet and the ring's base covers
+    this circle, so it is drawn but hidden. The side view's rivet is a dome 8.4 mm across and 2.5
+    high, centred on the ring. The device draws it. The foot's 7.4 mm is read from the side view
+    at 7.7 px/mm (1200 dpi, scaled from the ring pitch).
   color: >-
     datasheet - "Color: Black", "Steel construction" (cablmanagerh_datasheet.pdf). The drawing
     is line work, so the shade is this library's render of black steel.
 size: {w: 482.6, h: 43.69, d: 87.59}
 size-confidence: {w: drawing, h: drawing, d: estimated}
 attrs: {material: steel}
-relief: {wall: '#1b1d20'}
+relief:
+  wall: '#1b1d20'
+  features:
+    - {node: bracket-1, out: 7.4, color: '#23262a', confidence: estimated, source: 'the side view of the CABLMANAGERH drawing, the ring foot a block 7.4 mm high'}
+    - {node: bracket-2, out: 7.4, color: '#23262a', confidence: estimated, source: 'the same view'}
+    - {node: bracket-3, out: 7.4, color: '#23262a', confidence: estimated, source: 'the same view'}
+    - {node: bracket-4, out: 7.4, color: '#23262a', confidence: estimated, source: 'the same view'}
+    - {node: bracket-5, out: 7.4, color: '#23262a', confidence: estimated, source: 'the same view'}
 elements:
   floor: {at: [0.0, 0.0], size: [482.6, 43.69], class: bezel}
+  bracket-1: {at: [21.3, 0.845], size: [40.0, 42.0], class: bezel}
+  bracket-2: {at: [121.3, 0.845], size: [40.0, 42.0], class: bezel}
+  bracket-3: {at: [221.3, 0.845], size: [40.0, 42.0], class: bezel}
+  bracket-4: {at: [321.3, 0.845], size: [40.0, 42.0], class: bezel}
+  bracket-5: {at: [421.3, 0.845], size: [40.0, 42.0], class: bezel}
 skins: [default]
