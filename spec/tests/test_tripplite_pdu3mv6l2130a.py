@@ -221,6 +221,30 @@ def test_each_of_the_four_plain_holes_sits_in_a_hexagon_drawn_as_a_silkscreen_pa
         assert abs(x + w / 2 - cx) < 0.06 and abs(y + h / 2 - cy) < 0.06, f"hole {n} is concentric with its hexagon"
 
 
+# The meter's four legends, read from the sheet's glyph paths at the front view's scale. LOAD (AMPS) runs 29.8 to 30.0 mm and
+# its centre stands at x 11.8, y 910.8. The pair labels run 10.2, 10.8 and 10.8 mm and their centres stand at x 42.9, 43.2
+# and 43.5. The kit's text takes a font size and a point, so each size is set to give the sheet's length: 4.7 and 4.35.
+LEGENDS = {
+    "LOAD (AMPS)": (13.01, 910.84, 4.7),
+    "L3-L1": (44.46, 887.7, 4.35),
+    "L2-L3": (44.78, 910.3, 4.35),
+    "L1-L2": (45.03, 933.45, 4.35),
+}
+
+
+@pytest.mark.heavy
+def test_the_meter_legends_stand_at_the_size_and_place_the_sheet_prints():
+    svg = (DIST / f"{NAME}.front.svg").read_text()
+    found = {}
+    for m in re.finditer(r'<text x="([-\d.]+)" y="([-\d.]+)"[^>]* font-size="([\d.]+)"[^>]*data-class="silkscreen"[^>]*>([^<]+)</text>', svg):
+        found[m.group(4)] = (float(m.group(1)), float(m.group(2)), float(m.group(3)))
+    assert sorted(found) == sorted(LEGENDS), f"the front carries these legends: {sorted(found)}"
+    for text, (x, y, size) in LEGENDS.items():
+        fx, fy, fsize = found[text]
+        assert abs(fx - x) < 0.06 and abs(fy - y) < 0.06, f"{text} stands at ({fx}, {fy}), the sheet puts it at ({x}, {y})"
+        assert fsize == pytest.approx(size, abs=0.06), f"{text} is {fsize} high, the sheet's length needs {size}"
+
+
 @pytest.mark.heavy
 def test_the_removable_brackets_are_named_17_3_mm_past_the_back():
     assert "17.3" in gaps()["side-projections"]["note"]
@@ -283,8 +307,15 @@ def test_the_two_buttons_stand_1556_apart_on_the_rear():
     assert round(gap, 2) == 1556.0
 
 
+# The rear view draws two seam ticks, one on each edge, at 1452.1 mm from the top end. Each is 15.5 mm long with round ends,
+# the left 1.55 wide. The sheet's right tick stands past the right edge, so it is drawn on the edge, 0.6 wide. The sheet has
+# none at 1398.5 mm: the lines there lie on the strip's own outline.
+SEAM_TICK_TOP = 1452.1
+SEAM_TICK_LENGTH = 15.5
+
+
 @pytest.mark.heavy
-def test_the_rear_draws_the_keyhole_plate_the_two_bracket_plates_and_four_seam_ticks():
+def test_the_rear_draws_the_keyhole_plate_the_two_bracket_plates_and_two_seam_ticks():
     shapes = decor("rear")
     width, length = 56.0, 1776.44
     for name, (x, y, w, h) in shapes.items():
@@ -296,7 +327,11 @@ def test_the_rear_draws_the_keyhole_plate_the_two_bracket_plates_and_four_seam_t
     for part in ("keyhole-slot", "keyhole-bulb"):
         x, y, w, h = shapes[part]
         assert plate[0] <= x and x + w <= plate[0] + plate[2] and plate[1] <= y and y + h <= plate[1] + plate[3], part
-    assert sorted(round(shapes[n][1], 1) for n in shapes if n.startswith("seam-tick")) == [1398.5, 1398.5, 1453.4, 1453.4]
+    ticks = {n: shapes[n] for n in shapes if n.startswith("seam-tick")}
+    assert len(ticks) == 2, "the drawing has two seam ticks, one on each edge, and none at 1398.5 mm"
+    assert [round(t[1], 1) for t in ticks.values()] == [SEAM_TICK_TOP, SEAM_TICK_TOP], ticks
+    assert [round(t[3], 1) for t in ticks.values()] == [SEAM_TICK_LENGTH, SEAM_TICK_LENGTH], ticks
+    assert sorted(round(t[0], 1) for t in ticks.values()) == [0.2, 55.4], "one on each edge"
     assert len([n for n in shapes if n.startswith("bracket-plate")]) == 2
     assert len([n for n in shapes if re.fullmatch(r"bracket-hole-\d+", n)]) == 8
     assert len([n for n in shapes if re.fullmatch(r"rear-mark-\d+", n)]) == 2

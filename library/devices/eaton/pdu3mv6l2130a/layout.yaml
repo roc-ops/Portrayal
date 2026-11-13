@@ -89,7 +89,9 @@ provenance:
     note: >-
       drawing - one meter of three rows, "Digital Load Meter" on page 1. Each row reads "88.8" with its pair
       printed beside it. L3-L1 is at the top, then L2-L3 and L1-L2, and "LOAD (AMPS)" runs along the side. The
-      rows' grey backgrounds are the drawing's own fills, 67.84, 44.31 and 25.88 per cent grey. The product
+      legends are read from the sheet's glyph paths. LOAD (AMPS) runs 29.9 long and the pair labels 10.2, 10.8
+      and 10.8. The kit's text takes only a size and a point, so each is sized to the sheet's length. The labels'
+      letters stand 3.1 high against the sheet's 3.4. The rows' grey backgrounds are the drawing's own fills, 67.84, 44.31 and 25.88 per cent grey. The product
       page says "Set of 3 digital current meters report output current per phase". Page 1 says the input
       current is displayed (disagreements, gaps: meter-reads). Both statements are kept and the rows are labelled with
       the pair. Each row is three characters of eaton/tripplite-phase-meter@1. The part's rows are equal, while the
@@ -111,9 +113,10 @@ provenance:
       42.2 along at the left edge. Four holes and the two round marks carry inner rings. It draws two small round marks lower on the right.
       The two buttons are the shared button part, whose rings are not the sheet's (gaps: shared-part-rings). A keyhole plate holds the top button, and the lower button has none. It is 56.8 wide
       and 59.0 along, from 88.5 below the top end, and it overhangs the left edge by 3.9. It is drawn from
-      the edge, with its keyhole slot above the button. Four seam ticks stand on the edges at 1398.5 and
-      1453.4 from the top end, each about 13.8 long. The right tick of the lower pair is 1.0 past the edge in
-      the drawing and is drawn on the edge. All are estimated off the vector sheet at the rear view's own scale,
+      the edge, with its keyhole slot above the button. Two seam ticks stand on the edges at 1452.1 from the
+      top end, one on each edge. Each is 15.5 long with round ends, and the left is 1.55 wide. The right tick
+      is 1.0 past the edge in the drawing and is drawn on the edge, 0.6 wide. The sheet draws no tick at
+      1398.5, where its lines lie on the strip's own outline. All are estimated off the vector sheet at the rear view's own scale,
       3.10697 mm per point, good to about 0.5 mm. Each hole stands 2.27 mm below the top edge of its plate.
       The two marks are measured from the lower plate. The plate's side tab and the brackets stand outside the
       body and are not drawn (gaps: side-projections).
@@ -135,8 +138,8 @@ provenance:
   input:
     confidence: datasheet
     note: >-
-      datasheet and drawing - "Input Connector L21-30P", "Input Cord Length 6 ft." (page 1), "NEMA L21-30P"
-      (product page), and detail E, the twist-lock plug face. The cord is attached and leaves the end of the
+      datasheet and drawing: "Input Connector L21-30P", "Input Cord Length 6 ft." (page 1), "NEMA L21-30P"
+      (product page). Detail E draws the twist-lock plug face. The cord is attached and leaves the end of the
       strip through a hex strain relief, so the part stands on the bottom face. Its `input-plug` is the slug
       the cord part exports, `nema-l21-30p`. The input is 208 V three-phase, 24 A continuous (agency
       de-rated), from the product page. The drawing's page 1 gives "208V 3-Phase Input / 208V Single-Phase
@@ -437,10 +440,10 @@ views:
       - {id: seam-line-3, at: [0.57, 1410.775], size: [54.94, 0.25], fill: '#17181a', kind: seam}
     silkscreen:
     - {block: outlets}
-    - {at: [6.4, 910.5], text: LOAD (AMPS), font-size: 2.4, anchor: middle, rotate: 270, for: chassis}
-    - {at: [47.6, 885.8], text: L3-L1, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
-    - {at: [47.6, 910.3], text: L2-L3, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
-    - {at: [47.6, 934.8], text: L1-L2, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
+    - {at: [13.01, 910.84], text: LOAD (AMPS), font-size: 4.7, anchor: middle, rotate: 270, for: chassis}
+    - {at: [44.46, 887.7], text: L3-L1, font-size: 4.35, anchor: middle, rotate: 270, for: chassis}
+    - {at: [44.78, 910.3], text: L2-L3, font-size: 4.35, anchor: middle, rotate: 270, for: chassis}
+    - {at: [45.03, 933.45], text: L1-L2, font-size: 4.35, anchor: middle, rotate: 270, for: chassis}
     - {id: hex-ring-13, at: [11.7, 1619.2], for: chassis, filled: true, fill-rule: evenodd, fill: '#1f2022', path: 'M-2.75 0 L-1.375 -2.38 L1.375 -2.38 L2.75 0 L1.375 2.38 L-1.375 2.38 Z M-2.1 0 a2.1 2.1 0 1 0 4.2 0 a2.1 2.1 0 1 0 -4.2 0 Z'}
     - {id: hex-ring-14, at: [44.4, 1619.2], for: chassis, filled: true, fill-rule: evenodd, fill: '#1f2022', path: 'M-2.75 0 L-1.375 -2.38 L1.375 -2.38 L2.75 0 L1.375 2.38 L-1.375 2.38 Z M-2.1 0 a2.1 2.1 0 1 0 4.2 0 a2.1 2.1 0 1 0 -4.2 0 Z'}
     - {id: hex-ring-15, at: [12.4, 1734.1], for: chassis, filled: true, fill-rule: evenodd, fill: '#1f2022', path: 'M-2.75 0 L-1.375 -2.38 L1.375 -2.38 L2.75 0 L1.375 2.38 L-1.375 2.38 Z M-2.1 0 a2.1 2.1 0 1 0 4.2 0 a2.1 2.1 0 1 0 -4.2 0 Z'}
@@ -516,10 +519,8 @@ views:
       - {id: keyhole-plate, at: [0.0, 88.5], size: [52.9, 59.0], rx: 0.8, fill: '#34363a', kind: plate}
       - {id: keyhole-slot, at: [22.2, 96.2], size: [11.5, 22.0], rx: 5.7, fill: '#111213', kind: hole}
       - {id: keyhole-bulb, at: [16.8, 109.3], size: [22.4, 17.7], rx: 8.8, fill: '#111213', kind: hole}
-      - {id: seam-tick-1, at: [0.0, 1398.5], size: [0.6, 13.8], fill: '#17181a', kind: seam}
-      - {id: seam-tick-2, at: [55.4, 1398.5], size: [0.6, 13.8], fill: '#17181a', kind: seam}
-      - {id: seam-tick-3, at: [0.7, 1453.4], size: [0.6, 13.7], fill: '#17181a', kind: seam}
-      - {id: seam-tick-4, at: [55.4, 1453.4], size: [0.6, 13.7], fill: '#17181a', kind: seam}
+      - {id: seam-tick-1, at: [0.2, 1452.1], size: [1.55, 15.46], rx: 0.775, fill: '#17181a', kind: seam}
+      - {id: seam-tick-2, at: [55.4, 1452.1], size: [0.6, 15.46], rx: 0.3, fill: '#17181a', kind: seam}
       - {id: bracket-plate-1, at: [2.55, 280.7], size: [53.45, 47.0], rx: 1.55, fill: '#34363a', kind: plate}
       - {id: bracket-plate-2, at: [2.55, 1525.4], size: [53.45, 47.0], rx: 1.55, fill: '#34363a', kind: plate}
       - {id: bracket-tab-1, at: [0.0, 283.2], size: [1.7, 42.2], fill: '#2a2c2f', kind: plate}
