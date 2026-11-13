@@ -117,8 +117,40 @@ def test_the_console_and_usb_ports_and_the_serial_jacks_each_sit_on_one_pale_hou
     serial = decor["housing-serial"]
     for p in _in_group(lm4, "serial"):
         assert serial["at"][0] <= p["at"][0] <= serial["at"][0] + serial["size"][0]
-    assert serial["at"][1] + serial["size"][1] <= decor["bar-serial-bottom"]["at"][1]
-    assert decor["bar-serial-top"]["at"][1] + decor["bar-serial-top"]["size"][1] <= serial["at"][1]
+    assert serial["at"][1] + serial["size"][1] <= decor["bar-serial-bottom"]["at"][1] + 0.3
+    assert decor["bar-serial-top"]["at"][1] + decor["bar-serial-top"]["size"][1] <= serial["at"][1] + 0.3
+
+
+# The outer edge of each housing's black outline in the dimensions figure, mm: left, top, right, bottom.
+# Each is the midpoint of two readings of the same edge, and the build stands within 0.3 mm of it.
+FIGURE_HOUSINGS = {
+    "housing-serial": (114.57, 6.99, 149.51, 35.45),
+    "housing-console-usb": (91.69, 3.16, 111.96, 35.45),
+    "housing-e1": (46.25, 20.72, 63.92, 35.44),
+    "housing-sfp": (69.95, 24.25, 85.79, 35.44),
+    "dc-housing": (11.03, 27.14, 19.40, 35.05),
+    "dc-housing-tab": (12.50, 23.78, 17.97, 27.14),
+}
+
+
+def test_each_housing_stands_within_0_3_mm_of_the_outline_of_the_dimensions_figure():
+    decor = _decor(_lm4())
+    for ident, want in FIGURE_HOUSINGS.items():
+        box = decor[ident]
+        have = (box["at"][0], box["at"][1], box["at"][0] + box["size"][0], box["at"][1] + box["size"][1])
+        for edge, w, h in zip(("left", "top", "right", "bottom"), want, have):
+            assert abs(h - w) <= 0.3, (ident, edge, h, w)
+
+
+def test_the_e1_and_sfp_housings_stand_behind_their_parts_and_reach_past_them_to_the_figure():
+    decor = _decor(_lm4())
+    placed = _placed(_lm4())
+    for housing, part, (w, h) in (("housing-e1", "net-1", (15.8, 13.2)), ("housing-sfp", "port-2", (14.5, 10.0))):
+        box, at = decor[housing], placed[part]["at"]
+        assert box["at"][0] <= at[0] and box["at"][1] <= at[1], housing
+        assert at[0] + w <= box["at"][0] + box["size"][0] and at[1] + h <= box["at"][1] + box["size"][1], housing
+    ids = list(decor)
+    assert ids.index("housing-sfp") < ids.index("sfp-rim-mark-1") and ids.index("housing-sfp") < ids.index("sfp-pull-tab")
 
 
 def test_the_button_the_reset_pinhole_and_the_four_corner_screws_are_round():
@@ -243,20 +275,22 @@ def test_the_wordmark_and_the_registered_mark_sit_in_the_logo_zone_and_no_gap_as
     assert not [g for g in lm4["gaps"] if g["what"] in ("registered-mark", "front-positions", "indicator-led")]
 
 
-def test_the_rack_ear_is_drawn_on_each_side_outside_the_chassis_and_optional():
+def test_no_rack_ear_is_placed_on_the_desktop_unit_and_the_gap_and_the_note_say_why():
     lm4 = _lm4()
-    placed = _placed(lm4)
-    left, right = placed["ear-left"], placed["ear-right"]
-    assert left["ref"] == right["ref"] == "common/rack-ear@1"
-    assert left["optional"] == right["optional"] == "ears"
-    assert left["at"][0] < 0 and right["at"][0] == lm4["chassis"]["width"]
+    assert lm4["chassis"]["mount"] == "desktop" and "ears" not in lm4["chassis"]
+    assert not [p for p in _front(lm4) if p["ref"] == "common/rack-ear@1" or p.get("optional") == "ears"]
+    assert not [p for p in _front(lm4) if p["id"] in ("ear-left", "ear-right")]
     note = " ".join(lm4["provenance"]["mount"]["note"].split())
-    assert "one provided rack mounting ear" in note and "ships one" in note
+    assert "one provided rack mounting ear" in note
+    assert "states `ears` for a rack device only, so no ear is placed" in note
+    gap = next(g for g in lm4["gaps"] if g["what"] == "mounting")
+    assert gap["scope"] == ["front"] and gap["reason"] == "needs-drawing"
+    assert "two loose screws" in " ".join(gap["note"].split())
 
 
 def test_the_gaps_are_the_ones_no_held_document_answers():
     lm4 = _lm4()
-    assert {g["what"] for g in lm4["gaps"]} == {"dc-input", "rear-panel", "lamp-colour", "din-rail-mount",
+    assert {g["what"] for g in lm4["gaps"]} == {"dc-input", "rear-panel", "lamp-colour", "din-rail-mount", "mounting",
                                                 "envelope-faces-undetailed"}
     gap = next(g for g in lm4["gaps"] if g["what"] == "dc-input")
     note = " ".join(gap["note"].split())
@@ -275,7 +309,7 @@ def test_the_dc_housing_opening_is_drawn_as_decor_with_four_cells_and_no_part_is
     assert len(cells) == 4
     assert abs(cells[1]["at"][0] - cells[0]["at"][0] - 2.95) < 0.02 and abs(cells[2]["at"][1] - cells[0]["at"][1] - 2.93) < 0.05
     body = decor["dc-housing"]
-    assert abs(body["size"][0] - 8.6) < 0.1 and abs(decor["dc-housing-tab"]["at"][1] - 23.7) < 0.01
+    assert abs(body["size"][0] - 8.35) < 0.01 and abs(decor["dc-housing-tab"]["at"][1] - 23.75) < 0.01
     opening = decor["dc-opening"]
     for cell in cells:
         assert opening["at"][0] <= cell["at"][0] and cell["at"][0] + cell["size"][0] <= opening["at"][0] + opening["size"][0]
@@ -323,12 +357,14 @@ def test_the_sfp_cage_has_four_grey_marks_on_its_top_rim():
     assert len(marks) == 4
     port = _placed(_lm4())["port-2"]
     for mark in marks:
+        assert mark["kind"] == "bezel", "a rim mark is not a latch"
         assert 2.3 <= mark["size"][0] <= 2.7 and mark["size"][1] == 0.6
         assert port["at"][0] - 0.5 <= mark["at"][0] and mark["at"][0] + mark["size"][0] <= port["at"][0] + 16.0
+    assert decor["sfp-pull-tab"]["kind"] == "latch"
     gaps = [b["at"][0] - (a["at"][0] + a["size"][0]) for a, b in zip(marks, marks[1:])]
     assert all(1.4 < g < 2.0 for g in gaps)
     note = " ".join(_lm4()["provenance"]["body"]["note"].split())
-    assert "They are drawn as decor, estimated" in note
+    assert "They are drawn as decor, estimated" in note and "sit on the SFP housing's top band" in note
 
 
 def test_the_sources_that_disagree_are_each_said_in_the_notes():
