@@ -125,11 +125,14 @@ def test_the_r740xd_is_solid_and_nothing_else_regressed():
     assert levels["dell/r740xd"] >= 3, levels["dell/r740xd"]
     # no device in the library is blocked by a dimension disagreement any more
     assert dim_blocked == [], dim_blocked
-    # and the ones that are incomplete are incomplete for their own reasons
-    # (the two nokia kit parts are drawn front and rear only: the vendor's data sheet gives their sizes, not their sides)
+    # and the ones that are incomplete are incomplete for their own reasons.
+    # The nokia kit parts are drawn front and rear only: the vendor's data sheet gives their sizes, not their sides.
+    # The two Opengear gateways draw only a front and a rear: no held picture shows their sides.
+    # Their assessment needs "4 views top, bottom, left, right (six faces describe one box)".
     assert sorted(s for s, lv in levels.items() if lv < 4) == [
         "cisco/ws-c2960s-24pd", "cisco/ws-c2960s-24td", "cisco/ws-c2960s-48fpd", "cisco/ws-c2960s-48lpd",
         "cisco/ws-c2960s-48td",
         "nokia/fx4-vertical-air-intake-tray", "nokia/fx4-vertical-top-baffle",
         "nokia/fx8-vertical-air-intake-tray", "nokia/fx8-vertical-top-baffle",
+        "opengear/acm7004-2-l", "opengear/acm7004-5-l",
         "ufispace/s9502-12sm", "ufispace/s9620-32e", "ufispace/s9620-40dg"]
