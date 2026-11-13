@@ -1,0 +1,337 @@
+format: 1
+kind: device
+name: dsxa-32
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: DSXA-32
+portfolio: {line: Console servers, family: Dominion SX}
+description: >-
+  Raritan Dominion SX DSXA-32, a 32-port serial console server with dual AC power, one Ethernet port and a built-in modem, 1U.
+  The rear carries two AC inlets, each with a power switch, and a modem jack. It has a DB9 terminal port, a 10/100 Ethernet jack,
+  three lamps and a reset hole. Thirty-two RJ45 serial ports sit in four groups of two rows of four.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Datasheet - Raritan Dominion SX data sheet (2008, V1008R3), page 4: the model table with the width, depth, height and weight of the DSXA-32.
+      The same page holds the rear-panel photograph labelled DSXA-32 shown. Dominion SX Quick Setup Guide v3.5 (QSG-DSXv3-5.0-0N-E), page 2:
+      the connection figure and its key. The figure is for a model with two power outlets, one LAN interface and 32 server ports.
+      Page 1 of that guide holds an oblique photograph of a unit labelled SX16. Dominion SX User Guide v3.5, printed pp. 23 to 27:
+      the same key and the port numbering of the 32-port models. Its Appendix A (printed pp. 253 to 262) holds the terminal ports and the
+      dimension table. No dimensioned drawing or 3D model is held.
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING IS HELD, SO EVERY POSITION ON THE REAR IS MEASURED OFF THE DATA SHEET PHOTOGRAPH AND IS ESTIMATED.
+      The photograph is embedded at 545 by 100 pixels. The page was rendered at 600 dpi, which enlarges it four times.
+      In the render the rear face spans 2040 pixels for 440 mm, 4.64 pixels per millimetre, so one embedded pixel is about 0.86 mm.
+      The face height reads 43 mm against 44, so the view is square-on to about 3 percent across the rear plate.
+      The lid recedes above it and is not measured. The serial jack pitch reads 65 pixels, 14.0 mm, which agrees with the library's 13.97 ganged pitch.
+      A rear position is good to about 1 mm across and 2 mm down. The front and the side vents are read from the quick setup guide's page 1.
+      That photograph shows a unit labelled SX16. It is oblique and 398 pixels wide, so a position there is good to about 10 mm (gaps: front-photo).
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet page 4 and User Guide Appendix A (printed p. 253) both give 17.32 x 11.41 x 1.75 in for the DSXA-32.
+      That is 440 x 290 x 44 mm, as width, depth and height. Both give its weight as 8.40 lb (3.78 kg).
+      Whether the depth includes the rack brackets is not stated.
+  colour:
+    confidence: photo-measured
+    note: >-
+      Medians of the data sheet photograph rendered at 600 dpi. The rear face reads #a39ea5 from 900 pixels and the modem plate #8f8e96 from 1200 pixels.
+      The inlet recesses read #2d2c30 from 800 pixels and the DB9 shell #0d618c from 1500 pixels. The serial bank plates read #c7bfbc from 200 pixels.
+      The photograph shows a light grey box, not the black of the SX II. The three vents are drawn as hole and slot patterns on the face colour.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      From the data sheet photograph and the quick setup guide's figure, read from the left. Two AC inlets come first, each with a rocker switch above it.
+      Then the modem plate with an RJ11 jack, and the DB9 terminal port with a jackscrew at each end. Below the DB9 sits the Ethernet jack,
+      with three lamps to its left and the reset hole to its right. The serial ports follow in four groups of two rows of four.
+      The jack under the modem plate is the built-in modem the data sheet lists for this model (key B in the guide).
+  serial-ports:
+    confidence: datasheet
+    note: >-
+      Data sheet page 4 captions the jacks "RJ-45 Serial Ports". User Guide printed p. 26 has a figure, "32 Port SX Models - Port Numbering".
+      It numbers ports 1 to 4 on the lower row and 5 to 8 on the upper row of the first group. Ports 9 to 16, 17 to 24 and 25 to 32 follow in the next groups.
+      The RJ-45 serial pins in Appendix A are RTS, DTR, TxD, GND, signal GND, RxD, DSR and CTS on pins 1 to 8.
+      The upper row is drawn turned 180 degrees from the lower. That is an estimate, as the photograph is too small to show the latch side.
+  terminal-port:
+    confidence: datasheet
+    note: >-
+      Quick Setup Guide page 3, command line setup step 1, says: "This port is a DB9 male port on all models except" some.
+      The exceptions are models with two power connectors and two LAN interfaces. The DSXA-32 has one LAN interface, so its terminal port is the DB9 male port.
+      The photograph has a caption under the DB9 and another under the reset hole. Each is about 2 embedded pixels tall, 1.7 mm, too small to read.
+      The guide's wording for other models is not evidence of this one, so neither legend is drawn (gaps: legends).
+  lamps:
+    confidence: datasheet
+    note: >-
+      User Guide printed p. 23, key G: the unit status lamp blinks on network or serial activity. The Activity and 10/100 lamps are tied to the network port.
+      The photograph shows three small lamps left of the Ethernet jack, two green and one amber by eye.
+      Each is about 3 pixels across in the embedded picture.
+      Each caption beside them is about 2 pixels tall there, too small to read, so the guide's lamps are not matched to them.
+      Lit colours are the median of the 12 most saturated pixels of a 30 by 24 pixel box in the 600 dpi render.
+      The top lamp reads #527058, the middle one #587765 and the low one #897f5b.
+      These are dull, so the library's green and amber are used for the lit states. No blink behaviour is stated, as no lamp is matched to a guide entry.
+      The lamps are drawn off.
+  front:
+    confidence: estimated
+    note: >-
+      Read from the oblique photograph on the quick setup guide's page 1, 398 pixels wide, of a unit labelled SX16. It shows one perforated band.
+      The Raritan logo sits at its left end and a model label at its right end. A blue mark sits above the right end of the band.
+      The holes form a staggered lattice. Alternate rows are offset by 0.48 to 0.51 of a pitch, read over 21 holes a row.
+      The hole pitch is 4.13 pixels, 5.63 mm, and the row pitch is about 3 pixels, 4.3 mm. The scales are 1.36 mm a pixel across and 1.42 down.
+      The band has seven rows at its left end and five from pixel column 76 to its right end. The rows hold 9, 9, 56, 55, 54, 54 and 50 holes.
+      Each row is drawn as its own hole pattern at its counted length, so the band keeps the slanted ends the photograph shows.
+      The first full row sits about 22 mm below the top. The last row sits about 4 mm above the bottom. Both are read from the face edges in the picture.
+      The logo mark is about 25 pixels wide there and the label about 30. Both are regions without text.
+      The photograph shows one blue mark, at about 84 percent of the face width and 11 mm below the top, and none at the left. One lamp is drawn off at that mark.
+      The blue reads #5a7d82 from the 12 bluest of 360 pixels, so a library blue is used.
+  side-walls:
+    confidence: estimated
+    note: >-
+      Both walls are read from the oblique photograph on the quick setup guide's page 1, which shows two stacked units.
+      The upper unit is seen from the front and the lower unit from the rear, so the picture shows opposite walls of the two.
+      Left and right are as seen from the front. The upper unit's wall is the right wall, with the front at its left as the right view runs.
+      The lower unit's wall is the left wall, with the rear at its left as the left view runs. Each wall has three rows, 4.7 pixels apart, about 5.6 mm.
+      The right wall rows read as dashes at a pitch of 2.9 pixels, about 12 mm, from pixel column 336 to 384. That is x 45.5 to 253 mm, drawn as 17 whole dashes.
+      The left wall rows read as dots at a pitch of 2.4 pixels, about 9.6 mm, from column 330 to 383. That is x 17 to 245 mm, drawn as 24 dots.
+      The depth scale is 4.33 mm per pixel, from wall corners 67 pixels apart. The pattern stops inside the picture on both walls.
+      The unit above hides the top of the lower wall. Its rows are placed from its bottom edge, and only the visible extent is drawn.
+      A mark is 1 to 2 pixels, so its size is the pattern's own proportion at the pitch.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet page 4: 110/240 VAC auto-switching, 50 to 60 Hz, dual-feed AC, 32-port maximum 9.375 W.
+      Two inlets, each drawn as an IEC C14 as the photograph shows, each with a power on/off switch (guide key A).
+attrs:
+  physical:
+    weight-note: 8.40 lb (3.78 kg), data sheet page 4
+  power:
+    power-max-w: 9.375
+    power-input: 110 to 240 VAC auto-switching, 50 to 60 Hz, dual-feed, two C14 inlets (data sheet)
+  environmental:
+    operating-temp-c: 0 to 40
+    operating-humidity: 20% to 85% non-condensing
+  features:
+    serial-pinout: RJ45 pins in user guide Appendix A
+    modem: built-in modem
+    ethernet: one 10/100 RJ45
+    terminal: DB9 male terminal port
+chassis:
+  width: 440
+  height: 44
+  depth: 290
+  ru: 1
+  color: '#a39ea5'
+  ears:
+    positions:
+    - {name: flush, label: bracket mount, default: true}
+  power: ac
+gaps:
+- what: dimensioned-drawing
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    No dimensioned drawing or 3D model is held. The rear is measured off a photograph and every position is estimated (provenance method).
+  wanted: A dimensioned front and rear view of the DSXA-32.
+- what: front-photo
+  scope: [front, left, right]
+  reason: needs-photo
+  note: >-
+    No held page shows the front straight on. The only picture is an oblique photograph on the quick setup guide's page 1, 398 pixels wide, of a unit labelled SX16.
+    It shows a perforated bezel with a logo at the left and a model label at the right. The front is drawn from it as an estimate and may differ on the 32-port unit.
+  wanted: A straight-on front photograph of the DSXA-32.
+- what: rack-kit
+  scope: [front, left, right]
+  reason: needs-drawing
+  note: >-
+    The User Guide's table (printed p. 26) lists a 19-inch rack-mount kit for the DSXA-32. The held guides print no bracket drawing, hole spacing or part number.
+    No bracket is drawn.
+  wanted: A dimensioned drawing of the rack kit.
+- what: lamp-captions
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The three lamps beside the Ethernet jack are about 3 pixels across in the embedded photograph, and their captions are about 2 pixels tall.
+    The captions cannot be read, so the lamps are not matched to the guide's list.
+  wanted: A close photograph of the Ethernet jack and its lamps.
+- what: modem-label
+  scope: [rear]
+  reason: needs-photo
+  note: The caption under the modem jack is about 2 pixels tall in the embedded photograph. It cannot be read, so no text is drawn on that plate.
+  wanted: A close photograph of the modem plate.
+- what: inlet-captions
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    Each inlet has a small caption block to its right and a mark at the corner of its recess. A network symbol sits under the Ethernet jack.
+    Each is about 2 pixels tall in the embedded photograph, so none is drawn.
+  wanted: A close photograph of the inlets and the Ethernet jack.
+- what: top-and-bottom
+  scope: [top, bottom]
+  reason: needs-photo
+  note: >-
+    No held page shows the top or the bottom straight on, so neither is drawn.
+    The rear photographs show a banded logo area on the lid. It is a mark and is not drawn.
+  wanted: Photographs or a drawing of the top and the bottom.
+- what: front-holes
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    The lattice is staggered and counted row by row, but the photograph is oblique and 398 pixels wide.
+    The straight-on outline, the row count and the hole size are unknown. A hole is 1 to 3 pixels by two methods, so the pattern draws its own proportion.
+    The two short rows at the left end sit on the curved cap, so their place is a guess.
+  wanted: A straight-on front photograph of the DSXA-32, to read the lattice outline and the hole size.
+- what: side-slot-rows
+  scope: [left, right]
+  reason: needs-photo
+  note: >-
+    Each side wall is drawn as a pattern from its own wall in the photograph, but the mark size and the exact pitch are estimates.
+    A mark is 1 to 2 pixels in a 398 pixel photograph. The unit above hides the top of the left wall, so its rows are placed from its bottom edge.
+  wanted: A straight-on photograph of each side wall.
+- what: legends
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The captions under the DB9 and the reset hole are about 2 pixels tall in the embedded photograph and cannot be read.
+    The guide's text for the DSX16 and DSX32 is not evidence of this model, so no legend is drawn.
+  wanted: A close photograph of the DB9 and the reset hole.
+- what: db9-colour
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The photograph shows the DB9 shell blue, #0d618c from 1500 pixels. The shared DB9 part has a grey skin and a teal skin only.
+  wanted: A blue skin for the shared DB9 part, if the maintainer wants one.
+- what: lid-tabs
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    The three tabs on the rear face's top edge are drawn as flat rectangles, 10 by 1.7 mm. They are read from the data sheet photograph.
+    Their depth and shape are unknown. The photograph shows only a 2 pixel step in the shadow line of the lip.
+  wanted: A close photograph of the top edge of the rear face, to show the tab shape.
+groups:
+  inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two AC inlets, numbered 1 and 2 from the left'}
+  power-switches: {term: Switch, role: service, index-origin: 1, description: 'the rocker switch above each inlet'}
+  modem: {term: Port, role: management, index-origin: 1, attrs: {media: rj11}, description: 'the RJ11 jack of the built-in modem'}
+  console: {term: Port, role: management, index-origin: 1, attrs: {media: db9}, description: 'the DB9 male terminal port'}
+  lan: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 100m}, description: 'the 10/100 RJ45 Ethernet port'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the recessed reset hole'}
+  status-leds: {term: LED, role: indicator, index-origin: 1, description: 'the three lamps beside the Ethernet jack'}
+  front-leds: {term: LED, role: indicator, index-origin: 1, description: 'the one blue front lamp, at the right end of the bezel'}
+  serial-1-4: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 1 to 4, lower row of the first group'}
+  serial-5-8: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 5 to 8, upper row of the first group'}
+  serial-9-12: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 9 to 12, lower row of the second group'}
+  serial-13-16: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 13 to 16, upper row of the second group'}
+  serial-17-20: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 17 to 20, lower row of the third group'}
+  serial-21-24: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 21 to 24, upper row of the third group'}
+  serial-25-28: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 25 to 28, lower row of the fourth group'}
+  serial-29-32: {term: Port, role: management, index-origin: 1, attrs: {media: rj45-serial, role: console-server}, description: 'serial ports 29 to 32, upper row of the fourth group'}
+views:
+  front:
+    size: {w: 440, h: 44}
+    panel:
+      decor:
+      - {id: bezel-row-1, at: [48.8, 12.1], size: [50.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [48.8, 12.05], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 1, 9 holes at pixel columns 40.3 to 71.5'}
+      - {id: bezel-row-2, at: [52.3, 16.4], size: [50.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [52.3, 16.35], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 2, 9 holes at pixel columns 42.9 to 74.2'}
+      - {id: bezel-row-3, at: [50.6, 20.7], size: [315.2, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [50.6, 20.65], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 3, 56 holes at pixel columns 41.7 to 268.9'}
+      - {id: bezel-row-4, at: [53.4, 25.0], size: [309.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [53.4, 24.95], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 4, 55 holes at pixel columns 43.8 to 266.7'}
+      - {id: bezel-row-5, at: [56.2, 29.3], size: [304.0, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [56.2, 29.25], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 5, 54 holes at pixel columns 45.8 to 264.6'}
+      - {id: bezel-row-6, at: [59.2, 33.6], size: [304.0, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [59.2, 33.55], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 6, 54 holes at pixel columns 48.0 to 266.2'}
+      - {id: bezel-row-7, at: [67.7, 37.9], size: [281.5, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [67.7, 37.85], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 7, 50 holes at pixel columns 54.2 to 256.1'}
+    components:
+      placements:
+      - {ref: common/led-dot@1, id: led-front, at: [366.0, 11.0], for: chassis, group: front-leds, rel-pos: 1, states: ['off', {name: 'on', color: '#2f6fd6'}]}
+    regions:
+    - {id: logo-zone, at: [4.0, 8.0], size: {w: 22.0, h: 8.0}, label: 'Raritan logo at the left end; not drawn'}
+    - {id: model-label, at: [372.0, 12.0], size: {w: 40.0, h: 10.0}, label: 'Dominion SX model label at the right end; not drawn'}
+  rear:
+    size: {w: 440, h: 44}
+    panel:
+      decor:
+      - {id: recess-1, kind: frame-plate, at: [6.5, 5.8], size: [30.0, 33.7], rx: 1.0, fill: '#2d2c30'}
+      - {id: recess-2, kind: frame-plate, at: [44.7, 5.8], size: [30.0, 33.7], rx: 1.0, fill: '#2d2c30'}
+      - {id: modem-plate, kind: jack-plate, at: [85.2, 4.3], size: [23.7, 34.5], fill: '#8f8e96'}
+      - {id: db9-screw-left, kind: screw, at: [126.4, 9.6], size: [3.0, 3.0], rx: 1.5, fill: '#a8a8a0'}
+      - {id: db9-screw-right, kind: screw, at: [154.2, 9.6], size: [3.0, 3.0], rx: 1.5, fill: '#a8a8a0'}
+      - {id: bank-1, kind: jack-plate, at: [170.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
+      - {id: bank-2, kind: jack-plate, at: [237.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
+      - {id: bank-3, kind: jack-plate, at: [304.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
+      - {id: bank-4, kind: jack-plate, at: [371.8, 10.2], size: [58.0, 26.3], fill: '#c7bfbc'}
+      - {id: lid-tab-1, at: [85.6, 1.7], size: [10.0, 1.7], fill: '#6a656c', confidence: estimated, source: 'Data sheet page 4 photograph, embedded columns 114 to 124, 2 pixel step in the lip line, centre 90.6 mm from the left edge'}
+      - {id: lid-tab-2, at: [215.4, 1.7], size: [10.0, 1.7], fill: '#6a656c', confidence: estimated, source: 'Data sheet page 4 photograph, embedded columns 264 to 275, centre 220.4 mm from the left edge'}
+      - {id: lid-tab-3, at: [345.3, 1.7], size: [10.0, 1.7], fill: '#6a656c', confidence: estimated, source: 'Data sheet page 4 photograph, embedded columns 415 to 425, centre 350.3 mm from the left edge'}
+    silkscreen:
+    - {block: serial-1-4}
+    - {block: serial-5-8}
+    - {block: serial-9-12}
+    - {block: serial-13-16}
+    - {block: serial-17-20}
+    - {block: serial-21-24}
+    - {block: serial-25-28}
+    - {block: serial-29-32}
+    components:
+      blocks:
+      - {id: serial-1-4, ref: std/rj45-ganged@2, at: [171.95, 25.5], count: 4, rows: 1, pitch: 13.97, number-from: 1, id-format: 'serial-{n}', attrs: {media: rj45-serial}, numerals: {dx: 6.35, dy-top: 14.4, dy-bottom: 14.4, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-5-8, ref: std/rj45-ganged@2, at: [171.95, 10.7], count: 4, rows: 1, pitch: 13.97, number-from: 5, id-format: 'serial-{n}', attrs: {media: rj45-serial}, rotate: {top: 180}, numerals: {dx: 6.35, dy-top: -2.2, dy-bottom: -2.2, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-9-12, ref: std/rj45-ganged@2, at: [238.95, 25.5], count: 4, rows: 1, pitch: 13.97, number-from: 9, id-format: 'serial-{n}', attrs: {media: rj45-serial}, numerals: {dx: 6.35, dy-top: 14.4, dy-bottom: 14.4, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-13-16, ref: std/rj45-ganged@2, at: [238.95, 10.7], count: 4, rows: 1, pitch: 13.97, number-from: 13, id-format: 'serial-{n}', attrs: {media: rj45-serial}, rotate: {top: 180}, numerals: {dx: 6.35, dy-top: -2.2, dy-bottom: -2.2, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-17-20, ref: std/rj45-ganged@2, at: [305.95, 25.5], count: 4, rows: 1, pitch: 13.97, number-from: 17, id-format: 'serial-{n}', attrs: {media: rj45-serial}, numerals: {dx: 6.35, dy-top: 14.4, dy-bottom: 14.4, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-21-24, ref: std/rj45-ganged@2, at: [305.95, 10.7], count: 4, rows: 1, pitch: 13.97, number-from: 21, id-format: 'serial-{n}', attrs: {media: rj45-serial}, rotate: {top: 180}, numerals: {dx: 6.35, dy-top: -2.2, dy-bottom: -2.2, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-25-28, ref: std/rj45-ganged@2, at: [372.95, 25.5], count: 4, rows: 1, pitch: 13.97, number-from: 25, id-format: 'serial-{n}', attrs: {media: rj45-serial}, numerals: {dx: 6.35, dy-top: 14.4, dy-bottom: 14.4, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      - {id: serial-29-32, ref: std/rj45-ganged@2, at: [372.95, 10.7], count: 4, rows: 1, pitch: 13.97, number-from: 29, id-format: 'serial-{n}', attrs: {media: rj45-serial}, rotate: {top: 180}, numerals: {dx: 6.35, dy-top: -2.2, dy-bottom: -2.2, font-size: 2.0, anchor: middle, fill: '#3a3a3a'}}
+      placements:
+      - {ref: common/rocker-switch@1, id: power-switch-1, at: [11.0, 4.6], for: inlet-1, group: power-switches, rel-pos: 1}
+      - {ref: common/rocker-switch@1, id: power-switch-2, at: [49.2, 4.6], for: inlet-2, group: power-switches, rel-pos: 2}
+      - {ref: std/c14-inlet@1, id: inlet-1, at: [7.5, 19.0], rotate: 180, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: inlet-2, at: [45.7, 19.0], rotate: 180, group: inlets, rel-pos: 2}
+      - {ref: common/rj11-jack@1, id: modem, at: [90.1, 15.4], group: modem, rel-pos: 1}
+      - {ref: std/db9@1, id: console, at: [131.4, 6.6], group: console, rel-pos: 1, attrs: {role: console}}
+      - {ref: common/rj45-eth@1, id: lan-1, at: [132.6, 22.8], group: lan, rel-pos: 1}
+      - {ref: common/led-dot@1, id: led-1, at: [127.4, 21.2], for: lan-1, group: status-leds, rel-pos: 1, states: ['off', {name: 'on', color: '#39b54a'}]}
+      - {ref: common/led-dot@1, id: led-2, at: [127.4, 26.0], for: lan-1, group: status-leds, rel-pos: 2, states: ['off', {name: 'on', color: '#39b54a'}]}
+      - {ref: common/led-dot@1, id: led-3, at: [127.4, 31.4], for: lan-1, group: status-leds, rel-pos: 3, states: ['off', {name: 'on', color: '#f5a623'}]}
+      - {ref: common/reset-button@1, id: reset, at: [157.4, 29.3], for: chassis, group: buttons, rel-pos: 1}
+      - {block: serial-1-4}
+      - {block: serial-5-8}
+      - {block: serial-9-12}
+      - {block: serial-13-16}
+      - {block: serial-17-20}
+      - {block: serial-21-24}
+      - {block: serial-25-28}
+      - {block: serial-29-32}
+  top:
+    size: {w: 440, h: 290}
+    empty: >-
+      No held picture looks at the top straight on, so the top face is not drawn.
+  bottom:
+    size: {w: 440, h: 290}
+    empty: >-
+      No held page shows the underside: no photograph, drawing or guide figure looks at it.
+  left:
+    size: {w: 290, h: 44}
+    panel:
+      decor:
+      - {id: side-vent, at: [17.0, 18.6], size: [228.0, 16.8], pattern: holes, pattern-pitch: [9.6, 5.6], pattern-offset: [17.0, 18.6], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, the wall of the lower unit seen from the rear: 3 dotted rows at pixel columns 330 to 383, visible extent only'}
+  right:
+    size: {w: 290, h: 44}
+    panel:
+      decor:
+      - {id: side-vent, at: [45.5, 16.9], size: [204.0, 16.8], pattern: slots-h, pattern-pitch: [12.0, 5.6], pattern-offset: [45.5, 16.9], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, the wall of the upper unit seen from the front: 3 dashed rows at pixel columns 336 to 384'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      DSXA-32, the 32-port unit with dual AC power, one Ethernet port and a built-in modem. The rack kit is not drawn.
+    part-numbers:
+      DSXA-32: {}
+datasheet:
+  title: 'Dominion SX data sheet, V1008R3 (2008), Raritan'
+  url: https://www.raritan.com/assets/ram/resources/data_sheets/raritan-ds-DominionSX.pdf
+  sha256: 962aaadbb1785d77cbafac3c18a5473414a0ec71ab63b4b0697e2fbee5228d45
+references:
+- {title: 'Dominion SX data sheet, V1008R3 (2008), Raritan', sha256: 962aaadbb1785d77cbafac3c18a5473414a0ec71ab63b4b0697e2fbee5228d45}
+- {title: 'Dominion SX Quick Setup Guide, v3.5, Raritan', sha256: c0d74b246313a6786e9480688c07cc4b38e3c87a557f84a491c7ad6e76a7ac9f}
+- {title: 'Dominion SX User Guide, v3.5, Raritan', sha256: 77253bf5a52bc99f48eecf3634a1f2309f10243c6d9eea7da954ede838482104}
