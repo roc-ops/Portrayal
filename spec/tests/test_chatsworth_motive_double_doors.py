@@ -233,6 +233,21 @@ def test_the_12_in_notes_state_the_rows_of_the_seam_and_the_plate_and_the_widths
     assert "rows 482 to 487" in notes["latches"] and "1009.5" in notes["latches"] and "stand-in" in notes["latches"]
 
 
+@pytest.mark.parametrize("part", PARTS)
+def test_the_far_edge_handle_of_the_render_is_the_rear_doors_and_no_front_door_claims_it(part):
+    rear = " ".join(contract(part, rear=True)["provenance"]["latches"].split())
+    for text in ("far-edge handle", "columns 190 to 199", "rows 257 to 269", "917 mm", "4.267 mm per px",
+                 "is the rear door's handle"):
+        assert text in rear, f"{part}: the rear door contract lacks '{text}'"
+    front = yaml.safe_dump(contract(part, rear=False), width=10**6)
+    front += yaml.safe_dump(device(part), width=10**6)
+    flat = " ".join(front.split())
+    for text in ("far-edge handle", "columns 190 to 199", "rows 257 to 269", "917 mm", "is the rear door's handle"):
+        assert text not in flat, f"{part}: a front door contract or a device note claims '{text}'"
+    latches = " ".join(contract(part, rear=False)["provenance"]["latches"].split())
+    assert "second handle on the rear door's far edge" in latches, f"{part}: the front door contract lacks the pointer"
+
+
 def test_every_added_sentence_of_the_notes_is_at_most_25_words():
     for part in PARTS:
         for rear in (False, True):

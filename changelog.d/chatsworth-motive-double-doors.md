@@ -3,7 +3,8 @@
   The front door keeps its part and the rear door is a new plain part.
   The installation instructions say the rear door is a plain flat door with no logo.
 - Every front door and rear door draws the tip of each latch handle at its edge.
-  The data sheet's photograph shows a speck at the left edge and its render a handle at the right edge.
+  The data sheet's photograph shows a speck at the left edge and its render a handle at the front door's right edge.
+  The render shows a second handle on the rear door's far edge, and the rear door's contract records it.
   The tip is drawn 2 wide at both edges, and its 45 mm height is a stand-in.
 - The 12 in front doors (32623-703 and 32623-E03) also draw two vertical seams and a plate down the upper part.
   The photograph reads as 12 in, because no page prints its width.
@@ -31,6 +32,7 @@
   It checks that the other widths do not draw them and give the reason.
   It checks that every front and rear door has both handle tips.
   It checks that the rear door is its own plain part.
+  It checks that the rear door contract states the render's far-edge handle and that no front door contract does.
   It checks that each device draws one latch of each door on both sides, at the measured proportion.
   It checks that the rear end is on the left of the left face and on the right of the right face.
   It checks that the hook and the frame features stay gaps.
