@@ -1,0 +1,435 @@
+format: 1
+kind: device
+name: pdu3mv6l2130a
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: PDU3MV6L2130A
+description: >-
+  Eaton Tripp Lite series three-phase local metered PDU, 0U. A 1776 mm metal strip that hangs on two
+  toolless mounting buttons beside a rack. It takes a 208 V three-phase feed through a fixed 6 ft cord that
+  ends in a NEMA L21-30P (24 A, 8.6 kW). It feeds 45 outlets, 36 IEC C13 and 9 IEC C19, in three sections of
+  fifteen, each through its own 20 A two-pole breaker. Between the second and third sections is a meter
+  with three rows, one for each phase pair. It has no switch and no network port.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S SUBMITTAL DRAWING. The Tripp Lite PDU3MV6L2130A submittal drawing
+      (15-02-211, 2015, page 2) draws the front, the side and the rear, with details A to E. Its views are
+      vector. Every position was read from the path geometry of page 2 at 3.0867 mm per point. The scale
+      comes from the strip's 1776.44 between its end lines and its 56 across, which agree to 0.1 per cent.
+      A reading is good to about 0.3 mm. The rear view is drawn about 0.6 per cent smaller than the front.
+      Its figures use the drawing's own dimensions where it gives them. The outlet pitch is not dimensioned.
+      It is measured, and reads 34.5 between the C19 boxes and 35.5 between the rows of C13 boxes. No
+      photograph of any face is held. Page 1's isometric names the callouts and is the second reading for
+      which feature is which.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side` is the library's way to say a part stands beside an upright. The two toolless buttons
+      are on its back (the drawing's rear view and detail A). `ru: 40` is the height it runs, 1776.44 /
+      44.45 = 39.96 rounded up. No source sells it by rack units. The removable mounting brackets (detail D)
+      and the removable 90 degree rotation brackets (detail B, F) are in the box and are not drawn. Which
+      side, and front or rear, is a lab placement's to say.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - page 2: 1776.44 [69.94] along the strip (front view), 56 [2.20] across and 42.78 [1.68] deep
+      (side view). The breaker end is 67.40 [2.65] deep and 365.44 [14.39] long. Page 1 and the
+      product page give 70 x 2.65 x 2.2 in. Those are the length, the depth over the breaker end and the
+      width. The body stays the dimensioned 56 by 42.78. Weight 13.49 lb (6.12 kg), the product page.
+      Material metal, the product page ("Durable Metal Case" on page 1).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - page 2 front view, y from the top end and across from the face's left edge, 56 across and
+      centred 28. Each of the three sections is 334.75 between its two rows of three screws. Each section
+      has three C19 boxes 42.9 across and 29.9 along, centred 45.7, 80.2 and 114.7 from the section's first
+      screw row at 19.8. Then come six rows of two C13 boxes, each 25.4 across and 35.0 along, the first row
+      from 133.2 and then every 35.5. Section 2 is section 1 moved down 438.3 and section 3 is section 1
+      moved down 968.1. The meter plate lies between sections 2 and 3, 825.9 to 955.9, with the meter's
+      window 24 by 74 at 873.5. The breaker end is the lower 364.2 of the strip. It has three breakers 19.0
+      by 31.5 at 1428.4, 1496.2 and 1563.8. Twelve small holes stand on either side of them, a pair of
+      screws above and two pairs of holes below. The ground screw is a ring about 12.7 across at the foot, right of centre, with a plain hole 5.5 across
+      at the left. The drawing prints no legends but the meter's: no outlet numeral, no section mark and no
+      breaker name appears on page 2. The Tripp Lite wordmark is held as a `logo-zone` region and the mark
+      itself is a later touch.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - "IEC C19" and "IEC C13" on page 2 and "45 208V outlets (36 C13, 9 C19)" on the product page.
+      The library holds std/c13-outlet@1 and std/c19-outlet@1. The C13s are drawn two to a row, each turned
+      a quarter turn. Each is 22 across and 30.4 along, inside the 25.4 by 35.0 box the drawing gives. The
+      C19s are drawn one to a row, 35.6 across and 27.7 along. The orientation of each slot pattern is read
+      from page 2 and is checked in the pictures. THE UNIT'S OWN NUMBERS ARE NOT KNOWN. No document held
+      prints an outlet number. The outlets are named outlet-1 to outlet-45 from the top, which is this
+      model's numbering and not the unit's (gaps: outlet-numbers). The mouldings are one uniform dark grey:
+      the product page colour-codes the outlets by phase pair, and those colours are not drawn.
+  sections:
+    confidence: estimated
+    note: >-
+      estimated - the product page says "Three 20A double-pole circuit breakers (1 per output phase)" and
+      "L1-L2 feeds black outlets; L2-L3 feeds dark-gray outlets; L3-L1 feeds light-gray outlets", and page 1
+      says "12 C13 and 3 C19 per phase". No held document says which section is on which phase pair or which
+      breaker protects which section. They are read in order from the top. Section 1 is on breaker 1 and
+      L1-L2, section 2 on breaker 2 and L2-L3, and section 3 on breaker 3 and L3-L1 (gaps: section-order). The outlet
+      colours that code the pairs are not drawn.
+  meters:
+    confidence: drawing
+    note: >-
+      drawing - one meter of three rows, "Digital Load Meter" on page 1. Each row reads "88.8" with its pair
+      printed beside it. L3-L1 is at the top, then L2-L3 and L1-L2, and "LOAD (AMPS)" runs along the side. The
+      rows' grey backgrounds are the drawing's own fills, 67.84, 44.31 and 25.88 per cent grey. The product
+      page says "Set of 3 digital current meters report output current per phase". Page 1 says the input
+      current is displayed (disagreements, gaps: meter-reads). Both statements are kept and the rows are labelled with
+      the pair. Each row is three characters of eaton/tripplite-phase-meter@1.
+  breakers:
+    confidence: drawing
+    note: >-
+      drawing - each breaker is a rectangular paddle in a small plate (detail C: "20A 2-Pole Hydraulic
+      Magnetic Circuit Breakers"). The part is eaton/tripplite-breaker-20a-2p@1. The rating is the product
+      page's 20 A double-pole, one for each output phase pair.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view and detail A. Two toolless mounting buttons stand on the centre line. They are
+      134.01 [5.28] from the top end, 86.43 [3.40] from the bottom end and 1556 [61.26] apart. The three
+      figures sum to 1776.44, the strip's length. The rear view also draws two plates for the removable
+      mounting brackets, each with four holes in a column and about 47 along. It draws two small round marks
+      lower on the right. All are drawn as read off the vector sheet. The brackets themselves are not drawn.
+  sides:
+    confidence: drawing
+    note: >-
+      drawing - the side view draws the body 42.78 deep with the breaker end 67.40 deep. It draws the
+      removable brackets and a row of small ticks along the front edge. Nothing is built into the metal, so
+      both sides are plain faces. The standing PDU's right side is the one the drawing shows. The left side is built as
+      the documented side, as no document shows this one.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - "Input Connector L21-30P", "Input Cord Length 6 ft." (page 1), "NEMA L21-30P"
+      (product page), and detail E, the twist-lock plug face. The cord is attached and leaves the end of the
+      strip through a hex strain relief, so the part stands on the bottom face. Its `input-plug` is the slug
+      the cord part exports, `nema-l21-30p`. The input is 208 V three-phase, 24 A continuous (agency
+      de-rated), from the product page. The drawing's page 1 gives "208V 3-Phase Input / 208V Single-Phase
+      Output". The Tripp Lite manual for 3-phase basic PDUs gives 200 to 240 V, a range that holds the
+      nominal. THE WIRING IS NOT STATED by any held document. `input-wiring: wye` is an estimate. The plug is
+      NEMA's three-phase wye configuration. The sibling G4 unit with the same plug states wye on its drawing
+      (gaps: input-wiring).
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the product page: "Local metered PDU", a set of three meters that read the current of each
+      output phase pair, and no outlet switching. The finest level metered is the phase pair, which is a
+      branch, so `metering-scope: branch` and `outlet-switching: false`.
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is one power port, NEMA L21-30P. Each outlet is a power outlet fed by it, `iec-60320-c13` or
+      `iec-60320-c19`. Each goes through its section's breaker, which states the `lines` it is across. No
+      `feed_leg` is written: every outlet is line to line (docs/pdu-model-design.md section 5.2).
+attrs:
+  physical: {length-mm: 1776.44, weight-kg: 6.12, construction: metal}
+  power:
+    input-ac: 208 V three-phase, 24 A continuous (agency de-rated), 50/60 Hz
+    input-plug: nema-l21-30p
+    input-cord: fixed
+    input-phase: three
+    input-wiring: wye
+    input-voltage-v: 208
+    input-current-a: 24
+    plug-rating-a: 30
+    capacity-kw: 8.6
+    capacity-scope: >-
+      the load the PDU can hand on (the product page, "8.6kW (208V) total capacity"). It is not what the PDU
+      draws itself, which no document held states
+    output-voltage: 208 V
+    output-rating: 13.9 A per output phase; 12 A per C13
+    breakers: three 20 A two-pole, one for each output phase pair
+    frequency: 50/60 Hz
+  environmental: {operating-temp: 0 to 40 C (32 to 104 F), storage-temp: -30 to 50 C (-22 to 122 F), humidity: 5 to
+      95 % non-condensing, altitude: 0 to 3000 m (0 to 10000 ft)}
+  management:
+    metering-scope: branch
+    outlet-switching: false
+    metering: load current in amps for each output phase pair, on the three meters
+  compliance:
+    certifications: UL 62368-1; NOM; RETIE
+    product-compliance: RoHS; FCC Class A; TAA
+chassis: {width: 56, height: 1776.44, depth: 42.78, ru: 40, mount: rack-side, color: '#2e2f31', airflow: passive,
+  weight-kg: 6.12}
+gaps:
+- what: outlet-numbers
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    no held document prints an outlet number, and page 2's views carry no legend. Searched: both pages of the
+    drawing, the product page and the Tripp Lite manual for the three-phase basic and metered units. The
+    outlets are named outlet-1 to outlet-45 from the top by this model.
+  wanted: a photograph of the face, or the numbering the unit prints.
+- what: input-wiring
+  scope:
+  - front
+  - bottom
+  reason: vendor-silent
+  note: >-
+    no held document says whether the three-phase input is wired wye or delta. Searched: both pages of the
+    drawing, the product page and the manual's tables. `wye` is written because the lint requires the key
+    and the L21-30P plug is NEMA's wye configuration. It is an estimate, and a change to delta is a major.
+  wanted: the manual's wiring figure for this model, or the maker's word.
+- what: section-order
+  scope:
+  - front
+  reason: vendor-silent
+  note: >-
+    no held document says which section is on which phase pair, nor which breaker protects which section. They
+    are read in order from the top: breaker 1 on L1-L2, breaker 2 on L2-L3 and breaker 3 on L3-L1, an estimate.
+  wanted: a photograph of the face, or the manual's wiring figure for this model.
+- what: pitch-undimensioned
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    the outlet pitches, 34.5 (C19) and 35.5 (C13 rows), are measured off the drawing and no dimension states
+    them. Page 2 dimensions each section 334.75 between its screw rows and the strip's 1776.44.
+  wanted: a dimension of the outlet pitch.
+- what: colours
+  scope:
+  - front
+  - rear
+  - left
+  - right
+  reason: needs-photo
+  note: >-
+    no photograph is held. No document states a colour but the meter rows' greys and the phase colour code
+    of the outlets ("black", "dark-gray", "light-gray"). The strip and the outlet mouldings are drawn one
+    dark grey, as its siblings are. The meter digits are the green of the sibling meter. All are unchecked.
+  wanted: a photograph of the strip.
+- what: breaker-end-depth
+  scope:
+  - left
+  - right
+  - bottom
+  reason: sources-disagree
+  note: >-
+    the product page and page 1 give the depth as 2.65 in (67.4 mm) and the width 2.2 in. Page 2 dimensions
+    the body 42.78 [1.68] deep and 67.40 [2.65] over the breaker end, 365.44 [14.39] long. The body is modelled
+    42.78 deep, the dimensioned figure, and the breaker end's extra 24.6 is not built. A `chassis.section` for
+    the stepped end was tried and lint refused it: L206, a housing with a stepped end is not racked, and this
+    device is `rack-side`.
+  wanted: a section through the breaker end.
+- what: stand-in-parts
+  scope:
+  - front
+  reason: needs-drawing
+  note: >-
+    the strain relief is a hex 38.1 across read off the drawing and 38.1 in the other direction, an estimate.
+    The breaker paddle has no legend because the drawing is line art. No document gives a part number or a
+    dimension for either.
+  wanted: a dimensioned detail of the breaker end and the strain relief.
+- what: meter-reads
+  scope:
+  - front
+  reason: sources-disagree
+  note: >-
+    the product page says the three meters report output current per phase. Page 1 of the drawing says the
+    input current of each phase is displayed. The rows are labelled with the pair, L1-L2, L2-L3 and L3-L1, in
+    the drawing.
+  wanted: the manual's meter section for this model.
+- what: wordmark
+  scope:
+  - front
+  reason: needs-photo
+  note: >-
+    detail A draws the Tripp Lite wordmark on the meter plate, above the rows. Its size and place are read
+    from the drawing, and it is marked as a logo-zone and not drawn.
+  wanted: a photograph of the plate.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: the PDU's 45 outlets in three sections from the top, each three C19 then twelve C13
+  meters: {term: Display, role: indicator, index-origin: 1}
+  breakers: {term: Breaker, role: service, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1776.44}
+    panel:
+      decor:
+      - {block: outlets}
+      - {id: meter-plate, at: [1.0, 825.9], size: [54.0, 130.0], rx: 1.5, fill: '#1d1e20', kind: plate}
+      - {id: breaker-plate, at: [0.5, 1412.2], size: [55.0, 364.2], rx: 1.0, fill: '#252628', kind: plate}
+      - {id: screw-1, at: [7.3, 17.4], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-2, at: [25.6, 17.4], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-3, at: [43.8, 17.4], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-4, at: [7.3, 352.3], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-5, at: [25.6, 352.3], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-6, at: [43.8, 352.3], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-7, at: [7.3, 455.7], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-8, at: [25.6, 455.7], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-9, at: [43.8, 455.7], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-10, at: [7.3, 790.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-11, at: [25.6, 790.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-12, at: [43.8, 790.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-13, at: [7.3, 985.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-14, at: [25.6, 985.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-15, at: [43.8, 985.5], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-16, at: [7.3, 1320.0], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-17, at: [25.6, 1320.0], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: screw-18, at: [43.8, 1320.0], size: [4.8, 4.8], rx: 2.4, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-1, at: [7.35, 1402.85], size: [4.9, 4.9], rx: 2.45, fill: '#1f2022', kind: screw-head}
+      - {id: plate-screw-2, at: [43.75, 1402.85], size: [4.9, 4.9], rx: 2.45, fill: '#1f2022', kind: screw-head}
+      - {id: hole-1, at: [16.5, 1421.1], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-2, at: [35.5, 1421.1], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-3, at: [16.5, 1463.3], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-4, at: [35.5, 1463.3], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-5, at: [16.5, 1488.8], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-6, at: [35.5, 1488.8], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-7, at: [16.5, 1530.8], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-8, at: [35.5, 1530.8], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-9, at: [16.5, 1556.4], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-10, at: [35.5, 1556.4], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-11, at: [16.5, 1598.6], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-12, at: [35.5, 1598.6], size: [3.95, 3.95], rx: 1.975, fill: '#111213', kind: hole}
+      - {id: hole-13, at: [9.6, 1617.1], size: [4.2, 4.2], rx: 2.1, fill: '#111213', kind: hole}
+      - {id: hole-14, at: [42.3, 1617.1], size: [4.2, 4.2], rx: 2.1, fill: '#111213', kind: hole}
+      - {id: hole-15, at: [10.3, 1732.0], size: [4.2, 4.2], rx: 2.1, fill: '#111213', kind: hole}
+      - {id: hole-16, at: [41.7, 1732.0], size: [4.2, 4.2], rx: 2.1, fill: '#111213', kind: hole}
+      - {id: hole-17, at: [10.25, 1760.05], size: [5.5, 5.5], rx: 2.75, fill: '#111213', kind: hole}
+    silkscreen:
+    - {block: outlets}
+    - {at: [6.4, 910.5], text: LOAD (AMPS), font-size: 2.4, anchor: middle, rotate: 270, for: chassis}
+    - {at: [47.6, 885.8], text: L3-L1, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
+    - {at: [47.6, 910.3], text: L2-L3, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
+    - {at: [47.6, 934.8], text: L1-L2, font-size: 2.2, anchor: middle, rotate: 270, for: chassis}
+    components:
+      blocks:
+      - kind: outlet-run
+        id: outlets
+        id-format: outlet-{n}
+        number-from: 1
+        fed-by: input
+        banks:
+        - {through: breaker-1}
+        - {through: breaker-2, shift: [0.0, 438.3]}
+        - {through: breaker-3, shift: [0.0, 968.1]}
+        segments:
+        - ref: std/c19-outlet@1
+          count: 3
+          at: [10.2, 31.85]
+          pitch: [0.0, 34.5]
+          moulding:
+            id-format: c19-moulding-{m}
+            offset: [-3.65, -1.1]
+            size: [42.9, 29.9]
+            rx: 1.2
+            fill: '#262729'
+            kind: outlet-moulding
+        - count: 12
+          at: [0.1, 139.7]
+          pitch: [0.0, 17.75]
+          pattern:
+          - {ref: std/c13-outlet@1, rotate: 270}
+          - {ref: std/c13-outlet@1, rotate: 270, shift: [25.4, -17.75]}
+          moulding:
+            id-format: c13-moulding-{m}
+            offset: [2.5, -6.5]
+            size: [25.4, 35.0]
+            rx: 1.0
+            fill: '#262729'
+            kind: outlet-moulding
+      placements:
+      - {block: outlets}
+      - {id: meter, ref: eaton/tripplite-phase-meter@1, at: [15.5, 873.5], group: meters, rel-pos: 1, for: chassis,
+        description: 'the three-row load meter, one row for each phase pair'}
+      - {id: breaker-1, ref: eaton/tripplite-breaker-20a-2p@1, at: [8.9, 1428.4], group: breakers, rel-pos: 1,
+        lines: [L1, L2], description: 'the 20 A two-pole breaker of section 1, the top section, on L1-L2 (an estimate)'}
+      - {id: breaker-2, ref: eaton/tripplite-breaker-20a-2p@1, at: [8.9, 1496.2], group: breakers, rel-pos: 2,
+        lines: [L2, L3], description: 'the 20 A two-pole breaker of section 2 on L2-L3 (an estimate)'}
+      - {id: breaker-3, ref: eaton/tripplite-breaker-20a-2p@1, at: [8.9, 1563.8], group: breakers, rel-pos: 3,
+        lines: [L3, L1], description: 'the 20 A two-pole breaker of section 3, the one nearest the cord, on L3-L1 (an estimate)'}
+      - {id: ground, ref: common/ground-screw-washer@1, at: [34.5, 1757.8], group: grounding, rel-pos: 1}
+    regions:
+    - id: section-1
+      label: Section 1, the top section - outlets 1 to 15, on breaker 1
+      at: [2.6, 19.8]
+      size: {w: 50.9, h: 334.9}
+    - id: section-2
+      label: Section 2 - outlets 16 to 30, on breaker 2
+      at: [2.6, 458.1]
+      size: {w: 50.9, h: 334.8}
+    - id: section-3
+      label: Section 3 - outlets 31 to 45, on breaker 3
+      at: [2.6, 987.9]
+      size: {w: 50.9, h: 334.5}
+    - id: logo-zone
+      label: Tripp Lite wordmark; not drawn
+      at: [19.0, 834.0]
+      size: {w: 17.0, h: 34.0}
+  rear:
+    size: {w: 56, h: 1776.44}
+    panel:
+      decor:
+      - {id: bracket-plate-1, at: [2.8, 281.6], size: [50.4, 46.9], rx: 0.8, fill: '#34363a', kind: plate}
+      - {id: bracket-plate-2, at: [2.8, 1526.4], size: [50.4, 46.9], rx: 0.8, fill: '#34363a', kind: plate}
+      - {id: bracket-hole-1, at: [25.65, 283.95], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-2, at: [25.65, 296.75], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-3, at: [25.65, 309.45], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-4, at: [25.65, 322.15], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-5, at: [25.65, 1528.65], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-6, at: [25.65, 1541.35], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-7, at: [25.65, 1554.05], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: bracket-hole-8, at: [25.65, 1566.75], size: [4.5, 4.5], rx: 2.25, fill: '#111213', kind: hole}
+      - {id: rear-mark-1, at: [40.25, 1391.75], size: [5.5, 5.5], rx: 2.75, fill: '#1f2022', kind: screw-head}
+      - {id: rear-mark-2, at: [40.25, 1748.25], size: [5.5, 5.5], rx: 2.75, fill: '#1f2022', kind: screw-head}
+    components:
+      placements:
+      - {id: button-1, ref: eaton/tripplite-mounting-button@1, at: [15.65, 121.66], group: mounting, rel-pos: 1}
+      - {id: button-2, ref: eaton/tripplite-mounting-button@1, at: [15.65, 1677.66], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 56, h: 42.78}
+    empty: >-
+      no source draws the top end: the drawing's three views show it only as the end of the body, with no
+      feature on it.
+  bottom:
+    size: {w: 56, h: 42.78}
+    components:
+      placements:
+      - {id: input, ref: eaton/tripplite-cord-l21-30p@1, at: [8.95, 2.34], group: power-input, rel-pos: 1}
+  right:
+    size: {w: 42.78, h: 1776.44}
+    empty: >-
+      the drawing's side view shows a plain body. The removable brackets on it are not drawn. A row of small
+      ticks runs along the front edge. Nothing is built into the metal.
+  left:
+    size: {w: 42.78, h: 1776.44}
+    empty: >-
+      built as the documented side, as no document shows this one. The drawing's side view is one side only.
+      It shows nothing built into the metal.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The box also holds the removable mounting brackets, the removable 90 degree
+      rotation brackets, the cord retention sleeves, the spare buttons and the manual. None is drawn.
+    part-numbers:
+      PDU3MV6L2130A: {}
+datasheet:
+  title: Eaton PDU3MV6L2130A product specification page (skuPage.PDU3MV6L2130A)
+  url: https://www.eaton.com/us/en-us/skuPage.PDU3MV6L2130A.pdf
+  sha256: 662dd3c8a7dbcdfd8e1f5a4663dc1ff375a93b36c4052c1f62a848ee07bb7b21
+references:
+- title: Tripp Lite PDU3MV6L2130A submittal drawing, 15-02-211
+  url: https://assets.tripplite.com/submittal-drawing/pdu3mv6l2130a-submittal-drawing-en.pdf
+  sha256: c5e93bc6fa652ca00b75119c2f7d2f1b8da4d6d810d4e84e06968cb05e8c0253
+- title: Tripp Lite manual for 3-phase basic PDUs, 23-08-086
+  url: https://assets.tripplite.com/owners-manual/23-08-086-933145_revk.pdf
+  sha256: 842c70fa98b7eb1627aeed384deb4a3f103f79d4bbef30613617572c6395fdd4

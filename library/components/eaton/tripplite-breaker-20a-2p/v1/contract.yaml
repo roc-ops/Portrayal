@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: tripplite-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  A 20 A two-pole hydraulic magnetic circuit breaker of an Eaton Tripp Lite series
+  three-phase metered rack PDU. There is one for each of its three outlet sections. It is a
+  rectangular paddle in a small plate on the breaker end of the strip. Fixed to the
+  PDU, not a plug-in part.
+size: {w: 19.0, h: 31.5}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  size: >-
+    drawing - the front view of the Tripp Lite PDU3MV6L2130A submittal drawing (15-02-211,
+    page 2). The sheet is vector, read from its path geometry at 3.0867 mm per point from the
+    strip's own 1776.44 overall. Each breaker's outline reads 19.0 across and 31.5 along the
+    strip, to about 0.3. The three stand 67.8 apart.
+  paddle: >-
+    drawing - the paddle is the inner rectangle the front view draws in the upper part of each
+    outline. It is 14.1 across and 13.2 along, 2.5 from the side and 2.6 from the end. The lower part
+    of the outline is plain in the drawing. The drawing is a line drawing, so the paddle's
+    legend, if it has one, is not shown.
+  rating: >-
+    datasheet - the Tripp Lite PDU3MV6L2130A product page: "Three 20A double-pole circuit
+    breakers (1 per output phase)"; the drawing's detail C names "20A 2-Pole Hydraulic Magnetic
+    Circuit Breakers".
+  colour: >-
+    estimated - no held photograph shows the breaker. The plate is the dark grey of the strip
+    and the paddle a shade lighter. Both are unchecked against the unit.
+  relief: >-
+    drawing - the side view draws the paddle tips standing out of the breaker end of the strip.
+    No dimension is given for them, so the paddle is drawn flat and no relief is stated.
+elements:
+  rocker: {at: [2.5, 2.6], size: [14.1, 13.2], class: breaker, states: ['on', 'off']}
+skins: [default]

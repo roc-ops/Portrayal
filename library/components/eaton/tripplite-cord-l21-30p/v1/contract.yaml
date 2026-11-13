@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: tripplite-cord-l21-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L21-30P locking plug. The plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of an Eaton Tripp Lite series three-phase 30 A metered rack PDU.
+  It is 6 ft of cord that ends in a NEMA L21-30P locking plug. The cord leaves the
+  end of the strip through a hex strain relief. The part is drawn as the end shows it;
+  the cord and plug beyond the strain relief are not.
+size: {w: 38.1, h: 38.1}
+size-confidence: {w: drawing, h: estimated}
+attrs: {plug: nema-l21-30p, cord-length-ft: 6}
+provenance:
+  size: >-
+    drawing - the front view of the Tripp Lite PDU3MV6L2130A submittal drawing (15-02-211,
+    page 2). It draws the strain relief below the strip's end as a hex nut 38.1 across. The sheet
+    is vector, read from its path geometry at 3.0867 mm per point from the strip's own 1776.44
+    overall and its 56 across. The drawing draws no end view, so the same 38.1 is used for
+    the depth direction. That is an estimate, which a view of the strip's end would settle.
+  cord: >-
+    drawing - detail C draws the cord leaving the strain relief, and the front view draws it
+    straight below the strip. The cord's own diameter is not dimensioned by any held document;
+    the 14 across drawn here is an estimate read off the front view.
+  plug: >-
+    datasheet - the Tripp Lite PDU3MV6L2130A submittal drawing: "6-ft. Input Power Cord". It
+    also gives "L21-30P Twist-Lock Input Plug" and detail E, the L21-30P plug face. The product page
+    gives INPUT CONNECTION NEMA L21-30P and CORD LENGTH 6 ft. The cord is permanently attached.
+    The plug has no part of its own, so nothing here draws it.
+  not-drawn: >-
+    THE CORD BEYOND THE STRAIN RELIEF AND THE PLUG ARE NOT DRAWN: the far end of a cord is
+    not a part (docs/connectors-power-design.md section 7). This part stands for the power
+    input a DCIM records, a NEMA L21-30P power port.
+elements:
+  relief: {at: [0, 0], size: [38.1, 38.1], class: inlet}
+skins: [default]

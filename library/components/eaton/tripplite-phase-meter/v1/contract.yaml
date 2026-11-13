@@ -1,0 +1,50 @@
+format: 1
+kind: component
+name: tripplite-phase-meter
+version: 1.0.0
+class: display
+profile: power
+description: >-
+  The digital load meter of an Eaton Tripp Lite series three-phase metered rack PDU.
+  It is one window with three rows of three-digit seven-segment readouts, one for the
+  current of each phase pair, L1-L2, L2-L3 and L3-L1. It has no button.
+size: {w: 24.0, h: 74.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the front view of the Tripp Lite PDU3MV6L2130A submittal drawing (15-02-211,
+    page 2). The sheet is vector, read from its path geometry at 3.0867 mm per point from the strip's
+    own 1776.44 overall. The three rows form one window 24.0 across and 74.0 along the strip,
+    each row 24.5 along, to about 0.3.
+  digits: >-
+    drawing - detail A and the front view draw each row as "88.8", three seven-segment digits
+    with a decimal point before the last. The segments, their size and the decimal point are
+    drawn to that art and are not dimensioned by any held document, so they are estimates.
+  colour: >-
+    borrowed - no held source shows a PDU3MV6L2130A meter lit or in colour. The lit colour is
+    the green of eaton/tripplite-bank-meter@1, which a photograph of a sibling gave. It is
+    unchecked against this unit.
+  semantics: >-
+    datasheet - the Tripp Lite PDU3MV6L2130A product page: "Set of 3 digital current meters
+    report output current per phase", and the drawing's rows labelled L1-L2, L2-L3 and L3-L1.
+    The drawing's page 1 says the meter shows the input current of each phase; the two disagree.
+elements:
+  window-l1-l2:
+    at: [1.0, 50.0]
+    size: [22.0, 23.0]
+    class: display
+    characters: 3
+    description: the readout of the L1-L2 pair, three seven-segment cells that show its current in amps
+  window-l2-l3:
+    at: [1.0, 25.5]
+    size: [22.0, 23.0]
+    class: display
+    characters: 3
+    description: the readout of the L2-L3 pair, three seven-segment cells that show its current in amps
+  window-l3-l1:
+    at: [1.0, 1.0]
+    size: [22.0, 23.0]
+    class: display
+    characters: 3
+    description: the readout of the L3-L1 pair, three seven-segment cells that show its current in amps
+skins: [default]
