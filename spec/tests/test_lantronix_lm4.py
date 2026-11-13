@@ -317,6 +317,20 @@ def test_the_reset_pinhole_has_its_tan_ring_and_the_ring_sits_on_the_pinhole_dis
     assert "The Reset pinhole has a tan ring" in note
 
 
+def test_the_sfp_cage_has_four_grey_marks_on_its_top_rim():
+    decor = _decor(_lm4())
+    marks = sorted((d for i, d in decor.items() if i.startswith("sfp-rim-mark-")), key=lambda d: d["at"][0])
+    assert len(marks) == 4
+    port = _placed(_lm4())["port-2"]
+    for mark in marks:
+        assert 2.3 <= mark["size"][0] <= 2.7 and mark["size"][1] == 0.6
+        assert port["at"][0] - 0.5 <= mark["at"][0] and mark["at"][0] + mark["size"][0] <= port["at"][0] + 16.0
+    gaps = [b["at"][0] - (a["at"][0] + a["size"][0]) for a, b in zip(marks, marks[1:])]
+    assert all(1.4 < g < 2.0 for g in gaps)
+    note = " ".join(_lm4()["provenance"]["body"]["note"].split())
+    assert "They are drawn as decor, estimated" in note
+
+
 def test_the_sources_that_disagree_are_each_said_in_the_notes():
     notes = " ".join(" ".join(p["note"].split()) for p in _lm4()["provenance"].values())
     assert "The dimensions figure draws the console lamps yellow at the left and green at the right" in notes

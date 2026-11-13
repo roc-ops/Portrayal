@@ -10,5 +10,5 @@
   drawn as dark dots. They are lamps, with the colours the maker's figure shows. The Reset pinhole is named for what it is.
 - The rack ear the documentation shows is drawn, estimated, on each side, optional. The box ships one. The DC input housing is
   drawn as decor with its four cells. Its connector stays a named gap. The DIN rail fitting is a named gap. The right flank,
-  which no document shows, is built as the left flank mirrored. The Reset pinhole has its tan ring. The rear stays a named gap, because no held document shows it.
+  which no document shows, is built as the left flank mirrored. The Reset pinhole has its tan ring, and the SFP cage has its four rim marks. The rear stays a named gap, because no held document shows it.
   This closes no row.
