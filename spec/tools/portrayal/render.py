@@ -2962,9 +2962,11 @@ def plan_face(faceplate, ch, face, w, h, plan):
 
     Returns `{"steps": [path d, ...], "nocap": path d or None}`, or None where the face has
     neither."""
+    if plan is None:
+        return None
     W, H, D = ch["width"], ch["height"], ch["depth"]
-    if plan is None or (w, h) != {"front": (W, H), "rear": (W, H), "top": (W, D), "bottom": (W, D),
-                                  "right": (D, H), "left": (D, H)}.get(face):
+    if (w, h) != {"front": (W, H), "rear": (W, H), "top": (W, D), "bottom": (W, D),
+                  "right": (D, H), "left": (D, H)}.get(face):
         return None
     if face in ("top", "bottom"):
         plan_face_outline(faceplate, plan.outline(), face, W, D)
