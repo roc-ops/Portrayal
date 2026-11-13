@@ -242,8 +242,14 @@ def test_the_frame_note_states_its_scales_and_method(model):
                  "28 columns and 8 rows", "22 columns and 5 rows", "3 rows, so 7.9", "70.5 wide", "44 percent", "by three readings",
                  "four pale marks", "7 pixels wide, 31 mm", "so 13.1 across at 5.1 mm per pixel", "so 15.3 across", "so 20.4 by 8.5",
                  "three pairs of squares, a triangle and a dot", "base rail of 44 pixels, 32.8", "rounded lower corners of 17.5 pixels, 13",
-                 "overlay of the render", "four marks near 505 mm", "beyond the 600 mm depth"):
+                 "overlay of the render", "four marks near 505 mm", "beyond the 600 mm depth",
+                 "300 mm over 67.8 pixels", "A plan square is 19 pixels, so 14.1", "the slot is 35 by 19, so 26.1 by 14.1",
+                 "A screw ring is 20 pixels, so 14.9", "A page 3 square is 9.5 pixels at 1.484 mm per pixel, so 14.1",
+                 "The triangle is 11 by 8 pixels, so 16.3 by 11.9", "the dot is 5 pixels, so 7.4",
+                 "A side-plate dot spans 2 rows, so 5.0", "A faint mark spans 1.5 columns, so 7.7",
+                 "three corner radii tall, 39"):
         assert text in note, text
+    assert "300 mm over 67 pixels" not in note
     assert "four feet" not in note and "cross tube at the front" not in note and "one method" not in note
     assert load(model)["provenance"]["frame"]["confidence"] == "estimated"
 
@@ -262,6 +268,23 @@ def test_no_note_still_says_the_centre_is_open_where_the_plate_is_drawn(model):
     for new in ("That kit is a separate part and is not drawn.", "The flat centre plate of the page 3 render stands between the channels."):
         assert len(new.split()) <= LIMIT
     assert len("The flat centre plate of the page 3 render is drawn between the channels, with its holes and slots, in the side views.".split()) <= LIMIT
+
+
+@pytest.mark.parametrize("model", MODELS)
+def test_the_top_bottom_right_and_method_notes_say_what_is_drawn(model):
+    notes = load(model)["provenance"]
+    flat = {k: " ".join(notes[k]["note"].split()) for k in ("top", "bottom", "right", "method")}
+    assert "the bottom end is the top end again" not in flat["bottom"]
+    assert "It draws four end caps, two rails, a cross tube and a pale beam across the rear." in flat["top"]
+    assert "It draws the base plate with its holes, two rails and four feet." in flat["bottom"]
+    assert "except the centre plate's head" in flat["right"]
+    assert "The render's far plate shows its own head pattern, drawn on this face." in flat["right"]
+    assert "The frame fittings are read from the pictures, and the `frame` entry gives each reading." in flat["method"]
+    for text in ("It draws four end caps, two rails, a cross tube and a pale beam across the rear.",
+                 "It draws the base plate with its holes, two rails and four feet.",
+                 "The render's far plate shows its own head pattern, drawn on this face.",
+                 "The frame fittings are read from the pictures, and the `frame` entry gives each reading."):
+        assert len(text.split()) <= LIMIT
 
 
 @pytest.mark.parametrize("model", MODELS)

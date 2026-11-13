@@ -12,3 +12,4 @@
   Each device takes a patch. The front and rear door plates cover the fittings on those faces. No component changes.
   This edits the `track-rungs` gap, which now covers the left and right faces, where the render shows the rungs.
   Two provenance notes no longer say the centre is open: the flat centre plate is drawn there.
+  The top, bottom, right and method notes now say what each face draws, and the frame note gives the size of every figure.
