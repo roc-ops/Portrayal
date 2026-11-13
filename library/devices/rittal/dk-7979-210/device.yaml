@@ -72,7 +72,7 @@ provenance:
   outlets:
     confidence: datasheet
     note: >-
-      datasheet and drawing - the table of page 1 ("PDU metered"): DK 7979.210, 1~, 16 A, 3.7 kW, CEE input, 12 IEC
+      datasheet and drawing - the table of page 1 ("PDU metered") lists DK 7979.210. It gives 1~, 16 A, 3.7 kW, CEE input, 12 IEC
       C13 and 1 IEC C19, measuring per phase, 845 mm. std/c13-outlet@1 and std/c19-outlet@1. None is switched and
       none has a lamp. NO OUTLET NAME IS WRITTEN. No held photograph is of this SKU and the outlets keep their
       placement ids, counted from the foot.
@@ -97,8 +97,9 @@ provenance:
   phase-plates:
     confidence: photo-measured
     note: >-
-      Data sheet: "L1 pink". The three outlet cells are drawn in the pink of photograph 78_2802, #ee488f over 15335
-      pixels. The photograph is of a three-phase SKU, and the plate edges are not measured.
+      The data sheet marks phases for three-phase PDUs only, pink, black and white. This unit is single-phase and
+      its drawing on page 3 shows no marking. The three outlet cells are drawn in the dark cell colour of the
+      basic family, #1d1d1f. The short strip of photograph 78_3236 shows plain outlets with no coloured plate.
   dcim:
     confidence: estimated
     note: >-
@@ -167,8 +168,8 @@ gaps:
   scope: [front]
   reason: needs-photo
   note: >-
-    the three outlet cells are drawn in the pink of photograph 78_2802, which is of a three-phase SKU. Whether a
-    single-phase unit's plates are that colour is not known, and the edges of each plate are not measured.
+    the three outlet cells are drawn in the dark cell colour, as no held picture of a single-phase unit shows a
+    coloured plate. The edges of each cell are read from the drawing.
   wanted: a straight-on photograph of the front with a scale.
 - what: mounting-adaptor
   scope: [rear]
@@ -204,9 +205,9 @@ views:
       - {id: head-cap, at: [0, 0], size: [44, 18.58], fill: '#1d1d1f', kind: end-cap}
       - {id: spacer-1, at: [0, 18.58], size: [44, 24.01], fill: '#1b1b1d', kind: spacer}
       - {id: controller-cell, at: [0, 42.59], size: [44, 200.02], fill: '#1d1d1f', kind: controller-cell}
-      - {id: plate-c19, at: [0, 242.61], size: [44, 45.42], fill: '#ee488f', kind: phase-plate}
-      - {id: plate-c13-b, at: [0, 288.03], size: [44, 180.67], fill: '#ee488f', kind: phase-plate}
-      - {id: plate-c13-a, at: [0, 468.7], size: [44, 180.41], fill: '#ee488f', kind: phase-plate}
+      - {id: plate-c19, at: [0, 242.61], size: [44, 45.42], fill: '#1d1d1f', kind: phase-plate}
+      - {id: plate-c13-b, at: [0, 288.03], size: [44, 180.67], fill: '#1d1d1f', kind: phase-plate}
+      - {id: plate-c13-a, at: [0, 468.7], size: [44, 180.41], fill: '#1d1d1f', kind: phase-plate}
       - {id: cord-cell, at: [0, 649.11], size: [44, 123.79], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 772.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
       - {id: cover-plate, at: [2.1, 657.31], size: [40.2, 107.3], fill: '#2e2e31', kind: cover-plate}
@@ -241,7 +242,9 @@ views:
         - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 163.11], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 162.61], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: rs232, ref: common/rj11-jack@1, at: [5.55, 191.66], group: serial, rel-pos: 1}
-        - {id: can, ref: common/rj45-eth@1, at: [23.0, 190.51], group: can-bus, rel-pos: 1, states: {led-a: ['off', {name: communication-possible, color: '#22c55e'}], led-b: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}}
+        - {id: can, ref: std/rj45@2, at: [23.0, 190.51], group: can-bus, rel-pos: 1, attrs: {media: rj45-telemetry, function: can-bus}}
+        - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 204.41], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
+        - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 204.41], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
         - {id: usb, ref: common/usb-a@2, at: [4.3, 217.46], group: usb, rel-pos: 1}
         - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 206.56], group: signal, rel-pos: 1}
         - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 216.86], group: signal, rel-pos: 2}

@@ -86,7 +86,7 @@ def test_the_input_is_the_fixed_16_a_cord_and_there_is_no_breaker(sku):
 def test_the_controller_carries_three_rj45_one_rj12_one_usb_and_two_headers(sku):
     by_id = _by_id(sku)
     refs = Counter(p["ref"] for p in by_id.values())
-    assert refs["common/rj45-eth@1"] == 3
+    assert refs["common/rj45-eth@1"] == 2 and refs["std/rj45@2"] == 1
     assert refs["common/rj11-jack@1"] == 1
     assert refs["common/usb-a@2"] == 1
     assert refs["rittal/pdu-controller@1"] == 1
@@ -97,11 +97,12 @@ def test_the_controller_carries_three_rj45_one_rj12_one_usb_and_two_headers(sku)
 @pytest.mark.parametrize("sku", SKUS)
 def test_every_lamp_states_what_it_shows(sku):
     lamps = [p for p in _placements(sku) if p["ref"].startswith("common/led-")]
-    assert {p["id"] for p in lamps} == {"lamp-power", "lamp-status"}
+    assert {p["id"] for p in lamps} == {"lamp-power", "lamp-status", "lamp-can-green", "lamp-can-red"}
     for lamp in lamps:
         assert "states" in lamp, f"{lamp['id']} states nothing"
     by_id = _by_id(sku)
-    for jack in ("eth1", "eth2", "can"):
+    assert by_id["can"]["attrs"]["media"] == "rj45-telemetry", "the CAN jack must not export as Ethernet"
+    for jack in ("eth1", "eth2"):
         assert set(by_id[jack]["states"]) == {"led-a", "led-b"}
 
 
@@ -130,13 +131,15 @@ def test_the_controller_part_carries_no_port():
     assert {"esc", "up", "enter", "down", "display", "reset"} <= set(contract["elements"])
 
 
-def test_the_two_headers_share_the_registered_key_and_say_why_nothing_mates_it():
+def test_the_two_headers_share_the_registered_key_and_their_plugs_mate_it():
     registry = yaml.safe_load((ROOT / "spec" / "schemas" / "connectors.yaml").read_text())
     entry = next(v for k, v in _flatten(registry).items() if k == "pdu-io-header")
-    assert "pitch" in entry["note"] and len(entry["unmated"]) >= 40
+    assert "claims none" in entry["note"] and "unmated" not in entry
     for name in ("pdu-digital-input", "pdu-alarm-relay"):
         path = LIB / "components" / "rittal" / name / "v1" / "contract.yaml"
         assert yaml.safe_load(path.read_text())["interface"] == "pdu-io-header"
+        plug = LIB / "components" / "rittal" / f"{name}-plug" / "v1" / "contract.yaml"
+        assert yaml.safe_load(plug.read_text())["mates"] == "pdu-io-header"
 
 
 def _flatten(node, out=None):

@@ -79,7 +79,7 @@ provenance:
   outlets:
     confidence: datasheet
     note: >-
-      datasheet and drawing - the table of page 1 ("PDU metered"): DK 7979.242, 3~, 16 A, 11 kW, CEE input, 42 IEC
+      datasheet and drawing - the table of page 1 ("PDU metered") lists DK 7979.242. It gives 3~, 16 A, 11 kW, CEE input, 42 IEC
       C13 and no C19, measuring per phase, 1695 mm. The circuit diagram draws a block of eight and a block of six
       IEC C13 on each of L1, L2 and L3. std/c13-outlet@1. None is switched and none has a lamp. NO OUTLET NAME IS
       WRITTEN. No held photograph is of this SKU and the outlets keep their placement ids, counted from the foot.
@@ -286,7 +286,9 @@ views:
         - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 593.79], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 593.29], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
         - {id: rs232, ref: common/rj11-jack@1, at: [5.55, 622.34], group: serial, rel-pos: 1}
-        - {id: can, ref: common/rj45-eth@1, at: [23.0, 621.19], group: can-bus, rel-pos: 1, states: {led-a: ['off', {name: communication-possible, color: '#22c55e'}], led-b: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}}
+        - {id: can, ref: std/rj45@2, at: [23.0, 621.19], group: can-bus, rel-pos: 1, attrs: {media: rj45-telemetry, function: can-bus}}
+        - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 635.09], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
+        - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 635.09], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
         - {id: usb, ref: common/usb-a@2, at: [4.3, 648.14], group: usb, rel-pos: 1}
         - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 637.24], group: signal, rel-pos: 1}
         - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 647.54], group: signal, rel-pos: 2}
