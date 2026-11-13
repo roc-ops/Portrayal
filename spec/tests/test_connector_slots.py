@@ -192,7 +192,11 @@ def test_the_connector_registry_is_not_vacuous():
                          "scg-g16-module",
                          # the DIGITAL OUT header of the Vertiv Avocent ACS800, presented by
                          # vertiv/acs800-digital-out@1 and mated by vertiv/acs800-digital-out-plug@1
-                         "screw-terminal-4-relay"}
+                         "screw-terminal-4-relay",
+                         # the mini SIM slot, the DC housing and the digital I/O header of the
+                         # Opengear ACM7000 gateways, presented by opengear/sim-slot-2ff@1,
+                         # opengear/acm7000-dc-header@1 and opengear/acm7000-dio-header@1
+                         "sim-card-2ff", "opengear-acm-dc-block-4", "opengear-acm-dio-block-8"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}

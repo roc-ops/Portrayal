@@ -112,6 +112,8 @@ def test_only_a_rack_face_is_wider_than_its_plane():
     # them (the rule decided 2026-10-09: built-in ears are part of the face),
     # so the front is the 484 / 483.7 rack face while the chassis - and the side
     # brackets built in 3D - is the 424 / 423 between them.
+    # The three IOLAN SCG R fronts draw the maker's ear flanges, 22.1 past the
+    # 436 body, so each front is 480.2 wide.
     assert set(wide) <= {"r740xd:front", "r740xd:front-lff-12", "fhd-1ufmt-n:front",
                          "r660:front", "r660:front-sff8sf", "r660:front-nobp",
                          "r660:front-e3s16", "r660:front-e3s14", "lmfs-f:front",
@@ -126,5 +128,6 @@ def test_only_a_rack_face_is_wider_than_its_plane():
                          "r960:front-e3s16", "r960:front-sff8-e3s16",
                          "cmh-6dr1u:front", "dinrail2u:front", "dinrail4u:front",
                          "r760:front", "r760:front-sff16", "r760:front-sff8",
-                         "r760:front-lff12", "r760:front-e3s16", "r760:front-e3s16r"}, \
+                         "r760:front-lff12", "r760:front-e3s16", "r760:front-e3s16r",
+                         "iolan-scg18-r:front", "iolan-scg34-r:front", "iolan-scg50-r:front"}, \
         f"a face is wider than its plane and is not a known rack face: {wide}"

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: fs-pdubk
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: FS.com
 model: FS-PDUBK
@@ -10,7 +10,8 @@ aliases:
 description: >-
   Vertical PDU mounting brackets, FS SKU #78523, two to a pack. Each is a short black SPCC steel bracket
   that bolts to a rack post and holds a zero-U PDU beside it. A foot 30 mm across lies against the post
-  and is bolted through four holes. A plate 135 mm deep and 88.4 mm high stands out from it. The plate has
+  and is bolted through four holes. A plate 135 mm deep and 88.4 mm high stands out from it. Three gussets
+  join it to the foot, and each long edge turns back into a short lip. The plate has
   three keyhole slots, which take the mounting buttons of a toolless PDU, and two rows of four square
   holes. The guide shows two ways to fit it, on the front of the post or on its rear side.
 profile: passive
@@ -42,8 +43,14 @@ provenance:
     note: >-
       drawing - 135 and 88.4 are the dimensions of the product page's render of the plate (5.3 in [135 mm]
       and 3.5 in [88.4 mm]). The product page's specification gives 30 x 135 x 88.4 mm (H x W x D as FS prints
-      it); the 30 is the foot's reach from the plate and no view dimensions it. So the part is 30 across the
-      rack's face, 88.4 high and 135 deep.
+      it); the 30 is the foot's reach from the plate and no view dimensions it. Each long edge of the plate turns
+      back into a lip. The lips stand about 5 clear of the plate on the side away from the foot. So the part is
+      30 plus 5, 35, across the rack's face, 88.4 high and 135 deep. THE 5 AND THE 35 ARE ESTIMATED, and
+      FS does not say whether its 30 counts the lip. It was settled from two perspective photographs of the
+      product page. The plate's known 135 by 88.4 gave each camera, and heights above the plate followed from it.
+      The foot reaches 30 from the plate's underside: 28 above its top face,
+      and 29.5 to 31.1 in the two pictures.
+      Foot plus lip comes to about 35, not 30. So the 30 is the foot's reach alone, and the lip is added to it.
   plate:
     confidence: estimated
     note: >-
@@ -69,8 +76,30 @@ provenance:
     note: >-
       estimated - four bolt holes, two round between two slotted, up the foot's middle, drawn on the EIA-310
       pattern (15.875, 12.7 and 15.875 up the post, 44.45 end to end) that the photographs' spacing agrees
-      with, centred on the 88.4. Round 6.6 across, slotted 6.6 by 10.5. The guide's Step 1 shows the foot bolted
-      to the post's holes with cup screws and nuts.
+      with, centred on the 88.4. Round 6.6 across, slotted 6.6 by 10.5. The slots run across the foot, at
+      right angles to the column of holes, with a small tail at the end toward the plate. The foot's two free
+      corners are rounded, radius about 4, and three gussets join it to the plate (fs/fs-pdubk-flange@1). The
+      guide's Step 1 shows the foot bolted to the post's holes with cup screws and nuts.
+  lip:
+    confidence: estimated
+    note: >-
+      estimated - each long edge of the plate turns back into a lip, away from the side the foot is on.
+      Each lip is about 5 mm clear of the plate and runs the plate's whole 135. The hook at the end of each
+      lip reaches 3.2 to 3.5 mm past the plate's end (gap `lip-end-tabs`). The two perspective photographs
+      give 4.6 to 5.1 below the plate's underside. In the front and the rear view each lip is a bar beside
+      the plate's edge. One is at the top and one at the bottom of the 88.4. The top and the bottom view show
+      the upper and the lower lip as a strip
+      along the plate (fs/fs-pdubk-lip-plan@1). The view from the side away from the foot shows both as bars
+      along the plate's top and bottom edges. The foot's side shows neither, as they lie behind the plate.
+      The far short end of the plate is a plain edge in every photograph.
+  gussets:
+    confidence: estimated
+    note: >-
+      estimated - three gussets join the plate to the foot. They stand at 12.7, 44.2 and 75.7 down the 88.4,
+      the 31.5 pitch of the keyholes about the middle. Each is a right triangle about 15 across the foot and
+      6 along the plate. It is 6.5 thick at the plate and 3.5 at the tip. Both were counted in pixels on the
+      dimensioned render at 6.65 px per mm (fs/fs-pdubk-gusset-plan@1 and the skins of the foot and the plate).
+      The top view shows the top one, the bottom view the bottom one.
   thickness:
     confidence: estimated
     note: >-
@@ -96,7 +125,10 @@ provenance:
   color:
     confidence: photo-measured
     note: >-
-      black, as every photograph of the product page shows, and FS's "SPCC" for the steel.
+      black, as every photograph of the product page shows, and FS's "SPCC" for the steel. The photographs
+      measure a neutral near-black, with no blue cast. Pixels of luminance under 90 average 60 (n=431,329, x6),
+      48 (n=361,667, x7), 47 (n=215,802, g1) and 60 (n=493,471, g5). The fills stay as the device uses them,
+      body #1b1d20 and edges #2a2d31, because colours are a later touch.
   hardware:
     confidence: datasheet
     note: >-
@@ -111,7 +143,7 @@ attrs:
   lifecycle:
     eol: none-announced
 chassis:
-  width: 30.0
+  width: 35.0
   height: 88.4
   depth: 135.0
   ru: 2
@@ -136,13 +168,6 @@ gaps:
   note: >-
     FS states the material, SPCC, and no thickness for any part of the bracket.
   wanted: the gauge of the sheet
-- what: plate-lip
-  scope: [left, right, top, bottom]
-  reason: needs-drawing
-  note: >-
-    the far end of the plate turns back into a short lip, and three triangular gussets join the plate to
-    the foot (the product page's photographs). No view dimensions either, so neither is drawn.
-  wanted: a dimensioned drawing of the bracket from the side and from above
 - what: slot-size
   scope: [left]
   reason: needs-drawing
@@ -150,27 +175,73 @@ gaps:
     the guide gives no keyhole size and the dimensioned render gives only the pitch. The width scaled off
     it, 11.5, meets what the connectors registry states for `pdu-button` and is not confirmed by a figure.
   wanted: the keyhole dimensions
+- what: lip-and-gusset-sizes
+  reason: needs-drawing
+  note: >-
+    the lip and the gusset sizes are estimates read from the photographs. The bends at the foot and at
+    the two lips are rounded, about 2 to 4 mm radius (x7, g2, g3), and are drawn square. The gussets and
+    the lips are not drawn in 3D. `relief.features` with `shape: true` was tried on the gusset and the lip.
+    The blocks stood outside the top and bottom faces, because the shape extrudes outward, so it was reverted.
+  wanted: a dimensioned side or top drawing of the bracket
+- what: lip-end-tabs
+  scope: [left, right, top, bottom]
+  reason: needs-drawing
+  note: >-
+    each lip ends in a small hook past the plate's free end, one at each long edge (x6, g5, x7, g2, g3).
+    Each hook reaches 3.2 to 3.5 mm past the plate end and stands 2.4 to 2.7 mm high.
+    The reach is read on the two plan pictures, each at the scale of a dimension in it.
+    On x6 it reads 20 to 21 px at 6.04 to 6.18 px per mm, from its printed 135 line and its printed 31.5 pitch.
+    On g5 it reads 21 to 22 px at 6.52 to 6.56 px per mm, from the plate's 135 and the same pitch.
+    The perspective pictures x7, g2 and g3 show the hooks but give no usable reach.
+    A dark band about 1.2 mm wide runs down the end edge between them.
+    In the built views the plate and its lips end flush at 135.
+    The printed 135 line on x6 ends 1.5 mm short of the plate's end edge, so a reading from that line gives 140.
+    The 135 is printed on x6, the product page's dimensioned drawing, as 5.3" (135mm).
+    The quick start guide prints no dimension.
+    The kit can hold the hooks if the four views and the chassis depth all read 139.
+    A trial with the depth and the four views at 139 printed "HEAD level 4 addressable"
+    then "working tree level 4 addressable".
+    The device lint passed.
+    The device lock asked for a major version beyond 1.0.0 for the depth and view change alone,
+    and no id was lost.
+    The built views were not tested.
+    Widening only the four views to 138 dropped the bracket from level 4 to level 2.
+    It printed "blocked 3 solid - chassis depth disagrees:
+    left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135".
+    A test asserts "an inconsistent box must not reach solid".
+    The depth stays at the printed 135 and the hooks are not drawn,
+    because a stated dimension is the maintainer's to change.
+  wanted: the maintainer's yes that the stated depth may read 139 so the hooks can be drawn,
+    or a drawing that dimensions the hooks
 groups:
   foot: {term: Foot, role: furniture, index-origin: 1, description: 'the sheet that lies against the post, bolted through four holes'}
   plate: {term: Plate, role: furniture, index-origin: 1, description: 'the sheet that stands out from the foot, with the keyholes and the square holes'}
   keyholes: {term: Keyhole, role: furniture, index-origin: 1, description: 'the slots a PDU''s mounting buttons seat in'}
 views:
   front:
-    size: {w: 30.0, h: 88.4}
+    size: {w: 35.0, h: 88.4}
+    panel:
+      decor:
+      - {id: lip-top, at: [30.0, 0.0], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
+      - {id: lip-bottom, at: [30.0, 86.4], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
     components:
       placements:
       - {ref: fs/fs-pdubk-flange@1, id: foot-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
       - {ref: fs/fs-pdubk-flange-face@1, id: foot-rear, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [rear]}
       - {ref: fs/fs-pdubk-edge@1, id: plate-edge-front, at: [28.0, 0.0], group: plate, rel-pos: 2, only-in: [front], in: foot-front}
   rear:
-    size: {w: 30.0, h: 88.4}
+    size: {w: 35.0, h: 88.4}
+    panel:
+      decor:
+      - {id: lip-top, at: [0.0, 0.0], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
+      - {id: lip-bottom, at: [0.0, 86.4], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
     components:
       placements:
-      - {ref: fs/fs-pdubk-flange@1, id: foot-rear, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [rear]}
-      - {ref: fs/fs-pdubk-flange-face@1, id: foot-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
-      - {ref: fs/fs-pdubk-edge@1, id: plate-edge-rear, at: [0.0, 0.0], group: plate, rel-pos: 2, only-in: [rear], in: foot-rear}
+      - {ref: fs/fs-pdubk-flange@1, id: foot-rear, at: [5.0, 0.0], mirror: true, group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-flange-face@1, id: foot-front, at: [5.0, 0.0], mirror: true, group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-edge@1, id: plate-edge-rear, at: [5.0, 0.0], group: plate, rel-pos: 2, only-in: [rear], in: foot-rear}
   top:
-    size: {w: 30.0, h: 135.0}
+    size: {w: 35.0, h: 135.0}
     panel:
       decor:
       - {id: plate-edge, at: [28.0, 0.0], size: [2.0, 135.0], fill: '#2a2d31', kind: plate}
@@ -178,15 +249,21 @@ views:
       placements:
       - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
       - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [0.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-front, at: [13.0, 2.0], skin: foot-first, group: foot, rel-pos: 2, only-in: [front]}
+      - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-rear, at: [13.0, 127.0], skin: foot-last, group: foot, rel-pos: 2, only-in: [rear]}
+      - {ref: fs/fs-pdubk-lip-plan@1, id: lip, at: [30.0, 0.0], group: plate, rel-pos: 3}
   bottom:
-    size: {w: 30.0, h: 135.0}
+    size: {w: 35.0, h: 135.0}
     panel:
       decor:
-      - {id: plate-edge, at: [0.0, 0.0], size: [2.0, 135.0], fill: '#2a2d31', kind: plate}
+      - {id: plate-edge, at: [5.0, 0.0], size: [2.0, 135.0], fill: '#2a2d31', kind: plate}
     components:
       placements:
-      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
-      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [0.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-front, at: [5.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
+      - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [5.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
+      - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-front, at: [7.0, 2.0], mirror: true, skin: foot-first, group: foot, rel-pos: 2, only-in: [front]}
+      - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-rear, at: [7.0, 127.0], mirror: true, skin: foot-last, group: foot, rel-pos: 2, only-in: [rear]}
+      - {ref: fs/fs-pdubk-lip-plan@1, id: lip, at: [0.0, 0.0], group: plate, rel-pos: 3}
   left:
     size: {w: 135.0, h: 88.4}
     components:

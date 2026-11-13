@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: xs-010xr-p
-version: 0.1.4
+version: 0.2.1
 maturity: modelled
 manufacturer: Nokia
 model: XS-010XR-P
@@ -67,24 +67,47 @@ provenance:
       The data sheet render shows the vendor wordmark on the top face along the short edge at
       the right as seen from the front, reading along that edge. No line drawing shows it, so
       the reserved zone is placed by eye from a three-quarter render. Not drawn - a reserved
-      logo zone.
+      logo zone: the wordmark is a mark, and marks are left to a later part of their own.
   bottom-layout:
     confidence: drawing
     note: >-
-      Product Guide Figure 5-8 p53, a plan of the underside. GATE 1: outline 2142 x 1467 px,
-      1.460 against 208 / 142 = 1.465, orthographic to 0.3 percent, 10.30 px/mm. Four feet
-      11.65 mm across; two label recesses 60.4 x 40.7 and 60.4 x 20.8 mm; a raised plate about
-      169 x 101 mm; the two wall-mounting keyholes whose screw positions the figure marks,
-      115.9 mm apart. NOT DRAWN: four slanted slots at the plate corners and a third
-      wall-mounting hole the figure also shows, and two pegs near the front edge that no
-      document names. The figure has the back edge at the bottom; this view has it at the top.
+      Product Guide Figure 5-8 p53, a plan of the underside, read at 600 dpi. GATE 1: outline
+      2140 x 1464 px, 10.29 and 10.31 px/mm against 208 and 142, orthographic to 0.2 percent.
+      Four feet 11.65 mm across; two label recesses 60.4 x 40.7 and 60.4 x 20.8 mm, each with
+      its lower right corner cut 2.2 mm; a plate 167.1 x 101.3 mm with corners of 7.8 mm radius;
+      four slanted slots at 45 degrees, 15.0 x 5.5 mm, each in a dished recess; three
+      wall-mounting holes with two screw positions (the first an L of two slots, 17.5 x 7.0 and
+      7.0 x 11.5 mm; the second one slot 8.5 x 12.0 mm; the third a slot 9.5 x 5.3 mm ending in
+      a round 8.8 mm head; the first two stay the shared keyhole part, see the wall-hole-shapes
+      gap, and the third is cut here); two round pegs 8.7 mm across, 9.0 mm from the front edge (Figure 5-12 p56 labels them rubber pads, fitted for the outdoor enclosure; no height is stated); thin
+      creases from the plate corners to the housing corners. The file draws eight creases, nine
+      paths: the one at the case screw is broken round the screw, as the figure draws it. The figure's double
+      housing line is drawn as two, at 1.4 and 2.1 mm in. Each foot has the inner ring the figure
+      draws, 10.0 mm across. A U ring recess surrounds the third wall hole, 12.3 mm across and
+      open towards its round head. Each peg has the crescent of side wall below it in the figure,
+      2.5 mm deep, which the half turn puts on the plate side. These small shapes were read in the
+      600 dpi page at 4 times, rounded to 0.5 mm, and are estimates. Sizes are good to about 0.5 mm. The
+      figure has the back edge at the bottom; this view has it at the top, so a figure point
+      (x, y) is the face point (208 - x, 142 - y). Not drawn: the 8.9 x 5.7 mm tab the figure shows
+      on the back edge at x 70.7 to 79.6, which stands outside the face's own 208 x 142 rectangle.
+      Figure 4-1 draws a stub 16.5 mm wide at x 40.4 to 56.9 under the rear body.
   side-layout:
     confidence: estimated
     note: >-
-      The two seam lines are carried round from the back elevation (26.3 and 28.3 mm down).
-      The guide speaks of side vents (5.5 step 1: 50 mm clearance from the side vents) and the
-      render shows a perforated field on one short side, but no square-on figure of a side
-      exists, so the vents are a gap and not drawn.
+      The guide speaks of side vents (5.5 step 1: 50 mm clearance from the side vents).
+      Product Guide Figure 5-9 p53 shows a field of 22 slanted slats on the short side at the
+      fibre end, which seen from the front is the left; the data sheet render shows only a faint
+      vent texture at that end, too small to count. The figure draws two seams across the wall
+      at the ends of the field; the two end seams are drawn at 19.0 and 122.8 mm. The figure
+      draws no seam along the depth of this wall, so none is drawn on the left face. The right
+      face keeps the two carried from the rear elevation (26.3 and 28.3 mm down). The slats are
+      drawn on the left face as 2.3 x 21.0 mm stadiums at a 4.75 mm pitch, centred across the
+      142 mm depth and from 7.5 mm down the face. Scale: the field is taken to span the flat
+      of the side between the 19 mm plan corners, 142 - 2 x 19 = 104 mm. The 22 slats then
+      sit 4.75 mm apart, and the wall's 34.3 mm height, 238 px between its outer lines, sets
+      the 6.9 px/mm that gives their length and start. The figure is a perspective view, so
+      the figures are good to about 30 percent. No held picture shows the right side, so the
+      right face carries no vents.
   colours:
     confidence: estimated
     note: >-
@@ -204,26 +227,46 @@ gaps:
       The guide names an ONT SoC (Figure 4-4) without a part or a clock. Memory and flash are
       stated.
     wanted: the SoC named in a Nokia document
-  - what: side-vents
-    scope: [left, right]
-    reason: needs-drawing
+  - what: right-side-vents
+    scope: [right]
+    reason: needs-photo
     note: >-
-      Side vents are named in the mounting requirements and visible on one short side in the
-      render; no elevation of a side is in the guide.
-    wanted: a side elevation or a square-on photograph of each short side
+      No held picture shows the short side at the other end, so whether it is vented is not known.
+    wanted: a photograph or drawing of that side
   - what: front-face
     scope: [front]
     reason: needs-photo
     note: no figure or render held shows the long edge opposite the ports
     wanted: a photograph or drawing of the front edge
-  - what: underside-holes
+  - what: wall-hole-shapes
     scope: [bottom]
     reason: needs-drawing
     note: >-
-      Figure 5-8 shows four slanted slots, a third wall-mounting hole and two pegs that are
-      not drawn here: the slots are at an angle a decor rectangle cannot take, and no document
-      says what the pegs are.
-    wanted: a dimensioned underside drawing
+      Figure 5-8 draws the first wall hole as an L of two slots, 17.5 x 7.0 and 7.0 x 11.5 mm,
+      and the second as one slot 8.5 x 12.0 mm, each with a round screw position 9.0 mm across and
+      a 9.0 mm ring. The device draws them as two shared keyhole parts, 6 x 10 mm each, with the
+      round head 5.5 mm above the screw position, and the keyholes also sit upside down against
+      the figure. Redrawing them as shown is a later part of its own and a one-way change,
+      because leaving the shared part removes two placement ids.
+    wanted: a part that cuts the two holes, their rings and their screw positions as the figure shows them
+  - what: underside-tab
+    scope: [bottom]
+    reason: needs-drawing
+    note: >-
+      Figure 5-8 shows a tab 8.9 mm wide at x 70.7 to 79.6 on the back edge, standing about 5.7 mm
+      outside the 208 x 142 outline. Figure 4-1 draws a stub 16.5 mm wide at x 40.4 to 56.9.
+      The library holds neither reading as measured. The kit has no shape for a feature outside
+      a face's own rectangle: `chassis.overhang` and `chassis.ears` are for a rack device only,
+      decor is clipped to the view's size, and `out` and `lift` give only a depth.
+    wanted: a drawing of the back edge that gives the tab's width
+  - what: case-screw-head
+    scope: [bottom]
+    reason: needs-drawing
+    note: >-
+      Figure 5-8 draws the case screw as a slotted head with one slot in a double ring. The device
+      seats the shared screw head, which draws a cross. No slotted version exists in the library,
+      and a new version of a shared part moves every device that seats it.
+    wanted: a slotted version of the shared screw head
 groups:
   pon:
     term: Port
@@ -317,13 +360,49 @@ views:
     panel:
       decor:
         - {id: outline, at: [0.4, 0.4], size: [207.2, 141.2], rx: 19.0, stroke: '#c9ccd0', stroke-width: 0.5}
-        - {id: plate, at: [20.0, 20.3], size: [167.5, 100.7], rx: 3.0, stroke: '#c9ccd0', stroke-width: 0.3}
+        - {id: lip, at: [1.4, 1.4], size: [205.2, 139.2], rx: 17.6, stroke: '#c9ccd0', stroke-width: 0.25, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the first of two thin lines inside the housing edge, 1.4 mm in, radius 19.0 less the inset'}
+        - {id: lip-2, at: [2.1, 2.1], size: [203.8, 137.8], rx: 16.9, stroke: '#c9ccd0', stroke-width: 0.25, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the second of two thin lines inside the housing edge, 2.1 mm in, radius 19.0 less the inset'}
+        - {id: plate, at: [20.4, 20.3], size: [167.1, 101.3], rx: 7.8, stroke: '#c9ccd0', stroke-width: 0.3, confidence: drawing, source: 'Product Guide Figure 5-8 p53: plate edges 20.5 to 187.6 across and 20.4 to 121.7 down, corner radius 7.8 mm'}
         - {id: label-recess-1, kind: label-plate, at: [73.8, 60.7], size: [60.4, 40.7], stroke: '#c9ccd0', stroke-width: 0.3}
         - {id: label-recess-2, kind: label-plate, at: [73.8, 35.3], size: [60.4, 20.8], stroke: '#c9ccd0', stroke-width: 0.3}
         - {id: foot-1, at: [26.7, 22.3], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
         - {id: foot-2, at: [169.8, 22.3], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
         - {id: foot-3, at: [26.7, 107.8], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
         - {id: foot-4, at: [169.8, 107.8], size: [11.65, 11.65], rx: 5.825, fill: '#e3e5e8'}
+        - {id: foot-1-ring, at: [27.525, 23.125], size: [10.0, 10.0], rx: 5.0, stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the inner ring of the foot, 9.6 mm clear inside its line, drawn 10.0 mm across and rounded to 0.5 mm'}
+        - {id: foot-2-ring, at: [170.625, 23.125], size: [10.0, 10.0], rx: 5.0, stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the inner ring of the foot, 9.6 mm clear inside its line, drawn 10.0 mm across and rounded to 0.5 mm'}
+        - {id: foot-3-ring, at: [27.525, 108.625], size: [10.0, 10.0], rx: 5.0, stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the inner ring of the foot, 9.6 mm clear inside its line, drawn 10.0 mm across and rounded to 0.5 mm'}
+        - {id: foot-4-ring, at: [170.625, 108.625], size: [10.0, 10.0], rx: 5.0, stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53, 600 dpi at 4 times: the inner ring of the foot, 9.6 mm clear inside its line, drawn 10.0 mm across and rounded to 0.5 mm'}
+        - {id: peg-1, kind: peg, at: [144.45, 128.65], size: [8.7, 8.7], rx: 4.35, fill: '#e3e5e8', stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53 and Figure 5-12 p56, which labels the two Rubber pads and says they are installed on the ONT for the outdoor enclosure: a round pad 8.7 mm across, 9.0 mm from the front edge; how far it stands is not stated'}
+        - {id: peg-2, kind: peg, at: [54.95, 128.65], size: [8.7, 8.7], rx: 4.35, fill: '#e3e5e8', stroke: '#c9ccd0', stroke-width: 0.3, confidence: estimated, source: 'Product Guide Figure 5-8 p53 and Figure 5-12 p56, which labels the two Rubber pads and says they are installed on the ONT for the outdoor enclosure: a round pad 8.7 mm across, 9.0 mm from the front edge; how far it stands is not stated'}
+      cutouts:
+        - {id: slot-1, at: [155.0, 108.75], size: [15.0, 5.5], shape: slot, rotate: -45, empty: true}
+        - {id: slot-2, at: [46.0, 108.75], size: [15.0, 5.5], shape: slot, rotate: -45, empty: true}
+        - {id: slot-3, at: [155.0, 20.25], size: [15.0, 5.5], shape: slot, rotate: -45, empty: true}
+        - {id: slot-4, at: [46.0, 20.25], size: [15.0, 5.5], shape: slot, rotate: -45, empty: true}
+        - {id: wall-hole-3-slot, at: [165.4, 45.0], size: [9.1, 5.3], shape: slot, empty: true}
+        - {id: wall-hole-3-head, at: [156.8, 43.3], size: [8.6, 8.6], shape: circle, empty: true}
+    silkscreen:
+      - {id: slot-1-recess, at: [159.8, 114.2], path: 'M 0.18 -5.48 L -5.48 0.18 A 3.75 3.75 0 0 0 -0.18 5.48 L 5.48 -0.18', fill: '#c9ccd0', stroke-width: 0.4, for: chassis}
+      - {id: slot-2-recess, at: [50.3, 114.2], path: 'M 0.18 -5.48 L -5.48 0.18 A 3.75 3.75 0 0 0 -0.18 5.48 L 5.48 -0.18', fill: '#c9ccd0', stroke-width: 0.4, for: chassis}
+      - {id: slot-3-recess, at: [159.8, 26.2], path: 'M 0.18 -5.48 L -5.48 0.18 A 3.75 3.75 0 0 0 -0.18 5.48 L 5.48 -0.18', fill: '#c9ccd0', stroke-width: 0.4, for: chassis}
+      - {id: slot-4-recess, at: [50.3, 26.2], path: 'M 0.18 -5.48 L -5.48 0.18 A 3.75 3.75 0 0 0 -0.18 5.48 L 5.48 -0.18', fill: '#c9ccd0', stroke-width: 0.4, for: chassis}
+      - {id: crease-1, at: [20.4, 28.0], path: 'M 0 0 L -18.9 -7.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-2, at: [28.4, 20.3], path: 'M 0 0 L -2.7 -7.1', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-3, at: [22.5, 5.0], path: 'M 0 0 L -1.6 -4.2', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-4, at: [187.6, 28.0], path: 'M 0 0 L 18.9 -7.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-5, at: [179.6, 20.3], path: 'M 0 0 L 7.5 -19.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-6, at: [20.4, 114.0], path: 'M 0 0 L -18.9 7.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-7, at: [28.4, 121.7], path: 'M 0 0 L -7.5 19.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-8, at: [187.6, 114.0], path: 'M 0 0 L 18.9 7.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: crease-9, at: [179.6, 121.7], path: 'M 0 0 L 7.5 19.5', fill: '#c9ccd0', stroke-width: 0.2, for: chassis}
+      - {id: wall-hole-3-recess, at: [171.85, 47.6], path: 'M -5.8 6.15 L 0 6.15 A 6.15 6.15 0 0 0 0 -6.15 L -5.8 -6.15', fill: '#c9ccd0', stroke-width: 0.4, for: chassis}
+      - {id: peg-1-crescent, at: [148.8, 133.0], path: 'M 4.35 0 L 4.35 -2.5 A 4.35 4.35 0 0 0 -4.35 -2.5 L -4.35 0', fill: '#c9ccd0', stroke-width: 0.3, for: chassis}
+      - {id: peg-2-crescent, at: [59.3, 133.0], path: 'M 4.35 0 L 4.35 -2.5 A 4.35 4.35 0 0 0 -4.35 -2.5 L -4.35 0', fill: '#c9ccd0', stroke-width: 0.3, for: chassis}
+      - {id: label-recess-1-cut, at: [73.8, 60.7], path: 'M 0 0 L 2.2 0 L 0 2.2 Z', filled: true, fill: '#f7f7f7', stroke-width: 0, for: chassis}
+      - {id: label-recess-1-chamfer, at: [73.8, 60.7], path: 'M 2.2 0 L 0 2.2', fill: '#c9ccd0', stroke-width: 0.3, for: chassis}
+      - {id: label-recess-2-cut, at: [73.8, 35.3], path: 'M 0 0 L 2.2 0 L 0 2.2 Z', filled: true, fill: '#f7f7f7', stroke-width: 0, for: chassis}
+      - {id: label-recess-2-chamfer, at: [73.8, 35.3], path: 'M 2.2 0 L 0 2.2', fill: '#c9ccd0', stroke-width: 0.3, for: chassis}
     components:
       placements:
         - {ref: common/keyhole-mount@1, id: keyhole-1, at: [43.0, 88.6], group: furniture, rel-pos: 2}
@@ -333,8 +412,30 @@ views:
     size: {w: 142.0, h: 34.3}
     panel:
       decor:
-        - {id: seam-upper, at: [0.0, 26.3], size: [142.0, 0.2], fill: '#d3d6d9'}
-        - {id: seam-lower, at: [0.0, 28.3], size: [142.0, 0.2], fill: '#d3d6d9'}
+        - {id: seam-end-1, at: [19.0, 0.0], size: [0.2, 34.3], fill: '#d3d6d9', confidence: estimated, source: 'Product Guide Figure 5-9 p53: a seam across the wall at the end of the slat field, where the 19 mm plan corner meets the flat'}
+        - {id: seam-end-2, at: [122.8, 0.0], size: [0.2, 34.3], fill: '#d3d6d9', confidence: estimated, source: 'Product Guide Figure 5-9 p53: a seam across the wall at the end of the slat field, where the 19 mm plan corner meets the flat'}
+        - {id: vent-01, kind: vent-slot, at: [19.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-02, kind: vent-slot, at: [24.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-03, kind: vent-slot, at: [29.475, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-04, kind: vent-slot, at: [34.225, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-05, kind: vent-slot, at: [38.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-06, kind: vent-slot, at: [43.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-07, kind: vent-slot, at: [48.475, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-08, kind: vent-slot, at: [53.225, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-09, kind: vent-slot, at: [57.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-10, kind: vent-slot, at: [62.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-11, kind: vent-slot, at: [67.475, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-12, kind: vent-slot, at: [72.225, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-13, kind: vent-slot, at: [76.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-14, kind: vent-slot, at: [81.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-15, kind: vent-slot, at: [86.475, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-16, kind: vent-slot, at: [91.225, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-17, kind: vent-slot, at: [95.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-18, kind: vent-slot, at: [100.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-19, kind: vent-slot, at: [105.475, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-20, kind: vent-slot, at: [110.225, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-21, kind: vent-slot, at: [114.975, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
+        - {id: vent-22, kind: vent-slot, at: [119.725, 7.5], size: [2.3, 21.0], shape: slot, vent: 1, fill: '#585858', confidence: estimated, source: 'Product Guide Figure 5-9 p53: 22 slats counted twice, scale from the 104 mm flat of the side; the sheet thickness is not stated, so the vent depth is the kit default of 1 mm'}
   right:
     size: {w: 142.0, h: 34.3}
     panel:

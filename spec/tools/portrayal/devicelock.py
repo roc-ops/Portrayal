@@ -639,7 +639,11 @@ def _composed(doc, versions):
 # `section` IS GEOMETRY AS `bevel` IS: it is the outline of the left and right
 # faces and what a part on any face may stand on. Stating one on a released
 # device, or moving a point of it, is a major.
-CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell", "section"}
+# `plan-outline` IS GEOMETRY AS `section` IS: it is the outline of the top and bottom faces
+# and of the body seen from above, and what a part on any face may stand on. Stating one on a
+# released device, moving a point of it, changing a band or taking it away is a major.
+CHASSIS_SHAPE = {"width", "height", "depth", "ru", "bevel", "rounded", "shell", "section",
+                 "plan-outline"}
 # `fins` IS SURFACE, NOT SHAPE, though it is drawn: the ribs stand on a casting whose
 # outline `section` already fixes, and the box every size reads is unchanged by them, so
 # retuning a rib's height, pitch or step on a released device moves nothing a consumer
