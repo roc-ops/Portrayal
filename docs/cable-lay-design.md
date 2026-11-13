@@ -693,10 +693,11 @@ pane, the far panel, as it puts any rear port.
   back end no drawing places comes from behind its panel (the waypoint nearest
   that end is on the far side of the port from the way the port looks) crosses
   the panel's body, which the cable's own device is never counted as crossed
-  by. `cable.route` then adds a finding of kind `warning`: "c1 reaches port b01
-  of XCU10 rear from behind the panel: the last leg must come from the cabinet
-  side of the panel, the side of the front rails." (`approachWarnings` in
-  `rack/route.js`.) A route that passes today is stored as it was.
+  by. `cable.route` then adds a finding of kind `warning`. It opens with "c1
+  reaches port b01 of XCU10 rear from behind the panel". It ends with "the last
+  leg must come from the cabinet side of the panel, the side of the front
+  rails." (`approachWarnings` in `rack/route.js`.) A route that passes today is
+  stored as it was.
 
 What it does not do: the two views of the rack page (the cable hanging below
 the rack tagged "not connected", the rear view not drawing the cable) and
@@ -2511,7 +2512,7 @@ published file or a saved rack file uses it.
 | `tight-bend` in a path's `bends` (`point`, `between`, `at`, `angle_deg`, `legs_mm`, `room_mm`, `need_mm`, `short_mm`), `bendFindings`, and its sentence ("turns N degrees between A and B with room for an R mm bend; the cable (type) needs M mm, S mm short.") | kit API, agent output | a page and an agent read the kind and the fields, and match the sentence |
 | `port-behind-span` in a path's `covers` (`item`, `path`, `view`, `between`, `at`, `judged`, `estimated`), `coverFindings` with `span-over-ports` (`count`, `ports`, `between`, `judged`, `estimated`) and its sentence (`coverFindingsOf`: "crosses in front of P on D", the stretch, the advice, and "Only ports that hold a cable were judged."), the rule that a port within the bend radius of the cable's own is not listed, and the optional reader `ctx.portBoxesOf(itemId)` giving `[{path, view, x, y, w?, h?}]` (1.7, #1013) | kit API, the routing context, agent output | a page supplies the reader and reads the findings by these names; agents match the sentence |
 | `end-unreachable` (`cable`, `ends`, `text`), `unreachedFindings`, `unreachedFindingsOf`, `route.unreached` of `inspect`, its place on the `describe` findings line, and its sentence ("This end cannot be reached: no drawing places port b01 of PNL-1.") (1.8, #1836) | kit API, agent output | a page and an agent read the kind and the fields, and match the sentence; a released code is retired, not deleted |
-| the back end of an adapter standing where its twin does (`twinEnd`), the automatic route taking the twin's side, and the hand-route warning of `cable.route` ("reaches port b01 of D from behind the panel: the last leg must come from the cabinet side of the panel, the side of the front rails.") (1.8, #1836) | kit, saved racks, agent output | an existing rack with a cable on such an end gets a route, a routed length and a spare it had none of (a written length is untouched); a hand route that was accepted can now carry the warning |
+| the back end of an adapter standing where its twin does (`twinEnd`), the automatic route taking the twin's side, and the hand-route warning of `cable.route` ("reaches port b01 of D from behind the panel" and "the last leg must come from the cabinet side of the panel, the side of the front rails.") (1.8, #1836) | kit, saved racks, agent output | an existing rack with a cable on such an end gets a route, a routed length and a spare it had none of (a written length is untouched); a hand route that was accepted can now carry the warning |
 | one lay whichever end is written first (3.4, #986): a cable laid from both ends and one kept by crossings, room, length, then the first-sorted end; `ctx` readers handed the twin | kit API, saved racks | routed lengths and paths on saved racks follow the lay kept; a page whose reader tells the ends apart by `cable.a` sees them exchanged on a twin |
 | `cornersOf` and `STRAIGHT_DEG` in `rack/route-path.js` (still exported from `rack/bundles.js`), and `cornersOf`'s `share` option with `half` (the default, the bundle check's) and `need` | kit API | a consumer imports them by these names from either path |
 | a doubled-back ring's path `face` point at its approach point, apart from the ring's own `rings[].face` on the band (#968) | kit API | a page that draws the face point, or compares the two, reads them by these names |
