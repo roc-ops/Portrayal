@@ -93,7 +93,7 @@ def test_the_dividers_are_six_point_nine_wide_wherever_they_are_given():
     assert "12.0 mm divider" not in yaml.safe_dump(device()) + yaml.safe_dump(c)
 
 
-def test_the_right_end_draws_its_see_through_window_and_the_left_end_does_not():
+def test_the_right_end_outlines_an_opening_seen_through_its_open_end_and_the_left_end_does_not():
     doc = device()
     right = doc["views"]["right"]
     w, h = right["size"]["w"], right["size"]["h"]
@@ -105,15 +105,26 @@ def test_the_right_end_draws_its_see_through_window_and_the_left_end_does_not():
     # the sheet shows no cable crossing it, so no pass-through is declared
     assert "passes" not in right["panel"]
     note = doc["provenance"]["right"]
-    assert note["confidence"] == "estimated" and "window" in note["note"].lower()
+    assert note["confidence"] == "estimated"
+    text = " ".join(note["note"].lower().split())
+    # the photograph shows a triangle under a strut, so the note says what it shows and no more
+    for words in ("window", "seen through the open end", "shape and place by eye", "12 x 6 px", "not a panel with a hole",
+                  "not a pass-through", "pure white"):
+        assert words in text, words
 
 
 def test_what_cannot_be_counted_or_was_left_out_is_said_with_its_figures():
     notes = device()["provenance"]
     guides = " ".join(notes["guides"]["note"].split())
-    assert "cover-off front shows faint ticks only" in guides and "is not counted" in guides
+    assert "picture from above with the cover off shows about 9 to 10 clear white cells" in guides
+    assert "cannot be counted exactly" in guides and "no picture of the front with the cover off" in guides
+    # one range, one picture, and no word for the cells that the picture does not bear out
+    assert "faint" not in guides.lower() and "ticks" not in guides and "9 to 11" not in guides
     cover = " ".join(notes["cover"]["note"].split())
-    assert "notch" in cover and "3 px" in cover
+    tabs = " ".join(part("cover")["provenance"]["tabs"].split())
+    for text in (cover, tabs):
+        assert "notch" in text and "3 x 2 px" in text and "3 x 6 px" in text and "under one pixel" in text, text
+        assert "3.5 x 2.3 mm" in text and "3.5 x 7 mm" in text and "oblique" in text, text
     text = " ".join(yaml.safe_dump(device(), width=10000).split())
     assert "user manual" not in text.lower() and "owner" not in text.lower()
     assert "SRCABLEDUCT1UHD manual" in text
