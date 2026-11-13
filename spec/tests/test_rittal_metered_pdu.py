@@ -367,6 +367,19 @@ def test_the_notes_say_the_c13_frames_lines_and_grooves_are_drawn(sku):
     assert "3.0 wide" in notes["rear"] and "vector" in notes["rear"]
 
 
+def test_the_label_cover_carries_its_rim_and_the_button_its_three_rings_and_bands():
+    cover = (LIB / "components" / "rittal" / "pdu-cover-plate" / "v1" / "skins" / "default.svg").read_text()
+    assert 'id="rim"' in cover and cover.count("M 0.61 2.0 V 104.52") == 1
+    part = LIB / "components" / "rittal" / "pdu-metered-button" / "v1"
+    contract = yaml.safe_load((part / "contract.yaml").read_text())
+    assert contract["mates"] == "pdu-button" and contract["size"] == {"w": 35.0, "h": 25.0}
+    skin = (part / "skins" / "default.svg").read_text()
+    assert skin.count('r="7.5"') == 1 and skin.count('r="3.75"') == 1 and "M 0 5 H 35 M 0 20 H 35" in skin
+    for sku in SKUS:
+        buttons = [p for p in _placements(sku, "rear") if p["id"].startswith("button-")]
+        assert [p["ref"] for p in buttons] == ["rittal/pdu-metered-button@1"] * 2 and all(p["at"][0] == 4.47 for p in buttons)
+
+
 def test_the_controller_keys_are_the_two_rings_the_drawing_shows_and_the_headers_hold_their_holes():
     skin = (LIB / "components" / "rittal" / "pdu-controller" / "v1" / "skins" / "default.svg").read_text()
     assert skin.count('r="3.245"') == 4 and skin.count('r="4.0"') == 4

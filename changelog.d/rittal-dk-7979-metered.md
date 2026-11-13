@@ -5,7 +5,7 @@
   CAN bus jack and an RS232 jack. It also has a USB-A port, a digital input and
   an alarm relay output. The new parts are `rittal/pdu-controller@1`,
   `rittal/pdu-cover-plate@1`, `rittal/pdu-digital-input@1` and
-  `rittal/pdu-alarm-relay@1`. The phase plates are drawn as frames round each
+  `rittal/pdu-alarm-relay@1` and `rittal/pdu-metered-button@1`. The phase plates are drawn as frames round each
   outlet block. The ribs of the head cap are drawn from the maker's drawings.
   The outer frames round each C19 and each C13 are drawn too. So are the
   full-height lines of the front view, the grooves and ridge of the back, and
