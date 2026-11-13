@@ -48,6 +48,7 @@ from portrayal import halves as _halves
 from portrayal import bevel as _bevel
 from portrayal import section as _section
 from portrayal import fins as _fins
+from portrayal import plan as _plan
 from portrayal import elements as elements_mod
 from portrayal import facets as _facets
 TOOL_VERSION = "0.2.0"
@@ -2811,9 +2812,15 @@ def section_face(faceplate, ch, face, w, h):
     faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
 
 
-def fins_face(faceplate, ch, face, w, h):
+def fins_face(faceplate, ch, face, w, h, plan=None):
     """Draw the ribs of `chassis.fins` on this face (docs/modelling-a-device.md, "A housing
     with a stepped end"), and say what is left to paint over the face's own art.
+
+    With a `plan` (portrayal.plan.Plan, for a housing that states `chassis.plan-outline`) the
+    ribs are cut to the body the plan leaves: each stripe of the top and the bottom is the rib's
+    rectangle cut to the pieces of every band it crosses, joined, and each rib of the front and
+    the rear is cut to the outline of that face; a rib is then a <path> with an id, numbered
+    `-a`, `-b` where it is left in several pieces. No clip element is written.
 
     The front and the rear take the silhouette the fields give: at the core outside every
     span of an inside field, at the step's tip line within it, so the gaps between ribs are
@@ -2839,12 +2846,29 @@ def fins_face(faceplate, ch, face, w, h):
                   "right": (D, H), "left": (D, H)}.get(face):
         return None                     # a face drawn at another size is not this one
     color = ch.get("color", _fins.DEFAULT_COLOR)
-    rects, boxes = [], []
+    rects, paths, boxes = [], [], []
     mirror = face in ("rear", "bottom")
+    elevation = None
+    if plan is not None and face in _fins.OUTLINE_FACES:
+        # the outline of this face the plan leaves, as polygons in the face's own frame
+        elevation = [[(W - x, y) for x, y in reversed(lp)] if mirror else lp
+                     for lp in plan.elevation(_fins.silhouette("front", ch)) if _plan.loop_area2(lp) > 0]
 
     def put(x0, y0, rw, rh, fill, edge):
         rects.append((x0, y0, rw, rh, fill, edge))
         boxes.append((x0, y0, x0 + rw, y0 + rh))
+
+    ribs_seen = [0]
+
+    def put_loops(lps, fill, edge):
+        """One rib, as a path of the loops it has left, in the face's own frame. The rib's number
+        counts the ribs the plan removes too, so a rib keeps its number whatever is cut."""
+        ident = f"fin-{ribs_seen[0]}"
+        ribs_seen[0] += 1
+        pieces = sorted(lps)
+        for k, lp in enumerate(pieces):
+            paths.append((ident + (f"-{chr(97 + k)}" if len(pieces) > 1 else ""), _plan.path_d([lp]), fill, edge))
+            boxes.append((min(x for x, _ in lp), min(y for _, y in lp), max(x for x, _ in lp), max(y for _, y in lp)))
 
     for f in fields:
         top = _fins.tallest(f)
@@ -2855,11 +2879,27 @@ def fins_face(faceplate, ch, face, w, h):
                     y0 = -tip if f["on"] == "top" else H
                 else:
                     y0 = (_fins.limit(f) - tip) if f["on"] == "top" else H - _fins.limit(f)
-                put(W - x1 if mirror else x0, y0, x1 - x0, tip, _fins.tone(color, tip, top), f["on"])
+                fx0 = W - x1 if mirror else x0
+                if elevation is not None:
+                    rect = [(fx0, y0), (fx0 + x1 - x0, y0), (fx0 + x1 - x0, y0 + tip), (fx0, y0 + tip)]
+                    put_loops(_plan.loops(_plan.sweep([[rect], elevation])), _fins.tone(color, tip, top), f["on"])
+                else:
+                    put(fx0, y0, x1 - x0, tip, _fins.tone(color, tip, top), f["on"])
         elif face in ("top", "bottom") and f["on"] == face and ext is not None:
             for x0, x1, tip in _fins.ribs(f):
-                put(W - x1 if mirror else x0, D - ext[1], x1 - x0, ext[1] - ext[0],
-                    _fins.tone(color, tip, top), f["on"])
+                if plan is not None:
+                    if _fins.is_outside(f):
+                        h0, h1 = (0.0, 1e-3) if face == "top" else (H - 1e-3, H)
+                    elif face == "top":
+                        h0, h1 = _fins.limit(f) - tip, _fins.limit(f)
+                    else:
+                        h0, h1 = H - _fins.limit(f), H - _fins.limit(f) + tip
+                    lps = plan.stripe((x0, D - ext[1], x1, D - ext[0]), h0, h1)
+                    put_loops([[(W - x, y) for x, y in reversed(lp)] if mirror else lp for lp in lps],
+                              _fins.tone(color, tip, top), f["on"])
+                else:
+                    put(W - x1 if mirror else x0, D - ext[1], x1 - x0, ext[1] - ext[0],
+                        _fins.tone(color, tip, top), f["on"])
         elif face in _section.END_FACES and ext is not None:
             ex0, ex1 = ext if face == "right" else (D - ext[1], D - ext[0])
             if _fins.is_outside(f):
@@ -2879,11 +2919,88 @@ def fins_face(faceplate, ch, face, w, h):
                 faceplate.attrib.pop(k, None)
             faceplate.set("d", "M" + " L".join(f"{x:.3f},{y:.3f}" for x, y in outline) + " Z")
             boxes.append(outline_box)
-    if not rects and outline is None:
+    if elevation is not None:
+        plan_face_outline(faceplate, plan.elevation(_fins.silhouette("front", ch)), face, W, H, boxes)
+    if not rects and not paths and outline is None:
         return None
-    return {"rects": rects,
+    return {"rects": rects, "paths": paths,
             "box": (min(b[0] for b in boxes), min(b[1] for b in boxes),
                     max(b[2] for b in boxes), max(b[3] for b in boxes)) if boxes else None}
+
+
+def plan_face_outline(faceplate, loops, face, W, H, boxes=None):
+    """Make the faceplate a <path> of `loops` (a face's outline, in the front's frame for the front
+    and the rear, the top's for the top and the bottom), the same id, unless they are the whole
+    rectangle. The rear and the bottom are the x-mirror, wound the other way so they stay
+    clockwise. The rest of the face is left unpainted."""
+    mirror = face in ("rear", "bottom")
+    xs = [x for lp in loops for x, _ in lp]
+    ys = [y for lp in loops for _, y in lp]
+    if not loops:
+        return
+    box = (min(xs), min(ys), max(xs), max(ys))
+    if len(loops) == 1 and len(loops[0]) == 4 and box[:2] == (0.0, 0.0) and box[2] == W and box[3] == H:
+        return
+    faceplate.tag = f"{{{SVG_NS}}}path"
+    for k in ("x", "y", "width", "height", "rx"):
+        faceplate.attrib.pop(k, None)
+    faceplate.set("d", _plan.path_d(loops, mirror=W if mirror else None))
+    if boxes is not None:
+        boxes.append((W - box[2], box[1], W - box[0], box[3]) if mirror else box)
+
+
+def plan_face(faceplate, ch, face, w, h, plan):
+    """Draw what a housing's plan outline shows on this face (docs/modelling-a-device.md, "A
+    housing seen from above"), and say what is left to paint over the face's own art.
+
+    The top and the bottom take the union outline of the bands' polygons as the faceplate, a
+    <path> with the same id and the corners transparent, and the step between bands is a line
+    inside it (the bottom is the x-mirror, wound the other way). The front and the rear take the
+    outline of the body seen from the front (`fins_face` does that where there are ribs, and this
+    does where there are none). An end face stays the section's outline and shades, in the plain
+    tone, what the plan leaves no cap on, so the author sees where a part cannot stand.
+
+    Returns `{"steps": [path d, ...], "nocap": path d or None}`, or None where the face has
+    neither."""
+    if plan is None:
+        return None
+    W, H, D = ch["width"], ch["height"], ch["depth"]
+    if (w, h) != {"front": (W, H), "rear": (W, H), "top": (W, D), "bottom": (W, D),
+                  "right": (D, H), "left": (D, H)}.get(face):
+        return None
+    if face in ("top", "bottom"):
+        plan_face_outline(faceplate, plan.outline(), face, W, D)
+        return {"steps": [_plan.polyline_d(run, mirror=W if face == "bottom" else None)
+                          for run in plan.steps()], "nocap": None}
+    if face in ("front", "rear") and not _fins.fields(ch):
+        plan_face_outline(faceplate, plan.elevation(), face, W, H)
+        return None
+    if face in _section.END_FACES:
+        loops = plan.no_cap(face)
+        if loops:
+            return {"steps": [], "nocap": _plan.path_d(loops)}
+    return None
+
+
+def plan_group(svg, art, ch):
+    """The step lines and the shaded no-cap region of `plan_face`, painted over the face's art
+    (and over the ribs) and taking no click."""
+    g = ET.SubElement(svg, f"{{{SVG_NS}}}g")
+    g.set("id", "chassis-plan")
+    g.set("data-path", "chassis/plan")
+    g.set("pointer-events", "none")
+    if art["nocap"]:
+        p = ET.SubElement(g, f"{{{SVG_NS}}}path")
+        p.set("data-class", "plan-no-cap")
+        p.set("d", art["nocap"])
+        p.set("fill", ch.get("color", "#3a3f45")); p.set("stroke", "none")
+    for d in art["steps"]:
+        p = ET.SubElement(g, f"{{{SVG_NS}}}path")
+        p.set("data-class", "plan-step")
+        p.set("d", d)
+        p.set("fill", "none")
+        p.set("stroke", ch.get("edge", "#22262a")); p.set("stroke-width", "0.4")
+    return g
 
 
 def fins_group(svg, art):
@@ -2900,6 +3017,13 @@ def fins_group(svg, art):
         r.set("x", f"{x:g}"); r.set("y", f"{y:g}")
         r.set("width", f"{rw:g}"); r.set("height", f"{rh:g}")
         r.set("fill", fill); r.set("stroke", "none")
+    for ident, d, fill, edge in art.get("paths", ()):
+        p = ET.SubElement(g, f"{{{SVG_NS}}}path")
+        p.set("id", ident)
+        p.set("data-class", "fin")
+        p.set("data-fin-on", edge)
+        p.set("d", d)
+        p.set("fill", fill); p.set("stroke", "none")
     return g
 
 
@@ -3140,7 +3264,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
         faceplate.set("stroke", ch.get("edge", "#22262a")); faceplate.set("stroke-width", "0.5")
     bevel_face(svg, faceplate, ch, view.get("face") or view_name, w, h)
     section_face(faceplate, ch, view.get("face") or view_name, w, h)
-    fin_art = fins_face(faceplate, ch, view.get("face") or view_name, w, h)
+    # A HOUSING WHOSE PLAN IS NOT A RECTANGLE (`chassis.plan-outline`): cut once, read by every
+    # face below. A plan lint refuses (L220-L225) draws nothing here; lint has said what is wrong.
+    plan = _plan.Plan(ch) if "plan-outline" in ch and _plan.valid(ch) else None
+    fin_art = fins_face(faceplate, ch, view.get("face") or view_name, w, h, plan)
+    plan_art = plan_face(faceplate, ch, view.get("face") or view_name, w, h, plan)
 
     resolved = {}
     palette = {}
@@ -4976,8 +5104,11 @@ def render_view(device, view_name, view, lib, include=(), config_name="default",
             el.set("stroke", "none")
 
     # THE RIBS ARE PAINTED LAST, over the face's own art, and take no click
-    if fin_art and fin_art["rects"]:
+    if fin_art and (fin_art["rects"] or fin_art["paths"]):
         fins_group(svg, fin_art)
+    # AND THE PLAN'S STEP LINES AND SHADING OVER THEM
+    if plan_art and (plan_art["steps"] or plan_art["nocap"]):
+        plan_group(svg, plan_art, ch)
 
     meta_payload = {
         "generator": {"tool": "portrayal-render", "version": TOOL_VERSION},

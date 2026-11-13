@@ -68,6 +68,16 @@ def test_web_stops_where_each_ear_starts():
     assert round(web["at"][0] + web["size"][0], 3) == round(WIDTH - EAR_LENGTH, 3)
 
 
+def test_end_strips_are_one_gauge_thick_like_the_web_stands_out():
+    for side in SIDES:
+        view = DATA["views"][side]
+        width, height = view["size"]["w"], view["size"]["h"]
+        strips = decor(side)
+        assert strips["web"]["size"] == [GAUGE, height], side
+        assert strips["leg"]["size"] == [width, GAUGE], side
+    assert GAUGE == decor("front")["web"].get("out")
+
+
 def test_other_faces_build_nothing():
     for view in ("front", "rear", "top", "bottom", "left", "right"):
         for d in DATA["views"][view]["panel"]["decor"]:
@@ -148,7 +158,7 @@ def test_notes_state_each_limit():
         "no closed end cap",
         "only if you know to look for one",
         "do not show in 3d",
-        "1.5 mm larger in each direction",
+        "1.5 mm taller and 1.5 mm deeper",
         "nothing checks",
     ):
         assert phrase in text, phrase
