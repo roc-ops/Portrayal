@@ -78,13 +78,15 @@ provenance:
   front:
     confidence: estimated
     note: >-
-      Read from the oblique photograph on the quick setup guide's page 1, 398 pixels wide, of a unit labelled SX16. It shows one perforated vent panel.
-      The Raritan logo sits at its left end and a model label at its right end. A blue mark sits at the right end of the vent.
-      The perforated band runs from pixel column 31 to 268 and is about 23 pixel rows tall at its middle. One hole is about 2 pixels across.
-      The holes repeat every 4 pixels along the band, read from an autocorrelation of four pixel rows (peak 0.72 to 0.77). The photograph is oblique, so the row pitch is only about 3 pixels.
-      The panel is drawn as a hole pattern with a tile of 5.6 by 3.9 mm. The photograph's lattice is staggered and the tile is square, so the hole count is not exact.
+      Read from the oblique photograph on the quick setup guide's page 1, 398 pixels wide, of a unit labelled SX16. It shows one perforated band.
+      The Raritan logo sits at its left end and a model label at its right end. A blue mark sits above the right end of the band.
+      The holes form a staggered lattice. Alternate rows are offset by 0.48 to 0.51 of a pitch, read over 21 holes a row.
+      The hole pitch is 4.13 pixels, 5.63 mm, and the row pitch is about 3 pixels, 4.3 mm. The scales are 1.36 mm a pixel across and 1.42 down.
+      The band has seven rows at its left end and five from pixel column 76 to its right end. The rows hold 9, 9, 56, 55, 54, 54 and 50 holes.
+      Each row is drawn as its own hole pattern at its counted length, so the band keeps the slanted ends the photograph shows.
+      The first full row sits about 22 mm below the top. The last row sits about 4 mm above the bottom. Both are read from the face edges in the picture.
       The logo mark is about 25 pixels wide there and the label about 30. Both are regions without text.
-      The photograph shows one blue mark, at about 84 percent of the face width, and none at the left. One lamp is drawn off at that mark.
+      The photograph shows one blue mark, at about 84 percent of the face width and 11 mm below the top, and none at the left. One lamp is drawn off at that mark.
       The blue reads #5a7d82 from the 12 bluest of 360 pixels, so a library blue is used.
   side-walls:
     confidence: estimated
@@ -178,9 +180,10 @@ gaps:
   scope: [front]
   reason: needs-photo
   note: >-
-    The bezel holes are drawn as a pattern, but their exact count and pitch are unknown.
-    The photograph is oblique and 398 pixels wide, with holes 2 pixels across at a 4 pixel pitch.
-  wanted: A straight-on front photograph of the DSXA-32, to count the holes.
+    The lattice is staggered and counted row by row, but the photograph is oblique and 398 pixels wide.
+    The straight-on outline, the row count and the hole size are unknown. A hole is 1 to 3 pixels by two methods, so the pattern draws its own proportion.
+    The two short rows at the left end sit on the curved cap, so their place is a guess.
+  wanted: A straight-on front photograph of the DSXA-32, to read the lattice outline and the hole size.
 - what: side-slot-rows
   scope: [left, right]
   reason: needs-photo
@@ -230,10 +233,16 @@ views:
     size: {w: 440, h: 44}
     panel:
       decor:
-      - {id: bezel-vent, at: [30.0, 8.0], size: [330.0, 28.0], pattern: holes, pattern-pitch: [5.6, 3.9], pattern-offset: [30.0, 8.0], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band at pixel columns 31 to 268, hole pitch 4 pixels'}
+      - {id: bezel-row-1, at: [48.8, 12.1], size: [50.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [48.8, 12.05], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 1, 9 holes at pixel columns 40.3 to 71.5'}
+      - {id: bezel-row-2, at: [52.3, 16.4], size: [50.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [52.3, 16.35], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 2, 9 holes at pixel columns 42.9 to 74.2'}
+      - {id: bezel-row-3, at: [50.6, 20.7], size: [315.2, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [50.6, 20.65], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 3, 56 holes at pixel columns 41.7 to 268.9'}
+      - {id: bezel-row-4, at: [53.4, 25.0], size: [309.6, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [53.4, 24.95], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 4, 55 holes at pixel columns 43.8 to 266.7'}
+      - {id: bezel-row-5, at: [56.2, 29.3], size: [304.0, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [56.2, 29.25], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 5, 54 holes at pixel columns 45.8 to 264.6'}
+      - {id: bezel-row-6, at: [59.2, 33.6], size: [304.0, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [59.2, 33.55], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 6, 54 holes at pixel columns 48.0 to 266.2'}
+      - {id: bezel-row-7, at: [67.7, 37.9], size: [281.5, 4.2], pattern: holes, pattern-pitch: [5.63, 4.3], pattern-offset: [67.7, 37.85], vent: 1.0, confidence: estimated, source: 'Quick setup guide page 1, band row 7, 50 holes at pixel columns 54.2 to 256.1'}
     components:
       placements:
-      - {ref: common/led-dot@1, id: led-front, at: [366.0, 30.0], for: chassis, group: front-leds, rel-pos: 1, states: ['off', {name: 'on', color: '#2f6fd6'}]}
+      - {ref: common/led-dot@1, id: led-front, at: [366.0, 11.0], for: chassis, group: front-leds, rel-pos: 1, states: ['off', {name: 'on', color: '#2f6fd6'}]}
     regions:
     - {id: logo-zone, at: [4.0, 8.0], size: {w: 22.0, h: 8.0}, label: 'Raritan logo at the left end; not drawn'}
     - {id: model-label, at: [372.0, 12.0], size: {w: 40.0, h: 10.0}, label: 'Dominion SX model label at the right end; not drawn'}

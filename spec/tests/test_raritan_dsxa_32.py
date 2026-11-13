@@ -74,9 +74,15 @@ def test_the_front_and_the_sides_declare_their_source_and_the_missing_photograph
     assert "front-photo" in {g["what"] for g in dev["gaps"]}
 
 
+def front_rows(d):
+    return [x for x in d["views"]["front"]["panel"]["decor"] if x["id"].startswith("bezel-row-")]
+
+
 def test_the_three_vents_are_drawn_as_patterns_and_declared_as_air(dev):
-    front = {d["id"]: d for d in dev["views"]["front"]["panel"]["decor"]}["bezel-vent"]
-    assert (front["pattern"], front["pattern-pitch"], front["vent"]) == ("holes", [5.6, 3.9], 1.0)
+    assert len(front_rows(dev)) == 7
+    for row in front_rows(dev):
+        assert (row["pattern"], row["pattern-pitch"], row["vent"]) == ("holes", [5.63, 4.3], 1.0)
+        assert "fill" not in row
     right = {d["id"]: d for d in dev["views"]["right"]["panel"]["decor"]}["side-vent"]
     left = {d["id"]: d for d in dev["views"]["left"]["panel"]["decor"]}["side-vent"]
     assert (right["pattern"], right["pattern-pitch"], right["vent"]) == ("slots-h", [12.0, 5.6], 1.0)
@@ -94,6 +100,28 @@ def test_the_two_side_walls_are_drawn_from_their_own_pictures_and_not_mirrored(d
     assert left["pattern"] != right["pattern"]
     text = (str(dev["gaps"]) + str(dev["provenance"])).lower()
     assert "no picture shows the left wall" not in text and "no document shows this one" not in text
+
+
+def test_the_front_holes_are_a_staggered_lattice_drawn_one_pattern_per_row(dev):
+    # first hole centre and hole count of each row, counted by pixel runs on the oblique photograph
+    expected = [(48.8, 12.1, 9), (52.3, 16.4, 9), (50.6, 20.7, 56), (53.4, 25.0, 55), (56.2, 29.3, 54), (59.2, 33.6, 54), (67.7, 37.9, 50)]
+    rows = front_rows(dev)
+    assert [r["id"] for r in rows] == [f"bezel-row-{n}" for n in range(1, 8)]
+    for row, (x, y, holes) in zip(rows, expected):
+        assert row["at"] == [x, y] and row["size"][1] == 4.2
+        assert round(row["size"][0] / 5.63) == holes
+        assert row["pattern-offset"][0] == x
+    # the full-length rows 3 to 6 are offset by half a pitch (2.8 mm) from the row above, never by none
+    firsts = [r["at"][0] for r in rows[2:6]]
+    for a, b in zip(firsts, firsts[1:]):
+        assert (b - a) % 5.63 == pytest.approx(2.8, abs=0.3)
+    gap = next(g for g in dev["gaps"] if g["what"] == "front-holes")
+    assert "square" not in gap["note"].lower() and "7 rows" not in gap["note"]
+
+
+def test_the_one_front_lamp_sits_where_the_photograph_shows_the_blue_mark(dev):
+    lamp = placements(dev, "front")["led-front"]
+    assert lamp["at"] == [366.0, 11.0]
 
 
 def test_the_three_lid_tabs_are_drawn_on_the_top_edge_of_the_rear(dev):
