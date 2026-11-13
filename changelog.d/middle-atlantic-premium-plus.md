@@ -5,4 +5,5 @@
   The rear holds the inlet, a breaker, eight switchable outlets with a lamp each, and the network, USB, console and sensor ports.
   The front holds a power button, a touch strip with a display and a ninth outlet that is not switched.
   The models differ in inlet, outlet, breaker and surge protection. Every position inside the printed size is an estimate.
+  The four mounting-ear holes on each of the front and rear are not drawn, so the faces stay at the 441 mm body width.
   The Select Series and PD series models are not modelled yet. This closes no row of the conformance records.
