@@ -4,6 +4,7 @@ What the maker's documents print is held as a fact of the library. That is the o
 connector type of each port, the lamps' states and the places read from the straight front view. The tests
 read the device file, never a build.
 """
+import re
 from pathlib import Path
 
 import yaml
@@ -200,7 +201,8 @@ def test_the_marks_and_icons_are_drawn_as_silkscreen_paths():
     paths = {s["id"]: s for s in silk if "path" in s}
     assert set(paths) == {"mark-prompt", "mark-dc", "mark-power", "mark-pulse", "mark-warning", "mark-network",
                           "mark-antenna-arcs", "mark-antenna-stem", "mark-antenna-dot", "mark-link",
-                          "mark-arrows-shaft", "mark-arrows-head", "mark-10101"}
+                          "mark-arrows-shaft", "mark-arrows-head", "mark-10101", "dc-opening-foot-left",
+                          "dc-opening-foot-right", "dc-centre-mark"}
     assert all(s["path"].strip() and s["fill"].startswith("#") for s in paths.values())
     assert paths["mark-prompt"]["for"] == "console"
 
@@ -307,13 +309,13 @@ def test_the_dc_housing_opening_is_drawn_as_decor_with_four_cells_and_no_part_is
     decor = _decor(lm4)
     cells = sorted((d for i, d in decor.items() if i.startswith("dc-cell-")), key=lambda d: (d["at"][1], d["at"][0]))
     assert len(cells) == 4
-    assert abs(cells[1]["at"][0] - cells[0]["at"][0] - 2.95) < 0.02 and abs(cells[2]["at"][1] - cells[0]["at"][1] - 2.93) < 0.05
+    assert abs(cells[1]["at"][0] - cells[0]["at"][0] - 3.15) < 0.02 and abs(cells[2]["at"][1] - cells[0]["at"][1] - 2.95) < 0.02
     body = decor["dc-housing"]
     assert abs(body["size"][0] - 8.35) < 0.01 and abs(decor["dc-housing-tab"]["at"][1] - 23.75) < 0.01
-    opening = decor["dc-opening"]
+    interior = decor["dc-opening-interior"]
     for cell in cells:
-        assert opening["at"][0] <= cell["at"][0] and cell["at"][0] + cell["size"][0] <= opening["at"][0] + opening["size"][0]
-        assert opening["at"][1] <= cell["at"][1] and cell["at"][1] + cell["size"][1] <= opening["at"][1] + opening["size"][1]
+        assert interior["at"][0] <= cell["at"][0] and cell["at"][0] + cell["size"][0] <= interior["at"][0] + interior["size"][0]
+        assert interior["at"][1] <= cell["at"][1] and cell["at"][1] + cell["size"][1] <= interior["at"][1] + interior["size"][1]
     assert not [p for p in _front(lm4) if p["at"][0] < 20 and p["at"][1] > 23]
     note = " ".join(lm4["provenance"]["body"]["note"].split())
     assert "The DC housing at the lower left is drawn as decor" in note
@@ -345,9 +347,74 @@ def test_the_dc_latch_tab_draws_its_pale_window_bar_and_notch_within_0_3_mm_of_t
     gap = next(g for g in _lm4()["gaps"] if g["what"] == "dc-input")
     note = " ".join(gap["note"].split())
     assert "pale window" in note and "over 63 px" in note
-    assert "pale outline 6.5 mm square" in note and "pale tile" in note
+    assert "pale outline 0.2 mm thick" in note and "pale tile" in note
     body = " ".join(_lm4()["provenance"]["body"]["note"].split())
     assert "follow the dimensions figure, where the photograph shows the tab dark" in body
+
+
+# The DC input's opening and cells in the dimensions figure, mm: left, top, right, bottom.
+# Each is the midpoint of two readings of the same edge, and the build stands within 0.3 mm of it.
+FIGURE_DC_INPUT = {
+    "dc-opening": (11.93, 27.57, 18.38, 33.95),
+    "dc-cell-1": (12.57, 28.37, 14.81, 30.41),
+    "dc-cell-2": (15.74, 28.37, 17.79, 30.41),
+    "dc-cell-3": (12.57, 31.32, 14.81, 33.36),
+    "dc-cell-4": (15.74, 31.32, 17.79, 33.36),
+    "dc-hole-1": (13.16, 28.77, 14.29, 29.87),
+    "dc-hole-2": (16.12, 28.77, 17.24, 29.87),
+    "dc-hole-3": (13.16, 31.71, 14.29, 32.99),
+    "dc-hole-4": (16.11, 31.71, 17.24, 32.99),
+}
+# The pale wedges in the lower corners of the outline and the triangle at the centre, as boxes: the same readings.
+FIGURE_DC_MARKS = {
+    "dc-opening-foot-left": (12.20, 33.00, 13.15, 33.95),
+    "dc-opening-foot-right": (17.40, 32.90, 18.40, 33.95),
+    "dc-centre-mark": (14.60, 30.15, 15.85, 31.03),
+}
+DC_PIECES = ["dc-housing", "dc-housing-tab", "dc-latch-window", "dc-latch-bar", "dc-latch-notch", "dc-latch-notch-core",
+             "dc-opening", "dc-opening-interior", "dc-cell-1", "dc-cell-2", "dc-cell-3", "dc-cell-4",
+             "dc-hole-1", "dc-hole-2", "dc-hole-3", "dc-hole-4"]
+
+
+def test_the_dc_opening_and_cells_stand_within_0_3_mm_of_the_figure_and_look_like_it():
+    decor = _decor(_lm4())
+    for ident, want in FIGURE_DC_INPUT.items():
+        assert ident in decor, ident
+        box = decor[ident]
+        have = (box["at"][0], box["at"][1], box["at"][0] + box["size"][0], box["at"][1] + box["size"][1])
+        for edge, w, h in zip(("left", "top", "right", "bottom"), want, have):
+            assert abs(h - w) <= 0.3, (ident, edge, h, w)
+    for ident in ("dc-opening", "dc-cell-1", "dc-cell-2", "dc-cell-3", "dc-cell-4"):
+        assert decor[ident]["fill"] == "#aaafc7", ident
+    for ident in ("dc-opening-interior", "dc-hole-1", "dc-hole-2", "dc-hole-3", "dc-hole-4"):
+        assert decor[ident]["fill"] == "#101012", ident
+    for ident in DC_PIECES:
+        assert decor[ident].get("rx") == 0, ident
+    ids = list(decor)
+    assert [ids.index(i) for i in DC_PIECES] == sorted(ids.index(i) for i in DC_PIECES)
+    outer, inner = decor["dc-opening"], decor["dc-opening-interior"]
+    widths = (inner["at"][0] - outer["at"][0], inner["at"][1] - outer["at"][1],
+              outer["at"][0] + outer["size"][0] - inner["at"][0] - inner["size"][0],
+              outer["at"][1] + outer["size"][1] - inner["at"][1] - inner["size"][1])
+    assert [round(w, 2) for w in widths] == [0.2, 0.27, 0.2, 0.2]
+    for n in (1, 2, 3, 4):
+        tile, hole = decor[f"dc-cell-{n}"], decor[f"dc-hole-{n}"]
+        assert tile["at"][0] < hole["at"][0] and hole["at"][0] + hole["size"][0] < tile["at"][0] + tile["size"][0]
+        assert tile["at"][1] < hole["at"][1] and hole["at"][1] + hole["size"][1] < tile["at"][1] + tile["size"][1]
+
+
+def test_the_dc_opening_has_its_two_corner_wedges_and_its_centre_triangle_as_filled_marks():
+    marks = {s["id"]: s for s in _lm4()["views"]["front"]["silkscreen"] if s.get("id") in FIGURE_DC_MARKS}
+    assert set(marks) == set(FIGURE_DC_MARKS)
+    for ident, want in FIGURE_DC_MARKS.items():
+        mark = marks[ident]
+        assert mark["filled"] is True and mark["fill"] == "#aaafc7" and mark["for"] == "chassis", ident
+        numbers = [float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", mark["path"])]
+        xs, ys = numbers[0::2], numbers[1::2]
+        assert len(xs) == 3, ident
+        have = (mark["at"][0] + min(xs), mark["at"][1] + min(ys), mark["at"][0] + max(xs), mark["at"][1] + max(ys))
+        for edge, w, h in zip(("left", "top", "right", "bottom"), want, have):
+            assert abs(h - w) <= 0.3, (ident, edge, h, w)
 
 
 def test_each_corner_screw_has_a_plus_recess_and_the_sfp_cage_has_its_green_pull_tab():

@@ -11,8 +11,9 @@
 - The housings follow the outer edge of their outline in the maker's front view. That covers the console and USB housing, the
   serial housing, the DC housing, and a housing behind E1 and behind the SFP cage. Each moved by up to 1.0 mm.
 - The rack ear the documentation shows is not drawn. The library states ears for a rack device only, and the LM4 is a desktop
-  unit. It stays a named gap. The DC input housing is drawn as decor with its four cells. Its latch tab has a pale window,
-  a notch and a pale bar along its top. Its connector stays a named gap.
+  unit. It stays a named gap. The DC input housing is drawn as decor. Its opening is a pale outline round a black
+  interior, and each of its four cells is a pale tile with a black hole. Its latch tab has a pale window, a notch and a
+  pale bar along its top. Its connector stays a named gap.
   The DIN rail fitting is a named gap. The right flank, which no document shows, is built as the left flank mirrored. The Reset
   pinhole has its tan ring, and the SFP cage has its four rim marks. The rear stays a named gap, because no held document
   shows it. This closes no row.
