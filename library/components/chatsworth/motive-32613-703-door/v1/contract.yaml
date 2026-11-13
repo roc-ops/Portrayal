@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: motive-32613-703-door
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 behaviour: mounts
 lid: true
@@ -25,12 +25,32 @@ provenance:
     instructions, page 3). It is a lid. The format has no hinge, so which side it swings from is a
     gap.
   logo-zone: >-
-    not reserved - the installation instructions (page 3) say the front door has the logo at the
-    top, and no held page gives its size or position.
+    not drawn - the installation instructions (page 3) say the front door has the logo at the top. No held page gives its place
+    on this width. The plate that carries it is not drawn here, for the reason in door-geometry.
+  seams: >-
+    not drawn - the pictures put the seams in different places across the door. Seen as fractions of the door's width, the
+    right-hand photograph reads 0.23 and 0.73, the left-hand photograph 0.41 and 0.71. The render reads 0.36 and 0.62 and the
+    installation drawing 0.35 and 0.52.
+  door-geometry: >-
+    The plate and seams are not drawn on this width because the three pictures do not agree in millimetres at any listed width.
+  latches: >-
+    estimated - the installation instructions (page 3) say the door has two blue latches on its back. They draw them on the
+    rear door seen from inside: a housing at each side edge and a handle, about 0.473 down the door. The figure is not to
+    scale along the door, so only that fraction and the proportions are read. The housing measures 75 by 355 px at 1200 dpi,
+    4.7 to 1, and the handle is about 2.5 to 1. The sizes are stand-ins: the rear housing is 17 by 80 and the handle 17 by 45. The side housing is 15 by 70.5, the same proportion.
+    The rear housing's width is the 20 mm side assembly less 3. The device draws them on its rear, left and right faces, where the back of
+    the door is seen. The black render on page 3 shows one dot, at the right edge, about 0.44 down the door, and none at the
+    left edge. Each handle's tip is drawn 2 wide at its edge of the front. The left tip is built as the right tip, as no
+    picture shows it.
+  hook: >-
+    not drawn - the data sheet (page 1) lists a hook on the inside of the front door, for a test meter.
+    No held picture shows it.
 size: {w: 300, h: 2133.6}
 size-confidence: {w: estimated, h: estimated}
 elements:
   plate: {at: [0, 0], size: [300, 2133.6], class: bezel}
+  latch-tip-left: {at: [0, 987], size: [2, 45], class: bezel}
+  latch-tip-right: {at: [298, 987], size: [2, 45], class: bezel}
 relief:
   features:
     - node: plate

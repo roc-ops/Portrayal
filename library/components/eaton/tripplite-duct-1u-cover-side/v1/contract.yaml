@@ -1,18 +1,24 @@
 format: 1
 kind: component
 name: tripplite-duct-1u-cover-side
-version: 1.0.0
+version: 1.1.0
 class: mechanical
 description: >-
-  The cover of the Tripp Lite SmartRack SRCABLEDUCT1U finger duct seen from either end - the
-  plate edge-on across the front and the two lips folded back over the walls, 9.8 mm deep.
-  The same cover as tripplite-duct-1u-cover, drawn on the side views: it comes off with it.
+  The cover of the Tripp Lite SmartRack SRCABLEDUCT1U finger duct seen from either end. It draws
+  the plate edge-on across the front. On each side it draws the wall sheet and the return lip
+  folded back toward it. It also draws the snap tongue and the small beak where the cover starts.
+  It is 9.8 mm deep, and it is the cover of tripplite-duct-1u-cover drawn on the side views.
 provenance:
   size: >-
-    drawing - the SRCABLEDUCT1U submittal drawing: the lips run 9.8 mm back from the front edge
-    (top view) and the cover is 42.0 mm over them (body 39.8 on the side view and a lip 1.1 mm
-    outside each wall, estimated). The plate's thickness, 1.1 mm, is the wall's: no view
-    dimensions the cover section.
+    drawing - the SRCABLEDUCT1U submittal drawing: the cover runs 9.8 mm back from the front edge
+    (top view). Its height, 42.0 mm, is the library's earlier estimate and is not changed here.
+    The section is drawn at the side view's own figures, about 40 mm across, centred in it.
+  section: >-
+    estimated - the side view's cover section, read at 12.54 px per mm from the printed 37.57 mm
+    clear between the walls. The plate is 1.5 mm and the wall sheet 1.1 mm. The return lip and the
+    tongue are each an S curve of curve segments. They pass through pixel points read off the
+    bend, 6.1 mm in from the outside. The beak is a triangle 0.5 mm deep. Each point is good to about 0.5 mm.
+    The cover's thickness is not dimensioned.
   color: >-
     datasheet - "Cold rolled steel with black finish"; the shade is this library's render, the
     cover's.
@@ -25,7 +31,7 @@ fields:
     type: text
     default: '#55595e'
 elements:
-  lip-top: {at: [0.0, 0.0], size: [9.8, 1.1], class: bezel}
-  lip-bottom: {at: [0.0, 40.9], size: [9.8, 1.1], class: bezel}
-  plate: {at: [8.7, 0.0], size: [1.1, 42.0], class: bezel}
+  lip-top: {at: [0.0, 1.1], size: [8.3, 1.1], class: bezel}
+  lip-bottom: {at: [0.0, 39.8], size: [8.3, 1.1], class: bezel}
+  plate: {at: [8.28, 1.1], size: [1.52, 39.8], class: bezel}
 skins: [default]
