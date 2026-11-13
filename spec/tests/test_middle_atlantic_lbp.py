@@ -70,9 +70,14 @@ def test_each_side_keeps_the_overall_size_and_every_drawn_feature_lies_inside_it
     v = device()["views"][view]
     w, h = v["size"]["w"], v["size"]["h"]
     assert (w, h) in ((482.6, 12.7), (12.7, 12.7))
+    gauge = device()["chassis"]["thickness"]
     for d in v["panel"]["decor"]:
         x, y = d["at"]
         dw, dh = d["size"]
+        if view == "front" and d["id"] == "web":
+            # the sealing web overhangs the top edge by exactly one gauge, and by nothing else
+            assert close(y, -gauge) and close(y + dh, h), d["id"]
+            y, dh = 0, h
         assert x >= 0 and y >= 0 and x + dw <= w + 1e-6 and y + dh <= h + 1e-6, d["id"]
 
 
@@ -111,9 +116,17 @@ def test_each_ear_carries_one_hole_inside_it(view):
     ears = sorted(decor(view, "ear"), key=lambda d: d["at"][0])
     holes = sorted(decor(view, "ear-hole"), key=lambda d: d["at"][0])
     assert len(holes) == 2
-    for ear, hole in zip(ears, holes):
-        assert ear["at"][0] <= hole["at"][0] and hole["at"][0] + hole["size"][0] <= ear["at"][0] + ear["size"][0]
-        assert ear["at"][1] <= hole["at"][1] and hole["at"][1] + hole["size"][1] <= ear["at"][1] + ear["size"][1]
+    held = []
+    for hole in holes:
+        holding = [
+            ear
+            for ear in ears
+            if ear["at"][0] <= hole["at"][0] and hole["at"][0] + hole["size"][0] <= ear["at"][0] + ear["size"][0]
+            and ear["at"][1] <= hole["at"][1] and hole["at"][1] + hole["size"][1] <= ear["at"][1] + ear["size"][1]
+        ]
+        assert len(holding) == 1, hole["id"]
+        held.append(holding[0]["id"])
+    assert len(set(held)) == 2, "each painted ear holds its own hole"
     assert close(holes[0]["at"][0], 482.6 - (holes[1]["at"][0] + holes[1]["size"][0])), "the two ends are alike"
 
 
