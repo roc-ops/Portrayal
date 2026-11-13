@@ -74,8 +74,9 @@ def round_decor(face):
 
 # The drawing's side view shows eight round marks inside its 42.78 deep body. Two are at the top end and six are on
 # a column near the front edge. Read from the vector page: the ring is 6.2 across and the inner ring 3.4. The six sit
-# 310.55 apart. A right face has x = 0 at the front. The left face is its mirror, 42.78 minus x.
-SIDE_MARK_Y = [6.17, 13.91, 201.55, 512.10, 822.65, 1133.20, 1443.75, 1754.30]
+# 312.22 apart. The side view's own end lines are 572.45 points apart for 1776.44, so its scale is 3.103 per point.
+# A right face has x = 0 at the front. The left face is its mirror, 42.78 minus x.
+SIDE_MARK_Y = [6.21, 13.98, 202.64, 514.86, 827.07, 1139.29, 1451.50, 1763.72]
 SIDE_MARK_X = {"right": [13.46] + [4.75] * 7, "left": [29.32] + [38.03] * 7}
 
 
@@ -99,7 +100,7 @@ def test_each_side_draws_the_eight_round_marks_of_the_drawings_side_view(face):
     assert [c[0] < 20 for c in centres] == [True] * 2 + [False] * 6, "two at the top end and six on the column"
     column = [c[0] for c in centres[2:]]
     assert len({round(c[1], 2) for c in centres[1:]}) == 1, "the column and the lower top-end mark share an x"
-    assert all(abs((b - a) - 310.55) < 0.1 for a, b in zip(column, column[1:])), "the column's pitch"
+    assert all(abs((b - a) - 312.22) < 0.1 for a, b in zip(column, column[1:])), "the column's pitch"
     assert all(0 <= x and x + w <= 42.78 and 0 <= y and y + h <= 1776.44 for _, x, y, w, h, _ in rings), "inside the body"
 
 
