@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: iolan-scg50-r
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Perle
 model: IOLAN SCG50 R
@@ -39,11 +39,11 @@ provenance:
     confidence: drawing
     note: >-
       Every front position is read off the front view of the drawing on guide page 35 at 400 dpi (4.44
-      px/mm, the body's left edge as origin), and checked against the labelled photograph on page 9. The
-      drawing prints no dimension for any feature, so each is good to about 0.5 mm. The drawing also draws
-      a SIM slot, three antenna connectors and a modem jack. The guide says the SIM slot and the modem
-      apply to certain models and the R/U product page lists no cellular or modem feature, so none is
-      drawn here.
+      px/mm). The origin is the body's left edge, then each position is moved right by the ears. Each
+      is checked against the labelled photograph on page 9. The drawing prints no dimension for any feature,
+      so each is good to about 0.5 mm. The drawing also draws a SIM slot, three antenna connectors and
+      a modem jack. The guide says the SIM slot and the modem apply to certain models and the R/U product
+      page lists no cellular or modem feature, so none is drawn here.
   rear-layout:
     confidence: photo-measured
     note: >-
@@ -72,6 +72,36 @@ provenance:
       VAC, 50-60 Hz, 1.5 Amps max". The page: "IEC320-C13 to NEMA 5-15P line cord" and four other countries,
       so the inlet is a C14 (inferred from the cord end; the inlet's own type is not named). The R/U page
       prints 15.5 W typical and 47-63 Hz; the guide's 50-60 Hz is the one recorded.
+  sides:
+    confidence: drawing
+    note: >-
+      Estimated from the lower view of the drawing on guide page 35 at 600 dpi, 6.71 pixels to the millimetre
+      (the 262 mm label). Each edge is good to about 0.3 mm. Both sides carry the ear bracket, six round
+      holes and six slotted ovals. They also carry two rows of 32 vent slots, two more round holes and
+      two ringed holes. The drawing does not say which side it shows. Its front is at the left, which
+      is the right side on this library's views. So the right side is drawn as the drawing shows it, and
+      the left is its mirror about the depth. The photograph of the unit on guide page 10 shows the same
+      two vent rows in the middle of the side. It also shows a few small holes, in perspective. The photograph
+      shows no bracket fitted, and the drawing draws one on each side in the ear's colour. The guide does
+      not say how the brackets are supplied. The line colour and the hole colour are stand-ins on the
+      body's near black.
+  top-and-bottom:
+    confidence: drawing
+    note: >-
+      Estimated from the plan view of the same drawing. A line runs the full width 10.8 mm behind the
+      front. The plan is not labelled top or bottom, so both faces carry it. The plan shows the bracket
+      leg edge-on as a line about 2 mm outside each body edge, from 2.2 to 96.9 behind the front. The
+      view is the 436 body, so the leg is drawn as a thin line on each edge, 94.7 long. The plan also
+      shows the ear flange at each end of the front, about 2 mm deep and standing outside the body. Both
+      faces stay the 436 mm body, and the flanges are not drawn on them. The drawing shows no vent or
+      hole on the plan.
+  ears:
+    confidence: drawing
+    note: >-
+      Estimated from the front view of the same drawing at 6.70 pixels to the millimetre. A flange stands
+      22.1 past each end of the 436 body and is 43 high, with two slotted holes. The front is therefore
+      480.2 wide and the chassis stays 436. The drawn front positions are the body's, shifted 22.1 to
+      the right.
   colour:
     confidence: photo-measured
     note: >-
@@ -111,16 +141,6 @@ gaps:
     overlap a placement). The three bays take the 16-port RS-232 RJ45, USB or multi-protocol RJ45 G16
     module in consecutive order from Bay 1 (guide pages 9 and 10); that rule is words only and no tool
     checks it.
-- what: side-vents
-  scope:
-  - left
-  - right
-  reason: needs-drawing
-  wanted: >-
-    the side view of guide page 35 read for its vent slots and holes, which the drawing does not dimension.
-  note: >-
-    The lower view of the drawing shows a field of vent slots and a pattern of screw holes, undimensioned,
-    and the guide does not say which side it is. The two sides draw the envelope only.
 - what: front-trim
   scope:
   - front
@@ -134,11 +154,36 @@ gaps:
   - front
   - rear
   reason: vendor-silent
-  wanted: the rack kit's part number, the ear positions and the rear brackets' size.
+  wanted: the rack kit's part number and the rear brackets' size.
   note: >-
-    The drawing shows two ears with two slots each at the front. The guides say only "Rack mount kit"
-    and the page "front and rear mounting hardware included"; no document names the kit or places an ear
-    along the depth.
+    The front ears and the side brackets are drawn from the outline drawing. The guides say only "Rack
+    mount kit", and the page "front and rear mounting hardware included". No document names the kit or
+    shows rear ears.
+- what: inlet-projection
+  scope:
+  - rear
+  - top
+  - bottom
+  reason: needs-drawing
+  wanted: a rear view whose size is not the 262 mm depth, or a dimensioned drawing of the inlets.
+  note: >-
+    The plan view shows the two inlets standing 2.7 mm past the rear wall. The view's size is the 262
+    mm envelope. The renderer paints the chassis colour over the whole view (`render.py` lines 3119 to
+    3140), so a deeper plan would draw a deeper body. The schema's gap reasons (`device.schema.json` lines
+    2680 to 2685) have no word for a kit limit, so `needs-drawing` stands. The projection is not drawn.
+    The inlets stay on the rear face.
+- what: ear-flange-plan
+  scope:
+  - top
+  - bottom
+  reason: needs-drawing
+  wanted: a plan view that may be wider than the body without drawing the body that wide.
+  note: >-
+    The plan view shows each ear flange edge-on, about 2 mm deep, standing 22.1 beyond each end of the
+    body. Unless the body is a sheet shell, the renderer paints the chassis colour over the whole of a
+    view (`render.py` lines 3119 to 3140). A plan 480.2 wide would therefore draw a body that wide. The
+    schema's gap reasons (`device.schema.json` lines 2680 to 2685) have no word for a kit limit, so `needs-drawing`
+    stands. Both plans stay the 436 mm body and the flanges are drawn on the front only.
 - what: lamps-and-labels
   scope:
   - front
@@ -177,43 +222,46 @@ groups:
   inlets: {term: Inlet, role: service, index-origin: 1}
   switches: {term: Switch, role: service, index-origin: 1}
   furniture: {term: Part, role: furniture, index-origin: 1}
+  ears: {term: Part, role: furniture, index-origin: 1}
 views:
   front:
-    size: {w: 436, h: 44}
+    size: {w: 480.2, h: 44}
     panel:
       decor:
-      - {id: faceplate, at: [0.0, 0.0], size: [436, 44], fill: '#1d1e20', kind: bezel}
+      - {id: faceplate, at: [22.1, 0.0], size: [436, 44], fill: '#1d1e20', kind: bezel}
     silkscreen:
-    - {at: [23.7, 14.2], text: perle, font-size: 6.0, anchor: middle, fill: '#d8dadc', for: chassis}
-    - {at: [174.4, 37.2], text: SYSTEM READY, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: ready}
-    - {at: [196.7, 37.2], text: SD CARD, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: card-slot}
-    - {at: [230.0, 37.2], text: ADMIN, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: console}
-    - {at: [358.6, 37.2], text: USB, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: usb-a}
-    - {at: [384.0, 37.2], text: RESET, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: reset}
+    - {at: [45.8, 14.2], text: perle, font-size: 6.0, anchor: middle, fill: '#d8dadc', for: chassis}
+    - {at: [196.5, 37.2], text: SYSTEM READY, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: ready}
+    - {at: [218.8, 37.2], text: SD CARD, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: card-slot}
+    - {at: [252.1, 37.2], text: ADMIN, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: console}
+    - {at: [380.7, 37.2], text: USB, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: usb-a}
+    - {at: [406.1, 37.2], text: RESET, font-size: 1.5, anchor: middle, fill: '#d99a2b', for: reset}
     components:
       placements:
-      - {ref: perle/scg-power-button@1, id: power-button, at: [51.1, 17.8], group: furniture, rel-pos: 1,
+      - {ref: perle/scg-rack-ear@1, id: ear-left, at: [0.0, 0.5], skin: left, group: ears, rel-pos: 1}
+      - {ref: perle/scg-rack-ear@1, id: ear-right, at: [458.1, 0.5], skin: right, group: ears, rel-pos: 2}
+      - {ref: perle/scg-power-button@1, id: power-button, at: [73.2, 17.8], group: furniture, rel-pos: 1,
         for: chassis}
-      - {ref: perle/scg-lcd@1, id: display, at: [66.5, 13.3], for: chassis, group: displays, rel-pos: 1}
-      - {ref: perle/scg-keypad@1, id: keypad, at: [141.4, 8.3], for: chassis, group: furniture, rel-pos: 2}
-      - {ref: common/led-dot@1, id: ready, at: [173.4, 30.5], group: leds, rel-pos: 1, for: chassis, states: [
+      - {ref: perle/scg-lcd@1, id: display, at: [88.6, 13.3], for: chassis, group: displays, rel-pos: 1}
+      - {ref: perle/scg-keypad@1, id: keypad, at: [163.5, 8.3], for: chassis, group: furniture, rel-pos: 2}
+      - {ref: common/led-dot@1, id: ready, at: [195.5, 30.5], group: leds, rel-pos: 1, for: chassis, states: [
           'off', 'on']}
-      - {ref: perle/scg-sd-slot@1, id: card-slot, at: [189.4, 29.2], group: storage, rel-pos: 1}
+      - {ref: perle/scg-sd-slot@1, id: card-slot, at: [211.5, 29.2], group: storage, rel-pos: 1}
       - ref: std/rj45@2
         id: console
-        at: [216.65, 19.0]
+        at: [238.75, 19.0]
         group: mgmt
         rel-pos: 1
         attrs: {media: rj45-serial, role: console}
       - ref: std/micro-usb@1
         id: console-usb
-        at: [235.55, 29.4]
+        at: [257.65, 29.4]
         group: mgmt
         rel-pos: 2
         attrs: {role: console}
-      - {ref: std/usb-a@1, id: usb-a, at: [352.6, 16.9], group: usb-front, rel-pos: 1}
-      - {ref: std/usb-a@1, id: usb-b, at: [352.6, 25.2], group: usb-front, rel-pos: 2}
-      - {ref: common/reset-button@1, id: reset, at: [382.0, 28.4], group: mgmt, rel-pos: 3, for: chassis}
+      - {ref: std/usb-a@1, id: usb-a, at: [374.7, 16.9], group: usb-front, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-b, at: [374.7, 25.2], group: usb-front, rel-pos: 2}
+      - {ref: common/reset-button@1, id: reset, at: [404.1, 28.4], group: mgmt, rel-pos: 3, for: chassis}
   rear:
     size: {w: 436, h: 44}
     panel:
@@ -620,21 +668,539 @@ views:
     panel:
       decor:
       - {id: top-envelope, at: [0.0, 0.0], size: [436, 262], fill: '#1e1f21', kind: envelope}
+      - {id: front-seam, at: [0.0, 251.05], size: [436, 0.3], fill: '#3b3e43', kind: seam}
+      - {id: bracket-leg-1, at: [0.0, 165.1], size: [0.4, 94.7], fill: '#3b3e43', kind: bracket-leg}
+      - {id: bracket-leg-2, at: [435.6, 165.1], size: [0.4, 94.7], fill: '#3b3e43', kind: bracket-leg}
   bottom:
     size: {w: 436, h: 262}
     panel:
       decor:
       - {id: bottom-envelope, at: [0.0, 0.0], size: [436, 262], fill: '#1e1f21', kind: envelope}
+      - {id: front-seam, at: [0.0, 251.05], size: [436, 0.3], fill: '#3b3e43', kind: seam}
+      - {id: bracket-leg-1, at: [0.0, 165.1], size: [0.4, 94.7], fill: '#3b3e43', kind: bracket-leg}
+      - {id: bracket-leg-2, at: [435.6, 165.1], size: [0.4, 94.7], fill: '#3b3e43', kind: bracket-leg}
   left:
     size: {w: 262, h: 44}
     panel:
       decor:
       - {id: left-envelope, at: [0.0, 0.0], size: [262, 44], fill: '#1e1f21', kind: envelope}
+      - {id: ear-bracket-left, at: [165.4, 0.6], size: [96.6, 42.9], rx: 2.5, fill: '#1e1f21', stroke: '#3b3e43',
+        stroke-width: 0.25, kind: ear-bracket}
+      - {id: ear-flange-left, at: [260.0, 0.6], size: [2.0, 42.9], stroke: '#3b3e43', stroke-width: 0.25,
+        kind: ear-flange}
+      - {id: bracket-oval-1-left, at: [213.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-2-left, at: [204.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-3-left, at: [195.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-4-left, at: [186.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-5-left, at: [177.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-6-left, at: [168.1, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-hole-top-1-left, at: [244.85, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-1-left, at: [244.85, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-top-2-left, at: [208.95, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-2-left, at: [208.95, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-top-3-left, at: [174.75, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-3-left, at: [174.75, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - id: vent-seen-1-0-left
+        at: [193.76, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [193.76, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-1-left
+        at: [184.77, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [184.77, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-2-left
+        at: [175.78, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [175.78, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-3-left
+        at: [166.79, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [166.79, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-beyond-1-left
+        at: [58.91, 6.1]
+        size: [107.88, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [58.91, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-0-left
+        at: [193.76, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [193.76, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-1-left
+        at: [184.77, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [184.77, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-2-left
+        at: [175.78, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [175.78, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-3-left
+        at: [166.79, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [166.79, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-beyond-2-left
+        at: [58.91, 19.0]
+        size: [107.88, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [58.91, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - {id: hole-top-rear-left, at: [49.1, 4.6], size: [4.0, 4.0], rx: 2.0, fill: '#0e0f10', kind: hole}
+      - {id: hole-bottom-rear-left, at: [49.1, 35.5], size: [4.0, 4.0], rx: 2.0, fill: '#0e0f10', kind: hole}
+      - {id: ring-1-left, at: [128.2, 34.5], size: [6.0, 6.0], rx: 3.0, fill: '#1e1f21', kind: hole, stroke: '#3b3e43',
+        stroke-width: 0.2}
+      - {id: ring-1-bore-left, at: [129.1, 35.4], size: [4.2, 4.2], rx: 2.1, fill: '#0e0f10', kind: hole}
+      - {id: ring-2-left, at: [10.0, 34.5], size: [6.0, 6.0], rx: 3.0, fill: '#1e1f21', kind: hole, stroke: '#3b3e43',
+        stroke-width: 0.2}
+      - {id: ring-2-bore-left, at: [10.9, 35.4], size: [4.2, 4.2], rx: 2.1, fill: '#0e0f10', kind: hole}
   right:
     size: {w: 262, h: 44}
     panel:
       decor:
       - {id: right-envelope, at: [0.0, 0.0], size: [262, 44], fill: '#1e1f21', kind: envelope}
+      - {id: ear-bracket-right, at: [0.0, 0.6], size: [96.6, 42.9], rx: 2.5, fill: '#1e1f21', stroke: '#3b3e43',
+        stroke-width: 0.25, kind: ear-bracket}
+      - {id: ear-flange-right, at: [0.0, 0.6], size: [2.0, 42.9], stroke: '#3b3e43', stroke-width: 0.25,
+        kind: ear-flange}
+      - {id: bracket-oval-1-right, at: [41.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-2-right, at: [50.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-3-right, at: [59.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-4-right, at: [68.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-5-right, at: [77.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-oval-6-right, at: [86.7, 11.7], size: [7.2, 20.6], shape: slot, fill: '#1e1f21',
+        stroke: '#3b3e43', stroke-width: 0.2, kind: bracket-slot}
+      - {id: bracket-hole-top-1-right, at: [12.65, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-1-right, at: [12.65, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-top-2-right, at: [48.55, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-2-right, at: [48.55, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-top-3-right, at: [82.75, 4.35], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - {id: bracket-hole-bottom-3-right, at: [82.75, 35.25], size: [4.5, 4.5], rx: 2.25, fill: '#0e0f10',
+        kind: hole}
+      - id: vent-seen-1-0-right
+        at: [59.25, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [59.25, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-1-right
+        at: [68.24, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [68.24, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-2-right
+        at: [77.23, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [77.23, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-1-3-right
+        at: [86.22, 13.0]
+        size: [8.99, 2.6]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [86.22, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-beyond-1-right
+        at: [95.21, 6.1]
+        size: [107.88, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [95.21, 6.1]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-0-right
+        at: [59.25, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [59.25, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-1-right
+        at: [68.24, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [68.24, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-2-right
+        at: [77.23, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [77.23, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-seen-2-3-right
+        at: [86.22, 19.0]
+        size: [8.99, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [86.22, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - id: vent-beyond-2-right
+        at: [95.21, 19.0]
+        size: [107.88, 9.5]
+        pattern: motif
+        pattern-pitch: [4.495, 9.5]
+        pattern-offset: [95.21, 19.0]
+        pattern-cells:
+        - - [1.248, 1.0]
+          - [1.381, 0.5]
+          - [1.748, 0.134]
+          - [2.248, 0.0]
+          - [2.748, 0.134]
+          - [3.114, 0.5]
+          - [3.248, 1.0]
+          - [3.248, 8.5]
+          - [3.114, 9.0]
+          - [2.748, 9.366]
+          - [2.248, 9.5]
+          - [1.748, 9.366]
+          - [1.381, 9.0]
+          - [1.248, 8.5]
+        kind: vent-field
+      - {id: hole-top-rear-right, at: [208.9, 4.6], size: [4.0, 4.0], rx: 2.0, fill: '#0e0f10', kind: hole}
+      - {id: hole-bottom-rear-right, at: [208.9, 35.5], size: [4.0, 4.0], rx: 2.0, fill: '#0e0f10', kind: hole}
+      - {id: ring-1-right, at: [127.8, 34.5], size: [6.0, 6.0], rx: 3.0, fill: '#1e1f21', kind: hole,
+        stroke: '#3b3e43', stroke-width: 0.2}
+      - {id: ring-1-bore-right, at: [128.7, 35.4], size: [4.2, 4.2], rx: 2.1, fill: '#0e0f10', kind: hole}
+      - {id: ring-2-right, at: [246.0, 34.5], size: [6.0, 6.0], rx: 3.0, fill: '#1e1f21', kind: hole,
+        stroke: '#3b3e43', stroke-width: 0.2}
+      - {id: ring-2-bore-right, at: [246.9, 35.4], size: [4.2, 4.2], rx: 2.1, fill: '#0e0f10', kind: hole}
 interfaces:
 - {physical: net1-rj45, name: Ethernet 1}
 - {physical: net1-sfp, name: Ethernet 1 SFP}

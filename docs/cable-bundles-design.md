@@ -1031,8 +1031,10 @@ What the build settled that the sections above leave to it:
 
 - **Elements.** A lane run is cut at every U (a node at each U and a segment
   between each two), which shares exactly what cutting at every member's start
-  and stop shares (section 4.1). The trunk is written back as a waypoint at
-  each pathway and wherever a lane run starts, stops, turns or jumps.
+  and stop shares (section 4.1). A run that starts or ends at a half unit is
+  also cut there, with a shorter first or last segment that names both its ends;
+  a half unit is shared only with a run that ends at the same half unit. The
+  trunk is written back as a waypoint at each pathway and wherever a lane run starts, stops, turns or jumps.
 - **A bundle of fewer than two cables** does not change its member's route:
   it is not drawn, so its cable is drawn and measured on its own route.
 - **A peel point at or past the far end** of a member's run, not only a pair

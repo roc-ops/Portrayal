@@ -780,6 +780,66 @@ RULES = {
              "move the seam off the edge with `base.stands`, into the casting it divides, and keep it inside the section's height and below the ribs' core",
              "A seam outside the section, or where the ribs' field has cut the casting away, leaves one half empty, and one exactly on a horizontal edge does not say which half the edge belongs to, so the two parts a viewer builds would depend on how it rounds.",
              ERROR),
+    "L220": ("device", "`chassis.plan-outline` is stated only with a `chassis.section`: the plan only takes away from the end profile's body (error)",
+             "state the section the plan is cut from, or leave the plan outline out",
+             "The plan outline is cut from the body the section extrudes and can only remove from it, so without a section there is no body for it to cut and a reader would have to invent one.",
+             ERROR),
+    "L221": ("device", "`chassis.plan-outline` is stated only on a device that is not racked, and not together with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (error)",
+             "drop the other key, or leave the plan outline out: a rack device, a bevelled or rounded body and a sheet body each have a way of being drawn that a rounded plan does not yet join",
+             "Each of those keys already shapes the outline the plan outline would shape, so a device stating both would be drawn by whichever reader looked first.",
+             ERROR),
+    "L222": ("device", "the bands of `chassis.plan-outline` tile the box's height exactly (to 0.01 mm): the first starts at 0, each starts where the one before ends, the last ends at `height`, and each goes forward (error)",
+             "list the bands from the top down, each starting at the height the one before ends, from 0 to the chassis `height`; one band `[0, height]` is a housing with one outline",
+             "A height that no band covers has no outline and one that two bands cover has two, so the body built at that height would depend on which band a reader happened to look at first.",
+             ERROR),
+    "L223": ("device", "each polygon of `chassis.plan-outline` is an outline a body can be cut from: clockwise with y down by the sign of its area, no edge that crosses or touches another, no repeated point and no edge shorter than 0.1 mm (error)",
+             "list the points once each, in order, clockwise as the top face is seen with the rear at the top; take out a point that repeats another and merge points less than 0.1 mm apart",
+             "A polygon that crosses itself or winds the wrong way has no inside that is the same for every reader, and an edge of a hair's width is a rounding error that would be built into a wall.",
+             ERROR),
+    "L224": ("device", "`chassis.plan-outline` has at most 16 bands, at most 512 points in a band and at most 2048 points in all (error)",
+             "use fewer chords for each arc, or fewer bands: a corner needs a handful of chords, not hundreds",
+             "Every point is a wall the body is built from and a vertex the drawing is clipped at, so a plan of thousands would make one housing slower to open than the rest of a rack.",
+             ERROR),
+    "L225": ("device", "each polygon of `chassis.plan-outline` lies inside the box seen from above, `width` by `depth`, to 0.01 mm (error)",
+             "bring the points inside the box, or correct `width` or `depth` against the maker's drawing",
+             "The box is what the rack, the exports and the lock read, so a lobe that stands outside it makes a body larger than the size the device states.",
+             ERROR),
+    "L226": ("device", "the body `chassis.plan-outline` leaves, each band's polygon cut against the section's rows, reaches each of the four sides of the box to 0.01 mm (error)",
+             "bring a band out to the side it stops short of, or widen the section where the band's lobe stands: a point of the plan that the section has no body under does not count",
+             "The box is the extremes of the body, and a lobe whose tip lies where the section is inset is cut away, so the sizes the rack and the exports read would be larger than the housing the drawings and the 3D body show.",
+             ERROR),
+    "L227": ("device", "on a device with a `chassis.plan-outline`, a part on the top or bottom face lies inside the outline of the bands (and, on a lower casting, inside that band's polygon), a part on the front or rear lies where the wall that carries it is present at its heights, and a part on an end face lies where the body has a cap (error)",
+             "move the part onto the housing, or change the plan so the body is there; a rounded corner, a lobe's flank and an inset casting each leave a place a part cannot stand",
+             "A part drawn on a corner the plan has cut away, or on a wall that is not there, would float in the 3D body and sit on nothing in the drawing, so the face and the housing would disagree about where it is.",
+             ERROR),
+    "L228": ("device", "on a device with a `chassis.section`, `chassis.halves` and a `chassis.plan-outline`, each half's seam cap, the band on that half's side of the seam cut to the section there, is not empty and is in one piece (error)",
+             "change the band on that side of the seam so its polygon covers the section at the seam row, in one outline",
+             "A half with no rim has nothing to meet the other half and one whose rim is in two pieces has no single outline to draw or to turn, so the opened housing would show a hole or two unrelated bodies.",
+             ERROR),
+    "L229": ("device", "on a device with a `chassis.section`, `chassis.halves` and a `chassis.plan-outline`, each half's seam band reaches the line where the hinge face meets the seam row, so the lid turns on the body (error)",
+             "bring the band's polygon out to the hinge face's wall at the seam, or move the hinge to the face the rim does reach",
+             "The lid turns on the line where the seam meets the hinge face; a rim that stops short of it leaves the pivot in the air, and the opened lid would swing on nothing.",
+             ERROR),
+    "L230": ("device", "on a device with a `chassis.plan-outline` and `chassis.fins`, no rib is removed or cut by the plan (warning)",
+             "start the field where the plan is, or shorten the span: a rib the plan removes is not drawn, and one it cuts is drawn short",
+             "A rib the plan removes disappears from the drawing and the 3D body without a word from the author, so the count of ribs a device states would not be the count a visitor sees.",
+             WARNING),
+    "L231": ("device", "no point of a `chassis.plan-outline` band lies outside the depth the section has at the band's heights (warning)",
+             "bring the point inside the section, or widen the section there: a point outside it is cut away and the lobe it makes is lost",
+             "The plan only removes from the section, so a point beyond it adds nothing and a lobe drawn there would be silently shortened in every view.",
+             WARNING),
+    "L232": ("device", "a point of a `chassis.plan-outline` polygon within 0.5 mm of a side of the box or a wall of the section, and not on it, is moved onto it before the plan is cut, and each move over 0.01 mm is named (warning)",
+             "state the point on the line, or move it a whole millimetre away if it is meant as a step",
+             "A measured edge a few tenths inside a wall would otherwise cut a sliver no one drew, and the author should see which points the rule moved.",
+             WARNING),
+    "L233": ("device", "where two bands of a `chassis.plan-outline` meet at a height that is not a row of the section, their outlines are the same (warning)",
+             "put the band edge at a height where the section has an edge, or make the two outlines agree there",
+             "Two outlines that differ at a height with no step in the section leave a ledge inside a wall, which is legal but is more often a band edge put in the wrong place.",
+             WARNING),
+    "L234": ("device", "every depth the section is solid at, at the heights of a `chassis.plan-outline` band, is reached by some x of the band's polygon (warning)",
+             "widen the band's polygon to the depth of the section there, or narrow the section where the plan cannot fill it",
+             "A stretch of the section that no part of the plan reaches is body the end profile promises and the plan takes away, so the end face would show metal the housing does not have.",
+             WARNING),
 }
 
 # A CODE HANDED OUT TO WORK THAT HAS NOT LANDED YET. Two branches written at
@@ -9213,6 +9273,252 @@ def lint_device_section_opens(path, data):
                            f"and {_section.widest(pts):g} mm at its widest: a flange is expected at the seam")
 
 
+# THE CODES OF THE PLAN OUTLINE RULES BY WHAT THEY JUDGE, for the test that reads them. The
+# calls below spell each code out, because the severity guard reads literals;
+# test_chassis_plan_outline.py holds the two in step.
+PLAN_OUTLINE_CODES = {"needs": "L220", "kind": "L221", "tile": "L222", "polygon": "L223",
+                      "caps": "L224", "box": "L225"}
+
+
+def lint_device_plan_outline(path, data):
+    """L220-L225: a housing's outline seen from above is stated where it can be drawn, its
+    bands tile the height, and each polygon is an outline inside the box (docs/format-stability.md,
+    "The plan outline of a housing").
+
+    These are the rules that need no clipping. The rules that cut the plan against the section
+    (the body it leaves, a polygon that reaches outside the section, the parts and the seam) come
+    with the code that does the clipping. The schema checks only the shape of the bands; what a
+    polygon has to be is judged from portrayal.plan_outline, the one place that reads the key."""
+    from portrayal import plan_outline as _plan
+    ch = data.get("chassis") or {}
+    if "plan-outline" not in ch:
+        return
+    if "section" not in ch:
+        err(path, "L220", "`chassis.plan-outline` is stated without a `chassis.section`: the plan "
+                          "is cut from the body the section extrudes")
+    mount = ch.get("mount", "rack")
+    if mount in ("rack", "rack-face", "rack-side"):
+        err(path, "L221", f"`chassis.plan-outline` is stated on a {mount!r} device: a housing with "
+                          "a rounded plan is not racked")
+    for key in ("bevel", "rounded", "ears", "overhang", "kits"):
+        if ch.get(key):
+            err(path, "L221", f"`chassis.plan-outline` is stated with `chassis.{key}`, which this "
+                              "version does not join to a rounded plan")
+    if ch.get("shell") == "sheet":
+        err(path, "L221", "`chassis.plan-outline` is stated with `chassis.shell: sheet`, which this "
+                          "version does not join to a rounded plan")
+    plan = _plan.bands(ch)
+    if plan is None:
+        return                  # the schema reports bands that are not bands
+    for m in _plan.cap_problems(plan):
+        err(path, "L224", f"`chassis.plan-outline`: {m}")
+    w, h, d = ch.get("width"), ch.get("height"), ch.get("depth")
+    if _plan._number(h):
+        for m in _plan.tiling_problems(plan, h):
+            err(path, "L222", f"`chassis.plan-outline`: {m}")
+    for i, band in enumerate(plan):
+        if len(band["points"]) > _plan.MAX_POINTS:
+            continue            # the cap is reported above; the walk below is quadratic
+        for m in _plan.polygon_problems(band["points"]):
+            err(path, "L223", f"`chassis.plan-outline` band {i}: {m}")
+        if _plan._number(w) and _plan._number(d):
+            for m in _plan.box_problems(band["points"], w, d):
+                err(path, "L225", f"`chassis.plan-outline` band {i}: {m}")
+
+
+# THE CODES OF THE RULES THAT CUT THE PLAN OUTLINE AGAINST THE SECTION, by what they judge, for the
+# test that reads them. The calls below spell each code out, because the severity guard reads
+# literals; test_plan_clip_lint.py holds the two in step.
+PLAN_CLIP_CODES = {"contact": "L226", "part": "L227", "cap": "L228", "hinge": "L229",
+                   "rib": "L230", "outside": "L231", "snap": "L232", "ledge": "L233",
+                   "unreached": "L234"}
+
+
+def _plan_part_findings(path, data, lib_roots, plan, ch):
+    """L227: each part on a face stands where the body has that surface."""
+    from portrayal import plan as _pl
+    W, H, D = plan.width, plan.height, plan.depth
+    polys = [b["points"] for b in plan.bands]
+    for vname, view in sorted((data.get("views") or {}).items()):
+        view = view or {}
+        face = view.get("face") or vname
+        if face not in ("top", "bottom", "front", "rear", "left", "right"):
+            continue
+        for pid, (x0, y0, x1, y1) in _part_boxes(view, lib_roots):
+            where = f"{vname}/{pid}: ({x0:.2f},{y0:.2f})-({x1:.2f},{y1:.2f})"
+            if face in ("top", "bottom"):
+                ax, bx = (x0, x1) if face == "top" else (W - x1, W - x0)
+                if not _pl.covers(polys, (ax, y0, bx, y1)):
+                    err(path, "L227", f"{where} is not wholly inside the outline of this face: parts "
+                                      "sit on the housing, not in a corner the plan leaves empty")
+                    continue
+                if plan.level_holding(face, (ax, y0, bx, y1)) is None:
+                    err(path, "L227", f"{where} is not on one level of the casting: it runs over a step "
+                                      "of the body, or over the edge of a casting the plan has "
+                                      "rounded, where the surface it stands on changes")
+            elif face in ("front", "rear"):
+                h0, h1 = max(y0, 0.0), min(y1, H)
+                if h1 - h0 <= _pl.TOL:
+                    continue
+                ax, bx = (x0, x1) if face == "front" else (W - x1, W - x0)
+                runs = plan.wall_runs(face, h0, h1)
+                if not any(a - _pl.TOL <= ax and bx <= b + _pl.TOL for a, b in runs):
+                    err(path, "L227", f"{where} is not wholly on the {face} wall of the body: the "
+                                      "wall is not there across its width at these heights")
+            else:
+                if not _pl.covers(plan.cap_polygons(face), (x0, y0, x1, y1)):
+                    err(path, "L227", f"{where} is not wholly on a cap of this end: the plan leaves "
+                                      "the body no wall on this end there")
+
+
+def _plan_seam_findings(path, data, plan, ch):
+    """L228 and L229: each half has a rim in one piece, and it reaches the line the lid turns on."""
+    from portrayal import halves as _halves
+    from portrayal import plan as _pl
+    from portrayal import section as _section
+    declared = _halves.declared(data)
+    if not declared:
+        return
+    lid = declared.get("lid")
+    lid = lid if isinstance(lid, dict) else {}
+    base = declared.get("base")
+    base = base if isinstance(base, dict) else {}
+    hinge = lid.get("hinge")
+    if base.get("outer") not in ("top", "bottom") or hinge not in ("front", "rear"):
+        return                  # L217 reports it
+    row = _section.seam_row(declared, plan.height)
+    if row is None or _section.seam_problems(plan.section, row):
+        return                  # L219 reports it
+    for name in ("base", "lid"):
+        cap = plan.seam(declared, name)
+        loops = _pl.outer_loops(cap["pieces"])
+        if not loops:
+            err(path, "L228", f"`chassis.halves.{name}`: the seam cap is empty: at the seam, {row:g} mm "
+                              "down, the plan leaves no body on that half's side")
+            continue
+        if len(loops) > 1:
+            err(path, "L228", f"`chassis.halves.{name}`: the seam cap is in {len(loops)} pieces: the "
+                              f"plan at the seam, {row:g} mm down, leaves a rim that is not one outline")
+        iv = cap["intervals"]
+        line = iv[-1][1] if hinge == "front" else iv[0][0]
+        if hinge == "front":
+            reaches = any(max(p[4], p[5]) >= line - _pl.TOL for p in cap["pieces"])
+        else:
+            reaches = any(min(p[2], p[3]) <= line + _pl.TOL for p in cap["pieces"])
+        if not reaches:
+            err(path, "L229", f"`chassis.halves.{name}`: the band at the seam does not reach the "
+                              f"{hinge} face's line at the seam row, y {line:g} in the plan: the lid "
+                              "would turn on a line in the air")
+
+
+def _plan_rib_findings(path, plan, ch):
+    """L230: ribs the plan takes away."""
+    from portrayal import fins as _fins
+    from portrayal import plan as _pl
+    H, D = plan.height, plan.depth
+    for i, f in enumerate(_fins.fields(ch)):
+        ext = _fins.edge_extent(plan.section, f.get("on"), H) if f.get("on") in _fins.SIDES else None
+        if not _fins.usable(f) or ext is None:
+            continue
+        removed, cut, first = 0, 0, None
+        for x0, x1, tip in _fins.ribs(f):
+            if _fins.is_outside(f):
+                h0, h1 = (0.0, 1e-3) if f["on"] == "top" else (H - 1e-3, H)
+            elif f["on"] == "top":
+                h0, h1 = _fins.limit(f) - tip, _fins.limit(f)
+            else:
+                h0, h1 = H - _fins.limit(f), H - _fins.limit(f) + tip
+            rect = (x0, D - ext[1], x1, D - ext[0])
+            lps, _kept = _pl.ribs_clipped(plan, rect, h0, h1)
+            got = sum(_pl.loop_area2(lp) / 2.0 for lp in lps if _pl.loop_area2(lp) > 0)
+            want = (x1 - x0) * (ext[1] - ext[0])
+            if got <= _pl.TOL:
+                removed, first = removed + 1, x0 if first is None else first
+            elif want - got > _pl.TOL * ((x1 - x0) + (ext[1] - ext[0])):
+                cut, first = cut + 1, x0 if first is None else first
+        if removed or cut:
+            warn(path, "L230", f"`chassis.fins[{i}]`: the plan outline removes {removed} of its "
+                               f"{_fins.rib_count(f)} ribs entirely and cuts {cut} more, from x {first:g} "
+                               "along the length")
+
+
+def _plan_polygon_findings(path, plan):
+    """L231 to L234: what the plan takes away or moves without saying so."""
+    from portrayal import plan as _pl
+    for b, i, axis, was, now in plan.snaps:
+        warn(path, "L232", f"`chassis.plan-outline` band {b} point {i}: {axis} {was:g} is {abs(was - now):.2g} "
+                           f"mm from {now:g}, a side of the box or a wall of the section: it is snapped onto it "
+                           "before the plan is cut")
+    for i, band in enumerate(plan.bands):
+        reach = [iv for y0, y1, iv in plan.rows
+                 if min(y1, band["heights"][1]) - max(y0, band["heights"][0]) > _pl.TOL]
+        spans = [s for iv in reach for s in iv]
+        lost = [(j, p) for j, p in enumerate(band["points"])
+                if not any(a - _pl.TOL <= p[1] <= b + _pl.TOL for a, b in spans)]
+        if lost:
+            shown = ", ".join(f"point {j} [{p[0]:g}, {p[1]:g}]" for j, p in lost[:3])
+            warn(path, "L231", f"`chassis.plan-outline` band {i}: {len(lost)} of its points lie outside the "
+                               f"section's depth at heights {band['heights'][0]:g} to {band['heights'][1]:g} "
+                               f"and are cut away: {shown}")
+    edges = sorted({y for y0, y1, _ in plan.rows for y in (y0, y1)})
+    for i in range(len(plan.bands) - 1):
+        h = plan.bands[i]["heights"][1]
+        if any(abs(h - e) <= _pl.TOL for e in edges):
+            continue
+        above = [_pl.polygon(p) for s in plan.solid if s["band"] == i and s["heights"][0] < h - 1e-6 <= s["heights"][1]
+                 for p in s["pieces"]]
+        below = [_pl.polygon(p) for s in plan.solid if s["band"] == i + 1 and s["heights"][0] <= h + 1e-6 < s["heights"][1]
+                 for p in s["pieces"]]
+        both = sum(_pl.area(p) for p in _pl.sweep([above, below])) if above and below else 0.0
+        a = sum(_pl.area(p) for p in _pl.sweep([above])) if above else 0.0
+        c = sum(_pl.area(p) for p in _pl.sweep([below])) if below else 0.0
+        if a + c - 2 * both > _pl.TOL:
+            warn(path, "L233", f"`chassis.plan-outline` bands {i} and {i + 1} meet at {h:g} mm down and "
+                               "their outlines differ there, but that is not a row of the section: the "
+                               "wall there has a ledge in it")
+    for s in plan.solid:
+        runs = sorted((min(p[2], p[3]), max(p[4], p[5])) for p in s["pieces"])
+        merged = []
+        for a, b in runs:
+            if merged and a <= merged[-1][1] + _pl.TOL:
+                merged[-1] = (merged[-1][0], max(merged[-1][1], b))
+            else:
+                merged.append((a, b))
+        for a, b in _pl.gaps(s["intervals"], merged):
+            if b - a > _pl.TOL:
+                warn(path, "L234", f"`chassis.plan-outline` band {s['band']} at heights {s['heights'][0]:g} to "
+                                   f"{s['heights'][1]:g}: the section is solid at y {a:g} to {b:g} in the "
+                                   "plan, and no x of the plan reaches it")
+
+
+def lint_device_plan_clip(path, data, lib_roots):
+    """L226-L234: what the plan outline leaves of the body once it is cut against the section
+    (docs/modelling-a-device.md, "A housing seen from above").
+
+    The structural rules (L220-L225) judge the key as written; these cut each band's polygon
+    against the section's rows, in portrayal.plan, which the compiler draws from too, so a
+    drawing and its lint cannot disagree about what is left. A plan the structural rules refuse
+    is not cut: they have said what is wrong."""
+    from portrayal import plan as _pl
+    ch = data.get("chassis") or {}
+    if "plan-outline" not in ch or not _pl.valid(ch):
+        return
+    plan = _pl.Plan(ch)
+    reach = _pl.reach(plan.solid)
+    if reach is None:
+        err(path, "L226", "`chassis.plan-outline` leaves no body at all once it is cut against the section")
+    else:
+        x0, x1, y0, y1 = reach
+        for side, gap in (("left", x0), ("right", plan.width - x1), ("rear", y0), ("front", plan.depth - y1)):
+            if gap > _pl.TOL:
+                err(path, "L226", f"`chassis.plan-outline`: the body it leaves, cut against the section, "
+                                  f"does not reach the {side} side of the box: it stops {gap:g} mm short")
+    _plan_part_findings(path, data, lib_roots, plan, ch)
+    _plan_seam_findings(path, data, plan, ch)
+    _plan_rib_findings(path, plan, ch)
+    _plan_polygon_findings(path, plan)
+
+
 # THE CODES OF THE FIN RULES BY WHAT THEY JUDGE, for the test that reads them. The calls
 # below spell each code out, because the severity guard reads literals;
 # test_chassis_fins.py holds the two in step.
@@ -15411,6 +15717,8 @@ def main():
                 lint_device_section(f, d, args.library)
                 lint_device_section_opens(f, d)
                 lint_device_fins(f, d, args.library)
+                lint_device_plan_outline(f, d)
+                lint_device_plan_clip(f, d, args.library)
                 lint_rack_side_portrait(f, d)
                 lint_device_shell(f, d)
                 lint_device_power_outlets(f, d, args.library)

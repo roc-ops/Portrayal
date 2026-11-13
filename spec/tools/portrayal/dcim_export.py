@@ -825,6 +825,10 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # THE OPENGEAR ACM7000'S DC POWER HOUSING, a four-position housing printed 9~30V DC (the Resilience Gateway quick
+    # start, page 2). No document names its maker. No power-port type of the two targets is held for it in this tree, so
+    # it is `other` and POWER_LABEL says which connector.
+    "opengear/acm7000-dc-header": "other",
     # A RARITAN PX2-2475'S CORD ends in a NEMA L5-20P (the technical specification): `nema-l5-20p`, the value the Tripp Lite and
     # ePDU G3 cords above export, a PowerPortTypeChoices value in both targets.
     "raritan/px2-cord-l5-20p": "nema-l5-20p",

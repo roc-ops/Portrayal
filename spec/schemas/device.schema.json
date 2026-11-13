@@ -912,6 +912,36 @@
       }
      }
     },
+    "plan-outline": {
+     "type": "array",
+     "minItems": 1,
+     "description": "THE OUTLINE OF A CAST HOUSING SEEN FROM ABOVE: a top view, not a bay's plan. The `section` is one end profile run the whole `width`, so the housing seen from above is always a rectangle; a cast housing has rounded corners and lobes. A list of bands. Each band is `heights: [from, to]`, the range of heights it covers in millimetres down from the top of the box, and `points`, a closed polygon `[[x, y], ...]` in millimetres in the top face's frame: x along the width from the left, y down the drawing with the rear at the top and the front at the bottom. The bottom face is the mirror of it in x. The bands tile the height from 0 to `height` exactly (to 0.01 mm), in order from the top, and a range includes its `from` and not its `to`; one band `[0, height]` is a housing with the same outline at every height. Each polygon is the outer envelope of the housing at those heights seen from above: clockwise with y down, slanted edges allowed (a rounded corner is its arc in short straight steps, a lobe is its points), no repeated point, no edge shorter than 0.1 mm, no edge crossing another, and inside the `width` by `depth` box (L223, L225). At most 512 points a band, 16 bands and 2048 points in all (L224). The `section` is the most the housing can be and the plan only takes away from it: where a polygon is narrower than the section at those heights, the housing is too. Needs a `section` and is not stated on a rack device or with `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits` (L220, L221). The box stays the bounding box: rack fit, exports and the lock read `width`, `height` and `depth`. It may be stated with `halves` and `fins`. It is shape: stating or changing it is a major. A validator that does not know the key refuses a device that states it.",
+     "items": {
+      "type": "object",
+      "required": ["heights", "points"],
+      "additionalProperties": false,
+      "properties": {
+       "heights": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "number"},
+        "description": "`[from, to]`, the heights this band covers in millimetres down from the top of the box; it includes `from` and not `to`, and the bands tile `[0, height]`."
+       },
+       "points": {
+        "type": "array",
+        "minItems": 3,
+        "description": "The band's outline seen from above, a closed polygon of `[x, y]` points in millimetres in the top face's frame, listed once each, clockwise with y down.",
+        "items": {
+         "type": "array",
+         "minItems": 2,
+         "maxItems": 2,
+         "items": {"type": "number"}
+        }
+       }
+      }
+     }
+    },
     "airflow": {
      "description": "WHERE AIRFLOW LIVES. The chassis is the home; a configuration states `airflow` only when it DIFFERS from this, and the build reads the configuration first and falls back here. `top-to-bottom` is air drawn in at the top face and pushed out of the bottom, as a rack fan tray blowing down through the rack does. The enums differ on purpose: `side`, `passive` and `top-to-bottom` are chassis answers a configuration cannot give, because a fanless enclosure, a side-breathing modular chassis and a fan tray offer no airflow option to choose between. L91 checks the division.",
      "enum": [
