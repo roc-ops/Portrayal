@@ -10,4 +10,5 @@
   The right face draws the far plate's different pattern at the head.
   Every size is an estimate. The device's notes name ten scales, and each figure is read at the scale of its own direction.
   Each device takes a patch. The front and rear door plates cover the fittings on those faces. No component changes.
-  This edits the `track-rungs` gap, which now covers the front and rear only.
+  This edits the `track-rungs` gap, which now covers the left and right faces, where the render shows the rungs.
+  Two provenance notes no longer say the centre is open: the flat centre plate is drawn there.

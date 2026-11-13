@@ -224,7 +224,10 @@ def test_gaps_say_what_is_left_and_no_stale_gap_remains(model):
     for gone in ("end-caps", "feet", "side-plate-holes", "centre-plate"):
         assert gone not in gaps
     assert gaps["end-fittings-front"]["scope"] == ["front", "rear"]
-    assert gaps["track-rungs"]["scope"] == ["front", "rear"]
+    assert gaps["track-rungs"]["scope"] == ["left", "right"], "the render shows the rungs in the side channel"
+    rungs = " ".join(gaps["track-rungs"]["note"].split())
+    assert "The left and right faces draw the guides but not the rungs." in rungs
+    assert "The door plates hide the track in the front and rear elevations." in rungs
     assert "door-hinge-tabs" in gaps and "door-hook" in gaps and "mid-panel" in gaps
     assert all(g["reason"] == "vendor-silent" for g in gaps.values())
     assert "which a following change draws, so they are not drawn here" not in gaps["track-rungs"]["note"]
@@ -243,6 +246,22 @@ def test_the_frame_note_states_its_scales_and_method(model):
         assert text in note, text
     assert "four feet" not in note and "cross tube at the front" not in note and "one method" not in note
     assert load(model)["provenance"]["frame"]["confidence"] == "estimated"
+
+
+@pytest.mark.parametrize("model", MODELS)
+def test_no_note_still_says_the_centre_is_open_where_the_plate_is_drawn(model):
+    notes = load(model)["provenance"]
+    spine = " ".join(notes["spine"]["note"].split())
+    assert "none is fitted" not in spine and "centre is open" not in spine
+    assert "That kit is a separate part and is not drawn." in spine
+    assert "The flat centre plate of the page 3 render is drawn between the channels" in spine
+    assert "with its holes and slots, in the side views." in spine
+    side = " ".join(notes["left"]["note"].split())
+    assert "across the centre" not in side
+    assert "The flat centre plate of the page 3 render stands between the channels." in side
+    for new in ("That kit is a separate part and is not drawn.", "The flat centre plate of the page 3 render stands between the channels."):
+        assert len(new.split()) <= LIMIT
+    assert len("The flat centre plate of the page 3 render is drawn between the channels, with its holes and slots, in the side views.".split()) <= LIMIT
 
 
 @pytest.mark.parametrize("model", MODELS)
