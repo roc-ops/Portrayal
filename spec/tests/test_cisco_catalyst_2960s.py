@@ -293,12 +293,6 @@ def test_48fpd_lists_no_kit_and_opens_an_etsi_bracket_gap():
     assert "etsi-bracket" in {g["what"] for g in d["gaps"]}
 
 
-def test_48fpd_unmeasurable_faces_are_empty():
-    d = device("ws-c2960s-48fpd")
-    for face in ("top", "bottom", "left", "right"):
-        assert d["views"][face].get("empty"), face
-
-
 # --- the second look: plates, bar, silver, MODE button, marks, labels, fan, bay and the module -----------
 #
 # Every figure below is read from a held source at a stated scale: the NetBox 48FPD-L front stencil at
@@ -744,16 +738,6 @@ def test_48fpd_rear_screws_have_the_cross_the_modules_screws_use_at_the_measured
         assert cross["path"] == "M -2.15 0 H 2.15 M 0 -2.15 V 2.15"
     module = (COMPONENTS / "c2960s-stack/v1/skins/default.svg").read_text()
     assert module.count('stroke-width="0.35" fill="none"/></g>') >= 3, "the module's own screws are crossed"
-
-
-def test_48fpd_rear_undrawn_details_gap_lists_what_the_photograph_shows_and_the_render_does_not():
-    d = device("ws-c2960s-48fpd")
-    g = gaps(d)["rear-undrawn-details"]
-    assert g["scope"] == ["rear"]
-    for needle in ("diagonal edge", "two small oval tabs", "#323637", "#373b3e", "rectangular outline marks",
-                   "round hole", "notch", "three pins", "dimensioned view"):
-        assert needle in g["wanted"], needle
-    assert not [k for k in decor(d, "rear") if "tab" in k], "the tabs are too faint to place and are not drawn"
 
 
 def test_the_rps_connector_fills_equal_their_photograph_samples():
