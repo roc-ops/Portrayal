@@ -104,7 +104,8 @@ provenance:
       give. The dimensions figure prints a small 4 in the lower-left serial jack. The callouts figure and the photograph
       number that jack 3. The glyph is a mark and is not drawn here. The lid carries engraved specks that are too faint to
       read, kept as the zone lid-marking. The DC housing at the lower left is drawn as decor: a latch tab, a body, a grey
-      opening and four cells, estimated. The underside and the rear are not shown. No held picture shows the right flank.
+      opening and four cells, estimated. The tab's pale window, its black notch, the notch's core and the top bar
+      are read from the dimensions figure. Their edges are pixel edges and their colours are sampled. The underside and the rear are not shown. No held picture shows the right flank.
       The held pages are the brief, the fact sheet, the product pages and four figures. The right flank is built as the
       documented side, the left flank, mirrored, as no document shows this one. The LANTRONIX wordmark and the registered
       mark beside it are a logo and are not drawn: their place is the region logo-zone. The plain text LM4 stays. The
@@ -154,7 +155,12 @@ gaps:
   wanted: the maker's name for the DC input connector, its pitch and the plug that mates it, from a hardware guide.
   note: >-
     The front view shows a black housing at the lower left, 8.35 mm wide and 11.3 mm high with its latch tab. Its opening is
-    drawn as decor, estimated: a grey rectangle with four cells in two rows of two, 2.95 mm apart. The documentation says
+    drawn as decor, estimated: a grey rectangle with four cells in two rows of two, 2.95 mm apart. The latch tab holds a
+    pale window 4.65 by 2.3 mm. Inside it are a black notch 2.0 by 1.4 mm and a paler core 1.05 by 0.9 mm. A pale bar
+    0.3 mm thick runs along the tab's top. All four are decor, estimated, and each edge is within 0.2 mm of two readings
+    at 3.384 px per mm. The colours are sampled from the figure. The window is (170,175,199) over 72 px, the core
+    (215,223,254) over 6 px and the bar (178,178,178) over 14 px. The bar is one pixel thick in the figure, so its
+    thickness is the least certain figure. The documentation says
     only that the supply has a 4-pin connector. No interface is known, so no connector part is placed and its identity stays
     this gap.
 - what: rear-panel
@@ -245,8 +251,12 @@ views:
       - {id: housing-serial, at: [114.55, 7.0], size: [34.95, 28.45], fill: '#e5d9cf', kind: housing}
       - {id: housing-e1, at: [46.25, 20.7], size: [17.65, 14.75], fill: '#e5d9cf', kind: housing}
       - {id: housing-sfp, at: [69.95, 24.25], size: [15.85, 11.2], fill: '#9aa0a8', kind: housing}
-      - {id: dc-housing-tab, at: [12.5, 23.75], size: [5.45, 3.45], fill: '#101012', kind: housing}
       - {id: dc-housing, at: [11.05, 26.7], size: [8.35, 8.35], fill: '#101012', kind: housing}
+      - {id: dc-housing-tab, at: [12.5, 23.75], size: [5.45, 3.45], fill: '#101012', kind: housing}
+      - {id: dc-latch-window, at: [12.85, 24.9], size: [4.65, 2.3], fill: '#aaafc7', kind: latch}
+      - {id: dc-latch-bar, at: [12.85, 24.25], size: [4.65, 0.3], fill: '#b2b2b2', kind: latch}
+      - {id: dc-latch-notch, at: [14.25, 25.8], size: [2.0, 1.4], fill: '#101012', kind: recess}
+      - {id: dc-latch-notch-core, at: [14.65, 26.3], size: [1.05, 0.9], fill: '#d7dffe', kind: recess}
       - {id: dc-opening, at: [12.5, 27.95], size: [5.9, 5.9], fill: '#6b6d71', kind: housing}
       - {id: dc-cell-1, at: [12.76, 28.21], size: [2.4, 2.4], fill: '#0c0c0d', kind: hole}
       - {id: dc-cell-2, at: [15.72, 28.21], size: [2.4, 2.4], fill: '#0c0c0d', kind: hole}

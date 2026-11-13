@@ -319,6 +319,33 @@ def test_the_dc_housing_opening_is_drawn_as_decor_with_four_cells_and_no_part_is
     assert "The DC housing at the lower left is drawn as decor" in note
 
 
+# The pale parts of the DC latch tab in the dimensions figure, mm: left, top, right, bottom.
+# Each is the midpoint of two readings of the same edge, and the build stands within 0.3 mm of it.
+FIGURE_DC_LATCH = {
+    "dc-latch-window": (12.87, 24.92, 17.50, 27.20),
+    "dc-latch-bar": (12.87, 24.25, 17.50, 24.55),
+    "dc-latch-notch": (14.27, 25.80, 16.24, 27.20),
+    "dc-latch-notch-core": (14.64, 26.31, 15.72, 27.20),
+}
+
+
+def test_the_dc_latch_tab_draws_its_pale_window_bar_and_notch_within_0_3_mm_of_the_figure():
+    decor = _decor(_lm4())
+    for ident, want in FIGURE_DC_LATCH.items():
+        assert ident in decor, ident
+        box = decor[ident]
+        have = (box["at"][0], box["at"][1], box["at"][0] + box["size"][0], box["at"][1] + box["size"][1])
+        for edge, w, h in zip(("left", "top", "right", "bottom"), want, have):
+            assert abs(h - w) <= 0.3, (ident, edge, h, w)
+    assert decor["dc-latch-window"]["fill"] == "#aaafc7" and decor["dc-latch-bar"]["fill"] == "#b2b2b2"
+    assert decor["dc-latch-notch-core"]["fill"] == "#d7dffe" and decor["dc-latch-notch"]["fill"] == "#101012"
+    ids = list(decor)
+    order = ["dc-housing", "dc-housing-tab", "dc-latch-window", "dc-latch-bar", "dc-latch-notch", "dc-latch-notch-core"]
+    assert [ids.index(i) for i in order] == sorted(ids.index(i) for i in order)
+    gap = next(g for g in _lm4()["gaps"] if g["what"] == "dc-input")
+    assert "pale window" in " ".join(gap["note"].split())
+
+
 def test_each_corner_screw_has_a_plus_recess_and_the_sfp_cage_has_its_green_pull_tab():
     decor = _decor(_lm4())
     for corner in ("tl", "tr", "bl", "br"):
