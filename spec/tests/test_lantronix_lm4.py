@@ -343,7 +343,11 @@ def test_the_dc_latch_tab_draws_its_pale_window_bar_and_notch_within_0_3_mm_of_t
     order = ["dc-housing", "dc-housing-tab", "dc-latch-window", "dc-latch-bar", "dc-latch-notch", "dc-latch-notch-core"]
     assert [ids.index(i) for i in order] == sorted(ids.index(i) for i in order)
     gap = next(g for g in _lm4()["gaps"] if g["what"] == "dc-input")
-    assert "pale window" in " ".join(gap["note"].split())
+    note = " ".join(gap["note"].split())
+    assert "pale window" in note and "over 63 px" in note
+    assert "pale outline 6.5 mm square" in note and "pale tile" in note
+    body = " ".join(_lm4()["provenance"]["body"]["note"].split())
+    assert "follow the dimensions figure, where the photograph shows the tab dark" in body
 
 
 def test_each_corner_screw_has_a_plus_recess_and_the_sfp_cage_has_its_green_pull_tab():
