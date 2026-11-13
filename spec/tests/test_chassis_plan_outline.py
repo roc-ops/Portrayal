@@ -468,7 +468,7 @@ def built(tmp_path_factory):
 
 @pytest.fixture(scope="module")
 def plain(tmp_path_factory):
-    """The same box with no plan outline: nothing is drawn from the key yet, so its faces are these."""
+    """The same box with no plan outline: its faces are the rectangles."""
     tmp = tmp_path_factory.mktemp("plan-outline-plain")
     dev = tmp / "rounded" / "device.yaml"
     dev.parent.mkdir()
@@ -491,12 +491,13 @@ def test_a_device_with_no_plan_outline_publishes_no_key(plain):
 
 @pytest.mark.heavy
 @pytest.mark.parametrize("view", ["front", "rear", "left", "right", "top", "bottom"])
-def test_no_face_is_drawn_from_the_plan_outline_yet(built, plain, view):
+def test_every_face_follows_the_plan_outline(built, plain, view):
+    """The plan outline is drawn from now on (test_plan_faces.py says how); the same box without
+    it is the rectangles it was."""
     name = f"rounded.base.{view}.svg"
-    # the one thing that must differ is the hash of the source file each face records
     import re
     drawn = lambda p: re.sub(rb'"source-sha256":"[0-9a-f]+"', b"", (p / name).read_bytes())
-    assert drawn(built) == drawn(plain)
+    assert drawn(built) != drawn(plain)
 
 
 def test_the_index_contract_stays_2():
