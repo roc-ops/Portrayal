@@ -33,6 +33,7 @@ def test_the_xcu_adapters_are_couplers_against_the_rack_kit():
 
 @pytest.mark.heavy
 def test_the_back_end_of_a_rear_mounted_panel_is_placed_against_the_rack_kit():
-    """The far end of an XCU10 adapter has a point, a route and a length (rack-back-end.mjs reads
-    the rack at fixtures/rear-panel-back-end/ with the XCU10 and the MF-8 of the build)."""
+    """The far end of an XCU10 adapter has a point, a route and a length.
+    The script rack-back-end.mjs reads the rack at fixtures/rear-panel-back-end/
+    with the XCU10 and the MF-8 of the build."""
     run_against_the_build(BACK_END, ["xcu.configs.json", "lmfs-f.configs.json", "xcu.xcu10-51id.front.elements.json"])
