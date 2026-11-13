@@ -21,8 +21,9 @@ provenance:
       paths and once from 500 to 1200 dpi renders of the same view.'}
   recount: {confidence: drawing, note: 'Recounted twice. The six blocks of four, the 24 outlets (20 C13, 4 C19) and the
       two plates agree with the order''s counts. Blocks 1 and 5 are a C19, a C13 and a staggered pair. Blocks 2 and 6 are
-      the same turned 180 degrees. Blocks 3 and 4 are two pairs each. The drawing also prints a numeral, a round mark and
-      two short windows at every outlet, which the order''s inventory did not list.'}
+      the same turned 180 degrees. Blocks 3 and 4 are two pairs each. Moulding II holds block 3 under B1 and block 4 under
+      B2. The drawing also prints a numeral, a round mark and two short windows at every outlet, which the order''s inventory
+      did not list.'}
   mount: {confidence: drawing, note: '`rack-side`, on the two toolless buttons of the rear view (VERTICAL, 0U FULL; 1555.0
       between them, the first 40.5 from the cord end). `ru: 39` is the 1750 it runs, 1750 / 44.45. No source sells it by
       rack units. The top and bottom views draw the other button places as screw heads on the sides. The drawing''s note
@@ -34,8 +35,8 @@ provenance:
       off the data sheet''s face render, a vendor render and not a photograph of a unit.'}
   colour: {confidence: photo-measured, note: 'the data sheet''s face render (9800 by 357 px) reads plate B1 #646867, the
       drawing''s LIGHT GRAY. It reads plate B2 and the last two outlet blocks #77a6ee, BLUE, and the body #202020. The render
-      paints blocks 3 and 4 light gray where the drawing''s colour spans put them under B2 [BLUE]. They are drawn blue,
-      the drawing''s reading, and the disagreement is a gap. No photograph of a unit is held.'}
+      paints block 4 light gray where the drawing''s colour span puts it under B2 [BLUE]. Block 4 is drawn blue, the drawing''s
+      reading, and the disagreement is a gap. No photograph of a unit is held.'}
   front: {confidence: drawing, note: 'drawing - the front view, mm from the cord end and from the left edge as the strip
       stands. First come the cord gland, a ground screw with its earth symbol and breaker plate B1. Then come outlet blocks
       1 to 4 in two panels and the network module. Breaker plate B2 and blocks 5 and 6 in one panel close the strip. A panel
@@ -57,8 +58,9 @@ provenance:
       3W''. The unit has a fixed cord and no inlet.'}
   breakers: {confidence: drawing, note: 'datasheet and drawing - ''(2)2-pole,20A,5 kAIC'' and ''20 AMP, DOUBLE - POLE ELECTRO
       MECHANICAL SWITCH / BREAKER (2) PLACES''. Each plate prints its bank and L1-L2. The drawing''s colour spans put B1
-      [LIGHT GRAY] over plate B1 and blocks 1 and 2. They put B2 [BLUE] over blocks 3 to 6. The outlets run `through` the
-      breaker of their span. This is a reading, since no wiring sheet is held.'}
+      [LIGHT GRAY] over plate B1 and blocks 1 to 3. They put B2 [BLUE] over blocks 4 to 6 and plate B2. The outlets run
+      `through` the breaker of their span, B1 for outlets 1 to 12 and B2 for 13 to 24. This is a reading, since no wiring
+      sheet is held.'}
   module: {confidence: estimated, note: 'drawing - the front view draws the network module as a 155 mm block between blocks
       4 and 5. It shows an empty window, three round dots, a small window and a dot. It also shows a small dark tab, two
       stacked connector cutouts with two smaller ones beside them, and a dark end tab. No close-up of this module is held.
@@ -66,7 +68,8 @@ provenance:
       parts are read as that module''s layout. Their positions come from the drawing''s vector boxes and a 1200 dpi render,
       and are ESTIMATES to about 1 mm.'}
   plates: {confidence: drawing, note: 'drawing - plates B1 and B2 are 23.20 pt along by 16.31 pt across by their straight
-      edge. By their outline they are 25.38 pt along, 70.0 mm. They are the plate of the EN2333. Both use enlogic/en2333-breaker-20a-2p@1.'}
+      edge. By their outline they are 25.38 pt along, 70.0 mm. They are the plate of the EN2333. Both use enlogic/en2333-breaker-20a-2p@1.
+      Each plate prints its label above its rocker window, so the base configuration selects the `label-first` skin.'}
   rear: {confidence: drawing, note: 'drawing - the rear view: two toolless buttons, O18.4, 1555.0 apart, the first 40.5
       from the cord end, on the width''s centre line.'}
   sides: {confidence: drawing, note: 'drawing - the top view gives the right face, 18 round screw heads 6.6 to 6.9 across.
@@ -104,9 +107,8 @@ gaps:
 - what: breaker-feeds
   scope: [front]
   reason: sources-disagree
-  note: the drawing's colour spans put B1 [LIGHT GRAY] over blocks 1 and 2 and B2 [BLUE] over blocks 3 to 6. Its second
-    label stands over block 4 only. The render paints blocks 3 and 4 light gray like B1. The drawing's reading is used for
-    the colour and for `through`.
+  note: the drawing's colour spans put B1 [LIGHT GRAY] over blocks 1 to 3 and B2 [BLUE] over blocks 4 to 6. The render paints
+    block 4 light gray like B1. The drawing's reading is used for the colour and for `through`.
   wanted: the maker's wiring diagram.
 - what: input-voltage
   scope: [front]
@@ -158,10 +160,10 @@ gaps:
     at an end or a side.
   wanted: straight-on photographs of an end and a side.
 groups:
-  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 8 outlets of blocks 1 and 2, counted from the cord
-      end: 2 C19 and 6 C13, each switchable and metered, behind breaker B1'}
-  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 16 outlets of blocks 3 to 6, counted from the cord
-      end: 2 C19 and 14 C13, each switchable and metered, behind breaker B2'}
+  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 12 outlets of blocks 1 to 3, counted from the cord
+      end: 2 C19 and 10 C13, each switchable and metered, behind breaker B1'}
+  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 12 outlets of blocks 4 to 6, counted from the cord
+      end: 2 C19 and 10 C13, each switchable and metered, behind breaker B2'}
   outlet-leds:
     term: LED
     role: indicator
@@ -196,27 +198,32 @@ views:
         size: [51.53, 256.55]
         fill: '#646867'
         kind: outlet-moulding
-      - id: panel-1-seam
-        at: [0.24, 384.99]
-        size: [51.53, 1.66]
-        fill: '#303236'
-        kind: seam
       - id: panel-2
         at: [0.24, 570.1]
-        size: [51.53, 223.16]
+        size: [51.53, 110.59]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: panel-3
+        at: [0.24, 680.68]
+        size: [51.53, 112.57]
         fill: '#77a6ee'
         kind: outlet-moulding
-      - id: panel-2-seam
-        at: [0.24, 679.85]
-        size: [51.53, 1.66]
-        fill: '#303236'
-        kind: seam
-      - id: panel-3
+      - id: panel-4
         at: [0.24, 1308.35]
         size: [51.53, 256.55]
         fill: '#77a6ee'
         kind: outlet-moulding
-      - id: panel-3-seam
+      - id: seam-1
+        at: [0.24, 384.99]
+        size: [51.53, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: seam-2
+        at: [0.24, 679.85]
+        size: [51.53, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: seam-3
         at: [0.24, 1435.63]
         size: [51.53, 1.66]
         fill: '#303236'
@@ -386,49 +393,49 @@ views:
         at: [37.78, 584.5]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-9-2
         at: [37.78, 592.62]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-10-1
         at: [8.72, 610.09]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-10-2
         at: [8.72, 618.2]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-11-1
         at: [37.78, 632.52]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-11-2
         at: [37.78, 640.64]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-12-1
         at: [8.72, 658.11]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-12-2
         at: [8.72, 666.22]
         size: [5.35, 7.64]
         rx: 1.0
-        fill: '#6993d8'
+        fill: '#585b5a'
         kind: window
       - id: window-13-1
         at: [37.78, 687.66]
@@ -794,42 +801,42 @@ views:
         ref: std/c13-outlet@1
         at: [2.49, 583.16]
         rotate: 180
-        group: outlets-b2
-        rel-pos: 1
+        group: outlets-b1
+        rel-pos: 9
         fed-by: input
-        through: breaker-b2
+        through: breaker-b1
         states: ['on', 'off']
       - id: outlet-10
         ref: std/c13-outlet@1
         at: [18.97, 605.52]
-        group: outlets-b2
-        rel-pos: 2
+        group: outlets-b1
+        rel-pos: 10
         fed-by: input
-        through: breaker-b2
+        through: breaker-b1
         states: ['on', 'off']
       - id: outlet-11
         ref: std/c13-outlet@1
         at: [2.49, 631.18]
         rotate: 180
-        group: outlets-b2
-        rel-pos: 3
+        group: outlets-b1
+        rel-pos: 11
         fed-by: input
-        through: breaker-b2
+        through: breaker-b1
         states: ['on', 'off']
       - id: outlet-12
         ref: std/c13-outlet@1
         at: [18.97, 653.54]
-        group: outlets-b2
-        rel-pos: 4
+        group: outlets-b1
+        rel-pos: 12
         fed-by: input
-        through: breaker-b2
+        through: breaker-b1
         states: ['on', 'off']
       - id: outlet-13
         ref: std/c13-outlet@1
         at: [2.49, 686.32]
         rotate: 180
         group: outlets-b2
-        rel-pos: 5
+        rel-pos: 1
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -837,7 +844,7 @@ views:
         ref: std/c13-outlet@1
         at: [18.97, 708.68]
         group: outlets-b2
-        rel-pos: 6
+        rel-pos: 2
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -846,7 +853,7 @@ views:
         at: [2.49, 734.34]
         rotate: 180
         group: outlets-b2
-        rel-pos: 7
+        rel-pos: 3
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -854,7 +861,7 @@ views:
         ref: std/c13-outlet@1
         at: [18.97, 756.7]
         group: outlets-b2
-        rel-pos: 8
+        rel-pos: 4
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -863,7 +870,7 @@ views:
         at: [17.45, 1324.99]
         rotate: 90
         group: outlets-b2
-        rel-pos: 9
+        rel-pos: 5
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -871,7 +878,7 @@ views:
         ref: std/c13-outlet@1
         at: [19.05, 1360.93]
         group: outlets-b2
-        rel-pos: 10
+        rel-pos: 6
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -880,7 +887,7 @@ views:
         at: [2.49, 1386.93]
         rotate: 180
         group: outlets-b2
-        rel-pos: 11
+        rel-pos: 7
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -888,7 +895,7 @@ views:
         ref: std/c13-outlet@1
         at: [18.97, 1409.28]
         group: outlets-b2
-        rel-pos: 12
+        rel-pos: 8
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -897,7 +904,7 @@ views:
         at: [2.63, 1441.74]
         rotate: 180
         group: outlets-b2
-        rel-pos: 13
+        rel-pos: 9
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -905,7 +912,7 @@ views:
         ref: std/c13-outlet@1
         at: [19.11, 1464.09]
         group: outlets-b2
-        rel-pos: 14
+        rel-pos: 10
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -914,7 +921,7 @@ views:
         at: [2.55, 1490.09]
         rotate: 180
         group: outlets-b2
-        rel-pos: 15
+        rel-pos: 11
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -923,7 +930,7 @@ views:
         at: [-1.05, 1520.33]
         rotate: 270
         group: outlets-b2
-        rel-pos: 16
+        rel-pos: 12
         fed-by: input
         through: breaker-b2
         states: ['on', 'off']
@@ -1077,7 +1084,7 @@ views:
         group: breakers
         rel-pos: 1
         lines: [L1, L2]
-        description: 'Breaker B1 (light gray), 20 A double-pole across L1 and L2: protects its outlets'
+        description: 'Breaker B1 (light gray), 20 A double-pole across L1 and L2: protects outlets 1 to 12'
         attrs: {bank-color: '#646867', ink: '#e6e6e6', bank: B1, lines: L1-L2}
       - id: breaker-b2
         ref: enlogic/en2333-breaker-20a-2p@1
@@ -1085,7 +1092,7 @@ views:
         group: breakers
         rel-pos: 2
         lines: [L1, L2]
-        description: 'Breaker B2 (blue), 20 A double-pole across L1 and L2: protects its outlets'
+        description: 'Breaker B2 (blue), 20 A double-pole across L1 and L2: protects outlets 13 to 24'
         attrs: {bank-color: '#77a6ee', ink: '#202020', bank: B2, lines: L1-L2}
       - id: network-1
         ref: common/rj45-eth@1
@@ -1380,6 +1387,7 @@ configurations:
     kind: base
     default: true
     description: 'The PDU as the drawing shows it: a black chassis, the L6-30P plug, a 3 m cord and top feed.'
+    skins: {en2333-breaker-20a-2p: label-first}
     part-numbers:
       EN6324: {}
 datasheet: {title: 'Enlogic EN6324, Outlet metered and switched PDU - EN6 series data sheet (2 pages read of 4)', url: 'https://nvent.widen.net/content/qfoh89n8bc/original/en6324-spec-sheet.pdf',

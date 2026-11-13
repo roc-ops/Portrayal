@@ -75,6 +75,32 @@ def test_the_gaps_name_what_no_document_gives(slug):
     assert {"weight", "colour"} <= gaps
 
 
+FEEDS = {
+    "en2333": {"breaker-b1": 18, "breaker-b2": 18},
+    "en6324": {"breaker-b1": 12, "breaker-b2": 12},
+    "eb0952": {"breaker-b1": 6, "breaker-b2": 6, "breaker-b3": 6, "breaker-b4": 8, "breaker-b5": 8, "breaker-b6": 8},
+}
+
+
+@pytest.mark.parametrize("slug", FEEDS)
+def test_each_breaker_feeds_the_outlets_of_its_span(slug):
+    outlets = [p for p in _placements(slug, "front") if p["id"].startswith("outlet-")]
+    assert dict(Counter(p["through"] for p in outlets)) == FEEDS[slug]
+
+
+def test_the_eb0952_marks_on_white_columns_are_dark():
+    through = {p["id"]: p["through"] for p in _placements("eb0952", "front") if p["id"].startswith("outlet-")}
+    marks = _device("eb0952")["views"]["front"]["silkscreen"]
+    white = [m for m in marks if through[m["for"]] in ("breaker-b1", "breaker-b4")]
+    assert len(white) == 4 * 7 and all(m.get("fill") == "#202020" for m in white)
+
+
+def test_the_en6324_plates_use_the_label_first_skin():
+    skins = _device("en6324")["configurations"]["base"]["skins"]
+    assert skins == {"en2333-breaker-20a-2p": "label-first"}
+    assert "skins" not in _device("en2333")["configurations"]["base"]
+
+
 def test_the_l6_30p_cord_says_where_its_figures_come_from():
     contract = yaml.safe_load((LIB / "components" / "enlogic" / "pdu-cord-l6-30p" / "v1" / "contract.yaml").read_text())
     assert contract["name"] == "pdu-cord-l6-30p" and contract["class"] == "inlet"

@@ -49,6 +49,10 @@ provenance:
     drawing - the bank colour is a FIELD (`bank-color`). The drawings name B1 LIGHT GRAY and B2 BLUE.
     The data sheets' face renders, not photographs, read B1 #646867 and B2 #77a6ee, which a device writes.
     The legend ink is a field too (`ink`).
+  skins: >-
+    drawing - the EN2333 draws the recess and rocker toward the right edge and the legends toward the left,
+    the `default` skin. The EN6324 draws its label above its recess, so the legends are toward the right edge.
+    That is the `label-first` skin, which the EN6324 selects. Both are measured to about 1 mm.
   legends: >-
     drawing - the plate prints the bank (B1, B2) large and the lines (L1-L2) small under it. They are the fields
     `bank` and `lines`.
@@ -61,4 +65,4 @@ fields:
   lines: {label: Lines, type: text, default: L1-L2}
 elements:
   rocker: {at: [28.3, 27.65], size: [7.8, 14.7], class: breaker, states: ['on', 'off']}
-skins: [default]
+skins: [default, label-first]
