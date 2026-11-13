@@ -107,6 +107,20 @@ def test_ear_holes_edge_tabs_and_printed_marks_are_gaps(slug):
     assert "rack-face width" in note
     assert "9.5 by 6.35" in note
     assert "nothing could stand outside them" not in note
+    assert "483 mm wide, the width the sheet prints over the ears" in note
+    assert "level 2" in note
+    assert "chassis width disagrees: front.w=483, rear.w=483" in note
+    assert "L43" in note
+    wanted = found["ear-holes-and-tabs"]["wanted"]
+    assert "Question for the maintainer: may the faces be drawn 483 mm wide" in wanted
+    assert "falls from level 4 to level 2" in note
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_lamp_size_is_the_one_measured_figure(slug):
+    rear = device(slug)["provenance"]["rear"]["note"]
+    assert "3.5 by 2.5 mm" in rear
+    assert "4.0 by 2.2" not in rear
 
 
 @pytest.mark.parametrize("slug", MODELS)

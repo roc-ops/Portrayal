@@ -41,7 +41,7 @@ provenance:
       hole, two Ethernet jacks, two USB-A, one USB-B and four more RJ45 jacks. Four round marks sit at the corners of that port block, and one
       dark window below the reset hole. The manual p.19 says the yellow LED of ETH2 has no function, and the window is drawn dark. The two crossed
       screws either side of the inlet sit where the cord retainer''s holes are (quick start I-00827 p.5, figure D). The sheet''s screws read about 7 mm
-      and the library''s head is 3.6 mm. The sheet''s lamps are rectangles about 4.0 by 2.2 mm, so they use the library''s rectangular lamp. The lit green lamp reads #1fde2e (365 pixels of the
+      and the library''s head is 3.6 mm. The sheet''s lamps are rectangles 3.5 by 2.5 mm, so they use the library''s rectangular lamp. The lit green lamp reads #1fde2e (365 pixels of the
       user manual I-00826 p.20 photograph). No held picture shows a lit red lamp.'
   port-legends:
     confidence: estimated
@@ -190,11 +190,15 @@ gaps:
   - rear
   reason: needs-drawing
   note: 'The specification sheet 190174 p.2 shows two obround holes in each ear of its front and of its rear elevation. Each hole is 9.5 by 6.35
-    mm, four in each elevation. It shows two edge tabs in each elevation. The schema line for `chassis.overhang` says: "Such a device draws its
-    front at the rack-face width with the ears drawn". Lint L150 refuses a part past a 441 mm face, and decor there is never seen (L44). The tabs
-    stand past the 44 mm height, which `overhang` does not cover.'
-  wanted: the maintainer's word on two points. First, the front and rear drawn 483 mm wide with the ears, so the holes can be placed. Second, a
-    tab that stands past the 44 mm height.
+    mm, four in each elevation. It shows two edge tabs in each elevation. The holes stand outside the 441 mm face, and decor there is never seen
+    (L44). A part placed there is refused (L150). The schema line for `chassis.overhang` says: "Such a device draws its front at the rack-face
+    width with the ears drawn". A trial drew the front and rear 483 mm wide, the width the sheet prints over the ears. It placed the holes as decor
+    and moved every part 21 mm to the right. Lint passed, with L43 warnings that ask for a part seated within 25 mm of an end. The capability check
+    then gave level 2 for the device: "chassis width disagrees: front.w=483, rear.w=483, top.w=441, bottom.w=441, chassis.width=441". Drawing
+    the holes therefore falls from level 4 to level 2 until a part is seated in each ear. The tabs stand past the 44 mm height, which `overhang`
+    does not cover.'
+  wanted: 'Question for the maintainer: may the faces be drawn 483 mm wide, the sheet''s overall width, so the ear holes can be drawn? A second
+    question: may a tab that stands past the 44 mm height be drawn?'
 - what: printed-marks
   scope:
   - front
