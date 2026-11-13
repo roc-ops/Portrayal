@@ -134,3 +134,13 @@ def test_the_two_outer_foot_holes_are_slots_with_a_tail(cfg):
     for s in slots:
         # the slot runs across the foot: it starts on a horizontal line, not a vertical one
         assert re.match(r"M [\d.]+ [\d.]+ H ", s.strip()), s
+
+
+def test_the_lip_end_tabs_are_a_named_gap_with_a_reason():
+    import yaml
+
+    path = Path(__file__).resolve().parents[2] / "library" / "devices" / "fs" / "fs-pdubk" / "device.yaml"
+    gaps = {g["what"]: g for g in yaml.safe_load(path.read_text())["gaps"]}
+    assert "lip-end-tabs" in gaps
+    assert gaps["lip-end-tabs"]["reason"] == "needs-drawing"
+    assert gaps["lip-end-tabs"]["scope"] == ["left", "right", "top", "bottom"]
