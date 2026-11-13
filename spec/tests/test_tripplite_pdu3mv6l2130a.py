@@ -152,7 +152,7 @@ def test_each_side_draws_the_eight_marks_with_their_circles_and_the_plate_with_i
 def test_the_front_screws_and_holes_carry_the_drawings_inner_rings_and_the_seam_lines_cross_the_face():
     found = stacks("front")
     assert count_stacks(found, [3.95, 2.82]) == 12, "the twelve small holes"
-    assert count_stacks(found, [4.2]) == 4, "four 4.2 holes, each in a hexagon the kit cannot draw (gap hex-rings)"
+    assert count_stacks(found, [4.2]) == 4, "four 4.2 holes, each in a hexagon drawn as silkscreen"
     assert count_stacks(found, [5.5, 4.2]) == 1, "the plain hole at the foot has its ring"
     assert count_stacks(found, [5.5, 3.54]) == 6, "the six middle screws are 5.5 across with a ring"
     assert count_stacks(found, [4.8, 3.67, 2.68]) == 12, "the other twelve screws have two inner rings"
@@ -196,14 +196,34 @@ def test_the_rear_bracket_holes_and_marks_stand_where_the_page_puts_them():
         assert abs(above - below) < 0.3, f"the four holes sit evenly in {plate}: {above:.2f} above, {below:.2f} below"
 
 
+# The front view draws a hexagon round each of the four plain holes, 5.5 mm across its corners and 4.8 across its flats. The
+# kit has no hexagon decor shape, so each is a silkscreen path with a round hole in it. The hole centres are the holes' own.
+HEX_CENTRES = {13: (11.7, 1619.2), 14: (44.4, 1619.2), 15: (12.4, 1734.1), 16: (43.8, 1734.1)}
+
+
 @pytest.mark.heavy
-def test_the_hexagons_round_the_four_plain_holes_are_a_gap_the_kit_cannot_close():
-    gap = gaps()["hex-rings"]
-    assert gap["reason"] == "needs-drawing" and gap["scope"] == ["front"]
-    note = gap["note"]
-    for fact in ("hexagon", "5.5", "4.8", "octagon", "13 to 16"):
-        assert fact in note, fact
-    assert "17.3" in gaps()["side-projections"]["note"], "the removable brackets stand 17.3 mm past the back"
+def test_each_of_the_four_plain_holes_sits_in_a_hexagon_drawn_as_a_silkscreen_path():
+    svg = (DIST / f"{NAME}.front.svg").read_text()
+    found = {}
+    for n in HEX_CENTRES:
+        m = re.search(r'<path d="([^"]+)"[^>]* fill-rule="evenodd"[^>]* transform="translate\(([-\d.]+) ([-\d.]+)\)" id="hex-ring-%d"' % n, svg)
+        assert m, f"hexagon {n} is not drawn"
+        found[n] = m
+    for n, (cx, cy) in HEX_CENTRES.items():
+        d, x, y = found[n].groups()
+        assert abs(float(x) - cx) < 0.06 and abs(float(y) - cy) < 0.06, (n, x, y)
+        corners = [float(v) for v in re.findall(r"[ML]\s*(-?[\d.]+)\s+-?[\d.]+", d)]
+        assert max(corners) - min(corners) == pytest.approx(5.5, abs=0.06), "5.5 across the corners"
+        assert d.count("a2.1") == 2, "a 4.2 round hole in the hexagon"
+    holes = decor("front")
+    for n, (cx, cy) in HEX_CENTRES.items():
+        x, y, w, h = holes[f"hole-{n}"]
+        assert abs(x + w / 2 - cx) < 0.06 and abs(y + h / 2 - cy) < 0.06, f"hole {n} is concentric with its hexagon"
+
+
+@pytest.mark.heavy
+def test_the_removable_brackets_are_named_17_3_mm_past_the_back():
+    assert "17.3" in gaps()["side-projections"]["note"]
 
 
 @pytest.mark.heavy
