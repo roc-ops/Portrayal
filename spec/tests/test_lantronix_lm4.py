@@ -404,7 +404,8 @@ def test_the_dc_opening_and_cells_stand_within_0_3_mm_of_the_figure_and_look_lik
         assert tile["at"][1] < hole["at"][1] and hole["at"][1] + hole["size"][1] < tile["at"][1] + tile["size"][1]
 
 
-# The corner of each tile that the figure cuts, as the tile and the corner: 1 and 4 the lower right, 2 and 3 the lower left.
+# Each tile loses one lower corner in the figure, listed as the tile and the side of that corner.
+# Tiles 1 and 4 lose the lower right, and tiles 2 and 3 lose the lower left.
 DC_CHAMFERS = {"dc-tile-chamfer-1": ("dc-cell-1", "right"), "dc-tile-chamfer-2": ("dc-cell-2", "left"),
                "dc-tile-chamfer-3": ("dc-cell-3", "left"), "dc-tile-chamfer-4": ("dc-cell-4", "right")}
 
