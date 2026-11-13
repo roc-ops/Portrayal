@@ -93,14 +93,18 @@ provenance:
       SX16. It shows one perforated vent panel. The Raritan logo sits at its left end and a model label
       at its right end. A blue mark sits at the right end of the vent. The vent band is about 235 by 40
       pixels and one hole is about 2 pixels across. The holes are too small to count, so one panel is
-      drawn. The logo and label are regions without text. Two end lamps are drawn off, one at each end
-      of the face. The photograph shows one blue mark, near the right end, and none at the left. The blue
-      reads #5a7d82 from the 12 bluest of 360 pixels, so a library blue is used.
+      drawn. The logo mark is about 25 pixels wide there and the label about 30. Both are regions without
+      text. The photograph shows one blue mark, at about 84 percent of the face width, and none at the
+      left. The right lamp is drawn off at that mark. The left lamp is drawn off at the left end as its
+      mirror, and no picture shows it. The blue reads #5a7d82 from the 12 bluest of 360 pixels, so a library
+      blue is used.
   side-walls:
     confidence: estimated
     note: >-
       The right wall is read from the oblique photograph on the quick setup guide's page 1, which shows
-      slotted vents on that wall. One vent panel stands for them. The left wall is built as the documented
+      slotted vents on that wall. The slots run from about 20 to 85 percent of the depth, which is x 58
+      to 247 mm on the right view. Each slot is about 2 pixels tall there. One vent panel is drawn over
+      that span, as the slot rows cannot be counted at that size. The left wall is built as the documented
       side, as no document shows this one. The source is that same photograph of the right wall.
   power:
     confidence: datasheet
@@ -191,8 +195,17 @@ gaps:
   reason: needs-photo
   note: >-
     No held page shows the top or the bottom straight on. The rear photographs show a banded logo area
-    on the lid and two small tabs on its rear edge. None is drawn.
+    on the lid. It is not drawn.
   wanted: Photographs or a drawing of the top and the bottom.
+- what: lid-tabs
+  scope:
+  - rear
+  reason: needs-photo
+  note: >-
+    The data sheet photograph shows three small tabs on the top edge of the rear face. They sit over the
+    modem plate and after the first and second serial groups. Each is about 11 by 2 pixels in the embedded
+    photograph, so none is placed.
+  wanted: A close photograph of the top edge of the rear face.
 groups:
   inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two AC inlets, numbered 1 and
       2 from the left'}
@@ -288,7 +301,7 @@ views:
         - {name: 'on', color: '#2f6fd6'}
       - ref: common/led-dot@1
         id: led-front-right
-        at: [424.0, 20.0]
+        at: [366.0, 30.0]
         for: chassis
         group: front-leds
         rel-pos: 2
@@ -616,12 +629,12 @@ views:
     size: {w: 290, h: 44}
     panel:
       decor:
-      - {id: side-vent, kind: vent, at: [10.0, 12.0], size: [130.0, 20.0], rx: 1.0, fill: '#818181'}
+      - {id: side-vent, kind: vent, at: [43.0, 12.0], size: [189.0, 20.0], rx: 1.0, fill: '#818181'}
   right:
     size: {w: 290, h: 44}
     panel:
       decor:
-      - {id: side-vent, kind: vent, at: [150.0, 12.0], size: [130.0, 20.0], rx: 1.0, fill: '#818181'}
+      - {id: side-vent, kind: vent, at: [58.0, 12.0], size: [189.0, 20.0], rx: 1.0, fill: '#818181'}
 configurations:
   base:
     kind: base
