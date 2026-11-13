@@ -303,7 +303,7 @@ NOT_A_DCIM_PORT = {
     # of parts that export nothing is wrong about one that does.
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "opengear/sim-slot-2ff": "the mini SIM card slot of the ACM7000 cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
-    "opengear/acm7000-dio-header": "the digital I/O header of the ACM7004-2: sensor inputs and relay outputs, not a network, console or power connection, and neither DCIM has a port type for it",
+    "opengear/acm7000-dio-header": "the digital I/O header of the ACM7004-2-L: sensor inputs and relay outputs, not a network, console or power link. Neither DCIM has a port type for it",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
     "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
