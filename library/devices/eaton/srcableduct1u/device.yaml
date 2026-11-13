@@ -28,8 +28,8 @@ provenance:
       TWO SIZES ARE PUBLISHED AND THE MAKER'S OWN WINS. Resellers list 1.77 x 3.9 x 19.13 in;
       the spec sheet states unit dimensions 1.720 x 19.000 x 2.660 in (hwd, 4.37 x 48.26 x
       6.77 cm) and the submittal drawing states 1.72 x 2.67 x 19.00 in (43.7 x 67.7 x 482.6
-      mm). The drawing dimensions each of them on a view: 43.69 high over the ears, 482.60
-      long, 67.71 out. The reseller's figures match no view and are not used. The drawing's
+      mm). The drawing dimensions each of them on a view: the plate 43.69 high, the ears 41.26
+      high, 482.60 long, 67.71 out. The reseller's figures match no view and are not used. The drawing's
       title row labels its three figures H x W x D while giving them in the order height,
       depth, width; the views settle which is which. The spec sheet's 2.660 in is the
       drawing's 2.67 in (67.71 mm) to the printing.
@@ -37,9 +37,9 @@ provenance:
     confidence: drawing
     note: >-
       drawing - `rack-face`: the part bolts to the rail face at one rack unit through the slots
-      in its ears and stands out of it (front view, ears 465 mm [18.31 in] between hole
-      centres; top view, 62.71 mm [2.47 in] from the front of the cover to the plane of the
-      ears). The back plate stands 5.0 mm behind that plane, inside the rack's opening. `depth`
+      in its ears and stands out of it. The front view shows the ears 465 mm [18.31 in] between
+      hole centres and 41.26 mm high. The top view shows 62.71 mm [2.47 in] from the front of
+      the cover to the plane of the ears. The back plate stands 5.0 mm behind that plane, inside the rack's opening. `depth`
       is the maker's overall 67.71, which counts those 5.0 mm, so the part stands 62.71 in front
       of the rail face and the library's depth is 5.0 more than that.
   ears:
@@ -47,9 +47,11 @@ provenance:
     note: >-
       drawing - a rack-face part is its ears and what hangs off them, so the face is the 482.60
       mm over the ears and the ears are the 25.4 at each end of the back plate (the duct
-      between them is dimensioned 431.80 mm [17.00 in]). Each has two slots: 8.8 mm in from the
-      end (465 mm between hole centres) and 32 mm [1.26 in] apart across the 43.69. The slot
-      size, 12 x 6 mm, is read off the picture at 2.41 px/mm (estimated).
+      between them is dimensioned 431.80 mm [17.00 in]). The ears are 41.26 mm high. The plate
+      is 43.69 high and shows as a strip 1.25 mm deep above and below them. The strip runs from
+      29.8 mm to 452.8 mm (read at 7.97 px/mm, good to 0.5 mm). Each ear has two slots: 8.8 mm
+      in from the end (465 mm between hole centres) and 32 mm [1.26 in] apart across the 41.26.
+      The slot size, 12 x 6 mm, is read off the picture at 2.41 px/mm (estimated).
   method:
     confidence: drawing
     note: >-
@@ -101,15 +103,17 @@ provenance:
       small ring at the end of each slot nearer the cover, 24 a wall; its purpose is not stated.
       It is drawn as a 3.5 mm ring, estimated from the isometric (about 0.45 of the slot's
       width, read at 300 dpi). It is centred on each slot and set 1.75 mm in from the slot's cover end.
-      The isometric also shows round studs inside the channel, seen through the slots near the rear
-      end. They are foreshortened, so their count (between five and nine) and their places along
-      the length cannot be read from the picture. One stud is drawn on each end view, from the side view.
+      The isometric also shows round studs inside the channel, seen through the slots. Their
+      count is 8 to 10 and the `inner-studs` gap gives the numbers. One stud is drawn on each
+      end view, from the side view.
   top:
     confidence: drawing
     note: >-
-      drawing - the top view, rear at y=0: the back 5.0 mm behind the plane of the ears, the
-      wall, and the cover's lip over the front 9.8 mm (23 px at 2.344 px/mm; the front 62.71
-      to the plane is dimensioned). The 24 slots run from 9.8 mm behind the front edge, under
+      drawing - the top view, rear at y=0. It shows the back 5.0 mm behind the plane of the ears.
+      That is drawn as the drawing's rounded tab, 424.8 mm long and 3.5 mm in from each end of
+      the cover. It was read at 3.97 px/mm from the printed 431.80, with the corner radius of 2
+      mm estimated. It shows the wall. It shows the cover's lip over the front 9.8 mm (23 px at
+      2.344 px/mm; the front 62.71 to the plane is dimensioned). The 24 slots run from 9.8 mm behind the front edge, under
       the cover's edge, for the dimensioned 49.78, ending 3.1 mm before the plane. The bottom
       is the same as the top.
   left:
@@ -131,7 +135,9 @@ provenance:
   rear:
     confidence: drawing
     note: >-
-      drawing - the back view. It shows the plate 482.6 long with its ears, and five bosses 100 mm
+      drawing - the back view. It shows the plate 482.6 long with its ears. The ears are 41.26
+      high. The 43.69 plate shows as a strip 1.1 to 1.3 mm deep above and below them. The strip
+      runs from 29.8 mm to 452.8 mm (read at 7.97 px/mm, as on the front). It shows five bosses 100 mm
       apart (400 over the five, dimensioned) centred on the duct. It shows four larger round
       dimples between them. They stand at 50 mm either side of the centre and of the middle boss.
       The 300 mm dimension runs slot centre to slot centre of the outer two. Each has a slot set 5.0 mm to the
@@ -210,6 +216,17 @@ gaps:
       boss; no document says what they are for. All are drawn at estimated sizes and no
       pass-through is declared.
     wanted: the owner's manual or a dimensioned back view
+  - what: inner-studs
+    scope: [left, right]
+    reason: needs-drawing
+    note: >-
+      the page-1 isometric shows round studs inside the channel through the top wall's slots.
+      The drawing is vector, so it was rendered at 1200 dpi. Counted twice, 8 to 10 studs show,
+      each 40 to 110 px across (about 5.6 mm at 15.6 px/mm along a slot). They sit in slots 1,
+      3, 6, 10, 12, 14, 15, 17 and 23 from the open end, so the pitch is irregular. One oblique
+      view gives no depth, so how far across or down each stud stands cannot be read. The schema's
+      reasons have no value for a picture too foreshortened to place a feature.
+    wanted: an orthographic view into the channel, or a dimensioned section along it
 groups:
   body:
     term: Duct
@@ -241,7 +258,8 @@ views:
     size: {w: 482.6, h: 43.69}
     panel:
       decor:
-        - {id: plate-back, at: [0, 0], size: [482.6, 43.69], rx: 3, fill: '#3a3d41', kind: base}
+        - {id: strip-back, at: [29.8, 0], size: [423.0, 43.69], fill: '#3a3d41', kind: base}
+        - {id: plate-back, at: [0, 1.215], size: [482.6, 41.26], rx: 3, fill: '#3a3d41', kind: base}
         - {id: ear-slot-1, at: [2.8, 2.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
         - {id: ear-slot-2, at: [2.8, 34.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
         - {id: ear-slot-3, at: [467.8, 2.845], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
@@ -288,7 +306,7 @@ views:
     size: {w: 482.6, h: 67.71}
     panel:
       decor:
-        - {id: back, at: [25.4, 0], size: [431.8, 5.0], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: back, at: [28.9, 0], size: [424.8, 5.0], rx: 2, fill: '#3f4348', sink: 0.05, kind: base}
         - {id: ear-plane, at: [0, 4.4], size: [482.6, 0.6], fill: '#1d1f22', kind: fold}
         - {id: wall, at: [25.4, 5.0], size: [431.8, 52.91], fill: '#565b61', kind: finger-wall}
         - {id: slot-1, at: [30.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}
@@ -346,7 +364,7 @@ views:
     size: {w: 482.6, h: 67.71}
     panel:
       decor:
-        - {id: back, at: [25.4, 0], size: [431.8, 5.0], fill: '#3f4348', sink: 0.05, kind: base}
+        - {id: back, at: [28.9, 0], size: [424.8, 5.0], rx: 2, fill: '#3f4348', sink: 0.05, kind: base}
         - {id: ear-plane, at: [0, 4.4], size: [482.6, 0.6], fill: '#1d1f22', kind: fold}
         - {id: wall, at: [25.4, 5.0], size: [431.8, 52.91], fill: '#565b61', kind: finger-wall}
         - {id: slot-1, at: [30.3, 8.13], size: [8, 49.78], rx: 4, fill: '#0a0b0c', kind: finger-gap}

@@ -108,3 +108,38 @@ def test_the_notes_no_longer_leave_a_drawn_feature_as_a_gap():
     assert "not drawn" not in gaps["rear-features"]["note"] and "no clip" not in gaps["cover-fitting"]["note"]
     assert "twenty" in doc["provenance"]["rear"]["note"]
     assert "It is built as the documented side" in doc["provenance"]["left"]["note"]
+
+
+def test_the_front_and_rear_draw_the_ears_41_26_high_with_the_plate_strip_behind():
+    """The drawing prints the ears 41.26 high and the plate 43.69; a thin plate strip shows above and below."""
+    base = PARTS / "tripplite-duct-1u-base" / "v1"
+    skin = (base / "skins" / "default.svg").read_text()
+    assert re.search(r'id="strip"[^>]*\bx="29.8"[^>]*\by="0"[^>]*width="423"[^>]*height="43.69"', skin), "the strip, full plate height"
+    assert "M3,1.215" in skin and "V39.475" in skin and "42.475" in skin, "the ears' 41.26 centred in the 43.69"
+    contract = yaml.safe_load((base / "contract.yaml").read_text())
+    assert "41.26" in contract["provenance"]["size"]
+    rear = decor("rear")
+    assert rear["plate-back"]["at"][1] == 1.215 and rear["plate-back"]["size"] == [482.6, 41.26]
+    assert rear["strip-back"]["at"] == [29.8, 0] and rear["strip-back"]["size"] == [423.0, 43.69]
+    text = device()["provenance"]
+    for key in ("size-conflict", "ears", "mount"):
+        note = " ".join(text[key]["note"].split())
+        assert "43.69 high over the ears" not in note and "apart across the 43.69" not in note, key
+    assert "41.26" in " ".join(text["ears"]["note"].split())
+
+
+def test_the_isometric_studs_are_a_gap_with_their_count_and_widths():
+    """The studs cannot be placed from one oblique view, so a gap carries the count range and the pixel widths."""
+    gaps = {g["what"]: g for g in device()["gaps"]}
+    gap = gaps["inner-studs"]
+    assert gap["reason"] == "needs-drawing" and gap["scope"] == ["left", "right"]
+    note = " ".join(gap["note"].split())
+    assert "8 to 10" in note and "1200 dpi" in note and "px" in note
+    assert "cannot be read" not in " ".join(device()["provenance"]["guides"]["note"].split())
+
+
+def test_the_top_views_rear_strip_is_the_inset_rounded_tab_the_drawing_shows():
+    """The drawing's top view insets the rear strip 3.5 mm from each cover end and rounds its corners."""
+    for view in ("top", "bottom"):
+        back = decor(view)["back"]
+        assert back["at"] == [28.9, 0] and back["size"] == [424.8, 5.0] and back["rx"] == 2, view
