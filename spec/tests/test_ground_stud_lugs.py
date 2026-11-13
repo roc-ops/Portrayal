@@ -143,7 +143,8 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # 31 -> 30 on 22 -> 21 devices.
 CENSUS = {
     "common/ground-lug@1": (30, 21),
-    "common/ground-screw@1": (35, 25),   # (31, 21), the four Moxa CN2600 16-port terminal servers' ground screw; (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
+    # (31, 21) -> (35, 25) with the four Moxa CN2600 16-port terminal servers' ground screw
+    "common/ground-screw@1": (35, 25),   # (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     "common/ground-stud@1": (14, 14),
     CASA: (1, 1),
 }
