@@ -123,3 +123,23 @@ def test_the_phase_meter_states_three_rows_of_three_characters():
 
 def test_colours_no_photograph_shows_are_declared_a_gap():
     assert "colours" in {g["what"] for g in device()["gaps"]}
+
+
+@pytest.fixture(scope="module")
+def exported(tmp_path_factory):
+    """The device exported from the build, as publish.sh does it, without pictures."""
+    from portrayal.artifacts import Dist
+    out = tmp_path_factory.mktemp("dcim")
+    dx.export_device(Dist(str(ROOT / "library" / "dist")), "pdu3mv6l2130a", out, None)
+    return out
+
+
+@pytest.mark.heavy
+@pytest.mark.parametrize("tree", dx.TARGETS)
+def test_the_export_has_one_l21_30p_port_and_45_outlets_fed_by_it(exported, tree):
+    doc = yaml.safe_load((exported / tree / "device-types" / "Eaton" / "PDU3MV6L2130A.yaml").read_text())
+    assert [(p["name"], p["type"]) for p in doc["power-ports"]] == [("input", "nema-l21-30p")]
+    outs = doc["power-outlets"]
+    assert len(outs) == 45 and {o["power_port"] for o in outs} == {"input"}
+    types = [o["type"] for o in outs]
+    assert types.count("iec-60320-c13") == 36 and types.count("iec-60320-c19") == 9
