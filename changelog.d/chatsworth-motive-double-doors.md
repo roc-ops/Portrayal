@@ -21,8 +21,9 @@
   The new rear door makes the lock ask for the major.
   The `door-features` gap of each device is replaced by a `door-hook` gap.
   No held picture shows the hook on the inside of the front door.
-- Six more gaps on each device name what its own frame part draws in a following change.
-  They are the end caps, feet, hinge tabs, side plate holes, track rungs and centre plate.
+- Six more gaps on each device name what a following change draws.
+  The device's own frame part draws the end caps, feet, side plate holes, track rungs and centre plate.
+  The rear door draws its hinge tabs, central rib and two cross bars, and its contract says so.
 - This closes no row of the cable-manager list.
 
 ### Added

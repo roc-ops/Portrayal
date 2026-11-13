@@ -132,6 +132,8 @@ def test_the_rear_door_is_its_own_plain_part(part):
     shapes = skin_shapes(part, rear=True)
     assert {"plate"} | TIP_IDS <= set(shapes)
     assert not FEATURE_IDS & set(shapes), "the rear door is plain"
+    back = doc["provenance"]["door-back"]
+    assert "central rib" in back and "two cross bars" in back and "four hinge tabs" in back
     assert contract(part, rear=False)["name"] != doc["name"]
 
 
@@ -189,8 +191,12 @@ def test_the_gaps_keep_the_hook_and_the_frame_features_each_with_its_own_frame_p
     assert "No held picture shows the hook" in gaps["door-hook"]["note"]
     assert FRAME_GAPS <= set(gaps)
     assert all(g["reason"] == "vendor-silent" for g in gaps.values())
-    for name in FRAME_GAPS:
+    for name in FRAME_GAPS - {"door-hinge-tabs"}:
         assert "this device's own frame part, which a following change draws" in gaps[name]["note"]
+    tabs = gaps["door-hinge-tabs"]
+    assert tabs["scope"] == ["rear"], "the rib, bars and tabs are on the rear door's back"
+    assert "the rear door's own part, which a following change draws" in tabs["note"]
+    assert "two feet at its front corners" in gaps["feet"]["note"]
 
 
 @pytest.mark.parametrize("part", PARTS)
@@ -221,6 +227,9 @@ def test_the_12_in_notes_state_the_rows_of_the_seam_and_the_plate_and_the_widths
     for text in ("#e8e2de", "(232,226,222)", "#4d4f52", "(77,79,82)", "#5d5d5d", "later touch"):
         assert text in notes["logo-zone"], text
     assert "row 280" in notes["seams"] and "row 450" in notes["seams"] and "8 mm" in notes["seams"]
+    assert "two blue handles" in notes["latches"] and "rows 331 to 337" in notes["latches"]
+    assert "Each unseen edge is built as the edge shown" in notes["latches"]
+    assert "columns 231 to 233" in notes["seams"] and "step down at column 234" in notes["seams"]
     assert "rows 482 to 487" in notes["latches"] and "1009.5" in notes["latches"] and "stand-in" in notes["latches"]
 
 
