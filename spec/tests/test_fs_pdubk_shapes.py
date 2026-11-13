@@ -160,7 +160,9 @@ def test_the_lip_end_tabs_are_a_named_gap_with_a_reason():
         "chassis depth disagrees",
         "left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135",
         "an inconsistent box must not reach solid",
-        "a version beyond 1.0.0",
+        "asked for a major version beyond 1.0.0 for the depth and view change alone",
+        "and no id was lost",
+        "gives 140",
     ):
         assert words in note, words
     assert "the guide prints it" not in note
