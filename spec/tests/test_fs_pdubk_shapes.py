@@ -1,7 +1,7 @@
 """The shapes of the FS-PDUBK bracket that its product page's photographs show (#939).
 
-The photographs show more than the keyholes and the square holes. The far end of the plate turns back
-into a lip. Three gussets join the plate to the foot. Two slots run across the foot, each with a small
+The photographs show more than the keyholes and the square holes. Each long edge of the plate turns
+back into a lip. Three gussets join the plate to the foot. Two slots run across the foot, each with a small
 tail toward the plate. The foot's free corners are rounded. The bracket is drawn 30 across the foot and
 5 more for the lip, so 35 across the rack's face. Every figure is an estimate read off the photographs.
 The tests state what is drawn and where, to the accuracy the reading gives. They read the BUILT drawing
@@ -36,27 +36,27 @@ def test_the_four_end_views_are_35_across_for_the_lip(cfg, name):
 @pytest.mark.heavy
 @pytest.mark.parametrize("cfg", CONFIGS)
 @pytest.mark.parametrize("name", ["front", "rear"])
-def test_the_lip_is_a_5_mm_strip_in_the_end_views(cfg, name):
+def test_the_two_lips_are_5_by_2_bars_in_the_end_views(cfg, name):
     svg = view(cfg, name)
-    m = re.search(r'<rect id="lip"[^>]* x="([\d.]+)" y="0" width="([\d.]+)" height="88.4"', svg)
-    assert m, f"no lip strip in the {cfg} {name} view"
-    assert float(m.group(2)) == 5.0
-    # the lip is on the side away from the foot: the right of the front view, the left of the rear view
-    assert float(m.group(1)) == (30.0 if name == "front" else 0.0)
+    # the lips are on the side away from the foot: the right of the front view, the left of the rear view
+    x = 30.0 if name == "front" else 0.0
+    for lip, y in (("lip-top", 0.0), ("lip-bottom", 86.4)):
+        m = re.search(rf'<rect id="{lip}"[^>]* x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg)
+        assert m, f"no {lip} bar in the {cfg} {name} view"
+        assert tuple(float(v) for v in m.groups()) == (x, y, 5.0, 2.0)
 
 
 @pytest.mark.heavy
 @pytest.mark.parametrize("cfg", CONFIGS)
 @pytest.mark.parametrize("name", ["top", "bottom"])
-def test_the_lip_stands_at_the_far_end_of_the_plate_in_plan(cfg, name):
+def test_a_lip_runs_the_whole_length_of_the_plate_in_plan(cfg, name):
     svg = view(cfg, name)
-    ids = re.findall(r'<g id="(lip-(?:front|rear))"[^>]*transform="translate\(([\d.]+),([\d.]+)\)"', svg)
+    ids = re.findall(r'<g id="lip"[^>]*transform="translate\(([\d.]+),([\d.]+)\)"', svg)
     assert len(ids) == 1, f"one lip in the {cfg} {name} view, found {ids}"
-    # the foot is at the top of the plan in option 1 (front) and at the bottom in option 2 (rear)
-    far = 133.0 if cfg == "front" else 0.0
-    assert float(ids[0][2]) == far
-    # and the lip is on the side away from the foot: the right in the top view, the left in the bottom view
-    assert float(ids[0][1]) == (30.0 if name == "top" else 0.0)
+    # the lip is on the side away from the foot: the right in the top view, the left in the bottom view
+    assert (float(ids[0][0]), float(ids[0][1])) == ((30.0 if name == "top" else 0.0), 0.0)
+    m = re.search(r'<rect id="lip--lip"[^>]* width="([\d.]+)" height="([\d.]+)"', svg)
+    assert m and (float(m.group(1)), float(m.group(2))) == (5.0, 135.0)
 
 
 @pytest.mark.heavy
@@ -106,12 +106,14 @@ def test_three_gussets_stand_on_the_plate_at_the_foots_end(cfg):
 
 @pytest.mark.heavy
 @pytest.mark.parametrize("cfg", CONFIGS)
-def test_the_far_side_of_the_plate_shows_the_end_of_the_lip(cfg):
+def test_the_far_side_of_the_plate_shows_both_lips_along_its_edges(cfg):
     svg = view(cfg, "right")
-    m = re.search(r'<rect id="plate-face-(?:front|rear)--lip"[^>]* x="([\d.]+)" y="0" width="2" height="88.4"', svg)
-    assert m
-    # seen from the other side the foot swaps ends, so the lip is at the left in option 1 and the right in option 2
-    assert (float(m.group(1)) < 10) == (cfg == "front")
+    for lip, y in (("lip-top", 0.0), ("lip-bottom", 86.4)):
+        m = re.search(rf'<rect id="plate-face-(?:front|rear)--{lip}"[^>]* x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg)
+        assert m, f"no {lip} along the edge in the {cfg} right view"
+        assert tuple(float(v) for v in m.groups()) == (0.0, y, 135.0, 2.0)
+    # the near side, the foot's own, shows neither: they lie behind the plate
+    assert "--lip" not in view(cfg, "left")
 
 
 @pytest.mark.heavy

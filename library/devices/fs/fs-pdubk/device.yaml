@@ -11,7 +11,7 @@ description: >-
   Vertical PDU mounting brackets, FS SKU #78523, two to a pack. Each is a short black SPCC steel bracket
   that bolts to a rack post and holds a zero-U PDU beside it. A foot 30 mm across lies against the post
   and is bolted through four holes. A plate 135 mm deep and 88.4 mm high stands out from it. Three gussets
-  join it to the foot, and its far end turns back into a short lip. The plate has
+  join it to the foot, and each long edge turns back into a short lip. The plate has
   three keyhole slots, which take the mounting buttons of a toolless PDU, and two rows of four square
   holes. The guide shows two ways to fit it, on the front of the post or on its rear side.
 profile: passive
@@ -43,8 +43,8 @@ provenance:
     note: >-
       drawing - 135 and 88.4 are the dimensions of the product page's render of the plate (5.3 in [135 mm]
       and 3.5 in [88.4 mm]). The product page's specification gives 30 x 135 x 88.4 mm (H x W x D as FS prints
-      it); the 30 is the foot's reach from the plate and no view dimensions it. The far end of the plate turns
-      back into a lip. The lip stands about 5 clear of the plate on the side away from the foot. So the part is
+      it); the 30 is the foot's reach from the plate and no view dimensions it. Each long edge of the plate turns
+      back into a lip. The lips stand about 5 clear of the plate on the side away from the foot. So the part is
       30 plus 5, 35, across the rack's face, 88.4 high and 135 deep. THE 5 AND THE 35 ARE ESTIMATED, and
       FS does not say whether its 30 counts the lip. It was settled from two perspective photographs of the
       product page. The plate's known 135 by 88.4 gave each camera, and heights above the plate followed from it.
@@ -82,12 +82,14 @@ provenance:
   lip:
     confidence: estimated
     note: >-
-      estimated - the far end of the plate turns back into a lip, away from the side the foot is on.
-      The lip is about 5 mm clear of the plate. The hook at the end of the dimensioned render is about 3.8 mm. The two perspective
-      photographs give 4.6 to 5.1 below the plate's underside. It runs the plate's whole 88.4. It is drawn in the
-      front and the rear view as a strip beside the plate's edge. In the top and the bottom view it is a strip
-      at the plate's far end (fs/fs-pdubk-lip-plan@1). It is end-on in the view of the plate from the side
-      away from the foot.
+      estimated - each long edge of the plate turns back into a lip, away from the side the foot is on.
+      Each lip is about 5 mm clear of the plate and runs the plate's whole 135. The hook at the end of the
+      dimensioned render is about 3.8 mm. The two perspective photographs give 4.6 to 5.1 below the plate's
+      underside. In the front and the rear view each lip is a bar beside the plate's edge. One is at the top
+      and one at the bottom of the 88.4. The top and the bottom view show the upper and the lower lip as a strip
+      along the plate (fs/fs-pdubk-lip-plan@1). The view from the side away from the foot shows both as bars
+      along the plate's top and bottom edges. The foot's side shows neither, as they lie behind the plate.
+      The far short end of the plate is a plain edge in every photograph.
   gussets:
     confidence: estimated
     note: >-
@@ -176,7 +178,8 @@ views:
     size: {w: 35.0, h: 88.4}
     panel:
       decor:
-      - {id: lip, at: [30.0, 0.0], size: [5.0, 88.4], fill: '#2a2d31', kind: lip}
+      - {id: lip-top, at: [30.0, 0.0], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
+      - {id: lip-bottom, at: [30.0, 86.4], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
     components:
       placements:
       - {ref: fs/fs-pdubk-flange@1, id: foot-front, at: [0.0, 0.0], group: foot, rel-pos: 1, only-in: [front]}
@@ -186,7 +189,8 @@ views:
     size: {w: 35.0, h: 88.4}
     panel:
       decor:
-      - {id: lip, at: [0.0, 0.0], size: [5.0, 88.4], fill: '#2a2d31', kind: lip}
+      - {id: lip-top, at: [0.0, 0.0], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
+      - {id: lip-bottom, at: [0.0, 86.4], size: [5.0, 2.0], fill: '#2a2d31', kind: lip}
     components:
       placements:
       - {ref: fs/fs-pdubk-flange@1, id: foot-rear, at: [5.0, 0.0], mirror: true, group: foot, rel-pos: 1, only-in: [rear]}
@@ -203,8 +207,7 @@ views:
       - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [0.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
       - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-front, at: [13.0, 2.0], skin: foot-first, group: foot, rel-pos: 2, only-in: [front]}
       - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-rear, at: [13.0, 127.0], skin: foot-last, group: foot, rel-pos: 2, only-in: [rear]}
-      - {ref: fs/fs-pdubk-lip-plan@1, id: lip-front, at: [30.0, 133.0], group: plate, rel-pos: 3, only-in: [front]}
-      - {ref: fs/fs-pdubk-lip-plan@1, id: lip-rear, at: [30.0, 0.0], group: plate, rel-pos: 3, only-in: [rear]}
+      - {ref: fs/fs-pdubk-lip-plan@1, id: lip, at: [30.0, 0.0], group: plate, rel-pos: 3}
   bottom:
     size: {w: 35.0, h: 135.0}
     panel:
@@ -216,8 +219,7 @@ views:
       - {ref: fs/fs-pdubk-flange-edge@1, id: foot-edge-rear, at: [5.0, 133.0], group: foot, rel-pos: 1, only-in: [rear]}
       - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-front, at: [7.0, 2.0], mirror: true, skin: foot-first, group: foot, rel-pos: 2, only-in: [front]}
       - {ref: fs/fs-pdubk-gusset-plan@1, id: gusset-rear, at: [7.0, 127.0], mirror: true, skin: foot-last, group: foot, rel-pos: 2, only-in: [rear]}
-      - {ref: fs/fs-pdubk-lip-plan@1, id: lip-front, at: [0.0, 133.0], group: plate, rel-pos: 3, only-in: [front]}
-      - {ref: fs/fs-pdubk-lip-plan@1, id: lip-rear, at: [0.0, 0.0], group: plate, rel-pos: 3, only-in: [rear]}
+      - {ref: fs/fs-pdubk-lip-plan@1, id: lip, at: [0.0, 0.0], group: plate, rel-pos: 3}
   left:
     size: {w: 135.0, h: 88.4}
     components:
