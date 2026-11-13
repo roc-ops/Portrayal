@@ -133,12 +133,33 @@ provenance:
       The controller plate steps in by 0.6 mm on each side over the last 23.0 mm of each end. An inner rim line runs
       1.4 mm inside each end section. Both are read from a 1800 dpi render of page 18. The foot end is drawn by the
       device and the head end by the controller part.
+  head-cap-ribs:
+    confidence: drawing
+    note: >-
+      The head cap in the front view of page 16 has two full-width lines, at 10.05 and 16.4 mm from the head end. Each is
+      a pair of lines 0.2 mm apart and is drawn as one 0.35 mm line. They were read from the page's vector paths and from
+      a 1800 dpi render. The photographs are too small to count them.
+  c19-frames:
+    confidence: drawing
+    note: >-
+      Each C19 of the front view of page 16 sits in two rounded frames. The outer one is 42.1 along the strip and 34.11
+      across, with R1.5 corners, and is drawn here. The inner one is 34.7 by 26.7 with R4.5 corners, 3.65 mm inside it.
+      It is the mouth that std/c19-outlet@1 draws at 35.6 by 27.7, so it is not drawn twice. The two C19s of a pair are 42.5 mm
+      apart in the drawing, so each stands at its frame's centre. The outer frames were read from the page's vector paths
+      and from a 1800 dpi render.
+  plate-sections:
+    confidence: drawing
+    note: >-
+      The controller plate in the front view of page 16 has five full-height section lines. They are at 74.0, 104.0, 131.0,
+      142.7 and 160.0 mm from the head end of the plate. They were read from the vector paths and from a 1800 dpi render.
+      The first is in rittal/pdu-controller@1 and the other four are drawn here. The plate stands 1.0 mm nearer the head
+      than the drawing's plate, and the lines keep their spacing from it.
   usb-port:
     confidence: photo-measured
     note: >-
       The data sheet (dri1308088en, p.1) calls the port "USB 2.0 port (USB-A)", so it is std/usb-a@1 in its
       white-tongue skin. Fig. 21 item 15 and photograph 78_2802 show a silver-white shell and no trident. The shell
-      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port.
+      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port, as the device's own decor. No shared part draws a USB-A metal shell, and the white-tongue part is reused for the tongue.
   plan-circles:
     confidence: estimated
     note: >-
@@ -256,6 +277,8 @@ views:
     panel:
       decor:
       - {id: head-cap, at: [0, 0], size: [44, 26.84], fill: '#1d1d1f', kind: end-cap}
+      - {id: cap-rib-1, at: [0, 9.88], size: [44, 0.35], fill: '#55585c', kind: cap-rib, confidence: drawing, source: 'page 16 front view, a full-width line 10.05 mm from the head end, read twice'}
+      - {id: cap-rib-2, at: [0, 16.23], size: [44, 0.35], fill: '#55585c', kind: cap-rib, confidence: drawing, source: 'page 16 front view, a full-width line 16.4 mm from the head end, read twice'}
       - {id: plate-l3, at: [0, 26.84], size: [44, 323.31], fill: '#1d1d1f', kind: phase-plate}
       - {id: frame-l3-1, at: [1.75, 28.59], size: [40.5, 86.81], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
       - {id: frame-l3-2, at: [1.75, 118.9], size: [40.5, 229.5], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
@@ -270,7 +293,17 @@ views:
       - {id: blank-1, at: [0, 1274.42], size: [44, 23.73], fill: '#1b1b1d', kind: spacer}
       - {id: cord-cell, at: [0, 1298.15], size: [44, 123.75], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 1421.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: c19-frame-1, at: [4.94, 28.1], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'page 16 front view, the outer frame of a C19, read twice'}
+      - {id: c19-frame-2, at: [4.94, 70.6], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
+      - {id: c19-frame-3, at: [4.94, 603.2], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
+      - {id: c19-frame-4, at: [4.94, 645.68], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
+      - {id: c19-frame-5, at: [4.94, 952.48], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
+      - {id: c19-frame-6, at: [4.94, 994.98], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'as c19-frame-1'}
       - {id: plate-lower, at: [2.57, 478.93], size: [39.1, 93.05], fill: '#3c3d40', kind: controller-plate}
+      - {id: section-2, at: [2.57, 482.755], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'page 16 front view, a full-height line 104.0 mm from the plate head end, read twice'}
+      - {id: section-3, at: [2.57, 509.755], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 131.0 mm'}
+      - {id: section-4, at: [2.57, 521.455], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 142.7 mm'}
+      - {id: section-5, at: [2.57, 538.755], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 160.0 mm'}
       - {id: notch-foot-1, at: [2.57, 548.98], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
       - {id: notch-foot-2, at: [41.07, 548.98], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
       - {id: rim-foot-a, at: [4.145, 547.68], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'page 18 front view, the inner line at the foot end, 1800 dpi'}
@@ -300,7 +333,7 @@ views:
         - {id: outlet-6, ref: std/c13-outlet@1, at: [6.8, 1101.8], group: outlets-l1, rel-pos: 6, fed-by: input, lines: [L1, N]}
         - {id: outlet-7, ref: std/c13-outlet@1, at: [6.8, 1073.44], group: outlets-l1, rel-pos: 7, fed-by: input, lines: [L1, N]}
         - {id: outlet-8, ref: std/c13-outlet@1, at: [6.8, 1045.1], group: outlets-l1, rel-pos: 8, fed-by: input, lines: [L1, N]}
-        - {id: outlet-9, ref: std/c19-outlet@1, at: [4.2, 1004.92], rotate: 90, group: outlets-l1, rel-pos: 9, fed-by: input, lines: [L1, N]}
+        - {id: outlet-9, ref: std/c19-outlet@1, at: [4.2, 1002.18], rotate: 90, group: outlets-l1, rel-pos: 9, fed-by: input, lines: [L1, N]}
         - {id: outlet-10, ref: std/c19-outlet@1, at: [4.2, 959.63], rotate: 90, group: outlets-l1, rel-pos: 10, fed-by: input, lines: [L1, N]}
         - {id: outlet-11, ref: std/c13-outlet@1, at: [6.8, 894.16], group: outlets-l2, rel-pos: 1, fed-by: input, lines: [L2, N]}
         - {id: outlet-12, ref: std/c13-outlet@1, at: [6.8, 865.81], group: outlets-l2, rel-pos: 2, fed-by: input, lines: [L2, N]}
@@ -310,7 +343,7 @@ views:
         - {id: outlet-16, ref: std/c13-outlet@1, at: [6.8, 752.41], group: outlets-l2, rel-pos: 6, fed-by: input, lines: [L2, N]}
         - {id: outlet-17, ref: std/c13-outlet@1, at: [6.8, 724.06], group: outlets-l2, rel-pos: 7, fed-by: input, lines: [L2, N]}
         - {id: outlet-18, ref: std/c13-outlet@1, at: [6.8, 695.71], group: outlets-l2, rel-pos: 8, fed-by: input, lines: [L2, N]}
-        - {id: outlet-19, ref: std/c19-outlet@1, at: [4.2, 655.81], rotate: 90, group: outlets-l2, rel-pos: 9, fed-by: input, lines: [L2, N]}
+        - {id: outlet-19, ref: std/c19-outlet@1, at: [4.2, 652.88], rotate: 90, group: outlets-l2, rel-pos: 9, fed-by: input, lines: [L2, N]}
         - {id: outlet-20, ref: std/c19-outlet@1, at: [4.2, 610.52], rotate: 90, group: outlets-l2, rel-pos: 10, fed-by: input, lines: [L2, N]}
         - {id: outlet-21, ref: std/c13-outlet@1, at: [6.8, 319.28], group: outlets-l3, rel-pos: 1, fed-by: input, lines: [L3, N]}
         - {id: outlet-22, ref: std/c13-outlet@1, at: [6.8, 290.93], group: outlets-l3, rel-pos: 2, fed-by: input, lines: [L3, N]}
@@ -320,7 +353,7 @@ views:
         - {id: outlet-26, ref: std/c13-outlet@1, at: [6.8, 177.53], group: outlets-l3, rel-pos: 6, fed-by: input, lines: [L3, N]}
         - {id: outlet-27, ref: std/c13-outlet@1, at: [6.8, 149.17], group: outlets-l3, rel-pos: 7, fed-by: input, lines: [L3, N]}
         - {id: outlet-28, ref: std/c13-outlet@1, at: [6.8, 120.83], group: outlets-l3, rel-pos: 8, fed-by: input, lines: [L3, N]}
-        - {id: outlet-29, ref: std/c19-outlet@1, at: [4.2, 80.91], rotate: 90, group: outlets-l3, rel-pos: 9, fed-by: input, lines: [L3, N]}
+        - {id: outlet-29, ref: std/c19-outlet@1, at: [4.2, 77.8], rotate: 90, group: outlets-l3, rel-pos: 9, fed-by: input, lines: [L3, N]}
         - {id: outlet-30, ref: std/c19-outlet@1, at: [4.2, 35.63], rotate: 90, group: outlets-l3, rel-pos: 10, fed-by: input, lines: [L3, N]}
         - {id: cover-plate, ref: rittal/pdu-cover-plate@1, at: [2.1, 1306.35], group: cover, rel-pos: 1}
         - {id: controller, ref: rittal/pdu-controller@1, at: [2.57, 378.93], group: control, rel-pos: 1}

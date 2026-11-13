@@ -115,12 +115,31 @@ provenance:
       The controller plate steps in by 0.6 mm on each side over the last 23.0 mm of each end. An inner rim line runs
       1.4 mm inside each end section. Both are read from a 1800 dpi render of page 18. The foot end is drawn by the
       device and the head end by the controller part.
+  head-cap-ribs:
+    confidence: drawing
+    note: >-
+      The head cap in the front view of page 3 has one full-width line, 10.1 mm from the head end. It is a pair of
+      lines 0.2 mm apart and is drawn as one 0.35 mm line. It was read from the page's vector paths and from a 1800 dpi
+      render. The photographs are too small to count it.
+  c19-frames:
+    confidence: drawing
+    note: >-
+      The C19 of the front view of page 3 sits in two rounded frames. The outer one is 42.1 along the strip and 34.11
+      across, with R1.5 corners, and is drawn here. The inner one is 34.7 by 26.7 with R4.5 corners, 3.65 mm inside it.
+      It is the mouth that std/c19-outlet@1 draws at 35.6 by 27.7, so it is not drawn twice. The outer frame was read from
+      the page's vector paths and from a 1800 dpi render.
+  plate-sections:
+    confidence: drawing
+    note: >-
+      The controller plate in the front view of page 3 has five full-height section lines. They are at 74.0, 104.0, 131.0,
+      142.7 and 160.0 mm from the head end of the plate. They were read from the vector paths and from a 1800 dpi render.
+      The first is in rittal/pdu-controller@1 and the other four are drawn here.
   usb-port:
     confidence: photo-measured
     note: >-
       The data sheet (dri1308088en, p.1) calls the port "USB 2.0 port (USB-A)", so it is std/usb-a@1 in its
       white-tongue skin. Fig. 21 item 15 and photograph 78_2802 show a silver-white shell and no trident. The shell
-      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port.
+      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port, as the device's own decor. No shared part draws a USB-A metal shell, and the white-tongue part is reused for the tongue.
   plan-circles:
     confidence: estimated
     note: >-
@@ -233,6 +252,7 @@ views:
     panel:
       decor:
       - {id: head-cap, at: [0, 0], size: [44, 18.58], fill: '#1d1d1f', kind: end-cap}
+      - {id: cap-rib-1, at: [0, 9.93], size: [44, 0.35], fill: '#55585c', kind: cap-rib, confidence: drawing, source: 'page 3 front view, a full-width line 10.1 mm from the head end, read twice'}
       - {id: spacer-1, at: [0, 18.58], size: [44, 24.01], fill: '#1b1b1d', kind: spacer}
       - {id: controller-cell, at: [0, 42.59], size: [44, 200.02], fill: '#1d1d1f', kind: controller-cell}
       - {id: plate-c19, at: [0, 242.61], size: [44, 45.42], fill: '#1d1d1f', kind: phase-plate}
@@ -240,7 +260,12 @@ views:
       - {id: plate-c13-a, at: [0, 468.7], size: [44, 180.41], fill: '#1d1d1f', kind: phase-plate}
       - {id: cord-cell, at: [0, 649.11], size: [44, 123.79], fill: '#1b1b1d', kind: spacer}
       - {id: foot-cap, at: [0, 772.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: c19-frame-1, at: [4.94, 244.37], size: [34.11, 42.1], rx: 1.5, stroke: '#55585c', stroke-width: 0.3, kind: c19-flange, confidence: drawing, source: 'page 3 front view, the outer frame of the C19, read twice'}
       - {id: plate-lower, at: [2.57, 145.61], size: [39.1, 93.05], fill: '#3c3d40', kind: controller-plate}
+      - {id: section-2, at: [2.57, 149.435], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'page 3 front view, a full-height line 104.0 mm from the plate head end, read twice'}
+      - {id: section-3, at: [2.57, 176.435], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 131.0 mm'}
+      - {id: section-4, at: [2.57, 188.135], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 142.7 mm'}
+      - {id: section-5, at: [2.57, 205.435], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 160.0 mm'}
       - {id: notch-foot-1, at: [2.57, 215.66], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
       - {id: notch-foot-2, at: [41.07, 215.66], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
       - {id: rim-foot-a, at: [4.145, 214.36], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'page 18 front view, the inner line at the foot end, 1800 dpi'}

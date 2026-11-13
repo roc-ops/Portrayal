@@ -5,7 +5,7 @@ interface named in spec/schemas/connectors.yaml is a SLOT. Both are answered by
 `render.slot_entry` and published in the same `cages` list, told apart by `kind`.
 
 These run against the real library and a components.json built here by the
-indexer the build runs, never a fixture and never a possibly stale dist.
+indexer the build runs. They never use a fixture or a possibly stale dist.
 """
 import json
 import re
@@ -511,13 +511,13 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
     published once - as the wrapper's own placement, in its composer's frame.
 
     ON A COMPOSER BUILT HERE, because the library has no composer of the
-    wrapper: the FHD cassette rears that composed common/mpo-adapter@1 moved
-    to the flanged bulkhead on main (#497, #499), which presents `mpo` itself
-    (common/mpo-flange-adapter@2) rather than forwarding a std/mpo, and
-    mpo-adapter (@2 since the aperture was corrected) is `unplaced`. So the
-    forwarding is exercised on the real wrapper contract, and every mpo slot
-    the library does publish - one per bulkhead on each cassette back - is
-    held to the same shape."""
+    wrapper. The FHD cassette rears that composed common/mpo-adapter@1 moved
+    to the flanged bulkhead on main (#497, #499). That bulkhead presents `mpo`
+    itself (common/mpo-flange-adapter@2) rather than forwarding a std/mpo.
+    And mpo-adapter (@2 since the aperture was corrected) is `unplaced`. So the
+    forwarding is exercised on the real wrapper contract. Every mpo slot the
+    library does publish is held to the same shape, one per bulkhead on each
+    cassette back."""
     lib = render_mod.Library([str(LIB)])
     composer = {"size": {"w": 80.0, "h": 30.0},
                 "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@2",
@@ -535,8 +535,8 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
 
 def test_a_part_presenting_its_own_interface_keeps_its_composed_slots():
     """P2 is about FORWARDING only. A contract that declares its own
-    interface and point forwards nothing (manifest.presented_interface), so a
-    composed aperture of it is still its own slot - the shape a duplex LC
+    interface and point forwards nothing (manifest.presented_interface). So a
+    composed aperture of it is still its own slot. It is the shape a duplex LC
     adapter presenting `lc-duplex` over its two `lc` bores takes."""
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()

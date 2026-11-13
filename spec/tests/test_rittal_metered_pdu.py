@@ -187,6 +187,81 @@ def test_the_controller_plate_steps_in_at_each_end_and_has_a_rim_there(sku):
     assert "rim-foot" not in decor, "a closed box would draw a line across the plate that the drawing does not"
 
 
+# sku -> the ribs inside the head cap, mm from the head end (drawing's vector paths and a 1800 dpi render, read twice)
+RIBS = {
+    "210": [10.1],
+    "230": [10.0],
+    "235": [9.95],
+    "236": [10.05, 16.4],
+    "238": [9.95, 17.2, 27.25],
+    "240": [10.05, 17.25],
+    "242": [10.1],
+}
+# sku -> where each C19's outer frame starts, mm from the head end (it is 42.1 long, 34.11 across, R1.5)
+FRAMES = {
+    "210": [244.37],
+    "230": [17.51, 63.0, 108.51, 354.01, 399.5, 445.0, 490.49, 536.0, 581.49],
+    "235": [21.63, 447.72, 673.81],
+    "236": [28.1, 70.6, 603.2, 645.68, 952.48, 994.98],
+    "238": [39.26, 81.75, 129.85, 172.35, 689.84, 732.34, 780.44, 822.95, 1096.04, 1138.54, 1186.64, 1229.14],
+    "240": [29.34, 71.84, 769.93, 812.43, 1221.62, 1264.12],
+    "242": [],
+}
+# the controller plate's five section lines, mm from the plate's head end; the first is in the part's skin
+SECTIONS = [74.0, 104.0, 131.0, 142.7, 160.0]
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_head_cap_carries_the_ribs_the_drawing_shows(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    cap = next(d for d in decor if d["id"] == "head-cap")
+    ribs = sorted((d for d in decor if d.get("kind") == "cap-rib"), key=lambda d: d["at"][1])
+    assert len(ribs) == len(RIBS[sku])
+    for rib, want in zip(ribs, RIBS[sku]):
+        assert rib["size"] == [44, 0.35] and rib["at"][0] == 0 and rib["fill"] == "#55585c"
+        assert abs(rib["at"][1] + 0.175 - want) < 0.1
+        assert rib["at"][1] + 0.35 < cap["size"][1], "a rib stands inside the head cap"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_each_c19_sits_in_the_outer_frame_the_drawing_shows(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    frames = sorted((d for d in decor if d.get("kind") == "c19-flange"), key=lambda d: d["at"][1])
+    assert len(frames) == len(FRAMES[sku]) == DEVICES[sku][2]
+    for frame, want in zip(frames, FRAMES[sku]):
+        assert abs(frame["at"][1] - want) < 0.05
+        assert frame["at"][0] == 4.94 and frame["size"] == [34.11, 42.1] and frame["rx"] == 1.5
+        assert frame["stroke"] == "#55585c" and frame["stroke-width"] == 0.3 and "fill" not in frame
+        assert frame["confidence"] == ("estimated" if (sku, want) == ("235", 673.81) else "drawing")
+    outlets = sorted((p for p in _placements(sku) if p["ref"] == C19), key=lambda p: p["at"][1])
+    for frame, outlet in zip(frames, outlets):
+        assert abs((frame["at"][1] + 21.05) - (outlet["at"][1] + 13.85)) < 1.0, "the frame is round its outlet"
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_controller_plate_carries_its_five_section_lines(sku):
+    decor = _device(sku)["views"]["front"]["panel"]["decor"]
+    head = next(p for p in _placements(sku) if p["id"] == "controller")["at"][1]
+    lines = sorted((d for d in decor if d.get("kind") == "plate-section"), key=lambda d: d["at"][1])
+    assert len(lines) == 4
+    for line, want in zip(lines, SECTIONS[1:]):
+        assert line["size"] == [39.1, 0.35] and line["at"][0] == 2.57 and line["fill"] == "#26272a"
+        assert abs(line["at"][1] + 0.175 - (head + want)) < 0.05
+    skin = (LIB / "components" / "rittal" / "pdu-controller" / "v1" / "skins" / "default.svg").read_text()
+    assert '<rect id="section-1" x="0" y="73.825" width="39.1" height="0.35" fill="#26272a"/>' in skin
+
+
+@pytest.mark.parametrize("sku", SKUS)
+def test_the_notes_say_the_ribs_frames_and_section_lines_are_drawn(sku):
+    notes = {k: v["note"] for k, v in _device(sku)["provenance"].items() if "note" in v}
+    assert "full-width" in notes["head-cap-ribs"] and "1800 dpi" in notes["head-cap-ribs"]
+    assert "five full-height section lines" in notes["plate-sections"]
+    assert "No shared part draws a USB-A metal shell" in notes["usb-port"]
+    assert ("c19-frames" in notes) == bool(DEVICES[sku][2])
+    if DEVICES[sku][2]:
+        assert "outer" in notes["c19-frames"] and "R1.5" in notes["c19-frames"]
+
+
 @pytest.mark.parametrize("sku", SKUS)
 def test_the_notes_name_their_sources_and_say_what_is_estimated(sku):
     device = _device(sku)
