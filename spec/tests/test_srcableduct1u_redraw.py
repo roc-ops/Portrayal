@@ -107,4 +107,4 @@ def test_the_notes_no_longer_leave_a_drawn_feature_as_a_gap():
     gaps = {g["what"]: g for g in doc["gaps"]}
     assert "not drawn" not in gaps["rear-features"]["note"] and "no clip" not in gaps["cover-fitting"]["note"]
     assert "twenty" in doc["provenance"]["rear"]["note"]
-    assert "as no document shows it" in doc["provenance"]["left"]["note"]
+    assert "It is built as the documented side" in doc["provenance"]["left"]["note"]
