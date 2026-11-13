@@ -73,7 +73,9 @@ provenance:
   sides: {confidence: drawing, note: 'drawing - the top view gives the right face. It has 31 round heads: 27 screw heads
       6.6 to 6.9 across and 4 rings 12.1 across at the dimensioned button places. The bottom view gives the left face, 32
       of them. Positions are mm along from the cord end and from the front. The block at the cord end is 74.5 deep and the
-      strip 52.5, the module standing 9.7 proud of the strip. These are drawn as step voids. The right view prints no head.'}
+      strip 52.5, the module standing 9.7 proud of the strip. These are drawn as step voids. The right view looks at the far
+      end. It prints one round head 6.6 across on the width''s centre line, 6.0 from the rear edge. It is drawn on the bottom
+      face, with the rear edge as its top. The view also prints a flat tab, which the `cord-end-tab` gap names.'}
   dcim: {confidence: datasheet, note: 'the input is one NEMA L6-30P power port from the cord part and each outlet a power
       outlet it feeds: `iec-60320-c13` for the C13 and `iec-60320-c19` for the C19. Each outlet runs `through` its bank''s
       breaker. No feed_leg is written: a single-phase 208 V feed has no neutral.'}
@@ -146,6 +148,14 @@ gaps:
   note: the render shows the display lit with metering digits inside a blue border. The data sheet says the colour border
     is user programmable. The display is drawn dark.
   wanted: none.
+- what: cord-end-tab
+  scope: [left, right, bottom]
+  reason: needs-drawing
+  note: 'the drawing prints two small flat tabs, 18.4 mm wide and 4.0 mm proud of the rear edge, one near each end: 31 to
+    50 mm and 1587 to 1606 mm from the cord end. The top and bottom views draw both, and the right view draws one end-on.
+    The front view draws none. They stand outside every face''s rectangle, and the schema says ''L150 refuses a part outside
+    its view that the side''s figure does not cover''. So they are not placed.'
+  wanted: the maker's word on what they are.
 - what: ends
   scope: [top, bottom, left, right]
   reason: needs-photo
@@ -1573,8 +1583,14 @@ views:
         description: the fixed 3 m cord with a NEMA L6-30P plug, leaving the cord end of the strip through a cable gland
   bottom:
     size: {w: 52, h: 75}
-    empty: the bottom view of the drawing (TA-EN2333A) draws this end as a plain outline, 52.0 by 75.0, and no photograph
-      looks at it.
+    panel:
+      decor:
+      - id: screw-1
+        at: [22.69, 2.69]
+        size: [6.62, 6.62]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
   left:
     size: {w: 75, h: 1750}
     panel:

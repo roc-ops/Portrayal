@@ -2,7 +2,7 @@
 
 What is true of the library: each device places the outlets its data sheet counts and its breakers.
 It states one fixed input cord and sits on two toolless buttons. It says what no document gives.
-Reads the contracts and the device sources; none reads `library/dist`.
+Reads the contracts and the device sources; only the plate test reads `library/dist`, and it is heavy.
 """
 from collections import Counter
 from pathlib import Path
@@ -99,6 +99,90 @@ def test_the_en6324_plates_use_the_label_first_skin():
     skins = _device("en6324")["configurations"]["base"]["skins"]
     assert skins == {"en2333-breaker-20a-2p": "label-first"}
     assert "skins" not in _device("en2333")["configurations"]["base"]
+
+
+def test_the_en6324_feeds_each_outlet_from_the_breaker_of_its_span():
+    through = {p["id"]: p["through"] for p in _placements("en6324", "front") if p["id"].startswith("outlet-")}
+    assert through == {f"outlet-{n}": "breaker-b1" if n <= 12 else "breaker-b2" for n in range(1, 25)}
+
+
+def test_the_en6324_export_gives_the_same_feed():
+    export = yaml.safe_load((LIB / "exports" / "netbox" / "device-types" / "Enlogic" / "EN6324.yaml").read_text())
+    feeds = {o["name"]: o["description"].split(",")[0] for o in export["power-outlets"]}
+    assert feeds == {f"outlet-{n}": "Through breaker-b1" if n <= 12 else "Through breaker-b2" for n in range(1, 25)}
+
+
+# Centres of the four rings on each side: mm along from the cord end, and mm from the front on the right face.
+# The left face measures the same depth from the rear, so its x is the face's depth less that.
+RINGS = {
+    "en6324": dict(depth=53.0, front=32.0, size=8.2, along=(40.51, 64.52, 1596.41, 1620.42)),
+    "en2333": dict(depth=75.0, front=54.03, size=12.09, along=(40.53, 64.54, 1596.42, 1620.43)),
+}
+
+
+def _rings(slug, view):
+    return [d for d in _device(slug)["views"][view]["panel"]["decor"] if d["kind"] == "button-location"]
+
+
+@pytest.mark.parametrize("view", ["left", "right"])
+@pytest.mark.parametrize("slug", RINGS)
+def test_each_side_draws_the_four_button_location_rings(slug, view):
+    want = RINGS[slug]
+    rings = _rings(slug, view)
+    assert len(rings) == 4
+    centres = sorted((d["at"][0] + d["size"][0] / 2, d["at"][1] + d["size"][1] / 2) for d in rings)
+    x = want["front"] if view == "right" else want["depth"] - want["front"]
+    assert [c[0] for c in centres] == pytest.approx([x] * 4, abs=0.05)
+    assert sorted(c[1] for c in centres) == pytest.approx(want["along"], abs=0.05)
+    assert all(d["size"] == [want["size"], want["size"]] for d in rings)
+
+
+# The end-on view of the drawing prints one round head. Its centre is across the width and mm from the rear edge.
+HEADS = {"en6324": (26.0, 6.3, 53.0), "en2333": (26.0, 6.0, 75.0)}
+
+
+@pytest.mark.parametrize("slug", HEADS)
+def test_the_far_end_draws_the_one_round_head_of_the_end_view(slug):
+    across, from_rear, depth = HEADS[slug]
+    bottom = _device(slug)["views"]["bottom"]
+    assert bottom["size"] == {"w": 52, "h": depth} and "empty" not in bottom
+    heads = bottom["panel"]["decor"]
+    assert len(heads) == 1 and heads[0]["kind"] == "screw-head" and heads[0]["size"] == [6.62, 6.62]
+    assert heads[0]["at"][0] + 3.31 == pytest.approx(across, abs=0.05)
+    assert heads[0]["at"][1] + 3.31 == pytest.approx(from_rear, abs=0.05)
+
+
+@pytest.mark.parametrize("slug", HEADS)
+def test_the_notes_no_longer_say_the_right_view_prints_no_head(slug):
+    text = yaml.safe_dump(_device(slug)["provenance"]) + yaml.safe_dump(_device(slug)["gaps"])
+    assert "prints no head" not in text and "draws this end as a plain outline" not in text
+
+
+@pytest.mark.parametrize("slug", HEADS)
+def test_the_flat_tab_outside_the_faces_is_a_gap_that_quotes_the_schema(slug):
+    gaps = {g["what"]: g for g in _device(slug)["gaps"]}
+    assert "cord-end-tab" in gaps
+    gap = gaps["cord-end-tab"]
+    assert gap["reason"] == "needs-drawing" and "bottom" in gap["scope"]
+    assert "L150 refuses a part outside its view" in gap["note"] and "one near each end" in gap["note"]
+
+
+# The part's own plate-local rocker x: the label comes first on the EN6324, so its rocker is at the other edge.
+ROCKER_X = {"en2333": 28.3, "en6324": 8.9}
+
+
+@pytest.mark.heavy
+@pytest.mark.parametrize("slug", ROCKER_X)
+def test_the_built_plates_put_the_rocker_where_the_skin_does(slug):
+    import json
+    path = LIB / "dist" / f"{slug}.front.elements.json"
+    assert path.is_file(), f"no {path.name}: run ./build.sh first"
+    boxes = {e["id"]: e["box"] for e in json.loads(path.read_text())["elements"] if e.get("class") == "breaker"}
+    assert {"breaker-b1", "breaker-b2", "breaker-b1--rocker", "breaker-b2--rocker"} <= set(boxes)
+    for bank in ("b1", "b2"):
+        plate, rocker = boxes[f"breaker-{bank}"], boxes[f"breaker-{bank}--rocker"]
+        assert rocker["x"] - plate["x"] == pytest.approx(ROCKER_X[slug], abs=0.01)
+        assert rocker["y"] - plate["y"] == pytest.approx(27.65, abs=0.01)
 
 
 def test_the_l6_30p_cord_says_where_its_figures_come_from():
