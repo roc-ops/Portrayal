@@ -39,6 +39,12 @@ def outlets():
     return [found[f"outlet-{n}"] for n in range(1, 46)]
 
 
+def gaps():
+    """The device's gaps as the build carries them: what -> the gap."""
+    source = json.loads((DIST / f"{NAME}.source.json").read_text())
+    return {g["what"]: g for g in source["gaps"]}
+
+
 def decor(face):
     """The decor rectangles of a built face: id -> (x, y, w, h)."""
     svg = (DIST / f"{NAME}.{face}.svg").read_text()
@@ -146,7 +152,7 @@ def test_each_side_draws_the_eight_marks_with_their_circles_and_the_plate_with_i
 def test_the_front_screws_and_holes_carry_the_drawings_inner_rings_and_the_seam_lines_cross_the_face():
     found = stacks("front")
     assert count_stacks(found, [3.95, 2.82]) == 12, "the twelve small holes"
-    assert count_stacks(found, [4.2]) == 4, "four plain holes"
+    assert count_stacks(found, [4.2]) == 4, "four 4.2 holes, each in a hexagon the kit cannot draw (gap hex-rings)"
     assert count_stacks(found, [5.5, 4.2]) == 1, "the plain hole at the foot has its ring"
     assert count_stacks(found, [5.5, 3.54]) == 6, "the six middle screws are 5.5 across with a ring"
     assert count_stacks(found, [4.8, 3.67, 2.68]) == 12, "the other twelve screws have two inner rings"
@@ -166,6 +172,38 @@ def test_the_rear_marks_and_holes_carry_their_rings_and_the_bracket_plates_run_t
         assert abs(x - 2.55) < 0.06 and abs(x + w - 56.0) < 0.06 and abs(y - top) < 0.06 and abs(h - 47.0) < 0.06, (n, x, y, w, h)
         tx, ty, tw, th = shapes[f"bracket-tab-{n}"]
         assert abs(tx) < 0.06 and abs(tw - 1.7) < 0.06 and abs(th - 42.2) < 0.06 and abs(ty - tab) < 0.06, (n, tx, ty, tw, th)
+
+
+# The rear view's bracket holes and its two round marks, read from the vector page against the bracket plates already built.
+# A hole stands 2.27 mm below its plate's top edge on the page, and the four holes stand 12.7 mm apart. The marks are measured
+# from the lower plate's top edge, 576.38 pt on the page. The rear view's scale is 3.10697 mm per point, from its own end lines.
+REAR_HOLE_TOPS = [282.95, 295.65, 308.35, 321.05, 1527.65, 1540.35, 1553.05, 1565.75]
+REAR_MARK_TOPS = [1390.4, 1747.35]
+
+
+@pytest.mark.heavy
+def test_the_rear_bracket_holes_and_marks_stand_where_the_page_puts_them():
+    shapes = decor("rear")
+    holes = [shapes[f"bracket-hole-{n}"][1] for n in range(1, 9)]
+    assert all(abs(a - b) < 0.06 for a, b in zip(holes, REAR_HOLE_TOPS)), holes
+    marks = [shapes[f"rear-mark-{n}"][1] for n in (1, 2)]
+    assert all(abs(a - b) < 0.06 for a, b in zip(marks, REAR_MARK_TOPS)), marks
+    for n, plate in ((1, "bracket-plate-1"), (5, "bracket-plate-2")):
+        top, height = shapes[plate][1], shapes[plate][3]
+        inside = [shapes[f"bracket-hole-{k}"] for k in range(n, n + 4)]
+        above = inside[0][1] - top
+        below = top + height - (inside[-1][1] + inside[-1][3])
+        assert abs(above - below) < 0.3, f"the four holes sit evenly in {plate}: {above:.2f} above, {below:.2f} below"
+
+
+@pytest.mark.heavy
+def test_the_hexagons_round_the_four_plain_holes_are_a_gap_the_kit_cannot_close():
+    gap = gaps()["hex-rings"]
+    assert gap["reason"] == "needs-drawing" and gap["scope"] == ["front"]
+    note = gap["note"]
+    for fact in ("hexagon", "5.5", "4.8", "octagon", "13 to 16"):
+        assert fact in note, fact
+    assert "17.3" in gaps()["side-projections"]["note"], "the removable brackets stand 17.3 mm past the back"
 
 
 @pytest.mark.heavy
