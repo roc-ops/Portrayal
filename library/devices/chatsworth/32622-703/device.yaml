@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 32622-703
-version: 3.0.0
+version: 3.0.1
 maturity: modelled
 manufacturer: Chatsworth Products
 model: '32622-703'
@@ -128,6 +128,21 @@ provenance:
       estimated - the left view mirrored: the manager is the same on both sides. The rear end is on
       the right in this view. The rear latch and the rear guides stand there, and the front ones stand
       at the left.
+  frame:
+    confidence: estimated
+    note: >-
+      estimated - the data sheet (page 1) photograph of the double-sided manager shows two caps on its
+      top and two feet on a base plate. The page 3 render shows four caps, four feet and a flat
+      plate between the two channels. No page gives a size. Down the manager a figure is photograph
+      rows times 2.624 mm per pixel, the nominal height over the door's 813 rows. Across the door a
+      figure is columns times 2.679 mm per pixel, the 12 in reading of the photograph, drawn on every
+      width. A cap is 75 wide and 21 tall, a foot 60 wide and 10 tall, the base plate 8 thick. Each
+      depth is half the part's width, a stand-in. The render also shows two rails along the depth
+      and a cross tube at the front of the top. A rail is 30 wide and the tube 38 deep, read from
+      the render at about 4.4 mm per pixel. The centre plate is the centre section, 198 deep,
+      from the render. Each hole is 8 across, read from 2 render pixels. The photograph's side holes
+      are placed along the depth at about 10.3 mm per pixel. The front and rear doors paint over the
+      fittings, so those faces show none.
   guides:
     confidence: estimated
     note: >-
@@ -247,22 +262,6 @@ gaps:
       in text only. The installation figure (page 3) shows a hinge lug and the rear door's latches, not a
       hook. No held picture shows the hook, so it is not drawn.
     wanted: a photograph of the inside of the front door
-  - what: end-caps
-    scope: [front, rear, top]
-    reason: vendor-silent
-    note: >-
-      the page 1 photograph shows two dark rounded caps on the top of the manager and the page 3 render
-      shows four. No held page gives their size. They belong to this device's own frame part, which a
-      following change draws, so they are not drawn here.
-    wanted: a dimensioned view of the top of the frame
-  - what: feet
-    scope: [front, rear, bottom]
-    reason: vendor-silent
-    note: >-
-      the page 1 photograph shows dark feet and a base plate with small holes at the bottom of the manager.
-      The page 3 render shows two feet at its front corners, and its rear pair is out of view. No held page gives their size. They belong to this device's own
-      frame part, which a following change draws, so they are not drawn here.
-    wanted: a dimensioned view of the bottom of the frame
   - what: door-hinge-tabs
     scope: [rear]
     reason: vendor-silent
@@ -271,30 +270,22 @@ gaps:
       also shows a central rib and two cross bars. It gives no size. They belong to the rear door's own
       part, which a following change draws, so they are not drawn here.
     wanted: a dimensioned view of the door's back
-  - what: side-plate-holes
-    scope: [left, right]
+  - what: end-fittings-front
+    scope: [front, rear]
     reason: vendor-silent
     note: >-
-      the page 3 render shows holes on the side plate, some near the top and some near the bottom. The page
-      1 photograph shows dots on the side plate. No held page gives their size or place. They belong to this
-      device's own frame part, which a following change draws, so they are not drawn here.
-    wanted: a dimensioned view of the side plate
+      the end caps, feet and base plate show above and below the door in the data sheet's page 1
+      photograph. Each door plate is drawn to the full nominal height over the frame. It hides the
+      fittings in the front and rear elevations. No held page gives the overall height with them.
+    wanted: a dimensioned elevation with the caps and the feet
   - what: track-rungs
-    scope: [left, right]
+    scope: [front, rear]
     reason: vendor-silent
     note: >-
-      the page 1 photograph and the page 3 render show a row of rungs down the central track. No held page
-      gives their pitch or size. They belong to this device's own frame part, which a following change
-      draws, so they are not drawn here.
+      the page 1 photograph and the page 3 render show a row of rungs down the central track, seen
+      through the open channel. Each door plate is drawn over the frame and hides the track in the
+      front and rear elevations, so the rungs are not drawn. No held page gives their pitch or size.
     wanted: a dimensioned view of the central track
-  - what: centre-plate
-    scope: [left, right]
-    reason: vendor-silent
-    note: >-
-      the page 3 render shows a flat plate between the two channels. The page 6 mid panel kit is sold apart,
-      so the library draws the centre open. The pages disagree. They belong to this device's own frame part,
-      which a following change draws, so they are not drawn here.
-    wanted: a drawing of the manager as shipped, seen from the side
   - what: door-bevel
     scope: [top, bottom, left, right]
     reason: vendor-silent
@@ -562,6 +553,13 @@ views:
         - {id: front-head-right, at: [230, 583], size: [20, 14], fill: '#2a2c2e', kind: finger}
         - {id: rear-door, at: [0, 0], size: [250, 3], fill: '#2f3134', kind: cover}
         - {id: front-door, at: [0, 597], size: [250, 3], fill: '#2f3134', kind: cover}
+        - {id: top-rail-left, at: [0, 40.5], size: [30, 519], fill: '#2f3134', kind: rail, confidence: estimated}
+        - {id: top-rail-right, at: [220, 40.5], size: [30, 519], fill: '#2f3134', kind: rail, confidence: estimated}
+        - {id: cross-tube-front, at: [0, 559], size: [250, 38], fill: '#2f3134', kind: cross-tube, confidence: estimated}
+        - {id: end-cap-rear-left, at: [0, 3], size: [75, 37.5], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-rear-right, at: [175, 3], size: [75, 37.5], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-front-left, at: [0, 559.5], size: [75, 37.5], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-front-right, at: [175, 559.5], size: [75, 37.5], fill: '#2f3134', kind: end-cap, confidence: estimated}
   bottom:
     size: {w: 250, h: 600}
     panel:
@@ -579,6 +577,17 @@ views:
         - {id: front-head-right, at: [230, 583], size: [20, 14], fill: '#2a2c2e', kind: finger}
         - {id: rear-door, at: [0, 0], size: [250, 3], fill: '#2f3134', kind: cover}
         - {id: front-door, at: [0, 597], size: [250, 3], fill: '#2f3134', kind: cover}
+        - {id: base-rim, at: [0, 0], size: [250, 600], stroke: '#4a4d50', stroke-width: 2, kind: base-plate, confidence: estimated}
+        - {id: base-rail-left, at: [0, 33], size: [30, 519], fill: '#2f3134', kind: rail, confidence: estimated}
+        - {id: base-rail-right, at: [220, 33], size: [30, 519], fill: '#2f3134', kind: rail, confidence: estimated}
+        - {id: foot-rear-left, at: [0, 3], size: [60, 30], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-rear-right, at: [190, 3], size: [60, 30], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-front-left, at: [0, 567], size: [60, 30], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-front-right, at: [190, 567], size: [60, 30], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: base-plate-hole-1, at: [8, 39], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: base-plate-hole-2, at: [8, 99], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: base-plate-hole-3, at: [8, 144], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: base-plate-hole-4, at: [8, 284], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
   left:
     size: {w: 600, h: 2133.6}
     panel:
@@ -781,6 +790,27 @@ views:
         - {id: front-head-48, at: [583, 2096.38], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: rear-door, at: [0, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
         - {id: front-door, at: [597, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
+        - {id: end-cap-rear, at: [3, 0], size: [37.5, 21], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-front, at: [559.5, 0], size: [37.5, 21], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: base-rim, at: [0, 2125.6], size: [600, 8], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: foot-rear, at: [3, 2123.6], size: [30, 10], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-front, at: [567, 2123.6], size: [30, 10], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: centre-plate, at: [201, 21], size: [198, 2104.6], fill: '#2b2d30', kind: centre-plate, confidence: estimated}
+        - {id: centre-plate-hole-top-1, at: [228.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-2, at: [273.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-3, at: [318.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-4, at: [363.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-1, at: [228.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-2, at: [273.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-3, at: [318.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-4, at: [363.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-slot-1, at: [230, 2008.6], size: [20, 8], fill: '#141214', kind: slot, confidence: estimated}
+        - {id: centre-plate-slot-2, at: [275, 2008.6], size: [20, 8], fill: '#141214', kind: slot, confidence: estimated}
+        - {id: side-plate-hole-1, at: [16, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-hole-2, at: [78, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-hole-3, at: [120, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-dot-1, at: [79.5, 1007.5], size: [5, 5], fill: '#141214', rx: 2.5, kind: hole, confidence: estimated}
+        - {id: side-plate-dot-2, at: [141.5, 1007.5], size: [5, 5], fill: '#141214', rx: 2.5, kind: hole, confidence: estimated}
   right:
     size: {w: 600, h: 2133.6}
     panel:
@@ -983,6 +1013,27 @@ views:
         - {id: front-head-48, at: [3, 2096.38], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: rear-door, at: [597, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
         - {id: front-door, at: [0, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
+        - {id: end-cap-rear, at: [559.5, 0], size: [37.5, 21], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-front, at: [3, 0], size: [37.5, 21], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: base-rim, at: [0, 2125.6], size: [600, 8], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: foot-rear, at: [567, 2123.6], size: [30, 10], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-front, at: [3, 2123.6], size: [30, 10], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: centre-plate, at: [201, 21], size: [198, 2104.6], fill: '#2b2d30', kind: centre-plate, confidence: estimated}
+        - {id: centre-plate-hole-top-1, at: [228.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-2, at: [273.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-3, at: [318.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-top-4, at: [363.5, 46], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-1, at: [228.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-2, at: [273.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-3, at: [318.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-hole-bottom-4, at: [363.5, 2069.6], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: centre-plate-slot-1, at: [230, 2008.6], size: [20, 8], fill: '#141214', kind: slot, confidence: estimated}
+        - {id: centre-plate-slot-2, at: [275, 2008.6], size: [20, 8], fill: '#141214', kind: slot, confidence: estimated}
+        - {id: side-plate-hole-1, at: [576, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-hole-2, at: [514, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-hole-3, at: [472, 96], size: [8, 8], fill: '#141214', rx: 4, kind: hole, confidence: estimated}
+        - {id: side-plate-dot-1, at: [515.5, 1007.5], size: [5, 5], fill: '#141214', rx: 2.5, kind: hole, confidence: estimated}
+        - {id: side-plate-dot-2, at: [453.5, 1007.5], size: [5, 5], fill: '#141214', rx: 2.5, kind: hole, confidence: estimated}
 configurations:
   base:
     kind: base

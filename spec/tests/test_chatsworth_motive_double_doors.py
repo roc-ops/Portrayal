@@ -26,7 +26,7 @@ FEATURE_PARTS = [p for p in PARTS if p[4] == "3"]
 OTHER_PARTS = [p for p in PARTS if p[4] != "3"]
 FEATURE_IDS = {"seam-left", "seam-right", "door-plate", "logo-zone"}
 TIP_IDS = {"latch-tip-left", "latch-tip-right"}
-FRAME_GAPS = {"end-caps", "feet", "door-hinge-tabs", "side-plate-holes", "track-rungs", "centre-plate"}
+FRAME_GAPS = {"door-hinge-tabs", "end-fittings-front", "track-rungs"}
 SENTENCE_LIMIT = 25
 
 
@@ -191,12 +191,12 @@ def test_the_gaps_keep_the_hook_and_the_frame_features_each_with_its_own_frame_p
     assert "No held picture shows the hook" in gaps["door-hook"]["note"]
     assert FRAME_GAPS <= set(gaps)
     assert all(g["reason"] == "vendor-silent" for g in gaps.values())
-    for name in FRAME_GAPS - {"door-hinge-tabs"}:
-        assert "this device's own frame part, which a following change draws" in gaps[name]["note"]
+    for name in ("end-caps", "feet", "side-plate-holes", "centre-plate"):
+        assert name not in gaps, "the frame fittings are drawn now"
     tabs = gaps["door-hinge-tabs"]
     assert tabs["scope"] == ["rear"], "the rib, bars and tabs are on the rear door's back"
     assert "the rear door's own part, which a following change draws" in tabs["note"]
-    assert "two feet at its front corners" in gaps["feet"]["note"]
+    assert gaps["end-fittings-front"]["scope"] == ["front", "rear"]
 
 
 @pytest.mark.parametrize("part", PARTS)
