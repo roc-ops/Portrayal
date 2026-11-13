@@ -47,11 +47,11 @@ provenance:
   rear:
     confidence: estimated
     note: >-
-      estimated - the outlet face, read off the datasheet's p.6 photograph, mm from the face's left and top:
-      the inlet's centre at 17, eight outlets centred from 55 on a 36.1 pitch, numbered 1 to 8 under their mouths as
-      printed, the display's window from 333 to 355 across and 10 to 27 down, the round button centred at 376, two
-      jacks centred at 397 with the logo right of them, five small lamps and a Reset hole (see `lamps`). Every
-      figure is an estimate.
+      estimated - the outlet face, read off the datasheet's p.6 photograph, mm from the face's left and top.
+      The inlet's centre is at 17. Eight outlets are centred from 55 on a 36.1 pitch, numbered 1 to 8 under their
+      mouths as printed. The display's window runs from 333 to 355 across and 10 to 27 down. The round button is
+      centred at 376 and the two jacks at 397, with the logo right of them. It also has five small lamps and a Reset
+      hole (see `lamps`). Every figure is an estimate.
   outlets:
     confidence: datasheet
     note: >-
@@ -94,8 +94,14 @@ provenance:
       the colour of `lamp-load-ok`, the green load lamp. Yellow, count 1, mean #a7b047, is one pixel. The orange third, count 1, mean
       #ac8e20, is one pixel. So `lamp-load-warning` and `lamp-load-overload` use the library's yellow #e5d800 and red
       #e02020. The Link-RX/TX and Status windows at the right edge of the upper jack are pale and unlit in the
-      photograph. They use the library's green #39b54a and orange #f5a623, as nokia/sr-1-ac does. The upper lamp,
-      `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is Status, item 4, as in the figure. Status states: off, green valid TCP/IP,
+      photograph. They use the library's green #39b54a and orange #f5a623, as nokia/sr-1-ac does. The guide draws both
+      windows as small upright rectangles, so they use the rectangular part common/led-rect-sm@2, turned a quarter.
+      The rectangles measure about 1.8 x 3.2 mm in the guide's figure at 600 dpi, scaled from the jack frame's 15.8
+      mm. The part is 2.8 x 1.6 mm, within 13 percent of that, and the larger common/led-rect is 44 percent off. The
+      window heights follow the figure. The guide's place falls inside the library's wider jack, and the overlap
+      check refuses it. So each lamp stands just outside the jack's right edge, as the photograph shows. The upper
+      lamp, `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is Status, item 4, as in the figure.
+      Status states: off, green valid TCP/IP,
       flashing green not valid, orange hardware failure, flashing orange BOOTP, alternating orange and green DHCP.
       Link-RX/TX states: off, flashing green 10 Mbps, flashing orange 100 Mbps, and solid green or orange with no
       traffic. Load states: green normal, yellow near overload, red overload. The Reset hole is item 8. It is a dark
@@ -168,10 +174,11 @@ gaps:
   reason: needs-photo
   note: >-
     The count and place of the lamps are read off a 369 px photograph and the states come from the guide of an older
-    series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings beside
-    the round button, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status label,
-    which the guide draws as a check and a cross icon. They are read as icons, not lamps, an estimate, and are not drawn. All of these belong
-    to the later marks part.
+    series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings above
+    the display, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status label. It
+    shows a fainter green and orange pair near the Link label, read as a colour key. The guide draws a check and a
+    cross icon beside Status. The dots are read as printed icons, not lamps, and that reading is an estimate. No lamp
+    moved for them. They are not drawn, because the maintainer has left marks to a later touch.
   wanted: the guide of the B models (990-5569E) or a straight-on photograph of the display end with a scale.
 - what: jack-function
   scope: [jack-1, jack-2]
@@ -197,7 +204,7 @@ gaps:
   scope: [top, bottom, right]
   reason: needs-photo
   note: >-
-    no held photograph shows the bottom or the inlet end (the cord plug covers it), and the top is a plain lid in the
+    no held photograph shows the bottom or the inlet end (the cord plug covers it). The top is a plain lid in the
     angled photograph. The display end (`left`, seen from behind) draws the six marks the angled photograph shows.
   wanted: straight-on photographs of the top, the bottom and the inlet end.
 groups:
@@ -222,11 +229,11 @@ views:
     size: {w: 445, h: 44}
     panel:
       decor:
-      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm); right-hand pair read at 4x, 5 mm in from the end, good to about 3 mm; the left-hand pair is hidden by the cord plug and is placed to match'}
-      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm); right-hand pair read at 4x, 5 mm in from the end, good to about 3 mm; the left-hand pair is hidden by the cord plug and is placed to match'}
-      - {id: reset-hole, at: [323.3, 34.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: reset-hole, confidence: estimated, source: 'datasheet p.6 photograph, 12x crop of the display end: a dark dot of about 2.5 mm, 8 mm left of the display window and below its bottom edge; the Reset button, item 8 of the Switched Rack PDU guide (PDF p.11); good to about 3 mm'}
-      - {id: end-screw-3, at: [438.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm); right-hand pair read at 4x, 5 mm in from the end, good to about 3 mm'}
-      - {id: end-screw-4, at: [438.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm); right-hand pair read at 4x, 5 mm in from the end, good to about 3 mm'}
+      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm). The right-hand pair is read at 4x, 5 mm in from the end, good to about 3 mm. The left-hand pair is hidden by the cord plug and is placed to match.'}
+      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm). The right-hand pair is read at 4x, 5 mm in from the end, good to about 3 mm. The left-hand pair is hidden by the cord plug and is placed to match.'}
+      - {id: reset-hole, at: [323.3, 34.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: reset-hole, confidence: estimated, source: 'datasheet p.6 photograph, 12x crop of the display end. A dark dot of about 2.5 mm, 8 mm left of the display window and below its bottom edge. It is the Reset button, item 8 of the Switched Rack PDU guide (PDF p.11). Good to about 3 mm.'}
+      - {id: end-screw-3, at: [438.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm). The right-hand pair is read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: end-screw-4, at: [438.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.6 photograph of the outlet face (369 px, 1.6 mm per pixel across from the printed 445 mm). The right-hand pair is read at 4x, 5 mm in from the end, good to about 3 mm.'}
     silkscreen:
       - {at: [54.9, 38.5], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
       - {at: [91.0, 38.5], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
@@ -254,8 +261,8 @@ views:
         - {id: lamp-load-ok, ref: common/led-dot@1, at: [346.9, 2.0], group: lamps, rel-pos: 1, for: chassis, description: 'load indicator, green: normal (guide PDF p.15)', states: ['off', {name: normal, color: '#507a3d'}]}
         - {id: lamp-load-warning, ref: common/led-dot@1, at: [346.9, 4.2], group: lamps, rel-pos: 4, for: chassis, description: 'load indicator, yellow: near overload warning (guide PDF p.15)', states: ['off', {name: near-overload, color: '#e5d800'}]}
         - {id: lamp-load-overload, ref: common/led-dot@1, at: [346.9, 6.4], group: lamps, rel-pos: 5, for: chassis, description: 'load indicator, red: overload (guide PDF p.15)', states: ['off', {name: overload, color: '#e02020'}]}
-        - {id: lamp-jack-1, ref: common/led-dot@1, at: [405.1, 7.5], group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.14)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}
-        - {id: lamp-jack-2, ref: common/led-dot@1, at: [405.1, 16.5], group: lamps, rel-pos: 3, for: chassis, description: 'Status lamp, item 4, at the lower right edge of the network jack (guide PDF p.11 and p.14)', states: ['off', {name: valid-tcp-ip, color: '#39b54a'}, {name: invalid-tcp-ip, color: '#39b54a', behavior: blinking}, {name: hardware-failure, color: '#f5a623'}, {name: bootp-request, color: '#f5a623', behavior: blinking}, {name: dhcp-request, color: '#f5a623', behavior: {mode: alternating, color: '#39b54a'}}]}
+        - {id: lamp-jack-1, ref: common/led-rect-sm@2, at: [404.4, 7.4], rotate: 90, group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.14)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}
+        - {id: lamp-jack-2, ref: common/led-rect-sm@2, at: [404.4, 17.1], rotate: 90, group: lamps, rel-pos: 3, for: chassis, description: 'Status lamp, item 4, at the lower right edge of the network jack (guide PDF p.11 and p.14)', states: ['off', {name: valid-tcp-ip, color: '#39b54a'}, {name: invalid-tcp-ip, color: '#39b54a', behavior: blinking}, {name: hardware-failure, color: '#f5a623'}, {name: bootp-request, color: '#f5a623', behavior: blinking}, {name: dhcp-request, color: '#f5a623', behavior: {mode: alternating, color: '#39b54a'}}]}
     regions:
       - {id: logo-zone, at: [409.0, 22.0], size: {w: 22.0, h: 10.0}, label: 'APC logo; not drawn'}
   top:
@@ -271,12 +278,12 @@ views:
     size: {w: 108, h: 44}
     panel:
       decor:
-      - {id: end-screw-1, at: [25.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
-      - {id: end-screw-2, at: [52.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
-      - {id: end-screw-3, at: [79.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
-      - {id: end-screw-4, at: [25.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
-      - {id: end-screw-5, at: [52.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
-      - {id: end-screw-6, at: [79.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks; the row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face), so the columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across'}
+      - {id: end-screw-1, at: [25.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
+      - {id: end-screw-2, at: [52.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
+      - {id: end-screw-3, at: [79.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
+      - {id: end-screw-4, at: [25.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
+      - {id: end-screw-5, at: [52.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
+      - {id: end-screw-6, at: [79.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 angled photograph of the display end, 12x lifted crop: two rows of three marks. The row is foreshortened (fractions 0.38, 0.73, 0.93 of the depth from the outlet face). The columns are placed at quarter depth, good to about 15 mm along the depth and 4 mm across.'}
   right:
     size: {w: 108, h: 44}
     empty: >-

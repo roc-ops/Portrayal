@@ -49,9 +49,10 @@ provenance:
     confidence: estimated
     note: >-
       estimated - the outlet face, mm from the face's left and top, borrowed from the AP7921B photograph reading (see
-      `method`): the inlet's centre at 17, eight outlets from 55 on a 36.1 pitch, numbered 1 to 8 under their mouths as
-      printed, the display's window from 333 to 355 across, the round button centred at 376, two jacks centred at 397,
-      the logo right of them, five small lamps and a Reset hole (see `lamps`). The inlet is empty in this photograph.
+      `method`). The inlet's centre is at 17. Eight outlets start at 55 on a 36.1 pitch, numbered 1 to 8 under their
+      mouths as printed. The display's window runs from 333 to 355 across. The round button is centred at 376 and the
+      two jacks at 397. The logo is right of them, with five small lamps and a Reset hole (see `lamps`). The inlet is
+      empty in this photograph.
   outlets:
     confidence: datasheet
     note: >-
@@ -84,7 +85,8 @@ provenance:
       (AP7800 series, 2012) gives the identities and states. Its front panel is PDF p.11 and its items PDF p.15. Its
       Link-RX/TX and Status tables are PDF p.16 and its load indicator table PDF p.17. That guide is for an older
       series and the B models' own guide, 990-5569E, is not held. The count and place of the lamps come from the
-      photograph and are estimated. The guide's top single-phase figure shows one load lamp above the display. The
+      photograph and are estimated. The guide's top single-phase figure shows one load lamp above the display. It
+      also shows three legend rings at the left of the display, marked OK, Warning and Overload. The
       photograph shows three lit points in one column above the right digit. It cannot tell one lamp with three
       colours from three lamps, so three are placed and each carries one load colour. No B1, B2 or TOTAL lamps are
       shown. Each sample is a count and a mean over the pixels under a colour mask. The mask for green is G of at
@@ -93,7 +95,13 @@ provenance:
       colour of `lamp-load-ok`, the green load lamp. Yellow, count 2, mean #cad314, is the colour of `lamp-load-warning`. Red, count 2,
       mean #d92244, is the colour of `lamp-load-overload`. The Link-RX/TX and Status windows at the right edge of the
       upper jack are pale and unlit in the photograph. They use the library's green #39b54a and orange #f5a623, as
-      nokia/sr-1-ac does. The upper lamp, `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is Status, item 4, as in the figure.
+      nokia/sr-1-ac does. The guide draws both windows as small upright rectangles, so they use the rectangular part
+      common/led-rect-sm@2, turned a quarter. The rectangles measure about 1.8 x 3.2 mm in the guide's figure at 600
+      dpi, scaled from the jack frame's 15.8 mm. The part is 2.8 x 1.6 mm, within 13 percent of that, and the larger
+      common/led-rect is 44 percent off. The window heights follow the figure. The guide's place falls inside the
+      library's wider jack, and the overlap check refuses it. So each lamp stands just outside the jack's right edge,
+      as the photograph shows. The upper lamp, `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is
+      Status, item 4, as in the figure.
       Status states: off, green valid TCP/IP, flashing green not valid, orange hardware failure, flashing orange
       BOOTP, alternating orange and green DHCP. Link-RX/TX states: off, flashing green 10 Mbps, flashing orange 100
       Mbps, and solid green or orange with no traffic. Load states: green normal, yellow near overload, red overload.
@@ -164,10 +172,11 @@ gaps:
   reason: needs-photo
   note: >-
     The count and place of the lamps are read off a 369 px photograph and the states come from the guide of an older
-    series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings beside
-    the round button, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status label,
-    which the guide draws as a check and a cross icon. They are read as icons, not lamps, an estimate, and are not drawn. All of these belong
-    to the later marks part.
+    series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings at the
+    left of the display, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status
+    label. It shows a fainter green and orange pair near the Link label, read as a colour key. The guide draws a check
+    and a cross icon beside Status. The dots are read as printed icons, not lamps, and that reading is an estimate. No
+    lamp moved for them. They are not drawn, because the maintainer has left marks to a later touch.
   wanted: the guide of the B models (990-5569E) or a straight-on photograph of the display end with a scale.
 - what: jack-function
   scope: [jack-1, jack-2]
@@ -219,11 +228,11 @@ views:
     size: {w: 444, h: 44}
     panel:
       decor:
-      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
-      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
-      - {id: reset-hole, at: [322.9, 31.4], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: reset-hole, confidence: estimated, source: 'datasheet p.1 photograph, 12x crop of the display end: a dark dot of about 2.5 mm, 9 mm left of the display window and below its bottom edge; the Reset button, item 8 of the Metered Rack PDU guide (PDF p.11); good to about 3 mm'}
-      - {id: end-screw-3, at: [437.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
-      - {id: end-screw-4, at: [437.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm); centre read at 4x, 5 mm in from the end, good to about 3 mm'}
+      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: reset-hole, at: [322.9, 31.4], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: reset-hole, confidence: estimated, source: 'datasheet p.1 photograph, 12x crop of the display end. A dark dot of about 2.5 mm, 9 mm left of the display window and below its bottom edge. It is the Reset button, item 8 of the Metered Rack PDU guide (PDF p.11). Good to about 3 mm.'}
+      - {id: end-screw-3, at: [437.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: end-screw-4, at: [437.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
     silkscreen:
       - {at: [54.9, 38.5], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
       - {at: [91.0, 38.5], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
@@ -251,8 +260,8 @@ views:
         - {id: lamp-load-ok, ref: common/led-dot@1, at: [345.8, 1.4], group: lamps, rel-pos: 1, for: chassis, description: 'load indicator, green: normal (guide PDF p.17)', states: ['off', {name: normal, color: '#509049'}]}
         - {id: lamp-load-warning, ref: common/led-dot@1, at: [345.8, 3.9], group: lamps, rel-pos: 4, for: chassis, description: 'load indicator, yellow: near overload warning (guide PDF p.17)', states: ['off', {name: near-overload, color: '#cad314'}]}
         - {id: lamp-load-overload, ref: common/led-dot@1, at: [345.8, 6.4], group: lamps, rel-pos: 5, for: chassis, description: 'load indicator, red: overload (guide PDF p.17)', states: ['off', {name: overload, color: '#d92244'}]}
-        - {id: lamp-jack-1, ref: common/led-dot@1, at: [405.1, 6.1], group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}
-        - {id: lamp-jack-2, ref: common/led-dot@1, at: [405.1, 15.7], group: lamps, rel-pos: 3, for: chassis, description: 'Status lamp, item 4, at the lower right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: valid-tcp-ip, color: '#39b54a'}, {name: invalid-tcp-ip, color: '#39b54a', behavior: blinking}, {name: hardware-failure, color: '#f5a623'}, {name: bootp-request, color: '#f5a623', behavior: blinking}, {name: dhcp-request, color: '#f5a623', behavior: {mode: alternating, color: '#39b54a'}}]}
+        - {id: lamp-jack-1, ref: common/led-rect-sm@2, at: [404.4, 7.4], rotate: 90, group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}
+        - {id: lamp-jack-2, ref: common/led-rect-sm@2, at: [404.4, 17.1], rotate: 90, group: lamps, rel-pos: 3, for: chassis, description: 'Status lamp, item 4, at the lower right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: valid-tcp-ip, color: '#39b54a'}, {name: invalid-tcp-ip, color: '#39b54a', behavior: blinking}, {name: hardware-failure, color: '#f5a623'}, {name: bootp-request, color: '#f5a623', behavior: blinking}, {name: dhcp-request, color: '#f5a623', behavior: {mode: alternating, color: '#39b54a'}}]}
     regions:
       - {id: logo-zone, at: [408.0, 22.0], size: {w: 22.0, h: 10.0}, label: 'APC logo; not drawn'}
   top:
@@ -268,12 +277,12 @@ views:
     size: {w: 102, h: 44}
     panel:
       decor:
-      - {id: end-screw-1, at: [24.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
-      - {id: end-screw-2, at: [49.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
-      - {id: end-screw-3, at: [75.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
-      - {id: end-screw-4, at: [24.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
-      - {id: end-screw-5, at: [49.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
-      - {id: end-screw-6, at: [75.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b): this end is seen edge-on in the datasheet p.5 angled photograph, one mark countable; three columns at quarter depth, two rows, good to about 15 mm along the depth'}
+      - {id: end-screw-1, at: [24.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-2, at: [49.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-3, at: [75.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-4, at: [24.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-5, at: [49.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-6, at: [75.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
   right:
     size: {w: 102, h: 44}
     empty: >-

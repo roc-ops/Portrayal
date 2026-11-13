@@ -74,9 +74,8 @@ def test_every_mark_is_an_estimate_with_its_method(sku):
             assert "photograph" in d["source"] and len(d["source"]) > 30
 
 
-# --- the lamps, the Reset hole and the jacks at the display end of the outlet face -------------------------------
-#
-# Lamps are placed with the states the guides give and drawn in their off state; the viewer lights them.
+# The lamps, the Reset hole and the jacks at the display end of the outlet face.
+# Lamps are placed with the states the guides give. They are drawn off, and the viewer lights them.
 
 GREEN, YELLOW, ORANGE, RED = "#39b54a", "#e5d800", "#f5a623", "#e02020"
 
@@ -94,13 +93,19 @@ LOAD = {
         "lamp-load-overload": ([346.9, 6.4], "overload", RED),
     },
 }
+# The guide draws the two windows as small upright rectangles, about 1.8 x 3.2 mm. The nearest library part is the
+# small bar lamp, 2.8 x 1.6 mm, turned a quarter. A rotated part pivots on its own centre, so `at` is the window's
+# centre less half the unrotated size (1.4, 0.8). The library's jack is wider than the guide's. The guide's place
+# would overlap it, so the lamps stand against its right edge, at 404.9 mm, as close as the lint allows.
+JACK_LAMP_REF = "common/led-rect-sm@2"
 JACK_LAMPS = {
-    "ap7821b": {"lamp-jack-1": [405.1, 6.1], "lamp-jack-2": [405.1, 15.7]},
-    "ap7921b": {"lamp-jack-1": [405.1, 7.5], "lamp-jack-2": [405.1, 16.5]},
+    "ap7821b": {"lamp-jack-1": [404.4, 7.4], "lamp-jack-2": [404.4, 17.1]},
+    "ap7921b": {"lamp-jack-1": [404.4, 7.4], "lamp-jack-2": [404.4, 17.1]},
 }
 RESET = {"ap7821b": [322.9, 31.4], "ap7921b": [323.3, 34.5]}
-# the guide pages each note cites: front panel, item table, then the LED tables (the Metered guide has the Link and
-# Status tables on PDF p.16 and the load table on p.17; the Switched guide on p.14 and p.15)
+# The guide pages each note cites: front panel, item table, then the LED tables.
+# The Metered guide has the Link and Status tables on PDF p.16 and the load table on p.17.
+# The Switched guide has them on p.14 and p.15.
 GUIDE_PAGES = {
     "ap7821b": ("PDF p.11", "PDF p.15", "PDF p.16", "PDF p.17"),
     "ap7921b": ("PDF p.11", "PDF p.13", "PDF p.14", "PDF p.15"),
@@ -128,7 +133,7 @@ def placements(sku):
 
 
 def lamps(sku):
-    return {i: p for i, p in placements(sku).items() if p["ref"] == "common/led-dot@1"}
+    return {i: p for i, p in placements(sku).items() if p.get("group") == "lamps"}
 
 
 @pytest.mark.parametrize("sku", sorted(SKUS))
@@ -137,8 +142,8 @@ def test_the_display_end_places_five_lamps_with_their_identities(sku):
         ["lamp-jack-1", "lamp-jack-2", "lamp-load-ok", "lamp-load-warning", "lamp-load-overload"]
     )
     assert "lamp-status" not in placements(sku), "the Status LED is lamp-jack-2"
-    for p in lamps(sku).values():
-        assert p["group"] == "lamps"
+    for lamp_id, p in lamps(sku).items():
+        assert p["ref"] == (JACK_LAMP_REF if lamp_id in JACK_LAMPS[sku] else "common/led-dot@1"), f"{sku} {lamp_id}"
 
 
 @pytest.mark.parametrize("sku", sorted(SKUS))
@@ -156,6 +161,8 @@ def test_the_load_lamps_stand_in_a_column_above_the_display(sku):
 def test_the_jack_lamps_are_the_link_above_and_the_status_below(sku):
     placed = lamps(sku)
     for lamp_id, at in JACK_LAMPS[sku].items():
+        assert placed[lamp_id]["ref"] == JACK_LAMP_REF, f"{sku} {lamp_id} is the rectangular lamp"
+        assert placed[lamp_id]["rotate"] == 90, f"{sku} {lamp_id} stands upright"
         assert placed[lamp_id]["at"] == at, f"{sku} {lamp_id}"
     assert placed["lamp-jack-1"]["at"][1] < placed["lamp-jack-2"]["at"][1]
     assert placed["lamp-jack-1"]["states"] == LINK_STATES
@@ -203,6 +210,18 @@ def test_the_lamp_notes_cite_the_guides_pages_and_the_photograph_samples(sku):
     for color in [c for _, _, c in LOAD[sku].values() if c.startswith("#5") or c.startswith("#c") or c.startswith("#d")]:
         assert color in note, f"{sku} sample {color} is stated"
     assert "count" in note and "mean" in note and "mask" in note
+
+
+@pytest.mark.parametrize("sku", sorted(SKUS))
+def test_the_note_says_why_the_jack_lamps_are_rectangular(sku):
+    note = " ".join(device(sku)["provenance"]["lamps"]["note"].split())
+    assert "rectangles" in note and "led-rect-sm" in note and "1.8 x 3.2 mm" in note
+
+
+def test_the_small_bar_lamp_no_longer_says_no_device_seats_it():
+    contract = yaml.safe_load((LIB / "components" / "common" / "led-rect-sm" / "v2" / "contract.yaml").read_text())
+    assert "unplaced" not in contract, "a device seats this major now"
+    assert contract["size"] == {"w": 2.8, "h": 1.6}
 
 
 @pytest.mark.parametrize("sku", sorted(SKUS))
