@@ -65,7 +65,9 @@ provenance:
       uplink, all with 1500 V AC isolation. The front photograph prints NET1(S) over an SFP cage and NET1(C)
       over an RJ45 jack. They are one combo port, drawn as two placements sharing the number. The rear
       photograph prints NET2 and the numbers 1 to 4 round the switch block. The quick start footnote says
-      NET2 is the built-in switch.
+      NET2 is the built-in switch. ACM700x-2 Quick Start Guide, page 1, step 03: NET1 connects to the
+      primary network. That guide covers the -2 units. NET1 of this model is read the same way, so both
+      halves of the combo uplink are traffic ports.
   usb:
     confidence: datasheet
     note: >-
@@ -78,17 +80,20 @@ provenance:
     note: >-
       The front photograph shows four lamps at the left. A power symbol, a heartbeat symbol, IOIO and
       an antenna symbol sit beside them. Four signal lamps sit at the right of the SIM slots beside a
-      signal-bar symbol, all dark. The rear photograph shows a small light pipe at each corner of each
-      switch jack. No document held gives a colour or a meaning for any of them, so each is drawn off
-      and states are a gap.
+      signal-bar symbol, all dark. Three small red marks sit along the top of the SFP cage at 4.5 mm pitch.
+      They are sampled #c23639, #d12d32 and #d83b35 over 11, 15 and 17 px. They are drawn with the library's
+      round lamp, larger than the marks and round where the marks are small rectangles. The rear photograph
+      shows a small light pipe at each corner of each switch jack. No document held gives a colour or
+      a meaning for any of them, so each is drawn off and states are a gap.
   power:
     confidence: datasheet
     note: >-
-      Data sheet: 110-240 V AC to 12 V DC external power adapter in the box (450031), consumption less
-      than 11.5 W. Optional supplies are 450037, 450039 and 450041. The rear prints 9~30V DC under a four-position
-      housing. The user manual's appendix says less than 30 W for all models. The data sheet's 11.5 W
-      is followed. The appendix gives 5 to 50 C ambient where the data sheet gives -25 to 60 C. The data
-      sheet is followed.
+      Data sheet: 110-240 V AC to 12 V DC external power adapter, consumption less than 11.5 W. ACM700x-2
+      Quick Start Guide, page 1, kit table: the 12V switching DC power supply in the box is part 450031.
+      Data sheet optional supplies are 450037, 450039 and 450041. The rear prints 9~30V DC under a four-position
+      housing, with a line over five dashes. The user manual's appendix says less than 30 W for all models.
+      The data sheet's 11.5 W is followed. The appendix gives 5 to 50 C ambient where the data sheet gives
+      -25 to 60 C. The data sheet is followed.
   livery:
     confidence: estimated
     note: >-
@@ -132,11 +137,12 @@ gaps:
   - rear
   reason: vendor-silent
   note: >-
-    The front prints eight lamps and the two lamps of the RJ45 jack. The rear shows a light pipe at the
-    corners of each switch jack. No held document gives the colours or meanings, so each lamp states only
-    off and is drawn off. The photograph shows the RJ45 jack lamps green, sampled #2d5b36 over 56 px,
-    and the other lamps dark. The four signal lamps are small rectangles in the photograph. They are drawn
-    as the library's round lamp, a stand-in for the shape.
+    The front prints eight lamps, the two lamps of the RJ45 jack and three marks along the SFP cage. The
+    rear shows a light pipe at the corners of each switch jack. No held document gives the colours or
+    meanings, so each placed lamp is drawn off. The photograph shows the RJ45 jack lamps green, sampled
+    #2d5b36 over 56 px. It shows the three SFP marks red, sampled #d12d32 over 15 px for the middle one.
+    The eight other front lamps are dark. The four signal lamps and the three SFP marks are small rectangles
+    in the photograph. They are drawn as the library's round lamp, a stand-in for the shape.
   wanted: A hardware guide with the LED table.
 - what: sides
   scope:
@@ -191,13 +197,13 @@ groups:
     description: four RJ45 RS-232 serial ports, "Cisco straight" pinout.
   uplink-rj45:
     term: Port
-    role: management
+    role: traffic
     index-origin: 1
     attrs: {media: rj45, speed: 1g}
     description: the RJ45 half of the combo uplink NET1.
   uplink-sfp:
     term: Port
-    role: management
+    role: traffic
     index-origin: 1
     attrs: {media: sfp, speed: 1g}
     description: the SFP half of the combo uplink NET1.
@@ -356,6 +362,36 @@ views:
         rel-pos: 8
         for: chassis
         states: {lamp: ['off']}
+      - ref: common/led-dot@1
+        id: led-sfp-1
+        at: [16.0, 15.5]
+        group: status-leds
+        rel-pos: 9
+        for: net1-sfp
+        states:
+          lamp:
+          - 'off'
+          - {name: red, color: '#d12d32'}
+      - ref: common/led-dot@1
+        id: led-sfp-2
+        at: [20.6, 15.5]
+        group: status-leds
+        rel-pos: 10
+        for: net1-sfp
+        states:
+          lamp:
+          - 'off'
+          - {name: red, color: '#d12d32'}
+      - ref: common/led-dot@1
+        id: led-sfp-3
+        at: [25.0, 15.5]
+        group: status-leds
+        rel-pos: 11
+        for: net1-sfp
+        states:
+          lamp:
+          - 'off'
+          - {name: red, color: '#d12d32'}
   rear:
     size: {w: 130.0, h: 35.0}
     panel:
@@ -399,7 +435,9 @@ views:
       fill: '#e8e8e8', for: usb-4}
     - {at: [11.6, 32.2], text: 9~30V DC, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: power-in}
     - at: [11.6, 14.4]
-      path: M -3.4 -0.4 H 3.4 M -3.4 0.5 H -2.0 M -0.7 0.5 H 0.7 M 2.0 0.5 H 3.4
+      path: >-
+        M -3.9 -0.4 L 3.9 -0.4 M -3.87 0.5 L -3.02 0.5 M -2.18 0.5 L -1.33 0.5 M -0.42 0.5 L 0.42 0.5
+        M 1.21 0.5 L 2.06 0.5 M 2.9 0.5 L 3.75 0.5
       stroke-width: 0.25
       fill: '#e8e8e8'
       for: power-in

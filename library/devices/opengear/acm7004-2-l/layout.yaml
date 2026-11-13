@@ -75,8 +75,10 @@ provenance:
     note: >-
       Data sheet: ACM7004-2 has 2 x 10/100/1000 Ethernet ports. The front
       photograph prints NET1 and NET2 over two RJ45 jacks, each with a lamp at
-      each top corner. The quick start guide connects NET1 to the primary
-      network and NET2 to the out-of-band management network.
+      each top corner. ACM700x-2 Quick Start Guide, page 1, steps 03 and 04:
+      NET1 connects to the primary network and NET2 to the out-of-band
+      management network. That guide covers the ACM7004-2, which the -L fits
+      with a modem. NET1 is a traffic port and NET2 a management port.
   usb:
     confidence: datasheet
     note: >-
@@ -98,16 +100,18 @@ provenance:
       The front photograph shows four lamps at the left. A power symbol, a
       heartbeat symbol, IOIO and an antenna symbol sit beside them. Four signal
       lamps sit at the right of the SIM slots beside a signal-bar symbol. All
-      eight are dark in the photograph. No document held gives a colour or a
-      meaning for any of them, so each is drawn off and states are a gap.
+      eight are dark in the photograph. This model has no SFP cage and so no
+      cage marks. No document held gives a colour or a meaning for any of them,
+      so each is drawn off and states are a gap.
   power:
     confidence: datasheet
     note: >-
-      Data sheet: 110-240 V AC to 12 V DC external power adapter in the box
-      (450031), consumption less than 11.5 W. Optional supplies are 450037 (12
-      VDC four chamber square connector), 450039 (AC adapter with a 4-pin
-      connector) and 450041 (DC-DC converter). The rear prints 9~30V DC under a
-      four-position housing. The user manual's appendix says less than 30 W for
+      Data sheet: 110-240 V AC to 12 V DC external power adapter, consumption
+      less than 11.5 W. ACM700x-2 Quick Start Guide, page 1, kit table: the 12V
+      switching DC power supply in the box is part 450031. Data sheet optional
+      supplies are 450037 (12 VDC four chamber square connector), 450039 (AC
+      adapter with a 4-pin connector) and 450041 (DC-DC converter). The rear
+      prints 9~30V DC under a four-position housing, with a line over four dashes. The user manual's appendix says less than 30 W for
       all models. The data sheet's 11.5 W is followed. The appendix gives 5 to 50 C
       ambient where the data sheet gives -25 to 60 C. The data sheet is followed.
   livery:
@@ -211,12 +215,18 @@ groups:
     index-origin: 1
     attrs: {media: rj45-serial, role: console-server}
     description: four RJ45 RS-232 serial ports, "Cisco straight" pinout.
-  net:
+  net1:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the RJ45 port NET1, which connects to the primary network.
+  net2:
     term: Port
     role: management
     index-origin: 1
     attrs: {media: rj45, speed: 1g}
-    description: the two RJ45 network ports NET1 and NET2.
+    description: the RJ45 port NET2, which connects to the out-of-band management network.
   usb:
     term: Port
     role: management
@@ -275,8 +285,8 @@ views:
     - {at: [121.5, 25.0], path: 'M -1.4 1.4 V 0.2 M 0 1.4 V -0.8 M 1.4 1.4 V -1.8', stroke-width: 0.3, fill: '#c8c8c8', for: led-signal-4}
     components:
       placements:
-      - {ref: common/rj45-eth@1, id: net1, at: [14.1, 12.1], rotate: 180, group: net, rel-pos: 1}
-      - {ref: common/rj45-eth@1, id: net2, at: [30.0, 12.1], rotate: 180, group: net, rel-pos: 2}
+      - {ref: common/rj45-eth@1, id: net1, at: [14.1, 12.1], rotate: 180, group: net1, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: net2, at: [30.0, 12.1], rotate: 180, group: net2, rel-pos: 1}
       - {ref: opengear/sim-slot-2ff@1, id: sim1, at: [79.7, 15.2], group: sim, rel-pos: 1}
       - {ref: opengear/sim-slot-2ff@1, id: sim2, at: [102.9, 15.2], group: sim, rel-pos: 2}
       - {ref: common/led-dot@1, id: led-power, at: [5.5, 15.1], group: status-leds, rel-pos: 1, for: chassis, states: {lamp: ['off']}}
@@ -313,7 +323,7 @@ views:
     - {at: [99.3, 32.4], path: 'M -2.0 0 H 2.0 M -1.0 0 L -0.2 -0.9 M 0.2 0 L 1.0 0.9', stroke-width: 0.3, fill: '#e8e8e8', for: usb-2}
     - {at: [116.5, 32.4], path: 'M -2.0 0 H 2.0 M -1.0 0 L -0.2 -0.9 M 0.2 0 L 1.0 0.9', stroke-width: 0.3, fill: '#e8e8e8', for: usb-4}
     - {at: [11.6, 32.2], text: 9~30V DC, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: power-in}
-    - {at: [11.6, 14.4], path: 'M -3.4 -0.4 H 3.4 M -3.4 0.5 H -2.0 M -0.7 0.5 H 0.7 M 2.0 0.5 H 3.4', stroke-width: 0.25, fill: '#e8e8e8', for: power-in}
+    - {at: [11.6, 14.4], path: 'M -3.9 -0.4 L 3.9 -0.4 M -3.87 0.5 L -2.66 0.5 M -1.69 0.5 L -0.6 0.5 M 0.6 0.5 L 1.69 0.5 M 2.78 0.5 L 3.87 0.5', stroke-width: 0.25, fill: '#e8e8e8', for: power-in}
     components:
       placements:
       - {ref: opengear/acm7000-dc-header@1, id: power-in, at: [7.0, 17.9], group: inlets, rel-pos: 1}

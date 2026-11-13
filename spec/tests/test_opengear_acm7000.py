@@ -82,14 +82,64 @@ def test_all_six_faces_exist_and_the_four_unseen_sides_are_plain_outlines(slug):
     assert "plain outlines from the stated size" in gap["note"]
 
 
-@pytest.mark.parametrize("slug", DEVICES)
-def test_the_front_carries_two_sim_slots_and_eight_lamps_drawn_off(slug):
+@pytest.mark.parametrize("slug,lamp_count", [("acm7004-2-l", 8), ("acm7004-5-l", 11)])
+def test_the_front_carries_two_sim_slots_and_its_lamps_drawn_off(slug, lamp_count):
     slots = _refs(slug, "front", "opengear/sim-slot-2ff@1")
     assert sorted(p["rel-pos"] for p in slots) == [1, 2]
     lamps = _by_group(slug, "front", "status-leds")
-    assert len(lamps) == 8
+    assert len(lamps) == lamp_count
     for lamp in lamps:
         assert lamp["states"]["lamp"][0] == "off", lamp["id"]
+
+
+def test_the_5_l_sfp_cage_carries_three_red_marks_drawn_off():
+    marks = [p for p in _placements("acm7004-5-l", "front") if p.get("for") == "net1-sfp"]
+    assert sorted(p["id"] for p in marks) == ["led-sfp-1", "led-sfp-2", "led-sfp-3"]
+    assert [p["at"] for p in marks] == [[16.0, 15.5], [20.6, 15.5], [25.0, 15.5]]
+    for mark in marks:
+        assert mark["ref"] == "common/led-dot@1", mark["id"]
+        assert mark["states"]["lamp"] == ["off", {"name": "red", "color": "#d12d32"}], mark["id"]
+
+
+def test_the_2_l_has_no_sfp_cage_and_so_no_cage_marks():
+    assert not _refs("acm7004-2-l", "front", "std/sfp@1")
+    assert not [p for p in _placements("acm7004-2-l", "front") if str(p["id"]).startswith("led-sfp")]
+
+
+def _dc_symbol_dashes(slug):
+    paths = [s["path"] for s in _device(slug)["views"]["rear"]["silkscreen"] if s.get("for") == "power-in" and "path" in s]
+    assert len(paths) == 1, slug
+    return paths[0].count("M") - 1
+
+
+@pytest.mark.parametrize("slug,dashes", [("acm7004-2-l", 4), ("acm7004-5-l", 5)])
+def test_the_dc_symbol_draws_the_dashes_the_rear_photograph_shows(slug, dashes):
+    assert _dc_symbol_dashes(slug) == dashes
+
+
+@pytest.mark.parametrize("slug", DEVICES)
+def test_part_450031_is_cited_to_the_acm700x_2_quick_start_and_not_to_the_data_sheet(slug):
+    note = _device(slug)["provenance"]["power"]["note"]
+    sentence = next(s for s in note.split(". ") if "450031" in s)
+    assert "ACM700x-2 Quick Start Guide" in sentence
+    assert "page 1" in sentence
+    assert "Data sheet" not in sentence
+
+
+@pytest.mark.parametrize("slug,model", DEVICES.items())
+def test_net1_is_traffic_and_not_management_only_while_the_2_l_net2_stays_management(slug, model):
+    device = _device(slug)
+    net1 = [p for p in _placements(slug, "front") if p["id"].startswith("net1")]
+    assert net1
+    for p in net1:
+        assert device["groups"][p["group"]]["role"] == "traffic", p["id"]
+    for target in ("netbox", "nautobot"):
+        export = _load(LIB / "exports" / target / "device-types/Opengear" / f"{model}.yaml")
+        flags = {i["name"]: i.get("mgmt_only", False) for i in export["interfaces"]}
+        for p in net1:
+            assert flags[p["id"]] is False, (target, p["id"])
+        if slug == "acm7004-2-l":
+            assert flags["net2"] is True, target
 
 
 @pytest.mark.parametrize("slug", DEVICES)
@@ -101,7 +151,8 @@ def test_the_rear_carries_four_serial_four_usb_and_three_antenna_jacks(slug):
 
 
 def test_the_2_l_has_two_network_jacks_on_the_front_and_the_digital_io_header_on_the_rear():
-    assert len(_by_group("acm7004-2-l", "front", "net")) == 2
+    assert len(_by_group("acm7004-2-l", "front", "net1")) == 1
+    assert len(_by_group("acm7004-2-l", "front", "net2")) == 1
     assert len(_refs("acm7004-2-l", "rear", "opengear/acm7000-dio-header@1")) == 1
 
 
@@ -122,6 +173,7 @@ def test_each_new_connector_is_registered_and_a_part_mates_it(key):
     assert _contract(mate)["mates"] == key
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("key", KEYS)
 def test_no_other_part_presents_or_mates_a_new_key(key):
     holders = set()
