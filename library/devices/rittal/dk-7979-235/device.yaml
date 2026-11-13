@@ -1,0 +1,319 @@
+format: 1
+kind: device
+name: dk-7979-235
+version: 0.1.0
+maturity: modelled
+manufacturer: Rittal
+model: DK 7979.235
+description: >-
+  Rittal PDU metered, three-phase, 0U. A 1094 mm extruded aluminium strip, 44 mm wide and about 72 mm deep, that
+  hangs on two push-button attachments on its back. It takes a 400 V three-phase feed, 11 kW, through a 3 m fixed
+  cord with a 16 A CEE plug. It hands that on to 21 unswitched outlets in three phase groups of seven, each with six
+  IEC C13 and one IEC C19. The controller between phase 2 and phase 3 measures each phase. It has a display, two
+  Ethernet jacks, a CAN bus jack, an RS232 jack and a USB port. No breaker and no switching.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S DIMENSIONED DRAWING. Rittal, "Technical details, Power Distribution Unit, Metered
+      version" (dri2108029en, 08.2023), PDF page 15, DK 7979.235. The page has a plan view, a side view, an end view
+      and a front view, with the circuit diagram below. The cell lines of the front view were read from a 600 dpi
+      render at the drawing's own scale. The 1094 overall length reads 1.938 px per mm. Each cell edge is a
+      full-height line. Good to about 1 mm. The outlets sit in their housings as the DK 7979.138 model places them.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, the library's way to say a part stands vertically beside an upright. It hangs on the two
+      push-button attachments of the plan view, dimensioned 933.45 apart. The data sheet's "PDU mounting options"
+      are the enclosure frame at the side of the 482.6 mm mounting frame and the cable route. The mounting adaptor
+      7000.688 is an accessory and is not drawn. `ru: 25` is the 1094 mm it runs, 1094 / 44.45 = 24.6.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - length 1094 (the dimension of the front view; the table of page 1 prints 1095). Width is 44 (the data
+      sheet's "44 mm (1 U)"), depth 72.1 (the side view's dimension). The data sheet (dri1308088en, p.1) prints
+      "PDU enclosure depth 70 mm" and the end view 109. The 109 is the body with the cable gland standing out of the
+      front and the button out of the back. The 70 is the extrusion profile. 72.1 is drawn, as on the basic devices.
+  colour:
+    confidence: datasheet
+    note: >-
+      The data sheet (dri1308088en, p.1) says "Aluminium, anodised in RAL 9005 (black, other colours may be
+      configured)", so the body is drawn black. The screen value #0e0e10 is the usual one for RAL 9005 and is
+      estimated. The two photographs of the metered family show a natural silver-grey extrusion, median #8a8a8a over
+      383777 pixels of photograph 78_2802. They also show dark graphite plates, #2b2b2c over 301257 pixels. Colours are a later
+      touch. The gap below names both.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of page 15, mm from the foot end. The foot cell is 0 to 72.1 with the gland ring.
+      The cord cell runs to 195.9 with a flat cover plate in it. Phase 1 is 195.9 to 421.86, phase 2 is 421.86 to
+      647.89, and the controller runs to 847.59. Phase 3 is 847.59 to 1073.62 and the head cap runs to 1094. Each
+      phase is a block of six C13 cells, 180.4 long, and one C19 cell, 45.6 long. Outlets count from the foot. The
+      C13 long axis is across the strip and the C19 long axis along it.
+  hidden-cells:
+    confidence: estimated
+    note: >-
+      The front view draws the cord and its plug across the first phase group. Two C13 housings show beside the cord
+      and the other four lie under the plug. Their lines are estimated from the blocks of six in phase 2 and phase 3,
+      180.4 long. The block ends at the 376.3 line, 180.4 from the cord cell.
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the controller cell is 647.89 to 847.59 of page 15, between phase 2 and phase 3. Its parts are the
+      PDU controller plate and two RJ45 jacks (ETH2 and ETH1). The rest are an RJ12 jack (RS232), an RJ45 jack (CAN bus), a USB-A
+      port and two small headers. They are read as the DK 7979.238 page reads them, and the cell lines agree to
+      0.3 mm. Rittal, "Montage-, Installations- und Betriebsanleitung" for the PDU metered (7979204), fig. 21 names
+      each of them. The data sheet calls the RS232 port RJ12 and the library's `rj11` key is the same six-position
+      body. Each jack is drawn unrotated with its pins up.
+  lamps:
+    confidence: estimated
+    note: >-
+      Instructions p.18 to 19, tables 1 to 4. Every lamp is drawn dark and states its colours. POWER is green. The
+      multi-LED STATUS lamp is green, orange or red. It blinks green or red for the flashing codes. It is blue for a changed
+      position and white for a sensor update. The CAN jack has a green and a red lamp and each Ethernet jack a
+      green and an orange one. Fig. 21 shows only two lit colours, green #3baa39 over 2251 pixels and yellow
+      #f0f130 over 287 pixels, in a 200 dpi render of page 18. The other lit colours are the library's own
+      usual values, estimated.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - the table of page 1 ("PDU metered"): DK 7979.235, 3~, 16 A, 11 kW, CEE input, 18 IEC
+      C13 and 3 IEC C19, measuring per phase, 1095 mm. The circuit diagram draws six IEC C13 and one IEC C19 on each
+      of L1, L2 and L3. std/c13-outlet@1 and std/c19-outlet@1. None is switched and none has a lamp. NO OUTLET NAME
+      IS WRITTEN. No held photograph is of this SKU and the outlets keep their placement ids, counted from the foot.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - dri1308088en p.1 gives 230 V per phase (400 V, 3~) and 16 A for this SKU. It gives five wires and a 3 m
+      cable of type H05-VV. The circuit diagram draws the neutral to each phase group, so each outlet is line to
+      neutral. The unit has a fixed cord and no inlet. `plug-rating-a` is not written, as the data sheet rates the
+      unit and not the plug. The data sheet gives circuit-breakers only for 32 A versions, so none is drawn.
+  mounting-buttons:
+    confidence: drawing
+    note: >-
+      drawing - the plan view of page 15 shows two buttons 933.45 apart (dimensioned). Their plates read 67.86 to
+      92.63 and 1000.86 to 1025.88 from the foot end, 25.2 long. The foot end of the plan view is taken to be the
+      end of the front view's foot cell.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the plan view draws the same two long grooves, ridge and two buttons as the basic devices, from 2.6
+      in of each end.
+  phase-plates:
+    confidence: photo-measured
+    note: >-
+      Data sheet: "L1 pink, L2 black, L3 white". In photograph 78_2802 the pink plate reads #ee488f over 15335
+      pixels and the white plate #fefefe over 15569 pixels. The black plate is not sampled and is drawn #1f1f21 as
+      the basic family is. The photograph is of another SKU and the plate edges are not measured.
+  dcim:
+    confidence: estimated
+    note: >-
+      the input is one power port from the cord part and each outlet a power outlet it feeds. C13 and C19 export as
+      the IEC types. The CEE plug exports as `other` with a label. The jacks export as ports of their own type.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      the maker's page lists the SKU among the metered variants. No end-of-life notice was found in the pages read.
+attrs:
+  physical:
+    length-mm: 1094
+    construction: extruded aluminium
+  power:
+    input-ac: 230 V per phase (400 V, 3~), 16 A, 50-60 Hz
+    input-plug: other
+    input-cord: fixed
+    input-phase: three
+    input-wiring: wye
+    input-voltage-v: 400
+    input-current-a: 16
+    capacity-kw: 11
+    capacity-scope: >-
+      the load the PDU can hand on, 11 kW (the "Output kW" column of the maker's table). It is not what the PDU
+      draws itself
+    frequency: 50-60 Hz
+  environmental:
+    operating-temp: +5 to +50 C
+    humidity: 10 to 95 % non-condensing
+  management:
+    metering-scope: input
+    outlet-switching: false
+  compliance:
+    product-compliance: CE, EAC
+  lifecycle:
+    eol: none-announced
+chassis: {width: 44, height: 1094, depth: 72.1, ru: 25, mount: rack-side, color: '#0e0e10', airflow: passive}
+gaps:
+- what: colour
+  scope: [front, rear, left, right]
+  reason: sources-disagree
+  note: >-
+    the data sheet says black anodised RAL 9005 ("other colours may be configured"). The photographs of the
+    metered family show a natural silver-grey extrusion and dark graphite plates. Black is drawn.
+  wanted: a rating plate or order note naming the finish of this SKU.
+- what: phase-modules
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    photograph 78_3236 shows a small module with two sockets, two arrows and dots at the foot end of one phase of
+    a three-phase strip. No held document says which listed SKU carries it, so it is not drawn.
+  wanted: a document that names the SKU and draws the module.
+- what: can-rate
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    fig. 21 item 12 calls the jack a "CAN bus connection (daisy chain) for CMC III sensors, 24 V, 1 A". The
+    instructions state no bit rate for it. It carries no speed and the search is recorded here.
+  wanted: the maker's word on the CAN bus bit rate.
+- what: numbering
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    no photograph of this SKU shows what is printed beside the outlets. The placement ids stand.
+  wanted: a photograph of the printed outlet numbers.
+- what: group-plates
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the plates are drawn in the colours of photograph 78_2802, which is of another SKU. The edges of each plate
+    are not measured, and the plates touch as the drawing's cell lines give them.
+  wanted: a straight-on photograph of the front with a scale.
+- what: hidden-cells
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the front view draws the cord and its plug across the first phase group, so the cell lines of four of its C13
+    are hidden. The block is set from the blocks of six that show.
+  wanted: a front view with the cord drawn away.
+- what: mounting-adaptor
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the mounting adaptor 7000.688 and the universal mounting kit are named and not drawn.
+  wanted: a drawing of the adaptor.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    the end view draws the strip's section with the gland and the button and no detail. No photograph looks at an
+    end or a side straight on.
+  wanted: straight-on photographs of an end and a side.
+groups:
+  outlets-l1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the seven outlets of phase L1, counted from the cable foot: six IEC C13 and one IEC C19'}
+  outlets-l2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the seven outlets of phase L2, counted from the cable foot: six IEC C13 and one IEC C19'}
+  outlets-l3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the seven outlets of phase L3, counted from the cable foot: six IEC C13 and one IEC C19'}
+  power-input: {term: Input, role: service, index-origin: 1}
+  control: {term: Controller, role: furniture, index-origin: 1}
+  ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'ETH2 and ETH1, the two redundant network jacks'}
+  serial: {term: Port, role: management, index-origin: 1, description: 'the RS232 serial jack'}
+  can-bus: {term: Port, role: management, index-origin: 1, description: 'the CAN bus jack for CMC III sensors'}
+  usb: {term: Port, role: management, index-origin: 1, description: 'the USB port for firmware updates and data logging'}
+  signal: {term: Terminal, role: management, index-origin: 1, mixed: 'the digital input and the alarm relay output, two small pluggable headers'}
+  lamps: {term: Lamp, role: indicator, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 44, h: 1094}
+    panel:
+      decor:
+      - {id: head-cap, at: [0, 0], size: [44, 20.38], fill: '#1d1d1f', kind: end-cap}
+      - {id: plate-l3, at: [0, 20.38], size: [44, 226.03], fill: '#fefefe', kind: phase-plate}
+      - {id: controller-cell, at: [0, 246.41], size: [44, 199.7], fill: '#1d1d1f', kind: controller-cell}
+      - {id: plate-l2, at: [0, 446.11], size: [44, 226.03], fill: '#1f1f21', kind: phase-plate}
+      - {id: plate-l1, at: [0, 672.14], size: [44, 225.96], fill: '#ee488f', kind: phase-plate}
+      - {id: cord-cell, at: [0, 898.1], size: [44, 123.8], fill: '#1b1b1d', kind: spacer}
+      - {id: foot-cap, at: [0, 1021.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: cover-plate, at: [2.1, 906.3], size: [40.2, 107.3], fill: '#2e2e31', kind: cover-plate}
+      - {id: plate-lower, at: [2.57, 349.11], size: [39.1, 93.05], fill: '#3c3d40', kind: controller-plate}
+      - {id: screw-1, at: [6.44, 435.04], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
+      - {id: screw-2, at: [31.5, 435.04], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
+      - {id: eth2-body, at: [3.9, 355.11], size: [16.9, 24.0], fill: '#ececec', kind: jack-body}
+      - {id: eth1-body, at: [22.0, 362.81], size: [18.3, 16.3], fill: '#3baa39', kind: jack-body}
+    silkscreen:
+      - {at: [12.37, 352.31], text: ETH2, font-size: 1.8, anchor: middle, for: eth2}
+      - {at: [31.07, 352.31], text: ETH1, font-size: 1.8, anchor: middle, for: eth1}
+      - {at: [12.55, 390.71], text: RS232, font-size: 1.8, anchor: middle, for: rs232}
+      - {at: [30.9, 390.71], text: CAN, font-size: 1.8, anchor: middle, for: can}
+      - {at: [12.8, 418.61], text: USB, font-size: 1.8, anchor: middle, for: usb}
+    components:
+      placements:
+        - {id: input, ref: rittal/pdu-cord-cee-16a@1, at: [5.5, 1044.5], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord with a 16 A CEE plug, leaving the foot cell through a cable gland'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [6.8, 865.12], group: outlets-l1, rel-pos: 1, fed-by: input, lines: [L1, N]}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [6.8, 836.77], group: outlets-l1, rel-pos: 2, fed-by: input, lines: [L1, N]}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [6.8, 808.42], group: outlets-l1, rel-pos: 3, fed-by: input, lines: [L1, N]}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [6.8, 780.08], group: outlets-l1, rel-pos: 4, fed-by: input, lines: [L1, N]}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [6.8, 751.72], group: outlets-l1, rel-pos: 5, fed-by: input, lines: [L1, N]}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [6.8, 723.38], group: outlets-l1, rel-pos: 6, fed-by: input, lines: [L1, N]}
+        - {id: outlet-7, ref: std/c19-outlet@1, at: [4.2, 681.07], rotate: 90, group: outlets-l1, rel-pos: 7, fed-by: input, lines: [L1, N]}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [6.8, 639.16], group: outlets-l2, rel-pos: 1, fed-by: input, lines: [L2, N]}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [6.8, 610.81], group: outlets-l2, rel-pos: 2, fed-by: input, lines: [L2, N]}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [6.8, 582.46], group: outlets-l2, rel-pos: 3, fed-by: input, lines: [L2, N]}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [6.8, 554.12], group: outlets-l2, rel-pos: 4, fed-by: input, lines: [L2, N]}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [6.8, 525.76], group: outlets-l2, rel-pos: 5, fed-by: input, lines: [L2, N]}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [6.8, 497.41], group: outlets-l2, rel-pos: 6, fed-by: input, lines: [L2, N]}
+        - {id: outlet-14, ref: std/c19-outlet@1, at: [4.2, 455.09], rotate: 90, group: outlets-l2, rel-pos: 7, fed-by: input, lines: [L2, N]}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [6.8, 213.44], group: outlets-l3, rel-pos: 1, fed-by: input, lines: [L3, N]}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [6.8, 185.09], group: outlets-l3, rel-pos: 2, fed-by: input, lines: [L3, N]}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [6.8, 156.74], group: outlets-l3, rel-pos: 3, fed-by: input, lines: [L3, N]}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [6.8, 128.38], group: outlets-l3, rel-pos: 4, fed-by: input, lines: [L3, N]}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [6.8, 100.04], group: outlets-l3, rel-pos: 5, fed-by: input, lines: [L3, N]}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [6.8, 71.69], group: outlets-l3, rel-pos: 6, fed-by: input, lines: [L3, N]}
+        - {id: outlet-21, ref: std/c19-outlet@1, at: [4.2, 29.24], rotate: 90, group: outlets-l3, rel-pos: 7, fed-by: input, lines: [L3, N]}
+        - {id: controller, ref: rittal/pdu-controller@1, at: [2.57, 249.11], group: control, rel-pos: 1}
+        - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 366.61], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
+        - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 366.11], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
+        - {id: rs232, ref: common/rj11-jack@1, at: [5.55, 395.16], group: serial, rel-pos: 1}
+        - {id: can, ref: common/rj45-eth@1, at: [23.0, 394.01], group: can-bus, rel-pos: 1, states: {led-a: ['off', {name: communication-possible, color: '#22c55e'}], led-b: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}}
+        - {id: usb, ref: common/usb-a@2, at: [4.3, 420.96], group: usb, rel-pos: 1}
+        - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 410.06], group: signal, rel-pos: 1}
+        - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 420.36], group: signal, rel-pos: 2}
+        - {id: lamp-power, ref: common/led-dot@1, at: [7.5, 332.21], for: controller, group: lamps, rel-pos: 1, states: ['off', {name: 'on', color: '#22c55e'}]}
+        - {id: lamp-status, ref: common/led-dot@1, at: [7.5, 338.06], for: controller, group: lamps, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: alarm, color: '#ef4444'}, {name: device-detected, color: '#22c55e', behavior: blinking}, {name: device-lost, color: '#ef4444', behavior: blinking}, {name: position-changed, color: '#3b82f6'}, {name: update-in-progress, color: '#ef4444', behavior: blinking}, {name: sensor-update, color: '#f5f5f5'}]}
+  rear:
+    size: {w: 44, h: 1094}
+    panel:
+      decor:
+      - {id: groove-1, at: [12.4, 2.6], size: [2.6, 1088.8], fill: '#8e9094', kind: groove}
+      - {id: ridge, at: [21.8, 2.6], size: [0.8, 1088.8], fill: '#6f7173', kind: ridge}
+      - {id: groove-2, at: [30.4, 2.6], size: [2.6, 1088.8], fill: '#8e9094', kind: groove}
+    components:
+      placements:
+        - {id: button-1, ref: rittal/pdu-mounting-button@1, at: [3.7, 1001.37], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: rittal/pdu-mounting-button@1, at: [3.7, 68.12], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 44, h: 72.1}
+    empty: >-
+      no source shows the head end straight on. The end view of the drawing (page 15) is the section of the strip
+      with the gland and the button. No photograph looks at it straight on.
+  bottom:
+    size: {w: 44, h: 72.1}
+    empty: >-
+      no source shows the foot end straight on. The end view of the drawing (page 15) draws the section of the
+      strip. The cord leaves the front, not the end, as its side view shows.
+  left:
+    size: {w: 72.1, h: 1094}
+    empty: >-
+      the side view of the drawing (page 15) draws the side as a plain rectangle. The gland and the outlet
+      mouldings stand out of its front edge. Nothing is drawn on the face and no photograph looks at a side
+      straight on.
+  right:
+    size: {w: 72.1, h: 1094}
+    empty: >-
+      the side view of the drawing (page 15) draws the side as a plain rectangle. No photograph looks at the other
+      side and nothing is drawn on the face.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships: the fixed cord and the two push-button attachments on it. The connector lock for IEC C14
+      and C20 connectors, the universal mounting kit and the mounting adaptor are not drawn.
+    part-numbers:
+      DK 7979.235: {}
+datasheet:
+  title: 'Rittal, Technical details, Power Distribution Unit (dri1308088en, 08.2023)'
+  url: https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979235
+  sha256: 5b93785bcf1545394135a1f42809f8fc9cdf19ebeddfbfdfe0ca7ac86feb4657
+references:
+  - {title: 'Rittal, Technical details, Power Distribution Unit, Metered version (dri2108029en, 08.2023)', url: 'https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979235', sha256: 3d54d83c1d522c09a399e5e46f7506629848593680afb772dcd62a613c3b2a2a}
+  - {title: 'Rittal, Montage-, Installations- und Betriebsanleitung, PDU metered, metered plus, switched, managed, RCM (7979204)', url: 'https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979235'}
