@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 32613-703
-version: 2.0.0
+version: 2.0.1
 maturity: modelled
 manufacturer: Chatsworth Products
 model: '32613-703'
@@ -76,7 +76,8 @@ provenance:
       estimated - the door's size and section. The data sheet (page 1) lists one dual-hinged front
       door assembly, pre-installed, drawn as one plate the height of the manager (installation
       instructions, page 3). It opens to the right or to the left and lifts off; the format has no
-      hinge, so the side is a gap.
+      hinge, so the side is a gap. The door has two latches on its back, in the door component's notes.
+      The plate and seams are drawn on the 10 in width only.
   rear:
     confidence: estimated
     note: >-
@@ -200,14 +201,63 @@ gaps:
       (the data sheet, page 1; none on the 6 in and 8 in widths for the fingers and spools), which
       fit anywhere on the track; none has a fixed place, so none is drawn.
     wanted: a drawing of a manager as shipped, with the accessories placed
-  - what: door-features
+  - what: door-hook
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the data sheet (page 1, key features) names a hook on the inside of the front door for a test
+      meter, in text only. The installation figure (page 3) shows a hinge lug and the rear door's
+      latches, not a hook. The hook is not drawn on the door's back because no held picture shows it.
+    wanted: a photograph of the inside of the front door
+  - what: door-plate-and-seams
     scope: [front]
     reason: vendor-silent
     note: >-
-      the front door has a logo at the top and two blue latches on its back (installation
-      instructions, page 3), and the data sheet's page 1 photograph shows a lighter vertical strip
-      down its upper part; no held page gives their size or position, so none is drawn.
-    wanted: a dimensioned door
+      the page 1 photographs, the page 3 render and the installation drawing (page 1) show a plate and two seams on the door.
+      They sit at places that do not agree in millimetres at any listed width. The plate and seams are drawn on the 10 in
+      width only, so they are not drawn on this one.
+    wanted: a dimensioned drawing of the door's face at this width
+  - what: end-caps
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph shows two dark rounded caps on the top of the manager, one near each
+      side of the door. No held page gives their size. They belong to each device's own frame part,
+      which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the top of the frame
+  - what: feet
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph of the right-hand manager shows two dark feet at the bottom and, between
+      them, a plate that carries two holes. No held page gives their size. They belong to each
+      device's own frame part, which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the bottom of the frame
+  - what: door-hinge-tabs
+    scope: [rear]
+    reason: vendor-silent
+    note: >-
+      the installation figure (page 3) shows four hinge tabs, one at each corner of the door's
+      back, and gives no size. They belong to each device's own frame part, which a following
+      change draws, so they are not drawn here.
+    wanted: a dimensioned view of the door's back
+  - what: side-plate-holes
+    scope: [left, right]
+    reason: vendor-silent
+    note: >-
+      the page 3 render shows holes on the side plate, two above and one below. The page 1
+      photograph of the left-hand manager shows dots there. No held page gives their size or place.
+      They belong to each device's own frame part, which a following change draws, so they are not
+      drawn here.
+    wanted: a dimensioned view of the side plate
+  - what: track-rungs
+    scope: [rear, left, right]
+    reason: vendor-silent
+    note: >-
+      the page 1 photograph of the left-hand manager and the page 3 render show a row of rungs down
+      the central track, beside the door. No held page gives their pitch or size. They belong to
+      each device's own frame part, which a following change draws, so they are not drawn here.
+    wanted: a dimensioned view of the central track
   - what: door-bevel
     scope: [top, bottom, left, right]
     reason: vendor-silent
@@ -359,6 +409,10 @@ views:
         - {id: side-left, at: [0, 0], size: [20, 2133.6], fill: '#202224', kind: finger-wall}
         - {id: side-right, at: [280, 0], size: [20, 2133.6], fill: '#202224', kind: finger-wall}
         - {id: track, at: [135, 0], size: [30, 2133.6], fill: '#2b2d30', kind: base}
+        - {id: latch-left-housing, at: [20, 969], size: [17, 80], fill: '#1c1d1f', kind: latch-housing}
+        - {id: latch-left-handle, at: [14, 987], size: [17, 45], rx: 8.5, fill: '#2796bf', kind: latch}
+        - {id: latch-right-housing, at: [263, 969], size: [17, 80], fill: '#1c1d1f', kind: latch-housing}
+        - {id: latch-right-handle, at: [269, 987], size: [17, 45], rx: 8.5, fill: '#2796bf', kind: latch}
   top:
     size: {w: 300, h: 392}
     panel:
@@ -383,6 +437,8 @@ views:
     size: {w: 392, h: 2133.6}
     panel:
       decor:
+        - {id: latch-housing, at: [374, 973.75], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: latch-handle, at: [374, 987], size: [15, 45], fill: '#2796bf', kind: latch}
         - {id: arm-1, at: [0, 16.23], size: [375, 12], fill: '#26282a', kind: finger}
         - {id: head-1, at: [375, 7.23], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: arm-2, at: [0, 60.68], size: [375, 12], fill: '#26282a', kind: finger}
@@ -484,6 +540,8 @@ views:
     size: {w: 392, h: 2133.6}
     panel:
       decor:
+        - {id: latch-housing, at: [3, 973.75], size: [15, 70.5], fill: '#1c1d1f', kind: latch-housing}
+        - {id: latch-handle, at: [3, 987], size: [15, 45], fill: '#2796bf', kind: latch}
         - {id: arm-1, at: [17, 16.23], size: [375, 12], fill: '#26282a', kind: finger}
         - {id: head-1, at: [3, 7.23], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: arm-2, at: [17, 60.68], size: [375, 12], fill: '#26282a', kind: finger}
