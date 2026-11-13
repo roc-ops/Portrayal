@@ -202,7 +202,8 @@ def test_the_marks_and_icons_are_drawn_as_silkscreen_paths():
     assert set(paths) == {"mark-prompt", "mark-dc", "mark-power", "mark-pulse", "mark-warning", "mark-network",
                           "mark-antenna-arcs", "mark-antenna-stem", "mark-antenna-dot", "mark-link",
                           "mark-arrows-shaft", "mark-arrows-head", "mark-10101", "dc-opening-foot-left",
-                          "dc-opening-foot-right", "dc-centre-mark"}
+                          "dc-opening-foot-right", "dc-centre-mark", "dc-tile-chamfer-1", "dc-tile-chamfer-2",
+                          "dc-tile-chamfer-3", "dc-tile-chamfer-4"}
     assert all(s["path"].strip() and s["fill"].startswith("#") for s in paths.values())
     assert paths["mark-prompt"]["for"] == "console"
 
@@ -401,6 +402,29 @@ def test_the_dc_opening_and_cells_stand_within_0_3_mm_of_the_figure_and_look_lik
         tile, hole = decor[f"dc-cell-{n}"], decor[f"dc-hole-{n}"]
         assert tile["at"][0] < hole["at"][0] and hole["at"][0] + hole["size"][0] < tile["at"][0] + tile["size"][0]
         assert tile["at"][1] < hole["at"][1] and hole["at"][1] + hole["size"][1] < tile["at"][1] + tile["size"][1]
+
+
+# The corner of each tile that the figure cuts, as the tile and the corner: 1 and 4 the lower right, 2 and 3 the lower left.
+DC_CHAMFERS = {"dc-tile-chamfer-1": ("dc-cell-1", "right"), "dc-tile-chamfer-2": ("dc-cell-2", "left"),
+               "dc-tile-chamfer-3": ("dc-cell-3", "left"), "dc-tile-chamfer-4": ("dc-cell-4", "right")}
+
+
+def test_each_dc_tile_has_one_lower_corner_cut_by_a_black_triangle_about_0_6_mm_across():
+    lm4 = _lm4()
+    decor = _decor(lm4)
+    marks = {s["id"]: s for s in lm4["views"]["front"]["silkscreen"] if s.get("id") in DC_CHAMFERS}
+    assert set(marks) == set(DC_CHAMFERS)
+    for ident, (tile_id, side) in DC_CHAMFERS.items():
+        mark, tile = marks[ident], decor[tile_id]
+        assert mark["filled"] is True and mark["fill"] == "#101012" and mark["for"] == "chassis", ident
+        numbers = [float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", mark["path"])]
+        xs = [mark["at"][0] + v for v in numbers[0::2]]
+        ys = [mark["at"][1] + v for v in numbers[1::2]]
+        assert len(xs) == 3, ident
+        assert abs(max(ys) - (tile["at"][1] + tile["size"][1])) <= 0.05, ident
+        edge = tile["at"][0] if side == "left" else tile["at"][0] + tile["size"][0]
+        assert abs((min(xs) if side == "left" else max(xs)) - edge) <= 0.05, ident
+        assert abs(max(xs) - min(xs) - 0.58) <= 0.05 and abs(max(ys) - min(ys) - 0.58) <= 0.05, ident
 
 
 def test_the_dc_opening_has_its_two_corner_wedges_and_its_centre_triangle_as_filled_marks():
