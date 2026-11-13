@@ -128,14 +128,26 @@ def test_the_front_and_rear_draw_the_ears_41_26_high_with_the_plate_strip_behind
     assert "41.26" in " ".join(text["ears"]["note"].split())
 
 
-def test_the_isometric_studs_are_a_gap_with_their_count_and_widths():
-    """The studs cannot be placed from one oblique view, so a gap carries the count range and the pixel widths."""
-    gaps = {g["what"]: g for g in device()["gaps"]}
-    gap = gaps["inner-studs"]
+def test_the_isometric_marks_are_a_gap_that_says_what_the_vector_paths_show():
+    """The drawing's paths show ten marks that match no pressing one to one, so the gap names them and places none."""
+    doc = device()
+    gap = {g["what"]: g for g in doc["gaps"]}["inner-studs"]
     assert gap["reason"] == "needs-drawing" and gap["scope"] == ["left", "right"]
-    note = " ".join(gap["note"].split())
-    assert "8 to 10" in note and "1200 dpi" in note and "px" in note
-    assert "cannot be read" not in " ".join(device()["provenance"]["guides"]["note"].split())
+    note = " ".join(gap["note"].split()).lower()
+    for word in ("ten", "three", "seven", "one to one"):
+        assert word in note, word
+    for word in ("cannot be read", "inner ends"):
+        assert word not in note, word
+    guides = " ".join(doc["provenance"]["guides"]["note"].split())
+    assert "ten in all" in guides and "one to one" in guides
+    assert "inner ends" not in guides and "cannot be read" not in guides
+
+
+def test_the_rear_part_says_the_plate_is_high_and_not_over_the_ears():
+    """The plate is 43.69 high and the ears 41.26, so the plate is not said to stand over the ears."""
+    contract = yaml.safe_load((PARTS / "tripplite-duct-1u-end" / "v1" / "contract.yaml").read_text())
+    size = " ".join(contract["provenance"]["size"].split())
+    assert "high" in size and "over the ears" not in size
 
 
 def test_the_top_views_rear_strip_is_the_inset_rounded_tab_the_drawing_shows():
