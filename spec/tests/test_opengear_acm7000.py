@@ -69,11 +69,17 @@ def test_the_chassis_is_the_data_sheets_centimetre_size_and_has_no_rack_units(sl
 
 
 @pytest.mark.parametrize("slug", DEVICES)
-def test_all_six_faces_are_drawn_or_say_why_not(slug):
-    views = _device(slug)["views"]
+def test_all_six_faces_exist_and_the_four_unseen_sides_are_plain_outlines(slug):
+    device = _device(slug)
+    views = device["views"]
     assert set(views) == {"front", "rear", "top", "bottom", "left", "right"}
     for name in ("top", "bottom", "left", "right"):
-        assert views[name].get("empty"), name
+        assert not views[name].get("empty"), name
+        assert views[name]["size"], name
+    gap = next(g for g in device["gaps"] if g["what"] == "sides")
+    assert gap["reason"] == "needs-photo"
+    assert set(gap["scope"]) == {"top", "bottom", "left", "right"}
+    assert "plain outlines from the stated size" in gap["note"]
 
 
 @pytest.mark.parametrize("slug", DEVICES)
