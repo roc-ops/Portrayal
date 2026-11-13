@@ -48,7 +48,7 @@ provenance:
       30 plus 5, 35, across the rack's face, 88.4 high and 135 deep. THE 5 AND THE 35 ARE ESTIMATED, and
       FS does not say whether its 30 counts the lip. It was settled from two perspective photographs of the
       product page. The plate's known 135 by 88.4 gave each camera, and heights above the plate followed from it.
-      The foot reaches 30 from the plate's underside: 28 above its top face, and 29.5 to 30.6 in both pictures.
+      The foot reaches 30 from the plate's underside: 28 above its top face, and 29.5 to 31.1 in the two pictures.
       Foot plus lip comes to about 35, not 30. So the 30 is the foot's reach alone, and the lip is added to it.
   plate:
     confidence: estimated
@@ -95,8 +95,9 @@ provenance:
     note: >-
       estimated - three gussets join the plate to the foot. They stand at 12.7, 44.2 and 75.7 down the 88.4,
       the 31.5 pitch of the keyholes about the middle. Each is a right triangle about 15 across the foot and
-      6 along the plate. It is 3.5 thick at the plate and tapers (fs/fs-pdubk-gusset-plan@1 and the skins of the
-      foot and the plate). The top view shows the top one, the bottom view the bottom one.
+      6 along the plate. It is 6.5 thick at the plate and 3.5 at the tip. Both were counted in pixels on the
+      dimensioned render at 6.65 px per mm (fs/fs-pdubk-gusset-plan@1 and the skins of the foot and the plate).
+      The top view shows the top one, the bottom view the bottom one.
   thickness:
     confidence: estimated
     note: >-
@@ -122,7 +123,10 @@ provenance:
   color:
     confidence: photo-measured
     note: >-
-      black, as every photograph of the product page shows, and FS's "SPCC" for the steel.
+      black, as every photograph of the product page shows, and FS's "SPCC" for the steel. The photographs
+      measure a neutral near-black, with no blue cast. Pixels of luminance under 90 average 60 (n=431,329, x6),
+      48 (n=361,667, x7), 47 (n=215,802, g1) and 60 (n=493,471, g5). The fills stay as the device uses them,
+      body #1b1d20 and edges #2a2d31, because colours are a later touch.
   hardware:
     confidence: datasheet
     note: >-
@@ -169,6 +173,14 @@ gaps:
     the guide gives no keyhole size and the dimensioned render gives only the pitch. The width scaled off
     it, 11.5, meets what the connectors registry states for `pdu-button` and is not confirmed by a figure.
   wanted: the keyhole dimensions
+- what: lip-and-gusset-sizes
+  reason: needs-drawing
+  note: >-
+    the lip and the gusset sizes are estimates read from the photographs. The bends at the foot and at
+    the two lips are rounded, about 2 to 4 mm radius (x7, g2, g3), and are drawn square. The gussets and
+    the lips are not drawn in 3D. `relief.features` with `shape: true` was tried on the gusset and the lip.
+    The blocks stood outside the top and bottom faces, because the shape extrudes outward, so it was reverted.
+  wanted: a dimensioned side or top drawing of the bracket
 groups:
   foot: {term: Foot, role: furniture, index-origin: 1, description: 'the sheet that lies against the post, bolted through four holes'}
   plate: {term: Plate, role: furniture, index-origin: 1, description: 'the sheet that stands out from the foot, with the keyholes and the square holes'}

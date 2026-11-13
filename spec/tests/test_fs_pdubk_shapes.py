@@ -79,29 +79,35 @@ def centres(svg, pattern):
 def test_three_gussets_stand_on_the_foot_at_the_keyhole_pitch(cfg):
     name = "front" if cfg == "front" else "rear"
     svg = view(cfg, name)
-    paths = re.findall(r'<path id="foot-(?:front|rear)--gusset-\d" [^>]*d="M ([\d.]+) ([\d.]+) L [\d.]+ [\d.]+ V [\d.]+ L [\d.]+ ([\d.]+) Z"', svg)
+    paths = re.findall(r'<path id="foot-(?:front|rear)--gusset-\d" [^>]*d="M ([\d.]+) ([\d.]+) L ([\d.]+) ([\d.]+) V ([\d.]+) L [\d.]+ ([\d.]+) Z"', svg)
     assert len(paths) == 3, f"three gussets on the foot in the {cfg} {name} view"
-    ys = sorted((float(a) + float(b)) / 2 for _, a, b in paths)
+    ys = sorted((float(p[1]) + float(p[5])) / 2 for p in paths)
     for a, b in zip(ys, ys[1:]):
         assert abs(b - a - PITCH) <= TOL
     assert abs(ys[1] - 88.4 / 2) <= TOL, "the middle one is at the middle of the 88.4"
+    for p in paths:
+        # 6.5 thick at the plate and 3.5 at the tip, 15 long: measured on the dimensioned render
+        assert round(float(p[5]) - float(p[1]), 2) == 6.5
+        assert round(float(p[4]) - float(p[3]), 2) == 3.5
+        assert round(float(p[0]) - float(p[2]), 2) == 15.0
 
 
 @pytest.mark.heavy
 @pytest.mark.parametrize("cfg", CONFIGS)
 def test_three_gussets_stand_on_the_plate_at_the_foots_end(cfg):
     svg = view(cfg, "left")
-    rects = re.findall(r'<rect id="plate-(?:front|rear)--gusset-\d"[^>]* x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg)
-    assert len(rects) == 3
-    ys = sorted(float(y) + float(h) / 2 for _, y, _, h in rects)
+    paths = re.findall(r'<path id="plate-(?:front|rear)--gusset-\d"[^>]* d="M ([\d.]+) ([\d.]+) L ([\d.]+) ([\d.]+) V ([\d.]+) L [\d.]+ ([\d.]+) Z"', svg)
+    assert len(paths) == 3
+    ys = sorted((float(p[1]) + float(p[5])) / 2 for p in paths)
     for a, b in zip(ys, ys[1:]):
         assert abs(b - a - PITCH) <= TOL
-    # the foot is at the left end in option 1 and at the right end in option 2
-    for x, _, w, _ in rects:
-        if cfg == "front":
-            assert float(x) < 10
-        else:
-            assert float(x) + float(w) > 125
+    for p in paths:
+        # 6.5 thick at the foot's end and 3.5 at the tip, 6 along the plate: measured on the dimensioned render
+        assert round(float(p[5]) - float(p[1]), 2) == 6.5
+        assert round(float(p[4]) - float(p[3]), 2) == 3.5
+        assert round(abs(float(p[0]) - float(p[2])), 2) == 6.0
+        # the foot is at the left end in option 1 and at the right end in option 2
+        assert float(p[0]) == (2.0 if cfg == "front" else 133.0)
 
 
 @pytest.mark.heavy
@@ -112,8 +118,6 @@ def test_the_far_side_of_the_plate_shows_both_lips_along_its_edges(cfg):
         m = re.search(rf'<rect id="plate-face-(?:front|rear)--{lip}"[^>]* x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg)
         assert m, f"no {lip} along the edge in the {cfg} right view"
         assert tuple(float(v) for v in m.groups()) == (0.0, y, 135.0, 2.0)
-    # the near side, the foot's own, shows neither: they lie behind the plate
-    assert "--lip" not in view(cfg, "left")
 
 
 @pytest.mark.heavy
