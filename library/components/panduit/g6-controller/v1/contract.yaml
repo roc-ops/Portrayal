@@ -6,8 +6,8 @@ class: nic
 behaviour: fills
 profile: power
 description: >-
-  The controller of a Panduit G6 intelligent PDU, a plate midway along the strip. It has a display window, three round
-  buttons labelled Select, Menu and Scroll, two lamps labelled Status and Reset, five RJ45 jacks and a USB-A port.
+  The controller of a Panduit G6 intelligent PDU, a plate midway along the strip. It has a display window and three
+  round buttons labelled Select, Menu and Scroll. It also has two lamps labelled Status and Reset, five RJ45 jacks and a USB-A port.
 size: {w: 47.0, h: 127.8, d: 40}
 size-confidence: {w: drawing, h: drawing, d: estimated}
 attrs: {module: G6 controller}
@@ -18,7 +18,7 @@ provenance:
     figure and label below was read off that rendering, to about 0.5 mm. The drawing lies the PDU down with the cord
     end left. This part is drawn as the PDU stands, cord end down, so the printed legends read upside down.
   size: >-
-    drawing - the rounded face is 128.0 along the PDU by 46.9 across on the drawing, which matches the 127.8 by 47.0 of
+    drawing - the rounded face is 128.0 along the PDU by 46.9 across on the drawing. That matches the 127.8 by 47.0 of
     the G5 plate and is kept. The display window is 36.0 along by 20.7 across and each button is 7.3 across.
     The five jack cells are 16.4 to 17.1 along by 16.2 to 17.1 across.
   labels: >-
@@ -29,7 +29,7 @@ provenance:
   ports: >-
     drawing - five RJ45-shaped jacks and one USB-A jack. The Serial jack is drawn as an RJ45 body, because no held page
     states its standard. The manual IM064 (pages 6 and 7) names Dual 1Gb Ethernet and up to six physical sensors. It
-    does not say which jack is which, so each jack is typed as a telemetry jack (`media: rj45-telemetry`),
+    does not say which jack is which. Each jack is typed as a telemetry jack (`media: rj45-telemetry`),
     which says only that none is exported as an Ethernet interface. The upper row of the 2 by 2 group is drawn with the
     latch notch toward the plate's left edge, and the lower row mirrored.
   lamps: >-
@@ -48,7 +48,7 @@ provenance:
   power: >-
     no document held states the controller's own draw; L27 stands as the record.
 groups:
-  jacks: {term: Port, role: management, index-origin: 1, mixed: 'the controller''s five RJ45 jacks and its USB-A port, each named by its printed label; no document held says which is network, which sensor or which daisy chain'}
+  jacks: {term: Port, role: management, index-origin: 1, mixed: 'the controller''s five RJ45 jacks and its USB-A port, each named by its printed label. No document held says which is network, which sensor or which daisy chain'}
 elements:
   display: {at: [17.9, 77.2], size: [20.5, 35.8], class: decor}
   button-select:

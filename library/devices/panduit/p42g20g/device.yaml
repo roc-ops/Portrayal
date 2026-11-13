@@ -37,9 +37,9 @@ provenance:
   front:
     confidence: drawing
     note: >-
-      drawing - the front view. From the cord end: a plate with the external ground, three breaker plates B1 to B3,
-      three blocks of four columns of two outlets, a blank plate with six marks, the controller, three breaker plates
-      B4 to B6, and three blocks of three columns, to the far end. Plate, block and outlet positions match the P42G20M's
+      drawing - the front view. From the cord end: a plate with the external ground, three breaker plates B1 to B3, and three
+      blocks of four columns of two outlets. Then come a blank plate with six marks, the controller and breaker plates
+      B4 to B6. Three blocks of three columns run to the far end. Plate, block and outlet positions match the P42G20M's
       to 1 mm, checked against the 300 dpi rendering. The outlet pitch is not dimensioned. The column pitch is 37.1
       in the first half, as on the P42G20M, and kept in the second.
   outlets:
@@ -53,8 +53,8 @@ provenance:
   banks:
     confidence: drawing
     note: >-
-      drawing - the front view labels the six blocks 'B1 [DARK GRAY]', 'B2 [LIGHT GRAY]', 'B3 [WHITE]', 'B4 [DARK
-      GRAY]', 'B5 [LIGHT GRAY]' and 'B6 [WHITE]', read from the labels above the blocks, left to right from the cord end.
+      drawing - the front view labels the six blocks with a colour each. They read 'B1 [DARK GRAY]', 'B2 [LIGHT GRAY]' and 'B3 [WHITE]',
+      then 'B4 [DARK GRAY]', 'B5 [LIGHT GRAY]' and 'B6 [WHITE]'. The labels sit above the blocks, left to right from the cord end.
       A second row of labels below the blocks pairs B3 with the second block and B1 with the third (gaps:
       bank-colour-labels). The six breaker plates are B1 to B6, each printing its lines: L1-L2, L2-L3, L3-L1, L1-L2,
       L2-L3, L3-L1. THAT BLOCK Bk IS FED BY BREAKER Bk IS A READING OF THE LABELS. The three greys are drawn as #55585c,
@@ -69,9 +69,9 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the controller plate is drawn between the blank plate and the fourth breaker plate, about 142 along
-      against the component's 127.8; the bay is centred on it. P42G20G is composed with panduit/g6-controller@1 in a bay
+      against the component's 127.8. The bay is centred on it. P42G20G is composed with panduit/g6-controller@1 in a bay
       because the sheet PUSP97 calls the controller hot swappable. The maker's page counts one RJ45 network, two sensor
-      and two daisy-chain jacks and a USB port; the plate prints other labels, and the part names each jack by its label.
+      and two daisy-chain jacks and a USB port. The plate prints other labels, and the part names each jack by its label.
   lamps:
     confidence: datasheet
     note: >-
@@ -86,8 +86,8 @@ provenance:
   capability:
     confidence: datasheet
     note: >-
-      datasheet - the drawing's unit type is MONITORED & SWITCHED PER OUTLET and the maker's page lists it as
-      Monitored & Switched per Outlet, so `metering-scope: outlet` and `outlet-switching: true`.
+      datasheet - the drawing's unit type is MONITORED & SWITCHED PER OUTLET, and the maker's page lists it the
+      same way. So `metering-scope: outlet` and `outlet-switching: true`.
   rear:
     confidence: drawing
     note: >-
@@ -101,15 +101,15 @@ provenance:
       sheet stacks FRONT, RIGHT, REAR and LEFT upward and puts BOTTOM beside FRONT, as the P42G20M's sheet does. The
       library stands the strip cord end down, a half turn in the plane. The sheet's RIGHT VIEW is the library's left
       face and its LEFT VIEW the library's right face. The pairs of marks 24.0 apart agree in both views. Dot lattices:
-      RIGHT VIEW holds 1748 closed 0.6 pt marks, 1.75 mm across, and one is drawn twice, so 1747 dots in 17 blocks
+      RIGHT VIEW holds 1748 closed 0.6 pt marks, 1.75 mm across. One is drawn twice, so 1747 dots in 17 blocks
       on a 4.96 mm pitch. LEFT VIEW holds 1659 dots in 16 blocks on the same pitch. Counted twice, by bounding box and by
-      distinct centres. Also drawn: 12 and 24 round screws 7.1 across, four marks 5.5 across in two pairs 24.0 apart
-      on each face, 42 small tabs along each outlet-side edge, and the LEFT VIEW's window 157.6 by 32.1 with two corner
-      marks. Each position is good to about 1 mm. No function is stated for any mark.
+      distinct centres. Also drawn: 12 and 24 round screws 7.1 across, and four marks 5.5 across in two pairs 24.0 apart
+      on each face. Each face also has 42 small tabs along its outlet-side edge. The LEFT VIEW's window is 157.6 by 32.1,
+      with two corner marks. Each position is good to about 1 mm. No function is stated for any mark.
   ends:
     confidence: estimated
     note: >-
-      ESTIMATED from the vector paths - the sheet's BOTTOM VIEW is the far end, the library's top face: a 10 by 10
+      ESTIMATED from the vector paths. The sheet's BOTTOM VIEW is the far end, the library's top face. It holds a 10 by 10
       lattice of 100 dots on a 4.96 mm pitch, placed to about 2 mm. Its flange tabs are not drawn (gaps: side-marks). No
       view shows the cord end as an end view, so the bottom face is the cord gland alone (gaps: cord-end-face).
 attrs:
@@ -135,7 +135,7 @@ gaps:
 - what: outlet-pitch
   scope: [front]
   reason: needs-drawing
-  note: no dimension of an outlet or a plate on the front view is stated; the positions are read off the drawing at its own 1780.0 scale.
+  note: no dimension of an outlet or a plate on the front view is stated. The positions are read off the drawing at its own 1780.0 scale.
   wanted: a dimensioned front view.
 - what: outlet-numerals
   scope: [front]
@@ -165,8 +165,8 @@ gaps:
   scope: [left, right, top]
   reason: vendor-silent
   note: >-
-    the dot lattices, screws, tabs, window and corner marks of the sides and the far end's lattice are drawn from the
-    sheet as unnamed decor and no document names any of them. The far end's flange tabs are not drawn.
+    the dot lattices, screws, tabs, window and corner marks of the sides and the far end are drawn from the
+    sheet as unnamed decor. No document names any of them. The far end's flange tabs are not drawn.
   wanted: a photograph of each long side.
 - what: breaker-plate-size
   scope: [front]
