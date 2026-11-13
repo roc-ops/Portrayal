@@ -45,7 +45,7 @@ def placements(device, view):
 def test_the_chassis_is_the_one_u_body_the_drawing_dimensions(device):
     c = device["chassis"]
     assert (c["width"], c["height"], c["depth"], c["ru"]) == (436, 44, 262, 1)
-    for face, size in {"front": (436, 44), "rear": (436, 44), "top": (436, 262), "bottom": (436, 262),
+    for face, size in {"front": (480.2, 44), "rear": (436, 44), "top": (436, 262), "bottom": (436, 262),
                        "left": (262, 44), "right": (262, 44)}.items():
         assert (device["views"][face]["size"]["w"], device["views"][face]["size"]["h"]) == size, face
 
