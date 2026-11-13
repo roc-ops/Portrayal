@@ -1,0 +1,757 @@
+format: 1
+kind: device
+name: cn2610-16
+version: 0.1.0
+maturity: modelled
+manufacturer: Moxa
+model: CN2610-16
+description: >-
+  Moxa CN2610-16 16-port RS-232 rackmount terminal server. The front has an LCD panel, four push buttons
+  and a Reset button. It also has the Ready, LAN and PWR lamps and a Tx and an Rx lamp for each serial
+  port. The rear has a ground screw and an AC inlet with a rocker switch. It also has a console jack,
+  two LAN jacks and 16 RJ45 serial ports in two groups of eight.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Three Moxa documents. CN2600 Series data sheet v2.0: page 4 serial interface, page 5 power and dimensions,
+      page 6 environment and package, page 7 dimensions and ordering table. CN2600 Series quick installation
+      guide v6.4: page 3 rear panels. The maker's 2D CAD sheet from the CN2600 downloads. No photograph
+      or stencil is read.
+  size:
+    confidence: datasheet
+    note: >-
+      Data sheet page 5: 440 x 198 x 45.5 mm without ears. The page 7 drawing and the CAD sheet print
+      440.00 and 45.50 and draw the depth as 197.85 and 194.25. The text figure is used, and the difference
+      is the line art's.
+  ru:
+    confidence: estimated
+    note: >-
+      No held document states a rack-unit height. The data sheet says '19-inch rack mounting' and the
+      body is 45.5 mm. The 45.5 mm body is taken as one rack unit.
+  scale:
+    confidence: drawing
+    note: >-
+      The maker's 2D CAD sheet is a vector PDF in the CN2600 downloads. Its views are read from the line
+      coordinates at 1.4173 pt/mm, the scale of the printed 440.00 mm body width. Readings are good to
+      about 1 mm. The rear agrees with the NPort 5650-16 rear to that, apart from the second inlet, the
+      console jack and the second LAN jack.
+  front:
+    confidence: drawing
+    note: >-
+      Data sheet page 7 front view at 300 dpi, whose nameplate reads CN2650-16-2AC. Left to right: end
+      cap, the LCD panel, the Reset button, four push buttons and the nameplate. Then come two rows of
+      16 lamps under the port numerals, a Ready lamp, LAN2 over LAN1 and PWR2 over PWR1. The LCD and Reset
+      are read from the CAD sheet. The lamps and keys fall within 1 mm of the NPort 5650-16 front. The
+      model name on each device is its own, an estimate. The CAD sheet's front also draws a dark bar at
+      the right, which no document names, and it is drawn as an unnamed label. That front draws no push
+      buttons and eight rings in the lamp group, so the data sheet's four buttons and four lamps are followed.
+  serial-ports:
+    confidence: drawing
+    note: >-
+      Data sheet page 4: 16 ports on an 8-pin RJ45, RS-232. The rear figures draw two blocks of eight,
+      numbered 1 to 8 and 9 to 16. The CAD sheet's jack pitch is 13.97 mm, the registry's ganged pitch,
+      and the jack's latch side is up.
+  console:
+    confidence: datasheet
+    note: >-
+      Data sheet page 4: an RS-232 console port on an 8-pin RJ45. The rear figures label the left jack
+      of the three Console. Its pinout differs between the data sheet and the guide, and this device states
+      none.
+  lan:
+    confidence: datasheet
+    note: >-
+      Data sheet page 2 and the rear figures: two 10/100 RJ45 ports labelled LAN 1 and LAN 2. The lamped
+      Ethernet jack part is placed, as in the NPort 5650-16.
+  front-lamps:
+    confidence: drawing
+    note: >-
+      The 32 Tx and Rx lamps are in two rows in port order. A lamp cannot name a port on the other face,
+      so each lamp is `for: chassis` and its number is its id. They are drawn off, with an on state.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet page 5: 100 to 240 VAC, 50/60 Hz, 130 mA @ 110 VAC, one power input. The rear figures
+      draw an IEC inlet with a rocker switch. No held document states a power draw in watts.
+  colour:
+    confidence: estimated
+    note: >-
+      The body colours are the NPort 5650-16's, read from the data sheet's printed render of the same
+      family. The CN2600 render on page 1 is dark charcoal. No photograph is held, so no colour is compared
+      with one.
+  ground:
+    confidence: drawing
+    note: >-
+      A round screw at the left end of the rear, in the data sheet and CAD sheet rear views, with a ground
+      symbol above it. Its size is not stated; the nominal unsized ground screw is placed.
+  top:
+    confidence: drawing
+    note: >-
+      The CAD sheet's top view draws three sets of louvre openings and three screws. The NPort 5650-16
+      top has the same, so it is reused.
+  sides:
+    confidence: estimated
+    note: >-
+      The CAD sheet's left and right views. Each shows at the front a plate 57 mm long with two rows of
+      three holes and a fold, read from the line coordinates. Toward the rear each shows two rows of two
+      holes, a larger dot and two small holes at the edge. Those positions are the figures of the NPort
+      5610-16 sheet, which agree with this sheet to about 1 mm. The right side is the left one mirrored
+      in depth.
+  bottom:
+    confidence: estimated
+    note: >-
+      The CAD sheet's underside view shows four round holes and six tabs on the front edge. It also shows
+      a plate near the rear with two screws and a tab. The positions are read from the front edge and
+      put on the 198 mm face, good to about 1 mm there. The view is turned to the library's underside,
+      rear at the top.
+  ears:
+    confidence: estimated
+    note: >-
+      The CAD sheet's front view draws a flat ear on each end, the full height of the body. Its top view
+      puts the flange about 7.9 mm behind the front face. The printed 31.80 is the spacing of the two
+      slots of an ear.
+attrs:
+  physical:
+    weight-kg: 2.46
+    weight-note: 2,460 g; the data sheet does not say whether the package is included
+  performance: {serial-standards: RS-232, serial-connector: 8-pin RJ45, serial-rate-max: 921.6 kbps}
+  power: {power-input-ac: '100 to 240 VAC, 50/60 Hz', power-input-current: 130 mA @ 110 VAC}
+  environmental: {operating-temp-c: 0 to 55, storage-temp-c: 0 to 55, humidity: 5 to 95% non-condensing}
+  compliance: {safety: UL 60950-1, emc: EN 55032/24, emi: 'CISPR 32, FCC Part 15B Class A'}
+chassis:
+  width: 440
+  height: 45.5
+  depth: 198.0
+  ru: 1
+  color: '#3a3e47'
+  power: ac
+  ears:
+    positions:
+    - {name: proud, label: ears as drawn on the maker's CAD sheet, at: 7.9, default: true}
+gaps:
+- what: rack-kit
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  wanted: >-
+    an installation guide for the rack-mounting kit WK-45-01 with its parts and the racks it takes.
+  note: >-
+    The data sheet lists WK-45-01 as two L-shaped plates, 8 screws, 45 x 57 x 2.5 mm. No guide is held,
+    so no kit is written; the ears are stated as the CAD sheet draws them.
+- what: colour-photograph
+  scope:
+  - front
+  - rear
+  reason: needs-photo
+  wanted: a photograph of the front and of the rear.
+  note: >-
+    The only colour is the data sheet's printed render, which is not compared with a photograph.
+- what: lamp-meaning
+  scope:
+  - front
+  reason: vendor-silent
+  wanted: the guide's or the manual's table of what the Ready, Tx, Rx, LAN and PWR lamps show.
+  note: >-
+    The lamps are drawn and labelled as the figure prints them, and no lamp behaviour is stated.
+- what: console-pinout
+  scope:
+  - rear
+  reason: sources-disagree
+  wanted: which pinout the console jack has.
+  note: >-
+    The data sheet lists three signals for the console port and the guide's table lists eight.
+- what: depth-figures-differ
+  scope:
+  - top
+  - bottom
+  - left
+  - right
+  reason: sources-disagree
+  wanted: which depth is the body's.
+  note: >-
+    Data sheet page 5 gives 198 mm; the page 7 drawing and the CAD sheet give 197.85 and 194.25 mm. The
+    text figure is used.
+- what: front-lamps-keys
+  scope:
+  - front
+  reason: sources-disagree
+  wanted: which source the front follows for the lamps and the keys.
+  note: >-
+    The CAD sheet draws eight lamp rings in two rows of four and no keys. The data sheet draws four keys
+    and four lamps and no bar. The data sheet's page 7 and page 1 render are followed, and the sheet's
+    dark bar is drawn as an unnamed label.
+- what: rear-inlets
+  scope:
+  - top
+  - bottom
+  reason: needs-drawing
+  wanted: >-
+    a ruling on drawing the AC inlet that stands about 3.05 mm past the rear edge in the sheet's top and
+    underside views.
+  note: >-
+    The CAD sheet draws the inlet past the rear edge. Widening both views to 202 mm passed lint, but the
+    size test refused it. The kit states the convention "top = width x depth", and lint says decor "is
+    clipped and never drawn outside the face". The views stay 440 x 198 mm and the inlet is not drawn
+    there.
+- {what: lifecycle, scope: [front, rear], reason: vendor-silent, wanted: the maker's product-lifecycle
+    statement., note: No held document announces or denies an end of life.}
+- what: single-inlet-label
+  scope:
+  - rear
+  reason: vendor-silent
+  wanted: a figure of the single-inlet rear with its labels.
+  note: >-
+    The CAD sheet for this model has no text; the voltage label is placed as on the two-inlet drawing.
+groups:
+  serial:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45-serial}
+  lan:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 100m}
+  leds: {term: LED, role: indicator, index-origin: 1}
+  displays: {term: Display, role: indicator, index-origin: 1}
+  controls: {term: Button, role: management, index-origin: 1}
+  inlets: {term: Inlet, role: service, index-origin: 1}
+  switches: {term: Switch, role: service, index-origin: 1}
+  grounding: {term: Stud, role: furniture, index-origin: 1}
+  furniture: {term: Part, role: furniture, index-origin: 1}
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+views:
+  front:
+    size: {w: 440, h: 45.5}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [440, 45.5], fill: '#3a3e47', kind: bezel}
+      - {id: end-cap-left, at: [0.0, 0.0], size: [20.0, 45.5], fill: '#4a4d52', kind: end-cap}
+      - {id: end-cap, at: [0.0, 0.0], size: [46.08, 45.5], fill: '#4a4d52', rx: 18.0, kind: end-cap}
+      - {id: label-bar, kind: label, at: [346.6, 24.3], size: [26.6, 3.9], fill: '#14171a'}
+    silkscreen:
+    - {id: silk-port-1, at: [224.44, 24.9], text: '1', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-1}
+    - {id: silk-port-2, at: [229.45, 24.9], text: '2', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-2}
+    - {id: silk-port-3, at: [234.46, 24.9], text: '3', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-3}
+    - {id: silk-port-4, at: [239.48, 24.9], text: '4', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-4}
+    - {id: silk-port-5, at: [244.49, 24.9], text: '5', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-5}
+    - {id: silk-port-6, at: [249.5, 24.9], text: '6', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-6}
+    - {id: silk-port-7, at: [254.52, 24.9], text: '7', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-7}
+    - {id: silk-port-8, at: [259.53, 24.9], text: '8', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-8}
+    - {id: silk-port-9, at: [264.55, 24.9], text: '9', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-9}
+    - {id: silk-port-10, at: [269.56, 24.9], text: '10', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-10}
+    - {id: silk-port-11, at: [274.57, 24.9], text: '11', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-11}
+    - {id: silk-port-12, at: [279.59, 24.9], text: '12', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-12}
+    - {id: silk-port-13, at: [284.6, 24.9], text: '13', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-13}
+    - {id: silk-port-14, at: [289.62, 24.9], text: '14', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-14}
+    - {id: silk-port-15, at: [294.63, 24.9], text: '15', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-15}
+    - {id: silk-port-16, at: [299.64, 24.9], text: '16', font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-tx-16}
+    - {id: silk-port, at: [218.19, 25.3], text: Port, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: chassis}
+    - {id: silk-ready, at: [204.52, 35.32], text: Ready, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-ready}
+    - {id: silk-reset, at: [118.1, 32.4], text: Reset, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: reset}
+    - {id: silk-model, at: [158.6, 13.5], text: CN2610-16, font-size: 2.6, anchor: middle, fill: '#f2f5f6',
+      for: chassis}
+    - {id: silk-series, at: [219.5, 13.0], text: Terminal Server, font-size: 1.4, anchor: middle, fill: '#e8ecef',
+      for: chassis}
+    - {id: silk-lan2, at: [313.61, 29.97], text: LAN2, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-lan2}
+    - {id: silk-lan1, at: [313.61, 35.32], text: LAN1, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-lan1}
+    - {id: silk-pwr2, at: [336.8, 29.97], text: PWR2, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-pwr2}
+    - {id: silk-pwr1, at: [336.8, 35.32], text: PWR1, font-size: 1.3, anchor: middle, fill: '#e8ecef',
+      for: led-pwr1}
+    components:
+      placements:
+      - {ref: moxa/nport-5600-lcm@1, id: lcm, at: [57.3, 12.5], for: chassis, group: displays, rel-pos: 1}
+      - {ref: common/reset-button@1, id: reset, at: [123.5, 30.0], group: controls, rel-pos: 1, for: chassis}
+      - {ref: moxa/nport-5600-keys@1, id: keys, at: [136.58, 24.96], for: chassis, group: controls, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-tx-1, at: [223.44, 28.58], for: chassis, group: leds, rel-pos: 1,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-1, at: [223.44, 33.93], for: chassis, group: leds, rel-pos: 17,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-2, at: [228.45, 28.58], for: chassis, group: leds, rel-pos: 2,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-2, at: [228.45, 33.93], for: chassis, group: leds, rel-pos: 18,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-3, at: [233.46, 28.58], for: chassis, group: leds, rel-pos: 3,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-3, at: [233.46, 33.93], for: chassis, group: leds, rel-pos: 19,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-4, at: [238.48, 28.58], for: chassis, group: leds, rel-pos: 4,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-4, at: [238.48, 33.93], for: chassis, group: leds, rel-pos: 20,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-5, at: [243.49, 28.58], for: chassis, group: leds, rel-pos: 5,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-5, at: [243.49, 33.93], for: chassis, group: leds, rel-pos: 21,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-6, at: [248.5, 28.58], for: chassis, group: leds, rel-pos: 6,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-6, at: [248.5, 33.93], for: chassis, group: leds, rel-pos: 22,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-7, at: [253.52, 28.58], for: chassis, group: leds, rel-pos: 7,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-7, at: [253.52, 33.93], for: chassis, group: leds, rel-pos: 23,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-8, at: [258.53, 28.58], for: chassis, group: leds, rel-pos: 8,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-8, at: [258.53, 33.93], for: chassis, group: leds, rel-pos: 24,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-9, at: [263.55, 28.58], for: chassis, group: leds, rel-pos: 9,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-9, at: [263.55, 33.93], for: chassis, group: leds, rel-pos: 25,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-10, at: [268.56, 28.58], for: chassis, group: leds, rel-pos: 10,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-10, at: [268.56, 33.93], for: chassis, group: leds, rel-pos: 26,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-11, at: [273.57, 28.58], for: chassis, group: leds, rel-pos: 11,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-11, at: [273.57, 33.93], for: chassis, group: leds, rel-pos: 27,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-12, at: [278.59, 28.58], for: chassis, group: leds, rel-pos: 12,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-12, at: [278.59, 33.93], for: chassis, group: leds, rel-pos: 28,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-13, at: [283.6, 28.58], for: chassis, group: leds, rel-pos: 13,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-13, at: [283.6, 33.93], for: chassis, group: leds, rel-pos: 29,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-14, at: [288.62, 28.58], for: chassis, group: leds, rel-pos: 14,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-14, at: [288.62, 33.93], for: chassis, group: leds, rel-pos: 30,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-15, at: [293.63, 28.58], for: chassis, group: leds, rel-pos: 15,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-15, at: [293.63, 33.93], for: chassis, group: leds, rel-pos: 31,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-tx-16, at: [298.64, 28.58], for: chassis, group: leds, rel-pos: 16,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-rx-16, at: [298.64, 33.93], for: chassis, group: leds, rel-pos: 32,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-ready, at: [213.03, 33.93], for: chassis, group: leds, rel-pos: 33,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-lan2, at: [318.86, 28.58], for: chassis, group: leds, rel-pos: 34,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-lan1, at: [318.86, 33.93], for: chassis, group: leds, rel-pos: 35,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-pwr2, at: [328.96, 28.58], for: chassis, group: leds, rel-pos: 36,
+        states: ['off', 'on']}
+      - {ref: common/led-dot@1, id: led-pwr1, at: [328.96, 33.93], for: chassis, group: leds, rel-pos: 37,
+        states: ['off', 'on']}
+    regions:
+    - id: logo-zone
+      at: [5.35, 20.96]
+      size: {w: 26.46, h: 4.16}
+      label: maker mark; not drawn
+  rear:
+    size: {w: 440, h: 45.5}
+    panel:
+      decor:
+      - {id: rear-plate, at: [0.0, 0.0], size: [440, 45.5], fill: '#1d2024', kind: bezel}
+      - {id: power-plate, at: [19.32, 1.78], size: [90.07, 41.62], fill: '#14171a', rx: 1.0, kind: power-plate}
+      - {id: inlet-module-frame, at: [28.24, 5.95], size: [31.81, 34.78], fill: '#0b0c0e', rx: 2.0, kind: module-frame}
+      - {id: lan-plate, at: [113.85, 1.78], size: [64.51, 41.62], fill: '#14171a', rx: 1.0, kind: lan-plate}
+      - {id: serial-frame-1, at: [177.47, 20.21], size: [117.72, 17.24], fill: '#0b0c0e', kind: port-block-frame}
+      - {id: serial-frame-2, at: [305.59, 20.21], size: [116.53, 17.24], fill: '#0b0c0e', kind: port-block-frame}
+      cutouts:
+      - {id: port-1, at: [181.08, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-2, at: [195.05, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-3, at: [209.02, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-4, at: [222.99, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-5, at: [236.96, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-6, at: [250.93, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-7, at: [264.9, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-8, at: [278.87, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-9, at: [308.61, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-10, at: [322.58, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-11, at: [336.55, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-12, at: [350.52, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-13, at: [364.49, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-14, at: [378.46, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-15, at: [392.43, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: port-16, at: [406.4, 23.33], size: [12.7, 11.0], shape: rect}
+      - {id: inlet, at: [30.29, 8.73], size: [28.0, 20.0], shape: rect}
+      - {id: power-switch, at: [31.94, 28.78], size: [24.7, 8.9], shape: rect}
+      - {id: console, at: [120.9, 22.53], size: [15.8, 13.2], shape: rect}
+      - {id: lan-1, at: [137.4, 22.53], size: [15.8, 13.2], shape: rect}
+      - {id: lan-2, at: [153.9, 22.53], size: [15.8, 13.2], shape: rect}
+    silkscreen:
+    - {at: [187.43, 19.73], text: '1', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-1}
+    - {at: [201.4, 19.73], text: '2', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-2}
+    - {at: [215.37, 19.73], text: '3', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-3}
+    - {at: [229.34, 19.73], text: '4', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-4}
+    - {at: [243.31, 19.73], text: '5', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-5}
+    - {at: [257.28, 19.73], text: '6', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-6}
+    - {at: [271.25, 19.73], text: '7', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-7}
+    - {at: [285.22, 19.73], text: '8', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-8}
+    - {at: [314.96, 19.73], text: '9', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-9}
+    - {at: [328.93, 19.73], text: '10', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-10}
+    - {at: [342.9, 19.73], text: '11', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-11}
+    - {at: [356.87, 19.73], text: '12', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-12}
+    - {at: [370.84, 19.73], text: '13', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-13}
+    - {at: [384.81, 19.73], text: '14', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-14}
+    - {at: [398.78, 19.73], text: '15', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-15}
+    - {at: [412.75, 19.73], text: '16', font-size: 2.2, anchor: middle, fill: '#e8ecef', for: port-16}
+    - {id: silk-serial-ports, at: [189.66, 10.7], text: Serial Ports, font-size: 1.5, anchor: middle,
+      fill: '#e8ecef', for: chassis}
+    - {id: silk-console, at: [128.8, 19.62], text: Console, font-size: 1.5, anchor: middle, fill: '#e8ecef',
+      for: console}
+    - {id: silk-lan-1, at: [145.3, 19.62], text: LAN 1, font-size: 1.5, anchor: middle, fill: '#e8ecef',
+      for: lan-1}
+    - {id: silk-lan-2, at: [161.8, 19.62], text: LAN 2, font-size: 1.5, anchor: middle, fill: '#e8ecef',
+      for: lan-2}
+    - {id: silk-ac-range, at: [44.3, 4.2], text: '100-240V, 47-63Hz', font-size: 1.2, anchor: middle,
+      fill: '#e8ecef', for: inlet}
+    components:
+      placements:
+      - ref: std/rj45-ganged@2
+        id: port-1
+        at: [181.08, 23.33]
+        group: serial
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-2
+        at: [195.05, 23.33]
+        group: serial
+        rel-pos: 2
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-3
+        at: [209.02, 23.33]
+        group: serial
+        rel-pos: 3
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-4
+        at: [222.99, 23.33]
+        group: serial
+        rel-pos: 4
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-5
+        at: [236.96, 23.33]
+        group: serial
+        rel-pos: 5
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-6
+        at: [250.93, 23.33]
+        group: serial
+        rel-pos: 6
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-7
+        at: [264.9, 23.33]
+        group: serial
+        rel-pos: 7
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-8
+        at: [278.87, 23.33]
+        group: serial
+        rel-pos: 8
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-9
+        at: [308.61, 23.33]
+        group: serial
+        rel-pos: 9
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-10
+        at: [322.58, 23.33]
+        group: serial
+        rel-pos: 10
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-11
+        at: [336.55, 23.33]
+        group: serial
+        rel-pos: 11
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-12
+        at: [350.52, 23.33]
+        group: serial
+        rel-pos: 12
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-13
+        at: [364.49, 23.33]
+        group: serial
+        rel-pos: 13
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-14
+        at: [378.46, 23.33]
+        group: serial
+        rel-pos: 14
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-15
+        at: [392.43, 23.33]
+        group: serial
+        rel-pos: 15
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45-ganged@2
+        id: port-16
+        at: [406.4, 23.33]
+        group: serial
+        rel-pos: 16
+        attrs: {media: rj45-serial, role: console-server}
+      - ref: std/rj45@2
+        id: console
+        at: [120.9, 22.53]
+        group: console
+        rel-pos: 1
+        attrs: {media: rj45-serial, role: console}
+      - ref: common/rj45-eth@1
+        id: lan-1
+        at: [137.4, 22.53]
+        group: lan
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m}
+      - ref: common/rj45-eth@1
+        id: lan-2
+        at: [153.9, 22.53]
+        group: lan
+        rel-pos: 2
+        attrs: {media: rj45, speed: 100m}
+      - {ref: std/c14-inlet@1, id: inlet, at: [30.29, 8.73], group: inlets, rel-pos: 1}
+      - {ref: moxa/nport-5600-power-rocker@1, id: power-switch, at: [31.94, 28.78], for: inlet, group: switches,
+        rel-pos: 1}
+      - {ref: common/ground-screw@1, id: ground, at: [8.5, 30.79], group: grounding, rel-pos: 1}
+      - {ref: common/screw-head@1, id: plate-screw-1, at: [22.58, 7.12], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: plate-screw-2, at: [22.58, 37.44], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: plate-screw-3, at: [102.84, 7.12], group: furniture, rel-pos: 3}
+      - {ref: common/screw-head@1, id: plate-screw-4, at: [102.84, 37.44], group: furniture, rel-pos: 4}
+      - {ref: common/screw-head@1, id: plate-screw-5, at: [116.21, 7.12], group: furniture, rel-pos: 5}
+      - {ref: common/screw-head@1, id: plate-screw-6, at: [116.21, 37.44], group: furniture, rel-pos: 6}
+      - {ref: common/screw-head@1, id: plate-screw-7, at: [172.69, 7.12], group: furniture, rel-pos: 7}
+      - {ref: common/screw-head@1, id: plate-screw-8, at: [172.69, 37.44], group: furniture, rel-pos: 8}
+      - {ref: common/screw-head@1, id: plate-screw-9, at: [216.69, 39.82], group: furniture, rel-pos: 9}
+      - {ref: common/screw-head@1, id: plate-screw-10, at: [347.49, 39.82], group: furniture, rel-pos: 10}
+  top:
+    size: {w: 440, h: 198.0}
+    panel:
+      decor:
+      - {id: top-plate, at: [0.0, 0.0], size: [440, 198.0], fill: '#3a3e47', kind: envelope}
+      - id: vent-rear-centre
+        kind: vent-field
+        at: &id001 [131.99, 8.92]
+        size: [177.18, 77.3]
+        pattern: motif
+        pattern-offset: *id001
+        pattern-pitch: [177.18, 77.3]
+        pattern-cells:
+        - - [0.0, 0.0]
+          - [177.17, 0.0]
+          - [164.39, 11.3]
+          - [13.08, 11.3]
+        - - [25.56, 21.7]
+          - [151.9, 21.7]
+          - [138.82, 33.29]
+          - [38.64, 33.29]
+        - - [50.83, 44.0]
+          - [126.63, 44.0]
+          - [113.85, 55.29]
+          - [63.91, 55.29]
+        - - [75.8, 65.99]
+          - [101.37, 65.99]
+          - [88.59, 77.29]
+        vent: 1.0
+        fill: '#15171b'
+      - id: vent-left
+        kind: vent-field
+        at: &id002 [88.29, 86.21]
+        size: [87.7, 76.7]
+        pattern: motif
+        pattern-offset: *id002
+        pattern-pitch: [87.7, 76.7]
+        pattern-cells:
+        - - [0.0, 0.0]
+          - [0.0, 11.3]
+          - [13.08, 11.3]
+        - - [0.0, 22.0]
+          - [25.27, 22.0]
+          - [38.05, 33.29]
+          - [0.0, 33.29]
+        - - [0.0, 43.7]
+          - [50.54, 43.7]
+          - [63.32, 55.29]
+          - [0.0, 55.29]
+        - - [0.0, 64.8]
+          - [74.91, 64.8]
+          - [87.69, 76.69]
+          - [0.0, 76.69]
+        vent: 1.0
+        fill: '#15171b'
+      - id: vent-right
+        kind: vent-field
+        at: &id003 [265.16, 86.21]
+        size: [88.0, 76.7]
+        pattern: motif
+        pattern-offset: *id003
+        pattern-pitch: [88.0, 76.7]
+        pattern-cells:
+        - - [87.99, 0.0]
+          - [87.99, 11.3]
+          - [74.91, 11.3]
+        - - [62.72, 22.0]
+          - [87.99, 22.0]
+          - [87.99, 33.29]
+          - [49.94, 33.29]
+        - - [37.75, 43.7]
+          - [87.99, 43.7]
+          - [87.99, 55.29]
+          - [24.67, 55.29]
+        - - [13.38, 64.8]
+          - [87.99, 64.8]
+          - [87.99, 76.69]
+          - [0.0, 76.69]
+        vent: 1.0
+        fill: '#15171b'
+    components:
+      placements:
+      - {ref: common/screw-head@1, id: top-screw-1, at: [68.95, 180.13], group: furniture, rel-pos: 1}
+      - {ref: common/screw-head@1, id: top-screw-2, at: [219.07, 180.13], group: furniture, rel-pos: 2}
+      - {ref: common/screw-head@1, id: top-screw-3, at: [369.19, 180.13], group: furniture, rel-pos: 3}
+  bottom:
+    size: {w: 440, h: 198.0}
+    panel:
+      decor:
+      - {id: bottom-plate, kind: envelope, at: [0.0, 0.0], size: [440.0, 198.0], fill: '#3a3e47'}
+      - {id: round-hole-front-left, kind: hole, at: [21.9, 163.1], size: [14.8, 14.8], fill: '#14171a',
+        rx: 7.4}
+      - {id: round-hole-front-right, kind: hole, at: [403.3, 163.1], size: [14.8, 14.8], fill: '#14171a',
+        rx: 7.4}
+      - {id: round-hole-rear-left, kind: hole, at: [21.9, 22.85], size: [14.8, 14.8], fill: '#14171a',
+        rx: 7.4}
+      - {id: round-hole-rear-right, kind: hole, at: [403.3, 22.85], size: [14.8, 14.8], fill: '#14171a',
+        rx: 7.4}
+      - {id: tab-1, kind: tab, at: [390.75, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-1-bar, kind: tab, at: [390.75, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: tab-2, kind: tab, at: [318.55, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-2-bar, kind: tab, at: [318.55, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: tab-3, kind: tab, at: [246.35, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-3-bar, kind: tab, at: [246.35, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: tab-4, kind: tab, at: [174.25, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-4-bar, kind: tab, at: [174.25, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: tab-5, kind: tab, at: [102.05, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-5-bar, kind: tab, at: [102.05, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: tab-6, kind: tab, at: [29.65, 187.0], size: [9.7, 6.6], fill: '#2b2f36'}
+      - {id: tab-6-bar, kind: tab, at: [29.65, 181.4], size: [9.7, 3.3], fill: '#14171a'}
+      - {id: rear-plate, kind: plate, at: [154.5, 39.75], size: [272.0, 30.6], fill: '#2b2e34'}
+      - {id: rear-plate-tab, kind: tab, at: [278.7, 40.95], size: [24.0, 3.1], fill: '#14171a'}
+      - {id: rear-plate-screw-1, kind: hole, at: [353.3, 42.75], size: [6.6, 6.6], fill: '#14171a', rx: 3.3}
+      - {id: rear-plate-screw-2, kind: hole, at: [201.4, 42.75], size: [6.6, 6.6], fill: '#14171a', rx: 3.3}
+  left:
+    size: {w: 198.0, h: 45.5}
+    panel:
+      decor:
+      - {id: side-plate, kind: envelope, at: [0.0, 0.0], size: [198.0, 45.5], fill: '#3a3e47'}
+      - {id: fold-rear, kind: seam, at: [13.3, 0.9], size: [1.7, 43.7], fill: '#2c2f35'}
+      - {id: body-hole-1, kind: hole, at: [25.2, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-1-centre, kind: hole, at: [27.05, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-2, kind: hole, at: [45.5, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-2-centre, kind: hole, at: [47.35, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-3, kind: hole, at: [25.2, 28.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-3-centre, kind: hole, at: [27.05, 29.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-4, kind: hole, at: [45.5, 28.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-4-centre, kind: hole, at: [47.35, 29.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: rear-hole-1, kind: hole, at: [6.25, 14.15], size: [3.1, 3.1], fill: '#14171a', rx: 1.55}
+      - {id: rear-hole-2, kind: hole, at: [6.25, 29.15], size: [3.1, 3.1], fill: '#14171a', rx: 1.55}
+      - {id: body-dot, kind: hole, at: [47.55, 35.95], size: [6.5, 6.5], fill: '#14171a', rx: 3.25}
+      - {id: front-plate, kind: plate, at: [131.5, 0.9], size: [57.0, 43.7], fill: '#33373e'}
+      - {id: front-fold, kind: seam, at: [186.4, 0.9], size: [2.6, 43.7], fill: '#2c2f35'}
+      - {id: front-hole-1, kind: hole, at: [136.6, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-1-centre, kind: hole, at: [138.45, 14.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+      - {id: front-hole-2, kind: hole, at: [156.6, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-2-centre, kind: hole, at: [158.45, 14.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+      - {id: front-hole-3, kind: hole, at: [176.6, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-3-centre, kind: hole, at: [178.45, 14.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+      - {id: front-hole-4, kind: hole, at: [136.6, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-4-centre, kind: hole, at: [138.45, 29.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+      - {id: front-hole-5, kind: hole, at: [156.6, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-5-centre, kind: hole, at: [158.45, 29.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+      - {id: front-hole-6, kind: hole, at: [176.6, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-6-centre, kind: hole, at: [178.45, 29.75], size: [2.5, 2.5], fill: '#33373e',
+        rx: 1.25}
+  right:
+    size: {w: 198.0, h: 45.5}
+    panel:
+      decor:
+      - {id: side-plate, kind: envelope, at: [0.0, 0.0], size: [198.0, 45.5], fill: '#3a3e47'}
+      - {id: fold-rear, kind: seam, at: [183.0, 0.9], size: [1.7, 43.7], fill: '#2c2f35'}
+      - {id: body-hole-1, kind: hole, at: [167.4, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-1-centre, kind: hole, at: [169.25, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-2, kind: hole, at: [147.1, 13.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-2-centre, kind: hole, at: [148.95, 14.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-3, kind: hole, at: [167.4, 28.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-3-centre, kind: hole, at: [169.25, 29.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: body-hole-4, kind: hole, at: [147.1, 28.0], size: [5.4, 5.4], fill: '#14171a', rx: 2.7}
+      - {id: body-hole-4-centre, kind: hole, at: [148.95, 29.85], size: [1.7, 1.7], fill: '#3a3e47', rx: 0.85}
+      - {id: rear-hole-1, kind: hole, at: [188.65, 14.15], size: [3.1, 3.1], fill: '#14171a', rx: 1.55}
+      - {id: rear-hole-2, kind: hole, at: [188.65, 29.15], size: [3.1, 3.1], fill: '#14171a', rx: 1.55}
+      - {id: body-dot, kind: hole, at: [143.95, 35.95], size: [6.5, 6.5], fill: '#14171a', rx: 3.25}
+      - {id: front-plate, kind: plate, at: [9.5, 0.9], size: [57.0, 43.7], fill: '#33373e'}
+      - {id: front-fold, kind: seam, at: [9.0, 0.9], size: [2.6, 43.7], fill: '#2c2f35'}
+      - {id: front-hole-1, kind: hole, at: [55.2, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-1-centre, kind: hole, at: [57.05, 14.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+      - {id: front-hole-2, kind: hole, at: [35.2, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-2-centre, kind: hole, at: [37.05, 14.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+      - {id: front-hole-3, kind: hole, at: [15.2, 12.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-3-centre, kind: hole, at: [17.05, 14.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+      - {id: front-hole-4, kind: hole, at: [55.2, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-4-centre, kind: hole, at: [57.05, 29.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+      - {id: front-hole-5, kind: hole, at: [35.2, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-5-centre, kind: hole, at: [37.05, 29.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+      - {id: front-hole-6, kind: hole, at: [15.2, 27.9], size: [6.2, 6.2], fill: '#14171a', rx: 3.1}
+      - {id: front-hole-6-centre, kind: hole, at: [17.05, 29.75], size: [2.5, 2.5], fill: '#33373e', rx: 1.25}
+configurations:
+  base:
+    kind: base
+    default: true
+    part-numbers:
+      CN2610-16: {}
+    description: CN2610-16 as the data sheet's ordering table lists it, with its power cord
+references:
+- {title: 'CN2600 Series data sheet, v2.0 (Moxa)'}
+- {title: 'CN2600 Series quick installation guide, Version 6.4 (Moxa)'}
+- title: >-
+    2D CAD sheet in the CN2600 Series downloads, titled for the CN2610-16-2AC, CN2650-16-2AC and CN2650-16-2AC-T
+    (Moxa)
