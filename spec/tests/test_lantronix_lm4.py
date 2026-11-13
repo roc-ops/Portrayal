@@ -299,6 +299,24 @@ def test_each_corner_screw_has_a_plus_recess_and_the_sfp_cage_has_its_green_pull
     assert port["at"][0] <= tab["at"][0] and tab["at"][0] + tab["size"][0] <= port["at"][0] + 14.5
 
 
+def test_the_reset_pinhole_has_its_tan_ring_and_the_ring_sits_on_the_pinhole_disc_centre():
+    decor = _decor(_lm4())
+    assert "reset-ring" in decor and "reset-pinhole" in decor
+    disc, ring, pinhole = decor["reset-hole"], decor["reset-ring"], decor["reset-pinhole"]
+    assert ring["size"] == [1.8, 1.8] and ring["rx"] == 0.9
+    assert pinhole["size"] == [0.9, 0.9] and pinhole["rx"] == 0.45
+    for part in (ring, pinhole):
+        assert part["size"][0] <= disc["size"][0]
+    centre = (disc["at"][0] + 1.6, disc["at"][1] + 1.6)
+    for part in (ring, pinhole):
+        assert abs(part["at"][0] + part["size"][0] / 2 - centre[0]) < 0.01
+        assert abs(part["at"][1] + part["size"][1] / 2 - centre[1]) < 0.01
+    ids = list(decor)
+    assert ids.index("reset-hole") < ids.index("reset-ring") < ids.index("reset-pinhole")
+    note = " ".join(_lm4()["provenance"]["body"]["note"].split())
+    assert "The Reset pinhole has a tan ring" in note
+
+
 def test_the_sources_that_disagree_are_each_said_in_the_notes():
     notes = " ".join(" ".join(p["note"].split()) for p in _lm4()["provenance"].values())
     assert "The dimensions figure draws the console lamps yellow at the left and green at the right" in notes
