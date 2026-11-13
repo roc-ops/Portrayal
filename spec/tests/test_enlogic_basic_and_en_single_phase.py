@@ -113,7 +113,7 @@ def test_the_en6324_export_gives_the_same_feed():
 
 
 # Centres of the four rings on each side: mm along from the cord end, and mm from the front on the right face.
-# The left face measures the same depth from the rear, so its x is the face's depth less that.
+# The left face is the right face turned over, so its x is the face's depth less that figure.
 RINGS = {
     "en6324": dict(depth=53.0, front=32.0, size=8.2, along=(40.51, 64.52, 1596.41, 1620.42)),
     "en2333": dict(depth=75.0, front=54.03, size=12.09, along=(40.53, 64.54, 1596.42, 1620.43)),
