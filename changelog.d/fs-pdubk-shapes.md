@@ -9,9 +9,12 @@
   The gussets are drawn in the top and bottom views, on the plate and on the foot.
   A gusset is 6.5 mm thick at the plate and 3.5 mm at its tip, counted in pixels on the dimensioned render.
   Every position and size is read from the maker's photographs and is an estimate.
-  A new gap, `lip-and-gusset-sizes`, asks for a dimensioned drawing. It also records that the bends are drawn square and the lips and gussets are not drawn in 3D.
-  A second new gap, `lip-end-tabs`, names the small hook at the free end of each lip. Each reaches 3.2 to 3.5 mm. The hooks are not drawn.
-  A trial with the depth and the four views at 139 kept capability level 4. The depth is a stated figure, so the gap asks the maintainer whether it may read 139.
+  A new gap, `lip-and-gusset-sizes`, asks for a dimensioned drawing.
+  It also records that the bends are drawn square and the lips and gussets are not drawn in 3D.
+  A second new gap, `lip-end-tabs`, names the small hook at the free end of each lip.
+  Each reaches 3.2 to 3.5 mm. The hooks are not drawn.
+  A trial with the depth and the four views at 139 kept capability level 4.
+  The depth is a stated figure, so the gap asks the maintainer whether it may read 139.
   The device takes a major version because its width changes. No keyhole moves, and no port or export id changes.
   The foot and plate parts take a patch, and `fs/fs-pdubk-gusset-plan@1` and `fs/fs-pdubk-lip-plan@1` are added.
   This closes no row of the conformance records.

@@ -145,7 +145,8 @@ def test_the_lip_end_tabs_are_a_named_gap_with_a_reason():
     assert gaps["lip-end-tabs"]["reason"] == "needs-drawing"
     assert gaps["lip-end-tabs"]["scope"] == ["left", "right", "top", "bottom"]
     note = " ".join(gaps["lip-end-tabs"]["note"].split())
-    # the measured facts at each picture's own scale, the source of the 135, the probe's result and the level check's lines
+    # the measured facts at each picture's own scale, the source of the 135,
+    # the probe's result and the level check's lines
     for words in (
         "3.2 to 3.5 mm",
         "2.4 to 2.7 mm",
