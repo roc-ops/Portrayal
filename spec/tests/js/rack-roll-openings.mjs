@@ -75,6 +75,12 @@ test('the drawing adds one opening for each, a rect for a slot and an ellipse fo
   const sh = s[0];
   assert.ok(Math.abs(first.attrs.cx - (225.425 + sh.strip[0].cx)) < 1e-6, 'drawn at its x on the centre line');
   assert.ok(Math.abs(first.attrs.cy - (1000 - sh.strip[0].cy)) < 1e-6, 'drawn at its y');
+  const drawnSlots = kids.filter(k => k.tag === 'rect'), wantSlots = sh.earSlots;
+  assert.equal(drawnSlots.length, wantSlots.length);
+  drawnSlots.forEach((r, i) => {
+    assert.ok(Math.abs(r.attrs.x + 3 - (225.425 + wantSlots[i].cx)) < 1e-6, 'an ear slot is drawn at its x');
+    assert.ok(Math.abs(r.attrs.y + 7 - (1000 - wantSlots[i].cy)) < 1e-6, 'an ear slot is drawn at its y');
+  });
   const slotted = svgEl('svg', {});
   drawRolledBrackets(svgEl, slotted, it, rolledBracketShapes(it, [{...PLAIN, strip: {shape: 'slot', count: 3, pitch: 35, size: [30, 4]}}], box), mm => 1000 - mm, C);
   assert.equal(slotted.kids[0].kids.filter(k => k.tag === 'rect').length, 3, 'a strip of slots is drawn as rects');

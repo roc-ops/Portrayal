@@ -60,3 +60,9 @@ def test_the_published_form_keeps_each_key_and_floats_each_length():
     assert isinstance(b["strip"]["count"], int) and isinstance(b["strip"]["pitch"], float)
     assert b["ear-slots"] == {"count": 2, "pitch": 60.0, "size": [6.0, 14.0]}
     assert "strip" not in published_ears({"rolled": [BASE]})["rolled"][0]
+
+
+def test_the_published_form_keeps_the_shape():
+    from portrayal.render import published_ears
+    out = published_ears({"rolled": [{**BASE, "strip": {"shape": "slot", "count": 11, "pitch": 35, "size": [30, 4]}}]})
+    assert out["rolled"][0]["strip"] == {"shape": "slot", "count": 11, "pitch": 35.0, "size": [30.0, 4.0]}
