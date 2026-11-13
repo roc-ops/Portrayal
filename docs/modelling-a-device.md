@@ -778,13 +778,39 @@ the plan reaches is named by L234.
   hinge face meets the seam, so the lid turns on the body.
 
 The cut is portrayal/plan.py; its answers for small cases are worked by hand in
-`spec/tests/fixtures/plan_outline/sweep-cases.json`, which the kit's version will read too.
+`spec/tests/fixtures/plan_outline/sweep-cases.json`, which the kit's version (`kit/plan.js`)
+reads too, and `body-cases.json` holds what plan.py computes for two made-up boxes.
 
-**The 3D body does not follow the key yet.** The faces are drawn from it, and the body is
-still the extruded section, so a kit that has the new faces and not the new body shows
-holes in the top and bottom of the box. **State it on no device yet.** A test fails if a
-library device does; the later change that builds the body from it, and the site's
-re-vendoring of the kit, come first.
+**The 3D body follows the key (the closed state).** The viewer builds the closed housing
+as the section cut band by band, so the corners are round, the lobes stand, and a casting
+inset from the flange is narrower than it in every view. In 3D:
+
+- **Top and bottom facets** at every height where the section or a band changes: the part
+  of the body that looks up shows the top drawing and the part that looks down the bottom
+  drawing, each placed by where it is along the length and the depth. Where the two sides
+  of a height are the same there is no facet; where a lower band is narrower the ring it
+  leaves is a ledge.
+- **Walls of the section.** The front and rear walls the section itself has keep the
+  front and rear drawings, so an inset casting's front wall still carries its parts. A plan
+  edge within half a millimetre of such a wall is that wall, so nothing is drawn twice.
+- **Plan walls are plain.** A wall that comes from an edge of the plan, a rounded corner,
+  a lobe's flank, the end wall of an inset casting, is the plain housing colour (the
+  faceplate's fill) and shows no drawing, because a drawing laid flat on a wall at an angle
+  would be smeared along it. Nothing is picked on one except the long face it is on.
+- **End caps.** A cap at either end of the box is the section's profile cut to what the
+  plan leaves at that end: it can be several pieces, or none where a casting is inset from
+  the end.
+- **Ribs** are cut to the plan band they stand in: a rib the plan removes is not drawn, a
+  rib it cuts is cut, and the 400-rib limit counts the ribs before that.
+
+The body is one closed mesh, with no gap or doubled face where two bands meet.
+
+**Not drawn yet.** The open state of a housing that states a plan outline builds, but its
+two halves are still the section extruded, so they show a rectangle without the rounded
+corners, lobes or rim; parts do not yet stand on the plan's walls; and the new wall
+material is not yet taken into account by the GLB and USDZ exports. **State it on no
+device yet.** A test fails if a library device does; the site's re-vendoring of the kit
+comes first.
 
 **The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
 export keeps the alpha: the corners are fully transparent, and the `background` option
