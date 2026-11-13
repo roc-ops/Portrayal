@@ -46,10 +46,9 @@ def test_the_chassis_is_the_pages_size(name):
 def test_every_face_is_there(name):
     views = device(name)["views"]
     assert set(views) == {"front", "rear", "top", "bottom", "left", "right"}
-    # the top is drawn from the photograph's legends; the faces no source shows say so rather than stay bare
+    # the top is drawn from the photograph's legends; the one wall no source shows says so rather than stays bare
     assert views["top"].get("silkscreen")
-    for face in ("bottom", "left", "right"):
-        assert views[face].get("empty"), face
+    assert views["right"].get("empty")
 
 
 @pytest.mark.parametrize("name,spec", DEVICES.items())
