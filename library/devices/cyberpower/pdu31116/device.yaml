@@ -11,27 +11,31 @@ description: CyberPower PDU31116 monitored rack PDU, 0U, 100 to 120 V, 15 A, sin
   No document shows the rear.
 profile: power
 provenance:
-  method: {confidence: estimated, note: 'ESTIMATED. NO DIMENSIONED DRAWING, NO STRAIGHT-ON PICTURE AND NO MANUAL EXISTS. Every position on the front is
-      read off the one product photograph on page 1 of the PDU31116 data sheet. It is taken from the right and above, so it is NOT orthographic. The strip
-      lies along the picture. The left edges of the twenty outlet blocks were read on 4x crops. A one-axis perspective u = A + B / s was fitted to them,
-      with one pitch inside each group of ten (rms 0.35 px). The length between the two ends of the front, 1349 mm, fixes the scale, and gives a pitch of
-      33.2 mm. The ends of the front were read by eye at columns 207 and 1770. That is good to about 1 percent of the length. Across the strip the vertical
-      scale is the front''s own height, 113 px for 48 mm at the right end. Each position is good to about 2 mm. The strip is drawn standing, cord end down,
-      as the library draws a rack-side strip. The picture shows it lying with the cord at the left.'}
+  method: {confidence: estimated, note: 'ESTIMATED. The data sheet holds two pictures, no drawing and no manual. Page 1 is an angled photograph of the
+      whole strip, 1915 x 404 px. Page 2 is an orthographic view of the display module, 1887 x 1802 px at 435 ppi. Along the strip every position comes
+      from page 1. It is taken from the right and above, so it is NOT orthographic. The left edges of the outlet blocks were read twice on 2x and 4x
+      crops. A one-axis projective map was fitted to them, with one pitch inside each group of ten (rms 0.4 px). The length of the front, 1349 mm,
+      fixes the scale and gives a pitch of 33.2 mm. Each position along the strip is good to about 2 mm. The module and everything on it is refitted
+      from page 2. Its edges were read twice: 988 px along by 326.5 px across, which is 3.03 to 1. The scale on page 2 is 7.55 px/mm, from the RJ45
+      contact pitch, the USB-A shell and the 5-15R face in the same picture. That gives a module 130.9 mm long, and page 1 reads 130.9 and 131.4 mm
+      along. The same scale gives a front band 56.6 mm across, against the 48 mm the data sheet states (gaps: front-width). The front is drawn 48 mm
+      wide, so across the strip each position is good to about 3 mm. The strip is drawn standing, cord end down, as the library draws a rack-side
+      strip. Both pictures show it lying with the cord at the left.'}
   mount: {confidence: datasheet, note: 'datasheet - CyberPower PDU31116 data sheet, page 2: "Rack Height 0U", "Vertical Rackmount", "Wallmount", "Adjustable
       Mounting Brackets 1 set". No bracket is shown or dimensioned (gaps: mounting-brackets).'}
   chassis: {confidence: datasheet, note: 'datasheet - CyberPower PDU31116 data sheet, page 2: "48 x 1349 x 56 mm" (W x H x D). The same page gives "1.9
       x 53.1 x 2.2 in.", "Rack Height 0U" and weight 5.22 kg. The finish is black.'}
-  front: {confidence: photo-measured, note: 'photo-measured - millimetres along the strip from the cord end of the front, then across from the photograph''s
-      upper edge. Outlet blocks 1 to 10 start at 357.0 and then every 33.2. Blocks 11 to 20 start at 1007.0 on the same pitch. Each block is 29 mm long.
-      Display module from 853.2 to 985.9 along and 5.5 to 42 across. The Select and Enter buttons centre at 864.8 along and 18.4 and 33.1 across. The display
-      centres at 901.5 along. Each position comes off an angled photograph (gaps: front-angled-photograph).'}
+  front: {confidence: photo-measured, note: 'photo-measured - millimetres along the strip from the cord end of the front, then across from the lid side.
+      Outlet blocks 1 to 10 start at 357.0 and then every 33.2. Blocks 11 to 20 start at 1007.0 on the same pitch. Each block is 29 mm long. The display
+      module runs from 854.0 to 985.0 along and 2.4 to 45.6 across (131.0 x 43.2). The Select and Enter ring centres are at 866.3 along and 18.0 and 35.2
+      across. That is 1.2 mm nearer the cord end than page 2 reads, so that their boxes clear the box of the Critical lamp. The display centres at 900.6 along and 24.0 across. Positions along come off page 1 and positions on the module off page 2 (gaps:
+      front-width).'}
   outlets: {confidence: datasheet, note: 'datasheet - the data sheet, pages 1 and 2: "20 x NEMA 5-15R", "Outlet Total 20 Front, 0 Rear", "Outlet Banks 1".
       The photograph numbers them 1 to 20 from the cord end. The library''s 5-15R face (std/nema-5-15r@1) sets the outlet size (gaps: outlet-size).'}
   input: {confidence: datasheet, note: 'datasheet - "Input Plug Type NEMA 5-15P", "Plug Style Straight", "Cord Length 10 ft (3.0 m)", derated input current
       12 A and maximum 15 A. The photograph shows the cord leaving one end.'}
   controller: {confidence: datasheet, note: 'datasheet - page 1 "Meter Readout" lists kilowatts, voltage, amperage and IP address. Page 2 lists "Hardware
-      Connection Port RJ45" and "Serial", and the lamps "Load", "Tx/Rx", "LINK" and "Outlets". The photograph shows the module and its legends (gaps: port-labels).'}
+      Connection Port RJ45" and "Serial", and the lamps "Load", "Tx/Rx", "LINK" and "Outlets". Page 2 shows the module and its legends (gaps: port-labels).'}
   capability: {confidence: datasheet, note: 'datasheet - "Monitored PDU: SNMP Network Interface" and a meter readout, so the input is metered. No outlet
       switching is stated, so `outlet-switching: false`.'}
 attrs:
@@ -60,20 +64,28 @@ gaps:
 - what: ends
   scope: [top, bottom]
   reason: needs-photo
-  note: the photograph sees each end at a steep angle, about 24 px wide for 56 mm. It shows a seam and a notch at each edge of the cap. The notches are
-    drawn as two slots at estimated positions. The cord's position on its end is not shown, so the cord is centred on the end.
-  wanted: straight-on photographs of both ends, with a scale.
+  note: page 1 sees each end at a steep angle, about 34 px wide for 56 mm. It shows a seam and a notch at each edge of the cap. The notches are
+    drawn as two slots at estimated positions. The cord leaves the cord end about 0.9 mm above its middle height, which is 1.2 px of a 71 px
+    face. Then it curves down. How far along the end's 56 mm depth it leaves is not shown, so the cord is placed at mid-depth.
+  wanted: end-on photographs of both ends, with a scale.
 - what: other-side
   scope: [right]
   reason: needs-photo
   note: built as the documented side, as no document shows this one. The photograph shows the upper long side only, and the lower side is drawn as its mirror.
   wanted: a photograph of the lower long side.
-- what: front-angled-photograph
-  scope: [front]
+- what: vent-slits
+  scope: [left, right]
   reason: needs-photo
-  note: the front is read off one angled photograph, so every position is good to about 2 mm. The across positions are less certain than those along the
-    strip.
-  wanted: a straight-on photograph of the front, with a scale.
+  note: page 1 shows the louvre slits about 3 px apart along the strip, about 36 of them in a 110 px stretch. At about 1 px per mm that is a 3.0 mm pitch,
+    good to about 0.4 mm. The slit is drawn 1.4 mm thick and 7.0 mm long, estimated from 12x crops. The small dot at the far end sits about 18.7 mm from
+    the front and is about 1.6 mm across, estimated from one 8x crop.
+  wanted: a photograph of the lid taken square on, with a scale.
+- what: front-width
+  scope: [front]
+  reason: needs-drawing
+  note: the front band on page 2 reads 56.6 mm across at the scale three standard parts give. The data sheet states 48 mm. The front is drawn 48 mm
+    wide, so the 43.2 mm module leaves 2.4 mm each side where page 2 shows 6.6 mm. Which of the two is the face width is not stated.
+  wanted: a dimensioned drawing of the front, or the installation guide's dimension table.
 - what: outlet-size
   scope: [front]
   reason: needs-drawing
@@ -82,23 +94,23 @@ gaps:
 - what: port-labels
   scope: [front]
   reason: vendor-silent
-  note: no manual is held. The photograph prints Tx/Rx Link beside the silver Ethernet jack. It prints In/ENV beside the upper black jack, Out beside the
-    lower one, Serial beside the right-hand one and USB beside the USB jack. The black jacks are typed rj45-serial, as on the PDU41021. What each carries
+  note: no manual is held. Page 2 prints Tx/Rx and Link beside the silver Ethernet jack. It prints In / ENV beside the upper black jack and Out beside
+    the lower one. Serial is printed beside the right-hand one and USB beside the USB jack. The black jacks are typed rj45-serial, as on the PDU41021. What each carries
     is not stated.
   wanted: the installation guide's port table.
-- what: control-panel-parts
+- what: display-and-marks
   scope: [front]
   reason: needs-drawing
-  note: the Select and Enter buttons are plain rings about 10 mm across in the photograph, each printed with its name. The part drawn for them is the PDU81001G's
-    navigation button, 14 mm square with four arrows. It paints over a legend, so the two names are not drawn. It stands 3.0 mm nearer the cord end than
-    the ring, so that it clears the lamps. The display is that unit's graphic display part, light grey where the photograph's screen is black.
-  wanted: a straight-on photograph of the control panel.
-- what: lamp-colours
+  note: 'page 2 shows a black screen with a pale grey header, four white readout lines and 1/2. The shared display part draws a pale screen and carries
+    no text. It is used as it is. Page 2 also prints Select and Enter on the two rings, and a dark surround and silver tongue on the USB jack. The ring
+    names are not drawn. The USB part draws a silver ring and the blue tongue of USB 3.0, which the data sheet does not state.'
+  wanted: a display part with a black screen and its text, and a USB part with a dark surround, if the maintainer wants them.
+- what: lamp-meanings
   scope: [front]
   reason: vendor-silent
-  note: 'the lamps are drawn off. The photograph shows them lit. Each declared colour is the mean of the lit pixels in a 7 by 7 patch. The round lamp is
-    #def22d (10 pixels), Normal #edef0e (5), Warning #ead70f (6) and Critical #f9090b (4). The Normal lamp reads yellow there, which may be exposure. No
-    document states a colour or a meaning.'
+  note: 'the lamps are drawn off. Page 2 shows them lit. The power lamp is #9de916 (533 lit pixels), Normal #fbfb04 (111), Warning #faba04 (77) and
+    Critical #f90304 (113). The two Ethernet lamps are #bfe387 and #e7e31c, each a 7 by 7 patch of 49 pixels. The legends are printed with a dash
+    before them, and Tx/Rx and Link sit beside the two Ethernet lamps. The lamp legends are drawn at 1.9 mm, a little under their printed size, so that they clear the display part. No held document says what a lamp state means or whether a lamp blinks.'
   wanted: the installation guide's lamp table.
 - what: numbering-direction
   scope: [front]
@@ -126,7 +138,7 @@ groups:
     description: the round lamp left of the Normal, Warning and Critical lamps
     states:
     - 'off'
-    - {name: 'on', color: '#def22d'}
+    - {name: 'on', color: '#9de916'}
   lamp-normal:
     term: LED
     role: indicator
@@ -134,7 +146,7 @@ groups:
     description: the Normal lamp
     states:
     - 'off'
-    - {name: 'on', color: '#edef0e'}
+    - {name: 'on', color: '#fbfb04'}
   lamp-warning:
     term: LED
     role: indicator
@@ -142,7 +154,7 @@ groups:
     description: the Warning lamp
     states:
     - 'off'
-    - {name: 'on', color: '#ead70f'}
+    - {name: 'on', color: '#faba04'}
   lamp-critical:
     term: LED
     role: indicator
@@ -150,7 +162,7 @@ groups:
     description: the Critical lamp
     states:
     - 'off'
-    - {name: 'on', color: '#f9090b'}
+    - {name: 'on', color: '#f90304'}
   eth:
     term: Port
     role: management
@@ -240,30 +252,41 @@ views:
         fill: '#7a7d85'
         kind: plate-corner
       - id: display-module
-        at: [5.5, 363.0]
-        size: [36.5, 132.9]
+        at: [2.4, 364.0]
+        size: [43.2, 131.0]
         rx: 0.8
         fill: '#202126'
         stroke: '#101114'
         stroke-width: 0.3
         kind: control-panel
       - id: module-edge
-        at: [5.5, 494.3]
-        size: [36.5, 1.2]
-        fill: '#6b7076'
+        at: [2.4, 494.5]
+        size: [43.2, 0.5]
+        fill: '#8a8f96'
+        kind: bezel
+      - id: module-slot
+        at: [10.2, 492.4]
+        size: [25.4, 1.7]
+        fill: '#0b0b0d'
+        kind: slot
+      - id: eth-plate
+        at: [6.84, 412.8]
+        size: [16.5, 17.0]
+        rx: 0.4
+        fill: '#b6b5bb'
         kind: bezel
       - id: module-screw-1
-        at: [7.3, 366.9]
-        size: [2.4, 2.4]
-        rx: 1.2
+        at: [7.9, 366.65]
+        size: [5.5, 5.5]
+        rx: 2.75
         fill: '#14151a'
         stroke: '#6b7076'
         stroke-width: 0.2
         kind: panel-screw
       - id: module-screw-2
-        at: [38.3, 366.9]
-        size: [2.4, 2.4]
-        rx: 1.2
+        at: [34.35, 366.65]
+        size: [5.5, 5.5]
+        rx: 2.75
         fill: '#14151a'
         stroke: '#6b7076'
         stroke-width: 0.2
@@ -416,60 +439,66 @@ views:
       rotate: -90
       fill: '#e8e8e8'
       for: chassis
-    - at: [8.9, 473.4]
-      text: Normal
-      font-size: 1.4
+    - at: [7.0, 474.5]
+      text: '- Normal'
+      font-size: 1.9
       anchor: start
       rotate: -90
       fill: '#d0d0d0'
       for: chassis
-    - at: [11.6, 473.4]
-      text: Warning
-      font-size: 1.4
+    - at: [10.1, 474.5]
+      text: '- Warning'
+      font-size: 1.9
       anchor: start
       rotate: -90
       fill: '#d0d0d0'
       for: chassis
-    - at: [14.3, 473.4]
-      text: Critical
-      font-size: 1.4
+    - at: [13.0, 474.5]
+      text: '- Critical'
+      font-size: 1.9
       anchor: start
       rotate: -90
       fill: '#d0d0d0'
       for: chassis
-    - at: [9.0, 413.4]
-      text: Tx/Rx Link
-      font-size: 1.4
+    - at: [6.9, 411.3]
+      text: Tx/Rx
+      font-size: 2.6
       anchor: start
       fill: '#d0d0d0'
       for: chassis
-    - at: [9.0, 392.9]
-      text: In/ENV
-      font-size: 1.4
+    - at: [18.2, 411.3]
+      text: Link
+      font-size: 2.6
       anchor: start
       fill: '#d0d0d0'
       for: chassis
-    - at: [9.0, 379.5]
+    - at: [9.55, 394.1]
+      text: In / ENV
+      font-size: 2.6
+      anchor: start
+      fill: '#d0d0d0'
+      for: chassis
+    - at: [12.2, 382.2]
       text: USB
-      font-size: 1.4
+      font-size: 2.6
       anchor: start
       fill: '#d0d0d0'
       for: chassis
-    - at: [25.0, 392.9]
+    - at: [30.7, 394.1]
       text: Out
-      font-size: 1.4
+      font-size: 2.6
       anchor: start
       fill: '#d0d0d0'
       for: chassis
-    - at: [25.0, 375.15]
+    - at: [29.7, 376.6]
       text: Serial
-      font-size: 1.4
+      font-size: 2.6
       anchor: start
       fill: '#d0d0d0'
       for: chassis
-    - at: [37.5, 420.9]
+    - at: [38.7, 421.3]
       text: CyberPower
-      font-size: 2.2
+      font-size: 4.2
       anchor: middle
       rotate: -90
       fill: '#e8e8e8'
@@ -617,92 +646,95 @@ views:
         rel-pos: 20
         fed-by: input
       - id: select
-        ref: cyberpower/pdu-joystick@1
-        at: [11.4, 477.5]
+        ref: cyberpower/pdu-ring-button@1
+        at: [12.46, 477.2]
         group: buttons
         rel-pos: 1
         for: display
-        description: Select, a ring button printed Select
+        description: Select, a plain ring button printed Select
       - id: enter
-        ref: cyberpower/pdu-joystick@1
-        at: [26.1, 477.5]
+        ref: cyberpower/pdu-ring-button@1
+        at: [29.68, 477.2]
         group: buttons
         rel-pos: 2
         for: display
-        description: Enter, a ring button printed Enter
+        description: Enter, a plain ring button printed Enter
       - id: display
         ref: cyberpower/pdu-lcd@1
-        at: [10.95, 432.05]
+        at: [9.83, 432.85]
         rotate: 270
         group: display
         rel-pos: 1
         for: chassis
       - id: status-lamp
         ref: common/led-dot@1
-        at: [9.0, 480.5]
+        at: [6.83, 480.72]
         group: status
         rel-pos: 1
         for: chassis
       - id: lamp-normal
         ref: common/led-dot@1
-        at: [7.4, 474.9]
+        at: [5.24, 475.15]
         group: lamp-normal
         rel-pos: 1
         for: chassis
       - id: lamp-warning
         ref: common/led-dot@1
-        at: [10.1, 474.9]
+        at: [8.29, 475.15]
         group: lamp-warning
         rel-pos: 1
         for: chassis
       - id: lamp-critical
         ref: common/led-dot@1
-        at: [12.8, 474.9]
+        at: [11.2, 475.15]
         group: lamp-critical
         rel-pos: 1
         for: chassis
       - id: eth
         ref: common/rj45-eth@1
-        at: [6.9, 414.3]
+        at: [7.18, 413.0]
         rotate: 180
         group: eth
         attrs: {media: rj45, speed: 1g, role: mgmt}
+        states:
+          led-a: ['off', {name: link, color: '#e7e31c'}]
+          led-b: ['off', {name: tx-rx, color: '#bfe387'}]
         rel-pos: 1
-        description: the silver RJ45 Ethernet jack for network connection, with two lamps beside it
+        description: the silver RJ45 Ethernet jack for network connection, with a yellow Link lamp and a green Tx/Rx lamp in its edge
       - id: in-env
         ref: std/rj45@2
-        at: [6.9, 393.3]
+        at: [6.58, 395.12]
         rotate: 180
         group: mgmt
-        attrs: {media: rj45-serial}
+        attrs: {media: rj45-serial, finish: '#2b2f33'}
         rel-pos: 1
-        description: In/ENV, printed beside the upper black jack
+        description: In / ENV, printed beside the upper black jack
       - id: out
         ref: std/rj45@2
-        at: [22.8, 393.3]
+        at: [25.23, 395.12]
         rotate: 180
         group: mgmt
-        attrs: {media: rj45-serial}
+        attrs: {media: rj45-serial, finish: '#2b2f33'}
         rel-pos: 2
         description: Out, printed beside the lower black jack
       - id: serial
         ref: std/rj45@2
-        at: [22.8, 375.55]
+        at: [25.23, 377.9]
         rotate: 180
         group: mgmt
-        attrs: {media: rj45-serial}
+        attrs: {media: rj45-serial, finish: '#2b2f33'}
         rel-pos: 3
         description: Serial, printed beside the right-hand black jack
       - id: usb
         ref: common/usb-a-bezel@1
-        at: [5.8, 380.85]
+        at: [6.22, 382.55]
         group: mgmt
         rel-pos: 4
         description: USB, printed beside the USB jack
   rear:
     size: {w: 48.0, h: 1349.0}
-    empty: 'no source shows the rear of this model: the data sheet has one photograph, of the front, and no manual is held. It states 0 rear outlets and
-      an external site ground without a position. Searched: the data sheet text and picture.'
+    empty: 'no source shows the rear of this model: the data sheet holds two pictures, both of the front, and no manual is held. It states 0 rear outlets
+      and an external site ground without a position. Searched: the data sheet text and both pictures.'
   top:
     size: {w: 48.0, h: 56.0}
     panel:
@@ -735,7 +767,7 @@ views:
       placements:
       - id: input
         ref: cyberpower/pdu-cord-5-15p@1
-        at: [16.0, 20.0]
+        at: [15.1, 20.0]
         group: power-input
         rel-pos: 1
         description: the fixed 10 ft input cord, ending in a NEMA 5-15P plug
@@ -751,7 +783,9 @@ views:
       - id: vent-1
         at: [38.0, 977.0]
         size: [14.0, 205.8]
-        pattern: vent
+        pattern: motif
+        pattern-pitch: [14.0, 3.0]
+        pattern-cells: [[[3.5, 0.8], [10.5, 0.8], [10.5, 2.2], [3.5, 2.2]]]
         kind: vent
       - id: vent-backing-2
         at: [38.0, 453.2]
@@ -761,8 +795,16 @@ views:
       - id: vent-2
         at: [38.0, 453.2]
         size: [14.0, 200.9]
-        pattern: vent
+        pattern: motif
+        pattern-pitch: [14.0, 3.0]
+        pattern-cells: [[[3.5, 0.8], [10.5, 0.8], [10.5, 2.2], [3.5, 2.2]]]
         kind: vent
+      - id: end-dot
+        at: [36.5, 1.2]
+        size: [1.6, 1.6]
+        rx: 0.8
+        fill: '#5a5e66'
+        kind: dot
   right:
     size: {w: 56.0, h: 1349.0}
     panel:
@@ -775,7 +817,9 @@ views:
       - id: vent-1
         at: [4.0, 977.0]
         size: [14.0, 205.8]
-        pattern: vent
+        pattern: motif
+        pattern-pitch: [14.0, 3.0]
+        pattern-cells: [[[3.5, 0.8], [10.5, 0.8], [10.5, 2.2], [3.5, 2.2]]]
         kind: vent
       - id: vent-backing-2
         at: [4.0, 453.2]
@@ -785,8 +829,16 @@ views:
       - id: vent-2
         at: [4.0, 453.2]
         size: [14.0, 200.9]
-        pattern: vent
+        pattern: motif
+        pattern-pitch: [14.0, 3.0]
+        pattern-cells: [[[3.5, 0.8], [10.5, 0.8], [10.5, 2.2], [3.5, 2.2]]]
         kind: vent
+      - id: end-dot
+        at: [17.9, 1.2]
+        size: [1.6, 1.6]
+        rx: 0.8
+        fill: '#5a5e66'
+        kind: dot
 interfaces:
 - {physical: 'outlet-{n}', name: '{n}', range: 1-20}
 configurations:
