@@ -78,6 +78,55 @@ def test_all_six_sides_are_drawn_none_is_declared_empty(slug):
 
 
 @pytest.mark.parametrize("slug", MODELS)
+def test_the_lamps_are_the_sheets_rectangles_and_the_screws_are_crossed(slug):
+    rear = placements(device(slug), "rear")
+    for n in range(1, 9):
+        assert rear[f"lamp-{n}"]["ref"] == "common/led-rect@2"
+    for name in ("inlet-screw-1", "inlet-screw-2"):
+        assert rear[name]["ref"] == "common/screw-head@1"
+
+
+def gaps(slug):
+    return {g["what"]: g for g in device(slug)["gaps"]}
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_ear_holes_edge_tabs_and_printed_marks_are_gaps(slug):
+    found = gaps(slug)
+    assert found["ear-holes-and-tabs"]["scope"] == ["front", "rear"]
+    assert found["printed-marks"]["scope"] == ["front", "rear"]
+    assert "later touch" in found["printed-marks"]["note"]
+    assert "nothing could stand outside them" in found["ear-holes-and-tabs"]["note"]
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_notes_count_the_rear_ears_and_give_one_reason_for_the_marks(slug):
+    notes = device(slug)["provenance"]
+    assert "rear elevation" in notes["ears"]["note"]
+    left_out = notes["left-out"]["note"]
+    assert "153 by 52" in left_out
+    assert "too small" not in left_out
+    assert "later touch" in left_out
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_only_the_sp_models_record_the_certification_disagreement(slug):
+    found = gaps(slug)
+    if slug.endswith("-sp"):
+        assert found["certifications"]["reason"] == "sources-disagree"
+        assert "UL 62368" in found["certifications"]["note"]
+    else:
+        assert "certifications" not in found
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_input_note_says_which_current_it_states(slug):
+    note = device(slug)["provenance"]["input"]["note"]
+    assert "rated load" in note
+    assert "maximum" in note
+
+
+@pytest.mark.parametrize("slug", MODELS)
 def test_the_breaker_rating_is_the_models(slug):
     _, _, amps = MODELS[slug]
     assert placements(device(slug), "rear")["breaker"]["attrs"]["rating-a"] == amps

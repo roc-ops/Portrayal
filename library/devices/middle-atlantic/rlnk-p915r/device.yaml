@@ -24,9 +24,10 @@ provenance:
   ears:
     confidence: estimated
     note: 'estimated - the rack ears are the two mounting brackets of quick start I-00827 p.4, four screws each. The sheet''s top view shows the
-      flange at the front plane, so one flush position is stated. Each documented ear carries two obround holes (specification sheet 190174 p.2
-      front elevation). They are not drawn. The schema line for `chassis.ears` is: "WHERE THE EARS ARE AND WHERE THEY CAN PUT THE FACEPLATE, for
-      a rack device." It has no key for an ear''s holes. The generic ear stands in.'
+      flange at the front plane, so one flush position is stated. Each ear has two obround holes in the front and the rear elevation (specification
+      sheet 190174 p.2), four in each view. They stand outside the 441 mm face and are not drawn (gaps: ear-holes-and-tabs). The schema line for
+      `chassis.ears` is: "WHERE THE EARS ARE AND WHERE THEY CAN PUT THE FACEPLATE, for a rack device." It has no key for an ear''s holes. The generic
+      ear stands in.'
   front:
     confidence: estimated
     note: 'estimated - specification sheet 190174 p.2 front elevation, counted twice at 800 and 1600 dpi. A blue-edged recess 375 by 40 mm holds
@@ -39,8 +40,9 @@ provenance:
     note: 'estimated - specification sheet 190174 p.2 rear elevation and user manual I-00826 pp.15, 19 and 20. From the left stand the inlet,
       the breaker, the ground stud and eight outlets on a 27.9 mm pitch. Each outlet has a lamp under it and a numeral 1 to 8. Then come the reset
       hole, two Ethernet jacks, two USB-A, one USB-B and four more RJ45 jacks. Four round marks sit at the corners of that port block, and one
-      dark window below the reset hole. The manual p.19 says the yellow LED of ETH2 has no function, and the window is drawn dark. The two holes
-      either side of the inlet are the cord retainer''s (quick start I-00827 p.5, figure D). The lit green lamp reads #1fde2e (365 pixels of the
+      dark window below the reset hole. The manual p.19 says the yellow LED of ETH2 has no function, and the window is drawn dark. The two crossed
+      screws either side of the inlet sit where the cord retainer''s holes are (quick start I-00827 p.5, figure D). The sheet''s screws read about 7 mm
+      and the library''s head is 3.6 mm. The sheet''s lamps are rectangles about 4.0 by 2.2 mm, so they use the library''s rectangular lamp. The lit green lamp reads #1fde2e (365 pixels of the
       user manual I-00826 p.20 photograph). No held picture shows a lit red lamp.'
   port-legends:
     confidence: estimated
@@ -62,10 +64,15 @@ provenance:
   left-out:
     confidence: estimated
     note: 'not drawn: the cord retainer clip stands below the 44 mm body (specification sheet 190174 p.2, rear and end views). The schema line
-      for `chassis.overhang` says: "`left` and `right` are as seen from the front." It reaches no further than that. The clip is left out and
-      only its two holes are drawn. Not drawn: the two edge tabs of the front elevation, which stand outside the 44 mm body. Not drawn: the logo
-      on the touch strip, too small to trace on the sheet. Not drawn: the printed legends of the rear''s outlet block and breaker, which the user
-      manual I-00826 p.15 photograph prints at 911 by 83 pixels. Its capitals are about 3 pixels tall.'
+      for `chassis.overhang` says: "A `rack` device is drawn between its ear folds, and nothing could stand outside them". The clip is left out and
+      only its two screws are drawn. Not drawn: the edge tabs, which stand outside the 44 mm body. The front elevation shows one above and one
+      below. The rear elevation shows one above at the port block and one below under outlets 2 and 3. Not drawn: the ear holes, two in each ear
+      of the front elevation and of the rear elevation, which stand outside the face. Not drawn: the printed marks. The maintainer has left marks,
+      colours and the rest to a later touch. The sheet''s front elevation prints the logo on the touch strip. It is 153 by 52 px at 1600 dpi and 76 by 27 px at 800 dpi.
+      The power symbol on the button is 69 by 64 px at 1600 dpi. The blue rating text above the front outlet is 153 by 24 px at
+      800 dpi. The user manual I-00826 p.15 rear photograph is 911 by 83 px. It prints the ground symbol beside the stud, about 11 by 14 px. It
+      prints the inlet legend with capitals about 5 px tall. It prints the legends of the outlet block and breaker with capitals about 3 px tall.
+      The sheet''s rear elevation prints none of those three.'
   outlets:
     confidence: datasheet
     note: datasheet - user manual I-00826 p.234 and p.236 give 9 outlets in total, 8 controlled, type NEMA 5-15R. Each is std/nema-5-15r@1. The
@@ -74,7 +81,8 @@ provenance:
     confidence: datasheet
     note: 'datasheet - specification sheet 190174 p.2 table gives IEC C14, 15 A, 120 V, 60 Hz and a 9 ft [2.75 m] cord. The cord comes detachable
       with a retainer (quick start I-00827 p.4). The user manual I-00826 p.237 gives the SP models'' cord as 10 ft, SignalSAFE IEC to NEMA 5-15P
-      (gaps: cord-length).'
+      (gaps: cord-length). The input current states the 12 A rated load, which the user manual I-00826 p.234 and the sheet p.3 both print as the
+      continuous rating. The 15 A on the sheet''s p.2 table is the inlet and breaker rating, named as the maximum.'
   capability:
     confidence: datasheet
     note: datasheet - specification sheet 190174 p.1 gives 8 individually controllable outlets, a web server, data logging and metering. So `outlet-switching`
@@ -156,6 +164,24 @@ gaps:
   reason: sources-disagree
   note: The specification sheet 190174 p.2 gives 9 ft [2.75 m] for every model. The user manual I-00826 p.237 gives 10 ft (3 m) for the SP models.
   wanted: the maker's word on the SP cord.
+- what: ear-holes-and-tabs
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: 'The specification sheet 190174 p.2 shows two obround holes in each ear of its front and of its rear elevation, four in each. It shows
+    two edge tabs in each elevation. All stand outside the face. The schema line for `chassis.overhang` says: "A `rack` device is drawn between
+    its ear folds, and nothing could stand outside them."'
+  wanted: a way to state the holes of a documented ear, and a tab that stands past the box.
+- what: printed-marks
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: 'The sheet p.2 front elevation prints a logo, a power symbol on the button and blue rating text above the outlet. The user manual I-00826
+    p.15 rear photograph prints a ground symbol, an inlet legend and legends of the outlet block and breaker. The maintainer has left marks,
+    colours and the rest to a later touch.'
+  wanted: the maintainer's word on whether to draw printed marks.
 groups:
   outlets:
     term: Outlet
@@ -174,6 +200,10 @@ groups:
     index-origin: 1
   grounding:
     term: Ground
+    role: furniture
+    index-origin: 1
+  screws:
+    term: Screw
     role: furniture
     index-origin: 1
   buttons:
@@ -467,28 +497,6 @@ views:
         fill: '#0a0a09'
         kind: panel-screw
         confidence: estimated
-      - id: retainer-hole-1
-        at:
-        - 7.3
-        - 26.2
-        size:
-        - 3.0
-        - 3.0
-        rx: 1.5
-        fill: '#0a0a09'
-        kind: retainer-hole
-        confidence: estimated
-      - id: retainer-hole-2
-        at:
-        - 52.2
-        - 26.2
-        size:
-        - 3.0
-        - 3.0
-        rx: 1.5
-        fill: '#0a0a09'
-        kind: retainer-hole
-        confidence: estimated
       - id: eth-2-led-window
         at:
         - 336.9
@@ -682,6 +690,22 @@ views:
         group: grounding
         rel-pos: 1
         description: the round ground stud right of the breaker (user manual I-00826 p.20 photograph)
+      - id: inlet-screw-1
+        ref: common/screw-head@1
+        at:
+        - 7.0
+        - 25.9
+        group: screws
+        rel-pos: 1
+        description: the screw left of the inlet, where the cord retainer's hole is (specification sheet 190174 p.2; quick start I-00827 p.5)
+      - id: inlet-screw-2
+        ref: common/screw-head@1
+        at:
+        - 51.9
+        - 25.9
+        group: screws
+        rel-pos: 2
+        description: the screw right of the inlet, where the cord retainer's other hole is
       - id: outlet-1
         ref: std/nema-5-15r@1
         at:
@@ -779,10 +803,10 @@ views:
         - 'on'
         - 'off'
       - id: lamp-1
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 103.7
-        - 38.0
+        - 102.4
+        - 37.7
         group: lamps
         rel-pos: 1
         for: outlet-1
@@ -797,10 +821,10 @@ views:
           behavior: blinking
         description: outlet 1 status lamp (user manual I-00826 p.16 table)
       - id: lamp-2
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 131.6
-        - 38.0
+        - 130.3
+        - 37.7
         group: lamps
         rel-pos: 2
         for: outlet-2
@@ -815,10 +839,10 @@ views:
           behavior: blinking
         description: outlet 2 status lamp (user manual I-00826 p.16 table)
       - id: lamp-3
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 159.5
-        - 38.0
+        - 158.2
+        - 37.7
         group: lamps
         rel-pos: 3
         for: outlet-3
@@ -833,10 +857,10 @@ views:
           behavior: blinking
         description: outlet 3 status lamp (user manual I-00826 p.16 table)
       - id: lamp-4
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 187.4
-        - 38.0
+        - 186.1
+        - 37.7
         group: lamps
         rel-pos: 4
         for: outlet-4
@@ -851,10 +875,10 @@ views:
           behavior: blinking
         description: outlet 4 status lamp (user manual I-00826 p.16 table)
       - id: lamp-5
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 215.3
-        - 38.0
+        - 214.0
+        - 37.7
         group: lamps
         rel-pos: 5
         for: outlet-5
@@ -869,10 +893,10 @@ views:
           behavior: blinking
         description: outlet 5 status lamp (user manual I-00826 p.16 table)
       - id: lamp-6
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 243.2
-        - 38.0
+        - 241.9
+        - 37.7
         group: lamps
         rel-pos: 6
         for: outlet-6
@@ -887,10 +911,10 @@ views:
           behavior: blinking
         description: outlet 6 status lamp (user manual I-00826 p.16 table)
       - id: lamp-7
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 271.1
-        - 38.0
+        - 269.8
+        - 37.7
         group: lamps
         rel-pos: 7
         for: outlet-7
@@ -905,10 +929,10 @@ views:
           behavior: blinking
         description: outlet 7 status lamp (user manual I-00826 p.16 table)
       - id: lamp-8
-        ref: common/led-dot@1
+        ref: common/led-rect@2
         at:
-        - 299.0
-        - 38.0
+        - 297.7
+        - 37.7
         group: lamps
         rel-pos: 8
         for: outlet-8
