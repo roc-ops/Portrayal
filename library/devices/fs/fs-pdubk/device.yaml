@@ -185,11 +185,20 @@ gaps:
   scope: [left, right, top, bottom]
   reason: needs-drawing
   note: >-
-    each lip ends in a small hook at the plate's free end (x6, g5, x7, g2, g3). On x6 it stands about 2.9 mm
-    past the plate's end and is about 2.5 mm across. One hook stands at each long edge.
-    A dark band about 1.2 mm wide runs down the end edge. In the built views the plate and its lips end flush at 135. A part past 135 lies outside the view's face,
-    and `chassis.overhang` is only on a rack device, so the hooks are not drawn.
-  wanted: a dimensioned drawing of the bracket from above or the side that shows the hooks
+    each lip ends in a small hook past the plate's free end, one at each long edge (x6, g5, x7, g2, g3).
+    On x6 each hook reaches 3.0 to 3.2 mm past the plate end and stands 2.4 to 2.7 mm high.
+    A dark band about 1.2 mm wide runs down the end edge between them.
+    In the built views the plate and its lips end flush at 135.
+    The hooks are not drawn, because the kit has no shape for a part outside the box.
+    The schema says of a view `size`, "view dimensions in mm when not the chassis front elevation", with `w` and `h` only.
+    It says of `overhang`, "Only on a `rack` device (L125)", and this bracket is not one.
+    The one way round it, widening the four views to 138, passed lint but dropped the bracket from level 4 to level 2.
+    The capability check requires left.w, right.w, top.h, bottom.h and chassis.depth to agree.
+    The level check printed, "working tree level 2 faced", then "blocked 3 solid - chassis depth disagrees: left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135".
+    The committed bracket prints "HEAD level 4 addressable".
+    A test asserts "an inconsistent box must not reach solid".
+    The chassis depth stays 135, because the guide prints it.
+  wanted: a decision that the kit may hold a part beyond the box, or a drawing from above or the side that dimensions the hooks
 groups:
   foot: {term: Foot, role: furniture, index-origin: 1, description: 'the sheet that lies against the post, bolted through four holes'}
   plate: {term: Plate, role: furniture, index-origin: 1, description: 'the sheet that stands out from the foot, with the keyholes and the square holes'}

@@ -144,3 +144,18 @@ def test_the_lip_end_tabs_are_a_named_gap_with_a_reason():
     assert "lip-end-tabs" in gaps
     assert gaps["lip-end-tabs"]["reason"] == "needs-drawing"
     assert gaps["lip-end-tabs"]["scope"] == ["left", "right", "top", "bottom"]
+    note = " ".join(gaps["lip-end-tabs"]["note"].split())
+    # the measured facts, the two schema lines, the capability rule and the level check's line
+    for words in (
+        "3.0 to 3.2 mm",
+        "2.4 to 2.7 mm",
+        "flush at 135",
+        "Only on a `rack` device",
+        "widening the four views to 138",
+        "level 4 to level 2",
+        "chassis depth disagrees",
+        "left.w=138, right.w=138, top.h=138, bottom.h=138, chassis.depth=135",
+        "an inconsistent box must not reach solid",
+    ):
+        assert words in note, words
+    assert "dimensions the hooks" in gaps["lip-end-tabs"]["wanted"]
