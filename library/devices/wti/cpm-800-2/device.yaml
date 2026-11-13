@@ -143,6 +143,12 @@ gaps:
   note: >-
     The side view's bottom edge is a rounded fold. It is not drawn. The `bevel` (device schema line 797) is a flat 45 degree cut. The `rounded` (line 820) rounds plan corners. So the kit has no rounded-fold shape.
   wanted: A kit shape for a rounded fold along an edge.
+- what: input-voltage
+  scope: [rear]
+  reason: sources-disagree
+  note: >-
+    The data sheet (page 2) prints '100/240V' for the -2 models and the inlet label on the drawing reads 100-240V, 50/60 Hz, 16A; the hardware guide (appendix A) prints '208 - 240 VAC'. The device states the data sheet's figure.
+  wanted: The maker's statement of the -2 input range.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the eight switched IEC C13 outlets, A1 to A8 (A1-A4 from the first inlet, A5-A8 from the second)'}
   inlets: {term: Inlet, role: service, index-origin: 1, description: 'the two IEC C20 inlets, A1-A4 and A5-A8, at the left of the rear as seen from behind'}

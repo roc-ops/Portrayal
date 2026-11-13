@@ -131,3 +131,13 @@ def test_no_sentence_of_the_side_notes_runs_over_25_words(name):
 @pytest.mark.parametrize("name", sorted(DRAWN))
 def test_the_slots_are_outlines_as_the_drawings_show_them(name):
     assert {s.get("fill") for s in decor(name, "left", "vent-slot")} == {"none"}
+
+
+@pytest.mark.parametrize("name", ["cpm-800-2", "cpm-1600-2"])
+def test_the_input_voltage_disagreement_is_still_a_gap(name):
+    """The data sheet and the hardware guide disagree on the input voltage of the -2 models.
+    The device file keeps that disagreement as a gap on the rear."""
+    gaps = [g for g in device(name)["gaps"] if g["what"] == "input-voltage"]
+    assert len(gaps) == 1
+    assert gaps[0]["reason"] == "sources-disagree"
+    assert gaps[0]["scope"] == ["rear"]
