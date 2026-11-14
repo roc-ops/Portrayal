@@ -45,7 +45,7 @@ _BUTTON_FRONT = ("the cap of its button-up stands 0.5 mm proud of the front face
 PROUD = {
     **{f"dk-7979-{n}": (3.0, _BUTTON_REAR)
        for n in ("110", "130", "132", "133", "135", "136", "138", "140", "142", "175")},
-    **{n: (0.3, _LED) for n in ("en2951", "en6952", "pdumv20hvnetlx", "pro4x-smart-4c16a",
+    **{n: (0.3, _LED) for n in ("en2333", "en6324", "en2951", "en6952", "pdumv20hvnetlx", "pro4x-smart-4c16a",
                                 "pro4x-smart-pops-4t16a", "pro4x-switched-4f16a",
                                 "pro4x-switched-pops-4g16a", "px3-1045")},
     **{f"px4-{n}-e7m26v2": (0.5, _BUTTON_FRONT) for n in ("132awa", "1551wa", "532awa", "5551wa")},
