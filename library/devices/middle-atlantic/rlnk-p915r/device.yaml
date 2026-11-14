@@ -146,11 +146,17 @@ gaps:
   reason: needs-drawing
   note: Every position is read off line drawings at a reduced scale and is good to about 2 mm. No dimensioned drawing of the faces is held.
   wanted: a dimensioned drawing, or the 3D CAD zip once its terms allow.
+- what: feature-port
+  scope:
+  - rear
+  reason: vendor-silent
+  note: 'User manual I-00826 p.19 says FEATURE is "Reserved for Future Use". Its pinout on p.256 marks DTR "Reserved". No document gives a media or a rate.'
+  wanted: the maker's word on the feature port once it has a use.
 - what: expansion-port
   scope:
   - rear
   reason: vendor-silent
-  note: user manual I-00826 p.19 describes FEATURE (reserved) and the others but gives no row for EXPANSION.
+  note: 'Searched: user manual I-00826 pp.18 to 19 and p.256, quick start I-00827 and specification sheet 190174. The p.19 table gives no row for EXPANSION. The p.256 pinout lists 12 V and RS-485 pins and names no media or rate.'
   wanted: the maker's word on the expansion port.
 - what: display-part
   scope:
@@ -266,6 +272,7 @@ groups:
     role: management
     index-origin: 1
     description: 'FEATURE, EXPANSION and SENSOR: RJ45 jacks that are not Ethernet or serial consoles'
+    mixed: the reserved feature jack, the expansion jack and the environmental sensor jack, none of which carries Ethernet
   power-input:
     term: Input
     role: service
@@ -1064,6 +1071,9 @@ views:
         - 22.4
         group: aux
         rel-pos: 3
+        attrs:
+          media: rj45-telemetry
+          function: environmental-probe
         description: SENSOR, the environmental sensors' RJ45 (user manual I-00826 p.19)
   top:
     size:
