@@ -148,7 +148,11 @@ gets no generic ear, so it would have no use for `h`, `y` or `color`.)
   FX-8 shelf states two, read from its vertical mount kit's data sheet and
   installation figure. The brackets are the rack's, so they are drawn alike at
   90 and at 270. A new key, so a reader that does not know it draws a quarter
-  turn without them.
+  turn without them. An entry may also state `strip` (a row of round holes or
+  slots along the bar) and `ear-slots` (slots in each ear). The elevation draws
+  each opening as a plain mark. A screw head at a post's hole may stand over an
+  ear slot, as a bolt does. A folded return behind an ear and the bend are
+  not drawn: a front elevation does not show them.
 - **`none`** says the part has no ears: no flange and no bolt to a post, because
   it stands between the posts on another part's brackets. The tray and the top
   baffle of the 7360 ISAM FX-8 vertical mount kit state it, as the installation

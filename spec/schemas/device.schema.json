@@ -646,6 +646,77 @@
            "color": {
             "type": "string",
             "description": "the bracket's colour, a fill as `chassis.color` is written; absent, the generic ear's silver"
+           },
+           "strip": {
+            "type": "object",
+            "required": [
+             "count",
+             "pitch",
+             "size"
+            ],
+            "additionalProperties": false,
+            "description": "THE ROW OF HOLES OR SLOTS ALONG THE BAR, one row on the bar's middle line, centred between the ears. Absent, the bar is drawn plain.",
+            "properties": {
+             "shape": {
+              "enum": [
+               "round",
+               "slot"
+              ],
+              "description": "`round` (the default) is a round hole whose width and height are one diameter. `slot` is an oblong opening, as wide as the first number of `size` and as high as the second."
+             },
+             "count": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "how many openings the row has"
+             },
+             "pitch": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "millimetres from the centre of one opening to the next, along the bar"
+             },
+             "size": {
+              "type": "array",
+              "items": {
+               "type": "number",
+               "exclusiveMinimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "millimetres, [width, height] of one opening, as seen face-on"
+             }
+            }
+           },
+           "ear-slots": {
+            "type": "object",
+            "required": [
+             "count",
+             "pitch",
+             "size"
+            ],
+            "additionalProperties": false,
+            "description": "THE SLOTTED HOLES IN EACH EAR: the same on both ears, in one column on the ear's middle line, centred on the ear's height. Absent, an ear is drawn with only the screw heads at the posts' holes.",
+            "properties": {
+             "count": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "how many slots each ear has"
+             },
+             "pitch": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "description": "millimetres from the centre of one slot to the next, up the ear"
+             },
+             "size": {
+              "type": "array",
+              "items": {
+               "type": "number",
+               "exclusiveMinimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "description": "millimetres, [width, height] of one slot"
+             }
+            }
            }
           }
          }
