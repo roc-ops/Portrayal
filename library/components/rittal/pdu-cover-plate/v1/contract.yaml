@@ -1,0 +1,35 @@
+format: 1
+kind: component
+name: pdu-cover-plate
+version: 1.0.0
+class: mechanical
+profile: power
+description: >-
+  The label cover in the cord cell of a Rittal PDU metered. It is a flat rectangle on the front of the strip, beside the
+  cable gland. Its two short ends slope, so the cover reads as a trapezoid from the side.
+size: {w: 40.2, h: 107.3}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the front view of Rittal, "Technical details, Power Distribution Unit, Metered version" (dri2108029en,
+    08.2023), PDF page 18 (DK 7979.238). The rectangle reads 40.2 across the strip and 107.3 along it. That is a 600
+    dpi render at the 1.9375 px per mm the 1696 mm length gives. Good to about 0.5 mm.
+  height: >-
+    drawing - the side view of the same page draws the cover as a trapezoid standing on the face. It reads 13.2 mm
+    proud (25.5 px at 600 dpi, 51.5 px at 1200 dpi, 1.9375 and 3.875 px per mm). The 72.1 mm body in the same view
+    reads 72.1 on both renders.
+  slope: >-
+    drawing - the base of the trapezoid reads 107.9 and its top 103.2 along the strip. Each end falls 2.2 mm over
+    the 13.2. The slope is drawn with `profile-y`. The side view shows the slope along the strip and none across it.
+  colour: >-
+    estimated - no picture shows the cover's own colour. It is drawn a little lighter than the cord cell, as the
+    photograph 78_2802 shows a second dark flat plate beside the cap.
+relief:
+  features:
+    - node: plate
+      out: 13.2
+      profile-y: [[0.0, 0.0], [2.2, 13.2], [105.1, 13.2], [107.3, 0.0]]
+      color: '#26272a'
+      confidence: drawing
+      source: DK 7979.238 side view, page 18, the trapezoid beside the gland, read at 600 and 1200 dpi
+skins: [default]
