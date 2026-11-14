@@ -27,7 +27,7 @@ import {canCable, withCable, updateCable, cablesOf, cableName, endName, endKey, 
         dcFeedChecks, dcTypeOf, dcPoleWord, feedSides} from './cable-rules.js';
 import {portIdsOf, zeroUEnds, zeroUEndsText, seatedEndReason, dcReader, dcEndOf} from './ports.js';
 import {validate, same} from './validate.js';
-import {withRoutedLengths, pathwaysOf, waypointLanesOf, resolveRoute, pathwaysAt, zeroUPathways, pathwayId} from './route.js';
+import {withRoutedLengths, pathwaysOf, waypointLanesOf, resolveRoute, pathwaysAt, zeroUPathways, pathwayId, approachWarnings} from './route.js';
 import {slotsFor, slotEnv, resolverFor, holdsAt, partName, partOf} from './slots.js';
 import {acceptSwaps, underCarrier, spanWhy} from '../swap.js';
 import {followSwaps, keptSwaps, unknownTexts, rewriteRack, rewroteText, pairText} from '../redirects.js';
@@ -947,6 +947,12 @@ function cableRoute(rack, {id, route, summary}, ctx) {
     const [from, to] = m?.join && m?.leave ? [m.join, m.leave] : [b.route[0], b.route.at(-1)];
     findings.push(note(from && to ? `${id} follows ${bundleName(b)} from ${waypointText(rack, from)} to ${waypointText(rack, to)}; this route applies outside it.`
       : `${id} is in ${bundleName(b)}; this route applies outside it.`));
+  }
+  // A ROUTE THAT COMES TO A BACK END FROM BEHIND ITS PANEL is kept as given and warned of (route.js
+  // approachWarnings): it needs the routes' readers, and without them nothing is judged
+  if (ctx?.route) {
+    const labels = itemId => rack.items.find(i => i.id === itemId)?.label ?? itemId;
+    for (const text of approachWarnings(next, cableOf(next, id), ctx.route, labels)) findings.push({kind: 'warning', text});
   }
   return {...done(next, summary ?? `Routed cable ${cableName(c)} by hand.`), findings};
 }
