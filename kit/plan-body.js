@@ -40,9 +40,9 @@ const LINE = 0.005;          // an edge this close to a wall of the section, or 
 //   clip      {lo, hi}, rows of the section's frame (either may be infinite): the part of the body
 //             between them, as one half of an opened housing is. Everything is cut to those rows before
 //             the levels are found, so the walls end at them, and the faces the cut leaves open at a
-//             clip row are the CAP: one face for the polygon of the band on the part's own side (half-open
-//             bands: a band edge exactly on the row belongs to the band below it for the part above the
-//             row, and to the band above it for the part below), in slot `mat.cap`; where a rib is cut
+//             clip row are the CAP: one face for the polygon of the band on the part's own side (a band
+//             edge exactly on the row gives the part on the upper side the band above the row and the
+//             part on the lower side the band below it, so the two caps can differ), in slot `mat.cap`; where a rib is cut
 //             there its section is the rib's own, in `mat.seam`. Without a clip the faces are the whole
 //             body's, as they always were.
 export function planPolygons({bands, section, cutLoops, ribs, W, H, D, mat, clip}) {

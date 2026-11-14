@@ -827,7 +827,7 @@ the seam, not the section extruded:
   lobe or a rounded corner the flange's top, not the casting's the extrusion would put
   under that depth. A part on the front or rear stands on the wall at its own place and
   height, which is an arc's chord at a rounded corner. Where the plan leaves no body under
-  the point the seat is 0, the flat plane, as for any point off the body (L227 already
+  the point the seat is 0, the flat plane, as for any point off the body (lint already
   refuses a part there).
 - **Exports.** The GLB of the open state carries the halves with the plain slot; the USDZ
   of any body with several materials (a box's six faces, a stepped or plan body, an open

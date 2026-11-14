@@ -174,14 +174,15 @@ def test_a_box_with_six_materials_is_six_meshes_and_a_single_material_is_one(thr
 
 
 @needs_three
-def test_the_invisible_slot_is_not_in_the_usdz_of_the_body(three_run):
-    # slot 6 is invisible: the closed body has none and the half's is dropped before the split
+def test_an_open_half_is_written_as_one_mesh_for_each_material_it_uses(three_run):
+    # the half's walls and rim are slot 7 and its other facets slots 0 to 5: at least two pieces
     names = points_in(three_run["zips"]["lid"])[0]
     assert len([n for n in names if n.startswith("geometries/")]) >= 2
 
 
 @needs_three
 def test_a_hit_on_a_rim_cap_answers_the_side_it_is_on_from_a_real_vector(three_run):
+    # (the viewer does not pick the halves today, so this holds planWallFace, not a path the viewer takes)
     hits = {h["name"]: h for h in three_run["hits"]}
     for h in hits.values():
         assert h["isVector"] and h["slot"] == three_run["PLAN_WALL_INDEX"], h

@@ -355,7 +355,8 @@ function ringTriangles(points, n) {
 // its own, so a hit on one answers as the long face whose side it is on (the larger horizontal
 // component of its normal), a front or rear wall slanted at 45 degrees as the front or rear. `n` is the
 // triangle's normal in the box frame: three's vector (x, y, z) or an array. A rim cap of an opened
-// half (a slot-7 face looking along y) is on the top or the bottom.
+// half (a slot-7 face looking along y) is on the top or the bottom. The viewer does not pick the halves
+// today (a click in the open state goes to the hidden closed body); this answer is for the day it does.
 export function planWallFace(n) {
   const [x, y, z] = typeof n.x === 'number' ? [n.x, n.y || 0, n.z] : [n[0], n[1] || 0, n[2]];
   if (Math.abs(y) > Math.max(Math.abs(x), Math.abs(z))) return y > 0 ? 'top' : 'bottom';

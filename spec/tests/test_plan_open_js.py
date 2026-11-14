@@ -189,6 +189,27 @@ def test_each_halfs_bounds_are_the_bounds_of_its_clipped_positions(stands):
 
 
 @needs_node
+def test_the_casting_bounds_of_a_half_are_no_wider_than_what_the_plan_left():
+    """`body` is the casting without ribs, used to floor the bay plates: with a plan the upper casting
+    is the plan's 560 wide (x 20 to 580), not the section's whole 600."""
+    s = split(THREE, 100.0)
+    assert s["base"]["body"]["size"][0] == pytest.approx(560.0)
+    assert split(THREE, 100.0, plan=False)["base"]["body"]["size"][0] == pytest.approx(600.0)
+
+
+@needs_node
+@pytest.mark.parametrize("hinge", ["front", "rear"])
+def test_a_plan_housing_with_its_base_at_the_bottom_splits_into_closed_halves_that_add_up(hinge):
+    """outer bottom: the base is the lower part. Halves watertight, volumes sum to the closed body."""
+    s = split(THREE, 144.0, outer="bottom", hinge=hinge)
+    for name in ("base", "lid"):
+        e = edges(s[name]["arrays"])
+        assert not [k for k, n in e.items() if n != 1 or e.get((k[1], k[0])) != 1], name
+    both = volume(s["base"]["arrays"]) + volume(s["lid"]["arrays"])
+    assert both == pytest.approx(volume(closed(THREE)), rel=1e-6)
+
+
+@needs_node
 def test_the_pivot_is_still_the_hinge_faces_line_of_the_section_at_the_seam_row():
     for stands, z in ((144.0, D / 2 - 281.0), (100.0, D / 2 - 250.0)):
         s = split(THREE, stands)
