@@ -728,6 +728,9 @@ PART_POWER = {
     # THE ENLOGIC EB0803'S FIXED CORD ends in a NEMA L21-30P plug (its data sheet and
     # drawing), the same `nema-l21-30p` as the Eaton cord above.
     "enlogic/pdu-cord-l21-30p": "nema-l21-30p",
+    # THE ENLOGIC EN2333'S AND EN6324'S FIXED CORD ends in a NEMA L6-30P plug (their data sheets and drawings), the
+    # `nema-l6-30p` of the CyberPower and Eaton cords.
+    "enlogic/pdu-cord-l6-30p": "nema-l6-30p",
     # THE ENLOGIC EN2951'S FIXED CORD ends in a CS8365 plug (the data sheet writes CS8365L, the drawing CS8365): the
     # `cs8365c` of the Eaton cord below, a reading. THE EN6952'S ends in an IEC 60309 3P+E 9h plug, so it is `other`,
     # as the Panduit cord's is, and POWER_LABEL says which connector.

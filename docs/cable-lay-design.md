@@ -651,6 +651,60 @@ Without the reader a finding is still true and can miss a port with no cable
 in it; a cable that covers only such ports is then not reported. The list is
 read once per rack and context, as the solids are.
 
+### 1.8 The far end of an adapter no drawing places (#1836)
+
+A passive panel in a drawer of a rack device (a holder in the Fibrain XCU10's
+drawer) has an end on its face and an end on its back for each adapter, one
+sleeve. The device's drawing places the face end. It places the back end
+nowhere, because a holder in a drawer is no bay of the device
+(`backEnds` in `rack/ports.js` lists them). On a panel mounted on the rear
+rails that back end faces into the cabinet: `endPane` puts it on the front
+pane, the far panel, as it puts any rear port.
+
+- **A point.** A back end stands where the other end of the same adapter
+  does: across and up the panel as its twin, depth the panel's far side
+  (`panelZ`, the chassis depth in from the rail), as for any rear port. The
+  twin is read from the part's own fibre map (`twinEnd` in `rack/ports.js`: the
+  face end `optical.ends` pairs `rear:b01.1` with). A back that goes to no
+  one face end (a splitter, a part with no map) has none. With a point the
+  route, the routed length, the stock size and the spare are worked out as for
+  any port, and `withRoutedLengths` writes a length for the cable; a length
+  already written is never touched. It needs the parts lists on the routing
+  context (`slotsOf`, `compByRef`), as a part beside the rack does; without
+  them an unplaced end stays unplaced.
+- **The side.** The automatic route chooses a gutter by the side each port
+  stands on (`autoRoute`). A back end stands on its twin's side, so a port facing into
+  the cabinet leaves toward the front rails inside the cabinet and joins the
+  front gutter on the side its twin stands, not on the left, where a port with
+  no x counts.
+- **The finding.** `unreachedFindings(rack, ctx, nameOf)` gives one finding a
+  cable, `{kind: 'end-unreachable', cable, ends: [{end, item, path, view}],
+  text}`, for an end the catalogue accepts as a port on the back of a part and
+  that nothing places, no twin standing in for the drawing: "This end cannot
+  be reached: no drawing places port b01 of PNL-1." A cable with both ends out
+  of reach says it of each in one text. It is not said of a loose end (the
+  loose-end finding's), of an end a drawing or a twin places, or of a front end,
+  and not at all without the parts lists. It warns and never refuses.
+  `unreachedFindingsOf` gives the one cable's. `inspect` carries it as
+  `route.unreached`, `{ends, text}`, and `describe` counts the cables on its
+  `Findings:` line ("1 cable has an end that cannot be reached (c2)").
+- **A hand route into a back end.** A route a person lays by hand is stored as
+  given and never refused for how it meets a back end. A route whose leg to a
+  back end no drawing places comes from behind its panel (the waypoint nearest
+  that end is on the far side of the port from the way the port looks) crosses
+  the panel's body, which the cable's own device is never counted as crossed
+  by. `cable.route` then adds a finding of kind `warning`. It opens with "c1
+  reaches port b01 of XCU10 rear from behind the panel". It ends with "the last
+  leg must come from the cabinet side of the panel, the side of the front
+  rails." (`approachWarnings` in `rack/route.js`.) A route that passes today is
+  stored as it was.
+
+What it does not do: the two views of the rack page (the cable hanging below
+the rack tagged "not connected", the rear view not drawing the cable) and
+the page's text for a length not measured are the page's, driven by the point
+and the findings the kit now gives. Which ports are free or counted is as it
+was.
+
 ## 2. Trays: the library vocabulary
 
 **Recommendation: a tray is a pathway with a floor. It is declared as `tray`
@@ -2269,6 +2323,10 @@ And the reads:
 - **`describe`**: one line of totals for the findings ("2 cables cross a
   body; 1 tray is full"), so an agent that only describes the rack still
   sees fault 1, as the session behind #949 did not.
+- **An end no drawing places** (1.8, #1836) is in `inspect` of a cable, as
+  `route.unreached`, and on the `describe` findings line; `cable.route` says
+  of a hand route that comes to such an end from behind its panel, as a
+  warning.
 - **Bends** (3.4) and **spans in front of other ports** (1.7) are in all
   three reads (#1007). `inspect` of a cable gains `route.bends`, each tight
   corner with its sentence, and `route.covers`, `{count, ports, between,
@@ -2453,6 +2511,8 @@ published file or a saved rack file uses it.
 | room for the bends (3.4, #973): the measure a path is judged by (`cornersOf` with `share: 'need'`, the plug's reach a leg), the approach point at the bend radius, the lead point (`at: 'lead'`, with a ring's `item` and `via` or a plug's `end`), a detour's `room` of two bend radii, the evenly sampled hang that leaves no corner short, and `ROOM_MAX` | kit API, routed lengths | a page reads the points by these names, and every routed length and stock size of a saved rack follows the rules; changing one moves them again |
 | `tight-bend` in a path's `bends` (`point`, `between`, `at`, `angle_deg`, `legs_mm`, `room_mm`, `need_mm`, `short_mm`), `bendFindings`, and its sentence ("turns N degrees between A and B with room for an R mm bend; the cable (type) needs M mm, S mm short.") | kit API, agent output | a page and an agent read the kind and the fields, and match the sentence |
 | `port-behind-span` in a path's `covers` (`item`, `path`, `view`, `between`, `at`, `judged`, `estimated`), `coverFindings` with `span-over-ports` (`count`, `ports`, `between`, `judged`, `estimated`) and its sentence (`coverFindingsOf`: "crosses in front of P on D", the stretch, the advice, and "Only ports that hold a cable were judged."), the rule that a port within the bend radius of the cable's own is not listed, and the optional reader `ctx.portBoxesOf(itemId)` giving `[{path, view, x, y, w?, h?}]` (1.7, #1013) | kit API, the routing context, agent output | a page supplies the reader and reads the findings by these names; agents match the sentence |
+| `end-unreachable` (`cable`, `ends`, `text`), `unreachedFindings`, `unreachedFindingsOf`, `route.unreached` of `inspect`, its place on the `describe` findings line, and its sentence ("This end cannot be reached: no drawing places port b01 of PNL-1.") (1.8, #1836) | kit API, agent output | a page and an agent read the kind and the fields, and match the sentence; a released code is retired, not deleted |
+| the back end of an adapter standing where its twin does (`twinEnd`), the automatic route taking the twin's side, and the hand-route warning of `cable.route` ("reaches port b01 of D from behind the panel" and "the last leg must come from the cabinet side of the panel, the side of the front rails.") (1.8, #1836) | kit, saved racks, agent output | an existing rack with a cable on such an end gets a route, a routed length and a spare it had none of (a written length is untouched); a hand route that was accepted can now carry the warning |
 | one lay whichever end is written first (3.4, #986): a cable laid from both ends and one kept by crossings, room, length, then the first-sorted end; `ctx` readers handed the twin | kit API, saved racks | routed lengths and paths on saved racks follow the lay kept; a page whose reader tells the ends apart by `cable.a` sees them exchanged on a twin |
 | `cornersOf` and `STRAIGHT_DEG` in `rack/route-path.js` (still exported from `rack/bundles.js`), and `cornersOf`'s `share` option with `half` (the default, the bundle check's) and `need` | kit API | a consumer imports them by these names from either path |
 | a doubled-back ring's path `face` point at its approach point, apart from the ring's own `rings[].face` on the band (#968) | kit API | a page that draws the face point, or compares the two, reads them by these names |
