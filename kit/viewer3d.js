@@ -36,7 +36,7 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat, seatPoint, seatFins, finReach, sectionHalves, SEAM_INDEX,
+import { sectionBody, sectionSeat, seatPoint, seatPlan, seatFins, finReach, sectionHalves, SEAM_INDEX,
          PLAN_WALL_INDEX, planWallFace, planWallColor } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
@@ -405,6 +405,7 @@ export function createViewer(container, opts = {}) {
   let box = null, reliefGroup = null, gen = 0;
   let earGroup = null, earPlan = null;   // the generic ears, when they are on
   let housingGroup = null;               // the two halves, when the box is open
+  let planHex = null;                    // the colour of a plan wall, when the body has a plan outline
   let fitState = 'closed';               // which box the camera was last fitted to
   const faceGroups = {};        // view -> the group buildFaceRelief filled
   // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
@@ -656,7 +657,9 @@ export function createViewer(container, opts = {}) {
     // in front of the real ones: it is not painted.
     const reachRibs = COMP ? {top: 0, bottom: 0} : finReach(devIndex && devIndex.chassis);
     const ribsOutside = reachRibs.top > 0 || reachRibs.bottom > 0;
-    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs)};
+    // (with a plan outline a part is seated on the body the plan leaves under it: section.js seatPlan)
+    const seatOnPlan = COMP ? null : seatPlan(devIndex && devIndex.chassis, W, H, D);
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs, seatOnPlan)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -870,7 +873,8 @@ export function createViewer(container, opts = {}) {
       // comes from a plan edge: plain, in the chassis faceplate's fill, sampling no face texture. A
       // body with no plan outline has the six materials and nothing else, as it always had.
       const planned = a.groups.some(g => g.materialIndex === PLAN_WALL_INDEX);
-      const wall = planned && new THREE.MeshLambertMaterial({color: planWallColor(faceSvg) || '#3a3f44'});
+      planHex = planned ? planWallColor(faceSvg) || '#3a3f44' : null;
+      const wall = planned && new THREE.MeshLambertMaterial({color: planHex});
       box = new THREE.Mesh(geo, planned
         ? [...mats, new THREE.MeshBasicMaterial({visible: false}), wall] : mats);
       scene.add(box);
@@ -1060,6 +1064,12 @@ export function createViewer(container, opts = {}) {
         geo.translate(-part.center[0], -part.center[1], -part.center[2]);
         mats = Array.from({length: SEAM_INDEX + 1}, shell);
         mats[SEAM_INDEX] = new THREE.MeshBasicMaterial({visible: false});           // the cut face
+        // A PLAN OUTLINE: the half's walls and its rim cap are slot 7, plain, in the colour of the closed
+        // body's plan walls. The cap is drawn, so each half shows its rim as the plan outline; slot 6,
+        // the section of a rib the seam cuts, is still not. Without the key the cap is slot 6 only.
+        if (a.groups.some(g => g.materialIndex === PLAN_WALL_INDEX)) {
+          mats[PLAN_WALL_INDEX] = new THREE.MeshLambertMaterial({color: planHex || '#3a3f44', side: THREE.DoubleSide});
+        }
       } else {
         mats = Array.from({length: 6}, shell);
         mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face

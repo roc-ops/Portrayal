@@ -53,6 +53,16 @@
 // horizontal edge) cannot be split: lint refuses it (spec/tools/portrayal/lint.py) and the
 // split here throws.
 //
+// WITH A PLAN OUTLINE each half is the plan-cut body on its side of the seam, not the extrusion: the
+// corners are round, the lobes stand, and a casting band inset from the flange is as narrow as it is.
+// Its bounds are those of its own positions. Its cap is its own piece of the mesh, the polygon of the
+// band on ITS side of the seam (so a seam exactly on a band edge gives the two halves two rims),
+// intersected with the section's width there, in the plain slot and facing the other half; it is drawn,
+// so the open housing shows each rim as the plan outline, and it exists only in these arrays: the closed
+// body is one mesh with no cap in it. The section of a rib the seam cuts stays SEAM_INDEX, not drawn.
+// The pivot is the section's hinge line as before: lobes and rounded corners swing with the lid, and
+// nothing models the lid meeting the base. A housing without the key builds as it always did.
+//
 // THE PLAN OUTLINE (`chassis['plan-outline']`, spec/tools/portrayal/plan.py is the one place the compiler
 // cuts it). With it the closed body is no extrusion: the section is cut band by band against the band's
 // polygon seen from above, so the corners are round and the lobes stand, and plan-body.js says which
@@ -61,13 +71,14 @@
 // rear walls the SECTION has and the end caps keep the six face textures by planar projection; a wall
 // that comes from a plan edge (a slanted one, or the end wall of an inset casting) is PLAN_WALL_INDEX,
 // sampling no texture, so its UV is the special case below as the seam cap's is. Only the closed body
-// follows the plan: the open state's halves (splitSection) are the section extruded, until the
-// order that builds the rim.
+// follows the plan here; the open state's halves (splitSection) are cut by it in the same way, each
+// with its own rim (see THE OPEN STATE above).
 //
 // No `three` in here.
 
 import { boxUV, FACE_INDEX } from './bevel.js';
 import { planPolygons } from './plan-body.js';
+import { planBody } from './plan.js';
 
 // the material of a part's cut face: after the six faces, the slot bevel.js gives its bevels
 export const SEAM_INDEX = 6;
@@ -303,7 +314,7 @@ function planBands(plan) {
 // The closed body cut band by band: plan-body.js says which faces there are, and they are made into
 // arrays here. The ribs are the fields' ribs, each with where it stands on the edge it grows from; the
 // body they stand on is the section cut back to the fields' cores, as without a plan.
-function planArrays(pts, bands, ribs, fins, W, H, D) {
+function planArrays(pts, bands, ribs, fins, W, H, D, clip) {
   const specs = [];
   for (const r of ribs) {
     const ext = edgeExtent(pts, r.on, H);
@@ -316,7 +327,9 @@ function planArrays(pts, bands, ribs, fins, W, H, D) {
   const faces = planPolygons({
     bands, section: pts, cutLoops: bodyLoops(pts, fins, H), ribs: specs, W, H, D,
     mat: {top: FACE_INDEX.top, bottom: FACE_INDEX.bottom, front: FACE_INDEX.front, rear: FACE_INDEX.rear,
-          right: FACE_INDEX.right, left: FACE_INDEX.left, plan: PLAN_WALL_INDEX},
+          right: FACE_INDEX.right, left: FACE_INDEX.left, plan: PLAN_WALL_INDEX,
+          cap: PLAN_WALL_INDEX, seam: SEAM_INDEX},
+    clip,
   });
   const byMat = new Map();
   for (const f of faces) {
@@ -341,9 +354,12 @@ function ringTriangles(points, n) {
 // The face a wall that is no section wall looks toward, for picking: a plan wall carries no texture of
 // its own, so a hit on one answers as the long face whose side it is on (the larger horizontal
 // component of its normal), a front or rear wall slanted at 45 degrees as the front or rear. `n` is the
-// triangle's normal in the box frame: three's vector (x, y, z) or an array.
+// triangle's normal in the box frame: three's vector (x, y, z) or an array. A rim cap of an opened
+// half (a slot-7 face looking along y) is on the top or the bottom. The viewer does not pick the halves
+// today (a click in the open state goes to the hidden closed body); this answer is for the day it does.
 export function planWallFace(n) {
-  const [x, z] = typeof n.x === 'number' ? [n.x, n.z] : [n[0], n[2]];
+  const [x, y, z] = typeof n.x === 'number' ? [n.x, n.y || 0, n.z] : [n[0], n[1] || 0, n[2]];
+  if (Math.abs(y) > Math.max(Math.abs(x), Math.abs(z))) return y > 0 ? 'top' : 'bottom';
   return Math.abs(z) >= Math.abs(x) ? (z >= 0 ? 'front' : 'rear') : (x >= 0 ? 'right' : 'left');
 }
 
@@ -369,11 +385,13 @@ export function planWallColor(svgByView) {
 // the ribs cropped to them; the faces the cut makes are one more group, SEAM_INDEX, a cap planar at the
 // clip row, facing out of the part. Without it the arrays are the whole body, as they were.
 //
-// `plan` (the published `chassis['plan-outline']`, a list of bands) cuts the whole body band by band
+// `plan` (the published `chassis['plan-outline']`, a list of bands) cuts the body band by band
 // (plan-body.js); the faces that has are polygons, triangulated here, with welded positions so the
-// mesh is watertight. A body with a `clip` is the open state's and is built from the section alone, so
-// a plan given with one is not read: the halves follow the plan in the order that builds the rim.
-// Without a plan (none, or an empty list) the arrays are what they always were.
+// mesh is watertight. With a `clip` the body is a half of an opened housing, cut by the plan as the
+// closed body is: its cap is the polygon of the band on its own side of the clip row, in the plain slot
+// (PLAN_WALL_INDEX, drawn: the half shows its rim as the plan outline), and the section of a rib the row
+// cuts is SEAM_INDEX, which is not. Without a plan (none, or an empty list) the arrays are what they
+// always were, the clip's cap included.
 export function sectionArrays(section, W, H, D, fins, clip, plan) {
   if (!Array.isArray(section) || section.length < 4) {
     throw new Error('chassis.section: a polygon needs at least four points');
@@ -389,8 +407,8 @@ export function sectionArrays(section, W, H, D, fins, clip, plan) {
   if (ribs.length > FIN_MAX_RIBS) {
     throw new Error(`chassis.fins: ${ribs.length} ribs, at most ${FIN_MAX_RIBS} a device`);
   }
-  const bands = clip ? null : planBands(plan);
-  if (bands) return planArrays(pts, bands, ribs, fins, W, H, D);
+  const bands = planBands(plan);
+  if (bands) return planArrays(pts, bands, ribs, fins, W, H, D, clip);
   const loops = bodyLoops(pts, fins, H, clip);
   const at = (sx, sy, half) => [half, H / 2 - sy, D / 2 - sx];
   const cutRow = y => !!clip && (y === clip.lo || y === clip.hi);
@@ -556,10 +574,78 @@ export function surfaceUnder(section, face, at, W, H, D, fins) {
 // (+x right, +y up, +z out of the front, the box centred on the origin): a
 // front or rear part's row is its height below the top, a top or bottom part's
 // column its distance behind the front.
-export function seatPoint(section, face, p, W, H, D, fins) {
+//
+// WITH A PLAN OUTLINE (`plan`, seatPlan's answer) the surface under the point is read from the body the
+// plan leaves, at the point's own place across the width and the depth, not from the extrusion's column:
+// over a rounded corner, a lobe or a casting band inset from the flange it is the surface that exists
+// there (the band's top, the lobe's top, the arc's chord for a wall). Where the plan leaves no body under
+// the point the answer is 0, the flat plane, as for any point off the body.
+export function seatPoint(section, face, p, W, H, D, fins, plan) {
+  if (plan && (face === 'front' || face === 'rear' || face === 'top' || face === 'bottom')) {
+    return planSurfaceUnder(plan, face, p[0] + W / 2, p[2] + D / 2, H / 2 - p[1], W, H, D, fins);
+  }
   if (face === 'front' || face === 'rear') return surfaceUnder(section, face, H / 2 - p[1], W, H, D, fins);
   if (face === 'top' || face === 'bottom') return surfaceUnder(section, face, D / 2 - p[2], W, H, D, fins);
   return 0;
+}
+
+const SEAT_TOL = 1e-6;
+
+// is (x, y) in a piece of plan.js (the trapezoid [xl, xr, lo_left, lo_right, hi_left, hi_right])
+function inPiece(pc, x, y) {
+  const [xl, xr, a, b, c, d] = pc;
+  if (x < xl - SEAT_TOL || x > xr + SEAT_TOL) return false;
+  const t = xr > xl ? Math.min(1, Math.max(0, (x - xl) / (xr - xl))) : 0;
+  return y >= a + (b - a) * t - SEAT_TOL && y <= c + (d - c) * t + SEAT_TOL;
+}
+
+// The surface under a point of a face's flat plane, read from the plan-cut body `plan` (planBody's answer):
+// (px, py) the point in the top face's frame (x along the width from the left, y from the rear), `row` its
+// height down from the top. top and bottom read the highest or lowest solid at (px, py); front and rear the
+// outermost wall at (px, row), as a plan edge makes it. Offsets are as surfaceUnder's: 0 at the plane,
+// negative where the body is recessed.
+function planSurfaceUnder(plan, face, px, py, row, W, H, D, fins) {
+  if (face === 'top' || face === 'bottom') {
+    let best = null;
+    for (const e of plan.solid) {
+      if (!e.pieces.some(pc => inPiece(pc, px, py))) continue;
+      const h = face === 'top' ? e.heights[0] : e.heights[1];
+      if (best === null || (face === 'top' ? h < best : h > best)) best = h;
+    }
+    if (best === null) return 0;
+    return face === 'top' ? 0 - best : best - H;
+  }
+  for (const f of finsOf(fins) || []) {      // a row inside an inside field's zone is read at its core line
+    if (finOutside(f)) continue;
+    row = f.on === 'top' ? Math.max(row, f.core) : Math.min(row, H - f.core);
+  }
+  let reach = null;
+  for (const e of plan.solid) {
+    if (row < e.heights[0] - EPS || row > e.heights[1] + EPS) continue;
+    for (const [xl, xr, a, b, c, d] of e.pieces) {
+      if (px < xl - SEAT_TOL || px > xr + SEAT_TOL) continue;
+      const t = xr > xl ? Math.min(1, Math.max(0, (px - xl) / (xr - xl))) : 0;
+      const y = face === 'front' ? c + (d - c) * t : a + (b - a) * t;
+      if (reach === null || (face === 'front' ? y > reach : y < reach)) reach = y;
+    }
+  }
+  if (reach === null) return 0;
+  return face === 'front' ? reach - D : 0 - reach;
+}
+
+// The plan-cut body a part is seated on (planBody's answer), or null for a chassis that states no plan
+// outline or whose body cannot be built from one. Kept for the chassis and the box it was cut for.
+const seatPlanCache = new WeakMap();
+export function seatPlan(chassis, W, H, D) {
+  const b = sectionBody(chassis, W, H, D);
+  const bands = chassis && chassis['plan-outline'];
+  if (!b || !b.arrays || !Array.isArray(bands) || !bands.length) return null;
+  const sig = `${W}|${H}|${D}|${JSON.stringify(bands)}|${JSON.stringify(chassis.section)}`;
+  const kept = seatPlanCache.get(chassis);
+  if (kept && kept.sig === sig) return kept.plan;
+  const plan = planBody({width: W, height: H, depth: D, section: chassis.section, 'plan-outline': bands});
+  seatPlanCache.set(chassis, {sig, plan});
+  return plan;
 }
 
 // The fields of ribs a part is seated against: the published `chassis.fins` when the chassis
@@ -613,7 +699,7 @@ export function sectionBody(chassis, W, H, D) {
 // A part: its arrays, their bounds, and `body`, the bounds of the casting alone, the ribs left out
 // (the loops of the cut-back section, in the box frame): where a stand-in for a module can be set
 // against the casting's own surface rather than the rib tips.
-const partOf = (arrays, loops, W, H, D) => {
+const partOf = (arrays, loops, W, H, D, planned) => {
   const min = [Infinity, Infinity, Infinity], max = [-Infinity, -Infinity, -Infinity];
   for (let i = 0; i < arrays.positions.length; i++) {
     const k = i % 3, v = arrays.positions[i];
@@ -623,6 +709,9 @@ const partOf = (arrays, loops, W, H, D) => {
   const pts = loops.flat();
   const bmin = [-W / 2, H / 2 - Math.max(...pts.map(p => p[1])), D / 2 - Math.max(...pts.map(p => p[0]))];
   const bmax = [W / 2, H / 2 - Math.min(...pts.map(p => p[1])), D / 2 - Math.min(...pts.map(p => p[0]))];
+  if (planned) {            // the plan only removes: the casting is no wider than what the plan left of the part
+    for (let k = 0; k < 3; k++) { bmin[k] = Math.max(bmin[k], min[k]); bmax[k] = Math.min(bmax[k], max[k]); }
+  }
   return {arrays, min, max, size: max.map((v, i) => v - min[i]), center: max.map((v, i) => (v + min[i]) / 2),
           body: {min: bmin, max: bmax, size: bmax.map((v, i) => v - bmin[i]),
                  center: bmax.map((v, i) => (v + bmin[i]) / 2)}};
@@ -639,7 +728,9 @@ const partOf = (arrays, loops, W, H, D) => {
 // box frame: x = 0, the seam's height, and z at the hinge face's outline in the seam's row, the
 // foremost x of the body there for `front` and the rearmost for `rear`. Throws where the seam cannot
 // divide the body: a face that does not open a section, a seam outside it or on a horizontal edge.
-export function splitSection(section, W, H, D, fins, halves) {
+// `plan` (the published `plan-outline`, or nothing) cuts each part by the plan outline as well, with its
+// own rim cap (see WITH A PLAN OUTLINE above); the pivot is the section's, as without it.
+export function splitSection(section, W, H, D, fins, halves, plan) {
   const base = halves && halves.base, lid = halves && halves.lid;
   const outer = base && base.outer, hinge = lid && lid.hinge;
   if (outer !== 'top' && outer !== 'bottom') {
@@ -661,8 +752,10 @@ export function splitSection(section, W, H, D, fins, halves) {
   const upper = {lo: -Infinity, hi: seam}, lower = {lo: seam, hi: Infinity};
   const clips = outer === 'top' ? {base: upper, lid: lower} : {base: lower, lid: upper};
   const out = {seam};
+  const planned = !!planBands(plan);
   for (const name of ['base', 'lid']) {
-    out[name] = partOf(sectionArrays(pts, W, H, D, fins, clips[name]), bodyLoops(pts, fins, H, clips[name]), W, H, D);
+    out[name] = partOf(sectionArrays(pts, W, H, D, fins, clips[name], plan), bodyLoops(pts, fins, H, clips[name]),
+                       W, H, D, planned);
   }
   const xs = bodyLoops(pts, fins, H, clips.base).flat().filter(p => p[1] === seam).map(p => p[0]);
   if (!xs.length) throw new Error('chassis.halves: the body has no outline at the seam');
@@ -680,7 +773,7 @@ export function sectionHalves(chassis, W, H, D) {
   const body = sectionBody(chassis, W, H, D);
   if (!body || body.refused) return body && {refused: body.refused};
   try {
-    return {split: splitSection(chassis.section, W, H, D, chassis.fins, chassis.halves)};
+    return {split: splitSection(chassis.section, W, H, D, chassis.fins, chassis.halves, chassis['plan-outline'])};
   } catch (e) {
     return {refused: String(e.message || e)};
   }
