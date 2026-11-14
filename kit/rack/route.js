@@ -12,7 +12,7 @@
 // the site's pages, so the rack kit can take it as it is.
 
 import {uLabel, zeroUOf, zeroUById, bundlesOf, rollOf, zeroUPane, zeroUBottom} from './model.js';
-import {zeroUEnds} from './ports.js';
+import {zeroUEnds, seatedPort, twinEnd} from './ports.js';
 import {portPathOf} from './cable-rules.js';
 import {followTrunk, bundleDiameter} from './bundle-route.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
@@ -278,8 +278,9 @@ export function autoRoute(rack, cable, ctx, {gutter = false} = {}) {
       return {e, it: null, z, pane: endPane(rack, e), x: p?.x ?? zeroUX(z, ctx.chassisOf), ru: p ? unitAt(rack, p.y) : zeroUBottom(z), side: sideOfAt(z.at)};
     }
     // A port not found only defaults the SIDE (to the left, as a port at the centre does);
-    // no length is ever measured from it (portPoint).
-    return pane ? {e, it, pane, x: ctx.portX(e) ?? 0, ru: it.ru} : null;
+    // no length is ever measured from it (portPoint). A back end no drawing places
+    // takes the side its twin stands on (placedAt).
+    return pane ? {e, it, pane, x: placedAt(it, e, ctx).x ?? 0, ru: it.ru} : null;
   });
   if (ends.some(x => !x)) return [];
   const [A, B] = ends;
@@ -973,18 +974,34 @@ function endUnit(rack, e, ctx) {
   return p ? unitAt(rack, p.y) : zeroUBottom(z);
 }
 
+// WHERE THE DRAWING PLACES AN END: {at, x, twin}, the end whose box the drawing
+// reads (`at`, the end itself) and its x from the centre line (`ctx.portX`), null
+// when nothing places it. A BACK END OF AN ADAPTER (the far end of a holder in a
+// drawer, which no panel draws) STANDS WHERE THE OTHER END OF THE SAME ADAPTER
+// DOES: `at` is then that twin (ports.js twinEnd, from the part's own fibre map)
+// and `twin` is true. It needs the parts lists (`ctx.slotsOf`, `ctx.compByRef`);
+// without them, or for an end with no twin, an unplaced end stays unplaced.
+function placedAt(it, end, ctx) {
+  const x = ctx.portX(end);
+  if (x != null || typeof ctx.slotsOf !== 'function' || typeof ctx.compByRef !== 'function') return {at: end, x, twin: false};
+  const twin = twinEnd(it, end, ctx);
+  if (!twin) return {at: end, x, twin: false};
+  const at = {...end, ...twin};
+  return {at, x: ctx.portX(at), twin: true};
+}
+
 export function portPoint(rack, end, ctx) {
   const it = itemOf(rack, end.item), pane = it && endPane(rack, end);
   if (!it) return zeroUEndPoint(rack, end, ctx);
   if (!pane) return null;
   // No port found on the drawing: no point, and so no length - never an invented x of 0.
-  const x = ctx.portX(end);
+  const {at, x} = placedAt(it, end, ctx);
   if (x == null) return null;
   // On its own face a panel is at that rail, less its setback; the far panel is the chassis depth away.
   const z = panelZ(rack, it, pane, ctx);
   // `portX` and `portY` give the port as the item would hold it upright; its
   // roll turns it to where it is drawn (fit.js rollPoint)
-  return {...rollPoint(rack, it, {x, y: ctx.portY?.(end) ?? anchorY(rack, it, ctx.chassisOf)}, ctx.chassisOf), z};
+  return {...rollPoint(rack, it, {x, y: ctx.portY?.(at) ?? anchorY(rack, it, ctx.chassisOf)}, ctx.chassisOf), z};
 }
 
 // THE PORTS A SPAN CAN COVER (#1013, docs/cable-lay-design.md section 1.7).
@@ -2838,6 +2855,59 @@ export function coverFindingsOf(rack, c, ctx, nameOf = id => id, path = pathOf(r
     judged, ...(estimated ? {estimated: true} : {}),
     text: `${c.id} crosses in front of ${and(said)} ${and(where)}: ${advice.join(', ') || `add a horizontal cable manager beside ${ends.join(' or ')}`}.${
       judged === 'cabled' ? ' Only ports that hold a cable were judged.' : ''}`}];
+}
+
+// EVERY CABLE WITH AN END THAT CANNOT BE REACHED, rack-wide: an end the
+// catalogue accepts as a port on the back of a part (ports.js seatedPort) and
+// that nothing places, so no route, length or spare can start from it. One
+// finding a cable, {kind: 'end-unreachable', cable, ends: [{end: 'a'|'b', item,
+// path, view}], text}; a cable with both ends out of reach says it of each, in
+// one text. The text is "This end cannot be reached: no drawing places port
+// b01 of PNL-1." It does not judge a loose end (the loose-end finding's), an
+// end the drawing places, or one placed by its twin (placedAt), and it judges
+// nothing without the parts lists and a way to read a port's place
+// (`ctx.slotsOf`, `ctx.compByRef`, `ctx.portX`). It warns and never refuses.
+// `nameOf(itemId)` names an item.
+export function unreachedFindings(rack, ctx, nameOf = id => id) {
+  return (rack.cables || []).flatMap(c => unreachedFindingsOf(rack, c, ctx, nameOf));
+}
+// The same for one cable (what `inspect` carries): none, or the one finding.
+export function unreachedFindingsOf(rack, c, ctx, nameOf = id => id) {
+  if (typeof ctx?.slotsOf !== 'function' || typeof ctx.compByRef !== 'function' || typeof ctx.portX !== 'function') return [];
+  const ends = [['a', c.a], ['b', c.b]].filter(([, e]) => {
+    const it = itemOf(rack, e?.item);
+    return it && seatedPort(it, e, ctx)?.back === true && portPoint(rack, e, ctx) == null;
+  });
+  if (!ends.length) return [];
+  return [{kind: 'end-unreachable', cable: c.id, ends: ends.map(([end, e]) => ({end, item: e.item, path: e.path, view: e.view})),
+    text: ends.map(([, e]) => `This end cannot be reached: no drawing places port ${String(e.path).split('/').pop()} of ${nameOf(e.item)}.`).join(' ')}];
+}
+
+// A HAND ROUTE THAT COMES TO A BACK END FROM BEHIND ITS PANEL. A back end no
+// drawing places (placedAt: it stands where its twin does) faces the pane it is
+// on, into the cabinet when the panel is on the other rails; the leg of the
+// route that comes to it has to come from that side, and a leg from the other
+// crosses the panel's body, which the cable's own device never counts as
+// crossed. The route's first waypoint is judged for end a and its last for end
+// b. The sentences, [] for none; it warns and never refuses, so a route that
+// was accepted stays accepted. Nothing is judged without the readers a point
+// needs (`ctx.portX`, `ctx.slotsOf`, `ctx.compByRef`), for a route that is not
+// by hand, or for a waypoint the drawing cannot place.
+export function approachWarnings(rack, cable, ctx, nameOf = id => id) {
+  const route = cable?.routeEdited === true && Array.isArray(cable.route) ? cable.route : [];
+  if (!route.length || typeof ctx?.slotsOf !== 'function' || typeof ctx.compByRef !== 'function' || typeof ctx.portX !== 'function') return [];
+  const out = [];
+  for (const [e, w] of [[cable.a, route[0]], [cable.b, route.at(-1)]]) {
+    try {
+      const it = itemOf(rack, e?.item), pane = it && endPane(rack, e);
+      if (!pane || !placedAt(it, e, ctx).twin) continue;
+      const port = portPoint(rack, e, ctx), from = pointOf(rack, w, ctx);
+      // out of the panel the way the pane looks: toward the front rails on the front pane, the rear rails on the rear
+      if (!port || !from || (from.z - port.z) * (pane === 'front' ? 1 : -1) >= -1e-6) continue;
+      out.push(`${cable.id} reaches port ${String(e.path).split('/').pop()} of ${nameOf(e.item)} from behind the panel: the last leg must come from the cabinet side of the panel, the side of the ${pane} rails.`);
+    } catch { /* a reader that throws judges nothing */ }
+  }
+  return out;
 }
 
 // A word for a part of a body, as a finding names it.

@@ -1,0 +1,398 @@
+format: 1
+kind: device
+name: acm7004-5-l
+version: 0.1.0
+maturity: modelled
+manufacturer: Opengear
+model: ACM7004-5-L
+description: >-
+  Opengear ACM7004-5-L Resilience Gateway, a compact desktop appliance. It has
+  four RJ45 RS-232 serial ports, four USB 2.0 console ports and a four-port
+  gigabit switch. The uplink is a combo port that is an RJ45 or an SFP. A 4G LTE
+  cellular modem is fitted, with two SIM slots on the front. Main, GPS and
+  auxiliary antenna jacks and a 9 to 30 VDC power input are on the rear.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Opengear Resilience Gateway ACM7000 data sheet (October 02, 2026): console
+      specifications, interfaces, power, dimensions, weight, model table, package
+      checklist and accessories. Resilience Gateway Quick Start Guide for the
+      ACM7004-2-L, ACM7008-2-L and ACM7004-5-L (06052019), page 2: the front and
+      rear photographs with callouts. Its footnote says NET2 is the built-in
+      switch on the ACM7004-5 units.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, Dimensions and Weight: 5 1/8 x 4 3/4 x 1 3/8 in, 13 x 12 x 3.5
+      cm, 0.6 kg. Form factor "Compact". The user manual's appendix prints the
+      same 13 x 12 x 3.5 cm. The rack kit 590003 and the DIN rail kit 590012 are
+      accessories and no source dimensions them, so the body is drawn alone.
+  front-layout:
+    confidence: estimated
+    note: >-
+      Method: the ACM7004-5-L front photograph of the Quick Start Guide is
+      measured against the 130 mm data sheet width. It is 717 px wide, straight
+      on, with no scale marker, so 5.5 px/mm across. Every position on the front
+      is read off the photograph, good to about 0.7 mm. These are the SFP cage,
+      the RJ45 jack, the lamps and their symbols, the two SIM slots and the
+      printing. The lamps, slots and printing right of the network ports are the
+      ACM7004-2-L's to within 1 mm.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      Method: the ACM7004-5-L rear photograph of the Quick Start Guide is 1127
+      px wide. The body is 1075 px across for 130 mm (8.27 px/mm), so the face is
+      orthographic to about 1 percent. The two RJ45 blocks, the SMA jacks, the
+      USB ports and the power housing are read off it, good to about 0.5 mm.
+  cellular:
+    confidence: datasheet
+    note: >-
+      Data sheet: ACM7004-5-L has a 4G LTE modem (Sierra Wireless EM7565, Cat-12)
+      and two SIM card slots. Quick start, page 3: slide the carrier mini SIM
+      into the slot with the contacts facing up. The rear photograph labels the
+      antenna jacks (M), a satellite symbol and (A). The jacks are SMA by the
+      registry's reading of the photograph. No document names the connector,
+      which is recorded in the gaps.
+  serial:
+    confidence: datasheet
+    note: >-
+      Data sheet: ACM7004-5 has 4 RJ45 RS-232 "Cisco straight" pinout console
+      ports, 50 to 230,400 bps, and a 4 port embedded gigabit switch. The
+      photograph numbers the serial ports 1 and 2 on the left and 3 and 4 on the
+      right. It prints SERIAL beneath.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The serial ports are console server ports. ACM700x-2 Quick Start Guide,
+      page 3, "Configure managed devices": set the Console Server Mode radio
+      button for a port. The data sheet calls them "console ports".
+  network:
+    confidence: datasheet
+    note: >-
+      Data sheet: ACM7004-5 has 4 x 10/100/1000 Ethernet switch ports and 1 x
+      10/100/1000 Ethernet/SFP uplink, all with 1500 V AC isolation. The front
+      photograph prints NET1(S) over an SFP cage and NET1(C) over an RJ45 jack.
+      They are one combo port, drawn as two placements sharing the number. The
+      rear photograph prints NET2 and the numbers 1 to 4 round the switch block.
+      The quick start footnote says NET2 is the built-in switch. ACM700x-2 Quick
+      Start Guide, page 1, step 03: NET1 connects to the primary network. That
+      guide covers the -2 units. NET1 of this model is read the same way, so both
+      halves of the combo uplink are traffic ports.
+  usb:
+    confidence: datasheet
+    note: >-
+      Data sheet: 4 x USB 2.0 console ports. The rear photograph shows two
+      stacked pairs of USB-A jacks, lettered A and B on the left and C and D on
+      the right. The user manual, section 3.1.8, puts the ACM7008-2 USB ports on
+      the front. The photograph puts them on the rear, and the drawing follows
+      the photograph.
+  lamps:
+    confidence: estimated
+    note: >-
+      The front photograph shows four lamps at the left. A power symbol, a
+      heartbeat symbol, IOIO and an antenna symbol sit beside them. Four signal
+      lamps sit at the right of the SIM slots beside a signal-bar symbol, all
+      dark. Three small red marks sit along the top of the SFP cage at 4.5 mm
+      pitch. They are sampled #c23639, #d12d32 and #d83b35 over 11, 15 and 17 px.
+      They are drawn with the library's round lamp, larger than the marks and
+      round where the marks are small rectangles. The
+      rear photograph shows a small light pipe at each corner of each switch jack.
+      No document held gives a colour or a meaning for any of them, so each is
+      drawn off and states are a gap.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet: 110-240 V AC to 12 V DC external power adapter, consumption
+      less than 11.5 W. ACM700x-2 Quick Start Guide, page 1, kit table: the 12V
+      switching DC power supply in the box is part 450031. Data sheet optional
+      supplies are 450037, 450039 and 450041. The rear prints 9~30V DC under a
+      four-position housing, with a line over five dashes. The
+      user manual's appendix says less than 30 W for all models. The data sheet's
+      11.5 W is followed. The appendix gives 5 to 50 C ambient where the data sheet
+      gives -25 to 60 C. The data sheet is followed.
+  livery:
+    confidence: estimated
+    note: >-
+      The red and black front, the two diagonal stripes, the wordmark and the
+      printing are read off the front photograph. They are painted livery, not
+      parts. The red is the photograph's sampled median, #fa0024 over 800 px.
+      The logo mark is a simplified outline.
+  sides:
+    confidence: datasheet
+    note: >-
+      The outlines are drawn from the data sheet's stated size. The data sheet
+      photograph of the ACM7004-2-L shows the top lid at an angle as a plain dark
+      slab, with no detail to place. No held picture shows the bottom or either
+      side. The user manual says the connection status can be seen from the LEDs
+      on top of the device.
+attrs:
+  physical: {weight-kg: 0.6}
+  power:
+    power-max-w: 11.5
+    power-input: >-
+      9 to 30 VDC four-position housing; 12 VDC external adapter in the box
+  environmental: {operating-temp-c: -25 to 60, humidity-pct: 5 to 90}
+  platform:
+    cpu: 800 MHz Armada 370 ARMv7 SoC (Marvell 88F6W11)
+    memory: 256 MB DDR3 SDRAM
+    storage: 4 GB NAND flash
+  features:
+    cellular: Sierra Wireless EM7565, 4G LTE Cat-12
+    optics-sfp: >-
+      1GbE SFP in the combo uplink; no document held names an optic type or reach
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 130.0
+  height: 35.0
+  depth: 120.0
+  color: '#2a2a2d'
+  mount: desktop
+gaps:
+- what: rack-kit
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    The data sheet lists Rack Mount Kit 590003, DIN Rail 590012 and Rack Mount
+    Tray 590033. The quick start describes 590003 as a tab with two rack screws,
+    two nuts and three screws, fixed to the side. No held document dimensions any
+    of them, so none is modelled.
+  wanted: The kit installation guide for 590003, 590012 and 590033.
+- what: lamp-states
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The front prints eight lamps, the two lamps of the RJ45 jack and three marks
+    along the SFP cage. The rear shows a light pipe at the corners of each switch
+    jack. No held document gives the colours or meanings, so each placed lamp is
+    drawn off. The photograph shows the RJ45 jack lamps green, sampled #2d5b36
+    over 56 px. It shows the three SFP marks red, sampled #d12d32 over 15 px for
+    the middle one. The eight other front lamps are dark. The four signal lamps
+    and the three SFP marks are small rectangles in the photograph. They are
+    drawn as the library's round lamp, a stand-in for the shape.
+  wanted: A hardware guide with the LED table.
+- what: sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    The top, bottom, left and right sides are drawn as plain outlines from the
+    stated size; no held picture shows their details.
+  wanted: A photograph of the top, the base and each side.
+- what: gps-jack-connector
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The middle antenna jack is printed with a satellite symbol. The data sheet
+    lists an active GPS antenna (569018) and no connector. It is drawn as SMA
+    like the other two jacks.
+  wanted: A hardware guide that names the antenna jacks.
+- what: antenna-jack-connector
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    No document names the jacks marked (M) and (A). SMA is read from the
+    photograph (gold hex nut, centre pin).
+  wanted: A hardware guide that names the antenna jacks.
+- what: sim-slot-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The two mini SIM slots are drawn from the photograph alone, and no document
+    dimensions the slot. The quick start says slot 1 is the bottom slot and the
+    manual says top or bottom. The photograph shows two slots side by side.
+  wanted: A drawing of the front panel.
+- what: power-housing
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    No document names a maker, series or pitch for the four-position power
+    housing. It is a declared stand-in with a registered key and a plug.
+  wanted: A dimensioned drawing of the rear panel.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: four RJ45 RS-232 serial ports, "Cisco straight" pinout.
+  uplink-rj45:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the RJ45 half of the combo uplink NET1.
+  uplink-sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the SFP half of the combo uplink NET1.
+  switch:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the four gigabit switch ports of NET2.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: four USB 2.0 console ports, A to D.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    attrs: {input-voltage: 9 to 30 VDC}
+    description: the 9 to 30 VDC power input.
+  wwan:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-sma}
+    description: the main, GPS and auxiliary antenna jacks.
+  sim:
+    term: Slot
+    role: service
+    index-origin: 1
+    attrs: {media: sim}
+    description: the two mini SIM card slots.
+views:
+  front:
+    size: {w: 130.0, h: 35.0}
+    panel:
+      decor:
+      - {id: face, kind: livery, at: [1.8, 1.4], size: [126.4, 30.4], fill: '#fa0024'}
+      - {id: livery-dark, kind: livery, at: [65.2, 1.4], size: [63.0, 30.4], pattern: motif, pattern-offset: [65.2, 1.4], pattern-pitch: [63.0, 30.4], pattern-cells: [[[0, 0], [63.0, 0], [63.0, 30.4], [18.5, 30.4]]]}
+      - {id: livery-stripes, kind: livery, at: [54.9, 1.4], size: [23.4, 30.4], pattern: motif, pattern-offset: [54.9, 1.4], pattern-pitch: [23.4, 30.4], pattern-cells: [[[0, 0], [0.6, 0], [19.9, 30.4], [19.3, 30.4]], [[3.4, 0], [4.0, 0], [23.3, 30.4], [22.7, 30.4]]]}
+    silkscreen:
+    - {at: [92.5, 5.6], path: 'M -3.3 -2.4 L 0.2 -3.8 L 3.3 1.1 L 0.2 3.8 Z', filled: true, fill: '#e8e8e8', for: chassis}
+    - {at: [126.2, 7.2], text: opengear, font-size: 5.0, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [126.2, 11.0], text: RESILIENCE GATEWAY, font-size: 1.9, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [21.8, 12.6], text: NET1(S), font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: net1-sfp}
+    - {at: [39.6, 9.0], text: NET1(C), font-size: 2.4, anchor: middle, fill: '#f4f4f4', for: net1-rj45}
+    - {at: [10.9, 16.1], path: 'M -0.8 -0.6 A 1.0 1.0 0 1 0 0.8 -0.6 M 0 -1.5 L 0 -0.1', stroke-width: 0.25, fill: '#f0f0f0', for: led-power}
+    - {at: [11.3, 18.7], path: 'M -1.8 0.1 L -0.8 0.1 L -0.4 -1.3 L 0.2 1.3 L 0.6 0.1 L 1.8 0.1', stroke-width: 0.25, fill: '#f0f0f0', for: led-heartbeat}
+    - {at: [11.3, 21.83], text: IOIO, font-size: 1.4, anchor: middle, fill: '#f0f0f0', for: led-ioio}
+    - {at: [11.0, 24.6], path: 'M 0 1.1 V -1.1 M -1.1 -0.7 Q -1.5 -1.7 -1.1 -2.1 M 1.1 -0.7 Q 1.5 -1.7 1.1 -2.1', stroke-width: 0.25, fill: '#f0f0f0', for: led-cellular}
+    - {at: [91.1, 21.4], text: '1', font-size: 2.0, anchor: middle, fill: '#e0e0e0', for: sim1}
+    - {at: [113.6, 21.4], text: '2', font-size: 2.0, anchor: middle, fill: '#e0e0e0', for: sim2}
+    - {at: [88.4, 21.0], path: 'M -1.0 -1.8 H 0.4 L 1.0 -1.2 V 1.8 H -1.0 Z', stroke-width: 0.2, fill: '#e0e0e0', for: sim1}
+    - {at: [110.9, 21.0], path: 'M -1.0 -1.8 H 0.4 L 1.0 -1.2 V 1.8 H -1.0 Z', stroke-width: 0.2, fill: '#e0e0e0', for: sim2}
+    - {at: [121.5, 25.0], path: 'M -1.4 1.4 V 0.2 M 0 1.4 V -0.8 M 1.4 1.4 V -1.8', stroke-width: 0.3, fill: '#c8c8c8', for: led-signal-4}
+    components:
+      placements:
+      - {ref: std/sfp@1, id: net1-sfp, at: [14.5, 15.5], group: uplink-sfp, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: net1-rj45, at: [31.7, 11.9], rotate: 180, group: uplink-rj45, rel-pos: 1}
+      - {ref: opengear/sim-slot-2ff@1, id: sim1, at: [79.7, 15.2], group: sim, rel-pos: 1}
+      - {ref: opengear/sim-slot-2ff@1, id: sim2, at: [102.9, 15.2], group: sim, rel-pos: 2}
+      - {ref: common/led-dot@1, id: led-power, at: [5.5, 15.1], group: status-leds, rel-pos: 1, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-heartbeat, at: [5.5, 17.7], group: status-leds, rel-pos: 2, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-ioio, at: [5.5, 20.4], group: status-leds, rel-pos: 3, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-cellular, at: [5.5, 23.0], group: status-leds, rel-pos: 4, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-signal-1, at: [98.1, 25.1], group: status-leds, rel-pos: 5, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-signal-2, at: [102.6, 25.1], group: status-leds, rel-pos: 6, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-signal-3, at: [107.3, 25.1], group: status-leds, rel-pos: 7, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-signal-4, at: [112.2, 25.1], group: status-leds, rel-pos: 8, for: chassis, states: {lamp: ['off']}}
+      - {ref: common/led-dot@1, id: led-sfp-1, at: [16.0, 15.5], group: status-leds, rel-pos: 9, for: net1-sfp, states: {lamp: ['off', {name: red, color: '#d12d32'}]}}
+      - {ref: common/led-dot@1, id: led-sfp-2, at: [20.6, 15.5], group: status-leds, rel-pos: 10, for: net1-sfp, states: {lamp: ['off', {name: red, color: '#d12d32'}]}}
+      - {ref: common/led-dot@1, id: led-sfp-3, at: [25.0, 15.5], group: status-leds, rel-pos: 11, for: net1-sfp, states: {lamp: ['off', {name: red, color: '#d12d32'}]}}
+  rear:
+    size: {w: 130.0, h: 35.0}
+    panel:
+      decor:
+      - {id: usb-frame-1, kind: label-plate, at: [92.0, 13.1], size: [14.5, 15.7], fill: '#0b0b0c'}
+      - {id: usb-frame-2, kind: label-plate, at: [109.2, 13.1], size: [14.5, 15.7], fill: '#0b0b0c'}
+      - {id: switch-frame, kind: label-plate, at: [22.6, 4.0], size: [31.4, 25.6], fill: '#a9a597'}
+      - {id: serial-frame, kind: label-plate, at: [57.2, 4.0], size: [31.4, 25.6], fill: '#a9a597'}
+    silkscreen:
+    - {at: [30.95, 3.4], text: '1', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: switch-1}
+    - {at: [44.85, 3.4], text: '3', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: switch-3}
+    - {at: [30.95, 32.0], text: '2', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: switch-2}
+    - {at: [44.85, 32.0], text: '4', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: switch-4}
+    - {at: [38.1, 32.0], text: NET2, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: switch-2}
+    - {at: [65.55, 3.4], text: '1', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: serial-1}
+    - {at: [79.45, 3.4], text: '3', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: serial-3}
+    - {at: [65.55, 32.0], text: '2', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: serial-2}
+    - {at: [79.45, 32.0], text: '4', font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: serial-4}
+    - {at: [72.5, 32.0], text: SERIAL, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: serial-2}
+    - {at: [3.6, 9.8], text: (M), font-size: 2.4, anchor: middle, fill: '#e8e8e8', for: wwan1}
+    - {at: [124.7, 7.2], text: (A), font-size: 2.4, anchor: middle, fill: '#e8e8e8', for: wwan3}
+    - {at: [3.6, 5.0], path: 'M 0 1.2 V -1.0 M -1.1 -0.6 Q -1.5 -1.6 -1.1 -2.0 M 1.1 -0.6 Q 1.5 -1.6 1.1 -2.0', stroke-width: 0.25, fill: '#e8e8e8', for: wwan1}
+    - {at: [124.7, 4.6], path: 'M 0 1.2 V -1.0 M -1.1 -0.6 Q -1.5 -1.6 -1.1 -2.0 M 1.1 -0.6 Q 1.5 -1.6 1.1 -2.0', stroke-width: 0.25, fill: '#e8e8e8', for: wwan3}
+    - {at: [90.3, 4.7], path: 'M -1.4 1.4 L 1.4 -1.4 M -0.4 1.4 A 2.0 2.0 0 0 0 1.4 -0.4', stroke-width: 0.3, fill: '#e8e8e8', for: wwan2}
+    - {at: [89.6, 17.58], text: A, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: usb-1}
+    - {at: [89.6, 26.68], text: B, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: usb-2}
+    - {at: [125.2, 17.58], text: C, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: usb-3}
+    - {at: [125.2, 26.68], text: D, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: usb-4}
+    - {at: [99.3, 32.4], path: 'M -2.0 0 H 2.0 M -1.0 0 L -0.2 -0.9 M 0.2 0 L 1.0 0.9', stroke-width: 0.3, fill: '#e8e8e8', for: usb-2}
+    - {at: [116.5, 32.4], path: 'M -2.0 0 H 2.0 M -1.0 0 L -0.2 -0.9 M 0.2 0 L 1.0 0.9', stroke-width: 0.3, fill: '#e8e8e8', for: usb-4}
+    - {at: [11.6, 32.2], text: 9~30V DC, font-size: 2.2, anchor: middle, fill: '#e8e8e8', for: power-in}
+    - {at: [11.6, 14.4], path: 'M -3.9 -0.4 L 3.9 -0.4 M -3.87 0.5 L -3.02 0.5 M -2.18 0.5 L -1.33 0.5 M -0.42 0.5 L 0.42 0.5 M 1.21 0.5 L 2.06 0.5 M 2.9 0.5 L 3.75 0.5', stroke-width: 0.25, fill: '#e8e8e8', for: power-in}
+    components:
+      placements:
+      - {ref: opengear/acm7000-dc-header@1, id: power-in, at: [7.0, 17.9], group: inlets, rel-pos: 1}
+      - {ref: common/sma-jack@1, id: wwan1, at: [6.75, 1.6], group: wwan, rel-pos: 1}
+      - {ref: common/sma-jack@1, id: wwan2, at: [94.45, 2.25], group: wwan, rel-pos: 2}
+      - {ref: common/sma-jack@1, id: wwan3, at: [111.35, 1.7], group: wwan, rel-pos: 3}
+      - {block: switch}
+      - {block: serial}
+      - {ref: std/usb-a@1, id: usb-1, at: [93.3, 14.65], group: usb, skin: usb2, rel-pos: 1, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-2, at: [93.3, 23.75], group: usb, skin: usb2, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-3, at: [110.5, 14.65], group: usb, skin: usb2, rel-pos: 3, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-4, at: [110.5, 23.75], group: usb, skin: usb2, rel-pos: 4, attrs: {media: usb-a}}
+      blocks:
+      - id: switch
+        ref: common/rj45-ganged-eth@1
+        at: [24.6, 4.7]
+        count: 4
+        rows: 2
+        pitch: 13.9
+        row-pitch: 14.5
+        number-from: 1
+        id-format: switch-{n}
+        rotate: {top: 180}
+        attrs: {media: rj45}
+      - id: serial
+        ref: std/rj45-ganged@2
+        at: [59.2, 4.7]
+        count: 4
+        rows: 2
+        pitch: 13.9
+        row-pitch: 14.5
+        number-from: 1
+        id-format: serial-{n}
+        rotate: {top: 180}
+        attrs: {media: rj45-serial}
+  top:
+    size: {w: 130.0, h: 120.0}
+    empty: >-
+      no held picture shows the top straight on: the quick starts show the front and rear, and the data sheet a slanted view
+      from above. Nothing is drawn.
+  bottom:
+    size: {w: 130.0, h: 120.0}
+    empty: >-
+      no held picture shows the bottom: the quick starts show the front and rear, and the data sheet a slanted view from above.
+      Nothing is drawn.
+  left:
+    size: {w: 120.0, h: 35.0}
+    empty: >-
+      no held picture shows the left end straight on: the quick starts show the front and rear, and the data sheet a slanted
+      view. Nothing is drawn.
+  right:
+    size: {w: 120.0, h: 35.0}
+    empty: >-
+      no held picture shows the right end straight on: the quick starts show the front and rear, and the data sheet a slanted
+      view. Nothing is drawn.
+datasheet:
+  title: Resilience Gateway ACM7000 Smart Out-of-Band Console Server for Edge Locations
+  sha256: 94aa43142f11cd5cdb30f00bd6c2db211e1b793d055c782720942075d77d7520
+references:
+  - {title: 'Console Server User Guide, version 5.3.1 (Opengear User Manual), section 3.1.8 and appendix A', sha256: 103452612c3c3fa27cc6b96ff2bb7bad6db319d75ff6511d6c3bb9b8e9646c24}
+  - {title: 'Resilience Gateway Quick Start Guide, ACM7004-2-L, ACM7008-2-L and ACM7004-5-L (06052019)', sha256: 46be2be7990cd2e41f8cbd09023272e70f545be10238edac2759250ae8567946}
+  - {title: 'ACM700x-2 Quick Start Guide (520087, revision 1.0.0)', sha256: cacf52c109dacedc6ec3d128247e70e203d4f37a24a1c6172b5a24c8c9a58957}

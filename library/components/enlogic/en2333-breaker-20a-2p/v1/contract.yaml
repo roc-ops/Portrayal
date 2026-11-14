@@ -1,0 +1,68 @@
+format: 1
+kind: component
+name: en2333-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of an Enlogic EN2333 or EN6324 single-phase PDU. It is a 20 A double-pole rocker
+  in a recess on a rounded plate held by four screws. The plate is in the bank's colour and printed
+  with the bank's name (B1) and the two lines it is across (L1-L2). Fixed to the PDU, not a plug-in part.
+  The plate is a longer module than the one of enlogic/en-breaker-20a-2p@1, which the EN2951 and EN6952 carry.
+size: {w: 45.0, h: 70.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  method: >-
+    drawing - Enlogic customer drawings TA-EN2333A and TA-EN6324A (rev E1, 2020.05.20) are vector.
+    Sheet 1, FRONT VIEW of each, was read from its path geometry at 2.7598 mm per pt. That is the scale of
+    the printed 1750.0 overall, 634.11 pt between the end lines of the EN2333 and 634.10 of the EN6324. The
+    52.0 width reads as 18.85 pt over the outer lines. The drawings lie the PDU down, cord end left.
+    This part is drawn as the PDU stands, cord end up. The drawing's length runs down the part and its
+    width across it, the drawing's top edge on the right.
+  size: >-
+    drawing - the plate has a STRAIGHT edge and a FULL outline with rounded ends. By the straight edge it is
+    23.20 pt along the strip by 16.31 pt across it, 64.0 by 45.0. Both drawings give that for B1 and B2.
+    By the full outline it is 25.38 pt along, 70.0 by 45.0. That is the figure drawn here. The rounded ends add
+    3.0 at each end, and their radius, 4.0, is estimated to 0.5. The pitch of the two plates of the EN2333
+    is 25.74 pt, 71.0.
+  different-module: >-
+    drawing - this is NOT the plate of enlogic/en-breaker-20a-2p@1. Along the strip that plate is 50.2 by
+    the straight edge. That is 20.64 pt at 2.4306 mm per pt in the EN2951 drawing. It is 56.3 by its outline. This one
+    is 64.0 and 70.0. Across the strip the two agree, 45.0 against 44.9. Along it they differ by 13.7 to 13.8
+    by EITHER convention. The EB0952's plate matches the EN2951's and uses that part. It is 20.64 pt at
+    2.4232 mm per pt, 50.0 by the straight edge and 56.0 by its outline.
+  scale-check: >-
+    drawing - a scale check passes when each dimension is within 1 mm of the standard part's. The
+    EN2333's own outlet rings pass. Its C19 ring is 12.98 by 10.08 pt, 35.8 by 27.8, against
+    std/c19-outlet@1's 35.6 by 27.7 (0.2 and 0.1). Its C13 ring is 11.19 by 8.27 pt, 30.9 by 22.8, against
+    30.4 by 22.0 (0.5 and 0.8). The EN6324 draws the same rings at the same size. The scale of these two
+    drawings is therefore the one used.
+  screws: >-
+    drawing - four screws of 2.36 pt (6.5) across. The two pairs are 15.38 pt (42.4) apart along the strip
+    and 6.9 pt (19.0) across it, centred on the plate. The recess (19.0 across, 33.4 along) and the rocker
+    in it are read off 500 dpi renders to about 1.5 mm and are ESTIMATED.
+  rating: >-
+    datasheet and drawing - EN2333 and EN6324 data sheets: "(2)2-pole,20A,5 kAIC". The drawings: "20 AMP,
+    DOUBLE-POLE ELECTRO MECHANICAL SWITCH / BREAKER (2) PLACES".
+  colour: >-
+    drawing - the bank colour is a FIELD (`bank-color`). The drawings name B1 LIGHT GRAY and B2 BLUE.
+    The data sheets' face renders, not photographs, read B1 #646867 and B2 #77a6ee, which a device writes.
+    The legend ink is a field too (`ink`).
+  skins: >-
+    drawing - the EN2333 draws the recess and rocker toward the right edge and the legends toward the left,
+    the `default` skin. The EN6324 draws its label above its recess, so the legends are toward the right edge.
+    That is the `label-first` skin, which the EN6324 selects. Both are measured to about 1 mm.
+  legends: >-
+    drawing - the plate prints the bank (B1, B2) large and the lines (L1-L2) small under it. They are the fields
+    `bank` and `lines`.
+  relief: >-
+    not shown - the drawings' side views are outlines; the plate is drawn flat.
+fields:
+  bank-color: {label: Bank colour, type: text, default: '#646867'}
+  ink: {label: Legend ink, type: text, default: '#e6e6e6'}
+  bank: {label: Bank, type: text, default: B1}
+  lines: {label: Lines, type: text, default: L1-L2}
+elements:
+  rocker: {at: [28.3, 27.65], size: [7.8, 14.7], class: breaker, states: ['on', 'off']}
+skins: [default, label-first]
