@@ -23,7 +23,7 @@ The device draws the latches on its rear, left and right faces.
 Both housings are at the proportion read from the installation figure, 4.7 to 1, each at its own width.
 The rear housing is 17 by 80 and the side housing is 15 by 70.5.
 The device keeps one gap for the hook, which no held picture shows.
-Five more gaps name what each device's own frame part draws in a following change.
+Two more gaps name what each device's own frame part draws in a following change.
 """
 import pathlib
 import re
@@ -47,9 +47,6 @@ SIDE_H = 70.5
 SENTENCE_LIMIT = 25
 OLD_SCALE = "2.79" + "6"
 FRAME_GAPS = {
-    "end-caps": ["front"],
-    "feet": ["front"],
-    "door-hinge-tabs": ["rear"],
     "side-plate-holes": ["left", "right"],
     "track-rungs": ["rear", "left", "right"],
 }
@@ -226,7 +223,8 @@ def test_the_gaps_name_the_hook_and_what_the_frame_part_draws_later(part):
         assert "shared frame" not in note and "next part for this family" not in note
         assert all(len(s.split()) <= SENTENCE_LIMIT for s in sentences(note)), note
     assert "side-plate-holes" in gaps and "track-rungs" in gaps
-    assert "a plate that carries two holes" in " ".join(gaps["feet"]["note"].split())
+    assert not {"end-caps", "feet", "door-hinge-tabs"} & set(gaps), "the end fittings are drawn now"
+    assert "end-fittings-front" in gaps and gaps["end-fittings-front"]["scope"] == ["front"]
 
 
 @pytest.mark.parametrize("part", PARTS)

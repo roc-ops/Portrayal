@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: pdu-cord-l6-30p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the cable gland of a PDU's fixed input cord. Its far end is a NEMA L6-30P plug that goes into a receptacle outside this library. No cable lands on the gland, so no mate is offered for it
+description: >-
+  The fixed input cord of an Enlogic EN2333 or EN6324 single-phase PDU with a NEMA L6-30P
+  plug. It is 3 m of cord leaving the cord end of the strip through a cable gland. Drawn
+  as the gland shows from the end. The cord and plug beyond it are not.
+size: {w: 36.4, h: 36.4}
+size-confidence: {w: drawing, h: estimated}
+attrs: {plug: nema-l6-30p, cord-length-m: 3}
+provenance:
+  size: >-
+    drawing - the front view of the Enlogic EN2333 drawing TA-EN2333A (rev E1, 2020.05.20)
+    draws the gland nut as a block 36.4 across the strip. That is 13.17 pt, 513.61 to 526.77
+    on the page, read off the vector at 2.7598 mm per pt. The 1750 overall and the 52.0
+    width both check that scale. The gland body is 33.0 across (11.97 pt) and the cord
+    leaving it 25.4 across (9.21 pt). The EN6324 drawing TA-EN6324A (rev E1) draws the same
+    three figures to the hundredth of a point, so the two drawings agree. The end-on shape
+    of the gland is not drawn. The part is a circle of the nut's across figure with the
+    cord's 25.4 as its bore. The 36.4 is taken for its height too (estimated).
+  cord: >-
+    datasheet - EN2333 and EN6324 data sheets: "Input Cord Length 3m (9.84')". The
+    drawings print "3m[10'],TOP FEED".
+  plug: >-
+    drawing and datasheet - the PLUG/RECEPTACLE BLOCK of the drawings draws the plug "NEMA
+    L6-30P, 2P 3W". It prints "30A, 250V MAX RATED INPUT" and "24A DERATED". The data sheets
+    give "Input Plug Type NEMA L6-30P". The plug face is not a part here. A device draws
+    this cord or a plug face, never both. Otherwise one input exports as two power ports.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not
+    a part. This part stands for the power input a DCIM records, a NEMA L6-30P power port.
+elements:
+  gland: {at: [0, 0], size: [36.4, 36.4], class: inlet}
+skins: [default]

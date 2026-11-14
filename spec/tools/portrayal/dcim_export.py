@@ -728,6 +728,9 @@ PART_POWER = {
     # THE ENLOGIC EB0803'S FIXED CORD ends in a NEMA L21-30P plug (its data sheet and
     # drawing), the same `nema-l21-30p` as the Eaton cord above.
     "enlogic/pdu-cord-l21-30p": "nema-l21-30p",
+    # THE ENLOGIC EN2333'S AND EN6324'S FIXED CORD ends in a NEMA L6-30P plug (their data sheets and drawings), the
+    # `nema-l6-30p` of the CyberPower and Eaton cords.
+    "enlogic/pdu-cord-l6-30p": "nema-l6-30p",
     # THE ENLOGIC EN2951'S FIXED CORD ends in a CS8365 plug (the data sheet writes CS8365L, the drawing CS8365): the
     # `cs8365c` of the Eaton cord below, a reading. THE EN6952'S ends in an IEC 60309 3P+E 9h plug, so it is `other`,
     # as the Panduit cord's is, and POWER_LABEL says which connector.
@@ -822,6 +825,10 @@ PART_POWER = {
     # tree, so each is `other` and POWER_LABEL says which connector.
     "raritan/px4-universal-input": "other",
     "raritan/px3-rear-cord-60309": "other",
+    # THE OPENGEAR ACM7000'S DC POWER HOUSING, a four-position housing printed 9~30V DC (the Resilience Gateway quick
+    # start, page 2). No document names its maker. No power-port type of the two targets is held for it in this tree, so
+    # it is `other` and POWER_LABEL says which connector.
+    "opengear/acm7000-dc-header": "other",
     # A RARITAN PX2-2475'S CORD ends in a NEMA L5-20P (the technical specification): `nema-l5-20p`, the value the Tripp Lite and
     # ePDU G3 cords above export, a PowerPortTypeChoices value in both targets.
     "raritan/px2-cord-l5-20p": "nema-l5-20p",
