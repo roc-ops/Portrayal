@@ -524,14 +524,15 @@ def test_sectionBody_hands_the_plan_to_the_arrays_and_without_it_builds_the_extr
 # ---- the open state of such a housing builds, drawn as the extrusion until the next order ---
 
 @needs_node
-def test_the_open_state_of_a_section_plan_housing_builds_without_throwing_as_the_unclipped_extrusion():
+def test_the_open_state_of_a_section_plan_housing_builds_the_halves_the_plan_cuts():
+    """(test_plan_open_js.py holds the halves in full: watertight, volumes, caps, bounds)"""
     halves = {"base": {"outer": "top", "stands": 144.0}, "lid": {"hinge": "rear", "stands": 144.0}}
     ch = {**THREE, "halves": halves}
     got = run([{"fn": "halves", "chassis": ch, "W": 600, "H": 288, "D": 281}])[0]["ok"]
     assert "split" in got and "refused" not in got
     for part in ("base", "lid"):
         mats = {g["materialIndex"] for g in got["split"][part]["arrays"]["groups"]}
-        assert PLAN_WALL not in mats and SEAM in mats          # the halves do not follow the plan yet
+        assert PLAN_WALL in mats and SEAM not in mats          # the plan's walls and rim, no invisible cap
     closed = run([{"fn": "body", "chassis": ch, "W": 600, "H": 288, "D": 281}])[0]["ok"]
     assert PLAN_WALL in {g["materialIndex"] for g in closed["arrays"]["groups"]}
 
