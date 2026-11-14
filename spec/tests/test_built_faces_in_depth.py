@@ -2,24 +2,25 @@
 
 The solids test (test_rack_side_solids_in_depth.py) reads the boxes rack.json
 derives from the default configuration. A frame drawn as a well in front of its
-part shows there, but a door or a guide that rack.json does not turn into a box
-(it is `mounted`, or inside a duct) does not. This reads the faces themselves.
+part shows there. A door or a guide that rack.json does not turn into a box
+does not: it is `mounted`, or inside a duct. This reads the faces themselves.
 
 Each compiled face in library/dist (`<name>.<config>.<view>.svg`, or the shared
 file the configs index names for it) is walked for every element that carries
-`data-z-out`. relief.js reads `data-z-out` as an absolute distance out from the
-face and sums `data-z-lift` up the ancestor chain, so an element covers, along
-the face's normal, from -out to -(summed lift) back from that face: the same
-frame as rack.json (rack_solids.py), where a part `n` deep has every element
-between 0 and `n`. `n` is the depth for the front and rear views, the height
-for top and bottom and the width for left and right: the part's extent along
-that face's normal, from the configs index. An element that covers any of
--inf..0 or n..inf stands outside the part by the distance it covers there.
+`data-z-out`. The file relief.js reads `data-z-out` as an absolute distance out from the
+face and sums `data-z-lift` up the ancestor chain. So an element covers, along
+the face's normal, from -out to -(summed lift) back from that face. This is the
+same frame as rack.json (rack_solids.py), where a part `n` deep has every
+element between 0 and `n`. `n` is the depth for the front and rear views, the
+height for top and bottom and the width for left and right. It is the part's
+extent along that face's normal, from the configs index. An element that covers
+any of -inf..0 or n..inf stands outside the part by the distance it covers there.
 
 Parts that stand a control proud of a face, as a breaker, a button or an LED
-lens does, are listed in PROUD by name with the distance, which the sweep holds
-to: a part not listed fails; a listed part that no longer stands outside fails
-(delete its entry); a listed part that stands further out than its entry fails.
+lens does, are listed in PROUD by name. Each entry carries the distance, which
+the sweep holds to. A part not listed fails. A listed part that no longer stands
+outside fails (delete its entry). A listed part that stands further out than its
+entry fails.
 """
 import json
 import xml.etree.ElementTree as ET
@@ -36,29 +37,36 @@ TOL = 0.01
 VIEWS = {"front": "d", "rear": "d", "top": "h", "bottom": "h", "left": "w", "right": "w"}
 
 # part -> (the most it stands outside any face, in mm; why that is not a defect)
-_BUTTON_REAR = ("the plate of its button-1 stands 3 mm proud of the rear face, a control on a face and not a frame, "
-                "door or guide stood in front of the part; whether the stated depth includes it is not checked")
+_BUTTON_REAR = ("the plate of its button-1 stands 3 mm proud of the rear face. It is a control on a face and not a frame, "
+                "door or guide stood in front of the part. Whether the stated depth includes it is not checked")
+_COVER_FRONT = ("the label cover of its cord cell stands 13.2 mm proud of the front face. It is a raised cover on a face "
+                "and not a frame, door or guide stood in front of the part. The plate of its button-1 stands 3 mm "
+                "proud of the rear face. Whether the stated depth includes them is not checked")
 _LED = ("the lens of one LED stands 0.3 mm proud of the front face, drawn so that it relieves in the 3D view; "
         "it is not a frame, door or guide stood in front of the part")
-_BUTTON_FRONT = ("the cap of its button-up stands 0.5 mm proud of the front face, a control on a face and not a "
-                 "frame, door or guide stood in front of the part; whether the stated depth includes it is not checked")
+_BUTTON_FRONT = ("the cap of its button-up stands 0.5 mm proud of the front face. It is a control on a face and not a "
+                 "frame, door or guide stood in front of the part. Whether the stated depth includes it is not checked")
 PROUD = {
     **{f"dk-7979-{n}": (3.0, _BUTTON_REAR)
        for n in ("110", "130", "132", "133", "135", "136", "138", "140", "142", "175")},
-    **{n: (0.3, _LED) for n in ("en2951", "en6952", "pdumv20hvnetlx", "pro4x-smart-4c16a",
+    **{f"dk-7979-{n}": (13.2, _COVER_FRONT)
+       for n in ("210", "230", "235", "236", "238", "240", "242")},
+    **{n: (0.3, _LED) for n in ("en2333", "en6324", "en2951", "en6952", "pdumv20hvnetlx", "pro4x-smart-4c16a",
                                 "pro4x-smart-pops-4t16a", "pro4x-switched-4f16a",
                                 "pro4x-switched-pops-4g16a", "px3-1045")},
     **{f"px4-{n}-e7m26v2": (0.5, _BUTTON_FRONT) for n in ("132awa", "1551wa", "532awa", "5551wa")},
-    "epbz77": (3.2, "the nut of its ground stud stands 3.2 mm proud of the front face, a fastener on a face and not "
-                    "a frame, door or guide stood in front of the part; whether the stated depth includes it is not checked"),
-    "pdumv30": (2.5, "the nut of its breaker-2 stands 2.5 mm proud of the front face, a fastener on a face and not a "
-                     "frame, door or guide stood in front of the part; whether the stated depth includes it is not checked"),
-    "px2-2475": (6.73, "the opening of its console port stands 6.73 mm proud of the front face, a connector on a face "
-                       "and not a frame, door or guide stood in front of the part; whether the depth includes it is not checked"),
-    "evma8365x": (7.5, "the plates of its breakers stand 7.5 mm proud of the front face, controls on a face and not a "
-                       "frame, door or guide stood in front of the part; whether the stated depth includes them is not checked"),
-    "evmi2130x": (7.5, "the plates of its breakers stand 7.5 mm proud of the front face, controls on a face and not a "
-                       "frame, door or guide stood in front of the part; whether the stated depth includes them is not checked"),
+    "pdu31116": (0.5, "the plate of its USB-A bezel stands 0.5 mm proud of the front face, a connector on a face and not a "
+                      "frame or door"),
+    "epbz77": (3.2, "the nut of its ground stud stands 3.2 mm proud of the front face. It is a fastener on a face and not "
+                    "a frame, door or guide stood in front of the part. Whether the stated depth includes it is not checked"),
+    "pdumv30": (2.5, "the nut of its breaker-2 stands 2.5 mm proud of the front face. It is a fastener on a face and not a "
+                     "frame, door or guide stood in front of the part. Whether the stated depth includes it is not checked"),
+    "px2-2475": (6.73, "the opening of its console port stands 6.73 mm proud of the front face. It is a connector on a face "
+                       "and not a frame, door or guide stood in front of the part. Whether the depth includes it is not checked"),
+    "evma8365x": (7.5, "the plates of its breakers stand 7.5 mm proud of the front face. They are controls on a face and not a "
+                       "frame, door or guide stood in front of the part. Whether the stated depth includes them is not checked"),
+    "evmi2130x": (7.5, "the plates of its breakers stand 7.5 mm proud of the front face. They are controls on a face and not a "
+                       "frame, door or guide stood in front of the part. Whether the stated depth includes them is not checked"),
 }
 
 
@@ -162,7 +170,7 @@ def test_every_built_face_of_a_rack_side_or_zero_u_part_stands_inside_it():
     unlisted = {n: f for n, f in found.items() if n not in PROUD}
     assert not unlisted, "\n".join(
         f"{n}: {ident} stands {mm:.2f} mm outside the part on {face} (extent {extent}); "
-        "a frame, door or guide drawn in front of its part needs a base well, and a control proud of a face is listed in PROUD"
+        "a frame, door or guide drawn in front of its part needs a base well; a control proud of a face is listed in PROUD"
         for n, (ident, mm, face, extent) in sorted(unlisted.items()))
     stale = sorted(n for n in PROUD if n not in found)
     assert not stale, f"in PROUD but no longer standing outside any face, delete the entry: {stale}"

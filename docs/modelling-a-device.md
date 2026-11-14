@@ -712,6 +712,112 @@ views:
 **What is not there yet.** Relief taken from a rib and a section that varies along
 the length come in later changes, so a modeller should not look for them.
 
+### The housing seen from above: `chassis.plan-outline`
+
+The section is one end profile run the whole width, so the housing seen from above is
+always a rectangle. A cast housing has rounded corners and lobes. `chassis.plan-outline`
+states the outline seen from above (a top view, not a bay's plan) as a list of bands:
+each is a range of heights down from the top and a polygon in the top face's frame (x
+from the left, y down the drawing, the rear at the top), clockwise with y down. The
+bands tile the height from 0 to `height`, and one band `[0, height]` is a housing whose
+outline is the same at every height. A rounded corner is its arc in short straight
+steps; a lobe is its points. The section is the most the housing can be and the plan
+only removes from it.
+
+```yaml
+chassis:
+  section: [...]
+  plan-outline:
+  - heights: [0, 132]               # the upper casting, inset from the flange
+    points: [[20, 43], [21.61, 37], ...]
+  - heights: [132, 155]             # the flange, with a lobe on an end
+    points: [[0, 32], [1.83, 22.82], ...]
+  - heights: [155, 288]
+    points: [[32, 37], [33.21, 32.5], ...]
+```
+
+Check: lint L220 to L225 (it needs a section; it is not on a rack device or with
+`bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`; the bands tile; each
+polygon is clockwise, simple, has no edge under 0.1 mm and lies inside the box; the
+caps) and L226 to L234, which cut each band against the section. The key is shape, so
+stating it on a released device is a major.
+
+**What is left of the body.** A band's polygon is cut to the section's rows at the
+band's heights: the plan only removes. A point within half a millimetre of a side of the
+box or of a wall of the section is moved onto it before the cut, so a run measured a few
+tenths inside a wall is the wall; L232 names each move over a hundredth of a millimetre.
+The body that is left has to reach all four sides of the box (L226), so a lobe whose tip
+stands where the section has no body does not count and the warning L231 names the lost
+point. Where two bands meet at a height that is not a row of the section and their
+outlines differ, the wall has a ledge in it (L233); a stretch of the section that no x of
+the plan reaches is named by L234.
+
+**How the faces follow it (2D).**
+
+- **Top and bottom.** The faceplate is a path of the union of the bands' polygons, the
+  corners transparent, with the same id `chassis-faceplate`. The bottom is its mirror in
+  x, wound the other way so it stays clockwise. The step between bands is a line inside
+  the outline, in a group `chassis-plan` painted over the art, so the face's own art has
+  to stop at the outline: a rectangle of art across the whole face would paint the
+  corners.
+- **Rib stripes.** Each rib's rectangle is cut to the pieces of every band it crosses and
+  joined into one path, with no clip element. A rib in several pieces gets ids `fin-3-a`,
+  `fin-3-b`; a rib the plan removes is not drawn and keeps its number; L230 warns.
+- **Front and rear.** The outline is the fins' silhouette cut to the x-extent of the body
+  at each row of the section: an inset casting is narrower than the flange, and a rounded
+  corner narrows the outline only at a row whose depth lies inside the corner. Where a
+  row has several runs of x the outline keeps each, and does not close over the gap.
+- **End faces.** An end face stays the section's silhouette (with its fins). The part of
+  it where the plan leaves no cap, which is where a casting is inset from the end, is
+  shaded in the plain tone, so you can see where a part cannot stand.
+- **Parts (L227).** A part on the top or bottom stands wholly on one level inside the
+  outline (not across a step or a rounded edge); a part on the front or rear lies where
+  its wall is present at its heights; a part on an end face lies on a cap.
+- **A housing that opens (L228, L229).** Each half's rim, the band on its side of the seam
+  cut to the section there, is one piece and not empty, and reaches the line where the
+  hinge face meets the seam, so the lid turns on the body.
+
+The cut is portrayal/plan.py; its answers for small cases are worked by hand in
+`spec/tests/fixtures/plan_outline/sweep-cases.json`, which the kit's version (`kit/plan.js`)
+reads too, and `body-cases.json` holds what plan.py computes for two made-up boxes.
+
+**The 3D body follows the key (the closed state).** The viewer builds the closed housing
+as the section cut band by band, so the corners are round, the lobes stand, and a casting
+inset from the flange is narrower than it in every view. In 3D:
+
+- **Top and bottom facets** at every height where the section or a band changes: the part
+  of the body that looks up shows the top drawing and the part that looks down the bottom
+  drawing, each placed by where it is along the length and the depth. Where the two sides
+  of a height are the same there is no facet; where a lower band is narrower the ring it
+  leaves is a ledge.
+- **Walls of the section.** The front and rear walls the section itself has keep the
+  front and rear drawings, so an inset casting's front wall still carries its parts. A plan
+  edge within half a millimetre of such a wall is that wall, so nothing is drawn twice.
+- **Plan walls are plain.** A wall that comes from an edge of the plan, a rounded corner,
+  a lobe's flank, the end wall of an inset casting, is the plain housing colour (the
+  faceplate's fill) and shows no drawing, because a drawing laid flat on a wall at an angle
+  would be smeared along it. Nothing is picked on one except the long face it is on.
+- **End caps.** A cap at either end of the box is the section's profile cut to what the
+  plan leaves at that end: it can be several pieces, or none where a casting is inset from
+  the end.
+- **Ribs** are cut to the plan band they stand in: a rib the plan removes is not drawn, a
+  rib it cuts is cut, and the 400-rib limit counts the ribs before that.
+
+The body is one closed mesh, with no gap or doubled face where two bands meet.
+
+**Not drawn yet.** The open state of a housing that states a plan outline builds, but its
+two halves are still the section extruded, so they show a rectangle without the rounded
+corners, lobes or rim; parts do not yet stand on the plan's walls; and the new wall
+material is not yet taken into account by the GLB and USDZ exports. **State it on no
+device yet.** A test fails if a library device does; the site's re-vendoring of the kit
+comes first.
+
+**The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
+export keeps the alpha: the corners are fully transparent, and the `background` option
+fills them. The draw.io export embeds the face as an SVG image whose path faceplate
+carries the same transparent corners, and the OmniGraffle stencil holds a PNG with its
+alpha. None of them paints a background of its own.
+
 ## Stage 2: the cutouts
 
 Declare every hole in `panel.cutouts` before choosing what goes in it.

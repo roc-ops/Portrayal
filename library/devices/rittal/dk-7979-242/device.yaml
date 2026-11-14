@@ -1,0 +1,533 @@
+format: 1
+kind: device
+name: dk-7979-242
+version: 0.1.0
+maturity: modelled
+manufacturer: Rittal
+model: DK 7979.242
+description: >-
+  Rittal PDU metered, three-phase, 0U. A 1696 mm extruded aluminium strip, 44 mm wide and about 72 mm deep, that
+  hangs on two push-button attachments on its back. It takes a 400 V three-phase feed, 11 kW, through a 3 m fixed
+  cord with a 16 A CEE plug. It hands that on to 42 unswitched IEC C13 outlets in three phase groups of 14. The
+  controller between phase 2 and phase 3 measures each phase. It has a display, two Ethernet jacks, a CAN bus
+  jack, an RS232 jack and a USB port. No breaker and no switching.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S DIMENSIONED DRAWING. Rittal, "Technical details, Power Distribution Unit, Metered
+      version" (dri2108029en, 08.2023), PDF page 21, DK 7979.242. The page has a plan view, a side view, an end view
+      and a front view, with the circuit diagram below. The cell lines of the front view were read from a 600 dpi
+      render at the drawing's own scale. The 1696 overall length reads 1.937 px per mm. Each cell edge is a
+      full-height line. Good to about 1 mm. Each outlet sits in its housing at the lines the drawing shows inside the block.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, the library's way to say a part stands vertically beside an upright. It hangs on the two
+      push-button attachments of the plan view, dimensioned 1555.75 apart. The data sheet's "PDU mounting options"
+      are the enclosure frame at the side of the 482.6 mm mounting frame and the cable route. The mounting adaptor
+      7000.688 is an accessory and is not drawn. `ru: 38` is the 1696 mm it runs, 1696 / 44.45 = 38.2.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - length 1696 (the dimension of the front view; the table of page 1 prints 1695). Width is 44 (the data
+      sheet's "44 mm (1 U)"), depth 72.1 (the side view's dimension). The data sheet (dri1308088en, p.1) prints
+      "PDU enclosure depth 70 mm" and the end view 109. The 109 is the body with the cable gland standing out of the
+      front and the button out of the back. The 70 is the extrusion profile. 72.1 is drawn, as on the basic devices.
+  colour:
+    confidence: datasheet
+    note: >-
+      The data sheet (dri1308088en, p.1) says "Aluminium, anodised in RAL 9005 (black, other colours may be
+      configured)", so the body is drawn black. The screen value #0e0e10 is the usual one for RAL 9005 and is
+      estimated. The two photographs of the metered family show a natural silver-grey extrusion, median #8a8a8a over
+      383777 pixels of photograph 78_2802. They also show dark graphite plates, #2b2b2c over 301257 pixels. Colours are a later
+      touch. The gap below names both.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of page 21, mm from the foot end. The foot cell is 0 to 72.1 with the gland ring.
+      The cord cell runs to 195.88 with a raised label cover in it. Phase 1 is 195.88 to 609.29, phase 2 is 609.29 to
+      1022.71, and the controller runs to 1222.45. A spacer runs to 1266.84, phase 3 is 1266.84 to 1680.26, and the
+      head cap runs to 1696. Each phase is a block of eight C13 cells, 232.8 long, and a block of six, 180.65 long.
+      Outlets count from the foot. The C13 long axis is across the strip.
+  hidden-cells:
+    confidence: estimated
+    note: >-
+      The front view draws the cord and its plug across the first phase group. The block of eight C13 cells that
+      starts at the cord cell lies under the plug. Its lines are estimated from the blocks of eight in phase 2 and
+      phase 3, 232.77 long. It ends at the 428.65 line that shows. The table counts 42 C13 and the circuit
+      diagram 14 per phase.
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the controller cell is 1022.71 to 1222.45 of page 21, between phase 2 and phase 3. Its parts are the
+      PDU controller plate and two RJ45 jacks (ETH2 and ETH1). The rest are an RJ12 jack (RS232), an RJ45 jack (CAN bus), a USB-A
+      port and two small headers. They are read as the DK 7979.238 page reads them, and the cell lines agree to
+      0.3 mm. Rittal, "Montage-, Installations- und Betriebsanleitung" for the PDU metered (7979204), fig. 21 names
+      each of them. The data sheet calls the RS232 port RJ12 and the library's `rj11` key is the same six-position
+      body. Each jack is drawn unrotated with its pins up.
+  lamps:
+    confidence: estimated
+    note: >-
+      Instructions p.18 to 19, tables 1 to 4. Every lamp is drawn dark and states its colours. POWER is green. The
+      multi-LED STATUS lamp is green, orange or red. It is blue for a changed position and white for a sensor update.
+      Two flashing codes cycle colours in the table. Device-detected cycles green, orange and red. Device-lost
+      alternates red and blue. Each is stated here as one colour, green and red, which is a single-colour
+      approximation of the printed cycle. The CAN jack has a green and a red lamp and each Ethernet jack a green
+      and an orange one. The two CAN lamps are estimated and stand 1.6 mm toward the head, so neither straddles the plate's section line. The drawing shows no lamp there. Fig. 21 shows no lit lamp. Its green #3baa39 over 2251 pixels is the ETH1 jack body. Its
+      yellow #f0f130 over 287 pixels is a contact pad, in a 200 dpi render of page 18. The lit colours here are the
+      library's usual values, estimated.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - the table of page 1 ("PDU metered") lists DK 7979.242. It gives 3~, 16 A, 11 kW, CEE input, 42 IEC
+      C13 and no C19, measuring per phase, 1695 mm. The circuit diagram draws a block of eight and a block of six
+      IEC C13 on each of L1, L2 and L3. std/c13-outlet@1. None is switched and none has a lamp. NO OUTLET NAME IS
+      WRITTEN. No held photograph is of this SKU and the outlets keep their placement ids, counted from the foot.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - dri1308088en p.1 gives 230 V per phase (400 V, 3~) and 16 A for this SKU. It gives five wires and a 3 m
+      cable of type H05-VV. The circuit diagram draws the neutral to each phase group, so each outlet is line to
+      neutral. The unit has a fixed cord and no inlet. `plug-rating-a` is not written, as the data sheet rates the
+      unit and not the plug. The data sheet gives circuit-breakers only for 32 A versions, so none is drawn.
+  button-plates:
+    confidence: drawing
+    note: >-
+      The plan view of page 21 draws each button plate 25.0 along the strip and 35.0 across. Two lines stand 5.0 mm in
+      from its ends and three rings, 15.0, 7.5 and 3.7 across, sit at its centre. They are the part
+      rittal/pdu-metered-button@1, read from the vector paths. Two lines of 24.0 mm cross at its centre, one across the strip and one along it, under the rings. The label cover carries its double rim, read the same way.
+  mounting-buttons:
+    confidence: drawing
+    note: >-
+      drawing - the plan view of page 21 shows two buttons 1555.75 apart (dimensioned). Their plates read 57.55 to
+      82.84 and 1613.16 to 1637.94 from the foot end, 25.2 long. The foot end of the plan view is taken to be the
+      end of the front view's foot cell.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the plan view of page 21 draws two grooves 3.0 wide and a ridge 1.55 wide with a line along its crest.
+      It also draws two buttons. The grooves and the ridge run 1530.75 mm between the plates, from 82.63 to 1613.37 from the head end.
+      They also run from each strip end to its plate. The head run starts 3.51 mm from the head end. The foot run stops 3.0 mm short of the foot end. They were
+      read from the vector paths, twice. The mid circles are drawn by the `mark-N` entries.
+  phase-plates:
+    confidence: photo-measured
+    note: >-
+      The instructions (7979204) mark the phases "L1: pink, L2: black, L3: white". They do so in the table of technical
+      data and in the section on phases and slots. The data sheet (dri1308088en, p.1) says "Pink, black, white". The
+      metered drawing document (dri2108029en) states neither. In photograph 78_2802 the pink reads #ee488f over 15335
+      pixels and the white #fefefe over 15569 pixels. Both show as a thin margin round each outlet block. Three sample
+      lines run across the strip, 81 px for the 44 mm face. They read the pink margin at 1.1 mm on the far side and 5.8
+      mm on the near side. The white reads about 12 px on the far side. Each is drawn as a frame 3.5 mm wide, the mean,
+      round each block of the drawing's cell lines, on a dark plate. The width is estimated. The frame's inner edge reaches 1.7 to 2.6 mm into the outermost C13 or C19 frame at a block end. The drawing shows no phase frame, and the photograph reads the margin at 1.1 to 5.8 mm, so the overlap is inside what was measured. The outlet frame line is drawn over the pink band. The black plate is not
+      sampled and is drawn #1f1f21 as the basic family is. The photograph is of another SKU and the block edges are
+      not measured.
+  label-cover:
+    confidence: drawing
+    note: >-
+      The label cover in the cord cell is the part rittal/pdu-cover-plate@1. The front view gives its rectangle. The
+      side view of page 18 draws it as a trapezoid 13.2 mm proud, read at 600 and 1200 dpi. The part builds the
+      sloped ends.
+  plate-outline:
+    confidence: drawing
+    note: >-
+      The controller plate steps in by 0.6 mm on each side over the last 23.0 mm of each end. An inner rim line runs
+      1.4 mm inside each end section. Both are read from a 1800 dpi render of page 18. The foot end is drawn by the
+      device and the head end by the controller part.
+  head-cap-ribs:
+    confidence: drawing
+    note: >-
+      The head cap in the front view of page 21 has one full-width line, 10.1 mm from the head end. It is a pair of
+      lines 0.2 mm apart and is drawn as one 0.35 mm line. It was read from the page's vector paths and from a 1800 dpi
+      render. The photographs are too small to count it.
+  c13-frames:
+    confidence: drawing
+    note: >-
+      Each C13 of the front view of page 21 sits in a rounded outer frame, 28.0 along the strip and 35.8 across, with
+      R2.5 corners. It is drawn here as decor. Neighbouring frames stand 28.35 apart and nearly touch. The frames were
+      read from the page's vector paths, twice. std/c13-outlet@1 draws the well, nose and contacts inside each frame.
+      The seven C13 under the plug have no frame in the drawing, so theirs are estimated at the outlet centres. The
+      outlets stand up to 0.94 mm from their frame centre and are not moved.
+      Pages 3 and 18 give the well chamfers of 6.5 mm and the nose 5.0 mm, read twice at the upper and lower corner. The shared part draws 5.4 and 4.5, so its diagonals stand 0.78 and 0.37 mm from the drawing's. The
+      well's corner stands 3.1 mm from the frame's end and 2.9 mm from its side. Decor has no chamfer or polyline shape
+      (device.schema.json line 1496 lists `rect`, `d-sub` and `slot`) and the part is shared, so they are not changed.
+  cell-lines:
+    confidence: drawing
+    note: >-
+      The front view of page 21 draws full-height lines across the strip at the ends of each block of outlets. They are
+      drawn as 0.2 mm lines, or 0.35 mm where the drawing doubles a line 0.2 mm apart. They were read from the vector
+      paths. Between two C13 the drawing has no line, only the frames.
+  plate-sections:
+    confidence: drawing
+    note: >-
+      The controller plate in the front view of page 21 has five full-height section lines. They are at 74.0, 104.0, 131.0,
+      142.7 and 160.0 mm from the head end of the plate. They were read from the vector paths and from a 1800 dpi render.
+      The first is in rittal/pdu-controller@1 and the other four are drawn here.
+  usb-port:
+    confidence: photo-measured
+    note: >-
+      The data sheet (dri1308088en, p.1) calls the port "USB 2.0 port (USB-A)", so it is std/usb-a@1 in its
+      white-tongue skin. Fig. 21 item 15 and photograph 78_2802 show a silver-white shell and no trident. The shell
+      reads #c5c5c5 over 309 pixels of a 200 dpi render of page 18. It is drawn as a plate behind the port, as the device's own decor. No shared part draws a USB-A metal shell, and the white-tongue part is reused for the tongue. The shell takes its place and size from the vector paths, 12.5 by 5.13 mm. The part's tongue is 10.2 mm wide against 11.1 drawn, so its centre stands on the drawn centre.
+  plan-circles:
+    confidence: estimated
+    note: >-
+      The plan view of page 21 shows two small circles on the centre line, at 381.4 and 1314.6 mm from the foot. They
+      read 2.4 mm across, twice at 600 dpi. Nothing says what they are. They are drawn on the back as dark discs,
+      each marked as estimated.
+  side-views:
+    confidence: drawing
+    note: >-
+      The side view of page 21 draws the body as a 72.1 by 1696 rectangle. Its front edge has a notch, 2.1 mm deep and
+      0.19 to 0.34 wide, at each cell line. The outline and the notches were read from the vector paths, twice, and are
+      drawn as decor. The gland, the label cover, the outlet bars and the two button feet stand outside that rectangle,
+      past the face. Decor is clipped to the face (L150) and the depth stays 72.1, so they are not drawn on it. The cover
+      and the buttons stand out in 3D as the relief of their parts. The drawing shows one side and the other is built
+      the same, mirrored.
+  end-views:
+    confidence: drawing
+    note: >-
+      The end view of page 21 draws the 44.0 by 72.1 mm section of the body, plain. Its outline is drawn on the top and
+      the bottom face. The gland, the cover and the button stand outside the section, 109 mm in all. They are not drawn
+      on the face, for the reason given for the side views. The view does not tell the two ends apart, so both are built
+      from it.
+  dcim:
+    confidence: estimated
+    note: >-
+      the input is one power port from the cord part and each outlet a power outlet it feeds. C13 exports as the
+      IEC type. The CEE plug exports as `other` with a label. The jacks export as ports of their own type.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      the maker's page lists the SKU among the metered variants. No end-of-life notice was found in the pages read.
+attrs:
+  physical:
+    length-mm: 1696
+    construction: extruded aluminium
+  power:
+    input-ac: 230 V per phase (400 V, 3~), 16 A, 50-60 Hz
+    input-plug: other
+    input-cord: fixed
+    input-phase: three
+    input-wiring: wye
+    input-voltage-v: 400
+    input-current-a: 16
+    capacity-kw: 11
+    capacity-scope: >-
+      the load the PDU can hand on, 11 kW (the "Output kW" column of the maker's table). It is not what the PDU
+      draws itself
+    frequency: 50-60 Hz
+  environmental:
+    operating-temp: +5 to +50 C
+    humidity: 10 to 95 % non-condensing
+  management:
+    metering-scope: input
+    outlet-switching: false
+  compliance:
+    product-compliance: CE, EAC
+  lifecycle:
+    eol: none-announced
+chassis: {width: 44, height: 1696, depth: 72.1, ru: 38, mount: rack-side, color: '#0e0e10', airflow: passive}
+gaps:
+- what: colour
+  scope: [front, rear, left, right]
+  reason: sources-disagree
+  note: >-
+    the two sources disagree. The data sheet says black anodised RAL 9005 ("other colours may be configured"), drawn
+    as #0e0e10. The photographs of the metered family show a natural silver-grey extrusion, median #8a8a8a over
+    383777 pixels of photograph 78_2802, and dark graphite plates. Black is drawn, as the data sheet states. Nine of
+    the ten basic Rittal devices on main draw silver, #b9bbbe.
+  wanted: a rating plate or order note naming the finish of this SKU.
+- what: phase-modules
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    photograph 78_3236 shows a small module with two sockets, two arrows and dots at the foot end of one phase of
+    a three-phase strip. No held document says which listed SKU carries it, so it is not drawn.
+  wanted: a document that names the SKU and draws the module.
+- what: can-rate
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    fig. 21 item 12 calls the jack a "CAN bus connection (daisy chain) for CMC III sensors, 24 V, 1 A". The
+    instructions state no bit rate for it. It carries no speed and the search is recorded here.
+  wanted: the maker's word on the CAN bus bit rate.
+- what: numbering
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    no photograph of this SKU shows what is printed beside the outlets. The placement ids stand.
+  wanted: a photograph of the printed outlet numbers.
+- what: group-plates
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the phase frames are drawn in the colours of photograph 78_2802, which is of another SKU. Their width and the
+    block edges are estimated from three sample lines. The plates of phase 1 and phase 2 touch as the drawing's cell
+    lines give them.
+  wanted: a straight-on photograph of the front with a scale.
+- what: hidden-cells
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the front view draws the cord and its plug across the first phase group. The cell lines of its block of
+    eight C13 are hidden, so the block is set from the blocks of eight that show.
+  wanted: a front view with the cord drawn away.
+- what: mounting-adaptor
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the mounting adaptor 7000.688 and the universal mounting kit are named and not drawn.
+  wanted: a drawing of the adaptor.
+groups:
+  outlets-l1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 14 IEC C13 outlets of phase L1, counted from the cable foot: a block of eight and a block of six'}
+  outlets-l2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 14 IEC C13 outlets of phase L2, counted from the cable foot: a block of eight and a block of six'}
+  outlets-l3: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 14 IEC C13 outlets of phase L3, counted from the cable foot: a block of eight and a block of six'}
+  power-input: {term: Input, role: service, index-origin: 1}
+  control: {term: Controller, role: furniture, index-origin: 1}
+  cover: {term: Cover, role: furniture, index-origin: 1}
+  ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'ETH2 and ETH1, the two redundant network jacks'}
+  serial: {term: Port, role: management, index-origin: 1, description: 'the RS232 serial jack'}
+  can-bus: {term: Port, role: management, index-origin: 1, description: 'the CAN bus jack for CMC III sensors'}
+  usb: {term: Port, role: management, index-origin: 1, description: 'the USB port for firmware updates and data logging'}
+  signal: {term: Terminal, role: management, index-origin: 1, mixed: 'the digital input and the alarm relay output, two small pluggable headers'}
+  lamps: {term: Lamp, role: indicator, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 44, h: 1696}
+    panel:
+      decor:
+      - {id: head-cap, at: [0, 0], size: [44, 15.74], fill: '#1d1d1f', kind: end-cap}
+      - {id: cap-rib-1, at: [0, 9.95], size: [44, 0.35], fill: '#55585c', kind: cap-rib, confidence: drawing, source: 'page 21 front view, a full-width line 10.1 mm from the head end, read twice'}
+      - {id: plate-l3, at: [0, 15.74], size: [44, 413.42], fill: '#1d1d1f', kind: phase-plate}
+      - {id: frame-l3-1, at: [1.75, 17.49], size: [40.5, 177.12], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l3-2, at: [1.75, 198.11], size: [40.5, 229.3], stroke: '#fefefe', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: spacer-1, at: [0, 429.16], size: [44, 44.39], fill: '#1b1b1d', kind: spacer}
+      - {id: controller-cell, at: [0, 473.55], size: [44, 199.74], fill: '#1d1d1f', kind: controller-cell}
+      - {id: plate-l2, at: [0, 673.29], size: [44, 413.42], fill: '#1f1f21', kind: phase-plate}
+      - {id: plate-l1, at: [0, 1086.71], size: [44, 413.41], fill: '#1d1d1f', kind: phase-plate}
+      - {id: frame-l1-1, at: [1.75, 1088.46], size: [40.5, 177.11], stroke: '#ee488f', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: frame-l1-2, at: [1.75, 1269.07], size: [40.5, 229.3], stroke: '#ee488f', stroke-width: 3.5, kind: phase-frame, confidence: estimated, source: 'photograph 78_2802, see the phase-plates note'}
+      - {id: cord-cell, at: [0, 1500.12], size: [44, 123.78], fill: '#1b1b1d', kind: spacer}
+      - {id: foot-cap, at: [0, 1623.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: plate-lower, at: [2.57, 576.29], size: [39.1, 93.05], fill: '#3c3d40', kind: controller-plate}
+      - {id: section-2, at: [2.57, 580.115], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'page 21 front view, a full-height line 104.0 mm from the plate head end, read twice'}
+      - {id: section-3, at: [2.57, 607.115], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 131.0 mm'}
+      - {id: section-4, at: [2.57, 618.815], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 142.7 mm'}
+      - {id: section-5, at: [2.57, 636.115], size: [39.1, 0.35], fill: '#26272a', kind: plate-section, confidence: drawing, source: 'as section-2, 160.0 mm'}
+      - {id: notch-foot-1, at: [2.57, 646.34], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
+      - {id: notch-foot-2, at: [41.07, 646.34], size: [0.6, 23.0], fill: '#1d1d1f', kind: plate-notch, confidence: drawing, source: 'page 18 front view, a 3.5 px step at 1800 dpi'}
+      - {id: rim-foot-a, at: [4.145, 645.04], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'page 18 front view, the inner line at the foot end, 1800 dpi'}
+      - {id: rim-foot-b, at: [39.745, 645.04], size: [0.35, 17.25], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-c, at: [4.145, 662.12], size: [35.95, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-d, at: [2.57, 644.87], size: [1.75, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: rim-foot-e, at: [40.095, 644.87], size: [1.575, 0.35], fill: '#26272a', kind: plate-rim, confidence: drawing, source: 'as rim-foot-a'}
+      - {id: usb-shell, at: [6.59, 649.32], size: [12.5, 5.13], rx: 0.4, fill: '#c5c5c5', kind: port-shell, confidence: photo-measured, source: 'fig. 21 item 15, #c5c5c5 over 309 pixels of a 200 dpi render; place and size from the vector paths of page 21'}
+      - {id: screw-1, at: [6.44, 662.22], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
+      - {id: screw-2, at: [31.5, 662.22], size: [6, 6], rx: 3, fill: '#55585c', kind: screw-head}
+      - {id: socket-1, at: [8.24, 664.02], size: [2.4, 2.4], rx: 1.2, fill: '#2a2b2e', kind: screw-socket}
+      - {id: socket-2, at: [33.3, 664.02], size: [2.4, 2.4], rx: 1.2, fill: '#2a2b2e', kind: screw-socket}
+      - {id: eth2-body, at: [3.9, 582.29], size: [16.9, 24.0], fill: '#ececec', kind: jack-body}
+      - {id: eth1-body, at: [22.0, 589.99], size: [18.3, 16.3], fill: '#3baa39', kind: jack-body}
+      - {id: c13-frame-1, at: [4.1, 19.17], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'page 21 front view, the outer frame of a C13, read twice'}
+      - {id: c13-frame-2, at: [4.1, 47.47], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-3, at: [4.1, 75.77], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-4, at: [4.1, 104.07], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-5, at: [4.1, 132.37], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-6, at: [4.1, 160.67], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-7, at: [4.1, 197.12], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-8, at: [4.1, 225.41], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-9, at: [4.1, 253.71], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-10, at: [4.1, 282.01], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-11, at: [4.1, 310.31], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-12, at: [4.1, 338.61], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-13, at: [4.1, 366.91], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-14, at: [4.1, 395.21], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-15, at: [4.1, 677.05], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-16, at: [4.1, 705.39], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-17, at: [4.1, 733.69], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-18, at: [4.1, 761.98], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-19, at: [4.1, 790.28], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-20, at: [4.1, 818.58], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-21, at: [4.1, 855.02], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-22, at: [4.1, 883.32], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-23, at: [4.1, 911.62], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-24, at: [4.1, 939.92], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-25, at: [4.1, 968.22], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-26, at: [4.1, 996.53], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-27, at: [4.1, 1024.82], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-28, at: [4.1, 1053.12], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-29, at: [4.1, 1090.56], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-30, at: [4.1, 1118.86], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-31, at: [4.1, 1147.16], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-32, at: [4.1, 1175.46], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-33, at: [4.1, 1203.76], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-34, at: [4.1, 1232.06], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-35, at: [4.1, 1268.51], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: drawing, source: 'as c13-frame-1'}
+      - {id: c13-frame-36, at: [4.1, 1296.14], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-7, under the plug in the drawing'}
+      - {id: c13-frame-37, at: [4.1, 1324.49], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-6, under the plug in the drawing'}
+      - {id: c13-frame-38, at: [4.1, 1352.85], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-5, under the plug in the drawing'}
+      - {id: c13-frame-39, at: [4.1, 1381.19], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-4, under the plug in the drawing'}
+      - {id: c13-frame-40, at: [4.1, 1409.55], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-3, under the plug in the drawing'}
+      - {id: c13-frame-41, at: [4.1, 1437.89], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-2, under the plug in the drawing'}
+      - {id: c13-frame-42, at: [4.1, 1466.24], size: [35.8, 28.0], rx: 2.5, stroke: '#55585c', stroke-width: 0.3, kind: c13-flange, confidence: estimated, source: 'at the centre of outlet-1, under the plug in the drawing'}
+      - {id: cell-line-1, at: [0, 15.24], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'page 21 front view, a full-height line at 15.42 mm'}
+      - {id: cell-line-2, at: [0, 195.84], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-3, at: [0, 428.74], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-4, at: [0, 473.09], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-5, at: [0, 673.13], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-6, at: [0, 853.74], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-7, at: [0, 1086.63], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-8, at: [0, 1267.25], size: [44, 0.35], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-9, at: [0, 1396.19], size: [44, 0.2], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+      - {id: cell-line-10, at: [0, 1397.99], size: [44, 0.2], fill: '#55585c', kind: cell-line, confidence: drawing, source: 'as cell-line-1'}
+    silkscreen:
+      - {at: [12.37, 579.49], text: ETH2, font-size: 1.8, anchor: middle, for: eth2}
+      - {at: [31.07, 579.49], text: ETH1, font-size: 1.8, anchor: middle, for: eth1}
+      - {at: [12.55, 617.89], text: RS232, font-size: 1.8, anchor: middle, for: rs232}
+      - {at: [30.9, 617.89], text: CAN, font-size: 1.8, anchor: middle, for: can}
+      - {at: [12.85, 645.79], text: USB, font-size: 1.8, anchor: middle, for: usb}
+    components:
+      placements:
+        - {id: input, ref: rittal/pdu-cord-cee-16a@1, at: [5.5, 1646.5], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord with a 16 A CEE plug, leaving the foot cell through a cable gland'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [6.8, 1469.24], group: outlets-l1, rel-pos: 1, fed-by: input, lines: [L1, N]}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [6.8, 1440.89], group: outlets-l1, rel-pos: 2, fed-by: input, lines: [L1, N]}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [6.8, 1412.55], group: outlets-l1, rel-pos: 3, fed-by: input, lines: [L1, N]}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [6.8, 1384.19], group: outlets-l1, rel-pos: 4, fed-by: input, lines: [L1, N]}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [6.8, 1355.85], group: outlets-l1, rel-pos: 5, fed-by: input, lines: [L1, N]}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [6.8, 1327.49], group: outlets-l1, rel-pos: 6, fed-by: input, lines: [L1, N]}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [6.8, 1299.14], group: outlets-l1, rel-pos: 7, fed-by: input, lines: [L1, N]}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [6.8, 1270.8], group: outlets-l1, rel-pos: 8, fed-by: input, lines: [L1, N]}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [6.8, 1234.38], group: outlets-l1, rel-pos: 9, fed-by: input, lines: [L1, N]}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [6.8, 1206.03], group: outlets-l1, rel-pos: 10, fed-by: input, lines: [L1, N]}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [6.8, 1177.67], group: outlets-l1, rel-pos: 11, fed-by: input, lines: [L1, N]}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [6.8, 1149.33], group: outlets-l1, rel-pos: 12, fed-by: input, lines: [L1, N]}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [6.8, 1120.97], group: outlets-l1, rel-pos: 13, fed-by: input, lines: [L1, N]}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [6.8, 1092.62], group: outlets-l1, rel-pos: 14, fed-by: input, lines: [L1, N]}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [6.8, 1055.84], group: outlets-l2, rel-pos: 1, fed-by: input, lines: [L2, N]}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [6.8, 1027.49], group: outlets-l2, rel-pos: 2, fed-by: input, lines: [L2, N]}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [6.8, 999.13], group: outlets-l2, rel-pos: 3, fed-by: input, lines: [L2, N]}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [6.8, 970.79], group: outlets-l2, rel-pos: 4, fed-by: input, lines: [L2, N]}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [6.8, 942.44], group: outlets-l2, rel-pos: 5, fed-by: input, lines: [L2, N]}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [6.8, 914.09], group: outlets-l2, rel-pos: 6, fed-by: input, lines: [L2, N]}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [6.8, 885.74], group: outlets-l2, rel-pos: 7, fed-by: input, lines: [L2, N]}
+        - {id: outlet-22, ref: std/c13-outlet@1, at: [6.8, 857.38], group: outlets-l2, rel-pos: 8, fed-by: input, lines: [L2, N]}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [6.8, 820.97], group: outlets-l2, rel-pos: 9, fed-by: input, lines: [L2, N]}
+        - {id: outlet-24, ref: std/c13-outlet@1, at: [6.8, 792.62], group: outlets-l2, rel-pos: 10, fed-by: input, lines: [L2, N]}
+        - {id: outlet-25, ref: std/c13-outlet@1, at: [6.8, 764.27], group: outlets-l2, rel-pos: 11, fed-by: input, lines: [L2, N]}
+        - {id: outlet-26, ref: std/c13-outlet@1, at: [6.8, 735.92], group: outlets-l2, rel-pos: 12, fed-by: input, lines: [L2, N]}
+        - {id: outlet-27, ref: std/c13-outlet@1, at: [6.8, 707.57], group: outlets-l2, rel-pos: 13, fed-by: input, lines: [L2, N]}
+        - {id: outlet-28, ref: std/c13-outlet@1, at: [6.8, 679.22], group: outlets-l2, rel-pos: 14, fed-by: input, lines: [L2, N]}
+        - {id: outlet-29, ref: std/c13-outlet@1, at: [6.8, 398.29], group: outlets-l3, rel-pos: 1, fed-by: input, lines: [L3, N]}
+        - {id: outlet-30, ref: std/c13-outlet@1, at: [6.8, 369.94], group: outlets-l3, rel-pos: 2, fed-by: input, lines: [L3, N]}
+        - {id: outlet-31, ref: std/c13-outlet@1, at: [6.8, 341.59], group: outlets-l3, rel-pos: 3, fed-by: input, lines: [L3, N]}
+        - {id: outlet-32, ref: std/c13-outlet@1, at: [6.8, 313.24], group: outlets-l3, rel-pos: 4, fed-by: input, lines: [L3, N]}
+        - {id: outlet-33, ref: std/c13-outlet@1, at: [6.8, 284.88], group: outlets-l3, rel-pos: 5, fed-by: input, lines: [L3, N]}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [6.8, 256.54], group: outlets-l3, rel-pos: 6, fed-by: input, lines: [L3, N]}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [6.8, 228.19], group: outlets-l3, rel-pos: 7, fed-by: input, lines: [L3, N]}
+        - {id: outlet-36, ref: std/c13-outlet@1, at: [6.8, 199.84], group: outlets-l3, rel-pos: 8, fed-by: input, lines: [L3, N]}
+        - {id: outlet-37, ref: std/c13-outlet@1, at: [6.8, 163.42], group: outlets-l3, rel-pos: 9, fed-by: input, lines: [L3, N]}
+        - {id: outlet-38, ref: std/c13-outlet@1, at: [6.8, 135.07], group: outlets-l3, rel-pos: 10, fed-by: input, lines: [L3, N]}
+        - {id: outlet-39, ref: std/c13-outlet@1, at: [6.8, 106.72], group: outlets-l3, rel-pos: 11, fed-by: input, lines: [L3, N]}
+        - {id: outlet-40, ref: std/c13-outlet@1, at: [6.8, 78.37], group: outlets-l3, rel-pos: 12, fed-by: input, lines: [L3, N]}
+        - {id: outlet-41, ref: std/c13-outlet@1, at: [6.8, 50.02], group: outlets-l3, rel-pos: 13, fed-by: input, lines: [L3, N]}
+        - {id: outlet-42, ref: std/c13-outlet@1, at: [6.8, 21.67], group: outlets-l3, rel-pos: 14, fed-by: input, lines: [L3, N]}
+        - {id: cover-plate, ref: rittal/pdu-cover-plate@1, at: [2.1, 1508.32], group: cover, rel-pos: 1}
+        - {id: controller, ref: rittal/pdu-controller@1, at: [2.57, 476.29], group: control, rel-pos: 1}
+        - {id: eth2, ref: common/rj45-eth@1, at: [4.45, 593.79], group: ethernet, rel-pos: 1, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
+        - {id: eth1, ref: common/rj45-eth@1, at: [23.2, 593.29], group: ethernet, rel-pos: 2, states: {led-a: ['off', {name: link, color: '#22c55e'}], led-b: ['off', {name: activity, color: '#f59e0b', behavior: blinking}]}}
+        - {id: rs232, ref: common/rj11-jack@1, at: [5.55, 622.34], group: serial, rel-pos: 1}
+        - {id: can, ref: std/rj45@2, at: [23.0, 621.19], group: can-bus, rel-pos: 1, attrs: {media: rj45-telemetry, function: can-bus}}
+        - {id: lamp-can-green, ref: common/led-dot@1, at: [25.0, 633.48], for: can, group: lamps, rel-pos: 3, states: ['off', {name: communication-possible, color: '#22c55e'}]}
+        - {id: lamp-can-red, ref: common/led-dot@1, at: [34.8, 633.48], for: can, group: lamps, rel-pos: 4, states: ['off', {name: transmission-error, color: '#ef4444', behavior: blinking}]}
+        - {id: usb, ref: std/usb-a@1, at: [6.85, 649.39], skin: usb2, group: usb, rel-pos: 1, attrs: {function: USB}}
+        - {id: digital-input, ref: rittal/pdu-digital-input@1, at: [30.0, 637.24], group: signal, rel-pos: 1}
+        - {id: alarm-relay, ref: rittal/pdu-alarm-relay@1, at: [30.0, 647.54], group: signal, rel-pos: 2}
+        - {id: lamp-power, ref: common/led-dot@1, at: [7.5, 559.39], for: controller, group: lamps, rel-pos: 1, states: ['off', {name: 'on', color: '#22c55e'}]}
+        - {id: lamp-status, ref: common/led-dot@1, at: [7.5, 565.24], for: controller, group: lamps, rel-pos: 2, states: ['off', {name: ok, color: '#22c55e'}, {name: warning, color: '#f59e0b'}, {name: alarm, color: '#ef4444'}, {name: device-detected, color: '#22c55e', behavior: blinking}, {name: device-lost, color: '#ef4444', behavior: blinking}, {name: position-changed, color: '#3b82f6'}, {name: update-in-progress, color: '#ef4444', behavior: blinking}, {name: sensor-update, color: '#f5f5f5'}]}
+  rear:
+    size: {w: 44, h: 1696}
+    panel:
+      decor:
+      - {id: groove-1, at: [10.77, 82.63], size: [3.0, 1530.75], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 21 plan view, two lines 3.0 apart, read from the vector paths'}
+      - {id: ridge, at: [21.2, 82.63], size: [1.55, 1530.75], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'page 21 plan view, two lines 1.56 apart'}
+      - {id: ridge-crest, at: [21.88, 82.63], size: [0.2, 1530.75], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'page 21 plan view, the line between the two'}
+      - {id: groove-2, at: [30.18, 82.63], size: [3.0, 1530.75], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1'}
+      - {id: groove-1-head, at: [10.77, 3.51], size: [3.0, 54.12], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 21 plan view, from the head end to the button plate, read from the vector paths'}
+      - {id: ridge-head, at: [21.2, 3.51], size: [1.55, 54.12], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'as groove-1-head'}
+      - {id: ridge-crest-head, at: [21.88, 3.51], size: [0.2, 54.12], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'as groove-1-head'}
+      - {id: groove-2-head, at: [30.18, 3.51], size: [3.0, 54.12], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1-head'}
+      - {id: groove-1-foot, at: [10.77, 1638.37], size: [3.0, 54.63], fill: '#8e9094', kind: groove, confidence: drawing, source: 'page 21 plan view, from the button plate to 3.0 mm short of the foot end, read from the vector paths'}
+      - {id: ridge-foot, at: [21.2, 1638.37], size: [1.55, 54.63], fill: '#6f7173', kind: ridge, confidence: drawing, source: 'as groove-1-foot'}
+      - {id: ridge-crest-foot, at: [21.88, 1638.37], size: [0.2, 54.63], fill: '#5b5d60', kind: ridge, confidence: drawing, source: 'as groove-1-foot'}
+      - {id: groove-2-foot, at: [30.18, 1638.37], size: [3.0, 54.63], fill: '#8e9094', kind: groove, confidence: drawing, source: 'as groove-1-foot'}
+      - {id: mark-1, at: [21.0, 1313.4], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 21 plan view, a small circle on the centre line at 381.4 mm, read twice at 600 dpi'}
+      - {id: mark-2, at: [21.0, 380.2], size: [2.4, 2.4], rx: 1.2, fill: '#3a3b3e', kind: centre-mark, confidence: estimated, source: 'page 21 plan view, a small circle on the centre line at 1314.6 mm, read twice at 600 dpi'}
+    components:
+      placements:
+        - {id: button-1, ref: rittal/pdu-metered-button@1, at: [4.47, 1613.37], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: rittal/pdu-metered-button@1, at: [4.47, 57.63], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 44, h: 72.1}
+    panel:
+      decor:
+      - {id: section-outline, at: [0.11, 0.11], size: [43.78, 71.88], stroke: '#55585c', stroke-width: 0.22, kind: section-outline, confidence: drawing, source: 'page 21 end view, the 44.0 by 72.1 mm section of the body, read from the vector paths'}
+  bottom:
+    size: {w: 44, h: 72.1}
+    panel:
+      decor:
+      - {id: section-outline, at: [0.11, 0.11], size: [43.78, 71.88], stroke: '#55585c', stroke-width: 0.22, kind: section-outline, confidence: drawing, source: 'as the top face: the end view shows one section'}
+  left:
+    size: {w: 72.1, h: 1696}
+    panel:
+      decor:
+      - {id: side-outline, at: [0.11, 0.11], size: [71.88, 1695.78], stroke: '#55585c', stroke-width: 0.22, kind: side-outline, confidence: drawing, source: 'page 21 side view, the body outline 72.1 by 1696, read from the vector paths'}
+      - {id: side-tick-1, at: [70.0, 10.44], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick, confidence: drawing, source: 'page 21 side view, the notches of the front edge, one at each cell line, read from the vector paths'}
+      - {id: side-tick-2, at: [70.0, 15.75], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-3, at: [70.0, 196.34], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-4, at: [70.0, 429.24], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-5, at: [70.0, 473.64], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-6, at: [70.0, 499.71], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-7, at: [70.0, 646.44], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-8, at: [70.0, 673.65], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-9, at: [70.0, 854.25], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-10, at: [70.0, 1087.14], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-11, at: [70.0, 1267.74], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-12, at: [70.0, 1500.63], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-13, at: [70.0, 1624.25], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+  right:
+    size: {w: 72.1, h: 1696}
+    panel:
+      decor:
+      - {id: side-outline, at: [0.11, 0.11], size: [71.88, 1695.78], stroke: '#55585c', stroke-width: 0.22, kind: side-outline, confidence: drawing, source: 'as the left face: the drawing shows one side'}
+      - {id: side-tick-1, at: [0.0, 10.44], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-2, at: [0.0, 15.75], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-3, at: [0.0, 196.34], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-4, at: [0.0, 429.24], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-5, at: [0.0, 473.64], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-6, at: [0.0, 499.71], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-7, at: [0.0, 646.44], size: [2.1, 0.34], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-8, at: [0.0, 673.65], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-9, at: [0.0, 854.25], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-10, at: [0.0, 1087.14], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-11, at: [0.0, 1267.74], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-12, at: [0.0, 1500.63], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+      - {id: side-tick-13, at: [0.0, 1624.25], size: [2.1, 0.2], fill: '#55585c', kind: cell-tick}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships: the fixed cord and the two push-button attachments on it. The connector lock for IEC C14
+      and C20 connectors, the universal mounting kit and the mounting adaptor are not drawn.
+    part-numbers:
+      DK 7979.242: {}
+datasheet:
+  title: 'Rittal, Technical details, Power Distribution Unit (dri1308088en, 08.2023)'
+  url: https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979242
+  sha256: 5b93785bcf1545394135a1f42809f8fc9cdf19ebeddfbfdfe0ca7ac86feb4657
+references:
+  - {title: 'Rittal, Technical details, Power Distribution Unit, Metered version (dri2108029en, 08.2023)', url: 'https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979242', sha256: 3d54d83c1d522c09a399e5e46f7506629848593680afb772dcd62a613c3b2a2a}
+  - {title: 'Rittal, Montage-, Installations- und Betriebsanleitung, PDU metered, metered plus, switched, managed, RCM (7979204)', url: 'https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979242'}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: 32612-703
-version: 2.0.1
+version: 2.0.2
 maturity: modelled
 manufacturer: Chatsworth Products
 model: '32612-703'
@@ -105,6 +105,24 @@ provenance:
     confidence: estimated
     note: >-
       estimated - the left view mirrored: the manager is the same on both sides.
+  ends:
+    confidence: estimated
+    note: >-
+      estimated - the data sheet (page 1) photograph shows 2 caps on the top end. It also shows 2
+      feet with a base plate and 2 small holes on the bottom end. The installation instructions
+      (page 3) draw 4 hinge tabs on the corners of the door's back. Down the manager, a figure is
+      photograph rows times 2.804 mm per pixel, the nominal height over the door's 761 pixels.
+      Across it, a figure is the fraction of the door's 86 pixel width times this width, to 0.1 mm.
+      A cap is 0.425 of the width and 25 tall. A foot is 0.19 of the width and 13 tall. The base
+      plate is 8 tall. A tab is 0.07 of the width and 50 tall, from the figure's door, which is not
+      to scale. The same figure shows a cross plate at each end of the door's back, 0.874 of the
+      width and 116 tall. It also shows a rib 0.045 of the width between them. Both are drawn as
+      outlines, as the figure draws them. No page gives a depth: each is half its width, a
+      stand-in. The nominal height is taken as overall, so they stand over the ends of the body.
+      The caps and the base take the door's colour; the pads and the feet are the photograph's
+      sampled dark. The rear draws the caps, feet, base, tabs, plates and rib. The top draws the
+      caps and their pads. The bottom draws the feet, the plate and its holes. The sides draw the
+      caps, feet and base. The front door plate hides them there, so the front shows none.
   guides:
     confidence: estimated
     note: >-
@@ -209,30 +227,6 @@ gaps:
       meter, in text only. The installation figure (page 3) shows a hinge lug and the rear door's
       latches, not a hook. The hook is not drawn on the door's back because no held picture shows it.
     wanted: a photograph of the inside of the front door
-  - what: end-caps
-    scope: [front]
-    reason: vendor-silent
-    note: >-
-      the page 1 photograph shows two dark rounded caps on the top of the manager, one near each
-      side of the door. No held page gives their size. They belong to each device's own frame part,
-      which a following change draws, so they are not drawn here.
-    wanted: a dimensioned view of the top of the frame
-  - what: feet
-    scope: [front]
-    reason: vendor-silent
-    note: >-
-      the page 1 photograph of the right-hand manager shows two dark feet at the bottom and, between
-      them, a plate that carries two holes. No held page gives their size. They belong to each
-      device's own frame part, which a following change draws, so they are not drawn here.
-    wanted: a dimensioned view of the bottom of the frame
-  - what: door-hinge-tabs
-    scope: [rear]
-    reason: vendor-silent
-    note: >-
-      the installation figure (page 3) shows four hinge tabs, one at each corner of the door's
-      back, and gives no size. They belong to each device's own frame part, which a following
-      change draws, so they are not drawn here.
-    wanted: a dimensioned view of the door's back
   - what: side-plate-holes
     scope: [left, right]
     reason: vendor-silent
@@ -250,6 +244,14 @@ gaps:
       the central track, beside the door. No held page gives their pitch or size. They belong to
       each device's own frame part, which a following change draws, so they are not drawn here.
     wanted: a dimensioned view of the central track
+  - what: end-fittings-front
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the end caps and the feet show above and below the door in the data sheet's page 1
+      photograph. The door plate is drawn to the full nominal height over the guides. It hides them
+      in the front elevation, and no held page gives the overall height with them.
+    wanted: a dimensioned elevation with the caps and the feet
   - what: door-bevel
     scope: [top, bottom, left, right]
     reason: vendor-silent
@@ -405,6 +407,18 @@ views:
         - {id: latch-left-handle, at: [14, 987], size: [17, 45], rx: 8.5, fill: '#2796bf', kind: latch}
         - {id: latch-right-housing, at: [213, 969], size: [17, 80], fill: '#1c1d1f', kind: latch-housing}
         - {id: latch-right-handle, at: [219, 987], size: [17, 45], rx: 8.5, fill: '#2796bf', kind: latch}
+        - {id: cross-plate-top, at: [16.3, 3], size: [218.5, 116], stroke: '#4a4d50', stroke-width: 2, kind: cross-plate, confidence: estimated}
+        - {id: cross-plate-bottom, at: [16.3, 2014.6], size: [218.5, 116], stroke: '#4a4d50', stroke-width: 2, kind: cross-plate, confidence: estimated}
+        - {id: door-rib, at: [120.5, 119], size: [11.3, 1895.6], stroke: '#4a4d50', stroke-width: 2, kind: door-rib, confidence: estimated}
+        - {id: end-cap-1, at: [6.3, 0], size: [106.3, 25], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: end-cap-2, at: [137.4, 0], size: [106.3, 25], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: base-rim, at: [0, 2125.6], size: [250, 8], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: foot-1, at: [7.5, 2120.6], size: [47.5, 13], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-2, at: [195, 2120.6], size: [47.5, 13], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: hinge-tab-top-left, at: [8.3, 0], size: [17.5, 50], fill: '#2a2c2e', kind: hinge-tab, confidence: estimated}
+        - {id: hinge-tab-top-right, at: [224.2, 0], size: [17.5, 50], fill: '#2a2c2e', kind: hinge-tab, confidence: estimated}
+        - {id: hinge-tab-bottom-left, at: [8.3, 2083.6], size: [17.5, 50], fill: '#2a2c2e', kind: hinge-tab, confidence: estimated}
+        - {id: hinge-tab-bottom-right, at: [224.2, 2083.6], size: [17.5, 50], fill: '#2a2c2e', kind: hinge-tab, confidence: estimated}
   top:
     size: {w: 250, h: 392}
     panel:
@@ -415,6 +429,10 @@ views:
         - {id: arm-right, at: [230, 0], size: [20, 375], fill: '#202224', kind: finger-wall}
         - {id: head-right, at: [230, 375], size: [20, 14], fill: '#2a2c2e', kind: finger}
         - {id: door, at: [0, 389], size: [250, 3], fill: '#2f3134', kind: cover}
+        - {id: end-cap-1, at: [6.3, 335.8], size: [106.3, 53.2], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: cap-pad-1, at: [39.8, 342.8], size: [39.3, 39.3], fill: '#141214', rx: 19.7, kind: cap-pad, confidence: estimated}
+        - {id: end-cap-2, at: [137.4, 335.8], size: [106.3, 53.2], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: cap-pad-2, at: [170.9, 342.8], size: [39.3, 39.3], fill: '#141214', rx: 19.7, kind: cap-pad, confidence: estimated}
   bottom:
     size: {w: 250, h: 392}
     panel:
@@ -425,6 +443,12 @@ views:
         - {id: arm-right, at: [230, 0], size: [20, 375], fill: '#202224', kind: finger-wall}
         - {id: head-right, at: [230, 375], size: [20, 14], fill: '#2a2c2e', kind: finger}
         - {id: door, at: [0, 389], size: [250, 3], fill: '#2f3134', kind: cover}
+        - {id: base-rim, at: [0, 0], size: [250, 392], stroke: '#4a4d50', stroke-width: 2, kind: base-plate, confidence: estimated}
+        - {id: base-bar, at: [80, 359], size: [90, 30], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: base-hole-1, at: [111.6, 370.4], size: [7.3, 7.3], fill: '#141214', rx: 3.7, kind: hole, confidence: estimated}
+        - {id: base-hole-2, at: [131.1, 370.4], size: [7.3, 7.3], fill: '#141214', rx: 3.7, kind: hole, confidence: estimated}
+        - {id: foot-1, at: [7.5, 365.2], size: [47.5, 23.8], fill: '#070808', kind: foot, confidence: estimated}
+        - {id: foot-2, at: [195, 365.2], size: [47.5, 23.8], fill: '#070808', kind: foot, confidence: estimated}
   left:
     size: {w: 392, h: 2133.6}
     panel:
@@ -528,6 +552,9 @@ views:
         - {id: arm-48, at: [0, 2105.38], size: [375, 12], fill: '#26282a', kind: finger}
         - {id: head-48, at: [375, 2096.38], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: door, at: [389, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
+        - {id: end-cap, at: [335.8, 0], size: [53.2, 25], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: base-rim, at: [0, 2125.6], size: [392, 8], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: foot, at: [365.2, 2120.6], size: [23.8, 13], fill: '#070808', kind: foot, confidence: estimated}
   right:
     size: {w: 392, h: 2133.6}
     panel:
@@ -631,6 +658,9 @@ views:
         - {id: arm-48, at: [17, 2105.38], size: [375, 12], fill: '#26282a', kind: finger}
         - {id: head-48, at: [3, 2096.38], size: [14, 30], fill: '#2a2c2e', kind: finger}
         - {id: door, at: [0, 0], size: [3, 2133.6], fill: '#2f3134', kind: cover}
+        - {id: end-cap, at: [3, 0], size: [53.2, 25], fill: '#2f3134', kind: end-cap, confidence: estimated}
+        - {id: base-rim, at: [0, 2125.6], size: [392, 8], fill: '#2f3134', kind: base-plate, confidence: estimated}
+        - {id: foot, at: [3, 2120.6], size: [23.8, 13], fill: '#070808', kind: foot, confidence: estimated}
 configurations:
   base:
     kind: base

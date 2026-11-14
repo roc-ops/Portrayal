@@ -346,6 +346,7 @@ def test_every_pluggable_media_the_library_uses_is_a_pluggable_cage():
         "coax-sma",       # an SMA antenna jack a cable plug seats in, not a module cage (the cellular antenna connectors of the CM8000)
         "rj45-serial",    # an RJ45 serial console jack a cable plug seats in, not a module cage (the managed serial ports of a console server)
         "dvi-d",          # a DVI-D video jack a cable plug seats in, not a module cage (the DSX2-32's local video jack)
+        "rj11",           # an RJ11 telephone-modem jack a cable plug seats in, not a module cage (the DSXA-32's modem plate)
     }
     used = set()
     for p in sorted((LIB / "devices").glob("*/*/device.yaml")):

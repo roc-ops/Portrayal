@@ -425,7 +425,8 @@ def test_the_viewer_takes_the_section_branch_before_the_bevelled_and_plain_boxes
 def test_the_section_mesh_keeps_the_six_face_materials_in_face_of_index_order():
     code = viewer_code()
     branch = code[code.index("secBody.arrays)"):code.index("chassis.solid) {")]
-    assert "new THREE.Mesh(geo, mats)" in branch or "new THREE.Mesh(geo, [...mats" in branch
+    # (with a plan outline the six are followed by two more: test_plan_body_js.py)
+    assert re.search(r"new THREE\.Mesh\(geo,[^;]*\bmats\b", branch)
     assert "FACE_OF_INDEX" not in branch      # the order is the one table, used by picking as before
     assert re.search(r"FACE_OF_INDEX = \['right', 'left', 'top', 'bottom', 'front', 'rear'\]", code)
 

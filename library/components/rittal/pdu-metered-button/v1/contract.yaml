@@ -1,0 +1,49 @@
+format: 1
+kind: component
+name: pdu-metered-button
+version: 1.0.0
+class: mount
+mates: pdu-button
+profile: power
+description: >-
+  The push-button mounting attachment on the back of a Rittal DK 7979 metered zero-U PDU.
+  A rectangular plate across the back, split in three bands. A round button of three rings
+  at its centre engages a rack's button slot. Seen here from behind the PDU.
+size: {w: 35.0, h: 25.0}
+size-confidence: {w: drawing, h: drawing}
+provenance:
+  size: >-
+    drawing - the plan view of the metered drawing (dri2108029en, 08.2023), pages 3, 10, 15, 16, 18, 20 and 21.
+    The plate is 35.0 across the strip and 25.0 along it, read from the vector paths. Two lines across the plate stand
+    5.0 mm in from each end and split it into bands of 5, 15 and 5 mm.
+  head: >-
+    drawing - the plan view draws three rings round the button's centre. They are 15.0, 7.5 and 3.7 mm across, with a small
+    cross mark inside the smallest. They were read from the vector paths, twice. The earlier part
+    `rittal/pdu-mounting-button@1` draws a plate of 36.6 by 25.2 and rings of 11.0 and 4.0, from another drawing.
+  relief:
+    estimated - the side view draws the button below the back by about 7.7. The plate is built 3.0 of that and the
+    head the other 4.7, as the earlier part does. The split is not drawn.
+  mates: >-
+    `pdu-button` (spec/schemas/connectors.yaml), the interface a keyhole slot presents. The button's shaft and head
+    diameters are not held, so the fit is stated by mechanism and not checked by dimension.
+elements:
+  head: {at: [10.0, 5.0], size: [15.0, 15.0], class: mount}
+relief:
+  features:
+    - node: plate
+      out: 3.0
+      shape: true
+      color: '#26282b'
+      confidence: estimated
+      source: >-
+        The metered drawing's side view, page 18: the button stands about 7.7 below the back and the plate is taken as 3.0 of it.
+    - node: head
+      cyl: 4.7
+      lift: 3.0
+      color: '#18191b'
+      confidence: estimated
+      source: >-
+        The metered drawing's side view, page 18: the rest of the 7.7. The head is taken as 4.7 and not dimensioned.
+connection-points:
+  mate: {at: [17.5, 12.5], direction: front}
+skins: [default]

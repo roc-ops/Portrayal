@@ -143,7 +143,8 @@ OLD_SHIFT = {"stud-tr": (0.0, 0.0), "stud-bl": (-15.3, 15.3), "stud-br": (0.0, 1
 # 31 -> 30 on 22 -> 21 devices.
 CENSUS = {
     "common/ground-lug@1": (30, 21),
-    "common/ground-screw@1": (31, 21),   # (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
+    # (38, 28) -> (42, 32) with the four Moxa CN2600 16-port terminal servers' ground screw
+    "common/ground-screw@1": (42, 32),   # the Enlogic EB0952's, EN2333's and EN6324's one each (35, 25 before); the Panduit P42G20G's and P24B32M's one each (33, 23 before); the Moxa NPort 5610-16's and 5630-16's one each (31, 21 before); (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     "common/ground-stud@1": (18, 18),   # (14, 14), and the one stud each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
     CASA: (1, 1),
 }
@@ -458,6 +459,40 @@ def placed(walked):
     return [w for w in walked if w[1] is not None]
 
 
+# 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
+# 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
+# 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
+# 65 -> 66 with the Eaton EPBZ77's ground stud
+# 66 -> 68 with the Panduit P24B14M and P32E06M's ground screw each
+# 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
+# 69 -> 70 with the Enlogic EB0803's one ground screw
+# 70 -> 72 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+# 72 -> 73 with the CyberPower PDU15M2F12R's external site ground
+# 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
+# 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
+# 77 -> 76 with the S9500-30XS's lug becoming a pair host
+# 76 -> 78 with the Moxa NPort 5610-16 and 5630-16's one ground screw each
+# 78 -> 80 with the Panduit P42G20G and P24B32M's ground screw each
+# 83 -> 87 with the four Moxa CN2600 16-port terminal servers' ground screw
+# 87 -> 91 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+GROUND_SCREW_COUNT = 91   # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one ground screw each
+# 42 -> 44 with the Cisco C9300-24S and C9300-48S
+# 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
+# 47 -> 49 with the Panduit P24B14M and P32E06M
+# 49 -> 50 with the CyberPower PDU30BHVT8R
+# 50 -> 51 with the Enlogic EB0803
+# 51 -> 53 with the Moxa NPort 5650-16 and 5650-16-T
+# 53 -> 54 with the CyberPower PDU15M2F12R
+# 54 -> 56 with the Enlogic EN2951 and EN6952
+# 56 -> 58 with the Panduit P36G18M and P42G20M
+# 58 -> 57 with the S9500-30XS's lug becoming a pair host
+# 57 -> 59 with the Moxa NPort 5610-16 and 5630-16
+# 59 -> 61 with the Panduit P42G20G and P24B32M
+# 64 -> 68 with the four Moxa CN2600 16-port terminal servers' ground screw
+# 68 -> 72 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+GROUND_SCREW_LOCATIONS = 72   # 61 -> 64: the Enlogic EB0952, EN2333 and EN6324
+
+
 @pytest.mark.heavy
 def test_the_census_of_ground_stud_placements(placed, walked):
     """Counted by walking every device view and every component's `parts:`.
@@ -472,30 +507,8 @@ def test_the_census_of_ground_stud_placements(placed, walked):
     got = {ref: (n, len(devs)) for ref, (n, devs) in counts.items()}
     assert got == CENSUS
     assert all(n > 0 and d > 0 for n, d in got.values())
-    # 53 -> 59 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    # 59 -> 63 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    # 63 -> 65 with the earth stud of the Digi Connect EZ 16 and 32
-    # 65 -> 66 with the Eaton EPBZ77's ground stud
-    # 66 -> 68 with the Panduit P24B14M and P32E06M's ground screw each
-    # 68 -> 69 with the CyberPower PDU30BHVT8R's external site ground
-    # 69 -> 70 with the Enlogic EB0803's one ground screw
-    # 70 -> 72 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
-    # 72 -> 73 with the CyberPower PDU15M2F12R's external site ground
-    # 73 -> 75 with the Enlogic EN2951 and EN6952's one ground screw each
-    # 75 -> 77 with the Panduit P36G18M and P42G20M's cord-end screw each
-    # 77 -> 76 with the S9500-30XS's lug becoming a pair host
-    assert sum(n for n, _ in got.values()) == 80   # 76 before the four Middle Atlantic Premium+ RLNK rackmount PDUs' ground studs
-    # 42 -> 44 with the Cisco C9300-24S and C9300-48S
-    # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
-    # 47 -> 49 with the Panduit P24B14M and P32E06M
-    # 49 -> 50 with the CyberPower PDU30BHVT8R
-    # 50 -> 51 with the Enlogic EB0803
-    # 51 -> 53 with the Moxa NPort 5650-16 and 5650-16-T
-    # 53 -> 54 with the CyberPower PDU15M2F12R
-    # 54 -> 56 with the Enlogic EN2951 and EN6952
-    # 56 -> 58 with the Panduit P36G18M and P42G20M
-    # 58 -> 57 with the S9500-30XS's lug becoming a pair host
-    assert len({where for where, _, _ in placed}) == 61   # 57 before the four Middle Atlantic Premium+ RLNK rackmount PDUs
+    assert sum(n for n, _ in got.values()) == GROUND_SCREW_COUNT
+    assert len({where for where, _, _ in placed}) == GROUND_SCREW_LOCATIONS
     # the MX stud is still a part, composed twice by each MX pair host, and no
     # device places it straight on a face any more
     assert "juniper/mx-ground-stud@1" not in got
@@ -518,6 +531,26 @@ def slots(placed):
     return got
 
 
+# every placement of the census but the Casa terminal's one
+# 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
+# 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
+# 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
+# 64 -> 65 with the Eaton EPBZ77's ground stud
+# 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
+# 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
+# 68 -> 69 with the Enlogic EB0803's one ground screw
+# 69 -> 71 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
+# 71 -> 72 with the CyberPower PDU15M2F12R's external site ground
+# 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
+# 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
+# 76 -> 75 with the S9500-30XS's lug becoming a pair host
+# 75 -> 77 with the Moxa NPort 5610-16 and 5630-16's one ground screw each
+# 77 -> 79 with the Panduit P42G20G and P24B32M's ground screw each
+# 82 -> 86 with the four Moxa CN2600 16-port terminal servers' ground screw
+# 86 -> 90 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+STUD_SEATS_SEEN = 90   # 79 -> 82: the Enlogic EB0952, EN2333 and EN6324
+
+
 @pytest.mark.heavy
 def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(placed, slots):
     """A ground stud placed on a chassis face is a DEVICE cage, keyed by the
@@ -537,20 +570,7 @@ def test_every_single_stud_placement_is_a_slot_of_its_device_offering_the_lug(pl
         want = render_mod.seat_point(p["at"], s["size"], p.get("rotate"), list(s["axis"]))
         assert c["mate"] == pytest.approx(want, abs=EPS)
         seen += 1
-    # every placement of the census but the Casa terminal's one
-    # 52 -> 58 with the Cisco C9300-24P, C9300-24U and C9300-48U's two ground screws each
-    # 58 -> 62 with the Cisco C9300-24S and C9300-48S's two ground screws each
-    # 62 -> 64 with the earth stud of the Digi Connect EZ 16 and 32
-    # 64 -> 65 with the Eaton EPBZ77's ground stud
-    # 65 -> 67 with the Panduit P24B14M and P32E06M's ground screw each
-    # 67 -> 68 with the CyberPower PDU30BHVT8R's external site ground
-    # 68 -> 69 with the Enlogic EB0803's one ground screw
-    # 69 -> 71 with the Moxa NPort 5650-16 and 5650-16-T's one ground screw each
-    # 71 -> 72 with the CyberPower PDU15M2F12R's external site ground
-    # 72 -> 74 with the Enlogic EN2951 and EN6952's one ground screw each
-    # 74 -> 76 with the Panduit P36G18M and P42G20M's cord-end screw each
-    # 76 -> 75 with the S9500-30XS's lug becoming a pair host
-    assert seen == 79   # 75 before the four Middle Atlantic Premium+ RLNK rackmount PDUs' ground studs
+    assert seen == STUD_SEATS_SEEN
 
 
 @pytest.mark.heavy
@@ -591,6 +611,10 @@ def test_the_casa_terminal_publishes_exactly_its_three_studs_as_slots(comps, slo
 
 # --- 3. stud-size ------------------------------------------------------------------
 
+STUD_PLACEMENTS = 67
+STUD_DEVICES = 38
+
+
 @pytest.mark.heavy
 def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed):
     """65 placements on 34 devices state a size for a single stud or a common
@@ -606,7 +630,7 @@ def test_stud_size_is_stated_where_a_document_states_it_and_nowhere_else(placed)
         if size is not None:
             got.setdefault(device, {})[p["id"]] = size
     assert got == STUD_SIZE
-    assert sum(len(v) for v in got.values()) == 67 and len(got) == 38
+    assert sum(len(v) for v in got.values()) == STUD_PLACEMENTS and len(got) == STUD_DEVICES
     mx = {}
     for device, view, p in placements_of(MX_PAIR_HOSTS):
         mx.setdefault(device, {})[p["id"]] = (p.get("attrs") or {}).get("stud-size")

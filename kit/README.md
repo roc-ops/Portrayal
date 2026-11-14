@@ -120,6 +120,8 @@ shell, the viewer and the rack view.
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
+| `plan.js` | the x-sweep that cuts a housing's `chassis.plan-outline` against its section (merge, snap, pieces, loops, the union), the same maths as `portrayal.plan` and held to the same two fixture files; no THREE in it |
+| `plan-body.js` | the faces of the closed body cut band by band (walls by where they come from, facets at every level, ribs cut to their band), welded so the mesh is watertight; called by `section.js`; no THREE in it |
 | `section.js` | the 3D body of a housing that states `chassis.section`: the end profile extruded along the width (cut back to its core where `chassis.fins` says, with the ribs merged into the same buffer, and `finReach`, how far ribs stand outside the box), each facet mapped like the box face it looks toward, and `surfaceUnder` / `seatPoint`, the depth of the casting under a part's centre that `relief.js` seats the part at; no THREE in it, so it runs under node (used by `viewer3d.js` and `relief.js`) |
 | `camera-fit.js` | the 3D opening view fitted to the chassis box: the nearest distance at which all eight corners sit inside the frame for the lens and the frame's aspect (never nearer than the old two spans), with the dolly limit and far plane that follow it; no THREE in it, so it runs under node (used by `viewer3d.js`) |
 | `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
@@ -310,7 +312,7 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths; a cable's own colour (`parseColor`), what decides the colour it is drawn in (`colorFacts`, `cableColorOf`, `colorsKey`), and the plans a drawing reads (`cablePlan`, `cablePlan3d`) |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres; `jacketLookup(types)` and the loaded `typeColorOf` give the jacket colour of the type a cable names |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `ownRoute`, `trunkMeasures`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, `bendFindings`, `coverFindings`, and the geometry under them (`throughRings`, `cornersOf`); and the colour a cable is drawn in: `COLORS`, `cableColor`, `colorOf`, `hexColor`, `agreedJacket`, `bundleColor`; and the width it is drawn at: `WIDTH`, `widthOf` |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `ownRoute`, `trunkMeasures`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, `bendFindings`, `coverFindings`, `unreachedFindings`, `approachWarnings`, and the geometry under them (`throughRings`, `cornersOf`); and the colour a cable is drawn in: `COLORS`, `cableColor`, `colorOf`, `hexColor`, `agreedJacket`, `bundleColor`; and the width it is drawn at: `WIDTH`, `widthOf` |
 | `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them (with `room`, far enough out for the bends at each end); `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on; a ring's solid parts (`ring/<id>/<part>`) are met by the cable's tube |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/displays.js` | the displays of a placed device and what they show: `displaysOf`, `displayRefusal`, `displaysFor`, `displayNotices`, `displayList` |
@@ -321,7 +323,7 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
-| `rack/ports.js` | the ports of what a device's bays hold, read without a drawing: `seatedPort` (does a cable end name one, on which panel, and what holds it), `fibrePorts` (the front or rear ports of its module type that a fibre adapter is, from `optical.ports` in `components.json`), and `settleEnd` and `settleEnds`, which lay that over the facts a page read off its drawings; `seatedJacket`, `jacketAt` and `jacketsFor`, the jacket colour the part seated at a cable end states |
+| `rack/ports.js` | the ports of what a device's bays hold, read without a drawing: `seatedPort` (does a cable end name one, on which panel, and what holds it), `twinEnd` (the other end of the same adapter, for the back of a part), `fibrePorts` (the front or rear ports of its module type that a fibre adapter is, from `optical.ports` in `components.json`), and `settleEnd` and `settleEnds`, which lay that over the facts a page read off its drawings; `seatedJacket`, `jacketAt` and `jacketsFor`, the jacket colour the part seated at a cable end states |
 | `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, laid only where it leaves every corner its bend radius, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
@@ -889,6 +891,22 @@ are under it the reason names the port path to give instead of the first free sc
 states no DC port is read exactly as before**, and the DC ports of a part beside the rack
 (`zeroUEnds`) are not read yet. A port path is not an element of a drawing: `cableEndPaths` gives
 a page the pole slots it always did and no port path.
+
+**Next release: the far end of an adapter of a rear-mounted panel** (`docs/cable-lay-design.md`,
+section 1.8). A holder in a drawer has an end on its face and an end on its back for each adapter,
+and no drawing places the back. It stands where the other end of the same adapter does
+(`twinEnd(item, end, ctx)` in `rack/ports.js`, from the part's fibre map), so `portPoint` gives it a
+point and the cable has a route, a length, a stock size and a spare. The routing context needs
+`slotsOf` and `compByRef` for it, as a part beside the rack does; without them nothing changes.
+- **`unreachedFindings(rack, ctx, nameOf)`** and **`unreachedFindingsOf(rack, cable, ctx, nameOf)`**
+  give one `{ kind: 'end-unreachable', cable, ends: [{ end, item, path, view }], text }` a cable with an
+  end the catalogue accepts as a port on the back of a part and nothing places: "This end cannot be
+  reached: no drawing places port b01 of PNL-1." Not said of a loose end, a placed end or a front end.
+  `inspect` carries it as `route.unreached`, and `describe` counts the cables on its `Findings:` line.
+- **`cable.route`** stores a hand route as it always did and adds a `warning` finding when the leg
+  to such an end comes from behind its panel (`approachWarnings` in `rack/route.js`). It never refuses.
+- **Existing racks change** only where a cable has such an end: its automatic route, which found no
+  path, now has one, and a length is worked out for it; a length already written is never touched.
 
 **Next release: the checks of a DC feed.** A cable whose ends are DC ports or poles is checked end
 to end (`docs/dc-power-design.md`, section 6). All of it is warnings and none refuses a cable, and

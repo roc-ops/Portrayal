@@ -1,0 +1,64 @@
+format: 1
+kind: component
+name: pdu-controller
+version: 1.0.0
+class: control-panel
+profile: power
+description: >-
+  The head end of the controller plate of a Rittal PDU metered. It has the RITTAL mark, a colour display with four
+  round keys, a RESET opening, two lamp slots and a screw at each head corner. One of the plate's five section lines
+  crosses it. It carries no port.
+  The jacks, the USB port and the two small headers sit on the strip below it.
+size: {w: 39.1, h: 100.0}
+size-confidence: {w: drawing, h: drawing}
+attrs: {module: PDU controller}
+provenance:
+  method: >-
+    drawing - Rittal, "Technical details, Power Distribution Unit, Metered version" (dri2108029en, 08.2023), PDF
+    page 18 (DK 7979.238), the controller in the front view. It was read from a 1800 dpi render. The drawing's
+    own scale is 5.825 px per mm, where the 44 mm strip width is 256 px. The drawing lies the strip down with the
+    foot at the left. This part is drawn as the strip stands, foot down, as fig. 21 of the instructions is.
+  size: >-
+    drawing - the whole dark plate is 193.05 along the strip by 39.1 across it, inside a controller cell 200 long.
+    This part is its head end, the first 100 mm, and the rest is the strip's own panel. Good to about 0.3 mm.
+    The four round keys are 8.9 across and the display is 25.4 across by 26.6 along. The RESET opening is about 2 across.
+  layout: >-
+    drawing - key and display centres are read from the same view. The keys stand in two rows of two with the
+    display between the rows. The two lamp slots and the RESET opening are in the column nearer the foot.
+    The row nearer the head is Esc and Up. The other is Enter and Down, as the key legend of fig. 21 numbers them.
+  display: >-
+    instructions - fig. 21 item 3 is the display. It is drawn dark, as an unlit screen. The figure draws it
+    backlit pale cyan, read as #aaeeef from 6391 pixels of a 200 dpi render of page 18. No document names the
+    screen's own colour.
+  colour: >-
+    photo-measured - the plate of fig. 21 reads #3c3d40 over 19904 dark pixels of a 200 dpi render of page 18 of
+    the instructions.
+  marks: >-
+    estimated - the RITTAL mark, the legends RESET, POWER and STATUS and their positions are read off fig. 21,
+    which is a schematic. No size is printed. The mark is 20 mm wide by eye.
+  screws: >-
+    drawing - hexagon-socket screws, one at each corner of the plate, about 6 across. This part holds the two at
+    the head end.
+  lamps: >-
+    instructions - fig. 21 items 7 and 8 are the POWER and STATUS lamps. They are placed on the strip as lamps with
+    their states over the two slots this skin draws. The lit colours are in the device's notes.
+  slots: >-
+    drawing - each lamp slot reads 4.5 across the strip and 1.9 along it, between line centres. That is a 1800 dpi
+    render, read twice, at 5.8125 px per mm. The outer edges read 5.5 by 2.9. The two slots are 5.85 apart along the strip.
+  sections: >-
+    drawing - the plate has five full-height section lines, at 74.0, 104.0, 131.0, 142.7 and 160.0 mm from its head
+    end. They were read from the vector paths of page 18 and from a 1800 dpi render. The first lies inside this part and
+    is drawn by its skin. The other four lie below it and each device draws them.
+  outline: >-
+    drawing - the plate outline steps in by 0.6 on each side. The step runs over the last 23.0 mm of each end and is
+    3.5 px at 1800 dpi. An inner rim line runs 1.4 inside the end section, from 1.0 mm off the head end to 24.3 from
+    it. The rim is open toward the middle, where a short jog joins it to the plate edge. This part draws the head
+    end. The device draws the foot end.
+elements:
+  esc: {at: [5.17, 19.35], size: [8.9, 8.9], class: button}
+  up: {at: [24.57, 19.35], size: [8.9, 8.9], class: button}
+  enter: {at: [5.17, 62.59], size: [8.9, 8.9], class: button}
+  down: {at: [24.57, 62.59], size: [8.9, 8.9], class: button}
+  display: {at: [6.87, 32.2], size: [25.4, 26.6], class: decor}
+  reset: {at: [27.0, 78.2], size: [2.0, 2.0], class: button}
+skins: [default]
