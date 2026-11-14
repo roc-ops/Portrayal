@@ -204,6 +204,7 @@ def test_every_figure_the_note_names_is_in_the_table_with_its_direction_and_scal
             assert sentence in text, sentence
 
 
+@pytest.mark.heavy
 @pytest.mark.parametrize("model", MODELS)
 def test_the_count_of_scales_in_the_notes_equals_the_count_in_the_table(model):
     used = {d["scale"] for r in ROWS for d in r["dims"]}
