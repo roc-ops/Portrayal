@@ -145,7 +145,7 @@ CENSUS = {
     "common/ground-lug@1": (30, 21),
     # (38, 28) -> (42, 32) with the four Moxa CN2600 16-port terminal servers' ground screw
     "common/ground-screw@1": (42, 32),   # the Enlogic EB0952's, EN2333's and EN6324's one each (35, 25 before); the Panduit P42G20G's and P24B32M's one each (33, 23 before); the Moxa NPort 5610-16's and 5630-16's one each (31, 21 before); (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
-    "common/ground-stud@1": (14, 14),
+    "common/ground-stud@1": (18, 18),   # (14, 14), and the one stud each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -474,7 +474,8 @@ def placed(walked):
 # 76 -> 78 with the Moxa NPort 5610-16 and 5630-16's one ground screw each
 # 78 -> 80 with the Panduit P42G20G and P24B32M's ground screw each
 # 83 -> 87 with the four Moxa CN2600 16-port terminal servers' ground screw
-GROUND_SCREW_COUNT = 87   # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one ground screw each
+# 87 -> 91 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+GROUND_SCREW_COUNT = 91   # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one ground screw each
 # 42 -> 44 with the Cisco C9300-24S and C9300-48S
 # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
 # 47 -> 49 with the Panduit P24B14M and P32E06M
@@ -488,7 +489,8 @@ GROUND_SCREW_COUNT = 87   # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one
 # 57 -> 59 with the Moxa NPort 5610-16 and 5630-16
 # 59 -> 61 with the Panduit P42G20G and P24B32M
 # 64 -> 68 with the four Moxa CN2600 16-port terminal servers' ground screw
-GROUND_SCREW_LOCATIONS = 68   # 61 -> 64: the Enlogic EB0952, EN2333 and EN6324
+# 68 -> 72 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+GROUND_SCREW_LOCATIONS = 72   # 61 -> 64: the Enlogic EB0952, EN2333 and EN6324
 
 
 @pytest.mark.heavy
@@ -545,7 +547,8 @@ def slots(placed):
 # 75 -> 77 with the Moxa NPort 5610-16 and 5630-16's one ground screw each
 # 77 -> 79 with the Panduit P42G20G and P24B32M's ground screw each
 # 82 -> 86 with the four Moxa CN2600 16-port terminal servers' ground screw
-STUD_SEATS_SEEN = 86   # 79 -> 82: the Enlogic EB0952, EN2333 and EN6324
+# 86 -> 90 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+STUD_SEATS_SEEN = 90   # 79 -> 82: the Enlogic EB0952, EN2333 and EN6324
 
 
 @pytest.mark.heavy
