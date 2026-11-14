@@ -512,7 +512,9 @@ chassis:
       - {name: mid, at: 228, racks: [2-post], part: {kit: acme/slide@1, part: mid}}
     rolled:                 # optional; the brackets that hold it rolled a quarter turn
       - {id: below, side: below, bar-h: 25.4, length: 486.41, ear-h: 92.44, ear-w: 28.0,
-         color: "#c8cacc"}  # `color` optional
+         color: "#c8cacc",  # `color` optional
+         strip: {count: 17, pitch: 25.4, size: [5, 5]},      # optional; holes along the bar
+         ear-slots: {count: 2, pitch: 60, size: [6, 14]}}    # optional; slots in each ear
   kits:
     - {ref: acme/slide@1, supply: in-box,
        depth: {config: four-post, range: {square: [685, 868]}}}
@@ -537,6 +539,16 @@ chassis:
   ignores the key and draws a quarter turn as before. The brackets are the
   rack's: they are drawn alike at 90 and at 270 and a device that states none
   draws none.
+- `strip` and `ear-slots` on a `rolled` entry are **one-way** (two new optional
+  objects). `strip` is one row on the bar's middle line, centred between the
+  ears. It takes `count`, `pitch` (centre to centre) and `size` (`[width, height]`,
+  millimetres), and `shape`: `round` (the default) or `slot`. `ear-slots` is one
+  column of `count` slots on each ear's middle line, centred on its height, with
+  `pitch` and `size`. The row is drawn on the bar's front face; the sheet does
+  not say which face carries the holes. The rack elevation draws them and `configs.json` publishes
+  them as stated, `count` an integer and every length a float. An older reader
+  ignores them, and an older schema refuses them. A device that states neither
+  builds byte for byte as before.
 - `none` is **one-way** (a new optional boolean, added beside `rolled`). `none: true`
   says the part has no ears: it is not bolted to the posts and carries no flange,
   because it stands between them on another part's brackets, as the tray and the

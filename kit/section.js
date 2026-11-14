@@ -53,12 +53,26 @@
 // horizontal edge) cannot be split: lint refuses it (spec/tools/portrayal/lint.py) and the
 // split here throws.
 //
+// THE PLAN OUTLINE (`chassis['plan-outline']`, spec/tools/portrayal/plan.py is the one place the compiler
+// cuts it). With it the closed body is no extrusion: the section is cut band by band against the band's
+// polygon seen from above, so the corners are round and the lobes stand, and plan-body.js says which
+// faces that leaves (kit/plan.js is the x-sweep it is made from, the same maths as plan.py). A face is
+// in the slot of the way it looks and where it comes from: the top and bottom facets, the front and
+// rear walls the SECTION has and the end caps keep the six face textures by planar projection; a wall
+// that comes from a plan edge (a slanted one, or the end wall of an inset casting) is PLAN_WALL_INDEX,
+// sampling no texture, so its UV is the special case below as the seam cap's is. Only the closed body
+// follows the plan: the open state's halves (splitSection) are the section extruded, until the
+// order that builds the rim.
+//
 // No `three` in here.
 
 import { boxUV, FACE_INDEX } from './bevel.js';
+import { planPolygons } from './plan-body.js';
 
 // the material of a part's cut face: after the six faces, the slot bevel.js gives its bevels
 export const SEAM_INDEX = 6;
+// the material of a wall that comes from a plan edge: plain, the housing colour, no texture
+export const PLAN_WALL_INDEX = 7;
 
 const EPS = 1e-9;
 const FIN_TOL = 0.01;
@@ -264,6 +278,87 @@ export function bodyLoops(section, fins, H, clip) {
   return loops;
 }
 
+// ---- the plan outline ---------------------------------------------------------------------------
+
+// The published `plan-outline` as numbers, or null where there is none (absent or an empty list). One
+// the body cannot be cut from is an error the caller turns into a refusal: the bands must have two
+// heights that rise and a clockwise polygon of at least three points.
+function planBands(plan) {
+  if (plan === undefined || plan === null || (Array.isArray(plan) && !plan.length)) return null;
+  if (!Array.isArray(plan)) throw new Error('chassis.plan-outline: not a list of bands');
+  return plan.map((b, i) => {
+    const h = b && b.heights, p = b && b.points;
+    if (!Array.isArray(h) || h.length !== 2 || !h.every(isNum) || !(h[0] < h[1])) {
+      throw new Error(`chassis.plan-outline: band ${i} has no heights that rise`);
+    }
+    if (!Array.isArray(p) || p.length < 3 || p.some(q => !Array.isArray(q) || q.length !== 2 || !q.every(isNum))) {
+      throw new Error(`chassis.plan-outline: band ${i} has no polygon of at least three points`);
+    }
+    const points = p.map(q => [Number(q[0]), Number(q[1])]);
+    if (area2(points) <= 0) throw new Error(`chassis.plan-outline: band ${i} is not clockwise with y down`);
+    return {heights: [h[0], h[1]], points};
+  });
+}
+
+// The closed body cut band by band: plan-body.js says which faces there are, and they are made into
+// arrays here. The ribs are the fields' ribs, each with where it stands on the edge it grows from; the
+// body they stand on is the section cut back to the fields' cores, as without a plan.
+function planArrays(pts, bands, ribs, fins, W, H, D) {
+  const specs = [];
+  for (const r of ribs) {
+    const ext = edgeExtent(pts, r.on, H);
+    if (!ext) continue;
+    const top = r.on === 'top';
+    const root = r.outside ? (top ? 0 : H) : (top ? r.limit : H - r.limit);
+    const tip = top ? root - r.height : root + r.height;
+    specs.push({x0: r.x0, x1: r.x1, e0: ext[0], e1: ext[1], lo: Math.min(root, tip), hi: Math.max(root, tip)});
+  }
+  const faces = planPolygons({
+    bands, section: pts, cutLoops: bodyLoops(pts, fins, H), ribs: specs, W, H, D,
+    mat: {top: FACE_INDEX.top, bottom: FACE_INDEX.bottom, front: FACE_INDEX.front, rear: FACE_INDEX.rear,
+          right: FACE_INDEX.right, left: FACE_INDEX.left, plan: PLAN_WALL_INDEX},
+  });
+  const byMat = new Map();
+  for (const f of faces) {
+    if (!byMat.has(f.mi)) byMat.set(f.mi, []);
+    byMat.get(f.mi).push({points: f.points, n: f.n, poly: true});
+  }
+  return flatten(byMat, W, H, D);
+}
+
+// Triangles [i, j, k] of a planar ring of 3D points whose face looks along `n`: the ring is flattened
+// along the axis `n` points most nearly along, wound the way earClip wants, and cut by ear clipping.
+function ringTriangles(points, n) {
+  if (points.length === 3) return [[0, 1, 2]];
+  const drop = [0, 1, 2].reduce((a, b) => Math.abs(n[b]) > Math.abs(n[a]) ? b : a);
+  const keep = [0, 1, 2].filter(k => k !== drop);
+  const flat = points.map(p => [p[keep[0]], p[keep[1]]]);
+  const turned = area2(flat) < 0;
+  const ring = turned ? [...flat].reverse() : flat;
+  return earClip(ring).map(t => turned ? t.map(i => points.length - 1 - i) : t);
+}
+
+// The face a wall that is no section wall looks toward, for picking: a plan wall carries no texture of
+// its own, so a hit on one answers as the long face whose side it is on (the larger horizontal
+// component of its normal), a front or rear wall slanted at 45 degrees as the front or rear. `n` is the
+// triangle's normal in the box frame: three's vector (x, y, z) or an array.
+export function planWallFace(n) {
+  const [x, z] = typeof n.x === 'number' ? [n.x, n.z] : [n[0], n[2]];
+  return Math.abs(z) >= Math.abs(x) ? (z >= 0 ? 'front' : 'rear') : (x >= 0 ? 'right' : 'left');
+}
+
+// The colour of a plan wall: the chassis faceplate's fill, from the first face drawing that states one
+// (`svgByView`, view -> the face's SVG text); null when none does (the caller falls back to its grey).
+export function planWallColor(svgByView) {
+  for (const view of ['front', 'rear', 'right', 'left', 'top', 'bottom']) {
+    const text = svgByView && svgByView[view];
+    const tag = typeof text === 'string' && /<(?:rect|path)\b[^>]*\bid="chassis-faceplate"[^>]*>/.exec(text);
+    const fill = tag && /\sfill="([^"]+)"/.exec(tag[0]);
+    if (fill && fill[1] !== 'none') return fill[1];
+  }
+  return null;
+}
+
 // {positions, normals, uvs, indices, groups: [{start, count, materialIndex}]}.
 // `section` is the published polygon, [[x, y], ...]; `fins` the published `chassis.fins`
 // (or nothing). Indices, not a vertex per corner of every triangle: a cap shares its polygon's
@@ -273,7 +368,13 @@ export function bodyLoops(section, fins, H, clip) {
 // `clip` ({lo, hi}, rows of the section's frame) builds only the part of the body between those rows,
 // the ribs cropped to them; the faces the cut makes are one more group, SEAM_INDEX, a cap planar at the
 // clip row, facing out of the part. Without it the arrays are the whole body, as they were.
-export function sectionArrays(section, W, H, D, fins, clip) {
+//
+// `plan` (the published `chassis['plan-outline']`, a list of bands) cuts the whole body band by band
+// (plan-body.js); the faces that has are polygons, triangulated here, with welded positions so the
+// mesh is watertight. A body with a `clip` is the open state's and is built from the section alone, so
+// a plan given with one is not read: the halves follow the plan in the order that builds the rim.
+// Without a plan (none, or an empty list) the arrays are what they always were.
+export function sectionArrays(section, W, H, D, fins, clip, plan) {
   if (!Array.isArray(section) || section.length < 4) {
     throw new Error('chassis.section: a polygon needs at least four points');
   }
@@ -288,6 +389,8 @@ export function sectionArrays(section, W, H, D, fins, clip) {
   if (ribs.length > FIN_MAX_RIBS) {
     throw new Error(`chassis.fins: ${ribs.length} ribs, at most ${FIN_MAX_RIBS} a device`);
   }
+  const bands = clip ? null : planBands(plan);
+  if (bands) return planArrays(pts, bands, ribs, fins, W, H, D);
   const loops = bodyLoops(pts, fins, H, clip);
   const at = (sx, sy, half) => [half, H / 2 - sy, D / 2 - sx];
   const cutRow = y => !!clip && (y === clip.lo || y === clip.hi);
@@ -353,7 +456,13 @@ export function sectionArrays(section, W, H, D, fins, clip) {
     add(FACE_INDEX.front, {points: [P(e0, ya, hx0), P(e0, ya, hx1), P(e0, yb, hx1), P(e0, yb, hx0)], n: [0, 0, 1], quad: true});
     add(FACE_INDEX.rear, {points: [P(e1, ya, hx0), P(e1, ya, hx1), P(e1, yb, hx1), P(e1, yb, hx0)], n: [0, 0, -1], quad: true});
   }
+  return flatten(byMat, W, H, D);
+}
 
+// The faces by material, flattened to indexed arrays. A face is a quad ({quad: true}, two triangles),
+// a triangle of a cap (its vertices shared within the material), or a polygon ({poly: true}: a ring of
+// welded points, triangulated by ear clipping, its vertices its own so no normal is shared).
+function flatten(byMat, W, H, D) {
   const positions = [], normals = [], uvs = [], indices = [], groups = [];
   let vertex = 0;
   const key = p => p.map(v => v.toFixed(6)).join(',');
@@ -365,14 +474,17 @@ export function sectionArrays(section, W, H, D, fins, clip) {
       if (reuse && shared.has(k)) return shared.get(k);
       positions.push(...p);
       normals.push(...n);
-      // a cap has no drawing of its own; its UV is unused but present, as a bevel's is
-      uvs.push(...(mi === SEAM_INDEX ? [0, 0] : boxUV(mi, p, W, H, D)));
+      // a cap has no drawing of its own, nor has a plan wall (boxUV indexes a table of six faces, and a
+      // face texture on a wall at 45 degrees would stretch without bound): its UV is unused but present,
+      // as a bevel's is
+      uvs.push(...(mi === SEAM_INDEX || mi === PLAN_WALL_INDEX ? [0, 0] : boxUV(mi, p, W, H, D)));
       if (reuse) shared.set(k, vertex);
       return vertex++;
     };
     for (const q of byMat.get(mi)) {
-      const v = q.points.map(p => vert(p, q.n, !q.quad));
-      const tri = q.quad ? [[v[0], v[1], v[2]], [v[0], v[2], v[3]]] : [v];
+      const v = q.points.map(p => vert(p, q.n, !q.quad && !q.poly));
+      const tri = q.poly ? ringTriangles(q.points, q.n).map(t => t.map(i => v[i]))
+        : q.quad ? [[v[0], v[1], v[2]], [v[0], v[2], v[3]]] : [v];
       for (const t of tri) {
         // wind each triangle so its geometric normal agrees with the stored one
         const P = t.map(i => [positions[3 * i], positions[3 * i + 1], positions[3 * i + 2]]);
@@ -475,16 +587,27 @@ export function sectionSeat(chassis, W, H, D) {
 // shell is no extrusion, so these are guards, not a feature. `halves` is no
 // clash: the closed body of a housing that opens is this body; the open state
 // is `sectionHalves`.
+//
+// With a `plan-outline` the arrays are the body cut band by band; the viewer asks three times a build
+// (the body, the seat, the ribs), so that answer is kept for the chassis object and the box it was cut
+// for.
+const planCache = new WeakMap();
 export function sectionBody(chassis, W, H, D) {
   if (!chassis || !Array.isArray(chassis.section) || !chassis.section.length) return null;
   const clash = ['solid', 'bevel', 'rounded'].filter(k => chassis[k]);
   if (chassis.shell === 'sheet') clash.push('shell: sheet');
   if (clash.length) return {refused: `chassis.section is stated with ${clash.join(', ')}`};
+  const plan = chassis['plan-outline'];
+  const sig = plan ? `${W}|${H}|${D}|${JSON.stringify(plan)}|${JSON.stringify(chassis.section)}|${JSON.stringify(chassis.fins || null)}` : null;
+  if (sig && planCache.has(chassis) && planCache.get(chassis).sig === sig) return planCache.get(chassis).body;
+  let body;
   try {
-    return {arrays: sectionArrays(chassis.section, W, H, D, chassis.fins)};
+    body = {arrays: sectionArrays(chassis.section, W, H, D, chassis.fins, undefined, plan)};
   } catch (e) {
-    return {refused: String(e.message || e)};
+    body = {refused: String(e.message || e)};
   }
+  if (sig) planCache.set(chassis, {sig, body});
+  return body;
 }
 
 // A part: its arrays, their bounds, and `body`, the bounds of the casting alone, the ribs left out

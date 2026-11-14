@@ -5196,6 +5196,16 @@ def _listed_kit_refs(device):
 # configs.json alone. docs/format-stability.md records the shape.
 
 
+def _rolled_value(v):
+    """One value of a rolled bracket as published: a length is a float, `strip` and
+    `ear-slots` keep their keys with `count` an integer and every length a float."""
+    if isinstance(v, dict):
+        return {k: (x if k == "count" else _rolled_value(x)) for k, x in v.items()}
+    if isinstance(v, list):
+        return [_rolled_value(x) for x in v]
+    return float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v
+
+
 def published_ears(ears):
     """`chassis.ears` as configs.json publishes it: an object, always.
 
@@ -5228,8 +5238,7 @@ def published_ears(ears):
     if ears.get("rolled"):
         # THE BRACKETS A DEVICE STOOD ON ITS SIDE IS HELD BY: each keeps the keys it
         # writes, its lengths as floats like `overhang`'s
-        out["rolled"] = [{k: (float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else v)
-                          for k, v in (b or {}).items()} for b in ears["rolled"]]
+        out["rolled"] = [{k: _rolled_value(v) for k, v in (b or {}).items()} for b in ears["rolled"]]
     return out
 
 

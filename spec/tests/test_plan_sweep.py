@@ -56,7 +56,8 @@ def test_the_fixture_file_has_the_cases_the_order_names():
     names = " ".join(c["name"] for c in CASES)
     for needle in ("lobe on an end", "crossing", "near-coincident", "asymmetric", "snap"):
         assert needle in names, needle
-    assert {c["kind"] for c in CASES} == {"abscissae", "clip", "union", "snap", "body"}
+    assert {c["kind"] for c in CASES} == {"abscissae", "clip", "union", "snap", "body", "minus",
+                                          "clipped-union", "rows"}
 
 
 @pytest.mark.parametrize("case", _case("abscissae"))
@@ -81,6 +82,27 @@ def test_a_polygon_cut_to_the_intervals_is_the_pieces_worked_by_hand(case):
 def test_a_union_is_the_outline_worked_by_hand(case):
     polys = [[tuple(p) for p in poly] for poly in case["polygons"]]
     got = [_pts(lp) for lp in P.union_loops(polys)]
+    assert _close(got, case["expected"]), got
+
+
+@pytest.mark.parametrize("case", _case("minus"))
+def test_a_region_taken_from_another_is_the_outline_worked_by_hand(case):
+    a, b = [tuple(p) for p in case["polygon"]], [tuple(p) for p in case["take"]]
+    got = [_pts(lp) for lp in P.loops(P.sweep([[a]], minus=[[b]]))]
+    assert _close(got, case["expected"]), got
+
+
+@pytest.mark.parametrize("case", _case("clipped-union"))
+def test_a_union_cut_to_a_rectangle_is_the_outline_worked_by_hand(case):
+    polys = [[tuple(p) for p in poly] for poly in case["polygons"]]
+    got = [_pts(lp) for lp in P.union_loops(polys, clip=tuple(case["clip"]))]
+    assert _close(got, case["expected"]), got
+
+
+@pytest.mark.parametrize("case", _case("rows"))
+def test_the_rows_of_a_section_are_worked_by_hand(case):
+    got = [[y0, y1, [list(iv) for iv in ivs]] for y0, y1, ivs in
+           P.rows([tuple(p) for p in case["section"]], case["depth"])]
     assert _close(got, case["expected"]), got
 
 
