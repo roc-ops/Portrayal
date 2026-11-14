@@ -36,24 +36,34 @@ const LINE = 0.005;          // an edge this close to a wall of the section, or 
 //   bands     the published `plan-outline`, [{heights: [from, to], points: [[x, y], ...]}]
 //   section   the section polygon; cutLoops the loops of the section cut back to its ribs' cores
 //   ribs      [{x0, x1, e0, e1, lo, hi}]: along the width, across the depth, and the heights it spans
-//   mat       the slots {top, bottom, front, rear, right, left, plan}
-export function planPolygons({bands, section, cutLoops, ribs, W, H, D, mat}) {
+//   mat       the slots {top, bottom, front, rear, right, left, plan}, and for a part (below) {cap, seam}
+//   clip      {lo, hi}, rows of the section's frame (either may be infinite): the part of the body
+//             between them, as one half of an opened housing is. Everything is cut to those rows before
+//             the levels are found, so the walls end at them, and the faces the cut leaves open at a
+//             clip row are the CAP: one face for the polygon of the band on the part's own side (half-open
+//             bands: a band edge exactly on the row belongs to the band below it for the part above the
+//             row, and to the band above it for the part below), in slot `mat.cap`; where a rib is cut
+//             there its section is the rib's own, in `mat.seam`. Without a clip the faces are the whole
+//             body's, as they always were.
+export function planPolygons({bands, section, cutLoops, ribs, W, H, D, mat, clip}) {
   const plainRows = rows(section, D), cutRows = rows(cutLoops, D);
   const edgeRows = [...plainRows, ...cutRows];
   const snappedBands = snapped(bands, plainRows, W, D).bands
     .map(b => ({heights: bandHeights(b.heights, edgeRows), points: b.points}));
+  const clipLo = clip ? clip.lo : -Infinity, clipHi = clip ? clip.hi : Infinity;
 
   const entries = [];
   for (const e of bodyOf(snappedBands, cutRows, W)) {
-    if (e.pieces.length) entries.push({h0: e.heights[0], h1: e.heights[1], pieces: e.pieces, rib: null});
+    const h0 = Math.max(e.heights[0], clipLo), h1 = Math.min(e.heights[1], clipHi);
+    if (e.pieces.length && h1 - h0 > EPS) entries.push({h0, h1, pieces: e.pieces, rib: null});
   }
   const last = snappedBands.length - 1;
   for (const rb of ribs) {
     const rect = [[rb.x0, D - rb.e1], [rb.x1, D - rb.e1], [rb.x1, D - rb.e0], [rb.x0, D - rb.e0]];
     snappedBands.forEach((b, i) => {
       // a rib standing out of the box, above the first band or below the last, belongs to that band
-      const lo = Math.max(rb.lo, i === 0 ? -Infinity : b.heights[0]);
-      const hi = Math.min(rb.hi, i === last ? Infinity : b.heights[1]);
+      const lo = Math.max(rb.lo, i === 0 ? -Infinity : b.heights[0], clipLo);
+      const hi = Math.min(rb.hi, i === last ? Infinity : b.heights[1], clipHi);
       if (hi - lo <= EPS) return;
       const pieces = sweep([[b.points], [rect]]);
       if (pieces.length) entries.push({h0: lo, h1: hi, pieces, rib: rb});
@@ -115,8 +125,26 @@ export function planPolygons({bands, section, cutLoops, ribs, W, H, D, mat}) {
     if (!b.length) return a;
     return sweep([a.map(polygon)], [b.map(polygon)]);
   };
+  const onRow = (h, row) => Number.isFinite(row) && Math.abs(h - row) <= LEVEL;
   for (let i = 0; i < S.length; i++) {
     const above = i > 0 ? slabs[i - 1].pieces : [], below = i < slabs.length ? slabs[i].pieces : [];
+    if (clip && (onRow(S[i], clipLo) || onRow(S[i], clipHi))) {
+      // a clip row: the body is on one side only, so the whole region is the cap
+      const up = below.length > 0, all = up ? below : above;
+      const slab = slabs[up ? i : i - 1];
+      const here = entries.filter(e => e.c0 <= slab.k && slab.k < e.c1);
+      const body = here.filter(e => !e.rib);
+      const bodyPieces = here.length === body.length ? all : sweep([body.flatMap(e => e.pieces.map(polygon))]);
+      const parts = [[bodyPieces, mat.cap]];
+      if (here.length !== body.length) parts.push([diff(all, bodyPieces), mat.seam]);
+      for (const [pieces, mi] of parts) {
+        for (const p of pieces) {
+          const pts = polygon(p);
+          if (pts.length >= 3) faces.push({points: pts.map(([x, y]) => toV(x, y, S[i])), n: [0, up ? 1 : -1, 0], mi});
+        }
+      }
+      continue;
+    }
     if (JSON.stringify(above) === JSON.stringify(below)) continue;
     for (const [pieces, n, mi] of [[diff(below, above), [0, 1, 0], mat.top], [diff(above, below), [0, -1, 0], mat.bottom]]) {
       for (const p of pieces) {

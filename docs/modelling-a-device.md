@@ -805,12 +805,36 @@ inset from the flange is narrower than it in every view. In 3D:
 
 The body is one closed mesh, with no gap or doubled face where two bands meet.
 
-**Not drawn yet.** The open state of a housing that states a plan outline builds, but its
-two halves are still the section extruded, so they show a rectangle without the rounded
-corners, lobes or rim; parts do not yet stand on the plan's walls; and the new wall
-material is not yet taken into account by the GLB and USDZ exports. **State it on no
-device yet.** A test fails if a library device does; the site's re-vendoring of the kit
-comes first.
+**The open state follows the key.** A housing that states `section`, `halves` and a plan
+outline opens as two halves that are each the body the plan leaves of them on their side of
+the seam, not the section extruded:
+
+- **Each half shows its rim as the plan outline.** The corners are round, the lobes stand
+  and a casting inset from the flange is as narrow as it is. The rim is the half's own cap:
+  the polygon of the band on that half's side of the seam, cut to the section's width
+  there, plain and facing the other half. A seam exactly on a band edge gives the two
+  halves two different rims (bands are half-open, `[from, to)`), so draw the band edge where
+  the maker's rims differ. The rim is drawn in the open state only; the closed body is one
+  mesh and has no cap in it. A rib the seam happens to cut keeps its section hidden.
+- **The lid turns about the same line as before**: where the seam plane meets the hinge
+  face's outline of the section at the seam row. Its lobes and rounded corners swing with
+  it. Nothing models the lid meeting the base, so at some angles a lobe passes through the
+  other half. The camera frames each half's own extent, lobes included.
+- **The groove is not drawn.** The o-ring groove line inside the rim is art in the authored
+  open drawing; the 3D halves show the rim outline only. No key delivers the groove.
+- **A part stands on what the plan leaves under it.** A part on the top or bottom is seated
+  on the highest or lowest body at its own place across the width and the depth: over a
+  lobe or a rounded corner the flange's top, not the casting's the extrusion would put
+  under that depth. A part on the front or rear stands on the wall at its own place and
+  height, which is an arc's chord at a rounded corner. Where the plan leaves no body under
+  the point the seat is 0, the flat plane, as for any point off the body (L227 already
+  refuses a part there).
+- **Exports.** The GLB of the open state carries the halves with the plain slot; the USDZ
+  of any body with several materials (a box's six faces, a stepped or plan body, an open
+  half) is written one mesh a material, where it used to hold no geometry.
+
+A housing without the key opens and seats exactly as before. **State it on no device yet.**
+A test fails if a library device does; the site's re-vendoring of the kit comes first.
 
 **The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
 export keeps the alpha: the corners are fully transparent, and the `background` option

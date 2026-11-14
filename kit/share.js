@@ -89,8 +89,49 @@ export async function toGLB(root) {
   return buf;                       // ArrayBuffer, magic 'glTF'
 }
 
+// three's USDZ exporter writes a mesh only when its `material` is one material: a mesh with a list of
+// materials (a box's six faces, a stepped body, an open half) is skipped with a warning, and the file it
+// writes holds no geometry. So each such mesh becomes one mesh a material group, standing where it stood,
+// each with only the vertices its group uses. GLB writes the groups itself and is not given this.
+function splitByMaterial(root) {
+  const many = [];
+  root.traverse(o => { if (o.isMesh && Array.isArray(o.material) && o.parent) many.push(o); });
+  for (const mesh of many) {
+    const geo = mesh.geometry, index = geo.index;
+    const groups = geo.groups.length ? geo.groups
+      : [{start: 0, count: index ? index.count : geo.attributes.position.count, materialIndex: 0}];
+    groups.forEach((g, n) => {
+      const material = mesh.material[g.materialIndex];
+      if (!material || !g.count) return;
+      const kept = new Map(), indices = [];
+      for (let i = g.start; i < g.start + g.count; i++) {
+        const v = index ? index.getX(i) : i;
+        if (!kept.has(v)) kept.set(v, kept.size);
+        indices.push(kept.get(v));
+      }
+      const part = new THREE.BufferGeometry();
+      for (const name of ['position', 'normal', 'uv']) {
+        const src = geo.attributes[name];
+        if (!src) continue;
+        const data = new Float32Array(kept.size * src.itemSize);
+        for (const [v, k] of kept) for (let c = 0; c < src.itemSize; c++) data[k * src.itemSize + c] = src.getComponent(v, c);
+        part.setAttribute(name, new THREE.BufferAttribute(data, src.itemSize));
+      }
+      part.setIndex(indices);
+      const piece = new THREE.Mesh(part, material);
+      piece.name = `${mesh.name || 'mesh'}-${n}`;
+      piece.matrix.copy(mesh.matrix);
+      piece.matrix.decompose(piece.position, piece.quaternion, piece.scale);
+      piece.matrixWorld.copy(mesh.matrixWorld);
+      mesh.parent.add(piece);
+    });
+    mesh.parent.remove(mesh);
+  }
+  return root;
+}
+
 export async function toUSDZ(root) {
-  return await new USDZExporter().parse(forExport(root));   // Uint8Array (a zip)
+  return await new USDZExporter().parse(splitByMaterial(forExport(root)));   // Uint8Array (a zip)
 }
 
 /**

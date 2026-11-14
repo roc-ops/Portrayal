@@ -39,3 +39,8 @@ not staged - reference imagery lives in working/
 # that file need no corpus and run everywhere, which is why this is one skip and
 # not four.
 no working/ corpus here; this runs where the intake lives
+# three.js is an optional peer dependency of the kit and is not part of this repository (kit/NOTICE), so
+# the tests that hand the kit real three.js objects (a Vector3 from a raycast, a scene for the USDZ
+# exporter) run where `PORTRAYAL_THREE_DIR` names a copy of it, and the exports and the picking are
+# taken in the real viewer for the pull request. The kit's other tests need only node.
+three.js is not installed here (an optional peer dependency)
