@@ -1,0 +1,2024 @@
+format: 1
+kind: device
+name: en2333
+version: 0.1.0
+maturity: modelled
+manufacturer: Enlogic
+model: EN2333
+description: 'Enlogic EN2 PDU, 0U: a 1750 mm dark strip, 52 mm wide and 75 mm deep at the breakers. It hangs on two toolless
+  buttons beside a rack. It hands a single-phase 208 V feed on to 36 switched outlets. They are 30 IEC C13 and 6 IEC C19,
+  in two colour-coded banks of three groups. The feed is a fixed 3 m cord with a NEMA L6-30P plug, 30 A derated to 24 A,
+  5.0 kVA. Each bank sits behind its own 20 A double-pole breaker. A hot-swap network management module between the banks
+  carries a display, two Ethernet ports, USB-C and two sensor ports. Input metered, outlet switched.'
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S VECTOR DRAWING. Enlogic drawing TA-EN2333A rev E1, 2020.05.20
+      (one A3 sheet) and the EN2333 data sheet. The front view''s paths were read in points at 2.7598 mm per pt. That is
+      the scale of the printed 1750.0 overall. The end lines are 634.11 pt apart, at 158.97 and 793.08. The printed 52.0
+      width reads 18.85 pt over the outer lines, 52.0 mm, so the scale checks. The strip is drawn lying with the cord end
+      left. The library draws it standing, cord end up. A drawing x along the strip becomes y down from the cord end, and
+      the drawing''s top edge becomes the right edge. Every count below was made twice, once from clusters of touching paths
+      and once from 500 to 1600 dpi renders of the same view.'}
+  recount: {confidence: drawing, note: 'Recounted twice. The six groups, the 36 outlets (30 C13, 6 C19), the two plates
+      and the six seams agree with the order''s counts. One figure differs. In each group outlets 3 and 5 are turned 180
+      degrees and outlets 2, 4 and 6 are not. The order''s note read 3 to 6 as turned. The drawing also prints a numeral,
+      a round mark and two short windows at every outlet, which the order''s inventory did not list.'}
+  mount: {confidence: drawing, note: '`rack-side`, on the two toolless buttons of the rear view (VERTICAL, 0U FULL; 1555.0
+      between them, the first 40.5 from the cord end). `ru: 39` is the 1750 it runs, 1750 / 44.45. No source sells it by
+      rack units. The drawing''s TOOLESS MOUNTING BUTTON LOCATIONS note counts twelve places. The top and bottom views draw
+      the other ones as rings on the sides, and those are drawn.'}
+  chassis: {confidence: drawing, note: 'drawing and datasheet - the data sheet gives ''Chassis Dimensions (L x W x D) 1750.0
+      x 52.0 x 53.0 mm''. It also gives ''Depth At Circuit Breaker 75 mm''. The drawing''s top and bottom views show a block
+      at the cord end, 74.5 deep, and the strip 52.5 deep. Its right view prints 52.0 and 75.0. The chassis depth is the
+      75, the maximum. The side and end faces draw the block and the strip as outlines. The body colour is #202020, read
+      off the data sheet''s face render, which is a vendor render and not a photograph of a unit.'}
+  colour: {confidence: photo-measured, note: 'the data sheet''s face render (9862 by 329 px) reads plate B1 and its three
+      outlet panels #646867, the drawing''s LIGHT GRAY. It reads plate B2 and its three panels #77a6ee, BLUE, and the body
+      #202020. Each sample is the median of nine pixels, all within 12 of it. No photograph of a unit is held, so the colours
+      are the render''s. The two windows beside each outlet are drawn a shade darker than their panel, an estimate.'}
+  front: {confidence: drawing, note: 'drawing - the front view, mm from the cord end and from the left edge as the strip
+      stands. First come the cord gland, a ground screw with its earth symbol, and plates B1 and B2 side by side. Then come
+      a cross seam with one screw and three outlet groups under B1 [LIGHT GRAY]. The network module follows, then three
+      groups under B2 [BLUE]. A group is a C19 and a C13 beside it, then a staggered block of four C13, in two panels with
+      a seam between them. The groups start 293.34, 367.66 and 441.98 pt, then 574.32, 648.64 and 722.96 pt, a pitch of
+      74.32 pt, 205.1 mm.'}
+  outlets: {confidence: datasheet, note: 'datasheet and drawing - ''Outlet Configuration 30(C13),6(C19)''; the drawing''s
+      receptacle block gives IEC 60320/C13 (10A, 250V) and IEC 60320/C19 (16A, 250V). std/c13-outlet@1 and std/c19-outlet@1.
+      The drawing''s C19 ring is 35.8 by 27.8 and its C13 ring 30.9 by 22.8, within 1 mm of the parts. Every outlet is switchable
+      (''Remote Outlet Switching Yes''). The unit prints the numbers 1 to 36, which name the outlets as printed. The C19
+      is turned 90 degrees, its earth slot toward the drawing''s top edge. Each group turns outlets 3 and 5 by 180 degrees,
+      so their chamfered end faces the far end.'}
+  lamps: {confidence: estimated, note: 'drawing and render - the drawing prints one small ring, 0.94 pt (2.6 mm), beside
+      each of the 36 outlets. The data sheet''s render shows a green lit lamp in its place. Each is placed as a lamp with
+      the states `on` and `off`, drawn off. The lit colour #83ff73 is the median of the render''s lamp pixels (four of nine
+      within 12). No held document says what the lamp shows, so no meaning is claimed.'}
+  input: {confidence: datasheet, note: 'datasheet and drawing - ''Input Plug Type NEMA L6-30P'', ''Acceptable Input Voltage
+      208VAC, 1-phase''. The data sheet also gives ''Input Current (Phase) 30A (24A DERATED)'', ''Max Input Power 5.0 kVA'',
+      ''Input Cord Length 3m (9.84'')''. The drawing prints ''INPUT VOLTAGE: 200-240VAC'' and the plug ''NEMA L6-30P, 2P
+      3W''. The unit has a fixed cord and no inlet.'}
+  breakers: {confidence: datasheet, note: 'datasheet and drawing - ''(2)2-pole,20A,5 kAIC'' and ''20 AMP, DOUBLE-POLE ELECTRO
+      MECHANICAL SWITCH / BREAKER (2) PLACES''. Each plate prints its bank and L1-L2. The outlets run `through` the breaker
+      of the colour span they stand in. That is B1 for the three groups under B1 and B2 for the three under B2.'}
+  module: {confidence: estimated, note: 'drawing - the front view draws the network module as a 150.7 mm block between the
+      banks. It shows a large display window, three round dots, a small window and a dot. It also shows a small dark tab,
+      two stacked connector cutouts with two smaller ones beside them, and a dark end tab. No close-up of this module is
+      held. The data sheet names the module the Advanced Network Management Module, Advantage Series, the one of the EN2951.
+      The parts are read as that module''s layout: display, oLED screen with three buttons, reset, USB-C, two RJ45 and two
+      sensor ports. Their positions come from a 1200 dpi render of the view and are ESTIMATES to about 1 mm.'}
+  plates: {confidence: drawing, note: 'drawing - plates B1 and B2 are 23.20 pt along by 16.31 pt across by their straight
+      edge, 64.0 by 45.0 mm. By their outline they are 25.38 pt along, 70.0 mm. They are a different module from the EN2951''s,
+      so the part is enlogic/en2333-breaker-20a-2p@1, drawn to the outline. The plate pitch is 25.74 pt, 71.0 mm.'}
+  rear: {confidence: drawing, note: 'drawing - the rear view: two toolless buttons, O18.4, 1555.0 apart, the first 40.5
+      from the cord end, on the width''s centre line.'}
+  sides: {confidence: drawing, note: 'drawing - the top view gives the right face. It has 31 round heads: 27 screw heads
+      6.6 to 6.9 across and 4 rings 12.1 across at the dimensioned button places. The bottom view gives the left face, 32
+      of them. Positions are mm along from the cord end and from the front. The block at the cord end is 74.5 deep and the
+      strip 52.5, the module standing 9.7 proud of the strip. These are drawn as step voids. The right view looks at the far
+      end. It prints one round head 6.6 across on the width''s centre line, 6.0 from the rear edge. It is drawn on the bottom
+      face, with the rear edge as its top. The view also prints a flat tab, which the `cord-end-tab` gap names.'}
+  dcim: {confidence: datasheet, note: 'the input is one NEMA L6-30P power port from the cord part and each outlet a power
+      outlet it feeds: `iec-60320-c13` for the C13 and `iec-60320-c19` for the C19. Each outlet runs `through` its bank''s
+      breaker. No feed_leg is written: a single-phase 208 V feed has no neutral.'}
+  lifecycle: {confidence: datasheet, note: 'only the held documents were read: none announces an end of life. No web search
+      was made.'}
+attrs:
+  physical: {length-mm: 1750, construction: 'metal strip, dark'}
+  power: {input-ac: '208 V single-phase (data sheet; the drawing prints 200-240 V), 30 A (24 A derated), 50/60 Hz', input-plug: nema-l6-30p,
+    input-cord: fixed, input-phase: single, input-voltage-v: 208, input-current-a: 24, plug-rating-a: 30, max-input-power: 5.0
+      kVA, output-voltage: 200-240 V, output-rating: 10 A per C13; 16 A per C19, breakers: 'two 20 A two-pole, 5 kAIC, hydraulic-magnetic',
+    frequency: 50/60 Hz}
+  environmental: {operating-temp: -5 to 60 C (23 to 140 F), storage-temp: -20 to 60 C (-4 to 140 F), humidity: '5-90 %%
+      RH operating, 5-95 %% storage, non-condensing', altitude: 3000 m (9840 ft) maximum operating elevation}
+  management: {metering-scope: branch, outlet-switching: true}
+  compliance: {product-compliance: 'RoHS, REACH; IEC 62368 listed; UL 2900-1'}
+  lifecycle: {eol: none-announced}
+chassis: {width: 52, height: 1750, depth: 75, ru: 39, mount: rack-side, color: '#202020', airflow: passive}
+gaps:
+- what: weight
+  scope: [front, rear, left, right]
+  reason: vendor-silent
+  note: 'no held document states a weight: the drawing''s title block says N/A and the data sheet has no field.'
+  wanted: a weight from the maker.
+- what: colour
+  scope: [front, rear, left, right]
+  reason: needs-photo
+  note: the only colour source is the data sheet's face render. No photograph of a unit, and no view of the back, the sides
+    or the ends in colour, is held.
+  wanted: photographs of a unit, front, back, sides and ends.
+- what: depth
+  scope: [left, right, top, bottom]
+  reason: sources-disagree
+  note: the data sheet gives 53 mm for the chassis and 75 mm at the breaker. The drawing's right view prints 52.0 and 75.0
+    and its bottom view 53.0. The chassis depth is 75 and the strip is drawn 52.5 deep.
+  wanted: the maker's word on which figure is the chassis depth.
+- what: input-voltage
+  scope: [front]
+  reason: sources-disagree
+  note: 'the data sheet gives ''Acceptable Input Voltage 208VAC, 1-phase'', the drawing ''INPUT VOLTAGE: 200-240VAC''. 208
+    is written as the nominal and both are recorded.'
+  wanted: the maker's word on the input voltage range.
+- what: module-ports
+  scope: [front]
+  reason: needs-photo
+  note: no close-up of this module is held. The data sheet lists two Ethernet ports and sensor support but no USB or reset.
+    The ports are drawn in the layout of the EN2951's module. Which way each jack faces is not stated. The sensor ports
+    are dark openings.
+  wanted: a photograph of the module's face and the manual's port table.
+- what: sensor-count
+  scope: [front]
+  reason: sources-disagree
+  note: the data sheet says the module 'supports up to 10 digital sensor'. The EN2951 drawing's close-up says up to 8 physical
+    sensors. Two sensor ports are drawn.
+  wanted: the maker's word on the sensor capacity.
+- what: lamp-meaning
+  scope: [front]
+  reason: vendor-silent
+  note: the small ring at each outlet is a lamp in the data sheet's render, drawn green and lit there. No held document
+    says what it shows.
+  wanted: the manual's lamp table.
+- what: windows
+  scope: [front]
+  reason: vendor-silent
+  note: the drawing draws two short rounded windows beside each outlet, 36 pairs, and the render paints them in a shade
+    of the panel. No held document names them, so they are drawn as decor.
+  wanted: the maker's word on what they are.
+- what: module-display
+  scope: [front]
+  reason: needs-photo
+  note: the render shows the display lit with metering digits inside a blue border. The data sheet says the colour border
+    is user programmable. The display is drawn dark.
+  wanted: none.
+- what: cord-end-tab
+  scope: [left, right, bottom]
+  reason: needs-drawing
+  note: 'the drawing prints two small flat tabs, 18.4 mm wide and 4.0 mm proud of the rear edge, one near each end.
+    They stand 31 to 50 mm and 1587 to 1606 mm from the cord end. The top and bottom views draw both, and the right view
+    draws one end-on. The front view draws none. They stand outside every face''s rectangle. The schema says ''L150 refuses
+    a part outside its view that the side''s figure does not cover''. That line is for a rack device (L125) and this unit
+    is rack-side. So they are not placed.'
+  wanted: the maker's word on what they are.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: the drawing's views are outlines with round heads. The left face is read from the bottom view. No photograph looks
+    at an end or a side.
+  wanted: straight-on photographs of an end and a side.
+groups:
+  outlets-b1: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 18 outlets of bank B1, counted from the cord end:
+      three groups of one C19 and five C13, each switchable, behind breaker B1'}
+  outlets-b2: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 18 outlets of bank B2, counted from the cord end:
+      three groups of one C19 and five C13, each switchable, behind breaker B2'}
+  outlet-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: one lamp beside each outlet; its meaning is not stated by any held document
+    states:
+    - {name: green, color: '#83ff73'}
+    - 'off'
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'B1 and B2, each 20 A double-pole and each feeding
+      the 18 outlets of its bank'}
+  network: {term: Port, role: management, index-origin: 1, mixed: 'the network module''s two Ethernet ports: a 10/100/1000
+      primary port and a 10/100 port for redundancy and daisy-chain cascading'}
+  usb: {term: Port, role: management, index-origin: 1}
+  marks: {term: Mark, role: furniture, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  resets: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1750}
+    panel:
+      decor:
+      - id: ground-boss
+        at: [5.99, 14.02]
+        size: [12.0, 12.0]
+        rx: 6.0
+        fill: '#8c8f91'
+        kind: boss
+      - id: cross-seam
+        at: [-0.02, 333.99]
+        size: [52.05, 2.21]
+        fill: '#2a2c2f'
+        kind: seam
+      - id: seam-screw
+        at: [22.55, 338.04]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: panel-1
+        at: [-0.02, 358.27]
+        size: [52.05, 192.27]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: panel-1-seam
+        at: [-0.02, 485.5]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: panel-2
+        at: [-0.02, 563.38]
+        size: [52.05, 192.27]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: panel-2-seam
+        at: [-0.02, 690.61]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: panel-3
+        at: [-0.02, 768.49]
+        size: [52.05, 192.27]
+        fill: '#646867'
+        kind: outlet-moulding
+      - id: panel-3-seam
+        at: [-0.02, 895.71]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: panel-4
+        at: [-0.02, 1133.71]
+        size: [52.05, 192.27]
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: panel-4-seam
+        at: [-0.02, 1260.94]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: panel-5
+        at: [-0.02, 1338.82]
+        size: [52.05, 192.27]
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: panel-5-seam
+        at: [-0.02, 1466.05]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: panel-6
+        at: [-0.02, 1543.93]
+        size: [52.05, 192.27]
+        fill: '#77a6ee'
+        kind: outlet-moulding
+      - id: panel-6-seam
+        at: [-0.02, 1671.15]
+        size: [52.05, 1.66]
+        fill: '#303236'
+        kind: seam
+      - id: module-panel
+        at: [-0.02, 974.56]
+        size: [52.05, 150.68]
+        fill: '#17181a'
+        kind: module
+      - id: module-tab-left
+        at: [3.07, 975.88]
+        size: [45.26, 7.29]
+        rx: 1.5
+        fill: '#2b2d30'
+        kind: module-tab
+      - id: led-display
+        at: [4.45, 985.32]
+        size: [42.5, 52.99]
+        rx: 2.0
+        fill: '#050505'
+        kind: display
+      - id: module-button-1
+        at: [40.77, 1041.28]
+        size: [4.0, 4.0]
+        rx: 2.0
+        fill: '#2f6fb5'
+        kind: button
+      - id: module-button-2
+        at: [40.77, 1050.25]
+        size: [4.0, 4.0]
+        rx: 2.0
+        fill: '#2f6fb5'
+        kind: button
+      - id: module-button-3
+        at: [40.77, 1059.27]
+        size: [4.0, 4.0]
+        rx: 2.0
+        fill: '#2f6fb5'
+        kind: button
+      - id: oled-display
+        at: [4.45, 1045.35]
+        size: [33.5, 18.02]
+        rx: 1.0
+        fill: '#1b2a2e'
+        kind: display
+      - id: usb-shell
+        at: [13.75, 1065.96]
+        size: [10.02, 4.0]
+        rx: 1.5
+        fill: '#0d0e0f'
+        kind: shell
+      - id: sensor-1
+        at: [10.79, 1092.95]
+        size: [14.9, 15.73]
+        rx: 1.0
+        fill: '#0d0e0f'
+        kind: sensor-jack
+      - id: sensor-2
+        at: [26.25, 1092.95]
+        size: [14.63, 15.73]
+        rx: 1.0
+        fill: '#0d0e0f'
+        kind: sensor-jack
+      - id: module-tab-right
+        at: [14.38, 1120.55]
+        size: [23.18, 9.11]
+        rx: 1.5
+        fill: '#0a0a0a'
+        kind: module-tab
+      - id: window-1-1
+        at: [8.94, 380.9]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-1-2
+        at: [8.94, 388.96]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-2-1
+        at: [8.94, 415.62]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-2-2
+        at: [8.94, 423.67]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-3-1
+        at: [37.78, 438.17]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-3-2
+        at: [37.78, 446.28]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-4-1
+        at: [8.72, 463.75]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-4-2
+        at: [8.72, 471.87]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-5-1
+        at: [37.7, 493.28]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-5-2
+        at: [37.7, 501.41]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-6-1
+        at: [8.72, 518.89]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-6-2
+        at: [8.72, 527.01]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-7-1
+        at: [8.94, 586.01]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-7-2
+        at: [8.94, 594.07]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-8-1
+        at: [8.94, 620.73]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-8-2
+        at: [8.94, 628.77]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-9-1
+        at: [37.78, 643.28]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-9-2
+        at: [37.78, 651.39]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-10-1
+        at: [8.72, 668.86]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-10-2
+        at: [8.72, 676.97]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-11-1
+        at: [37.7, 698.39]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-11-2
+        at: [37.7, 706.52]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-12-1
+        at: [8.72, 724.0]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-12-2
+        at: [8.72, 732.11]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-13-1
+        at: [8.94, 791.12]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-13-2
+        at: [8.94, 799.18]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-14-1
+        at: [8.94, 825.83]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-14-2
+        at: [8.94, 833.88]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-15-1
+        at: [37.78, 848.38]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-15-2
+        at: [37.78, 856.5]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-16-1
+        at: [8.72, 873.97]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-16-2
+        at: [8.72, 882.08]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-17-1
+        at: [37.7, 903.49]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-17-2
+        at: [37.7, 911.62]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-18-1
+        at: [8.72, 929.11]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-18-2
+        at: [8.72, 937.22]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#585b5a'
+        kind: window
+      - id: window-19-1
+        at: [8.94, 1156.35]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-19-2
+        at: [8.94, 1164.4]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-20-1
+        at: [8.94, 1191.06]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-20-2
+        at: [8.94, 1199.11]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-21-1
+        at: [37.78, 1213.61]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-21-2
+        at: [37.78, 1221.72]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-22-1
+        at: [8.72, 1239.19]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-22-2
+        at: [8.72, 1247.31]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-23-1
+        at: [37.7, 1268.72]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-23-2
+        at: [37.7, 1276.85]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-24-1
+        at: [8.72, 1294.33]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-24-2
+        at: [8.72, 1302.45]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-25-1
+        at: [8.94, 1361.45]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-25-2
+        at: [8.94, 1369.51]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-26-1
+        at: [8.94, 1396.17]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-26-2
+        at: [8.94, 1404.21]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-27-1
+        at: [37.78, 1418.72]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-27-2
+        at: [37.78, 1426.83]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-28-1
+        at: [8.72, 1444.3]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-28-2
+        at: [8.72, 1452.41]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-29-1
+        at: [37.7, 1473.83]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-29-2
+        at: [37.7, 1481.96]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-30-1
+        at: [8.72, 1499.44]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-30-2
+        at: [8.72, 1507.55]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-31-1
+        at: [8.94, 1566.56]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-31-2
+        at: [8.94, 1574.62]
+        size: [5.3, 7.59]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-32-1
+        at: [8.94, 1601.28]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-32-2
+        at: [8.94, 1609.32]
+        size: [5.3, 7.58]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-33-1
+        at: [37.78, 1623.82]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-33-2
+        at: [37.78, 1631.94]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-34-1
+        at: [8.72, 1649.41]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-34-2
+        at: [8.72, 1657.52]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-35-1
+        at: [37.7, 1678.94]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-35-2
+        at: [37.7, 1687.06]
+        size: [5.44, 7.66]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-36-1
+        at: [8.72, 1704.55]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+      - id: window-36-2
+        at: [8.72, 1712.66]
+        size: [5.35, 7.64]
+        rx: 1.0
+        fill: '#6993d8'
+        kind: window
+    silkscreen:
+    - at: [10.3, 373.84]
+      text: '1'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-1
+    - at: [39.17, 435.71]
+      text: '2'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-2
+    - at: [10.3, 433.59]
+      text: '3'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-3
+    - at: [39.17, 483.73]
+      text: '4'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-4
+    - at: [10.68, 488.95]
+      text: '5'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-5
+    - at: [39.17, 538.85]
+      text: '6'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-6
+    - at: [10.3, 578.95]
+      text: '7'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-7
+    - at: [39.17, 640.82]
+      text: '8'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-8
+    - at: [10.3, 638.69]
+      text: '9'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-9
+    - at: [39.17, 688.84]
+      text: '10'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-10
+    - at: [10.68, 694.06]
+      text: '11'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-11
+    - at: [39.17, 743.95]
+      text: '12'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-12
+    - at: [10.3, 784.05]
+      text: '13'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-13
+    - at: [39.17, 845.93]
+      text: '14'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-14
+    - at: [10.3, 843.8]
+      text: '15'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-15
+    - at: [39.17, 893.95]
+      text: '16'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-16
+    - at: [10.68, 899.16]
+      text: '17'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-17
+    - at: [39.17, 949.06]
+      text: '18'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-18
+    - at: [10.3, 1149.28]
+      text: '19'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-19
+    - at: [39.17, 1211.15]
+      text: '20'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-20
+    - at: [10.3, 1209.03]
+      text: '21'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-21
+    - at: [39.17, 1259.17]
+      text: '22'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-22
+    - at: [10.68, 1264.39]
+      text: '23'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-23
+    - at: [39.17, 1314.29]
+      text: '24'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-24
+    - at: [10.3, 1354.39]
+      text: '25'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-25
+    - at: [39.17, 1416.26]
+      text: '26'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-26
+    - at: [10.3, 1414.14]
+      text: '27'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-27
+    - at: [39.17, 1464.28]
+      text: '28'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-28
+    - at: [10.68, 1469.5]
+      text: '29'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-29
+    - at: [39.17, 1519.39]
+      text: '30'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-30
+    - at: [10.3, 1559.49]
+      text: '31'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-31
+    - at: [39.17, 1621.37]
+      text: '32'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-32
+    - at: [10.3, 1619.24]
+      text: '33'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-33
+    - at: [39.17, 1669.39]
+      text: '34'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-34
+    - at: [10.68, 1674.6]
+      text: '35'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-35
+    - at: [39.17, 1724.5]
+      text: '36'
+      font-size: 3.6
+      anchor: middle
+      rotate: 90
+      for: outlet-36
+    components:
+      placements:
+      - id: outlet-1
+        ref: std/c19-outlet@1
+        at: [17.45, 374.89]
+        rotate: 90
+        group: outlets-b1
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at: [19.05, 410.83]
+        group: outlets-b1
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at: [2.49, 436.83]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-4
+        ref: std/c13-outlet@1
+        at: [18.97, 459.18]
+        group: outlets-b1
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-5
+        ref: std/c13-outlet@1
+        at: [2.49, 491.47]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-6
+        ref: std/c13-outlet@1
+        at: [18.91, 514.24]
+        group: outlets-b1
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-7
+        ref: std/c19-outlet@1
+        at: [17.45, 580.0]
+        rotate: 90
+        group: outlets-b1
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-8
+        ref: std/c13-outlet@1
+        at: [19.05, 615.94]
+        group: outlets-b1
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-9
+        ref: std/c13-outlet@1
+        at: [2.49, 641.93]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 9
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-10
+        ref: std/c13-outlet@1
+        at: [18.97, 664.29]
+        group: outlets-b1
+        rel-pos: 10
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-11
+        ref: std/c13-outlet@1
+        at: [2.49, 696.58]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 11
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-12
+        ref: std/c13-outlet@1
+        at: [18.91, 719.35]
+        group: outlets-b1
+        rel-pos: 12
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-13
+        ref: std/c19-outlet@1
+        at: [17.45, 785.1]
+        rotate: 90
+        group: outlets-b1
+        rel-pos: 13
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at: [19.05, 821.04]
+        group: outlets-b1
+        rel-pos: 14
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at: [2.49, 847.04]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 15
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-16
+        ref: std/c13-outlet@1
+        at: [18.97, 869.4]
+        group: outlets-b1
+        rel-pos: 16
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-17
+        ref: std/c13-outlet@1
+        at: [2.49, 901.68]
+        rotate: 180
+        group: outlets-b1
+        rel-pos: 17
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-18
+        ref: std/c13-outlet@1
+        at: [18.91, 924.45]
+        group: outlets-b1
+        rel-pos: 18
+        fed-by: input
+        through: breaker-b1
+        states: ['on', 'off']
+      - id: outlet-19
+        ref: std/c19-outlet@1
+        at: [17.45, 1150.33]
+        rotate: 90
+        group: outlets-b2
+        rel-pos: 1
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at: [19.05, 1186.27]
+        group: outlets-b2
+        rel-pos: 2
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at: [2.49, 1212.27]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 3
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-22
+        ref: std/c13-outlet@1
+        at: [18.97, 1234.62]
+        group: outlets-b2
+        rel-pos: 4
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-23
+        ref: std/c13-outlet@1
+        at: [2.49, 1266.91]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 5
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-24
+        ref: std/c13-outlet@1
+        at: [18.91, 1289.68]
+        group: outlets-b2
+        rel-pos: 6
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-25
+        ref: std/c19-outlet@1
+        at: [17.45, 1355.44]
+        rotate: 90
+        group: outlets-b2
+        rel-pos: 7
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at: [19.05, 1391.38]
+        group: outlets-b2
+        rel-pos: 8
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at: [2.49, 1417.38]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 9
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-28
+        ref: std/c13-outlet@1
+        at: [18.97, 1439.73]
+        group: outlets-b2
+        rel-pos: 10
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-29
+        ref: std/c13-outlet@1
+        at: [2.49, 1472.02]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 11
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-30
+        ref: std/c13-outlet@1
+        at: [18.91, 1494.79]
+        group: outlets-b2
+        rel-pos: 12
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-31
+        ref: std/c19-outlet@1
+        at: [17.45, 1560.55]
+        rotate: 90
+        group: outlets-b2
+        rel-pos: 13
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-32
+        ref: std/c13-outlet@1
+        at: [19.05, 1596.49]
+        group: outlets-b2
+        rel-pos: 14
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-33
+        ref: std/c13-outlet@1
+        at: [2.49, 1622.48]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 15
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-34
+        ref: std/c13-outlet@1
+        at: [18.97, 1644.84]
+        group: outlets-b2
+        rel-pos: 16
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-35
+        ref: std/c13-outlet@1
+        at: [2.49, 1677.13]
+        rotate: 180
+        group: outlets-b2
+        rel-pos: 17
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: outlet-36
+        ref: std/c13-outlet@1
+        at: [18.91, 1699.89]
+        group: outlets-b2
+        rel-pos: 18
+        fed-by: input
+        through: breaker-b2
+        states: ['on', 'off']
+      - id: lamp-1
+        ref: common/led-dot@1
+        at: [18.16, 372.92]
+        group: outlet-leds
+        rel-pos: 1
+        for: outlet-1
+      - id: lamp-2
+        ref: common/led-dot@1
+        at: [46.0, 434.71]
+        group: outlet-leds
+        rel-pos: 2
+        for: outlet-2
+      - id: lamp-3
+        ref: common/led-dot@1
+        at: [4.0, 432.81]
+        group: outlet-leds
+        rel-pos: 3
+        for: outlet-3
+      - id: lamp-4
+        ref: common/led-dot@1
+        at: [46.0, 482.73]
+        group: outlet-leds
+        rel-pos: 4
+        for: outlet-4
+      - id: lamp-5
+        ref: common/led-dot@1
+        at: [4.0, 487.95]
+        group: outlet-leds
+        rel-pos: 5
+        for: outlet-5
+      - id: lamp-6
+        ref: common/led-dot@1
+        at: [46.0, 537.85]
+        group: outlet-leds
+        rel-pos: 6
+        for: outlet-6
+      - id: lamp-7
+        ref: common/led-dot@1
+        at: [18.16, 578.03]
+        group: outlet-leds
+        rel-pos: 7
+        for: outlet-7
+      - id: lamp-8
+        ref: common/led-dot@1
+        at: [46.0, 639.82]
+        group: outlet-leds
+        rel-pos: 8
+        for: outlet-8
+      - id: lamp-9
+        ref: common/led-dot@1
+        at: [4.0, 637.92]
+        group: outlet-leds
+        rel-pos: 9
+        for: outlet-9
+      - id: lamp-10
+        ref: common/led-dot@1
+        at: [46.0, 687.84]
+        group: outlet-leds
+        rel-pos: 10
+        for: outlet-10
+      - id: lamp-11
+        ref: common/led-dot@1
+        at: [4.0, 693.06]
+        group: outlet-leds
+        rel-pos: 11
+        for: outlet-11
+      - id: lamp-12
+        ref: common/led-dot@1
+        at: [46.0, 742.95]
+        group: outlet-leds
+        rel-pos: 12
+        for: outlet-12
+      - id: lamp-13
+        ref: common/led-dot@1
+        at: [18.16, 783.13]
+        group: outlet-leds
+        rel-pos: 13
+        for: outlet-13
+      - id: lamp-14
+        ref: common/led-dot@1
+        at: [46.0, 844.93]
+        group: outlet-leds
+        rel-pos: 14
+        for: outlet-14
+      - id: lamp-15
+        ref: common/led-dot@1
+        at: [4.0, 843.02]
+        group: outlet-leds
+        rel-pos: 15
+        for: outlet-15
+      - id: lamp-16
+        ref: common/led-dot@1
+        at: [46.0, 892.95]
+        group: outlet-leds
+        rel-pos: 16
+        for: outlet-16
+      - id: lamp-17
+        ref: common/led-dot@1
+        at: [4.0, 898.16]
+        group: outlet-leds
+        rel-pos: 17
+        for: outlet-17
+      - id: lamp-18
+        ref: common/led-dot@1
+        at: [46.0, 948.06]
+        group: outlet-leds
+        rel-pos: 18
+        for: outlet-18
+      - id: lamp-19
+        ref: common/led-dot@1
+        at: [18.16, 1148.36]
+        group: outlet-leds
+        rel-pos: 19
+        for: outlet-19
+      - id: lamp-20
+        ref: common/led-dot@1
+        at: [46.0, 1210.15]
+        group: outlet-leds
+        rel-pos: 20
+        for: outlet-20
+      - id: lamp-21
+        ref: common/led-dot@1
+        at: [4.0, 1208.25]
+        group: outlet-leds
+        rel-pos: 21
+        for: outlet-21
+      - id: lamp-22
+        ref: common/led-dot@1
+        at: [46.0, 1258.17]
+        group: outlet-leds
+        rel-pos: 22
+        for: outlet-22
+      - id: lamp-23
+        ref: common/led-dot@1
+        at: [4.0, 1263.39]
+        group: outlet-leds
+        rel-pos: 23
+        for: outlet-23
+      - id: lamp-24
+        ref: common/led-dot@1
+        at: [46.0, 1313.29]
+        group: outlet-leds
+        rel-pos: 24
+        for: outlet-24
+      - id: lamp-25
+        ref: common/led-dot@1
+        at: [18.16, 1353.47]
+        group: outlet-leds
+        rel-pos: 25
+        for: outlet-25
+      - id: lamp-26
+        ref: common/led-dot@1
+        at: [46.0, 1415.26]
+        group: outlet-leds
+        rel-pos: 26
+        for: outlet-26
+      - id: lamp-27
+        ref: common/led-dot@1
+        at: [4.0, 1413.36]
+        group: outlet-leds
+        rel-pos: 27
+        for: outlet-27
+      - id: lamp-28
+        ref: common/led-dot@1
+        at: [46.0, 1463.28]
+        group: outlet-leds
+        rel-pos: 28
+        for: outlet-28
+      - id: lamp-29
+        ref: common/led-dot@1
+        at: [4.0, 1468.5]
+        group: outlet-leds
+        rel-pos: 29
+        for: outlet-29
+      - id: lamp-30
+        ref: common/led-dot@1
+        at: [46.0, 1518.39]
+        group: outlet-leds
+        rel-pos: 30
+        for: outlet-30
+      - id: lamp-31
+        ref: common/led-dot@1
+        at: [18.16, 1558.58]
+        group: outlet-leds
+        rel-pos: 31
+        for: outlet-31
+      - id: lamp-32
+        ref: common/led-dot@1
+        at: [46.0, 1620.37]
+        group: outlet-leds
+        rel-pos: 32
+        for: outlet-32
+      - id: lamp-33
+        ref: common/led-dot@1
+        at: [4.0, 1618.46]
+        group: outlet-leds
+        rel-pos: 33
+        for: outlet-33
+      - id: lamp-34
+        ref: common/led-dot@1
+        at: [46.0, 1668.39]
+        group: outlet-leds
+        rel-pos: 34
+        for: outlet-34
+      - id: lamp-35
+        ref: common/led-dot@1
+        at: [4.0, 1673.6]
+        group: outlet-leds
+        rel-pos: 35
+        for: outlet-35
+      - id: lamp-36
+        ref: common/led-dot@1
+        at: [46.0, 1723.5]
+        group: outlet-leds
+        rel-pos: 36
+        for: outlet-36
+      - id: breaker-b1
+        ref: enlogic/en2333-breaker-20a-2p@1
+        at: [3.5, 71.97]
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        description: 'Breaker B1 (light gray), 20 A double-pole across L1 and L2: protects its bank of 18 outlets'
+        attrs: {bank-color: '#646867', ink: '#e6e6e6', bank: B1, lines: L1-L2}
+      - id: breaker-b2
+        ref: enlogic/en2333-breaker-20a-2p@1
+        at: [3.5, 143.01]
+        group: breakers
+        rel-pos: 2
+        lines: [L1, L2]
+        description: 'Breaker B2 (blue), 20 A double-pole across L1 and L2: protects its bank of 18 outlets'
+        attrs: {bank-color: '#77a6ee', ink: '#202020', bank: B2, lines: L1-L2}
+      - id: network-1
+        ref: common/rj45-eth@1
+        at: [8.55, 1075.87]
+        group: network
+        rel-pos: 1
+        attrs: {media: rj45, speed: 1g, role: mgmt}
+        description: Gigabit Ethernet port, 10/100/1000 Mbps (the primary network port)
+      - id: network-2
+        ref: common/rj45-eth@1
+        at: [27.32, 1075.87]
+        group: network
+        rel-pos: 2
+        attrs: {media: rj45, speed: 100m, role: mgmt}
+        description: Ethernet port, 10/100 Mbps (redundancy and daisy-chain cascading)
+      - id: usb-c
+        ref: std/usb-c@1
+        at: [14.63, 1066.68]
+        group: usb
+        rel-pos: 1
+        description: USB-C port (upgrades, connectivity and expansion)
+      - id: reset
+        ref: common/reset-button@1
+        at: [29.77, 1065.96]
+        for: chassis
+        group: resets
+        rel-pos: 1
+      - id: ground-symbol
+        ref: common/ground-symbol@1
+        at: [10.0, 5.02]
+        group: marks
+        rel-pos: 1
+      - id: ground
+        ref: common/ground-screw@1
+        at: [9.19, 17.22]
+        group: grounding
+        rel-pos: 1
+  rear:
+    size: {w: 52, h: 1750}
+    components:
+      placements:
+      - id: button-1
+        ref: enlogic/pdu-mounting-button@1
+        at: [16.8, 31.3]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: enlogic/pdu-mounting-button@1
+        at: [16.8, 1586.3]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 75}
+    components:
+      placements:
+      - id: input
+        ref: enlogic/pdu-cord-l6-30p@1
+        at: [7.8, 19.3]
+        group: power-input
+        rel-pos: 1
+        description: the fixed 3 m cord with a NEMA L6-30P plug, leaving the cord end of the strip through a cable gland
+  bottom:
+    size: {w: 52, h: 75}
+    panel:
+      decor:
+      - id: screw-1
+        at: [22.69, 2.69]
+        size: [6.62, 6.62]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+  left:
+    size: {w: 75, h: 1750}
+    panel:
+      decor:
+      - id: step-void-1
+        at: [53.0, 334.3]
+        size: [22.0, 639.7]
+        fill: '#121314'
+        kind: step-void
+      - id: step-void-2
+        at: [62.7, 974.0]
+        size: [12.3, 146.6]
+        fill: '#121314'
+        kind: step-void
+      - id: step-void-3
+        at: [53.0, 1120.6]
+        size: [22.0, 629.4]
+        fill: '#121314'
+        kind: step-void
+      - id: screw-1
+        at: [9.66, 23.72]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-2
+        at: [14.92, 34.49]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: button-3
+        at: [14.92, 58.5]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: screw-4
+        at: [36.53, 261.71]
+        size: [6.91, 6.91]
+        rx: 3.46
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [9.66, 263.86]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-6
+        at: [36.53, 306.73]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-7
+        at: [39.18, 337.9]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-8
+        at: [14.16, 337.9]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-9
+        at: [9.51, 350.76]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-10
+        at: [42.68, 454.01]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-11
+        at: [42.68, 509.06]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-12
+        at: [9.51, 554.87]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-13
+        at: [42.68, 659.12]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-14
+        at: [42.68, 714.18]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-15
+        at: [9.51, 758.99]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-16
+        at: [42.68, 864.24]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-17
+        at: [42.68, 919.3]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-18
+        at: [9.66, 963.25]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-19
+        at: [21.66, 981.27]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-20
+        at: [21.66, 1107.34]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-21
+        at: [9.66, 1126.34]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-22
+        at: [42.68, 1229.45]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-23
+        at: [42.68, 1284.51]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-24
+        at: [9.51, 1330.32]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-25
+        at: [42.68, 1434.57]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-26
+        at: [42.68, 1489.62]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-27
+        at: [9.51, 1534.43]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-28
+        at: [14.92, 1590.38]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: button-29
+        at: [14.92, 1614.39]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: screw-30
+        at: [42.68, 1639.69]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-31
+        at: [42.68, 1694.76]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-32
+        at: [9.51, 1738.55]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+  right:
+    size: {w: 75, h: 1750}
+    panel:
+      decor:
+      - id: step-void-1
+        at: [0.0, 334.3]
+        size: [22.0, 639.7]
+        fill: '#121314'
+        kind: step-void
+      - id: step-void-2
+        at: [0.0, 974.0]
+        size: [12.3, 146.6]
+        fill: '#121314'
+        kind: step-void
+      - id: step-void-3
+        at: [0.0, 1120.6]
+        size: [22.0, 629.4]
+        fill: '#121314'
+        kind: step-void
+      - id: screw-1
+        at: [58.74, 23.72]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-2
+        at: [47.99, 34.49]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: button-3
+        at: [47.99, 58.5]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: screw-4
+        at: [58.74, 263.86]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-5
+        at: [31.57, 311.73]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-6
+        at: [29.22, 337.9]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-7
+        at: [54.24, 337.9]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-8
+        at: [58.59, 350.76]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-9
+        at: [25.72, 456.81]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-10
+        at: [25.72, 511.86]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-11
+        at: [58.59, 554.87]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-12
+        at: [25.72, 661.93]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-13
+        at: [25.72, 716.98]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-14
+        at: [58.59, 758.99]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-15
+        at: [25.72, 867.05]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-16
+        at: [25.72, 922.1]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-17
+        at: [58.74, 963.25]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-18
+        at: [46.73, 981.27]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-19
+        at: [46.73, 1107.34]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-20
+        at: [58.74, 1126.34]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-21
+        at: [25.72, 1232.25]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-22
+        at: [25.72, 1287.3]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-23
+        at: [58.59, 1330.32]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-24
+        at: [25.72, 1437.37]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-25
+        at: [25.72, 1492.42]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-26
+        at: [58.59, 1534.43]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+      - id: button-27
+        at: [47.99, 1590.38]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: button-28
+        at: [47.99, 1614.39]
+        size: [12.09, 12.09]
+        rx: 6.05
+        fill: '#2a2c2f'
+        kind: button-location
+      - id: screw-29
+        at: [25.72, 1642.49]
+        size: [6.61, 6.61]
+        rx: 3.31
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-30
+        at: [25.72, 1697.56]
+        size: [6.6, 6.6]
+        rx: 3.3
+        fill: '#2e3033'
+        kind: screw-head
+      - id: screw-31
+        at: [58.59, 1738.55]
+        size: [6.9, 6.9]
+        rx: 3.45
+        fill: '#2e3033'
+        kind: screw-head
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as the drawing shows it: a black chassis, the L6-30P plug, a 3 m cord and top feed.'
+    part-numbers:
+      EN2333: {}
+datasheet: {title: 'Enlogic EN2333, Input metered PDU - EN2 series data sheet (2 pages read of 4)', url: 'https://nvent.widen.net/content/lla3u41ny1/original/en2333-spec-sheet.pdf',
+  sha256: 7f70bb177ddce817d6a17a6bed275c3299b84f32bdd7dfddc236a1d11442265c}
+references:
+- {title: 'Enlogic EN2333 dimensioned drawing TA-EN2333A, rev E1, 2020.05.20 (one A3 sheet)', url: 'https://nvent.widen.net/content/hrl89yvwye/original/en2333a-e1.pdf',
+  sha256: 5d4f2afb795c14a962bca6cd98f10ff81f1731f807d436a458f1c8f1704a085f}
+- {title: 'Enlogic EB 2.0 Series PDU, Quick Start Installation Guide (page 2 only; titled for another series)', url: 'https://nvent.widen.net/content/rmg6v3jpv0/original/enlogic-installation-guide-pdu.pdf',
+  sha256: 694ccb32a01adcb3785e63744b614e0aa6a6d84500bfa753f17b584490359956}
