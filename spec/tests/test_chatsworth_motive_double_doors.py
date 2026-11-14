@@ -9,7 +9,7 @@ Every figure is in millimetres at a scale the door contract states.
 The rear door is its own component, plain, with a latch tip at each edge.
 The device places the front door on its front and the rear door on its rear.
 It draws the latch housing and handle of each door on its left and right faces.
-The gaps keep the hook and the frame features, which each device's own frame part draws later.
+Each device draws its frame fittings, so the gaps keep the hook, the hinge tabs and what the door plates cover.
 """
 import pathlib
 import re
@@ -26,7 +26,7 @@ FEATURE_PARTS = [p for p in PARTS if p[4] == "3"]
 OTHER_PARTS = [p for p in PARTS if p[4] != "3"]
 FEATURE_IDS = {"seam-left", "seam-right", "door-plate", "logo-zone"}
 TIP_IDS = {"latch-tip-left", "latch-tip-right"}
-FRAME_GAPS = {"end-caps", "feet", "door-hinge-tabs", "side-plate-holes", "track-rungs", "centre-plate"}
+FRAME_GAPS = {"door-hinge-tabs", "end-fittings-front", "track-rungs"}
 SENTENCE_LIMIT = 25
 
 
@@ -184,19 +184,19 @@ def test_the_side_latch_note_says_only_the_end_of_the_handle_shows(part):
 
 
 @pytest.mark.parametrize("part", PARTS)
-def test_the_gaps_keep_the_hook_and_the_frame_features_each_with_its_own_frame_part(part):
+def test_the_frame_is_drawn_and_the_gaps_keep_the_hook_the_tabs_and_what_the_doors_cover(part):
     gaps = {g["what"]: g for g in device(part)["gaps"]}
     assert "door-features" not in gaps
     assert gaps["door-hook"]["scope"] == ["front"]
     assert "No held picture shows the hook" in gaps["door-hook"]["note"]
     assert FRAME_GAPS <= set(gaps)
     assert all(g["reason"] == "vendor-silent" for g in gaps.values())
-    for name in FRAME_GAPS - {"door-hinge-tabs"}:
-        assert "this device's own frame part, which a following change draws" in gaps[name]["note"]
+    for name in ("end-caps", "feet", "side-plate-holes", "centre-plate"):
+        assert name not in gaps, "the frame fittings are drawn now"
     tabs = gaps["door-hinge-tabs"]
     assert tabs["scope"] == ["rear"], "the rib, bars and tabs are on the rear door's back"
     assert "the rear door's own part, which a following change draws" in tabs["note"]
-    assert "two feet at its front corners" in gaps["feet"]["note"]
+    assert gaps["end-fittings-front"]["scope"] == ["front", "rear"]
 
 
 @pytest.mark.parametrize("part", PARTS)
