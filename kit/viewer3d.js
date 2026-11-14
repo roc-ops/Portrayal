@@ -36,7 +36,8 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat, seatPoint, seatFins, finReach, sectionHalves, SEAM_INDEX } from './section.js';
+import { sectionBody, sectionSeat, seatPoint, seatFins, finReach, sectionHalves, SEAM_INDEX,
+         PLAN_WALL_INDEX, planWallFace, planWallColor } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -864,7 +865,14 @@ export function createViewer(container, opts = {}) {
       geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
       geo.setIndex(a.indices);
       for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
-      box = new THREE.Mesh(geo, mats);
+      // A PLAN OUTLINE (section.js) adds two slots after the six faces: 6, the part's cut face, which
+      // a closed body has none of and which stays unseen as in the open state, and 7, the wall that
+      // comes from a plan edge: plain, in the chassis faceplate's fill, sampling no face texture. A
+      // body with no plan outline has the six materials and nothing else, as it always had.
+      const planned = a.groups.some(g => g.materialIndex === PLAN_WALL_INDEX);
+      const wall = planned && new THREE.MeshLambertMaterial({color: planWallColor(faceSvg) || '#3a3f44'});
+      box = new THREE.Mesh(geo, planned
+        ? [...mats, new THREE.MeshBasicMaterial({visible: false}), wall] : mats);
       scene.add(box);
     } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
       // A BEVELLED BODY (#735): the polygons render.py published, each face
@@ -1171,6 +1179,10 @@ export function createViewer(container, opts = {}) {
     const hit = ray.intersectObjects(targets)[0];
     if (!hit) return null;
     if (COMP) return {view: hit.face.materialIndex === 4 ? 'comp' : SIDE_NAMES[hit.face.materialIndex], path: null};
+    // A PLAN WALL HAS NO DRAWING (section.js PLAN_WALL_INDEX): its UV is not a point of any face's
+    // texture, so it picks as the long face whose side it is on and as no part. Without this
+    // FACE_OF_INDEX has no entry for slot 7 and a hit on a rounded corner answered no face at all.
+    if (hit.face.materialIndex === PLAN_WALL_INDEX) return {view: planWallFace(hit.face.normal), path: null};
     const view = FACE_OF_INDEX[hit.face.materialIndex];
     if (!view || !hitIndex[view] || !hitIndex[view].length) return {view, path: null};
     // uv runs 0..1 across the mesh that was hit, and for a rack face that

@@ -113,6 +113,34 @@
     {"band": 1, "heights": [4, 6], "pieces": [
       [[0.7, 2], [11, 2], [11, 6], [0.7, 6]], [[11, 2], [12, 4], [11, 6]]]}
    ]
+  },
+  {
+   "name": "four rectangles round a hole: the outline is the outer loop and the hole turned the other way",
+   "kind": "union",
+   "polygons": [[[0, 0], [9, 0], [9, 3], [0, 3]], [[0, 6], [9, 6], [9, 9], [0, 9]],
+                [[0, 3], [3, 3], [3, 6], [0, 6]], [[6, 3], [9, 3], [9, 6], [6, 6]]],
+   "expected": [[[0, 0], [9, 0], [9, 9], [0, 9]], [[3, 3], [3, 6], [6, 6], [6, 3]]]
+  },
+  {
+   "name": "one rectangle taken away from another leaves an L",
+   "kind": "minus",
+   "polygon": [[0, 0], [6, 0], [6, 4], [0, 4]],
+   "take": [[3, 2], [9, 2], [9, 6], [3, 6]],
+   "expected": [[[0, 0], [6, 0], [6, 2], [3, 2], [3, 4], [0, 4]]]
+  },
+  {
+   "name": "a union cut to a rectangle keeps only what lies inside it",
+   "kind": "clipped-union",
+   "polygons": [[[0, 0], [10, 0], [10, 6], [0, 6]]],
+   "clip": [2, 1, 8, 5],
+   "expected": [[[2, 1], [8, 1], [8, 5], [2, 5]]]
+  },
+  {
+   "name": "the rows of a stepped section, in the plan's frame (depth minus the section's x)",
+   "kind": "rows",
+   "section": [[1, 0], [7, 0], [7, 2], [8, 2], [8, 4], [6, 4], [6, 6], [2, 6], [2, 4], [0, 4], [0, 2], [1, 2]],
+   "depth": 8,
+   "expected": [[0, 2, [[1, 7]]], [2, 4, [[0, 8]]], [4, 6, [[2, 6]]]]
   }
  ]
 }
