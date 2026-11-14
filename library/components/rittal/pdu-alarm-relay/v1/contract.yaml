@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: pdu-alarm-relay
+version: 1.0.0
+class: port
+profile: power
+interface: pdu-io-header
+description: >-
+  The alarm relay output of a Rittal PDU metered controller (fig. 21 item 14). It is a small three-position pluggable
+  screw-terminal header beside the USB jack. It is drawn with its three positions in a row along the strip.
+size: {w: 8.3, h: 12.9}
+size-confidence: {w: drawing, h: drawing}
+attrs:
+  media: relay-terminal
+  poles: 3
+provenance:
+  sources: >-
+    drawing and instructions - the front view of Rittal, "Technical details, Power Distribution Unit, Metered
+    version" (dri2108029en, 08.2023), PDF page 18 (DK 7979.238). It draws two small blocks at the cord end of the
+    controller. One has three positions and one has two. Rittal, "Montage-, Installations- und
+    Betriebsanleitung" for the PDU metered (7979204), fig. 21 names item 13 "Digital input" and item 14 "Alarm
+    relay output". It puts item 14 nearer the foot than item 13.
+  size: >-
+    drawing - read from a 1800 dpi render of the drawing at its own scale. The three-position block is 12.9
+    along the strip and 8.3 across it. Good to about 0.3 mm. No document dimensions it.
+  which: >-
+    estimated - the two blocks are told apart by the order of fig. 21 and by the number of positions; no
+    document says which block has three positions or what each position is.
+  pins: >-
+    estimated - each position is drawn as a dark opening over a clamp screw, as the maker's other pluggable
+    headers read. The drawing shows three small squares in the block and states no pitch, so the key claims none.
+  colour: >-
+    photo-measured - fig. 21 shows the block as a mid-grey rectangle. It reads #838788 over 540 pixels in a 200 dpi
+    render of page 18 of the instructions. The pixels are the mid-grey class, 95 to 140 with a spread under 14.
+  depth: >-
+    NOT STATED. No document gives how far the header stands out of the face, so the part draws a plan outline
+    only and builds no relief.
+elements:
+  body: {at: [0.0, 0.0], size: [8.3, 12.9], class: connector}
+connection-points:
+  mate: {at: [4.15, 6.45], direction: front}
+skins: [default]

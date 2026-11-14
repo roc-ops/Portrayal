@@ -306,9 +306,11 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
 @pytest.mark.heavy
 def test_the_census_of_placed_jacks_on_device_views():
     """The device side, walked off every view. The only one of the three a
-    chassis places is the RJ11 jack, nine times on eight devices. The HLX-TGV
+    chassis places is the RJ11 jack, sixteen times on fifteen devices. The HLX-TGV
     has two telephone jacks, both turned 180. The SLC 8000 has a modem jack,
-    not turned. The DSXA-32 has a modem jack, not turned. Each of five WTI
+    not turned. The DSXA-32 has a modem jack, not turned. Each of seven Rittal
+    DK 7979 strips has an RS232 jack, a serial jack on an RJ11-style housing,
+    not turned. Each of five WTI
     console servers has a phone jack, not turned. A part that
     states one of the three media and is none of the jacks is a plug or a
     card that composes one."""
@@ -324,6 +326,13 @@ def test_the_census_of_placed_jacks_on_device_views():
                                             ("halny/hlx-tgv", "tel-1", 180),
                                             ("lantronix/slc-8000", "modem", None),
                                             ("raritan/dsxa-32", "modem", None),
+                                            ("rittal/dk-7979-210", "rs232", None),
+                                            ("rittal/dk-7979-230", "rs232", None),
+                                            ("rittal/dk-7979-235", "rs232", None),
+                                            ("rittal/dk-7979-236", "rs232", None),
+                                            ("rittal/dk-7979-238", "rs232", None),
+                                            ("rittal/dk-7979-240", "rs232", None),
+                                            ("rittal/dk-7979-242", "rs232", None),
                                             ("wti/cpm-1600-1", "phone", None),
                                             ("wti/cpm-1600-2", "phone", None),
                                             ("wti/cpm-800-1", "phone", None),

@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: pdu-alarm-relay-plug
+version: 1.0.0
+class: port
+mates: pdu-io-header
+profile: power
+description: >-
+  The conductor ends of the wires that land on the alarm relay header of a Rittal PDU metered controller. Three
+  stripped ends sit side by side at the header's three positions. The part seats in a `pdu-io-header` connector.
+size: {w: 8.3, h: 12.9}
+size-confidence: {w: estimated, h: estimated}
+size-notes: >-
+  The outline of the header it seats in, rittal/pdu-alarm-relay@1. No document gives a dimension of a conductor
+  end or of a wire.
+attrs: {media: pdu-alarm-relay, connector: conductor ends, positions: 3}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  part: >-
+    A DECLARED STAND-IN FOR THE CABLE CONNECTOR. Fig. 21 of Rittal's instructions for the PDU metered (7979204)
+    names the alarm relay output and shows no cable connector. The part is the wires' own ends and claims no
+    maker, series or part number.
+  size: >-
+    estimated - see size-notes.
+  colour: >-
+    estimated - the grey body and the lighter conductor ends are declared estimates.
+  far-end: >-
+    NOT DRAWN. The other end lands on the site's own alarm circuit.
+  depth: >-
+    NOT STATED. No document gives how far a conductor enters the header, so the part draws a plan outline only.
+  behaviour: >-
+    DELIBERATELY OMITTED, as on every class port contract.
+elements: {}
+connection-points:
+  mate: {at: [4.15, 6.45], direction: front}
+skins: [default]
