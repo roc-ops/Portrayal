@@ -8340,7 +8340,7 @@ def lint_rack(path, data, roots):
             err(path, "L193", f"the factory depth {f} mm is outside the range {lo} to {hi}")
     lint_rack_cabinet(path, data)
     lint_rack_entries(path, data)
-    gaps ={g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
+    gaps = {g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
     for key, prov in (data.get("provenance") or {}).items():
         if str(key).split(".")[0] not in data:
             err(path, "L193", f"provenance for {key!r}, a key the rack does not state")
