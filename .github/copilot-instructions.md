@@ -6,7 +6,7 @@ This repository's instructions for any assistant are in
 The skills under `.claude/skills/` are plain Markdown. A person or an assistant
 can follow them by hand.
 
-Three rules that sank a first contribution:
+Three rules to keep:
 
 1. **The sign-off needs the human's yes.** Only the human contributor can agree
    to the Developer Certificate of Origin. Ask them to read it and to say they
