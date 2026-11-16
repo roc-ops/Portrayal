@@ -90,7 +90,7 @@ provenance:
       The maker's drawing of the node, supplied by the maker, shows the opened housing with the
       bolt bosses, gasket and hinge. The end profile and the ribs are stated as `chassis.section`
       and `chassis.fins`, and the open view draws each half's rim from the maker's drawing: a
-      rounded rectangle whose corner radius is about 6 per cent of its length, a rim about 16 mm
+      rounded rectangle whose corner radius is about 22 mm, a rim about 16 mm
       wide, a bulge round each of the ten closure bolts, and the gasket in a groove just inside
       the rim. Every figure is read as a fraction of the photograph or the drawing and is an
       estimate, as no figure carries a dimension.
@@ -111,6 +111,28 @@ provenance:
       flange takes the 281 mm depth and the two rib edges the 288 mm height. Every figure is an
       estimate read as a fraction of the photograph; no document gives a dimension of the
       profile. It is the same as the EN8100's, the one chassis.
+  chassis.plan-outline:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p29 (the closed housings), p32 (the opened node) and p41 (an end), the data sheet
+      p5 and p7, and the maker's drawing of the node, supplied by the maker, which shows the opened
+      node from above. Every figure is an estimate read from that drawing, fitted so that the lobes
+      at the ends span the data sheet's 607 mm and those of the long edges its 281 mm. The two agree
+      to within 2 per cent. The EN8400 shares the housing of the EN8100 and the drawing shows no
+      difference, so it is drawn the same. Two assumptions stand. First, the data sheet's length,
+      23.9 in without port plugs, includes the lobes at the ends, so the box is the extremes of the
+      body. Second, the castings are inset from the flange in the plan, with smaller corner radii and
+      roughly the same outline as the flange. Guide p29 shows each casting ending about 21 mm inside
+      the flange. The flange is the widest of eight bands, 24 mm tall: its body is 9.2 mm in from each
+      end and 9.4 mm in from each long edge, with corners of 22 mm radius. Three lobes stand on each
+      long edge, at 108.5, 303.5 and 498.5 mm, each 42 mm wide and 9.4 mm high. Each end has four
+      lobes at the bolt holes, 9.2, 6.0, 6.8 and 9.2 mm deep. The castings are seven bands, one for each
+      row of the section, 21 mm in from each end with corners of 12 mm radius. A boss of the casting
+      runs out to the end wherever a plug stands, so each plug stands on a wall; the drawing shows
+      the port bodies standing out beyond the lobes, and the size of a boss is the plug's, which is
+      an estimate. Every corner arc is cut into chords of 10 degrees, nine chords and ten points to
+      a quarter turn, and a chord that would lie within 0.5 mm of a wall is laid on it. The O-ring
+      groove is not part of this key: it stays in the open drawing.
   chassis.fins:
     confidence: estimated
     note: >-
@@ -118,10 +140,14 @@ provenance:
       same photographs). The ribs are thick, with gaps about as wide as the ribs. The tall ribs,
       on the lid, stand about 17 per cent of the height (49 mm) at the two ends and run along
       nearly the whole length, with a stepped tip line: a long flat stretch over the middle
-      third about two thirds as tall, and lower again at one end. They are 23 in number, 13 mm
-      thick with 13 mm gaps. The short ribs, on the
-      base, stand about 11 per cent of the height (32 mm), 9.5 mm thick with 9.5 mm gaps, 28 in
-      number. Both fields are inside the stated size, not outside it. The data sheet p7 gives
+      third about two thirds as tall. They are 21 in number, 13 mm thick with 13 mm gaps, from
+      33 to 566 mm along the length. The short ribs, on the
+      base, stand about 11 per cent of the height (32 mm), 9.5 mm thick with 9.5 mm gaps, 27 in
+      number, from 67 to 570.5 mm. Both fields stop at the casting, which the plan outline
+      insets by about 21 mm from each end of the flange: the photographs show the ribs ending at
+      the casting and not in the flange, so the fields were shortened from the first reading (23
+      tall ribs from 13.5 mm, 28 short ribs to 589.5 mm, and a lower step at the end of the tall
+      field, which no rib now stands in). Both fields are inside the stated size, not outside it. The data sheet p7 gives
       the height as measured from the bottom of the strand and does not exclude the ribs, and
       the end photograph (p41) has the flange's width at about 1.03 of the whole height with
       both rib fields in it, close to the data sheet's 11.0 in by 11.3 in (0.97); ribs outside
@@ -279,21 +305,212 @@ chassis:
   - [27.0, 32.0]
   fins:
   - 'on': top
-    span: [67.0, 589.5]
+    span: [67.0, 570.5]
     core: 32.0
     rib: 9.5
     gap: 9.5
   - 'on': bottom
-    span: [13.5, 598.5]
+    span: [33.0, 566.0]
     core: 49.0
     rib: 13.0
     gap: 13.0
     steps:
-    - {span: [13.5, 160.0], height: 49.0}
+    - {span: [33.0, 160.0], height: 49.0}
     - {span: [160.0, 190.0], height: 40.0}
     - {span: [190.0, 425.0], height: 32.0}
     - {span: [425.0, 566.0], height: 49.0}
-    - {span: [566.0, 598.5], height: 36.0}
+  plan-outline:
+  - heights: [0.0, 32.0]
+    points: [[30.92, 254], [28.9, 253.28], [27, 252.39], [25.29, 251.19],
+      [23.81, 249.71], [22.61, 248], [21.72, 246.1], [21.18, 244.08],
+      [21, 242], [21, 39], [21.18, 36.92], [21.72, 34.9],
+      [22.61, 33], [23.81, 31.29], [25.29, 29.81], [27, 28.61],
+      [28.9, 27.72], [30.92, 27], [576.08, 27], [578.1, 27.72],
+      [580, 28.61], [581.71, 29.81], [583.19, 31.29], [584.39, 33],
+      [585.28, 34.9], [585.82, 36.92], [586, 39], [586, 242],
+      [585.82, 244.08], [585.28, 246.1], [584.39, 248], [583.19, 249.71],
+      [581.71, 251.19], [580, 252.39], [578.1, 253.28], [576.08, 254]]
+  - heights: [32.0, 114.0]
+    points: [[2.5, 259], [0, 256.5], [0, 224.63], [0.54, 224],
+      [0.94, 223.43], [1.43, 222.94], [2, 222.54], [2.63, 222.24],
+      [3.31, 222.06], [4, 222], [21, 222], [21, 168],
+      [4, 168], [3.31, 167.94], [2.63, 167.76], [2, 167.46],
+      [1.43, 167.06], [0.94, 166.57], [0.54, 166], [0, 165.37],
+      [0, 132.63], [0.54, 132], [0.94, 131.43], [1.43, 130.94],
+      [2, 130.54], [2.63, 130.24], [3.31, 130.06], [4, 130],
+      [21, 130], [21, 95], [4, 95], [3.31, 94.94],
+      [2.63, 94.76], [2, 94.46], [1.43, 94.06], [0.94, 93.57],
+      [0.54, 93], [0, 92.37], [0, 48.63], [0.54, 48],
+      [0.94, 47.43], [1.43, 46.94], [2, 46.54], [2.63, 46.24],
+      [3.31, 46.06], [4, 46], [21, 46], [21, 34],
+      [21.18, 31.92], [21.72, 29.9], [22.61, 28], [23.81, 26.29],
+      [25.29, 24.81], [27, 23.61], [28.9, 22.72], [30.92, 22],
+      [576.08, 22], [578.1, 22.72], [580, 23.61], [581.71, 24.81],
+      [583.19, 26.29], [584.39, 28], [585.28, 29.9], [585.82, 31.92],
+      [586, 34], [586, 46], [603, 46], [603.69, 46.06],
+      [604.37, 46.24], [605, 46.54], [605.57, 46.94], [606.06, 47.43],
+      [606.46, 48], [607, 48.63], [607, 92.37], [606.46, 93],
+      [606.06, 93.57], [605.57, 94.06], [605, 94.46], [604.37, 94.76],
+      [603.69, 94.94], [603, 95], [586, 95], [586, 130],
+      [603, 130], [603.69, 130.06], [604.37, 130.24], [605, 130.54],
+      [605.57, 130.94], [606.06, 131.43], [606.46, 132], [607, 132.63],
+      [607, 165.37], [606.46, 166], [606.06, 166.57], [605.57, 167.06],
+      [605, 167.46], [604.37, 167.76], [603.69, 167.94], [603, 168],
+      [586, 168], [586, 222], [603, 222], [603.69, 222.06],
+      [604.37, 222.24], [605, 222.54], [605.57, 222.94], [606.06, 223.43],
+      [606.46, 224], [607, 224.63], [607, 256.5], [604.5, 259]]
+  - heights: [114.0, 132.0]
+    points: [[2.5, 263], [0, 260.5], [0, 224.63], [0.54, 224],
+      [0.94, 223.43], [1.43, 222.94], [2, 222.54], [2.63, 222.24],
+      [3.31, 222.06], [4, 222], [21, 222], [21, 168],
+      [4, 168], [3.31, 167.94], [2.63, 167.76], [2, 167.46],
+      [1.43, 167.06], [0.94, 166.57], [0.54, 166], [0, 165.37],
+      [0, 132.63], [0.54, 132], [0.94, 131.43], [1.43, 130.94],
+      [2, 130.54], [2.63, 130.24], [3.31, 130.06], [4, 130],
+      [21, 130], [21, 95], [4, 95], [3.31, 94.94],
+      [2.63, 94.76], [2, 94.46], [1.43, 94.06], [0.94, 93.57],
+      [0.54, 93], [0, 92.37], [0, 48.63], [0.54, 48],
+      [0.94, 47.43], [1.43, 46.94], [2, 46.54], [2.63, 46.24],
+      [3.31, 46.06], [4, 46], [21, 46], [21, 30],
+      [21.18, 27.92], [21.72, 25.9], [22.61, 24], [23.81, 22.29],
+      [25.29, 20.81], [27, 19.61], [28.9, 18.72], [30.92, 18],
+      [576.08, 18], [578.1, 18.72], [580, 19.61], [581.71, 20.81],
+      [583.19, 22.29], [584.39, 24], [585.28, 25.9], [585.82, 27.92],
+      [586, 30], [586, 46], [603, 46], [603.69, 46.06],
+      [604.37, 46.24], [605, 46.54], [605.57, 46.94], [606.06, 47.43],
+      [606.46, 48], [607, 48.63], [607, 92.37], [606.46, 93],
+      [606.06, 93.57], [605.57, 94.06], [605, 94.46], [604.37, 94.76],
+      [603.69, 94.94], [603, 95], [586, 95], [586, 130],
+      [603, 130], [603.69, 130.06], [604.37, 130.24], [605, 130.54],
+      [605.57, 130.94], [606.06, 131.43], [606.46, 132], [607, 132.63],
+      [607, 165.37], [606.46, 166], [606.06, 166.57], [605.57, 167.06],
+      [605, 167.46], [604.37, 167.76], [603.69, 167.94], [603, 168],
+      [586, 168], [586, 222], [603, 222], [603.69, 222.06],
+      [604.37, 222.24], [605, 222.54], [605.57, 222.94], [606.06, 223.43],
+      [606.46, 224], [607, 224.63], [607, 260.5], [604.5, 263]]
+  - heights: [132.0, 156.0]
+    points: [[9.2, 31.4], [9.53, 27.58], [10.53, 23.88], [12.15, 20.4],
+      [14.35, 17.26], [17.06, 14.55], [20.2, 12.35], [23.68, 10.73],
+      [27.38, 9.73], [31.2, 9.4], [87.5, 9.4], [89.6, 8.7],
+      [91.7, 7.58], [93.8, 6.29], [95.9, 4.93], [98, 3.61],
+      [100.1, 2.41], [102.2, 1.4], [104.3, 0.64], [106.4, 0],
+      [110.6, 0], [112.7, 0.64], [114.8, 1.4], [116.9, 2.41],
+      [119, 3.61], [121.1, 4.93], [123.2, 6.29], [125.3, 7.58],
+      [127.4, 8.7], [129.5, 9.4], [282.5, 9.4], [284.6, 8.7],
+      [286.7, 7.58], [288.8, 6.29], [290.9, 4.93], [293, 3.61],
+      [295.1, 2.41], [297.2, 1.4], [299.3, 0.64], [301.4, 0],
+      [305.6, 0], [307.7, 0.64], [309.8, 1.4], [311.9, 2.41],
+      [314, 3.61], [316.1, 4.93], [318.2, 6.29], [320.3, 7.58],
+      [322.4, 8.7], [324.5, 9.4], [477.5, 9.4], [479.6, 8.7],
+      [481.7, 7.58], [483.8, 6.29], [485.9, 4.93], [488, 3.61],
+      [490.1, 2.41], [492.2, 1.4], [494.3, 0.64], [496.4, 0],
+      [500.6, 0], [502.7, 0.64], [504.8, 1.4], [506.9, 2.41],
+      [509, 3.61], [511.1, 4.93], [513.2, 6.29], [515.3, 7.58],
+      [517.4, 8.7], [519.5, 9.4], [575.8, 9.4], [579.62, 9.73],
+      [583.32, 10.73], [586.8, 12.35], [589.94, 14.55], [592.65, 17.26],
+      [594.85, 20.4], [596.47, 23.88], [597.47, 27.58], [597.8, 31.4],
+      [597.8, 55], [598.49, 57], [599.58, 59], [600.85, 61],
+      [602.17, 63], [603.46, 65], [604.64, 67], [605.63, 69],
+      [606.38, 71], [607, 73], [607, 77], [606.38, 79],
+      [605.63, 81], [604.64, 83], [603.46, 85], [602.17, 87],
+      [600.85, 89], [599.58, 91], [598.49, 93], [597.8, 95],
+      [597.8, 130], [598.25, 131.2], [598.96, 132.4], [599.79, 133.6],
+      [600.65, 134.8], [601.49, 136], [602.26, 137.2], [602.9, 138.4],
+      [603.39, 139.6], [603.7, 140.8], [603.8, 142], [603.7, 143.2],
+      [603.39, 144.4], [602.9, 145.6], [602.26, 146.8], [601.49, 148],
+      [600.65, 149.2], [599.79, 150.4], [598.96, 151.6], [598.25, 152.8],
+      [597.8, 154], [597.8, 170.4], [598.31, 171.9], [599.11, 173.4],
+      [600.05, 174.9], [601.03, 176.4], [601.99, 177.9], [602.85, 179.4],
+      [603.59, 180.9], [604.14, 182.4], [604.48, 183.9], [604.6, 185.4],
+      [604.48, 186.9], [604.14, 188.4], [603.59, 189.9], [602.85, 191.4],
+      [601.99, 192.9], [601.03, 194.4], [600.05, 195.9], [599.11, 197.4],
+      [598.88, 197.8], [598.31, 198.9], [598.49, 199.6], [598.94, 200.4],
+      [599.58, 201.4], [600.85, 203.2], [602.17, 205], [603.46, 206.8],
+      [604.64, 208.6], [605.63, 210.4], [606.38, 212.2], [607, 214],
+      [607, 217.6], [606.38, 219.4], [605.63, 221.2], [604.64, 223],
+      [603.46, 224.8], [602.17, 226.6], [600.85, 228.4], [599.58, 230.2],
+      [598.49, 232], [597.8, 233.8], [597.8, 249.6], [597.47, 253.42],
+      [596.47, 257.12], [594.85, 260.6], [592.65, 263.74], [589.94, 266.45],
+      [586.8, 268.65], [583.32, 270.27], [579.62, 271.27], [575.8, 271.6],
+      [519.5, 271.6], [517.4, 272.3], [515.3, 273.42], [513.2, 274.71],
+      [511.1, 276.07], [509, 277.39], [506.9, 278.59], [504.8, 279.6],
+      [502.7, 280.36], [500.6, 281], [496.4, 281], [494.3, 280.36],
+      [492.2, 279.6], [490.1, 278.59], [488, 277.39], [485.9, 276.07],
+      [483.8, 274.71], [481.7, 273.42], [479.6, 272.3], [477.5, 271.6],
+      [324.5, 271.6], [322.4, 272.3], [320.3, 273.42], [318.2, 274.71],
+      [316.1, 276.07], [314, 277.39], [311.9, 278.59], [309.8, 279.6],
+      [307.7, 280.36], [305.6, 281], [301.4, 281], [299.3, 280.36],
+      [297.2, 279.6], [295.1, 278.59], [293, 277.39], [290.9, 276.07],
+      [288.8, 274.71], [286.7, 273.42], [284.6, 272.3], [282.5, 271.6],
+      [129.5, 271.6], [127.4, 272.3], [125.3, 273.42], [123.2, 274.71],
+      [121.1, 276.07], [119, 277.39], [116.9, 278.59], [114.8, 279.6],
+      [112.7, 280.36], [110.6, 281], [106.4, 281], [104.3, 280.36],
+      [102.2, 279.6], [100.1, 278.59], [98, 277.39], [95.9, 276.07],
+      [93.8, 274.71], [91.7, 273.42], [89.6, 272.3], [87.5, 271.6],
+      [31.2, 271.6], [27.38, 271.27], [23.68, 270.27], [20.2, 268.65],
+      [17.06, 266.45], [14.35, 263.74], [12.15, 260.6], [10.53, 257.12],
+      [9.53, 253.42], [9.2, 249.6], [9.2, 233.8], [8.51, 232],
+      [7.42, 230.2], [6.15, 228.4], [4.83, 226.6], [3.54, 224.8],
+      [2.36, 223], [1.37, 221.2], [0.62, 219.4], [0, 217.6],
+      [0, 214], [0.62, 212.2], [1.37, 210.4], [2.36, 208.6],
+      [3.54, 206.8], [4.83, 205], [6.15, 203.2], [7.42, 201.4],
+      [8.06, 200.4], [8.51, 199.6], [8.69, 198.9], [8.12, 197.8],
+      [7.89, 197.4], [6.95, 195.9], [5.97, 194.4], [5.01, 192.9],
+      [4.15, 191.4], [3.41, 189.9], [2.86, 188.4], [2.52, 186.9],
+      [2.4, 185.4], [2.52, 183.9], [2.86, 182.4], [3.41, 180.9],
+      [4.15, 179.4], [5.01, 177.9], [5.97, 176.4], [6.95, 174.9],
+      [7.89, 173.4], [8.69, 171.9], [9.2, 170.4], [9.2, 154],
+      [8.75, 152.8], [8.04, 151.6], [7.21, 150.4], [6.35, 149.2],
+      [5.51, 148], [4.74, 146.8], [4.1, 145.6], [3.61, 144.4],
+      [3.3, 143.2], [3.2, 142], [3.3, 140.8], [3.61, 139.6],
+      [4.1, 138.4], [4.74, 137.2], [5.51, 136], [6.35, 134.8],
+      [7.21, 133.6], [8.04, 132.4], [8.75, 131.2], [9.2, 130],
+      [9.2, 95], [8.51, 93], [7.42, 91], [6.15, 89],
+      [4.83, 87], [3.54, 85], [2.36, 83], [1.37, 81],
+      [0.62, 79], [0, 77], [0, 73], [0.62, 71],
+      [1.37, 69], [2.36, 67], [3.54, 65], [4.83, 63],
+      [6.15, 61], [7.42, 59], [8.51, 57], [9.2, 55]]
+  - heights: [156.0, 246.0]
+    points: [[30.92, 264], [28.9, 263.28], [27, 262.39], [25.29, 261.19],
+      [23.81, 259.71], [22.61, 258], [21.72, 256.1], [21.18, 254.08],
+      [21, 252], [21, 52], [4, 52], [3.31, 51.94],
+      [2.63, 51.76], [2, 51.46], [1.43, 51.06], [0.94, 50.57],
+      [0.54, 50], [0, 49.37], [0, 18], [1, 17],
+      [606, 17], [607, 18], [607, 49.37], [606.46, 50],
+      [606.06, 50.57], [605.57, 51.06], [605, 51.46], [604.37, 51.76],
+      [603.69, 51.94], [603, 52], [586, 52], [586, 252],
+      [585.82, 254.08], [585.28, 256.1], [584.39, 258], [583.19, 259.71],
+      [581.71, 261.19], [580, 262.39], [578.1, 263.28], [576.08, 264]]
+  - heights: [246.0, 262.0]
+    points: [[30.92, 260], [28.9, 259.28], [27, 258.39], [25.29, 257.19],
+      [23.81, 255.71], [22.61, 254], [21.72, 252.1], [21.18, 250.08],
+      [21, 248], [21, 33], [21.18, 30.92], [21.72, 28.9],
+      [22.61, 27], [23.81, 25.29], [25.29, 23.81], [27, 22.61],
+      [28.9, 21.72], [30.92, 21], [576.08, 21], [578.1, 21.72],
+      [580, 22.61], [581.71, 23.81], [583.19, 25.29], [584.39, 27],
+      [585.28, 28.9], [585.82, 30.92], [586, 33], [586, 248],
+      [585.82, 250.08], [585.28, 252.1], [584.39, 254], [583.19, 255.71],
+      [581.71, 257.19], [580, 258.39], [578.1, 259.28], [576.08, 260]]
+  - heights: [262.0, 276.0]
+    points: [[30.92, 255], [28.9, 254.28], [27, 253.39], [25.29, 252.19],
+      [23.81, 250.71], [22.61, 249], [21.72, 247.1], [21.18, 245.08],
+      [21, 243], [21, 38], [21.18, 35.92], [21.72, 33.9],
+      [22.61, 32], [23.81, 30.29], [25.29, 28.81], [27, 27.61],
+      [28.9, 26.72], [30.92, 26], [576.08, 26], [578.1, 26.72],
+      [580, 27.61], [581.71, 28.81], [583.19, 30.29], [584.39, 32],
+      [585.28, 33.9], [585.82, 35.92], [586, 38], [586, 243],
+      [585.82, 245.08], [585.28, 247.1], [584.39, 249], [583.19, 250.71],
+      [581.71, 252.19], [580, 253.39], [578.1, 254.28], [576.08, 255]]
+  - heights: [276.0, 288.0]
+    points: [[30.92, 250], [28.9, 249.28], [27, 248.39], [25.29, 247.19],
+      [23.81, 245.71], [22.61, 244], [21.72, 242.1], [21.18, 240.08],
+      [21, 238], [21, 43], [21.18, 40.92], [21.72, 38.9],
+      [22.61, 37], [23.81, 35.29], [25.29, 33.81], [27, 32.61],
+      [28.9, 31.72], [30.92, 31], [576.08, 31], [578.1, 31.72],
+      [580, 32.61], [581.71, 33.81], [583.19, 35.29], [584.39, 37],
+      [585.28, 38.9], [585.82, 40.92], [586, 43], [586, 238],
+      [585.82, 240.08], [585.28, 242.1], [584.39, 244], [583.19, 245.71],
+      [581.71, 247.19], [580, 248.39], [578.1, 249.28], [576.08, 250]]
   halves:
     base: {outer: top, stands: 144.0}
     lid: {hinge: rear, angle: 180.0, stands: 144.0}
@@ -390,7 +607,7 @@ views:
     size: {w: 607, h: 281}
     panel:
       decor:
-        - {id: lid-back, at: [0, 31], size: [607, 219], fill: '#e3e5e7', kind: casting-web, confidence: estimated, source: 'guide p29 and p41: the back of the lid casting the tall ribs stand on, as wide as the bottom edge of the chassis section'}
+        - {id: lid-back, at: [21, 31], size: [565, 219], fill: '#e3e5e7', rx: 12, kind: casting-web, confidence: estimated, source: 'guide p29 and p41: the back of the lid casting the tall ribs stand on, as wide as the bottom edge of the chassis section and inset from the flange at each end'}
   left:
     size: {w: 281, h: 288}
     panel:
@@ -425,7 +642,7 @@ views:
     size: {w: 607, h: 574}
     panel:
       decor:
-        - {id: base-half, at: [0, 7], size: [607, 268], fill: '#d8dbde', rx: 30, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the base half, a rounded rectangle whose corner radius is about 6 per cent of its length, and a rim about 16 mm wide before the gasket groove'}
+        - {id: base-half, at: [0, 7], size: [607, 268], fill: '#d8dbde', rx: 22, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the base half, a rounded rectangle whose corner radius is about 22 mm, as the plan outline of the closed housing, and a rim about 16 mm wide before the gasket groove'}
         - {id: base-lug-1, at: [90, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt, three along each long edge of a half'}
         - {id: base-lug-2, at: [292, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
         - {id: base-lug-3, at: [495, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
@@ -437,8 +654,8 @@ views:
         - {id: base-lug-9, at: [588, 54], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
         - {id: base-lug-10, at: [588, 197], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
         - {id: base-floor, at: [12, 19], size: [583, 244], fill: '#9da1a5', rx: 16, kind: housing-floor}
-        - {id: base-gasket, at: [9.5, 16.5], size: [588, 249], stroke: '#26282b', stroke-width: 5, rx: 19, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove just inside the rim, following the rounded corners'}
-        - {id: lid-half, at: [0, 300], size: [607, 268], fill: '#d8dbde', rx: 30, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the lid half, the same rounded rectangle as the base half'}
+        - {id: base-gasket, at: [9.5, 16.5], size: [588, 249], stroke: '#26282b', stroke-width: 6, rx: 16, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove, straight along the sides and turning at a corner radius of about 16 mm, about 17 mm inside the edge of the flange, drawn a little further out here so that the modules leave it showing'}
+        - {id: lid-half, at: [0, 300], size: [607, 268], fill: '#d8dbde', rx: 22, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the lid half, the same rounded rectangle as the base half'}
         - {id: lid-lug-1, at: [90, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
         - {id: lid-lug-2, at: [292, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
         - {id: lid-lug-3, at: [495, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
@@ -450,7 +667,7 @@ views:
         - {id: lid-lug-9, at: [588, 347], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
         - {id: lid-lug-10, at: [588, 490], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
         - {id: lid-floor, at: [12, 309], size: [583, 247], fill: '#9da1a5', rx: 16, kind: housing-floor}
-        - {id: lid-gasket, at: [9.5, 309.5], size: [588, 249], stroke: '#26282b', stroke-width: 5, rx: 19, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove just inside the rim, following the rounded corners'}
+        - {id: lid-gasket, at: [9.5, 309.5], size: [588, 249], stroke: '#26282b', stroke-width: 6, rx: 16, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove, the same line as on the base half'}
         - {id: lid-strip, at: [24, 311], size: [559, 16], fill: '#1f2124', kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid; its fins are its ribs'}
         - {id: lid-strip-fins, at: [24, 311], size: [559, 16], pattern: grille, kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid'}
         - {id: hinge-1-base, at: [164, 272], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}

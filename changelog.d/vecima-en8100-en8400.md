@@ -8,7 +8,9 @@
   the amplifier modules the orange AC shunt connectors, the black connector blocks, the blue test-port leads and the RF circuit
   lines; the closed housing is drawn from its end profile (`chassis.section`: a flange at the seam wider than the two castings
   either side) with a field of tall stepped ribs on the lid and one of short ribs on the base (`chassis.fins`), and opens in 3D
-  as two halves cut from that profile; the closed faces show the three numbered closure bolts, the hinge and the strand clamps. Three
+  as two halves cut from that profile. Seen from above the housing is not a rectangle: `chassis.plan-outline` gives the flange
+  rounded corners and the lobes round its bolt holes, and insets each casting from the flange with a smaller corner radius, so the
+  top and bottom drawings, the closed body and the rim of each open half follow it; the closed faces show the three numbered closure bolts, the hinge and the strand clamps. Three
   arrangements are configurations: 2x4 with and without the forward injection module, and 1x2 with one access module. The EN8400
   is the same housing with its own two port entry modules (`vecima/en8400-pem-rf@1` and `vecima/en8400-pem-ac@1`, screwless
   seizures, rated to 1.8 GHz) and an orange 1.8 GHz label. Twelve components are new for the EN8100 and two for the EN8400. The
