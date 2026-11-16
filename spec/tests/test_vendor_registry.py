@@ -98,15 +98,17 @@ def test_the_accton_claim_is_backed_by_the_dump_it_cites():
 LISTINGS = sorted((ROOT / "library" / "devices").glob("*/*/listing.yaml"))
 
 
-def test_every_listing_lives_under_a_software_vendor():
+def test_every_listing_lives_under_a_software_vendor_or_a_reseller():
     """Filing a disaggregated box under a hardware brand is the thing a listing
-    exists to avoid, so the namespace it lives in has to write software."""
+    exists to avoid, so the namespace it lives in has to write software, or resell
+    another maker's hardware (a `role` list may say both that and `hardware`)."""
     assert LISTINGS, "no listing in the library; this test proved nothing"
     for f in LISTINGS:
         ns = f.parent.parent.name
         v = VENDORS.get(ns)
         assert v, f"{ns}/{f.parent.name}: {ns} is not in the registry"
-        assert v["role"] in ("software", "both"), f"{ns} has role {v['role']}"
+        roles = set(v["role"]) if isinstance(v["role"], list) else {v["role"]}
+        assert roles & {"software", "both", "reseller"}, f"{ns} has role {v['role']}"
         doc = yaml.safe_load(f.read_text()) or {}
         assert str(doc.get("source") or "").strip(), f"{ns}/{f.parent.name} states no source"
 

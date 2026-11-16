@@ -1,0 +1,194 @@
+format: 1
+kind: rack
+name: srw12u
+version: 1.0.0
+maturity: modelled
+manufacturer: Eaton
+model: SRW12U
+part-numbers:
+  SRW12U: SmartRack 12U Low-Profile Switch-Depth Wall-Mount Small Rack Enclosure Cabinet
+description: >-
+  The Eaton (Tripp Lite) SmartRack SRW12U, a 12U steel wall-mount cabinet in
+  black powder coat, 600 mm wide and 450 mm deep. It has a lockable, removable,
+  reversible vented front door and two lockable, removable vented side panels.
+  The two vertical rails adjust in 7/8 in steps and take square holes or 12-24
+  threaded holes. It has a cable access port with a removable cover in the top
+  and in the bottom, four ventilation fan ports for the optional SRFANWM fan kit,
+  and a removable mounting plate that hooks the cabinet to the wall. It can
+  instead roll on the optional SRCASTER caster kit. The door, the panels, the
+  fan ports, the casters and the wall fixing are described here and are not data
+  yet: the rack product has no key for an enclosure or a base.
+form: wall-cabinet
+ru: 12
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+  fixing: cage nut
+hole-centres: 465.1
+opening: 450.85
+rails:
+  - id: front
+max-device-depth: 419
+outer:
+  w: 600
+  h: 637
+  d: 450
+weight-kg: 22
+load:
+  static-kg: 90.7
+datasheet:
+  title: SmartRack 12U Low-Profile Switch-Depth Wall-Mount Small Rack Enclosure Cabinet SRW12U data sheet
+  url: https://assets.tripplite.com/product-pdfs/en/srw12u.pdf
+references:
+  - title: SmartRack Wall-Mount Rack Enclosure Cabinet SRW12U product drawing (Eaton, 3 pages)
+    url: https://www.eaton.com/content/dam/eaton/products/server-racks-enclosures-airflow-management/racks-enclosures/tl-wallmount-enclosures/eaton-tripp-lite-series-SRW12U-drawing.pdf
+    sha256: c783d505025615077577573f700660837a08cc670d041a81d9355cf2f7301c2c
+  - title: SRW12U data sheet (Eaton, 3 pages)
+    url: https://assets.tripplite.com/product-pdfs/en/srw12u.pdf
+    sha256: b176f00a783194df0879b98eebc388f6eeb5bedacc8285660802223f459b4538
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      Page 1 of the product drawing prints "Rack Spaces 12U", and the data sheet
+      prints "Rack Height 12U" (page 2).
+  form:
+    confidence: datasheet
+    note: >-
+      The drawing's title is "Wall-Mount Rack Enclosure Cabinet" and the data
+      sheet's "Mounts to wall or rolls on floor". It has two vertical rails, the
+      data sheet's "Number of Vertical Mounting Rails 2", so the product states
+      the front rail alone, as the wall forms do.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in. Both documents say the rack spaces are numbered and neither
+      says which way, so bottom-up from 1, the default of the rack file, is
+      written.
+  width:
+    confidence: datasheet
+    note: >-
+      The drawing's page 1 icon row says "Standard 19" Rack Width" and the data
+      sheet says "19 in. rack equipment".
+  holes:
+    confidence: datasheet
+    note: >-
+      The drawing's page 1 icon row says "Square/Threaded Hole Mounting", and
+      its text says the rails support square-hole or 12-24 threaded-hole
+      mounting; the box holds 20 cage nuts and 20 M6 screws as well as 20 #12-24
+      screws. A hole style is one value in the rack product, so the square holes
+      are written and the threaded option is in the `hole-style` gap.
+  hole-centres:
+    confidence: estimated
+    note: >-
+      A stand-in for the EIA-310 figure, 465.1 mm between hole lines (18.312
+      in). Neither document prints a hole spacing; the drawing's rear view
+      prints 497.60 mm for a width it does not name.
+  opening:
+    confidence: drawing
+    note: >-
+      The drawing's page 2, rear view, dimensions 450.85 mm (17.75 in) between
+      the two rail lines at the mounting plane, the EIA-310 clear opening.
+  rails:
+    confidence: drawing
+    note: >-
+      The rear view and the cross section on page 2 of the drawing show the two
+      vertical rails. A wall cabinet states its front rail alone, and the rear
+      rail's place is the `rail-depth` gap.
+  max-device-depth:
+    confidence: datasheet
+    note: >-
+      The drawing's specification table prints "Equipment Mounting Depth Up to
+      16.5 in. / 419 mm" and the data sheet's "Maximum Device Depth" is 419 mm.
+      Its cross section, "USABLE MOUNTING DEPTH", prints 16.61 in (421.80 mm),
+      from the rail to the cabinet's back wall; the printed 419 mm is written.
+  outer:
+    confidence: drawing
+    note: >-
+      The drawing's specification table prints "Unit Dimensions (H x W x D)
+      25.08 x 23.62 x 17.72 in. / 637 x 600 x 450 mm" and its page 2 dimensions
+      the front view 600 by 637 and the side view 450. Height 637, width 600,
+      depth 450. The side view also dimensions 463.30 mm, the box with the door
+      handle, which is not written.
+  weight-kg:
+    confidence: datasheet
+    note: >-
+      The drawing prints "Unit Weight 48.5 lb. / 22 kg"; the data sheet 22.00 kg
+      (page 3).
+  load:
+    confidence: datasheet
+    note: >-
+      The drawing prints "Load Rating 200 lb. / 90.7 kg" and says it "includes
+      the combined weight of the unit and installed equipment"; the data sheet
+      prints "Weight Capacity - Stationary 91 kg / 200 lbs." (page 3). The
+      figure is written as the static load, 90.7 kg; the equipment alone is that
+      less the cabinet's 22 kg, which this product does not state. The sheets
+      print no rolling rating for the SRCASTER caster kit.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: Both documents say the rack spaces are numbered and not which way.
+    wanted: A photograph of the rail showing the unit labels.
+  - what: hole-centres
+    reason: vendor-silent
+    note: Neither document prints a spacing between the hole lines.
+    wanted: A dimensioned drawing of the rail with the hole lines marked.
+  - what: hole-style
+    reason: needs-photo
+    note: >-
+      The rails take square holes or 12-24 threaded holes, and the rack product
+      holds one style. Whether one rail carries both, or the choice is made at
+      the rail, is not said.
+    wanted: A photograph of the rail, or the maker's statement of what each rail face carries.
+  - what: hole-size
+    reason: vendor-silent
+    note: The documents print no size for the square hole.
+    wanted: A dimensioned drawing of the rail.
+  - what: rail-depth
+    reason: vendor-silent
+    note: >-
+      The rails adjust in 7/8 in (22.2 mm) steps, and the cross section prints
+      the usable depth, 421.80 mm, and a 367.74 mm figure it does not label. The
+      rail positions from the front rail are not printed, and a wall cabinet in
+      the rack product states the front rail alone, so no range is written.
+    wanted: The rail positions the 7/8 in step allows, measured from the front rail.
+  - what: width-across-rails
+    reason: needs-drawing
+    note: >-
+      The rear view prints 497.60 mm (19.59 in) across, a width it does not
+      name; it is not the 450.85 mm opening and not the 465.1 mm hole spacing.
+    wanted: The drawing's name for the 497.60 mm width.
+  - what: outer-size
+    reason: sources-disagree
+    note: >-
+      The data sheet prints the unit as 25.080 x 23.500 x 17.500 in (63.7 x 60 x
+      44.93 cm), and the drawing prints 25.08 x 23.62 x 17.72 in (637 x 600 x 450
+      mm). The width and depth differ by 3 and 5 mm. The drawing is dimensioned
+      and is written.
+    wanted: The maker's statement of which print is current.
+  - what: enclosure
+    reason: needs-drawing
+    note: >-
+      The vented reversible front door (hinges left or right by rotating the
+      cabinet 180 degrees before mounting), the two vented side panels, the
+      top and bottom cable ports with covers (10.63 in by 2.56 in in the top
+      view's dimensions) and the four fan ports are in the description only: the
+      rack product has no key for an enclosure.
+    wanted: An enclosure key in the rack product.
+  - what: casters
+    reason: needs-drawing
+    note: >-
+      The optional SRCASTER kit has four casters. It is in the description only,
+      because the rack product has no key for a base. No caster size or rolling
+      load is printed.
+    wanted: A base key in the rack product, and the kit's caster size and a rolling load from the maker.
+  - what: wall-fixing
+    reason: needs-drawing
+    note: >-
+      The removable mounting plate hooks the cabinet to the wall: its holes are
+      16 in (406 mm) apart and take user-supplied M8 or 5/16 in anchors (page 3
+      of the drawing). The rack product has no key for a wall fixing.
+    wanted: A wall-fixing key in the rack product.

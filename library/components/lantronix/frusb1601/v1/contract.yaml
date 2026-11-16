@@ -1,0 +1,76 @@
+format: 1
+kind: module
+name: frusb1601
+version: 1.0.0
+class: line-card
+mates: slc-io-module
+behaviour: fills
+profile: networking
+description: >-
+  Lantronix FRUSB1601, the 16-port USB I/O module of the SLC 8000 console manager. The face has sixteen USB type A host
+  ports in two staggered rows of eight, each set at an angle. A slate plate carries the legends DO NOT HOT SWAP and TO
+  CONSOLE, and two release slots. It seats in one of the three rear I/O bays, filled in order from bay 1.
+size: {w: 112.5, h: 43.4, d: 128.6}
+size-confidence: {w: estimated, h: estimated, d: borrowed}
+attrs:
+  model: FRUSB1601
+provenance:
+  identity: >-
+    datasheet - Lantronix SLC 8000 Advanced Console Manager User Guide, 900-704-RBD-SLC-UG (July 2025), Figure 3-7
+    (page 43): "16-Port USB I/O Module (Part Number FRUSB1601)"; Table 3-4: "USB 2.0 Interface ... Up to 48 USB type
+    A (Host)". The SLC 8000 I/O Module Installation Guide, 900-722-R Rev C: the module needs SLC 8000 firmware 7.2 or
+    above.
+  size: >-
+    estimated, and the depth borrowed - no document held gives an I/O module a size. The face takes the width and
+    height of the rear bay it seats in, 112.5 by 43.4 mm, which the SLC 8000 device reads off User Guide Figure 2-2 (an
+    estimate). The depth is the 128.6 mm of lantronix/lm83x-8sa@1, the same maker's 8-port serial expansion module of a
+    1U chassis (LM-Series Expansion Modules and Option Cards product brief); the SLC 8000 module may be deeper or
+    shallower. Both are estimates, and the gap on the device names the document that would replace them.
+  layout: >-
+    photo-measured - User Guide Figures 2-2 (page 28) and 2-3 (page 31), body 438.15 mm across at about 4.4 px/mm after
+    enlargement. Eight ports across in each of two rows at a 12.8 mm pitch, the upper row about 5.6 mm to the right of
+    the lower and 12 mm above it, every port turned about 35 degrees counter-clockwise from level (the long axis rises to
+    the right). Each position is estimated to within about 1.5 mm and the angle to within about 5 degrees.
+  rows: >-
+    photo-measured - port numbering is not printed on the module. The User Guide's dashboard (Figure 3-7) puts the odd
+    ports on the upper row and the even ports on the lower row, so the upper row is 1, 3 ... 15 and the lower row is 2,
+    4 ... 16, left to right. The numbering within a module is relative to its bay.
+  tongue: >-
+    datasheet - the User Guide states "USB 2.0" (Table 3-4) and its figures show a blue tongue, which the USB-IF
+    colour code gives to 3.0. The port is drawn with the white `usb2` skin the document's words call for; the figure's
+    blue is not drawn.
+  plate: >-
+    photo-measured - the plate reads slate blue-grey (about #4b5a68) in Figures 2-2 and 2-3, the same shade as the chassis
+    rear plate. No document gives a finish.
+  printing: >-
+    photo-measured - DO NOT HOT SWAP (with a warning triangle) and TO CONSOLE in white on the lower strip, and two dark
+    release slots.
+  power: >-
+    not published - the User Guide gives 100 mA per port and 600 mA per module for the USB host ports (Table 3-4,
+    Chapter 9) and no draw for the module. The lint finding for a module with no draw stays and is recorded in the
+    baseline.
+groups:
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a, role: console-server}
+    description: sixteen USB type A host ports, upper row odd and lower row even.
+parts:
+  - {ref: std/usb-a@1, id: p1, at: [7.6, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p3, at: [20.4, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p5, at: [33.2, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p7, at: [46.0, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p9, at: [58.8, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p11, at: [71.6, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p13, at: [84.4, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p15, at: [97.2, 8.15], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p2, at: [2.0, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p4, at: [14.8, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p6, at: [27.6, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p8, at: [40.4, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p10, at: [53.2, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p12, at: [66.0, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p14, at: [78.8, 20.45], rotate: -35, skin: usb2, group: usb}
+  - {ref: std/usb-a@1, id: p16, at: [91.6, 20.45], rotate: -35, skin: usb2, group: usb}
+skins: [default]

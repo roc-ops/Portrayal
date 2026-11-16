@@ -1,0 +1,37 @@
+format: 1
+kind: component
+name: tripplite-duct-vrt-base
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the Tripp Lite SmartRack SRCABLEDUCTVRT vertical finger duct seen from the front -
+  drawn as the well the two finger walls stand in, its floor the front face of the steel plate, with the
+  five holes punched down its centre line
+provenance:
+  size: >-
+    drawing - the front and rear views of the SRCABLEDUCTVRT submittal drawing (13-03-167, page 2)
+    dimension the plate 48.47 mm [1.91 in] wide and 862.6 mm [33.96 in] long.
+  size-holes: >-
+    drawing for where, estimated for how big - the rear view dimensions the holes 200 mm [7.87 in]
+    apart down the centre line; the first is 23.4 mm from the top end and the diameter,
+    9.5 mm, is read off the picture at 3.63 px/mm (estimated). The two mounting buttons
+    sit on the same centre line and are a separate part.
+  depth: >-
+    drawing - the end view dimensions 62.71 mm [2.47 in] from the plate to the front of the
+    cover. The well runs from the front to 0.2 mm in front of the plate's front face, so the
+    floor stays off the face the rear view draws.
+  color: >-
+    datasheet - "Cold rolled steel" and "Color: Black" (the specification sheet). The submittal
+    drawing is line work, so the shade is this library's render of black steel, lifted enough to
+    read on the explorer's dark stage as well as on a white one.
+size: {w: 48.47, h: 862.6, d: 62.5}
+size-confidence: {w: drawing, h: drawing, d: drawing}
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#3a3d41'
+relief: {wall: '#3a3d41'}
+elements:
+  floor: {at: [0.0, 0.0], size: [48.47, 862.6], class: bezel}
+skins: [default]

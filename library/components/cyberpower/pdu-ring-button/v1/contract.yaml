@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: pdu-ring-button
+version: 1.0.0
+class: button
+profile: power
+description: >-
+  A plain ring button of the CyberPower PDU31116 display module: a light ring round a dark centre, with no arrow. The
+  module carries two, printed Select and Enter. The names are not drawn. The data sheet says nothing of how they work.
+size: {w: 11.0, h: 11.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  existence: >-
+    datasheet - CyberPower PDU31116 data sheet, page 2, the orthographic view of the display module. It shows two
+    ring buttons left of the screen, printed Select and Enter. No document says what they select.
+  size: >-
+    ESTIMATED. The ring is 85 px across on page 2, which is 11.3 mm at 7.55 px/mm. The scale comes from the RJ45
+    contact pitch, the USB-A shell and the 5-15R face in that picture. It is good to about 2 percent. The ring
+    is drawn 11.0. The ring band is about 8 px, or 1.1 mm. No document dimensions it. needs-drawing: a dimensioned
+    drawing of the module.
+  not-the-arrow-button: >-
+    This is not a twin of cyberpower/pdu-joystick@1. That part is a four-arrow cap of the PDU81001G. This one is a
+    plain ring of a different control, and it carries no arrow.
+elements:
+  ring: {at: [0.0, 0.0], size: [11.0, 11.0], class: button}
+skins: [default]

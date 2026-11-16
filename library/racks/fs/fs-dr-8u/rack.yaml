@@ -1,0 +1,129 @@
+format: 1
+kind: rack
+name: fs-dr-8u
+version: 1.0.0
+maturity: modelled
+manufacturer: FS.com
+model: FS-DR-8U
+part-numbers:
+  FS-DR-8U: FS-DR-8U Free-Standing Desktop Rack
+description: >-
+  The FS 8U free-standing desktop rack, a two-post open frame in black powder-coated
+  steel. Its G-shape posts have square holes and lean back from a base bracket,
+  81 degrees to the base in the data sheet's side view. Equipment mounts on the
+  front rail only and the data sheet gives its depth as open. It is rated for a
+  static load only. The lean-back angle and the base are described here and are not
+  data yet: the rack product has no key for either.
+form: desktop-frame
+ru: 8
+numbering:
+  direction: bottom-up
+  start: 1
+width: 19
+holes:
+  style: square
+hole-centres: 465
+opening: 451
+rails:
+  - id: front
+outer:
+  w: 503
+  h: 409
+  d: 296
+weight-kg: 1.75
+load:
+  static-kg: 50
+datasheet:
+  title: FS-DR-8U Free-Standing Desktop Rack Datasheet
+  url: https://resource.fs.com/mall/resource/fs-dr-8u-desktop-rack-datasheet.pdf
+provenance:
+  ru:
+    confidence: datasheet
+    note: >-
+      "Number of Rack Spaces 8U" in the specification table on page 2.
+  form:
+    confidence: datasheet
+    note: >-
+      The specification table on page 2 says Rack Type 2-Post and Frame Type Open
+      Frame, and the title and page 1 say free-standing desktop rack. The side view
+      on page 3 shows the posts leaning back from the base. The form says how the
+      rack stands and how many posts it has.
+  width:
+    confidence: datasheet
+    note: >-
+      Page 1 says the rack takes EIA-standard 19-inch equipment, and the front view
+      on page 3 dimensions 465 mm between the hole lines, the 19-inch spacing.
+  holes:
+    confidence: datasheet
+    note: >-
+      "Mounting Hole Type Square" on page 2, with a G-shape rail profile. The
+      accessory list on page 2 holds 32 M6 screw, nut and cup washer sets, and the
+      sheet does not say they are for the rail holes, so no `fixing` is written. It
+      prints no hole size.
+  hole-centres:
+    confidence: drawing
+    note: >-
+      The front view on page 3 dimensions 465 mm [18.31 in] between the two hole
+      lines, the upper of its two inner dimensions.
+  opening:
+    confidence: drawing
+    note: >-
+      The front view on page 3 dimensions 451 mm [17.76 in] as the lower inner
+      dimension, the clear opening between the posts.
+  outer:
+    confidence: drawing
+    note: >-
+      The specification table on page 2 prints Dimensions (HxWxD) as 16.10 x 19.80 x
+      11.65 in (409 x 503 x 296 mm). The front view on page 3 dimensions 409 high
+      and 503 wide and the side view 296 deep, so the axes are the drawing's. The
+      height is the frame as it stands leaning back, base included. The metric
+      prints are written.
+  weight-kg:
+    confidence: datasheet
+    note: >-
+      Page 2 prints Product Weight as 3.86 lb (1.75 kg). The kilogram print is
+      written.
+  load:
+    confidence: datasheet
+    note: >-
+      Page 2 prints Stationary Weight Capacity as 110.23 lb (50 kg), and page 1 says
+      Max. Weight Capacity 110.23 lb. The kilogram print is written. No rolling
+      rating is stated.
+  numbering:
+    confidence: estimated
+    note: >-
+      A stand-in for the label of the first unit, 1, the default of the rack file.
+      The direction is read from an FS product photograph of the rail, which prints
+      the label 08 above 07, so the labels rise upward. The data sheet itself says
+      nothing about numbering.
+gaps:
+  - what: numbering
+    reason: vendor-silent
+    note: >-
+      The data sheet does not say how the units are numbered. A product photograph
+      prints 07 and 08 on the rail, rising upward, and shows no first label.
+    wanted: A photograph of the rail's lowest unit, or a statement of the first label.
+  - what: tilt
+    reason: needs-drawing
+    note: >-
+      The side view on page 3 dimensions 81.00 degrees between the post and the top
+      of the base, so the posts lean back 9 degrees from vertical. The rack product
+      has no key for a lean-back angle, so it is in the description and here only.
+    wanted: A tilt key in the rack product.
+  - what: base
+    reason: needs-drawing
+    note: >-
+      The side view on page 3 dimensions the base 296 mm deep and 73.7 mm [2.90 in]
+      high. The top view dimensions 445.5 mm between the two base rails, two holes
+      in each rail 255 mm apart, the first 12.5 mm from one end of the base. The
+      rack product has no key for a base, so these are not data. The sheet names no
+      feet.
+    wanted: A base key in the rack product, and the feet or fixing the maker intends.
+  - what: hole-size
+    reason: vendor-silent
+    note: The sheet says the holes are square and prints no size.
+    wanted: A dimensioned drawing of the rail, or a measurement of a square hole.
+  - what: max-device-depth
+    reason: vendor-silent
+    note: The sheet prints Maximum Device Depth as Open, which is not a figure, so none is written.
+    wanted: The usable depth for equipment, from FS.

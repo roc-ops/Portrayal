@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: srcableduct1ufc
-version: 0.1.1
+version: 0.1.2
 maturity: modelled
 manufacturer: Eaton
 model: SRCABLEDUCT1UFC
@@ -23,7 +23,10 @@ provenance:
       SRCABLEDUCT1U's follows returns an XML error page, not a PDF; the Eaton SKU page was
       tried once (the .html and the skuPage .pdf export both fail at the connection with an
       HTTP/2 stream error, and a regional copy timed out). So no dimension is drawn and every
-      figure but the unit size is estimated. Nothing is copied from the pictures.
+      figure but the unit size is estimated. Nothing is copied from the pictures. The copy of the
+      sheet read for the ears, the windows and the rear block is the 2026 print, hashed in
+      `datasheet`; it differs in bytes from the copy this device was first drawn from, which
+      was recorded under the hash 1b812813... and is not held.
   size-conflict:
     confidence: estimated
     note: >-
@@ -51,8 +54,14 @@ provenance:
       is 19.480 in, 494.79 mm, more than the 482.6 of 19.00 in: the ears seem to stand out past
       the rack face (the pictures show tabs at the end), and no document says by how much. The
       face is drawn the whole 494.79 and the ears are the 31.5 mm at each end, which leaves the
-      431.8 of the maker's SRCABLEDUCT1U between them; each has two slots where an EIA-310 ear
-      has its holes (465 mm between centres, 14.9 mm in from the end, 32 mm apart; 12 x 6 mm).
+      431.8 of the maker's SRCABLEDUCT1U between them. THE MAIN PHOTOGRAPH SHOWS THREE SLOTS IN
+      THE LEFT EAR, counted twice by eye at 6 times and by a column profile. The slot centres read
+      8.0, 28.1 and 48.2 mm from the plate's top edge, so they are drawn 20 mm apart and centred
+      on the 55.12 mm plate. The scale is the plate's 55.12 mm over its 52 px. A slot is 8 mm
+      high (the white run, 7.4 mm, and its edge pixels). Its 12 mm length is the SRCABLEDUCT1U
+      drawing's, because the ear is turned away in the photograph and its width cannot be read. The
+      slots stand 14.9 mm in from the end, 465 mm between centres, as an EIA-310 ear's holes do.
+      The right ear is the same by symmetry: the photograph shows it edge-on with one hole.
   chassis:
     confidence: datasheet
     note: >-
@@ -91,12 +100,16 @@ provenance:
     confidence: estimated
     note: >-
       estimated - TWO WINDOWS IN THE BACK PLATE, from the maker's picture of the rear: two long
-      openings either side of a centre block (two small dark squares, not drawn: no document says
-      what they are), each showing the fingers behind it. The spec sheet says "pass-through holes
-      in the rear allow convenient access to cabling for routing and separation of bundles". Each
-      is 122.7 x 22 mm (0.126 to 0.374 of the length from each end, about half the height), by eye
-      on a perspective view, so the size is a stand-in. Open: nothing is said to close them. A
-      cable crosses from the front of the duct to the rear through one, with the cover off.
+      openings either side of a centre block, each showing the fingers behind it. The spec sheet
+      says "pass-through holes in the rear allow convenient access to cabling for routing and
+      separation of bundles". The rear picture is 100 x 100 px, a perspective view. Its edges were
+      read by eye at 8 times along the plate's middle line, then corrected with one projective map
+      that puts the middle of the dark block at the middle of the part. The windows come out
+      126 x 22 mm, 82 mm in from each end: 126.2 and 125.8 mm long, 83.9 and 80.1 mm in, before rounding. The 22 mm
+      height is kept from the first reading and was not measured again. The figures are good to
+      about 6 mm, so they are a stand-in. The first drawing, by eye on the perspective view, put
+      the left window 62.3 mm in; the corrected reading is 82 mm. Open: nothing is said to close them. A cable crosses from the front of
+      the duct to the rear through one, with the cover off.
   top:
     confidence: estimated
     note: >-
@@ -108,11 +121,19 @@ provenance:
     note: >-
       estimated - the side: the back plate, the two walls with the channel between them, and the
       cover's plate and lips over the front. The duct is open at both ends and a cable runs out
-      of it there: nothing is built across the ends. The right is the same, turned round.
+      of it there: nothing is built across the ends. The main photograph looks into the open left
+      end and shows a small grey pin inside it, 0.58 of the way from the back plate to the cover
+      and 0.31 of the way down the channel. It is drawn as a 2.5 mm disc there, an estimate: it is
+      3 px across, too small to sample or to name. The right end is not seen, so the pin is not
+      drawn there. The right is otherwise the same, turned round.
   rear:
     confidence: estimated
     note: >-
-      estimated - the back plate with its ears and their slots and the two windows of `passes`.
+      estimated - the back plate with its ears and their three slots each, the two windows of
+      `passes`, and the block between them that the rear picture shows as two dark squares. Each
+      square is 25 x 30 mm, 11 mm apart, centred on the plate. Their width and gap come from the
+      same corrected readings (25.3 and 24.1 mm wide, 11.2 mm apart) and their height is 1.38 times the window's, read at 8 times.
+      What the squares are, a hole or a fitting, no document says, so they are drawn as marks.
   cover:
     confidence: datasheet
     note: >-
@@ -120,7 +141,10 @@ provenance:
       snap-on cover allows quick unconstrained access to cabling", its description "The snap-on
       cover lets you rapidly add or remove cables"). It is drawn fitted in `base` and absent in
       `cover-off`, as a lid (`lid: true`). A snap-on cover is a removable part, not a hinge, and
-      no clip is drawn: the format has none and no document draws one.
+      no clip is drawn: the format has none and no document draws one. Two of the sheet's
+      pictures show the cover lying beside the duct. That is not drawn: a face is the device's own
+      envelope and the kit has no shape for a loose part standing apart from it, so the cover is
+      drawn fitted in `base` and absent in `cover-off`.
   capacity:
     confidence: datasheet
     note: >-
@@ -191,11 +215,12 @@ gaps:
     wanted: a cable capacity and its basis from the owner's manual or the SKU page
   - what: rear-centre-block
     scope: [rear]
-    reason: needs-drawing
+    reason: needs-photo
     note: >-
-      the maker's picture of the rear shows a block with two small dark squares between the two
-      windows; no document says what it is, and it is not drawn.
-    wanted: a close picture or a drawing of the rear
+      the maker's picture of the rear shows a block of two dark squares between the two windows. They
+      are drawn as marks of the size the picture gives. No document says what they are, a hole or a
+      fitting, so nothing behind them is modelled.
+    wanted: a close photograph of the rear, or the owner's manual
 groups:
   body:
     term: Duct
@@ -229,19 +254,23 @@ views:
       decor:
         - {id: back-top, at: [0, 0], size: [494.79, 16.56], fill: '#f2c200', kind: base}
         - {id: back-bottom, at: [0, 38.56], size: [494.79, 16.56], fill: '#f2c200', kind: base}
-        - {id: back-left, at: [0, 16.56], size: [62.3, 22], fill: '#f2c200', kind: base}
-        - {id: back-middle, at: [185.0, 16.56], size: [124.8, 22], fill: '#f2c200', kind: base}
-        - {id: back-right, at: [432.5, 16.56], size: [62.29, 22], fill: '#f2c200', kind: base}
-        - {id: ear-slot-1, at: [8.9, 8.56], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
-        - {id: ear-slot-2, at: [8.9, 40.56], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
-        - {id: ear-slot-3, at: [473.89, 8.56], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
-        - {id: ear-slot-4, at: [473.89, 40.56], size: [12, 6], rx: 3, fill: '#14161a', kind: ear-slot}
+        - {id: back-left, at: [0, 16.56], size: [82, 22], fill: '#f2c200', kind: base}
+        - {id: back-middle, at: [208, 16.56], size: [78.79, 22], fill: '#f2c200', kind: base}
+        - {id: back-right, at: [412.79, 16.56], size: [82, 22], fill: '#f2c200', kind: base}
+        - {id: ear-slot-1, at: [8.9, 3.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-2, at: [8.9, 23.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-3, at: [8.9, 43.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-4, at: [473.89, 3.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-5, at: [473.89, 23.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: ear-slot-6, at: [473.89, 43.56], size: [12, 8], rx: 4, fill: '#14161a', kind: ear-slot}
+        - {id: centre-block-1, at: [217, 12.56], size: [25, 30], rx: 1, fill: '#14161a', kind: centre-block}
+        - {id: centre-block-2, at: [253, 12.56], size: [25, 30], rx: 1, fill: '#14161a', kind: centre-block}
         - {id: plate-outline, at: [0, 0], size: [494.79, 55.12], rx: 3, stroke: '#947600', stroke-width: 0.4, kind: outline}
-        - {id: window-1-outline, at: [62.3, 16.56], size: [122.7, 22], rx: 3, stroke: '#947600', stroke-width: 0.4, kind: outline}
-        - {id: window-2-outline, at: [309.8, 16.56], size: [122.7, 22], rx: 3, stroke: '#947600', stroke-width: 0.4, kind: outline}
+        - {id: window-1-outline, at: [82, 16.56], size: [126, 22], rx: 3, stroke: '#947600', stroke-width: 0.4, kind: outline}
+        - {id: window-2-outline, at: [286.79, 16.56], size: [126, 22], rx: 3, stroke: '#947600', stroke-width: 0.4, kind: outline}
     passes:
-      - {id: rear-window-1, at: [62.3, 16.56], size: [122.7, 22], shape: rect, cover: open}
-      - {id: rear-window-2, at: [309.8, 16.56], size: [122.7, 22], shape: rect, cover: open}
+      - {id: rear-window-1, at: [82, 16.56], size: [126, 22], shape: rect, cover: open}
+      - {id: rear-window-2, at: [286.79, 16.56], size: [126, 22], shape: rect, cover: open}
   top:
     size: {w: 494.79, h: 104.9}
     panel:
@@ -322,6 +351,7 @@ views:
         - {id: back-outline, at: [0, 0], size: [5.0, 55.12], stroke: '#947600', stroke-width: 0.2, kind: outline}
         - {id: wall-upper-outline, at: [5.0, 1.1], size: [87.9, 1.1], stroke: '#947600', stroke-width: 0.2, kind: outline}
         - {id: wall-lower-outline, at: [5.0, 52.92], size: [87.9, 1.1], stroke: '#947600', stroke-width: 0.2, kind: outline}
+        - {id: end-pin, at: [54.75, 16.65], size: [2.5, 2.5], rx: 1.25, fill: '#9a9a9a', kind: pin}
     components:
       placements:
         - {ref: eaton/tripplite-duct-1ufc-cover-side@1, id: cover-left, at: [92.9, 0.0], group: cover, rel-pos: 4, only-in: [base]}
@@ -363,4 +393,4 @@ configurations:
 datasheet:
   title: 'Tripp Lite SRCABLEDUCT1UFC spec sheet (Horizontal Cable Manager - Finger Duct with Cover, Yellow, 1U)'
   url: https://assets.tripplite.com/product-pdfs/en/srcableduct1ufc.pdf
-  sha256: 1b8128138fbeb30e17a3018bf51ad5bbd171d1a17c484e8f42a01b8f43c3d57b
+  sha256: bc0ecd72f038fe351295426734483111c7944fd98c9f961e2826304f0f4eb9a9

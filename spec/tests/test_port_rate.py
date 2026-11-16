@@ -159,6 +159,10 @@ LEFT = {
     "apc/ap7821b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
     "apc/ap7921b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
     "apc/ap7900b": {"jack-1", "jack-2"},           # vendor-silent: no document names the jacks or a rate
+    "middle-atlantic/rlnk-p915r": {"expansion", "feature"},     # vendor-silent: reserved, or no row, and no rate
+    "middle-atlantic/rlnk-p915r-sp": {"expansion", "feature"},  # vendor-silent: reserved, or no row, and no rate
+    "middle-atlantic/rlnk-p920r": {"expansion", "feature"},     # vendor-silent: reserved, or no row, and no rate
+    "middle-atlantic/rlnk-p920r-sp": {"expansion", "feature"},  # vendor-silent: reserved, or no row, and no rate
 }
 # THE CEILING ONLY GOES DOWN. It was 123 when L113 was written, and #511's
 # device sweep took it to the entries above.
@@ -168,7 +172,8 @@ LEFT = {
 # Four more for the APC AP7821B and AP7921B rear jacks (14): no APC document names the two jacks or states a rate,
 # recorded as the gap jack-speed on each.
 # Two more for the APC AP7900B rear jacks (16): the same gap, jack-speed.
-CEILING = 16
+# Eight more for the Middle Atlantic RLNK-P915R, -P915R-SP, -P920R and -P920R-SP feature and expansion jacks (24): no rate is stated.
+CEILING = 24
 
 
 def _findings():

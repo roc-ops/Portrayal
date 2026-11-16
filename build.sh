@@ -186,6 +186,9 @@ pids+=("$!")
 # so it runs beside the others and reads nothing they write.
 python3 spec/tools/portrayal/cable_types_index.py --schemas spec/schemas --out "$OUT" &
 pids+=("$!")
+# THE DIN RAIL PROFILES, from spec/schemas/din-rails.yaml: the same, no library walk.
+python3 spec/tools/portrayal/din_rails_index.py --schemas spec/schemas --out "$OUT" &
+pids+=("$!")
 # THE LINT RULES, from lint.py's own rule table: code, scope, rule, why, fix
 # and severity, for the site's rule page. No library walk either.
 python3 spec/tools/portrayal/lint.py --list-rules --json --out "$OUT/lint-rules.json" &

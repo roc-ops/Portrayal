@@ -37,7 +37,7 @@ OLD = "edgecore/dcs240-psu-dc@1"
 SCREW = "common/terminal-screw-34@1"
 EARTH = "common/ground-screw@1"
 LUG = "generic/ring-lug@1"
-DEVICES = {"edgecore/dcs240": "1.2.0", "edgecore/dcs511": "2.1.0"}
+DEVICES = {"edgecore/dcs240": "1.2.1", "edgecore/dcs511": "2.1.1"}
 DESCRIPTION = ("The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - a 54.4 x 40 CRPS face with a two-screw DC terminal "
                "block and an earth screw beside it. Rated 1600 W.")
 OLD_DESCRIPTION = ("The -48 VDC power supply of the Edgecore DCS240 (AS9726-32DB) - the same 54.4 x 40 CRPS face as the AC variant "

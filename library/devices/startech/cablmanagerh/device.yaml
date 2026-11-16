@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: cablmanagerh
-version: 0.1.0
+version: 0.1.1
 maturity: modelled
 manufacturer: StarTech.com
 model: CABLMANAGERH
@@ -58,7 +58,12 @@ provenance:
     note: >-
       drawing - the front view: the panel, five rings end-on 100.0 apart with the middle one on
       the centre line (41.3 from the left end, estimated), and the four holes midway between
-      them. Each ring stands on a 40 mm bracket that the drawing shows and that is not drawn.
+      them. Each ring stands on a 40 mm bracket across the panel's height, drawn estimated (see
+      `cablmanagerh-panel`). Each hole has a raised collar, 29 mm across outside, drawn as an
+      outline round the open hole. The drawing's inner circle at each collar scales at 21.2 mm.
+      What it means is not stated, so it is an outline ring only. The hole stays the dimensioned
+      29.0. The rivet is hidden under each ring's base here. The plan view shows none.
+      Not drawn: the fold seen along the front edge of the isometric view (a gap names it).
   rear:
     confidence: drawing
     note: >-
@@ -67,13 +72,24 @@ provenance:
       the dimensioned "phi 29.00" and the inner scales at about 21 mm. The datasheet's "inner
       and outer diameters of 1.14/1.26in [29/32mm]" is read as the hole (29) and a lip round it
       (32); the hole is 29, as the drawing dimensions it, and the lip is drawn on the rear. The
-      21 mm circle is not used (it would be a bore, but no document says so).
+      inner circle is 21.2 mm on the drawing and is drawn on the front as an outline only. What it
+      means is not stated, so no bore is drawn and the hole is not narrowed. The rivet's rear is
+      not drawn, and no held picture shows it. The maker's 32 mm lip is not drawn further. Its
+      data sheet would show the lip, and is not held.
   top:
     confidence: drawing
     note: >-
       drawing - an elevation, rear at the top of the drawing: the folded edge behind the panel
       and the five rings from above, each 9.1 mm across (estimated) and standing 87.59 out of the
-      panel's front face. The bottom is the same from underneath.
+      panel's front face. The bottom is the same from underneath. Each ring stands on a bracket
+      foot 7.4 mm high and 40.0 across. The foot's stepped lip has an inner box 32.0 across and
+      4.1 high, drawn as an outline. Each ring has a rivet dome at the foot's base, centred on the
+      ring: 8.4 across and 2.5 high. The drawing shows no end view, so the end views draw no lip.
+      Each hole has a collar 29.0 across and 3.6 high. The side view shows the collar and the
+      rivet as low domes; the kit has none, so each is a rounded rectangle. All sizes are
+      scaled off the drawing at 7.7 px/mm (1200 dpi, from the 100.0 mm ring pitch) and are
+      estimated. Four collar readings were each 3.6 mm; other readings run from 3.3 to 3.9 mm. The
+      five rivets read 8.4 across at the base (6.6 at half height) and 2.5 high.
   left:
     confidence: drawing
     note: >-
@@ -144,21 +160,23 @@ gaps:
     note: >-
       the datasheet and the drawing state no cable capacity, no fill and no cable count.
     wanted: a cable capacity table, or a stated fill, for the D-ring panel
-  - what: ring-bracket
-    scope: [front, top, bottom, rear]
+  - what: front-edge-strip
+    scope: [front]
     reason: needs-drawing
     note: >-
-      the drawing's front view shows each ring on a bracket about 40 mm across the panel's whole
-      height, held by a rivet or screw in the middle of it; no view dimensions it, and the
-      brackets are not drawn, so each ring stands directly on the panel.
-    wanted: a dimensioned view of a ring's bracket and of its fixing
+      the side view and the isometric both show the strip below the panel, 6.21 mm deep. It
+      starts about 30 mm in from each end, and the top and bottom views draw it. Not drawn: the
+      fold seen along the front edge of the isometric. It lies outside the front face's outline.
+      The kit has no shape for it.
+    wanted: a section of the panel's front edge, or a way to draw a fold outside a face outline
   - what: ring-waist
     scope: [left, right, top, bottom]
     reason: needs-drawing
     note: >-
       the side view draws each ring narrowing at about half its height, where two pieces seem to
       meet; no document says whether that is a seam or a slit a cable is laid in through, and
-      the loop is drawn closed.
+      the loop is drawn closed. Not drawn: the waist's shape is shown but its meaning is not
+      stated, and no answer covers it.
     wanted: a close view or a section of a ring at its waist
   - what: ring-other-run
     scope: [front]
@@ -182,6 +200,16 @@ groups:
 views:
   front:
     size: {w: 482.6, h: 43.69}
+    panel:
+      decor:
+        - {id: collar-1, at: [76.8, 7.345], size: [29.0, 29.0], rx: 14.5, stroke: '#2b2f34', stroke-width: 0.6, kind: collar}
+        - {id: collar-1-inner, at: [80.7, 11.245], size: [21.2, 21.2], rx: 10.6, stroke: '#2b2f34', stroke-width: 0.4, kind: collar}
+        - {id: collar-2, at: [176.8, 7.345], size: [29.0, 29.0], rx: 14.5, stroke: '#2b2f34', stroke-width: 0.6, kind: collar}
+        - {id: collar-2-inner, at: [180.7, 11.245], size: [21.2, 21.2], rx: 10.6, stroke: '#2b2f34', stroke-width: 0.4, kind: collar}
+        - {id: collar-3, at: [276.8, 7.345], size: [29.0, 29.0], rx: 14.5, stroke: '#2b2f34', stroke-width: 0.6, kind: collar}
+        - {id: collar-3-inner, at: [280.7, 11.245], size: [21.2, 21.2], rx: 10.6, stroke: '#2b2f34', stroke-width: 0.4, kind: collar}
+        - {id: collar-4, at: [376.8, 7.345], size: [29.0, 29.0], rx: 14.5, stroke: '#2b2f34', stroke-width: 0.6, kind: collar}
+        - {id: collar-4-inner, at: [380.7, 11.245], size: [21.2, 21.2], rx: 10.6, stroke: '#2b2f34', stroke-width: 0.4, kind: collar}
     components:
       placements:
         - {ref: startech/cablmanagerh-panel@1, id: panel, at: [0.0, 0.0], group: body, rel-pos: 1}
@@ -219,11 +247,30 @@ views:
     panel:
       decor:
         - {id: plate-edge, at: [0, 6.21], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: bracket-1-side, at: [21.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-2-side, at: [121.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-3-side, at: [221.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-4-side, at: [321.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-5-side, at: [421.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: foot-lip-1-side, at: [25.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-2-side, at: [125.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-3-side, at: [225.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-4-side, at: [325.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-5-side, at: [425.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: collar-1-side, at: [76.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-2-side, at: [176.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-3-side, at: [276.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-4-side, at: [376.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
         - {id: guide-1-top, at: [36.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-2-top, at: [136.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-3-top, at: [236.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-4-top, at: [336.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-5-top, at: [436.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: rivet-1-side, at: [37.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-2-side, at: [137.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-3-side, at: [237.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-4-side, at: [337.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-5-side, at: [437.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
     components:
       placements:
         - {ref: startech/cablmanagerh-flange@1, id: flange-top, at: [31.0, 0.0], group: body, rel-pos: 2}
@@ -232,11 +279,30 @@ views:
     panel:
       decor:
         - {id: plate-edge, at: [0, 6.21], size: [482.6, 1.2], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: bracket-1-side, at: [21.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-2-side, at: [121.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-3-side, at: [221.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-4-side, at: [321.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: bracket-5-side, at: [421.3, 7.41], size: [40.0, 7.4], rx: 1.0, fill: '#23262a', kind: bracket}
+        - {id: foot-lip-1-side, at: [25.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-2-side, at: [125.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-3-side, at: [225.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-4-side, at: [325.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: foot-lip-5-side, at: [425.3, 7.41], size: [32.0, 4.1], rx: 0, stroke: '#40454c', stroke-width: 0.4, kind: bracket}
+        - {id: collar-1-side, at: [76.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-2-side, at: [176.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-3-side, at: [276.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
+        - {id: collar-4-side, at: [376.8, 7.41], size: [29.0, 3.6], rx: 1.8, fill: '#23262a', kind: collar}
         - {id: guide-1-bottom, at: [36.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-2-bottom, at: [136.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-3-bottom, at: [236.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-4-bottom, at: [336.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
         - {id: guide-5-bottom, at: [436.75, 7.41], size: [9.1, 87.59], rx: 1.1, fill: '#40454c', kind: ring}
+        - {id: rivet-1-side, at: [37.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-2-side, at: [137.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-3-side, at: [237.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-4-side, at: [337.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
+        - {id: rivet-5-side, at: [437.1, 7.41], size: [8.4, 2.5], rx: 1.25, fill: '#101214', kind: rivet}
     components:
       placements:
         - {ref: startech/cablmanagerh-flange@1, id: flange-bottom, at: [31.0, 0.0], group: body, rel-pos: 3}
@@ -247,6 +313,7 @@ views:
         - {id: fold-top, at: [0, 0], size: [7.41, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
         - {id: fold-bottom, at: [0, 42.49], size: [7.41, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
         - {id: plate-edge, at: [6.21, 0], size: [1.2, 43.69], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: bracket-foot, at: [7.41, 0.845], size: [7.4, 42.0], rx: 1.0, fill: '#23262a', kind: bracket}
         - {id: ring-base, at: [7.41, 6.545], size: [4.0, 30.6], rx: 0, fill: '#40454c', kind: ring}
         - {id: ring-bar-top, at: [7.41, 6.545], size: [87.59, 4.0], rx: 0, fill: '#40454c', kind: ring}
         - {id: ring-bar-bottom, at: [7.41, 33.145], size: [87.59, 4.0], rx: 0, fill: '#40454c', kind: ring}
@@ -258,6 +325,7 @@ views:
         - {id: fold-top, at: [87.59, 0], size: [7.41, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
         - {id: fold-bottom, at: [87.59, 42.49], size: [7.41, 1.2], rx: 0, fill: '#1b1d20', kind: flange}
         - {id: plate-edge, at: [87.59, 0], size: [1.2, 43.69], rx: 0, fill: '#1b1d20', kind: panel}
+        - {id: bracket-foot, at: [80.19, 0.845], size: [7.4, 42.0], rx: 1.0, fill: '#23262a', kind: bracket}
         - {id: ring-base, at: [83.59, 6.545], size: [4.0, 30.6], rx: 0, fill: '#40454c', kind: ring}
         - {id: ring-bar-top, at: [0, 6.545], size: [87.59, 4.0], rx: 0, fill: '#40454c', kind: ring}
         - {id: ring-bar-bottom, at: [0, 33.145], size: [87.59, 4.0], rx: 0, fill: '#40454c', kind: ring}

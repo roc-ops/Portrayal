@@ -112,7 +112,7 @@ def test_the_controller_panel_carries_every_jack_the_drawing_shows():
     assert refs["console"] == "std/db9@1"
     assert {refs[i] for i in ("sensor", "feature")} == {"std/rj45@2"}
     assert refs["eth"] == "common/rj45-eth@1"
-    assert refs["reset"] == "common/reset-button@1"
+    assert "reset" not in refs  # the picture draws a ring, not a pinhole part: it is a decor ring
     assert sorted(i for i in refs if i.startswith("lamp-")) == [
         "lamp-current", "lamp-power", "lamp-sensor", "lamp-ub-load", "lamp-unlabelled", "lamp-voltage"]
 
@@ -142,7 +142,7 @@ def test_the_input_conflict_and_the_silent_places_are_gaps():
     gaps = {g["what"]: g for g in device()["gaps"]}
     assert gaps["input-conflict"]["reason"] == "sources-disagree"
     assert "IEC320 C20" in gaps["input-conflict"]["note"] and "NEMA L5-20P" in gaps["input-conflict"]["note"]
-    for what in ("outlet-lamps", "display-windows", "sensor-jack-type", "mounting-button-size"):
+    for what in ("outlet-lamps", "sensor-jack-type", "mounting-button-size"):
         assert what in gaps
 
 

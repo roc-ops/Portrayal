@@ -1,0 +1,47 @@
+format: 1
+kind: component
+name: vra1000-ring
+version: 1.0.0
+class: mechanical
+description: >-
+  A D ring of the Vertiv VRA1000 1U horizontal cable organizer seen from the front - a metal rod
+  loop that stands out of the plate, 10 mm across and 36.45 mm high, closed here at its tip, held by
+  a screw of its foot, with the opening a bundle runs through along the plate
+provenance:
+  size: >-
+    estimated - no page states a ring dimension. Read off the guide's picture of VRA1000 (page 7) against the
+    plate's 482.6 mm: four rings along the plate, the loop about as high as the plate less a margin
+    (36.45 mm), 10 mm across with its foot; the rod is taken as 5 mm. Spaced evenly, 134.0 mm
+    apart about the plate's middle (40.3, 174.3, 308.3 and 442.3 mm from the left end).
+  relief: >-
+    estimated - the loop stands 75 mm out of the plate's front face. Built as a frame of plates with
+    square corners where the real loop is a rod bent to a D: a foot against the plate, a bar along the top
+    and one along the bottom, and the closed end at the tip. The picture shows the end hooked and open; the
+    format has no slit, so the loop is drawn closed and the opening is a named gap of the device.
+    `out` is a distance from the plate, so a screw head that stands 1.5 mm proud of the 5 mm foot it sits on has an
+    `out` of 6.5; the 1.5 mm head height is estimated, as the guide states none.
+  guide: >-
+    estimated - the clear opening inside the frame, seen looking along the plate, which is the run:
+    26.45 mm high across the plate (the 36.45 less a rod each side) and 65 mm out of it.
+  guide-depth: >-
+    estimated - the loop is 10 mm across along the run.
+  color: >-
+    datasheet - "Color: Black" (VR Rack selection guide, publication SL-11367 (Vertiv), page 7). The picture is a render; the face is a lighter value
+    than the plate so the ring reads against it, and the screw heads are the grey the picture shows.
+size: {w: 10, h: 36.45}
+size-confidence: {w: estimated, h: estimated}
+guide: {kind: ring, aperture: {w: 26.45, h: 65}, run: x, depth: 10}
+elements:
+  back: {at: [0.0, 0.0], size: [10, 36.45], class: bezel}
+  bar-top: {at: [0.0, 0.0], size: [10, 5], class: bezel}
+  bar-bottom: {at: [0.0, 31.45], size: [10, 5], class: bezel}
+  tip: {at: [0.0, 0.0], size: [5, 36.45], class: bezel}
+  screw-1: {at: [6.0, 16.725], size: [3.0, 3.0], class: fastener}
+relief:
+  features:
+    - {node: back, out: 5, color: '#111315', confidence: estimated, source: 'the foot the ring stands on, a flat bracket; its thickness is the rod, estimated'}
+    - {node: bar-top, out: 75, color: '#111315', confidence: estimated, source: 'the rod along the top of the loop, out to the tip; the reach is scaled off the guide picture'}
+    - {node: bar-bottom, out: 75, color: '#0d0f10', confidence: estimated, source: 'the same'}
+    - {node: tip, lift: 70, out: 75, color: '#101214', confidence: estimated, source: 'the closed end of the loop; the real hook is open at the end (see the device gap), drawn closed'}
+    - {node: screw-1, lift: 5, out: 6.5, color: '#9aa0a6', confidence: estimated, source: 'the screw and nut that hold the ring, grey in the guide picture; head height not stated'}
+skins: [default]

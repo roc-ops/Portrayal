@@ -5,7 +5,7 @@ interface named in spec/schemas/connectors.yaml is a SLOT. Both are answered by
 `render.slot_entry` and published in the same `cages` list, told apart by `kind`.
 
 These run against the real library and a components.json built here by the
-indexer the build runs, never a fixture and never a possibly stale dist.
+indexer the build runs. They never use a fixture or a possibly stale dist.
 """
 import json
 import re
@@ -119,6 +119,8 @@ def test_the_connector_registry_is_not_vacuous():
                          "spade-m4",
                          "mrj21", "vhdci", "rj11", "sd-card",
                          "breaker-1ru-guard", "p40", "pdu-button",
+                         # the two small pluggable headers of the Rittal PDU metered controller
+                         "pdu-io-header",
                          # GPU power and NVLink (P-0028): presented by parts no
                          # device places yet, so none is a slot below
                          "eps12v-8pin", "pcie-8pin", "pcie-12vhpwr", "pcie-12v-2x6",
@@ -190,7 +192,11 @@ def test_the_connector_registry_is_not_vacuous():
                          "scg-g16-module",
                          # the DIGITAL OUT header of the Vertiv Avocent ACS800, presented by
                          # vertiv/acs800-digital-out@1 and mated by vertiv/acs800-digital-out-plug@1
-                         "screw-terminal-4-relay"}
+                         "screw-terminal-4-relay",
+                         # the mini SIM slot, the DC housing and the digital I/O header of the
+                         # Opengear ACM7000 gateways, presented by opengear/sim-slot-2ff@1,
+                         # opengear/acm7000-dc-header@1 and opengear/acm7000-dio-header@1
+                         "sim-card-2ff", "opengear-acm-dc-block-4", "opengear-acm-dio-block-8"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
@@ -509,13 +515,13 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
     published once - as the wrapper's own placement, in its composer's frame.
 
     ON A COMPOSER BUILT HERE, because the library has no composer of the
-    wrapper: the FHD cassette rears that composed common/mpo-adapter@1 moved
-    to the flanged bulkhead on main (#497, #499), which presents `mpo` itself
-    (common/mpo-flange-adapter@2) rather than forwarding a std/mpo, and
-    mpo-adapter (@2 since the aperture was corrected) is `unplaced`. So the
-    forwarding is exercised on the real wrapper contract, and every mpo slot
-    the library does publish - one per bulkhead on each cassette back - is
-    held to the same shape."""
+    wrapper. The FHD cassette rears that composed common/mpo-adapter@1 moved
+    to the flanged bulkhead on main (#497, #499). That bulkhead presents `mpo`
+    itself (common/mpo-flange-adapter@2) rather than forwarding a std/mpo.
+    And mpo-adapter (@2 since the aperture was corrected) is `unplaced`. So the
+    forwarding is exercised on the real wrapper contract. Every mpo slot the
+    library does publish is held to the same shape, one per bulkhead on each
+    cassette back."""
     lib = render_mod.Library([str(LIB)])
     composer = {"size": {"w": 80.0, "h": 30.0},
                 "parts": [{"id": "mtp1", "ref": "common/mpo-adapter@2",
@@ -533,8 +539,8 @@ def test_the_wrapper_is_the_slot_where_it_is_composed(comps):
 
 def test_a_part_presenting_its_own_interface_keeps_its_composed_slots():
     """P2 is about FORWARDING only. A contract that declares its own
-    interface and point forwards nothing (manifest.presented_interface), so a
-    composed aperture of it is still its own slot - the shape a duplex LC
+    interface and point forwards nothing (manifest.presented_interface). So a
+    composed aperture of it is still its own slot. It is the shape a duplex LC
     adapter presenting `lc-duplex` over its two `lc` bores takes."""
     lib = render_mod.Library([str(LIB)])
     families = render_mod._pluggable_families()

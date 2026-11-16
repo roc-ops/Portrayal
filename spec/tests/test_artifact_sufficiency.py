@@ -77,7 +77,8 @@ def test_a_listings_manufacturer_is_resolved_in_the_published_file():
         ns = key.split("/")[0]
         assert ls["ns"] == ns
         assert ls["manufacturer"] == vendors[ns]["display"], key
-        assert vendors[ns]["role"] in ("software", "both"), key
+        role = vendors[ns]["role"]
+        assert {"software", "both", "reseller"} & (set(role) if isinstance(role, list) else {role}), key
     assert seen, "no listing shipped; this test proved nothing"
 
 

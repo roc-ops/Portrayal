@@ -1,0 +1,544 @@
+format: 1
+kind: device
+name: p42g20g
+version: 0.1.0
+maturity: modelled
+manufacturer: Panduit
+model: P42G20G
+description: >-
+  Panduit P42G20G G6 intelligent rack PDU, monitored and switched per outlet, 0U: a 1780 mm strip for a cabinet's
+  vertical channel. It has a fixed 3 m cord ending in an IEC 60309 3P+E 9h 60 A plug, three-phase delta, 200-240 V.
+  It has 42 outlets in two rows: 21 C13/C15 combination sockets and 21 C13/C15/C19 combination sockets, in six
+  blocks. Each block is on a 20 A double-pole breaker across two of the three lines, as the drawing's labels read.
+  A G6 controller with a display, three buttons, two lamps, five RJ45 jacks and a USB-A port sits between the two halves.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S VECTOR DRAWING. Panduit customer drawing P42G20G-XXYZ_DC rev 00A (11/03/2023), two
+      sheets, has a front, rear, left, right and bottom view. Its scale was taken from its own 1780.0 overall dimension,
+      which is 609.9 pt on the sheet, so 2.918 mm to the point. The 1555.0 between the buttons agrees. Positions were
+      read off renderings of the front view at 200 and 300 dpi and off the vector paths, to about 1 mm. The library
+      draws the PDU STANDING, cord end down, so a position along the drawing becomes 1780 minus that, and a position
+      across becomes x. No photograph and no 3D model of the part is held.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`: the strip stands beside a rack's upright on two mounting buttons on its back, 1555.0 apart and
+      40.5 from the cord end (rear view). The drawing says 'VERTICAL, 0U FULL' and gives no count of units. `ru: 40` is
+      the whole units the 1780 mm length covers (40.04), and no held page states it.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1780.0 long (front view) and 56.0 and 75.0 on the bottom view. Panduit's product page 'P42G20G - Panduit'
+      prints 56 mm wide, 1,780 mm high and 75 mm deep, and agrees. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750 and
+      no form at 1780 (gaps: body-size). The drawing's figures are used. Weight 11.5 kg is on sheet 2's part table only.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view. From the cord end: a plate with the external ground, three breaker plates B1 to B3, and three
+      blocks of four columns of two outlets. Then come a blank plate with five hexagon-head marks and a ring, the controller
+      and breaker plates B4 to B6. The marks sit in a 2, 1, 2 layout along the plate. Three blocks of three columns run to the far end. Plate, block and outlet positions match the P42G20M's
+      to 1 mm, checked against the 300 dpi rendering. The outlet pitch is not dimensioned. The column pitch is 37.1
+      in the first half, as on the P42G20M, and kept in the second.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - '(21)C13/C15, (21)C13/C15/C19'. The receptacle block draws each as ONE SOCKET named 'C13/C15 COMBO 10A'
+      and 'C13/C15/C19 COMBO 16A', so each is one outlet. The sheet PUSP97 prints the second as C13/C15/C19/C21. The
+      upper row of the front view is the C13/C15 and the lower row the C13/C15/C19 (x = 4 and 28). The outlets are
+      numbered 1 to 42 column by column from the cord end, the upper socket first. THE NUMBERING IS AN ASSUMPTION, as
+      the drawing prints no outlet numeral (gaps: outlet-numerals). THE WAY UP OF EACH SOCKET IS NOT READ.
+  banks:
+    confidence: drawing
+    note: >-
+      drawing - the front view labels the six blocks with a colour each. They read 'B1 [DARK GRAY]', 'B2 [LIGHT GRAY]' and 'B3 [WHITE]',
+      then 'B4 [DARK GRAY]', 'B5 [LIGHT GRAY]' and 'B6 [WHITE]'. The labels sit above the blocks, left to right from the cord end.
+      A second row of labels below the blocks pairs B3 with the second block and B1 with the third (gaps:
+      bank-colour-labels). The six breaker plates are B1 to B6, each printing its lines: L1-L2, L2-L3, L3-L1, L1-L2,
+      L2-L3, L3-L1. THAT BLOCK Bk IS FED BY BREAKER Bk IS A READING OF THE LABELS. The three greys are drawn as #55585c,
+      #9a9da1 and #e4e5e7 and are estimates of the words.
+  colour:
+    confidence: drawing
+    note: >-
+      drawing - sheet 2 gives BLACK (RAL 9005) for the plain part number P42G20G. It is drawn here as the RAL's #0e0e10
+      on the body. THE PLATE, MOULDING AND SCREW COLOURS ARE NOT CHECKED against any source. No photograph is held, so no
+      colour is sampled.
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the controller plate is drawn between the blank plate and the fourth breaker plate, about 142 along
+      against the component's 127.8. The bay is centred on it. P42G20G is composed with panduit/g6-controller@1 in a bay
+      because the sheet PUSP97 calls the controller hot swappable. The part names each jack by the label the plate prints.
+  lamps:
+    confidence: datasheet
+    note: >-
+      datasheet - Panduit's product page 'P42G20G - Panduit' lists 'Green LED indicates outlet is on'. That is a green
+      LED per outlet. No held picture shows the lamp and the outlet parts carry none, so none is drawn on the strip
+      (gaps: outlet-lamps). No photograph is held, so no lit colour is sampled.
+  input:
+    confidence: drawing
+    note: >-
+      drawing - 'INPUT PLUG: IEC 60309 3P+E (IP44)' and plug 'IEC 60309, 3P 4W, 9H'. It also prints 'INPUT VOLTAGE:
+      200-240VAC' and 'INPUT CURRENT: 60A (48A DERATED)'. It prints 'INPUT PHASE: THREE-PHASE, DELTA' and
+      'RATED POWER: 17.3 kVA'. Sheet 2 gives the
+      plain part number a 3 m cord. The cord is one part at the cord end; its length and the plug's face are not drawn.
+  capability:
+    confidence: drawing
+    note: >-
+      drawing - the unit type is MONITORED & SWITCHED PER OUTLET. So `metering-scope: outlet` and
+      `outlet-switching: true`.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear view: two buttons 40.5 from the cord end and 1555.0 apart, on the strip's centre line. Two marks
+      5.5 across sit 24.0 from the buttons, as the view's 24.0 dimensions read. A 7.1 ring sits near the far end. The callout 'TOOLESS MOUNTING
+      BUTTON LOCATIONS (12) PL' names twelve locations, and the view draws the two buttons and no other (gaps: rear-marks).
+  sides:
+    confidence: estimated
+    note: >-
+      ESTIMATED from the vector paths of sheet 1 (2.918 mm to the point, scaled on the 1780.0 overall dimension). The
+      sheet stacks FRONT, RIGHT, REAR and LEFT upward and puts BOTTOM beside FRONT, as the P42G20M's sheet does. The
+      library stands the strip cord end down, a half turn in the plane. The sheet's RIGHT VIEW is the library's left
+      face and its LEFT VIEW the library's right face. The pairs of marks 24.0 apart agree in both views. Dot lattices:
+      RIGHT VIEW holds 1748 closed 0.6 pt marks, 1.75 mm across. One is drawn twice, so 1747 dots in 17 blocks
+      on a 4.96 mm pitch. LEFT VIEW holds 1659 dots in 16 blocks on the same pitch. Counted twice, by bounding box and by
+      distinct centres. Also drawn: 12 and 24 round screws 7.1 across, and four marks 5.5 across in two pairs 24.0 apart
+      on each face. Each face also has 42 small tabs along its outlet-side edge. The LEFT VIEW's window is 157.6 by 32.1,
+      with two corner marks. Each position is good to about 1 mm. No function is stated for any mark.
+  ends:
+    confidence: estimated
+    note: >-
+      ESTIMATED from the vector paths. The sheet's BOTTOM VIEW is the far end, the library's top face. It holds a 10 by 10
+      lattice of 100 dots on a 4.96 mm pitch, placed to about 2 mm. Its flange tabs are not drawn (gaps: side-marks). The
+      sheet draws the cord's plug end-on at the left of the front view and in its PLUG block. The reused cord part has no
+      plug face, so the bottom face is the cord gland alone (gaps: cord-end-face).
+attrs:
+  physical: {length-mm: 1780, weight-kg: 11.5}
+  power: {input-ac: 'three-phase delta, 200-240 V, 60 A (48 A derated), 17.3 kVA (drawing note 1)', input-plug: other, input-cord: fixed,
+    input-phase: three, input-wiring: delta, input-current-a: 48, plug-rating-a: 60, breakers: six 20 A double-pole electromechanical
+      switches and breakers}
+  management: {metering-scope: outlet, outlet-switching: true, network-module: G6 controller}
+chassis: {width: 56, height: 1780, depth: 75, ru: 40, mount: rack-side, color: '#0e0e10', airflow: passive, weight-kg: 11.5}
+gaps:
+- what: body-size
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the drawing and Panduit's product page 'P42G20G - Panduit' give 56 by 75 by 1780. The sheet PUSP97 lists a 0U FULL form at 52 by 53 by 1750.
+    The drawing's figures are used.
+  wanted: the maker's statement of which form the P42G20G is.
+- what: photographs
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-photo
+  note: no photograph of any face is held, so no colour, finish, printing or plate shape is checked against a photograph.
+  wanted: a photograph of each face of the P42G20G.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: no dimension of an outlet or a plate on the front view is stated. The positions are read off the drawing at its own 1780.0 scale.
+  wanted: a dimensioned front view.
+- what: outlet-numerals
+  scope: [front]
+  reason: needs-drawing
+  note: the drawing prints no outlet numeral that is text, so none is drawn. The numbering is column by column from the cord end.
+  wanted: a front view whose outlet numerals are text.
+- what: c15-notch
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the 10 A 'C13/C15 COMBO' socket is a C13 outlet with the C15 extension its name states. It presents the C13 key
+    and no C15 plug is registered. The 16 A socket presents the combination key. The drawing dimensions neither.
+  wanted: a dimensioned drawing of the socket.
+- what: cord-end-face
+  scope: [bottom]
+  reason: needs-drawing
+  note: >-
+    the sheet draws the plug end-on at the left of the front view and in its PLUG block. The reused cord part draws
+    no plug face, so the bottom face is the cord gland alone.
+  wanted: a cord part that draws the plug face.
+- what: rear-marks
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the rear view's callout names twelve toolless button locations, and the view draws two buttons. No document says
+    where the other ten are.
+  wanted: the maker's installation drawing.
+- what: side-marks
+  scope: [left, right, top]
+  reason: vendor-silent
+  note: >-
+    the dot lattices, screws, tabs, window and corner marks of the sides and the far end are drawn from the
+    sheet as unnamed decor. No document names any of them. The far end's flange tabs are not drawn.
+  wanted: a photograph of each long side.
+- what: breaker-plate-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the breaker plates are drawn about 56 along the strip against panduit/g5-breaker-20a's 70.2. The part is reused and
+    the plates are placed on their drawn centres.
+  wanted: a dimensioned front view.
+- what: bank-colour-labels
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the front view's second row of labels pairs B3 [WHITE] with the second block and B1 [DARK GRAY] with the third. The
+    row above pairs B1, B2 and B3 with the blocks in order, and that row is used.
+  wanted: the maker's statement of each block's colour.
+- what: wordmark-and-legends
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the earth symbol of the cord-end plate, the boxed 1/2 on each block, the rating triangles and the small boxes
+    are not drawn. The breaker legends and the controller's wordmark are drawn.
+  wanted: a photograph of the cord end and a block.
+- what: outlet-lamps
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    Panduit's product page 'P42G20G - Panduit' lists 'Green LED indicates outlet is on'. No held picture shows the lamp,
+    so none is drawn.
+  wanted: a photograph of the outlet face.
+- what: part-number-variants
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    sheet 2 of the drawing lists the plain P42G20G only; its key lists six colours, three cord lengths and a
+    bottom-end-fed cord. The device states the plain part's 3 m cord and 11.5 kg only.
+  wanted: an order for each variant that has a held photograph or a dimensioned drawing.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s 42 outlets, numbered 1 to 42 column by column
+      from the cord end - 21 C13/C15 and 21 C13/C15/C19 combination sockets, each switchable'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'six 20 A double-pole breakers, B1 to B6, each
+      feeding one block of outlets'}
+  controller: {term: Module, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 56, h: 1780}
+    panel:
+      decor:
+      - {id: moulding-1, at: [1.0, 1283.1], size: [54.0, 151.4], rx: 2.0, fill: '#55585c', kind: outlet-moulding}
+      - {id: moulding-2, at: [1.0, 1117.1], size: [54.0, 151.4], rx: 2.0, fill: '#9a9da1', kind: outlet-moulding}
+      - {id: moulding-3, at: [1.0, 951.1], size: [54.0, 151.4], rx: 2.0, fill: '#e4e5e7', kind: outlet-moulding}
+      - {id: moulding-4, at: [1.0, 284.2], size: [54.0, 114.3], rx: 2.0, fill: '#55585c', kind: outlet-moulding}
+      - {id: moulding-5, at: [1.0, 149.2], size: [54.0, 114.3], rx: 2.0, fill: '#9a9da1', kind: outlet-moulding}
+      - {id: moulding-6, at: [1.0, 13.2], size: [54.0, 114.3], rx: 2.0, fill: '#e4e5e7', kind: outlet-moulding}
+      - {id: blank-plate, at: [1.5, 795.0], size: [53.0, 157.0], rx: 1.5, fill: '#1e2023', kind: blank-plate, confidence: estimated}
+      - {id: blank-plate-hex-1, at: [6.12, 915.8], size: [5.52, 4.82], pattern: motif, pattern-cells: &hex [[[0, 2.41], [1.38, 0], [4.14, 0], [5.52, 2.41], [4.14, 4.82], [1.38, 4.82]]], pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-2, at: [44.29, 915.8], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-3, at: [43.33, 847.17], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-4, at: [6.12, 813.69], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-hex-5, at: [44.29, 813.69], size: [5.52, 4.82], pattern: motif, pattern-cells: *hex, pattern-pitch: [5.52, 4.82], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 front view, a hexagon head read from the vector paths'}
+      - {id: blank-plate-bolt-1, at: [6.65, 915.98], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-2, at: [44.82, 915.98], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-3, at: [43.86, 847.35], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-4, at: [6.65, 813.87], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-bolt-5, at: [44.82, 813.87], size: [4.46, 4.46], rx: 2.23, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: blank-plate-ring, at: [9.885, 938.655], size: [5.87, 5.87], rx: 2.935, stroke: '#565b60', stroke-width: 0.3, kind: ring, confidence: estimated}
+      - {id: blank-plate-ring-inner, at: [10.585, 939.355], size: [4.47, 4.47], rx: 2.235, stroke: '#565b60', stroke-width: 0.3, kind: ring, confidence: estimated}
+      - {id: end-screw, at: [40.0, 1707.7], size: [4.0, 4.0], rx: 2.0, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: controller-bracket-1, at: [24.7, 781.2], size: [6.6, 6.6], rx: 3.3, fill: '#565b60', kind: screw-head}
+      - {id: controller-bracket-2, at: [24.7, 644.2], size: [6.6, 6.6], rx: 3.3, fill: '#565b60', kind: screw-head}
+    components:
+      bays:
+      - id: controller
+        at: [4.5, 652.1]
+        size: {w: 47.0, h: 127.8}
+        accepts: [panduit/g6-controller@1]
+        default: panduit/g6-controller@1
+        group: controller
+        rel-pos: 1
+      placements:
+      - {id: outlet-1, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1398.0], group: outlets, rel-pos: 1, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-2, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1398.0], group: outlets, rel-pos: 2, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-3, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1360.9], group: outlets, rel-pos: 3, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-4, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1360.9], group: outlets, rel-pos: 4, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-5, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1323.8], group: outlets, rel-pos: 5, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-6, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1323.8], group: outlets, rel-pos: 6, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-7, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1286.7], group: outlets, rel-pos: 7, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-8, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1286.7], group: outlets, rel-pos: 8, fed-by: input, through: breaker-1, states: ['on', 'off']}
+      - {id: outlet-9, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1232.0], group: outlets, rel-pos: 9, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-10, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1232.0], group: outlets, rel-pos: 10, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-11, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1194.9], group: outlets, rel-pos: 11, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-12, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1194.9], group: outlets, rel-pos: 12, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-13, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1157.8], group: outlets, rel-pos: 13, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-14, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1157.8], group: outlets, rel-pos: 14, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-15, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1120.7], group: outlets, rel-pos: 15, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-16, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1120.7], group: outlets, rel-pos: 16, fed-by: input, through: breaker-2, states: ['on', 'off']}
+      - {id: outlet-17, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1066.0], group: outlets, rel-pos: 17, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-18, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1066.0], group: outlets, rel-pos: 18, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-19, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 1028.9], group: outlets, rel-pos: 19, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-20, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 1028.9], group: outlets, rel-pos: 20, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-21, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 991.8], group: outlets, rel-pos: 21, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-22, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 991.8], group: outlets, rel-pos: 22, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-23, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 954.7], group: outlets, rel-pos: 23, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-24, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 954.7], group: outlets, rel-pos: 24, fed-by: input, through: breaker-3, states: ['on', 'off']}
+      - {id: outlet-25, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 362.0], group: outlets, rel-pos: 25, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-26, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 362.0], group: outlets, rel-pos: 26, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-27, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 324.9], group: outlets, rel-pos: 27, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-28, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 324.9], group: outlets, rel-pos: 28, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-29, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 287.8], group: outlets, rel-pos: 29, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-30, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 287.8], group: outlets, rel-pos: 30, fed-by: input, through: breaker-4, states: ['on', 'off']}
+      - {id: outlet-31, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 227.0], group: outlets, rel-pos: 31, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-32, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 227.0], group: outlets, rel-pos: 32, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-33, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 189.9], group: outlets, rel-pos: 33, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-34, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 189.9], group: outlets, rel-pos: 34, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-35, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 152.8], group: outlets, rel-pos: 35, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-36, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 152.8], group: outlets, rel-pos: 36, fed-by: input, through: breaker-5, states: ['on', 'off']}
+      - {id: outlet-37, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 91.0], group: outlets, rel-pos: 37, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: outlet-38, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 91.0], group: outlets, rel-pos: 38, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: outlet-39, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 53.9], group: outlets, rel-pos: 39, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: outlet-40, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 53.9], group: outlets, rel-pos: 40, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: outlet-41, ref: 'panduit/g5-outlet-c13-c15@1', at: [4.0, 16.8], group: outlets, rel-pos: 41, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: outlet-42, ref: 'panduit/g5-outlet-c13-c15-c19@1', at: [28.0, 16.8], group: outlets, rel-pos: 42, fed-by: input, through: breaker-6, states: ['on', 'off']}
+      - {id: breaker-1, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 1603.9], group: breakers, rel-pos: 1, lines: [L1, L2], description: 'Breaker B1, a 20 A double-pole switch and breaker across L1-L2', attrs: {label: B1, lines: L1-L2}}
+      - {id: breaker-2, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 1529.9], group: breakers, rel-pos: 2, lines: [L2, L3], description: 'Breaker B2, a 20 A double-pole switch and breaker across L2-L3', attrs: {label: B2, lines: L2-L3}}
+      - {id: breaker-3, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 1454.9], group: breakers, rel-pos: 3, lines: [L3, L1], description: 'Breaker B3, a 20 A double-pole switch and breaker across L3-L1', attrs: {label: B3, lines: L3-L1}}
+      - {id: breaker-4, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 561.9], group: breakers, rel-pos: 4, lines: [L1, L2], description: 'Breaker B4, a 20 A double-pole switch and breaker across L1-L2', attrs: {label: B4, lines: L1-L2}}
+      - {id: breaker-5, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 487.9], group: breakers, rel-pos: 5, lines: [L2, L3], description: 'Breaker B5, a 20 A double-pole switch and breaker across L2-L3', attrs: {label: B5, lines: L2-L3}}
+      - {id: breaker-6, ref: 'panduit/g5-breaker-20a@1', at: [4.7, 407.9], group: breakers, rel-pos: 6, lines: [L3, L1], description: 'Breaker B6, a 20 A double-pole switch and breaker across L3-L1', attrs: {label: B6, lines: L3-L1}}
+      - {id: ground, ref: 'common/ground-screw@1', at: [6.0, 1741.2], group: grounding, rel-pos: 1}
+    regions:
+    - id: bank-1
+      label: Bank B1 - 8 outlets on breaker B1, lines L1-L2
+      members: [outlet-1, outlet-2, outlet-3, outlet-4, outlet-5, outlet-6, outlet-7, outlet-8, breaker-1]
+    - id: bank-2
+      label: Bank B2 - 8 outlets on breaker B2, lines L2-L3
+      members: [outlet-9, outlet-10, outlet-11, outlet-12, outlet-13, outlet-14, outlet-15, outlet-16, breaker-2]
+    - id: bank-3
+      label: Bank B3 - 8 outlets on breaker B3, lines L3-L1
+      members: [outlet-17, outlet-18, outlet-19, outlet-20, outlet-21, outlet-22, outlet-23, outlet-24, breaker-3]
+    - id: bank-4
+      label: Bank B4 - 6 outlets on breaker B4, lines L1-L2
+      members: [outlet-25, outlet-26, outlet-27, outlet-28, outlet-29, outlet-30, breaker-4]
+    - id: bank-5
+      label: Bank B5 - 6 outlets on breaker B5, lines L2-L3
+      members: [outlet-31, outlet-32, outlet-33, outlet-34, outlet-35, outlet-36, breaker-5]
+    - id: bank-6
+      label: Bank B6 - 6 outlets on breaker B6, lines L3-L1
+      members: [outlet-37, outlet-38, outlet-39, outlet-40, outlet-41, outlet-42, breaker-6]
+  rear:
+    size: {w: 56, h: 1780}
+    panel:
+      decor:
+      - {id: rear-mark-1, at: [25.25, 1712.5], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: rear-mark-2, at: [25.25, 156.8], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: rear-ring, at: [24.45, 6.45], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+    components:
+      placements:
+      - {id: button-1, ref: 'panduit/g5-mounting-button@1', at: [18.8, 1730.3], group: mounting, rel-pos: 1}
+      - {id: button-2, ref: 'panduit/g5-mounting-button@1', at: [18.8, 175.3], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 56, h: 75}
+    panel:
+      decor:
+      - id: far-end-dots
+        at: [3.2, 11.3]
+        size: [49.6, 49.6]
+        pattern: motif
+        pattern-cells:
+        - [[3.355, 2.84], [2.84, 3.355], [2.12, 3.355], [1.605, 2.84], [1.605, 2.12], [2.12, 1.605], [2.84, 1.605], [3.355, 2.12]]
+        pattern-pitch: [4.96, 4.96]
+        confidence: estimated
+        source: P42G20G-XXYZ_DC sheet 1, BOTTOM VIEW (the far end, the library's top face), 10 by 10 dots read from the vector paths
+  bottom:
+    size: {w: 56, h: 75}
+    components:
+      placements:
+      - id: input
+        ref: panduit/g5-cord-60309-3pe-9h@1
+        at: [12.0, 21.5]
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 3P+E 9h plug rated 60 A
+  left:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - {id: side-dots-1, at: [14.79, 7.47], size: [4.96, 1517.76], pattern: motif, pattern-cells: &dot [[[3.355, 2.84], [2.84, 3.355], [2.12, 3.355], [1.605, 2.84], [1.605, 2.12], [2.12, 1.605], [2.84, 1.605], [3.355, 2.12]]], pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW (the library''s left face), 306 dots read from the vector paths'}
+      - {id: side-dots-2, at: [19.75, 7.47], size: [9.92, 148.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 60 dots'}
+      - {id: side-dots-3, at: [29.67, 7.47], size: [4.96, 89.28], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 18 dots'}
+      - {id: side-dots-4, at: [34.63, 7.47], size: [4.96, 1517.76], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 306 dots'}
+      - {id: side-dots-5, at: [29.67, 102.60], size: [4.96, 54.56], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 11 dots'}
+      - {id: side-dots-6, at: [39.59, 127.40], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 25 dots'}
+      - {id: side-dots-7, at: [19.75, 167.38], size: [14.88, 9.92], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 6 dots'}
+      - {id: side-dots-8, at: [19.75, 187.51], size: [9.92, 1339.20], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 540 dots'}
+      - {id: side-dots-9, at: [29.67, 187.51], size: [4.96, 44.64], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 9 dots'}
+      - {id: side-dots-10, at: [29.67, 237.70], size: [4.96, 128.96], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 26 dots'}
+      - {id: side-dots-11, at: [39.59, 262.79], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 25 dots'}
+      - {id: side-dots-12, at: [29.67, 372.80], size: [4.96, 1155.68], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 233 dots'}
+      - {id: side-dots-13, at: [39.59, 792.99], size: [4.96, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 5 dots'}
+      - {id: side-dots-14, at: [44.55, 792.99], size: [19.84, 148.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 120 dots'}
+      - {id: side-dots-15, at: [39.59, 907.96], size: [4.96, 34.72], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 7 dots'}
+      - {id: side-dots-16, at: [39.59, 1103.18], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 25 dots'}
+      - {id: side-dots-17, at: [39.59, 1268.05], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 RIGHT VIEW, 25 dots'}
+      - {id: screw-1, at: [8.49, 5.02], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-2, at: [8.49, 335.22], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-3, at: [8.49, 575.25], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-4, at: [43.33, 651.15], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-5, at: [43.33, 777.12], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-6, at: [8.49, 815.46], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-7, at: [37.82, 817.39], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-8, at: [37.82, 902.38], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-9, at: [8.49, 1015.40], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-10, at: [8.49, 1291.51], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-11, at: [8.49, 1531.72], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-12, at: [8.49, 1746.98], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-1, at: [24.16, 156.98], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-2, at: [24.16, 180.98], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-3, at: [24.16, 1712.67], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-4, at: [24.16, 1736.74], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: tab-1, at: [70.46, 22.00], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-2, at: [70.46, 38.81], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-3, at: [70.46, 59.38], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-4, at: [70.46, 76.19], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-5, at: [70.46, 96.75], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-6, at: [70.46, 113.57], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-7, at: [70.46, 156.98], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-8, at: [70.46, 173.80], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-9, at: [70.46, 194.37], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-10, at: [70.46, 211.36], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-11, at: [70.46, 231.92], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-12, at: [70.46, 248.73], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-13, at: [70.46, 292.15], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-14, at: [70.46, 308.96], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-15, at: [70.46, 329.53], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-16, at: [70.46, 346.34], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-17, at: [70.46, 366.91], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-18, at: [70.46, 383.71], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-19, at: [70.46, 961.13], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-20, at: [70.46, 977.93], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-21, at: [70.46, 998.51], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-22, at: [70.46, 1015.32], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-23, at: [70.46, 1035.88], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-24, at: [70.46, 1052.70], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-25, at: [70.46, 1073.27], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-26, at: [70.46, 1090.25], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-27, at: [70.46, 1127.20], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-28, at: [70.46, 1144.00], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-29, at: [70.46, 1164.57], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-30, at: [70.46, 1181.39], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-31, at: [70.46, 1201.95], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-32, at: [70.46, 1218.76], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-33, at: [70.46, 1239.51], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-34, at: [70.46, 1256.32], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-35, at: [70.46, 1293.26], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-36, at: [70.46, 1310.06], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-37, at: [70.46, 1330.64], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-38, at: [70.46, 1347.45], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-39, at: [70.46, 1368.01], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-40, at: [70.46, 1385.00], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-41, at: [70.46, 1405.57], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-42, at: [70.46, 1422.38], size: [3.68, 6.0], fill: '#3c4046', kind: side-mark, confidence: estimated}
+  right:
+    size: {w: 75, h: 1780}
+    panel:
+      decor:
+      - {id: side-dots-1, at: [34.70, 7.47], size: [4.96, 644.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW (the library''s right face), 130 dots read from the vector paths'}
+      - {id: side-dots-2, at: [39.66, 7.47], size: [14.88, 148.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 90 dots'}
+      - {id: side-dots-3, at: [54.83, 7.47], size: [4.96, 1502.88], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 303 dots'}
+      - {id: side-dots-4, at: [9.60, 127.40], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 25 dots'}
+      - {id: side-dots-5, at: [39.66, 167.38], size: [14.88, 9.92], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 6 dots'}
+      - {id: side-dots-6, at: [39.66, 192.47], size: [9.92, 1130.88], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 456 dots'}
+      - {id: side-dots-7, at: [49.58, 192.47], size: [4.96, 1319.36], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 266 dots'}
+      - {id: side-dots-8, at: [9.60, 262.79], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 25 dots'}
+      - {id: side-dots-9, at: [4.64, 788.03], size: [24.80, 148.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 150 dots'}
+      - {id: side-dots-10, at: [29.74, 788.03], size: [4.96, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 5 dots'}
+      - {id: side-dots-11, at: [34.70, 817.80], size: [4.96, 84.32], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 17 dots'}
+      - {id: side-dots-12, at: [34.70, 907.96], size: [4.96, 575.36], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 116 dots'}
+      - {id: side-dots-13, at: [29.74, 912.92], size: [4.96, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 5 dots'}
+      - {id: side-dots-14, at: [9.60, 1103.18], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 25 dots'}
+      - {id: side-dots-15, at: [9.60, 1268.05], size: [24.80, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 25 dots'}
+      - {id: side-dots-16, at: [34.70, 1663.14], size: [14.88, 24.80], pattern: motif, pattern-cells: *dot, pattern-pitch: [4.96, 4.96], confidence: estimated, source: 'P42G20G-XXYZ_DC sheet 1 LEFT VIEW, 15 dots'}
+      - {id: window, at: [15.76, 1500.46], size: [32.04, 157.57], fill: '#2b2e32', kind: side-window, confidence: estimated}
+      - {id: window-corner-1, at: [38.70, 1499.15], size: [11.64, 11.47], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: window-corner-2, at: [13.92, 1649.02], size: [11.65, 11.47], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: screw-1, at: [58.66, 5.02], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-2, at: [21.54, 96.32], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-3, at: [21.54, 103.77], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-4, at: [21.54, 231.31], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-5, at: [21.54, 238.93], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-6, at: [58.66, 335.22], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-7, at: [21.54, 366.46], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-8, at: [21.54, 373.91], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-9, at: [58.66, 575.25], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-10, at: [23.81, 651.15], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-11, at: [23.81, 767.23], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-12, at: [29.33, 812.39], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-13, at: [58.66, 815.46], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-14, at: [29.33, 902.57], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-15, at: [58.66, 1015.40], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-16, at: [21.54, 1073.18], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-17, at: [21.54, 1080.62], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-18, at: [21.54, 1239.24], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-19, at: [21.54, 1246.69], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-20, at: [58.66, 1291.51], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-21, at: [21.54, 1405.31], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-22, at: [21.54, 1412.75], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-23, at: [58.66, 1531.72], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: screw-24, at: [58.66, 1746.98], size: [7.1, 7.1], rx: 3.55, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-1, at: [44.57, 156.98], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-2, at: [44.57, 180.98], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-3, at: [44.57, 1712.67], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: pair-mark-4, at: [44.57, 1736.74], size: [5.5, 5.5], rx: 2.75, fill: '#565b60', kind: screw-head, confidence: estimated}
+      - {id: tab-1, at: [0.44, 17.10], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-2, at: [0.44, 39.59], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-3, at: [0.44, 54.65], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-4, at: [0.44, 77.15], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-5, at: [0.44, 92.04], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-6, at: [0.44, 114.52], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-7, at: [0.44, 152.27], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-8, at: [0.44, 174.76], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-9, at: [0.44, 189.64], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-10, at: [0.44, 212.14], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-11, at: [0.44, 227.02], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-12, at: [0.44, 249.52], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-13, at: [0.44, 287.25], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-14, at: [0.44, 309.75], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-15, at: [0.44, 324.62], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-16, at: [0.44, 347.31], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-17, at: [0.44, 362.18], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-18, at: [0.44, 384.68], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-19, at: [0.44, 956.57], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-20, at: [0.44, 979.08], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-21, at: [0.44, 993.96], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-22, at: [0.44, 1016.45], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-23, at: [0.44, 1031.34], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-24, at: [0.44, 1054.01], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-25, at: [0.44, 1068.89], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-26, at: [0.44, 1091.40], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-27, at: [0.44, 1122.64], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-28, at: [0.44, 1145.14], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-29, at: [0.44, 1160.02], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-30, at: [0.44, 1182.70], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-31, at: [0.44, 1197.40], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-32, at: [0.44, 1220.07], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-33, at: [0.44, 1234.96], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-34, at: [0.44, 1257.46], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-35, at: [0.44, 1288.70], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-36, at: [0.44, 1311.20], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-37, at: [0.44, 1326.26], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-38, at: [0.44, 1348.76], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-39, at: [0.44, 1363.46], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-40, at: [0.44, 1386.14], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-41, at: [0.44, 1401.02], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+      - {id: tab-42, at: [0.44, 1423.51], size: [3.59, 5.5], fill: '#3c4046', kind: side-mark, confidence: estimated}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the controller in its place.
+    bays: {controller: panduit/g6-controller@1}
+    part-numbers:
+      P42G20G: {}
+datasheet: {title: G6 Intelligent Power Distribution Unit (iPDU) specification sheet PUSP97-WW-ENG 7/2024, sha256: 4892d9e05016063b17d125754a57d7d6e303e0bbe08471c428c93d7a4302cea0,
+  url: 'https://www.panduit.com/PanProductResource/en/P42G20G/SpecificationSheets2.pdf'}
+references:
+- {title: 'Panduit customer drawing P42G20G-XXYZ_DC, intelligent series PDU P42G20G-XXYZ, rev 00A 11/03/2023', url: 'https://www.panduit.com/PanProductResource/en/P42G20G/PartDrawings.pdf',
+  sha256: 7de29b743afffaf73452d15dd0fdcb000433221cc3f3d2debb46975e9e3bbc78}
+- {title: Panduit G6 PDU Installation Manual IM064, sha256: 44b41a887412c62de9260b907ac06efde4a9fd58d1bc005b1d1fcb62ea733cc6,
+  url: 'https://www.panduit.com/PanProductResource/en/P42G20G/InstallationDocuments.pdf'}

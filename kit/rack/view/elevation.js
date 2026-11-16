@@ -185,8 +185,27 @@ export function rolledBracketShapes(item, rolled, box) {
       bar: {y0: bottom, y1: barTop},
       ears: {left: {x0: -half, x1: -half + ew, y0: bottom, y1: earTop}, right: {x0: half - ew, x1: half, y0: bottom, y1: earTop}},
       holes: holes.length > 2 ? [holes[0], holes[holes.length - 1]] : holes,
+      ...(b.strip ? {strip: stripOpenings(b.strip, barTop - barH / 2)} : {}),
+      ...(b['ear-slots'] ? {earSlots: earSlotOpenings(b['ear-slots'], -half + ew / 2, half - ew / 2, (bottom + earTop) / 2)} : {}),
     };
   });
+}
+
+// An opening is {cx, cy, w, h, shape} in the rack's own measures. The strip's row is
+// centred on the bar and on the centre line; an ear's column is centred on the ear's
+// height, one column on each ear, the same on both.
+const centred = (n, pitch) => Array.from({length: n}, (_, i) => (i - (n - 1) / 2) * pitch);
+const stripOpenings = (s, cy) => centred(s.count, s.pitch).map(cx =>
+  ({cx, cy, w: s.size[0], h: s.size[1], shape: s.shape === 'slot' ? 'slot' : 'round'}));
+const earSlotOpenings = (s, xl, xr, cyMid) => [xl, xr].flatMap(cx =>
+  centred(s.count, s.pitch).map(dy => ({cx, cy: cyMid + dy, w: s.size[0], h: s.size[1], shape: 'slot'})));
+
+// a round opening is an ellipse of its own size, a slot a rounded rect of it
+function openingEl(svgEl, X, paneY, o, C) {
+  const base = {fill: C.hole ?? C.screwLine, stroke: C.screwLine, 'stroke-width': 0.5, 'data-opening': o.shape};
+  return o.shape === 'slot'
+    ? svgEl('rect', {x: X(o.cx) - o.w / 2, y: paneY(o.cy) - o.h / 2, width: o.w, height: o.h, rx: Math.min(o.w, o.h) / 2, ...base})
+    : svgEl('ellipse', {cx: X(o.cx), cy: paneY(o.cy), rx: o.w / 2, ry: o.h / 2, ...base});
 }
 
 // Drawn after the body, like its ears, in the colour the data states (the
@@ -201,6 +220,8 @@ export function drawRolledBrackets(svgEl, out, item, shapes, paneY, C = THEMED) 
     const d = s.outline.map(([x, y], i) => `${i ? 'L' : 'M'} ${X(x)} ${paneY(y)}`).join(' ') + ' Z';
     g.append(svgEl('path', {d, 'data-bracket': s.id, fill: s.color || C.ear, 'fill-opacity': s.color ? 1 : C.earOpacity,
       stroke: C.earLine, 'stroke-width': 1, 'stroke-linejoin': 'round'}));
+    for (const o of s.strip ?? []) g.append(openingEl(svgEl, X, paneY, o, C));
+    for (const o of s.earSlots ?? []) g.append(openingEl(svgEl, X, paneY, o, C));
     for (const side of SIDES) {
       for (const y of s.holes) {
         g.append(svgEl('circle', {cx: X(side.hole), cy: paneY(y), r: HOLE_ROUND / 2, fill: C.screw, stroke: C.screwLine, 'stroke-width': 0.6}));
