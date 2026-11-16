@@ -168,7 +168,7 @@ def test_the_gaps_say_what_the_pages_do_not(name):
     doc = device_yaml(name)
     gaps = {g["what"] for g in doc["gaps"]}
     assert {"cable-capacity", "door-hinge", "finger-shape", "finger-count", "nominal-size", "channel-depth",
-            "central-track", "accessories", "mid-panel", "door-features", "color-shade"} <= gaps
+            "central-track", "accessories", "mid-panel", "door-hook", "color-shade"} <= gaps
     assert all(g["reason"] == "vendor-silent" for g in doc["gaps"])
     assert "performance" not in doc["attrs"], "the data sheet points to a cable fill table and states no figure"
     assert doc["provenance"]["spine"]["confidence"] == "estimated"

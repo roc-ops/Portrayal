@@ -1,0 +1,46 @@
+format: 1
+kind: component
+name: acm7000-dc-header
+version: 1.0.0
+class: port
+profile: power
+interface: opengear-acm-dc-block-4
+description: >-
+  The DC power input on the rear of the Opengear ACM7000 resilience gateways: a black four-position housing, two
+  cells over two, printed 9~30V DC. The ACM7000 power supplies end in a four-chamber square connector that seats in it.
+size: {w: 9.3, h: 11.5}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs:
+  media: acm7000-dc-block
+  positions: 4
+  input-voltage: 9 to 30 VDC
+provenance:
+  sources: >-
+    photo-measured and datasheet. The ACM7004-2-L rear photograph of the Resilience Gateway Quick Start Guide
+    (06052019), page 2, is read at 8.3 pixels per millimetre. The ACM7000 data sheet (October 02,
+    2026), Optional Accessories, lists the power supplies.
+  size: >-
+    photo-measured - 77 pixels across and 95 down on that photograph, good to about 0.5 mm. No document gives a
+    dimension for the connector.
+  voltage: >-
+    printed - the rear prints "9~30V DC" under the housing. The data sheet states the adapter's 12 V DC output.
+    It gives no input range for the unit, so the range is the rear print and nothing more.
+  cells: >-
+    photo-measured - four square cells in two rows of two. The data sheet lists "Power Supply - 12VDC Four Chamber
+    Square Connector" (450037) and "output 4-pin connector for ACM7000" (450039). No document says which cell
+    carries which pole, so none is stated.
+  part: >-
+    A DECLARED STAND-IN FOR THE PART. NO MAKER, SERIES OR PART NUMBER IS NAMED FOR THE HOUSING. The data sheet
+    names the supply connector by its look ("Four Chamber Square Connector") and nothing more. The key claims no
+    pitch, series or gender.
+  colour: photo-measured - a black housing with four darker cells, as the rear photograph shows it.
+  mate: >-
+    derived - the centre of the housing, (4.65, 5.75), facing out. opengear/acm7000-dc-plug@1 is the part that mates it.
+  depth: >-
+    NOT STATED. No document gives how far the housing stands out of the rear, so the part draws a plan outline only
+    and builds no relief.
+elements:
+  body: {at: [0.0, 0.0], size: [9.3, 11.5], class: connector}
+connection-points:
+  mate: {at: [4.65, 5.75], direction: front}
+skins: [default]

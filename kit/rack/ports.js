@@ -296,6 +296,27 @@ export function backEnds(item, ctx) {
   return out.sort((a, b) => natural.compare(a.path, b.path));
 }
 
+// THE OTHER END OF THE SAME ADAPTER: for a port on the back of a part (the far
+// end of a coupler), the end on the part's face that the glass runs to, as
+// {path, view} in the words of a cable end; null for any other end, for a part
+// with no fibre map and for a back that goes to more than one front end (a
+// splitter is no sleeve). The holder's fibre map (`optical.ends`, which
+// components.json carries) pairs `rear:b01.1` with `sc01.1`; a back that
+// carries several fibres goes to the face end of its first. A drawing places
+// the face end and none places the back (backEnds), so the back stands where
+// this twin does.
+export function twinEnd(item, end, ctx) {
+  const at = seatedPort(item, end, ctx);
+  if (!at?.port || !at.back || !at.holder?.ref) return null;
+  const p = portPathOf(end.path), cut = p.lastIndexOf(MODULE), part = p.slice(cut + MODULE.length);
+  if (part.includes('/')) return null;
+  const ends = partOf(ctx.compByRef, at.holder.ref)?.optical?.ends;
+  const key = Object.keys(ends ?? {}).sort(natural.compare).find(k => k.startsWith(`rear:${part}.`));
+  const to = key ? ends[key]?.to : null;
+  const face = typeof to === 'string' ? to.match(/^(.+)\.\d+$/) : null;
+  return face && !face[1].startsWith('rear:') ? {path: `${p.slice(0, cut)}${MODULE}${face[1]}`, view: OTHER[end.view === 'rear' ? 'rear' : 'front']} : null;
+}
+
 // ── what a DCIM calls the port ─────────────────────────────────────────────
 // THE DCIM PORTS A CABLE END ON A SEATED PART LANDS ON, as the part's module
 // type lists them, or null when the catalogue has none for it. A module type

@@ -1,0 +1,442 @@
+format: 1
+kind: device
+name: lm4
+version: 1.0.0
+maturity: draft
+manufacturer: Lantronix
+model: LM4
+description: >-
+  Lantronix LM4 compact advanced serial console server, a small chassis with up to four RJ45 serial ports. The front has
+  one 10/100/1000 Ethernet port, an RJ45 console port, one SFP port and two USB-A ports. No held document shows its rear.
+profile: networking
+provenance:
+  size:
+    confidence: datasheet
+    note: >-
+      Lantronix LMOS 6.7 Local Manager documentation, LM4 series, Physical Installation page, dimensions figure. It prints
+      a front view 159.0 mm wide by 43.2 mm high and a top view 155.5 mm deep. The drawn chassis takes those figures.
+      The LM4 product brief (MPB-00246 Rev A), page 2, prints a height of 44.45 mm, or 1.75 inches. It prints a width and a
+      depth of 158.75 mm, or 6.25 inches. The two documents differ by 1.25 mm in height, 0.25 mm in width and 3.25 mm
+      in depth. The brief's figures are round inch values and the drawing's are dimensioned in millimetres.
+      The drawing's figures are drawn, and the brief's rounded figures are stated here as the difference and not drawn.
+  layout-source:
+    confidence: estimated
+    note: >-
+      The front is read from the straight front view of the dimensions figure. The printed 159.0 mm over the plate's
+      outer width gives 3.384 px per mm across. The printed 43.2 mm over its outer height gives 3.409 px per mm down.
+      Each figure is a pixel edge read at 4 times, rounded to 0.05 mm, and holds to about 0.4 mm (one pixel). Black outline
+      strokes are part of each drawn edge: about 0.3 mm wide on the plate and 0.9 to 1.5 mm on the housings. A housing
+      edge is the midpoint of two readings of the same edge, whole pixel and half-covered pixel, and holds to about 0.25 mm.
+      The marks, bars and lamp colours are not in that view. They
+      are read from the straight front elevation of the callouts figure, mapped plate to plate to 159.0 by 43.2 mm. Each
+      mark keeps its place beside the hardware it labels. The callouts figure is an illustration, not a dimensioned
+      drawing. Its jacks differ from the dimensioned view by up to 2.6 mm at the tops. Marks follow the dimensioned
+      view's hardware. The lid is read from the top view with the same scale. The left flank screws are from the earlier
+      angled photograph on page 1 of the brief and hold to about 2 mm. The DC housing's opening, its four cells and
+      the marks between them are read from the dimensioned view at the same scale.
+  serial:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "Supports up to 4 devices via serial (RS-232)". The callouts figure labels four RJ-45 RS-232
+      serial ports numbered 1 and 2 over 3 and 4. The LM-Series fact sheet says the ports are "RJ-45 wired as DCE". It does
+      not name the LM4. The LM4 documentation says the device management ports operate in DCE mode.
+      The brief lists "LM4-2S: LM4, 2 serial ports" and a "1 serial port activation" licence. Every build is drawn with
+      four jacks, so the LM4-2S export lists four ports. That is a drawing choice and not the maker's count of two.
+  network:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "One 10/100/1000 BaseT Ethernet interface" and "One 1-Gbps SFP port". The callouts figure labels E1
+      under the RJ45 jack as the management Ethernet and E2 under the SFP cage. The maker's product page says "2 Ethernet
+      Ports" for each model, which counts the two.
+  console:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "one RS-232 console port", "Two USB-A ports". The documentation labels the top jack of the
+      column of three as the console, auto-sensing DCE or DTE at 9600 8N1. It labels the two ports under it USB-A. It
+      lists a temperature and humidity sensor, an LCD and keypad module, a modem and a flash drive as USB devices.
+  leds:
+    confidence: estimated
+    note: >-
+      The callouts figure labels three front lamps, Power, Status and Warning, over a power mark, a pulse mark and
+      a warning triangle. It also labels a round Power button. It labels a Reset pinhole between the button and E1. The documentation
+      says the LEDs are a single colour and the Power LED is solid green when the system is on. The figure draws all three
+      lamps green, and the text names the colour of the Power lamp only. The Status and Warning lamps are drawn green as
+      the figure shows them. The Status and Warning flash states are the documentation's table. Their durations are not
+      stated, so a pattern with short and long flashes is a sequence of equal phases. The two small lamps at the lower
+      corners of the SFP cage are drawn green on the left and brown on the right. No document says what either shows. Their
+      marks are a link icon and an arrows icon. Lit colours are sampled from the callouts figure. Green is (154,196,56) over 155
+      px. SFP left green is (155,197,57) over 251 px. SFP right brown is (150,125,46) over 245 px. Every lamp is drawn off. The
+      console and serial jack lamps keep the photograph's colours. The dimensions figure draws the console lamps yellow at
+      the left and green at the right. The callouts figure and the photograph show green at the left, and that order is
+      drawn. The silkscreen marks are simplified paths in the mean
+      colour of the earlier photograph. Above E1 is a network icon and above E2 an antenna icon. The console jack has a
+      prompt icon in a boxed outline. To the right of the serial jacks is a "10101" mark. Under the four-position housing
+      is a DC mark.
+  storage:
+    confidence: datasheet
+    note: >-
+      The maker's product page for the LM4 prints "16GB eMMC flash memory supporting TCG Opal 2.0, 256-bit AES
+      encryption" as the on-board storage. The brief and the fact sheet do not print this line.
+  power:
+    confidence: datasheet
+    note: >-
+      LM4 product brief: "DC input: 9 to 60 VDC" and "Power consumption: Less than 24W". The external AC to DC supply
+      reads "AC Input: 100-240VAC, 50-60HZ, 1.4A" and "DC Output: 12VDC, 3A". The documentation says the supply has a 4-pin
+      connector. The front view shows a black housing at the lower left with four cells in two rows of two and a latch tab
+      above. The cells are 3.15 mm apart across and 2.95 mm down, read at 3.38 px per mm. No document names its type, pitch or the plug that mates
+      it, so it is drawn as decor only and not as a part.
+  body:
+    confidence: estimated
+    note: >-
+      The dimensions figure shows a black front plate with four round corner screws. At the top left it shows a heatsink
+      block with seven slots between six fins, at a pitch of 4.49 mm. Fins are drawn 1.45 mm wide, the width the callouts
+      figure shows. The dimensions figure draws the seven slots white; the callouts figure and the photograph show them
+      dark, and dark is drawn. The plate colour reads (67,65,70) over 92800 px in the earlier photograph, unevenly. The
+      drawn plate is #2b2e33 and stays. In the photograph the console jack and the two USB-A ports sit in one pale housing
+      block. The four serial jacks sit in another, with a band between the two rows. They are drawn as two rectangles in
+      the housing colour behind the parts. Each housing is drawn to the outer edge of its black outline in the figure. That
+      edge lies 0.9 to 1.5 mm outside the pale body. E1 and the SFP cage are shared parts. Each stands on a
+      housing rectangle in its own shell colour, drawn to the same outline. The housing colour reads (229,217,207), #e5d9cf, over 270177 pale pixels. The six
+      RJ45 jacks (E1, the console and the four serial jacks) are drawn in that colour through their finish field. The two
+      USB-A ports show a dark grey tongue in the photograph and the callouts figure. The dimensioned view draws them blue.
+      The drawn tongue is pale. For a device that does not claim 3.0 the library's skin for this port is the white one,
+      usb2. Its other skin is blue. Neither is dark. It is not a statement of the USB version, which the brief does not
+      give. The dimensions figure prints a small 4 in the lower-left serial jack. The callouts figure and the photograph
+      number that jack 3. The glyph is a mark and is not drawn here. The lid carries engraved specks that are too faint to
+      read, kept as the zone lid-marking. The DC housing at the lower left is drawn as decor, estimated. It has a latch tab, a body, a pale
+      outline round a black opening and four pale cells with black holes. Every DC piece has square corners, as the figure draws them. Each tile has one lower corner cut by a small black triangle. The tab's pale window, its black notch, the notch's core and the top bar
+      are read from the dimensions figure. Their edges are pixel edges and their colours are sampled. The underside and the rear are not shown. No held picture shows the right flank.
+      The held pages are the brief, the fact sheet, the product pages and four figures. The right flank is built as the
+      documented side, the left flank, mirrored, as no document shows this one. The LANTRONIX wordmark and the registered
+      mark beside it are a logo and are not drawn: their place is the region logo-zone. The plain text LM4 stays. The
+      button and the four corner screws are round and are drawn round, by a corner radius of half their side. The screws
+      read 6.5 mm across and the button 7.2 mm. The Reset disc reads 3.2 mm across counting its soft edge pixels, and 2.7 mm to the black outline. The Reset pinhole has a tan ring 1.8 mm across, 6 px in the figure. It has a black pinhole 0.9 mm across, 3 px. Both are decor, estimated. The SFP cage's four top rim marks are 8 to 9 px long and 2 px thick, about 2.4 by 0.6 mm. They are drawn as decor, estimated, by their pixel edges. The shared cage part draws over decor, so they sit on the SFP housing's top band, above the cage part. The figure draws the housings pale lavender. The build keeps the photograph's cream and draws the DC housing black. The latch window, its core and its bar follow the dimensions figure, where the photograph shows the tab dark. The opening's pale outline, the cell tiles, the two corner wedges and the centre triangle follow it as well. The corner screws carry a plus recess, drawn as two thin bars each. The SFP cage has a green pull tab below it, 5.9 mm wide, drawn as decor. The lid carries six ridges in seven
+      slots at the left, at the front's pitch. The left flank carries three round screws about 5.8 mm across, level at
+      about half the height. Their places are the fractions of the flank's length and height the photograph gives, applied
+      to the drawn flank.
+  mount:
+    confidence: estimated
+    note: >-
+      The documentation says the unit mounts in a 19-inch rack, left or right, using the one provided rack
+      mounting ear. It also lists a DIN rail mount bought separately, and a shelf or desk. The maker's product page lists
+      "Rack Mount Ear" and "2 Mounting Screws" in the box. The mounting figure shows a plain flange at the front of the box
+      on one side with two screws. No document gives the ear's size or screw holes. The chassis is stated as a desktop
+      unit. The library states `ears` for a rack device only, so no ear is placed. The figure also shows two loose screws
+      apart from the unit. Decor outside the face is clipped and never drawn, so they are not drawn either. No document
+      shows the DIN rail fitting.
+attrs:
+  physical: {weight-kg: 1.42}
+  power:
+    input: dc
+    power-max-w: 24
+    power-input: 9 to 60 VDC; the box holds an external AC adapter, 100 to 240 VAC in, 12 VDC 3 A out
+  environmental:
+    operating-temp-c: 0 to 55
+    storage-temp-c: -30 to 60
+    humidity-pct: 10 to 90 non-condensing in operation
+  features:
+    optics-sfp: one 1-Gbps SFP port; no held document names an optic type or reach
+  platform:
+    storage: 16 GB eMMC flash, TCG Opal 2.0, 256-bit AES encryption
+  compliance:
+    emissions: FCC class A subpart B
+    safety: UL
+    rohs: RoHS compliant
+chassis:
+  width: 159.0
+  height: 43.2
+  depth: 155.5
+  mount: desktop
+  color: '#2b2e33'
+gaps:
+- what: dc-input
+  scope: [front]
+  reason: vendor-silent
+  wanted: the maker's name for the DC input connector, its pitch and the plug that mates it, from a hardware guide.
+  note: >-
+    The front view shows a black housing at the lower left, 8.35 mm wide and 11.3 mm high with its latch tab. Its opening is
+    drawn as decor, estimated: a pale outline 0.2 mm thick round a black interior, 6.45 mm wide and 6.35 mm high. The top
+    line is 0.27 mm thick. It holds four cells in two rows of two. Each is a pale tile about 2.1 mm square holding a black hole
+    about 1.15 mm across. The tile columns are 3.15 mm apart and the rows 2.95 mm. A pale triangle 1.25 mm wide marks the
+    centre, and a pale wedge about 1 mm across fills each lower corner of the outline. The latch tab holds a
+    pale window 4.65 by 2.3 mm. Inside it are a black notch 2.0 by 1.4 mm and a paler core 1.05 by 0.9 mm. A pale bar
+    0.3 mm thick runs along the tab's top. All of these are decor, estimated, and each edge is within 0.2 mm of two readings
+    at 3.384 px per mm. The colours are sampled from the figure. The window and the tiles are (170,175,199), the window over
+    63 px, the core (215,223,254) over 6 px and the bar (178,178,178) over 14 px. The bar is one pixel thick in the figure,
+    so its thickness is the least certain figure. Every piece has square corners. Each tile has one lower corner cut by a
+    black triangle with 0.58 mm legs, two pixels in the figure. The cut is inner on the top pair and outer on the bottom pair. Two bumps on the outline's sides are about
+    one pixel or 0.3 mm each. They are too small to place at 3.4 px per mm and are not drawn. The
+    documentation says only that the supply has a 4-pin connector. No interface is known, so no connector part is placed and its identity stays
+    this gap.
+- what: rear-panel
+  scope: [rear]
+  reason: needs-photo
+  wanted: a photograph or a drawing of the rear of the LM4.
+  note: >-
+    No held document shows the rear. A web search found no rear picture; the maker's pages show the front and top only.
+- what: lamp-colour
+  scope: [front]
+  reason: vendor-silent
+  wanted: the maker's statement of the colour of the Status, Warning and SFP lamps.
+  note: >-
+    The documentation says the LEDs are a single colour and names green for the Power lamp only. The callouts figure
+    shows all three front lamps green. It shows the SFP lamps green and brown and says nothing of what they report.
+- what: din-rail-mount
+  scope: [front, rear, top, bottom, left, right]
+  reason: needs-drawing
+  wanted: a drawing of the DIN rail fitting and where it fixes.
+  note: >-
+    The documentation says a DIN rail mount is bought separately and shows no figure of it.
+- what: mounting
+  scope: [front]
+  reason: needs-drawing
+  wanted: a dimensioned drawing of the rack mount ear, its screw holes and its two loose screws.
+  note: >-
+    The product page lists "Rack Mount Ear" and "2 Mounting Screws" in the box. The rack-mount figure shows one ear per
+    sketch with two holes and two loose screws, and gives no size. The chassis is a desktop unit and the library states
+    `ears` for a rack device only, so no ear is placed. The two loose screws lie outside the face, and decor outside the
+    face is never drawn.
+- what: envelope-faces-undetailed
+  scope: [bottom, right]
+  reason: needs-photo
+  wanted: photographs of the underside and the right flank.
+  note: >-
+    The left flank draws three screws, estimated from the earlier photograph at a grazing angle, to about 2 mm. No held
+    picture shows the right flank, so it is built as the documented side, the left flank, mirrored. No held picture shows
+    the underside, so it draws the envelope only.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: four RJ45 RS-232 serial ports.
+  network:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the RJ45 10/100/1000 Ethernet port E1.
+  sfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the 1-Gbps SFP port, printed E2.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 RS-232 console port.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    description: the two USB-A ports.
+  status-leds: {term: LED, role: indicator, index-origin: 1}
+views:
+  front:
+    size: {w: 159.0, h: 43.2}
+    panel:
+      decor:
+      - {id: faceplate, at: [0.0, 0.0], size: [159.0, 43.2], fill: '#2b2e33', kind: bezel}
+      - {id: screw-tl, at: [1.95, 1.95], size: [6.5, 6.5], rx: 3.25, fill: '#16181b', kind: case-screw}
+      - {id: screw-tr, at: [150.55, 1.95], size: [6.5, 6.5], rx: 3.25, fill: '#16181b', kind: case-screw}
+      - {id: screw-bl, at: [1.95, 34.75], size: [6.5, 6.5], rx: 3.25, fill: '#16181b', kind: case-screw}
+      - {id: screw-br, at: [150.55, 34.75], size: [6.5, 6.5], rx: 3.25, fill: '#16181b', kind: case-screw}
+      - {id: heatsink-opening, at: [10.0, 2.0], size: [32.8, 21.1], fill: '#16181b', kind: vent}
+      - {id: heatsink-slat-1, at: [14.4, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-2, at: [18.9, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-3, at: [23.4, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-4, at: [27.9, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-5, at: [32.4, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: heatsink-slat-6, at: [36.9, 2.6], size: [1.45, 18.45], fill: '#3a3d42', kind: vent}
+      - {id: housing-console-usb, at: [91.7, 3.15], size: [20.25, 32.3], fill: '#e5d9cf', kind: housing}
+      - {id: housing-serial, at: [114.55, 7.0], size: [34.95, 28.45], fill: '#e5d9cf', kind: housing}
+      - {id: housing-e1, at: [46.25, 20.7], size: [17.65, 14.75], fill: '#e5d9cf', kind: housing}
+      - {id: housing-sfp, at: [69.95, 24.25], size: [15.85, 11.2], fill: '#9aa0a8', kind: housing}
+      - {id: dc-housing, at: [11.05, 26.7], size: [8.35, 8.35], rx: 0, fill: '#101012', kind: housing}
+      - {id: dc-housing-tab, at: [12.5, 23.75], size: [5.45, 3.45], rx: 0, fill: '#101012', kind: housing}
+      - {id: dc-latch-window, at: [12.85, 24.9], size: [4.65, 2.3], rx: 0, fill: '#aaafc7', kind: latch}
+      - {id: dc-latch-bar, at: [12.85, 24.25], size: [4.65, 0.3], rx: 0, fill: '#b2b2b2', kind: latch}
+      - {id: dc-latch-notch, at: [14.25, 25.8], size: [2.0, 1.4], rx: 0, fill: '#101012', kind: recess}
+      - {id: dc-latch-notch-core, at: [14.65, 26.3], size: [1.05, 0.9], rx: 0, fill: '#d7dffe', kind: recess}
+      - {id: dc-opening, at: [11.95, 27.6], size: [6.45, 6.35], rx: 0, fill: '#aaafc7', kind: housing}
+      - {id: dc-opening-interior, at: [12.15, 27.87], size: [6.05, 5.88], rx: 0, fill: '#101012', kind: recess}
+      - {id: dc-cell-1, at: [12.6, 28.35], size: [2.2, 2.05], rx: 0, fill: '#aaafc7', kind: contact}
+      - {id: dc-cell-2, at: [15.75, 28.35], size: [2.05, 2.05], rx: 0, fill: '#aaafc7', kind: contact}
+      - {id: dc-cell-3, at: [12.6, 31.3], size: [2.2, 2.05], rx: 0, fill: '#aaafc7', kind: contact}
+      - {id: dc-cell-4, at: [15.75, 31.3], size: [2.05, 2.05], rx: 0, fill: '#aaafc7', kind: contact}
+      - {id: dc-hole-1, at: [13.15, 28.75], size: [1.15, 1.15], rx: 0, fill: '#101012', kind: hole}
+      - {id: dc-hole-2, at: [16.1, 28.75], size: [1.15, 1.15], rx: 0, fill: '#101012', kind: hole}
+      - {id: dc-hole-3, at: [13.15, 31.7], size: [1.15, 1.25], rx: 0, fill: '#101012', kind: hole}
+      - {id: dc-hole-4, at: [16.1, 31.7], size: [1.15, 1.25], rx: 0, fill: '#101012', kind: hole}
+      - {id: button, at: [23.35, 27.15], size: [7.2, 7.2], rx: 3.6, fill: '#222222', kind: push-button}
+      - {id: reset-hole, at: [36.3, 29.3], size: [3.2, 3.2], rx: 1.6, fill: '#040304', kind: hole}
+      - {id: reset-ring, at: [37.0, 30.0], size: [1.8, 1.8], rx: 0.9, fill: '#c3bda0', kind: bezel}
+      - {id: reset-pinhole, at: [37.45, 30.45], size: [0.9, 0.9], rx: 0.45, fill: '#040304', kind: hole}
+      - {id: bar-e1, at: [46.3, 36.0], size: [17.7, 1.3], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-e2, at: [66.1, 36.0], size: [23.7, 1.3], fill: '#f0d41c', kind: legend-bar}
+      - {id: bar-serial-top, at: [115.6, 5.9], size: [33.2, 1.3], fill: '#29a8e0', kind: legend-bar}
+      - {id: bar-serial-bottom, at: [115.6, 35.2], size: [33.2, 1.4], fill: '#29a8e0', kind: legend-bar}
+      - {id: sfp-pull-tab, at: [75.0, 34.85], size: [5.9, 0.9], fill: '#259805', kind: latch}
+      - {id: sfp-rim-mark-1, at: [70.6, 24.5], size: [2.4, 0.6], fill: '#747475', kind: bezel}
+      - {id: sfp-rim-mark-2, at: [74.75, 24.5], size: [2.4, 0.6], fill: '#747475', kind: bezel}
+      - {id: sfp-rim-mark-3, at: [78.6, 24.5], size: [2.4, 0.6], fill: '#747475', kind: bezel}
+      - {id: sfp-rim-mark-4, at: [82.45, 24.5], size: [2.6, 0.6], fill: '#747475', kind: bezel}
+      - {id: screw-cross-tl-h, at: [3.4, 4.85], size: [3.6, 0.7], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-tl-v, at: [4.85, 3.4], size: [0.7, 3.6], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-tr-h, at: [152.0, 4.85], size: [3.6, 0.7], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-tr-v, at: [153.45, 3.4], size: [0.7, 3.6], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-bl-h, at: [3.4, 37.65], size: [3.6, 0.7], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-bl-v, at: [4.85, 36.2], size: [0.7, 3.6], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-br-h, at: [152.0, 37.65], size: [3.6, 0.7], fill: '#3a3d42', kind: case-screw}
+      - {id: screw-cross-br-v, at: [153.45, 36.2], size: [0.7, 3.6], fill: '#3a3d42', kind: case-screw}
+    silkscreen:
+    - {at: [67.65, 15.5], text: LM4, font-size: 6.4, anchor: middle, fill: '#f0f2f4', for: chassis}
+    - {at: [55.2, 40.95], text: E1, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: net-1}
+    - {at: [78.15, 40.95], text: E2, font-size: 2.4, anchor: middle, fill: '#f0d41c', for: port-2}
+    - {id: dc-opening-foot-left, at: [12.2, 33.0], path: 'M 0 0 L 0 0.95 L 0.95 0.95 Z', filled: true, fill: '#aaafc7', for: chassis}
+    - {id: dc-opening-foot-right, at: [17.4, 32.9], path: 'M 1.0 0 L 1.0 1.05 L 0 1.05 Z', filled: true, fill: '#aaafc7', for: chassis}
+    - {id: dc-centre-mark, at: [14.6, 30.15], path: 'M 0.6 0 L 1.25 0.88 L 0 0.88 Z', filled: true, fill: '#aaafc7', for: chassis}
+    - {id: dc-tile-chamfer-1, at: [14.22, 29.82], path: 'M 0.58 0 L 0.58 0.58 L 0 0.58 Z', filled: true, fill: '#101012', for: chassis}
+    - {id: dc-tile-chamfer-2, at: [15.75, 29.82], path: 'M 0 0 L 0.58 0.58 L 0 0.58 Z', filled: true, fill: '#101012', for: chassis}
+    - {id: dc-tile-chamfer-3, at: [12.6, 32.77], path: 'M 0 0 L 0.58 0.58 L 0 0.58 Z', filled: true, fill: '#101012', for: chassis}
+    - {id: dc-tile-chamfer-4, at: [17.22, 32.77], path: 'M 0.58 0 L 0.58 0.58 L 0 0.58 Z', filled: true, fill: '#101012', for: chassis}
+    - {id: mark-prompt, at: [86.25, 11.85], path: 'M 0.75 0.15 H 3.35 A 0.6 0.6 0 0 1 3.95 0.75 V 3.95 A 0.6 0.6 0 0 1 3.35 4.55 H 0.75 A 0.6 0.6 0 0 1 0.15 3.95 V 0.75 A 0.6 0.6 0 0 1 0.75 0.15 Z M 0.9 1.58 L 1.73 2.4 L 1.0 3.33 M 2.15 3.5 H 3.23', stroke-width: 0.3, fill: '#5eb3cf', for: console}
+    - {id: mark-dc, at: [11.7, 37.9], path: 'M 0 0.275 H 5.95 M 0 2.125 H 1.2 M 2.3 2.125 H 3.6 M 4.6 2.125 H 5.9', stroke-width: 0.55, fill: '#c6c8cc', for: chassis}
+    - {id: mark-power, at: [22.4, 39.7], path: 'M -0.746 -1.065 A 1.3 1.3 0 1 0 0.746 -1.065 M 0 -1.95 V 0.15', stroke-width: 0.45, fill: '#cbcdd1', for: led-power}
+    - {id: mark-pulse, at: [32.15, 37.6], path: 'M 0 1.95 H 1.0 L 1.55 0 L 1.8 3.5 L 2.1 1.95 H 2.25 M 2.85 1.95 A 0.3 0.3 0 1 0 2.25 1.95 A 0.3 0.3 0 1 0 2.85 1.95', stroke-width: 0.35, fill: '#c9cbcf', for: led-pulse}
+    - {id: mark-warning, at: [40.15, 37.55], path: 'M 1.8 0 L 3.6 3.25 H 0 Z M 1.6 1.2 H 2.0 V 2.3 H 1.6 Z M 1.6 2.6 H 2.0 V 3.0 H 1.6 Z', filled: true, fill-rule: evenodd, fill: '#dddfe3', for: led-alert}
+    - {id: mark-network, at: [53.0, 16.6], path: 'M 1.63 0 H 2.97 V 1.4 H 1.63 Z M 2.08 1.0 H 2.58 V 1.5 H 2.08 Z M 0 1.4 H 4.67 V 1.96 H 0 Z M 0.42 1.9 H 1.67 V 3.45 H 0.42 Z M 2.75 1.9 H 4.33 V 3.45 H 2.75 Z', filled: true, fill: '#d3d3d6', for: net-1}
+    - {id: mark-antenna-arcs, at: [76.5, 19.7], path: 'M 0.825 0.2 A 1.02 1.2 0 0 0 0.825 2.2 M 2.325 0.2 A 1.02 1.2 0 0 1 2.325 2.2', stroke-width: 0.7, fill: '#d6d8d9', for: port-2}
+    - {id: mark-antenna-stem, at: [76.5, 19.7], path: 'M 1.55 1.8 V 3.1 M 0 3.3 H 3.0', stroke-width: 0.5, fill: '#d6d8d9', for: port-2}
+    - {id: mark-antenna-dot, at: [76.5, 19.7], path: 'M 0.83 1.2 A 0.72 0.72 0 1 0 2.27 1.2 A 0.72 0.72 0 1 0 0.83 1.2 Z', filled: true, fill: '#d6d8d9', for: port-2}
+    - {id: mark-link, at: [65.85, 38.65], path: 'M 1.649 2.017 L 1.083 1.451 L -0.049 2.583 L 0.517 3.149 Z M 2.799 0.867 L 2.233 0.301 L 1.101 1.433 L 1.667 1.999 Z', stroke-width: 0.3, fill: '#d1d3d7', for: port-2}
+    - {id: mark-arrows-shaft, at: [86.1, 38.85], path: 'M 0 0.8 H 2.5 M 0.9 2.55 H 3.0', stroke-width: 0.4, fill: '#ccced1', for: port-2}
+    - {id: mark-arrows-head, at: [86.1, 38.85], path: 'M 2.0 0 L 3.45 0.8 L 2.0 1.6 Z M 1.5 1.75 L 0.2 2.55 L 1.5 3.35 Z', filled: true, fill: '#ccced1', for: port-2}
+    - {id: mark-10101, at: [149.6, 20.2], path: 'M 0.325 0 V 2.2 M 3.55 0 V 2.2 M 6.75 0 V 2.2 M 1.155 1.1 A 0.725 0.725 0 1 0 2.605 1.1 A 0.725 0.725 0 1 0 1.155 1.1 M 4.325 1.05 A 0.725 0.725 0 1 0 5.775 1.05 A 0.725 0.725 0 1 0 4.325 1.05', stroke-width: 0.65, fill: '#58c0dd', for: [serial-1, serial-2, serial-3, serial-4]}
+    - {at: [124.2, 5.1], text: '1', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-1}
+    - {at: [140.45, 5.1], text: '2', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-2}
+    - {at: [124.2, 40.2], text: '3', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-3}
+    - {at: [140.45, 40.2], text: '4', font-size: 2.6, anchor: middle, fill: '#29a8e0', for: serial-4}
+    components:
+      placements:
+      - {ref: common/rj45-eth@1, id: net-1, at: [47.3, 21.35], rotate: 180, group: network, rel-pos: 1, attrs: {speed: 1g, finish: '#e5d9cf'}}
+      - {ref: std/sfp@1, id: port-2, at: [70.85, 25.15], group: sfp, rel-pos: 1}
+      - {ref: common/rj45-ganged-lamped@1, id: console, at: [95.55, 5.3], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#948a33'}], led-b: ['off', {name: 'on', color: '#6a865a'}]}}
+      - {ref: std/usb-a@1, id: usb-1, at: [95.9, 20.1], skin: usb2, group: usb, rel-pos: 1}
+      - {ref: std/usb-a@1, id: usb-2, at: [95.9, 28.55], skin: usb2, group: usb, rel-pos: 2}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-1, at: [117.85, 8.5], rotate: 180, group: serial, rel-pos: 1, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#bdac10'}], led-b: ['off', {name: 'on', color: '#4d844c'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-2, at: [134.1, 8.5], rotate: 180, group: serial, rel-pos: 2, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#bdac10'}], led-b: ['off', {name: 'on', color: '#4d844c'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-3, at: [117.85, 23.0], group: serial, rel-pos: 3, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#4d844c'}], led-b: ['off', {name: 'on', color: '#bdac10'}]}}
+      - {ref: common/rj45-ganged-lamped@1, id: serial-4, at: [134.1, 23.0], group: serial, rel-pos: 4, attrs: {media: rj45-serial, finish: '#e5d9cf'}, states: {led-a: ['off', {name: 'on', color: '#4d844c'}], led-b: ['off', {name: 'on', color: '#bdac10'}]}}
+      - {ref: common/led-dot@1, id: led-power, at: [21.4, 33.55], for: chassis, group: status-leds, rel-pos: 1, states: ['off', {name: 'on', color: '#9ac438'}]}
+      - ref: common/led-dot@1
+        id: led-pulse
+        at: [32.9, 33.55]
+        for: chassis
+        group: status-leds
+        rel-pos: 2
+        states:
+        - 'off'
+        - {name: bootloader, color: '#9ac438', behavior: {mode: blinking, rate: 4}}
+        - {name: os-loading, color: '#9ac438', behavior: {mode: blinking, rate: 1}}
+        - {name: running, color: '#9ac438', behavior: {mode: blinking, rate: 0.5}}
+        - {name: software-installing, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+        - {name: factory-reset-beginning, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+        - {name: factory-reset-running, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+        - {name: fips-failure, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+      - ref: common/led-dot@1
+        id: led-alert
+        at: [40.9, 33.55]
+        for: chassis
+        group: status-leds
+        rel-pos: 3
+        states:
+        - 'off'
+        - {name: software-installing, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+        - {name: factory-reset-running, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+        - {name: fips-failure, behavior: {mode: sequence, phases: [{color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {color: '#9ac438'}, {}, {}]}}
+      - {ref: common/led-dot@1, id: led-e2-link, at: [66.3, 33.55], for: port-2, group: status-leds, rel-pos: 4, states: ['off', {name: 'on', color: '#9bc539'}]}
+      - {ref: common/led-dot@1, id: led-e2-activity, at: [87.75, 33.55], for: port-2, group: status-leds, rel-pos: 5, states: ['off', {name: 'on', color: '#967d2e'}]}
+    regions:
+    - id: logo-zone
+      at: [47.3, 3.7]
+      size: {w: 39.1, h: 6.0}
+      label: Vendor logo; not drawn
+  rear:
+    size: {w: 159.0, h: 43.2}
+    empty: >-
+      No held document shows the rear. The product brief gives the dimensions and the power supply and says nothing of the
+      rear panel. Its one photograph and the documentation's figures show the front. A web search found no rear picture.
+  top:
+    size: {w: 159.0, h: 155.5}
+    panel:
+      decor:
+      - {id: top-envelope, at: [0.0, 0.0], size: [159.0, 155.5], fill: '#2b2e33', kind: envelope}
+      - {id: lid-opening, at: [9.5, 2.4], size: [33.8, 151.6], fill: '#16181b', kind: vent}
+      - {id: lid-slat-1, at: [14.4, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-2, at: [18.9, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-3, at: [23.4, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-4, at: [27.9, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-5, at: [32.4, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+      - {id: lid-slat-6, at: [36.9, 3.0], size: [1.45, 150.4], fill: '#3a3d42', kind: vent}
+    regions:
+    - id: lid-marking
+      at: [115.2, 123.7]
+      size: {w: 34.0, h: 9.8}
+      label: Engraved marking on the lid, illegible in the figure; not drawn
+  bottom:
+    size: {w: 159.0, h: 155.5}
+    panel:
+      decor:
+      - {id: bottom-envelope, at: [0.0, 0.0], size: [159.0, 155.5], fill: '#2b2e33', kind: envelope}
+  left:
+    size: {w: 155.5, h: 43.2}
+    panel:
+      decor:
+      - {id: left-envelope, at: [0.0, 0.0], size: [155.5, 43.2], fill: '#a9adb1', kind: envelope}
+      - {id: flank-screw-1, at: [2.8, 18.4], size: [5.8, 5.8], rx: 2.9, fill: '#a9a29e', kind: case-screw}
+      - {id: flank-screw-2, at: [62.9, 19.5], size: [5.8, 5.8], rx: 2.9, fill: '#6c6662', kind: case-screw}
+      - {id: flank-screw-3, at: [141.8, 18.95], size: [5.8, 5.8], rx: 2.9, fill: '#726d69', kind: case-screw}
+  right:
+    size: {w: 155.5, h: 43.2}
+    panel:
+      decor:
+      - {id: right-envelope, at: [0.0, 0.0], size: [155.5, 43.2], fill: '#a9adb1', kind: envelope}
+      - {id: flank-screw-1, at: [146.9, 18.4], size: [5.8, 5.8], rx: 2.9, fill: '#a9a29e', kind: case-screw}
+      - {id: flank-screw-2, at: [86.8, 19.5], size: [5.8, 5.8], rx: 2.9, fill: '#6c6662', kind: case-screw}
+      - {id: flank-screw-3, at: [7.9, 18.95], size: [5.8, 5.8], rx: 2.9, fill: '#726d69', kind: case-screw}
+configurations:
+  ac-4s:
+    kind: orderable
+    default: true
+    description: >-
+      The four-port unit with its external AC adapter. The brief lists LM4-4S and says AC plug options are available.
+      The product page lists LM4-4S-NA, LM4-4S-UK and LM4-4S-EU, which differ by the power cord and adapter plug. They
+      are not drawn as separate builds.
+    part-numbers:
+      LM4-4S: {}
+  ac-2s:
+    kind: orderable
+    description: >-
+      The two-port unit with its external AC adapter. The brief lists "LM4-2S: LM4, 2 serial ports". The product page
+      lists LM4-2S-NA, LM4-2S-UK and LM4-2S-EU, which differ by the power cord and adapter plug. It is drawn with four
+      jacks like the four-port unit, so its export lists four ports. That is a drawing choice and not the maker's count
+      of two. The brief lists a serial port activation licence.
+    export-description: >-
+      Lantronix LM4-2S console server. The maker lists two serial ports. This drawing has four jacks, so the port list
+      shows four. That is a drawing choice, not the maker's count.
+    part-numbers:
+      LM4-2S: {}
+references:
+- title: >-
+    LM4 Compact & Inexpensive Advanced Console Server product brief, MPB-00246 Rev A (2024)
+- title: >-
+    LM-Series Technical Fact Sheet, MPB-00186 Rev A (2023)
+- title: >-
+    Lantronix LM4, Bringing AI-Driven Out-of-Band Management to the IDF and Small Sites, product page on lantronix.com
+- title: >-
+    Lantronix LMOS 6.7 Local Manager documentation, series 4: Platform Overview, Buttons and Indicator Lights, Physical Installation

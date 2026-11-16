@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: lbp-1a
-version: 0.1.0
+version: 0.1.2
 maturity: modelled
 manufacturer: Middle Atlantic
 model: LBP-1A
@@ -30,7 +30,9 @@ provenance:
       datasheet - 19 in (482.6 mm) wide, 0.5 in (12.7 mm) high and 0.5 in (12.7 mm) deep. These are the
       cut sheet's Width, Height and Depth rows (page 1). The height is far under the 44.45 of the rack
       unit it takes. The cut sheet does not say which 0.5 in figure is the bar's face. The other is the
-      projection from the rail face; see the `cross-section` gap.
+      projection from the rail face; see the `cross-section` gap. The maker's 12.7 by 12.7 is kept as
+      stated. A raised plate stands out of its face, so the drawn L is 1.5 mm taller and 1.5 mm deeper
+      than the stated box. Its width is the stated width.
   mount:
     confidence: estimated
     note: >-
@@ -44,11 +46,18 @@ provenance:
     note: >-
       estimated - `sheet`: the series page says steel construction and the photograph shows a thin L-section
       strip. The section is not dimensioned, so the end faces draw it at the stand-in thickness below.
+      The web is the face toward the front, tall and vertical. The leg is horizontal at the top and
+      runs back from the web's top edge. The maker's sheet gives 0.5 in for each and does not say which
+      is which. The photograph decides it: a tall dark face toward the viewer, with the narrow leg behind
+      and above it.
   thickness:
     confidence: estimated
     note: >-
       estimated - 1.5, the stand-in the library's other sheet cable managers use; no Middle Atlantic
-      document states a gauge.
+      document states a gauge. It is the source of the gauge. Every `out` on a base plate and every rect
+      size that adds the gauge restates it, and all must equal it. Nothing checks this in the kit. A test
+      for this device asserts it. Nothing checks which leg is the web, the sealed corner, the ear level,
+      or that each ear frame matches its painted hole.
   slots:
     confidence: estimated
     note: >-
@@ -56,6 +65,8 @@ provenance:
       photograph, by eye on 4x crops and by brightness runs. A perspective fit to the ten centres gave
       a pitch of about 41 mm and a length of 30 mm. The first centre is 57 mm from the end and the row is
       drawn centred. The scale along the bar is the ear tips spanning 482.6 mm. Good to about 3 mm.
+      The slots do not show in 3D: a painted vent shows neither dark nor open on a sheet device. They are
+      drawn in the 2D faces only. Opening them would mean splitting each plate into raised rects round them.
   ears:
     confidence: estimated
     note: >-
@@ -63,14 +74,17 @@ provenance:
       hole is 10 by 3 mm, from 3 to 13 mm from the end. The ears read about 21 and 19 mm in the photograph and
       are drawn alike. Same perspective fit and scale along the bar as the slots. Good to about 6 mm. The ears
       continue the top leg, so the top and bottom show them; the front and rear show them edge-on, with no hole.
+      In 3D each ear continues the leg beyond the web. It is a frame of four raised rects round the hole,
+      with the leg's `out`, level with the leg's top face. The painted ear and hole stay in the 2D drawing.
   front:
     confidence: estimated
     note: >-
       estimated - the bar's web as 442.6 by 12.7 between the ears, with its ten slots. The slots are 3 mm
       high, 6 mm below the web's top edge. Across the bar the scale is the web's printed 12.7 mm over its
       height on the 4x crop of the photograph. That height is 50 px at x 300 (y 342 to 392) and 44.5 px at
-      x 1600: 0.254 to 0.285 mm/px. The slots are openings in the build; the 2D face paints a hole dark, as
-      the library does everywhere.
+      x 1600: 0.254 to 0.285 mm/px. The slots are painted vents; the 2D face paints a hole dark, as
+      the library does everywhere. The web is a raised plate standing out 1.5 mm. It starts one gauge above
+      the top edge and is one gauge taller. Without that the slabs touch only along an edge and leave a groove.
   rear:
     confidence: estimated
     note: >-
@@ -84,13 +98,16 @@ provenance:
       face. The bottom is the same plate seen from below. Across the bar the scale is the web's printed
       12.7 mm over its apparent height (0.249 mm/px at the ears, fitted from the front). The ear is 30 px
       (8 mm) and its hole 12 px (3 mm) on the 4x crop at x 90. The leg slot is a stand-in: 6 mm wide,
-      6 mm from the rear edge, half the leg's 16 px depth (y 326 to 342).
+      6 mm from the rear edge, half the leg's 16 px depth (y 326 to 342). The leg is a raised plate
+      standing out 1.5 mm. The rear, bottom and end faces carry neither `sink` nor `out`, so they build
+      nothing in 3D.
   left:
     confidence: estimated
     note: >-
       estimated - the end as an L of two 1.5 mm strips, the web at the front and the leg along the top.
       The thickness is a stand-in and the sheet does not say which 0.5 in is the projection. The right is
-      the same.
+      the same. In 3D the end shows only as the end faces of the two slabs, with no closed end cap. The
+      end-on view reads as an L only if you know to look for one. It draws less than a photograph would.
   guides:
     confidence: datasheet
     note: >-
@@ -144,7 +161,8 @@ gaps:
     note: >-
       the cut sheet gives 0.5 in for the height and 0.5 in for the depth of an L-shaped bar. It does not
       say which is the face and which the leg, nor the sheet gauge. The L drawn at each end uses a
-      stand-in thickness and the photograph's reading of which side is which. The kit builds no solid L.
+      stand-in thickness and the photograph's reading of which side is which. The 3D L is two raised
+      plates; the kit has no single profile for an L.
     wanted: a dimensioned drawing, or an end-on photograph, of the bar
   - what: height-in-unit
     scope: [front]
@@ -172,9 +190,9 @@ views:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: web, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: ear-left, at: [0, 0], size: [20, 1.5], fill: '#3c3f43', sink: 0.05, kind: ear}
-        - {id: ear-right, at: [462.6, 0], size: [20, 1.5], fill: '#3c3f43', sink: 0.05, kind: ear}
+        - {id: web, at: [20, -1.5], size: [442.6, 14.2], fill: '#3c3f43', out: 1.5, kind: base}
+        - {id: ear-left, at: [0, 0], size: [20, 1.5], fill: '#3c3f43', kind: ear}
+        - {id: ear-right, at: [462.6, 0], size: [20, 1.5], fill: '#3c3f43', kind: ear}
         - {id: slot-1, at: [42, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
         - {id: slot-2, at: [83, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
         - {id: slot-3, at: [124, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
@@ -189,9 +207,9 @@ views:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: web, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: ear-left, at: [0, 0], size: [20, 1.5], fill: '#3c3f43', sink: 0.05, kind: ear}
-        - {id: ear-right, at: [462.6, 0], size: [20, 1.5], fill: '#3c3f43', sink: 0.05, kind: ear}
+        - {id: web, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', kind: base}
+        - {id: ear-left, at: [0, 0], size: [20, 1.5], fill: '#3c3f43', kind: ear}
+        - {id: ear-right, at: [462.6, 0], size: [20, 1.5], fill: '#3c3f43', kind: ear}
         - {id: slot-1, at: [42, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
         - {id: slot-2, at: [83, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
         - {id: slot-3, at: [124, 6], size: [30, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
@@ -206,9 +224,17 @@ views:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: leg, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: ear-left, at: [0, 4], size: [20, 8], rx: 2, fill: '#3c3f43', sink: 0.05, kind: ear}
-        - {id: ear-right, at: [462.6, 4], size: [20, 8], rx: 2, fill: '#3c3f43', sink: 0.05, kind: ear}
+        - {id: leg, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', out: 1.5, kind: base}
+        - {id: ear-left, at: [0, 4], size: [20, 8], rx: 2, fill: '#3c3f43', kind: ear}
+        - {id: ear-right, at: [462.6, 4], size: [20, 8], rx: 2, fill: '#3c3f43', kind: ear}
+        - {id: ear-left-a, at: [0, 4], size: [3, 8], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-left-b, at: [13, 4], size: [7, 8], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-left-c, at: [3, 4], size: [10, 2], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-left-d, at: [3, 9], size: [10, 3], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-right-a, at: [462.6, 4], size: [7, 8], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-right-b, at: [479.6, 4], size: [3, 8], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-right-c, at: [469.6, 4], size: [10, 2], fill: '#3c3f43', out: 1.5, kind: ear-frame}
+        - {id: ear-right-d, at: [469.6, 9], size: [10, 3], fill: '#3c3f43', out: 1.5, kind: ear-frame}
         - {id: ear-hole-left, at: [3, 6], size: [10, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: ear-hole}
         - {id: ear-hole-right, at: [469.6, 6], size: [10, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: ear-hole}
         - {id: slot-1, at: [42, 6], size: [30, 6], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
@@ -225,9 +251,9 @@ views:
     size: {w: 482.6, h: 12.7}
     panel:
       decor:
-        - {id: leg, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: ear-left, at: [0, 4], size: [20, 8], rx: 2, fill: '#3c3f43', sink: 0.05, kind: ear}
-        - {id: ear-right, at: [462.6, 4], size: [20, 8], rx: 2, fill: '#3c3f43', sink: 0.05, kind: ear}
+        - {id: leg, at: [20, 0], size: [442.6, 12.7], fill: '#3c3f43', kind: base}
+        - {id: ear-left, at: [0, 4], size: [20, 8], rx: 2, fill: '#3c3f43', kind: ear}
+        - {id: ear-right, at: [462.6, 4], size: [20, 8], rx: 2, fill: '#3c3f43', kind: ear}
         - {id: ear-hole-left, at: [3, 6], size: [10, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: ear-hole}
         - {id: ear-hole-right, at: [469.6, 6], size: [10, 3], shape: slot, fill: '#17191c', vent: 1.5, kind: ear-hole}
         - {id: slot-1, at: [42, 6], size: [30, 6], shape: slot, fill: '#17191c', vent: 1.5, kind: tie-slot}
@@ -244,14 +270,14 @@ views:
     size: {w: 12.7, h: 12.7}
     panel:
       decor:
-        - {id: web, at: [11.2, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: leg, at: [0, 0], size: [12.7, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: web, at: [11.2, 0], size: [1.5, 12.7], fill: '#3c3f43', kind: base}
+        - {id: leg, at: [0, 0], size: [12.7, 1.5], fill: '#3c3f43', kind: base}
   right:
     size: {w: 12.7, h: 12.7}
     panel:
       decor:
-        - {id: web, at: [0, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
-        - {id: leg, at: [0, 0], size: [12.7, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: web, at: [0, 0], size: [1.5, 12.7], fill: '#3c3f43', kind: base}
+        - {id: leg, at: [0, 0], size: [12.7, 1.5], fill: '#3c3f43', kind: base}
 configurations:
   base:
     kind: base

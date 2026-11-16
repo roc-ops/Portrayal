@@ -1,0 +1,38 @@
+{
+  "format": "portrayal-rack",
+  "version": 4,
+  "id": "rear-panel-back-end",
+  "racks": [
+    {
+      "id": "r1",
+      "name": "Rear panel back end",
+      "frame": {
+        "kind": "four-post",
+        "heightRU": 42,
+        "numbering": "bottom-up",
+        "holes": { "style": "square", "thread": null },
+        "railDepth": 740,
+        "usableDepth": 1000,
+        "ref": null
+      },
+      "items": [
+        { "id": "i1", "ref": "lmfs-f", "cfg": "populated", "label": "MF-8", "ru": 13, "face": "front", "turned": false, "swaps": { "lt-1/module/port-1": "generic/sfp-lc@1" }, "fields": {} },
+        { "id": "i2", "ref": "xcu", "cfg": "xcu10-51id", "label": "XCU10 rear", "ru": 16, "face": "rear", "turned": false, "swaps": {}, "fields": {} }
+      ],
+      "zeroU": [],
+      "cables": [
+        {
+          "id": "c1",
+          "a": { "item": "i1", "path": "lt-1/module/port-1", "view": "front" },
+          "b": { "item": "i2", "path": "drawer/module/slot-1/module/b01", "view": "rear" },
+          "media": "os2",
+          "purpose": "",
+          "label": "c1",
+          "route": [],
+          "routeEdited": false
+        }
+      ],
+      "bundles": []
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: connect-it-16
-version: 1.0.0
+version: 1.0.1
 maturity: draft
 manufacturer: Digi
 model: Connect IT 16
@@ -126,13 +126,15 @@ gaps:
   - rear
   reason: needs-photo
   note: >-
-    The rear photograph shows the two WWAN openings as plain dark circles. No document says what connector
-    is behind them; SMA, the type the maker lists on the CORE plug-in modem of the Connect EZ 16/32, is
-    drawn. The SD slot is the library's full-size SD slot, sized from another maker's photograph (the
-    page lists "(1) SD/SDHC/SDXC socket" and no size). The system fan is drawn as a grille and a thumbscrew,
-    not as a replaceable part, because no held document says it is one. The right-hand power supply's
-    second thumbscrew, the PSU1 and PSU2 legends on the supplies' outer tabs, and the cover plate's small
-    screws are not all drawn.
+    The rear photograph shows the two WWAN openings as plain dark circles with no connector visible at
+    8 times. This file draws gold SMA jacks there. The jacks are kept, because the maker lists SMA on
+    the CORE plug-in modem of the Connect EZ 16/32. The SD slot is the library's full-size SD slot, sized
+    from another maker's photograph (the page lists "(1) SD/SDHC/SDXC socket" and no size). The system
+    fan is drawn as a honeycomb grille and a thumbscrew, not as a replaceable part, because no held document
+    says it is one. Its openings are fainter than the photograph's bright ones. The photograph also shows
+    four small case screws at the fan module's corners, which are not drawn. The right-hand power supply's
+    second thumbscrew and the PSU1 and PSU2 legends on the supplies' outer tabs are not drawn. The cover
+    plate's small screws are not all drawn.
   wanted: Digi's hardware guide, or a close photograph of the rear.
 - what: power-supply-kit
   scope:
@@ -151,7 +153,11 @@ gaps:
     The round button under the power and status lamps carries a symbol that does not resolve at 800 px
     and no document names its function, so it is drawn as a plain button and not as a part. The marks
     under the Ethernet, SFP+ and USB housings (a number and an arrow each) do not resolve and are not
-    drawn. The bright metal frame that joins the serial jacks of the front is not drawn.
+    drawn. The bright metal frame that joins the serial jacks is drawn as one solid plate, 116 x 30.4.
+    The photograph shows a thin outline and a bar between the rows, so the plate stands for both. It is
+    read off the front photograph at 4 times with 1.53 px/mm across. Its colour is the mean of 509 bright
+    bar pixels. The bright frame round the console jack and the USB ports, and the outline of the SFP+
+    cage, are not drawn.
   wanted: Digi's hardware guide, or a higher resolution photograph of the front.
 - what: legend-text
   scope:
@@ -257,6 +263,7 @@ views:
           - [2.875, 3.475]
           - [1.275, 3.475]
           - [0.675, 2.875]
+      - {id: serial-frame, kind: plate, at: [82.6, 10.4], size: [116.0, 30.4], fill: '#9da4a7'}
       - {id: front-button, kind: button, at: [8.5, 32.3], size: [4.0, 4.0], rx: 2.0, fill: '#2b2f33',
         stroke: '#9aa0a6'}
       cutouts:
@@ -471,8 +478,30 @@ views:
       - {id: sd-cover, kind: plate, at: [233.6, 21.5], size: [47.4, 16.0], fill: '#101214'}
       - {id: sd-cover-screw-1, kind: case-screw, at: [238.9, 23.0], size: [2.6, 2.6], rx: 1.3, fill: '#2b2f33'}
       - {id: sd-cover-screw-2, kind: case-screw, at: [273.9, 23.0], size: [2.6, 2.6], rx: 1.3, fill: '#2b2f33'}
-      - {id: fan-grille, kind: fan-grille, at: [302.5, 1.0], size: [40.0, 40.0], rx: 20.0, fill: '#0d0f11',
-        vent: 1.0}
+      - id: fan-grille
+        kind: fan-grille
+        at: [302.5, 1.0]
+        size: [40.0, 40.0]
+        rx: 20.0
+        fill: '#2b2f33'
+        vent: 1.0
+        pattern: motif
+        pattern-pitch: [3.4, 5.888]
+        pattern-cells:
+        - - [1.7, 0.122]
+          - [2.869, 0.797]
+          - [2.869, 2.147]
+          - [1.7, 2.822]
+          - [0.531, 2.147]
+          - [0.531, 0.797]
+        - - [0.0, 3.066]
+          - [1.169, 3.741]
+          - [1.169, 5.091]
+          - [0.0, 5.766]
+        - - [3.4, 3.066]
+          - [2.231, 3.741]
+          - [2.231, 5.091]
+          - [3.4, 5.766]
       - {id: fan-thumbscrew, kind: thumbscrew, at: [295.4, 2.0], size: [7.0, 7.0], rx: 3.5, fill: '#2a6fc9'}
       - {id: fan-thumbscrew-head, kind: thumbscrew, at: [296.6, 3.2], size: [4.6, 4.6], rx: 2.3, fill: '#aeb3b9'}
       - {id: core-screw, kind: case-screw, at: [96.4, 30.4], size: [2.6, 2.6], rx: 1.3, fill: '#aeb3b9'}
