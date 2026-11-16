@@ -679,8 +679,8 @@ RULES = {
     "L192": ("component, device", "in Portrayal's own library a device or component states no `audience`, or states `public` (error); a project that keeps private entries beside the public library runs lint with `--allow-audience`", "delete the `audience` line, or set it to `public`; move a private entry to the library that holds private entries",
              "The public library is published to everyone, so a part labelled for one customer or kept internal there is either a leak or a label that means nothing; the check stops the label from reaching the published library.",
              ERROR),
-    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, an `enclosure` is stated only on a cabinet form with each door face and each channel `id` once and a `hinge` on a `reversible` door, a channel stands at an attachment point its form has and its slots present an interface the connector registry names, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; state an enclosure only on a cabinet; give each door face and each channel one entry; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
-             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth and names its channels by id; a stand-in that is not declared reads as a printed figure.",
+    "L193": ("rack", "a rack product is what its place says it is: its directory is its `name`, no device or listing of its vendor has that name, a four-post form lists a `front` and a `rear` rail and every other form the `front` alone, only the `rear` rail has a `depth`, a depth range runs from less to more with its `factory` inside it, an `enclosure` holds only `entries` on a frame and also doors, panels and a roof on a cabinet form, with each door face, each entry `id` and each channel `id` once, `any` as no entry `id`, a `hinge` on a `reversible` door, each entry `box` inside `outer` with the keys its `where` needs, and an `open` entry with no `box` only on a product that states `outer`, a channel stands at an attachment point its form has and its slots present an interface the connector registry names, every `provenance` key is a key the rack states, and a figure whose confidence is `estimated` has a `gaps` entry of its own name (error)", "rename the directory or the `name`; list the rails the form has; write the range as `min` below `max`; state doors, panels and a roof only on a cabinet; give each door face, each entry and each channel one entry; keep an entry box inside `outer` with the keys of its place; state `outer` or a `box` for an open entry; give each provenance entry the key of the figure it covers; declare every stand-in in `gaps` with what would close it",
+             "A rack is referenced as `<vendor>/<name>@<major>` without its kind, so the name has to be free among the vendor's devices, and a saved rack file copies a product's rails and depth and names its channels by id; a stand-in that is not declared reads as a printed figure. A route ends at an entry by its id, and an open frame may state its entries but has no doors, panels or roof.",
              ERROR),
     "L194": ("component", "a bay that states an `interface` does not also list, in `accepts`, a part that mates it and is wide enough for the bay", "delete the entry from `accepts`: the bay takes it through its `interface` already; keep in `accepts` only the parts that do not mate it, such as a vendor blank",
              "A list kept beside the interface it was written for goes on asserting what the interface already says, and the next card added to the library is then named by hand in one riser and by its interface in the others.",
@@ -8233,14 +8233,15 @@ TWO_POST_POINTS = ("left", "right")
 
 
 def lint_rack_cabinet(path, data):
-    """L193, the cabinet keys: an enclosure belongs to a cabinet, a door face and a channel
-    are stated once, a channel stands at a point its form has, and its slots present a
-    mount the connector registry names."""
+    """L193, the cabinet keys: a frame's enclosure holds entries alone, a door face and a
+    channel are stated once, a channel stands at a point its form has, and its slots
+    present a mount the connector registry names."""
     form = data.get("form")
     enc = data.get("enclosure")
     if enc and form not in CABINET_FORMS:
-        err(path, "L193", f"form {form!r} is not a cabinet and has no `enclosure`: a frame has no "
-            "doors, panels or roof to state")
+        for key in sorted(k for k in enc if k != "entries"):
+            err(path, "L193", f"form {form!r} is not a cabinet and its `enclosure` has no `{key}`: a "
+                "frame has no doors, panels or roof to state, and its `enclosure` holds `entries` alone")
     faces = [d.get("face") for d in (enc or {}).get("doors") or [] if isinstance(d, dict)]
     for face in sorted({f for f in faces if faces.count(f) > 1}):
         err(path, "L193", f"the {face} door is stated twice: one entry for each face")
@@ -8263,6 +8264,44 @@ def lint_rack_cabinet(path, data):
         if iface and interfaces and iface not in interfaces:
             err(path, "L193", f"channel {c.get('id')!r}: the slot interface {iface!r} is not in the "
                 "connector registry")
+
+
+ENTRY_PLAN_KEYS = {"x", "z", "w", "d"}      # a roof or floor box, seen from above
+ENTRY_SIDE_KEYS = {"y", "z", "h", "d"}      # a left or right box, on the side plane
+
+
+def lint_rack_entries(path, data):
+    """L193, the entries: an id is stated once and is not `any`, a box has the keys its
+    place needs and lies inside `outer`, and an open entry with no box needs an `outer`."""
+    entries = [e for e in (data.get("enclosure") or {}).get("entries") or [] if isinstance(e, dict)]
+    ids = [e.get("id") for e in entries]
+    for eid in sorted({i for i in ids if ids.count(i) > 1}, key=str):
+        err(path, "L193", f"the entry {eid!r} is stated twice: a route ends at an entry by its id")
+    if "any" in ids:
+        err(path, "L193", "the entry id `any` is reserved: it names no entry and asks for the nearest one")
+    outer = data.get("outer") if isinstance(data.get("outer"), dict) else None
+    for e in entries:
+        eid, where, box = e.get("id"), e.get("where"), e.get("box")
+        if not isinstance(box, dict):
+            if e.get("kind") == "open" and outer is None:
+                err(path, "L193", f"the open entry {eid!r} has no `box` and the product states no `outer`: "
+                    "state a box, or the whole part of the envelope has no extent")
+            continue
+        plan = where in ("roof", "floor")
+        want = ENTRY_PLAN_KEYS if plan else ENTRY_SIDE_KEYS
+        if set(box) != want:
+            err(path, "L193", f"the {where} entry {eid!r} has a box with {sorted(box)}, and a {where} box has "
+                f"{', '.join(sorted(want))}")
+            continue
+        if outer is None or not all(isinstance(v, (int, float)) for v in box.values()):
+            continue
+        # a plan box lies within the width and depth, a side box within the height and depth
+        across = ("x", "w", "width") if plan else ("y", "h", "height")
+        for start, size, label in (across, ("z", "d", "depth")):
+            whole, end = outer.get(size), box[start] + box[size]
+            if isinstance(whole, (int, float)) and end > whole:
+                err(path, "L193", f"the {where} entry {eid!r} runs to {end:g} mm, outside the {label} "
+                    f"of {whole:g} mm in `outer`")
 
 
 def lint_rack(path, data, roots):
@@ -8300,7 +8339,8 @@ def lint_rack(path, data, roots):
         if f is not None and lo is not None and hi is not None and not lo <= f <= hi:
             err(path, "L193", f"the factory depth {f} mm is outside the range {lo} to {hi}")
     lint_rack_cabinet(path, data)
-    gaps = {g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
+    lint_rack_entries(path, data)
+    gaps ={g.get("what") for g in data.get("gaps") or [] if isinstance(g, dict)}
     for key, prov in (data.get("provenance") or {}).items():
         if str(key).split(".")[0] not in data:
             err(path, "L193", f"provenance for {key!r}, a key the rack does not state")
