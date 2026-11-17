@@ -117,8 +117,8 @@ gaps:
   reason: sources-disagree
   note: >-
     the specification's table (page 1) lists a secondary, redundant 10/100/1000 BaseT Ethernet port. The control panel
-    drawing (page 4) labels the second jack "ETH 2 10/100". The device follows the label on the jack, 100 Mbps, and the
-    first jack is 1 Gbps by both.
+    drawing (page 4) labels the second jack 10/100/1000. The mechanical drawing's view C (page 6, dated 2016) labels it
+    "ETH 2 10/100". The device follows the table and page 4, 1 Gbps, and the first jack is 1 Gbps by all three.
   wanted: the maker's statement of the second port's rate.
 - what: jack-media
   scope: [front]
@@ -200,7 +200,7 @@ groups:
     - {name: tripped-off, color: '#2fb04a', behavior: blinking}
     - {name: tripped-on, color: '#d62b2b', behavior: {mode: alternating, color: '#2fb04a'}}
   breakers: {term: Breaker, role: service, index-origin: 1, description: 'the two circuit breakers, one for each circuit of 12 outlets'}
-  eth: {term: Port, role: management, index-origin: 1, mixed: 'the two Ethernet jacks of the controller, ETH 1 at 1 Gbps for the network and ETH 2 at 100 Mbps as the redundant secondary'}
+  eth: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 BaseT Ethernet jacks of the controller, ETH 1 and the redundant secondary ETH 2'}
   mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console, feature, expansion and sensor jacks and the three USB jacks of the controller'}
   buttons: {term: Button, role: service, index-origin: 1, description: 'the four navigation buttons and the reset pinhole'}
   display: {term: Display, role: indicator, index-origin: 1}
@@ -317,7 +317,7 @@ views:
         - {id: reset, ref: common/reset-button@1, at: [16.9, 687.9], group: buttons, rel-pos: 5, for: chassis}
         - {id: lamp-1, ref: common/led-dot@1, at: [29.8, 688.9], group: lamps, rel-pos: 1, for: chassis, description: 'the lamp under the reset pinhole'}
         - {id: eth-1, ref: common/rj45-eth@1, at: [11.3, 670.5], rotate: 90, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 1 10/100/1000, in a green frame'}
-        - {id: eth-2, ref: common/rj45-eth@1, at: [24.9, 670.5], rotate: 90, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'ETH 2 10/100, in a grey frame (gaps: eth2-speed)'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [24.9, 670.5], rotate: 90, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 2 10/100/1000, in a grey frame (gaps: eth2-speed)'}
         - {id: usb-a-1, ref: std/usb-a@1, at: [6.7, 652.65], rotate: 270, group: mgmt, rel-pos: 1, description: 'USB-A 1'}
         - {id: usb-a-2, ref: std/usb-a@1, at: [16.8, 652.65], rotate: 270, group: mgmt, rel-pos: 2, description: 'USB-A 2'}
         - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [27.7, 648.55], rotate: 270, group: mgmt, rel-pos: 3, description: USB-B}

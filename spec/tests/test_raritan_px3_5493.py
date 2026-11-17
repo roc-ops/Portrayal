@@ -136,7 +136,7 @@ def test_the_two_ethernet_jacks_are_the_interfaces():
     assert "eth-1" in physical and "eth-2" in physical
     assert any(i["physical"] == "outlet-{n}" and i["range"] == "1-24" for i in dev["interfaces"])
     speeds = {p["id"]: (p.get("attrs") or {}).get("speed") for p in _placements(dev, "front") if p["id"].startswith("eth-")}
-    assert speeds == {"eth-1": "1g", "eth-2": "100m"}
+    assert speeds == {"eth-1": "1g", "eth-2": "1g"}
 
 
 def test_the_input_is_the_fixed_iec_60309_cord_at_the_cord_end():
