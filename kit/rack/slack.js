@@ -14,8 +14,9 @@
 // read through bundles.js with it.
 
 import {routePath, spareOf, toMetres, UNPLACED_WARN_M, BREAK_TOL_M, resolveRoute, pathwaysAt, zeroUPathways, cablesThrough,
-  capacityBasis, pointOf} from './route.js';
+  capacityBasis, pointOf, cableDiameter} from './route.js';
 import {traysOf} from './solids.js';
+import {cellsOf, cellNear, coilIn} from './coil.js';
 import {bendOf, FAMILY} from './resting.js';
 import {bundleOfCable, layoutOf} from './bundles.js';
 import {bundleName, zeroUOf, zeroUById} from './model.js';
@@ -315,6 +316,35 @@ export function spareMarks(rack, cable, ctx) {
       run = 'y';
     }
     if (at) out.push({item: e.item, via: e.via, kind: e.kind ?? 'tray', form: e.form, metres: e.metres, at, run});
+  }
+  return out;
+}
+
+// ── the coil a stored loop is, for a drawing ─────────────────────────────
+// Each coil of the spare a cable stores on a tray with an entry of its own
+// (docs/cable-spare-design.md section 5): spareMarks' tray loops in the form of
+// a coil, each as coil.js coilIn gives it, with the `item` and `via` of the
+// tray and the `metres` stored. The coil is in the cell nearest the loop's
+// mark that takes a turn of the cable; a tray with no such cell gives none. The
+// legs and turns are part of the spare: this reads the route and changes
+// nothing in it. [] without the routes, for a cable with no entry, for an end
+// and for a cable that cannot turn on the floor.
+export function spareCoils(rack, cable, ctx) {
+  const out = [];
+  let path = null;
+  try { path = routePath(rack, cable, ctx); } catch { path = null; }
+  if (!path) return out;
+  const c = {bend: bendOf(cable, ctx), diameter: cableDiameter(cable, ctx)};
+  for (const m of spareMarks(rack, cable, ctx)) {
+    if (m.kind !== 'tray' || m.form !== 'coil') continue;
+    const tray = traysOf(rack, ctx).find(t => t.item === m.item && t.via === m.via);
+    if (!tray) continue;
+    const g = cellsOf(tray), cell = cellNear(g, c, g.run === 'x' ? m.at.x : m.at.z);
+    // the cord's own point on the tray: its height and its lay line across it
+    const lay = path.points.find(p => p.at === 'tray' && p.item === m.item && p.via === m.via);
+    if (!cell || !lay) continue;
+    const k = coilIn(g, cell, c, m.metres, lay);
+    if (k) out.push({item: m.item, via: m.via, metres: m.metres, ...k});
   }
   return out;
 }
