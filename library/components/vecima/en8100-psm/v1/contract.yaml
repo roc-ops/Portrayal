@@ -1,0 +1,52 @@
+format: 1
+kind: module
+name: en8100-psm
+version: 1.0.0
+class: psu
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 QSW AC power supply module (PSM) for 45-90 VAC input. The base half of the node holds
+  one or two of them, above and below the power distribution module; one is enough for normal
+  operation and the second adds redundancy and load sharing. It has an AC test point and a DC OUT
+  lamp, an AC IN lamp, a four-pin input cable and a twelve-pin output cable.
+size: {w: 190.0, h: 70.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 QSW AC power supply module
+  power-absent: not-published
+  inlet: other
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.4 and the
+    PSM figure on p36: "up to two 45-90 VAC QSW AC power supply modules", two lamps (AC IN and DC
+    OUT), "Only one PSM is required for normal operation." No part number is printed in the
+    guide; the label on the module is too small to read in the figure.
+  size: >-
+    estimated - no EN8100 document states a size for any module. 190 x 70 is the module's share of
+    the 607 x 281 open half in a hand-drawn layout of the open node, at the 2.3 aspect of the
+    module body in the PSM figure on p36 (the figure includes two mounting feet and cables).
+  elements: >-
+    photo-measured - the AC test point and the DC OUT lamp as fractions of the PSM figure on p36.
+    Not drawn: the AC IN lamp, whose place is not visible in the figure, the 4-pin input and
+    12-pin output cable connectors (no part in the library), the product label and its QR code, and
+    the vendor logo.
+  inlet: >-
+    guide - p36 and p37: the module takes AC on a four-pin input cable from the power distribution
+    module, which is a cable connector of a type no standard in the library describes, so the
+    inlet is `other`.
+  power-output: >-
+    NOT STATED in any EN8100 document held - the data sheet gives the node's input range and
+    "Max 200 W" and no figure for one supply.
+elements: {}
+parts:
+  - {ref: common/led-dot@1, id: led-dc-out, at: [160.0, 20.0], group: psm-leds}
+groups:
+  psm-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the DC OUT lamp; the AC IN lamp the guide also names is not located in the figure.
+connection-points:
+  mate: {at: [95.0, 35.0], direction: front}
+skins: [default]

@@ -1,0 +1,745 @@
+format: 1
+kind: device
+name: en8100
+version: 1.0.0
+maturity: draft
+manufacturer: Vecima
+model: EN8100
+description: >-
+  Entra EN8100 Remote PHY node, an outdoor hybrid fibre-coax node in a finned cast housing that
+  opens along its middle into a base half and a lid half. It hangs from a strand on two clamps. The
+  base carries the power: two power entry covers over six port entry modules, two RF amplifier
+  modules, one or two power supply modules and the power distribution module. The lid carries one or
+  two access modules, an optional forward injection module, the lid distribution module with its two
+  SFP+ Ethernet ports, and the fibre tray. Each end carries two RF/AC ports, one AC-only port, two
+  RF test ports and a fibre entry port, closed by stainless plugs; the ports under the plugs are not
+  modelled. The EN8400 is the same housing with a different port entry module and is a device of
+  its own. The faces are drawn as installed, rotated 180 degrees from the guide's lid-up
+  photographs: the lid hangs below the base. The fibre plug is on the lower half of each end and
+  the tall stepped fins are on the lower half of each long side.
+profile: networking
+provenance:
+  chassis:
+    confidence: datasheet
+    note: >-
+      Entra EN8100/8400 Hardware Unit Data Sheet (revision 1, 03/26/2024) p7, the dimensions row:
+      11.3 x 11.0 x 23.9 in (28.8 x 28.1 x 60.7 cm), with notes that the length leaves out the
+      port plugs and that the height is measured from the bottom of the strand. The data sheet does not say which
+      face is which; the 60.7 cm is the long axis, the ends carry the ports (guide p41), and the
+      node is drawn lying on that axis, so chassis width is 607, height 288 and depth 281. The
+      sheet's own W and D labels are therefore not the chassis' width and depth, and the height
+      includes the strand clamp side as the sheet says. A second reading, 24 x 11.9 in, comes from an
+      installation manual for the EN8400 and is not used; the two disagree and the data sheet is the
+      maker's own figure for both nodes.
+  chassis-color:
+    confidence: estimated
+    note: >-
+      Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15) p29: the two closed
+      housings are painted white or very light grey. No document names the colour or finish in
+      words.
+  mount:
+    confidence: datasheet
+    note: >-
+      The data sheet p7 lists strand, pedestal and wall as the mounting options. The device is written
+      `strand` because the guide ships two top strand clamps with each node (p61)
+      and sells the wall bracket and the pedestal kit as options
+      (p57, p62). The pedestal and wall mounts are stated here and not modelled: the bracket and rod
+      kits have no list to stand in on a device that is not a rack device.
+  power:
+    confidence: estimated
+    note: >-
+      STAND-IN. Data sheet p7: input 45-90 VAC at 50/60 Hz, and 15 A of passing current at most.
+      The node is fed through its RF/AC and AC-only ports (guide p41, p87), not through a mains
+      inlet, and the feed vocabulary has no word for power carried on the coaxial plant, so `ac` is
+      the nearest existing one.
+  views:
+    confidence: estimated
+    note: >-
+      Which face is `front`, `rear`, `top` and `bottom` is a drawing convention, because the node
+      has no front. `front` is the long side shown on guide p29 and p69 (the side with the closure
+      bolts), `rear` the opposite long side (the hinge side, not photographed from outside), `top`
+      the back of the base half, where the strand clamps are (guide p61), `bottom` the back of the
+      lid half, and `left`/`right` the two ends. The guide names the ends the left hand and right
+      hand sides (p41, p87). The faces are drawn as installed: base up, clamped to the
+      strand, lid swinging down and so on the bottom. The guide's closed-node photographs (p29,
+      p41) show the unit lid up, so each face is drawn rotated 180 degrees from its photograph:
+      the fibre plug and the tall stepped fins, which the photographs show on the upper casting
+      (the lid), are on the lower half here. This is an inference from three passages, not a
+      statement of the guide: the fibre entry ports are on the bottom of the unit, one on each
+      side (p42), the lid swings down on a horizontal mount (p59, p65), and the lid holds
+      the LDM and the fibre tray (p59).
+  outline:
+    confidence: photo-measured
+    note: >-
+      Guide p29 (the closed housings, lid up: tall stepped fins on the upper casting, which is the
+      lid, and shorter fins on the base below the flange; drawn as installed, so the tall fins are
+      the lower half here), p41 (an end), p69 (the three closure bolts on the front) and p32 (the
+      open halves).
+      The maker's drawing of the node, supplied by the maker, shows the opened housing with the
+      bolt bosses, gasket and hinge. The end profile and the ribs are stated as `chassis.section`
+      and `chassis.fins`, and the open view draws each half's rim from the maker's drawing: a
+      rounded rectangle whose corner radius is about 22 mm, a rim about 16 mm
+      wide, a bulge round each of the ten closure bolts, and the gasket in a groove just inside
+      the rim. Every figure is read as a fraction of the photograph or the drawing and is an
+      estimate, as no figure carries a dimension.
+  chassis.section:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p41 (the end of the EN8100, lid up) and p29 (the two closed housings). The end
+      is a stepped profile: a narrower casting carrying the tall ribs, a flange at the seam that is
+      the widest part (about 8 per cent of the height tall, with the closure lugs on it), and the
+      casting that carries the short ribs, which narrows a little towards them. Read from the photograph, the
+      castings are about 0.88 of the flange's width where they meet it, and the profile is
+      symmetrical about the middle of the depth. The photographs show the unit lid up; the profile
+      is drawn as installed, rotated 180 degrees from the guide's photographs (a rotation, not a
+      mirror), so the tall-rib casting, the lid, is the lower part and the short-rib casting, the
+      base, is the upper part. The sloped and rounded corners of the photographs are approximated
+      by steps of 4 to 5 mm, as the format only takes axis-aligned edges. The overall size is the
+      data sheet's: the flange takes the 281 mm depth and the two rib edges the 288 mm height.
+      Every figure is an estimate read as a fraction of the photograph; no document gives a
+      dimension of the profile.
+  chassis.plan-outline:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p29 (the closed housings), p32 (the opened node) and p41 (an end), the data sheet
+      p5 and p7, and the maker's drawing of the node, supplied by the maker, which shows the opened
+      node from above. Every figure is an estimate read from that drawing, fitted so that the lobes
+      at the ends span the data sheet's 607 mm and those of the long edges its 281 mm. The two agree
+      to within 2 per cent. The EN8400 shares this housing and is drawn the same. Two assumptions stand. First, the data sheet's length, 23.9 in without
+      port plugs, includes the lobes at the ends, so the box is the extremes of the body. Second,
+      the castings are inset from the flange in the plan, with smaller corner radii and roughly the
+      same outline as the flange. Guide p29 shows each casting ending about 21 mm inside the flange.
+      The flange is the widest of eight bands, 24 mm tall: its body is 9.2 mm in from each end and
+      9.4 mm in from each long edge, with corners of 22 mm radius. Three lobes stand on each long
+      edge, at 108.5, 303.5 and 498.5 mm, each 42 mm wide and 9.4 mm high. Each end has four lobes
+      at the bolt holes, 9.2, 6.0, 6.8 and 9.2 mm deep. The castings are seven bands, one for each
+      row of the section, 21 mm in from each end with corners of 12 mm radius. A boss of the casting runs out to
+      the end wherever a plug stands, so each plug stands on a wall; the drawing shows the port
+      bodies standing out beyond the lobes, and the size of a boss is the plug's, which is an
+      estimate. Every corner arc is cut into chords of 10 degrees, nine chords and ten points to a
+      quarter turn, and a chord that would lie within 0.5 mm of a wall is laid on it. The O-ring
+      groove is not part of this key: it stays in the open drawing.
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      Guide Rev_15 p29 (the side of the closed housings) and p41 (the end), data sheet p5 (the
+      same photographs). The ribs are thick, with gaps about as wide as the ribs. The tall ribs,
+      on the lid, stand about 17 per cent of the height (49 mm) at the two ends and run along
+      nearly the whole length, with a stepped tip line: a long flat stretch over the middle
+      third about two thirds as tall. They are 21 in number, 13 mm thick with 13 mm gaps, from
+      33 to 566 mm along the length. The short ribs, on the
+      base, stand about 11 per cent of the height (32 mm), 9.5 mm thick with 9.5 mm gaps, 27 in
+      number, from 67 to 570.5 mm. Both fields stop at the casting, which the plan outline
+      insets by about 21 mm from each end of the flange: the photographs show the ribs ending at
+      the casting and not in the flange, so the fields were shortened from the first reading (23
+      tall ribs from 13.5 mm, 28 short ribs to 589.5 mm, and a lower step at the end of the tall
+      field, which no rib now stands in). Both fields are inside the stated size, not outside it. The data sheet p7 gives
+      the height as measured from the bottom of the strand and does not exclude the ribs, and
+      the end photograph (p41) has the flange's width at about 1.03 of the whole height with
+      both rib fields in it, close to the data sheet's 11.0 in by 11.3 in (0.97); ribs outside
+      the 288 mm would make the whole noticeably taller than the flange is wide. Rotated 180
+      degrees from the guide's lid-up photographs like the profile, so the tall ribs are on the
+      lower edge and the short ribs on the upper edge as installed.
+  bolts:
+    confidence: photo-measured
+    note: >-
+      Guide p68: ten captive clamping bolts, numbered on the enclosure and closed in order from #1
+      to #10. Guide p69 shows #5, #1 and #3 along the front, left to right. The maker's drawing of
+      the node shows three bolt bosses on each long edge and two on each end of each half, ten in
+      all. The numbers of the other seven are not shown in any document held and are not drawn.
+  gasket:
+    confidence: photo-measured
+    note: >-
+      Guide p68 step 1, which has the installer check the flange and O-ring are clean, and the maker's drawing
+      of the node, which shows a dark ring round the rim of each half. Its section is not stated.
+  hinge:
+    confidence: photo-measured
+    note: >-
+      Guide p32 and p66 and the maker's drawing of the node: two hinges between the halves, each of
+      stacked knuckles on one pin. Positions are read from the maker's drawing as fractions of the
+      length. The guide says the lid swings down when the node is opened (p59, p65) and that a
+      vertically mounted node opens with the hinges on the left, never on the right, or the hinge
+      is damaged (p63, p66).
+  end-ports:
+    confidence: photo-measured
+    note: >-
+      Guide p41, the side view of one end, lid up: A fibre port on the upper casting, B two RF test
+      ports, C two RF/AC ports, D one AC-only port, on the lower casting, as fractions of the end
+      face. Plug sizes and the fraction readings are estimates (the plugs stand proud and the
+      photograph is in perspective). Drawn as installed, rotated 180 degrees from the photograph
+      (a rotation, not a mirror): the fibre plug is on the lower half, the lid, at the bottom right
+      of the `right` face, and the RF/AC, AC-only and test plugs are on the upper half, the base.
+      The other end is not photographed and is drawn as its pair, the same arrangement mirrored
+      left to right, without the printed legends, which is an assumption. The pair follows the
+      open node (p32, p42), which shows both fibre entries on the hinge side of the lid. The data
+      sheet p7 and the guide p42 count two fibre ports (one per side); the guide's specification
+      appendix counts four (two per side). One is drawn on each end.
+  end-legends:
+    confidence: photo-measured
+    note: >-
+      Guide p41: the letters "D" and "C" printed beside the RF/AC ports and "PWR (R)" beside the
+      AC-only port on the end photographed. Drawn rotated 180 degrees with the end, so they read
+      turned the other way up.
+  modules:
+    confidence: estimated
+    note: >-
+      Guide p32 (the open node: base above, lid below, items A to H) and the maker's drawing of the
+      node give which module sits on which half and in which column. No document held gives a module
+      size, a part number or a position in millimetres, so every module's size and every bay's
+      place is an estimate: the proportions are those of the module figures on p33 to p40 and of
+      the open-node photographs, scaled so that a half is the 607 x 281 of the closed housing.
+  open-view:
+    confidence: drawing
+    note: >-
+      The open drawing shows the base half above the lid half with the hinge between them, as guide
+      p32 and the maker's drawing of the node show it. Its two regions name the half each part of
+      the drawing belongs to. The lid is shown laid out flat, the way both figures show it.
+  halves.base.outer:
+    confidence: photo-measured
+    note: >-
+      Guide p61 and p58 to p59: the strand clamps, the wall bracket and the pedestal bracket all
+      fit to the base, the part holding the LDM and the fibre management tray being the
+      lid. The base's back, the face with the clamps, is drawn as `top`.
+  halves.base.stands:
+    confidence: estimated
+    note: >-
+      Half of the 288 mm height. No document gives either half's depth; the seam is read at about
+      the middle of the end (guide p41), in the flange, so the two halves are taken as equal. The
+      flange is the widest part of the section (y 132 to 156 mm), and the seam is at its middle.
+  halves.lid.hinge:
+    confidence: photo-measured
+    note: >-
+      Guide p32, p65 and p66: the hinges are on one long side, and on a horizontally mounted node
+      the lid swings down. That long side is drawn as `rear`.
+  halves.lid.angle:
+    confidence: estimated
+    note: >-
+      Guide p32 and the maker's drawing of the node show the lid laid out flat, 180 degrees from
+      closed. No document states how far the hinge travels, so 180 is the angle the figures draw and
+      not a limit.
+  halves.lid.stands:
+    confidence: estimated
+    note: >-
+      Half of the 288 mm height, as for the base.
+  configurations:
+    confidence: datasheet
+    note: >-
+      Guide p38 and p49 to p52: the access module comes as 1x1 or 1x2, the node as Fiber Deep (one
+      module) or 2AM (two), the forward injection module is optional, and only one supply is needed.
+      The maker's drawing of the node shows three arrangements: 2x4 with the forward injection
+      module, 2x4 without it, and 1x2 with one access module. Where a module is absent the drawing
+      shows a bare plate on the lid. Only the 1x2 module face is shown anywhere, so the 1x1 variant
+      is not drawn.
+attrs:
+  physical:
+    weight-kg: 22.7
+    weight-note: 'less than 50 lb (22.7 kg)'
+    enclosure: IP68, 1 m depth for 12 hours
+  power:
+    power-max-w: 200
+    power-input: 45-90 VAC, 50/60 Hz
+    ac-current-passing-a: 15
+    current-max-a: 5.5
+  environmental:
+    operating-temp-c: -40 to 60
+    operating-humidity: 5 to 95 percent
+  features:
+    mounting-options: strand, pedestal, wall
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 607.0
+  height: 288.0
+  depth: 281.0
+  mount: strand
+  power: ac
+  color: '#eceeef'
+  edge: '#c3c7ca'
+  silk: '#3a3f44'
+  section:
+  - [27.0, 0.0]
+  - [254.0, 0.0]
+  - [254.0, 32.0]
+  - [259.0, 32.0]
+  - [259.0, 114.0]
+  - [263.0, 114.0]
+  - [263.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 156.0]
+  - [264.0, 156.0]
+  - [264.0, 246.0]
+  - [260.0, 246.0]
+  - [260.0, 262.0]
+  - [255.0, 262.0]
+  - [255.0, 276.0]
+  - [250.0, 276.0]
+  - [250.0, 288.0]
+  - [31.0, 288.0]
+  - [31.0, 276.0]
+  - [26.0, 276.0]
+  - [26.0, 262.0]
+  - [21.0, 262.0]
+  - [21.0, 246.0]
+  - [17.0, 246.0]
+  - [17.0, 156.0]
+  - [0.0, 156.0]
+  - [0.0, 132.0]
+  - [18.0, 132.0]
+  - [18.0, 114.0]
+  - [22.0, 114.0]
+  - [22.0, 32.0]
+  - [27.0, 32.0]
+  fins:
+  - 'on': top
+    span: [67.0, 570.5]
+    core: 32.0
+    rib: 9.5
+    gap: 9.5
+  - 'on': bottom
+    span: [33.0, 566.0]
+    core: 49.0
+    rib: 13.0
+    gap: 13.0
+    steps:
+    - {span: [33.0, 160.0], height: 49.0}
+    - {span: [160.0, 190.0], height: 40.0}
+    - {span: [190.0, 425.0], height: 32.0}
+    - {span: [425.0, 566.0], height: 49.0}
+  plan-outline:
+  - heights: [0.0, 32.0]
+    points: [[30.92, 254], [28.9, 253.28], [27, 252.39], [25.29, 251.19],
+      [23.81, 249.71], [22.61, 248], [21.72, 246.1], [21.18, 244.08],
+      [21, 242], [21, 39], [21.18, 36.92], [21.72, 34.9],
+      [22.61, 33], [23.81, 31.29], [25.29, 29.81], [27, 28.61],
+      [28.9, 27.72], [30.92, 27], [576.08, 27], [578.1, 27.72],
+      [580, 28.61], [581.71, 29.81], [583.19, 31.29], [584.39, 33],
+      [585.28, 34.9], [585.82, 36.92], [586, 39], [586, 242],
+      [585.82, 244.08], [585.28, 246.1], [584.39, 248], [583.19, 249.71],
+      [581.71, 251.19], [580, 252.39], [578.1, 253.28], [576.08, 254]]
+  - heights: [32.0, 114.0]
+    points: [[2.5, 259], [0, 256.5], [0, 224.63], [0.54, 224],
+      [0.94, 223.43], [1.43, 222.94], [2, 222.54], [2.63, 222.24],
+      [3.31, 222.06], [4, 222], [21, 222], [21, 168],
+      [4, 168], [3.31, 167.94], [2.63, 167.76], [2, 167.46],
+      [1.43, 167.06], [0.94, 166.57], [0.54, 166], [0, 165.37],
+      [0, 132.63], [0.54, 132], [0.94, 131.43], [1.43, 130.94],
+      [2, 130.54], [2.63, 130.24], [3.31, 130.06], [4, 130],
+      [21, 130], [21, 95], [4, 95], [3.31, 94.94],
+      [2.63, 94.76], [2, 94.46], [1.43, 94.06], [0.94, 93.57],
+      [0.54, 93], [0, 92.37], [0, 48.63], [0.54, 48],
+      [0.94, 47.43], [1.43, 46.94], [2, 46.54], [2.63, 46.24],
+      [3.31, 46.06], [4, 46], [21, 46], [21, 34],
+      [21.18, 31.92], [21.72, 29.9], [22.61, 28], [23.81, 26.29],
+      [25.29, 24.81], [27, 23.61], [28.9, 22.72], [30.92, 22],
+      [576.08, 22], [578.1, 22.72], [580, 23.61], [581.71, 24.81],
+      [583.19, 26.29], [584.39, 28], [585.28, 29.9], [585.82, 31.92],
+      [586, 34], [586, 46], [603, 46], [603.69, 46.06],
+      [604.37, 46.24], [605, 46.54], [605.57, 46.94], [606.06, 47.43],
+      [606.46, 48], [607, 48.63], [607, 92.37], [606.46, 93],
+      [606.06, 93.57], [605.57, 94.06], [605, 94.46], [604.37, 94.76],
+      [603.69, 94.94], [603, 95], [586, 95], [586, 130],
+      [603, 130], [603.69, 130.06], [604.37, 130.24], [605, 130.54],
+      [605.57, 130.94], [606.06, 131.43], [606.46, 132], [607, 132.63],
+      [607, 165.37], [606.46, 166], [606.06, 166.57], [605.57, 167.06],
+      [605, 167.46], [604.37, 167.76], [603.69, 167.94], [603, 168],
+      [586, 168], [586, 222], [603, 222], [603.69, 222.06],
+      [604.37, 222.24], [605, 222.54], [605.57, 222.94], [606.06, 223.43],
+      [606.46, 224], [607, 224.63], [607, 256.5], [604.5, 259]]
+  - heights: [114.0, 132.0]
+    points: [[2.5, 263], [0, 260.5], [0, 224.63], [0.54, 224],
+      [0.94, 223.43], [1.43, 222.94], [2, 222.54], [2.63, 222.24],
+      [3.31, 222.06], [4, 222], [21, 222], [21, 168],
+      [4, 168], [3.31, 167.94], [2.63, 167.76], [2, 167.46],
+      [1.43, 167.06], [0.94, 166.57], [0.54, 166], [0, 165.37],
+      [0, 132.63], [0.54, 132], [0.94, 131.43], [1.43, 130.94],
+      [2, 130.54], [2.63, 130.24], [3.31, 130.06], [4, 130],
+      [21, 130], [21, 95], [4, 95], [3.31, 94.94],
+      [2.63, 94.76], [2, 94.46], [1.43, 94.06], [0.94, 93.57],
+      [0.54, 93], [0, 92.37], [0, 48.63], [0.54, 48],
+      [0.94, 47.43], [1.43, 46.94], [2, 46.54], [2.63, 46.24],
+      [3.31, 46.06], [4, 46], [21, 46], [21, 30],
+      [21.18, 27.92], [21.72, 25.9], [22.61, 24], [23.81, 22.29],
+      [25.29, 20.81], [27, 19.61], [28.9, 18.72], [30.92, 18],
+      [576.08, 18], [578.1, 18.72], [580, 19.61], [581.71, 20.81],
+      [583.19, 22.29], [584.39, 24], [585.28, 25.9], [585.82, 27.92],
+      [586, 30], [586, 46], [603, 46], [603.69, 46.06],
+      [604.37, 46.24], [605, 46.54], [605.57, 46.94], [606.06, 47.43],
+      [606.46, 48], [607, 48.63], [607, 92.37], [606.46, 93],
+      [606.06, 93.57], [605.57, 94.06], [605, 94.46], [604.37, 94.76],
+      [603.69, 94.94], [603, 95], [586, 95], [586, 130],
+      [603, 130], [603.69, 130.06], [604.37, 130.24], [605, 130.54],
+      [605.57, 130.94], [606.06, 131.43], [606.46, 132], [607, 132.63],
+      [607, 165.37], [606.46, 166], [606.06, 166.57], [605.57, 167.06],
+      [605, 167.46], [604.37, 167.76], [603.69, 167.94], [603, 168],
+      [586, 168], [586, 222], [603, 222], [603.69, 222.06],
+      [604.37, 222.24], [605, 222.54], [605.57, 222.94], [606.06, 223.43],
+      [606.46, 224], [607, 224.63], [607, 260.5], [604.5, 263]]
+  - heights: [132.0, 156.0]
+    points: [[9.2, 31.4], [9.53, 27.58], [10.53, 23.88], [12.15, 20.4],
+      [14.35, 17.26], [17.06, 14.55], [20.2, 12.35], [23.68, 10.73],
+      [27.38, 9.73], [31.2, 9.4], [87.5, 9.4], [89.6, 8.7],
+      [91.7, 7.58], [93.8, 6.29], [95.9, 4.93], [98, 3.61],
+      [100.1, 2.41], [102.2, 1.4], [104.3, 0.64], [106.4, 0],
+      [110.6, 0], [112.7, 0.64], [114.8, 1.4], [116.9, 2.41],
+      [119, 3.61], [121.1, 4.93], [123.2, 6.29], [125.3, 7.58],
+      [127.4, 8.7], [129.5, 9.4], [282.5, 9.4], [284.6, 8.7],
+      [286.7, 7.58], [288.8, 6.29], [290.9, 4.93], [293, 3.61],
+      [295.1, 2.41], [297.2, 1.4], [299.3, 0.64], [301.4, 0],
+      [305.6, 0], [307.7, 0.64], [309.8, 1.4], [311.9, 2.41],
+      [314, 3.61], [316.1, 4.93], [318.2, 6.29], [320.3, 7.58],
+      [322.4, 8.7], [324.5, 9.4], [477.5, 9.4], [479.6, 8.7],
+      [481.7, 7.58], [483.8, 6.29], [485.9, 4.93], [488, 3.61],
+      [490.1, 2.41], [492.2, 1.4], [494.3, 0.64], [496.4, 0],
+      [500.6, 0], [502.7, 0.64], [504.8, 1.4], [506.9, 2.41],
+      [509, 3.61], [511.1, 4.93], [513.2, 6.29], [515.3, 7.58],
+      [517.4, 8.7], [519.5, 9.4], [575.8, 9.4], [579.62, 9.73],
+      [583.32, 10.73], [586.8, 12.35], [589.94, 14.55], [592.65, 17.26],
+      [594.85, 20.4], [596.47, 23.88], [597.47, 27.58], [597.8, 31.4],
+      [597.8, 55], [598.49, 57], [599.58, 59], [600.85, 61],
+      [602.17, 63], [603.46, 65], [604.64, 67], [605.63, 69],
+      [606.38, 71], [607, 73], [607, 77], [606.38, 79],
+      [605.63, 81], [604.64, 83], [603.46, 85], [602.17, 87],
+      [600.85, 89], [599.58, 91], [598.49, 93], [597.8, 95],
+      [597.8, 130], [598.25, 131.2], [598.96, 132.4], [599.79, 133.6],
+      [600.65, 134.8], [601.49, 136], [602.26, 137.2], [602.9, 138.4],
+      [603.39, 139.6], [603.7, 140.8], [603.8, 142], [603.7, 143.2],
+      [603.39, 144.4], [602.9, 145.6], [602.26, 146.8], [601.49, 148],
+      [600.65, 149.2], [599.79, 150.4], [598.96, 151.6], [598.25, 152.8],
+      [597.8, 154], [597.8, 170.4], [598.31, 171.9], [599.11, 173.4],
+      [600.05, 174.9], [601.03, 176.4], [601.99, 177.9], [602.85, 179.4],
+      [603.59, 180.9], [604.14, 182.4], [604.48, 183.9], [604.6, 185.4],
+      [604.48, 186.9], [604.14, 188.4], [603.59, 189.9], [602.85, 191.4],
+      [601.99, 192.9], [601.03, 194.4], [600.05, 195.9], [599.11, 197.4],
+      [598.88, 197.8], [598.31, 198.9], [598.49, 199.6], [598.94, 200.4],
+      [599.58, 201.4], [600.85, 203.2], [602.17, 205], [603.46, 206.8],
+      [604.64, 208.6], [605.63, 210.4], [606.38, 212.2], [607, 214],
+      [607, 217.6], [606.38, 219.4], [605.63, 221.2], [604.64, 223],
+      [603.46, 224.8], [602.17, 226.6], [600.85, 228.4], [599.58, 230.2],
+      [598.49, 232], [597.8, 233.8], [597.8, 249.6], [597.47, 253.42],
+      [596.47, 257.12], [594.85, 260.6], [592.65, 263.74], [589.94, 266.45],
+      [586.8, 268.65], [583.32, 270.27], [579.62, 271.27], [575.8, 271.6],
+      [519.5, 271.6], [517.4, 272.3], [515.3, 273.42], [513.2, 274.71],
+      [511.1, 276.07], [509, 277.39], [506.9, 278.59], [504.8, 279.6],
+      [502.7, 280.36], [500.6, 281], [496.4, 281], [494.3, 280.36],
+      [492.2, 279.6], [490.1, 278.59], [488, 277.39], [485.9, 276.07],
+      [483.8, 274.71], [481.7, 273.42], [479.6, 272.3], [477.5, 271.6],
+      [324.5, 271.6], [322.4, 272.3], [320.3, 273.42], [318.2, 274.71],
+      [316.1, 276.07], [314, 277.39], [311.9, 278.59], [309.8, 279.6],
+      [307.7, 280.36], [305.6, 281], [301.4, 281], [299.3, 280.36],
+      [297.2, 279.6], [295.1, 278.59], [293, 277.39], [290.9, 276.07],
+      [288.8, 274.71], [286.7, 273.42], [284.6, 272.3], [282.5, 271.6],
+      [129.5, 271.6], [127.4, 272.3], [125.3, 273.42], [123.2, 274.71],
+      [121.1, 276.07], [119, 277.39], [116.9, 278.59], [114.8, 279.6],
+      [112.7, 280.36], [110.6, 281], [106.4, 281], [104.3, 280.36],
+      [102.2, 279.6], [100.1, 278.59], [98, 277.39], [95.9, 276.07],
+      [93.8, 274.71], [91.7, 273.42], [89.6, 272.3], [87.5, 271.6],
+      [31.2, 271.6], [27.38, 271.27], [23.68, 270.27], [20.2, 268.65],
+      [17.06, 266.45], [14.35, 263.74], [12.15, 260.6], [10.53, 257.12],
+      [9.53, 253.42], [9.2, 249.6], [9.2, 233.8], [8.51, 232],
+      [7.42, 230.2], [6.15, 228.4], [4.83, 226.6], [3.54, 224.8],
+      [2.36, 223], [1.37, 221.2], [0.62, 219.4], [0, 217.6],
+      [0, 214], [0.62, 212.2], [1.37, 210.4], [2.36, 208.6],
+      [3.54, 206.8], [4.83, 205], [6.15, 203.2], [7.42, 201.4],
+      [8.06, 200.4], [8.51, 199.6], [8.69, 198.9], [8.12, 197.8],
+      [7.89, 197.4], [6.95, 195.9], [5.97, 194.4], [5.01, 192.9],
+      [4.15, 191.4], [3.41, 189.9], [2.86, 188.4], [2.52, 186.9],
+      [2.4, 185.4], [2.52, 183.9], [2.86, 182.4], [3.41, 180.9],
+      [4.15, 179.4], [5.01, 177.9], [5.97, 176.4], [6.95, 174.9],
+      [7.89, 173.4], [8.69, 171.9], [9.2, 170.4], [9.2, 154],
+      [8.75, 152.8], [8.04, 151.6], [7.21, 150.4], [6.35, 149.2],
+      [5.51, 148], [4.74, 146.8], [4.1, 145.6], [3.61, 144.4],
+      [3.3, 143.2], [3.2, 142], [3.3, 140.8], [3.61, 139.6],
+      [4.1, 138.4], [4.74, 137.2], [5.51, 136], [6.35, 134.8],
+      [7.21, 133.6], [8.04, 132.4], [8.75, 131.2], [9.2, 130],
+      [9.2, 95], [8.51, 93], [7.42, 91], [6.15, 89],
+      [4.83, 87], [3.54, 85], [2.36, 83], [1.37, 81],
+      [0.62, 79], [0, 77], [0, 73], [0.62, 71],
+      [1.37, 69], [2.36, 67], [3.54, 65], [4.83, 63],
+      [6.15, 61], [7.42, 59], [8.51, 57], [9.2, 55]]
+  - heights: [156.0, 246.0]
+    points: [[30.92, 264], [28.9, 263.28], [27, 262.39], [25.29, 261.19],
+      [23.81, 259.71], [22.61, 258], [21.72, 256.1], [21.18, 254.08],
+      [21, 252], [21, 52], [4, 52], [3.31, 51.94],
+      [2.63, 51.76], [2, 51.46], [1.43, 51.06], [0.94, 50.57],
+      [0.54, 50], [0, 49.37], [0, 18], [1, 17],
+      [606, 17], [607, 18], [607, 49.37], [606.46, 50],
+      [606.06, 50.57], [605.57, 51.06], [605, 51.46], [604.37, 51.76],
+      [603.69, 51.94], [603, 52], [586, 52], [586, 252],
+      [585.82, 254.08], [585.28, 256.1], [584.39, 258], [583.19, 259.71],
+      [581.71, 261.19], [580, 262.39], [578.1, 263.28], [576.08, 264]]
+  - heights: [246.0, 262.0]
+    points: [[30.92, 260], [28.9, 259.28], [27, 258.39], [25.29, 257.19],
+      [23.81, 255.71], [22.61, 254], [21.72, 252.1], [21.18, 250.08],
+      [21, 248], [21, 33], [21.18, 30.92], [21.72, 28.9],
+      [22.61, 27], [23.81, 25.29], [25.29, 23.81], [27, 22.61],
+      [28.9, 21.72], [30.92, 21], [576.08, 21], [578.1, 21.72],
+      [580, 22.61], [581.71, 23.81], [583.19, 25.29], [584.39, 27],
+      [585.28, 28.9], [585.82, 30.92], [586, 33], [586, 248],
+      [585.82, 250.08], [585.28, 252.1], [584.39, 254], [583.19, 255.71],
+      [581.71, 257.19], [580, 258.39], [578.1, 259.28], [576.08, 260]]
+  - heights: [262.0, 276.0]
+    points: [[30.92, 255], [28.9, 254.28], [27, 253.39], [25.29, 252.19],
+      [23.81, 250.71], [22.61, 249], [21.72, 247.1], [21.18, 245.08],
+      [21, 243], [21, 38], [21.18, 35.92], [21.72, 33.9],
+      [22.61, 32], [23.81, 30.29], [25.29, 28.81], [27, 27.61],
+      [28.9, 26.72], [30.92, 26], [576.08, 26], [578.1, 26.72],
+      [580, 27.61], [581.71, 28.81], [583.19, 30.29], [584.39, 32],
+      [585.28, 33.9], [585.82, 35.92], [586, 38], [586, 243],
+      [585.82, 245.08], [585.28, 247.1], [584.39, 249], [583.19, 250.71],
+      [581.71, 252.19], [580, 253.39], [578.1, 254.28], [576.08, 255]]
+  - heights: [276.0, 288.0]
+    points: [[30.92, 250], [28.9, 249.28], [27, 248.39], [25.29, 247.19],
+      [23.81, 245.71], [22.61, 244], [21.72, 242.1], [21.18, 240.08],
+      [21, 238], [21, 43], [21.18, 40.92], [21.72, 38.9],
+      [22.61, 37], [23.81, 35.29], [25.29, 33.81], [27, 32.61],
+      [28.9, 31.72], [30.92, 31], [576.08, 31], [578.1, 31.72],
+      [580, 32.61], [581.71, 33.81], [583.19, 35.29], [584.39, 37],
+      [585.28, 38.9], [585.82, 40.92], [586, 43], [586, 238],
+      [585.82, 240.08], [585.28, 242.1], [584.39, 244], [583.19, 245.71],
+      [581.71, 247.19], [580, 248.39], [578.1, 249.28], [576.08, 250]]
+  halves:
+    base: {outer: top, stands: 144.0}
+    lid: {hinge: rear, angle: 180.0, stands: 144.0}
+groups:
+  rfam-bays:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the two RF amplifier modules, one at each end of the base half
+  am-bays:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the one or two access modules on the lid half
+  ldm-bay:
+    term: Slot
+    role: management
+    index-origin: 1
+    description: the lid distribution module
+  fim-bay:
+    term: Slot
+    role: traffic
+    index-origin: 1
+    description: the optional forward injection module
+  psm-bays:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the one or two power supply modules
+  pdm-bay:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the power distribution module
+  pec-bays:
+    term: Cover
+    role: service
+    index-origin: 1
+    description: the two power entry covers
+  port-entry-bays:
+    term: Slot
+    role: service
+    index-origin: 1
+    description: the six port entry modules under the covers, three at each end
+  tray-bay:
+    term: Tray
+    role: furniture
+    index-origin: 1
+    description: the fibre management tray
+  port-plugs:
+    term: Plug
+    role: furniture
+    index-origin: 1
+    description: the plugs that close the external ports on each end
+views:
+  front:
+    panel:
+      decor:
+        - {id: seam-flange, at: [0, 132], size: [607, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'guide p29: the flange around the seam, the widest part of the housing; its depth comes from the chassis section'}
+        - {id: gasket-line, at: [4, 143], size: [599, 2], fill: '#3a3d40', kind: gasket, confidence: estimated, source: 'guide p68 step 1: the O-ring at the seam; its section is not stated'}
+        - {id: clamp-1, at: [499, 118], size: [18, 40], fill: '#d3d6d9', out: 12, kind: closure-tab, confidence: photo-measured, source: 'guide p69: closure bolt #5 on the front, turned 180 degrees with the face; position from the maker drawing of the node'}
+        - {id: clamp-2, at: [297, 118], size: [18, 40], fill: '#d3d6d9', out: 12, kind: closure-tab, confidence: photo-measured, source: 'guide p69: closure bolt #1 on the front, turned 180 degrees with the face; position from the maker drawing of the node'}
+        - {id: clamp-3, at: [94, 118], size: [18, 40], fill: '#d3d6d9', out: 12, kind: closure-tab, confidence: photo-measured, source: 'guide p69: closure bolt #3 on the front, turned 180 degrees with the face; position from the maker drawing of the node'}
+        - {id: bolt-5, at: [502, 138], size: [12, 12], rx: 6, fill: '#9a9fa5', stroke: '#5d6166', out: 16, kind: bolt-head, confidence: photo-measured, source: 'guide p69: bolt #5, turned 180 degrees with the face'}
+        - {id: bolt-1, at: [300, 138], size: [12, 12], rx: 6, fill: '#9a9fa5', stroke: '#5d6166', out: 16, kind: bolt-head, confidence: photo-measured, source: 'guide p69: bolt #1, turned 180 degrees with the face'}
+        - {id: bolt-3, at: [97, 138], size: [12, 12], rx: 6, fill: '#9a9fa5', stroke: '#5d6166', out: 16, kind: bolt-head, confidence: photo-measured, source: 'guide p69: bolt #3, turned 180 degrees with the face'}
+        - {id: label-plate, at: [43, 36], size: [120, 76], fill: '#f4f4f2', kind: label-plate, confidence: estimated, source: 'guide p29 shows a white rating label on the base casting of the EN8100 housing, drawn here turned 180 degrees with the face; no document dimensions it, so its size and place are a gap read as fractions of the photograph'}
+    silkscreen:
+      - {at: [508, 170], text: '5', anchor: middle, font-size: 6}
+      - {at: [306, 170], text: '1', anchor: middle, font-size: 6}
+      - {at: [103, 170], text: '3', anchor: middle, font-size: 6}
+  rear:
+    panel:
+      decor:
+        - {id: seam-flange, at: [0, 132], size: [607, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'the same flange as the front'}
+        - {id: gasket-line, at: [4, 143], size: [599, 2], fill: '#3a3d40', kind: gasket, confidence: estimated, source: 'the same seam as the front'}
+        - {id: hinge-1-knuckle-a, at: [164, 126], size: [10, 36], rx: 3, fill: '#cfd2d5', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.29 of the length'}
+        - {id: hinge-1-knuckle-b, at: [176, 126], size: [10, 36], rx: 3, fill: '#b9bdc1', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.29 of the length'}
+        - {id: hinge-1-knuckle-c, at: [188, 126], size: [10, 36], rx: 3, fill: '#cfd2d5', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.29 of the length'}
+        - {id: hinge-2-knuckle-a, at: [402, 126], size: [10, 36], rx: 3, fill: '#cfd2d5', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.68 of the length'}
+        - {id: hinge-2-knuckle-b, at: [414, 126], size: [10, 36], rx: 3, fill: '#b9bdc1', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.68 of the length'}
+        - {id: hinge-2-knuckle-c, at: [426, 126], size: [10, 36], rx: 3, fill: '#cfd2d5', out: 10, kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge knuckles at about 0.68 of the length'}
+  top:
+    size: {w: 607, h: 281}
+    panel:
+      decor:
+        - {id: strand-clamp-1, at: [128, 88], size: [44, 104], fill: '#e6e8ea', out: 14, kind: strand-clamp, confidence: estimated, source: 'guide p61: the top strand clamp, two per node; position and size are estimates'}
+        - {id: strand-clamp-2, at: [435, 88], size: [44, 104], fill: '#e6e8ea', out: 14, kind: strand-clamp, confidence: estimated, source: 'guide p61: the top strand clamp, two per node; position and size are estimates'}
+        - {id: strand-bolt-1, at: [143, 128], size: [14, 14], rx: 7, fill: '#bfc3c7', out: 20, kind: bolt-head, confidence: photo-measured, source: 'guide p61: the strand clamp bolt, 1/2 inch hex'}
+        - {id: strand-bolt-2, at: [450, 128], size: [14, 14], rx: 7, fill: '#bfc3c7', out: 20, kind: bolt-head, confidence: photo-measured, source: 'guide p61: the strand clamp bolt, 1/2 inch hex'}
+  bottom:
+    size: {w: 607, h: 281}
+    panel:
+      decor:
+        - {id: lid-back, at: [21, 31], size: [565, 219], fill: '#e3e5e7', rx: 12, kind: casting-web, confidence: estimated, source: 'guide p29 and p41: the back of the lid casting the tall ribs stand on, as wide as the bottom edge of the chassis section and inset from the flange at each end'}
+  left:
+    size: {w: 281, h: 288}
+    panel:
+      decor:
+        - {id: seam-flange, at: [0, 132], size: [281, 24], fill: '#e0e3e5', kind: flange, confidence: estimated, source: 'guide p41: the flange at the seam, the widest part of the end, about the middle of its height'}
+    components:
+      placements:
+        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [18, 211], group: port-plugs, rel-pos: 1}
+        - {ref: vecima/en8100-test-plug@1, id: test-plug-1, at: [67, 105], group: port-plugs, rel-pos: 2}
+        - {ref: vecima/en8100-test-plug@1, id: test-plug-2, at: [231, 105], group: port-plugs, rel-pos: 3}
+        - {ref: vecima/en8100-port-plug@1, id: rfac-plug-1, at: [50, 54], group: port-plugs, rel-pos: 4}
+        - {ref: vecima/en8100-port-plug@1, id: ac-plug, at: [134, 54], group: port-plugs, rel-pos: 5}
+        - {ref: vecima/en8100-port-plug@1, id: rfac-plug-2, at: [226, 54], group: port-plugs, rel-pos: 6}
+  right:
+    size: {w: 281, h: 288}
+    panel:
+      decor:
+        - {id: seam-flange, at: [0, 132], size: [281, 24], fill: '#e0e3e5', kind: flange, confidence: photo-measured, source: 'guide p41: the flange at the seam, the widest part of the end, about the middle of its height'}
+    silkscreen:
+      - {at: [211, 38], text: D, font-size: 5, rotate: 90, for: rfac-plug-1}
+      - {at: [128, 38], text: PWR (R), font-size: 4, rotate: 90, for: ac-plug}
+      - {at: [46, 38], text: C, font-size: 5, rotate: 90, for: rfac-plug-2}
+    components:
+      placements:
+        - {ref: vecima/en8100-port-plug@1, id: fibre-plug, at: [233, 211], group: port-plugs, rel-pos: 1}
+        - {ref: vecima/en8100-test-plug@1, id: test-plug-1, at: [190, 105], group: port-plugs, rel-pos: 2}
+        - {ref: vecima/en8100-test-plug@1, id: test-plug-2, at: [26, 105], group: port-plugs, rel-pos: 3}
+        - {ref: vecima/en8100-port-plug@1, id: rfac-plug-1, at: [201, 54], group: port-plugs, rel-pos: 4}
+        - {ref: vecima/en8100-port-plug@1, id: ac-plug, at: [117, 54], group: port-plugs, rel-pos: 5}
+        - {ref: vecima/en8100-port-plug@1, id: rfac-plug-2, at: [25, 54], group: port-plugs, rel-pos: 6}
+  lid-open:
+    size: {w: 607, h: 574}
+    panel:
+      decor:
+        - {id: base-half, at: [0, 7], size: [607, 268], fill: '#d8dbde', rx: 22, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the base half, a rounded rectangle whose corner radius is about 22 mm, as the plan outline of the closed housing, and a rim about 16 mm wide before the gasket groove'}
+        - {id: base-lug-1, at: [90, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt, three along each long edge of a half'}
+        - {id: base-lug-2, at: [292, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-3, at: [495, 0], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-4, at: [90, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-5, at: [292, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-6, at: [495, 263], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: base-lug-7, at: [0, 54], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-8, at: [0, 197], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-9, at: [588, 54], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-lug-10, at: [588, 197], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: base-floor, at: [12, 19], size: [583, 244], fill: '#9da1a5', rx: 16, kind: housing-floor}
+        - {id: base-gasket, at: [9.5, 16.5], size: [588, 249], stroke: '#26282b', stroke-width: 6, rx: 16, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove, straight along the sides and turning at a corner radius of about 16 mm, about 17 mm inside the edge of the flange, drawn a little further out here so that the modules leave it showing'}
+        - {id: lid-half, at: [0, 300], size: [607, 268], fill: '#d8dbde', rx: 22, kind: housing-half, confidence: photo-measured, source: 'maker drawing of the node: the cast rim of the lid half, the same rounded rectangle as the base half'}
+        - {id: lid-lug-1, at: [90, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-2, at: [292, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-3, at: [495, 293], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-4, at: [90, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-5, at: [292, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-6, at: [495, 556], size: [18, 18], fill: '#d8dbde', rx: 9, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: the rim bulges round each closure bolt'}
+        - {id: lid-lug-7, at: [0, 347], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-8, at: [0, 490], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-9, at: [588, 347], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-lug-10, at: [588, 490], size: [19, 19], fill: '#d8dbde', rx: 9.5, kind: housing-lug, confidence: photo-measured, source: 'maker drawing of the node: two bolt lugs on each end of a half'}
+        - {id: lid-floor, at: [12, 309], size: [583, 247], fill: '#9da1a5', rx: 16, kind: housing-floor}
+        - {id: lid-gasket, at: [9.5, 309.5], size: [588, 249], stroke: '#26282b', stroke-width: 6, rx: 16, kind: gasket, confidence: photo-measured, source: 'guide p68 step 1 and the maker drawing of the node: the O-ring in its groove, the same line as on the base half'}
+        - {id: lid-strip, at: [24, 311], size: [559, 16], fill: '#1f2124', kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid; its fins are its ribs'}
+        - {id: lid-strip-fins, at: [24, 311], size: [559, 16], pattern: grille, kind: finned-strip, confidence: photo-measured, source: 'maker drawing of the node: the black strip along the hinge side of the lid'}
+        - {id: hinge-1-base, at: [164, 272], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
+        - {id: hinge-1-lid, at: [164, 293], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
+        - {id: hinge-1-pin, at: [177, 270], size: [4, 34], rx: 2, fill: '#6f7378', kind: hinge-pin, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.29 of the length'}
+        - {id: hinge-2-base, at: [402, 272], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
+        - {id: hinge-2-lid, at: [402, 293], size: [30, 9], rx: 3, fill: '#cfd2d5', kind: hinge, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
+        - {id: hinge-2-pin, at: [415, 270], size: [4, 34], rx: 2, fill: '#6f7378', kind: hinge-pin, confidence: photo-measured, source: 'maker drawing of the node: hinge at about 0.68 of the length'}
+        - {id: base-bolt-1, at: [93, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #5 on the front edge of the base'}
+        - {id: base-bolt-2, at: [295, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #1'}
+        - {id: base-bolt-3, at: [498, 3], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'guide p68 and p69; maker drawing of the node: closure bolt #3'}
+        - {id: base-bolt-4, at: [93, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-5, at: [295, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-6, at: [498, 266], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the base'}
+        - {id: base-bolt-7, at: [4, 58], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
+        - {id: base-bolt-8, at: [4, 201], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: base-bolt-9, at: [592, 58], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: base-bolt-10, at: [592, 201], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-1, at: [93, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-2, at: [295, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-3, at: [498, 296], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: bolt on the hinge edge of the lid'}
+        - {id: lid-bolt-4, at: [93, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-5, at: [295, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-6, at: [498, 559], size: [12, 12], rx: 6, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: closure bolt on the front edge of the lid'}
+        - {id: lid-bolt-7, at: [4, 351], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt, two on each end of a half'}
+        - {id: lid-bolt-8, at: [4, 494], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-9, at: [592, 351], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+        - {id: lid-bolt-10, at: [592, 494], size: [11, 11], rx: 5.5, fill: '#8d9298', stroke: '#5d6166', kind: bolt-head, confidence: photo-measured, source: 'maker drawing of the node: end bolt'}
+    silkscreen:
+      - {at: [112, 16], text: '5', anchor: middle, font-size: 5}
+      - {at: [314, 16], text: '1', anchor: middle, font-size: 5}
+      - {at: [517, 16], text: '3', anchor: middle, font-size: 5}
+    components:
+      bays:
+        - {id: pem-1, at: [16.5, 24.5], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-rf@1'], default: 'vecima/en8100-pem-rf@1', under: pec-1, group: port-entry-bays, rel-pos: 1}
+        - {id: pem-2, at: [16.5, 103.0], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-ac@1'], default: 'vecima/en8100-pem-ac@1', under: pec-1, group: port-entry-bays, rel-pos: 2}
+        - {id: pem-3, at: [16.5, 181.5], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-rf@1'], default: 'vecima/en8100-pem-rf@1', under: pec-1, group: port-entry-bays, rel-pos: 3}
+        - {id: pem-4, at: [554.5, 24.5], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-rf@1'], default: 'vecima/en8100-pem-rf@1', rotate: 180, under: pec-2, group: port-entry-bays, rel-pos: 4}
+        - {id: pem-5, at: [554.5, 103.0], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-ac@1'], default: 'vecima/en8100-pem-ac@1', rotate: 180, under: pec-2, group: port-entry-bays, rel-pos: 5}
+        - {id: pem-6, at: [554.5, 181.5], size: {w: 36, h: 75}, accepts: ['vecima/en8100-pem-rf@1'], default: 'vecima/en8100-pem-rf@1', rotate: 180, under: pec-2, group: port-entry-bays, rel-pos: 6}
+        - {id: rfam-1, at: [55.5, 24.5], size: {w: 150, h: 232}, accepts: ['vecima/en8100-rfam@1'], default: 'vecima/en8100-rfam@1', group: rfam-bays, rel-pos: 1}
+        - {id: psm-1, at: [208.5, 24.5], size: {w: 190, h: 70}, accepts: ['vecima/en8100-psm@1'], default: 'vecima/en8100-psm@1', group: psm-bays, rel-pos: 1}
+        - {id: pdm, at: [208.5, 103.5], size: {w: 190, h: 74}, accepts: ['vecima/en8100-pdm@1'], default: 'vecima/en8100-pdm@1', group: pdm-bay, rel-pos: 1}
+        - {id: psm-2, at: [208.5, 186.5], size: {w: 190, h: 70}, accepts: ['vecima/en8100-psm@1'], default: 'vecima/en8100-psm@1', rotate: 180, group: psm-bays, rel-pos: 2}
+        - {id: rfam-2, at: [401.5, 24.5], size: {w: 150, h: 232}, accepts: ['vecima/en8100-rfam@1'], default: 'vecima/en8100-rfam@1', rotate: 180, group: rfam-bays, rel-pos: 2}
+        - {id: am-1, at: [16.5, 328.5], size: {w: 205, h: 95}, accepts: ['vecima/en8100-am-1x2@1'], default: 'vecima/en8100-am-1x2@1', group: am-bays, rel-pos: 1}
+        - {id: fim, at: [16.5, 429.5], size: {w: 205, h: 98}, accepts: ['vecima/en8100-fim@1'], default: 'vecima/en8100-fim@1', group: fim-bay, rel-pos: 1}
+        - {id: ldm, at: [235, 328.5], size: {w: 145, h: 153}, accepts: ['vecima/en8100-ldm@1'], default: 'vecima/en8100-ldm@1', group: ldm-bay, rel-pos: 1}
+        - {id: tray, at: [391, 328.5], size: {w: 200, h: 115}, accepts: ['vecima/en8100-fibre-tray@1'], default: 'vecima/en8100-fibre-tray@1', group: tray-bay, rel-pos: 1}
+        - {id: am-2, at: [386, 449.5], size: {w: 205, h: 95}, accepts: ['vecima/en8100-am-1x2@1'], default: 'vecima/en8100-am-1x2@1', rotate: 180, group: am-bays, rel-pos: 2}
+      placements:
+        - {ref: vecima/en8100-pec@1, id: pec-1, at: [16.5, 24.5], group: pec-bays, rel-pos: 1, hides: [pem-1, pem-2, pem-3]}
+        - {ref: vecima/en8100-pec@1, id: pec-2, at: [554.5, 24.5], rotate: 180, group: pec-bays, rel-pos: 2, hides: [pem-4, pem-5, pem-6]}
+    regions:
+      - {id: base-half, half: base, at: [0, 0], size: {w: 607, h: 281}, label: Base half, members: [pec-1, pem-1, pem-2, pem-3, rfam-1, psm-1, pdm, psm-2, rfam-2, pem-4, pem-5, pem-6, pec-2]}
+      - {id: lid-half, half: lid, at: [0, 293], size: {w: 607, h: 281}, label: Lid half, members: [am-1, fim, ldm, tray, am-2]}
+configurations:
+  2am-2x4:
+    kind: example
+    description: >-
+      Two 1x2 access modules and the forward injection module: two downstream and four upstream
+      service groups (guide p38 and p52).
+    default: true
+    source: guide p38 and p49 to p52; the maker drawing of the node, the 2x4 with the forward injection module
+  2am-no-fim:
+    kind: example
+    description: Two access modules without the optional forward injection module (guide p37 to p39, p95).
+    source: guide p38, p39 and p95; the maker drawing of the node, the 2x4 without the forward injection module
+    bays:
+      fim: ''
+  fiber-deep-1x2:
+    kind: example
+    description: >-
+      One 1x2 access module on the left of the lid, with no forward injection module and the
+      right-hand access module slot empty: one downstream and two upstream service groups (guide p38
+      and p49 to p51).
+    source: guide p38 and p49 to p51 (the 1X2 figure is at the top of p51); the maker drawing of the node, the 1x2
+    bays:
+      fim: ''
+      am-2: ''
+  one-supply:
+    kind: example
+    description: One power supply module, which the guide says is enough for normal operation (guide p36).
+    source: guide p36
+    bays:
+      psm-2: ''
+datasheet:
+  title: Entra EN8100/8400 Hardware Unit Data Sheet
+references:
+  - {title: Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15)}
+  - {title: EN8100 Pedestal Mount Installation Guide (r01)}

@@ -875,8 +875,8 @@ the seam, not the section extruded:
   of any body with several materials (a box's six faces, a stepped or plan body, an open
   half) is written one mesh a material, where it used to hold no geometry.
 
-A housing without the key opens and seats exactly as before. **State it on no device yet.**
-A test fails if a library device does; the site's re-vendoring of the kit comes first.
+A housing without the key opens and seats exactly as before. The site has re-vendored the
+kit, so a device may state the key; the EN8100 and EN8400 do.
 
 **The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
 export keeps the alpha: the corners are fully transparent, and the `background` option
