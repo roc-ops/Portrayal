@@ -9,7 +9,8 @@ from pathlib import Path
 import pytest
 
 SCRIPT = Path(__file__).resolve().parent / "js/relief-flipped-card-planes.mjs"
-pytestmark = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
+# The module's one node run is charged to its first test, so the whole module is heavy.
+pytestmark = [pytest.mark.heavy, pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")]
 
 # Card y 40 to 70 turned half a turn on a 100 mm card is y 30 to 60. The mark moves to the far corner.
 FLAT_STRIP, FLAT_MARK = [0, 40, 25, 70], [1, 1, 8, 8]
