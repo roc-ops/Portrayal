@@ -12,7 +12,7 @@ equally binding on an agent:
   stages in manufacturing order (panel, cutouts, silkscreen, components) with a
   gate at each, the ears-and-kits step that follows the panel, the
   power-figure rules, the two audits of Gate 5, and the
-  canonical shape of `device.yaml`. Read it in full before starting a device.
+  canonical shape of `device.yaml`. Start with the guide's Start here section, then use the rest of the guide as the reference as you reach each stage.
 - **`docs/modelling-pitfalls.md`** - what has gone wrong before. Read it when
   a figure, a measurement or a lint warning is not behaving as you expect.
 - **`CONTRIBUTING.md`** - the commands, how to read what lint says, the
