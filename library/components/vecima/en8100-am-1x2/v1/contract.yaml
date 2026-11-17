@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: en8100-am-1x2
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 1x2 Remote PHY access module (AM), the module on the lid half of the node that
+  translates between the hub-side Ethernet and the subscriber-side RF. It has one downstream and
+  two upstream service groups, four SMB jacks (RTN 1, RTN 2, FWD 1A and FWD 1B) and four status
+  lamps. Power, management and network connections come from the lid distribution module. The
+  node holds one or two of them.
+size: {w: 205.0, h: 95.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 1x2 R-PHY access module
+  power-absent: not-published
+groups:
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-smb}
+    description: >-
+      the four SMB jacks RTN 1, RTN 2, FWD 1A and FWD 1B; the cabling tables send the forward
+      cable (black) and the return cables (red) from them to the RF amplifier modules.
+  am-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: >-
+      the four multicolored lamps the figure labels POWER, CONN, OPER and ALARM; the guide
+      names their areas as alarm, operational, connection and power and gives no colours.
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.6 and
+    the AM figure on p38: the figure is lettered "1x2 R-PHY ACCESS MODULE", and the text names two
+    variants, 1x1 (1 DS SG, 1 US SG) and 1x2 (1 DS SG, 2 US SG). Only the 1x2 face is shown in
+    any document held; the 1x1 face is not modelled. No part number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for any module. 205 x 95 is the module's share of
+    the 607 x 281 open half in a hand-drawn layout of the open node, checked against the aspect
+    of the AM figure on p38 (2.15).
+  elements: >-
+    photo-measured - the four jacks are placed in one column at the left and the four lamps in a
+    row at the lower right as fractions of the AM figure on p38. The three numbered screws, the
+    handles, the printed arrows and the vendor logo are not drawn.
+  jacks: >-
+    guide - cabling tables p91 and the cable steps on p125 name the AM ports as SMB, forward black
+    and return red.
+  power: >-
+    NOT STATED in any EN8100 document held; the data sheet gives the node's maximum power (200 W)
+    and nothing per module.
+elements: {}
+parts:
+  - {ref: common/smb-jack@1, id: rtn-1, at: [9.3, 17.0], group: rf, attrs: {role: return}}
+  - {ref: common/smb-jack@1, id: rtn-2, at: [9.3, 35.5], group: rf, attrs: {role: return}}
+  - {ref: common/smb-jack@1, id: fwd-1a, at: [9.3, 57.5], group: rf, attrs: {role: forward}}
+  - {ref: common/smb-jack@1, id: fwd-1b, at: [9.3, 76.5], group: rf, attrs: {role: forward}}
+  - {ref: common/led-dot@1, id: led-power, at: [166.0, 84.4], group: am-leds}
+  - {ref: common/led-dot@1, id: led-conn, at: [171.1, 84.4], group: am-leds}
+  - {ref: common/led-dot@1, id: led-oper, at: [176.2, 84.4], group: am-leds}
+  - {ref: common/led-dot@1, id: led-alarm, at: [181.3, 84.4], group: am-leds}
+connection-points:
+  mate: {at: [102.5, 47.5], direction: front}
+skins: [default]

@@ -1,0 +1,64 @@
+format: 1
+kind: module
+name: en8100-fim
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 forward injection module (FIM), an optional module on the lid half of the node that
+  joins an external RF source or an optical overlay source to the node's forward path. It takes a
+  local RF input on an SMB jack and an optical input on an SC/APC connector, and feeds the left and
+  right RF amplifier modules. It sits beside the lid distribution module.
+size: {w: 205.0, h: 98.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 forward injection module
+  power-absent: not-published
+groups:
+  rf:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: coax-smb}
+    description: >-
+      the local RF input and the left and right in and out jacks. Only LOCAL RF IN is stated to be
+      SMB in the text; the other four are drawn as SMB because the cabling tables send SMB
+      cables to them, and that is recorded as unconfirmed.
+  fim-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: the one lamp the figure labels POWER.
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.7 and the
+    FIM figure on p39: optional, accepts an external RF source and an optical overlay source, a
+    female SMB push-on LOCAL RF IN and an SC/APC optical connector. No part number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for any module. 205 x 98 is the module's share of
+    the 607 x 281 open half in a hand-drawn layout of the open node, checked against the aspect
+    of the FIM figure on p39 (2.1).
+  elements: >-
+    photo-measured - fractions of the FIM figure on p39. Drawn: LOCAL RF IN, LEFT OUT, LEFT IN,
+    RIGHT IN and RIGHT OUT as SMB jacks and the POWER lamp. Not drawn: the two MON connectors (a
+    four-pin round connector in the figure, not named in the text), the SC/APC optical connector
+    with its jumper, the LBOI connector, the four red attenuator sliders, the two green
+    equaliser plugs, the optical test point, the screws and the handle. The vendor logo is not
+    drawn.
+  jacks: >-
+    guide - p39 says LOCAL RF IN is a "female SMB push-on connector"; the other four SMB claims
+    rest on the cabling tables p93 and p94 and are not confirmed against a figure.
+  power: >-
+    NOT STATED in any EN8100 document held.
+elements: {}
+parts:
+  - {ref: common/smb-jack@1, id: local-rf-in, at: [144.5, 34.5], group: rf, attrs: {role: forward}}
+  - {ref: common/smb-jack@1, id: left-out, at: [16.5, 13.6], group: rf, attrs: {role: forward}}
+  - {ref: common/smb-jack@1, id: left-in, at: [51.3, 10.7], group: rf, attrs: {role: forward}}
+  - {ref: common/smb-jack@1, id: right-in, at: [51.3, 71.1], group: rf, attrs: {role: forward}}
+  - {ref: common/smb-jack@1, id: right-out, at: [16.5, 78.4], group: rf, attrs: {role: forward}}
+  - {ref: common/led-dot@1, id: led-power, at: [190.7, 74.7], group: fim-leds}
+connection-points:
+  mate: {at: [102.5, 49.0], direction: front}
+skins: [default]
