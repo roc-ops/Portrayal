@@ -1,0 +1,67 @@
+format: 1
+kind: module
+name: pro3x-controller
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The controller panel of a Server Technology PRO3X intelligent PDU (Smart, Switched and Switched POPS).
+  It has a display window, four keys, two Ethernet jacks and a console and modem jack.
+  It also has a sensor jack, an auxiliary jack, a USB-A port and a USB-B port.
+size: {w: 52.96, h: 139.13, d: 40}
+size-confidence: {w: estimated, h: estimated, d: estimated}
+attrs: {module: PRO3X controller}
+provenance:
+  method: >-
+    estimated - Server Technology data sheets C3S36RL-EPJE2MT4, C3W36RL-EPJE2MT4 and C3WG36RL-EPJE2MT4 draw the panel on page 5.
+    The sheet of C3S36RL-EPJE2MT4 calls it Detail A and gives no scale and no dimension.
+    The panel was read from a 900 dpi render of that sheet.
+    The scale puts the panel's 472 px across at 52.96, the PRO4X controller bay's width.
+    The display window then reads 33.3 by 41.7, and the PRO4X controller's window is 33.5 by 42.4.
+    So the scale is good to about 3 percent.
+    The drawing lies the PDU down, cord end left. This part is drawn as the PDU stands.
+  size: >-
+    estimated - 52.96 across and 139.13 along, from the scale above.
+    The plan view of the same sheet puts the panel at about 146 along, so the length carries about 5 mm.
+    The depth is chosen to sit inside the 63.5 body.
+  keys: >-
+    drawing and datasheet - Detail A draws four round marks, two above the display window and two below it.
+    Each is about 5 mm across. The PRO3X data sheet's controller photograph (page 2) shows four round push buttons round the window.
+    So the marks are the keys. The glyphs on the photograph's keys are not read, so none is drawn.
+  identity: >-
+    datasheet - the PRO3X data sheet says the Controller is hot swappable.
+    It also says the Controller houses computing, display and connectivity ports. So it is a module that fills a bay.
+  ports: >-
+    datasheet and drawing - the sheets list dual Ethernet, one sensor port (RJ45), one aux port (6P6C) and one console and modem port (RJ45).
+    They also list one USB-A and one USB-B port.
+    Detail A prints ETH1, ETH2, CONSOLE/MODEM, AUX, SENSOR, USB-A and USB-B beside the jacks, and RESET beside a small hole.
+    The ids below follow the printed names.
+  jacks: >-
+    drawing - each jack is centred on its cell.
+    The pin comb of ETH1 and CONSOLE/MODEM is at the end of the cell away from the cord. That of ETH2, AUX and SENSOR is at the cord end.
+    So the first two are unrotated and the other three are rotated 180. The comb is read from the figure at 900 dpi.
+    The 6P6C aux jack is the common/rj11-jack@1 part, as the sheet calls it 6P6C.
+    The USB-B jack is raritan/pxo-usb-b@1, the part that already carries the usb-b key.
+  depth: >-
+    estimated - no document held shows the controller's depth, so 40 is chosen to sit inside the 63.5 body.
+  power: >-
+    no document held states the controller's own draw; L27 stands as the record.
+groups:
+  ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 network ports, printed ETH1 and ETH2'}
+  peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the console and modem port, the sensor port, the aux port and the USB-A port'}
+elements:
+  lcd: {at: [9.76, 60.14], size: [33.32, 41.74], class: decor}
+  key-1: {at: [2.55, 88.68], size: [5.0, 5.0], class: button}
+  key-2: {at: [2.55, 74.64], size: [5.0, 5.0], class: button}
+  key-3: {at: [45.2, 88.68], size: [5.0, 5.0], class: button}
+  key-4: {at: [45.2, 74.64], size: [5.0, 5.0], class: button}
+parts:
+  - {ref: common/rj45-eth@1, id: eth1, at: [9.32, 118.68], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: eth2, at: [3.43, 20.5], rotate: 180, group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/rj45@2, id: console, at: [27.11, 118.68], group: peripheral, attrs: {media: rj45-serial, function: console-modem}}
+  - {ref: std/rj45@2, id: sensor, at: [33.78, 19.82], rotate: 180, group: peripheral, attrs: {media: rj45-telemetry, function: sensor}}
+  - {ref: common/rj11-jack@1, id: aux, at: [19.42, 19.67], rotate: 180, group: peripheral, attrs: {media: rj11, function: aux}}
+  - {ref: std/usb-a@1, id: usb-a, at: [11.9, 38.59], group: peripheral}
+  - {ref: raritan/pxo-usb-b@1, id: usb-b, at: [32.11, 35.45], group: peripheral}
+skins: [default]
