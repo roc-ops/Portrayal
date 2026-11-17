@@ -3,7 +3,7 @@
 An entry is `{id, where, kind, box, source}`. The schema holds the shape of each
 key. The lint holds what crosses keys (L193). `rack.json` `frames` carries the
 entries of a product that states them. The two APC open frames state the `top`
-entry. A product that states no entries reads exactly as it did.
+entry, and so do two more (MORE_FRAMES). A product that states no entries reads exactly as it did.
 """
 import copy
 import json
@@ -23,7 +23,9 @@ KINDS = ["brush", "knockout", "cutout", "open"]
 PLACES = ["roof", "floor", "left", "right"]
 FRAMES = ["apc/ar201", "apc/ar203a"]
 # two products this change leaves alone, one frame and one cabinet
-UNTOUCHED = ["apc/ar3100b2", "startech/4postrack42"]
+UNTOUCHED = ["apc/ar3100b2", "chatsworth/13853-x03"]
+# the open frames that state the `top` entry as well (see test_rack_open_frames.py)
+MORE_FRAMES = ["fs/fs-or4p-45u", "startech/4postrack42"]
 # the keys of a frames row before entries existed
 ROW_KEYS = ["ref", "vendor", "name", "version", "major", "manufacturer", "model", "maturity",
             "part-numbers", "description", "aliases", "form", "ru", "numbering", "width",
@@ -265,6 +267,6 @@ def test_a_product_with_no_entries_indexes_exactly_as_before(frames, key):
     assert json.dumps(row) == json.dumps(want)
 
 
-def test_only_the_two_frames_gain_an_enclosure(frames):
+def test_only_the_open_frames_gain_an_enclosure(frames):
     have = sorted(ref.split("@")[0] for ref, r in frames.items() if "enclosure" in r)
-    assert have == FRAMES
+    assert have == sorted(FRAMES + MORE_FRAMES)
