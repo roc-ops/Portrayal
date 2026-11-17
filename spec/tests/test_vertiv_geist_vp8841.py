@@ -88,6 +88,13 @@ def test_the_cord_is_an_l6_30p_that_exports_as_other():
     assert _load(DEVICE)["attrs"]["power"]["input-plug"] == "other"
 
 
+def test_the_exports_carry_the_cord_as_a_labelled_power_port_of_type_other():
+    for tool in ("netbox", "nautobot"):
+        path = ROOT / "library" / "exports" / tool / "device-types" / "Vertiv" / "VP8841.yaml"
+        ports = _load(path)["power-ports"]
+        assert [(p["name"], p["type"], p["label"]) for p in ports] == [("input", "other", "NEMA L6-30P")], tool
+
+
 def test_the_pdu_meters_its_branches_and_switches_no_outlet():
     management = _load(DEVICE)["attrs"]["management"]
     assert management["metering-scope"] == "branch"

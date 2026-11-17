@@ -17,8 +17,7 @@ provenance:
     note: >-
       NO DRAWING EXISTS, SO EVERY POSITION ALONG THE STRIP IS READ OFF THE STRIP ON PAGE 1 OF THE DATA SHEET, 815 by 85 px. The body
       reads 807 px for 1778 mm (2.203 mm per px). It reads 22 px across for 50.8 mm (2.31), so the scale agrees two ways. Each position
-      is good to about 2 mm along the strip and about 3 mm across it. No 3D model and no stencil is held for any Vertiv rack PDU: the
-      intake holds no folder of them.
+      is good to about 2 mm along the strip and about 3 mm across it. No 3D model and no stencil is held for any Vertiv rack PDU.
   chassis:
     confidence: datasheet
     note: >-
@@ -67,8 +66,8 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - page 2 lists "Monitoring Level 1" as phase monitoring and "Monitoring Level 2" as circuit and breaker monitoring, so
-      `metering-scope: branch`. "Switch Breaker/Switch Combination" describes the breakers and not outlet switching: the page 1 summary
-      says monitored, no switched outlets.
+      `metering-scope: branch`. "Switch Breaker/Switch Combination" describes the breakers. The sheet prints "Monitored" on page 1 and
+      lists no outlet switching, which is read here as none.
   input:
     confidence: datasheet
     note: >-
@@ -79,7 +78,8 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - the sheet lists the 7938 vertical mounting bracket kit. It lists tool-free hardware at 61.25 in and 64.75 in centre to
-      centre (1556 and 1645 mm). Neither the sheet nor the strip shows the buttons, so none is drawn (gaps: other-faces).
+      centre (1556 and 1645 mm). No kit part is modelled, because no held document gives the shape of the bracket. Neither the sheet nor
+      the strip shows the buttons, so none is drawn (gaps: other-faces).
   lifecycle:
     confidence: datasheet
     note: >-
@@ -150,28 +150,47 @@ gaps:
   note: >-
     the sheet names no module. The strip shows two Ethernet jacks, two small jacks, a USB port, a display and three keys, which is the
     module in the brochure photograph. The guide's figures of the IMD-02X and IMD-02E show no USB port, and the guide gives 10/100 Mb
-    Ethernet where the sheet gives 10/100/1000 Mbps. The drawing follows the sheet and the brochure photograph, and the part is named
-    for what it is and not for a model.
+    Ethernet where the sheet gives 10/100/1000 Mbps. The guide lists a proprietary RJ-45 port for future expansion on the IMD-02E. It
+    is read here as the sheet's RS-232 port, and that is a reading. The drawing follows the sheet and the brochure photograph, and the
+    part is named for what it is and not for a model.
   wanted: the maker's page for this module, or a larger photograph of it.
 - what: module-detail
   scope: [front]
   reason: needs-photo
   note: >-
     the strip shows the module 48 px long. The brochure photograph, of another unit, gives the jack and key positions, read to about 1
-    mm. The module's label, the symbols beside the jacks and its right-hand end are not legible or not in the photograph.
+    mm. The module's label and the symbols beside the jacks are not legible. The photograph shows a black square at each end of the
+    module and one is drawn, at an end the strip does not confirm. The two small jacks are drawn lighter than the photograph shows
+    them, and the USB tongue is drawn blue where the photograph shows it silver. The two Ethernet jacks are drawn as separate tiles
+    where the photograph shows one frame.
   wanted: a larger photograph of the module on this unit.
+- what: sensor-count
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet gives one remote sensor jack that supports up to 16 sensors. The module draws one sensor jack. No held document says how
+    many sensors the module reads in the base unit.
+  wanted: the installer guide for this model.
+- what: section
+  scope: [front, top, bottom]
+  reason: sources-disagree
+  note: >-
+    the sheet gives the section as a whole 2 in by 2 in, which is 50.8 mm. The strip reads about 48.5 mm across. The device takes the
+    sheet's figure.
+  wanted: an outline drawing with the section in millimetres.
 - what: marks-and-text
   scope: [front]
   reason: needs-photo
   note: >-
     the maker's mark and the printed labels, including the breaker labels, are left to a later touch. The windows that carry them are
-    drawn.
+    drawn. The strip also shows small dots near the two ends and faint marks, which are too small to place.
   wanted: a larger photograph of the front.
 - what: colour
   scope: [front]
   reason: sources-disagree
   note: >-
-    the sheet says black and the body is drawn black, an estimate. The strip reads the body as a mid grey, which is the lighting.
+    the sheet says black and the body is drawn black, an estimate. The strip reads the body as a mid grey, which is the lighting. The
+    strip reads the display window red. It is drawn unlit, as every display is by default.
   wanted: a photograph under neutral light, or the swatch of the finish.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 42 outlets on the front, 36 IEC C13 and 6 IEC C19. They are numbered from the far end. The sheet gives no numbering.'}
