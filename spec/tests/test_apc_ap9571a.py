@@ -10,7 +10,8 @@ once it is in:
   - every position read off a photograph is declared an estimate;
   - the two new parts say where each figure came from and are parts of the maker.
 
-These read the contracts and the device source. They read no library/dist and render nothing.
+These read the contracts and the device source and render nothing. One test, marked heavy, runs the DCIM exporter
+on the built device and reads the files it writes.
 """
 from pathlib import Path
 
@@ -116,6 +117,101 @@ def test_the_ten_outlets_stand_on_a_24_mm_pitch_in_two_groups_of_five(dev):
     assert {round(b - a, 1) for a, b in zip(xs[:4], xs[1:5])} == {24.0}
     assert {round(b - a, 1) for a, b in zip(xs[5:9], xs[6:10])} == {24.0}
     assert xs[5] - xs[4] > 90
+
+
+def decor(dev, view="rear"):
+    return {d["id"]: d for d in dev["views"][view]["panel"]["decor"]}
+
+
+def gap(dev, name):
+    return next(g for g in dev["gaps"] if g["what"] == name)
+
+
+def test_both_breakers_stand_in_the_upper_half_of_the_face_level_with_the_upper_round_mark(dev):
+    """The photographs put each breaker block between the face top and about half way down."""
+    rear, marks = placements(dev, "rear"), decor(dev)
+    height = contract("apc/pdu-breaker-rocker@1")["size"]["h"]
+    for pid, upper, lower in (("breaker-1", "screw-1", "screw-2"), ("breaker-2", "screw-5", "screw-6")):
+        top = rear[pid]["at"][1]
+        mid_of_pair = (marks[upper]["at"][1] + marks[lower]["at"][1]) / 2 + 1.5
+        assert 3.0 <= top <= 5.0, pid
+        assert top + height / 2 < mid_of_pair - 6, pid
+        assert top < marks[upper]["at"][1], pid
+
+
+def test_the_method_note_states_the_breaker_figure_and_its_tolerance(dev):
+    note = " ".join(dev["provenance"]["breakers"]["note"].split())
+    assert "mm from the face top" in note
+    assert "good to about" in note
+
+
+def test_the_cord_boot_is_squared_with_two_flat_cord_lines_leaving_to_the_left():
+    svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
+    assert "<circle" not in svg
+    assert '<rect id="relief"' in svg
+    assert 'id="cord-line-1"' in svg and 'id="cord-line-2"' in svg
+    c = contract("apc/pdu-cord-l6-30p@1")
+    text = " ".join(str(c["description"]).split()).lower()
+    assert "round" not in text and "squared" in text and "left" in text
+
+
+def test_the_cord_beyond_the_face_and_the_cord_end_are_named_as_a_gap_with_the_reason(dev):
+    g = gap(dev, "cord")
+    assert g["reason"] and "left" in g["scope"]
+    note = " ".join(g["note"].split()).lower()
+    assert "no held picture" in note and "kit" in note
+
+
+def test_the_light_strip_left_of_breaker_one_is_named_with_the_same_size_as_the_other_strip(dev):
+    note = " ".join(gap(dev, "marks")["note"].split())
+    assert "left of the first breaker" in note and "beside the second breaker" in note
+    assert "about 2 px" in note and "too small to place" in note
+    assert "one pixel" not in str(dev)
+
+
+def test_no_note_calls_a_round_mark_a_screw(dev):
+    prose = [n["note"] for n in dev["provenance"].values()] + [g["note"] for g in dev["gaps"]]
+    prose.append(dev["description"])
+    assert not [t for t in prose if "screw" in t.lower()]
+    assert all(d["kind"] == "end-screw" for i, d in decor(dev).items() if i.startswith(("screw-", "end-screw-")))
+
+
+def test_each_quoted_figure_is_cited_to_the_data_sheet_copy_that_prints_it(dev):
+    chassis = " ".join(dev["provenance"]["chassis"]["note"].split())
+    inputs = " ".join(dev["provenance"]["input"]["note"].split())
+    for note in (chassis, inputs):
+        assert "8f932e6e" in note and "d8ed048a" in note
+    assert dev["datasheet"]["sha256"].startswith("8f932e6e")
+    assert "5 Nov copy" in chassis and "10 Nov copy" in chassis
+    assert "10 Nov copy" in inputs
+
+
+def test_the_breaker_says_its_two_states_are_estimated_and_draw_alike():
+    c = contract("apc/pdu-breaker-rocker@1")
+    assert c["elements"]["rocker"]["states"] == ["on", "off"]
+    text = " ".join(str(c["provenance"]["states"]).split()).lower()
+    assert "estimated" in text and "alike" in text
+
+
+@pytest.mark.heavy
+def test_the_export_gives_a_nema_l6_30p_power_port_feeding_ten_outlets(tmp_path):
+    """Runs the DCIM exporter on the built device and reads what it wrote."""
+    from portrayal import dcim_export
+    from portrayal.artifacts import Dist
+
+    if not (LIB / "dist").is_dir():
+        pytest.skip("not built - run ./build.sh")
+    dcim_export.export_device(Dist(LIB / "dist"), "ap9571a", str(tmp_path), None)
+    written = sorted(tmp_path.glob("*/device-types/APC/AP9571A.yaml"))
+    assert len(written) == 2
+    for path in written:
+        doc = yaml.safe_load(path.read_text())
+        ports = doc["power-ports"]
+        assert [p["type"] for p in ports] == ["nema-l6-30p"]
+        outlets = doc["power-outlets"]
+        assert len(outlets) == 10
+        assert {o["power_port"] for o in outlets} == {ports[0]["name"]}
+        assert {o["type"] for o in outlets} == {"iec-60320-c13"}
 
 
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
