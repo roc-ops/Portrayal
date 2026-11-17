@@ -149,6 +149,16 @@ def test_the_lamps_note_gives_the_sampled_colours_and_says_they_are_drawn_dark(n
 
 
 @pytest.mark.parametrize("name", MODEM)
+def test_the_top_carries_two_rows_of_four_lid_screws_at_the_same_x(name):
+    decor = load(name)["views"]["top"]["panel"]["decor"]
+    screws = [d for d in decor if d["kind"] == "screw-head"]
+    assert len(screws) == 8
+    front = sorted(d["at"][0] for d in screws if d["at"][1] > 120)
+    rear = sorted(d["at"][0] for d in screws if d["at"][1] < 120)
+    assert front == rear and len(front) == 4
+
+
+@pytest.mark.parametrize("name", MODEM)
 def test_each_device_type_is_exported_for_both_targets(name):
     model = MODEM[name][0]
     for target in ("netbox", "nautobot"):
