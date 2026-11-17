@@ -1,0 +1,30 @@
+format: 1
+kind: component
+name: sim-card-3ff
+version: 1.0.0
+class: port
+mates: sim-card-3ff
+profile: networking
+description: >-
+  A Micro-SIM (3FF) card, the carrier's card that goes into the SIM slot of a device that takes the bare card.
+  It is seen from the edge it is pushed in from, a narrow card edge. It is not shipped with the device.
+size: {w: 12.0, h: 0.76}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: sim, form-factor: 3ff}
+unplaced: seated by configurations downstream of this library; see docs/pluggables-design.md decision 2
+provenance:
+  size: >-
+    estimated - no drawing of the card is held. The standard the L product page names for it, ETSI TS 102 221, is not
+    held. 12.0 by 0.76 is the card's width and thickness as commonly published, so it is an estimate and fits the
+    16.2 mm bar of perle/scg-sim-slot@1.
+  identity: >-
+    IOLAN SCG Hardware Installation Guide, Expandable Models (5500427-10), page 22: a 3FF (Micro-SIM) card from the
+    user's carrier.
+  mate: >-
+    estimated - the centre of the card edge, on the slot's own mate point.
+  card: >-
+    A DECLARED STAND-IN. The SIM card is not a Perle part and no drawing of one is held.
+elements: {}
+connection-points:
+  mate: {at: [6.0, 0.38], direction: front}
+skins: [default]

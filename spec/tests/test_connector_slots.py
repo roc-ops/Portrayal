@@ -196,7 +196,10 @@ def test_the_connector_registry_is_not_vacuous():
                          # the mini SIM slot, the DC housing and the digital I/O header of the
                          # Opengear ACM7000 gateways, presented by opengear/sim-slot-2ff@1,
                          # opengear/acm7000-dc-header@1 and opengear/acm7000-dio-header@1
-                         "sim-card-2ff", "opengear-acm-dc-block-4", "opengear-acm-dio-block-8"}
+                         "sim-card-2ff", "opengear-acm-dc-block-4", "opengear-acm-dio-block-8",
+                         # the Micro-SIM slot of the Perle IOLAN SCG L models, presented by
+                         # perle/scg-sim-slot@1 and mated by generic/sim-card-3ff@1
+                         "sim-card-3ff"}
     # No connector interface is also a cage family's: one core, two registries,
     # and an interface must not be answered by both.
     fam_ifaces = {f.get("interface") for f in render_mod._pluggable_families().values()}
