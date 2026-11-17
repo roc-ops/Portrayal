@@ -1,0 +1,32 @@
+format: 1
+kind: component
+name: rpdu-cord-60309-3pne
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in an IEC 60309 3P+N+E plug. The plug is the cord's own end, so nothing plugs into the cord and no mate is offered
+description: >-
+  The fixed input cord of a Vertiv Geist basic vertical rack PDU for a 230/400 V three-phase feed.
+  It ends in an IEC 60309 3P+N+E plug rated 16 A, 230/400 V, splashproof to IP44.
+  It leaves the end of the strip through a round cable gland.
+  Drawn as the end of the strip shows it; the cord and plug beyond it are not.
+size: {w: 40.0, h: 40.0}
+size-confidence: {w: photo-measured, h: photo-measured}
+attrs: {plug: iec-60309-3p-n-e-16a, cord-length-m: 3}
+provenance:
+  size: >-
+    photo-measured - the gland at the end of the strip in the photograph of the VP7557 (800 by 600 px).
+    The strip's 1683 mm reads 736 px, so one pixel is 2.29 mm.
+    The gland reads about 17.5 px across, 40 mm, good to about 4 mm.
+  plug: >-
+    datasheet - the VP7557 data sheet prints the plug as "IEC60309 3P + N + E, 16 A, 230/400 V, splashproof IP44".
+    It does not print the hour position of the earth contact.
+  cord: >-
+    datasheet - the sheet prints a 3 m cord of 2.5 mm2 H07RN-F.
+    No photograph shows the cord beyond the gland, so it is not drawn.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part
+    (docs/connectors-power-design.md section 7). This part stands for the power input a DCIM records.
+elements:
+  gland: {at: [0, 0], size: [40.0, 40.0], class: inlet}
+skins: [default]

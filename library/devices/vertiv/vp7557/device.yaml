@@ -1,0 +1,269 @@
+format: 1
+kind: device
+name: vp7557
+version: 0.1.0
+maturity: modelled
+manufacturer: Vertiv
+model: VP7557
+description: >-
+  Vertiv Geist basic rack PDU, vertical, 230/400 V three-phase, 16 A, 11.0 kW. It has a fixed 3 m input cord with an IEC 60309
+  3P+N+E plug. Thirty-six IEC C13 outlets in six banks of six and six IEC C19 outlets sit on the front. Each phase feeds twelve C13
+  and two C19. The unit has no breaker, no meter and no display.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DRAWING EXISTS, SO EVERY POSITION ALONG THE STRIP IS READ OFF THE 800 BY 600 PX PHOTOGRAPH OF THE VP7557
+      (800X600-VP7557-249228.JPG). The strip's 1683 mm reads 736 px (2.29 mm per px). Its 51 mm width reads 22 px (2.32), so the scale
+      agrees two ways. Each position is good to 2 to 3 mm and each size across the strip to about 3 mm. No 3D model and no stencil is
+      held for any Vertiv rack PDU: the intake holds no folder of them.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - the page 2 line "Dimensiones del chasis (Al. x An. x Pr.) 1.683 mm x 51 mm x 51 mm": 1683 long, 51 wide and 51 deep.
+      The sheet's page 1 gives the length as "66 pulgadas (1.683 mm)", and 66 in is 1676.4 mm (gaps: length-66-in). The drawing uses the
+      chassis line. The unit is 0U, so the rack unit count is the length divided by 44.45, rounded up.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the outlet face. The source lies the strip on its side with the cord end on the right. The drawing stands it up
+      with the cord end at the bottom (gaps: orientation).Distances are along the strip from the far end. Across the strip every feature
+      is centred, which the figure shows to about 2 mm. The bezel behind each outlet group and the small label windows are drawn as
+      plates; their text is not drawn.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - page 1 lists "IEC C13": 36 on the front face, 12 per phase, in banks of 6, 10 A per bank. It lists "IEC C19": 6 on the
+      front face, 2 per phase, individual, 16 A. The photograph shows six banks of six and six C19, which agrees. Each outlet is
+      std/c13-outlet@1 or std/c19-outlet@1 at the part's own size. The sheets give no numbering, so the outlets are numbered from the
+      far end (gaps: numbering).
+  circuits:
+    confidence: estimated
+    note: >-
+      estimated - the sheet gives twelve C13 and two C19 per phase and does not say which. Phase 1 is taken as the two C19 and two banks
+      nearest the far end, then phases 2 and 3 in order.
+  orientation:
+    confidence: estimated
+    note: >-
+      estimated - the picture is too small to show which end of each C13 is chamfered. It does not show which way a C19 earth slot
+      faces. Every outlet is drawn at the part's own orientation.
+  colours:
+    confidence: datasheet
+    note: >-
+      The body is drawn black, about #1b1c1e (an estimate): the sheet says "Negro", black electrostatic paint. The photograph reads the
+      plain body at #5c5c5a (352 px), the maker plate at #464646 (96 px) and the gland centre at #25262a (64 px). The lit reads are the
+      lighting and not the finish. The bezels and plates are drawn a little lighter than the body, as the picture shows them.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - the sheet lists a basic unit with no meter, no display and no network port. It lists no overcurrent protection and no
+      switch.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "230/400 V WYE", "Corriente 16 A", 11.0 kW, 50/60 Hz, one input. The cord is 3 m of 2.5 mm2 H07RN-F. The plug is
+      "IEC60309 3P + N + E, 16 A, 230/400 V", splashproof IP44. The cord is fixed: the photograph shows it leaving through a gland.
+  mounting:
+    confidence: datasheet
+    note: >-
+      datasheet - the sheet lists the vertical mounting bracket kit 7938 and tool-free metal mounting parts at 1556 mm and 1645 mm
+      centre to centre. Neither the sheet nor the picture shows the buttons, so none is drawn (gaps: other-faces).
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      no held document announces an end of life. Nothing is fetched for this model.
+attrs:
+  power:
+    input-ac: 230/400 V three-phase wye, 16 A, 50/60 Hz, a fixed 3 m cord with an IEC 60309 3P+N+E plug
+    input-plug: other
+    input-cord: fixed
+    input-phase: three
+    input-wiring: wye
+    input-voltage-v: 400
+    input-current-a: 16
+    capacity-kw: 11.0
+    capacity-scope: the load the PDU can hand on, from the data sheet; it is not what the PDU draws itself
+    frequency: 50/60 Hz
+    breakers: none
+  environmental: {operating-temp: 10 to 45 C (50 to 113 F)}
+  physical: {length-mm: 1683, construction: 'heavy steel with a black electrostatic paint finish'}
+  management: {metering-scope: none, outlet-switching: false}
+  compliance: {certifications: 'RoHS, CE, EN 55032, EN 55024, IEC 60950-1'}
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 51
+  height: 1683
+  depth: 51
+  ru: 38
+  mount: rack-side
+  color: '#1b1c1e'
+  airflow: passive
+gaps:
+- what: length-66-in
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the sheet's page 1 prints 66 in (1.683 mm) and 66 in is 1676.4 mm. Its chassis line prints 1683 mm. The drawing follows the
+    chassis line.
+  wanted: a dimensioned outline drawing.
+- what: other-faces
+  scope: [rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    the sheet shows the outlet face only. No held image shows the back, the two ends or the two sides. The sheet lists outlets on the
+    front face only, so the back is not drawn as a copy of it. The four faces are drawn bare at the sheet's size.
+  wanted: straight-on photographs of the back, both ends and the sides, or the installer guide for this model.
+- what: orientation
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, the usual
+    way a vertical strip is hung.
+  wanted: a photograph of the unit mounted.
+- what: outlet-orientation
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the picture is too small to show which end of each C13 is chamfered. It does not show which way a C19 earth slot faces. Every
+    outlet takes the part's own orientation.
+  wanted: a larger photograph of the outlet face.
+- what: numbering
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no held document numbers the outlets. They are numbered from the far end, one count across the C13 and the C19.
+  wanted: a photograph that shows the printed numbers, or the installer guide.
+- what: circuit-assignment
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet gives twelve C13 and two C19 per phase and does not say which outlets each phase feeds. The split is estimated by
+    position.
+  wanted: the installer guide, or a photograph of the circuit marks.
+- what: label-windows
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the photograph shows a small light-framed window at three places along the strip. No held text says what each is. They are drawn
+    as plain plates.
+  wanted: the installer guide for this model.
+- what: marks-and-text
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the maker's mark and the printed labels are left to a later touch. The plate that carries the mark is drawn.
+  wanted: a larger photograph of the cord end.
+- what: colour
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the sheet says black and the body is drawn black, an estimate. The picture reads the body as a mid grey, which is the lighting.
+  wanted: a photograph under neutral light, or the swatch of the finish.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 42 outlets on the front, 36 IEC C13 and 6 IEC C19. They are numbered from the far end. The sheet gives no numbering.'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 51, h: 1683}
+    panel:
+      decor:
+      - {id: bezel-bank-1, at: [7.5, 121.5], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-bank-2, at: [7.5, 362.8], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-bank-3, at: [7.5, 605.2], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-bank-4, at: [7.5, 847.6], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-bank-5, at: [7.5, 1087.7], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-bank-6, at: [7.5, 1329], size: [36, 148], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-1, at: [6, 56.7], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-2, at: [6, 296.8], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-3, at: [6, 540.8], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-4, at: [6, 781.6], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-5, at: [6, 1024], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bezel-c19-6, at: [6, 1266.4], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: label-window-1, at: [10, 336.5], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-2, at: [10, 997.4], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-3, at: [10, 1482.1], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: maker-plate, at: [17.5, 1536.5], size: [16, 37], rx: 1, fill: '#121314', kind: logo-plate}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c19-outlet@1, at: [7.7, 59.4], group: outlets, rel-pos: 1, fed-by: input, lines: [L1, N]}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [10.3, 124.5], group: outlets, rel-pos: 2, fed-by: input, lines: [L1, N]}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [10.3, 148.5], group: outlets, rel-pos: 3, fed-by: input, lines: [L1, N]}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [10.3, 172.5], group: outlets, rel-pos: 4, fed-by: input, lines: [L1, N]}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [10.3, 196.5], group: outlets, rel-pos: 5, fed-by: input, lines: [L1, N]}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [10.3, 220.5], group: outlets, rel-pos: 6, fed-by: input, lines: [L1, N]}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [10.3, 244.5], group: outlets, rel-pos: 7, fed-by: input, lines: [L1, N]}
+        - {id: outlet-8, ref: std/c19-outlet@1, at: [7.7, 299.4], group: outlets, rel-pos: 8, fed-by: input, lines: [L1, N]}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [10.3, 365.8], group: outlets, rel-pos: 9, fed-by: input, lines: [L1, N]}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [10.3, 389.8], group: outlets, rel-pos: 10, fed-by: input, lines: [L1, N]}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [10.3, 413.8], group: outlets, rel-pos: 11, fed-by: input, lines: [L1, N]}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [10.3, 437.8], group: outlets, rel-pos: 12, fed-by: input, lines: [L1, N]}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [10.3, 461.8], group: outlets, rel-pos: 13, fed-by: input, lines: [L1, N]}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [10.3, 485.8], group: outlets, rel-pos: 14, fed-by: input, lines: [L1, N]}
+        - {id: outlet-15, ref: std/c19-outlet@1, at: [7.7, 543.4], group: outlets, rel-pos: 15, fed-by: input, lines: [L2, N]}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [10.3, 608.2], group: outlets, rel-pos: 16, fed-by: input, lines: [L2, N]}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [10.3, 632.2], group: outlets, rel-pos: 17, fed-by: input, lines: [L2, N]}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [10.3, 656.2], group: outlets, rel-pos: 18, fed-by: input, lines: [L2, N]}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [10.3, 680.2], group: outlets, rel-pos: 19, fed-by: input, lines: [L2, N]}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [10.3, 704.2], group: outlets, rel-pos: 20, fed-by: input, lines: [L2, N]}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [10.3, 728.2], group: outlets, rel-pos: 21, fed-by: input, lines: [L2, N]}
+        - {id: outlet-22, ref: std/c19-outlet@1, at: [7.7, 784.2], group: outlets, rel-pos: 22, fed-by: input, lines: [L2, N]}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [10.3, 850.6], group: outlets, rel-pos: 23, fed-by: input, lines: [L2, N]}
+        - {id: outlet-24, ref: std/c13-outlet@1, at: [10.3, 874.6], group: outlets, rel-pos: 24, fed-by: input, lines: [L2, N]}
+        - {id: outlet-25, ref: std/c13-outlet@1, at: [10.3, 898.6], group: outlets, rel-pos: 25, fed-by: input, lines: [L2, N]}
+        - {id: outlet-26, ref: std/c13-outlet@1, at: [10.3, 922.6], group: outlets, rel-pos: 26, fed-by: input, lines: [L2, N]}
+        - {id: outlet-27, ref: std/c13-outlet@1, at: [10.3, 946.6], group: outlets, rel-pos: 27, fed-by: input, lines: [L2, N]}
+        - {id: outlet-28, ref: std/c13-outlet@1, at: [10.3, 970.6], group: outlets, rel-pos: 28, fed-by: input, lines: [L2, N]}
+        - {id: outlet-29, ref: std/c19-outlet@1, at: [7.7, 1026.7], group: outlets, rel-pos: 29, fed-by: input, lines: [L3, N]}
+        - {id: outlet-30, ref: std/c13-outlet@1, at: [10.3, 1090.7], group: outlets, rel-pos: 30, fed-by: input, lines: [L3, N]}
+        - {id: outlet-31, ref: std/c13-outlet@1, at: [10.3, 1114.7], group: outlets, rel-pos: 31, fed-by: input, lines: [L3, N]}
+        - {id: outlet-32, ref: std/c13-outlet@1, at: [10.3, 1138.7], group: outlets, rel-pos: 32, fed-by: input, lines: [L3, N]}
+        - {id: outlet-33, ref: std/c13-outlet@1, at: [10.3, 1162.7], group: outlets, rel-pos: 33, fed-by: input, lines: [L3, N]}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [10.3, 1186.7], group: outlets, rel-pos: 34, fed-by: input, lines: [L3, N]}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [10.3, 1210.7], group: outlets, rel-pos: 35, fed-by: input, lines: [L3, N]}
+        - {id: outlet-36, ref: std/c19-outlet@1, at: [7.7, 1269.1], group: outlets, rel-pos: 36, fed-by: input, lines: [L3, N]}
+        - {id: outlet-37, ref: std/c13-outlet@1, at: [10.3, 1332], group: outlets, rel-pos: 37, fed-by: input, lines: [L3, N]}
+        - {id: outlet-38, ref: std/c13-outlet@1, at: [10.3, 1356], group: outlets, rel-pos: 38, fed-by: input, lines: [L3, N]}
+        - {id: outlet-39, ref: std/c13-outlet@1, at: [10.3, 1380], group: outlets, rel-pos: 39, fed-by: input, lines: [L3, N]}
+        - {id: outlet-40, ref: std/c13-outlet@1, at: [10.3, 1404], group: outlets, rel-pos: 40, fed-by: input, lines: [L3, N]}
+        - {id: outlet-41, ref: std/c13-outlet@1, at: [10.3, 1428], group: outlets, rel-pos: 41, fed-by: input, lines: [L3, N]}
+        - {id: outlet-42, ref: std/c13-outlet@1, at: [10.3, 1452], group: outlets, rel-pos: 42, fed-by: input, lines: [L3, N]}
+        - {id: input, ref: vertiv/rpdu-cord-60309-3pne@1, at: [5.5, 1635.6], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord, IEC 60309 3P+N+E plug'}
+  rear:
+    size: {w: 51, h: 1683}
+    empty: >-
+      no held image shows the back. Searched: the VP7557 data sheet and the 800 by 600 photograph and the Geist product overview
+      brochure.
+  top:
+    size: {w: 51, h: 51}
+    empty: >-
+      no held image shows the top. Searched: the VP7557 data sheet and the 800 by 600 photograph and the Geist product overview
+      brochure.
+  bottom:
+    size: {w: 51, h: 51}
+    empty: >-
+      no held image shows the bottom. Searched: the VP7557 data sheet and the 800 by 600 photograph and the Geist product overview
+      brochure.
+  left:
+    size: {w: 51, h: 1683}
+    empty: >-
+      no held image shows the left. Searched: the VP7557 data sheet and the 800 by 600 photograph and the Geist product overview
+      brochure.
+  right:
+    size: {w: 51, h: 1683}
+    empty: >-
+      no held image shows the right. Searched: the VP7557 data sheet and the 800 by 600 photograph and the Geist product overview
+      brochure.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-42'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships.
+    part-numbers:
+      VP7557: {}
+datasheet:
+  title: 'Vertiv Geist rPDU data sheet VP7557 (Spanish), MKA4L0ESdata-rPDU Rev.1-11/2018'
+  url: https://www.vertiv.com/4a1606/globalassets/shared/vertiv-geist-rpdu-vp7557_datasheet_es-emea.pdf
+  sha256: 7ff0275a2e98757b43b9bbf9f5a12e2a541892a7c5cd2741a3523511b920fd8c
