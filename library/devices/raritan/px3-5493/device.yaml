@@ -1,0 +1,373 @@
+format: 1
+kind: device
+name: px3-5493
+version: 0.1.0
+maturity: modelled
+manufacturer: Raritan
+model: PX3-5493
+description: >-
+  Raritan PX3-5493 rack PDU, 0U: a black strip 52 mm wide, 65 mm deep and 1539 mm long for a rack's vertical channel.
+  It has 20 IEC C13 and 4 C19 outlets in four groups of six, two circuit breakers and a controller panel. The panel sits
+  between the second and third groups. A 3 m cord leaves near the bottom end and ends in an IEC 60309 2P+E 6h 32 A plug.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S PRINTED SIZES AND A READING OF ITS MECHANICAL DRAWING. The technical specification (rev
+      2025-06-25) prints the unit size on page 2. Its mechanical diagram MPX3-5493 & MPX3-4493 (Rev 0A; PDF page 6) draws
+      the strip's elevation. Each position along it is read at 3.089 px per mm, set by the printed 1539 mm, to about 0.5
+      mm. Its control panel (page 4) and its one-line diagram (page 5) name the jacks and the circuits. The library
+      draws the PDU STANDING, cord end down, so a position along the strip is the y of the front view. The drawing is
+      turned a quarter turn, outlet 1 at the top. No vendor stencil was opened and no vendor drawing, photograph or
+      stencil is copied. The figures were read by a person and written down. No photograph of this model is held.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 1539 x 52 x 65 mm (60.6 x 2.1 x 2.6 in), the specification's height, width and depth (page 2). The drawing
+      prints 1539 and 52. 5.3 kg, shipping 7.7 kg and 280 x 115 x 1655 mm. `ru: 35` is the height it runs, 1539 mm being
+      34.6 units; it is derived, not printed.
+  colours:
+    confidence: estimated
+    note: >-
+      THE HEX VALUES ARE ESTIMATES. The specification gives "Black powder coat (custom colors available)". No photograph
+      of this model is held. So the chassis is black and the panel and plates are estimates of dark grey. The jack frame
+      colours (green, grey, red, cyan, yellow) are those the page 4 drawing paints, written as estimated hex values. The
+      lamp colours are the user guide's, written as estimated hex values. None was checked against a photograph.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - outlet centres, measured from the cord end, at 306.2 + 33.4 n mm for outlets 24 to 19. Outlets 18 to 13
+      stand at 515.1 + 33.4 n. Outlets 12 to 7 stand at 1096.8 + 33.4 n and 6 to 1 at 1305.1 + 33.4 n (n from 0). The first of each group
+      is a C19. The drawing's numerals under the outlets give the numbering, outlet 1 at the far end. Positions ACROSS the
+      strip are not printed. Each outlet is centred, as the drawing's outlet frames are. The breaker plates are about 55 by
+      42 mm, from 204.1 and 994.2 mm. Each has a rocker, two screws and its CIRCUIT label. The ring beside each outlet is
+      read at about 2.4 mm.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - the technical specification: (20) IEC320 C13, 10 A, and (4) IEC320 C19, 16 A, switched and metered per
+      outlet (page 1). The one-line diagram (page 5) puts outlets 1 to 12 on circuit 1 and 13 to 24 on circuit 2. Drawn as
+      std/c13-outlet@1 and std/c19-outlet@1, unturned. The drawing's chamfered C13 end and C19 earth slot point to the
+      strip's top end, as the parts are drawn.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - two LEGBXA6-16 breakers, 5KAIC (page 2). The one-line diagram prints each as 16 A. The breaker is the
+      shared raritan/px3-breaker@1, turned a quarter turn so its 14 mm lies along the strip. Its size is that part's
+      estimate and not this drawing's rocker (gaps: rocker-size).
+  controller:
+    confidence: drawing
+    note: >-
+      drawing - the panel is about 212 by 43.4 mm. It starts 749.1 mm from the cord end (page 6, read at 1200 dpi), 577.9 to
+      789.9 mm from the top. Its contents are read from the page 4 drawing and the page 6 elevation. There are four round
+      buttons (left chevron, right chevron, cross, circle) beside a display window of 42.4 by 33.7 mm. There is a RESET
+      pinhole with a lamp under it. Two stacked jacks, ETH 1 over ETH 2, come next. Then come USB-A 1, USB-A 2 and USB-B,
+      then FEATURE over CONSOLE / MODEM, then EXPANSION over SENSOR. A screw ring stands at each end. Each jack is turned a
+      quarter turn so its latch edge faces the strip's left, as the drawing's latch edge faces up. The display and the
+      buttons are the PXO's parts, whose sizes match the drawing to about 0.5 mm. The frame colours and the labels' names
+      follow page 4. The Raritan logo, the iX7 mark and the label texts are not drawn. A later change draws marks.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - two mounting buttons 1244.0 apart, the first 147.5 from the cord end (PDF page 6, rear view, dimensions
+      147.5 and 1244.0). They stand 147.5 and 1391.5 mm from the top. The button is the maker's PX3 mounting button, its 14.7
+      head borrowed (gaps: mounting-button-size). It is centred across, an estimate. A ring 25.2 mm across is drawn round each,
+      the flange that page 7 prints for the button part.
+  sides:
+    confidence: estimated
+    note: >-
+      estimated - the page 6 side elevation draws profile lines and an end cap that this change does not read. Every side is
+      a plain outline at the printed size (gaps: side-profile, ends).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - IEC 60309 2P+E 6h 32 A (2P3W), IP44, 3 m (9.84 ft) cord (page 2). It has a bottom-front feed, cord
+      retention, a 32 A maximum and a 200 - 240 V rating. The cord leaves through the end cap, about 30 mm from the bottom end.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - remote outlet switching yes and metering per outlet, per branch breaker and per input line (page 1). So
+      `outlet-switching: true` and each outlet states on and off, and `metering-scope: outlet`.
+  lamps:
+    confidence: estimated
+    note: >-
+      The drawing shows a small ring beside every outlet. The PX-Series PDU User Guide (4.3.11, page 88) lists an LED for
+      5000 series models. It is not lit when an outlet is off, red when it is on and live, and green when it is off and live.
+      The guide also lists blinking states for overload and tripped breakers. It names a series and not this model. The
+      model number places this one in the 5000 series. The lamps are drawn OFF. No picture is held, so no lit colour was
+      sampled.
+attrs:
+  physical:
+    length-mm: 1539
+    weight-kg: 5.3
+    construction: metal strip
+  power:
+    input-cord: fixed
+    input-plug: other
+    input-current-a: 32
+    breakers: two LEGBXA6-16 breakers, one for each circuit of 12 outlets
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+chassis: {width: 52, height: 1539, depth: 65, ru: 35, mount: rack-side, color: '#1c1c1e', airflow: passive}
+gaps:
+- what: eth2-speed
+  scope: [front, eth]
+  reason: sources-disagree
+  note: >-
+    the specification's table (page 1) lists a secondary, redundant 10/100/1000 BaseT Ethernet port. The control panel
+    drawing (page 4) labels the second jack "ETH 2 10/100". The device follows the label on the jack, 100 Mbps, and the
+    first jack is 1 Gbps by both.
+  wanted: the maker's statement of the second port's rate.
+- what: jack-media
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the FEATURE, CONSOLE / MODEM, EXPANSION and SENSOR jacks are drawn as RJ45 serial jacks, as the maker's other PDUs are.
+    The specification names them and does not give their connector or signal type.
+  wanted: the specification's port table, or a close photograph of the panel.
+- what: usb-speed
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the two USB-A jacks and the USB-B jack are drawn at the library's default skins. The specification does not give their
+    speeds.
+  wanted: the specification's port table.
+- what: controller-lamp
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the panel drawing shows one lamp under the RESET pinhole. No page says what it shows, so it is drawn off with the
+    library's default states.
+  wanted: the controller's description in the maker's user guide.
+- what: rocker-size
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the drawing's rocker is about 13.6 along the strip by 15.4 across. The shared breaker part is 14 by 20 and is an
+    estimate. The part is not changed here.
+  wanted: a drawing of the breaker with its sizes.
+- what: mounting-button-size
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the Raritan Mounting Brackets data sheet names 250-80-0011-00 the M5 button mount of kit G2-RACK-FOR-ZU. Page 7 draws its
+    head at 14.00 and its flange at 25.20. The shared PX3 mounting button is 14.7 across, from another drawing's screw
+    head. It is not changed here.
+  wanted: the kit's installation sheet.
+- what: rack-kit
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the specification lists the mounting kit G2-RACK-FOR-ZU and draws four of its parts (page 7). The rear view also draws a
+    sliding plate with four holes and two small marks, 290.9 and 933.0 from the cord end. None is drawn, and no kit
+    contract is written.
+  wanted: the kit's installation sheet.
+- what: printed-marks
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the drawing prints a nameplate, the jack and button labels, an earth mark near the cord, the Raritan logo and the iX7
+    mark. Only the outlet numerals and the CIRCUIT labels are drawn.
+  wanted: a later change for marks and printed text.
+- what: side-profile
+  scope: [left, right]
+  reason: needs-drawing
+  note: >-
+    the side elevation on page 6 draws profile lines along the strip and an end cap at each end. They are not read in this
+    change, so each long side is a plain outline at 65 by 1539 mm.
+  wanted: the side elevation read at its printed sizes.
+- what: ends
+  scope: [top, bottom]
+  reason: needs-drawing
+  note: >-
+    the drawing has no end view and the specification publishes no end feature. Each end is a plain outline at 52 by 65 mm.
+  wanted: an end view of the strip.
+groups:
+  c13-outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the 20 IEC C13 outlets, five after the C19 of each group of six'}
+  c19-outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c19}, description: 'the four IEC C19 outlets, the first of each group of six'}
+  outlet-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: 'one lamp beside each outlet (PX-Series PDU User Guide, 5000 series outlets)'
+    states:
+    - 'off'
+    - {name: on-live, color: '#d62b2b'}
+    - {name: off-live, color: '#2fb04a'}
+    - {name: overload, color: '#d62b2b', behavior: blinking}
+    - {name: tripped-off, color: '#2fb04a', behavior: blinking}
+    - {name: tripped-on, color: '#d62b2b', behavior: {mode: alternating, color: '#2fb04a'}}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the two circuit breakers, one for each circuit of 12 outlets'}
+  eth: {term: Port, role: management, index-origin: 1, mixed: 'the two Ethernet jacks of the controller, ETH 1 at 1 Gbps for the network and ETH 2 at 100 Mbps as the redundant secondary'}
+  mgmt: {term: Port, role: management, index-origin: 1, mixed: 'the console, feature, expansion and sensor jacks and the three USB jacks of the controller'}
+  buttons: {term: Button, role: service, index-origin: 1, description: 'the four navigation buttons and the reset pinhole'}
+  display: {term: Display, role: indicator, index-origin: 1}
+  lamps: {term: LED, role: indicator, index-origin: 1, description: 'the lamp under the reset pinhole'}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+  power-input: {term: Cord, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1539}
+    panel:
+      decor:
+      - {id: cap-line-cord, at: [0, 1481.9], size: [52.0, 0.2], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: the cord end cap is 57 mm long'}
+      - {id: cap-line-far, at: [0, 44.9], size: [52.0, 0.2], fill: '#3a3d42', kind: profile-line, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: a line 45 mm from the far end'}
+      - {id: breaker-plate-1, at: [5.5, 489.9], size: [42.2, 54.9], rx: 1.0, fill: '#18191b', stroke: '#5c5c5c', stroke-width: 0.2, kind: breaker-plate, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: the plate of circuit 1, about 55 by 42 mm'}
+      - {id: breaker-plate-2, at: [5.5, 1280.0], size: [42.2, 54.9], rx: 1.0, fill: '#18191b', stroke: '#5c5c5c', stroke-width: 0.2, kind: breaker-plate, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: the plate of circuit 2, about 55 by 42 mm'}
+      - {id: breaker-screw-1a, at: [31.75, 534.05], size: [6.1, 6.1], rx: 3.05, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: a screw each side of the rocker, about 6 mm across'}
+      - {id: breaker-screw-1b, at: [31.75, 492.35], size: [6.1, 6.1], rx: 3.05, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: a screw each side of the rocker, about 6 mm across'}
+      - {id: breaker-screw-2a, at: [31.75, 1282.45], size: [6.1, 6.1], rx: 3.05, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: a screw each side of the rocker, about 6 mm across'}
+      - {id: breaker-screw-2b, at: [31.75, 1324.15], size: [6.1, 6.1], rx: 3.05, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, front elevation: a screw each side of the rocker, about 6 mm across'}
+      - {id: controller-panel, at: [4.3, 577.9], size: [43.4, 212.0], rx: 3.0, fill: '#18191b', kind: controller-panel}
+      - {id: panel-screw-1, at: [23.9, 783.3], size: [4.2, 4.2], rx: 2.1, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, controller panel: a screw ring at each end'}
+      - {id: panel-screw-2, at: [23.9, 580.9], size: [4.2, 4.2], rx: 2.1, fill: none, stroke: '#8a8f96', stroke-width: 0.2, kind: screw-ring, confidence: estimated, source: 'PX3-5493 spec page 6, controller panel: a screw ring at each end'}
+      - {id: frame-eth-1, at: [12.4, 668.2], size: [13.6, 17.8], fill: none, stroke: '#2fa84f', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-eth-2, at: [26.0, 668.2], size: [13.6, 17.8], fill: none, stroke: '#9a9da1', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-feature, at: [12.4, 623.8], size: [13.6, 17.8], fill: none, stroke: '#d23b3b', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-console, at: [26.0, 623.8], size: [13.6, 17.8], fill: none, stroke: '#2fb5c6', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-expansion, at: [12.4, 603.5], size: [13.6, 17.8], fill: none, stroke: '#9a9da1', stroke-width: 0.5, kind: colour-frame}
+      - {id: frame-sensor, at: [26.0, 603.5], size: [13.6, 17.8], fill: none, stroke: '#e6d633', stroke-width: 0.5, kind: colour-frame}
+    silkscreen:
+      - {at: [20.8, 518.1], text: CIRCUIT 1, font-size: 3.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: chassis}
+      - {at: [20.8, 1308.2], text: CIRCUIT 2, font-size: 3.0, anchor: middle, rotate: -90, fill: '#e8e8e8', for: chassis}
+      - {at: [46.5, 66.9], text: '1', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-1}
+      - {at: [46.5, 100.3], text: '2', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-2}
+      - {at: [46.5, 133.7], text: '3', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-3}
+      - {at: [46.5, 167.1], text: '4', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-4}
+      - {at: [46.5, 200.5], text: '5', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-5}
+      - {at: [46.5, 233.9], text: '6', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-6}
+      - {at: [46.5, 275.2], text: '7', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-7}
+      - {at: [46.5, 308.6], text: '8', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-8}
+      - {at: [46.5, 342.0], text: '9', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-9}
+      - {at: [46.5, 375.4], text: '10', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-10}
+      - {at: [46.5, 408.8], text: '11', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-11}
+      - {at: [46.5, 442.2], text: '12', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-12}
+      - {at: [46.5, 856.9], text: '13', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-13}
+      - {at: [46.5, 890.3], text: '14', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-14}
+      - {at: [46.5, 923.7], text: '15', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-15}
+      - {at: [46.5, 957.1], text: '16', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-16}
+      - {at: [46.5, 990.5], text: '17', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-17}
+      - {at: [46.5, 1023.9], text: '18', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-18}
+      - {at: [46.5, 1065.8], text: '19', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-19}
+      - {at: [46.5, 1099.2], text: '20', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-20}
+      - {at: [46.5, 1132.6], text: '21', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-21}
+      - {at: [46.5, 1166.0], text: '22', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-22}
+      - {at: [46.5, 1199.4], text: '23', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-23}
+      - {at: [46.5, 1232.8], text: '24', font-size: 2.4, anchor: middle, rotate: 90, fill: '#e8e8e8', for: outlet-24}
+    components:
+      placements:
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [10.8, 55.9], group: c13-outlets, rel-pos: 1, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [10.8, 89.3], group: c13-outlets, rel-pos: 2, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [10.8, 122.7], group: c13-outlets, rel-pos: 3, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [10.8, 156.1], group: c13-outlets, rel-pos: 4, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [10.8, 189.5], group: c13-outlets, rel-pos: 5, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/c19-outlet@1, at: [8.2, 220.05], group: c19-outlets, rel-pos: 1, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [10.8, 264.2], group: c13-outlets, rel-pos: 6, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [10.8, 297.6], group: c13-outlets, rel-pos: 7, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [10.8, 331.0], group: c13-outlets, rel-pos: 8, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [10.8, 364.4], group: c13-outlets, rel-pos: 9, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [10.8, 397.8], group: c13-outlets, rel-pos: 10, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-12, ref: std/c19-outlet@1, at: [8.2, 428.35], group: c19-outlets, rel-pos: 2, through: breaker-1, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [10.8, 845.9], group: c13-outlets, rel-pos: 11, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [10.8, 879.3], group: c13-outlets, rel-pos: 12, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-15, ref: std/c13-outlet@1, at: [10.8, 912.7], group: c13-outlets, rel-pos: 13, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [10.8, 946.1], group: c13-outlets, rel-pos: 14, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [10.8, 979.5], group: c13-outlets, rel-pos: 15, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-18, ref: std/c19-outlet@1, at: [8.2, 1010.05], group: c19-outlets, rel-pos: 3, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [10.8, 1054.8], group: c13-outlets, rel-pos: 16, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [10.8, 1088.2], group: c13-outlets, rel-pos: 17, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [10.8, 1121.6], group: c13-outlets, rel-pos: 18, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-22, ref: std/c13-outlet@1, at: [10.8, 1155.0], group: c13-outlets, rel-pos: 19, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [10.8, 1188.4], group: c13-outlets, rel-pos: 20, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-24, ref: std/c19-outlet@1, at: [8.2, 1218.95], group: c19-outlets, rel-pos: 4, through: breaker-2, fed-by: input, states: ['on', 'off']}
+        - {id: led-1, ref: common/led-dot@1, at: [40.7, 54.0], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: led-2, ref: common/led-dot@1, at: [40.7, 87.4], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-3, ref: common/led-dot@1, at: [40.7, 120.8], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-4, ref: common/led-dot@1, at: [40.7, 154.2], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-5, ref: common/led-dot@1, at: [40.7, 187.6], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-6, ref: common/led-dot@1, at: [40.7, 221.0], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-7, ref: common/led-dot@1, at: [40.7, 262.3], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-8, ref: common/led-dot@1, at: [40.7, 295.7], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-9, ref: common/led-dot@1, at: [40.7, 329.1], group: outlet-leds, rel-pos: 9, for: outlet-9}
+        - {id: led-10, ref: common/led-dot@1, at: [40.7, 362.5], group: outlet-leds, rel-pos: 10, for: outlet-10}
+        - {id: led-11, ref: common/led-dot@1, at: [40.7, 395.9], group: outlet-leds, rel-pos: 11, for: outlet-11}
+        - {id: led-12, ref: common/led-dot@1, at: [40.7, 429.3], group: outlet-leds, rel-pos: 12, for: outlet-12}
+        - {id: led-13, ref: common/led-dot@1, at: [40.7, 844.0], group: outlet-leds, rel-pos: 13, for: outlet-13}
+        - {id: led-14, ref: common/led-dot@1, at: [40.7, 877.4], group: outlet-leds, rel-pos: 14, for: outlet-14}
+        - {id: led-15, ref: common/led-dot@1, at: [40.7, 910.8], group: outlet-leds, rel-pos: 15, for: outlet-15}
+        - {id: led-16, ref: common/led-dot@1, at: [40.7, 944.2], group: outlet-leds, rel-pos: 16, for: outlet-16}
+        - {id: led-17, ref: common/led-dot@1, at: [40.7, 977.6], group: outlet-leds, rel-pos: 17, for: outlet-17}
+        - {id: led-18, ref: common/led-dot@1, at: [40.7, 1011.0], group: outlet-leds, rel-pos: 18, for: outlet-18}
+        - {id: led-19, ref: common/led-dot@1, at: [40.7, 1052.9], group: outlet-leds, rel-pos: 19, for: outlet-19}
+        - {id: led-20, ref: common/led-dot@1, at: [40.7, 1086.3], group: outlet-leds, rel-pos: 20, for: outlet-20}
+        - {id: led-21, ref: common/led-dot@1, at: [40.7, 1119.7], group: outlet-leds, rel-pos: 21, for: outlet-21}
+        - {id: led-22, ref: common/led-dot@1, at: [40.7, 1153.1], group: outlet-leds, rel-pos: 22, for: outlet-22}
+        - {id: led-23, ref: common/led-dot@1, at: [40.7, 1186.5], group: outlet-leds, rel-pos: 23, for: outlet-23}
+        - {id: led-24, ref: common/led-dot@1, at: [40.7, 1219.9], group: outlet-leds, rel-pos: 24, for: outlet-24}
+        - {id: breaker-1, ref: raritan/px3-breaker@1, at: [27.8, 498.6], rotate: 90, group: breakers, rel-pos: 1, description: 'Breaker 1 of 2: circuit 1, outlets 1 to 12'}
+        - {id: breaker-2, ref: raritan/px3-breaker@1, at: [27.8, 1288.5], rotate: 90, group: breakers, rel-pos: 2, description: 'Breaker 2 of 2: circuit 2, outlets 13 to 24'}
+        - {id: input, ref: raritan/px3-cord-60309@1, at: [16.0, 1499.2], group: power-input, rel-pos: 1, description: 'the fixed 3 m input cord, ending in an IEC 60309 2P+E 6h 32 A plug; only its gland is drawn'}
+        - {id: display, ref: raritan/pxo-lcd@1, at: [4.9, 708.05], rotate: 270, group: display, rel-pos: 1, for: chassis}
+        - {id: button-left, ref: raritan/pxo-button@1, skin: down, at: [14.3, 764.7], group: buttons, rel-pos: 1, for: display, description: 'left chevron on the drawing'}
+        - {id: button-right, ref: raritan/pxo-button@1, at: [14.3, 752.7], group: buttons, rel-pos: 2, for: display, description: 'right chevron on the drawing'}
+        - {id: button-cross, ref: raritan/pxo-button@1, skin: cross, at: [29.9, 764.7], group: buttons, rel-pos: 3, for: display, description: 'cross'}
+        - {id: button-circle, ref: raritan/pxo-button@1, skin: circle, at: [29.9, 752.7], group: buttons, rel-pos: 4, for: display, description: 'circle'}
+        - {id: reset, ref: common/reset-button@1, at: [16.9, 687.9], group: buttons, rel-pos: 5, for: chassis}
+        - {id: lamp-1, ref: common/led-dot@1, at: [29.8, 688.9], group: lamps, rel-pos: 1, for: chassis, description: 'the lamp under the reset pinhole'}
+        - {id: eth-1, ref: common/rj45-eth@1, at: [11.3, 670.5], rotate: 90, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 1 10/100/1000, in a green frame'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [24.9, 670.5], rotate: 90, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'ETH 2 10/100, in a grey frame (gaps: eth2-speed)'}
+        - {id: usb-a-1, ref: std/usb-a@1, at: [6.7, 652.65], rotate: 270, group: mgmt, rel-pos: 1, description: 'USB-A 1'}
+        - {id: usb-a-2, ref: std/usb-a@1, at: [16.8, 652.65], rotate: 270, group: mgmt, rel-pos: 2, description: 'USB-A 2'}
+        - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [27.7, 648.55], rotate: 270, group: mgmt, rel-pos: 3, description: USB-B}
+        - {id: feature, ref: std/rj45@2, at: [11.3, 626.1], rotate: 90, group: mgmt, rel-pos: 4, attrs: {media: rj45-serial}, description: 'FEATURE jack, in a red frame; media not published, drawn as a serial jack'}
+        - {id: console, ref: std/rj45@2, at: [24.9, 626.1], rotate: 90, group: mgmt, rel-pos: 5, attrs: {role: console, media: rj45-serial}, description: 'CONSOLE / MODEM jack, in a cyan frame'}
+        - {id: expansion, ref: std/rj45@2, at: [11.3, 606.0], rotate: 90, group: mgmt, rel-pos: 6, attrs: {media: rj45-serial}, description: 'EXPANSION jack, in a grey frame; media not published, drawn as a serial jack'}
+        - {id: sensor, ref: std/rj45@2, at: [24.9, 606.0], rotate: 90, group: mgmt, rel-pos: 7, attrs: {media: rj45-serial}, description: 'SENSOR jack, in a yellow frame'}
+  rear:
+    size: {w: 52, h: 1539}
+    panel:
+      decor:
+      - {id: button-1-boss, at: [13.4, 134.9], size: [25.2, 25.2], rx: 12.6, stroke: '#5c5c5c', stroke-width: 0.15, kind: button-boss, confidence: drawing, source: 'PX3-5493 spec page 7, part 250-80-0011-00: flange 25.20'}
+      - {id: button-2-boss, at: [13.4, 1378.9], size: [25.2, 25.2], rx: 12.6, stroke: '#5c5c5c', stroke-width: 0.15, kind: button-boss, confidence: drawing, source: 'PX3-5493 spec page 7, part 250-80-0011-00: flange 25.20'}
+    components:
+      placements:
+        - {id: button-1, ref: raritan/px3-mounting-button@1, at: [18.65, 140.15], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: raritan/px3-mounting-button@1, at: [18.65, 1384.15], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 52, h: 65}
+    empty: >-
+      no source shows the top end: the maker's drawing gives no end view and the specification publishes no feature on it, so
+      nothing is drawn.
+  bottom:
+    size: {w: 52, h: 65}
+    empty: >-
+      no source shows the bottom end: the maker's drawing gives no end view, and the cord leaves by the front face near it.
+  left:
+    size: {w: 65, h: 1539}
+    empty: >-
+      the side elevation on page 6 is not read in this change, so nothing is drawn on this long side beyond its printed outline.
+  right:
+    size: {w: 65, h: 1539}
+    empty: >-
+      the side elevation on page 6 is not read in this change, so nothing is drawn on this long side beyond its printed outline.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-24'}
+- {physical: eth-1, name: Ethernet 1}
+- {physical: eth-2, name: Ethernet 2}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The 3 m cord beyond its gland is not drawn.
+    part-numbers:
+      PX3-5493: {}
+datasheet:
+  title: 'Raritan PX3-5493 technical specification (rev 2025-06-25)'
+references:
+  - {title: 'Raritan mechanical drawing MPX3-5493 and MPX3-4493, Rev 0A'}
+  - {title: 'Raritan Mounting Brackets data sheet'}
+  - {title: 'Raritan PX3 rack PDU data sheet'}
+  - {title: 'Raritan PX-Series PDU User Guide for PX2, PX3, PXO and PXC (4.3.11)'}
