@@ -760,6 +760,8 @@ PART_POWER = {
     "vertiv/rpdu-cord-5-15p": "nema-5-15p",
     # The APC AP7900B's fixed 11.98 ft cord ends in a NEMA 5-15P: `nema-5-15p`, as the two cords above.
     "apc/pdu-cord-5-15p": "nema-5-15p",
+    # The APC AP9571A's fixed 11.98 ft cord ends in a NEMA L6-30P: `nema-l6-30p`, as the CyberPower and Eaton cords.
+    "apc/pdu-cord-l6-30p": "nema-l6-30p",
     # The ePDU G3 basic EPBZ77's fixed 15 ft cord ends in the same NEMA L5-20P: the same slug.
     "eaton/g3-cord-l5-20p": "nema-l5-20p",
     # THE PDUMV30'S FIXED 10 ft CORD ENDS IN A NEMA L5-30P. No power-port type for it has been read from a held

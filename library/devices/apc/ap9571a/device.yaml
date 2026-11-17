@@ -1,0 +1,261 @@
+format: 1
+kind: device
+name: ap9571a
+version: 0.1.0
+maturity: modelled
+manufacturer: APC
+model: AP9571A
+description: >-
+  APC by Schneider Electric NetShelter basic rack PDU, 1U horizontal: a 445 mm black metal box, 77 mm deep. It hands
+  a 200 to 230 V feed on to ten IEC C13 outlets in two banks of five. The feed comes through a fixed 3.65 m cord with
+  a NEMA L6-30P plug, 24 A rated, 4992 VA. Each bank has a rocker circuit breaker beside it. It has no display, no
+  network port and no switching. The other face is plain, with a logo. Rack mounting brackets are supplied.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      NO DRAWING EXISTS AND THE ONLY PICTURES ARE TWO 369 PX PRODUCT PHOTOGRAPHS, so every position on the outlet face
+      is an estimate. Searched: the AP9571A data sheet (two copies, 4 pp) and the generic 2006 installation booklet
+      for basic rack PDUs. The booklet has 16 pp, no model number and no dimension. No dimensioned drawing, installation guide for this model,
+      stencil or CAD file is held. The outlet-face photograph is taken at an angle with strong perspective. An outlet
+      reads about 10 px apart at the cord end and about 19 px apart at the far end. The positions were read by fitting
+      one perspective map along the face to the two ends of the face (445 mm) and to those spacings. It puts the ten
+      outlets on a 24 mm pitch, a figure no document states. A C13 outlet turned upright is 22 mm wide, so they fit as
+      the photograph shows them. THE POSITIONS ARE GOOD TO ABOUT 10 MM (gaps: face-positions).
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - AP9571A data sheet: Height 1.7 in (44 mm), Width 17.5 in (445 mm), Depth 3.03 in (77 mm), net weight
+      5.62 lb (2.55 kg), 1U (p.1). Colour: the plain-face photograph reads #4a4a4a at the median of the face. The
+      outlet-face photograph reads #5e5e5e between the banks. Both are lit and lifted, and no document names a colour.
+      The drawn colour, #2c2e30, is the library's black-matte estimate for the maker's other 1U PDUs.
+  ears:
+    confidence: estimated
+    note: >-
+      NOT DRAWN. The data sheet lists rack mounting brackets as supplied (p.1) and states "Mounting location Front Rear",
+      "Mounting position Horizontal". The 2006 booklet draws an L-shaped bracket with no dimension and no position on
+      the PDU. One `flush` position is written without a figure and it is a stand-in (gaps: ears).
+  front:
+    confidence: estimated
+    note: >-
+      estimated - the plain face, read off the product photograph SPD_MMAE-7UVSK6_B_H (369 px, near front-on). It is a
+      plain slab with the red APC logo and a small label under it at the right end. The label text cannot be read. The
+      logo and label are named and not drawn. Which face is the rack front is not stated (gaps: face-names).
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the outlet face, mm from the face's left and top as the photograph shows it, the cord at the left. The cord
+      relief is centred at 12. Two screws stand at 46 and two at 87, with a rocker breaker at 72 between them. Five C13
+      outlets stand on a 24 mm pitch centred at 115, 139, 163, 187 and 211, in a recessed panel. Two screws stand at 242,
+      a rocker breaker at 269 and two screws at 282. Five more outlets stand centred at 312, 336, 360, 384 and 408, in a
+      second recessed panel. Two screws stand at 434. The outlets are numbered 1 to 10 from the left as seen from the
+      outlet face; no number can be read in the image. Twenty-three small notches stand along the lower edge, 19 mm
+      apart. The count is good to 4 (gaps: face-positions).
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - "Number of power socket outlets 10 IEC 60320 C13" (p.1); each is std/c13-outlet@1. The image shows two
+      groups of five. No per-outlet rating is stated.
+  breakers:
+    confidence: estimated
+    note: >-
+      datasheet - "Protection Type Circuit breaker" (p.1); the number, rating and the outlets each one protects are
+      not stated. The photograph shows one rocker block before each bank of five. So two breakers are drawn,
+      apc/pdu-breaker-rocker@1, the first feeding outlets 1 to 5 and the second outlets 6 to 10. That is read from the
+      photograph (gaps: breaker-banks).
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Input Connection Type NEMA L6-30P", input 200 V 208 V 230 V, output 208 V, 50/60 Hz (p.1). Input current
+      limit 30 A, rated current 24 A, max current draw 24 A, max line current 30 A, load capacity 4992 VA (p.1). One
+      cable of 11.98 ft (3.65 m) (p.1). The cord leaves the left end of the outlet face. Only its strain relief is drawn.
+  dcim:
+    confidence: datasheet
+    note: >-
+      datasheet - the input is a NEMA L6-30P power port (`nema-l6-30p`) and each outlet an `iec-60320-c13` power outlet fed
+      by it. The outlets are named 1 to 10 from the left of the outlet face, as the image shows no number.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - sold as a basic PDU (p.1): no metering and no outlet switching in any held document.
+attrs:
+  physical:
+    weight-kg: 2.55
+    construction: metal
+  power:
+    input-ac: 200/208/230 V, 24 A rated (limit 30 A), 4992 VA, 50/60 Hz
+    input-plug: nema-l6-30p
+    input-voltage-v: 208
+    input-current-a: 24
+    output-voltage: 208 V
+    frequency: 50/60 Hz
+    breakers: circuit breaker, number and rating not stated
+  management:
+    metering-scope: none
+    outlet-switching: false
+chassis:
+  width: 445
+  height: 44
+  depth: 77
+  ru: 1
+  color: '#2c2e30'
+  airflow: passive
+  weight-kg: 2.55
+  ears:
+    color: '#2c2e30'
+    positions:
+      - {name: flush, label: 'rack mounting brackets, position not stated (data sheet p.1)', default: true}
+gaps:
+- what: face-names
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    the data sheet says "Mounting location Front Rear" and names no face as the front. The face with the outlets is
+    drawn as `rear` and the plain face as `front`, the usual way a horizontal PDU is racked. No held document says so.
+  wanted: the installation guide's mounting figure.
+- what: face-positions
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    every position on the outlet face is read off a 369 px photograph taken at an angle. It is good to about 10 mm.
+    The 24 mm outlet pitch is a result of that reading and no document states it.
+  wanted: a dimensioned drawing or a straight-on photograph of the outlet face with a scale.
+- what: breaker-banks
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    the data sheet names a circuit breaker and no count, rating or bank. Two rocker blocks are seen, one before each group
+    of five outlets. So two breakers each feed one group. That is a reading of the photograph.
+  wanted: the installation or user guide's description of the breakers.
+- what: outlet-numbers
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    the outlets are numbered 1 to 10 from the left as seen from the outlet face. No number or label can be read at
+    369 px, so none is drawn.
+  wanted: a straight-on photograph of the outlet face.
+- what: marks
+  scope: [front, rear]
+  reason: needs-photo
+  note: >-
+    the APC logo and its label on the plain face, the small mark beside the second breaker and any breaker legend are
+    named as shown. They are not drawn. Marks and printed text are left to a later touch.
+  wanted: a straight-on photograph of each face.
+- what: ears
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: >-
+    the data sheet lists rack mounting brackets and no figure. The 2006 booklet draws a bracket with no dimension. It
+    does not say where the bracket bolts to this unit.
+  wanted: the installation guide's mounting figures.
+- what: sides
+  scope: [top, bottom, left]
+  reason: needs-photo
+  note: >-
+    no held photograph shows the top straight on, the bottom or the cord end. The cord end is built as the documented
+    right end, as no document shows this one.
+  wanted: straight-on photographs of the top, the bottom and the cord end.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the ten C13 outlets, numbered 1 to 10 from the left as seen from the outlet face; the image shows no number'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the two rocker circuit breakers, one before each bank of five outlets'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 445, h: 44}
+    regions:
+      - {id: logo-zone, at: [405.0, 10.0], size: {w: 24.0, h: 9.0}, label: 'APC logo; not drawn'}
+      - {id: label-zone, at: [405.0, 21.0], size: {w: 20.0, h: 7.0}, label: 'product label, text not legible; not drawn'}
+  rear:
+    size: {w: 445, h: 44}
+    panel:
+      decor:
+      - {id: bank-recess-1, at: [101.5, 3.5], size: [121.0, 37.0], rx: 1.0, fill: '#232528', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop: a recessed panel round the first five outlets. Edges read to about 10 mm.'}
+      - {id: bank-recess-2, at: [298.5, 3.5], size: [121.0, 37.0], rx: 1.0, fill: '#232528', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop: a recessed panel round the last five outlets. Edges read to about 10 mm.'}
+      - {id: screw-1, at: [44.5, 8.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the cord end: a vertical pair of round marks before the first breaker. Good to about 10 mm.'}
+      - {id: screw-2, at: [44.5, 33.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the cord end: a vertical pair of round marks before the first breaker. Good to about 10 mm.'}
+      - {id: screw-3, at: [85.5, 8.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the cord end: a vertical pair of round marks after the first breaker. Good to about 10 mm.'}
+      - {id: screw-4, at: [85.5, 33.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the cord end: a vertical pair of round marks after the first breaker. Good to about 10 mm.'}
+      - {id: screw-5, at: [240.5, 8.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop of the middle: a vertical pair of round marks before the second breaker. Good to about 10 mm.'}
+      - {id: screw-6, at: [240.5, 33.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop of the middle: a vertical pair of round marks before the second breaker. Good to about 10 mm.'}
+      - {id: screw-7, at: [280.5, 8.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop of the middle: a vertical pair of round marks after the second breaker. Good to about 10 mm.'}
+      - {id: screw-8, at: [280.5, 33.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 6x crop of the middle: a vertical pair of round marks after the second breaker. Good to about 10 mm.'}
+      - {id: end-screw-1, at: [432.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the far end: a vertical pair of diamond-shaped marks right of the last outlet. Good to about 10 mm.'}
+      - {id: end-screw-2, at: [432.5, 31.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face image, 14x crop of the far end: a vertical pair of diamond-shaped marks right of the last outlet. Good to about 10 mm.'}
+      - {id: notch-1, at: [10.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-2, at: [29.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-3, at: [48.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-4, at: [67.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-5, at: [86.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-6, at: [105.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-7, at: [124.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-8, at: [143.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-9, at: [162.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-10, at: [181.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-11, at: [200.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-12, at: [219.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-13, at: [238.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-14, at: [257.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-15, at: [276.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-16, at: [295.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-17, at: [314.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-18, at: [333.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-19, at: [352.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-20, at: [371.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-21, at: [390.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-22, at: [409.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+      - {id: notch-23, at: [428.8, 41.6], size: [2.4, 1.2], rx: 0.3, fill: '#0a0a09', kind: unidentified, confidence: estimated, source: 'AP9571A outlet-face photograph, 10x crop of the lower edge. A row of small notches, about 23 over the face, 19 mm apart, good to 4 in the count.'}
+    components:
+      placements:
+        - {id: input, ref: apc/pdu-cord-l6-30p@1, at: [2.0, 12.0], group: power-input, rel-pos: 1, description: 'the fixed 3.65 m input cord, ending in a NEMA L6-30P plug; only its strain relief is drawn'}
+        - {id: breaker-1, ref: apc/pdu-breaker-rocker@1, at: [67.0, 13.0], group: breakers, rel-pos: 1, description: 'the rocker breaker before outlets 1 to 5; rating not stated'}
+        - {id: breaker-2, ref: apc/pdu-breaker-rocker@1, at: [264.0, 13.0], group: breakers, rel-pos: 2, description: 'the rocker breaker before outlets 6 to 10; rating not stated'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [99.8, 11.0], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, through: breaker-1}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [123.8, 11.0], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, through: breaker-1}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [147.8, 11.0], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, through: breaker-1}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [171.8, 11.0], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, through: breaker-1}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [195.8, 11.0], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, through: breaker-1}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [296.8, 11.0], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, through: breaker-2}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [320.8, 11.0], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, through: breaker-2}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [344.8, 11.0], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, through: breaker-2}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [368.8, 11.0], rotate: 90, group: outlets, rel-pos: 9, fed-by: input, through: breaker-2}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [392.8, 11.0], rotate: 90, group: outlets, rel-pos: 10, fed-by: input, through: breaker-2}
+  top:
+    size: {w: 445, h: 77}
+    empty: >-
+      no source shows the top straight on: the images see the lid at a steep angle, a plain plane with nothing that can be
+      measured.
+  bottom:
+    size: {w: 445, h: 77}
+    empty: >-
+      no source shows the bottom; the 2006 booklet says the serial number label is on the bottom and shows no figure of it.
+  left:
+    size: {w: 77, h: 44}
+    panel:
+      decor:
+      - {id: end-mark-1, at: [25.0, 8.0], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'built as the documented right end, as no document shows this one. The right end is seen edge-on in the outlet-face photograph. It shows four faint marks in two columns and two rows, good to about 15 mm along the depth.'}
+      - {id: end-mark-2, at: [50.0, 8.0], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'built as the documented right end, as no document shows this one. The right end is seen edge-on in the outlet-face photograph. It shows four faint marks in two columns and two rows, good to about 15 mm along the depth.'}
+      - {id: end-mark-3, at: [25.0, 33.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'built as the documented right end, as no document shows this one. The right end is seen edge-on in the outlet-face photograph. It shows four faint marks in two columns and two rows, good to about 15 mm along the depth.'}
+      - {id: end-mark-4, at: [50.0, 33.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'built as the documented right end, as no document shows this one. The right end is seen edge-on in the outlet-face photograph. It shows four faint marks in two columns and two rows, good to about 15 mm along the depth.'}
+  right:
+    size: {w: 77, h: 44}
+    panel:
+      decor:
+      - {id: end-mark-1, at: [25.0, 8.0], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face photograph, 14x crop of the far end. Four faint marks in two columns and two rows on the end face, read edge-on, good to about 15 mm along the depth.'}
+      - {id: end-mark-2, at: [50.0, 8.0], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face photograph, 14x crop of the far end. Four faint marks in two columns and two rows on the end face, read edge-on, good to about 15 mm along the depth.'}
+      - {id: end-mark-3, at: [25.0, 33.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face photograph, 14x crop of the far end. Four faint marks in two columns and two rows on the end face, read edge-on, good to about 15 mm along the depth.'}
+      - {id: end-mark-4, at: [50.0, 33.5], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'AP9571A outlet-face photograph, 14x crop of the far end. Four faint marks in two columns and two rows on the end face, read edge-on, good to about 15 mm along the depth.'}
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-10'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The rack mounting brackets are in the box and are not drawn.
+    part-numbers:
+      AP9571A: {}
+datasheet:
+  title: 'Schneider Electric APC NetShelter Basic Rack PDUs AP9571A product datasheet (5 Nov 2026 copy)'
+  url: https://www.se.com/il/en/product/download-pdf/AP9571A?filename=Schneider+Electric_NetShelter-Basic-Rack-PDUs_AP9571A.pdf
+  sha256: 8f932e6ecd8cba603c9d1a0e5d27254748940dc05a14e622cdda95c001b931c8
