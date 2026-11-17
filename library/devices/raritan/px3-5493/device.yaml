@@ -63,9 +63,11 @@ provenance:
       789.9 mm from the top. Its contents are read from the page 4 drawing and the page 6 elevation. There are four round
       buttons (left chevron, right chevron, cross, circle) beside a display window of 42.4 by 33.7 mm. There is a RESET
       pinhole with a lamp under it. Two stacked jacks, ETH 1 over ETH 2, come next. Then come USB-A 1, USB-A 2 and USB-B,
-      then FEATURE over CONSOLE / MODEM, then EXPANSION over SENSOR. A screw ring stands at each end. Each jack is turned a
-      quarter turn so its latch edge faces the strip's left, as the drawing's latch edge faces up. The display and the
-      buttons are the PXO's parts, whose sizes match the drawing to about 0.5 mm. The frame colours and the labels' names
+      then FEATURE over CONSOLE / MODEM, then EXPANSION over SENSOR. A screw ring stands at each end. The upper-row jacks
+      (ETH 1, FEATURE, EXPANSION) are turned so their latch edge faces the strip's left, as the drawing's faces up. The
+      lower-row jacks (ETH 2, CONSOLE / MODEM, SENSOR) are turned the other way, so theirs faces right, as the drawing's
+      faces down. Each turn was read from view C of pages 4 and 6, cropped at one scale, and set from the part's own
+      contract. The display and the buttons are the PXO's parts, whose sizes match the drawing to about 0.5 mm. The frame colours and the labels' names
       follow page 4. The Raritan logo, the iX7 mark and the label texts are not drawn. A later change draws marks.
   rear:
     confidence: drawing
@@ -317,14 +319,14 @@ views:
         - {id: reset, ref: common/reset-button@1, at: [16.9, 687.9], group: buttons, rel-pos: 5, for: chassis}
         - {id: lamp-1, ref: common/led-dot@1, at: [29.8, 688.9], group: lamps, rel-pos: 1, for: chassis, description: 'the lamp under the reset pinhole'}
         - {id: eth-1, ref: common/rj45-eth@1, at: [11.3, 670.5], rotate: 90, group: eth, rel-pos: 1, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 1 10/100/1000, in a green frame'}
-        - {id: eth-2, ref: common/rj45-eth@1, at: [24.9, 670.5], rotate: 90, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 2 10/100/1000, in a grey frame (gaps: eth2-speed)'}
+        - {id: eth-2, ref: common/rj45-eth@1, at: [24.9, 670.5], rotate: 270, group: eth, rel-pos: 2, attrs: {media: rj45, speed: 1g, role: mgmt}, description: 'ETH 2 10/100/1000, in a grey frame (gaps: eth2-speed)'}
         - {id: usb-a-1, ref: std/usb-a@1, at: [6.7, 652.65], rotate: 270, group: mgmt, rel-pos: 1, description: 'USB-A 1'}
         - {id: usb-a-2, ref: std/usb-a@1, at: [16.8, 652.65], rotate: 270, group: mgmt, rel-pos: 2, description: 'USB-A 2'}
         - {id: usb-b, ref: raritan/pxo-usb-b@1, at: [27.7, 648.55], rotate: 270, group: mgmt, rel-pos: 3, description: USB-B}
         - {id: feature, ref: std/rj45@2, at: [11.3, 626.1], rotate: 90, group: mgmt, rel-pos: 4, attrs: {media: rj45-serial}, description: 'FEATURE jack, in a red frame; media not published, drawn as a serial jack'}
-        - {id: console, ref: std/rj45@2, at: [24.9, 626.1], rotate: 90, group: mgmt, rel-pos: 5, attrs: {role: console, media: rj45-serial}, description: 'CONSOLE / MODEM jack, in a cyan frame'}
+        - {id: console, ref: std/rj45@2, at: [24.9, 626.1], rotate: 270, group: mgmt, rel-pos: 5, attrs: {role: console, media: rj45-serial}, description: 'CONSOLE / MODEM jack, in a cyan frame'}
         - {id: expansion, ref: std/rj45@2, at: [11.3, 606.0], rotate: 90, group: mgmt, rel-pos: 6, attrs: {media: rj45-serial}, description: 'EXPANSION jack, in a grey frame; media not published, drawn as a serial jack'}
-        - {id: sensor, ref: std/rj45@2, at: [24.9, 606.0], rotate: 90, group: mgmt, rel-pos: 7, attrs: {media: rj45-serial}, description: 'SENSOR jack, in a yellow frame'}
+        - {id: sensor, ref: std/rj45@2, at: [24.9, 606.0], rotate: 270, group: mgmt, rel-pos: 7, attrs: {media: rj45-serial}, description: 'SENSOR jack, in a yellow frame'}
   rear:
     size: {w: 52, h: 1539}
     panel:

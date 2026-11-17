@@ -130,6 +130,24 @@ def test_the_controller_carries_the_jacks_the_panel_drawing_shows():
     assert len(buttons) == 4
 
 
+def _turn(p):
+    return p.get("rotate", 0) % 360
+
+
+def test_the_lower_row_of_rj45_jacks_is_the_upper_row_turned_a_half_turn():
+    """The drawing's panel (pages 4 and 6, view C) draws the lower RJ45 row as a 180 degree mirror of the upper row.
+
+    The upper row has its latch tab at the top and the lower row at the bottom.
+    The strip stands with the drawing turned a quarter turn, so the upper row's latch faces the left.
+    A quarter turn of 90 gives that, and the lower row needs the other quarter turn, 270.
+    """
+    placed = _by_id(_device(), "front")
+    for upper, lower in (("eth-1", "eth-2"), ("feature", "console"), ("expansion", "sensor")):
+        assert _turn(placed[upper]) == 90, upper
+        assert _turn(placed[lower]) == 270, lower
+        assert (_turn(placed[lower]) - _turn(placed[upper])) % 360 == 180, (upper, lower)
+
+
 def test_the_two_ethernet_jacks_are_the_interfaces():
     dev = _device()
     physical = [i["physical"] for i in dev["interfaces"]]
