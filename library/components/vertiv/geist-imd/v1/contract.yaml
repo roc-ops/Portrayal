@@ -1,0 +1,71 @@
+format: 1
+kind: module
+name: geist-imd
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: power
+description: >-
+  The interchangeable monitoring module of a Vertiv Geist unit-level monitored rack PDU.
+  It has two Ethernet ports that act as a switch, a remote sensor jack, an RJ-45 serial jack and a USB port.
+  It also has a hard-reboot button, a network-reset button, a four-digit display and three display buttons.
+  Drawn as it stands on a vertical PDU.
+size: {w: 41.0, h: 105.8, d: 40}
+size-confidence: {w: photo-measured, h: photo-measured, d: estimated}
+attrs: {module: Geist IMD}
+provenance:
+  method: >-
+    photo-measured - the Vertiv Geist rack PDU brochure, page 7, photograph of a combination-outlet PDU (1287 by 159 px) shows the module.
+    Its jack plate reads 660 px at 4 times and 465 px across. The VP8841 data sheet SL-26176 strip shows a module block 48 px long.
+    One pixel of the strip is 2.2 mm, so the block reads 105.8 mm, its jack plate 58 mm and the plate 41.0 across.
+    Every position is read off the photograph at 0.088 mm per px, good to about 1 mm.
+    The module is turned a quarter so it stands as on a vertical PDU.
+  size: >-
+    photo-measured - the length is the strip's block and the width follows the photograph's ratio. The depth is estimated.
+  identity: >-
+    READING OF PICTURES, NOT A STATEMENT: the VP8841 data sheet names no module, and the label on the brochure photograph is too small to read.
+    The guide's Figures 3.2 and 3.3 show the IMD-02X and IMD-02E, which have no USB port. The module drawn here has one.
+    The guide names an IMD-03 in its display-code table only, with no figure. This part is named for what it is and not for a model.
+  ports: >-
+    datasheet - the VP8841 data sheet SL-26176 lists dual 10/100/1000 Mbps Ethernet, USB support, an IP reset button and a hard reboot button.
+    It also lists "RS232 via RJ45" and "1 (Supports up to 16 Sensors)" remote sensor RJ jacks. Guide Table 3.5 (PDF page 26) says the two Ethernet ports act as a two-port switch.
+    The jacks are declared 1g, the data sheet's figure; the guide gives 10/100 Mb for its own modules.
+  jacks: >-
+    photo - the two Ethernet jacks are common/rj45-eth@1 with their two lamps. The sensor jack is common/rj11-jack@1: an RJ-12 is the same housing with six contacts.
+    The second small jack carries a serial symbol and is the bare std/rj45@2, read as the data sheet's RS-232 on an RJ-45. A USB-A port stands beside it.
+  display: >-
+    datasheet and photo-measured - the guide calls it a local display that shows phase, line and circuit current values in amperes.
+    The photograph shows four seven-segment digits, red when lit. They are drawn unlit, as every lamp and display is by default.
+    The strip reads the lit window about #a35856 (44 px).
+  buttons: >-
+    datasheet - guide Table 3.4: a back, a forward and a centre button. The photograph draws a triangle, a square and a triangle.
+    The three are drawn as keys without a symbol, because the symbols are printed text.
+  print: >-
+    NOT DRAWN: the maker's mark, the printed words, the symbols beside the jacks and the module's label.
+    Printed text is a later touch.
+  depth: >-
+    estimated - no held source shows the module behind its plate; 40 is chosen to sit inside the unit's 50.8 depth.
+  power: >-
+    datasheet - no held source states the module's own draw; the lint finding for it stands as the record.
+groups:
+  ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two Ethernet ports, which act as a two-port switch'}
+  peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the remote sensor jack, the RS-232 serial port on an RJ-45 and the USB port'}
+  controls: {term: Button, role: management, index-origin: 1}
+elements:
+  display: {at: [5.7, 68.4], size: [28.7, 13.2], class: display, characters: 4, description: 'the local four-digit display window'}
+  digit-1: {at: [7.0, 70.5], size: [5.0, 9.0], class: display, characters: 1, states: &digit-states [{name: '0', lights: [a, b, c, d, e, f]}, {name: '1', lights: [b, c]}, {name: '2', lights: [a, b, g, e, d]}, {name: '3', lights: [a, b, g, c, d]}, {name: '4', lights: [f, g, b, c]}, {name: '5', lights: [a, f, g, c, d]}, {name: '6', lights: [a, f, g, e, c, d]}, {name: '7', lights: [a, b, c]}, {name: '8', lights: [a, b, c, d, e, f, g]}, {name: '9', lights: [a, b, c, d, f, g]}, {name: 'blank', lights: []}]}
+  digit-2: {at: [13.8, 70.5], size: [5.0, 9.0], class: display, characters: 1, states: *digit-states}
+  digit-3: {at: [20.6, 70.5], size: [5.0, 9.0], class: display, characters: 1, states: *digit-states}
+  digit-4: {at: [27.4, 70.5], size: [5.0, 9.0], class: display, characters: 1, states: *digit-states}
+  key-1: {at: [27.75, 85.05], size: [7.1, 7.1], class: button}
+  key-2: {at: [16.75, 85.05], size: [7.1, 7.1], class: button}
+  key-3: {at: [5.65, 85.05], size: [7.1, 7.1], class: button}
+parts:
+  - {id: eth1, ref: common/rj45-eth@1, at: [7.1, 13.7], rotate: 90, group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {id: eth2, ref: common/rj45-eth@1, at: [7.1, 29.6], rotate: 90, group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {id: sensor, ref: common/rj11-jack@1, at: [24.4, 14.6], rotate: 90, group: peripheral, attrs: {media: rj12-sensor, function: remote-sensor}}
+  - {id: serial, ref: std/rj45@2, at: [24.7, 30.5], rotate: 90, group: peripheral, attrs: {role: serial, media: rj45-serial}}
+  - {id: usb, ref: std/usb-a@1, at: [25.95, 47.4], group: peripheral}
+  - {id: hard-reboot, ref: common/reset-button@1, at: [2.8, 20.1], group: controls}
+  - {id: network-reset, ref: common/reset-button@1, at: [2.8, 34.0], group: controls}
+skins: [default]

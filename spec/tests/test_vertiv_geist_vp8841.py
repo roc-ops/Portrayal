@@ -1,0 +1,123 @@
+"""The Vertiv Geist VP8841, a unit-level monitored vertical rack PDU with an L6-30P cord.
+
+What is true of the library once the device is in it. It is a 1778 mm strip, 51 mm wide and deep.
+Thirty-six C13 and six C19 outlets sit on its front, in two circuits that each run through one breaker.
+A monitoring module with two Ethernet jacks and a four-digit display sits between the circuits.
+The fixed cord exports as a power port of type other.
+"""
+import pathlib
+
+import yaml
+
+from portrayal import dcim_export as dx
+from portrayal import dcim_registers as dr
+
+ROOT = pathlib.Path(__file__).resolve().parents[2]
+DEVICE = ROOT / "library" / "devices" / "vertiv" / "vp8841" / "device.yaml"
+COMPONENTS = ROOT / "library" / "components"
+
+C13 = "std/c13-outlet"
+C19 = "std/c19-outlet"
+CORD = "vertiv/rpdu-cord-l6-30p-round"
+BREAKER = "vertiv/rpdu-magnetic-breaker-2p"
+MODULE = "vertiv/geist-imd"
+
+
+def _load(path):
+    return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+def _contract(ref):
+    ns, name = ref.split("/")
+    return _load(COMPONENTS / ns / name / "v1" / "contract.yaml")
+
+
+def _base(ref):
+    return ref.split("@")[0]
+
+
+def _placements():
+    return _load(DEVICE)["views"]["front"]["components"]["placements"]
+
+
+def _of(ref):
+    return [p for p in _placements() if _base(p["ref"]) == ref]
+
+
+def test_the_device_is_a_1778_mm_strip_with_all_six_faces():
+    dev = _load(DEVICE)
+    assert dev["manufacturer"] == "Vertiv" and dev["model"] == "VP8841"
+    chassis = dev["chassis"]
+    assert (chassis["width"], chassis["height"], chassis["depth"]) == (50.8, 1778.0, 50.8)
+    assert set(dev["views"]) == {"front", "rear", "top", "bottom", "left", "right"}
+    assert list(dev["configurations"]["base"]["part-numbers"]) == ["VP8841"]
+
+
+def test_the_front_carries_the_outlets_the_data_sheet_counts():
+    assert len(_of(C13)) == 36
+    assert len(_of(C19)) == 6
+    for p in _of(C13) + _of(C19):
+        assert 0 <= p["at"][0] and p["at"][0] + 36 <= 50.8, p["id"]
+        assert 0 <= p["at"][1] and p["at"][1] + 28 <= 1778.0, p["id"]
+
+
+def test_each_breaker_feeds_eighteen_c13_and_three_c19():
+    breakers = _of(BREAKER)
+    assert len(breakers) == 2
+    outlets = _of(C13) + _of(C19)
+    for b in breakers:
+        fed = [p for p in outlets if p["through"] == b["id"]]
+        assert sum(_base(p["ref"]) == C13 for p in fed) == 18, b["id"]
+        assert sum(_base(p["ref"]) == C19 for p in fed) == 3, b["id"]
+
+
+def test_every_outlet_is_fed_by_the_fixed_cord_and_carries_no_switch_state():
+    cords = _of(CORD)
+    assert len(cords) == 1
+    for p in _of(C13) + _of(C19):
+        assert p["fed-by"] == cords[0]["id"], p["id"]
+        assert "states" not in p, p["id"]
+
+
+def test_the_cord_is_an_l6_30p_that_exports_as_other():
+    contract = _contract(CORD)
+    assert contract["class"] == "inlet"
+    assert contract["attrs"]["plug"] == "nema-l6-30p"
+    assert dx.PART_POWER[CORD] == "other"
+    assert "L6-30P" in dr.POWER_LABEL[CORD]
+    assert _load(DEVICE)["attrs"]["power"]["input-plug"] == "other"
+
+
+def test_the_pdu_meters_its_branches_and_switches_no_outlet():
+    management = _load(DEVICE)["attrs"]["management"]
+    assert management["metering-scope"] == "branch"
+    assert management["outlet-switching"] is False
+
+
+def test_the_breaker_is_a_twenty_amp_double_pole_part():
+    contract = _contract(BREAKER)
+    assert contract["class"] == "breaker"
+    assert contract["elements"]["button"]["states"] == ["on", "off"]
+    assert "20 A" in contract["provenance"]["rating"]
+
+
+def test_the_module_has_two_ethernet_jacks_a_four_digit_display_and_three_buttons():
+    contract = _contract(MODULE)
+    assert contract["kind"] == "module"
+    jacks = [p for p in contract["parts"] if _base(p["ref"]) == "common/rj45-eth"]
+    assert len(jacks) == 2
+    assert sorted(_base(p["ref"]) for p in contract["parts"] if p["group"] == "peripheral") == [
+        "common/rj11-jack", "std/rj45", "std/usb-a"]
+    window = contract["elements"]["display"]
+    assert window["class"] == "display" and window["characters"] == 4
+    digits = [k for k in contract["elements"] if k.startswith("digit-")]
+    assert len(digits) == 4
+    buttons = [k for k, v in contract["elements"].items() if v.get("class") == "button"]
+    assert len(buttons) == 3
+
+
+def test_the_device_places_the_module_in_a_bay():
+    dev = _load(DEVICE)
+    bays = dev["views"]["front"]["components"]["bays"]
+    assert [b["default"] for b in bays] == [MODULE + "@1"]
+    assert dev["configurations"]["base"]["bays"]["module"] == MODULE + "@1"

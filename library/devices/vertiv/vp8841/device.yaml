@@ -1,0 +1,284 @@
+format: 1
+kind: device
+name: vp8841
+version: 0.1.0
+maturity: modelled
+manufacturer: Vertiv
+model: VP8841
+description: >-
+  Vertiv Geist unit-level monitored rack PDU, vertical, 208 V, 30 A, 4.9 kW. It has a fixed 10 ft input cord with a NEMA L6-30P
+  plug. Thirty-six IEC C13 and six IEC C19 outlets sit on the front, in two circuits of eighteen C13 and three C19. Each circuit has
+  one 20 A double-pole magnetic breaker. A monitoring module with two Ethernet ports and a four-digit display sits between the
+  circuits.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DRAWING EXISTS, SO EVERY POSITION ALONG THE STRIP IS READ OFF THE STRIP ON PAGE 1 OF THE DATA SHEET, 815 by 85 px. The body
+      reads 807 px for 1778 mm (2.203 mm per px). It reads 22 px across for 50.8 mm (2.31), so the scale agrees two ways. Each position
+      is good to about 2 mm along the strip and about 3 mm across it. No 3D model and no stencil is held for any Vertiv rack PDU: the
+      intake holds no folder of them.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - the page 3 line "Chassis Dimensions (LxWxD) 70in x 2in x 2in": 1778 long, 50.8 wide and 50.8 deep. The figures are
+      whole inches and the strip reads 48.5 mm across, so the cross-section is good to a few millimetres. Page 1 gives "70in / 1778mm,
+      Vertical". The unit is 0U, so the rack unit count is the length divided by 44.45.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the outlet face. The source lies the strip on its side with the cord end on the right. The drawing stands it up
+      with the cord end at the bottom (gaps: orientation). Distances are along the strip from the far end. Across the strip every
+      feature is centred, which the strip shows to about 3 mm. The lighter tray round each bank of six C13 and the lighter plate round
+      each C19 are drawn as plates.
+  module:
+    confidence: photo-measured
+    note: >-
+      photo-measured - between the circuits a dark block 48 px (106 mm) long holds two Ethernet jacks. Two smaller jacks and a USB port
+      sit above them. It also holds a display and three round keys. It is the vertiv/geist-imd@1 module, a reading of the strip against
+      the photograph on page 7 of the Geist rack PDU brochure (gaps: module-identity).
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - page 2 lists "IEC C13": 36 on the face, 18 per breaker, in banks of 6, 208 V. It lists "IEC C19": 6 on the face, 3 per
+      breaker, individual, 208 V. The strip shows six banks of six C13 and six C19, one before each bank, which agrees. Each outlet is
+      std/c13-outlet@1 or std/c19-outlet@1 at the part's own size. The sheet gives no numbering, so the outlets are numbered from the
+      far end (gaps: numbering).
+  circuits:
+    confidence: estimated
+    note: >-
+      estimated - the sheet gives eighteen C13 and three C19 per breaker and does not say which. The first circuit is taken as the three
+      banks before the module and the second as the three after it. A breaker stands beside each three.
+  orientation:
+    confidence: estimated
+    note: >-
+      estimated - the strip is too small to show which end of each C13 is chamfered. It does not show which way a C19 earth slot faces.
+      Every outlet is drawn at the part's own orientation.
+  colours:
+    confidence: datasheet
+    note: >-
+      The body is drawn black, about #1b1c1e (an estimate): the sheet says "Black" and lists seven chassis colours on request. The strip
+      reads the plain body at #5c5c57 (576 px) and the module plate at #2f2f2b (151 px). It reads the cord ring at #51514f (360 px) and
+      an outlet well at #161712 (200 px). The two actuators read #ead963 (16 px) and #e7d962 (15 px), and the display window #a35856 (44
+      px). The lit reads are the lighting and not the finish. The trays and plates are drawn a little lighter than the body, as the
+      strip shows them.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - page 2 lists "Monitoring Level 1" as phase monitoring and "Monitoring Level 2" as circuit and breaker monitoring, so
+      `metering-scope: branch`. "Switch Breaker/Switch Combination" describes the breakers and not outlet switching: the page 1 summary
+      says monitored, no switched outlets.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Voltage 200-240V", "Current 30A", "4.9kW (208V)", 50/60 Hz, one input. The cord is 10 ft (3 m) of 10/3 wire. The plug
+      is "NEMA L6-30P Twistlock" and the power entry is "Bottom Front". The cord is fixed: the strip shows it leaving through a ring at
+      the bottom end.
+  mounting:
+    confidence: datasheet
+    note: >-
+      datasheet - the sheet lists the 7938 vertical mounting bracket kit. It lists tool-free hardware at 61.25 in and 64.75 in centre to
+      centre (1556 and 1645 mm). Neither the sheet nor the strip shows the buttons, so none is drawn (gaps: other-faces).
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      no held document announces an end of life. Nothing is fetched for this model.
+attrs:
+  power:
+    input-ac: 200-240 V single-phase, 30 A, 50/60 Hz, a fixed 10 ft cord with a NEMA L6-30P plug
+    input-plug: other
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 208
+    input-current-a: 30
+    capacity-kw: 4.9
+    capacity-scope: the load the PDU can hand on, from the data sheet; it is not what the PDU draws itself
+    frequency: 50/60 Hz
+    breakers: two 20 A double-pole magnetic breakers, one per circuit
+  environmental: {operating-temp: up to 60 C (140 F)}
+  physical: {length-mm: 1778, shipping-weight-kg: 7.26, construction: 'heavy steel with a black powder-coat finish'}
+  management: {metering-scope: branch, outlet-switching: false, network-module: 'dual 10/100/1000 Mbps Ethernet, one remote sensor jack, RS-232 on an RJ-45, USB, four-digit display'}
+  compliance: {certifications: 'FCC Part 15 Class A, RoHS, UL and c-UL Listed 62368-1'}
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 50.8
+  height: 1778
+  depth: 50.8
+  ru: 40
+  mount: rack-side
+  color: '#1b1c1e'
+  airflow: passive
+gaps:
+- what: other-faces
+  scope: [rear, top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    the sheet shows the outlet face only. No held image shows the back, the two ends or the two sides. The sheet lists outlets on the
+    front face only, so the back is not drawn as a copy of it.
+  wanted: straight-on photographs of the back, both ends and the sides, or an outline drawing.
+- what: orientation
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, where the
+    sheet puts the power entry.
+  wanted: a photograph of the unit mounted.
+- what: outlet-orientation
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the strip is too small to show which end of each C13 is chamfered. It does not show which way a C19 earth slot faces. Every outlet
+    takes the part's own orientation.
+  wanted: a larger photograph of the outlet face.
+- what: numbering
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    no held document numbers the outlets. They are numbered from the far end, one count across the C13 and the C19.
+  wanted: a photograph that shows the printed numbers, or the installer guide for this model.
+- what: circuit-assignment
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet gives eighteen C13 and three C19 per breaker and does not say which outlets each breaker feeds. The split is estimated
+    by position.
+  wanted: the installer guide for this model, or a photograph of the circuit marks.
+- what: module-identity
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the sheet names no module. The strip shows two Ethernet jacks, two small jacks, a USB port, a display and three keys, which is the
+    module in the brochure photograph. The guide's figures of the IMD-02X and IMD-02E show no USB port, and the guide gives 10/100 Mb
+    Ethernet where the sheet gives 10/100/1000 Mbps. The drawing follows the sheet and the brochure photograph, and the part is named
+    for what it is and not for a model.
+  wanted: the maker's page for this module, or a larger photograph of it.
+- what: module-detail
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the strip shows the module 48 px long. The brochure photograph, of another unit, gives the jack and key positions, read to about 1
+    mm. The module's label, the symbols beside the jacks and its right-hand end are not legible or not in the photograph.
+  wanted: a larger photograph of the module on this unit.
+- what: marks-and-text
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the maker's mark and the printed labels, including the breaker labels, are left to a later touch. The windows that carry them are
+    drawn.
+  wanted: a larger photograph of the front.
+- what: colour
+  scope: [front]
+  reason: sources-disagree
+  note: >-
+    the sheet says black and the body is drawn black, an estimate. The strip reads the body as a mid grey, which is the lighting.
+  wanted: a photograph under neutral light, or the swatch of the finish.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 42 outlets on the front, 36 IEC C13 and 6 IEC C19. They are numbered from the far end. The sheet gives no numbering.'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the two 20 A double-pole magnetic breakers, one per circuit'}
+  module: {term: Slot, role: management, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 50.8, h: 1778}
+    panel:
+      decor:
+      - {id: bank-tray-1, at: [8, 107.5], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-1, at: [6, 69.4], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bank-tray-2, at: [8, 294.8], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-2, at: [6, 256.7], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bank-tray-3, at: [8, 482.1], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-3, at: [6, 444], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bank-tray-4, at: [8, 940.3], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-4, at: [6, 902.2], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bank-tray-5, at: [8, 1127.6], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-5, at: [6, 1089.5], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+      - {id: bank-tray-6, at: [8, 1314.9], size: [34.8, 146.3], rx: 1, fill: '#232426', kind: bezel}
+      - {id: c19-plate-6, at: [6, 1276.8], size: [38.8, 33], rx: 1, fill: '#232426', kind: bezel}
+    components:
+      bays:
+        - {id: module, at: [4.9, 765.8], size: {w: 41.0, h: 105.8}, accepts: [vertiv/geist-imd@1], default: vertiv/geist-imd@1, group: module, rel-pos: 1}
+      placements:
+        - {id: outlet-1, ref: std/c19-outlet@1, at: [7.6, 72.1], group: outlets, rel-pos: 1, fed-by: input, through: breaker-1}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [10.2, 109.1], group: outlets, rel-pos: 2, fed-by: input, through: breaker-1}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [10.2, 133.3], group: outlets, rel-pos: 3, fed-by: input, through: breaker-1}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [10.2, 157.5], group: outlets, rel-pos: 4, fed-by: input, through: breaker-1}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [10.2, 181.8], group: outlets, rel-pos: 5, fed-by: input, through: breaker-1}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [10.2, 206], group: outlets, rel-pos: 6, fed-by: input, through: breaker-1}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [10.2, 230.3], group: outlets, rel-pos: 7, fed-by: input, through: breaker-1}
+        - {id: outlet-8, ref: std/c19-outlet@1, at: [7.6, 259.3], group: outlets, rel-pos: 8, fed-by: input, through: breaker-1}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [10.2, 296.3], group: outlets, rel-pos: 9, fed-by: input, through: breaker-1}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [10.2, 320.6], group: outlets, rel-pos: 10, fed-by: input, through: breaker-1}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [10.2, 344.8], group: outlets, rel-pos: 11, fed-by: input, through: breaker-1}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [10.2, 369.1], group: outlets, rel-pos: 12, fed-by: input, through: breaker-1}
+        - {id: outlet-13, ref: std/c13-outlet@1, at: [10.2, 393.3], group: outlets, rel-pos: 13, fed-by: input, through: breaker-1}
+        - {id: outlet-14, ref: std/c13-outlet@1, at: [10.2, 417.5], group: outlets, rel-pos: 14, fed-by: input, through: breaker-1}
+        - {id: outlet-15, ref: std/c19-outlet@1, at: [7.6, 446.6], group: outlets, rel-pos: 15, fed-by: input, through: breaker-1}
+        - {id: outlet-16, ref: std/c13-outlet@1, at: [10.2, 483.6], group: outlets, rel-pos: 16, fed-by: input, through: breaker-1}
+        - {id: outlet-17, ref: std/c13-outlet@1, at: [10.2, 507.9], group: outlets, rel-pos: 17, fed-by: input, through: breaker-1}
+        - {id: outlet-18, ref: std/c13-outlet@1, at: [10.2, 532.1], group: outlets, rel-pos: 18, fed-by: input, through: breaker-1}
+        - {id: outlet-19, ref: std/c13-outlet@1, at: [10.2, 556.3], group: outlets, rel-pos: 19, fed-by: input, through: breaker-1}
+        - {id: outlet-20, ref: std/c13-outlet@1, at: [10.2, 580.6], group: outlets, rel-pos: 20, fed-by: input, through: breaker-1}
+        - {id: outlet-21, ref: std/c13-outlet@1, at: [10.2, 604.8], group: outlets, rel-pos: 21, fed-by: input, through: breaker-1}
+        - {id: outlet-22, ref: std/c19-outlet@1, at: [7.6, 904.9], group: outlets, rel-pos: 22, fed-by: input, through: breaker-2}
+        - {id: outlet-23, ref: std/c13-outlet@1, at: [10.2, 941.9], group: outlets, rel-pos: 23, fed-by: input, through: breaker-2}
+        - {id: outlet-24, ref: std/c13-outlet@1, at: [10.2, 966.1], group: outlets, rel-pos: 24, fed-by: input, through: breaker-2}
+        - {id: outlet-25, ref: std/c13-outlet@1, at: [10.2, 990.4], group: outlets, rel-pos: 25, fed-by: input, through: breaker-2}
+        - {id: outlet-26, ref: std/c13-outlet@1, at: [10.2, 1014.6], group: outlets, rel-pos: 26, fed-by: input, through: breaker-2}
+        - {id: outlet-27, ref: std/c13-outlet@1, at: [10.2, 1038.8], group: outlets, rel-pos: 27, fed-by: input, through: breaker-2}
+        - {id: outlet-28, ref: std/c13-outlet@1, at: [10.2, 1063.1], group: outlets, rel-pos: 28, fed-by: input, through: breaker-2}
+        - {id: outlet-29, ref: std/c19-outlet@1, at: [7.6, 1092.2], group: outlets, rel-pos: 29, fed-by: input, through: breaker-2}
+        - {id: outlet-30, ref: std/c13-outlet@1, at: [10.2, 1129.2], group: outlets, rel-pos: 30, fed-by: input, through: breaker-2}
+        - {id: outlet-31, ref: std/c13-outlet@1, at: [10.2, 1153.4], group: outlets, rel-pos: 31, fed-by: input, through: breaker-2}
+        - {id: outlet-32, ref: std/c13-outlet@1, at: [10.2, 1177.6], group: outlets, rel-pos: 32, fed-by: input, through: breaker-2}
+        - {id: outlet-33, ref: std/c13-outlet@1, at: [10.2, 1201.9], group: outlets, rel-pos: 33, fed-by: input, through: breaker-2}
+        - {id: outlet-34, ref: std/c13-outlet@1, at: [10.2, 1226.1], group: outlets, rel-pos: 34, fed-by: input, through: breaker-2}
+        - {id: outlet-35, ref: std/c13-outlet@1, at: [10.2, 1250.3], group: outlets, rel-pos: 35, fed-by: input, through: breaker-2}
+        - {id: outlet-36, ref: std/c19-outlet@1, at: [7.6, 1279.4], group: outlets, rel-pos: 36, fed-by: input, through: breaker-2}
+        - {id: outlet-37, ref: std/c13-outlet@1, at: [10.2, 1316.4], group: outlets, rel-pos: 37, fed-by: input, through: breaker-2}
+        - {id: outlet-38, ref: std/c13-outlet@1, at: [10.2, 1340.7], group: outlets, rel-pos: 38, fed-by: input, through: breaker-2}
+        - {id: outlet-39, ref: std/c13-outlet@1, at: [10.2, 1364.9], group: outlets, rel-pos: 39, fed-by: input, through: breaker-2}
+        - {id: outlet-40, ref: std/c13-outlet@1, at: [10.2, 1389.1], group: outlets, rel-pos: 40, fed-by: input, through: breaker-2}
+        - {id: outlet-41, ref: std/c13-outlet@1, at: [10.2, 1413.4], group: outlets, rel-pos: 41, fed-by: input, through: breaker-2}
+        - {id: outlet-42, ref: std/c13-outlet@1, at: [10.2, 1437.6], group: outlets, rel-pos: 42, fed-by: input, through: breaker-2}
+        - {id: breaker-1, ref: vertiv/rpdu-magnetic-breaker-2p@1, at: [8.4, 668.9], group: breakers, rel-pos: 1, description: 'the first circuit 20 A double-pole breaker'}
+        - {id: breaker-2, ref: vertiv/rpdu-magnetic-breaker-2p@1, at: [8.4, 1501.7], group: breakers, rel-pos: 2, description: 'the second circuit 20 A double-pole breaker'}
+        - {id: input, ref: vertiv/rpdu-cord-l6-30p-round@1, at: [7.9, 1722.9], group: power-input, rel-pos: 1, description: 'the fixed 10 ft cord, NEMA L6-30P plug'}
+  rear:
+    size: {w: 50.8, h: 1778}
+    empty: >-
+      no held image shows the back. Searched: the VP8841 data sheet, the Geist installer/user guide and the Geist rack PDU brochure.
+  top:
+    size: {w: 50.8, h: 50.8}
+    empty: >-
+      no held image shows the top. Searched: the VP8841 data sheet, the Geist installer/user guide and the Geist rack PDU brochure.
+  bottom:
+    size: {w: 50.8, h: 50.8}
+    empty: >-
+      no held image shows the bottom. Searched: the VP8841 data sheet, the Geist installer/user guide and the Geist rack PDU brochure.
+  left:
+    size: {w: 50.8, h: 1778}
+    empty: >-
+      no held image shows the left. Searched: the VP8841 data sheet, the Geist installer/user guide and the Geist rack PDU brochure.
+  right:
+    size: {w: 50.8, h: 1778}
+    empty: >-
+      no held image shows the right. Searched: the VP8841 data sheet, the Geist installer/user guide and the Geist rack PDU brochure.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-42'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships, the monitoring module in its slot.
+    bays:
+      module: vertiv/geist-imd@1
+    part-numbers:
+      VP8841: {}
+datasheet:
+  title: 'Vertiv Geist rPDU data sheet SL-26176, VP8841'
+  url: https://www.vertiv.com/globalassets/shared/vp8841-vertiv-rack-pdu-data-sheet-sl-26176-north-america.pdf
+  sha256: d955abb4267a1f65a46d18eed38af142bcdad2174d2b02653b19ff3b54366f18
+references:
+  - {title: 'Vertiv Geist Intelligent Rack PDUs Installer/User Guide', url: 'https://www.vertiv.com/49ebe3/globalassets/shared/vertiv-geist-rack-pdu-installer-user-guide.pdf', sha256: c6cc0ddf28975e7c5e5834c2ab20c462ef0985948e1419463f7bb7de4e898eea}
+  - {title: 'Vertiv Geist Rack PDUs brochure, EMEA', url: 'https://www.vertiv.com/4980ab/globalassets/products/critical-power/power-distribution/vertiv-geist-rpdu---brochure.pdf', sha256: 8502cef505120ca786dbb35ffb478afe013ba48102acc43de632a338395ae611}
