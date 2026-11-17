@@ -83,7 +83,7 @@ def test_a_usb_module_has_two_bands_of_four_columns_of_pairs(name):
 @pytest.mark.parametrize("name", FORMS)
 def test_the_usb_ports_are_numbered_in_one_run_and_never_overlap(name):
     ports = usb_ports(name)
-    assert sorted(p["rel-pos"] for p in ports) == list(range(1, len(ports) + 1)) or not ports
+    assert sorted(p["rel-pos"] for p in ports) == list(range(1, len(ports) + 1))
     ids = [p["id"] for p in ports]
     assert len(ids) == len(set(ids))
     boxes = [(p["at"][0], p["at"][1], p["at"][0] + USB_W, p["at"][1] + 4.5) for p in ports]
@@ -103,6 +103,30 @@ def test_the_rj45_modules_hold_sixteen_jacks_each(name):
     placements, _, _ = rear_parts(name)
     jacks = [p for p in placements if "rj45-ganged" in str(p.get("ref", ""))]
     assert len(jacks) == 16 * FORMS[name].count("rj45")
+
+
+@pytest.mark.parametrize("name", FORMS)
+def test_each_rj45_module_sits_in_the_bay_the_photograph_shows(name):
+    placements, _, _ = rear_parts(name)
+    per_bay = {}
+    for p in placements:
+        if "rj45-ganged" in str(p.get("ref", "")):
+            per_bay.setdefault(bay_of(p["at"][0]), []).append(p)
+    for bay, kind in enumerate(FORMS[name], start=1):
+        assert len(per_bay.get(bay, [])) == (16 if kind == "rj45" else 0), (name, bay)
+
+
+@pytest.mark.parametrize("name", FORMS)
+def test_each_fitted_module_has_two_thumbscrews_in_its_own_bay(name):
+    decor = load(name)["views"]["rear"]["panel"]["decor"]
+    screws = [d for d in decor if d.get("kind") == "thumbscrew"]
+    per_bay = {}
+    for d in screws:
+        per_bay.setdefault(bay_of(d["at"][0] + d["size"][0] / 2), []).append(d)
+    for bay, kind in enumerate(FORMS[name], start=1):
+        assert len(per_bay.get(bay, [])) == (0 if kind == "-" else 2), (name, bay)
+    seams = [d for d in decor if d.get("kind") == "seam" and d["at"][1] < 10 and d["size"][1] > 40]
+    assert len(seams) == 2
 
 
 @pytest.mark.parametrize("name", FORMS)
