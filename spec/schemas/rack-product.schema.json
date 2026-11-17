@@ -331,7 +331,7 @@
       "type": "object",
       "additionalProperties": false,
       "minProperties": 1,
-      "description": "what closes a cabinet in: its doors, its side panels and its roof. Only a cabinet form has one (L193); an open frame has none. Each part is written only where a document states it",
+      "description": "what closes a cabinet in (its doors, its side panels and its roof) and where a cable may leave the rack (its entries). Only a cabinet form has doors, panels or a roof; an open frame may state `entries` alone (L193). Each part is written only where a document states it",
       "properties": {
         "doors": {
           "type": "array",
@@ -446,6 +446,90 @@
             "removable": {
               "type": "boolean",
               "description": "true when the roof comes off without tools or without taking the cabinet apart, as the maker says"
+            }
+          }
+        },
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "description": "the places a cable may leave the rack, one entry for each. A route can end at an entry by its `id`. An open frame states its open top here",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "where",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                "not": {
+                  "const": "any"
+                },
+                "description": "the name a route ends at: lowercase letters, digits and hyphens, once in the product (L193). `any` is reserved: it names no entry and asks for the nearest one"
+              },
+              "where": {
+                "enum": [
+                  "roof",
+                  "floor",
+                  "left",
+                  "right"
+                ],
+                "description": "which part of the enclosure the entry is in. A side is seen from the front. Front and rear are not places: a door is a door"
+              },
+              "kind": {
+                "enum": [
+                  "brush",
+                  "knockout",
+                  "cutout",
+                  "open"
+                ],
+                "description": "what the entry is: `brush` (a bristle strip), `knockout` (a panel punched out to open it), `cutout` (a hole already cut) or `open` (no panel at all)"
+              },
+              "box": {
+                "type": "object",
+                "additionalProperties": false,
+                "minProperties": 1,
+                "description": "where the entry is, in mm, in the product's own frame: `x` from the left of `outer`, `y` up from its bottom, `z` back from its front. A roof or floor entry is a plan box `{x, z, w, d}`. A left or right entry is `{y, z, h, d}` on the side plane (L193). Absent on an `open` entry it means the whole part of `outer`; on any other kind the size is not stated",
+                "properties": {
+                  "x": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "mm from the left of the outer box to the near edge of a roof or floor entry"
+                  },
+                  "y": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "mm up from the bottom of the outer box to the lower edge of a left or right entry"
+                  },
+                  "z": {
+                    "type": "number",
+                    "minimum": 0,
+                    "description": "mm back from the front of the outer box to the front edge of the entry"
+                  },
+                  "w": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "mm of width along `x`, for a roof or floor entry"
+                  },
+                  "h": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "mm of height along `y`, for a left or right entry"
+                  },
+                  "d": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "mm of depth along `z`"
+                  }
+                }
+              },
+              "source": {
+                "type": "string",
+                "description": "what states the entry, as a free-text note. A provenance note reads the same"
+              }
             }
           }
         }

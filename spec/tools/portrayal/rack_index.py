@@ -121,6 +121,11 @@ def frames(dist):
         if r.get("aliases"):
             row["aliases"] = r["aliases"]
         row.update({k: doc[k] for k in FRAME_NUMBERS if k in doc})
+        # the places a cable may leave, only where the product states them. Doors, panels and
+        # a roof are not carried: nothing in the catalogue reads them
+        entries = (doc.get("enclosure") or {}).get("entries")
+        if entries:
+            row["enclosure"] = {"entries": entries}
         out[r["ref"]] = row
     return out
 
