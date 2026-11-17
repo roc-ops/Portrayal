@@ -8,7 +8,7 @@ model: VP7557
 description: >-
   Vertiv Geist basic rack PDU, vertical, 230/400 V three-phase, 16 A, 11.0 kW. It has a fixed 3 m input cord with an IEC 60309
   3P+N+E plug. Thirty-six IEC C13 outlets in six banks of six and six IEC C19 outlets sit on the front. Each phase feeds twelve C13
-  and two C19. The unit has no breaker, no meter and no display.
+  and two C19. The unit has no breaker and no meter.
 profile: power
 provenance:
   method:
@@ -23,14 +23,15 @@ provenance:
     note: >-
       datasheet - the page 2 line "Dimensiones del chasis (Al. x An. x Pr.) 1.683 mm x 51 mm x 51 mm": 1683 long, 51 wide and 51 deep.
       The sheet's page 1 gives the length as "66 pulgadas (1.683 mm)", and 66 in is 1676.4 mm (gaps: length-66-in). The drawing uses the
-      chassis line. The unit is 0U, so the rack unit count is the length divided by 44.45, rounded up.
+      chassis line. The sheet says "Montaje en rack vertical". The drawing treats it as 0U, so the rack unit count is the length
+      divided by 44.45, rounded up.
   front:
     confidence: photo-measured
     note: >-
       photo-measured - the outlet face. The source lies the strip on its side with the cord end on the right. The drawing stands it up
       with the cord end at the bottom (gaps: orientation). Distances are along the strip from the far end. Across the strip every
-      feature is centred, which the figure shows to about 2 mm. The bezel behind each outlet group and the small label windows are drawn
-      as plates; their text is not drawn.
+      outlet, bezel and plate is centred, which the photograph shows to about 2 mm. The bezel behind each outlet group is drawn as a
+      plate. Each small window after an outlet run is drawn as a plate with a light rim and a pale bar (gaps: label-windows).
   outlets:
     confidence: datasheet
     note: >-
@@ -52,18 +53,20 @@ provenance:
     confidence: datasheet
     note: >-
       The body is drawn black, about #1b1c1e (an estimate): the sheet says "Negro", black electrostatic paint. The photograph reads the
-      plain body at #5c5c5a (352 px), the maker plate at #464646 (96 px) and the gland centre at #25262a (64 px). The lit reads are the
-      lighting and not the finish. The bezels and plates are drawn a little lighter than the body, as the picture shows them.
+      plain body at #5c5c5a (352 px), the maker plate at #464646 (96 px) and the gland centre at #25262a (64 px). The picture reads
+      lighter than "Negro", and the difference is taken as the lighting and not the finish. The bezels are drawn a little lighter than
+      the body and the maker plate a little darker, as the picture shows them.
   capability:
     confidence: datasheet
     note: >-
-      datasheet - the sheet lists a basic unit with no meter, no display and no network port. It lists no overcurrent protection and no
-      switch.
+      datasheet - the sheet prints only "Básica" for the type. The brochure "Vertiv™ Geist™ Product Overview" (SL-70412), page 4, marks
+      no current meter and no network interface for Basic. Its text gives a digital display to Metered units. The sheet lists no
+      overcurrent protection and no switch.
   input:
     confidence: datasheet
     note: >-
       datasheet - "230/400 V WYE", "Corriente 16 A", 11.0 kW, 50/60 Hz, one input. The cord is 3 m of 2.5 mm2 H07RN-F. The plug is
-      "IEC60309 3P + N + E, 16 A, 230/400 V", splashproof IP44. The cord is fixed: the photograph shows it leaving through a gland.
+      "IEC60309 3P + N + E, 16 A, 230/400 V", splashproof IP44. The cord is fixed: the sheet lists a cord with its plug, and the photograph shows a gland at the end of the strip.
   mounting:
     confidence: datasheet
     note: >-
@@ -87,7 +90,7 @@ attrs:
     frequency: 50/60 Hz
     breakers: none
   environmental: {operating-temp: 10 to 45 C (50 to 113 F)}
-  physical: {length-mm: 1683, construction: 'heavy steel with a black electrostatic paint finish'}
+  physical: {length-mm: 1683, construction: 'high-strength steel with a black electrostatic paint finish'}
   management: {metering-scope: none, outlet-switching: false}
   compliance: {certifications: 'RoHS, CE, EN 55032, EN 55024, IEC 60950-1'}
   lifecycle: {eol: none-announced}
@@ -112,14 +115,14 @@ gaps:
   reason: needs-photo
   note: >-
     the sheet shows the outlet face only. No held image shows the back, the two ends or the two sides. The sheet lists outlets on the
-    front face only, so the back is not drawn as a copy of it. The four faces are drawn bare at the sheet's size.
+    front face only, so the back is not drawn as a copy of it. The other five faces are drawn bare at the chassis size.
   wanted: straight-on photographs of the back, both ends and the sides, or the installer guide for this model.
 - what: orientation
   scope: [front]
   reason: vendor-silent
   note: >-
-    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, the usual
-    way a vertical strip is hung.
+    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, which is an
+    assumption.
   wanted: a photograph of the unit mounted.
 - what: outlet-orientation
   scope: [front]
@@ -145,8 +148,9 @@ gaps:
   scope: [front]
   reason: vendor-silent
   note: >-
-    the photograph shows a small light-framed window at three places along the strip. No held text says what each is. They are drawn
-    as plain plates.
+    the photograph shows a small light-rimmed window at three places along the strip, with a pale bar inside each. No held text says
+    what each is. Each is drawn as a plate with a light rim and a pale bar, both estimated. The photograph is too small to read an
+    edge closer than about 2 mm. The rim takes the breaker window's colour and width. Anything printed in a window is not drawn.
   wanted: the installer guide for this model.
 - what: marks-and-text
   scope: [front]
@@ -158,7 +162,8 @@ gaps:
   scope: [front]
   reason: sources-disagree
   note: >-
-    the sheet says black and the body is drawn black, an estimate. The picture reads the body as a mid grey, which is the lighting.
+    the sheet says black and the body is drawn black, an estimate. The picture reads the body as a mid grey, which is taken as the
+    lighting.
   wanted: a photograph under neutral light, or the swatch of the finish.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 42 outlets on the front, 36 IEC C13 and 6 IEC C19. They are numbered from the far end. The sheet gives no numbering.'}
@@ -181,8 +186,14 @@ views:
       - {id: bezel-c19-5, at: [6, 1024], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
       - {id: bezel-c19-6, at: [6, 1266.4], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
       - {id: label-window-1, at: [10, 336.5], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-1-rim, at: [10, 336.5], size: [31, 13], rx: 2, stroke: '#6f7072', stroke-width: 0.6}
+      - {id: label-window-1-bar, at: [14, 341.75], size: [23, 2.5], rx: 0.6, fill: '#6f7072', kind: label-bar}
       - {id: label-window-2, at: [10, 997.4], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-2-rim, at: [10, 997.4], size: [31, 13], rx: 2, stroke: '#6f7072', stroke-width: 0.6}
+      - {id: label-window-2-bar, at: [14, 1002.65], size: [23, 2.5], rx: 0.6, fill: '#6f7072', kind: label-bar}
       - {id: label-window-3, at: [10, 1482.1], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-3-rim, at: [10, 1482.1], size: [31, 13], rx: 2, stroke: '#6f7072', stroke-width: 0.6}
+      - {id: label-window-3-bar, at: [14, 1487.35], size: [23, 2.5], rx: 0.6, fill: '#6f7072', kind: label-bar}
       - {id: maker-plate, at: [17.5, 1536.5], size: [16, 37], rx: 1, fill: '#121314', kind: logo-plate}
     components:
       placements:

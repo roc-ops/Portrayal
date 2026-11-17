@@ -22,21 +22,24 @@ provenance:
     note: >-
       datasheet - the page 2 line "Dimensiones del chasis (Al. x An. x Pr.) 1.683 mm x 51 mm x 51 mm": 1683 long, 51 wide and 51 deep.
       The sheet's page 1 gives the length as "66 pulgadas (1.683 mm)", and 66 in is 1676.4 mm (gaps: length-66-in). The drawing uses the
-      chassis line. The unit is 0U, so the rack unit count is the length divided by 44.45, rounded up. Page 2 also prints "Forma (D)
-      37mm", which no text explains (gaps: form-d).
+      chassis line. The sheet says "Montaje en rack vertical". The drawing treats it as 0U, so the rack unit count is the length
+      divided by 44.45, rounded up. Page 2 also prints "Forma (D) 37mm", which no text explains (gaps: form-d).
   front:
     confidence: photo-measured
     note: >-
       photo-measured - the outlet face. The source lies the strip on its side with the cord end on the right. The drawing stands it up
       with the cord end at the bottom (gaps: orientation). Distances are along the strip from the far end. Across the strip every
-      feature is centred, which the figure shows to about 2 mm. The bezel behind each outlet group and the small label windows are drawn
-      as plates; their text is not drawn.
+      outlet, bezel and plate is centred, which the figure shows to about 2 mm. The bezel behind each outlet group is drawn as a plate.
+      Each small window after an outlet run is drawn as a plate with a light rim and a pale bar (gaps: label-windows).
   module:
     confidence: photo-measured
     note: >-
       photo-measured - at the cord end a dark module plate about 161 mm long carries two breakers, each a labelled window beside a round
-      actuator. Eight small screws sit on the plate and one at each end of the strip. A small maker plate stands between the module and
-      the gland. The data sheet's "(2) Disyuntores magneticos unipolares de 16 A" gives the breaker count and rating.
+      actuator. Eight small screws sit on the plate, in four columns of two that flank the two windows. Two dots sit just before the
+      plate and one at each end of the strip, all drawn as small screws. The columns read 16, 58, 103 and 143 mm from the plate start,
+      in two rows 19.5 mm apart across the strip. The scale is 1.99 mm per pixel and each read is good to about 3 mm. A small maker
+      plate stands between the module and the gland. The data sheet's "(2) Disyuntores magnéticos unipolares de 16 A" gives the breaker
+      count and rating.
   outlets:
     confidence: datasheet
     note: >-
@@ -58,18 +61,21 @@ provenance:
     confidence: datasheet
     note: >-
       The body is drawn black, about #1b1c1e (an estimate): the sheet says "Negro", black electrostatic paint. The figure reads the
-      plain body at #535351 (192 px), the module plate at #363636 (400 px) and the gland centre at #222629 (42 px). The lit reads are
-      the lighting and not the finish. The bezels and plates are drawn a little lighter than the body, as the picture shows them.
+      plain body at #535351, the module plate at #363636 and the gland centre at #222528. The picture reads lighter than "Negro", and
+      the difference is taken as the lighting and not the finish. The bezels are drawn a little lighter than the body and the module
+      and maker plates a little darker, as the picture shows them.
   capability:
     confidence: datasheet
     note: >-
-      datasheet - the sheet lists a basic unit with no meter, no display and no network port. Its "Switch" row reads a breaker and
-      switch combination, which describes the breakers and not outlet switching.
+      datasheet - the sheet prints only "Básica" for the type. The brochure "Vertiv™ Geist™ Product Overview" (SL-70412), page 4, marks
+      no current meter and no network interface for Basic. Its text gives a digital display to Metered units. The sheet's "Switch"
+      row reads "Combinación de disyuntor/conmutador", read here as the breakers and not outlet switching.
   input:
     confidence: datasheet
     note: >-
       datasheet - "Tensión 230V", "Corriente 32 A", 7.3 kW, 50/60 Hz, one input. The cord is 3 m of 4 mm2 H07RN-F. The plug is "IEC60309
-      2P + E, 32 A, 250 V", splashproof IP44. The cord is fixed: the figure shows it leaving through a gland.
+      2P + E, 32 A, 250 V", splashproof IP44. The cord is fixed: the sheet lists a cord with its plug, and the figure shows a gland at
+      the end of the strip.
   mounting:
     confidence: datasheet
     note: >-
@@ -92,7 +98,7 @@ attrs:
     frequency: 50/60 Hz
     breakers: two single-pole 16 A magnetic breakers, one per circuit
   environmental: {operating-temp: 10 to 45 C (50 to 113 F)}
-  physical: {length-mm: 1683, construction: 'heavy steel with a black electrostatic paint finish'}
+  physical: {length-mm: 1683, construction: 'high-strength steel with a black electrostatic paint finish'}
   management: {metering-scope: none, outlet-switching: false}
   compliance: {certifications: 'RoHS, CE, EN 55032, EN 55024, IEC 60950-1'}
   lifecycle: {eol: none-announced}
@@ -124,14 +130,14 @@ gaps:
   reason: needs-photo
   note: >-
     the sheet shows the outlet face only. No held image shows the back, the two ends or the two sides. The sheet lists outlets on the
-    front face only, so the back is not drawn as a copy of it. The four faces are drawn bare at the sheet's size.
+    front face only, so the back is not drawn as a copy of it. The other five faces are drawn bare at the chassis size.
   wanted: straight-on photographs of the back, both ends and the sides, or the installer guide for this model.
 - what: orientation
   scope: [front]
   reason: vendor-silent
   note: >-
-    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, the usual
-    way a vertical strip is hung.
+    the sheet lies the strip on its side and says only "Vertical". The drawing stands it with the cord end at the bottom, which is an
+    assumption.
   wanted: a photograph of the unit mounted.
 - what: outlet-orientation
   scope: [front]
@@ -157,8 +163,9 @@ gaps:
   scope: [front]
   reason: vendor-silent
   note: >-
-    the figure shows a small light-framed window after the last outlet of each circuit. No held text says what it is. It is drawn as a
-    plain plate.
+    the figure shows a small light-rimmed window after the last outlet of each circuit, with a pale bar inside. No held text says what
+    it is. It is drawn as a plate with a light rim and a pale bar, both estimated. The figure is too small to read an edge closer than
+    about 2 mm. The rim takes the breaker window's colour and width. Anything printed in the window is not drawn.
   wanted: the installer guide for this model.
 - what: module-detail
   scope: [front]
@@ -177,7 +184,8 @@ gaps:
   scope: [front]
   reason: sources-disagree
   note: >-
-    the sheet says black and the body is drawn black, an estimate. The picture reads the body as a mid grey, which is the lighting.
+    the sheet says black and the body is drawn black, an estimate. The picture reads the body as a mid grey, which is taken as the
+    lighting.
   wanted: a photograph under neutral light, or the swatch of the finish.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the 24 outlets on the front, 20 IEC C13 and 4 IEC C19. They are numbered from the far end. The sheet gives no numbering.'}
@@ -203,17 +211,23 @@ views:
       - {id: bezel-c19-3, at: [6, 722.4], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
       - {id: bezel-c19-4, at: [6, 1024.2], size: [39, 33], rx: 1, fill: '#232426', kind: bezel}
       - {id: label-window-1, at: [10, 577.1], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-1-rim, at: [10, 577.1], size: [31, 13], rx: 2, stroke: '#6f7072', stroke-width: 0.6}
+      - {id: label-window-1-bar, at: [14, 582.35], size: [23, 2.5], rx: 0.6, fill: '#6f7072', kind: label-bar}
       - {id: label-window-2, at: [10, 1220.4], size: [31, 13], rx: 2, fill: '#3c3d3f', kind: label-window}
+      - {id: label-window-2-rim, at: [10, 1220.4], size: [31, 13], rx: 2, stroke: '#6f7072', stroke-width: 0.6}
+      - {id: label-window-2-bar, at: [14, 1225.65], size: [23, 2.5], rx: 0.6, fill: '#6f7072', kind: label-bar}
       - {id: module-plate, at: [5.5, 1434], size: [40, 161], rx: 1, fill: '#101112', kind: module-plate}
       - {id: maker-plate, at: [8, 1597.5], size: [35, 15], rx: 1, fill: '#121314', kind: logo-plate}
-      - {id: module-screw-1, at: [13, 1437], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-2, at: [35, 1437], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-3, at: [13, 1554.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-4, at: [35, 1554.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-5, at: [13, 1494.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-6, at: [35, 1494.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-7, at: [13, 1588.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
-      - {id: module-screw-8, at: [35, 1588.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-1, at: [14.3, 1448.8], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-2, at: [33.7, 1448.8], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-3, at: [14.3, 1490.7], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-4, at: [33.7, 1490.7], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-5, at: [14.3, 1535], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-6, at: [33.7, 1535], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-7, at: [14.3, 1575.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: module-screw-8, at: [33.7, 1575.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: plate-dot-1, at: [14.3, 1426.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
+      - {id: plate-dot-2, at: [33.7, 1426.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
       - {id: end-screw-1, at: [24, 2.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
       - {id: end-screw-2, at: [24, 1673.5], size: [3, 3], rx: 1.5, fill: '#2c2d2f', kind: screw}
     components:

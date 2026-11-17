@@ -5,6 +5,7 @@ Its outlets are on the front, each fed by the fixed cord. The VP7553 runs them t
 The VP7557 spreads them over three phases. Each cord exports as a power port of type other.
 """
 import pathlib
+import xml.etree.ElementTree as ET
 
 import yaml
 
@@ -127,3 +128,124 @@ def test_the_pdus_neither_meter_nor_switch_and_the_breaker_is_a_sixteen_amp_part
     assert contract["class"] == "breaker"
     assert contract["elements"]["button"]["states"] == ["on", "off"]
     assert "16 A" in contract["provenance"]["rating"]
+
+
+def test_the_breaker_states_have_their_own_provenance_entry():
+    contract = _contract(BREAKER)
+    for element in contract["elements"].values():
+        if element.get("states"):
+            assert "states" in contract["provenance"]
+    states = contract["provenance"]["states"]
+    assert states.startswith("estimated")
+    assert "does not show" in states
+    assert "`off`" in states
+
+
+def _decor(dev):
+    return dev["views"]["front"]["panel"]["decor"]
+
+
+def _box(d):
+    return (d["at"][0], d["at"][1], d["at"][0] + d["size"][0], d["at"][1] + d["size"][1])
+
+
+def _overlap(a, b):
+    return a[0] < b[2] and b[0] < a[2] and a[1] < b[3] and b[1] < a[3]
+
+
+def _skin(ref):
+    ns, name = ref.split("/")
+    return (COMPONENTS / ns / name / "v1" / "skins" / "default.svg").read_text(encoding="utf-8")
+
+
+def test_the_vp7553_plate_shows_eight_screws_in_the_figures_four_columns_and_none_is_covered():
+    dev = _device("vp7553")
+    decor = _decor(dev)
+    plate = next(d for d in decor if d["id"] == "module-plate")
+    screws = [d for d in decor if d["id"].startswith("module-screw-")]
+    assert len(screws) == 8
+    parts = []
+    for p in _front(dev):
+        size = _contract(_base(p["ref"]))["size"]
+        parts.append((p["at"][0], p["at"][1], p["at"][0] + size["w"], p["at"][1] + size["h"]))
+    px0, py0, px1, py1 = _box(plate)
+    for i, s in enumerate(decor):
+        if not s["id"].startswith("module-screw-"):
+            continue
+        box = _box(s)
+        assert px0 <= box[0] and box[2] <= px1 and py0 <= box[1] and box[3] <= py1, s["id"]
+        assert not any(_overlap(box, part) for part in parts), s["id"]
+        assert not any(_overlap(box, _box(later)) for later in decor[i + 1:] if later.get("fill") and not later.get("stroke")), s["id"]
+    columns = sorted({round(s["at"][1] + s["size"][1] / 2 - py0) for s in screws})
+    # the figure at 1.99 mm per pixel: columns 16, 58, 103 and 143 mm from the plate start, good to about 3 mm
+    assert len(columns) == 4
+    assert all(abs(c - w) <= 4 for c, w in zip(columns, (16, 58, 103, 143))), columns
+    for c in columns:
+        assert sum(round(s["at"][1] + s["size"][1] / 2 - py0) == c for s in screws) == 2, c
+    rows = sorted({round(s["at"][0] + s["size"][0] / 2, 1) for s in screws})
+    assert len(rows) == 2 and abs((rows[1] - rows[0]) - 19.5) <= 3, rows
+    assert abs((rows[0] + rows[1]) / 2 - 25.5) <= 2, rows
+
+
+def test_each_vp7553_window_has_a_screw_column_on_either_side_of_it():
+    dev = _device("vp7553")
+    decor = _decor(dev)
+    plate = next(d for d in decor if d["id"] == "module-plate")
+    screw_y = sorted({s["at"][1] + s["size"][1] / 2 for s in decor if s["id"].startswith("module-screw-")})
+    window = None
+    for rect in ET.fromstring(_skin(BREAKER)).iter("{http://www.w3.org/2000/svg}rect"):
+        if rect.get("stroke"):
+            window = (float(rect.get("y")), float(rect.get("y")) + float(rect.get("height")))
+    assert window is not None
+    for b in _of(dev, BREAKER):
+        start, end = b["at"][1] + window[0], b["at"][1] + window[1]
+        before = [y for y in screw_y if start - 10 <= y <= start - 3]
+        after = [y for y in screw_y if end + 0.5 <= y <= end + 6]
+        assert len(before) == 1 and len(after) == 1, b["id"]
+        assert plate["at"][1] <= before[0] and after[0] <= plate["at"][1] + plate["size"][1], b["id"]
+
+
+def test_the_vp7553_module_note_says_what_is_drawn():
+    dev = _device("vp7553")
+    note = dev["provenance"]["module"]["note"]
+    assert "Eight small screws" in note and "four columns" in note
+    screws = [d for d in _decor(dev) if d.get("kind") == "screw"]
+    assert len(screws) == 12, "eight on the plate, two just before it and one at each end of the strip"
+    start = next(d for d in _decor(dev) if d["id"] == "module-plate")["at"][1]
+    dots = [s for s in screws if s["id"].startswith("plate-dot-")]
+    assert len(dots) == 2 and all(s["at"][1] + s["size"][1] < start for s in dots)
+
+
+def test_the_vp7553_cord_draws_a_hex_sided_nut_and_the_vp7557_cord_a_round_gland():
+    ns = "{http://www.w3.org/2000/svg}"
+    nut = ET.fromstring(_skin(CORDS["vp7553"]))
+    polygons = [e for e in nut.iter(ns + "polygon") if e.get("id") == "gland"]
+    assert len(polygons) == 1
+    points = [tuple(float(v) for v in pt.split(",")) for pt in polygons[0].get("points").split()]
+    assert len(points) == 6
+    assert min(p[1] for p in points) <= 0.5 and max(p[1] for p in points) >= 39.5
+    assert not [e for e in nut.iter(ns + "circle") if e.get("id") == "gland"]
+    assert "hex-sided" in _contract(CORDS["vp7553"])["description"]
+    round_gland = ET.fromstring(_skin(CORDS["vp7557"]))
+    assert [e for e in round_gland.iter(ns + "circle") if e.get("id") == "gland"]
+    assert not list(round_gland.iter(ns + "polygon"))
+    assert "round" in _contract(CORDS["vp7557"])["description"]
+
+
+def test_every_slot_carries_a_light_rim_and_a_pale_bar_drawn_over_its_plate():
+    for name, slots in (("vp7553", 2), ("vp7557", 3)):
+        decor = _decor(_device(name))
+        ids = [d["id"] for d in decor]
+        for n in range(1, slots + 1):
+            plate = decor[ids.index(f"label-window-{n}")]
+            rim = decor[ids.index(f"label-window-{n}-rim")]
+            bar = decor[ids.index(f"label-window-{n}-bar")]
+            assert ids.index(f"label-window-{n}") < ids.index(f"label-window-{n}-rim") < ids.index(f"label-window-{n}-bar")
+            assert rim["at"] == plate["at"] and rim["size"] == plate["size"], (name, n)
+            assert rim["stroke"] == "#6f7072" and rim["stroke-width"] == 0.6, (name, n)
+            inner = _box(bar)
+            outer = _box(plate)
+            assert outer[0] < inner[0] and inner[2] < outer[2] and outer[1] < inner[1] and inner[3] < outer[3], (name, n)
+        assert f"label-window-{slots + 1}" not in ids
+        gap = next(g for g in _device(name)["gaps"] if g["what"] == "label-windows")
+        assert "rim" in gap["note"] and "plain plate" not in gap["note"], name
