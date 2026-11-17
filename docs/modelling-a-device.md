@@ -1,5 +1,47 @@
 # Modelling a device
 
+## Start here
+
+This page is long. Read this section first. Then read each stage's section as
+you reach it.
+
+**The order of the stages.** A faceplate is made in a fixed order, and you model
+it in that order. Do not start a stage until the previous one has been checked
+against the reference.
+
+1. [Before you draw anything: sort the sources](#before-you-draw-anything-sort-the-sources)
+2. [Stage 1: the panel](#stage-1-the-panel)
+3. [After the panel: the ears and the kits](#after-the-panel-the-ears-and-the-kits), for a rack device
+4. [Stage 2: the cutouts](#stage-2-the-cutouts)
+5. [Stage 3: the silkscreen](#stage-3-the-silkscreen)
+6. [Stage 4: the components](#stage-4-the-components)
+7. [Gate 4b: every port is usable](#gate-4b-every-port-is-usable)
+8. [Gate 5: audit against the source, twice](#gate-5-audit-against-the-source-twice)
+
+**The sentence Gate 5 asks for.** A model that cannot produce it is not
+finished, however green it lints. Gate 5 states it:
+
+> I put the render beside the reference at matched scale, and here is what it
+> showed.
+
+**The maturity levels.** The table is in
+`.claude/skills/portrayal-model-device/SKILL.md`. Claim the lowest level that is
+true.
+
+- `draft`: anything still being drawn, including a face with no source yet. A
+  draft is welcome.
+- `modelled`: every face is sourced. Each figure has provenance, and each face
+  is drawn or says it has nothing on it.
+- `verified`: no `estimated` value anywhere in the assembly, components
+  included.
+
+**The finishing steps.** A device that lints is not done. The finishing steps
+are in [`AGENTS.md`](../AGENTS.md) and in the Submit table of
+[the skill](../.claude/skills/portrayal-model-device/SKILL.md).
+[CONTRIBUTING](../CONTRIBUTING.md) has the commands. When a figure or a lint
+warning behaves oddly, [modelling-pitfalls.md](modelling-pitfalls.md) probably
+already explains why.
+
 A faceplate is made in a fixed order: the sheet metal is sized, it is punched,
 it is printed, and only then are the parts installed. Model it in that order,
 and do not start a stage until the previous one has been checked against the

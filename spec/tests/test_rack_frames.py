@@ -66,7 +66,12 @@ def test_a_row_holds_exactly_the_numbers_its_product_holds(frames, ref):
             assert row[k] == doc[k], (ref, k)
         else:
             assert k not in row, f"{ref}: {k} is not in the product, so not in its row"
-    assert set(row) <= IDENTITY | set(NUMBERS), set(row) - IDENTITY - set(NUMBERS)
+    entries = (doc.get("enclosure") or {}).get("entries")
+    if entries:
+        assert row["enclosure"] == {"entries": entries}, ref
+    else:
+        assert "enclosure" not in row, f"{ref}: states no entries, so no enclosure in its row"
+    assert set(row) <= IDENTITY | set(NUMBERS) | {"enclosure"}, set(row) - IDENTITY - set(NUMBERS)
     assert not (set(row) & (SOURCES - {"aliases"}))
 
 
@@ -84,7 +89,7 @@ def test_no_row_holds_a_key_its_product_does_not(frames):
 
 def test_ar203a_row_is_golden(frames):
     assert frames["apc/ar203a@1"] == {
-        "ref": "apc/ar203a@1", "vendor": "apc", "name": "ar203a", "version": "1.0.0", "major": 1,
+        "ref": "apc/ar203a@1", "vendor": "apc", "name": "ar203a", "version": "1.1.0", "major": 1,
         "manufacturer": "APC", "model": "AR203A", "maturity": "modelled",
         "part-numbers": {"AR203A": "APC NetShelter Open Frame Rack, 4 Post, 44U, Square Holes"},
         "description": product("apc/ar203a@1")["description"],
@@ -94,7 +99,8 @@ def test_ar203a_row_is_golden(frames):
         "rails": [{"id": "front"}, {"id": "rear", "depth": {"fixed": 740}}],
         "max-device-depth": 740,
         "outer": {"w": 600, "h": 2130, "d": 747},
-        "weight-kg": 40.32, "load": {"static-kg": 907.2}}
+        "weight-kg": 40.32, "load": {"static-kg": 907.2},
+        "enclosure": {"entries": product("apc/ar203a@1")["enclosure"]["entries"]}}
 
 
 def test_generic_four_post_frame_row_is_golden(frames):
