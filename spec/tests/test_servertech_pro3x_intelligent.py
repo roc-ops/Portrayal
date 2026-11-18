@@ -227,6 +227,14 @@ def test_the_side_pegs_are_named_in_the_side_gap_with_the_kit_reason():
         assert gaps["side-nubs"]["scope"] == ["left", "right"], name
 
 
+def test_the_side_gap_names_the_breaker_boxes_and_the_cover_bar_with_figures():
+    """The side view's two boxes under the breakers and the bar under the cover stand beyond the face: the gap gives figures."""
+    for name in CASES:
+        note = {g["what"]: g["note"] for g in _device(name)["gaps"]}["side-nubs"]
+        for phrase in ("box under each breaker", "10.2", "174 to 234", "1105 to 1166", "flat bar", "1.5 mm"):
+            assert phrase in note, (name, phrase)
+
+
 def test_every_estimate_gap_states_its_tolerance():
     for name in CASES:
         gaps = {g["what"]: g["note"] for g in _device(name)["gaps"]}
