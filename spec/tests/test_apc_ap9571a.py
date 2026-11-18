@@ -225,7 +225,7 @@ def test_each_breaker_is_drawn_the_measured_width_and_stays_centred_on_its_round
         assert abs(centre - mid) <= 1.0, pid
 
 
-def test_the_two_cord_lines_leave_the_lower_half_of_the_boot():
+def test_the_two_cord_lines_leave_the_middle_and_lower_part_of_the_boot():
     import re
 
     svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
@@ -237,6 +237,7 @@ def test_the_two_cord_lines_leave_the_lower_half_of_the_boot():
         lines.append((float(m.group(1)), float(m.group(2))))
     for y, h in lines:
         assert y + h / 2 >= height / 2, "a cord line centre is in the upper half"
+    assert sum(y + h / 2 for y, h in lines) / 2 > height / 2, "the pair stands below the boot's middle"
     assert min(y for y, h in lines) >= 11.0
     assert max(y + h for y, h in lines) <= height - 2.0
     assert 12.0 <= max(y + h for y, h in lines) - min(y for y, h in lines) <= 18.0
@@ -244,6 +245,7 @@ def test_the_two_cord_lines_leave_the_lower_half_of_the_boot():
 
 def test_no_description_or_attr_names_the_material_or_the_colour_as_fact(dev):
     assert "metal" not in " ".join(str(dev["description"]).split()).lower()
+    assert "chassis material" in " ".join(dev["provenance"]["chassis"]["note"].split())
     assert "black" not in str(dev["description"]).lower()
     assert "metal" not in str(dev["attrs"]["physical"].get("construction", "")).lower()
 
