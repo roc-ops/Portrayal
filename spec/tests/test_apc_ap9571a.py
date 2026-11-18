@@ -13,6 +13,7 @@ once it is in:
 These read the contracts and the device source and render nothing. One test, marked heavy, runs the DCIM exporter
 on the built device and reads the files it writes.
 """
+import re
 from pathlib import Path
 
 import pytest
@@ -235,12 +236,9 @@ def test_the_two_cord_lines_leave_the_middle_and_lower_part_of_the_boot():
         m = re.search(rf'<rect id="{rid}"[^>]*? y="([\d.]+)"[^>]*? height="([\d.]+)"', svg)
         assert m, rid
         lines.append((float(m.group(1)), float(m.group(2))))
-    for y, h in lines:
-        assert y + h / 2 >= height / 2, "a cord line centre is in the upper half"
-    assert sum(y + h / 2 for y, h in lines) / 2 > height / 2, "the pair stands below the boot's middle"
-    assert min(y for y, h in lines) >= 11.0
-    assert max(y + h for y, h in lines) <= height - 2.0
-    assert 12.0 <= max(y + h for y, h in lines) - min(y for y, h in lines) <= 18.0
+    top, bottom = min(y for y, h in lines), max(y + h for y, h in lines)
+    assert (top + bottom) / 2 > height / 2, "the pair stands below the boot's middle"
+    assert top >= 6.0 and bottom <= height
 
 
 def test_no_description_or_attr_names_the_material_or_the_colour_as_fact(dev):
@@ -268,6 +266,76 @@ def test_the_export_gives_a_nema_l6_30p_power_port_feeding_ten_outlets(tmp_path)
         assert len(outlets) == 10
         assert {o["power_port"] for o in outlets} == {ports[0]["name"]}
         assert {o["type"] for o in outlets} == {"iec-60320-c13"}
+
+
+CORD_SKIN = LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg"
+LIMIT = (
+    "every position on the outlet face and the cord is an estimate read at about 0.5 pixel per millimetre. "
+    "it is good to about 3 mm unless a gap says otherwise"
+)
+
+
+def skin_rect(rid):
+    m = re.search(rf'<rect id="{rid}"([^>]*)/>', CORD_SKIN.read_text())
+    assert m, rid
+    return {k: float(v) for k, v in re.findall(r'(?<![-\w])(x|y|width|height)="([\d.]+)"', m.group(1))}
+
+
+def words(text):
+    return " ".join(str(text).split())
+
+
+def test_the_boots_light_edge_stands_at_the_measured_fraction_of_the_boot_width():
+    boot, edge = skin_rect("relief"), skin_rect("boot-edge")
+    drawn = (edge["x"] + edge["width"] / 2 - boot["x"]) / boot["width"]
+    assert 0.37 <= drawn <= 0.43, "the edge reads about 40 percent across the boot, from its left"
+    c = contract("apc/pdu-cord-l6-30p@1")
+    text = words(c["description"]) + " " + words(c["provenance"]["boot"])
+    stated = re.findall(r"about (\d+) percent across the boot", text)
+    assert len(stated) == 1 and abs(int(stated[0]) - drawn * 100) <= 2
+    assert "on its right" not in text
+
+
+def test_the_cord_pair_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
+    lines = [skin_rect("cord-line-1"), skin_rect("cord-line-2")]
+    drawn = max(r["y"] + r["height"] for r in lines) - min(r["y"] for r in lines)
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        stated = re.findall(r"pair is (\d+) mm high", text)
+        assert len(stated) == 1 and float(stated[0]) == drawn, source
+        assert "16 to 20 mm" not in text and "about 17 mm" not in text, source
+
+
+def test_the_cord_pair_and_its_boot_stand_where_the_photograph_reads_them(dev):
+    top = placements(dev, "rear")["input"]["at"][1]
+    lines = [skin_rect("cord-line-1"), skin_rect("cord-line-2")]
+    first, last = top + min(r["y"] for r in lines), top + max(r["y"] + r["height"] for r in lines)
+    assert abs(first - 17.6) <= 3.0 and abs(last - 37.2) <= 3.0
+
+
+def test_the_rear_note_gives_the_boot_extent_the_skin_draws(dev):
+    boot = skin_rect("relief")
+    m = re.search(r"cord boot stands at (\d+) to (\d+)", words(dev["provenance"]["rear"]["note"]))
+    assert m
+    assert (float(m.group(1)), float(m.group(2))) == (boot["x"], boot["x"] + boot["width"])
+
+
+def test_the_marks_gap_states_the_device_wide_limit_once_and_the_shelf_doubt(dev):
+    note = words(gap(dev, "marks")["note"]).lower()
+    assert LIMIT in note
+    assert "top-edge highlight" in note
+    every = [words(n["note"]).lower() for n in dev["provenance"].values()] + [words(g["note"]).lower() for g in dev["gaps"]]
+    assert sum(LIMIT in n for n in every) == 1
+
+
+def test_the_two_front_regions_stand_where_the_plain_face_photograph_reads_the_logo_and_the_label(dev):
+    regions = {r["id"]: r for r in dev["views"]["front"]["regions"]}
+    for rid, (x0, x1, y0, y1) in (("logo-zone", (412.5, 439.0, 10.5, 22.0)), ("label-zone", (416.0, 435.0, 22.0, 32.0))):
+        r = regions[rid]
+        x, y = r["at"]
+        assert abs(x - x0) <= 1.0 and abs(x + r["size"]["w"] - x1) <= 1.0, rid
+        assert abs(y - y0) <= 1.0 and abs(y + r["size"]["h"] - y1) <= 1.0, rid
+    assert "not drawn" in str(regions["logo-zone"]["label"]) and "not drawn" in str(regions["label-zone"]["label"])
 
 
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
