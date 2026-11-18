@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: scg-sim-slot
+version: 1.0.0
+class: port
+profile: networking
+interface: sim-card-3ff
+description: >-
+  The Micro-SIM (3FF) card slot on the front of a Perle IOLAN SCG L console server, a thin dark bar printed SIM CARD.
+  The guide says the card fits one way and is pressed in until it clicks. It seats the card at its own mate point.
+size: {w: 16.2, h: 2.3}
+size-confidence: {w: drawing, h: drawing}
+attrs: {media: sim, form-factor: 3ff}
+provenance:
+  identity: >-
+    IOLAN SCG Hardware Installation Guide, Expandable Models (5500427-10), page 22, "Micro SIM Card" and "Installing
+    the Micro SIM Card". A 3FF (Micro-SIM) card goes into the slot, fits one way and is pressed forward until it
+    clicks. The L product page lists "SIM Card slot (empty)" and "Accepts Micro SIM (3FF)".
+  size: >-
+    drawing - the bar in the front view of Appendix D (page 35) reads 72 px by 10 px at 4.44 px/mm. That is
+    16.2 by 2.3 mm. The drawing prints no dimension for it. The figures are read against the drawing's 436 mm body.
+    The page 22 photograph shows the same bar inside a recessed rectangle; the rectangle is not drawn.
+  interface: >-
+    `sim-card-3ff` in spec/schemas/connectors.yaml. The guide says to insert the card into the slot, so the slot
+    takes the bare card.
+  mate: >-
+    estimated - the centre of the bar. The card enters from the front.
+  depth: >-
+    NOT STATED. No document gives the depth of the slot, so the part claims none.
+elements: {}
+connection-points:
+  mate: {at: [8.1, 1.15], direction: front}
+skins: [default]
