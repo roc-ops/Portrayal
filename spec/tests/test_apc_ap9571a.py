@@ -139,8 +139,9 @@ def test_the_method_note_states_the_breaker_figure_and_its_tolerance(dev):
 
 def test_the_cord_end_is_a_round_boss_and_a_round_cord_leaving_to_the_left():
     svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
-    assert '<ellipse id="relief"' in svg and '<rect id="relief"' not in svg
-    assert '<ellipse id="shank-end"' in svg and '<ellipse id="cord-end"' in svg
+    assert '<polygon id="relief"' in svg and '<rect id="relief"' not in svg
+    assert '<polygon id="shank"' in svg and '<ellipse id="cord-end"' in svg
+    assert 'id="shank-end"' not in svg and "<path" not in svg and "<ellipse" in svg
     assert '<rect id="cord"' in svg and "cord-line" not in svg
     assert svg.count("<linearGradient") == 2 and 'fill="url(#cord-shade)"' in svg
     c = contract("apc/pdu-cord-l6-30p@1")
@@ -253,6 +254,12 @@ LIMIT = (
 )
 
 
+def skin_poly(eid):
+    m = re.search(rf'<polygon id="{eid}"[^>]*points="([^"]+)"', CORD_SKIN.read_text())
+    assert m, eid
+    return [tuple(float(v) for v in p.split(",")) for p in m.group(1).split()]
+
+
 def skin_el(tag, eid):
     m = re.search(rf'<{tag} id="{eid}"([^>]*)/>', CORD_SKIN.read_text())
     assert m, eid
@@ -294,12 +301,14 @@ def test_the_cord_is_drawn_the_one_height_and_place_the_contract_and_the_gap_sta
 
 
 def test_the_rear_note_gives_the_boss_extent_the_skin_draws(dev):
-    relief, shank = skin_el("ellipse", "relief"), skin_el("ellipse", "shank-end")
-    m = re.search(r"round cord boss stands at (\d+) to (\d+) and (\d+(?:\.\d+)?) mm below the face top", words(dev["provenance"]["rear"]["note"]))
+    relief, shank = skin_poly("relief"), skin_poly("shank")
+    note = words(dev["provenance"]["rear"]["note"])
+    m = re.search(r"round cord boss stands at (\d+) to (\d+) and (\d+(?:\.\d+)?) mm below the face top", note)
     assert m
-    assert (float(m.group(1)), float(m.group(2))) == (relief["cx"] - relief["rx"], shank["cx"] + shank["rx"])
+    assert (float(m.group(1)), float(m.group(2))) == (min(x for x, _ in relief), max(x for x, _ in shank))
     assert float(m.group(3)) == placements(dev, "rear")["input"]["at"][1]
-    assert "left edge is drawn 4.5 mm right of the photograph, beyond the 3.5 mm limit" in words(dev["provenance"]["rear"]["note"])
+    assert "The ellipse is cut at the face edge, where the photograph puts its left extreme 4.5 mm beyond it" in note
+    assert "left edge is drawn 4.5 mm right" not in note
 
 
 def test_the_marks_gap_states_the_device_wide_limit_once_and_the_shelf_doubt(dev):
@@ -336,12 +345,11 @@ def test_three_thin_strips_are_drawn_the_second_light_one_left_of_the_second_bre
 
 
 def test_the_boss_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
-    relief = skin_el("ellipse", "relief")
-    shank = skin_el("ellipse", "shank-end")
+    relief, shank = skin_poly("relief"), skin_poly("shank")
     c = contract("apc/pdu-cord-l6-30p@1")
-    height = 2 * relief["ry"]
+    height = max(y for _, y in relief) - min(y for _, y in relief)
     assert c["size"]["h"] == height and c["elements"]["relief"]["size"][1] == height
-    assert shank["ry"] == relief["ry"] and shank["cy"] == relief["cy"] and relief["rx"] < relief["ry"]
+    assert max(y for _, y in shank) == max(y for _, y in relief), "the shank ends at the boss's lower edge"
     for source, text in cord_texts(dev):
         stated = re.findall(r"The boss is (\d+) mm high", text)
         assert len(stated) == 1 and float(stated[0]) == height, source
@@ -350,18 +358,58 @@ def test_the_boss_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
 
 
 def test_the_boss_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract_agree(dev):
-    relief, shank = skin_el("ellipse", "relief"), skin_el("ellipse", "shank-end")
+    relief, shank = skin_poly("relief"), skin_poly("shank")
     c = contract("apc/pdu-cord-l6-30p@1")
-    assert relief["cx"] - relief["rx"] == 0.0, "the whole ellipse is drawn, from the face's left edge"
-    assert c["elements"]["relief"]["at"] == [0, 0] and c["size"]["w"] == shank["cx"] + shank["rx"]
+    assert min(x for x, _ in relief) == 0.0, "the visible face of the boss starts at the face's left edge"
+    assert c["elements"]["relief"]["at"] == [0, 0] and c["size"]["w"] == max(x for x, _ in shank)
     assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
     sentence = r"boss stands 0 to (\d+) mm from the face's left edge, good to about 3\.5 mm"
     for source, text in cord_texts(dev):
         assert re.findall(sentence, text) == [str(int(c["size"]["w"]))], source
         assert "2 px, 1.3 mm, plus 2.0 mm for the scale spread" in text, source
         assert "6.7 px, left of the face edge, which is 4.5 mm along the face" in text, source
-        assert "4.5 mm right of the photograph. That is beyond the 3.5 mm limit" in text, source
+        assert "so its centre stands 7.5 mm and its right extreme 19.5 mm from the face edge" in text, source
+        assert "it is cut there" in text and "4.5 mm right of the photograph" not in text, source
         assert abs(6.7 / 1.506 - 4.5) <= 0.1, source
+
+
+def test_the_boss_face_is_the_picture_ellipse_cut_at_the_face_edge_and_ends_at_the_lit_bar():
+    relief = skin_poly("relief")
+    cx, rx, cy, ry = 7.5, 12.0, 16.5, 16.5
+    for x, y in relief:
+        assert abs(((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 - 1) < 0.001, (x, y)
+    xs = [x for x, _ in relief]
+    assert min(xs) == 0.0 and max(xs) == cx + rx == 19.5, "the cut ellipse runs from the face edge to its right extreme"
+    bar = skin_el("rect", "boss-edge")
+    assert bar["x"] - max(xs) <= 1.0, "the face ends at the lit bar, within 1 mm"
+    assert abs(bar["x"] + bar["width"] / 2 - 20.9) < 1e-9,"the lit vertical edge stays at 20.9 mm"
+    assert min(x for x, y in relief if y < cy) == 0.0 and min(x for x, y in relief if y > cy) == 0.0, "cut on both sides"
+
+
+def test_the_shank_is_a_flat_top_a_chamfered_corner_and_a_straight_vertical_right_side():
+    shank = skin_poly("shank")
+    top = min(y for _, y in shank)
+    flat = [p for p in shank if p[1] == top]
+    assert len(flat) == 2 and flat[0][0] != flat[1][0], "a flat top"
+    right = max(x for x, _ in shank)
+    side = [p for p in shank if p[0] == right]
+    assert len(side) == 2 and side[0][1] != side[1][1], "a right side with two corners on one column"
+    assert max(y for _, y in side) == max(y for _, y in shank) and min(y for _, y in side) > top + 3, "straight down to the foot"
+    i, j = shank.index(flat[1]), shank.index(side[0])
+    assert j == i + 1 and shank[i][0] < right and shank[i][1] == top and shank[j][1] > top, "a chamfer joins the top to the side"
+    svg = CORD_SKIN.read_text()
+    assert 'id="shank-end"' not in svg and "<path" not in svg and svg.count("<ellipse") == 1
+    assert abs(top - 0.3) < 1e-9 and abs(right - 33.0) < 1e-9 and abs(side[0][1] - 6.5) < 1e-9
+
+
+def test_the_notes_name_the_straight_sided_shank_and_one_pair_of_cord_figures(dev):
+    for source, text in cord_texts(dev):
+        assert "photograph shows a straight-sided shank, like a nut" in text, source
+        assert "flat top" in text and "chamfered" in text and "straight vertical right side" in text, source
+        assert "drawn round" not in text and "looks faceted" not in text, source
+        assert "21.4 mm" in text and "22.9 mm" in text, source
+    for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
+        assert not re.search(r"\b21\.5 mm|\b23\.0 mm", f.read_text()), f.name
 
 
 def test_each_figure_of_the_cord_end_names_its_scale_method_and_the_cord_tolerance(dev):
@@ -465,7 +513,7 @@ def test_the_left_end_is_not_drawn_and_the_gap_says_no_held_picture_shows_it(dev
     note = words(gap(dev, "cord")["note"])
     assert "No held picture shows the left end face" in note and "documented right end" in note
     assert not [d for d in dev["views"]["left"]["panel"]["decor"] if "cord" in d["id"] or "boss" in d["id"]]
-    assert "shank looks faceted" in note and "drawn round" in note
+    assert "straight-sided shank, like a nut" in note and "drawn round" not in note
 
 
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
