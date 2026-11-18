@@ -9,36 +9,35 @@ description: >-
   The controller panel of a Server Technology PRO3X intelligent PDU (Smart, Switched and Switched POPS).
   It has a display window, four keys, two Ethernet jacks and a console and modem jack.
   It also has a sensor jack, an auxiliary jack, a USB-A port and a USB-B port.
-size: {w: 52.96, h: 139.13, d: 40}
+size: {w: 52.0, h: 141.6, d: 40}
 size-confidence: {w: estimated, h: estimated, d: estimated}
 attrs: {module: PRO3X controller}
 provenance:
   method: >-
     estimated - Server Technology data sheets C3S36RL-EPJE2MT4, C3W36RL-EPJE2MT4 and C3WG36RL-EPJE2MT4 draw the panel on page 5.
-    The sheet of C3S36RL-EPJE2MT4 calls it Detail A and gives no scale and no dimension.
-    The panel was read from a 900 dpi render of that sheet.
-    The scale puts the panel's 472 px across at 52.96, the PRO4X controller bay's width.
-    The display window then reads 33.3 by 41.7, and the PRO4X controller's window is 33.5 by 42.4.
-    So the scale is good to about 3 percent.
+    The sheet of C3S36RL-EPJE2MT4 draws it in the strip's front view and again as a lower detail with no scale.
+    The size and the marks' places are read from the front view at 1200 ppi, 0.242 mm per pixel.
+    The front view is dimensioned at 1778.0 long, and its source raster resolves about 1 mm.
+    The jacks' places are the lower detail's, fitted to the plate by 0.982 across and 1.018 along.
     The drawing lies the PDU down, cord end left. This part is drawn as the PDU stands.
   size: >-
-    estimated - 52.96 across and 139.13 along, from the scale above.
-    The plan view of the same sheet puts the panel at about 146 along, so the length carries about 5 mm.
+    estimated - 52.0 across and 141.6 along, read from the front view's plate outline.
+    Across is the narrow outline, 1.9 inside the strip's wall on each side. Each figure has a tolerance of about 1 mm.
     The depth is chosen to sit inside the 63.5 body.
   keys: >-
     drawing and datasheet - Detail A draws four round marks, two above the display window and two below it.
     Each is about 5 mm across. The PRO3X data sheet's controller photograph (page 2) shows four round push buttons round the window.
     So the marks are the keys. The glyphs on the photograph's keys are not read, so none is drawn.
   identity: >-
-    datasheet - the PRO3X data sheet says the Controller is hot swappable.
-    It also says the Controller houses computing, display and connectivity ports. So it is a module that fills a bay.
+    datasheet - the SKU sheets say the Controller is hot swappable. They also say it houses computing, display and
+    connectivity ports. The PRO3X data sheet calls it a hot-swappable card. So it is a module that fills a bay.
   ports: >-
     datasheet and drawing - the sheets list dual Ethernet, one sensor port (RJ45), one aux port (6P6C) and one console and modem port (RJ45).
     They also list one USB-A and one USB-B port.
     Detail A prints ETH1, ETH2, CONSOLE/MODEM, AUX, SENSOR, USB-A and USB-B beside the jacks, and RESET beside a small hole.
     The ids below follow the printed names.
   jacks: >-
-    drawing - each jack is centred on its cell.
+    drawing - each jack is centred on its cell. The USB-A cell is its frame on the front view, 16.1 across and 8.7 along.
     The pin comb of ETH1 and CONSOLE/MODEM is at the end of the cell away from the cord. That of ETH2, AUX and SENSOR is at the cord end.
     So the first two are unrotated and the other three are rotated 180. The comb is read from the figure at 900 dpi.
     The 6P6C aux jack is the common/rj11-jack@1 part, as the sheet calls it 6P6C.
@@ -51,17 +50,17 @@ groups:
   ethernet: {term: Port, role: management, index-origin: 1, attrs: {media: rj45, speed: 1g}, description: 'the two 10/100/1000 network ports, printed ETH1 and ETH2'}
   peripheral: {term: Port, role: management, index-origin: 1, mixed: 'the console and modem port, the sensor port, the aux port and the USB-A port'}
 elements:
-  lcd: {at: [9.76, 60.14], size: [33.32, 41.74], class: decor}
-  key-1: {at: [2.55, 88.68], size: [5.0, 5.0], class: button}
-  key-2: {at: [2.55, 74.64], size: [5.0, 5.0], class: button}
-  key-3: {at: [45.2, 88.68], size: [5.0, 5.0], class: button}
-  key-4: {at: [45.2, 74.64], size: [5.0, 5.0], class: button}
+  lcd: {at: [9.15, 61.2], size: [33.8, 42.5], class: decor}
+  key-1: {at: [1.5, 91.3], size: [5.0, 5.0], class: button}
+  key-2: {at: [1.5, 76.1], size: [5.0, 5.0], class: button}
+  key-3: {at: [45.0, 91.3], size: [5.0, 5.0], class: button}
+  key-4: {at: [45.0, 76.1], size: [5.0, 5.0], class: button}
 parts:
-  - {ref: common/rj45-eth@1, id: eth1, at: [9.32, 118.68], group: ethernet, attrs: {media: rj45, speed: 1g}}
-  - {ref: common/rj45-eth@1, id: eth2, at: [3.43, 20.5], rotate: 180, group: ethernet, attrs: {media: rj45, speed: 1g}}
-  - {ref: std/rj45@2, id: console, at: [27.11, 118.68], group: peripheral, attrs: {media: rj45-serial, function: console-modem}}
-  - {ref: std/rj45@2, id: sensor, at: [33.78, 19.82], rotate: 180, group: peripheral, attrs: {media: rj45-telemetry, function: sensor}}
-  - {ref: common/rj11-jack@1, id: aux, at: [19.42, 19.67], rotate: 180, group: peripheral, attrs: {media: rj11, function: aux}}
-  - {ref: std/usb-a@1, id: usb-a, at: [11.9, 38.59], group: peripheral}
-  - {ref: raritan/pxo-usb-b@1, id: usb-b, at: [32.11, 35.45], group: peripheral}
+  - {ref: common/rj45-eth@1, id: eth1, at: [9.15, 120.79], group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: common/rj45-eth@1, id: eth2, at: [3.37, 20.86], rotate: 180, group: ethernet, attrs: {media: rj45, speed: 1g}}
+  - {ref: std/rj45@2, id: console, at: [26.62, 120.79], group: peripheral, attrs: {media: rj45-serial, function: console-modem}}
+  - {ref: std/rj45@2, id: sensor, at: [33.17, 20.17], rotate: 180, group: peripheral, attrs: {media: rj45-telemetry, function: sensor}}
+  - {ref: common/rj11-jack@1, id: aux, at: [19.07, 20.02], rotate: 180, group: peripheral, attrs: {media: rj11, function: aux}}
+  - {ref: std/usb-a@1, id: usb-a, at: [11.68, 39.28], group: peripheral}
+  - {ref: raritan/pxo-usb-b@1, id: usb-b, at: [31.53, 36.08], group: peripheral}
 skins: [default]

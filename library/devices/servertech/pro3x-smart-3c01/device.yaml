@@ -14,8 +14,8 @@ provenance:
     confidence: drawing
     note: FIGURES FROM THE MAKER'S SKU SHEET C3S36RL-EPJE2MT4, PAGE 5 (headed Drawings), READ FROM A 300 PPI RASTER. The sheet
       draws the strip as the Basic 3A01 sheet does and adds the controller panel between the banks. Positions along the strip
-      carry about 1 to 3 mm. The controller panel's place is read from the plan view of the Smart 3C01 sheet at 900 dpi and
-      carries about 3 mm. The three intelligent sheets draw the same strip.
+      carry about 1 to 3 mm. The controller panel's place and size are read from the front view of the Smart 3C01 sheet at
+      1200 ppi and carry about 2 mm. The three intelligent sheets draw the same strip.
   mount:
     confidence: drawing
     note: '`rack-side`: the strip stands beside a rack''s upright on mounting buttons at the back. The rear view dimensions
@@ -28,7 +28,7 @@ provenance:
       prints 70.0 x 2.2 x 2.5 in.
   front:
     confidence: drawing
-    note: drawing - the plan view, measured on the raster. From the cord end come the front-entry cover and a ground point.
+    note: drawing - the front view, measured on the raster. From the cord end come the front-entry cover and a ground point.
       Then two symbol labels, a rating label, and a plate with a breaker and its label. Then three groups of six outlets,
       three HDOT Cx then three HDOT C13 (detail A), with a blank plate before the second and third. Then the controller panel,
       a second plate with a breaker, and three more groups with a blank plate before the second and third. The outlet centres
@@ -40,7 +40,8 @@ provenance:
       Each lever is centred on its outlet (gap outlet-lever). Each outlet has a hole by its numeral, 36 in all, read from
       the data sheet photograph (gap numeral-hole). Each bank has two end lugs, six top tabs and six bottom tabs, read to
       about 1 mm (gap raster-detail). The cover has two screw holes, and the ground point is a ring with a centre dot. A plain
-      plate stands between the controller and the far breaker.
+      plate stands between the controller and the far breaker. Each bank's housing is full width over its three Cx outlets
+      and 3.0 narrower on each side over its three C13 outlets (gap housing-step).
   numbering:
     confidence: estimated
     note: 'estimated - outlet #1 is opposite the power input (the sheet). So the far end is 1 and the cord end 36, as the
@@ -66,7 +67,8 @@ provenance:
   sides:
     confidence: drawing
     note: drawing - the side view shows two perforated zones with a seam between them. It shows 11 screws along the front
-      edge and 2 nubs on the rear edge. The other side is drawn as its mirror (estimated).
+      edge and 2 nubs on the rear edge. The other side is drawn as its mirror (estimated). The 36 lever pegs under the body
+      are named in gap side-nubs.
   ends:
     confidence: estimated
     note: estimated - the end views show a plate with the cord entry; they are drawn as caps.
@@ -76,9 +78,10 @@ provenance:
       kW. The cord''s length and gauge and the plug''s face are in no held document (gaps: cord-and-plug).'
   controller:
     confidence: estimated
-    note: estimated - Detail A of the Smart 3C01 sheet draws the panel with no scale; the part's contract states the method.
-      The Switched and Switched POPS sheets draw the same panel small in their plan views and carry no Detail A. The notched
-      outline is drawn as the part's plate and two tabs (gap controller-outline).
+    note: estimated - the controller's size is read from the front view of the Smart 3C01 sheet. Its jacks come from the lower
+      Detail A, which has no scale; the part's contract states the method. The Switched and Switched POPS sheets draw the
+      same panel small in their front views and carry no controller detail. The notched outline is the part's plate and four
+      tabs, two stretches (gap controller-outline).
 attrs:
   physical:
     length-mm: 1778.0
@@ -110,7 +113,9 @@ gaps:
   - bottom
   reason: vendor-silent
   note: the sheet names the plug and the drawing marks front and bottom entry. No held document gives the cord's length or
-    gauge or draws the plug's face. Only an entry frame is drawn, at the size of the PRO4X 4G16A's, borrowed.
+    gauge or draws the plug's face. The entry frame is drawn 29.2 by 33.1, a stand-in that the sheet does not give. The end
+    view on page 5 shows the frame about 30 wide, and the screws and the cord hide its length. The stand-in has a tolerance
+    of 4 mm on each figure.
   wanted: a photograph of the cord and its plug.
 - what: button-positions
   scope:
@@ -123,54 +128,71 @@ gaps:
   scope:
   - front
   reason: needs-drawing
-  note: no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held. The Cx recess is estimated and the C13 is the standard's.
-    The retention latch of each outlet is drawn estimated (gap outlet-lever).
+  note: no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held. The sheet's HDOT detail is drawn at 0.36 to 1 and
+    gives no dimension. The Cx recess is estimated and the C13 is the standard's. The retention latch of each outlet is drawn
+    estimated (gap outlet-lever).
   wanted: a dimensioned outlet drawing from Server Technology.
 - what: outlet-lever
   scope:
   - front
   reason: needs-drawing
   note: the pictures show a lever at each outlet and no dimensioned drawing gives it. Its 7.6 along the strip is the peg width
-    on the side view and its 18.3 reach is the sheet's. Its 2.0 across and its place are scaled from the data sheet photograph.
+    on the side view and its 18.3 reach is the sheet's. Its 2.0 across and its place are scaled from the data sheet photograph
+    by the C13 width, a taken figure. The tolerance is about 0.5 mm on the 7.6 and about 1 mm on the 2.0 and the place.
   wanted: a dimensioned drawing of the HDOT outlet module with its lever.
 - what: raster-detail
   scope:
   - front
   reason: needs-drawing
-  note: the sheet draws the bank lugs, the edge tabs, the cover screw holes and the plain plate as a 300 ppi raster. Their
-    places are read to about 1 mm, so they are estimates. The lugs are 8.3 and 7.3 by 4.6, and the edge tabs 9.7 and 3.0 across.
-    The outlet parts cover the bank's end, so each lug straddles the bank's far edge, 2.5 outside it.
+  note: 'the sheet draws the bank lugs, the edge tabs, the cover screw holes and the plain plate as a 300 ppi raster. Their
+    places are read to a tolerance of about 1 mm, so they are estimates. The lugs are 8.3 and 7.3 by 4.6, and the edge tabs
+    9.7 and 3.0 across. The outlet parts paint over the bank''s end, so each lug straddles the bank''s far edge, 2.5 outside
+    it. The sheet puts it 2.7 inside, so the lugs sit about 5 mm from the sheet''s place: their tolerance is 5 mm along.'
   wanted: a dimensioned front view of the strip.
 - what: numeral-hole
   scope:
   - front
   reason: needs-photo
   note: the data sheet photograph shows a hole by each numeral. It is 1.6 across and 4.3 before the numeral toward the far
-    end, scaled by the 22.0 outlet pitch. It is drawn at 50.4 across, clear of the numeral window, which is estimated wider
-    than the numeral.
+    end. The scale is 0.067 mm per pixel. It is set by the model's 22.0 outlet pitch between numerals 22 and 23, a taken figure.
+    The tolerance is about 1 mm on the place and 0.5 mm on the 1.6. It is drawn at 50.4 across, clear of the numeral window,
+    which is estimated wider than the numeral.
   wanted: a dimensioned drawing of the outlet module.
 - what: controller-outline
   scope:
   - front
   reason: needs-drawing
-  note: Detail A draws the controller plate with a notched outline, wider by about 2.4 over 32.7 at its middle. The part's
-    plate is a plain rounded rectangle. The wider stretch is drawn as two tabs beyond the bay's edge, 1.2 deep.
+  note: the front view draws the controller plate with a notched outline of two wider stretches. They are 31.0 along over
+    the display and 21.3 along over the jack group. Each stretch reaches the strip's wall, 1.9 beyond the narrow outline on
+    both sides. The part's plate is the narrow outline and each stretch is a tab beside the bay, four in all. They are read
+    at 0.242 mm per pixel. The tolerance is about 0.5 mm in depth and 1 mm along.
   wanted: a dimensioned drawing of the PRO3X controller panel.
+- what: housing-step
+  scope:
+  - front
+  reason: needs-drawing
+  note: 'the front view draws each bank''s housing stepped where the Cx outlets change to C13: 3.0 narrower on each side over
+    the three C13 outlets, with a bump of 6.0 along back to full width between them. The step is drawn square, though the
+    sheet slopes it over about 3 mm. Decor draws a rect, circle, d-sub, slot or octagon and no sloped edge (device schema,
+    decor `shape`). The tolerance is about 1.5 mm for the step''s place along and 0.5 mm for its depth.'
+  wanted: a dimensioned front view of the strip.
 - what: side-detail
   scope:
   - left
   - right
   reason: needs-drawing
   note: the side view is a 300 ppi raster. The dot grid is read at 4.5 pitch with a 2.0 dot, in two zones and a seam. The
-    11 screws and 2 nubs are read to about 1 mm.
+    11 screws and 2 nubs are read to a tolerance of about 1 mm, and the pitch to 0.2 mm.
   wanted: a dimensioned side view of the strip.
 - what: side-nubs
   scope:
   - left
   - right
   reason: needs-drawing
-  note: the side view shows each nub standing 6.9 beyond the body's rear edge. The face is the body's 63.5 wide, so each nub
-    is drawn inside it, along the rear edge.
+  note: the side view on page 5 shows each nub standing 6.9 beyond the body's rear edge. It also shows 36 lever pegs standing
+    under the body, beyond the side face. A face is the body's width, so no shape draws what stands beyond it. Each nub is
+    drawn as a footprint inside the face, along the rear edge. The pegs are drawn on the front, 18.3 proud (gap outlet-lever).
+    The footprint has a tolerance of about 1 mm.
   wanted: a side view that allows features beyond the body.
 - what: body-colour
   scope:
@@ -191,7 +213,10 @@ gaps:
   scope:
   - front
   reason: needs-drawing
-  note: the sheet's drawing is a raster with no dimension across the strip, so the outlets sit where the 3A06's do, as a stand-in.
+  note: the sheet's front view carries no dimension across the strip. The outlets keep the 3A06 drawing's places across, a
+    stand-in. Read off the sheet's raster at 0.121 mm per pixel, the outlet bodies' top edges agree with that place within
+    about 1 mm. The housing lines sit 4.9 nearer the top edge, and the housings are drawn there. That reading has a tolerance
+    of about 1 mm.
   wanted: a dimensioned front view of the HDOT module.
 - what: outlet-numbering
   scope:
@@ -217,8 +242,10 @@ gaps:
   scope:
   - front
   reason: needs-drawing
-  note: Detail A of the Smart 3C01 sheet draws the panel with no scale or dimension. So its size and its jacks' places are
-    read at the PRO4X controller bay's width. The display window then reads within 3 percent of the PRO4X controller's.
+  note: the lower Detail A of the Smart 3C01 sheet draws the panel with no scale or dimension. The panel's 52.0 by 141.6 is
+    read from the sheet's own front view, dimensioned at 1778.0 long, at 1200 ppi. The window, keys and holes are read there
+    too. The jacks' places are the detail's, fitted to that size by 0.982 across and 1.018 along. Each figure has a tolerance
+    of about 1 mm.
   wanted: a dimensioned drawing of the PRO3X controller panel.
 - what: lcd-content
   scope:
@@ -332,21 +359,21 @@ views:
         kind: screw-head
       - id: symbol-label-1
         at:
-        - 11.0
-        - 1700.8
+        - 31.9
+        - 1700.5
         size:
-        - 8.9
-        - 8.9
+        - 8.0
+        - 10.4
         rx: 0.5
         fill: '#1c1d1f'
         kind: label-panel
       - id: symbol-label-2
         at:
-        - 2.2
-        - 1700.8
+        - 44.5
+        - 1700.5
         size:
-        - 8.9
-        - 8.9
+        - 8.0
+        - 10.4
         rx: 0.5
         fill: '#1c1d1f'
         kind: label-panel
@@ -422,14 +449,58 @@ views:
         kind: label-panel
       - id: housing-6
         at:
-        - 14.9
+        - 13.0
         - 1381.2
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-6-cx
+        at:
+        - 10.0
+        - 1446.6
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-6-bump-1a
+        at:
+        - 10.0
+        - 1423.6
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-1b
+        at:
+        - 42.7
+        - 1423.6
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-2a
+        at:
+        - 10.0
+        - 1403.1
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-2b
+        at:
+        - 42.7
+        - 1403.1
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: plate-5
         at:
         - 1.7
@@ -462,14 +533,58 @@ views:
         kind: screw-head
       - id: housing-5
         at:
-        - 14.9
+        - 13.0
         - 1157.9
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-5-cx
+        at:
+        - 10.0
+        - 1223.3
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-5-bump-1a
+        at:
+        - 10.0
+        - 1200.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-1b
+        at:
+        - 42.7
+        - 1200.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-2a
+        at:
+        - 10.0
+        - 1179.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-2b
+        at:
+        - 42.7
+        - 1179.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: plate-4
         at:
         - 1.7
@@ -502,14 +617,58 @@ views:
         kind: screw-head
       - id: housing-4
         at:
-        - 14.9
+        - 13.0
         - 934.8
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-4-cx
+        at:
+        - 10.0
+        - 1000.2
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-4-bump-1a
+        at:
+        - 10.0
+        - 977.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-1b
+        at:
+        - 42.7
+        - 977.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-2a
+        at:
+        - 10.0
+        - 956.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-2b
+        at:
+        - 42.7
+        - 956.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: plate-3
         at:
         - 1.7
@@ -572,14 +731,58 @@ views:
         kind: label-panel
       - id: housing-3
         at:
-        - 14.9
+        - 13.0
         - 449.3
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-3-cx
+        at:
+        - 10.0
+        - 514.7
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-3-bump-1a
+        at:
+        - 10.0
+        - 491.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-1b
+        at:
+        - 42.7
+        - 491.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-2a
+        at:
+        - 10.0
+        - 471.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-2b
+        at:
+        - 42.7
+        - 471.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: plate-2
         at:
         - 1.7
@@ -612,14 +815,58 @@ views:
         kind: screw-head
       - id: housing-2
         at:
-        - 14.9
+        - 13.0
         - 226.1
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-2-cx
+        at:
+        - 10.0
+        - 291.5
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-2-bump-1a
+        at:
+        - 10.0
+        - 268.5
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-1b
+        at:
+        - 42.7
+        - 268.5
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-2a
+        at:
+        - 10.0
+        - 248.0
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-2b
+        at:
+        - 42.7
+        - 248.0
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: plate-1
         at:
         - 1.7
@@ -652,14 +899,58 @@ views:
         kind: screw-head
       - id: housing-1
         at:
-        - 14.9
+        - 13.0
         - 2.9
         size:
-        - 35.2
-        - 150.6
-        rx: 3
+        - 29.7
+        - 65.4
         fill: '#1e1f21'
         kind: outlet-housing
+      - id: housing-1-cx
+        at:
+        - 10.0
+        - 68.3
+        size:
+        - 35.7
+        - 85.2
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-1-bump-1a
+        at:
+        - 10.0
+        - 45.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-1b
+        at:
+        - 42.7
+        - 45.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-2a
+        at:
+        - 10.0
+        - 24.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-2b
+        at:
+        - 42.7
+        - 24.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
       - id: bank-lug-1-1
         at:
         - 17.8
@@ -1872,21 +2163,41 @@ views:
         kind: blank-plate
       - id: controller-outline-a
         at:
-        - 0.3
-        - 824.6
+        - 0.05
+        - 826.3
         size:
-        - 2.7
-        - 32.7
+        - 2.9
+        - 31.0
         rx: 0.5
         fill: '#18191b'
         kind: outline-tab
       - id: controller-outline-b
         at:
-        - 52.9
-        - 824.6
+        - 52.95
+        - 826.3
         size:
-        - 2.7
-        - 32.7
+        - 2.9
+        - 31.0
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: controller-outline-c
+        at:
+        - 0.05
+        - 773.0
+        size:
+        - 2.9
+        - 21.3
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: controller-outline-d
+        at:
+        - 52.95
+        - 773.0
+        size:
+        - 2.9
+        - 21.3
         rx: 0.5
         fill: '#18191b'
         kind: outline-tab
@@ -2254,11 +2565,11 @@ views:
       bays:
       - id: controller
         at:
-        - 1.47
-        - 758.7
+        - 1.95
+        - 756.1
         size:
-          w: 52.96
-          h: 139.13
+          w: 52.0
+          h: 141.6
         accepts:
         - servertech/pro3x-controller@1
         default: servertech/pro3x-controller@1

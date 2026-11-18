@@ -5,7 +5,9 @@ Each has a bay for the controller between the banks.
 The controller's seven jacks are modelled parts with interface keys.
 Switched units declare on and off on every outlet. The Smart unit declares no outlet state.
 """
+import importlib.util
 import pathlib
+import re
 
 import yaml
 
@@ -98,6 +100,17 @@ def test_the_cover_has_two_screw_holes_and_the_ground_point_is_a_ring_with_a_dot
         assert dot["size"][0] < ring["size"][0] / 2, name
 
 
+def test_the_symbol_labels_stand_beside_the_ground_ring_as_the_sheet_draws_them():
+    """The cord-end crop reads the two labels at 31.7 to 40.2 and 44.3 to 51.8 across and 66.6 to 78.0 along from the cord end."""
+    for name in CASES:
+        decor = {i["id"]: i for i in _decor(_device(name), "front")}
+        for key, lo, hi in (("symbol-label-1", 31.0, 41.0), ("symbol-label-2", 43.5, 53.0)):
+            label = decor[key]
+            assert lo <= label["at"][0] and label["at"][0] + label["size"][0] <= hi, (name, key)
+            along = (1778.0 - label["at"][1] - label["size"][1], 1778.0 - label["at"][1])
+            assert 66.0 <= along[0] and along[1] <= 78.6, (name, key)
+
+
 def test_each_side_has_two_perforated_zones_a_seam_screws_and_nubs():
     """Each side draws a short cord-end block and a long band of dots, a seam between them, 11 screws and 2 nubs."""
     for name in CASES:
@@ -124,24 +137,111 @@ def test_each_bank_has_end_lugs_and_each_outlet_has_edge_tabs():
         tabs = _kind(dev, "front", "edge-tab")
         assert len([i for i in tabs if "-top-" in i["id"]]) == 36, name
         assert len([i for i in tabs if "-bottom-" in i["id"]]) == 36, name
-        housings = sorted(i["at"][1] for i in _decor(dev, "front") if i["id"].startswith("housing-"))
+        housings = sorted(i["at"][1] for i in _decor(dev, "front") if re.fullmatch(r"housing-\d", i["id"]))
+        assert len(housings) == 6, name
         for h in housings:
             near = [i for i in _kind(dev, "front", "bank-lug") if h - 4 <= i["at"][1] <= h]
             assert len(near) == 2, (name, h)
 
 
+def _tabs(dev):
+    return [i for i in _decor(dev, "front") if i["id"].startswith("controller-outline-")]
+
+
 def test_the_controller_plate_has_a_notched_outline():
-    """The notched outline is the part's plate and two tabs beyond the bay's edge, beside the bay."""
+    """The notched outline is the part's plate and four tabs beyond the bay's edges: two stretches, two sides each."""
     for name in CASES:
         dev = _device(name)
         bay = dev["views"]["front"]["components"]["bays"][0]
-        tabs = [i for i in _decor(dev, "front") if i["id"].startswith("controller-outline-")]
-        assert len(tabs) == 2, name
+        tabs = _tabs(dev)
+        assert len(tabs) == 4, name
         for t in tabs:
             assert bay["at"][1] < t["at"][1] and t["at"][1] + t["size"][1] < bay["at"][1] + bay["size"]["h"], name
-        left, right = sorted(tabs, key=lambda t: t["at"][0])
-        assert left["at"][0] < bay["at"][0] < left["at"][0] + left["size"][0], name
-        assert right["at"][0] < bay["at"][0] + bay["size"]["w"] < right["at"][0] + right["size"][0], name
+        left = [t for t in tabs if t["at"][0] < 28]
+        right = [t for t in tabs if t["at"][0] >= 28]
+        assert all(t["at"][0] < bay["at"][0] < t["at"][0] + t["size"][0] for t in left), name
+        assert all(t["at"][0] < bay["at"][0] + bay["size"]["w"] < t["at"][0] + t["size"][0] for t in right), name
+        # the notch is 1.9 deep, read on the sheet: each tab reaches that far beyond the bay's edge
+        assert all(bay["at"][0] - t["at"][0] >= 1.8 for t in left), name
+        assert all(t["at"][0] + t["size"][0] - (bay["at"][0] + bay["size"]["w"]) >= 1.8 for t in right), name
+
+
+def test_the_controller_plate_is_wider_over_the_jack_group_as_well_as_the_display():
+    """Two stretches: about 31 along over the display and about 21 along over the jack group, nearer the far end."""
+    for name in CASES:
+        tabs = sorted((t for t in _tabs(_device(name)) if t["at"][0] < 28), key=lambda t: t["at"][1])
+        assert len(tabs) == 2, name
+        far, near = tabs
+        assert 19.0 < far["size"][1] < 24.0, name
+        assert 28.0 < near["size"][1] < 34.0, name
+        assert far["at"][1] + far["size"][1] < near["at"][1], name
+
+
+def test_the_controller_panel_size_is_read_from_the_sheet_and_not_lent_by_another_model():
+    """52.0 across and 141.6 along, read on the sheet's front view, and written the same in the bay and the part."""
+    part = yaml.safe_load(CONTROLLER.read_text(encoding="utf-8"))
+    skin = (CONTROLLER.parent / "skins" / "default.svg").read_text(encoding="utf-8")
+    assert part["size"]["w"] == 52.0 and part["size"]["h"] == 141.6
+    assert 'viewBox="0 0 52 141.6"' in skin
+    for name in CASES:
+        bay = _device(name)["views"]["front"]["components"]["bays"][0]
+        assert (bay["size"]["w"], bay["size"]["h"]) == (52.0, 141.6), name
+        assert abs(bay["at"][0] * 2 + bay["size"]["w"] - 55.9) < 0.01, name
+    text = CONTROLLER.read_text(encoding="utf-8") + skin
+    assert "PRO4X" not in text and "borrowed" not in text
+    for name in CASES:
+        dev = _device(name)
+        gaps = {g["what"]: g["note"] for g in dev["gaps"]}
+        for what in ("controller-scale", "cord-and-plug"):
+            assert "PRO4X" not in gaps[what] or "stand-in" in gaps[what], (name, what)
+            assert "borrowed" not in gaps[what], (name, what)
+        assert "stand-in" in gaps["cord-and-plug"], name
+
+
+def test_each_housing_steps_in_where_the_cx_outlets_change_to_c13():
+    """Each bank's housing is full width over its Cx outlets and 3.0 narrower each side over its C13 outlets."""
+    for name in CASES:
+        decor = {i["id"]: i for i in _decor(_device(name), "front")}
+        for n in range(1, 7):
+            c13, cx = decor[f"housing-{n}"], decor[f"housing-{n}-cx"]
+            assert abs(c13["at"][1] + c13["size"][1] - cx["at"][1]) < 0.01, (name, n)
+            assert abs(c13["at"][0] - cx["at"][0] - 3.0) < 0.01, (name, n)
+            assert abs(cx["size"][0] - c13["size"][0] - 6.0) < 0.01, (name, n)
+            assert 60.0 < c13["size"][1] < 68.0, (name, n)
+            # the sheet's housing lines read 9.9 and 45.6 from the strip's top edge, to about 1 mm
+            assert 9.0 <= cx["at"][0] <= 10.9 and 44.6 <= cx["at"][0] + cx["size"][0] <= 46.6, (name, n)
+        bumps = [i for i in decor.values() if i.get("kind") == "housing-bump"]
+        assert len(bumps) == 24, name
+
+
+def test_the_side_pegs_are_named_in_the_side_gap_with_the_kit_reason():
+    """The 36 lever pegs stand under the body beyond a face's width: a gap says so and says where the sheet shows them."""
+    for name in CASES:
+        gaps = {g["what"]: g for g in _device(name)["gaps"]}
+        note = gaps["side-nubs"]["note"]
+        for phrase in ("pegs", "36", "page 5", "side view", "body's width"):
+            assert phrase in note, (name, phrase)
+        assert gaps["side-nubs"]["scope"] == ["left", "right"], name
+
+
+def test_every_estimate_gap_states_its_tolerance():
+    for name in CASES:
+        gaps = {g["what"]: g["note"] for g in _device(name)["gaps"]}
+        for what in ("numeral-hole", "outlet-lever", "controller-outline", "controller-scale", "housing-step",
+                     "raster-detail", "side-detail", "side-nubs", "cord-and-plug", "outlet-across-position"):
+            assert "tolerance" in gaps[what], (name, what)
+        assert "taken figure" in gaps["numeral-hole"], name
+
+
+def test_the_proud_entries_of_the_three_devices_stand_for_the_sheets_81_8_reach():
+    spec = importlib.util.spec_from_file_location("built_faces_in_depth", ROOT / "spec" / "tests" / "test_built_faces_in_depth.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for name in CASES:
+        mm, why = module.PROUD[name]
+        assert abs(mm - (81.8 - 63.5)) < 0.01, name
+        assert "81.8" in why and "63.5" in why, name
+        assert len(why.split()) <= 25 and "ISS-" not in why, name
 
 
 def test_a_plain_plate_stands_between_the_controller_and_the_far_breaker():
