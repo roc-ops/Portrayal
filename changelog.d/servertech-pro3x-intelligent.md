@@ -5,5 +5,6 @@
   One new part: the PRO3X controller. Its two Ethernet jacks, console and modem jack, sensor jack, aux jack,
   USB-A port and USB-B port are modelled parts. Its display window and four keys are drawn.
   The panel's size is read from the sheet's front view to about 1 mm. The outlet levers are estimated.
-  Each device also draws the numeral holes, the bank lugs and edge tabs, the stepped housings, the notched controller
-  outline and the perforated sides.
+  The outlets, plates and housings are placed along the strip from the sheet's raster, to about 1 mm.
+  Each device also draws the numeral holes, the bank lugs and the edge tabs with their holes and notches.
+  It draws the bottom-edge dots and bumps, the stepped housings, the notched controller outline and the perforated sides.

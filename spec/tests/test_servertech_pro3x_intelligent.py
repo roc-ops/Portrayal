@@ -140,7 +140,8 @@ def test_each_bank_has_end_lugs_and_each_outlet_has_edge_tabs():
         housings = sorted(i["at"][1] for i in _decor(dev, "front") if re.fullmatch(r"housing-\d", i["id"]))
         assert len(housings) == 6, name
         for h in housings:
-            near = [i for i in _kind(dev, "front", "bank-lug") if h - 4 <= i["at"][1] <= h]
+            # the sheet puts each lug 2.4 inside its bank's far edge
+            near = [i for i in _kind(dev, "front", "bank-lug") if abs(i["at"][1] - (h + 2.4)) < 0.01]
             assert len(near) == 2, (name, h)
 
 
@@ -207,7 +208,7 @@ def test_each_housing_steps_in_where_the_cx_outlets_change_to_c13():
             assert abs(c13["at"][1] + c13["size"][1] - cx["at"][1]) < 0.01, (name, n)
             assert abs(c13["at"][0] - cx["at"][0] - 3.0) < 0.01, (name, n)
             assert abs(cx["size"][0] - c13["size"][0] - 6.0) < 0.01, (name, n)
-            assert 60.0 < c13["size"][1] < 68.0, (name, n)
+            assert 60.0 < c13["size"][1] < 70.0, (name, n)
             # the sheet's housing lines read 9.9 and 45.6 from the strip's top edge, to about 1 mm
             assert 9.0 <= cx["at"][0] <= 10.9 and 44.6 <= cx["at"][0] + cx["size"][0] <= 46.6, (name, n)
         bumps = [i for i in decor.values() if i.get("kind") == "housing-bump"]
@@ -269,3 +270,86 @@ def test_the_controller_jacks_are_modelled_parts():
         "usb-a": "std/usb-a@1",
         "usb-b": "raritan/pxo-usb-b@1",
     }
+
+
+def _bank_of(item_id):
+    return (int(item_id.rsplit("-", 2)[-2] if item_id.endswith(("-a", "-b")) else item_id.rsplit("-", 1)[1]) - 1) // 6
+
+
+def test_each_top_tab_has_two_holes_and_each_c13_tab_a_notch():
+    """Each of the 36 top tabs has two holes: 12 a bank. Each of the 18 C13 tabs also has a notch."""
+    for name in CASES:
+        dev = _device(name)
+        holes = _kind(dev, "front", "tab-hole")
+        assert len(holes) == 72, name
+        for bank in range(6):
+            assert len([h for h in holes if _bank_of(h["id"]) == bank]) == 12, (name, bank)
+        tabs = {i["id"]: i for i in _kind(dev, "front", "edge-tab") if "-top-" in i["id"]}
+        for h in holes:
+            tab = tabs[f"edge-tab-top-{h['id'].split('-')[2]}"]
+            assert tab["at"][0] < h["at"][0] and h["at"][0] + h["size"][0] < tab["at"][0] + tab["size"][0], (name, h["id"])
+            assert tab["at"][1] < h["at"][1] and h["at"][1] + h["size"][1] < tab["at"][1] + tab["size"][1], (name, h["id"])
+        notches = [i for i in _kind(dev, "front", "tab-notch") if not i["id"].endswith("-stub")]
+        assert len(notches) == 18, name
+        c13 = {int(p["id"].rsplit("-", 1)[1]) for p in _outlets(dev) if p["ref"] == "std/c13-outlet@1"}
+        assert {int(n["id"].rsplit("-", 1)[1]) for n in notches} == c13, name
+        for bank in range(6):
+            assert len([n for n in notches if _bank_of(n["id"]) == bank]) == 3, (name, bank)
+
+
+def test_each_bank_has_six_bottom_bumps_six_dots_and_three_rings():
+    """The bottom edge of each bank: a bump and a dot at each outlet and a ring at each Cx outlet."""
+    for name in CASES:
+        dev = _device(name)
+        bumps = [i for i in _kind(dev, "front", "edge-tab") if "-bottom-" in i["id"]]
+        dots = _kind(dev, "front", "bottom-dot")
+        rings = _kind(dev, "front", "bottom-ring")
+        assert (len(bumps), len(dots), len(rings)) == (36, 36, 18), name
+        for bank in range(6):
+            assert len([i for i in bumps if _bank_of(i["id"]) == bank]) == 6, (name, bank)
+            assert len([i for i in dots if _bank_of(i["id"]) == bank]) == 6, (name, bank)
+            assert len([i for i in rings if _bank_of(i["id"]) == bank]) == 3, (name, bank)
+
+
+def test_the_outlets_stand_at_the_centres_read_on_the_sheet():
+    """The centres along the strip are read from the sheet's raster: spot checks at both ends and the middle, to 0.1 mm."""
+    for name in CASES:
+        outlets = {int(p["id"].rsplit("-", 1)[1]): p for p in _outlets(_device(name))}
+        for k, centre in ((36, 256.7), (31, 379.2), (19, 824.3), (18, 1185.2), (1, 1753.0)):
+            p = outlets[k]
+            h = 24.0 if p["ref"] == "servertech/hdot-cx-outlet@1" else 22.0
+            assert abs(1778.0 - p["at"][1] - h / 2 - centre) < 0.1, (name, k)
+        gaps = {g["what"]: g["note"] for g in _device(name)["gaps"]}
+        assert "tolerance" in gaps["outlet-along-position"] and "0.485" in gaps["outlet-along-position"], name
+
+
+def test_the_controller_skin_draws_the_notches_and_the_lip():
+    """Eight notches at the stretch ends, four near the ring end and a lip at each side of the cord end, in the part's skin."""
+    skin = (CONTROLLER.parent / "skins" / "default.svg").read_text(encoding="utf-8")
+    assert len(re.findall(r'id="stretch-notch-\d"', skin)) == 8
+    assert len(re.findall(r'id="ring-notch-\d"', skin)) == 4
+    assert len(re.findall(r'id="lip-[lr]"', skin)) == 2
+
+
+def test_the_outlet_size_gap_says_why_the_shared_part_is_not_changed_here():
+    """The sheet reads the Cx body 24.2 across and the part draws it 30.1. A shared part is changed in its own pull request."""
+    for name in CASES:
+        note = {g["what"]: g["note"] for g in _device(name)["gaps"]}["outlet-size"]
+        for phrase in ("24.2", "30.1", "shared", "new version", "its own change"):
+            assert phrase in note, (name, phrase)
+
+
+def test_the_outlet_lever_gap_says_the_tabs_and_pegs_may_be_the_levers():
+    for name in CASES:
+        note = {g["what"]: g["note"] for g in _device(name)["gaps"]}["outlet-lever"]
+        assert "top-edge tabs" in note and "pegs" in note and "same part" in note, name
+
+
+def test_the_proud_entries_say_the_levers_place_and_across_are_photograph_estimates():
+    spec = importlib.util.spec_from_file_location("built_faces_in_depth", ROOT / "spec" / "tests" / "test_built_faces_in_depth.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for name in CASES:
+        why = module.PROUD[name][1]
+        assert "photograph" in why and "2.0" in why and "place" in why, name
+        assert len(why.split()) <= 25, name
