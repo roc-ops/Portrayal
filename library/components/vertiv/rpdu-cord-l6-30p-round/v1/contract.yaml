@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: rpdu-cord-l6-30p-round
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L6-30P locking plug. The plug is the cord's own end, so no mate is offered for it
+description: >-
+  The fixed input cord of a Vertiv Geist vertical rack PDU with an L6-30P plug. It leaves the front
+  face at the bottom end of the strip through a round ring. Drawn as the front face shows it; the cord and plug beyond it are not.
+size: {w: 35.0, h: 35.0}
+size-confidence: {w: estimated, h: estimated}
+attrs: {plug: nema-l6-30p}
+provenance:
+  size: >-
+    estimated - the strip in the VP8841 data sheet SL-26176 shows the ring about 16 px across. One pixel is 2.2 mm,
+    so the ring reads 35 mm and is good to about 2 mm.
+  cord: >-
+    estimated - the figure shows the ring and nothing of the cord beyond it. The centre is drawn as the cord's bore.
+    The sheet gives the cord as 10 ft (3 m) of 10/3 wire. It gives no diameter for the bore.
+  plug: >-
+    datasheet - the VP8841 data sheet SL-26176 prints "10ft power cord with L6-30P" and "NEMA L6-30P Twistlock".
+    No held document dimensions the plug or the ring.
+  not-drawn: >-
+    THE CORD BEYOND THE RING AND THE PLUG ARE NOT DRAWN: the far end of a cord is not a part.
+    This part stands for the power input a DCIM records.
+elements:
+  ring: {at: [0, 0], size: [35.0, 35.0], class: inlet}
+skins: [default]
