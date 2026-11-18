@@ -519,3 +519,64 @@ def test_the_cx_recess_and_the_end_plates_state_figure_method_and_tolerance():
         ends = _gaps(name)["end-plates"]
         for phrase in ("2400 ppi", "8.25", "56.3", "63.7", "55.9 by 63.5", "tolerance"):
             assert phrase in ends, (name, phrase)
+
+
+# These are the centres of the 11 side screws from the cord end. They are read on page 5 of the C3S sheet.
+# The method is a column profile at 1800 and 2400 ppi, 6.1912 and 8.2542 pixels per mm. The two renders agree to 0.1 mm.
+SCREW_CENTRES = (16.5, 108.1, 133.3, 238.6, 461.5, 683.5, 866.7, 1076.2, 1389.7, 1612.3, 1764.4)
+# The next three tables come from the same readings. They hold the dot zones' end dots, the dot rows and the nub caps' edges.
+DOT_ENDS = {"short": (13.6, 98.4), "long": (143.4, 1757.7)}
+DOT_ROWS = (7.35, 11.7, 16.07, 20.92, 25.28, 29.64)
+NUB_CAPS = {"side-nub-1-cap": (1347.6, 1364.0), "side-nub-2-cap": (414.9, 430.4)}
+
+
+def test_each_side_screw_stands_at_the_centre_read_on_the_sheet_within_the_stated_tolerance():
+    """Each screw centre from the cord end is the sheet's reading within about 1 mm; screws 5 to 11 are placed to it."""
+    for name in CASES:
+        note = _gaps(name)["side-detail"]
+        for phrase in ("column profile", "1800 and 2400 ppi", "6.19 and 8.25 pixels per mm", "13.6 from the far end",
+                       "tolerance of about 1 mm") + tuple("%.1f" % c for c in SCREW_CENTRES):
+            assert phrase in note, (name, phrase)
+        for face in ("left", "right"):
+            screws = {i["id"]: i for i in _kind(_device(name), face, "screw-head")}
+            for n, read in enumerate(SCREW_CENTRES, 1):
+                item = screws["side-screw-%d" % n]
+                built = 1778.0 - (item["at"][1] + item["size"][1] / 2)
+                assert abs(built - read) <= 1.0, (name, face, n, built, read)
+                if n >= 5:
+                    assert abs(built - read) <= 0.1, (name, face, n, built, read)
+
+
+def test_the_dot_zones_and_the_nub_caps_stand_within_a_millimetre_of_the_sheet():
+    """The dot zones' end dots and rows, and the nub caps' edges, agree with the side view's readings to 1 mm."""
+    for name in CASES:
+        for face in ("left", "right"):
+            decor = _decor(_device(name), face)
+            zones = sorted((i for i in decor if i.get("pattern") == "holes"), key=lambda i: i["size"][1])
+            for zone, key in zip(zones, ("short", "long")):
+                px, py = zone["pattern-pitch"]
+                assert zone["at"] == zone["pattern-offset"], (name, face, key)
+                tiles = round(zone["size"][1] / py)
+                near = 1778.0 - (zone["at"][1] + py / 2 + (tiles - 1) * py)
+                far = 1778.0 - (zone["at"][1] + py / 2)
+                assert abs(near - DOT_ENDS[key][0]) <= 1.0, (name, face, key, near)
+                assert abs(far - DOT_ENDS[key][1]) <= 1.0, (name, face, key, far)
+                rows = [zone["at"][0] + px / 2 + k * px for k in range(round(zone["size"][0] / px))]
+                rows = sorted(r if face == "left" else 63.5 - r for r in rows)
+                for built, read in zip(rows, DOT_ROWS):
+                    assert abs(built - read) <= 1.0, (name, face, key, built, read)
+            caps = {i["id"]: i for i in decor if i.get("kind") == "mount-nub" and i["id"].endswith("-cap")}
+            for ident, (lo, hi) in NUB_CAPS.items():
+                y, h = caps[ident]["at"][1], caps[ident]["size"][1]
+                assert abs((1778.0 - y - h) - lo) <= 1.0 and abs((1778.0 - y) - hi) <= 1.0, (name, face, ident)
+
+
+def test_the_side_gap_states_the_rounds_and_the_end_uprights_with_figure_method_and_tolerance():
+    """18 rounds stand under the first three pegs of each bank, and 12 more uprights after each sixth peg."""
+    notes = {name: _gaps(name)["side-nubs"] for name in CASES}
+    assert len(set(notes.values())) == 1, "the three side-nubs notes differ"
+    note = next(iter(notes.values()))
+    for phrase in ("18 ring-and-dot rounds", "first three pegs of every bank", "read at 2400 ppi",
+                   "3.2 across, 1.2 along and 3.1 below", "12 more uprights", "9.7 and 17.2",
+                   "about 1.5 mm along and 1 mm below"):
+        assert phrase in note, phrase

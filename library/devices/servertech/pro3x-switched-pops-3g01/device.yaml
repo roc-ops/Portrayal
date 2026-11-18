@@ -209,8 +209,14 @@ gaps:
   - left
   - right
   reason: needs-drawing
-  note: the side view is a 300 ppi raster. The dot grid is read at 4.5 pitch with a 2.0 dot, in two zones and a seam. The
-    11 screws and 2 nubs are read to a tolerance of about 1 mm, and the pitch to 0.2 mm.
+  note: the side view is a 300 ppi raster. The dot grid is read at 4.5 pitch with a 2.0 dot, in two zones and a seam. The pitch
+    is read to 0.2 mm. Each of the 11 screw heads is read by a column profile of page 5. The renders are 1800 and 2400 ppi,
+    6.19 and 8.25 pixels per mm, set by the body's 1778.0 length. The two renders agree to 0.1 mm. The screws' centres from the
+    cord end are 16.5, 108.1, 133.3, 238.6, 461.5, 683.5, 866.7, 1076.2, 1389.7, 1612.3 and 1764.4. The far screw stands 13.6 from
+    the far end. The dot zones' end dots, the seam, the end walls and the nubs are read the same way. The long dot band's first
+    and last dots stand at 143.4 and 1757.7, and the cord-end block's at 13.6 and 98.4. The seam is read at 120.7 and drawn at
+    119.8. The end walls are read at 1.9 to 2.9 and drawn at 2.0. The nub caps are drawn 16.0 wide, the mean of two readings. All these
+    carry a tolerance of about 1 mm, one pixel of the raster.
   wanted: a dimensioned side view of the strip.
 - what: side-nubs
   scope:
@@ -232,7 +238,7 @@ gaps:
     1771.2. Each ledge has 6 small squares and 6 thin uprights, one pair at each peg. That makes 36 small squares and 36
     thin uprights in all. A square is 3 to 4 wide and stands 5 to 8 before its peg's centre. An upright is about 1 wide
     and stands about 2 after its peg's right wall. The ledge figures are read from the dark runs along rows 2 to 6.5
-    below the body line, on both renders. They carry a tolerance of about 1.5 mm along and 1 mm below. Depths are measured from the centre of the body's bottom line. These figures are read on 1800 and
+    below the body line, on both renders. They carry a tolerance of about 1.5 mm along and 1 mm below. The view also draws 18 ring-and-dot rounds, one on each of the first three pegs of every bank, counted from the cord end. Each is read at 2400 ppi as about 3 across, 0.9 along from the peg's centre and 2.5 below the body line. An earlier reading gives 3.2 across, 1.2 along and 3.1 below. Their tolerance is about 1.5 mm along and 1 mm below. After each bank's sixth peg stand two more thin uprights, about 9.7 and 17.2 from that peg's centre. That makes 12 more uprights, each about 1 to 2 wide, standing from the body line to the ledge's bottom line. Depths are measured from the centre of the body's bottom line. These figures are read on 1800 and
     2400 ppi renders at 6.19 and 8.25 pixels per mm, from the body's 1778.0 length. The box positions carry a tolerance of
     about 4 mm, the spread of three readings of the raster. The other figures carry about 1.5 mm along and 1 mm below. They
     stand beyond the face too, so none is drawn.
@@ -5448,7 +5454,7 @@ views:
         kind: end-cap
       - id: perf-back-a
         at:
-        - 5.6
+        - 4.95
         - 1677.74
         size:
         - 27.6
@@ -5458,7 +5464,7 @@ views:
         kind: vent-grille
       - id: perf-a
         at:
-        - 5.6
+        - 4.95
         - 1677.74
         size:
         - 27.6
@@ -5468,13 +5474,13 @@ views:
         - 4.6
         - 4.48
         pattern-offset:
-        - 5.6
+        - 4.95
         - 1677.74
         kind: perforation
       - id: perf-back-b
         at:
-        - 5.6
-        - 20.34
+        - 4.95
+        - 18.84
         size:
         - 27.6
         - 1617.28
@@ -5483,8 +5489,8 @@ views:
         kind: vent-grille
       - id: perf-b
         at:
-        - 5.6
-        - 20.34
+        - 4.95
+        - 18.84
         size:
         - 27.6
         - 1617.28
@@ -5493,8 +5499,8 @@ views:
         - 4.6
         - 4.48
         pattern-offset:
-        - 5.6
-        - 20.34
+        - 4.95
+        - 18.84
         kind: perforation
       - id: side-seam
         at:
@@ -5549,7 +5555,7 @@ views:
       - id: side-screw-5
         at:
         - 53.8
-        - 1314.4
+        - 1313.1
         size:
         - 6.8
         - 6.8
@@ -5559,7 +5565,7 @@ views:
       - id: side-screw-6
         at:
         - 53.8
-        - 1092.1
+        - 1091.1
         size:
         - 6.8
         - 6.8
@@ -5569,7 +5575,7 @@ views:
       - id: side-screw-7
         at:
         - 53.8
-        - 909.3
+        - 907.9
         size:
         - 6.8
         - 6.8
@@ -5579,7 +5585,7 @@ views:
       - id: side-screw-8
         at:
         - 53.8
-        - 699.9
+        - 698.4
         size:
         - 6.8
         - 6.8
@@ -5589,7 +5595,7 @@ views:
       - id: side-screw-9
         at:
         - 53.8
-        - 386.5
+        - 384.9
         size:
         - 6.8
         - 6.8
@@ -5599,7 +5605,7 @@ views:
       - id: side-screw-10
         at:
         - 53.8
-        - 164.6
+        - 162.3
         size:
         - 6.8
         - 6.8
@@ -5609,7 +5615,7 @@ views:
       - id: side-screw-11
         at:
         - 53.8
-        - 12.6
+        - 10.2
         size:
         - 6.8
         - 6.8
@@ -5629,10 +5635,10 @@ views:
       - id: side-nub-1-cap
         at:
         - 1.8
-        - 413.8
+        - 414.3
         size:
         - 5.1
-        - 17.0
+        - 16.0
         rx: 0.3
         fill: '#44484d'
         kind: mount-nub
@@ -5649,10 +5655,10 @@ views:
       - id: side-nub-2-cap
         at:
         - 1.8
-        - 1347.2
+        - 1347.7
         size:
         - 5.1
-        - 17.0
+        - 16.0
         rx: 0.3
         fill: '#44484d'
         kind: mount-nub
@@ -5682,7 +5688,7 @@ views:
         kind: end-cap
       - id: perf-back-a
         at:
-        - 30.3
+        - 30.95
         - 1677.74
         size:
         - 27.6
@@ -5692,7 +5698,7 @@ views:
         kind: vent-grille
       - id: perf-a
         at:
-        - 30.3
+        - 30.95
         - 1677.74
         size:
         - 27.6
@@ -5702,13 +5708,13 @@ views:
         - 4.6
         - 4.48
         pattern-offset:
-        - 30.3
+        - 30.95
         - 1677.74
         kind: perforation
       - id: perf-back-b
         at:
-        - 30.3
-        - 20.34
+        - 30.95
+        - 18.84
         size:
         - 27.6
         - 1617.28
@@ -5717,8 +5723,8 @@ views:
         kind: vent-grille
       - id: perf-b
         at:
-        - 30.3
-        - 20.34
+        - 30.95
+        - 18.84
         size:
         - 27.6
         - 1617.28
@@ -5727,8 +5733,8 @@ views:
         - 4.6
         - 4.48
         pattern-offset:
-        - 30.3
-        - 20.34
+        - 30.95
+        - 18.84
         kind: perforation
       - id: side-seam
         at:
@@ -5783,7 +5789,7 @@ views:
       - id: side-screw-5
         at:
         - 2.9
-        - 1314.4
+        - 1313.1
         size:
         - 6.8
         - 6.8
@@ -5793,7 +5799,7 @@ views:
       - id: side-screw-6
         at:
         - 2.9
-        - 1092.1
+        - 1091.1
         size:
         - 6.8
         - 6.8
@@ -5803,7 +5809,7 @@ views:
       - id: side-screw-7
         at:
         - 2.9
-        - 909.3
+        - 907.9
         size:
         - 6.8
         - 6.8
@@ -5813,7 +5819,7 @@ views:
       - id: side-screw-8
         at:
         - 2.9
-        - 699.9
+        - 698.4
         size:
         - 6.8
         - 6.8
@@ -5823,7 +5829,7 @@ views:
       - id: side-screw-9
         at:
         - 2.9
-        - 386.5
+        - 384.9
         size:
         - 6.8
         - 6.8
@@ -5833,7 +5839,7 @@ views:
       - id: side-screw-10
         at:
         - 2.9
-        - 164.6
+        - 162.3
         size:
         - 6.8
         - 6.8
@@ -5843,7 +5849,7 @@ views:
       - id: side-screw-11
         at:
         - 2.9
-        - 12.6
+        - 10.2
         size:
         - 6.8
         - 6.8
@@ -5863,10 +5869,10 @@ views:
       - id: side-nub-1-cap
         at:
         - 56.6
-        - 413.8
+        - 414.3
         size:
         - 5.1
-        - 17.0
+        - 16.0
         rx: 0.3
         fill: '#44484d'
         kind: mount-nub
@@ -5883,10 +5889,10 @@ views:
       - id: side-nub-2-cap
         at:
         - 56.6
-        - 1347.2
+        - 1347.7
         size:
         - 5.1
-        - 17.0
+        - 16.0
         rx: 0.3
         fill: '#44484d'
         kind: mount-nub
