@@ -231,8 +231,29 @@ def test_the_side_gap_names_the_breaker_boxes_and_the_cover_bar_with_figures():
     """The side view's two boxes under the breakers and the bar under the cover stand beyond the face: the gap gives figures."""
     for name in CASES:
         note = {g["what"]: g["note"] for g in _device(name)["gaps"]}["side-nubs"]
-        for phrase in ("box under each breaker", "10.2", "174 to 234", "1105 to 1166", "flat bar", "1.5 mm"):
+        for phrase in ("box under each breaker", "flat bar", "1.5 mm"):
             assert phrase in note, (name, phrase)
+
+
+def test_the_side_gap_restates_the_box_figures_with_the_spread_as_tolerance_in_all_three():
+    """Three readings of the boxes differ by 4.1 mm, so the positions carry about 4 mm. The three notes are word for word."""
+    notes = {name: {g["what"]: g["note"] for g in _device(name)["gaps"]}["side-nubs"] for name in CASES}
+    assert len(set(notes.values())) == 1, "the three side-nubs notes differ"
+    note = next(iter(notes.values()))
+    for phrase in ("175.9 to 237.6", "1103.8 to 1165.8", "about 62 along", "9.7 below", "tolerance of about 4 mm",
+                   "187.0 to 220.2", "1115.9 to 1148.9", "about 52 along and 2.9 below"):
+        assert phrase in note, phrase
+    for old in ("174 to 234", "1105 to 1166", "10.2"):
+        assert old not in note, old
+
+
+def test_the_side_gap_names_each_small_item_under_the_body_with_figure_method_and_tolerance():
+    """The side view shows five small items under the body from 887 to 1025 mm; the gap places each and says how."""
+    note = {g["what"]: g["note"] for g in _device("pro3x-smart-3c01")["gaps"]}["side-nubs"]
+    for phrase in ("five small items", "887.1 to 905.5", "931.2 and 945.7", "976.2 to 1005.3", "1016.0 to 1023.7",
+                   "1800 and 2400 ppi", "6.19 and 8.25 pixels per mm", "centre of the body's bottom line",
+                   "1.5 mm along and 1 mm below"):
+        assert phrase in note, phrase
 
 
 def test_every_estimate_gap_states_its_tolerance():
