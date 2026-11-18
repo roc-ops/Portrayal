@@ -137,16 +137,16 @@ def test_the_method_note_states_the_breaker_figure_and_its_tolerance(dev):
     assert "good to about" in note
 
 
-def test_the_cord_end_is_a_round_boss_and_a_round_cord_leaving_to_the_left():
+def test_the_cord_end_is_a_round_base_and_a_round_cord_seen_straight_on():
     svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
-    assert '<polygon id="relief"' in svg and '<rect id="relief"' not in svg
-    assert '<polygon id="shank"' in svg and '<ellipse id="cord-end"' in svg
-    assert 'id="shank-end"' not in svg and "<path" not in svg and "<ellipse" in svg
-    assert '<rect id="cord"' in svg and "cord-line" not in svg
-    assert svg.count("<linearGradient") == 2 and 'fill="url(#cord-shade)"' in svg
+    assert svg.count("<circle") == 2 and '<circle id="relief"' in svg and '<circle id="cord"' in svg
+    for gone in ("<polygon", "<ellipse", "<rect", "<path", "<line", "shank", "boss-edge", "cord-end"):
+        assert gone not in svg, gone
+    assert svg.count("<radialGradient") == 2 and 'fill="url(#cord-shade)"' in svg and 'fill="url(#base-shade)"' in svg
     c = contract("apc/pdu-cord-l6-30p@1")
     text = " ".join(str(c["description"]).split()).lower()
-    assert "round boss" in text and "round cord" in text and "squared" not in text and "left" in text
+    assert "round base" in text and "round cord" in text and "squared" not in text and "left" in text
+    assert "perpendicular to the face" in text
 
 
 def test_the_cord_beyond_the_face_and_the_cord_end_are_named_as_a_gap_with_the_reason(dev):
@@ -254,16 +254,10 @@ LIMIT = (
 )
 
 
-def skin_poly(eid):
-    m = re.search(rf'<polygon id="{eid}"[^>]*points="([^"]+)"', CORD_SKIN.read_text())
-    assert m, eid
-    return [tuple(float(v) for v in p.split(",")) for p in m.group(1).split()]
-
-
 def skin_el(tag, eid):
     m = re.search(rf'<{tag} id="{eid}"([^>]*)/>', CORD_SKIN.read_text())
     assert m, eid
-    return {k: float(v) for k, v in re.findall(r'(?<![-\w])(x|y|cx|cy|rx|ry|width|height)="(-?[\d.]+)"', m.group(1))}
+    return {k: float(v) for k, v in re.findall(r'(?<![-\w])(x|y|cx|cy|r|rx|ry|width|height)="(-?[\d.]+)"', m.group(1))}
 
 
 def words(text):
@@ -272,45 +266,51 @@ def words(text):
 
 def cord_texts(dev):
     c = contract("apc/pdu-cord-l6-30p@1")
-    return (("contract", words(c["provenance"]["boss"])), ("gap", words(gap(dev, "cord")["note"])))
+    return (("contract", words(c["provenance"]["base"])), ("gap", words(gap(dev, "cord")["note"])))
 
 
-def test_the_light_edge_stands_where_the_photograph_reads_it_from_the_face_edge(dev):
-    edge = skin_el("rect", "boss-edge")
-    drawn = edge["x"] + edge["width"] / 2
+OBLIQUE = (
+    "Some features belong only to the oblique view and are not seen straight on. "
+    "The shank's top and side faces and the lit vertical edge are not drawn. "
+    "The bright arc on the boss's rim, the cord's highlight stripes and the nub on the boss are not drawn."
+)
+
+
+def test_the_features_only_the_oblique_view_shows_are_named_as_not_drawn_and_none_is_in_the_skin(dev):
+    svg = CORD_SKIN.read_text()
     for source, text in cord_texts(dev):
-        stated = re.findall(r"light edge stands (\d+) mm from the face's left edge, good to about 2 mm", text)
-        assert len(stated) == 1 and abs(float(stated[0]) - drawn) <= 0.6, source
-        assert "percent across" not in text, source
-        assert "That is 1 px, 0.7 mm, plus 1.3 mm for the scale spread" in text, source
-        assert "It shows a second highlight stripe on the cord and a small nub on the disc's upper left. None of these is drawn" in text, source
+        assert OBLIQUE in text, source
+        assert "photograph is a perspective view from the front left" in text, source
+        assert "angle the cord shows in it belongs to the camera" in text, source
+        assert "The photograph shows a straight-sided shank, like a nut" in text, source
+        assert "dark opening in a lighter ring" in text and "no inner circle is drawn" in text, source
+    assert svg.count("fill=") == 2 and "highlight" not in svg and "nub" not in svg
 
 
-def test_the_cord_is_drawn_the_one_height_and_place_the_contract_and_the_gap_state(dev):
-    cord = skin_el("rect", "cord")
+def test_the_cord_is_drawn_the_one_diameter_and_the_centre_the_contract_and_the_gap_state(dev):
+    cord, base = skin_el("circle", "cord"), skin_el("circle", "relief")
     top = placements(dev, "rear")["input"]["at"][1]
-    first, last = top + cord["y"], top + cord["y"] + cord["height"]
+    assert (cord["cx"], cord["cy"]) == (base["cx"], base["cy"]), "the two end-on circles share one centre"
     for source, text in cord_texts(dev):
-        stated = re.findall(r"The cord is (\d+) mm high, good to about 2 mm", text)
-        assert len(stated) == 1 and float(stated[0]) == cord["height"], source
-        assert f"drawn {first:g} to {last:g} mm below the face top" in text, source
-    assert abs(first - 17.8) <= 2.0 and abs(last - 41.2) <= 2.0, "the cord's edges at the face edge, 1500 px picture"
-    end = skin_el("ellipse", "cord-end")
-    assert end["cy"] - end["ry"] == cord["y"] and end["cy"] + end["ry"] == cord["y"] + cord["height"]
-    assert cord["x"] == 0.0
+        stated = re.findall(r"The cord is (\d+) mm across, good to about 2 mm", text)
+        assert len(stated) == 1 and float(stated[0]) == 2 * cord["r"], source
+        assert f"the cord is drawn at {top + cord['cy']:.1f} mm below the face top" in text, source
+        assert "That is an offset of 3.5 mm, inside the 5 mm that the cord's 2 mm and the boss's 3 mm add up to" in text, source
+        assert "The picture's angle explains it. The two end-on circles share one centre" in text, source
+    assert abs(top + cord["cy"] - 29.5) <= 3.6, "the drawn centre against the cord's reading at the face edge"
+    assert abs((top + cord["cy"] - cord["r"]) - 18.5) <= 5.6 and abs((top + cord["cy"] + cord["r"]) - 40.5) <= 5.6
 
 
-def test_the_rear_note_gives_the_boss_extent_the_skin_draws(dev):
-    relief, shank = skin_poly("relief"), skin_poly("shank")
+def test_the_rear_note_gives_the_base_circle_the_skin_draws_and_says_it_stands_perpendicular(dev):
+    base = skin_el("circle", "relief")
     note = words(dev["provenance"]["rear"]["note"])
-    m = re.search(r"round cord boss shows at (\d+) to (\d+(?:\.\d+)?) and stands (\d+(?:\.\d+)?) mm below the face top", note)
+    m = re.search(r"round cord base is a circle (\d+) mm across, centred (\d+(?:\.\d+)?) mm from the face edge and (\d+(?:\.\d+)?) mm below the face top", note)
     assert m
-    assert (float(m.group(1)), float(m.group(2))) == (min(x for x, _ in relief), max(x for x, _ in relief))
-    assert float(m.group(3)) == placements(dev, "rear")["input"]["at"][1]
-    right = re.search(r"shank's right side stands at (\d+)", note)
-    assert right and float(right.group(1)) == max(x for x, _ in shank)
-    assert "The ellipse is cut at the face edge, where the photograph puts its left extreme 4.5 mm beyond it" in note
-    assert "left edge is drawn 4.5 mm right" not in note
+    top = placements(dev, "rear")["input"]["at"]
+    assert float(m.group(1)) == 2 * base["r"]
+    assert float(m.group(2)) == top[0] + base["cx"] and float(m.group(3)) == top[1] + base["cy"]
+    assert "stand perpendicular to the face" in note and "seen only in the oblique photograph and are not drawn" in note
+    assert "ellipse" not in note and "shank's right side stands at" not in note and "cut at the face edge" not in note
 
 
 def test_the_marks_gap_states_the_device_wide_limit_once_and_the_shelf_doubt(dev):
@@ -346,102 +346,62 @@ def test_three_thin_strips_are_drawn_the_second_light_one_left_of_the_second_bre
     assert "A second thin light strip" in words(dev["provenance"]["rear"]["note"])
 
 
-def test_the_boss_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
-    relief, shank = skin_poly("relief"), skin_poly("shank")
+def test_the_base_is_a_circle_of_the_one_diameter_the_contract_and_the_gap_state(dev):
+    base = skin_el("circle", "relief")
     c = contract("apc/pdu-cord-l6-30p@1")
-    height = max(y for _, y in relief) - min(y for _, y in relief)
-    assert c["size"]["h"] == height and c["elements"]["relief"]["size"][1] == height
-    assert max(y for _, y in shank) == max(y for _, y in relief), "the shank ends at the boss's lower edge"
+    assert c["size"]["w"] == c["size"]["h"] == 2 * base["r"] == c["elements"]["relief"]["size"][0] == c["elements"]["relief"]["size"][1]
     for source, text in cord_texts(dev):
-        stated = re.findall(r"The boss is (\d+) mm high", text)
-        assert len(stated) == 1 and float(stated[0]) == height, source
+        stated = re.findall(r"So the base is a circle (\d+) mm across, centred", text)
+        assert len(stated) == 1 and float(stated[0]) == 2 * base["r"], source
         assert "good to about 3 mm" in text and "2 px at each end, 0.9 mm each, plus 1 mm for the dark lower arc" in text, source
     assert "71 px high" in words(c["provenance"]["size"])
 
 
-def test_the_boss_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract_agree(dev):
-    relief, shank = skin_poly("relief"), skin_poly("shank")
+def test_the_base_circle_stands_on_the_footprint_the_picture_reads_and_is_not_cut(dev):
+    base = skin_el("circle", "relief")
     c = contract("apc/pdu-cord-l6-30p@1")
-    assert min(x for x, _ in relief) == 0.0, "the visible face of the boss starts at the face's left edge"
-    assert c["elements"]["relief"]["at"] == [0, 0] and c["size"]["w"] == max(x for x, _ in shank)
-    assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
-    sentence = r"boss shows 0 to ([\d.]+) mm from the face's left edge\. The shank's right side stands (\d+) mm from it\. Each is good to about 3\.5 mm"
+    at = placements(dev, "rear")["input"]["at"]
+    assert c["elements"]["relief"]["at"] == [0, 0] and at == [0.0, 9.5], "the part starts at the face edge, 9.5 mm below the top"
+    assert base["cx"] - base["r"] == 0.0 and base["cx"] + base["r"] == 33.0, "the circle reaches the face edge and does not pass it"
+    assert (base["cx"], base["cy"]) == (16.5, 16.5)
+    assert abs(base["cx"] + base["r"] - 32.7) <= 3.5, "the footprint's right side, column 448.5"
+    assert abs(at[1] + base["cy"] - 26.1) <= 3.5, "the footprint's centre down the face, rows 673.5 to 744.3"
     for source, text in cord_texts(dev):
-        assert re.findall(sentence, text) == [(f"{max(x for x, _ in relief):g}", str(int(c["size"]["w"])))], source
+        assert "centred 16.5 mm from the face edge and 26.0 mm below the face top. Each is good to about 3.5 mm" in text, source
+        assert "so it is not cut" in text, source
         assert "2 px, 1.3 mm, plus 2.0 mm for the scale spread" in text, source
-        assert "6.7 px, left of the face edge, which is 4.5 mm along the face" in text, source
-        assert "so its centre stands 7.5 mm and its right extreme 19.5 mm from the face edge" in text, source
-        assert "it is cut there" in text and "4.5 mm right of the photograph" not in text, source
+        assert "The flat top is at row 673.5, 9.7 mm below the face top, good to about 1 mm: 2 px" in text, source
+        assert "The right side is at column 448.5, 33 mm from the face edge, read on rows 695 to 720, good to about 3.5 mm" in text, source
+        assert "42.5 mm below the face top" in text and "is dark on dark" in text, source
+        assert "a shift of 13.5 mm" in text and "19.5 mm" in text and "shifted by its depth" in text, source
         assert abs(6.7 / 1.506 - 4.5) <= 0.1, source
 
 
-def test_the_boss_face_is_the_picture_ellipse_cut_at_the_face_edge_and_ends_at_the_lit_bar():
-    relief = skin_poly("relief")
-    cx, rx, cy, ry = 7.5, 12.0, 16.5, 16.5
-    for x, y in relief:
-        assert abs(((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 - 1) < 0.001, (x, y)
-    xs = [x for x, _ in relief]
-    assert min(xs) == 0.0 and max(xs) == cx + rx == 19.5, "the cut ellipse runs from the face edge to its right extreme"
-    bar = skin_el("rect", "boss-edge")
-    assert bar["x"] - max(xs) <= 1.0, "the face ends at the lit bar, within 1 mm"
-    assert abs(bar["x"] + bar["width"] / 2 - 20.9) < 1e-9,"the lit vertical edge stays at 20.9 mm"
-    assert min(x for x, y in relief if y < cy) == 0.0 and min(x for x, y in relief if y > cy) == 0.0, "cut on both sides"
-
-
-def test_the_shank_is_a_flat_top_a_chamfered_corner_and_a_straight_vertical_right_side():
-    shank = skin_poly("shank")
-    top = min(y for _, y in shank)
-    flat = [p for p in shank if p[1] == top]
-    assert len(flat) == 2 and flat[0][0] != flat[1][0], "a flat top"
-    right = max(x for x, _ in shank)
-    side = [p for p in shank if p[0] == right]
-    assert len(side) == 2 and side[0][1] != side[1][1], "a right side with two corners on one column"
-    assert max(y for _, y in side) == max(y for _, y in shank) and min(y for _, y in side) > top + 3, "straight down to the foot"
-    i, j = shank.index(flat[1]), shank.index(side[0])
-    assert j == i + 1 and shank[i][0] < right and shank[i][1] == top and shank[j][1] > top, "a chamfer joins the top to the side"
-    svg = CORD_SKIN.read_text()
-    assert 'id="shank-end"' not in svg and "<path" not in svg and svg.count("<ellipse") == 1
-    assert abs(top - 0.3) < 1e-9 and abs(right - 33.0) < 1e-9 and abs(side[0][1] - 6.5) < 1e-9
-
-
-def test_the_notes_name_the_straight_sided_shank_and_one_pair_of_cord_figures(dev):
+def test_the_notes_state_that_the_base_and_the_cord_stand_perpendicular_to_the_face(dev):
     for source, text in cord_texts(dev):
-        assert "photograph shows a straight-sided shank, like a nut" in text, source
-        assert "flat top" in text and "curved upper-right corner" in text and "straight vertical right side" in text, source
-        assert "drawn round" not in text and "looks faceted" not in text, source
+        assert "The base and the cord are taken to stand perpendicular to the face. Straight on, they show as a circle and an end-on circle." in text, source
         assert "21.4 mm" in text and "22.9 mm" in text, source
-        assert "side face ends at about row 729, 25.8 mm below the part top" in text and "on purpose" in text, source
-        assert "shank's upper-right corner as a curve. It is drawn as a straight chamfer" in text, source
-        assert "bright arc on the boss's rim" in text and "3 mm wide and is drawn 1 mm wide" in text, source
-        assert "round mark stands right of the shank" in text, source
+        assert "drawn round" not in text and "looks faceted" not in text, source
+        assert "A round mark stands right of the shank in the photograph" in text, source
+        assert "ellipse" not in text, source
+        assert "lit bar" not in text and "drawn as a straight chamfer" not in text and "curved upper-right corner" not in text, source
     assert "strain relief" not in words(contract("apc/pdu-cord-l6-30p@1")).lower()
     for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
         assert not re.search(r"\b21\.5 mm|\b23\.0 mm", f.read_text()), f.name
 
 
-def test_no_sentence_says_the_photograph_shows_a_chamfered_corner(dev):
-    """The photograph shows a curved corner. Only the drawn corner is a chamfer."""
-    texts = [t for _, t in cord_texts(dev)] + [words(dev["provenance"]["rear"]["note"])]
-    for text in texts:
-        assert "chamfered" not in text
-        for sentence in re.split(r"(?<=[.?!])\s+", text):
-            assert not ("photograph" in sentence and "chamfer" in sentence), sentence
+def test_no_drawn_shank_lit_bar_or_24_by_33_ellipse_stands_in_the_notes_or_the_skin(dev):
+    svg = CORD_SKIN.read_text().lower()
+    for gone in ("polygon", "ellipse", "shank", "boss-edge", "<rect"):
+        assert gone not in svg, gone
     for source, text in cord_texts(dev):
-        assert "flat top, a curved upper-right corner and a straight vertical right side" in text, source
-        assert "It is drawn as a straight chamfer" in text and "The curved corner starts at column 433.5" in text
-
-
-def test_the_boss_shows_0_to_19_5_mm_and_the_shanks_right_side_stands_at_33_mm(dev):
-    c = contract("apc/pdu-cord-l6-30p@1")
-    for source, text in cord_texts(dev):
-        assert "The boss shows 0 to 19.5 mm from the face's left edge. The shank's right side stands 33 mm from it. Each is good to about 3.5 mm." in text, source
+        assert "24 mm wide" not in text and "drawn as a straight chamfer" not in text, source
+        assert "boss shows 0 to 19.5 mm" not in text and "cut there" not in text and "7.5 mm" not in text, source
     note = words(dev["provenance"]["rear"]["note"])
-    assert "boss shows at 0 to 19.5 and stands 9.5 mm below the face top" in note
-    assert "shank's right side stands at 33" in note
     stated_as_33 = r"boss (?:stands|shows)(?: at)? 0 (?:to|and) 33"
     for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
         assert not re.search(stated_as_33, words(f.read_text())), f.name
-    assert not re.search(stated_as_33, words(c)) and c["size"]["w"] == 33.0
+    assert "ellipse" not in note
 
 
 def test_each_figure_of_the_cord_end_names_its_scale_method_and_the_cord_tolerance(dev):

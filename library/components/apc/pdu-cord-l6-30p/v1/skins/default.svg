@@ -1,16 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="33mm" height="33mm" viewBox="0 0 33 33">
-  <!-- The input cord leaving the left end of the outlet face: a round boss cut at the face edge, a straight-sided shank behind it, and the round cord running into the boss. -->
+  <!-- The input cord leaving the left end of the outlet face, seen straight on: a round base and the round cord end-on in it, one axis. -->
   <defs>
-    <linearGradient id="boss-shade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#34373b"/><stop offset="1" stop-color="#17181a"/>
-    </linearGradient>
-    <linearGradient id="cord-shade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a3d41"/><stop offset="0.3" stop-color="#8a8d91"/><stop offset="0.55" stop-color="#4a4d51"/><stop offset="1" stop-color="#1b1c1e"/>
-    </linearGradient>
+    <radialGradient id="base-shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2a2c2f"/><stop offset="1" stop-color="#17181a"/>
+    </radialGradient>
+    <radialGradient id="cord-shade" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4a4d51"/><stop offset="0.6" stop-color="#2a2c2f"/><stop offset="1" stop-color="#0d0e0f"/>
+    </radialGradient>
   </defs>
-  <polygon id="shank" points="8,0.3 23,0.3 33,6.5 33,33 8,33" fill="url(#boss-shade)"/>
-  <polygon id="relief" points="0,3.62 1.50,2.21 4.39,0.56 7.50,0.00 10.61,0.56 13.50,2.21 15.99,4.83 17.89,8.25 19.09,12.23 19.50,16.50 19.09,20.77 17.89,24.75 15.99,28.17 13.50,30.79 10.61,32.44 7.50,33.00 4.39,32.44 1.50,30.79 0,29.38" fill="#1b1c1e" stroke="#4a4d51" stroke-width="0.25"/>
-  <rect id="boss-edge" x="20.4" y="8.5" width="1" height="18" fill="#8a8d91"/>
-  <rect id="cord" x="0" y="9" width="11" height="22" fill="url(#cord-shade)"/>
-  <ellipse id="cord-end" cx="11" cy="20" rx="2.5" ry="11" fill="url(#cord-shade)" stroke="#3c3f43" stroke-width="0.25"/>
+  <circle id="relief" cx="16.5" cy="16.5" r="16.5" fill="url(#base-shade)" stroke="#4a4d51" stroke-width="0.25"/>
+  <circle id="cord" cx="16.5" cy="16.5" r="11" fill="url(#cord-shade)" stroke="#3c3f43" stroke-width="0.3"/>
 </svg>
