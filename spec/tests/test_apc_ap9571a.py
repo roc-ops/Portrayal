@@ -518,3 +518,43 @@ def test_the_new_parts_say_where_each_figure_came_from_and_which_are_estimates(r
         assert c["attrs"]["plug"] == plug
     ns, part = ref.split("@")[0].split("/")
     assert (LIB / "components" / ns / part / "v1" / "skins" / "default.svg").is_file()
+
+
+RUN_IS_ANGLE = "the cord's run in the photograph is the camera's angle and is not drawn"
+STALE_RUN = (
+    "beyond the face edge",
+    "beyond the unit",
+    "beyond it",
+    "face view ends",
+    "view ends at the unit",
+    "leaving the boss to the left",
+    "leaves the boss to the left",
+    "runs out of it to the left",
+)
+
+
+def run_texts(dev):
+    """Each place that names the cord's run: the gap, the contract's two notes, the fragment, the rear note."""
+    c = contract("apc/pdu-cord-l6-30p@1")
+    return (
+        ("gap", words(gap(dev, "cord")["note"])),
+        ("not-drawn", words(c["provenance"]["not-drawn"])),
+        ("plug", words(c["provenance"]["plug"])),
+        ("base", words(c["provenance"]["base"])),
+        ("description", words(c["description"])),
+        ("rear", words(dev["provenance"]["rear"]["note"])),
+        ("fragment", words(FRAGMENT.read_text())),
+    )
+
+
+def test_no_text_says_the_cord_leaves_the_boss_to_the_left_or_runs_beyond_the_face_edge(dev):
+    for source, text in run_texts(dev):
+        low = text.lower()
+        for stale in STALE_RUN:
+            assert stale not in low, (source, stale)
+
+
+def test_the_gap_the_not_drawn_text_and_the_plug_text_say_the_cords_run_is_the_cameras_angle(dev):
+    texts = dict(run_texts(dev))
+    for source in ("gap", "not-drawn", "plug"):
+        assert RUN_IS_ANGLE in texts[source].lower(), source
