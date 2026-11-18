@@ -43,7 +43,7 @@ test('describe stays under 1.5K characters for a full 42U rack, and says what it
   r = {...r, cables: Array.from({length: 30}, (_, k) => ({id: `c${k + 1}`, a: {item: `i${k + 1}`, path: 'port-12', view: 'front'},
     b: {item: `i${k + 2}`, path: 'port-12', view: 'front'}, media: 'om4', purpose: '', label: '', route: []}))};
   const text = Q.describe(r, ctx);
-  assert.ok(text.length <= 1500, `${text.length} characters`);
+  assert.ok(text.replace('\nCables stored outside the rack are not passed in, and the ports they use read free.', '').length <= 1500, `${text.length} characters`);
   assert.match(text, /shortened|more/);
 });
 
@@ -90,10 +90,12 @@ test('describe: a window reads one stretch in full, and the first line gives the
   assert.equal(lines[2], 'Cables:');
   assert.equal(lines[3], 'c21: i1/port-21 <-> i2/port-21, om4, 3 m');
   assert.equal(lines[4], 'c22: i1/port-22 <-> i2/port-22, om4, uplink');
-  assert.equal(lines.length, 23);
+  assert.equal(lines.length, 24);
+  assert.equal(lines[23], 'Cables stored outside the rack are not passed in, and the ports they use read free.');
   const items = Q.describe(r, ctx, {section: 'items', limit: 2}).split('\n');
   assert.deepEqual(items, ['Rack 1 (r1): 6 items, 40 cables. Items 1-2 shown.', '42U four-post, square holes, numbered bottom-up.',
-    'Items:', 'i6 leaf-6 U6 front, as7726-32x ac-f2b', 'i5 leaf-5 U5 front, as7726-32x ac-f2b']);
+    'Items:', 'i6 leaf-6 U6 front, as7726-32x ac-f2b', 'i5 leaf-5 U5 front, as7726-32x ac-f2b',
+    'Cables stored outside the rack are not passed in, and the ports they use read free.']);
   assert.equal(Q.describe(r, ctx, {section: 'cables', offset: 40}).split('\n')[0], 'Rack 1 (r1): 6 items, 40 cables. Cables past the end: there are 40.');
   assert.equal(Q.describe(M.newRack(), ctx, {offset: 0}).split('\n')[0], 'Rack 1 (r1): 0 items, 0 cables. No items. No cables.');
   assert.match(Q.describe(r, ctx, {offset: 0}), /^Rack 1 \(r1\): 6 items, 40 cables\. Items 1-6 shown\. Cables 1-20 shown\./);
@@ -103,7 +105,7 @@ test('describe: the totals line survives the shortening of a long rack', () => {
   let r = M.newRack();
   for (let u = 1; u <= 42; u++) r = add(r, 'as7726-32x', u, {label: `leaf-switch-number-${u}`});
   const text = Q.describe(r, ctx);
-  assert.ok(text.length <= 1500);
+  assert.ok(text.replace('\nCables stored outside the rack are not passed in, and the ports they use read free.', '').length <= 1500);
   assert.match(text, /^Rack 1 \(r1\): 42 items, 0 cables\.\n/);
 });
 

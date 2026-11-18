@@ -63,14 +63,28 @@ export function tagText(rack, end) {
 // (docs/dc-power-design.md section 5.4): a cable on the port takes every pole,
 // a cable on one pole makes the port partly used, and two poles are two places.
 // Without it, a port is its path alone, as it was.
-export function portFree(rack, end, {ignoreId = null, uOf, dc = null} = {}) {
+// THE CABLES STORED OUTSIDE THE RACK (docs/rack-entries-design.md section 3) are
+// the caller's, and a port reads taken when one of them has it. `outside` is a
+// list of cables whose far end is an exit end `{exit: id}`. A value that is no
+// list is read as absent, which is the caller not having looked.
+export const isExitEnd = e => e !== null && typeof e === 'object' && typeof e.exit === 'string';
+export const outsideList = v => (Array.isArray(v) ? v : null);
+// the rack end of an outside cable: the one end that is no exit end, else null
+export const nearEndOf = c => {
+  const [a, b] = [c?.a, c?.b];
+  if (isExitEnd(b) && a !== null && typeof a === 'object' && !isExitEnd(a)) return a;
+  return isExitEnd(a) && b !== null && typeof b === 'object' && !isExitEnd(b) ? b : null;
+};
+export function portFree(rack, end, {ignoreId = null, uOf, dc = null, outside = null} = {}) {
   const k = portKey(end);
   const other = (rack.cables || []).find(c => c.id !== ignoreId && (portKey(c.a) === k || portKey(c.b) === k));
   if (other) return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(other)}).`};
+  const kept = (outsideList(outside) || []).find(c => c?.id !== ignoreId && nearEndOf(c) && portKey(nearEndOf(c)) === k);
+  if (kept) return {ok: false, reason: `${endName(rack, end, uOf)} already has a cable (${cableName(kept)}), stored outside the rack.`};
   const mine = typeof dc === 'function' ? dc(end) : null;
-  if (mine) for (const c of rack.cables || []) {
+  if (mine) for (const c of [...(rack.cables || []), ...(outsideList(outside) || []).filter(x => nearEndOf(x))]) {
     if (c.id === ignoreId) continue;
-    for (const e of [c.a, c.b]) {
+    for (const e of nearEndOf(c) ? [nearEndOf(c)] : [c.a, c.b]) {
       const o = dc(e);
       if (!o || o.key !== mine.key || !(o.pole === null || mine.pole === null || o.pole === mine.pole)) continue;
       // (naming the pole it is on where this end asks for the whole port)

@@ -775,11 +775,14 @@ export function mirrorClears(clears, pc, flipX, flipY) {
     y: flipY ? pc.y + pc.y + pc.h - p.y - p.h : p.y}));
 }
 // A FACE PUNCH AS IT IS REPLAYED ON A MODULE'S CROP OF THE FACE. The crop is cut
-// from the face canvas, which a flipped face (flipLX / flipLY) has mirrored, so a
-// `rect` punch (a facet's footprint) is mirrored within the crop's own rect `pf`;
-// any other punch is returned as it is.
+// from the face canvas, which a flipped face (flipLX / flipLY) has mirrored.
+// A `rect` punch (a facet's footprint) is mirrored within the crop's own rect `pf`.
+// A `shape` punch is mirrored there too and carries the flips, so its art is turned as well.
+// Any other punch is returned as it is.
 export function cropPunch(p, pf, flipX, flipY) {
-  return p.kind === 'rect' ? mirrorClears([p], pf, flipX, flipY)[0] : p;
+  if (p.kind === 'rect') return mirrorClears([p], pf, flipX, flipY)[0];
+  if (p.kind === 'shape' && (flipX || flipY)) return {...mirrorClears([p], pf, flipX, flipY)[0], flipX, flipY};
+  return p;
 }
 // clear `rect` punches from a canvas whose origin is (ox, oy) face mm
 export function clearFloor(cvs, clears, ox, oy, pxmm) {
@@ -2386,6 +2389,36 @@ export function crop(cv, r, pxmm = PXMM) {
   ctx.drawImage(cv, Math.round(r.x * pxmm), Math.round(r.y * pxmm), c.width, c.height, 0, 0, c.width, c.height);
   return c;
 }
+// A MODULE'S ART CUT FROM ITS FACE CANVAS. A flipped face mirrors that canvas in both axes,
+// so the rect is mirrored within the face first. A centred module is its own mirror.
+export function cropFace(cv, r, fw, fh, flipX, flipY, pxmm = PXMM) {
+  return crop(cv, mirrorClears([r], {x: 0, y: 0, w: fw, h: fh}, flipX, flipY)[0], pxmm);
+}
+// REPLAY ONE FACE PUNCH on a canvas whose origin is `pf`. A facet's is a rect, drawn as it stands.
+export async function replayPunch(ctx2, p, pf, pxmm = PXMM) {
+  if (p.kind === 'rect') { ctx2.clearRect(...punchRectPx(p, pf.x, pf.y, pxmm)); return; }
+  ctx2.globalCompositeOperation = 'destination-out';
+  ctx2.drawImage(await rasterSource(p.svg, p.w, p.h, pxmm, !!p.flipX, !!p.flipY),
+                 Math.round((p.x - pf.x) * pxmm), Math.round((p.y - pf.y) * pxmm));
+  ctx2.globalCompositeOperation = 'source-over';
+}
+// THE FACE'S PUNCHES THAT FALL IN AN OPEN-BACKED MODULE'S CROP, replayed on it.
+// The crop is cut from the mirrored canvas, so each punch is mirrored within it first.
+export async function replayOnCrop(cv, punches, pf, pxmm, flipX, flipY) {
+  const x0 = cv.getContext('2d');
+  for (const p of punches) {
+    if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
+    await replayPunch(x0, cropPunch(p, pf, flipX, flipY), pf, pxmm);
+  }
+}
+// A MODULE'S PLANE CUT AGAIN FROM ITS RESTYLED ART, with the face's punches replayed on it.
+// On a flipped face it is turned as the first cut is, and its context stays flipped for the punches.
+export async function recutPlane(text, pf, punches, pxmm, flipX, flipY) {
+  const c2 = await rasterize(text, pf.w, pf.h, pxmm, flipX, flipY);
+  const x2 = c2.getContext('2d');
+  for (const p of punches) await replayPunch(x2, p, pf, pxmm);
+  return c2;
+}
 
 // WHICH INSTANCES COME OUT, and as what: the behaviour extractRelief builds a
 // removable part's body by, from the instance's own marks - `fills` and
@@ -3641,7 +3674,7 @@ export async function buildFaceRelief(F, ctx) {
     const pastFace = r => r.x < -0.01 || r.y < -0.01 || r.x + r.w > fw + 0.01 || r.y + r.h > fh + 0.01;
     const cropArt = (src, r) => beyond && pastFace(r)
       ? crop(beyond.cv, {x: r.x - beyond.x, y: r.y - beyond.y, w: r.w, h: r.h}, PX)
-      : crop(src, r, PX);
+      : cropFace(src, r, fw, fh, !!F.flipLX, !!F.flipLY, PX);
     faceCv[F.view] = cv;
     faceSvg[F.view] = faceText;   // LOD re-rasterises from this; keep it squared
     facePunch[F.view] = [];
@@ -4376,14 +4409,6 @@ export async function buildFaceRelief(F, ctx) {
       // A TILTED MODULE IS CUT FROM THE PRISTINE ART, like a lifted one: it
       // stands on a facet, and the facet's footprint has been cleared from `cv`.
       const faceCrop = cropArt(f.lift || f.openBack || f.tilt ? artCv : cv, pf);
-      // replay one face punch on a canvas whose origin is pf (a facet's is a rect)
-      const unpunch = async (ctx2, p) => {
-        if (p.kind === 'rect') { ctx2.clearRect(...punchRectPx(p, pf.x, pf.y, PX)); return; }
-        ctx2.globalCompositeOperation = 'destination-out';
-        ctx2.drawImage(await rasterSource(p.svg, p.w, p.h, PX),
-                       Math.round((p.x - pf.x) * PX), Math.round((p.y - pf.y) * PX));
-        ctx2.globalCompositeOperation = 'source-over';
-      };
       // A TILTED MODULE'S OWN BORES ARE PUNCHED FROM ITS PLANE HERE, not through
       // `cv`: a tilted cavity never punches the face (its facet is its surface),
       // so no face punch exists to replay, and one recorded for the purpose
@@ -4398,14 +4423,7 @@ export async function buildFaceRelief(F, ctx) {
           ctx2.globalCompositeOperation = 'source-over';
         }
       };
-      if (f.openBack && !f.lift) {
-        const x0 = faceCrop.getContext('2d');
-        for (const p of facePunch[F.view]) {
-          if (p.mouth || !(p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y)) continue;
-          // the restyle re-cut below is an unflipped raster and replays `p` as drawn
-          await unpunch(x0, cropPunch(p, pf, !!F.flipLX, !!F.flipLY));
-        }
-      }
+      if (f.openBack && !f.lift) await replayOnCrop(faceCrop, facePunch[F.view], pf, PX, !!F.flipLX, !!F.flipLY);
       // A MODULE IS ITS SHAPE, NOT ITS BOX. The R740xd's riser 2 is two
       // full-height slots over one low-profile slot - an L - and its box
       // takes in the top-left corner of a power supply; riser 1's brackets
@@ -4450,10 +4468,8 @@ export async function buildFaceRelief(F, ctx) {
       const punchesHere = f.lift || f.tilt ? [] : facePunch[F.view].filter(p => !p.mouth &&
         p.x < pf.x + pf.w && p.x + p.w > pf.x && p.y < pf.y + pf.h && p.y + p.h > pf.y);
       reg(f.svgText, async text => {
-        const c2 = await rasterize(text, pf.w, pf.h, PX);
-        const x2 = c2.getContext('2d');
-        for (const p of punchesHere) await unpunch(x2, p);
-        if (bores.length) await unbore(x2);
+        const c2 = await recutPlane(text, pf, punchesHere, PX, !!F.flipLX, !!F.flipLY);
+        if (bores.length) await unbore(c2.getContext('2d'));
         remap(plane.material, c2);
         if (opticMat && !f.bodyColor) recolourBody(true, [opticMat], c2);
       });

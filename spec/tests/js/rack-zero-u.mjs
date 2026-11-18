@@ -346,7 +346,7 @@ test('describe and inspect know the parts beside the rack and the rail a part is
   assert.match(text, /^Rack 1 \(r1\): 1 item, 1 part beside the rack, 0 cables\./);
   assert.match(text, /\ni1 fb-1 U10-U14 front right rail\n/);
   assert.match(text, /\nBeside the rack:\nz1 vcm-1 between racks at left, U1-U45/);
-  assert.match(describe(r, ctx, {section: 'zeroU'}), /Beside the rack 1-1 shown\.\n.*\nBeside the rack:\nz1 vcm-1 between racks at left, U1-U45, cmv-sfd45u5w base$/);
+  assert.match(describe(r, ctx, {section: 'zeroU'}), /Beside the rack 1-1 shown\.\n.*\nBeside the rack:\nz1 vcm-1 between racks at left, U1-U45, cmv-sfd45u5w base\nCables stored outside the rack are not passed in, and the ports they use read free\.$/);
   assert.match(describe(rackOf(), ctx, {section: 'zeroU'}), /No parts beside the rack\./);
   // a rack with none reads as before
   assert.match(describe(rackOf(), ctx), /^Rack 1 \(r1\): 0 items, 0 cables\./);
