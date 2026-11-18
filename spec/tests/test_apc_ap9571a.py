@@ -303,10 +303,12 @@ def test_the_cord_is_drawn_the_one_height_and_place_the_contract_and_the_gap_sta
 def test_the_rear_note_gives_the_boss_extent_the_skin_draws(dev):
     relief, shank = skin_poly("relief"), skin_poly("shank")
     note = words(dev["provenance"]["rear"]["note"])
-    m = re.search(r"round cord boss stands at (\d+) to (\d+) and (\d+(?:\.\d+)?) mm below the face top", note)
+    m = re.search(r"round cord boss shows at (\d+) to (\d+(?:\.\d+)?) and stands (\d+(?:\.\d+)?) mm below the face top", note)
     assert m
-    assert (float(m.group(1)), float(m.group(2))) == (min(x for x, _ in relief), max(x for x, _ in shank))
+    assert (float(m.group(1)), float(m.group(2))) == (min(x for x, _ in relief), max(x for x, _ in relief))
     assert float(m.group(3)) == placements(dev, "rear")["input"]["at"][1]
+    right = re.search(r"shank's right side stands at (\d+)", note)
+    assert right and float(right.group(1)) == max(x for x, _ in shank)
     assert "The ellipse is cut at the face edge, where the photograph puts its left extreme 4.5 mm beyond it" in note
     assert "left edge is drawn 4.5 mm right" not in note
 
@@ -363,9 +365,9 @@ def test_the_boss_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract
     assert min(x for x, _ in relief) == 0.0, "the visible face of the boss starts at the face's left edge"
     assert c["elements"]["relief"]["at"] == [0, 0] and c["size"]["w"] == max(x for x, _ in shank)
     assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
-    sentence = r"boss stands 0 to (\d+) mm from the face's left edge, good to about 3\.5 mm"
+    sentence = r"boss shows 0 to ([\d.]+) mm from the face's left edge\. The shank's right side stands (\d+) mm from it\. Each is good to about 3\.5 mm"
     for source, text in cord_texts(dev):
-        assert re.findall(sentence, text) == [str(int(c["size"]["w"]))], source
+        assert re.findall(sentence, text) == [(f"{max(x for x, _ in relief):g}", str(int(c["size"]["w"])))], source
         assert "2 px, 1.3 mm, plus 2.0 mm for the scale spread" in text, source
         assert "6.7 px, left of the face edge, which is 4.5 mm along the face" in text, source
         assert "so its centre stands 7.5 mm and its right extreme 19.5 mm from the face edge" in text, source
@@ -405,7 +407,7 @@ def test_the_shank_is_a_flat_top_a_chamfered_corner_and_a_straight_vertical_righ
 def test_the_notes_name_the_straight_sided_shank_and_one_pair_of_cord_figures(dev):
     for source, text in cord_texts(dev):
         assert "photograph shows a straight-sided shank, like a nut" in text, source
-        assert "flat top" in text and "chamfered" in text and "straight vertical right side" in text, source
+        assert "flat top" in text and "curved upper-right corner" in text and "straight vertical right side" in text, source
         assert "drawn round" not in text and "looks faceted" not in text, source
         assert "21.4 mm" in text and "22.9 mm" in text, source
         assert "side face ends at about row 729, 25.8 mm below the part top" in text and "on purpose" in text, source
@@ -415,6 +417,31 @@ def test_the_notes_name_the_straight_sided_shank_and_one_pair_of_cord_figures(de
     assert "strain relief" not in words(contract("apc/pdu-cord-l6-30p@1")).lower()
     for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
         assert not re.search(r"\b21\.5 mm|\b23\.0 mm", f.read_text()), f.name
+
+
+def test_no_sentence_says_the_photograph_shows_a_chamfered_corner(dev):
+    """The photograph shows a curved corner. Only the drawn corner is a chamfer."""
+    texts = [t for _, t in cord_texts(dev)] + [words(dev["provenance"]["rear"]["note"])]
+    for text in texts:
+        assert "chamfered" not in text
+        for sentence in re.split(r"(?<=[.?!])\s+", text):
+            assert not ("photograph" in sentence and "chamfer" in sentence), sentence
+    for source, text in cord_texts(dev):
+        assert "flat top, a curved upper-right corner and a straight vertical right side" in text, source
+        assert "It is drawn as a straight chamfer" in text and "The curved corner starts at column 433.5" in text
+
+
+def test_the_boss_shows_0_to_19_5_mm_and_the_shanks_right_side_stands_at_33_mm(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in cord_texts(dev):
+        assert "The boss shows 0 to 19.5 mm from the face's left edge. The shank's right side stands 33 mm from it. Each is good to about 3.5 mm." in text, source
+    note = words(dev["provenance"]["rear"]["note"])
+    assert "boss shows at 0 to 19.5 and stands 9.5 mm below the face top" in note
+    assert "shank's right side stands at 33" in note
+    stated_as_33 = r"boss (?:stands|shows)(?: at)? 0 (?:to|and) 33"
+    for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
+        assert not re.search(stated_as_33, words(f.read_text())), f.name
+    assert not re.search(stated_as_33, words(c)) and c["size"]["w"] == 33.0
 
 
 def test_each_figure_of_the_cord_end_names_its_scale_method_and_the_cord_tolerance(dev):
