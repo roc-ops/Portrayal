@@ -377,6 +377,51 @@ def test_the_edge_position_has_its_own_tolerance_in_the_contract_and_the_gap(dev
         assert 3 <= tol <= 8 and abs(centre - drawn * 100) <= 2, source
 
 
+def test_the_boot_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract_agree(dev):
+    boot = skin_rect("relief")
+    c = contract("apc/pdu-cord-l6-30p@1")
+    assert c["elements"]["relief"]["at"][0] == boot["x"]
+    assert c["size"]["w"] == boot["x"] + boot["width"]
+    assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
+    want = [(str(int(boot["x"])), str(int(boot["x"] + boot["width"])))]
+    sentence = r"boot stands (\d+) to (\d+) mm from the face's left edge, good to about 3 mm"
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        assert re.findall(sentence, text) == want, source
+    assert "5 px and 12.5 px at 2.7 mm per px" in words(c["provenance"]["boot"])
+    assert abs(boot["x"] - 5 * 2.7) <= 3.0 and abs(boot["x"] + boot["width"] - 12.5 * 2.7) <= 3.0
+
+
+def test_the_cord_lines_run_from_the_face_edge_to_the_boot_and_no_text_says_four_mm(dev):
+    boot = skin_rect("relief")
+    for rid in ("cord-line-1", "cord-line-2"):
+        r = skin_rect(rid)
+        assert r["x"] == 0.0 and r["x"] + r["width"] >= boot["x"], rid
+    c = contract("apc/pdu-cord-l6-30p@1")
+    prose = words(c) + " " + words(dev)
+    assert "first 4 mm" not in prose and "4 to 23" not in prose and "FIRST 4 MM" not in prose
+
+
+NOTCHES = "about 12 to 26, drawn as 23 at a 19 mm pitch"
+
+
+def test_one_notch_count_and_one_tolerance_stand_in_the_device_the_gap_and_the_sources(dev):
+    notches = [d for i, d in decor(dev).items() if i.startswith("notch-")]
+    assert len(notches) == 23
+    for d in notches:
+        assert NOTCHES in words(d["source"])
+    assert NOTCHES in words(dev["provenance"]["rear"]["note"])
+    assert NOTCHES in words(gap(dev, "face-positions")["note"])
+    assert "good to 4" not in words(dev)
+
+
+def test_the_breaker_note_reads_one_scale_figure_for_the_first_block(dev):
+    note = words(dev["provenance"]["breakers"]["note"])
+    m = re.search(r"face reads (\d+) px high at the first breaker, so (0\.\d+) px per mm", note)
+    assert m and abs(int(m.group(1)) / 44 - float(m.group(2))) <= 0.01
+    assert "22 px" not in note and "0.5 px per mm" not in note and "0.5 and 0.7" not in note
+    assert "0.5 px per mm" not in words(contract("apc/pdu-breaker-rocker@1")["provenance"]["size"])
+
+
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
 def test_the_new_parts_say_where_each_figure_came_from_and_which_are_estimates(ref, plug):
     c = contract(ref)
