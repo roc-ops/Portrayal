@@ -163,6 +163,40 @@ def test_the_module_has_two_ethernet_jacks_a_four_digit_display_and_three_button
     assert len(buttons) == 3
 
 
+def _part_box(part):
+    ns, rest = part["ref"].split("/")
+    name, version = rest.split("@")
+    size = _load(COMPONENTS / ns / name / f"v{version}" / "contract.yaml")["size"]
+    x, y = part["at"]
+    w, h = size["w"], size["h"]
+    if part.get("rotate") in (90, 270):
+        cx, cy = x + w / 2, y + h / 2
+        return cx - h / 2, cy - w / 2, cx + h / 2, cy + w / 2
+    return x, y, x + w, y + h
+
+
+def test_every_module_element_lies_inside_the_strip_across_and_inside_the_module_plate():
+    dev = _load(DEVICE)
+    bay = dev["views"]["front"]["components"]["bays"][0]
+    bx, by = bay["at"]
+    contract = _contract(MODULE)
+    width, height = contract["size"]["w"], contract["size"]["h"]
+    across = dev["chassis"]["width"]
+    assert 0 <= bx and bx + width <= across
+    boxes = [(k, v["at"][0], v["at"][1], v["at"][0] + v["size"][0], v["at"][1] + v["size"][1])
+             for k, v in contract["elements"].items()]
+    boxes += [(p["id"], *_part_box(p)) for p in contract["parts"]]
+    boxes += [(r.get("id") or "rect", float(r.get("x")), float(r.get("y")),
+               float(r.get("x")) + float(r.get("width")), float(r.get("y")) + float(r.get("height")))
+              for r in _skin_rects() if r.get("width") and r.get("height") and r.get("x") and r.get("y")]
+    assert len(boxes) > 20
+    for name, x0, y0, x1, y1 in boxes:
+        assert 0 <= x0 and x1 <= width + 0.01, name
+        assert 0 <= y0 and y1 <= height + 0.01, name
+        assert bx + x0 >= 0 and bx + x1 <= across, name
+        assert by + y1 <= dev["chassis"]["height"], name
+
+
 def test_the_device_places_the_module_in_a_bay():
     dev = _load(DEVICE)
     bays = dev["views"]["front"]["components"]["bays"]
