@@ -1,11 +1,11 @@
 """The APC NetShelter AP9571A basic 1U rack PDU, and the two parts it needed.
 
 It carries ten IEC C13 outlets in two banks of five on one face. A fixed input cord leaves the left end of that
-face, and a rocker circuit breaker stands beside each bank. The other face is plain. What is true of the library
+face, and a rocker circuit breaker stands before each bank in the photograph. The other face is plain. What is true of the library
 once it is in:
 
   - it is a device of the maker, with the width, height, depth and weight the data sheet gives, and six views;
-  - the outlet face carries ten numbered C13 outlets, the input cord and two breakers, each bank behind its own;
+  - the outlet face carries ten numbered C13 outlets, the input cord and two breakers, one before each bank;
   - the unit has no display, no network port and no switching;
   - every position read off a photograph is declared an estimate;
   - the two new parts say where each figure came from and are parts of the maker.
@@ -165,7 +165,7 @@ def test_the_cord_beyond_the_face_and_the_cord_end_are_named_as_a_gap_with_the_r
 def test_the_light_strip_left_of_breaker_one_is_named_with_the_same_size_as_the_other_strip(dev):
     note = " ".join(gap(dev, "marks")["note"].split())
     assert "left of the first breaker" in note and "beside the second breaker" in note
-    assert "about 2 px" in note and "too small to place" in note
+    assert "2 px wide" in note and "good to about" in note
     assert "one pixel" not in str(dev)
 
 
@@ -193,14 +193,68 @@ def test_the_breaker_says_its_two_states_are_estimated_and_draw_alike():
     assert "estimated" in text and "alike" in text
 
 
+def test_the_two_thin_strips_beside_the_breakers_are_drawn_as_decor_by_measurement(dev):
+    marks, rear = decor(dev), placements(dev, "rear")
+    for sid, pid, side in (("strip-right-of-breaker-2", "breaker-2", "right"), ("strip-left-of-breaker-1", "breaker-1", "left")):
+        s = marks[sid]
+        assert s["confidence"] == "estimated" and "px" in s["source"] and "mm" in s["source"], sid
+        width = contract("apc/pdu-breaker-rocker@1")["size"]["w"]
+        bx = rear[pid]["at"][0]
+        assert 2.0 <= s["size"][0] <= 4.0 and 8.0 <= s["size"][1] <= 22.0, sid
+        if side == "right":
+            assert bx + width < s["at"][0] < bx + width + 8, sid
+        else:
+            assert bx - 14 < s["at"][0] < bx - s["size"][0], sid
+    assert "shelf-left-of-breaker-1" in marks
+    note = " ".join(gap(dev, "marks")["note"].split())
+    assert "too small to place" not in note and "is the tolerance, not a reason to leave them out" in note
+
+
+def test_each_breaker_is_drawn_the_measured_width_and_stays_centred_on_its_round_marks(dev):
+    c = contract("apc/pdu-breaker-rocker@1")
+    assert 12.0 <= c["size"]["w"] <= 14.0
+    assert c["elements"]["rocker"]["size"][0] == c["size"]["w"]
+    skin = (LIB / "components/apc/pdu-breaker-rocker/v1/skins/default.svg").read_text()
+    assert f'width="{c["size"]["w"]:g}mm"' in skin
+    text = " ".join(str(c["provenance"]["size"]).split())
+    assert "16 by 19" not in text and "good to about" in text
+    rear, marks = placements(dev, "rear"), decor(dev)
+    for pid, left, right in (("breaker-1", "screw-1", "screw-3"), ("breaker-2", "screw-5", "screw-7")):
+        centre = rear[pid]["at"][0] + c["size"]["w"] / 2
+        mid = (marks[left]["at"][0] + marks[right]["at"][0]) / 2 + 1.5
+        assert abs(centre - mid) <= 1.0, pid
+
+
+def test_the_two_cord_lines_leave_the_lower_half_of_the_boot():
+    import re
+
+    svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
+    height = contract("apc/pdu-cord-l6-30p@1")["size"]["h"]
+    lines = []
+    for rid in ("cord-line-1", "cord-line-2"):
+        m = re.search(rf'<rect id="{rid}"[^>]*? y="([\d.]+)"[^>]*? height="([\d.]+)"', svg)
+        assert m, rid
+        lines.append((float(m.group(1)), float(m.group(2))))
+    for y, h in lines:
+        assert y + h / 2 >= height / 2, "a cord line centre is in the upper half"
+    assert min(y for y, h in lines) >= 11.0
+    assert max(y + h for y, h in lines) <= height - 2.0
+    assert 12.0 <= max(y + h for y, h in lines) - min(y for y, h in lines) <= 18.0
+
+
+def test_no_description_or_attr_names_the_material_or_the_colour_as_fact(dev):
+    assert "metal" not in " ".join(str(dev["description"]).split()).lower()
+    assert "black" not in str(dev["description"]).lower()
+    assert "metal" not in str(dev["attrs"]["physical"].get("construction", "")).lower()
+
+
 @pytest.mark.heavy
 def test_the_export_gives_a_nema_l6_30p_power_port_feeding_ten_outlets(tmp_path):
     """Runs the DCIM exporter on the built device and reads what it wrote."""
     from portrayal import dcim_export
     from portrayal.artifacts import Dist
 
-    if not (LIB / "dist").is_dir():
-        pytest.skip("not built - run ./build.sh")
+    assert (LIB / "dist").is_dir(), "this test reads the built device: run ./build.sh first"
     dcim_export.export_device(Dist(LIB / "dist"), "ap9571a", str(tmp_path), None)
     written = sorted(tmp_path.glob("*/device-types/APC/AP9571A.yaml"))
     assert len(written) == 2
