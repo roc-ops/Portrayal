@@ -132,5 +132,8 @@ def test_only_a_rack_face_is_wider_than_its_plane():
                          "iolan-scg18-r:front", "iolan-scg34-r:front", "iolan-scg50-r:front",
                          # the six USB and mixed forms draw the same ear flanges
                          "iolan-scg18-u:front", "iolan-scg34-u:front", "iolan-scg34-ru:front",
-                         "iolan-scg50-u:front", "iolan-scg50-rru:front", "iolan-scg50-ruu:front"}, \
+                         "iolan-scg50-u:front", "iolan-scg50-rru:front", "iolan-scg50-ruu:front",
+                         "iolan-scg18-r-la:front", "iolan-scg18-r-le:front",
+                         "iolan-scg34-r-la:front", "iolan-scg34-r-le:front",
+                         "iolan-scg50-r-la:front", "iolan-scg50-r-le:front"}, \
         f"a face is wider than its plane and is not a known rack face: {wide}"
