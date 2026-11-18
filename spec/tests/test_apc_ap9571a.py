@@ -103,15 +103,6 @@ def test_every_view_that_draws_a_mark_declares_it_estimated(dev):
             assert d.get("source"), f"{name}/{d['id']}"
 
 
-def test_the_notches_along_the_lower_edge_of_the_outlet_face_are_drawn(dev):
-    decor = dev["views"]["rear"]["panel"]["decor"]
-    notches = sorted((d for d in decor if d["id"].startswith("notch-")), key=lambda d: d["at"][0])
-    assert len(notches) == 23
-    assert {d["at"][1] for d in notches} == {41.6}
-    pitch = {round(b["at"][0] - a["at"][0], 1) for a, b in zip(notches, notches[1:])}
-    assert pitch == {19.0}
-
-
 def test_the_ten_outlets_stand_on_a_24_mm_pitch_in_two_groups_of_five(dev):
     rear = placements(dev, "rear")
     xs = [rear[f"outlet-{n}"]["at"][0] for n in range(1, 11)]
@@ -270,8 +261,8 @@ def test_the_export_gives_a_nema_l6_30p_power_port_feeding_ten_outlets(tmp_path)
 
 CORD_SKIN = LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg"
 LIMIT = (
-    "every position on the outlet face and the cord is an estimate read at about 0.5 pixel per millimetre. "
-    "it is good to about 3 mm unless a gap says otherwise"
+    "every position on the outlet face and the cord is an estimate read from the 369 px photograph. "
+    "it is good to about 3 mm unless a gap says otherwise. each figure names its own scale"
 )
 
 
@@ -384,7 +375,7 @@ def test_the_boot_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract
     assert c["size"]["w"] == boot["x"] + boot["width"]
     assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
     want = [(str(int(boot["x"])), str(int(boot["x"] + boot["width"])))]
-    sentence = r"boot stands (\d+) to (\d+) mm from the face's left edge, good to about 3 mm"
+    sentence = r"boot stands (\d+) to (\d+) mm from the face's left edge, good to about 4\.5 mm"
     for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
         assert re.findall(sentence, text) == want, source
     assert "5 px and 12.5 px at 2.7 mm per px" in words(c["provenance"]["boot"])
@@ -401,17 +392,63 @@ def test_the_cord_lines_run_from_the_face_edge_to_the_boot_and_no_text_says_four
     assert "first 4 mm" not in prose and "4 to 23" not in prose and "FIRST 4 MM" not in prose
 
 
-NOTCHES = "about 12 to 26, drawn as 23 at a 19 mm pitch"
+DEVICE_FILE = LIB / "devices/apc/ap9571a/device.yaml"
+PART_FILES = [
+    LIB / f"components/apc/{p}/v1/{f}"
+    for p in ("pdu-cord-l6-30p", "pdu-breaker-rocker")
+    for f in ("contract.yaml", "skins/default.svg")
+]
+FRAGMENT = ROOT / "changelog.d/apc-ap9571a-pdu.md"
 
 
-def test_one_notch_count_and_one_tolerance_stand_in_the_device_the_gap_and_the_sources(dev):
-    notches = [d for i, d in decor(dev).items() if i.startswith("notch-")]
-    assert len(notches) == 23
-    for d in notches:
-        assert NOTCHES in words(d["source"])
-    assert NOTCHES in words(dev["provenance"]["rear"]["note"])
-    assert NOTCHES in words(gap(dev, "face-positions")["note"])
-    assert "good to 4" not in words(dev)
+def test_no_notch_is_drawn_and_one_gap_says_the_lower_edge_is_a_smooth_slope(dev):
+    assert not [d for d in dev["views"]["rear"]["panel"]["decor"] if "notch" in d["id"].lower()]
+    lines = DEVICE_FILE.read_text().splitlines()
+    start = next(i for i, ln in enumerate(lines) if ln.strip() == "- what: face-positions")
+    end = next(i for i in range(start + 1, len(lines)) if lines[i].startswith("- what:"))
+    assert not [n for n, ln in enumerate(lines) if "notch" in ln.lower() and not start <= n < end]
+    for path in PART_FILES + [FRAGMENT]:
+        assert "notch" not in path.read_text().lower(), path.name
+    note = words(gap(dev, "face-positions")["note"]).lower()
+    assert "smooth slope in both photographs" in note
+    assert "no notch is resolved, so none is drawn" in note
+    assert "12x crop" in note and "7 pixel" in note
+
+
+def test_the_boots_x_tolerance_reads_four_and_a_half_mm_with_its_arithmetic(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        assert "good to about 4.5 mm" in text, source
+        assert "2.7 mm for a pixel plus 1.75 mm for the scale spread" in text, source
+        assert "good to about 3 mm" not in text, source
+
+
+def test_each_cord_line_has_its_height_method_and_tolerance_in_the_contract_and_the_gap(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        assert "upper line reads 2.7 px, the gap 2.6 px and the lower line 6 px" in text, source
+        assert "4.8, 4.6 and 10.8 mm" in text and "3.5, 6 and 10.5 mm" in text, source
+        assert "grey level of 140" in text and "x 87 to 91 and 96" in text, source
+        assert "estimate good to about 2 mm" in text, source
+
+
+def test_the_breaker_positions_state_the_marks_tolerance_and_the_first_width_figure(dev):
+    c = contract("apc/pdu-breaker-rocker@1")
+    for source, text in (
+        ("device", words(dev["provenance"]["breakers"]["note"])),
+        ("contract", words(c["provenance"]["size"])),
+    ):
+        assert "centred between marks that are good to about 10 mm" in text, source
+        assert "at 66.5 and 262 mm, each good to about 10 mm" in text, source
+        assert "18 mm read, 13 mm drawn" in text and "5 mm" in text, source
+
+
+def test_no_text_calls_a_panel_recessed_or_a_breaker_standing_proud(dev):
+    for path in [DEVICE_FILE, FRAGMENT] + PART_FILES:
+        text = " ".join(path.read_text().lower().split())
+        assert "recess" not in text and "standing proud" not in text, path.name
+    assert "panel plate" in words(dev["provenance"]["rear"]["note"])
+    assert "no held picture shows" in words(contract("apc/pdu-breaker-rocker@1")["description"]).lower()
 
 
 def test_the_breaker_note_reads_one_scale_figure_for_the_first_block(dev):
