@@ -2,8 +2,8 @@
 
 An entry is `{id, where, kind, box, source}`. The schema holds the shape of each
 key. The lint holds what crosses keys (L193). `rack.json` `frames` carries the
-entries of a product that states them. The two APC open frames state the `top`
-entry. A product that states no entries reads exactly as it did.
+entries of a product that states them. The two APC open frames and the StarTech
+12U frame state the `top` entry. A product that states no entries reads exactly as it did.
 """
 import copy
 import json
@@ -21,7 +21,7 @@ SCHEMA = json.loads((ROOT / "spec/schemas/rack-product.schema.json").read_text()
 
 KINDS = ["brush", "knockout", "cutout", "open"]
 PLACES = ["roof", "floor", "left", "right"]
-FRAMES = ["apc/ar201", "apc/ar203a"]
+FRAMES = ["apc/ar201", "apc/ar203a", "startech/4postrack12a"]
 # two products this change leaves alone, one frame and one cabinet
 UNTOUCHED = ["apc/ar3100b2", "startech/4postrack42"]
 # the keys of a frames row before entries existed

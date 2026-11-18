@@ -26,8 +26,14 @@ out.flippedY = rect(m.cropPunch(facet, pf, false, true));
 out.narrow = rect(m.cropPunch({...facet, x: 40, w: 10}, pf, true, false));
 out.keepsFacet = m.cropPunch(facet, pf, true, true).facet;
 out.theInputIsKept = [facet.x, facet.y, facet.w, facet.h];
+// a shape punch (a cavity, a seated module) is mirrored within the crop too, and carries the flips
+const pocket = {kind: 'shape', svg: '<svg/>', x: 40.5, y: 100, w: 10, h: 8};
+out.shapeFlat = m.cropPunch(shape, pf, false, false) === shape;
+out.shapeFlipped = m.cropPunch(pocket, pf, true, true);
+out.shapeOneAxis = m.cropPunch(pocket, pf, true, false);
 // a punch of any other kind is the face's hole as drawn: not touched
-out.shapeSame = m.cropPunch(shape, pf, true, true) === shape;
+const other = {kind: 'mouth', x: 40.5, y: 100, w: 10, h: 8};
+out.otherSame = m.cropPunch(other, pf, true, true) === other;
 // a flat face gives back the very punch
 out.flatSame = m.cropPunch(facet, pf, false, false) === facet;
 console.log(JSON.stringify(out));
