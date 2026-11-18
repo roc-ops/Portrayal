@@ -61,7 +61,8 @@ provenance:
       reads the plain body at #5c5c57 (576 px) and the module plate at #2f2f2b (151 px). It reads the cord ring at #51514f (360 px) and
       an outlet well at #161712 (200 px). The two actuators read #ead963 (16 px) and #e7d962 (15 px), and the display window #a35856 (44
       px). The lit reads are the lighting and not the finish. The trays and plates are drawn a little lighter than the body, as the
-      strip shows them.
+      strip shows them. The module plate reads darker than the body, so the same lighting reading is applied to it. It is drawn at
+      the body's colour and no lighter.
   capability:
     confidence: datasheet
     note: >-
@@ -78,8 +79,8 @@ provenance:
     confidence: datasheet
     note: >-
       datasheet - the sheet lists the 7938 vertical mounting bracket kit. It lists tool-free hardware at 61.25 in and 64.75 in centre to
-      centre (1556 and 1645 mm). No kit part is modelled, because no held document gives the shape of the bracket. Neither the sheet nor
-      the strip shows the buttons, so none is drawn (gaps: other-faces).
+      centre (1556 and 1645 mm). No kit part is modelled, because no held document gives the shape of the bracket. Neither the sheet
+      nor the strip shows the mounting buttons of that hardware, so none is drawn (gaps: other-faces).
   lifecycle:
     confidence: datasheet
     note: >-
@@ -159,18 +160,21 @@ gaps:
   reason: needs-photo
   note: >-
     the strip shows the module 48 px long. The brochure photograph, of another unit, gives the jack and key positions, read to about 1
-    mm. The module's label and the symbols beside the jacks are not legible. The photograph shows a black square at each end of the
-    module and one is drawn, at an end the strip does not confirm. The two small jacks are drawn lighter than the photograph shows
-    them, and the USB tongue is drawn blue where the photograph shows it silver. The two Ethernet jacks are drawn as separate tiles
-    where the photograph shows one frame.
+    mm. The module's label and the symbols beside the jacks are only partly legible. A black square is drawn at each end of the
+    module, by measurement against the strip at 12x and the photograph. A seam between the jack panel and the display panel is drawn
+    as a thin line at about 59 mm. The serial jack is drawn as a full RJ-45, as the guide's Figure 3.3 names the second jack for the
+    IMD-02E. The strip and the photograph show two identical small jacks. Both are drawn light where the strip shows them dark. The USB tongue comes from a fixed library part that draws it
+    blue, where the strip shows it pale. The two Ethernet jacks are separate tiles of a fixed library part, where the photograph
+    shows one frame.
   wanted: a larger photograph of the module on this unit.
 - what: sensor-count
   scope: [front]
-  reason: vendor-silent
+  reason: sources-disagree
   note: >-
-    the sheet gives one remote sensor jack that supports up to 16 sensors. The module draws one sensor jack. No held document says how
-    many sensors the module reads in the base unit.
-  wanted: the installer guide for this model.
+    the sheet gives one remote sensor jack that supports up to 16 sensors. The guide, Table 3.5 row 6 on PDF page 26, says GU
+    Enhanced Monitored PDUs support one sensor at a time. The sources differ. The module draws one sensor jack, and the device's
+    data holds no sensor count.
+  wanted: the installer guide for this model, or the maker's statement of the count.
 - what: section
   scope: [front, top, bottom]
   reason: sources-disagree
@@ -183,7 +187,8 @@ gaps:
   reason: needs-photo
   note: >-
     the maker's mark and the printed labels, including the breaker labels, are left to a later touch. The windows that carry them are
-    drawn. The strip also shows small dots near the two ends and faint marks, which are too small to place.
+    drawn. The strip also shows small dots near the two ends and a dot beside the module at about x 409 of the strip. It shows
+    specks along the top edge and faint marks too. Each is 1 to 2 px, which is too small to place.
   wanted: a larger photograph of the front.
 - what: colour
   scope: [front]

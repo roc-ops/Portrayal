@@ -6,6 +6,7 @@ A monitoring module with two Ethernet jacks and a four-digit display sits betwee
 The fixed cord exports as a power port of type other.
 """
 import pathlib
+import xml.etree.ElementTree as ET
 
 import yaml
 
@@ -101,11 +102,50 @@ def test_the_pdu_meters_its_branches_and_switches_no_outlet():
     assert management["outlet-switching"] is False
 
 
-def test_the_breaker_is_a_twenty_amp_double_pole_part():
+def test_the_breaker_part_switches_and_each_export_outlet_names_its_breaker():
+    """The contract carries no rating, so the rating is the device's text. The states and the exported links are behaviour."""
     contract = _contract(BREAKER)
     assert contract["class"] == "breaker"
+    assert contract["elements"]["button"]["class"] == "breaker"
     assert contract["elements"]["button"]["states"] == ["on", "off"]
-    assert "20 A" in contract["provenance"]["rating"]
+    dev = _load(DEVICE)
+    assert "20 A double-pole" in dev["attrs"]["power"]["breakers"]
+    for tool in ("netbox", "nautobot"):
+        path = ROOT / "library" / "exports" / tool / "device-types" / "Vertiv" / "VP8841.yaml"
+        outlets = _load(path)["power-outlets"]
+        said = [o.get("description", "") for o in outlets]
+        assert len(outlets) == 42, tool
+        assert said.count("Through breaker-1") == 21, tool
+        assert said.count("Through breaker-2") == 21, tool
+
+
+def _skin_rects():
+    skin = COMPONENTS / "vertiv" / "geist-imd" / "v1" / "skins" / "default.svg"
+    root = ET.fromstring(skin.read_text(encoding="utf-8"))
+    return [e for e in root.iter() if e.tag.endswith("rect")]
+
+
+def _luma(colour):
+    r, g, b = (int(colour[i:i + 2], 16) for i in (1, 3, 5))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def test_the_module_draws_a_black_square_at_each_end():
+    squares = [r for r in _skin_rects() if r.get("fill") == "#050505"]
+    assert len(squares) == 2
+    height = _contract(MODULE)["size"]["h"]
+    (a, b) = sorted(squares, key=lambda r: float(r.get("y")))
+    assert (a.get("x"), a.get("width"), a.get("height")) == (b.get("x"), b.get("width"), b.get("height"))
+    top = float(a.get("y")) + float(a.get("height")) / 2
+    bottom = float(b.get("y")) + float(b.get("height")) / 2
+    assert abs(top - (height - bottom)) < 0.3
+    assert top < 10 and bottom > height - 10
+
+
+def test_the_module_plate_is_no_lighter_than_the_body():
+    plate = [r for r in _skin_rects() if r.get("id") == "plate"][0]
+    body = _load(DEVICE)["chassis"]["color"]
+    assert _luma(plate.get("fill")) <= _luma(body)
 
 
 def test_the_module_has_two_ethernet_jacks_a_four_digit_display_and_three_buttons():
