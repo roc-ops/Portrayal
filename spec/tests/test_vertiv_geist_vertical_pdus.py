@@ -229,7 +229,8 @@ def test_the_vp7553_cord_draws_a_hex_sided_nut_and_the_vp7557_cord_a_round_gland
     round_gland = ET.fromstring(_skin(CORDS["vp7557"]))
     assert [e for e in round_gland.iter(ns + "circle") if e.get("id") == "gland"]
     assert not list(round_gland.iter(ns + "polygon"))
-    assert "round" in _contract(CORDS["vp7557"])["description"]
+    # the photograph cannot tell round from hex-sided, so the contract's description no longer says round
+    assert "round" not in _contract(CORDS["vp7557"])["description"]
 
 
 def test_every_slot_carries_a_light_rim_and_a_pale_bar_drawn_over_its_plate():
@@ -249,3 +250,38 @@ def test_every_slot_carries_a_light_rim_and_a_pale_bar_drawn_over_its_plate():
         assert f"label-window-{slots + 1}" not in ids
         gap = next(g for g in _device(name)["gaps"] if g["what"] == "label-windows")
         assert "rim" in gap["note"] and "plain plate" not in gap["note"], name
+
+
+def test_the_vp7553_plate_has_the_figures_dark_band_along_its_start_edge_and_the_vp7557_has_none():
+    dev = _device("vp7553")
+    decor = _decor(dev)
+    ids = [d["id"] for d in decor]
+    plate = decor[ids.index("module-plate")]
+    band = decor[ids.index("module-plate-band")]
+    # the figure at 1.99 mm per pixel: the band reads about 3.9 px, 7.7 mm, good to 2 mm, across the whole plate
+    assert band["at"][0] == plate["at"][0] and band["size"][0] == plate["size"][0]
+    assert band["at"][1] == plate["at"][1], "on the plate's start edge, the edge nearer the far end"
+    assert 5.5 <= band["size"][1] <= 9.5, band["size"]
+    assert ids.index("module-plate") < ids.index("module-plate-band")
+    assert band["fill"].lower() < plate["fill"].lower(), "darker than the plate"
+    for screw in (d for d in decor if d.get("kind") == "screw"):
+        assert not _overlap(_box(band), _box(screw)), screw["id"]
+    assert all(ids.index("module-plate-band") < i for i, n in enumerate(ids) if n.startswith("module-screw-"))
+    gap = next(g for g in dev["gaps"] if g["what"] == "module-detail")
+    assert "band" in gap["note"] and "is drawn" in gap["note"] and "not drawn" in gap["note"]
+    assert "which is not drawn" not in gap["note"]
+    assert not [d for d in _decor(_device("vp7557")) if "band" in d["id"] and "bank" not in d["id"]]
+
+
+def test_the_vp7557_gland_is_drawn_round_as_a_stated_stand_in_and_not_claimed_to_read_round():
+    contract = _contract(CORDS["vp7557"])
+    size = contract["provenance"]["size"]
+    assert "too small to tell round from hex-sided" in size and "drawn round" in size
+    assert "reads round" not in size
+    assert "round" not in contract["description"] and "through a cable gland" in contract["description"]
+    dev = _device("vp7557")
+    assert "too small to tell round from hex-sided" in dev["provenance"]["input"]["note"]
+    gap = next(g for g in dev["gaps"] if g["what"] == "gland-shape")
+    for word in ("round", "hex", "18 px", "VP7553"):
+        assert word in gap["note"], word
+    assert [g for g in _device("vp7553")["gaps"] if g["what"] == "gland-shape"] == []
