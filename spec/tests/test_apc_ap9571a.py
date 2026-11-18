@@ -275,6 +275,8 @@ def test_the_light_edge_stands_where_the_photograph_reads_it_from_the_face_edge(
         stated = re.findall(r"light edge stands (\d+) mm from the face's left edge, good to about 2 mm", text)
         assert len(stated) == 1 and abs(float(stated[0]) - drawn) <= 0.6, source
         assert "percent across" not in text, source
+        assert "That is 1 px, 0.7 mm, plus 1.3 mm for the scale spread" in text, source
+        assert "It shows a second highlight stripe on the cord and a small nub on the disc's upper left. None of these is drawn" in text, source
 
 
 def test_the_cord_is_drawn_the_one_height_and_place_the_contract_and_the_gap_state(dev):
@@ -297,6 +299,7 @@ def test_the_rear_note_gives_the_boss_extent_the_skin_draws(dev):
     assert m
     assert (float(m.group(1)), float(m.group(2))) == (relief["cx"] - relief["rx"], shank["cx"] + shank["rx"])
     assert float(m.group(3)) == placements(dev, "rear")["input"]["at"][1]
+    assert "left edge is drawn 4.5 mm right of the photograph, beyond the 3.5 mm limit" in words(dev["provenance"]["rear"]["note"])
 
 
 def test_the_marks_gap_states_the_device_wide_limit_once_and_the_shelf_doubt(dev):
