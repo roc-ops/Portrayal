@@ -263,7 +263,7 @@ def test_the_side_gap_places_the_six_bank_ledges_their_squares_and_uprights():
     note = next(iter(notes.values()))
     for phrase in ("ledge under each of the six banks", "239.5 to 398.5", "461.5 to 620.4", "683.6 to 842.5",
                    "1167.3 to 1326.2", "1390.2 to 1548.3", "1612.3 to 1771.2", "about 6 below",
-                   "36 small squares", "36 thin uprights", "a tolerance of about 1.5 mm along and 1 mm below"):
+                   "36 small squares", "42 thin uprights", "a tolerance of about 1.5 mm along and 1 mm below"):
         assert phrase in note, phrase
 
 
@@ -399,10 +399,11 @@ def test_the_proud_entries_say_the_levers_place_and_across_are_photograph_estima
 
 
 # The 36 lever pegs of the side view on page 5 of the C3S sheet. Each centre is in mm from the cord end.
-# They are read at 600 ppi, 2.063 pixels per mm, from each peg's two edges. The first is outlet 36 and the last outlet 1.
-PEGS = (254.2, 280.9, 307.3, 334.2, 354.8, 375.9, 476.7, 503.4, 529.8, 556.2, 577.3, 598.4,
-        699.2, 726.1, 752.3, 779.0, 799.8, 821.1, 1183.0, 1209.7, 1236.3, 1262.5, 1283.8, 1304.7,
-        1405.5, 1432.1, 1458.8, 1485.0, 1506.3, 1527.2, 1628.0, 1654.6, 1681.3, 1707.5, 1728.8, 1749.6)
+# They are read at 1800 ppi, 6.1912 pixels per mm, from each peg's two walls. The first is outlet 36 and the last outlet 1.
+# The 2400 ppi readings differ by 0.00 to 0.03. A first reading at 600 ppi differed from these by 0.56 at the most.
+PEGS = (254.55, 281.20, 307.86, 334.51, 354.86, 376.18, 476.97, 503.62, 529.78, 556.43, 577.27, 598.59,
+        699.54, 726.19, 752.36, 779.01, 799.84, 821.16, 1182.80, 1209.45, 1236.10, 1262.27, 1283.59, 1304.43,
+        1405.21, 1431.87, 1458.52, 1484.76, 1506.16, 1527.00, 1627.79, 1654.44, 1681.09, 1707.25, 1728.58, 1749.41)
 
 
 def _gaps(name):
@@ -437,20 +438,20 @@ def test_each_breaker_cell_draws_a_bar_with_dots_and_a_framed_square():
 
 
 def test_the_rear_draws_the_seam_the_sides_draw():
-    """The sheet's rear view has a vertical line at the side seam, 119.8 mm from the cord end, across the whole width."""
+    """The sheet's rear view has a vertical line at the side seam, 120.7 mm from the cord end, across the whole width."""
     for name in CASES:
         dev = _device(name)
         seams = _kind(dev, "rear", "seam")
         assert len(seams) == 1, name
         seam = seams[0]
-        assert abs(1778.0 - (seam["at"][1] + seam["size"][1] / 2) - 119.8) <= 1.0, name
+        assert abs(1778.0 - (seam["at"][1] + seam["size"][1] / 2) - SEAM_READ) <= 0.1, name
         assert seam["size"][0] == 55.9 and seam["size"][1] <= 1.0, name
         side = _kind(dev, "left", "seam")[0]
         assert seam["at"][1] == side["at"][1] and seam["fill"] == side["fill"], name
 
 
 def test_each_lever_is_centred_on_its_peg_on_the_side_view():
-    """Each lever stands within the stated tolerance of its peg's centre, read from the side view at 600 ppi."""
+    """Each lever stands within the stated tolerance of its peg's centre, and within 0.3 mm of the reading at 1800 ppi."""
     for name in CASES:
         dev = _device(name)
         note = _gaps(name)["outlet-lever"]
@@ -461,7 +462,8 @@ def test_each_lever_is_centred_on_its_peg_on_the_side_view():
         for k, latch in latches.items():
             centre = 1778.0 - latch["at"][1] - latch["size"][1] / 2
             assert abs(centre - PEGS[36 - k]) <= tol, (name, k, centre, PEGS[36 - k])
-        for phrase in ("254.2", "375.9", "peg", "600 ppi", "2.063"):
+            assert round(abs(centre - PEGS[36 - k]), 2) <= 0.30, (name, k, centre, PEGS[36 - k])
+        for phrase in ("254.55", "376.18", "peg", "1800 ppi", "6.19 pixels per mm", "within 0.3 mm"):
             assert phrase in note, (name, phrase)
 
 
@@ -531,7 +533,7 @@ NUB_CAPS = {"side-nub-1-cap": (1347.6, 1364.0), "side-nub-2-cap": (414.9, 430.4)
 
 
 def test_each_side_screw_stands_at_the_centre_read_on_the_sheet_within_the_stated_tolerance():
-    """Each screw centre from the cord end is the sheet's reading within about 1 mm; screws 5 to 11 are placed to it."""
+    """Each screw centre from the cord end is the sheet's reading within 0.1 mm, all 11 of them."""
     for name in CASES:
         note = _gaps(name)["side-detail"]
         for phrase in ("column profile", "1800 and 2400 ppi", "6.19 and 8.25 pixels per mm", "13.6 from the far end",
@@ -542,9 +544,7 @@ def test_each_side_screw_stands_at_the_centre_read_on_the_sheet_within_the_state
             for n, read in enumerate(SCREW_CENTRES, 1):
                 item = screws["side-screw-%d" % n]
                 built = 1778.0 - (item["at"][1] + item["size"][1] / 2)
-                assert abs(built - read) <= 1.0, (name, face, n, built, read)
-                if n >= 5:
-                    assert abs(built - read) <= 0.1, (name, face, n, built, read)
+                assert abs(built - read) <= 0.1, (name, face, n, built, read)
 
 
 def test_the_dot_zones_and_the_nub_caps_stand_within_a_millimetre_of_the_sheet():
@@ -580,3 +580,54 @@ def test_the_side_gap_states_the_rounds_and_the_end_uprights_with_figure_method_
                    "3.2 across, 1.2 along and 3.1 below", "12 more uprights", "9.7 and 17.2",
                    "about 1.5 mm along and 1 mm below"):
         assert phrase in note, phrase
+
+
+# The dot bands are counted on page 5 at 1800 and 2400 ppi. They give the tile count and the pitch.
+# They also give the dots at 10, 30, 50, 70 and 90 per cent. Each middle dot is its number from the cord end
+# and its centre in mm from the cord end, the mean of the two renders.
+DOT_TILES = {"short": (20, 4.463), "long": (360, 4.4964)}
+DOT_MID = {"short": ((2, 18.41), (6, 35.86), (10, 54.28), (14, 71.72), (18, 89.17)),
+           "long": ((36, 300.58), (108, 624.28), (180, 948.12), (252, 1271.96), (324, 1595.80))}
+# The seam's centre from the cord end, read on the rows below the dots at both renders (120.65 and 120.67).
+SEAM_READ = 120.7
+
+
+def test_the_dot_bands_are_tiled_as_the_sheet_counts_them_and_their_middle_dots_agree():
+    """The long band is 360 columns at 4.4964, the cord-end block 20 at 4.463. The five middle dots of each stand within 1 mm."""
+    for name in CASES:
+        note = _gaps(name)["side-detail"]
+        for phrase in ("360 columns", "4.4964", "20 columns", "4.463", "within 0.3 mm", "within 0.9 mm", "4.4975"):
+            assert phrase in note, (name, phrase)
+        for face in ("left", "right"):
+            zones = sorted((i for i in _decor(_device(name), face) if i.get("pattern") == "holes"), key=lambda i: i["size"][1])
+            for zone, key in zip(zones, ("short", "long")):
+                tiles, pitch = DOT_TILES[key]
+                px, py = zone["pattern-pitch"]
+                assert py == pitch, (name, face, key, py)
+                assert abs(zone["size"][1] / py - tiles) < 0.01, (name, face, key, zone["size"][1] / py)
+                assert zone["at"] == zone["pattern-offset"], (name, face, key)
+                for number, read in DOT_MID[key]:
+                    built = 1778.0 - (zone["at"][1] + py / 2 + (tiles - number) * py)
+                    assert abs(built - read) <= 1.0, (name, face, key, number, built, read)
+
+
+def test_the_side_seam_stands_at_the_centre_read_and_the_gap_says_so():
+    """The seam is drawn where it is read, 120.7 from the cord end, on both faces, and no text gives the old 119.8."""
+    for name in CASES:
+        for face in ("left", "right"):
+            seam = _kind(_device(name), face, "seam")[0]
+            assert abs(1778.0 - (seam["at"][1] + seam["size"][1] / 2) - SEAM_READ) <= 0.1, (name, face)
+        assert "read at 120.7 and drawn there" in _gaps(name)["side-detail"], name
+        text = (DEVICES / name / "device.yaml").read_text(encoding="utf-8")
+        assert "119.8" not in text, name
+
+
+def test_the_side_gap_states_the_six_uprights_before_peg_one_of_each_ledge():
+    """A thin upright stands about 9.5 before peg 1 of every ledge: six more, so 42 thin uprights at the pegs and the ledge starts."""
+    notes = {name: _gaps(name)["side-nubs"] for name in CASES}
+    assert len(set(notes.values())) == 1, "the three side-nubs notes differ"
+    note = next(iter(notes.values()))
+    for phrase in ("before peg 1 of each ledge", "about 9.5", "9.2 to 9.7", "0.97 wide", "42 thin uprights",
+                   "their tolerance is about 1 mm"):
+        assert phrase.lower() in note.lower(), phrase
+    assert "36 thin uprights" not in note
