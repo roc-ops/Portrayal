@@ -10,8 +10,8 @@ spawn a few hundred of them, and that parse was most of the ~6 minutes they
 added to CI's `tests` step - the step that went over the job's 30 minutes.
 
 WHAT THIS DOES INSTEAD. One server per pytest worker imports the tools and
-parses the library ONCE, through `manifest.load_yaml` - the build's own cache,
-keyed by (path, mtime_ns). Each call then FORKS that server: the child is a
+parses the library ONCE. The parse goes into the cache `manifest.load_yaml`
+reads - the build's own, keyed by (path, mtime_ns). Each call then FORKS that server: the child is a
 fresh copy of a process that has read the library and done nothing else, and it
 runs the tool exactly as `python <tool> args...` would - `runpy` executes the
 script as `__main__` with `sys.argv` set, its stdout and stderr on files, stdin
@@ -64,6 +64,7 @@ PORTRAYAL_TESTS_COLD_RENDER=1 sends every call to `subprocess.run` instead, so
 a suspicion that the server changed an answer is one run away from settled.
 """
 import atexit
+import hashlib
 import json
 import os
 import subprocess
@@ -188,31 +189,60 @@ def _warm():
     the build's own cache, and prime lint's content-keyed per-file memo for
     L62. Nothing else: no rule runs, and no global holding a rule's answer is
     filled."""
+    import yaml
+
     import portrayal.capability  # noqa: F401
-    import portrayal.lint  # noqa: F401
-    import portrayal.render  # noqa: F401
+    import portrayal.lint as lint
+    import portrayal.render as render
+    from portrayal import manifest
     from portrayal.manifest import load_yaml
+    # EACH LIBRARY FILE IS PARSED ONCE. It is read as bytes, stat first as
+    # load_yaml does, and parsed by the loader load_yaml uses. The document is
+    # stored under (path, mtime) in load_yaml's cache. It is also kept by the
+    # sha256 of those bytes, so the two memos below take it instead of parsing
+    # the same bytes again.
+    real_load, parsed = yaml.load, {}
     for sub in ("components", "devices", "labs"):
         for f in sorted((LIB / sub).rglob("*.yaml")):
-            load_yaml(f)
+            try:
+                mtime = f.stat().st_mtime_ns
+                data = f.read_bytes()
+            except OSError:
+                continue
+            doc = real_load(data, Loader=manifest._Loader)
+            manifest._CACHE[(str(f), mtime)] = doc
+            parsed[hashlib.sha256(data).hexdigest()] = doc
     for f in sorted(SCHEMAS.glob("*.yaml")):
         load_yaml(f)
+
+    def reuse(stream, Loader=None):
+        """A parse of bytes this warm-up already parsed, else the real one."""
+        if isinstance(stream, bytes):
+            sha = hashlib.sha256(stream).hexdigest()
+            if sha in parsed:
+                return parsed[sha]
+        return real_load(stream, Loader=Loader)
+
     # AND L62'S PER-FILE FACTS FOR THE SAME LIBRARY (#542). L62's vocabulary is
-    # cached on disk by content, so a render whose roots include a tmp library
-    # beside the real one misses that cache, and would otherwise parse all
-    # ~860 real files again from their bytes. This fills lint's memo of what
-    # each FILE contributes, keyed by the sha256 of its bytes, so a child
-    # parses only the files a test wrote. It is not rule state: no vocabulary
-    # is computed, nothing goes into `_ID_VOCAB_CACHE` or onto disk, and a
-    # content-keyed entry cannot go stale - a file that changes is a new key.
-    import portrayal.lint as lint
-    lint._id_corpus_prime([LIB])
+    # cached on disk by content. A render whose roots include a tmp library
+    # beside the real one misses that cache. It would then parse every real
+    # file again from its bytes. This fills lint's memo of what each FILE
+    # contributes, keyed by the sha256 of its bytes, so a child parses only
+    # the files a test wrote. It is not rule state: no vocabulary is computed,
+    # nothing goes into `_ID_VOCAB_CACHE` or onto disk, and a content-keyed
+    # entry cannot go stale - a file that changes is a new key.
     # AND THE PLUGGABLE CANDIDATE WALK'S, FOR THE SAME REASON (#543): its
     # selection is cached on disk by content, and its per-contract memo is
     # keyed by the sha256 of each contract's bytes, so this is not rule state
     # either - nothing is selected and nothing is written.
-    import portrayal.render as render
-    render._candidates_prime([LIB])
+    # `yaml.load` is swapped only while the two memos fill, and put back before
+    # the server answers, so no render sees it.
+    yaml.load = reuse
+    try:
+        lint._id_corpus_prime([LIB])
+        render._candidates_prime([LIB])
+    finally:
+        yaml.load = real_load
 
 
 def _child(req):

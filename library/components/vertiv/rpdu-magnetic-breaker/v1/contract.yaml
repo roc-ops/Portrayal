@@ -1,0 +1,29 @@
+format: 1
+kind: component
+name: rpdu-magnetic-breaker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of a Vertiv Geist basic vertical rack PDU with a 32 A input.
+  A labelled window sits beside a round actuator, on the dark module plate at the cord end of the strip.
+  Fixed to the PDU, not a plug-in part.
+size: {w: 35.0, h: 32.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    estimated - the figure on page 2 of the VP7553 data sheet shows each breaker at about 17 by 16 px. One pixel is 1.99 mm.
+    The window reads about 14 mm across the strip by 32 mm along it. The actuator reads about 11 mm across.
+    The figure is too small to read an edge closer than about 2 mm.
+  rating: >-
+    datasheet - the VP7553 data sheet prints "(2) Disyuntores magnéticos unipolares de 16 A": two single-pole 16 A magnetic breakers.
+    The contract carries no rating, so the power figures stand as the record.
+  states: >-
+    estimated - a breaker trips and is reset by its actuator, so `off` stands for tripped. The figure does not show either state
+    and no held document describes the actuator's travel, so the skin does not change.
+  print: >-
+    NOT DRAWN: the window carries a printed label that the figure is too small to read.
+    Printed text is left to a later touch.
+elements:
+  button: {at: [2.5, 3.5], size: [11.0, 11.0], class: breaker, states: ['on', 'off']}
+skins: [default]
