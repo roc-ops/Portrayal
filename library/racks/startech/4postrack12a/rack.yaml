@@ -1,7 +1,7 @@
 format: 1
 kind: rack
 name: 4postrack12a
-version: 1.0.0
+version: 1.1.0
 maturity: modelled
 manufacturer: StarTech.com
 model: 4POSTRACK12A
@@ -12,7 +12,8 @@ description: >-
   rails that have square holes for cage nuts. The rails are adjustable for a
   variable mounting depth. It ships flat pack with four swiveling casters, which
   raise the frame to 657 mm, and it is not wall-mountable. The casters are
-  described here and are not data yet: the rack product has no key for a base.
+  described here only. The rack product has a base key, but no held document
+  states the caster count, so none is written.
 form: 4-post-frame
 ru: 12
 numbering:
@@ -37,6 +38,14 @@ outer:
 weight-kg: 15.60
 load:
   static-kg: 270.07
+enclosure:
+  entries:
+    - id: top
+      where: roof
+      kind: open
+      source: >-
+        The form note of this product says "The Rack Type row (4-Post) and the
+        Frame Type row (Open Frame) on page 3." No note says the frame has a roof.
 datasheet:
   title: 12U 4 Post Server Equipment Open Frame Rack Cabinet w/ Adjustable Posts & Casters
   url: https://media.startech.com/cms/pdfs/4postrack12a_datasheet.pdf
@@ -168,7 +177,8 @@ gaps:
   - what: casters
     reason: needs-drawing
     note: >-
-      The frame ships with four swiveling casters, and the rack product has no
-      key for a base yet, so they are in the description only. The sheet prints
-      no caster size and no rolling load.
-    wanted: A base key in the rack product, and the caster size and a rolling load from the maker.
+      The description says the frame ships with four swiveling casters. No held
+      document states that count, so `base` is not written. The maker's sheet
+      for this model is not held, and the product's notes print no caster size
+      or rolling load.
+    wanted: The page of the maker's 4POSTRACK12A data sheet that lists the casters, for `base.casters`.
