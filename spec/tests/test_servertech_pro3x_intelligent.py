@@ -256,6 +256,17 @@ def test_the_side_gap_names_each_small_item_under_the_body_with_figure_method_an
         assert phrase in note, phrase
 
 
+def test_the_side_gap_places_the_six_bank_ledges_their_squares_and_uprights():
+    """The side view draws a ledge under each of the six banks, with a square and an upright at each peg: the gap says where."""
+    notes = {name: {g["what"]: g["note"] for g in _device(name)["gaps"]}["side-nubs"] for name in CASES}
+    assert len(set(notes.values())) == 1, "the three side-nubs notes differ"
+    note = next(iter(notes.values()))
+    for phrase in ("ledge under each of the six banks", "239.5 to 398.5", "461.5 to 620.4", "683.6 to 842.5",
+                   "1167.3 to 1326.2", "1390.2 to 1548.3", "1612.3 to 1771.2", "about 6 below",
+                   "36 small squares", "36 thin uprights", "a tolerance of about 1.5 mm along and 1 mm below"):
+        assert phrase in note, phrase
+
+
 def test_every_estimate_gap_states_its_tolerance():
     for name in CASES:
         gaps = {g["what"]: g["note"] for g in _device(name)["gaps"]}
