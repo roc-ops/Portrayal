@@ -15,8 +15,8 @@ provenance:
     confidence: drawing
     note: FIGURES FROM THE MAKER'S SKU SHEET C3WG36RL-EPJE2MT4, PAGE 5 (headed Drawings), READ FROM A 300 PPI RASTER. The
       sheet draws the strip as the Basic 3A01 sheet does and adds the controller panel between the banks. Positions along
-      the strip carry about 1 to 3 mm. The controller panel's place and size are read from the front view of the Smart 3C01
-      sheet at 1200 ppi and carry about 2 mm. The three intelligent sheets draw the same strip.
+      the strip carry about 1 mm. The controller panel's place and size are read from the front view of the Smart 3C01 sheet
+      at 1200 ppi and carry about 2 mm. The three intelligent sheets draw the same strip.
   mount:
     confidence: drawing
     note: '`rack-side`: the strip stands beside a rack''s upright on mounting buttons at the back. The rear view dimensions
@@ -37,13 +37,13 @@ provenance:
       Across, the outlets sit where the 3A06's do (a stand-in). The labels and the ground point are read to about 2 mm. Each
       outlet has a retention lever, drawn estimated as a block 7.6 long along the strip and 2.0 across, standing 18.3 proud.
       The 7.6 is the peg width read on the side view at 600 ppi. The 2.0 and the place across are scaled from the data sheet
-      photograph by the C13 width, 22.0 at the standard recess. Each lever is centred on its outlet (gap outlet-lever). Each
-      outlet has a hole by its numeral, 36 in all, read from the data sheet photograph (gap numeral-hole). Each bank has two
-      end lugs, six top tabs and six bottom tabs, read to about 1 mm (gap raster-detail). Each top tab has two holes and each
-      C13 tab a notch. Each outlet has a bump and a dot on the bottom edge. Each blank plate has a tab and two dots. The cover
-      has two screw holes, and the ground point is a ring with a centre dot. A plain plate stands between the controller and
-      the far breaker. Each bank's housing is full width over its three Cx outlets and 3.0 narrower on each side over its
-      three C13 outlets (gap housing-step).
+      photograph by the C13 width, 22.0 at the standard recess. Each lever is centred on its peg on the side view (gap outlet-lever).
+      Each outlet has a hole by its numeral, 36 in all, read from the data sheet photograph (gap numeral-hole). Each bank
+      has two end lugs, six top tabs and six bottom tabs, read to about 1 mm (gap raster-detail). Each top tab has two holes
+      and each C13 tab a notch. Each outlet has a bump and a dot on the bottom edge. Each blank plate has a tab and two dots.
+      The cover has two screw holes, and the ground point is a ring with a centre dot. A plain plate stands between the controller
+      and the far breaker. Each breaker cell holds a framed square and a bar with two dots (gap raster-detail). Each bank's
+      housing is full width over its three Cx outlets and 3.0 narrower on each side over its three C13 outlets (gap housing-step).
   numbering:
     confidence: estimated
     note: 'estimated - outlet #1 is opposite the power input (the sheet). So the far end is 1 and the cord end 36, as the
@@ -59,13 +59,16 @@ provenance:
       outlet` and `outlet-switching: true`. Each outlet declares [on, off].'
   outlets:
     confidence: datasheet
-    note: datasheet - the sheet says 18 IEC 60320 C13 and 18 Cx outlets. HDOT Cx is a hybrid C13/C19 that takes a C14 or a
-      C20 plug. HDOT C13 is drawn as std/c13-outlet@1. The HDOT Cx is servertech/hdot-cx-outlet@1, an estimate of the recess,
-      as no dimensioned outlet drawing is held.
+    note: 'datasheet - the sheet says 18 IEC 60320 C13 and 18 Cx outlets. HDOT Cx is a hybrid C13/C19 that takes a C14 or
+      a C20 plug. HDOT C13 is drawn as std/c13-outlet@1. The HDOT Cx is servertech/hdot-cx-outlet@1. Its recess is the part''s
+      own: 30.1 across, from the PRO4X outline drawing''s plan view, and 24.0 along, an estimate. The figures are not read
+      from this sheet. The part''s contract states the method and no tolerance. This sheet''s views read the body 5.9 smaller
+      across and 6.8 along, so the real tolerance is about 6 mm (gap outlet-size).'
   rear:
     confidence: drawing
-    note: drawing - the twelve positions the rear view marks. 391.0 and 453.6 are 31.3 either side of the 422.3 button. 1324.4
-      and 1387.0 are either side of the 1355.7 one.
+    note: drawing - the twelve positions the rear view marks. A seam crosses the rear 119.8 from the cord end, where the side
+      seam stands. 391.0 and 453.6 are 31.3 either side of the 422.3 button. 1324.4 and 1387.0 are either side of the 1355.7
+      one.
   sides:
     confidence: drawing
     note: drawing - the side view shows two perforated zones with a seam between them. It shows 11 screws along the front
@@ -73,7 +76,7 @@ provenance:
       are named in gap side-nubs.
   ends:
     confidence: estimated
-    note: estimated - the end views show a plate with the cord entry; they are drawn as caps.
+    note: estimated - the end views show a plate with the cord entry; they are drawn as caps. The figures are in gap end-plates.
   input:
     confidence: datasheet
     note: 'datasheet - the SKU sheet prints Input Voltage 230 V, Input Plug IEC 230V/32A 2P+PE 6Hr, 32 A (32 A rated), 7.3
@@ -115,9 +118,15 @@ gaps:
   - bottom
   reason: vendor-silent
   note: the sheet names the plug and the drawing marks front and bottom entry. No held document gives the cord's length or
-    gauge or draws the plug's face. The entry frame is drawn 29.2 by 33.1, a stand-in that the sheet does not give. The end
-    view on page 5 shows the frame about 30 wide, and the screws and the cord hide its length. The stand-in has a tolerance
-    of 4 mm on each figure.
+    gauge or draws the plug's face. The entry frame is servertech/pro3x-cord-60309-2pe@1, a shared part that the Basic 3A01
+    also places, so it is not changed here. The part draws the frame 29.2 by 33.1, a stand-in taken from the PRO4X cord part.
+    The end view on page 5, read at 2400 ppi and 8.25 pixels per mm, shows the frame 26.1 across and 33.8 along. It is 29.7
+    across with its side arcs. Its four corner screws stand 27.1 across and 34.9 along, its two mid screws about 42 apart,
+    and its centre 32 from the rear edge. The part's frame is 21.6 by 25.5. Its corner screws stand 25.2 across and 20.7 along,
+    and its mid screws 30.3 apart. Its centre is 44.2 from the top edge of the bottom view. The part's frame is 4.5 narrower
+    and 8.3 shorter than the sheet's, and 12 mm off its place. The sheet's figures carry a tolerance of about 1 mm, so the
+    part is wrong by far more than the reading can explain. A new version of the part moves the 3A01's lock, so it is its
+    own change.
   wanted: a photograph of the cord and its plug.
 - what: button-positions
   scope:
@@ -130,20 +139,26 @@ gaps:
   scope:
   - front
   reason: needs-drawing
-  note: no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held. The sheet's HDOT detail is drawn at 0.36 to 1 and
-    gives no dimension. The part draws the Cx body 30.1 mm wide across, where the sheet's side and front views read 24.2 mm.
-    That part is shared by the Basic, PRO3X and PRO4X devices that place it. A wrongly drawn shared part gets a new version.
-    A new version moves the lock of every device that places it, so it is its own change. The Cx recess is estimated and the
-    C13 is the standard's. The retention latch of each outlet is drawn estimated (gap outlet-lever).
+  note: 'no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held. The sheet''s HDOT detail is drawn at 0.36 to 1 and
+    gives no dimension. The Cx recess is the shared part''s own figure, from its contract: 30.1 across, read on the PRO4X
+    outline drawing''s plan view, and 24.0 along, estimated as the 26.69 pitch less a 2.7 web. The figures are not read from
+    this sheet, and the contract states no tolerance. The sheet''s side and front views read the Cx body 24.2 across and 17.2
+    along. The part is 5.9 wider and 6.8 longer, so the tolerance it really carries is about 6 mm. That part is shared by
+    the Basic, PRO3X and PRO4X devices that place it. A wrongly drawn shared part gets a new version. A new version moves
+    the lock of every device that places it, so it is its own change. The C13 is the standard''s. The retention latch of each
+    outlet is drawn estimated (gap outlet-lever).'
   wanted: a dimensioned outlet drawing from Server Technology.
 - what: outlet-lever
   scope:
   - front
   reason: needs-drawing
   note: the pictures show a lever at each outlet and no dimensioned drawing gives it. Its 7.6 along the strip is the peg width
-    on the side view and its 18.3 reach is the sheet's. Its 2.0 across and its place are scaled from the data sheet photograph
-    by the C13 width, a taken figure. The tolerance is about 0.5 mm on the 7.6 and about 1 mm on the 2.0 and the place. The
-    front view's top-edge tabs and the side view's pegs may be the same part as the levers, which the held pages do not settle.
+    on the side view and its 18.3 reach is the sheet's. Each lever is centred on its peg's centre, read on the side view at
+    600 ppi, 2.063 pixels per mm, from the 1778.0 length. The six pegs of the cord-end bank stand at 254.2, 280.9, 307.3,
+    334.2, 354.8 and 375.9 mm from the cord end. That is about 2.2 mm nearer the cord end than the outlet centres. The tolerance
+    along the strip is about 0.5 mm, one pixel, and four rows read the same within 0.3. Its 2.0 across and its place across
+    are scaled from the data sheet photograph by the C13 width, a taken figure. The tolerance across is about 1 mm. The front
+    view's top-edge tabs and the side view's pegs may be the same part as the levers, which the held pages do not settle.
   wanted: a dimensioned drawing of the HDOT outlet module with its lever.
 - what: raster-detail
   scope:
@@ -154,7 +169,10 @@ gaps:
     place. Each top tab has two holes, 1.6 across and about 10 apart, and each C13 tab has a notch 4.4 by 1.4. Each outlet
     has a bottom-edge bump 3.9 by 4.2 and a dot 3.0 to 3.3 across. Each Cx outlet also has a ring 1.6 across. Each blank plate
     has a tab 3.3 by 10.9 on its far edge and two dots 1.5 across on its bottom edge. The lugs are 8.3 and 7.3 by 4.6, and
-    the top edge tabs 9.7 across. Each lug stands 2.4 inside its bank''s far edge, as the sheet draws it.'
+    the top edge tabs 9.7 across. Each lug stands 2.4 inside its bank''s far edge, as the sheet draws it. Each breaker cell
+    holds a framed square and a bar with two dots. They are read on a 2400 ppi render at 8.252 pixels per mm, from the 1778.0
+    length. The frame is 17.4 across and 17.4 along. The bar''s head is 3.8 across and 6.7 along, on a stem 2.8 along, with
+    dots 2.8 and 2.0 across. The tolerance is about 1 mm, one pixel of the raster.'
   wanted: a dimensioned front view of the strip.
 - what: numeral-hole
   scope:
@@ -216,7 +234,10 @@ gaps:
   - top
   - bottom
   reason: needs-photo
-  note: the end views are small, so the end faces are caps and the front-entry cover is a plate.
+  note: the end views on page 5 are small, so the end faces are caps and the front-entry cover is a plate. At 2400 ppi, 8.25
+    pixels per mm, the cord-end view reads 56.3 across and 63.7 deep between its wall lines. Each cap is drawn 55.9 by 63.5,
+    the body's own size. The nub stands beyond the cap and the entry frame is a part, so each has its own gap (side-nubs,
+    cord-and-plug). The tolerance is about 1 mm, one pixel of the raster.
   wanted: a close photograph of each end.
 - what: outlet-across-position
   scope:
@@ -2223,7 +2244,7 @@ views:
       - id: latch-1
         at:
         - 10.9
-        - 21.2
+        - 24.6
         size:
         - 2.0
         - 7.6
@@ -2233,7 +2254,7 @@ views:
       - id: latch-2
         at:
         - 10.9
-        - 43.2
+        - 45.4
         size:
         - 2.0
         - 7.6
@@ -2243,7 +2264,7 @@ views:
       - id: latch-3
         at:
         - 10.9
-        - 65.2
+        - 66.7
         size:
         - 2.0
         - 7.6
@@ -2253,7 +2274,7 @@ views:
       - id: latch-4
         at:
         - 10.9
-        - 91.0
+        - 92.9
         size:
         - 2.0
         - 7.6
@@ -2263,7 +2284,7 @@ views:
       - id: latch-5
         at:
         - 10.9
-        - 117.4
+        - 119.6
         size:
         - 2.0
         - 7.6
@@ -2273,7 +2294,7 @@ views:
       - id: latch-6
         at:
         - 10.9
-        - 144.3
+        - 146.2
         size:
         - 2.0
         - 7.6
@@ -2283,7 +2304,7 @@ views:
       - id: latch-7
         at:
         - 10.9
-        - 243.8
+        - 247.0
         size:
         - 2.0
         - 7.6
@@ -2293,7 +2314,7 @@ views:
       - id: latch-8
         at:
         - 10.9
-        - 265.8
+        - 267.9
         size:
         - 2.0
         - 7.6
@@ -2303,7 +2324,7 @@ views:
       - id: latch-9
         at:
         - 10.9
-        - 287.8
+        - 289.2
         size:
         - 2.0
         - 7.6
@@ -2313,7 +2334,7 @@ views:
       - id: latch-10
         at:
         - 10.9
-        - 313.5
+        - 315.4
         size:
         - 2.0
         - 7.6
@@ -2323,7 +2344,7 @@ views:
       - id: latch-11
         at:
         - 10.9
-        - 340.1
+        - 342.1
         size:
         - 2.0
         - 7.6
@@ -2333,7 +2354,7 @@ views:
       - id: latch-12
         at:
         - 10.9
-        - 366.3
+        - 368.7
         size:
         - 2.0
         - 7.6
@@ -2343,7 +2364,7 @@ views:
       - id: latch-13
         at:
         - 10.9
-        - 466.3
+        - 469.5
         size:
         - 2.0
         - 7.6
@@ -2353,7 +2374,7 @@ views:
       - id: latch-14
         at:
         - 10.9
-        - 488.3
+        - 490.4
         size:
         - 2.0
         - 7.6
@@ -2363,7 +2384,7 @@ views:
       - id: latch-15
         at:
         - 10.9
-        - 510.3
+        - 511.7
         size:
         - 2.0
         - 7.6
@@ -2373,7 +2394,7 @@ views:
       - id: latch-16
         at:
         - 10.9
-        - 535.9
+        - 537.9
         size:
         - 2.0
         - 7.6
@@ -2383,7 +2404,7 @@ views:
       - id: latch-17
         at:
         - 10.9
-        - 562.4
+        - 564.5
         size:
         - 2.0
         - 7.6
@@ -2393,7 +2414,7 @@ views:
       - id: latch-18
         at:
         - 10.9
-        - 589.0
+        - 591.2
         size:
         - 2.0
         - 7.6
@@ -2403,7 +2424,7 @@ views:
       - id: latch-19
         at:
         - 10.9
-        - 949.9
+        - 953.1
         size:
         - 2.0
         - 7.6
@@ -2413,7 +2434,7 @@ views:
       - id: latch-20
         at:
         - 10.9
-        - 971.9
+        - 974.4
         size:
         - 2.0
         - 7.6
@@ -2423,7 +2444,7 @@ views:
       - id: latch-21
         at:
         - 10.9
-        - 993.9
+        - 995.2
         size:
         - 2.0
         - 7.6
@@ -2433,7 +2454,7 @@ views:
       - id: latch-22
         at:
         - 10.9
-        - 1019.7
+        - 1021.9
         size:
         - 2.0
         - 7.6
@@ -2443,7 +2464,7 @@ views:
       - id: latch-23
         at:
         - 10.9
-        - 1046.4
+        - 1048.1
         size:
         - 2.0
         - 7.6
@@ -2453,7 +2474,7 @@ views:
       - id: latch-24
         at:
         - 10.9
-        - 1072.8
+        - 1075.0
         size:
         - 2.0
         - 7.6
@@ -2463,7 +2484,7 @@ views:
       - id: latch-25
         at:
         - 10.9
-        - 1172.8
+        - 1175.8
         size:
         - 2.0
         - 7.6
@@ -2473,7 +2494,7 @@ views:
       - id: latch-26
         at:
         - 10.9
-        - 1194.8
+        - 1196.9
         size:
         - 2.0
         - 7.6
@@ -2483,7 +2504,7 @@ views:
       - id: latch-27
         at:
         - 10.9
-        - 1216.8
+        - 1218.0
         size:
         - 2.0
         - 7.6
@@ -2493,7 +2514,7 @@ views:
       - id: latch-28
         at:
         - 10.9
-        - 1242.2
+        - 1244.4
         size:
         - 2.0
         - 7.6
@@ -2503,7 +2524,7 @@ views:
       - id: latch-29
         at:
         - 10.9
-        - 1268.6
+        - 1270.8
         size:
         - 2.0
         - 7.6
@@ -2513,7 +2534,7 @@ views:
       - id: latch-30
         at:
         - 10.9
-        - 1295.5
+        - 1297.5
         size:
         - 2.0
         - 7.6
@@ -2523,7 +2544,7 @@ views:
       - id: latch-31
         at:
         - 10.9
-        - 1395.0
+        - 1398.3
         size:
         - 2.0
         - 7.6
@@ -2533,7 +2554,7 @@ views:
       - id: latch-32
         at:
         - 10.9
-        - 1417.0
+        - 1419.4
         size:
         - 2.0
         - 7.6
@@ -2543,7 +2564,7 @@ views:
       - id: latch-33
         at:
         - 10.9
-        - 1439.0
+        - 1440.0
         size:
         - 2.0
         - 7.6
@@ -2553,7 +2574,7 @@ views:
       - id: latch-34
         at:
         - 10.9
-        - 1464.5
+        - 1466.9
         size:
         - 2.0
         - 7.6
@@ -2563,7 +2584,7 @@ views:
       - id: latch-35
         at:
         - 10.9
-        - 1491.4
+        - 1493.3
         size:
         - 2.0
         - 7.6
@@ -2573,7 +2594,7 @@ views:
       - id: latch-36
         at:
         - 10.9
-        - 1517.5
+        - 1520.0
         size:
         - 2.0
         - 7.6
@@ -5110,9 +5131,9 @@ views:
         attrs:
           label: '36'
       - id: breaker-1
-        ref: servertech/pro3x-breaker-handle@1
+        ref: servertech/pro3x-breaker-handle@2
         at:
-        - 33.7
+        - 31.9
         - 627.0
         group: breakers
         rel-pos: 1
@@ -5122,9 +5143,9 @@ views:
         description: Breaker 1 of 2, a two-pole branch breaker across L1 and L2/N (the schematic's label), feeding outlets
           1 to 18
       - id: breaker-2
-        ref: servertech/pro3x-breaker-handle@1
+        ref: servertech/pro3x-breaker-handle@2
         at:
-        - 33.7
+        - 31.9
         - 1559.0
         group: breakers
         rel-pos: 2
@@ -5157,6 +5178,16 @@ views:
         - 2
         fill: '#26282b'
         kind: end-cap
+      - id: rear-seam
+        at:
+        - 0.0
+        - 1657.9
+        size:
+        - 55.9
+        - 0.6
+        rx: 0
+        fill: '#0f1011'
+        kind: seam
       - id: mount-hole-1
         at:
         - 24.8

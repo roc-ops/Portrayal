@@ -8,12 +8,14 @@ Switched units declare on and off on every outlet. The Smart unit declares no ou
 import importlib.util
 import pathlib
 import re
+import xml.etree.ElementTree as ET
 
 import yaml
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEVICES = ROOT / "library" / "devices" / "servertech"
 CONTROLLER = ROOT / "library" / "components" / "servertech" / "pro3x-controller" / "v1" / "contract.yaml"
+BREAKER = ROOT / "library" / "components" / "servertech" / "pro3x-breaker-handle" / "v2"
 
 CASES = {
     "pro3x-smart-3c01": ("branch", False),
@@ -229,7 +231,8 @@ def test_every_estimate_gap_states_its_tolerance():
     for name in CASES:
         gaps = {g["what"]: g["note"] for g in _device(name)["gaps"]}
         for what in ("numeral-hole", "outlet-lever", "controller-outline", "controller-scale", "housing-step",
-                     "raster-detail", "side-detail", "side-nubs", "cord-and-plug", "outlet-across-position"):
+                     "raster-detail", "side-detail", "side-nubs", "cord-and-plug", "outlet-across-position",
+                     "outlet-size", "end-plates", "outlet-along-position"):
             assert "tolerance" in gaps[what], (name, what)
         assert "taken figure" in gaps["numeral-hole"], name
 
@@ -353,3 +356,126 @@ def test_the_proud_entries_say_the_levers_place_and_across_are_photograph_estima
         why = module.PROUD[name][1]
         assert "photograph" in why and "2.0" in why and "place" in why, name
         assert len(why.split()) <= 25, name
+
+
+# The 36 lever pegs of the side view on page 5 of the C3S sheet. Each centre is in mm from the cord end.
+# They are read at 600 ppi, 2.063 pixels per mm, from each peg's two edges. The first is outlet 36 and the last outlet 1.
+PEGS = (254.2, 280.9, 307.3, 334.2, 354.8, 375.9, 476.7, 503.4, 529.8, 556.2, 577.3, 598.4,
+        699.2, 726.1, 752.3, 779.0, 799.8, 821.1, 1183.0, 1209.7, 1236.3, 1262.5, 1283.8, 1304.7,
+        1405.5, 1432.1, 1458.8, 1485.0, 1506.3, 1527.2, 1628.0, 1654.6, 1681.3, 1707.5, 1728.8, 1749.6)
+
+
+def _gaps(name):
+    return {g["what"]: g["note"] for g in _device(name)["gaps"]}
+
+
+def _skin_item(skin, ident):
+    for el in ET.fromstring(skin).iter():
+        if el.get("id") == ident:
+            return el
+    raise AssertionError(f"no element {ident} in the skin")
+
+
+def test_each_breaker_cell_draws_a_bar_with_dots_and_a_framed_square():
+    """The sheet's cell holds a narrow bar with two dots and a framed square 17.4 along. Both plates of each device."""
+    skin = (BREAKER / "skins" / "default.svg").read_text(encoding="utf-8")
+    frame = _skin_item(skin, "frame")
+    assert abs(float(frame.get("width")) - 17.4) <= 1.0 and abs(float(frame.get("height")) - 17.4) <= 1.0
+    head, stem = _skin_item(skin, "bar-head"), _skin_item(skin, "bar-stem")
+    assert abs(float(head.get("height")) - 6.7) <= 1.0 and abs(float(stem.get("height")) - 2.8) <= 1.0
+    assert len([e for e in ET.fromstring(skin).iter() if (e.get("id") or "").startswith("bar-dot-")]) == 2
+    # the bar stands nearer the cord end than the frame: skin y runs from the far end of the cell
+    assert float(frame.get("y")) + float(frame.get("height")) < float(head.get("y"))
+    for name in CASES:
+        dev = _device(name)
+        breakers = [p for p in dev["views"]["front"]["components"]["placements"] if p["id"].startswith("breaker-")]
+        assert len(breakers) == 2, name
+        assert all(p["ref"] == "servertech/pro3x-breaker-handle@2" for p in breakers), name
+        note = _gaps(name)["raster-detail"]
+        for phrase in ("breaker cell", "2400 ppi", "8.252", "17.4", "tolerance"):
+            assert phrase in note, (name, phrase)
+
+
+def test_the_rear_draws_the_seam_the_sides_draw():
+    """The sheet's rear view has a vertical line at the side seam, 119.8 mm from the cord end, across the whole width."""
+    for name in CASES:
+        dev = _device(name)
+        seams = _kind(dev, "rear", "seam")
+        assert len(seams) == 1, name
+        seam = seams[0]
+        assert abs(1778.0 - (seam["at"][1] + seam["size"][1] / 2) - 119.8) <= 1.0, name
+        assert seam["size"][0] == 55.9 and seam["size"][1] <= 1.0, name
+        side = _kind(dev, "left", "seam")[0]
+        assert seam["at"][1] == side["at"][1] and seam["fill"] == side["fill"], name
+
+
+def test_each_lever_is_centred_on_its_peg_on_the_side_view():
+    """Each lever stands within the stated tolerance of its peg's centre, read from the side view at 600 ppi."""
+    for name in CASES:
+        dev = _device(name)
+        note = _gaps(name)["outlet-lever"]
+        tol = float(re.search(r"tolerance along the strip is about ([0-9.]+) mm", note).group(1))
+        assert 0.3 <= tol <= 0.6, name
+        latches = {int(i["id"].rsplit("-", 1)[1]): i for i in _kind(dev, "front", "latch")}
+        assert sorted(latches) == list(range(1, 37)), name
+        for k, latch in latches.items():
+            centre = 1778.0 - latch["at"][1] - latch["size"][1] / 2
+            assert abs(centre - PEGS[36 - k]) <= tol, (name, k, centre, PEGS[36 - k])
+        for phrase in ("254.2", "375.9", "peg", "600 ppi", "2.063"):
+            assert phrase in note, (name, phrase)
+
+
+def test_the_entry_frame_is_the_shared_parts_and_the_gap_gives_the_sheets_figures():
+    """The cord part is the merged 3A01's. The cord-and-plug gap gives the end view's frame, the part's and the real error."""
+    for name in CASES:
+        dev = _device(name)
+        cord = next(p for p in dev["views"]["bottom"]["components"]["placements"] if p["id"] == "input")
+        assert cord["ref"] == "servertech/pro3x-cord-60309-2pe@1", name
+        note = _gaps(name)["cord-and-plug"]
+        for phrase in ("shared part", "pro3x-cord-60309-2pe@1", "26.1", "33.8", "27.1", "34.9", "32 from the rear",
+                       "29.2 by 33.1", "21.6", "25.5", "44.2", "12 mm", "tolerance", "its own change"):
+            assert phrase in note, (name, phrase)
+
+
+def test_the_lever_offset_text_reads_the_figure_the_pegs_and_outlets_give():
+    """The gap's offset of the pegs from the outlet centres is the mean of the 36 differences, stated once and the same on all three."""
+    for name in CASES:
+        dev = _device(name)
+        outlets = {int(p["id"].rsplit("-", 1)[1]): p for p in _outlets(dev)}
+        diffs = []
+        for k in range(1, 37):
+            p = outlets[k]
+            h = 24.0 if p["ref"] == "servertech/hdot-cx-outlet@1" else 22.0
+            diffs.append(1778.0 - p["at"][1] - h / 2 - PEGS[36 - k])
+        mean = sum(diffs) / 36
+        stated = re.findall(r"about ([0-9.]+) mm nearer the cord end", _gaps(name)["outlet-lever"])
+        assert len(stated) == 1, name
+        assert abs(float(stated[0]) - mean) <= 0.05, (name, stated, mean)
+        text = (DEVICES / name / "device.yaml").read_text(encoding="utf-8")
+        assert "2.1 mm nearer" not in text, name
+
+
+def test_the_breaker_part_has_a_second_major_placed_by_the_three_devices_only():
+    """The 3A01 keeps the first major of the breaker part; the three PRO3X devices place the second."""
+    assert (BREAKER / "contract.yaml").is_file() and (BREAKER / "skins" / "default.svg").is_file()
+    assert (BREAKER.parent / "v1" / "contract.yaml").is_file()
+    basic = (DEVICES / "pro3x-basic-3a01" / "device.yaml").read_text(encoding="utf-8")
+    assert "servertech/pro3x-breaker-handle@1" in basic and "pro3x-breaker-handle@2" not in basic
+    for name in CASES:
+        text = (DEVICES / name / "device.yaml").read_text(encoding="utf-8")
+        assert "servertech/pro3x-breaker-handle@2" in text and "pro3x-breaker-handle@1" not in text, name
+
+
+def test_the_cx_recess_and_the_end_plates_state_figure_method_and_tolerance():
+    """The Cx recess is the shared part's own figure and not read from the sheet. The end plates are read on the end view."""
+    for name in CASES:
+        dev = _device(name)
+        outlets = dev["provenance"]["outlets"]["note"]
+        for phrase in ("30.1", "24.0", "contract", "not read from this sheet", "tolerance"):
+            assert phrase in outlets, (name, phrase)
+        size = _gaps(name)["outlet-size"]
+        for phrase in ("30.1", "24.0", "contract", "not read from this sheet", "tolerance", "5.9", "6.8"):
+            assert phrase in size, (name, phrase)
+        ends = _gaps(name)["end-plates"]
+        for phrase in ("2400 ppi", "8.25", "56.3", "63.7", "55.9 by 63.5", "tolerance"):
+            assert phrase in ends, (name, phrase)
