@@ -338,6 +338,45 @@ def test_the_two_front_regions_stand_where_the_plain_face_photograph_reads_the_l
     assert "not drawn" in str(regions["logo-zone"]["label"]) and "not drawn" in str(regions["label-zone"]["label"])
 
 
+def test_three_thin_strips_are_drawn_the_second_light_one_left_of_the_second_breaker(dev):
+    marks, rear = decor(dev), placements(dev, "rear")
+    strips = {i for i in marks if i.startswith("strip-")}
+    assert strips == {"strip-right-of-breaker-2", "strip-left-of-breaker-1", "strip-left-of-breaker-2"}
+    s = marks["strip-left-of-breaker-2"]
+    bx = rear["breaker-2"]["at"][0]
+    assert s["confidence"] == "estimated" and "px" in s["source"] and "mm" in s["source"]
+    assert s["fill"] == marks["strip-left-of-breaker-1"]["fill"]
+    assert 2.0 <= s["size"][0] <= 4.0 and 8.0 <= s["size"][1] <= 12.0
+    assert bx - 14 < s["at"][0] < bx - s["size"][0]
+    note = words(gap(dev, "marks")["note"])
+    assert "light strip stands left of the second" in note and "All three" in note
+    assert "A second thin light strip" in words(dev["provenance"]["rear"]["note"])
+
+
+def test_the_boot_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
+    boot = skin_rect("relief")
+    c = contract("apc/pdu-cord-l6-30p@1")
+    assert c["size"]["h"] == boot["height"] and c["elements"]["relief"]["size"][1] == boot["height"]
+    for source, text in (
+        ("contract", words(c["description"]) + " " + words(c["provenance"]["size"]) + " " + words(c["provenance"]["boot"])),
+        ("gap", words(gap(dev, "cord")["note"])),
+    ):
+        stated = re.findall(r"boot is (\d+) mm high", text)
+        assert len(stated) == 1 and float(stated[0]) == boot["height"], source
+        assert "14 px" not in text and "25 mm" not in text, source
+    assert "16 px high" in words(c["provenance"]["size"])
+
+
+def test_the_edge_position_has_its_own_tolerance_in_the_contract_and_the_gap(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    drawn = (skin_rect("boot-edge")["x"] + skin_rect("boot-edge")["width"] / 2 - skin_rect("relief")["x"]) / skin_rect("relief")["width"]
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        stated = re.findall(r"edge stands (\d+) percent across the boot, plus or minus (\d+) points", text)
+        assert len(stated) == 1, source
+        centre, tol = (int(v) for v in stated[0])
+        assert 3 <= tol <= 8 and abs(centre - drawn * 100) <= 2, source
+
+
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
 def test_the_new_parts_say_where_each_figure_came_from_and_which_are_estimates(ref, plug):
     c = contract(ref)
