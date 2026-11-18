@@ -13,7 +13,7 @@
 
 import {uLabel, zeroUOf, zeroUById, bundlesOf, rollOf, zeroUPane, zeroUBottom} from './model.js';
 import {zeroUEnds, seatedPort, twinEnd} from './ports.js';
-import {portPathOf} from './cable-rules.js';
+import {portPathOf, isExitEnd, nearEndOf, outsideList} from './cable-rules.js';
 import {followTrunk, bundleDiameter} from './bundle-route.js';
 import {RU, OPENING, RAIL_W} from './rails.js';
 import {throughRings, cornersOf, STRAIGHT_DEG} from './route-path.js';
@@ -991,6 +991,8 @@ function placedAt(it, end, ctx) {
 }
 
 export function portPoint(rack, end, ctx) {
+  // the exit end of a cable that leaves the rack stands where routeToExit puts it (below)
+  if (isExitEnd(end)) return end.point ?? null;
   const it = itemOf(rack, end.item), pane = it && endPane(rack, end);
   if (!it) return zeroUEndPoint(rack, end, ctx);
   if (!pane) return null;
@@ -1185,6 +1187,8 @@ export const PLUG_SPLIT = {
 // how much of it is rigid, so none is; else PLUG_REACH, and PLUG_SPLIT says.
 // (The page is asked once.)
 function plugOf(cable, end, ctx) {
+  // an exit has no plug: the lead out through it is not counted (routeToExit)
+  if (isExitEnd(end)) return {mm: 0, rigid: 0};
   let v = null;
   try { v = typeof ctx?.plugReachOf === 'function' ? ctx.plugReachOf(end, cable) : null; } catch { v = null; }
   if (typeof v === 'number' && Number.isFinite(v) && v >= 0) return {mm: v, rigid: 0};
@@ -2976,10 +2980,8 @@ const areaOf = media => Math.PI * ((ownMedia(DIAMETERS, media) ?? UNSET_D) / 2) 
 // part's id as `item`, its first guide as `via`, and `zeroU: true`.
 export function fill(rack, ctx) {
   const at = new Map();
-  for (const c of rack.cables || []) {
-    const path = pathOf(rack, c, ctx);
-    const notThrough = new Set((path?.findings || []).map(f => `${f.item}|${f.via}`));
-    for (const w of routeOf(rack, c, ctx).waypoints) {
+  const count = (c, waypoints, notThrough) => {
+    for (const w of waypoints) {
       if (w.lane || notThrough.has(`${w.item}|${w.via}`)) continue;
       const g = ctx.guidesOf(w.item).find(x => x.via === w.via);
       if (!g?.aperture) continue;
@@ -2990,13 +2992,21 @@ export function fill(rack, ctx) {
       e.cables.push(c.id);
       at.set(key, e);
     }
+  };
+  for (const c of rack.cables || []) {
+    const path = pathOf(rack, c, ctx);
+    count(c, routeOf(rack, c, ctx).waypoints, new Set((path?.findings || []).map(f => `${f.item}|${f.via}`)));
   }
+  // A cable stored outside the rack counts in each ring or duct its route passes, once.
+  // It counts by its media's diameter, and only the part inside the rack is routed.
+  const outside = outsideRoutes(rack, ctx);
+  for (const o of outside) count(o.cable, o.passes, new Set());
   const filled = e => Math.round(e.area / (FILL_LIMIT * e.aperture.w * e.aperture.h) * 100);
   const items = [...at.values()].map(e => {
     const percent = filled(e);
     return {item: e.item, via: e.via, count: e.cables.length, percent, over: percent > 100, cables: e.cables};
   });
-  const beside = zeroUThrough(rack, ctx).flatMap(({z, c, cables}) => {
+  const beside = zeroUThrough(rack, ctx, outside).flatMap(({z, c, cables}) => {
     const ap = typeof ctx.zeroUAperture === 'function' ? ctx.zeroUAperture(z) : null;
     if (!(ap?.w > 0 && ap?.h > 0)) return [];
     const percent = filled({aperture: ap, area: cables.reduce((a, x) => a + areaOf(x.media), 0)});
@@ -3008,10 +3018,10 @@ export function fill(rack, ctx) {
 
 // The zero-U parts that carry a lane, each with the cables whose routes run
 // through it, in rack order; a part no cable runs through is left out.
-function zeroUThrough(rack, ctx) {
+function zeroUThrough(rack, ctx, outside = []) {
   const parts = zeroUOf(rack).map(z => ({z, c: ctx.chassisOf(z.ref)})).filter(({c}) => carriesLane(c));
   if (!parts.length) return [];
-  const routes = (rack.cables || []).map(c => [c, routeOf(rack, c, ctx).waypoints]);
+  const routes = [...(rack.cables || []).map(c => [c, routeOf(rack, c, ctx).waypoints]), ...outside.map(o => [o.cable, o.waypoints])];
   return parts
     .map(({z, c}) => ({z, c, cables: routes.filter(([, ws]) => runsThrough(ws, z, ctx.chassisOf)).map(([cable]) => cable)}))
     .filter(x => x.cables.length);
@@ -3085,6 +3095,135 @@ export function capacityOver(rack, ctx) {
     if (o) out.push({item: z.id, ...o, zeroU: true});
   }
   return out;
+}
+
+// ── CABLES THAT LEAVE THE RACK (docs/rack-entries-design.md section 3) ─────
+// An OUTSIDE CABLE is a rack-file cable whose far end is an exit end `{exit: id}`.
+// `{exit: 'any'}` takes the nearest brush, cutout or open entry. Its near end is a rack end.
+// It is the caller's. It is never added to the rack, and nothing here writes from it.
+// routeToExit lays it from its port to the plane of an entry of the rack's product,
+// read from `ctx.frameOf(rack.frame.ref).enclosure.entries`. It answers, in mm:
+//   inRack     the length of the route inside the rack, from the port to the
+//              entry's plane. It is laid like any cable, with its plug's lead,
+//              its bends, its rings and its detours. It has no end allowance,
+//              no stock size and no lead out through the entry.
+//   exit       the id of the entry taken.
+//   at         where the route ends. It is the point of the entry's box nearest
+//              the last waypoint, on its plane. An open entry with no box
+//              is the plan (or the side) of the envelope.
+//   waypoints  the route resolved, and `passes` the rings and ducts it goes through.
+// WHEN NO LENGTH CAN BE GIVEN, `inRack` is null and `reason` says why in one sentence.
+// Nothing is estimated. The roof's plane is the top of the numbered rails.
+// The floor's plane is the bottom of U1. No source says how far a product stands off the floor.
+// A box is read from the front plane of the rails, back along the rack, and from the left of the envelope.
+const ANY_EXITS = ['brush', 'cutout', 'open'];
+const entryText = e => `entry ${e.id}`;
+function entryExtent(rack, entry, outer) {
+  const num = v => typeof v === 'number' && Number.isFinite(v);
+  const {w, h, d} = outer && typeof outer === 'object' ? outer : {};
+  if (![w, h, d].every(num)) return {reason: `The product states no outer size, so ${entryText(entry)} has no place.`};
+  const b = entry.box, side = entry.where === 'left' || entry.where === 'right';
+  if (b === undefined && entry.kind !== 'open') return {reason: `The product states no box for ${entryText(entry)}, so its place is not known.`};
+  if (b !== undefined && !(b && typeof b === 'object' && (side ? ['y', 'z', 'h', 'd'] : ['x', 'z', 'w', 'd']).every(k => num(b[k]))))
+    return {reason: `The box of ${entryText(entry)} cannot be read.`};
+  const z = b ? [-(b.z + b.d), -b.z] : [-d, 0];
+  if (side) { const x = entry.where === 'left' ? -w / 2 : w / 2; return {x: [x, x], y: b ? [b.y, b.y + b.h] : [0, h], z}; }
+  if (entry.where === 'roof' || entry.where === 'floor') {
+    const y = entry.where === 'roof' ? rack.frame.heightRU * RU : 0;
+    return {x: b ? [b.x - w / 2, b.x - w / 2 + b.w] : [-w / 2, w / 2], y: [y, y], z};
+  }
+  return {reason: `Entry ${entry.id} is at a place the kit does not know.`};
+}
+const within = (v, [lo, hi]) => Math.min(hi, Math.max(lo, v));
+const tenth = v => Math.round(v * 10) / 10;
+
+// The waypoints out of a port to the top of its lane. They go through the manager
+// its end leaves by, as autoRoute's gutter route does, then up the lane of the
+// side its port stands on.
+function exitWaypoints(rack, near, probe, ctx) {
+  const it = itemOf(rack, near.item);
+  let A;
+  if (it) {
+    const pane = endPane(rack, near);
+    if (!pane) return null;
+    A = {e: near, it, pane, x: placedAt(it, near, ctx).x ?? 0, ru: it.ru};
+  } else {
+    const z = zeroUById(rack, near.item), pane = z && endPane(rack, near);
+    if (!pane) return null;
+    const p = zeroUEndPoint(rack, near, ctx);
+    A = {e: near, it: null, z, pane, x: p?.x ?? zeroUX(z, ctx.chassisOf), ru: p ? unitAt(rack, p.y) : zeroUBottom(z), side: sideOfAt(z.at)};
+  }
+  const top = {pane: A.pane, ru: rack.frame.heightRU, x: A.x};
+  const m = A.it ? managerOf(rack, A.it, A.pane, ctx) : null;
+  const roomOf = (E, mm, s) => g => leadRoom(rack, probe, E.e, mm, g, s === 'left' ? -1 : 1, ctx);
+  return byGutter(rack, A, top, m, null, A.z ? A.side : (A.x <= 0 ? 'left' : 'right'), ctx, roomOf);
+}
+
+// One entry: its place, the route to it and the length of that route.
+function layToEntry(rack, cable, near, entry, row, ctx) {
+  const ext = entryExtent(rack, entry, row.outer);
+  if (ext.reason) return ext;
+  const unplaced = {reason: 'The drawing does not place the port.'};
+  const pinned = Array.isArray(cable.route) && cable.route.length > 0;
+  // laid as a route written by hand, which the kit chose when the caller pinned none (patchRing's `measuring`)
+  const base = {a: near, media: cable.media, ...(cable.type ? {type: cable.type} : {}), routeEdited: true, ...(pinned ? {} : {measuring: true})};
+  const listed = pinned ? cable.route : exitWaypoints(rack, near, {...base, id: Symbol('exit'), b: {exit: entry.id}, route: []}, ctx);
+  if (!listed) return unplaced;
+  const {waypoints} = resolvedList(rack, listed, ctx, [endUnit(rack, near, ctx), null]);
+  const last = waypoints.length ? pointOf(rack, waypoints.at(-1), ctx) : portPoint(rack, near, ctx);
+  if (!last) return unplaced;
+  const at = {x: within(last.x, ext.x), y: within(last.y, ext.y), z: within(last.z, ext.z)};
+  const laid = {...base, id: Symbol('exit'), b: {exit: entry.id, point: at}, route: listed};
+  const path = pathOf(rack, laid, ctx);
+  if (!path) return unplaced;
+  let mm = 0;
+  for (let k = 1; k < path.points.length; k++) mm += dist(path.points[k - 1], path.points[k]);
+  const resolved = routeOf(rack, laid, ctx).waypoints, notThrough = new Set(path.findings.map(f => `${f.item}|${f.via}`));
+  return {inRack: tenth(mm), exit: entry.id, at: {x: tenth(at.x), y: tenth(at.y), z: tenth(at.z)}, reason: null,
+          waypoints: resolved.map(w => ({...w})),
+          passes: resolved.filter(w => !w.lane && !notThrough.has(`${w.item}|${w.via}`)).map(w => ({item: w.item, via: w.via}))};
+}
+
+const exitMemo = new WeakMap();
+export function routeToExit(rack, cable, ctx) {
+  const memo = perOf(exitMemo, rack, ctx, cable);
+  let out = memo?.get(cable);
+  if (!out) { out = exitFor(rack, cable, ctx); memo?.set(cable, out); }
+  return copyOf(out);
+}
+function exitFor(rack, cable, ctx) {
+  const none = reason => ({inRack: null, exit: null, at: null, waypoints: [], passes: [], reason});
+  const near = nearEndOf(cable);
+  if (!near) return none('The cable needs one rack end and one exit end.');
+  const want = (near === cable.a ? cable.b : cable.a).exit;
+  const ref = rack.frame?.ref;
+  if (typeof ref !== 'string' || !ref) return none('The rack has no product ref, so no exit is declared.');
+  const row = typeof ctx?.frameOf === 'function' ? ctx.frameOf(ref) : null;
+  if (!row) return none(`The catalogue has no product ${ref}, so its entries are not known.`);
+  const entries = (Array.isArray(row.enclosure?.entries) ? row.enclosure.entries : []).filter(e => e && typeof e.id === 'string');
+  if (!entries.length) return none('The product declares no entry.');
+  if (!itemOf(rack, near.item) && !zeroUById(rack, near.item)) return none('The port is not on a device of this rack.');
+  const chosen = want === 'any' ? entries.filter(e => ANY_EXITS.includes(e.kind)) : entries.filter(e => e.id === want);
+  if (!chosen.length) return none(want === 'any' ? 'The product declares no brush, cutout or open entry for any to take.' : `The product has no entry ${want}.`);
+  // the nearest by the length inside the rack, the first declared on a tie
+  let best = null, why = null;
+  for (const entry of chosen) {
+    const got = layToEntry(rack, cable, near, entry, row, ctx);
+    if (got.reason) { why ??= got.reason; continue; }
+    if (!best || got.inRack < best.inRack) best = got;
+  }
+  return best ?? none(why);
+}
+// The outside cables of the context that have a route in the rack. Each comes with
+// its waypoints and the rings and ducts it passes. It is [] when `outside` is not given.
+function outsideRoutes(rack, ctx) {
+  const list = outsideList(ctx?.outside);
+  if (!list) return [];
+  return list.flatMap(cable => {
+    if (!nearEndOf(cable)) return [];
+    const r = routeToExit(rack, cable, ctx);
+    return r.inRack == null ? [] : [{cable, waypoints: r.waypoints, passes: r.passes}];
+  });
 }
 
 // ── keeping routed lengths current ────────────────────────────────────────
