@@ -408,6 +408,11 @@ def test_the_notes_name_the_straight_sided_shank_and_one_pair_of_cord_figures(de
         assert "flat top" in text and "chamfered" in text and "straight vertical right side" in text, source
         assert "drawn round" not in text and "looks faceted" not in text, source
         assert "21.4 mm" in text and "22.9 mm" in text, source
+        assert "side face ends at about row 729, 25.8 mm below the part top" in text and "on purpose" in text, source
+        assert "shank's upper-right corner as a curve. It is drawn as a straight chamfer" in text, source
+        assert "bright arc on the boss's rim" in text and "3 mm wide and is drawn 1 mm wide" in text, source
+        assert "round mark stands right of the shank" in text, source
+    assert "strain relief" not in words(contract("apc/pdu-cord-l6-30p@1")).lower()
     for f in [DEVICE_FILE, FRAGMENT, *PART_FILES]:
         assert not re.search(r"\b21\.5 mm|\b23\.0 mm", f.read_text()), f.name
 
