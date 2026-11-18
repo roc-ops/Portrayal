@@ -241,7 +241,7 @@ def test_the_side_gap_restates_the_box_figures_with_the_spread_as_tolerance_in_a
     assert len(set(notes.values())) == 1, "the three side-nubs notes differ"
     note = next(iter(notes.values()))
     for phrase in ("175.9 to 237.6", "1103.8 to 1165.8", "about 62 along", "9.7 below", "tolerance of about 4 mm",
-                   "187.0 to 220.2", "1115.9 to 1148.9", "about 52 along and 2.9 below"):
+                   "187.0 to 220.2", "1115.9 to 1148.9", "about 12 below", "from 2.9 to 55.2, about 52 along and 2.9 below"):
         assert phrase in note, phrase
     for old in ("174 to 234", "1105 to 1166", "10.2"):
         assert old not in note, old
