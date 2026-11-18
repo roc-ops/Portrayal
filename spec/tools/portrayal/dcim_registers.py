@@ -47,6 +47,9 @@ POWER_LABEL = {
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
+    "vertiv/rpdu-cord-l6-30p-round": "NEMA L6-30P",
+    "vertiv/rpdu-cord-60309-2pe": "IEC 60309 2P+E 32 A plug on a fixed cord",
+    "vertiv/rpdu-cord-60309-3pne": "IEC 60309 3P+N+E 16 A plug on a fixed cord",
     "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
     "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
@@ -313,6 +316,7 @@ NOT_A_DCIM_PORT = {
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
     "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
+    "perle/scg-sim-slot": "the Micro-SIM card slot of the IOLAN SCG L cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
     "servertech/pro1-dc-output-block": "the four output circuits (eight screw terminals) of one block of a PRO1 -48VDC PDU, placed as one part; a power outlet is one circuit with its own feed, so one row cannot state four, and each circuit would need its own placement and `fed-by`",
 }
 

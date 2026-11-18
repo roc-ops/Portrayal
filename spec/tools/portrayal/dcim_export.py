@@ -842,6 +842,14 @@ PART_POWER = {
     # rack PDU brochure). No power-port type of the two targets is held for it in this tree, so it is `other`,
     # as the connectors above are, and POWER_LABEL says which connector.
     "vertiv/rpdu-cord-l6-30p": "other",
+    # A VERTIV GEIST VERTICAL PDU'S FIXED CORD ends in an IEC 60309 plug: 2P+E 32 A on the VP7553 and 3P+N+E 16 A on
+    # the VP7557. No power-port type of the two targets is held for either in this tree, so each is `other`,
+    # and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-60309-2pe": "other",
+    "vertiv/rpdu-cord-60309-3pne": "other",
+    # THE VERTIV GEIST VP8841'S FIXED CORD ends in an L6-30P plug and leaves through a round ring. No power-port type of the
+    # two targets is held for the plug in this tree, so it is `other`, and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-l6-30p-round": "other",
 }
 
 

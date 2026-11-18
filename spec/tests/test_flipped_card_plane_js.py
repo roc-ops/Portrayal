@@ -44,5 +44,14 @@ def test_the_mirrored_punch_keeps_its_facet_and_the_recorded_one_is_untouched(o)
     assert o["theInputIsKept"] == [37.5, 60, 25, 30]
 
 
-def test_a_punch_that_is_not_a_rect_is_left_as_drawn(o):
-    assert o["shapeSame"] is True
+def test_a_shape_punch_is_mirrored_within_the_crop_and_carries_the_flips(o):
+    # A 10 x 8 mm pocket at card x 3, y 80 is, turned within its 25 x 100 crop, at x 12, y 12.
+    assert o["shapeFlipped"] == {"kind": "shape", "svg": "<svg/>", "x": 49.5, "y": 32, "w": 10, "h": 8,
+                                 "flipX": True, "flipY": True}
+    assert o["shapeOneAxis"] == {"kind": "shape", "svg": "<svg/>", "x": 49.5, "y": 100, "w": 10, "h": 8,
+                                 "flipX": True, "flipY": False}
+
+
+def test_a_shape_punch_on_a_flat_face_and_any_other_punch_are_left_as_drawn(o):
+    assert o["shapeFlat"] is True
+    assert o["otherSame"] is True

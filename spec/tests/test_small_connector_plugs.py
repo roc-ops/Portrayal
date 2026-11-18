@@ -300,7 +300,9 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
             assert cages[p["id"]]["kind"] == "connector", (ref, p["id"])
             assert cages[p["id"]]["interface"] == iface, (ref, p["id"])
             assert cages[p["id"]]["accepts"] == [PAIRS[iface][1]], (ref, p["id"])
-    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 3}
+    # rj11: the ServerTech plate, the Vertiv IMD-5M and the Vertiv Geist monitoring module, which places one RJ-12 sensor jack
+    # rj11: the ServerTech PRO3X controller module also places one RJ-11 aux jack
+    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 4}
 
 
 @pytest.mark.heavy

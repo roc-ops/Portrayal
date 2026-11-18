@@ -1869,6 +1869,72 @@ rack and each part's rail, `inspect` reads one (`kind: 'zeroU'`), and the
 export data says where each stands (`zeroUNotes`, `zeroUImportItems` for the
 DCIM device rows, and `rackNotes(rack, { zeroU: false, chassisOf })`).
 
+### Cables that leave the rack
+
+A cable stored outside the rack file, such as a run to a wall outlet or to the
+next rack, is the caller's. The rack file never holds it
+([`docs/rack-entries-design.md`](../docs/rack-entries-design.md) section 3).
+The kit takes it as input, in the shape of a rack-file cable with the far end
+replaced by an exit end:
+
+```js
+{ id: 'run-17', a: { item: 'i1', path: 'rear-1', view: 'rear' }, b: { exit: 'top' },
+  media: 'cat6a', type: 'cat6a-ftp', purpose: 'Riser', label: 'R17', route: [] }
+```
+
+- The near end is a rack end `{ item, path, view }`, as the rack file writes it.
+  It has `plug` where the port takes more than one.
+- The far end is `{ exit: id }`, the id of an entry of the rack's product. The
+  entries are `enclosure.entries`, read from `ctx.frameOf(rack.frame.ref)`.
+- `{ exit: 'any' }` takes the nearest `brush`, `cutout` or `open` entry by the
+  length inside the rack. A `knockout` is taken only when named.
+- `route: []` is the automatic route. Waypoints written there pin it. A `length`
+  the caller holds is the whole run's and is not used for the in-rack figure.
+- The input is documented here and has no schema. The rack schema does not
+  describe it.
+
+`routeToExit(rack, cable, ctx)` in `rack/route.js` takes the route context and
+answers `{ inRack, exit, at, waypoints, passes, reason }`, in the rack's units
+(mm):
+
+- `inRack` is the length of the route inside the rack, from the port to the
+  plane of the entry. It is laid like any cable, with the same plug lead and bend
+  rules. It has no end allowance, no stock size and no lead out through the
+  entry, since no source states one. The caller adds the rest of the run.
+- `exit` is the id of the entry taken, so `{ exit: 'any' }` reports which. `at` is
+  where the route ends: the point of the entry's `box` nearest the last waypoint,
+  on its plane. An `open` entry with no box is the envelope's plan.
+- `waypoints` is the route resolved, and `passes` the rings and ducts it goes
+  through. The roof's plane is the top of the numbered rails, since no source
+  says how far a product stands off the floor.
+- `inRack` is `null`, with one sentence in `reason`, when no length can be given.
+  The product may declare no entry. The named id may not be in it. The rack may
+  have no product `ref`, or the port may not be on a device.
+- A catalogue without the product answers `null` too. So do an `any` with no
+  entry it may take, an entry with no box, and a port the drawing does not
+  place. Nothing is estimated.
+- The cable is never added to `rack.cables`, and the kit writes nothing from it.
+  `serialize` of the rack gives the same bytes with and without it.
+
+`ctx.outside` is a list of these cables, on the context a query takes:
+
+- `portFree` (as the `outside` option) and `freePorts` read a port as taken when
+  a cable of `rack.cables` or of `outside` has it.
+- `fill` counts an outside cable once in each ring or duct its in-rack route
+  passes, by its media's diameter. Only the part inside the rack is counted.
+  `capacityOver` does not read `outside` yet.
+- `outside` absent is not `outside: []`. An empty list says nothing is stored
+  elsewhere. Absent says the caller has not looked.
+- When `outside` is absent, `describe` ends with one line: cables stored outside
+  the rack are not passed in, and the ports they use read free. A list, empty or
+  not, leaves the line out.
+
+**A rack opened on its own** shows no cable stored above it. The port reads free,
+the manager's fill leaves the run out, and the bill of materials and the DCIM
+exports leave it out too. That is the cost of a rack file that never holds
+a cable stored elsewhere, and the kit does not guess at it. The description says
+so once, as above.
+
 ### Bundles
 
 Cables that share part of their route can be combed into a bundle and held

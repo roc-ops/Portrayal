@@ -55,6 +55,9 @@ PROUD = {
                                 "pro4x-smart-pops-4t16a", "pro4x-switched-4f16a",
                                 "pro4x-switched-pops-4g16a", "px3-1045")},
     **{f"px4-{n}-e7m26v2": (0.5, _BUTTON_FRONT) for n in ("132awa", "1551wa", "532awa", "5551wa")},
+    "px3-5493": (0.5, "the cap of its button-left stands 0.5 mm proud of the front face. It is a control on a face and not a "
+                      "frame, door or guide stood in front of the part. Whether the stated depth includes it is not checked"),
+    "vp8841": (0.3, "the lamps of its two Ethernet jacks stand 0.3 mm proud of the front face, drawn so they relieve in the 3D view."),
     "pdu31116": (0.5, "the plate of its USB-A bezel stands 0.5 mm proud of the front face, a connector on a face and not a "
                       "frame or door"),
     "epbz77": (3.2, "the nut of its ground stud stands 3.2 mm proud of the front face. It is a fastener on a face and not "

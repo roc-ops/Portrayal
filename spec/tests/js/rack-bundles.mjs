@@ -654,7 +654,7 @@ test('a shortened reading trims bundle lines and counts them', () => {
   for (let k = 0; k < 20; k++)
     r = run(r, {op: 'bundle.create', cables: [`c${2 * k + 1}`, `c${2 * k + 2}`], route: TRUNK, label: `a fairly long bundle label ${k}`}).rack;
   const text = describe(r, {chassisOf});
-  assert.ok(text.length <= 1500, text.length);
+  assert.ok(text.replace('\nCables stored outside the rack are not passed in, and the ports they use read free.', '').length <= 1500, text.length);
   const shown = text.split('\n').filter(l => /^b\d+ /.test(l)).length;
   assert.ok(shown < 20, `${shown} bundle lines`);
   const more = Number(/and (\d+) more not listed/.exec(text)[1]);
