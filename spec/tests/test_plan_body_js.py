@@ -32,7 +32,6 @@ import pytest
 import yaml
 
 import warmrender
-from portrayal import libwalk
 from portrayal import plan as P
 
 from test_plan_body_cases import ASYMMETRIC, three_band
@@ -719,16 +718,6 @@ def write_as_today():
             out[label] = bevel_digest(ch, tmp) if ch.get("solid") else {"box": "sectionBody is null"}
     AS_TODAY.write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
     print("wrote", AS_TODAY)
-
-
-@pytest.mark.heavy
-def test_no_library_device_states_a_plan_outline():
-    """(the guard of the earlier order stays; this one only says why this order may not add one: the
-    site's copy of the kit has no plan body yet)"""
-    for path in libwalk.iter_devices([LIB]):
-        text = path.read_text()
-        if "plan-outline" in text:
-            assert "plan-outline" not in (yaml.safe_load(text).get("chassis") or {}), path
 
 
 if __name__ == "__main__":

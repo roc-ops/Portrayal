@@ -1,0 +1,33 @@
+format: 1
+kind: module
+name: en8100-pem-ac
+version: 1.0.0
+class: mechanical
+behaviour: fills
+profile: networking
+description: >-
+  Entra EN8100 power port entry module (PEM), the centre board under each power entry cover, which
+  takes the AC-only port and plugs into the power distribution module. Every port entry module
+  includes an AC shunt (guide p34); that the centre board is the one the AC-only port lands on, and
+  the split of two power and four RF boards, are inferences from the guide's wording. The
+  node holds two, one at each end, between the two RF port entry modules.
+size: {w: 36.0, h: 75.0}
+size-confidence: {w: estimated, h: estimated}
+attrs:
+  model: EN8100 power port entry module
+provenance:
+  identity: >-
+    Entra Remote PHY Node EN8100 Installation and Operations Guide (Rev_15), section 3.2.2 and the
+    EN8100 PEM figure on p35, and the replacement chapter p116 and p117. The guide calls the centre
+    board the "power" PEM; the parts table of the 1.8 GHz PEM upgrade procedure (product code
+    FA520120, no page numbers) names the pair AC-PEM and RF-PEM. No part number is printed.
+  size: >-
+    estimated - no EN8100 document states a size for any module; the same 36 x 75 as the RF port
+    entry module, which the figure on p35 shows at the same size.
+  elements: >-
+    photo-measured - a green board with a screened block, from the figure on p35, drawn as for the
+    RF module with a second small block for the shunt. Nothing else is drawn.
+elements: {}
+connection-points:
+  mate: {at: [18.0, 37.5], direction: front}
+skins: [default]
