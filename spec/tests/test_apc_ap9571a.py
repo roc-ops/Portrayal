@@ -426,8 +426,8 @@ def test_the_boots_x_tolerance_reads_four_and_a_half_mm_with_its_arithmetic(dev)
 def test_each_cord_line_has_its_height_method_and_tolerance_in_the_contract_and_the_gap(dev):
     c = contract("apc/pdu-cord-l6-30p@1")
     for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        assert "upper line reads 2.7 px, the gap 2.6 px and the lower line 6 px" in text, source
-        assert "4.8, 4.6 and 10.8 mm" in text and "3.5, 6 and 10.5 mm" in text, source
+        assert "upper line reads 2.71 px, the gap 2.60 px and the lower line 6.05 px" in text, source
+        assert "4.84, 4.64 and 10.80 mm" in text and "3.5, 6 and 10.5 mm" in text, source
         assert "grey level of 140" in text and "x 87 to 91 and 96" in text, source
         assert "estimate good to about 2 mm" in text, source
 
@@ -457,6 +457,43 @@ def test_the_breaker_note_reads_one_scale_figure_for_the_first_block(dev):
     assert m and abs(int(m.group(1)) / 44 - float(m.group(2))) <= 0.01
     assert "22 px" not in note and "0.5 px per mm" not in note and "0.5 and 0.7" not in note
     assert "0.5 px per mm" not in words(contract("apc/pdu-breaker-rocker@1")["provenance"]["size"])
+
+
+def test_the_shelf_is_drawn_the_one_length_the_marks_gap_states_and_the_part_hides_the_rest(dev):
+    note = words(gap(dev, "marks")["note"])
+    stated = re.findall(r"It is drawn (\d+(?:\.\d+)?) mm long and 1\.5 mm high", note)
+    assert len(stated) == 1
+    shelf = decor(dev)["shelf-left-of-breaker-1"]
+    assert float(stated[0]) == shelf["size"][0] and shelf["size"][1] == 1.5
+    breaker_x = placements(dev, "rear")["breaker-1"]["at"][0]
+    visible = breaker_x - shelf["at"][0]
+    assert f"{visible:g} mm shows" in note
+    assert shelf["at"][0] < breaker_x < shelf["at"][0] + shelf["size"][0]
+    assert f"drawn {stated[0]} mm long" in words(shelf["source"]) or f"{stated[0]} mm long" in words(shelf["source"])
+    assert "good to about 6 mm" in note and "good to about 4 mm" not in words(shelf["source"])
+
+
+def test_each_strip_width_is_stated_with_a_tolerance_of_at_least_two_and_a_half_mm(dev):
+    note = words(gap(dev, "marks")["note"])
+    widths = re.findall(r"The (first light|second light|dark) strip's width is good to about (\d+(?:\.\d+)?) mm", note)
+    assert [w[0] for w in widths] == ["dark", "first light", "second light"]
+    assert all(float(w[1]) >= 2.5 for w in widths)
+    assert "good to about 2 mm" not in note and "1 to 2 px" in note
+    for sid in ("strip-right-of-breaker-2", "strip-left-of-breaker-1", "strip-left-of-breaker-2"):
+        source = words(decor(dev)[sid]["source"])
+        stated = re.findall(r"Width good to about (\d+(?:\.\d+)?) mm", source)
+        assert len(stated) == 1 and float(stated[0]) >= 2.5, sid
+
+
+def test_the_cord_contract_and_gap_quote_the_one_set_of_cord_line_numbers_and_the_dropped_columns(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
+        assert "11.36 px" in text and "20.3 mm" in text, source
+        assert "170.89 to 182.25 px" in text or source == "gap", source
+        assert "170.7" not in text and "181.7" not in text and "18 to 37 mm" not in text, source
+        assert "columns 92 to 95 are left out because they hold a third dark run" in text.lower(), source
+        assert "compression ringing" in text, source
+        assert "largest difference" in text and "1.4 mm" in text, source
 
 
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
