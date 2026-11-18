@@ -1,7 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="33mm" height="28mm" viewBox="0 0 33 28">
-  <!-- The input cord leaving the left end of the outlet face: a squared boot, and the cord's two flat lines running from the face edge to it. -->
-  <rect id="cord-line-1" x="0" y="8" width="15" height="3.5" fill="#7d8085"/>
-  <rect id="cord-line-2" x="0" y="17.5" width="15" height="10.5" fill="#7d8085"/>
-  <rect id="relief" x="14" y="0" width="19" height="28" rx="1.2" fill="#1b1c1e" stroke="#4a4d51" stroke-width="0.25"/>
-  <rect id="boot-edge" x="21.1" y="5" width="1" height="18" fill="#8a8d91"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="33mm" height="33mm" viewBox="0 0 33 33">
+  <!-- The input cord leaving the left end of the outlet face: a round boss, a shank behind it, and the round cord running into the boss. -->
+  <defs>
+    <linearGradient id="boss-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34373b"/><stop offset="1" stop-color="#17181a"/>
+    </linearGradient>
+    <linearGradient id="cord-shade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3d41"/><stop offset="0.3" stop-color="#8a8d91"/><stop offset="0.55" stop-color="#4a4d51"/><stop offset="1" stop-color="#1b1c1e"/>
+    </linearGradient>
+  </defs>
+  <ellipse id="shank-end" cx="21" cy="16.5" rx="12" ry="16.5" fill="url(#boss-shade)" stroke="#4a4d51" stroke-width="0.25"/>
+  <rect id="shank" x="12" y="0" width="9" height="33" fill="url(#boss-shade)"/>
+  <ellipse id="relief" cx="12" cy="16.5" rx="12" ry="16.5" fill="#1b1c1e" stroke="#4a4d51" stroke-width="0.25"/>
+  <rect id="boss-edge" x="20.4" y="8.5" width="1" height="18" fill="#8a8d91"/>
+  <rect id="cord" x="0" y="9" width="11" height="22" fill="url(#cord-shade)"/>
+  <ellipse id="cord-end" cx="11" cy="20" rx="2.5" ry="11" fill="url(#cord-shade)" stroke="#3c3f43" stroke-width="0.25"/>
 </svg>

@@ -137,14 +137,15 @@ def test_the_method_note_states_the_breaker_figure_and_its_tolerance(dev):
     assert "good to about" in note
 
 
-def test_the_cord_boot_is_squared_with_two_flat_cord_lines_leaving_to_the_left():
+def test_the_cord_end_is_a_round_boss_and_a_round_cord_leaving_to_the_left():
     svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
-    assert "<circle" not in svg
-    assert '<rect id="relief"' in svg
-    assert 'id="cord-line-1"' in svg and 'id="cord-line-2"' in svg
+    assert '<ellipse id="relief"' in svg and '<rect id="relief"' not in svg
+    assert '<ellipse id="shank-end"' in svg and '<ellipse id="cord-end"' in svg
+    assert '<rect id="cord"' in svg and "cord-line" not in svg
+    assert svg.count("<linearGradient") == 2 and 'fill="url(#cord-shade)"' in svg
     c = contract("apc/pdu-cord-l6-30p@1")
     text = " ".join(str(c["description"]).split()).lower()
-    assert "round" not in text and "squared" in text and "left" in text
+    assert "round boss" in text and "round cord" in text and "squared" not in text and "left" in text
 
 
 def test_the_cord_beyond_the_face_and_the_cord_end_are_named_as_a_gap_with_the_reason(dev):
@@ -217,21 +218,6 @@ def test_each_breaker_is_drawn_the_measured_width_and_stays_centred_on_its_round
         assert abs(centre - mid) <= 1.0, pid
 
 
-def test_the_two_cord_lines_leave_the_middle_and_lower_part_of_the_boot():
-    import re
-
-    svg = (LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg").read_text()
-    height = contract("apc/pdu-cord-l6-30p@1")["size"]["h"]
-    lines = []
-    for rid in ("cord-line-1", "cord-line-2"):
-        m = re.search(rf'<rect id="{rid}"[^>]*? y="([\d.]+)"[^>]*? height="([\d.]+)"', svg)
-        assert m, rid
-        lines.append((float(m.group(1)), float(m.group(2))))
-    top, bottom = min(y for y, h in lines), max(y + h for y, h in lines)
-    assert (top + bottom) / 2 > height / 2, "the pair stands below the boot's middle"
-    assert top >= 6.0 and bottom <= height
-
-
 def test_no_description_or_attr_names_the_material_or_the_colour_as_fact(dev):
     assert "metal" not in " ".join(str(dev["description"]).split()).lower()
     assert "chassis material" in " ".join(dev["provenance"]["chassis"]["note"].split())
@@ -261,54 +247,56 @@ def test_the_export_gives_a_nema_l6_30p_power_port_feeding_ten_outlets(tmp_path)
 
 CORD_SKIN = LIB / "components/apc/pdu-cord-l6-30p/v1/skins/default.svg"
 LIMIT = (
-    "every position on the outlet face and the cord is an estimate read from the 369 px photograph. "
+    "every position on the outlet face is an estimate read from the 369 px photograph. "
+    "the cord end is read from the 1500 px photograph. "
     "it is good to about 3 mm unless a gap says otherwise. each figure names its own scale"
 )
 
 
-def skin_rect(rid):
-    m = re.search(rf'<rect id="{rid}"([^>]*)/>', CORD_SKIN.read_text())
-    assert m, rid
-    return {k: float(v) for k, v in re.findall(r'(?<![-\w])(x|y|width|height)="([\d.]+)"', m.group(1))}
+def skin_el(tag, eid):
+    m = re.search(rf'<{tag} id="{eid}"([^>]*)/>', CORD_SKIN.read_text())
+    assert m, eid
+    return {k: float(v) for k, v in re.findall(r'(?<![-\w])(x|y|cx|cy|rx|ry|width|height)="(-?[\d.]+)"', m.group(1))}
 
 
 def words(text):
     return " ".join(str(text).split())
 
 
-def test_the_boots_light_edge_stands_at_the_measured_fraction_of_the_boot_width():
-    boot, edge = skin_rect("relief"), skin_rect("boot-edge")
-    drawn = (edge["x"] + edge["width"] / 2 - boot["x"]) / boot["width"]
-    assert 0.37 <= drawn <= 0.43, "the edge reads about 40 percent across the boot, from its left"
+def cord_texts(dev):
     c = contract("apc/pdu-cord-l6-30p@1")
-    text = words(c["description"]) + " " + words(c["provenance"]["boot"])
-    stated = re.findall(r"about (\d+) percent across the boot", text)
-    assert len(stated) == 1 and abs(int(stated[0]) - drawn * 100) <= 2
-    assert "on its right" not in text
+    return (("contract", words(c["provenance"]["boss"])), ("gap", words(gap(dev, "cord")["note"])))
 
 
-def test_the_cord_pair_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
-    lines = [skin_rect("cord-line-1"), skin_rect("cord-line-2")]
-    drawn = max(r["y"] + r["height"] for r in lines) - min(r["y"] for r in lines)
-    c = contract("apc/pdu-cord-l6-30p@1")
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        stated = re.findall(r"pair is (\d+) mm high", text)
-        assert len(stated) == 1 and float(stated[0]) == drawn, source
-        assert "16 to 20 mm" not in text and "about 17 mm" not in text, source
+def test_the_light_edge_stands_where_the_photograph_reads_it_from_the_face_edge(dev):
+    edge = skin_el("rect", "boss-edge")
+    drawn = edge["x"] + edge["width"] / 2
+    for source, text in cord_texts(dev):
+        stated = re.findall(r"light edge stands (\d+) mm from the face's left edge, good to about 2 mm", text)
+        assert len(stated) == 1 and abs(float(stated[0]) - drawn) <= 0.6, source
+        assert "percent across" not in text, source
 
 
-def test_the_cord_pair_and_its_boot_stand_where_the_photograph_reads_them(dev):
+def test_the_cord_is_drawn_the_one_height_and_place_the_contract_and_the_gap_state(dev):
+    cord = skin_el("rect", "cord")
     top = placements(dev, "rear")["input"]["at"][1]
-    lines = [skin_rect("cord-line-1"), skin_rect("cord-line-2")]
-    first, last = top + min(r["y"] for r in lines), top + max(r["y"] + r["height"] for r in lines)
-    assert abs(first - 17.6) <= 3.0 and abs(last - 37.2) <= 3.0
+    first, last = top + cord["y"], top + cord["y"] + cord["height"]
+    for source, text in cord_texts(dev):
+        stated = re.findall(r"The cord is (\d+) mm high, good to about 2 mm", text)
+        assert len(stated) == 1 and float(stated[0]) == cord["height"], source
+        assert f"drawn {first:g} to {last:g} mm below the face top" in text, source
+    assert abs(first - 17.8) <= 2.0 and abs(last - 41.2) <= 2.0, "the cord's edges at the face edge, 1500 px picture"
+    end = skin_el("ellipse", "cord-end")
+    assert end["cy"] - end["ry"] == cord["y"] and end["cy"] + end["ry"] == cord["y"] + cord["height"]
+    assert cord["x"] == 0.0
 
 
-def test_the_rear_note_gives_the_boot_extent_the_skin_draws(dev):
-    boot = skin_rect("relief")
-    m = re.search(r"cord boot stands at (\d+) to (\d+)", words(dev["provenance"]["rear"]["note"]))
+def test_the_rear_note_gives_the_boss_extent_the_skin_draws(dev):
+    relief, shank = skin_el("ellipse", "relief"), skin_el("ellipse", "shank-end")
+    m = re.search(r"round cord boss stands at (\d+) to (\d+) and (\d+(?:\.\d+)?) mm below the face top", words(dev["provenance"]["rear"]["note"]))
     assert m
-    assert (float(m.group(1)), float(m.group(2))) == (boot["x"], boot["x"] + boot["width"])
+    assert (float(m.group(1)), float(m.group(2))) == (relief["cx"] - relief["rx"], shank["cx"] + shank["rx"])
+    assert float(m.group(3)) == placements(dev, "rear")["input"]["at"][1]
 
 
 def test_the_marks_gap_states_the_device_wide_limit_once_and_the_shelf_doubt(dev):
@@ -344,52 +332,54 @@ def test_three_thin_strips_are_drawn_the_second_light_one_left_of_the_second_bre
     assert "A second thin light strip" in words(dev["provenance"]["rear"]["note"])
 
 
-def test_the_boot_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
-    boot = skin_rect("relief")
+def test_the_boss_is_drawn_the_one_height_the_contract_and_the_gap_state(dev):
+    relief = skin_el("ellipse", "relief")
+    shank = skin_el("ellipse", "shank-end")
     c = contract("apc/pdu-cord-l6-30p@1")
-    assert c["size"]["h"] == boot["height"] and c["elements"]["relief"]["size"][1] == boot["height"]
-    for source, text in (
-        ("contract", words(c["description"]) + " " + words(c["provenance"]["size"]) + " " + words(c["provenance"]["boot"])),
-        ("gap", words(gap(dev, "cord")["note"])),
-    ):
-        stated = re.findall(r"boot is (\d+) mm high", text)
-        assert len(stated) == 1 and float(stated[0]) == boot["height"], source
-        assert "14 px" not in text and "25 mm" not in text, source
-    assert "16 px high" in words(c["provenance"]["size"])
+    height = 2 * relief["ry"]
+    assert c["size"]["h"] == height and c["elements"]["relief"]["size"][1] == height
+    assert shank["ry"] == relief["ry"] and shank["cy"] == relief["cy"] and relief["rx"] < relief["ry"]
+    for source, text in cord_texts(dev):
+        stated = re.findall(r"The boss is (\d+) mm high", text)
+        assert len(stated) == 1 and float(stated[0]) == height, source
+        assert "good to about 3 mm" in text and "2 px at each end, 0.9 mm each, plus 1 mm for the dark lower arc" in text, source
+    assert "71 px high" in words(c["provenance"]["size"])
 
 
-def test_the_edge_position_has_its_own_tolerance_in_the_contract_and_the_gap(dev):
+def test_the_boss_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract_agree(dev):
+    relief, shank = skin_el("ellipse", "relief"), skin_el("ellipse", "shank-end")
     c = contract("apc/pdu-cord-l6-30p@1")
-    drawn = (skin_rect("boot-edge")["x"] + skin_rect("boot-edge")["width"] / 2 - skin_rect("relief")["x"]) / skin_rect("relief")["width"]
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        stated = re.findall(r"edge stands (\d+) percent across the boot, plus or minus (\d+) points", text)
-        assert len(stated) == 1, source
-        centre, tol = (int(v) for v in stated[0])
-        assert 3 <= tol <= 8 and abs(centre - drawn * 100) <= 2, source
-
-
-def test_the_boot_stands_where_the_face_edge_datum_puts_it_and_skin_and_contract_agree(dev):
-    boot = skin_rect("relief")
-    c = contract("apc/pdu-cord-l6-30p@1")
-    assert c["elements"]["relief"]["at"][0] == boot["x"]
-    assert c["size"]["w"] == boot["x"] + boot["width"]
+    assert relief["cx"] - relief["rx"] == 0.0, "the whole ellipse is drawn, from the face's left edge"
+    assert c["elements"]["relief"]["at"] == [0, 0] and c["size"]["w"] == shank["cx"] + shank["rx"]
     assert placements(dev, "rear")["input"]["at"][0] == 0.0, "the part starts at the face's left edge"
-    want = [(str(int(boot["x"])), str(int(boot["x"] + boot["width"])))]
-    sentence = r"boot stands (\d+) to (\d+) mm from the face's left edge, good to about 4\.5 mm"
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        assert re.findall(sentence, text) == want, source
-    assert "5 px and 12.5 px at 2.7 mm per px" in words(c["provenance"]["boot"])
-    assert abs(boot["x"] - 5 * 2.7) <= 3.0 and abs(boot["x"] + boot["width"] - 12.5 * 2.7) <= 3.0
+    sentence = r"boss stands 0 to (\d+) mm from the face's left edge, good to about 3\.5 mm"
+    for source, text in cord_texts(dev):
+        assert re.findall(sentence, text) == [str(int(c["size"]["w"]))], source
+        assert "2 px, 1.3 mm, plus 2.0 mm for the scale spread" in text, source
+        assert "6.7 px, left of the face edge, which is 4.5 mm along the face" in text, source
+        assert "4.5 mm right of the photograph. That is beyond the 3.5 mm limit" in text, source
+        assert abs(6.7 / 1.506 - 4.5) <= 0.1, source
 
 
-def test_the_cord_lines_run_from_the_face_edge_to_the_boot_and_no_text_says_four_mm(dev):
-    boot = skin_rect("relief")
-    for rid in ("cord-line-1", "cord-line-2"):
-        r = skin_rect(rid)
-        assert r["x"] == 0.0 and r["x"] + r["width"] >= boot["x"], rid
+def test_each_figure_of_the_cord_end_names_its_scale_method_and_the_cord_tolerance(dev):
+    for source, text in cord_texts(dev):
+        for needle in (
+            "2.17 px per mm across", "95.3 px for 44 mm", "1.506 px per mm along", "0.37 px per mm at 369 px times 4.07",
+            "14 times", "rows 673.2 to 744.3", "grey level 200", "46.5 px", "21.4 mm", "49.7 px", "22.9 mm",
+            "first and last crossing", "columns 200 to 280",
+        ):
+            assert needle in text, (source, needle)
     c = contract("apc/pdu-cord-l6-30p@1")
-    prose = words(c) + " " + words(dev)
-    assert "first 4 mm" not in prose and "4 to 23" not in prose and "FIRST 4 MM" not in prose
+    assert "2.17 px per mm across" in words(c["provenance"]["size"])
+
+
+def test_the_pictures_say_the_small_one_cannot_tell_round_from_squared_and_no_text_says_squared(dev):
+    c = contract("apc/pdu-cord-l6-30p@1")
+    for source, text in cord_texts(dev):
+        assert "369 px" in text and "cannot tell round from squared" in text, source
+    prose = words(c) + " " + words(dev["provenance"]) + " " + words(dev["gaps"]) + " " + words(dev["views"]["rear"]["components"])
+    for stale in ("squared boot", "boot", "cord-line", "two flat", "good to about 4.5 mm","11.36 px", "20.3 mm", "170.89", "compression ringing"):
+        assert stale not in prose, stale
 
 
 DEVICE_FILE = LIB / "devices/apc/ap9571a/device.yaml"
@@ -413,23 +403,6 @@ def test_no_notch_is_drawn_and_one_gap_says_the_lower_edge_is_a_smooth_slope(dev
     assert "smooth slope in both photographs" in note
     assert "no notch is resolved, so none is drawn" in note
     assert "12x crop" in note and "7 pixel" in note
-
-
-def test_the_boots_x_tolerance_reads_four_and_a_half_mm_with_its_arithmetic(dev):
-    c = contract("apc/pdu-cord-l6-30p@1")
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        assert "good to about 4.5 mm" in text, source
-        assert "2.7 mm for a pixel plus 1.75 mm for the scale spread" in text, source
-        assert "good to about 3 mm" not in text, source
-
-
-def test_each_cord_line_has_its_height_method_and_tolerance_in_the_contract_and_the_gap(dev):
-    c = contract("apc/pdu-cord-l6-30p@1")
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        assert "upper line reads 2.71 px, the gap 2.60 px and the lower line 6.05 px" in text, source
-        assert "4.84, 4.64 and 10.80 mm" in text and "3.5, 6 and 10.5 mm" in text, source
-        assert "grey level of 140" in text and "x 87 to 91 and 96" in text, source
-        assert "estimate good to about 2 mm" in text, source
 
 
 def test_the_breaker_positions_state_the_marks_tolerance_and_the_first_width_figure(dev):
@@ -485,15 +458,11 @@ def test_each_strip_width_is_stated_with_a_tolerance_of_at_least_two_and_a_half_
         assert len(stated) == 1 and float(stated[0]) >= 2.5, sid
 
 
-def test_the_cord_contract_and_gap_quote_the_one_set_of_cord_line_numbers_and_the_dropped_columns(dev):
-    c = contract("apc/pdu-cord-l6-30p@1")
-    for source, text in (("contract", words(c["provenance"]["boot"])), ("gap", words(gap(dev, "cord")["note"]))):
-        assert "11.36 px" in text and "20.3 mm" in text, source
-        assert "170.89 to 182.25 px" in text or source == "gap", source
-        assert "170.7" not in text and "181.7" not in text and "18 to 37 mm" not in text, source
-        assert "columns 92 to 95 are left out because they hold a third dark run" in text.lower(), source
-        assert "compression ringing" in text, source
-        assert "largest difference" in text and "1.4 mm" in text, source
+def test_the_left_end_is_not_drawn_and_the_gap_says_no_held_picture_shows_it(dev):
+    note = words(gap(dev, "cord")["note"])
+    assert "No held picture shows the left end face" in note and "documented right end" in note
+    assert not [d for d in dev["views"]["left"]["panel"]["decor"] if "cord" in d["id"] or "boss" in d["id"]]
+    assert "shank looks faceted" in note and "drawn round" in note
 
 
 @pytest.mark.parametrize("ref,plug", [("apc/pdu-cord-l6-30p@1", "nema-l6-30p"), ("apc/pdu-breaker-rocker@1", None)])
