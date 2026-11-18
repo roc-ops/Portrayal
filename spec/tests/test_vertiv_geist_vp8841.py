@@ -197,6 +197,37 @@ def test_every_module_element_lies_inside_the_strip_across_and_inside_the_module
         assert by + y1 <= dev["chassis"]["height"], name
 
 
+SHEET_MODEL_NUMBER = "MN03E4W1-42IZ68-3TL6A0A10-S"
+
+
+def _identity_gap():
+    return [g for g in _load(DEVICE)["gaps"] if g["what"] == "module-identity"][0]["note"]
+
+
+def test_the_device_note_names_the_brochure_footnote_and_the_sheet_model_number():
+    note = _identity_gap()
+    assert SHEET_MODEL_NUMBER in note
+    assert "page 1" in note
+    assert "page 6" in note
+    for name in ("IMD-03E", "IMD-03E-S", "IMD-3E", "IMD-3E-S"):
+        assert name in note, name
+    assert "upgrade a Monitored Unit Level unit" in note
+    assert "inference" in note
+    assert "geist-imd" in note
+
+
+def test_the_module_contract_names_the_brochure_footnote_and_the_sheet_model_number():
+    note = _contract(MODULE)["provenance"]["identity"]
+    assert SHEET_MODEL_NUMBER in note
+    assert "page 1" in note
+    assert "page 6" in note
+    for name in ("IMD-03E", "IMD-03E-S", "IMD-3E", "IMD-3E-S"):
+        assert name in note, name
+    assert "upgrade a Monitored Unit Level unit" in note
+    assert "inference" in note
+    assert "geist-imd" in note
+
+
 def test_the_device_places_the_module_in_a_bay():
     dev = _load(DEVICE)
     bays = dev["views"]["front"]["components"]["bays"]
