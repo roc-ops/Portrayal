@@ -847,6 +847,9 @@ PART_POWER = {
     # and POWER_LABEL says which connector.
     "vertiv/rpdu-cord-60309-2pe": "other",
     "vertiv/rpdu-cord-60309-3pne": "other",
+    # THE VERTIV GEIST VP8841'S FIXED CORD ends in an L6-30P plug and leaves through a round ring. No power-port type of the
+    # two targets is held for the plug in this tree, so it is `other`, and POWER_LABEL says which connector.
+    "vertiv/rpdu-cord-l6-30p-round": "other",
 }
 
 
