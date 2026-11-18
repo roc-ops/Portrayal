@@ -154,8 +154,13 @@ def test_the_device_says_what_its_figures_rest_on(device):
 @pytest.mark.parametrize("model,size", [("iolan-scg50-r", "SCG50"), ("iolan-scg34-r", "SCG34"),
                                         ("iolan-scg18-r", "SCG18")])
 def test_the_device_type_lists_the_serial_ports_and_the_empty_bay(export, model, size):
-    docs = [yaml.safe_load(p.read_text()) for p in (LIB / "exports" / export / "device-types" / "Perle").glob("*.yaml")]
-    doc = next(d for d in docs if f"IOLAN {size} R" in d["description"])
+    folder = LIB / "exports" / export / "device-types" / "Perle"
+    docs = [yaml.safe_load(p.read_text()) for p in sorted(folder.glob("*.yaml"))]
+    # The R, RRU, RUU, R-LA and R-LE all open "Perle IOLAN SCGnn R", so match the full name of the R alone.
+    opening = f"Perle IOLAN {size} R console server"
+    found = [d for d in docs if d["description"].startswith(opening)]
+    assert len(found) == 1, f"{export}: {len(found)} device types open with {opening!r}: {[d['model'] for d in found]}"
+    doc = found[0]
     ports = [i for i in doc["interfaces"] if i["name"].startswith("port-")]
     assert len(ports) == MODELS[model]
     assert len(doc.get("module-bays", [])) == 3 - MODELS[model] // 16
