@@ -1,13 +1,19 @@
 # Cards by interface: a slot that seats by form, not by list
 
-Status: proposed. The mechanism was decided 2026-10-18 (#120, #43): PCIe, OCP
-and EDSFF slots seat cards by `interface:` on the slot and `mates:` on the card,
-as an optic seats in a cage (lint L12), and not by `accepts:` lists that name
-every card. The choice among #120's options A to D for a card that is also a
-product is **not** decided; this note lays them out and proposes one.
+Status: accepted 2026-11-11. The mechanism was decided 2026-10-18 (#120, #43):
+PCIe, OCP and EDSFF slots seat cards by `interface:` on the slot and `mates:` on
+the card, as an optic seats in a cage (lint L12), and not by `accepts:` lists
+that name every card. Of #120's options A to D, option A is chosen for a card
+that is also a product: it stays a module. This note lays the options out and
+records the choice.
 
-This note changes nothing. The build it describes is one-way, and the one-way
-items are listed in "What moves when it is built".
+The build it describes is one-way, and the one-way items are listed in "What
+moves when it is built". Part of the mechanism has landed since this note was
+written; "What is on `main`" says what. The rest of the note stays as it was
+written, with its counts taken from `main` at that time: the OCP bullet under
+"The interface keys", "What moves when it is built" and "The first build slice"
+still describe the build as not yet made, and a later change brings them up to
+date.
 
 ## Goal
 
@@ -30,11 +36,13 @@ person installing a card reads 9 of slot 1's 24 names and 13 of slot 3's 23.
 ## What is on `main`
 
 - **A device bay may state `interface` instead of, or beside, `accepts`**
-  (`device.schema.json`, `anyOf`). **A component bay may not.** The component
-  schema's `bays` still requires `at`, `size` and `accepts` and forbids other
-  keys, and the riser slots are component bays. Nothing reads a bay's
-  `interface` but the schema and the device lock, which hashes it "so the first
-  bay to state one is not stated in silence".
+  (`device.schema.json`, `anyOf`), and so may a component bay now
+  (`component.schema.json`, `bays`). `manifest.py` has `takes` and `offers`, and
+  the component and device indexes and the catalogue read a bay through
+  `offers`; lint and the device lock follow it for the parts a bay seats. The
+  device lock hashes a stated `interface` "so the
+  first bay to state one is not stated in silence". No library part states
+  `interface` or `mates` for the two PCIe keys yet.
 - **L12 holds a `mate-to` or an `occupants:` seat to its host's interface**
   (`lint._mate_check`, `manifest.mates_of`). A seat in a bay is not an L12 case
   today: L8 holds a configuration's `bays:` to the bay's `accepts`, and L6 holds a
@@ -67,8 +75,8 @@ note measures nothing and reads no standard that the registry does not cite.
 
 | Key | Means | Registry entry it points at | Source | Status |
 |---|---|---|---|---|
-| `pcie-fh` | a slot whose opening takes a full-height add-in card bracket | `pcie-bracket-fh` | PCI Express CEM 5.0, figure 11-5 "Standard Add-in Card I/O Bracket", page 172 | proposed |
-| `pcie-lp` | a slot whose opening takes a low-profile bracket | `pcie-bracket-lp` | CEM 5.0, figure 11-9 "Low Profile I/O Bracket", page 177 | proposed |
+| `pcie-fh` | a slot whose opening takes a full-height add-in card bracket | `pcie-bracket-fh` | PCI Express CEM 5.0, figure 11-5 "Standard Add-in Card I/O Bracket", page 172 | registered |
+| `pcie-lp` | a slot whose opening takes a low-profile bracket | `pcie-bracket-lp` | CEM 5.0, figure 11-9 "Low Profile I/O Bracket", page 177 | registered |
 | (none) | a two-slot card | `pcie-bracket-fh-2slot` | CEM 5.0, figure 11-13, page 181 | not a key: it mates `pcie-fh` and states `slot-width: 2` |
 | `ocp3-sff` | OCP NIC 3.0, small form factor: 76.00 x 115.00, 11.50 high, one 4C+ connector | `ocp3-sff` | OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25 | registered |
 | `ocp3-tsff` | OCP NIC 3.0, tall small form factor: the SFF outline, 14.20 high. Its `mates` list names `ocp3-tsff` and `ocp3-sff` | `ocp3-tsff` | the same table; section 2.1.2, page 26, and Table 7, page 43, for the SFF card in a TSFF slot | registered |
@@ -237,7 +245,7 @@ namespace and `model` from `attrs.model`. What a card cannot state is `portfolio
 `maturity`, `gaps`, `datasheet` and `references`, and `provenance` carries the
 sources and the unknowns in prose.
 
-**Recommendation (a proposal, to be accepted or not): A, with #1161.** It is built, it is
+**Chosen (accepted 2026-11-11): A, with #1161.** It is built, it is
 what the DCIM models, and it needs only the interface mechanism to stop the
 enumeration. B and C answer a question about views inside a host that nothing
 asks yet. D duplicates. If a card's catalogue facts (portfolio, maturity) are
@@ -304,7 +312,10 @@ seats exactly what it did before.
 
 ## Open questions
 
-1. **Which of #120's options?** A is proposed. Choosing C instead means the 37
+Each question below is settled as the note proposes it (2026-11-11); the
+questions stay as the record of what was open.
+
+1. **Which of #120's options?** A is chosen. Choosing C instead means the 37
    cards authored as modules are redone, and each module type the DCIM imported is
    replaced.
 2. **Spelling and home of the keys.** `pcie-fh` and `pcie-lp` in `connectors.yaml`
@@ -326,7 +337,7 @@ seats exactly what it did before.
    form factors are registered (`ocp3-sff`, `ocp3-tsff`, `ocp3-dsff`, `ocp3-tdsff`,
    Table 5, page 25; the large form factor is deprecated and skipped). What is
    left is EDSFF: register `e3s` in a later slice from the SFF-TA-1008 entry, or
-   register `e3s` now.
+   register `e3s` now. Proposed: a later slice.
 9. **Is a changed DCIM bay description "BREAKING for DCIM data already
    imported"?** Names and positions do not change; the note says no.
 10. **L11.** Waive the `mate` point for a part that fills a bay (proposed), or give

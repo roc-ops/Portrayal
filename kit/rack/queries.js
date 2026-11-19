@@ -8,7 +8,7 @@ import {fits, isRackFace, heightOf, railOf, isZeroUPart, zeroUUnits, itemUnits, 
 import {placement, managersOf} from './managers.js';
 import {uLabel, zeroUOf, zeroUBottom, firstU, holderOf, rollOf, uText} from './model.js';
 import {whereText, carriesLane} from './zero-u.js';
-import {portFree, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
+import {portFree, outsideList, endKey, proposeMedia, mismatch, endName, carriedU, portPathOf, matches, lengthText, isElementId, addressFor, portLabel,
         takesCableEnd, receptacleOf, endKind, connectorName, endPlug, couplerRole, dcTypeOf, feedSides, looseReason} from './cable-rules.js';
 import {seatedPort, settleEnds, shownEnv, cableEndPaths, zeroUEnds, backEnds, dcPortsOf, dcReader, dcEntryOf, dcCovered, PANELS} from './ports.js';
 import {zeroUById, zeroUBottomMm} from './model.js';
@@ -16,7 +16,7 @@ import {RU} from './rails.js';
 import {configFacts} from './catalog.js';
 import {settableOf} from './states.js';
 import {waypointLanesOf, pathwaysOf, resolveRoute, pathLength, routePath, routeText, bendFindingsOf, coverFindingsOf, ringFindingsOf, ductsThrough,
-  zeroUPathways, pathwaysAt, windowsOf} from './route.js';
+  unreachedFindings, unreachedFindingsOf, zeroUPathways, pathwaysAt, windowsOf} from './route.js';
 import {catalogEntries} from './catalog.js';
 import {slackOf, slackFindings, sparePlaces, holdsSpare, spareExports, trayText, mText, labelOf} from './slack.js';
 import {GONE, CABLE_GONE, ZERO_GONE, BUNDLE_GONE, dcFactsReader} from './commands.js';
@@ -122,6 +122,8 @@ function findingsText(rack, ctx) {
   if (!ctx?.route) return sides.length ? `Findings: ${sides.join('; ')}.` : null;
   let bodies = 0, bends = 0, covers = 0, worst = null, most = null, cabled = false;
   const rings = [], cords = [];
+  let gone = [];
+  try { gone = unreachedFindings(rack, ctx.route).map(f => f.cable); } catch { gone = []; }
   try {
     for (const c of rack.cables || []) {
       const path = routePath(rack, c, ctx.route);
@@ -153,13 +155,21 @@ function findingsText(rack, ctx) {
       rings.length > 3 ? `${rings.slice(0, 3).join(', ')} and ${rings.length - 3} more` : rings.join(', ')})`] : []),
     ...(bends ?[`${count(bends, 'cable')} ${bends === 1 ? 'has' : 'have'} a tight bend (${bends === 1 ? '' : 'the worst '}${worst.id}, ${worst.short} mm short)`] : []),
     ...(covers ? [`${count(covers, 'cable')} cross${covers === 1 ? 'es' : ''} in front of other ports (${covers === 1 ? '' : 'the most '}${most.id}, ${count(most.n, 'port')}${cabled ? '; only ports that hold a cable were judged' : ''})`] : []),
+    ...(gone.length ? [`${count(gone.length, 'cable')} ${gone.length === 1 ? 'has' : 'have'} an end that cannot be reached (${
+      gone.length > 3 ? `${gone.slice(0, 3).join(', ')} and ${gone.length - 3} more` : gone.join(', ')})`] : []),
     ...(cords.length ? [`${count(cords.length, 'cord')} ${cords.length === 1 ? 'is' : 'are'} shorter than ${cords.length === 1 ? 'its' : 'their'} route needs (${cords.length === 1 ? '' : 'the worst '}${worstCord.id}, ${mText(worstCord.short)} short)`] : []),
     ...sides];
   return parts.length ? `Findings: ${parts.join('; ')}.` : null;
 }
 
+// THE LINE A DESCRIPTION ENDS WITH when the caller passed no `ctx.outside`. A
+// rack opened on its own does not hold a cable stored above it. The line is said
+// once, after the length limit is applied. It is left out when `outside` is a
+// list, empty or not.
+export const OUTSIDE_NOT_PASSED = 'Cables stored outside the rack are not passed in, and the ports they use read free.';
 export function describe(rack, ctx, {section, offset, limit} = {}) {
   const {chassisOf} = ctx;
+  const tail = outsideList(ctx?.outside) ? '' : `\n${OUTSIDE_NOT_PASSED}`;
   const f = rack.frame;
   const holes = f.holes.style === 'tapped' ? `tapped${f.holes.thread ? ` ${f.holes.thread}` : ''} holes` : `${f.holes.style === 'round' ? 'round' : 'square'} holes`;
   const items = [...rack.items].sort((a, b) => b.ru - a.ru);
@@ -227,7 +237,7 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
         body.push(`${title}:`, ...list.slice(from, from + n).map(line));
       }
     }
-    return [`${totals} ${shown.join(' ')}`, frameLine, ...(findingsLine ? [findingsLine] : []), ...(spare ? [spare] : []), ...body].join('\n');
+    return [`${totals} ${shown.join(' ')}`, frameLine, ...(findingsLine ? [findingsLine] : []), ...(spare ? [spare] : []), ...body].join('\n') + tail;
   }
 
   const bundleLines = bundles.map(b => bundleLine(rack, b, ctx));
@@ -241,7 +251,7 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
     return lines.join('\n');
   };
   let out = build(false, items.length, cables.length, bundles.length);
-  if (out.length <= LIMIT) return out;
+  if (out.length <= LIMIT) return out + tail;
   // the longest list loses its tail first; bundles, whose lines are longest, on a tie
   let ni = items.length, nc = cables.length, nb = bundles.length;
   out = build(true, ni, nc, nb);
@@ -249,7 +259,7 @@ export function describe(rack, ctx, {section, offset, limit} = {}) {
     if (nb && nb >= nc && nb >= ni) nb--; else if (nc >= ni && nc) nc--; else ni--;
     out = build(true, ni, nc, nb);
   }
-  return out;
+  return out + tail;
 }
 
 // The ports of a device with no cable, on either of its panels, each by its
@@ -311,6 +321,8 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
   const want = k => kinds == null || kinds.includes(k);
   const ofType = e => type == null || String(e.type ?? '').toLowerCase() === type.toLowerCase();
   if (z) return zeroUFree(rack, z, ctx, {want, ofType, near});
+  // a port a cable stored outside the rack has, which the caller passes in as `ctx.outside`, is taken
+  const free = (end, o = {}) => portFree(rack, end, {...o, outside: ctx.outside});
   const out = [], seen = new Set();
   // DC PORTS: the slots a port takes in its place are not rows of their own, and a cable is counted across them
   const dcCtx = {slotsOf, compByRef, redirects}, dc = dcReader(rack, dcCtx), covered = dcCovered(item, dcCtx);
@@ -345,7 +357,7 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
           info = receptacleOf(partOf(compByRef, seats?.refAt(q)));
         }
         if (!faced && endKind(info) === 'other') continue;
-        if (!want(endKind(info)) || !portFree(rack, {item: itemId, path: p.path, view}).ok) continue;
+        if (!want(endKind(info)) || !free({item: itemId, path: p.path, view}).ok) continue;
         out.push({path: p.path, view, label: portLabel(p.path), media: p.media ?? null, speed: p.speed ?? null,
                   kind: endKind(info), connector: connectorName(slot, info), plug: endPlug(slot, compByRef).plug});
         continue;
@@ -359,13 +371,13 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
       }
       if (seen.has(`${view}|${path}`)) continue;
       seen.add(`${view}|${path}`);
-      if (!portFree(rack, {item: itemId, path, view}).ok) continue;
+      if (!free({item: itemId, path, view}).ok) continue;
       out.push({path, view, label: portLabel(path), media: p.media ?? null, speed: p.speed ?? null});
     }
     // the far ends of a passive panel's adapters, which no panel of the device
     // draws when the panel sits in a drawer (ports.js backEnds)
     if (faced && want('data')) for (const e of backEnds(item, {slotsOf, compByRef, redirects}).filter(x => x.view === view)) {
-      if (seen.has(`${view}|${e.path}`) || !portFree(rack, {item: itemId, path: e.path, view}).ok) continue;
+      if (seen.has(`${view}|${e.path}`) || !free({item: itemId, path: e.path, view}).ok) continue;
       seen.add(`${view}|${e.path}`);
       out.push({path: e.path, view, label: portLabel(e.path), media: e.media ?? null, speed: null});
     }
@@ -374,15 +386,15 @@ export async function freePorts(rack, itemId, ctx, {kinds = null, type = null, n
     for (const e of slotEnds(item, {slotsOf, compByRef, redirects}).filter(x => x.view === view)) {
       if (seen.has(`${view}|${e.path}`)) continue;
       seen.add(`${view}|${e.path}`);
-      if (!want(e.kind) || !portFree(rack, {item: itemId, path: e.path, view}, {dc}).ok) continue;
+      if (!want(e.kind) || !free({item: itemId, path: e.path, view}, {dc}).ok) continue;
       out.push({path: e.path, view, label: portLabel(e.path), media: null, speed: null, kind: e.kind, connector: e.connector, plug: e.plug,
                 ...(e.dc ? {dc: e.dc} : {})});
     }
     // a PARTLY USED slots port: each pole no cable is on is a row, for a single conductor
     if (want('power')) for (const port of dcPortsOf(item, dcCtx)) {
-      if (port.kind !== 'slots' || !port.lands || port.view !== view || portFree(rack, {item: itemId, path: port.path, view}, {dc}).ok) continue;
+      if (port.kind !== 'slots' || !port.lands || port.view !== view || free({item: itemId, path: port.path, view}, {dc}).ok) continue;
       port.poles.forEach((q, i) => {
-        if (!portFree(rack, {item: itemId, path: q.path, view}, {dc}).ok) return;
+        if (!free({item: itemId, path: q.path, view}, {dc}).ok) return;
         const e = dcEntryOf(port, dcCtx, i);
         out.push({path: e.path, view, label: portLabel(e.path), media: null, speed: null, kind: e.kind, connector: e.connector, plug: e.plug, dc: e.dc});
       });
@@ -448,7 +460,7 @@ function zeroUFree(rack, z, ctx, {want, ofType, near}) {
   const at = near == null ? null : Array.from({length: f.heightRU}, (_, k) => k + 1).find(ru => uLabel(f, ru) === near) ?? null;
   if (near != null && at == null) return {error: `This rack has no U${near}.`};
   const out = zeroUEnds(z, ctx)
-    .filter(e => want(e.kind) && ofType(e) && portFree(rack, {item: z.id, path: e.path, view: e.view}).ok)
+    .filter(e => want(e.kind) && ofType(e) && portFree(rack, {item: z.id, path: e.path, view: e.view}, {outside: ctx.outside}).ok)
     .map(e => { const ru = ruOf(e);
       return {path: e.path, view: e.view, label: names[e.path] ?? portLabel(e.path), media: e.media ?? null, speed: e.speed ?? null, kind: e.kind,
               connector: e.connector, plug: e.plug, type: e.type, u: ru == null ? null : uLabel(f, ru),
@@ -635,7 +647,7 @@ async function cableInfo(rack, cable, ctx) {
   const edited = cable.routeEdited === true;
   // A route context's readers come from the page's drawings and may throw; a
   // measure that fails is "not measured", never an error.
-  let routed = null, waypoints = edited ? cable.route || [] : [], windows = [], rings = null, crosses = null, rests = null, bends = null, covers = null, ringNote = null;
+  let routed = null, waypoints = edited ? cable.route || [] : [], windows = [], rings = null, crosses = null, rests = null, bends = null, covers = null, ringNote = null, unreached = null;
   if (ctx.route) {
     try {
       waypoints = resolveRoute(rack, cable, ctx.route).waypoints;
@@ -674,7 +686,10 @@ async function cableInfo(rack, cable, ctx) {
       const over = coverFindingsOf(rack, cable, ctx.route, label, path)[0];
       if (over) covers = {count: over.count, ports: over.ports, between: over.between, judged: over.judged,
         ...(over.estimated ? {estimated: true} : {}), text: over.text};
-    } catch { routed = null; rings = null; crosses = null; rests = null; bends = null; covers = null; ringNote = null; }
+      // an end the catalogue accepts and nothing places (route.js unreachedFindings)
+      const gone = unreachedFindingsOf(rack, cable, ctx.route, label)[0];
+      if (gone) unreached = {ends: gone.ends, text: gone.text};
+    } catch { routed = null; rings = null; crosses = null; rests = null; bends = null; covers = null; ringNote = null; unreached = null; }
   }
   // slack: the cable's own length less the routed one, in metres
   // (only metres and feet convert; any other unit leaves slack unknown)
@@ -732,7 +747,7 @@ async function cableInfo(rack, cable, ctx) {
     // how it was laid by hand in a pathway, as the file has it (`cable.lay`)
     ...(Array.isArray(cable.lay) && cable.lay.length ? {lay: cable.lay} : {}),
     route: {edited, waypoints, text: routeText(waypoints, label, rack.frame, ductsThrough(rack, ctx.chassisOf, label, windows)), ...(rings ? {rings} : {}), ...(crosses ? {crosses} : {}), ...(rests ? {rests} : {}),
-            ...(bends ? {bends} : {}), ...(covers ? {covers} : {}), ...(ringNote ? {ring_findings: ringNote} : {})}, lanes: waypointLanesOf(rack.frame), passes,
+            ...(bends ? {bends} : {}), ...(covers ? {covers} : {}), ...(ringNote ? {ring_findings: ringNote} : {}), ...(unreached ? {unreached} : {})}, lanes: waypointLanesOf(rack.frame), passes,
     loose, mismatch: warn, ...(unchecked ? {unchecked: true} : {})};
 }
 

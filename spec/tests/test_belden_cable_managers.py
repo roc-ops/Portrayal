@@ -8,9 +8,8 @@ carry no dimensioned drawing: the finger pitch, the ring size and the cover's sh
 thumbnails and are estimates, which the contracts say. The rack kit's half of the features (a cable laid
 through a ring, along a duct) is `spec/tests/js/rack-belden-managers.mjs`, run by `test_rack_kit_js.py`.
 
-The lacing bar 9512-1903 is not modelled: the format has no tie point on a ring or a duct yet (#1009), and
-a cable is tied to a lacing bar, not laid through it. `test_the_lacing_bar_waits_for_the_tie_point_issue`
-holds that, so adding it later is a decision and not an accident.
+The lacing bar 9512-1903 is modelled without tie points, as its size only (the format has no tie point on a
+ring or a duct yet, and no document places one); `test_belden_lacing_bar.py` holds it.
 
 These read the build (`library/dist`, `library/exports`) and skip without it, like the other sweeps over
 compiled drawings.
@@ -107,9 +106,9 @@ def test_belden_is_a_hardware_vendor_listed_directly_after_credo():
     assert "Belden, Inc" in vendors["belden"]["source"] and "data sheet" in vendors["belden"]["source"]
 
 
-def test_exactly_these_eight_parts_are_modelled_and_the_lacing_bar_waits_for_the_tie_point_issue():
+def test_exactly_these_eight_managers_and_the_lacing_bar_are_modelled():
     names = sorted(p.name for p in (LIB / "devices" / "belden").iterdir() if p.is_dir())
-    assert names == sorted(ALL), "the lacing bar 9512-1903 is left out: no tie point on a ring or a duct yet (#1009)"
+    assert names == sorted(ALL + ["9512-1903"]), "the lacing bar is modelled without tie points, in test_belden_lacing_bar.py"
 
 
 # --- each device's envelope against its data sheet -------------------------------------------------

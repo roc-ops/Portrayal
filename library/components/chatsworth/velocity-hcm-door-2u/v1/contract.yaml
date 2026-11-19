@@ -1,0 +1,61 @@
+format: 1
+kind: component
+name: velocity-hcm-door-2u
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+lid: true
+description: >-
+  The snap-on cover of the 2U Chatsworth Velocity horizontal cable manager (13930-702), seen from
+  the front - a plastic plate that closes the manager, whose returns snap onto the ends of the
+  T-shaped cable guides, and that stays in the open position when it is swung out
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#1b1c1e'
+provenance:
+  size: >-
+    estimated - the cover closes the front between the ears: 450.0 wide, the 482.6 (19 in EIA) of
+    the data sheet's table less an estimated 16.3 of ear each end, and 88.9 high, the 2U of that
+    table. The page-3 photograph shows the cover as one plate along the manager's lower front;
+    nothing dimensions its width or height.
+  relief: >-
+    estimated - the cover stands at the front of the 150 mm overall depth: a plate 2.0 thick (148
+    to 150) with returns 6.0 deep along its top and bottom edges, 1.5 thick, that clip onto the
+    finger heads. No held page gives the cover's section.
+  lid: >-
+    datasheet - the Velocity Cable Management product data sheet (page 1 and the closing paragraph
+    of page 2): the horizontal manager includes "One cover that snaps onto the T-shaped cable
+    guides", and "the snap-on cover stays in the opened position to provide easy access to
+    cables". It snaps on and off, so it is a lid (`lid: true`).
+  finish: >-
+    estimated - "Color is Black" (the table's note) and "black plastic" (the finish row); the
+    default is the near-black the other Velocity parts use. The photograph is a grey render.
+  mark: >-
+    not drawn - a vendor mark is never drawn, and nothing is reserved for it.
+size: {w: 450.0, h: 88.9}
+size-confidence: {w: estimated, h: datasheet}
+attrs: {material: Plastic}
+elements:
+  plate: {at: [0.0, 0.0], size: [450.0, 88.9], class: bezel}
+  lip-top: {at: [0.0, 0.0], size: [450.0, 1.5], class: bezel}
+  lip-bottom: {at: [0.0, 87.4], size: [450.0, 1.5], class: bezel}
+relief:
+  features:
+    - node: plate
+      lift: 148.0
+      out: 150.0
+      confidence: estimated
+      source: a thin moulding at the front of the 150 mm overall depth; no held page gives its section
+    - node: lip-top
+      lift: 144.0
+      out: 150.0
+      confidence: estimated
+      source: the cover snaps onto the finger ends (data sheet, page 1); the return depth is a stand-in
+    - node: lip-bottom
+      lift: 144.0
+      out: 150.0
+      confidence: estimated
+      source: as lip-top
+skins: [default]

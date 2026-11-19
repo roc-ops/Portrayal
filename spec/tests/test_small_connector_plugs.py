@@ -300,16 +300,20 @@ def test_the_census_of_composed_jacks_and_every_one_is_a_slot(comps):
             assert cages[p["id"]]["kind"] == "connector", (ref, p["id"])
             assert cages[p["id"]]["interface"] == iface, (ref, p["id"])
             assert cages[p["id"]]["accepts"] == [PAIRS[iface][1]], (ref, p["id"])
-    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 1}
+    # rj11: the ServerTech plate, the Vertiv IMD-5M and the Vertiv Geist monitoring module, which places one RJ-12 sensor jack
+    assert seen == {"std/mrj21@1": 8, "common/vhdci-receptacle@1": 3, "common/rj11-jack@1": 4}
+    # The rj11 count of 4 also names the ServerTech PRO3X controller module, which places one RJ-11 aux jack.
 
 
 @pytest.mark.heavy
 def test_the_census_of_placed_jacks_on_device_views():
-    """The device side, walked off every view: the only one of the three a
-    chassis places is the RJ11 jack, six times on five devices: the two
-    telephone jacks of the HLX-TGV, both turned 180, the SLC 8000's
-    modem jack, not turned, and the phone jack of each of three WTI console
-    servers, not turned. A part that
+    """The device side, walked off every view. The only one of the three a
+    chassis places is the RJ11 jack, sixteen times on fifteen devices. The HLX-TGV
+    has two telephone jacks, both turned 180. The SLC 8000 has a modem jack,
+    not turned. The DSXA-32 has a modem jack, not turned. Each of seven Rittal
+    DK 7979 strips has an RS232 jack, a serial jack on an RJ11-style housing,
+    not turned. Each of five WTI
+    console servers has a phone jack, not turned. A part that
     states one of the three media and is none of the jacks is a plug or a
     card that composes one."""
     placed = {r: [] for r in JACK_IFACE}
@@ -323,8 +327,18 @@ def test_the_census_of_placed_jacks_on_device_views():
     assert placed["common/rj11-jack@1"] == [("halny/hlx-tgv", "tel-2", 180),
                                             ("halny/hlx-tgv", "tel-1", 180),
                                             ("lantronix/slc-8000", "modem", None),
+                                            ("raritan/dsxa-32", "modem", None),
+                                            ("rittal/dk-7979-210", "rs232", None),
+                                            ("rittal/dk-7979-230", "rs232", None),
+                                            ("rittal/dk-7979-235", "rs232", None),
+                                            ("rittal/dk-7979-236", "rs232", None),
+                                            ("rittal/dk-7979-238", "rs232", None),
+                                            ("rittal/dk-7979-240", "rs232", None),
+                                            ("rittal/dk-7979-242", "rs232", None),
                                             ("wti/cpm-1600-1", "phone", None),
+                                            ("wti/cpm-1600-2", "phone", None),
                                             ("wti/cpm-800-1", "phone", None),
+                                            ("wti/cpm-800-2", "phone", None),
                                             ("wti/dsm-8", "phone", None)]
     assert placed["std/mrj21@1"] == [] and placed["common/vhdci-receptacle@1"] == []
     media = {_contract(j)["attrs"]["media"] for j in JACK_IFACE}

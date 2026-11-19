@@ -30,10 +30,10 @@ HEADER = "oscilloquartz/osa542x-dc-header@1"
 PLUG = "oscilloquartz/osa542x-dc-plug@1"
 SUPPLIES = {"oscilloquartz/osa542x-psu-dc-40w@1": 40, "oscilloquartz/osa542x-psu-dc-90w@1": 90}
 DEVICES = {
-    "oscilloquartz/osa-5420-quartz": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
-    "oscilloquartz/osa-5420-quartz-hq-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-40w@1"),
-    "oscilloquartz/osa-5421-quartz-hq-plus-plus": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
-    "oscilloquartz/osa-5421-rubidium": ("0.1.3", "0.1.4", "oscilloquartz/osa542x-psu-dc-90w@1"),
+    "oscilloquartz/osa-5420-quartz": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-40w@1"),
+    "oscilloquartz/osa-5420-quartz-hq-plus": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-40w@1"),
+    "oscilloquartz/osa-5421-quartz-hq-plus-plus": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-90w@1"),
+    "oscilloquartz/osa-5421-rubidium": ("0.1.3", "0.1.5", "oscilloquartz/osa542x-psu-dc-90w@1"),
 }
 
 
@@ -84,7 +84,7 @@ def test_the_header_presents_the_key_and_says_its_size_is_an_estimate():
 
 def test_the_plug_is_the_manuals_cable_connector_and_mates_the_key():
     d = contract(PLUG)
-    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.0.0")
+    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.1.0")
     assert d["size"] == {"w": 13.7, "h": 10.3}
     points = d["connection-points"]
     assert points["mate"]["at"] == contract(HEADER)["connection-points"]["mate"]["at"]

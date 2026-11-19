@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ap7821b
-version: 0.1.0
+version: 1.0.0
 maturity: modelled
 manufacturer: APC
 model: AP7821B
@@ -9,8 +9,8 @@ description: >-
   APC by Schneider Electric NetShelter metered rack PDU, 1U horizontal: a 444 mm black metal box, 102 mm deep.
   It hands a 200 to 230 V feed (a C20 inlet; 16 A rated, 3300 VA) on to eight IEC C13 outlets in one row. It has no
   breaker and no switching. The outlet face has the inlet at the left end. At the right end it has a two-digit
-  display, a round button, two jacks and three small lamps. The other face is plain, with a logo and a
-  ground mark. A cord retention bracket and rack mounting brackets are supplied.
+  display, a round button, two jacks, five small lamps and a small Reset hole. The other face is plain, with a logo
+  and a ground mark. A cord retention bracket and rack mounting brackets are supplied.
 profile: power
 provenance:
   method:
@@ -49,9 +49,10 @@ provenance:
     confidence: estimated
     note: >-
       estimated - the outlet face, mm from the face's left and top, borrowed from the AP7921B photograph reading (see
-      `method`): the inlet's centre at 17, eight outlets from 55 on a 36.1 pitch, numbered 1 to 8 under their mouths as
-      printed, the display's window from 333 to 355 across, the round button centred at 376, two jacks centred at 397,
-      the logo right of them, and three small lamps. The inlet is empty in this photograph.
+      `method`). The inlet's centre is at 17. Eight outlets start at 55 on a 36.1 pitch, numbered 1 to 8 under their
+      mouths as printed. The display's window runs from 333 to 355 across. The round button is centred at 376 and the
+      two jacks at 397. The logo is right of them, with five small lamps and a Reset hole (see `lamps`). The inlet is
+      empty in this photograph.
   outlets:
     confidence: datasheet
     note: >-
@@ -66,12 +67,45 @@ provenance:
   display:
     confidence: estimated
     note: >-
-      estimated - apc/ap78-display@1. The datasheet's text names no display; the photograph shows the window.
+      estimated - apc/ap78-display@1. The datasheet's text names no display; the photograph shows the window. The
+      Metered Rack PDU guide's figure calls it the digital display, item 7 (PDF p.11 and p.15).
   jacks:
     confidence: estimated
     note: >-
-      estimated - two jacks shaped like RJ45 jacks at the right end (p.5 photograph); their labels are not legible and
-      no document names them, so each is std/rj45@2, without a role.
+      estimated - two jacks shaped like RJ45 jacks at the right end (p.1 photograph). By position they match the
+      Metered Rack PDU guide's figure (PDF p.11). The upper is the 10/100 Base-T network connector, item 3. The lower
+      is the RJ-12 serial port, item 6 (PDF p.15). That guide is for an older series. Each is std/rj45@2, without a
+      role.
+  lamps:
+    confidence: estimated
+    note: >-
+      estimated - five lamps and a Reset hole at the display end, read off the 369 px p.1 photograph. The display
+      window, 22 mm across, is the scale, about 1.4 mm per pixel. Each lamp is drawn in its off state, and its on
+      states carry the colours of the guide and the photograph; the viewer lights it. The Metered Rack PDU guide
+      (AP7800 series, 2012) gives the identities and states. Its front panel is PDF p.11 and its items PDF p.15. Its
+      Link-RX/TX and Status tables are PDF p.16 and its load indicator table PDF p.17. That guide is for an older
+      series and the B models' own guide, 990-5569E, is not held. The count and place of the lamps come from the
+      photograph and are estimated. The guide's top single-phase figure shows one load lamp above the display. It
+      also shows three legend rings at the left of the display, marked OK, Warning and Overload. The
+      photograph shows three lit points in one column above the right digit. It cannot tell one lamp with three
+      colours from three lamps, so three are placed and each carries one load colour. No B1, B2 or TOTAL lamps are
+      shown. Each sample is a count and a mean over the pixels under a colour mask. The mask for green is G of at
+      least 90 and at least R and B plus 30. The mask for yellow is R and G of at least 150 and B at most R minus 80.
+      The mask for red is R of at least 150, G under 90 and B under R minus 60. Green, count 3, mean #509049, is the
+      colour of `lamp-load-ok`, the green load lamp. Yellow, count 2, mean #cad314, is the colour of `lamp-load-warning`. Red, count 2,
+      mean #d92244, is the colour of `lamp-load-overload`. The Link-RX/TX and Status windows at the right edge of the
+      upper jack are pale and unlit in the photograph. They use the library's green #39b54a and orange #f5a623, as
+      nokia/sr-1-ac does. The guide draws both windows as small upright rectangles, so they use the rectangular part
+      common/led-rect-sm@2, turned a quarter. The rectangles measure about 1.8 x 3.2 mm in the guide's figure at 600
+      dpi, scaled from the jack frame's 15.8 mm. The part is 2.8 x 1.6 mm, within 13 percent of that, and the larger
+      common/led-rect is 44 percent off. The window heights follow the figure. The guide's place falls inside the
+      library's wider jack, and the overlap check refuses it. So each lamp stands just outside the jack's right edge,
+      as the photograph shows. The upper lamp, `lamp-jack-1`, is Link-RX/TX, item 5. The lower, `lamp-jack-2`, is
+      Status, item 4, as in the figure.
+      Status states: off, green valid TCP/IP, flashing green not valid, orange hardware failure, flashing orange
+      BOOTP, alternating orange and green DHCP. Link-RX/TX states: off, flashing green 10 Mbps, flashing orange 100
+      Mbps, and solid green or orange with no traffic. Load states: green normal, yellow near overload, red overload.
+      The Reset hole is item 8. It is a dark dot of about 2.5 mm at the lower left of the display, good to about 3 mm.
   dcim:
     confidence: datasheet
     note: >-
@@ -133,26 +167,31 @@ gaps:
     the datasheet sells the unit as metered and says nothing of what is metered or where; the display is one window,
     so the input is the scope drawn.
   wanted: the user manual's description of the metering.
-- what: lamp-colours
+- what: lamp-marks
   scope: [lamps]
   reason: needs-photo
   note: >-
-    small lamps stand over the display and beside the jacks, some lit green or amber in the photographs; their count,
-    colours and meanings were not read off the pixels and no document names them, so three are drawn unlit and
-    uncoloured.
-  wanted: the user manual's description of the status lamps.
+    The count and place of the lamps are read off a 369 px photograph and the states come from the guide of an older
+    series. The printed legends are named as shown and not drawn. They are the OK, Warning and Overload rings at the
+    left of the display, Amps, Reset and the logo. The photograph shows a green and an orange dot beside the Status
+    label. It shows a fainter green and orange pair near the Link label, read as a colour key. The guide draws a check
+    and a cross icon beside Status. The dots are read as printed icons, not lamps, and that reading is an estimate. No
+    lamp moved for them. They are not drawn, because the maintainer has left marks to a later touch.
+  wanted: the guide of the B models (990-5569E) or a straight-on photograph of the display end with a scale.
 - what: jack-function
   scope: [jack-1, jack-2]
   reason: vendor-silent
   note: >-
-    the labels under the two jacks are not legible and no datasheet names a port.
-  wanted: the user manual, or a close photograph of the jacks.
+    The datasheet names no port. The older series' guide names the upper jack the 10/100 Base-T connector and the
+    lower the RJ-12 serial port, so the match is by position.
+  wanted: the guide of the B models (990-5569E).
 - what: jack-speed
   scope: [rear]
   reason: vendor-silent
   note: >-
-    no document held names the two rear jacks or prints a speed for them, so none is stated.
-  wanted: the user manual's port specification.
+    The older series' guide gives the network jack as 10/100 Base-T. It gives the serial port no speed, and none is
+    stated for either jack.
+  wanted: the port specification in the guide of the B models.
 - what: ears
   scope: [front, rear, left, right]
   reason: needs-drawing
@@ -161,16 +200,17 @@ gaps:
     them.
   wanted: the installation guide's mounting figures.
 - what: sides
-  scope: [top, bottom, left, right]
+  scope: [top, bottom, right]
   reason: needs-photo
   note: >-
-    no held document shows the top, the bottom or an end.
-  wanted: straight-on photographs of the top, the bottom and an end.
+    no held photograph shows the bottom or the inlet end, and the top is a plain lid in the angled photograph. The
+    display end (`left`, seen from behind) draws the marks the angled photograph shows, borrowed from the AP7921B.
+  wanted: straight-on photographs of the top, the bottom and the inlet end.
 groups:
   outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the eight C13 outlets, numbered 1 to 8 from the left as seen from the outlet face, as printed'}
   display: {term: Display, role: indicator, index-origin: 1}
   buttons: {term: Button, role: service, index-origin: 1}
-  jacks: {term: Port, role: management, index-origin: 1, description: 'the two jacks at the right end of the outlet face; their use is not stated'}
+  jacks: {term: Port, role: management, index-origin: 1, description: 'the two jacks at the right end of the outlet face: the upper the 10/100 Base-T network port, the lower the RJ-12 serial port'}
   lamps: {term: LED, role: indicator, index-origin: 1}
   power-input: {term: Input, role: service, index-origin: 1}
 views:
@@ -186,6 +226,13 @@ views:
       - {id: label-zone, at: [411.0, 26.0], size: {w: 22.0, h: 9.0}, label: 'product label, text partly legible; not drawn'}
   rear:
     size: {w: 444, h: 44}
+    panel:
+      decor:
+      - {id: end-screw-1, at: [3.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: end-screw-2, at: [3.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: reset-hole, at: [322.9, 31.4], size: [2.5, 2.5], rx: 1.25, fill: '#0a0a09', kind: reset-hole, confidence: estimated, source: 'datasheet p.1 photograph, 12x crop of the display end. A dark dot of about 2.5 mm, 9 mm left of the display window and below its bottom edge. It is the Reset button, item 8 of the Metered Rack PDU guide (PDF p.11). Good to about 3 mm.'}
+      - {id: end-screw-3, at: [437.5, 10.0], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
+      - {id: end-screw-4, at: [437.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'datasheet p.1 photograph of the outlet face (369 px, 1.34 mm per pixel across from the printed 444 mm). Centre read at 4x, 5 mm in from the end, good to about 3 mm.'}
     silkscreen:
       - {at: [54.9, 38.5], text: '1', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-1}
       - {at: [91.0, 38.5], text: '2', font-size: 2.6, anchor: middle, fill: '#a8aeae', for: outlet-2}
@@ -207,12 +254,14 @@ views:
         - {id: outlet-7, ref: std/c13-outlet@1, at: [256.3, 6.0], group: outlets, rel-pos: 7, fed-by: input}
         - {id: outlet-8, ref: std/c13-outlet@1, at: [292.4, 6.0], group: outlets, rel-pos: 8, fed-by: input}
         - {id: display, ref: apc/ap78-display@1, at: [333.0, 10.0], group: display, rel-pos: 1, for: chassis}
-        - {id: button, ref: apc/ap78-button@1, at: [372.5, 15.0], group: buttons, rel-pos: 1, for: display, description: 'round button beside the display; what it does is not stated'}
-        - {id: jack-1, ref: std/rj45@2, at: [389.1, 6.4], group: jacks, rel-pos: 1, description: 'upper jack; its use is not stated'}
-        - {id: jack-2, ref: std/rj45@2, at: [388.1, 25.4], group: jacks, rel-pos: 2, description: 'lower jack; its use is not stated'}
-        - {id: lamp-status, ref: common/led-dot@1, at: [338.0, 5.5], group: lamps, rel-pos: 1, for: chassis}
-        - {id: lamp-jack-1, ref: common/led-dot@1, at: [407.0, 11.0], group: lamps, rel-pos: 2, for: chassis}
-        - {id: lamp-jack-2, ref: common/led-dot@1, at: [407.0, 19.0], group: lamps, rel-pos: 3, for: chassis}
+        - {id: button, ref: apc/ap78-button@1, at: [372.5, 15.0], group: buttons, rel-pos: 1, for: display, description: 'the round input selector beside the display, item 2 of the Metered Rack PDU guide (PDF p.15)'}
+        - {id: jack-1, ref: std/rj45@2, at: [389.1, 6.4], group: jacks, rel-pos: 1, description: 'upper jack: the 10/100 Base-T network port, item 3 of the Metered Rack PDU guide (PDF p.15), matched by position'}
+        - {id: jack-2, ref: std/rj45@2, at: [388.1, 25.4], group: jacks, rel-pos: 2, description: 'lower jack: the RJ-12 serial port, item 6 of the Metered Rack PDU guide (PDF p.15), matched by position'}
+        - {id: lamp-load-ok, ref: common/led-dot@1, at: [345.8, 1.4], group: lamps, rel-pos: 1, for: chassis, description: 'load indicator, green: normal (guide PDF p.17)', states: ['off', {name: normal, color: '#509049'}]}
+        - {id: lamp-load-warning, ref: common/led-dot@1, at: [345.8, 3.9], group: lamps, rel-pos: 4, for: chassis, description: 'load indicator, yellow: near overload warning (guide PDF p.17)', states: ['off', {name: near-overload, color: '#cad314'}]}
+        - {id: lamp-load-overload, ref: common/led-dot@1, at: [345.8, 6.4], group: lamps, rel-pos: 5, for: chassis, description: 'load indicator, red: overload (guide PDF p.17)', states: ['off', {name: overload, color: '#d92244'}]}
+        - {id: lamp-jack-1, ref: common/led-rect-sm@2, at: [404.4, 7.4], rotate: 90, group: lamps, rel-pos: 2, for: chassis, description: 'Link-RX/TX 10/100 lamp, item 5, at the upper right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: receiving-10m, color: '#39b54a', behavior: blinking}, {name: receiving-100m, color: '#f5a623', behavior: blinking}, {name: no-traffic-green, color: '#39b54a'}, {name: no-traffic-orange, color: '#f5a623'}]}
+        - {id: lamp-jack-2, ref: common/led-rect-sm@2, at: [404.4, 17.1], rotate: 90, group: lamps, rel-pos: 3, for: chassis, description: 'Status lamp, item 4, at the lower right edge of the network jack (guide PDF p.11 and p.16)', states: ['off', {name: valid-tcp-ip, color: '#39b54a'}, {name: invalid-tcp-ip, color: '#39b54a', behavior: blinking}, {name: hardware-failure, color: '#f5a623'}, {name: bootp-request, color: '#f5a623', behavior: blinking}, {name: dhcp-request, color: '#f5a623', behavior: {mode: alternating, color: '#39b54a'}}]}
     regions:
       - {id: logo-zone, at: [408.0, 22.0], size: {w: 22.0, h: 10.0}, label: 'APC logo; not drawn'}
   top:
@@ -226,9 +275,14 @@ views:
       no source shows the bottom: none of the datasheet's photographs looks at it, and no installation guide is held.
   left:
     size: {w: 102, h: 44}
-    empty: >-
-      no source shows the left end straight on; the photograph sees it at a steep angle and no installation guide is
-      held.
+    panel:
+      decor:
+      - {id: end-screw-1, at: [24.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-2, at: [49.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-3, at: [75.5, 9.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-4, at: [24.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-5, at: [49.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
+      - {id: end-screw-6, at: [75.5, 31.5], size: [3.0, 3.0], rx: 1.5, fill: '#0a0a09', kind: end-screw, confidence: estimated, source: 'borrowed from the AP7921B end (see apc/ap7921b). This end is seen edge-on in the datasheet p.5 angled photograph, one mark countable. Three columns at quarter depth, two rows, good to about 15 mm along the depth.'}
   right:
     size: {w: 102, h: 44}
     empty: >-

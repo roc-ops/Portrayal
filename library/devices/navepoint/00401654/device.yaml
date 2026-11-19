@@ -1,0 +1,182 @@
+format: 1
+kind: device
+name: '00401654'
+version: 0.1.0
+maturity: modelled
+manufacturer: NavePoint
+model: '00401654'
+description: '1U brush panel, NavePoint 00401654: a black cold rolled steel panel the full width of the
+  rack, with flanged edges. A slot of nylon bristles lets cables pass through. The page lists a cable
+  support bar with tie-down points.'
+profile: passive
+provenance:
+  method: {confidence: estimated, note: 'FIGURES FROM A PRODUCT PAGE, NO DRAWING. NavePoint publishes
+      no datasheet or drawing for this part. The held page (NavePoint product page for 00401654 (navepoint-1u-rack-mount-cable-management-panel-with-tidy-brush-slot-black.txt,
+      saved 2026-11-11)) gives External Height 1.75", External Width 0.31", External Depth 19", Venting
+      Style Non-vented, Lip Flanged, Rack Capacity 1U, Material Cold Rolled Steel, Finish Powder Coated
+      and the hardware (four M6 screws, washers and cage nuts). It gives no size or place for the brush
+      slot or the support bar: the slot is drawn as a window in the middle of the panel and its size is
+      estimated. No product photograph is held, so the shape was not checked and nothing was copied.'}
+  chassis: {confidence: datasheet, note: page - 482.6 x 44.45 x 7.87; the 0.31 in is the projection the
+      page calls External Width. The cable support bar the bullets mention may reach further; see `gaps`.}
+  mount: {confidence: estimated, note: estimated - "Simply mount to any open space in the front or rear
+      of your rack"; taken as a rack-face part flush with the rail face.}
+  brush: {confidence: estimated, note: 'estimated - the page says "high-density nylon brush bristles"
+      and gives no window size; 382.6 x 20.45 mm, centred between the ears.'}
+  passes: {confidence: estimated, note: 'estimated - the brush slot is the pass-through, declared `brush`
+      over the estimated window: "Brush panels allow cables to pass from rack front to rear".'}
+  front: {confidence: estimated, note: estimated - the plate with the brush window and its bristles.}
+  rear: {confidence: estimated, note: 'estimated - the back of the plate and the bristles, the front seen
+      from behind.'}
+  attrs: {confidence: datasheet, note: 'page - material, finish and hardware.'}
+  color: {confidence: estimated, note: estimated - black powder coat; no photograph is held.}
+attrs:
+  physical: {material: Cold Rolled Steel, finish: Powder Coated, color: Black, brush-material: Nylon,
+    mounting-hardware: '4 x M6 screws, 4 x M6 washers, 4 x M6 cage nuts'}
+chassis: {width: 482.6, height: 44.45, depth: 7.87, ru: 1, mount: rack-face, shell: sheet, thickness: 1.5,
+  color: '#2b2d30'}
+gaps:
+- {what: weight, reason: vendor-silent, note: the page states no product weight and the product's own
+    record in the page holds none; none is recorded., wanted: a datasheet weight}
+- what: brush-slot
+  scope: [front, rear]
+  reason: needs-drawing
+  note: the page gives no slot size or place; the window is estimated.
+  wanted: a dimensioned drawing of the panel
+- what: cable-support-bar
+  scope: [front, rear, left, right]
+  reason: needs-drawing
+  note: the bullets mention a support bar with tie-downs and the page gives no size, place or depth; it
+    is not drawn.
+  wanted: a drawing of the support bar
+- what: flanges
+  scope: [top, bottom, left, right]
+  reason: needs-drawing
+  note: '"Lip: Flanged" with no size; the flanges are drawn folded back the page''s 0.31 in.'
+  wanted: a dimensioned section
+- {what: cable-capacity, reason: vendor-silent, note: 'the page states no cable capacity, so none is recorded
+    or estimated.', wanted: a capacity figure}
+groups:
+  body: {term: Panel, role: furniture, index-origin: 1, description: 'the steel panel, its ears and its
+      flanges'}
+views:
+  front:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+      - id: brush-window
+        at: &id001 [50.0, 12.0]
+        size: &id002 [382.6, 20.45]
+        rx: 5.0
+        pattern: brush
+        bristle: vertical
+    components:
+      placements:
+      - ref: navepoint/00401654-panel@1
+        id: panel
+        at: [0.0, 0.0]
+        group: body
+        rel-pos: 1
+    passes:
+    - id: brush-window
+      at: *id001
+      size: *id002
+      shape: obround
+      cover: brush
+  rear:
+    size: {w: 482.6, h: 44.45}
+    panel:
+      decor:
+      - id: panel-back
+        at: [0, 0]
+        size: [482.6, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        kind: panel
+      - id: brush-back
+        at: *id001
+        size: *id002
+        rx: 5.0
+        pattern: brush
+        bristle: vertical
+  top:
+    size: {w: 482.6, h: 7.87}
+    panel:
+      decor:
+      - id: plate
+        at: [0, 0]
+        size: [482.6, 1.5]
+        rx: 0
+        fill: '#2b2d30'
+        kind: panel
+      - id: flange
+        at: [16.3, 1.5]
+        size: [450.0, 6.37]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+  bottom:
+    size: {w: 482.6, h: 7.87}
+    panel:
+      decor:
+      - id: plate
+        at: [0, 0]
+        size: [482.6, 1.5]
+        rx: 0
+        fill: '#2b2d30'
+        kind: panel
+      - id: flange
+        at: [16.3, 1.5]
+        size: [450.0, 6.37]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+  left:
+    size: {w: 7.87, h: 44.45}
+    panel:
+      decor:
+      - id: plate-edge
+        at: [0, 0]
+        size: [1.5, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        kind: panel
+      - id: fold-top
+        at: [1.5, 0]
+        size: [6.37, 1.5]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+      - id: fold-bottom
+        at: [1.5, 42.95]
+        size: [6.37, 1.5]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+  right:
+    size: {w: 7.87, h: 44.45}
+    panel:
+      decor:
+      - id: plate-edge
+        at: [6.37, 0]
+        size: [1.5, 44.45]
+        rx: 0
+        fill: '#2b2d30'
+        kind: panel
+      - id: fold-top
+        at: [0, 0]
+        size: [6.37, 1.5]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+      - id: fold-bottom
+        at: [0, 42.95]
+        size: [6.37, 1.5]
+        rx: 0
+        fill: '#303336'
+        kind: flange
+configurations:
+  base: {kind: base, default: true, description: The brush panel as NavePoint ships 00401654.}
+datasheet: {title: 'NavePoint 1U Rack Mount Cable Management Panel with Tidy Brush Slot, Black (product
+    page, SKU 00401654, saved 2026-11-11)', url: 'https://navepoint.com/navepoint-1u-rack-mount-cable-management-panel-with-tidy-brush-slot-black/',
+  sha256: 12fd52ed6091207e76d6a033b9d00e18cdaa0c60ff37c16f33c442bdefda1e6f}

@@ -1,7 +1,9 @@
 # DIN rails: profiles as data, a length set where the rail is used, and the device side
 
-Status: proposed 2026-10-19. Issue #736, with #972 in section 9. This note
-changes nothing: no code, schema, library file or test. It proposes, and the
+Status: proposed 2026-10-19; the first part of section 8 built, with the
+disputed figures of section 3.1 read against the makers' pages. Issue #736, with
+#972 in section 9. The rest of this note changes nothing: no device schema,
+library file, lab or lint rule. It proposes, and the
 open questions in section 7 are for the maintainers to answer. Every count was
 taken from `main` at commit `713499fab`, and every figure in section 3 carries
 the drawing it came from. Where the sources do not settle a figure, the note
@@ -113,10 +115,10 @@ dimension a drawing labels between the two flanges of a hat.
 | figure | `ts35x7.5` | `ts35x15` | `ts15` | `g32` |
 |---|---|---|---|---|
 | width | 35.0 (AD 1, EN 1, ITC 2) | 35.0 (AD 1, EN 2, ITC 3) | 15.0 (AD 1, EN 3, ITC 5) | 32.0 (EN 3, ITC 4) |
-| depth | 7.5 (AD 1, EN 1, ITC 2) | 15.0 (AD 1, EN 2, ITC 3) | 5.5 (AD 1, EN 3, ITC 5 drawing; **ITC 5 text says 5**) | 15.0 (EN 3, ITC 4) |
+| depth | 7.5 (AD 1, EN 1, ITC 2) | 15.0 (AD 1, EN 2, ITC 3) | 5.5 (AD 1, EN 3, ITC 5 drawing; ITC 5's text line says "15x5mm", its drawing 5.5) | 15.0 (EN 3, ITC 4) |
 | thickness | 1.0 (AD 1, EN 1, ITC 2) | 1.5 (AD 1, EN 2, ITC 3) | 1.0 (AD 1, EN 3, ITC 5) | 1.5 (EN 3, ITC 4) |
-| crown | 27.0 (AD 1, ITC 2, EN 3 tolerance drawing; **EN 1 labels 25**) | **27.0 (AD 1, ITC 3) or 24 (EN 2, EN 3): open** | 10.5 (AD 1, ITC 5) | – |
-| flange (hat) or lip (G) | 4.0 (AD 1) | 4.0 (AD 1) | – | **6 (EN 3) or 9 (ITC 4): open** |
+| crown | 27.0 outside (AD 1 and 4, EN 3, ITC 2, RS 3) and 25.0 inside (EN 1): one measurement, 27 less the sheet twice | **27.0 (AD 1, ITC 3) or 24 (EN 2, EN 3): open** | 10.5 (AD 1, ITC 5) | – |
+| flange (hat) or lip (G) | 4.0 (AD 1 and 4) | 4.0 (AD 1) | – | 9 high on the short wall (ITC 4) and 6 below the long wall's edge (EN 3): one figure, 15 less 6 |
 | slot | 6.3 x 18.0 (AD 1 and 4, EN 1, ITC 2) | 6.3 x 18.0 (AD 1, EN 2, ITC 3) | 4.2 x 12.2 (AD 1, EN 3, ITC 5) | 6.3 x 18 (EN 3, ITC 4) |
 | slot pitch | 25.0 (AD 1, EN 1, ITC 2) | 25.0 (AD 1, EN 2, ITC 3) | 20.0 (AD 1, EN 3, ITC 5) | 25.0 (EN 3, ITC 4) |
 | first slot centre from the end | 12.5, derived (AD 4, section 3.3) | as `ts35x7.5`, not drawn | – | – |
@@ -132,17 +134,32 @@ What the table does not settle, and what the note does about it:
   `TS35/F5` at 5.1 x 25 on a 36 pitch and its aluminium and PVC rails at 4.5 x 25
   on 50 (ITC 2). The note records 6.3 x 18 on 25, which three makers agree on, and
   leaves 6.2 x 15 out until the maker's drawing is cited (question Q7).
-- **The crown of the 15 mm rail.** AD and ITC label 27.0; EN labels 24. They are
-  not reconciled here: the table keeps both, and the profile entry would carry a
-  figure only after one is chosen (Q6). The depth of a hat and its thickness are
-  the figures a 3D extrusion needs first, and those agree.
-- **The G32 section.** It is not a hat. Width, depth, thickness and a 16.5
-  figure agree between EN and ITC (what the 16.5 spans no text says), but the
-  lip is 6 in EN and 9 in ITC, and from text and a small drawing alone the note
-  cannot tell whether they dimension the same feature. A G32 entry would hold its envelope (32 x 15 x 1.5)
-  and its slot pattern, and no cross-section outline until that is settled (Q6).
-  The issue says G32's slots are "per maker": here two makers state the same
-  6.3 x 18 on 25.
+- **The crown of the 7.5 mm rail** is not in dispute. AD 1 and 4, EN 3 (the
+  tolerance drawing, `a = 27 +-0.2`), ITC 2 (Fig. 1) and RS PRO 3 print 27 across
+  the top on the outside; EN 1 prints 25, and 27 less the sheet's 1.0 twice is
+  25. It is one measurement on two faces. The profile entry holds both and says
+  which is which.
+- **The crown of the 15 mm rail.** AD 1 and ITC 3 draw 27 on a 1.5 sheet, which
+  is 24 on the inside; EN 2 draws 24 on a 1.5 sheet. That reading is arithmetic,
+  and it does not close the question: EN 3's tolerance drawing prints `a = 24
+  +-0.2` beside a 1 +-0.04 sheet, and ITC 3's 2.2 sheet "extra-heavy" rail also
+  prints 24. No page says which face a 24 is measured on, so it stays open: the
+  table keeps both, and the profile entry carries a figure only after one is
+  chosen (Q6). The depth of a hat and its thickness are the figures a 3D
+  extrusion needs first, and those agree.
+- **The G32 lip** is not in dispute. ITC 4 draws a 9 on the short wall, from the
+  outside of the base; EN 3 draws a 6 between the level of the long wall's top
+  edge and the short wall's, and 15 less 6 is 9. They are one figure seen from
+  two sides. The G32 section is still not a hat. Width, depth, thickness and a
+  16.5 agree between EN and ITC (what the 16.5 spans no text says), and EN 3's
+  tolerance drawing adds a 5 and a 6 +-0.1 whose features the page does not
+  name, so a G32 entry would hold its envelope (32 x 15 x 1.5), its short wall
+  and its slot pattern, and no cross-section outline until those are read
+  (Q6). The issue says G32's slots are "per maker": here two makers state the
+  same 6.3 x 18 on 25.
+- **The depth of the 15 mm rail, TS15,** is 5.5 on AD 1, EN 3 and ITC 5's
+  drawing. ITC 5's text line "15x5mm" is the only 5, and the drawing on the
+  same page says 5.5.
 - **A standard's status.** The issue calls EN 50035 "withdrawn". None of the three
   sources says so, so the note does not write it. EN and ITC name EN 50045 for the
   15 mm rail where the issue's table says IEC/EN 60715; AD's page lists EN 60715
@@ -318,12 +335,16 @@ a decision.
    end (section 3.3), or something else? No source states it for a length that is
    not a multiple of 25. **Recommendation: whole slots only, from the left end**;
    note the rule in the profile entry as proposed and not sourced.
-6. **Q6. The figures the sources disagree on.** TS35 x 15 crown (27 or 24), G32
-   lip (6 or 9), TS15 depth (5.5 from three drawings, 5 in ITC's text), and the
-   standard named for TS15. **Recommendation: record only agreed figures, and
-   hold each disputed one as `unsourced` with both values in its note**, and
-   obtain a drawing for each from one maker with a stated tolerance before the
-   cross-section outline is drawn. No outline for G32 until the lip is settled.
+6. **Q6. The figures the sources disagree on.** Read against the makers' pages
+   (section 3.1), three of the four first listed are not disputes: the 7.5 mm
+   crown (27 outside, 25 inside), the G32 lip (9 and 6 are one figure) and the
+   TS15 depth (5.5). Two remain: the TS35 x 15 crown (27 or 24, section 3.1) and
+   the standard named for TS15 (EN 50045 on EN 3 and ITC 5, EN 60715 on AD 1).
+   **Recommendation: record only agreed figures, and hold each disputed one as
+   `unsourced` with both values in its note**, and obtain a drawing for each
+   from one maker with a stated tolerance before the cross-section outline is
+   drawn. No outline for G32 until the features EN 3's tolerance drawing names
+   only by number are read.
 7. **Q7. The 6.2 x 15 slot.** Which maker and which drawing? **Recommendation:
    leave it out and add it as a slot variant when a drawing is cited**; the issue
    does not give the source.
@@ -345,6 +366,13 @@ a decision.
     rack-products-design.md section 7.4 has it.
 
 ## 8. The first build slice
+
+**Built as its first part: the table, its tool and its tests, with one profile,
+`ts35x7.5`**, the one whose every figure is on a page of a maker's drawing and agrees where
+more than one drawing prints it (AD, EN, ITC and RS PRO). The other three profiles are later parts, each a
+minor of the table: `ts35x15` once its crown is settled, `ts15` and `g32` with
+their section figures. Q10 recommended all four at once; the first part holds
+one. The tool also holds `slot_centres`, the slot rule of section 3.3.
 
 Small enough for one task, and data only, as the issue's "order of work" starts:
 the registry, its tool, its test, and no device, schema, lab or lint change.

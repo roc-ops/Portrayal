@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr130
-version: 0.2.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS5916-54XKS
@@ -625,6 +625,7 @@ groups:
     index-origin: 0
     attrs: {media: qsfp28, speed: 100g}
   port-leds: {term: LED, role: indicator, index-origin: 0}
+  qsfp28-leds: {term: LED, role: indicator, index-origin: 0}
   mgmt:
     term: Port
     role: management
@@ -1582,7 +1583,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-0-lane-1
         at: [135.72, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 101
         for: uplink-0
         attrs: {lane: 1}
@@ -1595,7 +1596,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-0-lane-2
         at: [140.62, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 102
         for: uplink-0
         attrs: {lane: 2}
@@ -1608,7 +1609,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-0-lane-3
         at: [145.52, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 103
         for: uplink-0
         attrs: {lane: 3}
@@ -1621,7 +1622,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-0-lane-4
         at: [150.42, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 104
         for: uplink-0
         attrs: {lane: 4}
@@ -1634,7 +1635,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-1-lane-1
         at: [165.58, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 111
         for: uplink-1
         attrs: {lane: 1}
@@ -1647,7 +1648,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-1-lane-2
         at: [170.48, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 112
         for: uplink-1
         attrs: {lane: 2}
@@ -1660,7 +1661,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-1-lane-3
         at: [175.38, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 113
         for: uplink-1
         attrs: {lane: 3}
@@ -1673,7 +1674,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-1-lane-4
         at: [180.28, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 114
         for: uplink-1
         attrs: {lane: 4}
@@ -1686,7 +1687,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-2-lane-1
         at: [195.44, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 121
         for: uplink-2
         attrs: {lane: 1}
@@ -1699,7 +1700,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-2-lane-2
         at: [200.34, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 122
         for: uplink-2
         attrs: {lane: 2}
@@ -1712,7 +1713,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-2-lane-3
         at: [205.24, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 123
         for: uplink-2
         attrs: {lane: 3}
@@ -1725,7 +1726,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-2-lane-4
         at: [210.14, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 124
         for: uplink-2
         attrs: {lane: 4}
@@ -1738,7 +1739,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-3-lane-1
         at: [225.3, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 131
         for: uplink-3
         attrs: {lane: 1}
@@ -1751,7 +1752,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-3-lane-2
         at: [230.2, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 132
         for: uplink-3
         attrs: {lane: 2}
@@ -1764,7 +1765,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-3-lane-3
         at: [235.1, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 133
         for: uplink-3
         attrs: {lane: 3}
@@ -1777,7 +1778,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-3-lane-4
         at: [240.0, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 134
         for: uplink-3
         attrs: {lane: 4}
@@ -1790,7 +1791,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-4-lane-1
         at: [255.16, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 141
         for: uplink-4
         attrs: {lane: 1}
@@ -1803,7 +1804,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-4-lane-2
         at: [260.06, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 142
         for: uplink-4
         attrs: {lane: 2}
@@ -1816,7 +1817,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-4-lane-3
         at: [264.96, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 143
         for: uplink-4
         attrs: {lane: 3}
@@ -1829,7 +1830,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-4-lane-4
         at: [269.86, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 144
         for: uplink-4
         attrs: {lane: 4}
@@ -1842,7 +1843,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-5-lane-1
         at: [285.46, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 151
         for: uplink-5
         attrs: {lane: 1}
@@ -1855,7 +1856,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-5-lane-2
         at: [290.36, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 152
         for: uplink-5
         attrs: {lane: 2}
@@ -1868,7 +1869,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-5-lane-3
         at: [295.26, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 153
         for: uplink-5
         attrs: {lane: 3}
@@ -1881,7 +1882,7 @@ views:
       - ref: common/led-rect@1
         id: led-uplink-5-lane-4
         at: [300.16, 30.1]
-        group: port-leds
+        group: qsfp28-leds
         rel-pos: 154
         for: uplink-5
         attrs: {lane: 4}
@@ -1891,12 +1892,18 @@ views:
         - {name: link-40g, color: '#3b82f6'}
         - {name: link-25g, color: '#fbbf24'}
         - {name: link-10g, color: '#a855f7'}
-      - {ref: common/led-rect@1, id: led-uplink-2, at: [345.87, 30.1], group: port-leds, rel-pos: 2, for: uplink-2}
-      - {ref: common/led-rect@1, id: led-uplink-5, at: [351.77, 30.1], group: port-leds, rel-pos: 5, for: uplink-5}
-      - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: port-leds, rel-pos: 0, for: uplink-0}
-      - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: port-leds, rel-pos: 1, for: uplink-1}
-      - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.6], group: port-leds, rel-pos: 2, for: uplink-3}
-      - {ref: common/led-dot@1, id: led-uplink-4, at: [394.57, 14.6], group: port-leds, rel-pos: 3, for: uplink-4}
+      - {ref: common/led-rect@1, id: led-uplink-2, at: [345.87, 30.1], group: qsfp28-leds, rel-pos: 2,
+        for: uplink-2}
+      - {ref: common/led-rect@1, id: led-uplink-5, at: [351.77, 30.1], group: qsfp28-leds, rel-pos: 5,
+        for: uplink-5}
+      - {ref: common/led-dot@1, id: led-uplink-0, at: [370.94, 14.6], group: qsfp28-leds, rel-pos: 0,
+        for: uplink-0}
+      - {ref: common/led-dot@1, id: led-uplink-1, at: [374.88, 14.6], group: qsfp28-leds, rel-pos: 1,
+        for: uplink-1}
+      - {ref: common/led-dot@1, id: led-uplink-3, at: [390.19, 14.6], group: qsfp28-leds, rel-pos: 3,
+        for: uplink-3}
+      - {ref: common/led-dot@1, id: led-uplink-4, at: [394.57, 14.6], group: qsfp28-leds, rel-pos: 4,
+        for: uplink-4}
       - ref: common/led-rect@1
         id: led-ps0
         at: [16.57, 30.95]

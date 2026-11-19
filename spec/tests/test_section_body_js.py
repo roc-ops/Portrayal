@@ -383,10 +383,20 @@ def test_a_chassis_with_a_section_gets_the_arrays_and_one_without_gets_none():
 
 @needs_node
 @pytest.mark.parametrize("extra", [{"solid": {"polygons": []}}, {"bevel": [{"edges": ["front-left"], "size": 5}]},
-                                   {"rounded": 4}, {"shell": "sheet"}, {"halves": {"hinge": "rear"}}])
+                                   {"rounded": 4}, {"shell": "sheet"}])
 def test_a_section_with_another_body_key_falls_back_with_a_reason(extra):
     got = body_of({**CHASSIS, **extra})["ok"]
     assert got["refused"] and "arrays" not in got
+
+
+@needs_node
+def test_a_section_with_halves_builds_the_closed_body_as_it_does_without_them():
+    """`halves` is no longer a clash: the closed body of a housing that opens is the stepped body,
+    the same arrays as without the key (the open state is built apart, from the split)."""
+    halves = {"base": {"outer": "top", "stands": 144.0}, "lid": {"hinge": "rear", "stands": 144.0}}
+    got = body_of({**CHASSIS, "halves": halves})["ok"]
+    assert "refused" not in got
+    assert got["arrays"] == body_of({**CHASSIS})["ok"]["arrays"]
 
 
 @needs_node
@@ -415,7 +425,8 @@ def test_the_viewer_takes_the_section_branch_before_the_bevelled_and_plain_boxes
 def test_the_section_mesh_keeps_the_six_face_materials_in_face_of_index_order():
     code = viewer_code()
     branch = code[code.index("secBody.arrays)"):code.index("chassis.solid) {")]
-    assert "new THREE.Mesh(geo, mats)" in branch or "new THREE.Mesh(geo, [...mats" in branch
+    # (with a plan outline the six are followed by two more: test_plan_body_js.py)
+    assert re.search(r"new THREE\.Mesh\(geo,[^;]*\bmats\b", branch)
     assert "FACE_OF_INDEX" not in branch      # the order is the one table, used by picking as before
     assert re.search(r"FACE_OF_INDEX = \['right', 'left', 'top', 'bottom', 'front', 'rear'\]", code)
 
@@ -467,13 +478,17 @@ AS_TODAY = ["cisco/c9300-24p", "aurcore/ais4001", "fs/cmh-6dr1u"]
 
 
 @pytest.mark.heavy
-def test_no_library_device_states_a_section():
+def test_only_the_two_cast_nodes_state_a_section():
     paths = libwalk.iter_devices([LIB])
     assert len(paths) > 100
+    stating = []
     for path in paths:
         text = path.read_text()
         if "section" in text:         # only a file that says the word can state the key
-            assert "section" not in (yaml.safe_load(text).get("chassis") or {}), path
+            if "section" in (yaml.safe_load(text).get("chassis") or {}):
+                stating.append(f"{path.parent.parent.name}/{path.parent.name}")
+    # the two cast nodes are the only housings that state one; every other body is as it was
+    assert sorted(stating) == ["vecima/en8100", "vecima/en8400"]
 
 
 @pytest.mark.heavy

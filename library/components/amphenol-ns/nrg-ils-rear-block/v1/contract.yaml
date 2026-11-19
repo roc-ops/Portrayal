@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: nrg-ils-rear-block
-version: 1.1.0
+version: 1.2.0
 class: port
 profile: power
 description: >-
@@ -57,15 +57,30 @@ provenance:
     photo - nrgNET is printed in white at the top left of the plate, and a
     short legend sits over the right-hand column that the photograph does not
     resolve. Only nrgNET is drawn.
+  groups: >-
+    The nrgILS300CB08 datasheet (p4) gives the nrgNET connector of this panel as RJ45, "Ethernet IN" from the
+    controller or the upstream panel and "Ethernet OUT" to the downstream one, over a "proprietary serial protocol",
+    and the installation guide 149722-2 A9 (p34, Fig. 2-30) shows the two jacks of the nrgILS panels under the legend
+    nrgNET. They link a panel to the controller, so the role is management, the role the devices that place this block
+    already give it. The group states the media the part states, `rj45-serial`, and no speed: the datasheet (p1) lists
+    "One ethernet connection, 10/100/1000" for the panel without saying which jack carries it, and prints no rate for the
+    nrgNET link. The probe jack and the three headers are still elements of the skin, not parts, and join no group.
 attrs: {nrgnet-connector: rj45}
+groups:
+  nrgnet:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial}
+    description: the nrgNET jacks, IN over OUT, the panel-to-panel link to the controller
 elements:
   probe: {at: [26.0, 3.0], size: [11.0, 14.0], class: port}
   header-1: {at: [24.6, 19.4], size: [12.6, 5.0], class: port}
   header-2: {at: [24.6, 26.4], size: [12.6, 5.0], class: port}
   header-3: {at: [24.6, 33.4], size: [12.6, 5.0], class: port}
 parts:
-  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-in, at: [2.2, 13.0]}
-  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-out, at: [2.2, 28.4]}
+  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-in, at: [2.2, 13.0], group: nrgnet}
+  - {ref: amphenol-ns/nrgnet-jack@1, id: nrgnet-out, at: [2.2, 28.4], group: nrgnet}
 relief:
   features:
     - node: probe

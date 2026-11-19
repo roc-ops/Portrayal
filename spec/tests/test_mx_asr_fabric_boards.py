@@ -544,7 +544,7 @@ def test_mx2k_chassis_versions_and_locks(slug):
     assert [f for f in devicelock.check(LIBRARY) if f[0] == slug] == []
 
 
-MX2K_VERSIONS = {"juniper/mx2010": "4.0.0", "juniper/mx2020": "3.0.0"}
+MX2K_VERSIONS = {"juniper/mx2010": "4.1.0", "juniper/mx2020": "3.1.0"}
 
 
 @pytest.mark.parametrize("tree", ["netbox", "nautobot"])

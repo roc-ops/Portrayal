@@ -289,8 +289,9 @@ def test_the_index_carries_a_parts_other_faces():
     # 216 since the RTX 6000, 5000, 4500 and 4000 Ada cards (the RTX 2000 Ada has none).
     # 218 since the RTX PRO 5000 and RTX PRO 4000 Blackwell (a rear face each, and a plan for the 4000).
     # 222 since the RTX 4080 SUPER, 4080, 4060 Ti and 3090 Founders Edition cards.
-    assert len(with_faces) == 222, \
-        f"expected exactly 222 of {len(entries)} entries to carry a faces " \
+    # 223 since the DVI-D plug, whose mating face is its rear face.
+    assert len(with_faces) == 223, \
+        f"expected exactly 223 of {len(entries)} entries to carry a faces " \
         f"key, found {len(with_faces)}"
 
 

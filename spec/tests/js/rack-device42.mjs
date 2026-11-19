@@ -32,7 +32,7 @@ test('the sheets come in the import sequence, with the declared headers', () => 
   assert.deepEqual(s.sheets.rooms.columns, ['name', 'building']);
   assert.deepEqual(s.sheets.racks.columns, ['name', 'size', 'room']);
   assert.deepEqual(s.sheets.devices.columns, ['name', 'hardware']);
-  assert.deepEqual(s.sheets['devices-to-racks'].columns, ['name', 'rack', 'start_at']);
+  assert.deepEqual(s.sheets['devices-to-racks'].columns, ['device', 'rack', 'start_at']);
   assert.deepEqual(D.FILES, {buildings: '1-buildings.csv', rooms: '2-rooms.csv', racks: '3-racks.csv',
     devices: '5-devices.csv', 'devices-to-racks': '6-devices-to-racks.csv'});
 });
@@ -49,13 +49,13 @@ test('every device row names its hardware model and every placement its rack', (
   assert.deepEqual(rows(s, 'devices').map(r => [r.name, r.hardware]),
     [['leaf-1', 'SW-1'], ['srv-1', 'SRV-1'], ['pdu-1', 'PDU-1'], ['held-1', 'BOX-1']]);
   for (const r of rows(s, 'devices-to-racks')) assert.equal(r.rack, 'R1');
-  for (const r of rows(s, 'devices-to-racks')) assert.ok(rows(s, 'devices').some(d => d.name === r.name));
+  for (const r of rows(s, 'devices-to-racks')) assert.ok(rows(s, 'devices').some(d => d.name === r.device));
 });
 
 test('start_at is the lowest U the device fills, a half unit as it is', () => {
   const s = sheets();
   assert.deepEqual(rows(s, 'devices-to-racks'),
-    [{name: 'leaf-1', rack: 'R1', start_at: 3}, {name: 'srv-1', rack: 'R1', start_at: 10.5}]);
+    [{device: 'leaf-1', rack: 'R1', start_at: 3}, {device: 'srv-1', rack: 'R1', start_at: 10.5}]);
   assert.ok(rows(s, 'devices-to-racks').every(r => r.start_at !== 'auto'));
 });
 
@@ -67,7 +67,7 @@ test('a top-down rack counts its lowest U from the top, as the rack labels it', 
 
 test('a device with no U is listed with no position and named in skipped', () => {
   const s = sheets();
-  assert.ok(!rows(s, 'devices-to-racks').some(r => ['pdu-1', 'held-1', 'mystery'].includes(r.name)));
+  assert.ok(!rows(s, 'devices-to-racks').some(r => ['pdu-1', 'held-1', 'mystery'].includes(r.device)));
   assert.ok(rows(s, 'devices').some(r => r.name === 'pdu-1'));
   const byId = Object.fromEntries(s.skipped.map(k => [k.id, k]));
   assert.deepEqual(Object.keys(byId).sort(), ['h', 'n', 'p']);
@@ -75,6 +75,21 @@ test('a device with no U is listed with no position and named in skipped', () =>
   assert.match(byId.h.reason, /no U position/);
   assert.match(byId.n.reason, /no hardware model/);
   assert.equal(byId.n.name, 'mystery');
+});
+
+test('every header is named on the import pages or declared a stand-in, never both', () => {
+  assert.deepEqual(D.STAND_INS, {
+    rooms: ['building'], racks: ['room'], devices: ['name', 'hardware'], 'devices-to-racks': ['rack'],
+  });
+  assert.deepEqual(D.NAMED, {
+    buildings: ['name'], rooms: ['name'], racks: ['name', 'size'], 'devices-to-racks': ['device', 'start_at'],
+  });
+  for (const [sheet, columns] of Object.entries(D.COLUMNS)) {
+    for (const c of columns) {
+      const named = (D.NAMED[sheet] ?? []).includes(c), stand = (D.STAND_INS[sheet] ?? []).includes(c);
+      assert.ok(named !== stand, `${sheet}.${c} must be named on a page or a stand-in, not both and not neither`);
+    }
+  }
 });
 
 test('a rack with no site is written with a blank room, and says so', () => {

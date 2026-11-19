@@ -131,9 +131,9 @@ def test_a_name_and_a_version_have_the_shapes_a_device_gives_them():
 
 
 def test_a_rack_that_is_not_in_the_design_yet_is_refused_rather_than_ignored():
-    """Channels, doors and the base come with the cabinets (design sections 3 to
-    5). A key the schema does not know fails; it is never dropped silently."""
-    for key in ("channels", "enclosure", "base", "baying", "options", "points"):
+    """Baying, options and the outside attachment points are not in the format yet.
+    A key the schema does not know fails; it is never dropped silently."""
+    for key in ("baying", "options", "points"):
         assert errors(with_(**{key: {}})), key
 
 

@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ws-c2960s-48td
-version: 1.0.2
+version: 1.0.3
 maturity: modelled
 manufacturer: Cisco
 model: WS-C2960S-48TD-L
@@ -153,17 +153,52 @@ provenance:
       at each end of the plate. Eleven across is what the serial-number figures draw (PDF p55-56, printed 1-5 to 1-6);
       Figure 1-10 draws seven in a smaller figure, and the photograph and the larger figures are followed. The warning
       label above the plate ("DC inputs for remote power supply specified in manual", with a triangle) is printed on the
-      metal at (294.0, 5.9), 45.2 x 9.7 mm and is drawn as the photograph prints it; the rating strip over the pins and
-      the rating plate beside the inlet (32.7 x 13.4 mm at (351.0, 6.1)) are drawn blank, because the figures the
-      photograph prints match none of this model's own row of the spec tables (see the gap `rear-label-text`). The inlet
+      metal. It sits at (294.0, 5.9), 45.2 x 9.7 mm, and is drawn as the photograph prints it. The rating strip over the
+      pins and the rating plate beside the inlet (32.7 x 13.4 mm at (351.0, 6.1)) are drawn blank. The printed legends
+      are left to a later touch of their own (see the gaps `rear-label-text` and `rps-connector-part`). The inlet
       sits in a moulded black surround 29.3 x 22.5 mm at (387.6, 8.3). The fan exhaust is a honeycomb of hexagons about
       9.7 x 8.5 mm on an 8.8 mm column pitch (21 cells, flat-topped), drawn with the library's `vent` pattern scaled by
       2.0 with `pattern-pitch` to that pitch over a plate in the web's colour (the photograph's web reads #404345, box
       (540,44,705,140), the holes #040507), with the two light cut edges above and below the field (#b9bcba, box
       (533,40,712,46)). Four pan-head screws, 6.8 mm across, stand at 7.3, 111.4, 274.2 and 436.4 mm along and 28.7 mm
       down; the first is on the module's flange and is drawn with the cover. The FlexStack slot is the fitted module's
-      stepped frame (see the blank cover's contract). The faint stamped corner marks round the fan and one small drilled
-      hole are not drawn.
+      stepped frame (see the blank cover's contract). The stamped corner marks round the fan and the small drilled hole
+      are drawn (see `rear-details`).
+  rear-details:
+    confidence: estimated
+    note: >-
+      Read off the NetBox rear photograph of the WS-C2960S-48LPD-L (1516 x 150 px; 3.41 px per mm from the 444.5 mm width).
+      Each figure is the pixel points read at 4 times on a gridded crop, rounded to 0.1 mm and good to about 0.3 mm.
+      Drawn: the lid's lit edge along the top (rows 0 to 3, mean #95979a) and the light rim round the inlet surround.
+      Also drawn: the two oval tabs above and below the inlet (stroke #5c6062, fill #323637).
+      Also drawn: the round hole left of the fan (rim #838788, 125 px; dark #171717).
+      Also drawn: the twelve stamped bracket marks (two groups of six).
+      Also drawn: the chassis' diagonal edge at the far right (line #5c6061) and the steps under it.
+      The 24TS-L photograph, a model with no FlexStack slot, shows the same lit top edge.
+      The stamped marks are under 2 px wide, so the sampled extremes (dark #232729 over 353 px, lit #959c9e over 1084 px)
+      overstate their contrast. The drawn ink is each extreme blended 40 percent into the plate's #3f4447, which is #34383b
+      dark and #61676a lit. The photograph is another model's rear, so the same marks are carried to this one.
+      The printed legends and marks are not drawn here: each is left to a later touch of its own.
+  side-left:
+    confidence: estimated
+    note: >-
+      The left wall's 29 openings (17 peanut slots, 7 round holes, 5 small rectangles) are placed from photographs of the product.
+      One photograph shows a 24-port model and the other a 48-port model, both 299 mm deep.
+      Each opening is placed in millimetres from the rear and top edges, good to about 4 mm along and 2 mm across.
+      The two photographs differ by at most 3.5 mm along the wall and 1.3 mm across it.
+      Figure 1-10 (PDF p19, printed 1-17) gives the pattern: the count and kind of each opening.
+      Figure 1-10 is captioned "Catalyst 2960-S Switch Rear Panel with Stacking Module Slot and RPS connector".
+      It is a perspective view, so it gives the pattern but not the positions along the wall.
+      The scale along the wall comes from the model's own length, 299 mm (Table 1-3, PDF p65).
+      The scale across the wall comes from the printed 44.45 mm height.
+      Sizes along the wall come from the photographs too.
+      In the figure, the rear group's slots and bars read about 1.4 times too long along the wall.
+      The rear group is seen in both photographs and the front group only in the 24-port one.
+      Assumed: the front group is the 24-port model's pattern, applied to a model of the same length.
+      Its four callouts do not name the openings: the figure shows 29 openings; the guide does not say what they are for.
+      They stay drawn as marks. The openings' colour, #141414, is a stand-in dark; the figure's grey is shading.
+      The wall keeps the device's colour.
+      Figure 1-10 shows each of the 17 slots with a waist. The drawn outlines have none; the waists are a later part of their own.
   airflow:
     confidence: estimated
     note: >-
@@ -217,22 +252,26 @@ chassis:
     - {name: mid, label: 'mid-mounting position'}
     - {name: rear, label: 'rear-mounting position'}
 gaps:
-- what: the-four-undrawn-faces
-  scope: [top, bottom, left, right]
+- what: the-undrawn-faces
+  scope: [top, bottom, right]
   reason: needs-drawing
   wanted: >-
-    A flat drawing of the lid, the underside and the two side walls. The guide's figures show the lid and one side
-    isometrically (bracket screw holes and slots on the side); none can be measured. Each carries an `empty:`
-    sentence saying where I looked.
+    The top, the bottom and the right wall. The guide's figures show the lid plain and no underside.
+    Figure 1-12 (PDF p36, printed 1-12) shows the right wall only in part, behind the rack bracket.
+    No held picture shows the part it hides. The right wall is left as a later part of its own.
 - what: rps-connector-part
   scope: [rear]
   reason: needs-drawing
   wanted: >-
-    The RPS connector is the part cisco/rps2300-connector@2, drawn open where the photograph puts it. The part draws the
-    plate, its two screw holes, the shroud with its dark top edge, the housing and the two rows of eleven cavities with
-    a contact in each; it draws the cells with their chamfered lower corners and does not draw the slot in the screws, which the
-    photograph shows at about one pixel. The rating strip stays chassis art. The guide says the cover (two Phillips
-    pan-head screws, Figure 1-15) goes on when no RPS is connected.
+    The RPS connector is the part cisco/rps2300-connector@2, drawn open where the photograph puts it.
+    The part draws the plate, its two screw holes and the shroud with its dark top edge.
+    It draws the housing and the two rows of eleven cavities, each with a contact and chamfered lower corners.
+    It does not draw the slot in the screws, which the photograph shows at about one pixel.
+    The rating strip stays chassis art.
+    The line printed on the tab above the plate is not drawn; the printed legends are left to a later touch of their own.
+    The photograph reads "+12V", a direct-current sign, "@11.25A", "-48V", a direct-current sign and "@7.8A".
+    The mark after "11.25A" reads as a comma or a full stop; every other character is legible.
+    The guide says the cover (two Phillips pan-head screws, Figure 1-15) goes on when no RPS is connected.
 - what: faceplate-colour
   scope: [rear]
   reason: needs-photo
@@ -281,10 +320,13 @@ gaps:
     The Mode button is drawn as plain panel art. No library part is a flush push button of this shape.
 - what: rear-label-text
   scope: [rear]
-  reason: needs-photo
+  reason: needs-drawing
   wanted: >-
-    The rating label text beside the inlet. The guide's drawings show "12-6A" and this model's row of Table 1-3
-    reads 1 to 0.5 A, so no text is carried.
+    The RATING label beside the inlet is not drawn; the printed legends are left to a later touch of their own.
+    The 48LPD-L photograph prints "RATING", then "100-240V~", then "8-4A" and "50-60Hz" with a small mark between them.
+    The small mark reads as a comma or a full stop; every other character is legible.
+    The photograph is another model's rear: this model's row of Table 1-3 reads 1 to 0.5 A.
+    The guide's drawings read "12-6A".
 - what: port-arrow-fill
   scope: [front]
   reason: needs-drawing
@@ -356,21 +398,14 @@ gaps:
     other and upright, each 0.78 mm tall, 10.3 mm in all (it reads "BASET", with no hyphen, at 6x). A legend 0.78 mm
     tall is under the 1.5 mm font size the library's legend test asks for, so it is not drawn. Wanted: a
     photograph or a dimensioned front that gives the legend at a size that reads.
-- what: rear-undrawn-details
+- what: ac-inlet-pins
   scope: [rear]
   reason: needs-drawing
   wanted: >-
-    A dimensioned view of this model's rear. The NetBox photograph of the WS-C2960S-48LPD-L (3.41 px per mm) shows
-    these things that the render does not, each looked at at 4x: the chassis' own diagonal edge at the far right,
-    running from about (422.6, 18) up to (443.7, 1.5) mm with two small steps below it, which is the chassis outline
-    and is not drawn over the face; two small oval tabs above and below the AC inlet, about 9 x 3 mm at (386 to 396,
-    3 to 6) and (386 to 396, 33 to 36) mm, whose interior (#323637, 110 px, box (1322,12,1344,17)) is 5 levels of 255
-    from the plate round it (#373b3e, 200 px, box (1360,12,1400,17)), too faint for an outline to be placed, so they
-    are not drawn; faint rectangular outline marks stamped in the rear plate between the module and the fan and
-    beside the RPS plate; a small round hole at the left of the fan, near (149.6, 28.7) mm; a small dark notch in the
-    RPS plate's left edge, near (285 to 288, 25 to 33) mm; and the AC inlet's three pins, which are light grey blocks
-    in the render and dark pockets with a small light mark in the photograph. All are drawn from one model's
-    photograph and none from the guide, whose Figure 1-10 (PDF p19, printed 1-17) is too small to show them.
+    The photograph shows the three pins of the AC inlet as dark pockets, each with a small light mark.
+    It also shows two curved light lines inside the inlet's foot. The render draws light grey pin blocks.
+    The inlet is std/c14-inlet@1, which many parts place, so a new version of that part draws the pins, not this device.
+    The pin pockets are left as a later part of their own.
 groups:
   rj45:
     term: Port
@@ -709,6 +744,18 @@ views:
       - {id: rear-screw-1, kind: screw, at: [108.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
       - {id: rear-screw-2, kind: screw, at: [270.8, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
       - {id: rear-screw-3, kind: screw, at: [433.0, 25.3], size: [6.8, 6.8], shape: slot, fill: '#bdc8c5'}
+      - {id: rear-lid-edge, kind: panel, at: [0, 0], size: [444.5, 1.2], rx: 0, fill: '#95979a'}
+      - {id: rear-inlet-rim, kind: moulding, at: [387.6, 8.3], size: [29.3, 22.5], rx: 3.5, stroke: '#5c6061', stroke-width: 0.25}
+      - {id: rear-tab-top, kind: moulding, at: [386.0, 3.0], size: [10.2, 3.0], rx: 1.4, fill: '#323637', stroke: '#5c6062', stroke-width: 0.25}
+      - {id: rear-tab-bottom, kind: moulding, at: [386.0, 33.7], size: [10.2, 3.0], rx: 1.4, fill: '#323637', stroke: '#5c6062', stroke-width: 0.25}
+      - {id: rear-hole-rim, kind: panel, at: [147.4, 26.7], size: [4.4, 4.4], rx: 2.2, fill: '#838788'}
+      - {id: rear-hole, kind: panel, at: [148.3, 26.9], size: [3.0, 3.0], rx: 1.5, fill: '#171717'}
+      - {id: rear-corner-slot, kind: panel, at: [421.7, 18.5], size: [1.2, 6.7], rx: 0, fill: '#0e0e0e'}
+      - {id: rear-corner-lip-1, kind: panel, at: [421.3, 25.2], size: [1.6, 1.2], rx: 0, fill: '#a7a9a9'}
+      - {id: rear-corner-line, kind: panel, at: [421.4, 26.4], size: [0.6, 5.9], rx: 0, fill: '#747474'}
+      - {id: rear-corner-lip-2, kind: panel, at: [419.4, 32.3], size: [3.0, 1.5], rx: 0, fill: '#848484'}
+      - {id: rear-corner-gap, kind: panel, at: [419.9, 34.3], size: [3.0, 7.4], rx: 0, fill: '#2a2a2a'}
+      - {id: rear-corner-foot, kind: panel, at: [417.9, 41.0], size: [2.9, 3.4], rx: 0, fill: '#b6b6b6'}
       cutouts:
       - {id: ac-inlet, at: [388.4, 9.1], size: [28.0, 20.0], shape: rect}
     silkscreen:
@@ -718,6 +765,31 @@ views:
        fill: '#667572', for: chassis}
     - {id: rear-screw-cross-3, at: [436.4, 28.7], path: 'M -2.15 0 H 2.15 M 0 -2.15 V 2.15', filled: false, stroke-width: 0.35,
        fill: '#667572', for: chassis}
+    - {id: rear-diagonal, at: [422.8, 18.2], path: 'M 0 0 L 21.1 -17.9', filled: false, stroke-width: 0.6, fill: '#5c6061', for: chassis}
+    - {id: rear-stamp-1, at: [113.8, 4.4], path: 'M 0 0 L -5.3 0.0 L -5.3 7.6 L 0.0 7.6', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-1-lit, at: [113.8, 4.75], path: 'M 0 0 L -5.3 0 M 0.0 7.6 L -5.3 7.6', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-2, at: [123.5, 14.7], path: 'M 0 0 L -5.9 0.0 L -5.9 7.9 L 0.0 7.9', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-2-lit, at: [123.5, 15.05], path: 'M 0 0 L -5.9 0 M 0.0 7.9 L -5.9 7.9', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-3, at: [137.5, 14.7], path: 'M 0 0 L 6.2 0.0 L 6.2 7.9 L 0.0 7.9', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-3-lit, at: [137.5, 15.05], path: 'M 0 0 L 6.2 0 M 0.0 7.9 L 6.2 7.9', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-4, at: [146.9, 4.4], path: 'M 0 0 L 6.5 0.0 L 6.5 7.6 L 0.0 7.6', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-4-lit, at: [146.9, 4.75], path: 'M 0 0 L 6.5 0 M 0.0 7.6 L 6.5 7.6', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-5, at: [120.2, 30.8], path: 'M 0 0 L -5.5 0.0 L -5.5 10.5 L 0.0 10.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-5-lit, at: [120.2, 31.15], path: 'M 0 0 L -5.5 0 M 0.0 10.5 L -5.5 10.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-6, at: [140.2, 30.8], path: 'M 0 0 L 6.1 0.0 L 6.1 10.5 L 0.0 10.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-6-lit, at: [140.2, 31.15], path: 'M 0 0 L 6.1 0 M 0.0 10.5 L 6.1 10.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-7, at: [235.5, 4.4], path: 'M 0 0 L -5.9 0.0 L -5.9 7.6 L 0.0 7.6', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-7-lit, at: [235.5, 4.75], path: 'M 0 0 L -5.9 0 M 0.0 7.6 L -5.9 7.6', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-8, at: [262.5, 4.4], path: 'M 0 0 L 6.1 0.0 L 6.1 7.6 L 0.0 7.6', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-8-lit, at: [262.5, 4.75], path: 'M 0 0 L 6.1 0 M 0.0 7.6 L 6.1 7.6', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-9, at: [243.4, 14.4], path: 'M 0 0 L -6.2 0.0 L -6.2 10.5 L 0.0 10.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-9-lit, at: [243.4, 14.75], path: 'M 0 0 L -6.2 0 M 0.0 10.5 L -6.2 10.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-10, at: [259.5, 14.4], path: 'M 0 0 L 6.2 0.0 L 6.2 10.5 L 0.0 10.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-10-lit, at: [259.5, 14.75], path: 'M 0 0 L 6.2 0 M 0.0 10.5 L 6.2 10.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-11, at: [235.5, 26.7], path: 'M 0 0 L -5.9 0.0 L -5.9 13.5 L 0.0 13.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-11-lit, at: [235.5, 27.05], path: 'M 0 0 L -5.9 0 M 0.0 13.5 L -5.9 13.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
+    - {id: rear-stamp-12, at: [262.5, 26.7], path: 'M 0 0 L 6.1 0.0 L 6.1 13.5 L 0.0 13.5', filled: false, stroke-width: 0.35, fill: '#34383b', for: chassis}
+    - {id: rear-stamp-12-lit, at: [262.5, 27.05], path: 'M 0 0 L 6.1 0 M 0.0 13.5 L 6.1 13.5', filled: false, stroke-width: 0.25, fill: '#61676a', for: chassis}
     - {id: warning-triangle, at: [298.15, 7.6], path: 'M 0 0 L 4.05 7.1 H -4.05 Z M 0 2.6 V 4.9 M 0 5.9 V 6.2', filled: false,
        stroke-width: 0.35, fill: '#dce0e0', for: chassis}
     - {id: silk-warning-1, at: [322.2, 8.42], text: 'DC INPUTS FOR REMOTE', font-size: 2.6, anchor: middle, fill: '#cfd3d1', for: chassis}
@@ -744,9 +816,36 @@ views:
       Not drawn by any held source. Neither the guide nor the NetBox elevations picture the underside.
   left:
     size: {w: 299.0, h: 44.45}
-    empty: >-
-      Not drawn flat by any held source. The guide's figures show one side wall isometrically with bracket screw
-      holes and slots and say nothing of the other.
+    silkscreen:
+    - {id: side-opening-01, at: [15.1, 5.0], path: 'M 0 0 L 1.2 -1.2 L 2.9 -1.2 L 4.0 -0.5 L 4.4 0.8 L 3.7 2.6 L 1.5 3.2 L 0.0 1.8 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-02, at: [10.0, 15.6], path: 'M 0 0 L 7.6 -0.3 L 7.9 7.1 L 0.0 7.1 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-03, at: [19.2, 19.8], path: 'M 0 0 L 9.1 -0.2 L 9.4 4.4 L 0.0 4.8 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-04, at: [50.4, 38.5], path: 'M 0 0 L 0.7 -1.7 L 2.1 -2.2 L 3.2 -2.1 L 4.1 -1.1 L 4.4 -0.2 L 4.1 0.9 L 2.8 2.2 L 0.7 1.6 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-05, at: [40.7, 21.6], path: 'M 0 0 L 0.9 -1.8 L 2.8 -2.4 L 4.2 -2.2 L 10.9 3.6 L 11.4 4.4 L 11.4 5.6 L 10.7 7.1 L 9.0 7.8 L 7.4 7.5 L 0.5 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-06, at: [40.2, 7.5], path: 'M 0 0 L 0.5 -1.0 L 2.2 -1.9 L 4.6 -1.5 L 10.7 3.7 L 11.4 4.8 L 11.4 6.2 L 10.5 7.8 L 8.8 8.2 L 7.0 7.9 L 0.7 2.5 L 0.0 1.1 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-07, at: [48.0, 19.6], path: 'M 0 0 L 0.5 -1.3 L 7.3 -7.1 L 9.7 -7.2 L 11.4 -5.3 L 11.4 -4.1 L 10.9 -3.1 L 3.9 3.0 L 1.4 2.7 L 0.3 1.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-08, at: [55.9, 21.5], path: 'M 0 0 L 0.9 -1.6 L 2.8 -2.2 L 4.2 -2.1 L 10.9 3.7 L 11.4 4.6 L 11.4 5.6 L 10.7 7.2 L 9.0 7.9 L 7.4 7.7 L 0.5 1.7 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-09, at: [55.4, 7.1], path: 'M 0 0 L 0.5 -0.9 L 2.2 -1.7 L 4.6 -1.5 L 10.6 3.8 L 11.4 5.0 L 11.4 6.3 L 10.4 7.9 L 8.7 8.3 L 7.0 8.0 L 0.7 2.5 L 0.0 1.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-10, at: [63.2, 19.3], path: 'M 0 0 L 1.0 -1.5 L 7.3 -6.9 L 9.7 -6.9 L 11.4 -5.1 L 11.4 -3.9 L 10.9 -2.9 L 3.9 3.3 L 2.2 3.3 L 0.7 2.4 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-11, at: [70.7, 7.2], path: 'M 0 0 L 0.5 -0.9 L 2.2 -1.8 L 4.6 -1.5 L 10.7 3.8 L 11.4 4.9 L 11.4 6.1 L 10.4 7.8 L 8.7 8.3 L 7.0 7.9 L 0.7 2.6 L 0.0 1.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-12, at: [78.7, 19.7], path: 'M 0 0 L 9.2 0.0 L 9.4 4.7 L 9.0 5.0 L 0.0 4.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-13, at: [87.3, 7.9], path: 'M 0 0 L 0.5 -1.0 L 2.2 -1.9 L 4.1 -1.8 L 10.7 3.7 L 11.4 5.0 L 10.9 7.3 L 8.7 8.2 L 7.5 8.1 L 0.7 2.5 L 0.0 1.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-14, at: [95.1, 19.7], path: 'M 0 0 L 0.7 -1.4 L 7.3 -6.8 L 9.7 -6.8 L 10.7 -6.2 L 11.4 -4.9 L 11.4 -3.8 L 10.7 -2.7 L 4.6 2.7 L 3.2 3.2 L 1.5 2.9 L 0.3 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-15, at: [102.9, 21.8], path: 'M 0 0 L 1.0 -1.4 L 2.8 -2.0 L 4.3 -1.9 L 10.9 3.9 L 11.4 4.9 L 10.7 7.4 L 9.1 8.1 L 7.4 7.9 L 0.5 1.8 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-16, at: [102.6, 7.5], path: 'M 0 0 L 0.7 -1.2 L 4.1 -1.5 L 10.9 4.4 L 11.4 5.2 L 10.9 7.6 L 8.7 8.6 L 7.5 8.5 L 0.7 2.6 L 0.0 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-17, at: [110.5, 19.8], path: 'M 0 0 L 0.7 -1.5 L 7.3 -6.9 L 8.2 -7.0 L 10.5 -6.5 L 11.2 -5.7 L 11.4 -3.9 L 10.2 -2.3 L 3.6 3.1 L 2.2 3.1 L 0.7 2.1 L 0.0 0.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-18, at: [118.2, 21.5], path: 'M 0 0 L 1.2 -1.6 L 4.3 -1.8 L 10.9 4.0 L 11.4 5.8 L 10.9 7.3 L 10.2 7.9 L 9.1 8.3 L 6.9 7.8 L 0.5 2.0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-19, at: [118.0, 7.5], path: 'M 0 0 L 0.7 -1.1 L 4.1 -1.5 L 10.9 4.4 L 11.4 5.3 L 10.9 7.7 L 8.7 8.6 L 7.5 8.5 L 0.7 2.7 L 0.0 1.6 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-20, at: [125.8, 19.6], path: 'M 0 0 L 0.7 -1.3 L 7.3 -6.7 L 8.3 -6.8 L 10.5 -6.3 L 11.4 -4.8 L 11.4 -3.8 L 10.2 -2.1 L 3.6 3.3 L 2.2 3.3 L 0.7 2.4 L 0.0 1.1 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-21, at: [181.2, 32.3], path: 'M 0 0 L 1.0 -1.2 L 2.2 -1.4 L 3.4 -1.1 L 4.4 0.2 L 4.2 1.8 L 2.7 3.0 L 0.5 2.3 L 0.0 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-22, at: [195.1, 4.3], path: 'M 0 0 L 0.5 -1.4 L 4.1 -1.3 L 4.4 1.3 L 3.4 2.5 L 2.5 3.0 L 1.2 2.7 L 0.3 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-23, at: [199.2, 19.6], path: 'M 0 0 L 13.1 -0.1 L 13.5 4.5 L 11.4 4.7 L 0.2 4.7 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-24, at: [215.4, 32.8], path: 'M 0 0 L 1.2 -1.6 L 3.2 -1.5 L 4.4 -0.4 L 4.4 1.4 L 3.0 2.8 L 1.9 2.8 L 0.5 1.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-25, at: [230.9, 37.3], path: 'M 0 0 L 1.0 -1.2 L 2.2 -1.4 L 3.4 -1.1 L 4.4 0.2 L 4.2 1.8 L 2.7 3.0 L 1.2 2.8 L 0.5 2.3 L 0.0 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-26, at: [259.1, 6.8], path: 'M 0 0 L 0.7 -1.2 L 4.1 -1.6 L 10.9 4.3 L 11.4 5.2 L 10.9 7.6 L 8.7 8.4 L 7.5 8.4 L 0.7 2.6 L 0.0 1.5 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-27, at: [259.4, 32.6], path: 'M 0 0 L 7.2 -6.3 L 9.7 -6.3 L 11.0 -5.5 L 11.4 -4.7 L 11.2 -2.6 L 3.7 3.8 L 2.2 3.8 L 0.7 3.1 L 0.0 2.1 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-28, at: [259.9, 19.6], path: 'M 0 0 L 13.2 -0.2 L 13.5 4.4 L 0.0 4.6 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-opening-29, at: [278.3, 4.4], path: 'M 0 0 L 0.7 -1.2 L 4.2 -1.1 L 4.4 1.5 L 2.9 3.2 L 1.5 3.0 L 0.2 1.5 Z', filled: true, fill: '#141414', for: chassis}
   right:
     size: {w: 299.0, h: 44.45}
     empty: >-

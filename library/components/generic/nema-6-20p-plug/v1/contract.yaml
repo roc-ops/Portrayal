@@ -1,0 +1,77 @@
+format: 1
+kind: component
+name: nema-6-20p-plug
+version: 1.0.0
+class: inlet
+conforms: nema-6-20p-plug
+profile: power
+description: >-
+  A NEMA 6-20P straight-blade plug, face on (20 A 250 V, two pole, three
+  wire, grounding). It has the moulded body with its cord boss and one flat
+  blade lying across. The other blade is turned a quarter (the 6-20 key).
+  The round earth pin is below them. The input plug at the end of a 250 V
+  20 A cord.
+size: {w: 31.2, h: 29.6}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-6-20p, rating-a: 20, rating-v: 250}
+unplaced: >-
+  No device in the library places it yet. It is for a cord or a PDU whose
+  fixed input cord ends in a 6-20P.
+provenance:
+  size: >-
+    drawing - registry `nema-6-20p-plug`. Volex "Power Products catalogue"
+    (Aug-2025), cat. no. PS620 "NEMA 6-20P Straight Plug for Class I
+    Appliance (RoHS 2)", PDF page 166: the body 31.2 across and 29.6 high,
+    dimensioned. NEMA WD 6, which governs the configuration, is not held.
+  method: >-
+    estimated - the sheet is a raster (about 200 ppi), not a vector, and its
+    three views are at no common printed scale. The figures that are printed
+    are used as printed; every position that is not is measured off the face
+    view against the printed 31.2 and 29.6 and is a reading of about +-0.5.
+  pins: >-
+    drawing for the blade pitch 15.47 +-0.127, the blade thickness 1.52
+    +-0.127, the blade width 6.35 +-0.127, the earth pin 4.67 to 4.83 across
+    (drawn 4.75) and the blade centre line 11.89 +-0.127 above the earth pin
+    centre. estimated: the blade centre line 12.0 below the top edge, and the
+    pair's position across the body (the horizontal blade 9.17 left of the
+    body centre, the vertical blade 6.30 right of it), read off the face
+    view. The turned blade is on the right as the sheet draws it.
+  outline: >-
+    estimated - the body's top corners, the cord boss that narrows to 21.98
+    across at the foot (printed 21.9752, in brackets as a reference size) and
+    the rounded foot are traced from the face view and simplified.
+  blade-length: >-
+    drawing - the side view: the blades 15.88 minimum and the earth pin 21.41
+    maximum proud of the face.
+  color: >-
+    photograph - the sheet's photograph shows a black body, brass-coloured
+    blades and earth pin.
+  no-text: >-
+    No moulded legend is drawn.
+  no-depth: >-
+    NO `size.d`, as on every generic plug: the body behind the face, 56.34
+    +-1 long, is not built.
+  dcim: >-
+    PART_POWER maps it to `other`, and POWER_LABEL names it "NEMA 6-20P plug":
+    the target slug `nema-6-20p` has not been read from a source file. A device
+    draws either its cord or its plug, not both.
+elements:
+  face: {at: [0, 0], size: [31.2, 29.6], class: inlet}
+relief:
+  features:
+    - node: pin-g
+      cyl: 21.41
+      color: '#b08d57'
+      confidence: drawing
+      source: Volex Power Products catalogue Aug-2025 PS620, PDF page 166, side view, the earth pin 21.41 max proud
+    - node: blade-a
+      out: 15.88
+      color: '#b08d57'
+      confidence: drawing
+      source: Volex Power Products catalogue Aug-2025 PS620, PDF page 166, side view, the blades 15.88 min proud
+    - node: blade-b
+      out: 15.88
+      color: '#b08d57'
+      confidence: drawing
+      source: Volex Power Products catalogue Aug-2025 PS620, PDF page 166, side view, the blades 15.88 min proud
+skins: [default]

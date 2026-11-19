@@ -1,5 +1,47 @@
 # Modelling a device
 
+## Start here
+
+This page is long. Read this section first. Then read each stage's section as
+you reach it.
+
+**The order of the stages.** A faceplate is made in a fixed order, and you model
+it in that order. Do not start a stage until the previous one has been checked
+against the reference.
+
+1. [Before you draw anything: sort the sources](#before-you-draw-anything-sort-the-sources)
+2. [Stage 1: the panel](#stage-1-the-panel)
+3. [After the panel: the ears and the kits](#after-the-panel-the-ears-and-the-kits), for a rack device
+4. [Stage 2: the cutouts](#stage-2-the-cutouts)
+5. [Stage 3: the silkscreen](#stage-3-the-silkscreen)
+6. [Stage 4: the components](#stage-4-the-components)
+7. [Gate 4b: every port is usable](#gate-4b-every-port-is-usable)
+8. [Gate 5: audit against the source, twice](#gate-5-audit-against-the-source-twice)
+
+**The sentence Gate 5 asks for.** A model that cannot produce it is not
+finished, however green it lints. Gate 5 states it:
+
+> I put the render beside the reference at matched scale, and here is what it
+> showed.
+
+**The maturity levels.** The table is in
+`.claude/skills/portrayal-model-device/SKILL.md`. Claim the lowest level that is
+true.
+
+- `draft`: anything still being drawn, including a face with no source yet. A
+  draft is welcome.
+- `modelled`: every face is sourced. Each figure has provenance, and each face
+  is drawn or says it has nothing on it.
+- `verified`: no `estimated` value anywhere in the assembly, components
+  included.
+
+**The finishing steps.** A device that lints is not done. The finishing steps
+are in [`AGENTS.md`](../AGENTS.md) and in the Submit table of
+[the skill](../.claude/skills/portrayal-model-device/SKILL.md).
+[CONTRIBUTING](../CONTRIBUTING.md) has the commands. When a figure or a lint
+warning behaves oddly, [modelling-pitfalls.md](modelling-pitfalls.md) probably
+already explains why.
+
 A faceplate is made in a fixed order: the sheet metal is sized, it is punched,
 it is printed, and only then are the parts installed. Model it in that order,
 and do not start a stage until the previous one has been checked against the
@@ -571,8 +613,8 @@ provenance:
   bounding box and what the rack fit and the exports read. Check: the section
   touches all four sides, so L205 is silent.
 - **Not with the other body keys.** A housing with a `section` is not racked and
-  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang`, `kits` or
-  `halves`. Check: L206 is silent.
+  states none of `bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`.
+  It may state `halves`; see "A housing that opens" below. Check: L206 is silent.
 - **State where the profile came from.** `provenance` keyed `chassis.section`
   names the document and page, and says so when the drawing had to be turned to the
   way the device is installed.
@@ -665,10 +707,182 @@ the box from the rear above, from the end and from below; the ribs read as thick
 ribs on a casting, the ends are cut back, and the lower step lies below the tip line
 of its neighbours.
 
-**What is not there yet.** The open state of a housing with a section, relief taken
-from a rib, and a section that varies along the length come in later changes, so a
-modeller should not look for them: a device with a `section` cannot also state
-`halves`, and a ribbed housing is drawn closed.
+### A housing that opens: `chassis.section` with `chassis.halves`
+
+A housing with a section may state `halves` as a box does (the rules above, L200
+to L203, still apply) and then opens in 3D as the stepped body in two parts, with
+the ribs on the half they stand on.
+
+```yaml
+chassis:
+  section: [...]            # the twelve points above
+  fins: [...]
+  halves:
+    base: {outer: top, stands: 144.0}      # the seam is 144 down, inside the flange
+    lid:  {hinge: rear, angle: 180.0, stands: 144.0}
+views:
+  lid-open: {...}           # drawn by hand, with a region for each half, as for a box
+```
+
+- **The base is the top or the bottom, the hinge a long face.** `base.outer` is
+  `top` or `bottom` and `lid.hinge` is `front` or `rear` (L217). The housing is an
+  extrusion along its length, so only a seam parallel to the length leaves each half
+  a cut of the same end profile, and only a hinge on a long face is a line parallel
+  to it.
+- **`stands` places the seam.** The seam is the plane `base.stands` from the base's
+  `outer` face, so the seam is that many millimetres down the section from the top
+  (`top`) or up from the bottom (`bottom`). Put it where the maker's housing splits.
+  Check: it lies in the flange, the widest part, or L218 warns; and it cuts the
+  section in two parts that each have outline, so not outside the section, not
+  exactly on a horizontal edge of it and not in the stretch the ribs cut back (L219).
+- **The lid turns about the hinge-side edge at the seam.** The line is parallel to
+  the length, at the seam, at the section's rearmost edge in that row for `rear` and
+  its foremost for `front`. With a flange that is the flange's edge, which is where
+  a maker's hinge is drawn. `angle` is 0 to 180 degrees and 180 when not stated.
+  Check: open the box in the viewer at the angle the maker draws and see the lid
+  turn about that edge.
+- **What the open state shows.** Each half is a plain shell of the stepped body on
+  its side of the seam, ribs and ribs that stand outside the box included, seen from
+  both sides. The cut face is not drawn: you look into the shell through it, as with
+  a box half. **The inside of a half, its rim, gasket groove, bolt lugs and the
+  modules, is not drawn from the section; it is the authored open drawing's job**
+  (the `lid-open` view and its regions), as for any box that opens. Bays appear as
+  stand-in plates on the half that holds them. The camera frames both parts.
+- **A device without a `section` is unchanged:** its halves are the two boxes they
+  were.
+
+**What is not there yet.** Relief taken from a rib and a section that varies along
+the length come in later changes, so a modeller should not look for them.
+
+### The housing seen from above: `chassis.plan-outline`
+
+The section is one end profile run the whole width, so the housing seen from above is
+always a rectangle. A cast housing has rounded corners and lobes. `chassis.plan-outline`
+states the outline seen from above (a top view, not a bay's plan) as a list of bands:
+each is a range of heights down from the top and a polygon in the top face's frame (x
+from the left, y down the drawing, the rear at the top), clockwise with y down. The
+bands tile the height from 0 to `height`, and one band `[0, height]` is a housing whose
+outline is the same at every height. A rounded corner is its arc in short straight
+steps; a lobe is its points. The section is the most the housing can be and the plan
+only removes from it.
+
+```yaml
+chassis:
+  section: [...]
+  plan-outline:
+  - heights: [0, 132]               # the upper casting, inset from the flange
+    points: [[20, 43], [21.61, 37], ...]
+  - heights: [132, 155]             # the flange, with a lobe on an end
+    points: [[0, 32], [1.83, 22.82], ...]
+  - heights: [155, 288]
+    points: [[32, 37], [33.21, 32.5], ...]
+```
+
+Check: lint L220 to L225 (it needs a section; it is not on a rack device or with
+`bevel`, `rounded`, `shell: sheet`, `ears`, `overhang` or `kits`; the bands tile; each
+polygon is clockwise, simple, has no edge under 0.1 mm and lies inside the box; the
+caps) and L226 to L234, which cut each band against the section. The key is shape, so
+stating it on a released device is a major.
+
+**What is left of the body.** A band's polygon is cut to the section's rows at the
+band's heights: the plan only removes. A point within half a millimetre of a side of the
+box or of a wall of the section is moved onto it before the cut, so a run measured a few
+tenths inside a wall is the wall; L232 names each move over a hundredth of a millimetre.
+The body that is left has to reach all four sides of the box (L226), so a lobe whose tip
+stands where the section has no body does not count and the warning L231 names the lost
+point. Where two bands meet at a height that is not a row of the section and their
+outlines differ, the wall has a ledge in it (L233); a stretch of the section that no x of
+the plan reaches is named by L234.
+
+**How the faces follow it (2D).**
+
+- **Top and bottom.** The faceplate is a path of the union of the bands' polygons, the
+  corners transparent, with the same id `chassis-faceplate`. The bottom is its mirror in
+  x, wound the other way so it stays clockwise. The step between bands is a line inside
+  the outline, in a group `chassis-plan` painted over the art, so the face's own art has
+  to stop at the outline: a rectangle of art across the whole face would paint the
+  corners.
+- **Rib stripes.** Each rib's rectangle is cut to the pieces of every band it crosses and
+  joined into one path, with no clip element. A rib in several pieces gets ids `fin-3-a`,
+  `fin-3-b`; a rib the plan removes is not drawn and keeps its number; L230 warns.
+- **Front and rear.** The outline is the fins' silhouette cut to the x-extent of the body
+  at each row of the section: an inset casting is narrower than the flange, and a rounded
+  corner narrows the outline only at a row whose depth lies inside the corner. Where a
+  row has several runs of x the outline keeps each, and does not close over the gap.
+- **End faces.** An end face stays the section's silhouette (with its fins). The part of
+  it where the plan leaves no cap, which is where a casting is inset from the end, is
+  shaded in the plain tone, so you can see where a part cannot stand.
+- **Parts (L227).** A part on the top or bottom stands wholly on one level inside the
+  outline (not across a step or a rounded edge); a part on the front or rear lies where
+  its wall is present at its heights; a part on an end face lies on a cap.
+- **A housing that opens (L228, L229).** Each half's rim, the band on its side of the seam
+  cut to the section there, is one piece and not empty, and reaches the line where the
+  hinge face meets the seam, so the lid turns on the body.
+
+The cut is portrayal/plan.py; its answers for small cases are worked by hand in
+`spec/tests/fixtures/plan_outline/sweep-cases.json`, which the kit's version (`kit/plan.js`)
+reads too, and `body-cases.json` holds what plan.py computes for two made-up boxes.
+
+**The 3D body follows the key (the closed state).** The viewer builds the closed housing
+as the section cut band by band, so the corners are round, the lobes stand, and a casting
+inset from the flange is narrower than it in every view. In 3D:
+
+- **Top and bottom facets** at every height where the section or a band changes: the part
+  of the body that looks up shows the top drawing and the part that looks down the bottom
+  drawing, each placed by where it is along the length and the depth. Where the two sides
+  of a height are the same there is no facet; where a lower band is narrower the ring it
+  leaves is a ledge.
+- **Walls of the section.** The front and rear walls the section itself has keep the
+  front and rear drawings, so an inset casting's front wall still carries its parts. A plan
+  edge within half a millimetre of such a wall is that wall, so nothing is drawn twice.
+- **Plan walls are plain.** A wall that comes from an edge of the plan, a rounded corner,
+  a lobe's flank, the end wall of an inset casting, is the plain housing colour (the
+  faceplate's fill) and shows no drawing, because a drawing laid flat on a wall at an angle
+  would be smeared along it. Nothing is picked on one except the long face it is on.
+- **End caps.** A cap at either end of the box is the section's profile cut to what the
+  plan leaves at that end: it can be several pieces, or none where a casting is inset from
+  the end.
+- **Ribs** are cut to the plan band they stand in: a rib the plan removes is not drawn, a
+  rib it cuts is cut, and the 400-rib limit counts the ribs before that.
+
+The body is one closed mesh, with no gap or doubled face where two bands meet.
+
+**The open state follows the key.** A housing that states `section`, `halves` and a plan
+outline opens as two halves that are each the body the plan leaves of them on their side of
+the seam, not the section extruded:
+
+- **Each half shows its rim as the plan outline.** The corners are round, the lobes stand
+  and a casting inset from the flange is as narrow as it is. The rim is the half's own cap:
+  the polygon of the band on that half's side of the seam, cut to the section's width
+  there, plain and facing the other half. A seam exactly on a band edge gives the two
+  halves two different rims (bands are half-open, `[from, to)`), so draw the band edge where
+  the maker's rims differ. The rim is drawn in the open state only; the closed body is one
+  mesh and has no cap in it. A rib the seam happens to cut keeps its section hidden.
+- **The lid turns about the same line as before**: where the seam plane meets the hinge
+  face's outline of the section at the seam row. Its lobes and rounded corners swing with
+  it. Nothing models the lid meeting the base, so at some angles a lobe passes through the
+  other half. The camera frames each half's own extent, lobes included.
+- **The groove is not drawn.** The o-ring groove line inside the rim is art in the authored
+  open drawing; the 3D halves show the rim outline only. No key delivers the groove.
+- **A part stands on what the plan leaves under it.** A part on the top or bottom is seated
+  on the highest or lowest body at its own place across the width and the depth: over a
+  lobe or a rounded corner the flange's top, not the casting's the extrusion would put
+  under that depth. A part on the front or rear stands on the wall at its own place and
+  height, which is an arc's chord at a rounded corner. Where the plan leaves no body under
+  the point the seat is 0, the flat plane, as for any point off the body (lint already
+  refuses a part there).
+- **Exports.** The GLB of the open state carries the halves with the plain slot; the USDZ
+  of any body with several materials (a box's six faces, a stepped or plan body, an open
+  half) is written one mesh a material, where it used to hold no geometry.
+
+A housing without the key opens and seats exactly as before. The site has re-vendored the
+kit, so a device may state the key; the EN8100 and EN8400 do.
+
+**The 2D exports** were checked in Chromium on the top face of a synthetic box. The PNG
+export keeps the alpha: the corners are fully transparent, and the `background` option
+fills them. The draw.io export embeds the face as an SVG image whose path faceplate
+carries the same transparent corners, and the OmniGraffle stencil holds a PNG with its
+alpha. None of them paints a background of its own.
 
 ## Stage 2: the cutouts
 
@@ -1372,3 +1586,16 @@ holds two kinds of block, and each is placed in the face's lists by a
 
 What a block cannot say stays longhand beside it: the meter, the network
 interface, the breakers and anything else that is not repeated.
+
+**`whole-numbers: true`** is an optional key at the top of a `layout.yaml`, level
+with `views`. The expander computes every coordinate it writes, so a position of
+14 comes out as `14.0`, where a device written by hand says `14`. The two parse
+equal, but the compiled source is hashed as JSON, so the source hash and every
+face compiled from it change although the drawing does not. With the key, an
+`at` or a `size` that the expander computes and that is a whole number is
+written as an integer; `14.0` becomes `14` and `17.6` stays `17.6`. Use it
+when a layout reproduces a hand-written device and a whole number would
+otherwise change its hash. The key touches only the numbers the expander
+computes: longhand items, the non-view keys, and a block's own figures such as a
+numeral's `font-size` are copied as written. It is not written to `device.yaml`,
+it must be `true` or `false`, and a layout without it expands exactly as before.

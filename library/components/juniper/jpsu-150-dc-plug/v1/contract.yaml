@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: jpsu-150-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: juniper-dc-block-3
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the Juniper JPSU-150-DC-AFO supply of the EX3400 and EX4100 switches, wired, seen from the front as
   seated. A body with a clamp screw at each of its three cells and a screw at each end of its flange. A wire enters each cell
   from the right: from the top down the cells are "+", "-" and the earth, as the supply prints them. It seats in a
-  `juniper-dc-block-3` connector at its own mate point. It carries one wire per cell, not one cable.
+  `juniper-dc-block-3` connector at its own mate point. It carries one wire per cell, all in one cable that ends at its `mate` point.
 size: {w: 10.0, h: 25.0}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -43,9 +43,15 @@ provenance:
     builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [5.0, 11.9], direction: front}
+  cable: {at: [5.0, 11.9], direction: front}
   wire-1: {at: [9.2, 6.3], direction: front}
   wire-2: {at: [9.2, 11.9], direction: front}
   wire-3: {at: [9.2, 17.5], direction: front}

@@ -82,7 +82,7 @@ def test_the_supply_skin_no_longer_draws_what_the_part_draws(ref):
 
 def test_the_plug_is_the_guides_cable_connector_and_mates_the_key():
     d = contract(PLUG)
-    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.0.0")
+    assert (d["class"], d["mates"], d["version"]) == ("port", KEY, "1.1.0")
     assert d["size"] == {"w": 10.9, "h": 28.4}
     points = d["connection-points"]
     assert points["mate"]["at"] == contract(HEADER)["connection-points"]["mate"]["at"]

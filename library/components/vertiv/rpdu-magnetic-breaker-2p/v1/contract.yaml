@@ -1,0 +1,28 @@
+format: 1
+kind: component
+name: rpdu-magnetic-breaker-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of a Vertiv Geist vertical rack PDU with a 30 A input.
+  A labelled window sits beside a pale yellow window with a yellow actuator. Fixed to the PDU, not a plug-in part.
+size: {w: 34.0, h: 34.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    estimated - the strip in the VP8841 data sheet SL-26176 shows each breaker about 15 px along the strip and 15 px across it.
+    One pixel is 2.2 mm, so the breaker reads about 34 mm square and is good to about 2 mm.
+  rating: >-
+    datasheet - the VP8841 data sheet SL-26176 prints "(2) 20A Double Pole Magnetic Breakers" and
+    "Breaker/Switch Combination": two 20 A double-pole magnetic breakers.
+    The contract carries no rating, so the power figures stand as the record.
+  colour: >-
+    photo-measured - the actuator reads #ead963 (16 px) on the first breaker and #e7d962 (15 px) on the second.
+    The strip is too small to read the window frame closer than about 2 mm.
+  print: >-
+    NOT DRAWN: the label window carries a short label of the form Circuit and a digit, which the strip is too small to read.
+    Printed text is left to a later touch.
+elements:
+  button: {at: [3.5, 12.0], size: [9.0, 9.0], class: breaker, states: ['on', 'off']}
+skins: [default]

@@ -1,0 +1,287 @@
+format: 1
+kind: device
+name: dk-7979-110
+version: 0.1.0
+maturity: modelled
+manufacturer: Rittal
+model: DK 7979.110
+description: >-
+  Rittal PDU basic, single-phase, 0U. A 695 mm extruded aluminium strip, 44 mm
+  wide and about 72 mm deep, that hangs on two push-button attachments on its
+  back. It takes a 230 V single-phase feed, 3.7 kW, through a 3 m fixed cord with
+  a 16 A CEE plug. It hands that on to twelve unswitched IEC C13 outlets, in two
+  blocks of six, and one IEC C19 outlet. No breaker, no meter, no display, no
+  network interface.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S DIMENSIONED DRAWING. Rittal, "Technical details,
+      Power Distribution Unit, Basic version" (dri2108028en, 08.2023), PDF page
+      3, DK 7979.110: a plan view (the back), a side view, an end view and a
+      front view, with the circuit diagram below. The cell lines of the front
+      view were read from a 600 dpi render of that page at the drawing's own
+      scale: the 695 overall length between the two ends of the front view reads
+      1351 px (1.944 px per mm), the same scale the DK 7979.130 page gives. Each
+      cell edge is a full-height line of the front view. Good to about 0.5 mm.
+      The outlet housings were read the same way: the C13 housings repeat every
+      28.3 mm (five pitches, read to 0.1 mm); a block of six stands 8.2 mm from
+      the foot edge of its cell and about 2.7 mm from the head edge. An outlet
+      stands at the centre of its housing.
+  mount:
+    confidence: drawing
+    note: >-
+      `rack-side`, the library's way to say a part stands vertically beside an
+      upright, on the two push-button attachments of the plan view (dimensioned
+      622.3 apart). The data sheet's "PDU mounting options" are the enclosure
+      frame at the side of the 482.6 mm mounting frame (zero-U space) and the
+      cable route (push-button attachment); the mounting adaptor 7000.688 is an
+      accessory and is not drawn. `ru: 16` is the 695 mm it runs, 695 / 44.45 =
+      15.6; the data sheet sells it by minimum rack height (1200 for a VX IT
+      frame) and not by rack units.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - length 695 (the table of page 1 prints 695 as well), width 44 (the
+      data sheet's "44 mm (1 U)"), depth 72.1 (the side view's dimension). The data
+      sheet (dri1308088en, p.1) prints "PDU enclosure depth 70 mm" and the end view
+      109; the 109 is the body with the cable gland standing out of the front and
+      the button out of the back, and the 70 is the extrusion profile, as the
+      DK 7979.130 model reads the same figures. 72.1 is drawn.
+  colour:
+    confidence: datasheet
+    note: >-
+      The data sheet (dri1308088en, p.1) says "Aluminium, anodised in RAL 9005
+      (black, other colours may be configured)", so the body is drawn black. The
+      RAL class is the sheet's; the screen value (#0e0e10) is the usual one for
+      RAL 9005 and is estimated, not measured. The photographs held of the basic
+      family show a natural silver side, and none is of this SKU: a unit
+      configured in another finish would differ, and the gap below says so.
+  front:
+    confidence: drawing
+    note: >-
+      drawing - the front view of page 3, mm from the foot end: the foot cell 0 to
+      72.1 with the gland; two blank cells to 116.3 and to 160.5; a block of six C13
+      cells to 341.1 and a second to 521.6; a C19 cell to 567.4; two blank cells to
+      611.7 and to 656.2; and the head cap, 656.2 to 695, with its ribs. Each C13
+      stands in its housing as the DK 7979.142 model places it (earth slot toward
+      the head); the C19 as the DK 7979.130 places it (long axis along the strip).
+      Outlets count from the foot.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet and drawing - the table of page 1 ("PDU basic"): DK 7979.110, 1~,
+      16 A, 3.7 kW, CEE input, 12 IEC C13, 1 IEC C19, no earthing-pin, 695 mm; the
+      circuit diagram draws the outlets in blocks "6 x C13", "6 x C13" and "1 x
+      C19" and numbers them 1 to 13. std/c13-outlet@1 and std/c19-outlet@1. None is
+      switched; none has a lamp. NO OUTLET NAME IS WRITTEN: no held photograph is of
+      this SKU, so what the unit prints beside an outlet is not known, and the
+      outlets keep their placement ids, counted from the foot.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - dri1308088en p.1: "Input voltage range (L - N) 230 V (400 V,
+      3~), 50 - 60 Hz", "Input current 16 A/32 A (depending on product variant)",
+      "No. of wires 3/5", "Connection cable type H05-VV", "Length of connection
+      cable 3m"; the table: 1~, 16 A, 3.7 kW, input CEE; the circuit diagram draws
+      the plug "CEE 16 A/1P" with the wires L, PE and N and labels the line L1. A
+      single-phase input states no wiring (`input-phase: single`). The unit has a
+      fixed cord and no inlet. `plug-rating-a` is not written: the data sheet rates
+      the unit, not the plug.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - dri1308088en p.1: "No. of circuit-breakers 2 (single-phase) or 6
+      (3-phase) with 32 A version"; the table prints this SKU at 16 A and the
+      sheet's feature table has the breaker "only for 32 A PDU versions", so a 16 A
+      version has none. The circuit diagram draws none. No breaker is drawn and none
+      is stated.
+  mounting-buttons:
+    confidence: drawing
+    note: >-
+      drawing - the plan view of page 3: two buttons 622.3 apart (dimensioned); the
+      695 mm strip is the DK 7979.130's length, and the buttons are placed as that
+      model places them (36.1 and 36.6 in from the two ends, plate 25.2 along the
+      strip). The foot end of the plan view is taken to be the end of the front
+      view's foot cell; the two positions are equal to within 0.5 mm.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the plan view draws the same two long grooves, ridge and two buttons
+      as the DK 7979.130 model reads, from 2.6 in of each end.
+  logo:
+    confidence: estimated
+    note: >-
+      no photograph of this SKU is held; the RITTAL mark of the basic family's
+      renders is not drawn.
+  dcim:
+    confidence: estimated
+    note: >-
+      the input is one power port from the cord part and each outlet a power
+      outlet it feeds. C13 and C19 export as the IEC types; the CEE plug exports as
+      `other` with a label, because no upstream type for it has been read from a
+      held source.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      the maker's page lists the SKU among the 27 basic variants; no end-of-life
+      notice was found in the pages read.
+attrs:
+  physical:
+    length-mm: 695
+    construction: extruded aluminium
+  power:
+    input-ac: 230 V single-phase, 16 A, 50-60 Hz
+    input-plug: other
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 230
+    input-current-a: 16
+    capacity-kw: 3.7
+    capacity-scope: >-
+      the load the PDU can hand on, 3.7 kW (the "Output kW" column of the maker's
+      table). It is not what the PDU draws itself, which the basic version does
+      not state
+    frequency: 50-60 Hz
+  environmental:
+    operating-temp: +5 to +50 C
+    humidity: 10 to 95 % non-condensing
+  management:
+    metering-scope: none
+    outlet-switching: false
+  compliance:
+    product-compliance: CE, EAC
+  lifecycle:
+    eol: none-announced
+chassis: {width: 44, height: 695, depth: 72.1, ru: 16, mount: rack-side, color: '#0e0e10', airflow: passive}
+gaps:
+- what: colour
+  scope: [front, rear, left, right]
+  reason: sources-disagree
+  note: >-
+    the data sheet (dri1308088en, p.1) says black anodised RAL 9005 ("other colours may be configured")
+    and black is drawn; the photographs of the basic family show a natural silver
+    extrusion, none of this SKU, so whether a unit of this SKU ships in another
+    finish is not known. The screen value #0e0e10 is the usual one for RAL 9005,
+    estimated.
+  wanted: a photograph of this SKU, or a rating plate or order note naming its finish.
+- what: numbering
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the circuit diagram numbers the outlets 1 to 13, and no photograph of this SKU
+    shows what is printed beside them; no name is taken, so the placement ids stand.
+  wanted: a photograph of the printed outlet numbers.
+- what: group-plates
+  scope: [front]
+  reason: needs-photo
+  note: >-
+    the three outlet cells are drawn as full-width plates in the colour of the L1
+    plate of the DK 7979.130 render (the data sheet: L1 pink; this unit's circuit
+    diagram labels its one line L1); no photograph of this SKU is held, so whether
+    a single-phase unit's plates are that colour is not known. The blank cells and
+    the head cap are drawn in that model's end-cap colour, and the narrow margin
+    each plate may leave at its edges is not measured.
+  wanted: a straight-on photograph of the front with a scale.
+- what: mounting-adaptor
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the mounting adaptor 7000.688 and the universal mounting kit are named and not
+    drawn; the attachment on the enclosure frame at the side of the 19" frame is
+    named and not dimensioned.
+  wanted: a drawing of the adaptor.
+- what: ends
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    the end view draws the strip's section with the gland and the button and no
+    detail; no photograph looks at an end or a side straight on.
+  wanted: straight-on photographs of an end and a side.
+groups:
+  outlets-c13-a: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the six IEC C13 outlets of the first block, counted from the cable foot'}
+  outlets-c13-b: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the six IEC C13 outlets of the second block, counted from the cable foot'}
+  outlets-c19: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the one IEC C19 outlet, the last of the strip'}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 44, h: 695}
+    panel:
+      decor:
+      - {id: foot-cap, at: [0, 622.9], size: [44, 72.1], fill: '#1d1d1f', kind: end-cap}
+      - {id: blank-1, at: [0, 578.7], size: [44, 44.2], fill: '#1b1b1d', kind: spacer}
+      - {id: blank-2, at: [0, 534.5], size: [44, 44.2], fill: '#1b1b1d', kind: spacer}
+      - {id: plate-c13-a, at: [0, 353.9], size: [44, 180.6], fill: '#c9283a', kind: phase-plate}
+      - {id: plate-c13-b, at: [0, 173.4], size: [44, 180.5], fill: '#c9283a', kind: phase-plate}
+      - {id: plate-c19, at: [0, 127.6], size: [44, 45.8], fill: '#c9283a', kind: phase-plate}
+      - {id: blank-3, at: [0, 83.3], size: [44, 44.3], fill: '#1b1b1d', kind: spacer}
+      - {id: blank-4, at: [0, 38.8], size: [44, 44.5], fill: '#1b1b1d', kind: spacer}
+      - {id: head-cap, at: [0, 0], size: [44, 38.8], fill: '#1d1d1f', kind: end-cap}
+    components:
+      placements:
+        - {id: input, ref: rittal/pdu-cord-cee-16a-1p@1, at: [5.5, 642.9], group: power-input, rel-pos: 1, description: 'the fixed 3 m cord with a single-phase 16 A CEE plug, leaving the foot cell through a cable gland'}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [6.80, 501.12], group: outlets-c13-a, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [6.80, 472.82], group: outlets-c13-a, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [6.80, 444.52], group: outlets-c13-a, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [6.80, 416.22], group: outlets-c13-a, rel-pos: 4, fed-by: input}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [6.80, 387.92], group: outlets-c13-a, rel-pos: 5, fed-by: input}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [6.80, 359.62], group: outlets-c13-a, rel-pos: 6, fed-by: input}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [6.80, 320.55], group: outlets-c13-b, rel-pos: 1, fed-by: input}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [6.80, 292.25], group: outlets-c13-b, rel-pos: 2, fed-by: input}
+        - {id: outlet-9, ref: std/c13-outlet@1, at: [6.80, 263.95], group: outlets-c13-b, rel-pos: 3, fed-by: input}
+        - {id: outlet-10, ref: std/c13-outlet@1, at: [6.80, 235.65], group: outlets-c13-b, rel-pos: 4, fed-by: input}
+        - {id: outlet-11, ref: std/c13-outlet@1, at: [6.80, 207.35], group: outlets-c13-b, rel-pos: 5, fed-by: input}
+        - {id: outlet-12, ref: std/c13-outlet@1, at: [6.80, 179.05], group: outlets-c13-b, rel-pos: 6, fed-by: input}
+        - {id: outlet-13, ref: std/c19-outlet@1, at: [4.20, 136.62], rotate: 270, group: outlets-c19, rel-pos: 1, fed-by: input}
+  rear:
+    size: {w: 44, h: 695}
+    panel:
+      decor:
+      - {id: groove-1, at: [12.4, 2.6], size: [2.6, 689.8], fill: '#8e9094', kind: groove}
+      - {id: ridge, at: [21.8, 2.6], size: [0.8, 689.8], fill: '#6f7173', kind: ridge}
+      - {id: groove-2, at: [30.4, 2.6], size: [2.6, 689.8], fill: '#8e9094', kind: groove}
+    components:
+      placements:
+        - {id: button-1, ref: rittal/pdu-mounting-button@1, at: [3.7, 646.3], group: mounting, rel-pos: 1}
+        - {id: button-2, ref: rittal/pdu-mounting-button@1, at: [3.7, 24.0], group: mounting, rel-pos: 2}
+  top:
+    size: {w: 44, h: 72.1}
+    empty: >-
+      no source shows the head end straight on: the end view of the drawing
+      (page 3) is the section of the strip with the gland and the button, and no
+      photograph of this SKU is held.
+  bottom:
+    size: {w: 44, h: 72.1}
+    empty: >-
+      no source shows the foot end straight on: the end view of the drawing
+      (page 3) draws the section of the strip, and the cord leaves the front, not
+      the end, as its side view shows.
+  left:
+    size: {w: 72.1, h: 695}
+    empty: >-
+      the side view of the drawing (page 3) draws the side as a plain rectangle with
+      the gland and the outlet mouldings standing out of its front edge; nothing is
+      drawn on the face, and no photograph looks at a side straight on.
+  right:
+    size: {w: 72.1, h: 695}
+    empty: >-
+      the side view of the drawing (page 3) draws the side as a plain rectangle;
+      no photograph looks at the other side, and nothing is drawn on the face.
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships: the fixed cord and the two push-button attachments on it.
+      The universal mounting kit, the connector lock and the mounting adaptor are
+      not drawn.
+    part-numbers:
+      DK 7979.110: {}
+datasheet:
+  title: 'Rittal, Technical details, Power Distribution Unit (dri1308088en, 08.2023)'
+  url: https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979110
+  sha256: 5b93785bcf1545394135a1f42809f8fc9cdf19ebeddfbfdfe0ca7ac86feb4657
+references:
+  - {title: 'Rittal, Technical details, Power Distribution Unit, Basic version (dri2108028en, 08.2023)', url: 'https://www.rittal.com/com-en/products/PG20231215ITI101/PG20240403ITI201/PG20240913ITI001/PG20240925ZUB101/PRO115364?variantId=7979110', sha256: 02ef5970925d49473da9ce669c7f635386114a698ec268c607742150c7d27b4c}

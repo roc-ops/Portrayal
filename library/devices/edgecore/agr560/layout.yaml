@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: agr560
-version: 3.0.4
+version: 4.0.0
 maturity: modelled
 manufacturer: Edgecore
 model: AS9947-36XKB
@@ -431,6 +431,8 @@ groups:
       text calls the cage QSFP56-DD; the panel says QSFP-DD 400G and the panel is followed.
     attrs: {media: qsfp-dd, speed: 400g}
   port-leds: {term: LED, role: indicator, index-origin: 0}
+  qsfp28-leds: {term: LED, role: indicator, index-origin: 0}
+  qsfpdd-leds: {term: LED, role: indicator, index-origin: 0}
   mgmt:
     term: Port
     role: management
@@ -651,6 +653,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -676,6 +679,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -701,6 +705,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -726,6 +731,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -751,6 +757,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -776,6 +783,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -801,6 +809,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -826,6 +835,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -851,6 +861,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -876,6 +887,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -901,6 +913,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.48
           dy-bottom: -3.93
@@ -926,6 +939,7 @@ views:
         led:
           ref: common/led-arrow-sm@1
           id-format: 'led-qsfp28-{n}-speed'
+          group: qsfp28-leds
           dx-by-row: [3.08, 0.83]
           dy-top: 11.32
           dy-bottom: -4.09
@@ -952,6 +966,7 @@ views:
         led:
           ref: common/led-dot@1
           id-format: 'led-qsfpdd-{n}-speed'
+          group: qsfpdd-leds
           dx-by-col: [-3.88, 20.74]
           dy-top: 4.62
           dy-bottom: 1.44
@@ -970,42 +985,42 @@ views:
       - {ref: common/led-arrow-sm@1, id: led-port-1-link, at: [18.12, 31.99], skin: down, group: port-leds, rel-pos: 101, for: port-1, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-2-link, at: [35.34, 31.99], skin: up, group: port-leds, rel-pos: 102, for: port-2, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
       - {ref: common/led-arrow-sm@1, id: led-port-3-link, at: [32.32, 31.99], skin: down, group: port-leds, rel-pos: 103, for: port-3, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-0-link, at: [63.02, 31.99], skin: up, group: port-leds, rel-pos: 200, for: qsfp28-0, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-1-link, at: [60.7, 31.99], skin: down, group: port-leds, rel-pos: 201, for: qsfp28-1, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-2-link, at: [63.02, 61.76], skin: up, group: port-leds, rel-pos: 202, for: qsfp28-2, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-3-link, at: [60.7, 61.76], skin: down, group: port-leds, rel-pos: 203, for: qsfp28-3, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-4-link, at: [81.91, 31.99], skin: up, group: port-leds, rel-pos: 204, for: qsfp28-4, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-5-link, at: [79.59, 31.99], skin: down, group: port-leds, rel-pos: 205, for: qsfp28-5, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-6-link, at: [81.91, 61.76], skin: up, group: port-leds, rel-pos: 206, for: qsfp28-6, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-7-link, at: [79.59, 61.76], skin: down, group: port-leds, rel-pos: 207, for: qsfp28-7, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-8-link, at: [108.41, 31.99], skin: up, group: port-leds, rel-pos: 208, for: qsfp28-8, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-9-link, at: [106.09, 31.99], skin: down, group: port-leds, rel-pos: 209, for: qsfp28-9, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-10-link, at: [108.41, 61.76], skin: up, group: port-leds, rel-pos: 210, for: qsfp28-10, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-11-link, at: [106.09, 61.76], skin: down, group: port-leds, rel-pos: 211, for: qsfp28-11, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-12-link, at: [127.31, 31.99], skin: up, group: port-leds, rel-pos: 212, for: qsfp28-12, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-13-link, at: [124.98, 31.99], skin: down, group: port-leds, rel-pos: 213, for: qsfp28-13, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-14-link, at: [127.31, 61.76], skin: up, group: port-leds, rel-pos: 214, for: qsfp28-14, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-15-link, at: [124.98, 61.76], skin: down, group: port-leds, rel-pos: 215, for: qsfp28-15, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-16-link, at: [153.69, 31.99], skin: up, group: port-leds, rel-pos: 216, for: qsfp28-16, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-17-link, at: [151.38, 31.99], skin: down, group: port-leds, rel-pos: 217, for: qsfp28-17, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-18-link, at: [153.69, 61.76], skin: up, group: port-leds, rel-pos: 218, for: qsfp28-18, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-19-link, at: [151.38, 61.76], skin: down, group: port-leds, rel-pos: 219, for: qsfp28-19, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-20-link, at: [172.59, 31.99], skin: up, group: port-leds, rel-pos: 220, for: qsfp28-20, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-21-link, at: [170.28, 31.99], skin: down, group: port-leds, rel-pos: 221, for: qsfp28-21, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-22-link, at: [172.59, 61.76], skin: up, group: port-leds, rel-pos: 222, for: qsfp28-22, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-arrow-sm@1, id: led-qsfp28-23-link, at: [170.28, 61.76], skin: down, group: port-leds, rel-pos: 223, for: qsfp28-23, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-0-link, at: [185.25, 43.6], group: port-leds, rel-pos: 300, for: qsfpdd-0, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-1-link, at: [185.25, 54.47], group: port-leds, rel-pos: 301, for: qsfpdd-1, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-2-link, at: [229.03, 43.6], group: port-leds, rel-pos: 302, for: qsfpdd-2, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-3-link, at: [229.03, 54.47], group: port-leds, rel-pos: 303, for: qsfpdd-3, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-4-link, at: [238.68, 43.6], group: port-leds, rel-pos: 304, for: qsfpdd-4, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-5-link, at: [238.68, 54.47], group: port-leds, rel-pos: 305, for: qsfpdd-5, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-6-link, at: [282.46, 43.6], group: port-leds, rel-pos: 306, for: qsfpdd-6, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-7-link, at: [282.46, 54.47], group: port-leds, rel-pos: 307, for: qsfpdd-7, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-8-link, at: [292.31, 43.6], group: port-leds, rel-pos: 308, for: qsfpdd-8, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-9-link, at: [292.31, 54.47], group: port-leds, rel-pos: 309, for: qsfpdd-9, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-10-link, at: [336.09, 43.6], group: port-leds, rel-pos: 310, for: qsfpdd-10, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
-      - {ref: common/led-dot@1, id: led-qsfpdd-11-link, at: [336.09, 54.47], group: port-leds, rel-pos: 311, for: qsfpdd-11, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-0-link, at: [63.02, 31.99], skin: up, group: qsfp28-leds, rel-pos: 200, for: qsfp28-0, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-1-link, at: [60.7, 31.99], skin: down, group: qsfp28-leds, rel-pos: 201, for: qsfp28-1, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-2-link, at: [63.02, 61.76], skin: up, group: qsfp28-leds, rel-pos: 202, for: qsfp28-2, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-3-link, at: [60.7, 61.76], skin: down, group: qsfp28-leds, rel-pos: 203, for: qsfp28-3, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-4-link, at: [81.91, 31.99], skin: up, group: qsfp28-leds, rel-pos: 204, for: qsfp28-4, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-5-link, at: [79.59, 31.99], skin: down, group: qsfp28-leds, rel-pos: 205, for: qsfp28-5, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-6-link, at: [81.91, 61.76], skin: up, group: qsfp28-leds, rel-pos: 206, for: qsfp28-6, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-7-link, at: [79.59, 61.76], skin: down, group: qsfp28-leds, rel-pos: 207, for: qsfp28-7, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-8-link, at: [108.41, 31.99], skin: up, group: qsfp28-leds, rel-pos: 208, for: qsfp28-8, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-9-link, at: [106.09, 31.99], skin: down, group: qsfp28-leds, rel-pos: 209, for: qsfp28-9, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-10-link, at: [108.41, 61.76], skin: up, group: qsfp28-leds, rel-pos: 210, for: qsfp28-10, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-11-link, at: [106.09, 61.76], skin: down, group: qsfp28-leds, rel-pos: 211, for: qsfp28-11, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-12-link, at: [127.31, 31.99], skin: up, group: qsfp28-leds, rel-pos: 212, for: qsfp28-12, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-13-link, at: [124.98, 31.99], skin: down, group: qsfp28-leds, rel-pos: 213, for: qsfp28-13, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-14-link, at: [127.31, 61.76], skin: up, group: qsfp28-leds, rel-pos: 214, for: qsfp28-14, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-15-link, at: [124.98, 61.76], skin: down, group: qsfp28-leds, rel-pos: 215, for: qsfp28-15, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-16-link, at: [153.69, 31.99], skin: up, group: qsfp28-leds, rel-pos: 216, for: qsfp28-16, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-17-link, at: [151.38, 31.99], skin: down, group: qsfp28-leds, rel-pos: 217, for: qsfp28-17, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-18-link, at: [153.69, 61.76], skin: up, group: qsfp28-leds, rel-pos: 218, for: qsfp28-18, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-19-link, at: [151.38, 61.76], skin: down, group: qsfp28-leds, rel-pos: 219, for: qsfp28-19, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-20-link, at: [172.59, 31.99], skin: up, group: qsfp28-leds, rel-pos: 220, for: qsfp28-20, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-21-link, at: [170.28, 31.99], skin: down, group: qsfp28-leds, rel-pos: 221, for: qsfp28-21, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-22-link, at: [172.59, 61.76], skin: up, group: qsfp28-leds, rel-pos: 222, for: qsfp28-22, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-arrow-sm@1, id: led-qsfp28-23-link, at: [170.28, 61.76], skin: down, group: qsfp28-leds, rel-pos: 223, for: qsfp28-23, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-0-link, at: [185.25, 43.6], group: qsfpdd-leds, rel-pos: 300, for: qsfpdd-0, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-1-link, at: [185.25, 54.47], group: qsfpdd-leds, rel-pos: 301, for: qsfpdd-1, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-2-link, at: [229.03, 43.6], group: qsfpdd-leds, rel-pos: 302, for: qsfpdd-2, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-3-link, at: [229.03, 54.47], group: qsfpdd-leds, rel-pos: 303, for: qsfpdd-3, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-4-link, at: [238.68, 43.6], group: qsfpdd-leds, rel-pos: 304, for: qsfpdd-4, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-5-link, at: [238.68, 54.47], group: qsfpdd-leds, rel-pos: 305, for: qsfpdd-5, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-6-link, at: [282.46, 43.6], group: qsfpdd-leds, rel-pos: 306, for: qsfpdd-6, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-7-link, at: [282.46, 54.47], group: qsfpdd-leds, rel-pos: 307, for: qsfpdd-7, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-8-link, at: [292.31, 43.6], group: qsfpdd-leds, rel-pos: 308, for: qsfpdd-8, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-9-link, at: [292.31, 54.47], group: qsfpdd-leds, rel-pos: 309, for: qsfpdd-9, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-10-link, at: [336.09, 43.6], group: qsfpdd-leds, rel-pos: 310, for: qsfpdd-10, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
+      - {ref: common/led-dot@1, id: led-qsfpdd-11-link, at: [336.09, 54.47], group: qsfpdd-leds, rel-pos: 311, for: qsfpdd-11, states: ['off', {name: linked, color: '#22c55e'}, {name: partial, color: '#fbbf24'}]}
       # the out-of-band cluster, measured on the datasheet elevation because the guide's
       # callout balloons 4 to 8 sit over this stretch of panel
       - {ref: common/rj45-eth@1, id: mgmt-eth, at: [343.08, 32.67], group: mgmt, rel-pos: 1,

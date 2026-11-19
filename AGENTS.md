@@ -6,8 +6,8 @@ documentation that a person follows the same way.
 ## Read these first
 
 - [`docs/modelling-a-device.md`](docs/modelling-a-device.md): how a device is
-  modelled, in manufacturing order, with a gate at each stage. Read it in full
-  before you start a device.
+  modelled, in manufacturing order, with a gate at each stage. Start with its
+  Start here page, then read each stage's section as you reach it.
 - [`docs/modelling-pitfalls.md`](docs/modelling-pitfalls.md): what has gone
   wrong before. Read it when a figure, a measurement or a lint warning does not
   behave as you expect.
@@ -25,6 +25,32 @@ Read this one when you review, not while you build:
 
 - [`docs/review-standards.md`](docs/review-standards.md): the judgements no
   gate can make, for the second pass over a finished change.
+
+## A device is not done at a clean lint
+
+A `device.yaml` that lints is the middle of the work, not the end of it.
+After Gate 5, run these eight steps in this order, from the checkout you changed:
+
+1. Up to date: bring the branch up to `origin/main` before the lock.
+2. The lock: run `devicelock.py`, bump `version:` as it says, then run it again
+   with `--update`.
+3. The exports: run `./publish.sh --no-images` and commit `library/exports/`.
+4. The changelog: add a new file under `changelog.d/`.
+5. The tests: run the tests the change reaches, after the publish.
+6. Preflight: run `preflight.py --json` and fix every FAIL line.
+7. The sign-off: every commit carries a `Signed-off-by:` line (`git commit -s`).
+8. The description: fill in every section of `.github/PULL_REQUEST_TEMPLATE.md`.
+
+Only the human contributor can agree to the Developer Certificate of Origin.
+An assistant stops and asks the contributor to read it and to say they agree.
+It adds the `Signed-off-by:` line only after they have, and never writes it for
+them.
+
+Steps 2 to 6 can send you back to an earlier step. After the last edit, run 2
+to 6 once more in order.
+
+The Submit table in `.claude/skills/portrayal-model-device/SKILL.md` and
+[`CONTRIBUTING.md`](CONTRIBUTING.md) are the authority. This list restates them.
 
 ## The skills are documents
 

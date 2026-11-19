@@ -48,7 +48,11 @@ def device_yaml(name):
 
 
 def contract(ref):
-    return yaml.safe_load((LIB / "components" / ref.split("@")[0] / "v1" / "contract.yaml").read_text())
+    """A component's contract: the major its ref names, else the newest the library holds."""
+    name, _, major = ref.partition("@")
+    folder = LIB / "components" / name
+    major = f"v{major}" if major else max((p.name for p in folder.glob("v*")), key=lambda v: int(v[1:]))
+    return yaml.safe_load((folder / major / "contract.yaml").read_text())
 
 
 def placements(doc, face, stem):
@@ -142,7 +146,7 @@ def test_one_full_height_door_covers_each_face(name):
         comp = contract(doors[0]["ref"])
         assert comp["size"]["w"] == w and close(comp["size"]["h"], HEIGHT)
         frames = placements(doc, face, "frame")
-        assert [p["ref"] for p in frames] == [f"chatsworth/motive-{name.lower()}-frame@1"]
+        assert [p["ref"] for p in frames] == [f"chatsworth/motive-{name.lower()}-frame@3"]
     assert "door-hinge" in {g["what"] for g in doc["gaps"]}
     assert sorted(p["rel-pos"] for face in FACES for p in placements(doc, face, "door")) == [1, 2]
 
@@ -164,7 +168,7 @@ def test_the_gaps_say_what_the_pages_do_not(name):
     doc = device_yaml(name)
     gaps = {g["what"] for g in doc["gaps"]}
     assert {"cable-capacity", "door-hinge", "finger-shape", "finger-count", "nominal-size", "channel-depth",
-            "central-track", "accessories", "mid-panel", "door-features", "color-shade"} <= gaps
+            "central-track", "accessories", "mid-panel", "door-hook", "color-shade"} <= gaps
     assert all(g["reason"] == "vendor-silent" for g in doc["gaps"])
     assert "performance" not in doc["attrs"], "the data sheet points to a cable fill table and states no figure"
     assert doc["provenance"]["spine"]["confidence"] == "estimated"

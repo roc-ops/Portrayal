@@ -1,0 +1,188 @@
+format: 1
+kind: device
+name: 9512-1903
+version: 0.1.1
+maturity: modelled
+manufacturer: Belden
+model: 9512-1903
+description: >-
+  1U rack-mount lacing bar, Belden 9512-1903. A black powder-coated steel bar the full 19 in width
+  that bolts to the rack rails, for tying cables to. It is a thin flat strip 12.7 mm across with
+  one slotted hole near each end. No tie point is placed: no document gives one.
+profile: passive
+provenance:
+  method:
+    confidence: datasheet
+    note: >-
+      FIGURES FROM A DATA SHEET TABLE AND ONE PHOTOGRAPH. The 9512-1903 technical data sheet
+      (revision 0.41, 05-31-2024, page 1) states the rack units, the overall height and width, the
+      depth (in its Variants table only), the weight, the material, the finish and the colour, and carries one 430 px photograph
+      of the bar with its two screws lying beside it. The maker's product page held here is text
+      with no dimension in it. NO BELDEN DOCUMENT HOLDS A DIMENSIONED DRAWING. The two end holes and
+      the thin flat section are read off the photograph and are `estimated`: the scale is the
+      printed 12.7 mm face over its 9.8 px width at the middle of the bar, 1.3 mm per px, and the
+      length is the printed 482.6 over 438 px. Nothing was copied from the photograph; the data
+      sheet's footer ("provided on an AS IS basis") grants no licence to reuse its artwork.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - 1U, 0.5 in (12.7 mm) high, 19 in (482.6 mm) wide and 0.5 in (12.7 mm) deep, the
+      data sheet's Overall Height and Overall Width rows and its Variants table (Height 0.5 in, Width
+      19 in, Depth 0.5 in). The height is far under the 44.45 of the rack unit it takes, as the
+      other Belden parts' heights are. The width is the 482.6 of 19 in, the bar's own length. The
+      data sheet does not say which of the 0.5 in figures is the bar's face and which its
+      projection from the rail face; see the `cross-section` gap.
+  mount:
+    confidence: estimated
+    note: >-
+      estimated - the data sheet says only "Mount Type: 19 in". The photograph shows one slotted
+      hole near each end of a flat bar and two screws beside it, so it bolts to the rail face at a
+      rack unit and stands out from it: a `rack-face` part, as the line's other managers are. At
+      what height inside the unit it sits is not stated.
+  shell:
+    confidence: estimated
+    note: >-
+      estimated - `sheet`, as the line's other managers: the data sheet says "Steel" and the
+      photograph shows a flat strip. The strip is drawn 12.7 across and 1.5 thick, its edge on the
+      rail side. The sheet's 0.5 in depth is kept as the overall size.
+  thickness:
+    confidence: estimated
+    note: >-
+      estimated - 1.5, the stand-in the line's other managers use; no Belden document states a gauge
+      for this bar.
+  weight:
+    confidence: datasheet
+    note: >-
+      datasheet - 0.5 lb in the data sheet's Weight row and its Variants table, 0.227 kg. The data
+      sheet does not say whether it is a net or a shipping weight, nor whether the two screws are in it.
+  front:
+    confidence: datasheet
+    note: >-
+      estimated - the bar's face as a 482.6 by 12.7 strip, the overall width and height, with one
+      slotted hole at each end. Each hole is 10 by 4, its centre 13 from the end and 6.35 from the
+      edge, read off the photograph: the centre sits 12 px from the end at 1.1 mm per px along the
+      bar. The size is good to about 3.
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - the back of the same strip, with the same two holes through it. No Belden document
+      shows the bar from behind.
+  top:
+    confidence: estimated
+    note: >-
+      estimated - the strip's edge, 482.6 long and 1.5 thick, on the rail side of the 12.7 depth.
+      The bottom is the same.
+  left:
+    confidence: estimated
+    note: >-
+      estimated - the end of the strip, 12.7 across and 1.5 thick, on the rail side of the 12.7
+      depth. The right is the same.
+  guides:
+    confidence: datasheet
+    note: >-
+      datasheet - none. A cable is tied to a lacing bar, and no document says where. The format has
+      no tie point on a bar, and none is placed (`tie-points` gap).
+  attrs:
+    confidence: datasheet
+    note: >-
+      datasheet - the material, the colour and the finish are the data sheet's table. The overview
+      sentence says the managers' 19 in mount "includes mounting hardware" and the photograph shows
+      two screws; their size and thread are not stated and no part is modelled for them.
+  color:
+    confidence: estimated
+    note: >-
+      estimated - "Black Powdercoat Finish" and "Color: Black". The photograph shows a dark steel
+      bar that reads dark grey where it catches light, so the shade is this library's render of
+      black, the same as the line's other 1U managers.
+attrs:
+  physical:
+    weight-kg: 0.227
+    material: Steel
+    finish: Black Powdercoat Finish
+    color: Black
+chassis:
+  width: 482.6
+  height: 12.7
+  depth: 12.7
+  ru: 1
+  mount: rack-face
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 0.227
+  color: '#3c3f43'
+gaps:
+  - what: tie-points
+    scope: [front, top, bottom]
+    reason: vendor-silent
+    note: >-
+      the data sheet and the product page say the part is a rack-mount lacing bar and give no tie
+      point, slot or cut-out along it, so none is drawn and no cable is told where to be tied.
+    wanted: a Belden drawing, or a square-on photograph, that marks where a cable is tied
+  - what: cross-section
+    scope: [top, bottom, left, right]
+    reason: vendor-silent
+    note: >-
+      the sheet gives 0.5 in for the height and for the depth. The photograph shows a thin flat strip,
+      drawn 1.5 thick from the line's stand-in gauge. Which edge of the 12.7 depth it sits on is unknown.
+    wanted: a dimensioned drawing, or an end-on photograph, of the bar
+  - what: height-in-unit
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the bar is 12.7 high and takes one 44.45 rack unit; no document says where in the unit it sits.
+    wanted: a drawing of the bar fitted to a rail
+  - what: mounting-screws
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the photograph shows two loose screws beside the bar. They are not on any face and the format has
+      no shape for a loose part beside a device. No document gives their size, thread or head.
+    wanted: the mounting hardware's part list
+views:
+  front:
+    size: {w: 482.6, h: 12.7}
+    panel:
+      decor:
+        - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: end-hole-left, at: [8, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+        - {id: end-hole-right, at: [464.6, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+  rear:
+    size: {w: 482.6, h: 12.7}
+    panel:
+      decor:
+        - {id: bar, at: [0, 0], size: [482.6, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+        - {id: end-hole-left, at: [8, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+        - {id: end-hole-right, at: [464.6, 4.35], size: [10, 4], shape: slot, fill: '#17191c', kind: end-hole}
+  top:
+    size: {w: 482.6, h: 12.7}
+    panel:
+      decor:
+        - {id: strip, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
+  bottom:
+    size: {w: 482.6, h: 12.7}
+    panel:
+      decor:
+        - {id: strip, at: [0, 0], size: [482.6, 1.5], fill: '#3c3f43', sink: 0.05, kind: base}
+  left:
+    size: {w: 12.7, h: 12.7}
+    panel:
+      decor:
+        - {id: strip, at: [0, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+  right:
+    size: {w: 12.7, h: 12.7}
+    panel:
+      decor:
+        - {id: strip, at: [11.2, 0], size: [1.5, 12.7], fill: '#3c3f43', sink: 0.05, kind: base}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The lacing bar as Belden ships 9512-1903.'
+datasheet:
+  title: 'Belden 9512-1903 technical data sheet (Rack-Mount Lacing Bar), revision 0.41, 05-31-2024'
+  url: https://catalog.belden.com/techdata/EN/9512-1903_techdata.pdf
+  sha256: 294a5c94d3cacedc815c33e3e0a5946a7e998299c50f75964e2471c10a15a708
+references:
+  - title: 'Belden 9512-1903 product page (Horizontal Cable Management, Rack-Mount Lacing Bar)'
+    url: https://www.belden.com/products/racks-cabinets-cable-management/cable-management/enclosure-cable-management/horizontal-cable-management/9512-1903
+    sha256: 318e2f4fd67c646d04cbc6bcdd9f4c77bf09f88e2d684abd164745d38d26859c

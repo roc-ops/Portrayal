@@ -228,8 +228,6 @@ def test_a_polygon_that_does_not_fill_its_box_is_an_error(edit, word):
     lambda c: c.update(ears={"h": 20}),
     lambda c: c.update(overhang={"left": 5}),
     lambda c: c.update(kits=[{"ref": "fixture/rail@1", "supply": "in-box"}]),
-    lambda c: c.update(halves={"base": {"outer": "top", "stands": 140.0},
-                               "lid": {"hinge": "rear", "angle": 180, "stands": 148.0}}),
 ])
 def test_a_section_with_a_mount_or_a_key_that_cannot_go_with_it_is_an_error(edit):
     doc = device()

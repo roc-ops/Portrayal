@@ -1,0 +1,124 @@
+format: 1
+kind: module
+name: dpce-q-40ge-sfp
+version: 1.0.0
+class: line-card
+behaviour: fills
+profile: networking
+description: >-
+  Juniper DPCE-R-Q-40GE-SFP, a Gigabit Ethernet Enhanced Queuing IP Services DPC with SFP (EOL).
+  Forty 1GbE SFP ports in four 2x5 blocks, drawn on the face of the 40-port DPCE-R card.
+  The Ethernet Services model DPCE-X-Q-40GE-SFP prints the same watts and ports and shares this part.
+  Ports are numbered per PIC (x/0..x/9, four PICs).
+attrs:
+  model: DPCE-R-Q-40GE-SFP
+  model-variants: DPCE-X-Q-40GE-SFP
+  # Forty 1GbE, which the model number and the module reference both say. Without it the export
+  # falls back to the SFP+ default and states forty 10G ports.
+  sfp: 40
+  power-draw-max-w: 365
+  lifecycle-note: EOL per PSN-2011-07-314
+provenance:
+  power: >-
+    MX240 Hardware Guide, Table 93 FRU Power Requirements, Dense Port Concentrators (printed p. 228):
+    one row, 365 W, for DPCE-R-Q-40GE-SFP and DPCE-X-Q-40GE-SFP. The module reference states 7.6 A @ 48 V
+    (365 W) for each in its own section. The vendor does not qualify an ambient for the DPC rows; filed as
+    max, which is our reading.
+  size: >-
+    estimated from the sibling juniper/dpce-r-40ge-sfp, which is photographed: a 396.0 x 29.5 plate centred in
+    a 413.5 lever envelope. The module reference's Figure 5 (printed p. 88) is a three-quarter view and
+    dimensions nothing. No page gives this card's own plate.
+  ports: >-
+    MX Series 5G Universal Routing Platform Interface Module Reference, 'Gigabit Ethernet Enhanced Queuing IP
+    Services DPCs with SFP', Figure 5 (printed p. 88): the 40-port card draws SFP cages in blocks at the front
+    plate; the positions are taken from the photographed sibling and are estimated, since Figure 5 gives no
+    scale. The ports are four PICs of ten, numbered 0 through 9 (printed pp. 89 to 91).
+  indicator-panels: >-
+    estimated from the sibling juniper/dpce-r-40ge-sfp: the link lamps are one green per port in groups of
+    five (printed p. 91, 'The Link LEDs are labeled in groups of five'). Drawn as the sibling's matrix panels
+    without per-lamp ids; Figure 5 does not show them at a legible size.
+  levers: >-
+    the sibling's photo-measured levers (29.0 x 7.4, tip at the envelope edge). Figure 5 draws one lever
+    with a round screw head at the left end of the plate.
+  model-name: >-
+    Figure 5 (printed p. 88) prints the model label 'DPCE-R-Q-40GE' beside the left lever. The label is
+    set at the sibling's position (card x 11.4, baseline 25.5), which is estimated.
+  status-group: >-
+    Figure 5 draws one OK/FAIL lamp with its legend beside the left lever; the module reference gives one
+    bicolor OK/FAIL LED (printed p. 91). Position taken from the sibling, estimated.
+  groups: >-
+    Juniper MX Series 5G Universal Routing Platform Interface Module Reference, 'Gigabit Ethernet Enhanced
+    Queuing IP Services DPCs with SFP' (printed pp. 88 to 91) and 'Gigabit Ethernet Enhanced Queuing
+    Ethernet Services DPC with SFP' (printed pp. 85 to 87): '40 Gigabit Ethernet ports', throughput on each
+    port at speeds up to 1 Gbps. The role is traffic: the book names no role for the ports, and the role
+    follows the job, a network interface a transceiver is plugged into.
+states:
+- ok
+- fail
+- absent
+groups:
+  sfp-1g:
+    term: Port
+    role: traffic
+    index-origin: 0
+    attrs: {media: sfp, speed: 1g}
+    description: >-
+      the forty SFP ports, labelled 0/0 to 3/9 by PIC and port, each at up to 1 Gbps
+parts:
+- {ref: std/sfp-ganged@1, id: port-0-0, group: sfp-1g, at: [59.55, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-2, group: sfp-1g, at: [73.84, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-4, group: sfp-1g, at: [88.13, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-6, group: sfp-1g, at: [102.42, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-8, group: sfp-1g, at: [116.71, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-0-1, group: sfp-1g, at: [59.55, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-3, group: sfp-1g, at: [73.84, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-5, group: sfp-1g, at: [88.13, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-7, group: sfp-1g, at: [102.42, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-0-9, group: sfp-1g, at: [116.71, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-0, group: sfp-1g, at: [134.16, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-2, group: sfp-1g, at: [148.46, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-4, group: sfp-1g, at: [162.75, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-6, group: sfp-1g, at: [177.04, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-8, group: sfp-1g, at: [191.33, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-1-1, group: sfp-1g, at: [134.16, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-3, group: sfp-1g, at: [148.46, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-5, group: sfp-1g, at: [162.75, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-7, group: sfp-1g, at: [177.04, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-1-9, group: sfp-1g, at: [191.33, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-0, group: sfp-1g, at: [232.85, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-2, group: sfp-1g, at: [247.14, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-4, group: sfp-1g, at: [261.43, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-6, group: sfp-1g, at: [275.73, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-8, group: sfp-1g, at: [290.02, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-2-1, group: sfp-1g, at: [232.85, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-3, group: sfp-1g, at: [247.14, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-5, group: sfp-1g, at: [261.43, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-7, group: sfp-1g, at: [275.73, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-2-9, group: sfp-1g, at: [290.02, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-0, group: sfp-1g, at: [307.17, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-2, group: sfp-1g, at: [321.46, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-4, group: sfp-1g, at: [335.75, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-6, group: sfp-1g, at: [350.04, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-8, group: sfp-1g, at: [364.33, 4.5]}
+- {ref: std/sfp-ganged@1, id: port-3-1, group: sfp-1g, at: [307.17, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-3, group: sfp-1g, at: [321.46, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-5, group: sfp-1g, at: [335.75, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-7, group: sfp-1g, at: [350.04, 16.5], rotate: 180}
+- {ref: std/sfp-ganged@1, id: port-3-9, group: sfp-1g, at: [364.33, 16.5], rotate: 180}
+elements:
+  lever-left:
+    at: [0.0, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+  lever-right:
+    at: [384.5, 11.05]
+    size: [29.0, 7.4]
+    class: latch
+size:
+  w: 413.5
+  h: 29.5
+size-notes: >-
+  w is the lever envelope and h the plate height of the card family that every MX240, MX480 and MX960
+  slot takes (the MX960 seats it turned 90). Both are the sibling juniper/dpce-r-40ge-sfp's figures; the
+  module reference does not dimension this card.
+size-confidence: {w: estimated, h: estimated}

@@ -1,0 +1,5932 @@
+format: 1
+kind: device
+name: pro3x-switched-3f01
+version: 0.1.0
+maturity: modelled
+manufacturer: Server Technology
+model: PRO3X Switched 3F01
+description: 'Server Technology PRO3X Switched 3F01, 0U: a 1778.0 mm strip for a rack''s vertical channel. It has 36 outlets,
+  18 HDOT C13 and 18 HDOT Cx, in six groups of six behind two two-pole breakers. A controller panel sits between the two banks.
+  The unit meters the input and each branch circuit and switches each outlet. The drawing is the one for the 230 V 32 A SKU.'
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: FIGURES FROM THE MAKER'S SKU SHEET C3W36RL-EPJE2MT4, PAGE 5 (headed Drawings), READ FROM A 300 PPI RASTER. The sheet
+      draws the strip as the Basic 3A01 sheet does and adds the controller panel between the banks. Positions along the strip
+      carry about 1 mm. The controller panel's place and size are read from the front view of the Smart 3C01 sheet at 1200
+      ppi and carry about 2 mm. The three intelligent sheets draw the same strip.
+  mount:
+    confidence: drawing
+    note: '`rack-side`: the strip stands beside a rack''s upright on mounting buttons at the back. The rear view dimensions
+      68.4, 20.0 and 98.4 from the cord end. It gives 422.3 from either end to a button and 933.5 between the buttons. It
+      gives 31.3 either side of each button and 1555.8 to the far outer mark. It gives 123.8 from that mark to the end, and
+      68.4 and 20.0 from the far end. The two marks 933.5 apart carry a button and the other ten are holes (gaps: button-positions).'
+  chassis:
+    confidence: drawing
+    note: drawing - 1778.0 long and 55.9 wide. The side view's body is 63.5 deep and the outlets reach 81.8; the SKU sheet
+      prints 70.0 x 2.2 x 2.5 in.
+  front:
+    confidence: drawing
+    note: drawing - the front view, measured on the raster. From the cord end come the front-entry cover and a ground point.
+      Then two symbol labels, a rating label, and a plate with a breaker and its label. Then three groups of six outlets,
+      three HDOT Cx then three HDOT C13 (detail A), with a blank plate before the second and third. Then the controller panel,
+      a second plate with a breaker, and three more groups with a blank plate before the second and third. The outlet centres
+      along the strip are read from the sheet's raster, Cx about 26.5 apart and each C13 group 22.0 apart (gap outlet-along-position).
+      Across, the outlets sit where the 3A06's do (a stand-in). The labels and the ground point are read to about 2 mm. Each
+      outlet has a retention lever, drawn estimated as a block 7.6 long along the strip and 2.0 across, standing 18.3 proud.
+      The 7.6 is the peg width read on the side view at 600 ppi. The 2.0 and the place across are scaled from the data sheet
+      photograph by the C13 width, 22.0 at the standard recess. Each lever is centred on its peg on the side view (gap outlet-lever).
+      Each outlet has a hole by its numeral, 36 in all, read from the data sheet photograph (gap numeral-hole). Each bank
+      has two end lugs, six top tabs and six bottom tabs, read to about 1 mm (gap raster-detail). Each top tab has two holes
+      and each C13 tab a notch. Each outlet has a bump and a dot on the bottom edge. Each blank plate has a tab and two dots.
+      The cover has two screw holes, and the ground point is a ring with a centre dot. A plain plate stands between the controller
+      and the far breaker. Each breaker cell holds a framed square and a bar with two dots (gap raster-detail). Each bank's
+      housing is full width over its three Cx outlets and 3.0 narrower on each side over its three C13 outlets (gap housing-step).
+  numbering:
+    confidence: estimated
+    note: 'estimated - outlet #1 is opposite the power input (the sheet). So the far end is 1 and the cord end 36, as the
+      3A06 prints. The numbers under the outlets are not legible on this raster. The order is the 3A06''s.'
+  breakers:
+    confidence: drawing
+    note: drawing - the wiring schematic draws two breakers (CB). The cord side one feeds the first three groups and the far
+      one the last three. Each is two-pole across L1 and L2/N. The sheet says two 2-pole 20 A trip breakers, 10 kAIC (North
+      America) and 5 kAIC (rest of world). Which group each blank plate belongs to is read from the schematic.
+  capability:
+    confidence: datasheet
+    note: 'datasheet - the C3W36RL-EPJE2MT4 sheet lists the key features of a PRO3X Switched PDU, so `metering-scope: branch`
+      and `outlet-switching: true`. Each outlet declares [on, off].'
+  outlets:
+    confidence: datasheet
+    note: 'datasheet - the sheet says 18 IEC 60320 C13 and 18 Cx outlets. HDOT Cx is a hybrid C13/C19 that takes a C14 or
+      a C20 plug. HDOT C13 is drawn as std/c13-outlet@1. The HDOT Cx is servertech/hdot-cx-outlet@1. Its recess is the part''s
+      own: 30.1 across, from the PRO4X outline drawing''s plan view, and 24.0 along, an estimate. The figures are not read
+      from this sheet. The part''s contract states the method and no tolerance. This sheet''s views read the body 5.9 smaller
+      across and 6.8 along, so the real tolerance is about 6 mm (gap outlet-size).'
+  rear:
+    confidence: drawing
+    note: drawing - the twelve positions the rear view marks. A seam crosses the rear 120.7 from the cord end, where the side
+      seam stands. 391.0 and 453.6 are 31.3 either side of the 422.3 button. 1324.4 and 1387.0 are either side of the 1355.7
+      one.
+  sides:
+    confidence: drawing
+    note: drawing - the side view shows two perforated zones with a seam between them. It shows 11 screws along the front
+      edge and 2 nubs on the rear edge. The other side is drawn as its mirror (estimated). The 36 lever pegs under the body
+      are named in gap side-nubs.
+  ends:
+    confidence: estimated
+    note: estimated - the end views show a plate with the cord entry; they are drawn as caps. The figures are in gap end-plates.
+  input:
+    confidence: datasheet
+    note: 'datasheet - the SKU sheet prints Input Voltage 230 V, Input Plug IEC 230V/32A 2P+PE 6Hr, 32 A (32 A rated), 7.3
+      kW. The cord''s length and gauge and the plug''s face are in no held document (gaps: cord-and-plug).'
+  controller:
+    confidence: estimated
+    note: estimated - the controller's size is read from the front view of the Smart 3C01 sheet. Its jacks come from the lower
+      Detail A, which has no scale; the part's contract states the method. The Switched and Switched POPS sheets draw the
+      same panel small in their front views and carry no controller detail. The notched outline is the part's plate and four
+      tabs, two stretches (gap controller-outline).
+attrs:
+  physical:
+    length-mm: 1778.0
+    construction: metal strip
+  power:
+    input-cord: fixed
+    input-plug: other
+    input-phase: single
+    input-voltage-v: 230
+    input-current-a: 32
+    input-ac: single-phase 230 V, L1 L2/N PE. The SKU sheet for C3W36RL-EPJE2MT4 prints 230 V, 32 A (32 A rated), 7.3 kW and
+      an IEC 230V/32A 2P+PE 6h plug.
+    breakers: two two-pole branch breakers, 10 kAIC North America, 5 kAIC rest of world (SKU sheet)
+  management:
+    metering-scope: branch
+    outlet-switching: true
+    network-module: PRO3X controller
+chassis:
+  width: 55.9
+  height: 1778.0
+  depth: 63.5
+  ru: 40
+  mount: rack-side
+  color: '#2b2d30'
+  airflow: passive
+gaps:
+- what: cord-and-plug
+  scope:
+  - bottom
+  reason: vendor-silent
+  note: the sheet names the plug and the drawing marks front and bottom entry. No held document gives the cord's length or
+    gauge or draws the plug's face. The entry frame is servertech/pro3x-cord-60309-2pe@1, a shared part that the Basic 3A01
+    also places, so it is not changed here. The part draws the frame 29.2 by 33.1, a stand-in taken from the PRO4X cord part.
+    The end view on page 5, read at 2400 ppi and 8.25 pixels per mm, shows the frame 26.1 across and 33.8 along. It is 29.7
+    across with its side arcs. Its four corner screws stand 27.1 across and 34.9 along, its two mid screws about 42 apart,
+    and its centre 32 from the rear edge. The part's frame is 21.6 by 25.5. Its corner screws stand 25.2 across and 20.7 along,
+    and its mid screws 30.3 apart. Its centre is 44.2 from the top edge of the bottom view. The part's frame is 4.5 narrower
+    and 8.3 shorter than the sheet's, and 12 mm off its place. The sheet's figures carry a tolerance of about 1 mm, so the
+    part is wrong by far more than the reading can explain. A new version of the part moves the 3A01's lock, so it is its
+    own change.
+  wanted: a photograph of the cord and its plug.
+- what: button-positions
+  scope:
+  - rear
+  reason: vendor-silent
+  note: the rear view marks twelve positions and no document says which carry buttons on this SKU; the pair 933.5 apart is
+    drawn with buttons.
+  wanted: the PRO3X installation guide, or a photograph of the back.
+- what: outlet-size
+  scope:
+  - front
+  reason: needs-drawing
+  note: 'no dimensioned drawing of an HDOT Cx or HDOT C13 outlet is held. The sheet''s HDOT detail is drawn at 0.36 to 1 and
+    gives no dimension. The Cx recess is the shared part''s own figure, from its contract. It is 30.1 across, read on the PRO4X
+    outline drawing''s plan view. It is 24.0 along, estimated as the 26.69 pitch less a 2.7 web. The figures are not read from
+    this sheet, and the contract states no tolerance. The sheet''s side and front views read the Cx body 24.2 across and 17.2
+    along. The part is 5.9 wider and 6.8 longer, so the tolerance it really carries is about 6 mm. That part is shared by
+    the Basic, PRO3X and PRO4X devices that place it. A wrongly drawn shared part gets a new version. A new version moves
+    the lock of every device that places it, so it is its own change. The C13 is the standard''s. The retention latch of each
+    outlet is drawn estimated (gap outlet-lever).'
+  wanted: a dimensioned outlet drawing from Server Technology.
+- what: outlet-lever
+  scope:
+  - front
+  reason: needs-drawing
+  note: the pictures show a lever at each outlet and no dimensioned drawing gives it. Its 7.6 along the strip is the peg width
+    on the side view and its 18.3 reach is the sheet's. Each lever is centred on its peg's centre, read on the side view at
+    1800 ppi, 6.19 pixels per mm, from the 1778.0 length. The six pegs of the cord-end bank stand at 254.55, 281.20, 307.86,
+    334.51, 354.86 and 376.18 mm from the cord end. That is about 2.2 mm nearer the cord end than the outlet centres. The
+    tolerance along the strip is about 0.5 mm, and every lever stands within 0.3 mm of its reading at 1800 ppi. A first reading
+    at 600 ppi, 2.063 pixels per mm, agreed within 0.6 mm. Its 2.0 across and its place across are scaled from the data sheet
+    photograph by the C13 width, a taken figure. The tolerance across is about 1 mm. The front view's top-edge tabs and the
+    side view's pegs may be the same part as the levers, which the held pages do not settle.
+  wanted: a dimensioned drawing of the HDOT outlet module with its lever.
+- what: raster-detail
+  scope:
+  - front
+  reason: needs-drawing
+  note: 'the sheet draws the bank lugs, the edge tabs, the cover screw holes and the plain plate as a 300 ppi raster. Each
+    source pixel is about 1 mm: 1778.0 spans 3668 pixels at 600 ppi, 0.485 mm per pixel. The tolerance is about 1 mm on every
+    place. Each top tab has two holes, 1.6 across and about 10 apart, and each C13 tab has a notch 4.4 by 1.4. Each outlet
+    has a bottom-edge bump 3.9 by 4.2 and a dot 3.0 to 3.3 across. Each Cx outlet also has a ring 1.6 across. Each blank plate
+    has a tab 3.3 by 10.9 on its far edge and two dots 1.5 across on its bottom edge. The lugs are 8.3 and 7.3 by 4.6, and
+    the top edge tabs 9.7 across. Each lug stands 2.4 inside its bank''s far edge, as the sheet draws it. Each breaker cell
+    holds a framed square and a bar with two dots. They are read on a 2400 ppi render at 8.252 pixels per mm, from the 1778.0
+    length. The frame is 17.4 across and 17.4 along. The bar''s head is 3.8 across and 6.7 along, on a stem 2.8 along, with
+    dots 2.8 and 2.0 across. The tolerance is about 1 mm, one pixel of the raster.'
+  wanted: a dimensioned front view of the strip.
+- what: numeral-hole
+  scope:
+  - front
+  reason: needs-photo
+  note: the data sheet photograph shows a hole by each numeral. It is 1.6 across and 4.3 before the numeral toward the far
+    end. The scale is 0.067 mm per pixel. It is set by the model's 22.0 outlet pitch between numerals 22 and 23, a taken figure.
+    The tolerance is about 1 mm on the place and 0.5 mm on the 1.6. It is drawn at 50.4 across, clear of the numeral window,
+    which is estimated wider than the numeral.
+  wanted: a dimensioned drawing of the outlet module.
+- what: controller-outline
+  scope:
+  - front
+  reason: needs-drawing
+  note: the front view draws the controller plate with a notched outline of two wider stretches. They are 31.0 along over
+    the display and 21.3 along over the jack group. Each stretch reaches the strip's wall, 1.9 beyond the narrow outline on
+    both sides. The part's plate is the narrow outline and each stretch is a tab beside the bay, four in all. The plate's
+    edge has a notch 1.5 along and 1.2 deep at each end of each stretch, 8 in all. It has 4 notches near the ring end and
+    a lip 5.0 along and 2.0 deep at each side of the cord end. They are read on the 600 ppi raster at 0.485 mm per pixel and
+    on a 1200 ppi crop at 0.242. The source raster is 300 ppi, so the crop adds no resolution. The tolerance is about 1 mm in
+    depth and along.
+  wanted: a dimensioned drawing of the PRO3X controller panel.
+- what: housing-step
+  scope:
+  - front
+  reason: needs-drawing
+  note: 'the front view draws each bank''s housing stepped where the Cx outlets change to C13. The step is 3.0 narrower on each side over
+    the three C13 outlets, with a bump of 6.0 along back to full width between them. The step is drawn square, though the
+    sheet slopes it over about 3 mm. Decor draws a rect, circle, d-sub, slot or octagon and no sloped edge (device schema,
+    decor `shape`). The tolerance is about 1.5 mm for the step''s place along and 0.5 mm for its depth.'
+  wanted: a dimensioned front view of the strip.
+- what: side-detail
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: the side view is a 300 ppi raster. The dot grid is a 2.0 dot in two zones and a seam. Each of the 11 screw heads is
+    read by a column profile of page 5. The renders are 1800 and 2400 ppi, 6.19 and 8.25 pixels per mm, set by the body's
+    1778.0 length. The two renders agree to 0.1 mm. The screws' centres from the cord end are 16.5, 108.1, 133.3, 238.6, 461.5,
+    683.5, 866.7, 1076.2, 1389.7, 1612.3 and 1764.4. The far screw stands 13.6 from the far end. The dot zones' end dots,
+    the seam, the end walls and the nubs are read the same way. The long dot band is 360 columns of dots, its first dot at
+    143.4 and its last at 1757.7, so the pitch is 4.4964. Five dots along the band, at 10, 30, 50, 70 and 90 per cent of its
+    length, stand within 0.3 mm of that line. Every dot stands within 0.9 mm of it. A second reading, 360 columns at 4.4975,
+    differs by 0.4 mm over the band. The cord-end block is 20 columns at 4.463, its first dot at 13.6 and its last at 98.4.
+    Every dot stands within 0.7 mm of that line. The seam is read at 120.7 and drawn there. The end walls are read at 1.9
+    to 2.9 and drawn at 2.0. The nub caps are drawn 16.0 wide, the mean of two readings. All these carry a tolerance of about
+    1 mm, one pixel of the raster.
+  wanted: a dimensioned side view of the strip.
+- what: side-nubs
+  scope:
+  - left
+  - right
+  reason: needs-drawing
+  note: the side view on page 5 shows each nub standing 6.9 beyond the body's rear edge. It also shows 36 lever pegs standing
+    under the body, beyond the side face. A face is the body's width, so no shape draws what stands beyond it. Each nub is
+    drawn as a footprint inside the face, along the rear edge. The pegs are drawn on the front, 18.3 proud (gap outlet-lever).
+    The footprint has a tolerance of about 1 mm. The side view also shows a box under each breaker, about 62 along and 9.7
+    below the body. The boxes stand from 175.9 to 237.6 and from 1103.8 to 1165.8 from the cord end. A thin bar about 33 along,
+    about 12 below the body, lies under each box. It stands from 187.0 to 220.2 and from 1115.9 to 1148.9. A flat bar stands
+    under the cover from 2.9 to 55.2, about 52 along and 2.9 below the body. Under the body from 887 to 1025 the view shows
+    five small items. A thin bar stands from 887.1 to 905.5, 2.9 below the body. Two nubs about 3 wide stand at 931.2 and
+    945.7, 1.9 below. A longer bar stands from 976.2 to 1005.3, 1.9 below to 988 and 2.9 below beyond. A small round stands
+    from 1016.0 to 1023.7, 3.9 below. The view also draws a ledge under each of the six banks, touching the body line. Its
+    bottom line stands about 6 below the body, reading 5.8 at the dark threshold and 6.8 at the light one. The ledges stand
+    from 239.5 to 398.5, 461.5 to 620.4 and 683.6 to 842.5. They also stand from 1167.3 to 1326.2, 1390.2 to 1548.3 and 1612.3
+    to 1771.2. Each ledge has 6 small squares and 6 thin uprights, one pair at each peg. A thin upright also stands before
+    peg 1 of each ledge, about 9.5 before its centre. The six read 9.2 to 9.7 at 2400 ppi. Each is 0.97 wide, one source pixel,
+    and stands from the body line to the ledge's bottom line. Their tolerance is about 1 mm. That makes 36 small squares and
+    42 thin uprights in all, besides the 12 below. A square is 3 to 4 wide and stands 5 to 8 before its peg's centre. An upright
+    is about 1 wide and stands about 2 after its peg's right wall. The ledge figures are read from the dark runs along rows
+    2 to 6.5 below the body line, on both renders. They carry a tolerance of about 1.5 mm along and 1 mm below. The view also
+    draws 18 ring-and-dot rounds, one on each of the first three pegs of every bank, counted from the cord end. Each is read
+    at 2400 ppi as about 3 across, 0.9 along from the peg's centre and 2.5 below the body line. An earlier reading gives 3.2
+    across, 1.2 along and 3.1 below. Their tolerance is about 1.5 mm along and 1 mm below. After each bank's sixth peg stand
+    two more thin uprights, about 9.7 and 17.2 from that peg's centre. That makes 12 more uprights, each about 1 to 2 wide,
+    standing from the body line to the ledge's bottom line. Depths are measured from the centre of the body's bottom line.
+    These figures are read on 1800 and 2400 ppi renders at 6.19 and 8.25 pixels per mm, from the body's 1778.0 length. The
+    box positions carry a tolerance of about 4 mm, the spread of three readings of the raster. The other figures carry about
+    1.5 mm along and 1 mm below. They stand beyond the face too, so none is drawn.
+  wanted: a side view that allows features beyond the body.
+- what: body-colour
+  scope:
+  - front
+  reason: vendor-silent
+  note: the PRO3X data sheet's photographs (pages 1 and 2) show white outlet modules, a black plate and a silver side. None
+    is of this SKU. The library's dark neutral is drawn on every face, as on the sibling devices.
+  wanted: a photograph of this SKU, and the maintainer's word on drawing the colours.
+- what: end-plates
+  scope:
+  - front
+  - top
+  - bottom
+  reason: needs-photo
+  note: the end views on page 5 are small, so the end faces are caps and the front-entry cover is a plate. At 2400 ppi, 8.25
+    pixels per mm, the cord-end view reads 56.3 across and 63.7 deep between its wall lines. Each cap is drawn 55.9 by 63.5,
+    the body's own size. The nub stands beyond the cap and the entry frame is a part, so each has its own gap (side-nubs,
+    cord-and-plug). The tolerance is about 1 mm, one pixel of the raster.
+  wanted: a close photograph of each end.
+- what: outlet-across-position
+  scope:
+  - front
+  reason: needs-drawing
+  note: the sheet's front view carries no dimension across the strip. The outlets keep the 3A06 drawing's places across, a
+    stand-in. Read off the sheet's raster at 0.121 mm per pixel, the outlet bodies' top edges agree with that place within
+    about 1 mm. The housing lines sit 4.9 nearer the top edge, and the housings are drawn there. That reading has a tolerance
+    of about 1 mm.
+  wanted: a dimensioned front view of the HDOT module.
+- what: outlet-along-position
+  scope:
+  - front
+  reason: needs-drawing
+  note: the outlets' centres along the strip are read from the sheet's front view at 600 ppi, 0.485 mm per pixel, from its
+    1778.0 length. Cx outlets read about 26.5 apart and C13 outlets about 21.0. The C13 part is 22 along, so each C13 group
+    is spaced 22.0 about its mean, within 1.1 mm of the centres read. They differ from the 3A06 drawing's places, which the
+    sibling devices keep. The plates and the housings' cord-side edges are read the same way. The tolerance is about 1 mm
+    along.
+  wanted: a dimensioned front view of the HDOT module.
+- what: outlet-numbering
+  scope:
+  - front
+  reason: needs-photo
+  note: the numbers printed under the outlets are not legible on the raster. The order is the 3A06's, from 1 at the far end
+    to 36 at the cord end. No figure is read, so the tolerance is the order itself, which the sheet's text confirms only
+    for outlet 1.
+  wanted: a photograph of the front.
+- what: label-positions
+  scope:
+  - front
+  reason: needs-photo
+  note: the ground point and the two symbol labels at the cord end are read off the raster to about 2 mm.
+  wanted: a close photograph of the cord end.
+- what: other-side
+  scope:
+  - left
+  - right
+  reason: vendor-silent
+  note: the sheet shows one side of the strip, so the other is drawn as its mirror. It has the
+    left side's figures and their tolerance of about 1 mm. No held page shows whether the right side differs.
+  wanted: a photograph of the other side.
+- what: controller-scale
+  scope:
+  - front
+  reason: needs-drawing
+  note: the lower Detail A of the Smart 3C01 sheet draws the panel with no scale or dimension. The panel's 52.0 by 141.6 is
+    read from the sheet's own front view, dimensioned at 1778.0 long, at 1200 ppi. The window, keys and holes are read there
+    too. The jacks' places are the detail's, fitted to that size by 0.982 across and 1.018 along. Each figure has a tolerance
+    of about 1 mm.
+  wanted: a dimensioned drawing of the PRO3X controller panel.
+- what: lcd-content
+  scope:
+  - front
+  reason: vendor-silent
+  note: the sheet says a multi-colour LCD and states no character count or rows, so it is drawn as a window with no display
+    kind.
+  wanted: the PRO3X user guide.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    mixed: the PDU's 36 outlets, numbered 1 to 36 from the far end. 18 are HDOT C13 and 18 are HDOT Cx, in six groups of six
+  outlet-numerals:
+    term: Label
+    role: furniture
+    index-origin: 1
+  breakers:
+    term: Breaker
+    role: service
+    index-origin: 1
+    description: two two-pole branch breakers, each feeding the 18 outlets of three groups
+  mounting:
+    term: Button
+    role: furniture
+    index-origin: 1
+  power-input:
+    term: Cord
+    role: service
+    index-origin: 1
+  controller:
+    term: Module
+    role: management
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 55.9
+      h: 1778.0
+    panel:
+      decor:
+      - id: end-cap-top
+        at:
+        - 0
+        - 0
+        size:
+        - 55.9
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at:
+        - 0
+        - 1776.0
+        size:
+        - 55.9
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: front-entry-plate
+        at:
+        - 6.9
+        - 1725.0
+        size:
+        - 39.1
+        - 49.1
+        rx: 1.5
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: cover-hole-1
+        at:
+        - 24.5
+        - 1767.0
+        size:
+        - 6.0
+        - 6.0
+        rx: 3.0
+        fill: '#0b0b0c'
+        kind: hole
+      - id: cover-hole-2
+        at:
+        - 24.5
+        - 1725.5
+        size:
+        - 6.0
+        - 6.0
+        rx: 3.0
+        fill: '#0b0b0c'
+        kind: hole
+      - id: ground-point
+        at:
+        - 42.8
+        - 1712.3
+        size:
+        - 9.8
+        - 9.8
+        rx: 4.9
+        kind: ground-ring
+        stroke: '#6b7076'
+        stroke-width: 1.2
+      - id: ground-point-dot
+        at:
+        - 46.6
+        - 1716.1
+        size:
+        - 2.2
+        - 2.2
+        rx: 1.1
+        fill: '#6b7076'
+        kind: screw-head
+      - id: symbol-label-1
+        at:
+        - 31.9
+        - 1700.5
+        size:
+        - 8.0
+        - 10.4
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: symbol-label-2
+        at:
+        - 44.5
+        - 1700.5
+        size:
+        - 8.0
+        - 10.4
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: rating-label
+        at:
+        - 17.2
+        - 1641.7
+        size:
+        - 20.5
+        - 39.3
+        rx: 1.0
+        fill: '#1c1d1f'
+        kind: label-panel
+      - id: plate-6
+        at:
+        - 1.7
+        - 1541.2
+        size:
+        - 53.0
+        - 61.2
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: screw-6-1
+        at:
+        - 3.9
+        - 1584.7
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-2
+        at:
+        - 3.9
+        - 1554.7
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-3
+        at:
+        - 38.5
+        - 1593.3
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-6-4
+        at:
+        - 38.5
+        - 1551.2
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: plate-label-6
+        at:
+        - 12.4
+        - 1547.0
+        size:
+        - 18.7
+        - 53.2
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: housing-6
+        at:
+        - 13.0
+        - 1379.9
+        size:
+        - 29.7
+        - 68.5
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-6-cx
+        at:
+        - 10.0
+        - 1448.4
+        size:
+        - 35.7
+        - 86.25
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-6-bump-1a
+        at:
+        - 10.0
+        - 1425.4
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-1b
+        at:
+        - 42.7
+        - 1425.4
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-2a
+        at:
+        - 10.0
+        - 1404.9
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-6-bump-2b
+        at:
+        - 42.7
+        - 1404.9
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: plate-5
+        at:
+        - 1.7
+        - 1318.7
+        size:
+        - 53.0
+        - 60.0
+        rx: 1.5
+        fill: '#232528'
+        kind: blank-plate
+      - id: screw-5-1
+        at:
+        - 3.9
+        - 1361.4
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-5-2
+        at:
+        - 3.9
+        - 1331.4
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-5
+        at:
+        - 13.0
+        - 1157.4
+        size:
+        - 29.7
+        - 68.8
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-5-cx
+        at:
+        - 10.0
+        - 1226.2
+        size:
+        - 35.7
+        - 85.95
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-5-bump-1a
+        at:
+        - 10.0
+        - 1203.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-1b
+        at:
+        - 42.7
+        - 1203.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-2a
+        at:
+        - 10.0
+        - 1182.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-5-bump-2b
+        at:
+        - 42.7
+        - 1182.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: plate-4
+        at:
+        - 1.7
+        - 1095.7
+        size:
+        - 53.0
+        - 60.6
+        rx: 1.5
+        fill: '#232528'
+        kind: blank-plate
+      - id: screw-4-1
+        at:
+        - 3.9
+        - 1138.0
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-4-2
+        at:
+        - 3.9
+        - 1108.0
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-4
+        at:
+        - 13.0
+        - 934.9
+        size:
+        - 29.7
+        - 68.4
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-4-cx
+        at:
+        - 10.0
+        - 1003.3
+        size:
+        - 35.7
+        - 86.35
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-4-bump-1a
+        at:
+        - 10.0
+        - 980.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-1b
+        at:
+        - 42.7
+        - 980.3
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-2a
+        at:
+        - 10.0
+        - 959.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-4-bump-2b
+        at:
+        - 42.7
+        - 959.8
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: plate-3
+        at:
+        - 1.7
+        - 612.1
+        size:
+        - 53.0
+        - 61.8
+        rx: 1.5
+        fill: '#232528'
+        kind: breaker-plate
+      - id: screw-3-1
+        at:
+        - 3.9
+        - 652.7
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-2
+        at:
+        - 3.9
+        - 622.7
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-3
+        at:
+        - 38.5
+        - 661.3
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-3-4
+        at:
+        - 38.5
+        - 619.2
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: plate-label-3
+        at:
+        - 12.4
+        - 615.0
+        size:
+        - 18.7
+        - 53.2
+        rx: 1.0
+        fill: '#1a1b1d'
+        kind: label-panel
+      - id: housing-3
+        at:
+        - 13.0
+        - 451.2
+        size:
+        - 29.7
+        - 68.5
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-3-cx
+        at:
+        - 10.0
+        - 519.7
+        size:
+        - 35.7
+        - 85.95
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-3-bump-1a
+        at:
+        - 10.0
+        - 496.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-1b
+        at:
+        - 42.7
+        - 496.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-2a
+        at:
+        - 10.0
+        - 476.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-3-bump-2b
+        at:
+        - 42.7
+        - 476.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: plate-2
+        at:
+        - 1.7
+        - 389.6
+        size:
+        - 53.0
+        - 60.6
+        rx: 1.5
+        fill: '#232528'
+        kind: blank-plate
+      - id: screw-2-1
+        at:
+        - 3.9
+        - 429.5
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-2-2
+        at:
+        - 3.9
+        - 399.5
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-2
+        at:
+        - 13.0
+        - 228.7
+        size:
+        - 29.7
+        - 68.5
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-2-cx
+        at:
+        - 10.0
+        - 297.2
+        size:
+        - 35.7
+        - 86.25
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-2-bump-1a
+        at:
+        - 10.0
+        - 274.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-1b
+        at:
+        - 42.7
+        - 274.2
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-2a
+        at:
+        - 10.0
+        - 253.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-2-bump-2b
+        at:
+        - 42.7
+        - 253.7
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: plate-1
+        at:
+        - 1.7
+        - 166.6
+        size:
+        - 53.0
+        - 60.6
+        rx: 1.5
+        fill: '#232528'
+        kind: blank-plate
+      - id: screw-1-1
+        at:
+        - 3.9
+        - 206.1
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-1-2
+        at:
+        - 3.9
+        - 176.1
+        size:
+        - 4.4
+        - 4.4
+        rx: 2.2
+        fill: '#565b60'
+        kind: screw-head
+      - id: housing-1
+        at:
+        - 13.0
+        - 6.2
+        size:
+        - 29.7
+        - 68.4
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-1-cx
+        at:
+        - 10.0
+        - 74.6
+        size:
+        - 35.7
+        - 86.35
+        fill: '#1e1f21'
+        kind: outlet-housing
+      - id: housing-1-bump-1a
+        at:
+        - 10.0
+        - 51.6
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-1b
+        at:
+        - 42.7
+        - 51.6
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-2a
+        at:
+        - 10.0
+        - 31.1
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: housing-1-bump-2b
+        at:
+        - 42.7
+        - 31.1
+        size:
+        - 3.0
+        - 6.0
+        fill: '#1e1f21'
+        kind: housing-bump
+      - id: bank-lug-1-1
+        at:
+        - 17.8
+        - 8.6
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-1-2
+        at:
+        - 35.6
+        - 8.6
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-2-1
+        at:
+        - 17.8
+        - 231.1
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-2-2
+        at:
+        - 35.6
+        - 231.1
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-3-1
+        at:
+        - 17.8
+        - 453.6
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-3-2
+        at:
+        - 35.6
+        - 453.6
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-4-1
+        at:
+        - 17.8
+        - 937.3
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-4-2
+        at:
+        - 35.6
+        - 937.3
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-5-1
+        at:
+        - 17.8
+        - 1159.8
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-5-2
+        at:
+        - 35.6
+        - 1159.8
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-6-1
+        at:
+        - 17.8
+        - 1382.3
+        size:
+        - 8.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: bank-lug-6-2
+        at:
+        - 35.6
+        - 1382.3
+        size:
+        - 7.3
+        - 4.6
+        rx: 0.5
+        fill: '#3a3d41'
+        kind: bank-lug
+      - id: edge-tab-top-1
+        at:
+        - 2.9
+        - 20.35
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-1
+        at:
+        - 50.5
+        - 22.65
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-2
+        at:
+        - 2.9
+        - 42.35
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-2
+        at:
+        - 50.5
+        - 44.65
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-3
+        at:
+        - 2.9
+        - 64.35
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-3
+        at:
+        - 50.5
+        - 66.65
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-4
+        at:
+        - 2.9
+        - 89.55
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-4
+        at:
+        - 50.5
+        - 92.45
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-5
+        at:
+        - 2.9
+        - 115.95
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-5
+        at:
+        - 50.5
+        - 118.85
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-6
+        at:
+        - 2.9
+        - 142.85
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-6
+        at:
+        - 50.5
+        - 145.75
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-7
+        at:
+        - 2.9
+        - 242.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-7
+        at:
+        - 50.5
+        - 245.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-8
+        at:
+        - 2.9
+        - 264.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-8
+        at:
+        - 50.5
+        - 267.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-9
+        at:
+        - 2.9
+        - 286.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-9
+        at:
+        - 50.5
+        - 289.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-10
+        at:
+        - 2.9
+        - 312.05
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-10
+        at:
+        - 50.5
+        - 314.95
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-11
+        at:
+        - 2.9
+        - 338.65
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-11
+        at:
+        - 50.5
+        - 341.55
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-12
+        at:
+        - 2.9
+        - 364.85
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-12
+        at:
+        - 50.5
+        - 367.75
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-13
+        at:
+        - 2.9
+        - 465.45
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-13
+        at:
+        - 50.5
+        - 467.75
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-14
+        at:
+        - 2.9
+        - 487.45
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-14
+        at:
+        - 50.5
+        - 489.75
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-15
+        at:
+        - 2.9
+        - 509.45
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-15
+        at:
+        - 50.5
+        - 511.75
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-16
+        at:
+        - 2.9
+        - 534.45
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-16
+        at:
+        - 50.5
+        - 537.35
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-17
+        at:
+        - 2.9
+        - 560.95
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-17
+        at:
+        - 50.5
+        - 563.85
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-18
+        at:
+        - 2.9
+        - 587.55
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-18
+        at:
+        - 50.5
+        - 590.45
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-19
+        at:
+        - 2.9
+        - 949.05
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-19
+        at:
+        - 50.5
+        - 951.35
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-20
+        at:
+        - 2.9
+        - 971.05
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-20
+        at:
+        - 50.5
+        - 973.35
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-21
+        at:
+        - 2.9
+        - 993.05
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-21
+        at:
+        - 50.5
+        - 995.35
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-22
+        at:
+        - 2.9
+        - 1018.25
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-22
+        at:
+        - 50.5
+        - 1021.15
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-23
+        at:
+        - 2.9
+        - 1044.95
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-23
+        at:
+        - 50.5
+        - 1047.85
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-24
+        at:
+        - 2.9
+        - 1071.35
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-24
+        at:
+        - 50.5
+        - 1074.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-25
+        at:
+        - 2.9
+        - 1171.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-25
+        at:
+        - 50.5
+        - 1174.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-26
+        at:
+        - 2.9
+        - 1193.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-26
+        at:
+        - 50.5
+        - 1196.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-27
+        at:
+        - 2.9
+        - 1215.95
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-27
+        at:
+        - 50.5
+        - 1218.25
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-28
+        at:
+        - 2.9
+        - 1240.75
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-28
+        at:
+        - 50.5
+        - 1243.65
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-29
+        at:
+        - 2.9
+        - 1267.15
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-29
+        at:
+        - 50.5
+        - 1270.05
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-30
+        at:
+        - 2.9
+        - 1294.05
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-30
+        at:
+        - 50.5
+        - 1296.95
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-31
+        at:
+        - 2.9
+        - 1394.15
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-31
+        at:
+        - 50.5
+        - 1396.45
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-32
+        at:
+        - 2.9
+        - 1416.15
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-32
+        at:
+        - 50.5
+        - 1418.45
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-33
+        at:
+        - 2.9
+        - 1438.15
+        size:
+        - 9.7
+        - 13.3
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-33
+        at:
+        - 50.5
+        - 1440.45
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-34
+        at:
+        - 2.9
+        - 1463.05
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-34
+        at:
+        - 50.5
+        - 1465.95
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-35
+        at:
+        - 2.9
+        - 1489.95
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-35
+        at:
+        - 50.5
+        - 1492.85
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: edge-tab-top-36
+        at:
+        - 2.9
+        - 1516.05
+        size:
+        - 9.7
+        - 14.5
+        rx: 0.5
+        fill: '#16171a'
+        kind: edge-tab
+      - id: edge-tab-bottom-36
+        at:
+        - 50.5
+        - 1518.95
+        size:
+        - 4.2
+        - 3.9
+        rx: 0.5
+        fill: '#1c1d1f'
+        kind: edge-tab
+      - id: numeral-hole-1
+        at:
+        - 49.6
+        - 31.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-2
+        at:
+        - 49.6
+        - 53.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-3
+        at:
+        - 49.6
+        - 75.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-4
+        at:
+        - 49.6
+        - 102.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-5
+        at:
+        - 49.6
+        - 129.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-6
+        at:
+        - 49.6
+        - 156.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-7
+        at:
+        - 49.6
+        - 254.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-8
+        at:
+        - 49.6
+        - 276.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-9
+        at:
+        - 49.6
+        - 298.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-10
+        at:
+        - 49.6
+        - 325.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-11
+        at:
+        - 49.6
+        - 351.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-12
+        at:
+        - 49.6
+        - 378.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-13
+        at:
+        - 49.6
+        - 477.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-14
+        at:
+        - 49.6
+        - 499.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-15
+        at:
+        - 49.6
+        - 521.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-16
+        at:
+        - 49.6
+        - 547.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-17
+        at:
+        - 49.6
+        - 574.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-18
+        at:
+        - 49.6
+        - 600.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-19
+        at:
+        - 49.6
+        - 960.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-20
+        at:
+        - 49.6
+        - 982.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-21
+        at:
+        - 49.6
+        - 1004.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-22
+        at:
+        - 49.6
+        - 1031.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-23
+        at:
+        - 49.6
+        - 1058.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-24
+        at:
+        - 49.6
+        - 1084.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-25
+        at:
+        - 49.6
+        - 1183.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-26
+        at:
+        - 49.6
+        - 1205.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-27
+        at:
+        - 49.6
+        - 1227.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-28
+        at:
+        - 49.6
+        - 1253.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-29
+        at:
+        - 49.6
+        - 1280.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-30
+        at:
+        - 49.6
+        - 1307.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-31
+        at:
+        - 49.6
+        - 1405.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-32
+        at:
+        - 49.6
+        - 1427.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-33
+        at:
+        - 49.6
+        - 1449.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-34
+        at:
+        - 49.6
+        - 1476.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-35
+        at:
+        - 49.6
+        - 1503.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: numeral-hole-36
+        at:
+        - 49.6
+        - 1529.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: hole
+      - id: plate-plain
+        at:
+        - 1.7
+        - 673.9
+        size:
+        - 53.0
+        - 80.2
+        rx: 1.5
+        fill: '#232528'
+        kind: blank-plate
+      - id: controller-outline-a
+        at:
+        - 0.05
+        - 824.3
+        size:
+        - 2.9
+        - 31.0
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: controller-outline-b
+        at:
+        - 52.95
+        - 824.3
+        size:
+        - 2.9
+        - 31.0
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: controller-outline-c
+        at:
+        - 0.05
+        - 771.0
+        size:
+        - 2.9
+        - 21.3
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: controller-outline-d
+        at:
+        - 52.95
+        - 771.0
+        size:
+        - 2.9
+        - 21.3
+        rx: 0.5
+        fill: '#18191b'
+        kind: outline-tab
+      - id: latch-1
+        at:
+        - 10.9
+        - 24.6
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-2
+        at:
+        - 10.9
+        - 45.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-3
+        at:
+        - 10.9
+        - 66.7
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-4
+        at:
+        - 10.9
+        - 92.9
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-5
+        at:
+        - 10.9
+        - 119.6
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-6
+        at:
+        - 10.9
+        - 146.2
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-7
+        at:
+        - 10.9
+        - 247.0
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-8
+        at:
+        - 10.9
+        - 267.9
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-9
+        at:
+        - 10.9
+        - 289.2
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-10
+        at:
+        - 10.9
+        - 315.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-11
+        at:
+        - 10.9
+        - 342.1
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-12
+        at:
+        - 10.9
+        - 368.7
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-13
+        at:
+        - 10.9
+        - 469.5
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-14
+        at:
+        - 10.9
+        - 490.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-15
+        at:
+        - 10.9
+        - 511.7
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-16
+        at:
+        - 10.9
+        - 537.9
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-17
+        at:
+        - 10.9
+        - 564.5
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-18
+        at:
+        - 10.9
+        - 591.2
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-19
+        at:
+        - 10.9
+        - 953.1
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-20
+        at:
+        - 10.9
+        - 974.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-21
+        at:
+        - 10.9
+        - 995.2
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-22
+        at:
+        - 10.9
+        - 1021.9
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-23
+        at:
+        - 10.9
+        - 1048.1
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-24
+        at:
+        - 10.9
+        - 1074.66
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-25
+        at:
+        - 10.9
+        - 1175.8
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-26
+        at:
+        - 10.9
+        - 1196.9
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-27
+        at:
+        - 10.9
+        - 1218.0
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-28
+        at:
+        - 10.9
+        - 1244.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-29
+        at:
+        - 10.9
+        - 1270.8
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-30
+        at:
+        - 10.9
+        - 1297.5
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-31
+        at:
+        - 10.9
+        - 1398.3
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-32
+        at:
+        - 10.9
+        - 1419.4
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-33
+        at:
+        - 10.9
+        - 1439.69
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-34
+        at:
+        - 10.9
+        - 1466.34
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-35
+        at:
+        - 10.9
+        - 1493.3
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: latch-36
+        at:
+        - 10.9
+        - 1519.65
+        size:
+        - 2.0
+        - 7.6
+        fill: '#111214'
+        out: 18.3
+        kind: latch
+      - id: tab-hole-1-a
+        at:
+        - 5.6
+        - 21.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-1-b
+        at:
+        - 5.6
+        - 31.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-1
+        at:
+        - 6.4
+        - 24.8
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-1-stub
+        at:
+        - 6.4
+        - 28.1
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-1
+        at:
+        - 48.7
+        - 18.5
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-2-a
+        at:
+        - 5.6
+        - 43.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-2-b
+        at:
+        - 5.6
+        - 53.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-2
+        at:
+        - 6.4
+        - 46.8
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-2-stub
+        at:
+        - 6.4
+        - 50.1
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-2
+        at:
+        - 48.7
+        - 40.5
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-3-a
+        at:
+        - 5.6
+        - 65.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-3-b
+        at:
+        - 5.6
+        - 75.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-3
+        at:
+        - 6.4
+        - 68.8
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-3-stub
+        at:
+        - 6.4
+        - 72.1
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-3
+        at:
+        - 48.7
+        - 62.5
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-4-a
+        at:
+        - 5.6
+        - 90.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-4-b
+        at:
+        - 5.6
+        - 101.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-4
+        at:
+        - 47.6
+        - 99.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-4
+        at:
+        - 48.05
+        - 87.65
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-5-a
+        at:
+        - 5.6
+        - 117.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-5-b
+        at:
+        - 5.6
+        - 127.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-5
+        at:
+        - 47.6
+        - 126.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-5
+        at:
+        - 48.05
+        - 114.05
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-6-a
+        at:
+        - 5.6
+        - 144.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-6-b
+        at:
+        - 5.6
+        - 154.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-6
+        at:
+        - 47.6
+        - 152.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-6
+        at:
+        - 48.05
+        - 140.95
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-7-a
+        at:
+        - 5.6
+        - 243.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-7-b
+        at:
+        - 5.6
+        - 253.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-7
+        at:
+        - 6.4
+        - 247.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-7-stub
+        at:
+        - 6.4
+        - 250.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-7
+        at:
+        - 48.7
+        - 241.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-8-a
+        at:
+        - 5.6
+        - 265.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-8-b
+        at:
+        - 5.6
+        - 275.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-8
+        at:
+        - 6.4
+        - 269.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-8-stub
+        at:
+        - 6.4
+        - 272.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-8
+        at:
+        - 48.7
+        - 263.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-9-a
+        at:
+        - 5.6
+        - 287.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-9-b
+        at:
+        - 5.6
+        - 297.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-9
+        at:
+        - 6.4
+        - 291.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-9-stub
+        at:
+        - 6.4
+        - 294.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-9
+        at:
+        - 48.7
+        - 285.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-10-a
+        at:
+        - 5.6
+        - 313.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-10-b
+        at:
+        - 5.6
+        - 323.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-10
+        at:
+        - 47.6
+        - 322.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-10
+        at:
+        - 48.05
+        - 310.15
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-11-a
+        at:
+        - 5.6
+        - 340.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-11-b
+        at:
+        - 5.6
+        - 350.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-11
+        at:
+        - 47.6
+        - 348.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-11
+        at:
+        - 48.05
+        - 336.75
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-12-a
+        at:
+        - 5.6
+        - 366.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-12-b
+        at:
+        - 5.6
+        - 376.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-12
+        at:
+        - 47.6
+        - 374.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-12
+        at:
+        - 48.05
+        - 362.95
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-13-a
+        at:
+        - 5.6
+        - 466.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-13-b
+        at:
+        - 5.6
+        - 476.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-13
+        at:
+        - 6.4
+        - 469.9
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-13-stub
+        at:
+        - 6.4
+        - 473.2
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-13
+        at:
+        - 48.7
+        - 463.6
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-14-a
+        at:
+        - 5.6
+        - 488.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-14-b
+        at:
+        - 5.6
+        - 498.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-14
+        at:
+        - 6.4
+        - 491.9
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-14-stub
+        at:
+        - 6.4
+        - 495.2
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-14
+        at:
+        - 48.7
+        - 485.6
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-15-a
+        at:
+        - 5.6
+        - 510.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-15-b
+        at:
+        - 5.6
+        - 520.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-15
+        at:
+        - 6.4
+        - 513.9
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-15-stub
+        at:
+        - 6.4
+        - 517.2
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-15
+        at:
+        - 48.7
+        - 507.6
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-16-a
+        at:
+        - 5.6
+        - 535.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-16-b
+        at:
+        - 5.6
+        - 546.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-16
+        at:
+        - 47.6
+        - 544.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-16
+        at:
+        - 48.05
+        - 532.55
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-17-a
+        at:
+        - 5.6
+        - 562.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-17-b
+        at:
+        - 5.6
+        - 572.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-17
+        at:
+        - 47.6
+        - 571.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-17
+        at:
+        - 48.05
+        - 559.05
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-18-a
+        at:
+        - 5.6
+        - 588.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-18-b
+        at:
+        - 5.6
+        - 599.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-18
+        at:
+        - 47.6
+        - 597.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-18
+        at:
+        - 48.05
+        - 585.65
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-19-a
+        at:
+        - 5.6
+        - 950.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-19-b
+        at:
+        - 5.6
+        - 959.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-19
+        at:
+        - 6.4
+        - 953.5
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-19-stub
+        at:
+        - 6.4
+        - 956.8
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-19
+        at:
+        - 48.7
+        - 947.2
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-20-a
+        at:
+        - 5.6
+        - 972.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-20-b
+        at:
+        - 5.6
+        - 981.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-20
+        at:
+        - 6.4
+        - 975.5
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-20-stub
+        at:
+        - 6.4
+        - 978.8
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-20
+        at:
+        - 48.7
+        - 969.2
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-21-a
+        at:
+        - 5.6
+        - 994.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-21-b
+        at:
+        - 5.6
+        - 1003.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-21
+        at:
+        - 6.4
+        - 997.5
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-21-stub
+        at:
+        - 6.4
+        - 1000.8
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-21
+        at:
+        - 48.7
+        - 991.2
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-22-a
+        at:
+        - 5.6
+        - 1019.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-22-b
+        at:
+        - 5.6
+        - 1029.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-22
+        at:
+        - 47.6
+        - 1028.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-22
+        at:
+        - 48.05
+        - 1016.35
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-23-a
+        at:
+        - 5.6
+        - 1046.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-23-b
+        at:
+        - 5.6
+        - 1056.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-23
+        at:
+        - 47.6
+        - 1055.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-23
+        at:
+        - 48.05
+        - 1043.05
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-24-a
+        at:
+        - 5.6
+        - 1072.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-24-b
+        at:
+        - 5.6
+        - 1082.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-24
+        at:
+        - 47.6
+        - 1081.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-24
+        at:
+        - 48.05
+        - 1069.45
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-25-a
+        at:
+        - 5.6
+        - 1172.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-25-b
+        at:
+        - 5.6
+        - 1182.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-25
+        at:
+        - 6.4
+        - 1176.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-25-stub
+        at:
+        - 6.4
+        - 1179.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-25
+        at:
+        - 48.7
+        - 1170.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-26-a
+        at:
+        - 5.6
+        - 1194.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-26-b
+        at:
+        - 5.6
+        - 1204.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-26
+        at:
+        - 6.4
+        - 1198.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-26-stub
+        at:
+        - 6.4
+        - 1201.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-26
+        at:
+        - 48.7
+        - 1192.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-27-a
+        at:
+        - 5.6
+        - 1216.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-27-b
+        at:
+        - 5.6
+        - 1226.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-27
+        at:
+        - 6.4
+        - 1220.4
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-27-stub
+        at:
+        - 6.4
+        - 1223.7
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-27
+        at:
+        - 48.7
+        - 1214.1
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-28-a
+        at:
+        - 5.6
+        - 1242.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-28-b
+        at:
+        - 5.6
+        - 1252.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-28
+        at:
+        - 47.6
+        - 1250.8
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-28
+        at:
+        - 48.05
+        - 1238.85
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-29-a
+        at:
+        - 5.6
+        - 1268.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-29-b
+        at:
+        - 5.6
+        - 1278.7
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-29
+        at:
+        - 47.6
+        - 1277.2
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-29
+        at:
+        - 48.05
+        - 1265.25
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-30-a
+        at:
+        - 5.6
+        - 1295.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-30-b
+        at:
+        - 5.6
+        - 1305.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-30
+        at:
+        - 47.6
+        - 1304.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-30
+        at:
+        - 48.05
+        - 1292.15
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-31-a
+        at:
+        - 5.6
+        - 1395.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-31-b
+        at:
+        - 5.6
+        - 1404.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-31
+        at:
+        - 6.4
+        - 1398.6
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-31-stub
+        at:
+        - 6.4
+        - 1401.9
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-31
+        at:
+        - 48.7
+        - 1392.3
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-32-a
+        at:
+        - 5.6
+        - 1417.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-32-b
+        at:
+        - 5.6
+        - 1426.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-32
+        at:
+        - 6.4
+        - 1420.6
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-32-stub
+        at:
+        - 6.4
+        - 1423.9
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-32
+        at:
+        - 48.7
+        - 1414.3
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-33-a
+        at:
+        - 5.6
+        - 1439.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-33-b
+        at:
+        - 5.6
+        - 1448.9
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-notch-33
+        at:
+        - 6.4
+        - 1442.6
+        size:
+        - 1.4
+        - 4.4
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: tab-notch-33-stub
+        at:
+        - 6.4
+        - 1445.9
+        size:
+        - 2.3
+        - 1.2
+        fill: '#0b0b0c'
+        kind: tab-notch
+      - id: bottom-dot-33
+        at:
+        - 48.7
+        - 1436.3
+        size:
+        - 3.0
+        - 3.0
+        rx: 1.5
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-34-a
+        at:
+        - 5.6
+        - 1464.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-34-b
+        at:
+        - 5.6
+        - 1474.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-34
+        at:
+        - 47.6
+        - 1473.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-34
+        at:
+        - 48.05
+        - 1461.15
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-35-a
+        at:
+        - 5.6
+        - 1491.3
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-35-b
+        at:
+        - 5.6
+        - 1501.5
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-35
+        at:
+        - 47.6
+        - 1500.0
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-35
+        at:
+        - 48.05
+        - 1488.05
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: tab-hole-36-a
+        at:
+        - 5.6
+        - 1517.4
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: tab-hole-36-b
+        at:
+        - 5.6
+        - 1527.6
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        fill: '#0b0b0c'
+        kind: tab-hole
+      - id: bottom-ring-36
+        at:
+        - 47.6
+        - 1526.1
+        size:
+        - 1.6
+        - 1.6
+        rx: 0.8
+        stroke: '#6b7076'
+        stroke-width: 0.3
+        kind: bottom-ring
+      - id: bottom-dot-36
+        at:
+        - 48.05
+        - 1514.15
+        size:
+        - 3.3
+        - 3.3
+        rx: 1.65
+        fill: '#0b0b0c'
+        kind: bottom-dot
+      - id: plate-tab-5
+        at:
+        - 26.2
+        - 1318.7
+        size:
+        - 10.9
+        - 3.3
+        rx: 0.4
+        fill: '#3a3d41'
+        kind: plate-tab
+      - id: plate-rail-5
+        at:
+        - 49.5
+        - 1322.1
+        size:
+        - 1.1
+        - 53.2
+        fill: '#2f3135'
+        kind: plate-rail
+      - id: plate-dot-5-a
+        at:
+        - 49.35
+        - 1374.55
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-dot-5-b
+        at:
+        - 49.35
+        - 1321.35
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-tab-4
+        at:
+        - 26.2
+        - 1095.7
+        size:
+        - 10.9
+        - 3.3
+        rx: 0.4
+        fill: '#3a3d41'
+        kind: plate-tab
+      - id: plate-rail-4
+        at:
+        - 49.5
+        - 1099.1
+        size:
+        - 1.1
+        - 53.8
+        fill: '#2f3135'
+        kind: plate-rail
+      - id: plate-dot-4-a
+        at:
+        - 49.35
+        - 1152.15
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-dot-4-b
+        at:
+        - 49.35
+        - 1098.35
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-tab-2
+        at:
+        - 26.2
+        - 389.6
+        size:
+        - 10.9
+        - 3.3
+        rx: 0.4
+        fill: '#3a3d41'
+        kind: plate-tab
+      - id: plate-rail-2
+        at:
+        - 49.5
+        - 393.0
+        size:
+        - 1.1
+        - 53.8
+        fill: '#2f3135'
+        kind: plate-rail
+      - id: plate-dot-2-a
+        at:
+        - 49.35
+        - 446.05
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-dot-2-b
+        at:
+        - 49.35
+        - 392.25
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-tab-1
+        at:
+        - 26.2
+        - 166.6
+        size:
+        - 10.9
+        - 3.3
+        rx: 0.4
+        fill: '#3a3d41'
+        kind: plate-tab
+      - id: plate-rail-1
+        at:
+        - 49.5
+        - 170.0
+        size:
+        - 1.1
+        - 53.8
+        fill: '#2f3135'
+        kind: plate-rail
+      - id: plate-dot-1-a
+        at:
+        - 49.35
+        - 223.05
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+      - id: plate-dot-1-b
+        at:
+        - 49.35
+        - 169.25
+        size:
+        - 1.5
+        - 1.5
+        rx: 0.75
+        fill: '#0b0b0c'
+        kind: plate-dot
+    components:
+      bays:
+      - id: controller
+        at:
+        - 1.95
+        - 754.1
+        size:
+          w: 52.0
+          h: 141.6
+        accepts:
+        - servertech/pro3x-controller@1
+        default: servertech/pro3x-controller@1
+        group: controller
+        rel-pos: 1
+      placements:
+      - id: outlet-1
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 14.0
+        group: outlets
+        rel-pos: 1
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-2
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 36.0
+        group: outlets
+        rel-pos: 2
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-3
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 58.0
+        group: outlets
+        rel-pos: 3
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-4
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 82.8
+        group: outlets
+        rel-pos: 4
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-5
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 109.2
+        group: outlets
+        rel-pos: 5
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-6
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 136.1
+        group: outlets
+        rel-pos: 6
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-7
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 236.6
+        group: outlets
+        rel-pos: 7
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-8
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 258.6
+        group: outlets
+        rel-pos: 8
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-9
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 280.6
+        group: outlets
+        rel-pos: 9
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-10
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 305.3
+        group: outlets
+        rel-pos: 10
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-11
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 331.9
+        group: outlets
+        rel-pos: 11
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-12
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 358.1
+        group: outlets
+        rel-pos: 12
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-13
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 459.1
+        group: outlets
+        rel-pos: 13
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-14
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 481.1
+        group: outlets
+        rel-pos: 14
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-15
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 503.1
+        group: outlets
+        rel-pos: 15
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-16
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 527.7
+        group: outlets
+        rel-pos: 16
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-17
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 554.2
+        group: outlets
+        rel-pos: 17
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-18
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 580.8
+        group: outlets
+        rel-pos: 18
+        through: breaker-1
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-19
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 942.7
+        group: outlets
+        rel-pos: 19
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-20
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 964.7
+        group: outlets
+        rel-pos: 20
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-21
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 986.7
+        group: outlets
+        rel-pos: 21
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-22
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1011.5
+        group: outlets
+        rel-pos: 22
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-23
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1038.2
+        group: outlets
+        rel-pos: 23
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-24
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1064.6
+        group: outlets
+        rel-pos: 24
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-25
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1165.6
+        group: outlets
+        rel-pos: 25
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-26
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1187.6
+        group: outlets
+        rel-pos: 26
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-27
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1209.6
+        group: outlets
+        rel-pos: 27
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-28
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1234.0
+        group: outlets
+        rel-pos: 28
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-29
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1260.4
+        group: outlets
+        rel-pos: 29
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-30
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1287.3
+        group: outlets
+        rel-pos: 30
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-31
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1387.8
+        group: outlets
+        rel-pos: 31
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-32
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1409.8
+        group: outlets
+        rel-pos: 32
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-33
+        ref: std/c13-outlet@1
+        at:
+        - 17.2
+        - 1431.8
+        group: outlets
+        rel-pos: 33
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-34
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1456.3
+        group: outlets
+        rel-pos: 34
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-35
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1483.2
+        group: outlets
+        rel-pos: 35
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: outlet-36
+        ref: servertech/hdot-cx-outlet@1
+        at:
+        - 17.35
+        - 1509.3
+        group: outlets
+        rel-pos: 36
+        through: breaker-2
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+      - id: numeral-1
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 28.0
+        group: outlet-numerals
+        rel-pos: 1
+        attrs:
+          label: '1'
+      - id: numeral-2
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 50.0
+        group: outlet-numerals
+        rel-pos: 2
+        attrs:
+          label: '2'
+      - id: numeral-3
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 72.0
+        group: outlet-numerals
+        rel-pos: 3
+        attrs:
+          label: '3'
+      - id: numeral-4
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 98.8
+        group: outlet-numerals
+        rel-pos: 4
+        attrs:
+          label: '4'
+      - id: numeral-5
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 125.2
+        group: outlet-numerals
+        rel-pos: 5
+        attrs:
+          label: '5'
+      - id: numeral-6
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 152.1
+        group: outlet-numerals
+        rel-pos: 6
+        attrs:
+          label: '6'
+      - id: numeral-7
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 250.6
+        group: outlet-numerals
+        rel-pos: 7
+        attrs:
+          label: '7'
+      - id: numeral-8
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 272.6
+        group: outlet-numerals
+        rel-pos: 8
+        attrs:
+          label: '8'
+      - id: numeral-9
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 294.6
+        group: outlet-numerals
+        rel-pos: 9
+        attrs:
+          label: '9'
+      - id: numeral-10
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 321.3
+        group: outlet-numerals
+        rel-pos: 10
+        attrs:
+          label: '10'
+      - id: numeral-11
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 347.9
+        group: outlet-numerals
+        rel-pos: 11
+        attrs:
+          label: '11'
+      - id: numeral-12
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 374.1
+        group: outlet-numerals
+        rel-pos: 12
+        attrs:
+          label: '12'
+      - id: numeral-13
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 473.1
+        group: outlet-numerals
+        rel-pos: 13
+        attrs:
+          label: '13'
+      - id: numeral-14
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 495.1
+        group: outlet-numerals
+        rel-pos: 14
+        attrs:
+          label: '14'
+      - id: numeral-15
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 517.1
+        group: outlet-numerals
+        rel-pos: 15
+        attrs:
+          label: '15'
+      - id: numeral-16
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 543.7
+        group: outlet-numerals
+        rel-pos: 16
+        attrs:
+          label: '16'
+      - id: numeral-17
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 570.2
+        group: outlet-numerals
+        rel-pos: 17
+        attrs:
+          label: '17'
+      - id: numeral-18
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 596.8
+        group: outlet-numerals
+        rel-pos: 18
+        attrs:
+          label: '18'
+      - id: numeral-19
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 956.7
+        group: outlet-numerals
+        rel-pos: 19
+        attrs:
+          label: '19'
+      - id: numeral-20
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 978.7
+        group: outlet-numerals
+        rel-pos: 20
+        attrs:
+          label: '20'
+      - id: numeral-21
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1000.7
+        group: outlet-numerals
+        rel-pos: 21
+        attrs:
+          label: '21'
+      - id: numeral-22
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1027.5
+        group: outlet-numerals
+        rel-pos: 22
+        attrs:
+          label: '22'
+      - id: numeral-23
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1054.2
+        group: outlet-numerals
+        rel-pos: 23
+        attrs:
+          label: '23'
+      - id: numeral-24
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1080.6
+        group: outlet-numerals
+        rel-pos: 24
+        attrs:
+          label: '24'
+      - id: numeral-25
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1179.6
+        group: outlet-numerals
+        rel-pos: 25
+        attrs:
+          label: '25'
+      - id: numeral-26
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1201.6
+        group: outlet-numerals
+        rel-pos: 26
+        attrs:
+          label: '26'
+      - id: numeral-27
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1223.6
+        group: outlet-numerals
+        rel-pos: 27
+        attrs:
+          label: '27'
+      - id: numeral-28
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1250.0
+        group: outlet-numerals
+        rel-pos: 28
+        attrs:
+          label: '28'
+      - id: numeral-29
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1276.4
+        group: outlet-numerals
+        rel-pos: 29
+        attrs:
+          label: '29'
+      - id: numeral-30
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1303.3
+        group: outlet-numerals
+        rel-pos: 30
+        attrs:
+          label: '30'
+      - id: numeral-31
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1401.8
+        group: outlet-numerals
+        rel-pos: 31
+        attrs:
+          label: '31'
+      - id: numeral-32
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1423.8
+        group: outlet-numerals
+        rel-pos: 32
+        attrs:
+          label: '32'
+      - id: numeral-33
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1445.8
+        group: outlet-numerals
+        rel-pos: 33
+        attrs:
+          label: '33'
+      - id: numeral-34
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1472.3
+        group: outlet-numerals
+        rel-pos: 34
+        attrs:
+          label: '34'
+      - id: numeral-35
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1499.2
+        group: outlet-numerals
+        rel-pos: 35
+        attrs:
+          label: '35'
+      - id: numeral-36
+        ref: servertech/outlet-numeral@1
+        at:
+        - 51.4
+        - 1525.3
+        group: outlet-numerals
+        rel-pos: 36
+        attrs:
+          label: '36'
+      - id: breaker-1
+        ref: servertech/pro3x-breaker-handle@2
+        at:
+        - 31.9
+        - 627.0
+        group: breakers
+        rel-pos: 1
+        lines:
+        - L1
+        - N
+        description: Breaker 1 of 2, a two-pole branch breaker across L1 and L2/N (the schematic's label), feeding outlets
+          1 to 18
+      - id: breaker-2
+        ref: servertech/pro3x-breaker-handle@2
+        at:
+        - 31.9
+        - 1559.0
+        group: breakers
+        rel-pos: 2
+        lines:
+        - L1
+        - N
+        description: Breaker 2 of 2, a two-pole branch breaker across L1 and L2/N (the schematic's label), feeding outlets
+          19 to 36
+  rear:
+    size:
+      w: 55.9
+      h: 1778.0
+    panel:
+      decor:
+      - id: end-cap-top
+        at:
+        - 0
+        - 0
+        size:
+        - 55.9
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at:
+        - 0
+        - 1776.0
+        size:
+        - 55.9
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: rear-seam
+        at:
+        - 0.0
+        - 1657.0
+        size:
+        - 55.9
+        - 0.6
+        rx: 0
+        fill: '#0f1011'
+        kind: seam
+      - id: mount-hole-1
+        at:
+        - 24.8
+        - 1706.45
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-2
+        at:
+        - 24.8
+        - 1686.45
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-3
+        at:
+        - 24.8
+        - 1676.45
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-4
+        at:
+        - 24.8
+        - 1383.85
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-5
+        at:
+        - 24.8
+        - 1321.25
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-6
+        at:
+        - 24.8
+        - 450.45
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-7
+        at:
+        - 24.8
+        - 387.85
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-8
+        at:
+        - 24.8
+        - 120.65
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-9
+        at:
+        - 24.8
+        - 85.25
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: mount-hole-10
+        at:
+        - 24.8
+        - 65.25
+        size:
+        - 6.3
+        - 6.3
+        rx: 3.15
+        fill: '#141516'
+        kind: hole
+      - id: screw-rear-1
+        at:
+        - 18.3
+        - 1769.2
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-rear-2
+        at:
+        - 32.8
+        - 1769.2
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-rear-3
+        at:
+        - 18.3
+        - 1661.5
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-rear-4
+        at:
+        - 32.8
+        - 1661.5
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-rear-5
+        at:
+        - 12.5
+        - 4.8
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+      - id: screw-rear-6
+        at:
+        - 39.1
+        - 4.8
+        size:
+        - 4.0
+        - 4.0
+        rx: 2.0
+        fill: '#565b60'
+        kind: screw-head
+    components:
+      placements:
+      - id: button-1
+        ref: servertech/mounting-button@1
+        at:
+        - 15.25
+        - 1343.0
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: servertech/mounting-button@1
+        at:
+        - 15.25
+        - 409.6
+        group: mounting
+        rel-pos: 2
+  top:
+    size:
+      w: 55.9
+      h: 63.5
+    panel:
+      decor:
+      - id: end-cap
+        at:
+        - 0
+        - 0
+        size:
+        - 55.9
+        - 63.5
+        fill: '#26282b'
+        kind: end-cap
+  bottom:
+    size:
+      w: 55.9
+      h: 63.5
+    panel:
+      decor:
+      - id: end-cap
+        at:
+        - 0
+        - 0
+        size:
+        - 55.9
+        - 63.5
+        fill: '#26282b'
+        kind: end-cap
+    components:
+      placements:
+      - id: input
+        ref: servertech/pro3x-cord-60309-2pe@1
+        at:
+        - 13.0
+        - 27.7
+        group: power-input
+        rel-pos: 1
+        description: the fixed input cord, ending in an IEC 60309 2P+E 6h plug
+  left:
+    size:
+      w: 63.5
+      h: 1778.0
+    panel:
+      decor:
+      - id: end-cap-top
+        at:
+        - 0
+        - 0
+        size:
+        - 63.5
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at:
+        - 0
+        - 1776.0
+        size:
+        - 63.5
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: perf-back-a
+        at:
+        - 4.95
+        - 1677.4
+        size:
+        - 27.6
+        - 89.26
+        rx: 0.6
+        fill: '#1a1b1d'
+        kind: vent-grille
+      - id: perf-a
+        at:
+        - 4.95
+        - 1677.4
+        size:
+        - 27.6
+        - 89.26
+        pattern: holes
+        pattern-pitch:
+        - 4.6
+        - 4.463
+        pattern-offset:
+        - 4.95
+        - 1677.4
+        kind: perforation
+      - id: perf-back-b
+        at:
+        - 4.95
+        - 18.11
+        size:
+        - 27.6
+        - 1618.7
+        rx: 0.6
+        fill: '#1a1b1d'
+        kind: vent-grille
+      - id: perf-b
+        at:
+        - 4.95
+        - 18.11
+        size:
+        - 27.6
+        - 1618.7
+        pattern: holes
+        pattern-pitch:
+        - 4.6
+        - 4.4964
+        pattern-offset:
+        - 4.95
+        - 18.11
+        kind: perforation
+      - id: side-seam
+        at:
+        - 0.0
+        - 1657.0
+        size:
+        - 63.5
+        - 0.6
+        rx: 0
+        fill: '#0f1011'
+        kind: seam
+      - id: side-screw-1
+        at:
+        - 53.8
+        - 1758.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-2
+        at:
+        - 53.8
+        - 1666.5
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-3
+        at:
+        - 53.8
+        - 1641.3
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-4
+        at:
+        - 53.8
+        - 1536.0
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-5
+        at:
+        - 53.8
+        - 1313.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-6
+        at:
+        - 53.8
+        - 1091.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-7
+        at:
+        - 53.8
+        - 907.9
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-8
+        at:
+        - 53.8
+        - 698.4
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-9
+        at:
+        - 53.8
+        - 384.9
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-10
+        at:
+        - 53.8
+        - 162.3
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-11
+        at:
+        - 53.8
+        - 10.2
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-nub-1-base
+        at:
+        - 0.0
+        - 409.0
+        size:
+        - 1.8
+        - 26.6
+        rx: 0.3
+        fill: '#3a3d41'
+        kind: mount-nub
+      - id: side-nub-1-cap
+        at:
+        - 1.8
+        - 414.3
+        size:
+        - 5.1
+        - 16.0
+        rx: 0.3
+        fill: '#44484d'
+        kind: mount-nub
+      - id: side-nub-2-base
+        at:
+        - 0.0
+        - 1342.4
+        size:
+        - 1.8
+        - 26.6
+        rx: 0.3
+        fill: '#3a3d41'
+        kind: mount-nub
+      - id: side-nub-2-cap
+        at:
+        - 1.8
+        - 1347.7
+        size:
+        - 5.1
+        - 16.0
+        rx: 0.3
+        fill: '#44484d'
+        kind: mount-nub
+  right:
+    size:
+      w: 63.5
+      h: 1778.0
+    panel:
+      decor:
+      - id: end-cap-top
+        at:
+        - 0
+        - 0
+        size:
+        - 63.5
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: end-cap-cord
+        at:
+        - 0
+        - 1776.0
+        size:
+        - 63.5
+        - 2
+        fill: '#26282b'
+        kind: end-cap
+      - id: perf-back-a
+        at:
+        - 30.95
+        - 1677.4
+        size:
+        - 27.6
+        - 89.26
+        rx: 0.6
+        fill: '#1a1b1d'
+        kind: vent-grille
+      - id: perf-a
+        at:
+        - 30.95
+        - 1677.4
+        size:
+        - 27.6
+        - 89.26
+        pattern: holes
+        pattern-pitch:
+        - 4.6
+        - 4.463
+        pattern-offset:
+        - 30.95
+        - 1677.4
+        kind: perforation
+      - id: perf-back-b
+        at:
+        - 30.95
+        - 18.11
+        size:
+        - 27.6
+        - 1618.7
+        rx: 0.6
+        fill: '#1a1b1d'
+        kind: vent-grille
+      - id: perf-b
+        at:
+        - 30.95
+        - 18.11
+        size:
+        - 27.6
+        - 1618.7
+        pattern: holes
+        pattern-pitch:
+        - 4.6
+        - 4.4964
+        pattern-offset:
+        - 30.95
+        - 18.11
+        kind: perforation
+      - id: side-seam
+        at:
+        - 0.0
+        - 1657.0
+        size:
+        - 63.5
+        - 0.6
+        rx: 0
+        fill: '#0f1011'
+        kind: seam
+      - id: side-screw-1
+        at:
+        - 2.9
+        - 1758.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-2
+        at:
+        - 2.9
+        - 1666.5
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-3
+        at:
+        - 2.9
+        - 1641.3
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-4
+        at:
+        - 2.9
+        - 1536.0
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-5
+        at:
+        - 2.9
+        - 1313.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-6
+        at:
+        - 2.9
+        - 1091.1
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-7
+        at:
+        - 2.9
+        - 907.9
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-8
+        at:
+        - 2.9
+        - 698.4
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-9
+        at:
+        - 2.9
+        - 384.9
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-10
+        at:
+        - 2.9
+        - 162.3
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-screw-11
+        at:
+        - 2.9
+        - 10.2
+        size:
+        - 6.8
+        - 6.8
+        rx: 3.4
+        fill: '#565b60'
+        kind: screw-head
+      - id: side-nub-1-base
+        at:
+        - 61.7
+        - 409.0
+        size:
+        - 1.8
+        - 26.6
+        rx: 0.3
+        fill: '#3a3d41'
+        kind: mount-nub
+      - id: side-nub-1-cap
+        at:
+        - 56.6
+        - 414.3
+        size:
+        - 5.1
+        - 16.0
+        rx: 0.3
+        fill: '#44484d'
+        kind: mount-nub
+      - id: side-nub-2-base
+        at:
+        - 61.7
+        - 1342.4
+        size:
+        - 1.8
+        - 26.6
+        rx: 0.3
+        fill: '#3a3d41'
+        kind: mount-nub
+      - id: side-nub-2-cap
+        at:
+        - 56.6
+        - 1347.7
+        size:
+        - 5.1
+        - 16.0
+        rx: 0.3
+        fill: '#44484d'
+        kind: mount-nub
+interfaces:
+- physical: outlet-{n}
+  name: '{n}'
+  range: 1-36
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships.
+    part-numbers:
+      C3W36RL-EPJE2MT4: {}
+    bays:
+      controller: servertech/pro3x-controller@1
+datasheet:
+  title: Server Technology PRO3X data sheet (STI_PRO3X_Datasheet_R3)
+  url: https://cdn10.servertech.com/assets/documents/documents/917/original/STI_PRO3X_Datasheet_R3.pdf
+  sha256: 39f5acbb35d132d9d9385a2e7bd474ab6db625edc5f0b92705bb91efffcb856e
+references:
+- title: Server Technology data sheet C3W36RL-EPJE2MT4 (PRO3X Switched 3F01), page 5 Drawings
+  url: https://datasheets.servertech.com/datasheets/C3W36RL-EPJE2MT4.pdf
+  sha256: 5a21451d36118247a0cc319eef31189e79f919d1f53180d7c7dca7cfa4e7d23c
+- title: Server Technology outline drawing, PRO3X V36, 208V 3PH DELTA 60A, 412-1500-060 rev 1A
+  url: https://cdn10.servertech.com/assets/documents/documents/854/original/412-1500-060_%283A06%29.pdf
+  sha256: 5e8587acd58eaf0edad7060cfc62a833cd517ca5e56fa0f6ac774d37299fa76b

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: p40-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: p40
 profile: power
@@ -11,8 +11,7 @@ description: >-
   wired, seen from the wire side as a front elevation sees it seated: the
   black housing, the two latch arms above and below it, and a short straight
   stub of insulated wire leaving each pole, BATT over RTN. Seats in a `p40`
-  receptacle at its own mate point. It carries one wire per pole, not one
-  cable.
+  receptacle at its own mate point. It carries one wire per pole, all in one cable that ends at its `mate` point.
 size: {w: 9.7, h: 34.2}
 size-confidence: {w: drawing, h: drawing}
 size-notes: >-
@@ -101,6 +100,11 @@ provenance:
     product pages; a FIELD.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port plug.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 relief:
   features:
@@ -146,6 +150,7 @@ relief:
         see wire-1
 connection-points:
   mate: {at: [4.85, 16.9], direction: front}
+  cable: {at: [4.85, 16.9], direction: front}
   wire-1: {at: [4.85, 12.0], direction: front, 'on': wire-1}
   wire-2: {at: [4.85, 21.8], direction: front, 'on': wire-2}
 skins: [default]

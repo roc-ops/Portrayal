@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: terminal-508-2-plug
-version: 1.0.2
+version: 1.1.0
 class: port
 mates: terminal-508-2
 conforms: terminal-508-2-plug
@@ -12,7 +12,7 @@ description: >-
   entry at each pole and a short straight stub of insulated wire leaving each
   of the two poles, every stub the diameter of the wire-od field. Seats in a
   `terminal-508-2` header at its own mate point. It carries one wire per pole,
-  not one cable.
+  all in one cable that ends at its `mate` point.
 size: {w: 10.16, h: 15}
 size-confidence: {w: drawing, h: drawing}
 size-notes: the width is the drawing's a + 5.08 with the a the data sheet tabulates; the height is the 15 the drawing dimensions
@@ -141,6 +141,11 @@ provenance:
   behaviour: >-
     DELIBERATELY OMITTED, as on generic/usb-a-plug@1 - every class port
     contract states none (spec/tests/test_behaviour.py).
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 relief:
   features:
@@ -181,6 +186,7 @@ relief:
         (provenance.wires)
 connection-points:
   mate: {at: [5.08, 10.7], direction: front}
+  cable: {at: [5.08, 10.7], direction: front}
   wire-1: {at: [2.54, 10.7], direction: front, 'on': wire-1}
   wire-2: {at: [7.62, 10.7], direction: front, 'on': wire-2}
 skins: [default]

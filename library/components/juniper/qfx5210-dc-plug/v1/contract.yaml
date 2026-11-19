@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: qfx5210-dc-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: juniper-qfx5210-dc-header-3
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the QFX5210 DC power cable, wired, seen from the wire side as seated. A grey body at
   the outline of the header it seats in. One insulated wire enters each of its three ways, numbered 1, 2 and 3
   from the top as the supply numbers its cells. It seats in a `juniper-qfx5210-dc-header-3` header at its own
-  mate point. It carries one wire per contact, not one cable.
+  mate point. It carries one wire per contact, all in one cable that ends at its `mate` point.
 size: {w: 10.9, h: 29.9}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -36,9 +36,15 @@ provenance:
     plan outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [5.2, 15.2], direction: front}
+  cable: {at: [5.2, 15.2], direction: front}
   wire-1: {at: [5.2, 9.7], direction: front}
   wire-2: {at: [5.2, 15.2], direction: front}
   wire-3: {at: [5.2, 20.4], direction: front}

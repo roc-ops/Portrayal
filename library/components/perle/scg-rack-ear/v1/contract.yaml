@@ -1,0 +1,26 @@
+format: 1
+kind: component
+name: scg-rack-ear
+version: 1.0.0
+class: ear
+behaviour: mounts
+description: >-
+  One front mounting ear of the Perle IOLAN SCG R chassis. It is a flat flange standing out from the end of
+  the body, with two slotted holes for rack screws. Skins `left` and `right`.
+provenance:
+  size: >-
+    estimated - the front view of the drawing on page 35 of the installation guide, 6.70 pixels to
+    the millimetre. The 436 mm body is 2921 pixels. The flange stands 22.1 beyond the body (148 to 149
+    pixels) and is 43 high. Each outer corner is rounded to about 3 mm.
+  size-holes: >-
+    estimated - two slots in each flange, 10.4 long and 7.2 high. Each is centred 8.5 from the flange's
+    outer end and 5.7 from its top and bottom edges. They are read from the same view at 6.70 pixels to
+    the millimetre, good to about 0.3 mm.
+size: {w: 22.1, h: 43.0}
+size-confidence: {w: estimated, h: estimated}
+elements:
+  plate: {at: [0.0, 0.0], size: [22.1, 43.0], class: bezel}
+relief:
+  features:
+  - {node: plate, out: 1.5, color: '#1e1f21', confidence: estimated, source: 'the flange, 1.5, estimated'}
+skins: [left, right]

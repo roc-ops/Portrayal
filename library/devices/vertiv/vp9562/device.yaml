@@ -1,0 +1,241 @@
+format: 1
+kind: device
+name: vp9562
+version: 0.1.0
+maturity: modelled
+manufacturer: Vertiv
+model: VP9562
+description: >-
+  Vertiv Geist basic rack PDU, 1U horizontal, 100 to 120 V, 15 A, 1.4 kW. It has a fixed 10 ft input cord with a NEMA 5-15P plug.
+  Ten NEMA 5-15R outlets sit in a row on the rear, behind one 15 A thermal breaker.
+  The front has a power lamp, a blank label plate and the breaker button.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DRAWING EXISTS, SO EVERY POSITION IS READ OFF THE TWO STRAIGHT-ON IMAGES ON PAGE 1 OF THE DATA SHEET SL-26159. Searched: the data
+      sheet, the Geist rack PDU installer/user guide (whose figures 2.1 to 2.14 are generic bracket and cord-lock pictures, and whose figures 3.1
+      to 3.3 show monitoring modules, none of this unit), the VP7553 and VP7557 data sheets (text only) and the Geist brochure. The front
+      image is 815 px wide and the rear 815 px; each was extracted from the PDF at its own resolution. The scale is the 19 in ear-to-ear width,
+      791 px on the rear (1.639 px per mm) and 800 px on the front (1.658), and it is confirmed three ways on the rear: the 1U height reads
+      73 px, 44.5 mm; the two ear holes read 52 px apart, 31.7 mm (31.75 is the EIA hole pitch within a unit); and the figure is a flat view.
+      Horizontal positions are good to about 1 mm and vertical ones to about 1.5 mm. No 3D model and no stencil is held.
+  chassis:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the body between the ear folds reads 733 px on the rear, 447 mm, and the face 73 px high, 44.5 mm, taken as 1U (44.45).
+      THE DATA SHEET PRINTS 1.72 in x 17 in x 3.75 in (43.7, 431.8 and 95.3 mm) and the image reads 447 mm across: the two disagree by 15 mm
+      (gaps: chassis-width). The photograph is the source here because every position is measured on it, and the sheet's inch figures read low
+      against its own 1U and 19 in. The depth is the sheet's 3.75 in. The colour is the sheet's "Black" (see the colour gap).
+  ears:
+    confidence: photo-measured
+    note: >-
+      photo-measured - the images show an ear at each end, about 17 mm wide, flush with the rear face, each with two slots 13 mm by 7.5 mm
+      on the 31.7 mm pitch. The sheet says "Flush Mount Yes". No document dimensions the ear (gaps: ear-dimensions).
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - front image, mm from the body's left fold and its top. A dark navy plate with the maker's mark from 292.1 to 331.4
+      across and 7.0 to 24.1 down. A small round lens centred 340.3 across and 15.9 down, 6.7 across. A dark square lamp plate from 350.0 to
+      367.1 across and 7.6 to 24.1 down, with the green POWER ON lamp in it, centred 358.5, 15.9 (the sheet: "1 - Power ON Green LED"). A grey
+      blank plate from 373.6 to 389.3 across and 7.6 to 37.8 down. The breaker button, 13.9 across, centred 406.0 across and 21.6 down.
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - rear image, mm from the body's left fold as seen from behind and from its top. Ten outlets in one row, centred 20.4
+      down, the first at 26.4 across and then every 39.68 (the nine steps read 585 px, 65.0 px each, 39.7 mm; the last is at 383.5). Each is a
+      rounded oval bezel 28.9 mm across and 35.1 mm high with its earth hole to the right, so the outlet is turned a quarter. A screw between
+      each pair, 4.5 mm across, centred 20.1 down and half a pitch from the outlets either side. The cord bushing, 27.5 by 26.4, centred
+      429.7 across and 21.8 down.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - SL-26159 page 2: "Receptacle/Socket Type #1 NEMA 5-15R", "Quantity on Rear 10", "Quantity per Breaker 10", "Style Duplex",
+      "Maximum Output per Receptacle/Socket 15A", "Voltage per Receptacle/Socket 120V". Each is std/nema-5-15r@1, whose face is borrowed from
+      the 5-20R; the oval bezel round it is not drawn. The sheet's style "Duplex" is not explained and the rear image shows ten single
+      receptacle faces, which is the count the sheet gives. They carry no number on the image, so they are numbered 1 to 10 from the left of
+      the rear image.
+  breakers:
+    confidence: datasheet
+    note: >-
+      datasheet - "Over Current Protection 15A Thermal Breaker", "Quantity per Breaker 10": one breaker for all ten outlets, the round button
+      with 15 on the front image.
+  colours:
+    confidence: datasheet
+    note: >-
+      The body and the ears are drawn black (about #1b1c1e, an estimate): the sheet says "Black" and offers other chassis colours
+      (black, red, orange, yellow, green, blue, white swatches) on request. The sheet's lit image reads the body at #54554f on the front
+      and #555651 on the rear and the ears at #4b4a46, which is the lighting and not the finish. The bushing #85847f with a #0a0a09 bore,
+      the maker's plate #121727, the blank plate #868580 and the lamp plate #4a4948 are photo-measured medians of that image.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - "Category Basic", "Switch No", one green power lamp, no network port: no metering and no outlet switching.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Quantity Of Inputs 1", "Voltage 100-120V", "Current 15A", "VA per Input (Load Capacity) 1.4kW (120V)", "Plug Type NEMA
+      5-15P", "Power Cable Length 10ft", "Power Cable Wire Gauge 14/3", frequency 50/60 Hz. The cord is fixed: the rear image shows it
+      leaving through a bushing. The 1.4 kW is the sheet's figure and is not the 1.8 kW of 120 V at 15 A.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      no held document announces an end of life. Not searched on the web: nothing is fetched for this model.
+attrs:
+  power:
+    input-ac: 100-120 V, 50/60 Hz, a fixed 10 ft cord with a NEMA 5-15P plug
+    input-plug: nema-5-15p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 15
+    capacity-kw: 1.4
+    capacity-scope: the load the PDU can hand on, from the data sheet; it is not what the PDU draws itself
+    frequency: 50/60 Hz
+    breakers: one 15 A thermal breaker for all ten outlets
+  environmental: {operating-temp: 10 to 45 C (50 to 113 F)}
+  physical: {shipping-weight-kg: 2.72, construction: 'heavy steel with a black powder-coat finish'}
+  management: {metering-scope: none, outlet-switching: false}
+  compliance: {certifications: 'UL & c-UL Listed 60950, RoHS'}
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 447.0
+  height: 44.45
+  depth: 95.25
+  ru: 1
+  color: '#1b1c1e'
+  airflow: passive
+  ears:
+    color: '#1b1c1e'
+    positions:
+      - {name: flush, default: true}
+gaps:
+- what: chassis-width
+  scope: [front, rear]
+  reason: sources-disagree
+  note: >-
+    the data sheet prints 17 in (431.8 mm) and the image reads 447 mm between the ear folds at the scale its 19 in and 1U give.
+    The drawing follows the image.
+  wanted: a dimensioned outline drawing.
+- what: ear-dimensions
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    the chassis names one ear position, flush, as the images show it; the face views do not draw the ears. Their width and slot size
+    are read off the images and stated in no document.
+  wanted: a dimensioned outline drawing, or the mounting section of the installer guide for this model.
+- what: round-lens
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the front image shows a small round lens beside the POWER ON lamp. The sheet lists one lamp and names no other; what the lens is is
+    not stated. It is drawn as a plain disc.
+  wanted: the installer guide for this model.
+- what: blank-plate
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the grey rectangle on the front is drawn as the image shows it, blank. No document says what it is.
+  wanted: the installer guide for this model.
+- what: outlet-bezel
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    the image shows each outlet in a rounded oval bezel; only the outlet face is drawn, at the library's borrowed size.
+  wanted: a dimensioned drawing of the outlet.
+- what: bushing-tab
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    a small tab ring sits at the upper right of the cord bushing; its use is not stated.
+  wanted: the installer guide for this model.
+- what: colour
+  scope: [front, rear, top, bottom, left, right]
+  reason: sources-disagree
+  note: >-
+    the data sheet says "Black" and the body and ears are drawn black (about #1b1c1e, the near-black the library gives other black
+    powder-coat parts; an estimate). The sheet's lit image reads the body at #54554f on the front and #555651 on the rear and the ears
+    at #4b4a46, which is the lighting and not the finish. The plates, lens and bushing keep their image readings.
+  wanted: a photograph of the unit under neutral light, or the swatch of the finish.
+- what: top-bottom-sides
+  scope: [top, bottom, left, right]
+  reason: needs-photo
+  note: >-
+    no held image shows the top, the bottom or an end of this model. The four faces are drawn bare at the sheet's depth.
+  wanted: straight-on photographs of the four faces.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the ten NEMA 5-15R outlets on the rear, numbered 1 to 10 from the left of the rear image; the sheet gives no numbering'}
+  power-led: {term: LED, role: indicator, index-origin: 1, description: 'the green POWER ON lamp'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'the 15 A thermal breaker for all ten outlets'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 447.0, h: 44.45}
+    panel:
+      decor:
+      - {id: maker-plate, at: [292.1, 7.0], size: [39.3, 17.1], rx: 1.0, fill: '#121727', kind: logo-plate}
+      - {id: round-lens, at: [336.95, 12.55], size: [6.7, 6.7], rx: 3.35, fill: '#7c7467', kind: lens}
+      - {id: lamp-plate, at: [350.0, 7.6], size: [17.1, 16.5], rx: 2.0, fill: '#4a4948', kind: lamp-plate}
+      - {id: blank-plate, at: [373.6, 7.6], size: [15.7, 30.2], fill: '#868580', kind: blank-plate}
+    components:
+      placements:
+        - {id: power-led, ref: common/led-dot@1, at: [357.5, 14.9], group: power-led, rel-pos: 1, for: chassis}
+        - {id: breaker, ref: vertiv/rpdu-thermal-breaker@1, at: [399.05, 14.65], group: breakers, rel-pos: 1}
+    regions:
+      - {id: logo-zone, at: [292.1, 7.0], size: {w: 39.3, h: 17.1}, label: 'Vertiv mark; drawn as a plain plate'}
+  rear:
+    size: {w: 447.0, h: 44.45}
+    panel:
+      decor:
+      - {id: screw-1, at: [43.99, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-2, at: [83.67, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-3, at: [123.35, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-4, at: [163.03, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-5, at: [202.71, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-6, at: [242.39, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-7, at: [282.07, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-8, at: [321.75, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+      - {id: screw-9, at: [361.43, 17.85], size: [4.5, 4.5], rx: 2.25, fill: '#666561', kind: screw}
+    components:
+      placements:
+        - {id: input, ref: vertiv/rpdu-cord-5-15p@1, at: [415.95, 8.6], group: power-input, rel-pos: 1, description: 'the fixed 10 ft input cord, ending in a NEMA 5-15P plug'}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [12.9, 6.9], rotate: 90, group: outlets, rel-pos: 1, fed-by: input, through: breaker}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [52.58, 6.9], rotate: 90, group: outlets, rel-pos: 2, fed-by: input, through: breaker}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [92.26, 6.9], rotate: 90, group: outlets, rel-pos: 3, fed-by: input, through: breaker}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [131.94, 6.9], rotate: 90, group: outlets, rel-pos: 4, fed-by: input, through: breaker}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [171.62, 6.9], rotate: 90, group: outlets, rel-pos: 5, fed-by: input, through: breaker}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [211.3, 6.9], rotate: 90, group: outlets, rel-pos: 6, fed-by: input, through: breaker}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [250.98, 6.9], rotate: 90, group: outlets, rel-pos: 7, fed-by: input, through: breaker}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [290.66, 6.9], rotate: 90, group: outlets, rel-pos: 8, fed-by: input, through: breaker}
+        - {id: outlet-9, ref: std/nema-5-15r@1, at: [330.34, 6.9], rotate: 90, group: outlets, rel-pos: 9, fed-by: input, through: breaker}
+        - {id: outlet-10, ref: std/nema-5-15r@1, at: [370.02, 6.9], rotate: 90, group: outlets, rel-pos: 10, fed-by: input, through: breaker}
+  top:
+    size: {w: 447.0, h: 95.25}
+    empty: >-
+      no held image shows the top straight on. Searched: the VP9562 data sheet SL-26159 and the Geist installer/user guide.
+  bottom:
+    size: {w: 447.0, h: 95.25}
+    empty: >-
+      no held image shows the bottom. Searched: the VP9562 data sheet SL-26159 and the Geist installer/user guide.
+  left:
+    size: {w: 95.25, h: 44.45}
+    empty: >-
+      no held image shows an end straight on. Searched: the VP9562 data sheet SL-26159 and the Geist installer/user guide.
+  right:
+    size: {w: 95.25, h: 44.45}
+    empty: >-
+      no held image shows an end straight on. Searched: the VP9562 data sheet SL-26159 and the Geist installer/user guide.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-10'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships. The mounting ears are in their flush position.
+    part-numbers:
+      VP9562: {}
+datasheet:
+  title: 'Vertiv Geist rPDU data sheet SL-26159, VP9562'
+  url: https://www.vertiv.com/48ea85/globalassets/products/critical-power/power-distribution/vp9562/vp9562-vertiv-rack-pdu-data-sheet-sl-26159-north-america.pdf
+  sha256: 06628471fa8aa13044e31b46692e38729337b45489a16d465231e390695e3c36

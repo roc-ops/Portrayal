@@ -1,7 +1,7 @@
 format: 1
 kind: module
 name: ps3248n
-version: 1.0.0
+version: 1.1.0
 class: psu
 behaviour: fills
 profile: optical
@@ -23,6 +23,12 @@ attrs:
   back-plate: BP-P2
   inlet: none
 provenance:
+  groups: >-
+    CommScope PS3248 (1511505 Rev B) data sheet: page 1 'Monitoring and control of chassis-resident
+    active modules via micro-USB' and page 2 General, 'Front panel micro-USB port'; the monitoring
+    and control features are reached over it with the vendor's CMS software. It is a way into the
+    chassis, so the role is management. No speed is stated: the data sheet prints no data rate for
+    it, and the media is the one the part states.
   inlet: >-
     datasheet - the supply has no input of its own: the PS3248 "ships with a model BP-P2
     dynamic back plate" and its -48 VDC input is the BP-P2's terminal block; see
@@ -48,13 +54,20 @@ elements:
   vent-main: {at: [6.5, 28.4], size: [23.9, 82.1], class: vent}
   vent-lower: {at: [31.8, 64.5], size: [11.3, 35.4], class: vent}
   handle: {at: [7.7, 121.8], size: [32.6, 7.3], class: handle}
+groups:
+  mgmt:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b}
+    description: "the front-panel micro-USB port, through which the chassis monitoring and control features are reached"
 parts:
   - {ref: common/led-dot@1, id: led-status-ok, at: [36.8, 30.6], attrs: {function: status, color: green}}
   - {ref: common/led-dot@1, id: led-status-minor, at: [36.8, 35.4], attrs: {function: status, color: yellow}}
   - {ref: common/led-dot@1, id: led-status-major, at: [36.8, 39.2], attrs: {function: status, color: red}}
   - {ref: common/led-dot@1, id: led-access, at: [36.8, 48.8], attrs: {function: activity, color: blue}}
   - {ref: common/led-dot@1, id: led-backup-psu, at: [36.8, 58.4], attrs: {function: redundancy, color: green}}
-  - {ref: std/micro-usb@1, id: usb, at: [32.2, 106.7], rotate: 90, attrs: {role: console}}
+  - {ref: std/micro-usb@1, id: usb, group: mgmt, at: [32.2, 106.7], rotate: 90, attrs: {role: console}}
 connection-points:
   mate: {at: [26.26, 65.1], direction: front}
 skins: [default]

@@ -1,0 +1,42 @@
+format: 1
+kind: component
+name: g3-breaker-20a-2p
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The branch breaker of one outlet section of an Eaton ePDU G3 metered input rack
+  PDU with 208 to 240 V sections - a 20 A two-pole breaker with a round handle on
+  a plate, two mounting screws above the plate, and the section's letter on a tile
+  in the section's colour. Fixed to the PDU, not a plug-in part.
+size: {w: 59.2, h: 31.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {rating-a: 20, poles: 2}
+provenance:
+  size: >-
+    drawing - Eaton EMIT04-10 specification drawing (rev 002, sheet 1), the
+    front view read at 300 dpi against its own 482.6 overall (9.45 px per mm):
+    the plate is 59.2 across by 19.4 down, a small screw 8.2 from its left end,
+    a round handle 16.2 across centred 24.2 from the left end, the letter tile
+    from 33.5 to the right end, and two mounting screws 5.0 across centred 9.0
+    above the plate's top edge, 8.5 and 50.7 from the left end, so their centres
+    stand 2.7 below the part's top (the plate starts 11.7 down). The sheet
+    dimensions none of it and the reading is good to about 0.5.
+  rating: >-
+    drawing - EMIT04-10 CIRCUIT BREAKERS: "(2) 20A 2-POLE UL LISTED"; the
+    one-line diagram on the sheet puts each breaker in both lines, L1 and L2.
+  colour: >-
+    drawing and photo - as eaton/g3-breaker-20a-1p: yellow (A) and blue (B) on
+    the sheet and on the 1U units photographed on page 3 of the Eaton Rack PDU
+    G3+ brochure (BR155022EN); the tint is a field and a stand-in, the plate's
+    grey and the handle's colour are not stated by any held document. This sheet
+    draws the handle pale.
+  not-drawn: >-
+    the handle's slot and the printing on it are not drawn; no held figure
+    shows them larger than 1.5.
+fields:
+  section-color: {label: Section colour, type: text, default: '#f4d440'}
+  section: {label: Section letter, type: text, default: A}
+elements:
+  handle: {at: [16.1, 13.4], size: [16.2, 16.2], class: breaker, states: ['on', 'off']}
+skins: [default]

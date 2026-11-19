@@ -74,7 +74,8 @@ def test_the_ar7722_is_the_23u_length_over_the_20u_length_and_they_make_its_1911
     """The installation sheet (990-5140A) labels the two lengths 20U and 23U; the data sheet's 1911 mm is both."""
     doc = device_yaml("ar7722")
     placed = {p["ref"].split("@")[0]: p for p in doc["views"]["front"]["components"]["placements"]}
-    assert set(placed) == {"apc/nsx-vcm-23u", "apc/nsx-vcm-20u"}
+    assert set(placed) == {"apc/nsx-vcm-ar7722-base", "apc/nsx-vcm-23u", "apc/nsx-vcm-20u"}
+    assert [p["in"] for k, p in placed.items() if k != "apc/nsx-vcm-ar7722-base"] == ["base", "base"]
     top, low = contract("nsx-vcm-23u"), contract("nsx-vcm-20u")
     assert placed["apc/nsx-vcm-23u"]["at"][1] == 0 and close(placed["apc/nsx-vcm-20u"]["at"][1], top["size"]["h"])
     assert close(top["size"]["h"] + low["size"]["h"], 1911.0, 0.5)

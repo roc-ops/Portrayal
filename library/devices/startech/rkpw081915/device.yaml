@@ -1,0 +1,178 @@
+format: 1
+kind: device
+name: rkpw081915
+version: 0.1.0
+maturity: modelled
+manufacturer: StarTech.com
+model: RKPW081915
+description: >-
+  StarTech.com RKPW081915, a 1U horizontal rack PDU with eight NEMA 5-15 outlets, 120 V, 15 A (12 A derated), single phase. It has 1800 J
+  surge protection, a built-in circuit breaker and an illuminated power switch. A black steel box with a mounting bracket at each end.
+  The front carries a SURGE lamp and a GROUND lamp at the left. At the right it carries the maker's logo, the model number and a red
+  illuminated rocker switch. A fixed 6 ft (1.8 m) cord with a NEMA 5-15P plug leaves the unit. No document shows the rear. The eight outlets
+  and the cord are placed there from the data sheet's counts, at estimated positions.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      ESTIMATED. NO DIMENSIONED DRAWING EXISTS. The front is read off the one product photograph on page 1 of the RKPW081915 data sheet (a 400 x 400
+      pixel image, taken nearly straight on but drawn about 1.4 times too wide for its height), so x is read as a fraction of the ear-to-ear length (ear tips at
+      10 and 395 px, 483 mm) and y as a fraction of the face height (200 to 225 px, 42.7 mm). The body between the folds is taken as 440 mm, the figure
+      the 8NS8-RACK-MOUNT-PDU guide's diagram gives for the same maker's 1U strip. Every front position is good to about 3 mm, except the logo and model text (about 10 mm). THE REAR IS NOT SHOWN: the outlet
+      row and the cord are placed from the data sheet's counts, at the pitch the 8NS8-RACK-MOUNT-PDU guide's rear diagram gives, and are an estimate.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - RKPW081915 data sheet, page 2: "Product Length 19.0 in [48.3 cm]", "Product Width 3.8 in [95.5 mm]", "Product Height 1.7 in [42.7 mm]",
+      "Weight of Product 4.3 lb [2.0 kg]", "Color Black", "Material Steel", "Form Factor Horizontal". The height is 42.7 where the other two
+      StarTech 1U strips give 44. The width is read as the depth of a horizontal unit.
+  front:
+    confidence: photo-measured
+    note: >-
+      photo-measured - millimetres from the body's left edge and its top, read off the photograph. SURGE lamp at 76.5 across and GROUND lamp at 97.8, both 19.4 down, their
+      legends 8.8 down. Rocker centre at 421.2 across, 22.9 down; logo at 379.8 across. The lamp colours (#e5392e, #3ddc3a) and the rocker's red (#d0212b) are STAND-INS read by eye from the photograph; no pixel count was taken. The logo and model text are good to about 10 mm across (the photograph reads about 387 to 391 mm across for the logo's centre; the drawing keeps 379.8).
+  rear:
+    confidence: estimated
+    note: >-
+      estimated - no document shows the rear. The data sheet gives "Number of Power Outlets 8" and "8 NEMA 5-15 outlets" and the front photograph shows none, so
+      they are placed on the rear. Centres 30.6 across then every 38.8 mm, 22.2 down (the outlet row of the 8NS8-RACK-MOUNT-PDU's rear diagram); the cord relief centre at 413.0 across, 23.7 down, borrowed from that unit's placement (its guide's rear figure reads nearer 20 to 21 mm down; an estimate, good to about 3 mm).
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - data sheet, page 1 and 2: "eight 120V 15A power ports/outlets", "Number of Power Outlets 8", "Connector 2 (Quantity) 8, NEMA 5-15 (125V AC, 15A)".
+      std/nema-5-15r@1 is the library's 5-15R face, borrowed from the 5-20R.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - "Cable Length 6.0 ft [1.8 m]", "Connector 1 NEMA 5-15 (125V AC, 15A)", "Input Voltage 120 AC", "Regulatory Derated Input Current (North America)
+      12A", "Maximum Total Current 15A".
+  indicators:
+    confidence: datasheet
+    note: >-
+      datasheet - "two LEDs to indicate proper ground and surge detection", "LED Indicators 1 - Ground, 1 - Surge". The photograph prints SURGE (a red lamp) and
+      GROUND (a green lamp). Which lamp colour means which condition is not stated.
+  switch:
+    confidence: datasheet
+    note: >-
+      datasheet - "control the power state with an illuminated power/reset switch", "a built-in circuit breaker and reset switch". The photograph shows one red
+      rocker at the right of the front, drawn with common/rocker-switch@1 tinted red. Whether this rocker is the power switch, the reset switch or the breaker is not stated.
+attrs:
+  physical:
+    weight-kg: 2.0
+    construction: steel
+  power:
+    input-ac: '120 V AC, 15 A (12 A derated, North America), NEMA 5-15P, 6 ft (1.8 m) fixed cord'
+    input-plug: nema-5-15p
+    input-cord: fixed
+    input-phase: single
+    input-voltage-v: 120
+    input-current-a: 12
+    plug-rating-a: 15
+  environmental:
+    operating-temp: -5 to 45 C (23 to 113 F)
+    storage-temp: -25 to 65 C (-13 to 149 F)
+    humidity: 5 % to 95 % RH non-condensing
+  management:
+    metering-scope: none
+    outlet-switching: false
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440
+  height: 42.7
+  depth: 95.5
+  ru: 1
+  color: '#1f1f21'
+  ears:
+    color: '#1f1f21'
+    positions:
+      - {name: flush, default: true}
+gaps:
+  - what: rear
+    scope: [rear]
+    reason: needs-photo
+    note: >-
+      no document shows the rear of this model: the data sheet has one photograph, of the front. The eight outlets and the cord are drawn on the rear because the data
+      sheet counts them and the front shows none; their positions are an estimate borrowed from the same maker's 8NS8-RACK-MOUNT-PDU, and which end the cord leaves by is not shown.
+    wanted: a photograph of the rear, or the installation document.
+  - what: switch-and-breaker
+    scope: [front]
+    reason: vendor-silent
+    note: >-
+      the data sheet lists a built-in circuit breaker, a reset switch and an illuminated power/reset switch, and the photograph shows one rocker. Which control is which, and
+      where the breaker stands, is not stated.
+    wanted: the installation document.
+  - what: ear-positions
+    scope: [front]
+    reason: needs-drawing
+    note: >-
+      the data sheet gives no ear, bracket or hole dimension; it lists four M5 screws and four M5 cage nuts. The body width between the folds is an estimate.
+    wanted: a dimensioned drawing.
+  - what: sides
+    scope: [top, bottom, left, right]
+    reason: needs-photo
+    note: >-
+      the photograph sees the top at a shallow angle and shows no end; nothing can be measured.
+    wanted: straight-on photographs of the top, the bottom and an end, with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: nema-5-15r}, description: 'the eight NEMA 5-15R outlets, numbered 1 to 8 from the left as seen from behind: no document prints numbers'}
+  surge-led: {term: LED, role: indicator, index-origin: 1, description: 'the SURGE lamp, red in the photograph', states: ['off', {name: 'on', color: '#e5392e'}]}
+  ground-led: {term: LED, role: indicator, index-origin: 1, description: 'the GROUND lamp, green in the photograph', states: ['off', {name: 'on', color: '#3ddc3a'}]}
+  switch: {term: Switch, role: service, index-origin: 1, description: 'the illuminated rocker at the right of the front'}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 440, h: 42.7}
+    silkscreen:
+      - {at: [76.5, 11.0], text: SURGE, font-size: 2.0, anchor: middle, fill: '#d0d0d0', for: surge-led}
+      - {at: [97.8, 11.0], text: GROUND, font-size: 2.0, anchor: middle, fill: '#d0d0d0', for: ground-led}
+      - {at: [379.8, 9.0], text: StarTech.com, font-size: 3.6, anchor: middle, fill: '#e8e8e8', for: chassis}
+      - {at: [379.8, 36.0], text: RKPW081915, font-size: 2.6, anchor: middle, fill: '#e8e8e8', for: chassis}
+    components:
+      placements:
+        - {id: surge-led, ref: common/led-dot@1, at: [75.5, 18.4], group: surge-led, rel-pos: 1, for: chassis}
+        - {id: ground-led, ref: common/led-dot@1, at: [96.8, 18.4], group: ground-led, rel-pos: 1, for: chassis}
+        - {id: power-switch, ref: common/rocker-switch@1, at: [413.7, 12.4], rotate: 90, group: switch, rel-pos: 1, for: chassis, attrs: {rocker-color: '#d0212b'}}
+  rear:
+    size: {w: 440, h: 42.7}
+    components:
+      placements:
+        - {id: input, ref: startech/pdu-cord-5-15p@1, at: [405.0, 15.7], group: power-input, rel-pos: 1, description: 'the fixed 6 ft cord, ending in a NEMA 5-15P plug; its end is estimated'}
+        - {id: outlet-1, ref: std/nema-5-15r@1, at: [17.1, 8.7], rotate: 270, group: outlets, rel-pos: 1, fed-by: input}
+        - {id: outlet-2, ref: std/nema-5-15r@1, at: [55.9, 8.7], rotate: 270, group: outlets, rel-pos: 2, fed-by: input}
+        - {id: outlet-3, ref: std/nema-5-15r@1, at: [94.7, 8.7], rotate: 270, group: outlets, rel-pos: 3, fed-by: input}
+        - {id: outlet-4, ref: std/nema-5-15r@1, at: [133.5, 8.7], rotate: 270, group: outlets, rel-pos: 4, fed-by: input}
+        - {id: outlet-5, ref: std/nema-5-15r@1, at: [172.3, 8.7], rotate: 270, group: outlets, rel-pos: 5, fed-by: input}
+        - {id: outlet-6, ref: std/nema-5-15r@1, at: [211.1, 8.7], rotate: 270, group: outlets, rel-pos: 6, fed-by: input}
+        - {id: outlet-7, ref: std/nema-5-15r@1, at: [249.9, 8.7], rotate: 270, group: outlets, rel-pos: 7, fed-by: input}
+        - {id: outlet-8, ref: std/nema-5-15r@1, at: [288.7, 8.7], rotate: 270, group: outlets, rel-pos: 8, fed-by: input}
+  top:
+    size: {w: 440, h: 95.5}
+    empty: >-
+      no source shows the top straight on. Searched: the data sheet.
+  bottom:
+    size: {w: 440, h: 95.5}
+    empty: >-
+      no source shows the bottom. Searched: the data sheet.
+  left:
+    size: {w: 95.5, h: 42.7}
+    empty: >-
+      no source shows the left end. Searched: the data sheet.
+  right:
+    size: {w: 95.5, h: 42.7}
+    empty: >-
+      no source shows the right end. Searched: the data sheet.
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, with its 6 ft cord drawn only as the strain relief it leaves by.
+    part-numbers:
+      RKPW081915: {}
+datasheet:
+  title: 'RKPW081915 data sheet (Rackmount PDU with 8 Outlets and Surge Protection, 1U)'
+  url: https://media.startech.com/cms/pdfs/rkpw081915_datasheet.pdf
+  sha256: 83065ce0da1fbfce808982eb65d750119ea918c259d865c475920bc0a2746b9f

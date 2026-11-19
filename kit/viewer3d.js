@@ -36,7 +36,8 @@ import { configureRelief, createReliefScope, svgCanvas, canvasTex, rasterize, sv
 import { seatViews, seatBack, refusalReason } from './swap.js';
 import { positionsChanged } from './fields.js';
 import { bevelledArrays } from './bevel.js';
-import { sectionBody, sectionSeat, seatPoint, seatFins, finReach } from './section.js';
+import { sectionBody, sectionSeat, seatPoint, seatPlan, seatFins, finReach, sectionHalves, SEAM_INDEX,
+         PLAN_WALL_INDEX, planWallFace, planWallColor } from './section.js';
 import { projectionRecords } from './path-index.js';
 import { expandStates } from './states.js';
 import { jdist, faceFile, distResolver, readIndex } from './dist.js';
@@ -404,6 +405,7 @@ export function createViewer(container, opts = {}) {
   let box = null, reliefGroup = null, gen = 0;
   let earGroup = null, earPlan = null;   // the generic ears, when they are on
   let housingGroup = null;               // the two halves, when the box is open
+  let planHex = null;                    // the colour of a plan wall, when the body has a plan outline
   let fitState = 'closed';               // which box the camera was last fitted to
   const faceGroups = {};        // view -> the group buildFaceRelief filled
   // view -> [w, h] of the face's DRAWING, which is not always the plane's. The
@@ -655,7 +657,9 @@ export function createViewer(container, opts = {}) {
     // in front of the real ones: it is not painted.
     const reachRibs = COMP ? {top: 0, bottom: 0} : finReach(devIndex && devIndex.chassis);
     const ribsOutside = reachRibs.top > 0 || reachRibs.bottom > 0;
-    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs)};
+    // (with a plan outline a part is seated on the body the plan leaves under it: section.js seatPlan)
+    const seatOnPlan = COMP ? null : seatPlan(devIndex && devIndex.chassis, W, H, D);
+    const seatSection = seatPoly && {seat: (view, p) => seatPoint(seatPoly, view, p, W, H, D, seatRibs, seatOnPlan)};
     for (const F of FACES) {
       const before = meshes.length;
       await buildFaceRelief(F, {src: F.url || f(F.view), faceCv, faceSvg, facePunch,
@@ -864,7 +868,15 @@ export function createViewer(container, opts = {}) {
       geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
       geo.setIndex(a.indices);
       for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
-      box = new THREE.Mesh(geo, mats);
+      // A PLAN OUTLINE (section.js) adds two slots after the six faces: 6, the part's cut face, which
+      // a closed body has none of and which stays unseen as in the open state, and 7, the wall that
+      // comes from a plan edge: plain, in the chassis faceplate's fill, sampling no face texture. A
+      // body with no plan outline has the six materials and nothing else, as it always had.
+      const planned = a.groups.some(g => g.materialIndex === PLAN_WALL_INDEX);
+      planHex = planned ? planWallColor(faceSvg) || '#3a3f44' : null;
+      const wall = planned && new THREE.MeshLambertMaterial({color: planHex});
+      box = new THREE.Mesh(geo, planned
+        ? [...mats, new THREE.MeshBasicMaterial({visible: false}), wall] : mats);
       scene.add(box);
     } else if (devIndex && devIndex.chassis && devIndex.chassis.solid) {
       // A BEVELLED BODY (#735): the polygons render.py published, each face
@@ -1007,11 +1019,24 @@ export function createViewer(container, opts = {}) {
   // plates on its floor (the open drawing's regions are not published, so they
   // are placed by where they are to each other). Closed, or a box with no
   // halves, shows what was always shown. The halves are no pick target.
+  //
+  // A HOUSING WITH A SECTION (section.js sectionHalves) opens as the stepped body cut at the seam:
+  // each half is that part of the body, ribs and all, and the lid turns about the line where the seam
+  // meets the hinge face's outline. The part's cut face is not drawn, as the open face of a box half
+  // is not: the inside of the shell shows through it, and what the lid's inside looks like is the
+  // authored open drawing's. A device with no section, or whose halves the body cannot be cut at,
+  // gets the two boxes it always had.
   const HALF_BAY = {base: '#4b8f6b', lid: '#c07a2c'};
   function applyHousing() {
     if (housingGroup) { scene.remove(housingGroup); disposeTree(housingGroup); housingGroup = null; }
+    // (cut only when it is wanted: a closed box builds none of this)
+    const cut = (!COMP && devIndex && devIndex.chassis && HOUSING === 'open')
+      ? sectionHalves(devIndex.chassis, W, H, D) : null;
+    if (cut && cut.refused) {
+      console.warn(`viewer3d: ${cut.refused}; opening the box without the section`);
+    }
     const plan = (!COMP && devIndex && devIndex.chassis)
-      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}) : null;
+      ? housingPlan(devIndex.chassis.halves, {w: W, h: H, d: D}, cut && cut.split) : null;
     const shown = !(plan && HOUSING === 'open');
     for (const o of [box, box && box.userData.bodyBox, reliefGroup, earGroup]) if (o) o.visible = shown;
     if (!plan || HOUSING !== 'open') {
@@ -1025,9 +1050,32 @@ export function createViewer(container, opts = {}) {
     housingGroup.name = 'housing-open';
     for (const name of ['base', 'lid']) {
       const h = plan[name];
-      const mats = Array.from({length: 6}, shell);
-      mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
-      const half = new THREE.Mesh(new THREE.BoxGeometry(...h.size), mats);
+      let mats, geo;
+      const part = plan.split && plan.split[name];
+      if (part) {
+        // the stepped part, in the box frame: moved so its bounds' centre is the half's origin
+        const a = part.arrays;
+        geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.Float32BufferAttribute(a.positions, 3));
+        geo.setAttribute('normal', new THREE.Float32BufferAttribute(a.normals, 3));
+        geo.setAttribute('uv', new THREE.Float32BufferAttribute(a.uvs, 2));
+        geo.setIndex(a.indices);
+        for (const g of a.groups) geo.addGroup(g.start, g.count, g.materialIndex);
+        geo.translate(-part.center[0], -part.center[1], -part.center[2]);
+        mats = Array.from({length: SEAM_INDEX + 1}, shell);
+        mats[SEAM_INDEX] = new THREE.MeshBasicMaterial({visible: false});           // the cut face
+        // A PLAN OUTLINE: the half's walls and its rim cap are slot 7, plain, in the colour of the closed
+        // body's plan walls. The cap is drawn, so each half shows its rim as the plan outline; slot 6,
+        // the section of a rib the seam cuts, is still not. Without the key the cap is slot 6 only.
+        if (a.groups.some(g => g.materialIndex === PLAN_WALL_INDEX)) {
+          mats[PLAN_WALL_INDEX] = new THREE.MeshLambertMaterial({color: planHex || '#3a3f44', side: THREE.DoubleSide});
+        }
+      } else {
+        mats = Array.from({length: 6}, shell);
+        mats[faceIndexOf(h.seam)] = new THREE.MeshBasicMaterial({visible: false});   // the open face
+        geo = new THREE.BoxGeometry(...h.size);
+      }
+      const half = new THREE.Mesh(geo, mats);
       half.name = `half-${name}`;
       half.position.set(...h.center);
       if (name === 'lid') half.quaternion.set(...h.quaternion);
@@ -1141,6 +1189,10 @@ export function createViewer(container, opts = {}) {
     const hit = ray.intersectObjects(targets)[0];
     if (!hit) return null;
     if (COMP) return {view: hit.face.materialIndex === 4 ? 'comp' : SIDE_NAMES[hit.face.materialIndex], path: null};
+    // A PLAN WALL HAS NO DRAWING (section.js PLAN_WALL_INDEX): its UV is not a point of any face's
+    // texture, so it picks as the long face whose side it is on and as no part. Without this
+    // FACE_OF_INDEX has no entry for slot 7 and a hit on a rounded corner answered no face at all.
+    if (hit.face.materialIndex === PLAN_WALL_INDEX) return {view: planWallFace(hit.face.normal), path: null};
     const view = FACE_OF_INDEX[hit.face.materialIndex];
     if (!view || !hitIndex[view] || !hitIndex[view].length) return {view, path: null};
     // uv runs 0..1 across the mesh that was hit, and for a rack face that

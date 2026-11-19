@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: st-receptacle
+version: 1.0.0
+class: port
+profile: networking
+interface: st
+description: >-
+  An ST (BFOC) bayonet fibre receptacle on a card faceplate, seen face on: a round metal barrel
+  with a central bore, as the Oscilloquartz IRIG-B card carries it for its optical output. One fibre.
+  An ST fibre plug seats at its mate point.
+size: {w: 7.4, h: 7.4}
+size-confidence: {w: estimated, h: estimated}
+attrs: {media: st}
+provenance:
+  model: >-
+    datasheet - Adtran OSA 5422 data sheet, p6, IRIG/TIMECODE line card: "1x IRIG optical output",
+    "ST connector - fiber 62/125um", "wavelength 820nm multimode". The p8 line card picture
+    shows the same card with a round barrel under the "Optical OUT" legend. The data sheet
+    gives no dimension, standard or part number for the receptacle.
+  size: >-
+    estimated - THE DATA SHEET PRINTS NO DIMENSION. It is drawn as the card's own art measured the
+    barrel, 7.4 across (oscilloquartz/irig-b@1 provenance elements, a 375 px render at 3.25 px/mm).
+  interface: >-
+    datasheet - the `st` key of spec/schemas/connectors.yaml. The mate point is the centre of the
+    bore, facing out.
+  colour: >-
+    estimated - the barrel #9ea3a8, the ring #7c8187 and the bore #1b1d20 are the card skin's own,
+    read off the same render.
+elements: {}
+connection-points:
+  mate: {at: [3.7, 3.7], direction: front}
+skins: [default]

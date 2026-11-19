@@ -33,21 +33,29 @@ POWER_LABEL = {
     "edgecore/agr560-dc-header": "DC power connector (2-socket)",
     "edgecore/ais800-64-dc-header": "DC power connector (6-socket)",
     "smartoptics/dcp-2-dc-header": "DC power connector (3-cell)",
+    "opengear/acm7000-dc-header": "DC power input (4-position, 9 to 30 V)",
     "cisco/nc5k-pdc-930w-dc-header": "DC power connector block (3-position, - DC + DC earth)",
     "ufispace/psu-242-dc-header": "DC input connector (6-position, two rows of three, V+ over V-)",
     "rittal/pdu-cord-cee-16a": "CEE (IEC 60309) 16 A plug, 3P+N+PE",
+    "rittal/pdu-cord-cee-16a-1p": "CEE (IEC 60309) 16 A plug, 1P (L, N, PE)",
     "servertech/pro4x-cord-60309": "IEC 60309 3P+N+G 6h plug on a fixed cord",
     "servertech/pro3x-cord-60309": "IEC 60309 3P+G 9h plug on a fixed cord",
     "servertech/pro3x-cord-60309-2pe": "IEC 60309 2P+E 6h plug on a fixed cord",
     "raritan/px3-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "eaton/tripplite-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
+    "eaton/g3-cord-l5-30p": "NEMA L5-30P locking plug on a fixed cord",
     "raritan/px4-universal-input": "Legrand Universal Input connector (keyed)",
     "raritan/px3-rear-cord-60309": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "vertiv/rpdu-cord-l6-30p": "NEMA L6-30P",
+    "vertiv/rpdu-cord-l6-30p-round": "NEMA L6-30P",
+    "vertiv/rpdu-cord-60309-2pe": "IEC 60309 2P+E 32 A plug on a fixed cord",
+    "vertiv/rpdu-cord-60309-3pne": "IEC 60309 3P+N+E 16 A plug on a fixed cord",
     "panduit/g5-cord-60309-2pe-6h": "IEC 60309 2P+E 6h 32 A plug on a fixed cord",
     "panduit/g5-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
     "panduit/g5-cord-l6-30p": "NEMA L6-30P locking plug on a fixed cord",
     "enlogic/pdu-cord-60309-3pe-9h": "IEC 60309 3P+E 9h 60 A plug on a fixed cord",
+    "generic/nema-6-15p-plug": "NEMA 6-15P plug",
+    "generic/nema-6-20p-plug": "NEMA 6-20P plug",
 }
 
 PART_OUTLET = {
@@ -204,6 +212,12 @@ NOT_A_DCIM_PORT = {
     "vertiv/acs800-digital-out": "the Avocent ACS800's DIGITAL OUT connector - two relay switches of two "
                                  "pins each on a four-pin pluggable terminal, not a network port or a "
                                  "console. Neither library has a relay output port",
+    "rittal/pdu-digital-input": "the digital input of the Rittal DK 7979 metered controller: a two-position "
+                                "pluggable screw terminal, not a network port or a console. Neither library "
+                                "has a digital input port",
+    "rittal/pdu-alarm-relay": "the alarm relay output of the Rittal DK 7979 metered controller: a three-position "
+                              "pluggable screw terminal, not a network port or a console. Neither library has "
+                              "a relay output port",
     "juniper/ex4100-h-terminal-pad": "one of the twelve wire terminals behind the EX4100-H-24MP and -24F "
                                      "terminal door - L, N and G for an AC supply, DC+, DC- and G for a DC "
                                      "supply, for the supply slot of the same number. One terminal is not a "
@@ -256,6 +270,12 @@ NOT_A_DCIM_PORT = {
     "common/wire-wrap-header-6": "the six-pin wire-wrap BITS timing header of the Nokia NGFC-H and NGFC-G "
                                  "cards - the BITS cables are wrapped to bare pins, and neither DCIM has "
                                  "a port type for such a header",
+    "common/st-receptacle": "the ST receptacle of the optical IRIG output of the Oscilloquartz IRIG-B card - "
+                            "a time-code signal on 62/125 um fibre at 820 nm, not an Ethernet or "
+                            "serial port; neither DCIM has a port type for a time-code output",
+    "common/terminal-header-250-3": "the three-position alarm/pulse relay terminal block of the Oscilloquartz "
+                                    "IRIG-B card - dry contacts for an external alarm loop; neither DCIM has "
+                                    "a port type for an alarm contact",
 
     # --- Virtual Chassis ---------------------------------------------------------
     "juniper/ex4200-vcp-port": "the 68-pin Virtual Chassis port of an EX4200: a proprietary stacking "
@@ -291,9 +311,13 @@ NOT_A_DCIM_PORT = {
     # placements now declare their speed. The entry had to go with it - a register
     # of parts that export nothing is wrong about one that does.
     "opengear/sim-slot-4ff": "the 4FF SIM card slot of the CM8000's cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "opengear/sim-slot-2ff": "the mini SIM card slot of the ACM7000 cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "opengear/acm7000-dio-header": "the digital I/O header of the ACM7004-2-L: sensor inputs and relay outputs, not a network, console or power link. Neither DCIM has a port type for it",
     "zpe/nsc-hdmi": "the HDMI video output of the Nodegrid Serial Console S; a video jack, not a port, and no device-type field holds a video output",
     "vertiv/sd-card-slot": "the full-size SD card slot of the ACS8000; a card slot, not a port, and no device-type field holds a card slot",
     "perle/scg-sd-slot": "the Micro SD card slot of the IOLAN SCG front; a card slot, not a port, and no device-type field holds a card slot",
+    "perle/scg-sim-slot": "the Micro-SIM card slot of the IOLAN SCG L cellular models; a card slot, not a port, and no device-type field holds a SIM slot",
+    "servertech/pro1-dc-output-block": "the four output circuits (eight screw terminals) of one block of a PRO1 -48VDC PDU, placed as one part; a power outlet is one circuit with its own feed, so one row cannot state four, and each circuit would need its own placement and `fed-by`",
 }
 
 # THE MANAGEMENT CLUSTER'S PORTS THAT DO NOT REACH A DCIM, AND WHY (#384).

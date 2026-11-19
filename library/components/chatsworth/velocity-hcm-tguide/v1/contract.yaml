@@ -1,0 +1,57 @@
+format: 1
+kind: component
+name: velocity-hcm-tguide
+version: 1.0.0
+class: mechanical
+behaviour: mounts
+description: >-
+  One plastic T-shaped cable guide (finger) of the Chatsworth Velocity horizontal cable manager, seen end-on from the front - a finger that stands from the back plate toward the cover, with a head that widens under the cover to leave a narrow neck a cable is pressed through into the manager
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#1b1c1e'
+provenance:
+  size: >-
+    estimated - the width is one finger pitch, 90.0: 5 fingers in a row across the 450.0
+    between the ears. The data sheet's page-3 photograph shows the T-shaped guides in groups
+    with about four openings across the width; the count is read by eye and is one more or less
+    than 5. No held page dimensions a finger. The body is 54.0 of the 90.0 (a slot 36.0
+    wide) and the head 78.0, which leaves a 12.0 neck. The height, 15.5, is the finger plate's
+    thickness: the data sheet's note gives the usable height as 1.2 in (31 mm) less than the
+    overall height at the narrowest point, and the 31 is split equally between the two plates.
+  relief: >-
+    estimated - a finger stands from the back plate to the cover: its slot ends 56.0 out, 150
+    less the usable depth of 3.7 in (94 mm) the data sheet's note gives (read as running from
+    the slot ends to the cover's face, which the note does not say), the body to 138.0 and the
+    head from 138.0 to 144.0 under the cover. Nothing dimensions the head.
+  finish: >-
+    estimated - "black plastic" (the data sheet's finish row) and "Color is Black"; the default
+    is the near-black of the other Velocity parts.
+  shading: >-
+    estimated - a stand-in for the light a render would give: the head carries a lit rim and a
+    10% lighter face and the slot beside it is shaded, so that a black finger reads against the
+    black plate. They are semi-transparent white and black over the finish.
+size: {w: 90.0, h: 15.5}
+size-confidence: {w: estimated, h: estimated}
+attrs: {material: Plastic}
+elements:
+  root: {at: [0.0, 0.0], size: [90.0, 15.5], class: bezel}
+  stem: {at: [18.0, 0.0], size: [54.0, 15.5], class: bezel}
+  tip: {at: [6.0, 0.0], size: [78.0, 15.5], class: bezel}
+relief:
+  features:
+    - node: root
+      out: 56.0
+      confidence: estimated
+      source: the slot ends, read from the usable depth of the data sheet's note; the note does not say where the 94 mm starts
+    - node: stem
+      out: 138.0
+      confidence: estimated
+      source: the finger from the plate to where its head widens, read off the data sheet photograph
+    - node: tip
+      lift: 138.0
+      out: 144.0
+      confidence: estimated
+      source: the head the cover snaps onto (data sheet, page 1), read off the same photograph
+skins: [default]

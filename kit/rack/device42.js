@@ -5,10 +5,13 @@
 // for. The hardware models come from the device types
 // (spec/tools/dev/device42_export.py, written where --out says).
 //
-// THE HEADERS ARE STAND-INS: the issue's own field names, not read from the
-// import page, and not confirmed against it. docs/device42-export-design.md
-// lists each one. `hardware` (the model a device is), `building` and `rack` are
-// the least certain.
+// EACH HEADER IS NAMED ON A DEVICE42 PAGE OR IS A STAND-IN. Three pages of
+// Device42's documentation name some parameters (NAMED) and not others
+// (STAND_INS): `building`, `room`, `hardware` (the model a device is), `rack`
+// and the devices sheet's `name` are guesses the pages do not settle. The
+// sample files, which hold each sheet's row 3, are not held, so the spelling of
+// row 3 is seen only for the buildings sheet's `name`.
+// docs/device42-export-design.md quotes the line behind each header.
 import {positionOf, firstU, holderOf} from './model.js';
 import {itemUnits, isZeroUPart} from './fit.js';
 import {uniqueNames, flat, toCsv} from './export-data.js';
@@ -18,7 +21,19 @@ export const COLUMNS = {
   rooms: ['name', 'building'],
   racks: ['name', 'size', 'room'],
   devices: ['name', 'hardware'],
-  'devices-to-racks': ['name', 'rack', 'start_at'],
+  'devices-to-racks': ['device', 'rack', 'start_at'],
+};
+export const NAMED = {
+  buildings: ['name'],
+  rooms: ['name'],
+  racks: ['name', 'size'],
+  'devices-to-racks': ['device', 'start_at'],
+};
+export const STAND_INS = {
+  rooms: ['building'],
+  racks: ['room'],
+  devices: ['name', 'hardware'],
+  'devices-to-racks': ['rack'],
 };
 // A file's name carries its place in the import sequence; 4 is the hardware
 // models, written from the library and not from a rack.
@@ -35,8 +50,8 @@ export const FILES = {
 //
 // A DEVICE IS NAMED AS THE NETBOX AND NAUTOBOT FILES NAME IT (uniqueNames), so
 // the three kits agree. `start_at` is the device's lowest U as the rack labels
-// it, a half unit as it is; `auto` is not used, since it is not confirmed for
-// the stand-in sheets. A device that has no model is not a device row. A device
+// it, a half unit as it is; `auto` is not used, since a placement is a fact the
+// rack file has. A device that has no model is not a device row. A device
 // with no U position on the rails (a part beside the rack, a manager on the rail
 // face, an item a shelf or rail holds) is a device row with no placement, and
 // `skipped` names it and says why.
@@ -59,7 +74,7 @@ export function device42Sheets({rack, items: given, types, chassisOf = null}) {
       skipped.push({id: it.id, name, reason: `${name} has no U position on the rails (${beside ? 'a 0U part' : 'held by another device'}), so it is a device with no placement.`});
       continue;
     }
-    placed.push({name, rack: rackName, start_at: positionOf({...rack.frame, startU: 1}, it.ru, it.u)});
+    placed.push({device: name, rack: rackName, start_at: positionOf({...rack.frame, startU: 1}, it.ru, it.u)});
   }
   if (firstU(rack.frame) !== 1)
     notes.push(`The rack numbers its units from ${firstU(rack.frame)}; start_at counts from 1.`);

@@ -1,0 +1,36 @@
+format: 1
+kind: component
+name: velocity-hcm-base-2u
+version: 1.0.0
+class: mechanical
+description: >-
+  The back plate of the 2U Chatsworth Velocity horizontal cable manager (13930-702) seen from the
+  front, the full 19 in EIA width with its ears - drawn as the well the two rows of fingers stand
+  in, its floor the front face of the plate
+fields:
+  finish:
+    label: Finish
+    type: text
+    default: '#232527'
+provenance:
+  shading: >-
+    estimated - a stand-in for the light a render would give: a 12% white layer over the plate so
+    it reads as a plate against the black fingers in front of it. It is a semi-transparent layer
+    over the finish; no document gives the plate's shade.
+  size: >-
+    datasheet - the Velocity Cable Management product data sheet (page 3, Single-Sided Horizontal
+    Cable Managers table) gives 2U x 19 x 5.9 in (150 mm) for 13930-702. The plate is the whole
+    482.6 with its ears (a rack-face part is its ears and what hangs off them) and 88.9 high, the
+    2U of that table at 1.75 in a unit. The well is 148.0 deep, 2.0 mm short of the 150
+    overall, where the plate stands. The table's note says the overall height is a little under the
+    full unit; the full unit is drawn (the device's `height-under-unit` gap).
+  size-holes: >-
+    estimated - none drawn: the data sheet says two cable openings are in the rear of the manager
+    and gives neither size nor position, so the openings are declared on the device's rear view
+    as a gap and not cut in this plate.
+size: {w: 482.6, h: 88.9, d: 148.0}
+size-confidence: {w: datasheet, h: datasheet, d: estimated}
+relief: {wall: '#232527'}
+elements:
+  floor: {at: [0.0, 0.0], size: [482.6, 88.9], class: bezel}
+skins: [default]

@@ -1,7 +1,7 @@
 format: 1
 kind: component
 name: xm8424-dc-cable-plug
-version: 1.0.0
+version: 1.1.0
 class: port
 mates: telco-dc-block-2
 profile: power
@@ -9,7 +9,7 @@ description: >-
   The cable connector of the Telco Systems XM-8424H's DC supply, wired, seen from the wire side as
   seated. A green block at the outline of the connector it seats in, with one insulated wire
   entering each of its two cells. It seats in a `telco-dc-block-2` connector at its own mate
-  point. It carries one wire per cell, not one cable.
+  point. It carries one wire per cell, all in one cable that ends at its `mate` point.
 size: {w: 20.1, h: 12.1}
 size-confidence: {w: estimated, h: estimated}
 size-notes: >-
@@ -35,9 +35,15 @@ provenance:
     plan outline only and builds no relief.
   behaviour: >-
     DELIBERATELY OMITTED, as on every class port contract.
+  cable-point: >-
+    `cable` is where the cable that carries the wires ends: at the `mate` point, with its direction. The wires
+    leave the plug there and fan out to `wire-1` and the rest. A rule of the library for a plug with
+    several wires, not a reading of a maker document. It states no `on:`, so the viewer reads the
+    depth of the cable end from the face of the part.
 elements: {}
 connection-points:
   mate: {at: [10.35, 7.75], direction: front}
+  cable: {at: [10.35, 7.75], direction: front}
   wire-1: {at: [7.85, 7.75], direction: front}
   wire-2: {at: [12.85, 7.75], direction: front}
 skins: [default]

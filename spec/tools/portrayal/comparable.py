@@ -282,6 +282,17 @@ FACTS = [
         A("nebs-emc-safety", qualifier="emc-safety"),
         A("nebs-physical", qualifier="physical"),
     ]),
+    # THE MARKS A BOX CARRIES, ONE HEADING. `certifications` and `other-approvals`
+    # are lists of safety marks, EMC marks and country approvals as the maker
+    # prints them, and one value often runs all three together, so the value is
+    # kept whole and never split. The note says so, where a reader of the
+    # comparison sees it. Neighbouring spellings (`certification`,
+    # `product-compliance`, `psu-approvals`, `regulatory`, `compliance-programme`)
+    # are other claims and are not sources.
+    Fact("approvals", "compliance", None, TEXT, [
+        A("certifications"), A("other-approvals"),
+    ], note="the marks the maker lists: safety, EMC and country approvals mixed "
+            "in one string, not split; not the same as safety, emc or nebs"),
     Fact("environmental-directives", "compliance", None, TEXT, [
         A("environment"), A("rohs"),
     ], note="RoHS, WEEE and the like - not the operating environment, which is "

@@ -124,6 +124,15 @@ and no index names it. Mark it, once, from an interactive login:
 npm deprecate @portrayal/components "split by namespace: see @portrayal/components-<namespace>"
 ```
 
+A device that is removed or renamed leaves its package on npm, and a release
+never marks it, because it publishes what the build makes and does not look for
+what the build stopped making. `spec/tools/dev/npm_deprecate_lines.py --held
+FILE` prints one `npm deprecate` line for each name in FILE that the build no
+longer ships, and runs nothing. FILE is the package names npm holds under the
+scope, one to a line, which you make from your own login; the tool asks npm
+nothing. It leaves out `@portrayal/kit` and `@portrayal/components`. Read the
+lines, then run them from an interactive login.
+
 `@portrayal/kit` is not part of this. It is published by hand from `kit/`.
 
 **Do not bump the kit version in a pull request; add a changelog fragment. The

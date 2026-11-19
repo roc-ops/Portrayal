@@ -5,7 +5,8 @@ Status: implemented, 2026-10-06. Issue #789, all three parts. Builds on
 a SLOT that offers every part whose `mates:` names it) and follows
 [connectors-usb-design.md](connectors-usb-design.md): a registry entry per interface and a
 generic plug per interface. It differs in one thing. A terminal plug carries one wire per
-pole, not one cable. The DC barrel jack, section 9, follows the USB pattern exactly.
+pole, all in one cable that ends at its `mate` point: the connection point named
+`cable` sits there, and `wire-1` to `wire-N` are where the conductors land. The DC barrel jack, section 9, follows the USB pattern exactly.
 
 ## 1. What existed, and what was missing
 

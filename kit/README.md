@@ -120,6 +120,8 @@ shell, the viewer and the rack view.
 | `viewer3d.js` | 2D→3D: rasterises each face onto a chassis-sized box, adds relief meshes; a host can hold coloured marks on many parts (`setMarks`) and paint a lamp its own colour (`setLampColors`) |
 | `relief.js` | turns `data-depth` / `data-z-*` annotations into geometry |
 | `bevel.js` | a bevelled chassis body from the polygons the build publishes, triangulated and mapped for the 3D view |
+| `plan.js` | the x-sweep that cuts a housing's `chassis.plan-outline` against its section (merge, snap, pieces, loops, the union), the same maths as `portrayal.plan` and held to the same two fixture files; no THREE in it |
+| `plan-body.js` | the faces of the closed body cut band by band (walls by where they come from, facets at every level, ribs cut to their band), welded so the mesh is watertight; called by `section.js`; no THREE in it |
 | `section.js` | the 3D body of a housing that states `chassis.section`: the end profile extruded along the width (cut back to its core where `chassis.fins` says, with the ribs merged into the same buffer, and `finReach`, how far ribs stand outside the box), each facet mapped like the box face it looks toward, and `surfaceUnder` / `seatPoint`, the depth of the casting under a part's centre that `relief.js` seats the part at; no THREE in it, so it runs under node (used by `viewer3d.js` and `relief.js`) |
 | `camera-fit.js` | the 3D opening view fitted to the chassis box: the nearest distance at which all eight corners sit inside the frame for the lens and the frame's aspect (never nearer than the old two spans), with the dolly limit and far plane that follow it; no THREE in it, so it runs under node (used by `viewer3d.js`) |
 | `lamps.js` | animated lamps in 3D: each blinking lamp drawn once per keyframe and swapped by the clock (used by `viewer3d.js`, not exported on its own) |
@@ -310,7 +312,7 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/managers.js` | cable managers: `placement` of a manager onto the device behind it, and moving one |
 | `rack/cable-rules.js` | cables: which two ports may be joined, `withCable`, media and lengths; a cable's own colour (`parseColor`), what decides the colour it is drawn in (`colorFacts`, `cableColorOf`, `colorsKey`), and the plans a drawing reads (`cablePlan`, `cablePlan3d`) |
 | `rack/cable-types.js` | the cable types (`cable-types.json`): `loadCableTypes(dist)` fetches them and returns `typeOf`, `bendOf` and `diameterOf` over them; the same lookups are exported to build over a table already in hand (a fixture, a cached copy): `typeOf(types, id)`, `cableTypeOf(types, cable)`, `radiusMm(type, which)`, `installedRadiusMm(types, id)`, `bendLookup(types)` and `diameterLookup(types)`, each radius in millimetres; `jacketLookup(types)` and the loaded `typeColorOf` give the jacket colour of the type a cable names |
-| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `ownRoute`, `trunkMeasures`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, `bendFindings`, `coverFindings`, and the geometry under them (`throughRings`, `cornersOf`); and the colour a cable is drawn in: `COLORS`, `cableColor`, `colorOf`, `hexColor`, `agreedJacket`, `bundleColor`; and the width it is drawn at: `WIDTH`, `widthOf` |
+| `rack/route.js`, `rack/route-path.js`, `rack/cable-geometry.js` | where a cable runs: `resolveRoute`, `ownRoute`, `trunkMeasures`, `routePath`, `trayOf`, `ringMarks`, `orientMarks`, `reverseMarks`, `routedLength`, `pathLength`, pathway fill, `ringFindings`, `bodyFindings`, `bendFindings`, `coverFindings`, `unreachedFindings`, `approachWarnings`, and the geometry under them (`throughRings`, `cornersOf`); and the colour a cable is drawn in: `COLORS`, `cableColor`, `colorOf`, `hexColor`, `agreedJacket`, `bundleColor`; and the width it is drawn at: `WIDTH`, `widthOf` |
 | `rack/solids.js` | the solid bodies a route may not pass through: `solidsOf(rack, ctx)` places every device's envelope or derived `solids` in rack coordinates; `legCrossings` tests a leg against them; `detour` takes a leg round them (with `room`, far enough out for the bends at each end); `CLEAR`, the clearance a detour keeps; `traysOf(rack, ctx)` places every device's `trays`, the floors a cable lies on; a ring's solid parts (`ring/<id>/<part>`) are met by the cable's tube |
 | `rack/bundles.js`, `rack/bundle-route.js` | cable bundles: the size and bend checks (`bundleCheck`, `bundleChecks`, `pathwaysOn`, `bendCheck`, `cornersOf`), strap positions (`straps`), the trunk worked out from the members' routes (`deriveTrunk`) and a member's route along it (`followTrunk`) |
 | `rack/displays.js` | the displays of a placed device and what they show: `displaysOf`, `displayRefusal`, `displaysFor`, `displayNotices`, `displayList` |
@@ -321,7 +323,7 @@ compared, and a difference throws ("New in 0.25.0" below).
 | `rack/history.js` | undo and redo as snapshots |
 | `rack/editor.js` | `createRackEditor`: a rack document you edit by commands, with undo, redo and change events |
 | `rack/queries.js` | reading a rack: `fitsAt`, `freeUs`, `catalog`, `describe`, `inspect`, `selectCables`, `freePorts`, `suggestMedia`, `looseEnds` |
-| `rack/ports.js` | the ports of what a device's bays hold, read without a drawing: `seatedPort` (does a cable end name one, on which panel, and what holds it), `fibrePorts` (the front or rear ports of its module type that a fibre adapter is, from `optical.ports` in `components.json`), and `settleEnd` and `settleEnds`, which lay that over the facts a page read off its drawings; `seatedJacket`, `jacketAt` and `jacketsFor`, the jacket colour the part seated at a cable end states |
+| `rack/ports.js` | the ports of what a device's bays hold, read without a drawing: `seatedPort` (does a cable end name one, on which panel, and what holds it), `twinEnd` (the other end of the same adapter, for the back of a part), `fibrePorts` (the front or rear ports of its module type that a fibre adapter is, from `optical.ports` in `components.json`), and `settleEnd` and `settleEnds`, which lay that over the facts a page read off its drawings; `seatedJacket`, `jacketAt` and `jacketsFor`, the jacket colour the part seated at a cable end states |
 | `rack/resting.js` | internal, not exported: how a cable rests, for `route.js` (`DRAPE`, the free span's hang and landing, laid only where it leaves every corner its bend radius, the held face) |
 | `rack/slots.js` | internal, not exported: what a placed device holds, read without a drawing, for `commands.js` and `queries.js` |
 
@@ -889,6 +891,22 @@ are under it the reason names the port path to give instead of the first free sc
 states no DC port is read exactly as before**, and the DC ports of a part beside the rack
 (`zeroUEnds`) are not read yet. A port path is not an element of a drawing: `cableEndPaths` gives
 a page the pole slots it always did and no port path.
+
+**Next release: the far end of an adapter of a rear-mounted panel** (`docs/cable-lay-design.md`,
+section 1.8). A holder in a drawer has an end on its face and an end on its back for each adapter,
+and no drawing places the back. It stands where the other end of the same adapter does
+(`twinEnd(item, end, ctx)` in `rack/ports.js`, from the part's fibre map), so `portPoint` gives it a
+point and the cable has a route, a length, a stock size and a spare. The routing context needs
+`slotsOf` and `compByRef` for it, as a part beside the rack does; without them nothing changes.
+- **`unreachedFindings(rack, ctx, nameOf)`** and **`unreachedFindingsOf(rack, cable, ctx, nameOf)`**
+  give one `{ kind: 'end-unreachable', cable, ends: [{ end, item, path, view }], text }` a cable with an
+  end the catalogue accepts as a port on the back of a part and nothing places: "This end cannot be
+  reached: no drawing places port b01 of PNL-1." Not said of a loose end, a placed end or a front end.
+  `inspect` carries it as `route.unreached`, and `describe` counts the cables on its `Findings:` line.
+- **`cable.route`** stores a hand route as it always did and adds a `warning` finding when the leg
+  to such an end comes from behind its panel (`approachWarnings` in `rack/route.js`). It never refuses.
+- **Existing racks change** only where a cable has such an end: its automatic route, which found no
+  path, now has one, and a length is worked out for it; a length already written is never touched.
 
 **Next release: the checks of a DC feed.** A cable whose ends are DC ports or poles is checked end
 to end (`docs/dc-power-design.md`, section 6). All of it is warnings and none refuses a cable, and
@@ -1850,6 +1868,72 @@ unit it spans, not only its bottom one. `describe` lists the parts beside the
 rack and each part's rail, `inspect` reads one (`kind: 'zeroU'`), and the
 export data says where each stands (`zeroUNotes`, `zeroUImportItems` for the
 DCIM device rows, and `rackNotes(rack, { zeroU: false, chassisOf })`).
+
+### Cables that leave the rack
+
+A cable stored outside the rack file, such as a run to a wall outlet or to the
+next rack, is the caller's. The rack file never holds it
+([`docs/rack-entries-design.md`](../docs/rack-entries-design.md) section 3).
+The kit takes it as input, in the shape of a rack-file cable with the far end
+replaced by an exit end:
+
+```js
+{ id: 'run-17', a: { item: 'i1', path: 'rear-1', view: 'rear' }, b: { exit: 'top' },
+  media: 'cat6a', type: 'cat6a-ftp', purpose: 'Riser', label: 'R17', route: [] }
+```
+
+- The near end is a rack end `{ item, path, view }`, as the rack file writes it.
+  It has `plug` where the port takes more than one.
+- The far end is `{ exit: id }`, the id of an entry of the rack's product. The
+  entries are `enclosure.entries`, read from `ctx.frameOf(rack.frame.ref)`.
+- `{ exit: 'any' }` takes the nearest `brush`, `cutout` or `open` entry by the
+  length inside the rack. A `knockout` is taken only when named.
+- `route: []` is the automatic route. Waypoints written there pin it. A `length`
+  the caller holds is the whole run's and is not used for the in-rack figure.
+- The input is documented here and has no schema. The rack schema does not
+  describe it.
+
+`routeToExit(rack, cable, ctx)` in `rack/route.js` takes the route context and
+answers `{ inRack, exit, at, waypoints, passes, reason }`, in the rack's units
+(mm):
+
+- `inRack` is the length of the route inside the rack, from the port to the
+  plane of the entry. It is laid like any cable, with the same plug lead and bend
+  rules. It has no end allowance, no stock size and no lead out through the
+  entry, since no source states one. The caller adds the rest of the run.
+- `exit` is the id of the entry taken, so `{ exit: 'any' }` reports which. `at` is
+  where the route ends: the point of the entry's `box` nearest the last waypoint,
+  on its plane. An `open` entry with no box is the envelope's plan.
+- `waypoints` is the route resolved, and `passes` the rings and ducts it goes
+  through. The roof's plane is the top of the numbered rails, since no source
+  says how far a product stands off the floor.
+- `inRack` is `null`, with one sentence in `reason`, when no length can be given.
+  The product may declare no entry. The named id may not be in it. The rack may
+  have no product `ref`, or the port may not be on a device.
+- A catalogue without the product answers `null` too. So do an `any` with no
+  entry it may take, an entry with no box, and a port the drawing does not
+  place. Nothing is estimated.
+- The cable is never added to `rack.cables`, and the kit writes nothing from it.
+  `serialize` of the rack gives the same bytes with and without it.
+
+`ctx.outside` is a list of these cables, on the context a query takes:
+
+- `portFree` (as the `outside` option) and `freePorts` read a port as taken when
+  a cable of `rack.cables` or of `outside` has it.
+- `fill` counts an outside cable once in each ring or duct its in-rack route
+  passes, by its media's diameter. Only the part inside the rack is counted.
+  `capacityOver` does not read `outside` yet.
+- `outside` absent is not `outside: []`. An empty list says nothing is stored
+  elsewhere. Absent says the caller has not looked.
+- When `outside` is absent, `describe` ends with one line: cables stored outside
+  the rack are not passed in, and the ports they use read free. A list, empty or
+  not, leaves the line out.
+
+**A rack opened on its own** shows no cable stored above it. The port reads free,
+the manager's fill leaves the run out, and the bill of materials and the DCIM
+exports leave it out too. That is the cost of a rack file that never holds
+a cable stored elsewhere, and the kit does not guess at it. The description says
+so once, as above.
 
 ### Bundles
 

@@ -1,0 +1,294 @@
+format: 1
+kind: device
+name: cm8116-10g
+version: 0.1.0
+maturity: modelled
+manufacturer: Opengear
+model: CM8116-10G
+description: >-
+  Opengear CM8116-10G Console Manager, a 1RU rack appliance with 16 RJ45 RS-232 serial ports on the front. Two 10G
+  SFP+ cages and two 1G RJ45 ports carry the network. A console RJ45 port and two USB 3.0 ports are on the front. Two
+  IEC C14 inlets on the rear feed dual AC power.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Opengear CM8100-10G High Density Console Manager datasheet (October 22, 2026): console specifications,
+      interfaces, power requirements, physical dimensions and model table. Opengear CM8100 Quick Start Guide v1
+      (October 2026), p.5, "CM8100-10G Model": the front and rear of the 10G appliance, and p.6, the network interface
+      names. The CM8116-10G-USB front photograph published with the family. No dimensioned drawing is held.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, p.2, Dimensions and Weight: "CM8148-10G, CM8132-10G, and CM8116-10G" are 17.3 x 10.5 x 1.75 in, 8 lbs,
+      440 x 265 x 44 mm, 3.5 kg; Form Factor 1 RU. The rack kit 590037 ships in the box but no source dimensions it,
+      so the body is drawn alone.
+  front-layout:
+    confidence: estimated
+    note: >-
+      Method: no photograph of the CM8116-10G is held. The face is read from the CM8116-10G-USB front photograph
+      (2560 x 1440, no scale marker, a slight downward view that shows a strip of the top), which has the same front,
+      and from the Quick Start Guide p.5 figure of the 10G appliance. It is measured against the data sheet envelope.
+      The face is 1964 px wide for 440 mm, 4.46 px/mm across; it is 189 px high for 44 mm, 4.30 px/mm down, so the face
+      is foreshortened about 4 percent in height and the positions down the face are the less sure. The positions
+      across are good to about 1 mm and the ones down to about 1.5 mm. The serial pitch (14.3 mm, 64 px) is read on
+      that face only.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      Method: no rear photograph of the CM8116-10G is held. The Quick Start Guide p.5 10G rear figure shows the logo,
+      the CM8100 mark, the "PSU 1 & 2" label and two inlets at the right, and no bank of ports. The positions are
+      borrowed from the CM8116-10G-USB rear photograph (1961 px wide for 440 mm, 4.46 px/mm; 191 px high for 44 mm,
+      4.34 px/mm), good to about 1 mm across and 1.5 mm down, with its USB-C bank left out. The inlet openings in the
+      photograph are smaller than the library's C14 part; the part is drawn as it is.
+  serial:
+    confidence: datasheet
+    note: >-
+      Data sheet: CM8116-10G has 16 RJ45 RS-232 serial ports with a software selectable "Straight or Rollover"
+      pinout, 50 to 230,400 bps. The pinout drawing prints, for the device ports, X1 "Cisco Rolled" (1 RTS, 2 DTR,
+      3 TxD, 4 GND, 5 CTS, 6 RxD, 7 DCD, 8 DSR) and X2 "Cisco Straight" (1 CTS, 2 DSR DCD, 3 RxD, 4 GND, 5 not
+      connected, 6 TxD, 7 DTR, 8 RTS), and for the local console X1 with pins 2, 5 and 7 not connected. The
+      CM8116-10G-USB photograph numbers the ports 1, 3 to 15 over 2, 4 to 16.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The serial ports are console server ports. The CM8100-10G family data sheet, p.1, says of the family (not of this model alone): "Secure, remote, access to manage up
+      to 96 serial devices". It also lists "IP alias for serial port console connections" under
+      Console Management. The RJ45 console on the front is the local console (data sheet, p.1, "Console Port").
+  network:
+    confidence: datasheet
+    note: >-
+      Data sheet: "2 x 10G SFP+ Fiber and 2 x 1000 Base-T Ethernet". Quick Start Guide p.6: NET1 and NET2 are the 10G
+      SFP+ cages, NET3 and NET4 the 1000Base-T ports. The photograph prints NET1 SFP+ over NET2 SFP+ on two stacked
+      cages and NET3 over NET4 on two stacked RJ45 jacks, each jack with a green and an amber lamp window.
+  usb:
+    confidence: datasheet
+    note: >-
+      Data sheet: two USB 3.0 ports, 900 mA per port. The photograph labels the two USB-A jacks A and B and prints the
+      SuperSpeed mark under them, beside the CONSOLE RJ45 jack in one housing.
+  lamps:
+    confidence: estimated
+    note: >-
+      The photograph prints four lamp windows with the power, heartbeat, IOIO and network symbols. Quick Start Guide
+      p.9 describes the four lamps and what each shows; no lamp state is written here.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet: dual socket universal IEC C14 inlet, 100-240 V AC 50/60 Hz; every appliance ships with two C14 power
+      cables. The data sheet gives no power consumption for the CM8116-10G (it gives CM8148-10G, CM8196-10G,
+      CM8148-10G-USB and CM8148-10G-C), so none is written. The rear prints the numbers 1 and 2 with a plug symbol
+      under each inlet.
+  livery:
+    confidence: estimated
+    note: >-
+      The red face, the charcoal panel with its diagonal edge and two stripes, the white label tabs, the black serial frame
+      and the wordmark are read off the photographs at the same scale and are painted livery, not parts. The logo mark is a
+      simplified outline.
+  sides:
+    confidence: estimated
+    note: >-
+      The data sheet prints, p.2, "Passive Cooling - can be forward or reverse mounted to best suit airflow". It shows no top,
+      bottom or side, so how those faces look is not stated; the vent slots drawn on the front and rear are read off those photographs.
+attrs:
+  power:
+    power-input: >-
+      two IEC C14 inlets, 100-240 V AC 50/60 Hz; two C14 power cables in the box
+  thermal: {cooling: passive; forward or reverse mounted}
+  environmental: {operating-temp-c: 5 to 50, humidity-pct: 5 to 90 non-condensing}
+  physical: {weight-kg: 3.5}
+  platform:
+    cpu: 1.6 GHz dual-core ARM Cortex-A9
+    memory: 2 GB DDR4
+    storage: 32 GB eMMC
+    tpm: TPM 2.0
+  features:
+    optics-sfp: >-
+      10G SFP+ in the NET1 and NET2 cages; no document held names an optic type or reach
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440.0
+  height: 44.0
+  depth: 265.0
+  ru: 1
+  color: '#3a3a3d'
+  power: ac
+gaps:
+- what: rack-kit
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The data sheet lists Rack Mount Kit 590037, ears and screws, as an accessory. No held document dimensions the ears
+    or says where they sit, and the photographs show the chassis without ears, so no ear or kit is modelled.
+  wanted: The installation guide for rack mount kit 590037.
+- what: rear-positions
+  scope: [rear]
+  reason: needs-photo
+  note: >-
+    No rear photograph of the CM8116-10G is held; the guide's rear figure is a small drawing of the appliance. The
+    inlet and printing positions are borrowed from the CM8116-10G-USB rear.
+  wanted: A straight-on rear photograph of the CM8116-10G.
+- what: power-draw
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The data sheet states no power consumption for the CM8116-10G and none for any one port or lamp, so none is stated.
+  wanted: The power consumption of the CM8116-10G.
+- what: serial-pinout-switch
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The data sheet says the pinout of each serial port is software selectable, straight or rollover. No held document
+    says how the setting is made, so the ports carry no pinout attribute.
+  wanted: The user guide section that sets the port pinout.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: sixteen RJ45 RS-232 serial ports with a software selectable pinout.
+  net-sfp:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: sfp, speed: 10g}
+    description: the two 10G SFP+ cages NET1 and NET2.
+  net-rj45:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the two 1G RJ45 ports NET3 and NET4.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: two USB 3.0 ports, A and B.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 local console port, Cisco rolled X1 pinout.
+  controls:
+    term: Control
+    role: management
+    index-origin: 1
+    description: the ERASE pinhole.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  inlets:
+    term: Inlet
+    role: service
+    index-origin: 1
+    attrs: {input-voltage: 100-240 V AC}
+    description: the two IEC C14 power inlets.
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face, kind: livery, at: [1.1, 1.7], size: [436.4, 35.7], fill: '#b9172b'}
+      - {id: vents, kind: vent-row, at: [4.3, 39.8], size: [421.2, 3.0], pattern: motif, pattern-offset: [4.3, 39.8], pattern-pitch: [5.9, 3.0], pattern-cells: [[[1.9, 0.1], [3.7, 0.1], [3.2, 2.9], [1.4, 2.9]]], vent: 1.0}
+      - {id: livery-dark, kind: livery, at: [335.4, 1.7], size: [103.5, 35.7], fill: '#231f20', pattern: motif, pattern-offset: [335.4, 1.7], pattern-pitch: [103.5, 35.7], pattern-cells: [[[0, 0], [103.5, 0], [103.5, 35.7], [23.2, 35.7]]]}
+      - {id: livery-stripes, kind: livery, at: [321.1, 1.7], size: [28.6, 35.7], fill: '#26181a', pattern: motif, pattern-offset: [321.1, 1.7], pattern-pitch: [28.6, 35.7], pattern-cells: [[[0, 0], [0.6, 0], [23.8, 35.7], [23.2, 35.7]], [[4.8, 0], [5.4, 0], [28.6, 35.7], [28.0, 35.7]]]}
+      - {id: tab-net1, kind: label-tab, at: [381.0, 4.2], size: [15.1, 2.9], fill: '#f2f2f2'}
+      - {id: tab-net2, kind: label-tab, at: [381.0, 34.2], size: [15.1, 2.9], fill: '#f2f2f2'}
+      - {id: tab-net3, kind: label-tab, at: [397.9, 4.2], size: [17.7, 2.9], fill: '#f2f2f2'}
+      - {id: tab-net4, kind: label-tab, at: [397.9, 34.2], size: [17.7, 2.9], fill: '#f2f2f2'}
+      - {id: serial-frame, kind: label-plate, at: [4.8, 6.4], size: [118.6, 30.8], fill: '#1a1a1a'}
+    silkscreen:
+    - {block: serial}
+    - {at: [420.0, 5.0], path: 'M -2.4 -1.8 L 0.1 -2.9 L 2.4 0.8 L 0.1 2.9 Z', filled: true, fill: '#e8e8e8', for: chassis}
+    - {at: [437.2, 6.0], text: opengear, font-size: 2.8, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [437.2, 10.0], text: CM8100, font-size: 2.7, anchor: end, fill: '#f0f0f0', for: chassis}
+    - {at: [388.3, 6.0], text: NET1 SFP+, font-size: 1.5, anchor: middle, fill: '#222222', for: net1-sfp}
+    - {at: [388.3, 36.1], text: NET2 SFP+, font-size: 1.5, anchor: middle, fill: '#222222', for: net2-sfp}
+    - {at: [407.0, 6.0], text: NET3, font-size: 1.5, anchor: middle, fill: '#222222', for: net3-rj45}
+    - {at: [407.0, 36.1], text: NET4, font-size: 1.5, anchor: middle, fill: '#222222', for: net4-rj45}
+    - {at: [358.4, 1.9], text: RJ45, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [370.0, 1.9], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [382.0, 1.9], text: USB, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: usb-a}
+    - {at: [358.4, 21.68], text: A, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: usb-a}
+    - {at: [358.4, 30.48], text: B, font-size: 2.2, anchor: middle, fill: '#f0f0f0', for: usb-b}
+    - {at: [368.2, 36.4], text: SS, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [372.4, 36.0], path: 'M -1.5 0 H 1.5 M -0.4 0 L 0.6 -0.9 M 0.2 0 L 1.2 0.9', stroke-width: 0.25, fill: '#f0f0f0', for: usb-b}
+    - {at: [422.3, 36.4], text: ERASE, font-size: 1.4, anchor: middle, fill: '#f0f0f0', for: erase}
+    - {at: [437.8, 23.9], path: 'M -0.5 -0.4 A 0.6 0.6 0 1 0 0.5 -0.4 M 0 -0.9 L 0 -0.1', stroke-width: 0.2, fill: '#f0f0f0', for: led-power}
+    - {at: [437.8, 26.5], path: 'M -1.1 0.1 L -0.5 0.1 L -0.2 -0.8 L 0.1 0.8 L 0.4 0.1 L 1.1 0.1', stroke-width: 0.2, fill: '#f0f0f0', for: led-heartbeat}
+    - {at: [437.8, 29.5], text: IOIO, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: led-ioio}
+    - {at: [437.8, 31.8], path: 'M 0 -0.9 V -0.2 M -0.9 -0.2 H 0.9 M -0.9 -0.2 V 0.4 M 0 -0.2 V 0.4 M 0.9 -0.2 V 0.4', stroke-width: 0.2, fill: '#f0f0f0', for: led-network}
+    components:
+      placements:
+      - {block: serial}
+      - {ref: std/rj45@2, id: console, at: [362.1, 4.2], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: 'the local console: Cisco rolled X1 pinout'}
+      - {ref: std/usb-a@1, id: usb-a, at: [363.9, 18.75], group: usb, rel-pos: 1, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-b, at: [363.9, 27.55], group: usb, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: std/sfp@1, id: net1-sfp, at: [381.05, 8.0], group: net-sfp, rel-pos: 1}
+      - {ref: std/sfp@1, id: net2-sfp, at: [381.05, 23.6], rotate: 180, group: net-sfp, rel-pos: 2}
+      - {ref: common/rj45-eth@1, id: net3-rj45, at: [399.1, 7.8], rotate: 180, group: net-rj45, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: net4-rj45, at: [399.1, 21.1], group: net-rj45, rel-pos: 2}
+      - {ref: common/reset-button@1, id: erase, at: [420.3, 30.5], group: controls, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-power, at: [431.0, 22.9], group: status-leds, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-heartbeat, at: [431.0, 25.5], group: status-leds, rel-pos: 2, for: chassis}
+      - {ref: common/led-dot@1, id: led-ioio, at: [431.0, 28.1], group: status-leds, rel-pos: 3, for: chassis}
+      - {ref: common/led-dot@1, id: led-network, at: [431.0, 30.6], group: status-leds, rel-pos: 4, for: chassis}
+      blocks:
+      - id: serial
+        ref: std/rj45-ganged@2
+        at: [7.85, 8.55]
+        count: 16
+        rows: 2
+        pitch: 14.3
+        row-pitch: 14.8
+        number-from: 1
+        id-format: serial-{n}
+        rotate: {top: 180}
+        attrs: {media: rj45-serial}
+        numerals: {dx: 6.35, dy-top: -0.45, dy-bottom: 13.15, font-size: 1.5, fill: '#f0f0f0'}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face, kind: livery, at: [1.6, 7.7], size: [381.2, 35.6], fill: '#a80d27'}
+      - {id: vents, kind: vent-row, at: [4.9, 1.2], size: [366.0, 4.0], pattern: motif, pattern-offset: [4.9, 1.2], pattern-pitch: [6.0, 4.0], pattern-cells: [[[1.9, 0.1], [3.7, 0.1], [3.3, 3.9], [1.5, 3.9]]], vent: 1.0}
+      - {id: livery-dark, kind: livery, at: [303.7, 7.5], size: [79.1, 35.6], fill: '#231f20', pattern: motif, pattern-offset: [303.7, 7.5], pattern-pitch: [79.1, 35.6], pattern-cells: [[[0, 0], [79.1, 0], [79.1, 35.6], [27.1, 35.6]]]}
+      - {id: livery-stripes, kind: livery, at: [288.8, 7.5], size: [34.0, 35.6], fill: '#26181a', pattern: motif, pattern-offset: [288.8, 7.5], pattern-pitch: [34.0, 35.6], pattern-cells: [[[0, 0], [0.6, 0], [27.7, 35.6], [27.1, 35.6]], [[6.2, 0], [6.8, 0], [33.8, 35.6], [33.2, 35.6]]]}
+      - {id: inlet-shroud-1, kind: label-tab, at: [388.8, 9.4], size: [24.1, 32.3], rx: 1.0, fill: '#2c2c2e'}
+      - {id: inlet-shroud-2, kind: label-tab, at: [413.4, 9.4], size: [23.2, 32.3], rx: 1.0, fill: '#2c2c2e'}
+    silkscreen:
+    - {at: [325.0, 14.0], path: 'M -6.5 -6.0 L 1.0 -8.5 L 6.5 3.0 L 1.0 8.5 Z', filled: true, fill: '#e8e8e8', for: chassis}
+    - {at: [380.8, 20.4], text: opengear, font-size: 9.0, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [380.3, 29.6], text: CM8100, font-size: 5.6, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [370.5, 35.2], text: '1', font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [378.0, 35.2], text: '2', font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: chassis}
+    components:
+      placements:
+      - {ref: std/c14-inlet@1, id: ac-inlet-1, at: [386.5, 15.7], rotate: -90, group: inlets, rel-pos: 1}
+      - {ref: std/c14-inlet@1, id: ac-inlet-2, at: [410.3, 15.7], rotate: -90, group: inlets, rel-pos: 2}
+  top:
+    size: {w: 440.0, h: 265.0}
+    empty: >-
+      No held source shows the top face. The data sheet states passive cooling; the photographs show the vent slots only
+      along one edge of the front and rear faces.
+  bottom:
+    size: {w: 440.0, h: 265.0}
+    empty: >-
+      No held source shows the bottom face: the data sheet and the held photographs show the front or the rear only.
+  left:
+    size: {w: 265.0, h: 44.0}
+    empty: >-
+      No held source shows the left side: the data sheet and the held photographs show the front or the rear only.
+  right:
+    size: {w: 265.0, h: 44.0}
+    empty: >-
+      No held source shows the right side: the data sheet and the held photographs show the front or the rear only.
+datasheet:
+  title: CM8100-10G High Density Console Manager with Smart Out-of-Band Management
+  sha256: 9667dd58c9d8ded3d75d75dd82563a88f50f30a96ab09cb23b7ebd40e98673f0
+references:
+  - {title: 'Opengear CM8100-10G pinout drawing (X1 Cisco Rolled, X2 Cisco Straight, CM8100 local console)', sha256: ac542835b6864881016a4d34159b564c24c9161df2aa3c18f2c4b6827e549c28}

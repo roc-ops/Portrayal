@@ -1,0 +1,122 @@
+format: 1
+kind: module
+name: mcx75343-ocp3-tsff
+version: 1.0.0
+class: nic
+behaviour: fills
+profile: networking
+description: >-
+  NVIDIA ConnectX-7 MCX75343A single-port 400Gb/s OSFP adapter, OCP NIC 3.0 tall small form factor, PCIe Gen5 x16, on its thumbscrew (pull tab) bracket
+size: {w: 82.5, h: 17.8, d: 115.0}
+size-confidence: {w: drawing, h: drawing, d: datasheet}
+unplaced: >-
+  no bay in the library takes this card. It is a tall small form factor card
+  (OCP NIC 3.0 Design Specification 1.6.0, Table 5, 14.20 high) and the only held
+  OCP bay, the Dell R660's, is a small form factor slot (Dell technical guide,
+  Table 11), which does not take it. A server whose documents give a TSFF slot,
+  or a bay that states `interface: ocp3-tsff`, would seat it.
+attrs:
+  model: MCX75343A
+  part-numbers: 900-9X7AX-004NMC0 (MCX75343AMC-NEAC), 900-9X7AX-003NMC0 (MCX75343AMS-NEAC)
+  ports: 1
+  media: osfp
+  form-factor: ocp3-tsff
+  osfp: 1
+  role: nic
+  pcie-generation: 5
+  power-draw-typical-w: 25.9
+  power-input: OCP slot
+groups:
+  osfp:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: osfp, speed: 400g}
+  port-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+provenance:
+  sources: >-
+    NVIDIA ConnectX-7 Cards for OCP Spec 3.0 User Manual: the ordering table
+    (section 1.1, page 5: single-port OSFP, "Tall Small Form Factor (TSFF)", PCIe
+    5.0 x16, "Thumbscrew (Pull Tab) TSFF Bracket"), the specifications for
+    MCX75343AMC-NEAC and MCX75343AMS-NEAC (section 9.1, page 79), the board
+    drawing (section 9.3.1, page 83, figure 0022) and the bracket drawing
+    (section 9.3.2, page 84, figure 0023), and the LED section (3.2.4, page 20).
+    The outline from OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25. No
+    photograph of the card is held; the face is read off the manual's figures.
+  one-board: >-
+    the manual's specifications table lists the two part numbers under one
+    heading and one drawing; they differ in crypto only (MCX75343AMC-NEAC crypto
+    enabled, MCX75343AMS-NEAC disabled), so they are one module, as the PCIe cards
+    of this vendor are.
+  size: >-
+    drawing - the face is the manual's thumbscrew bracket, 82.50 x 17.80 (bracket
+    drawing, both printed): a 71.80 plate and a thumbscrew tab on its right. `d`
+    is the specifications table's 115.00 board depth; the board is 76.00 across
+    (board drawing). The specifications table's "Adapter Card Height : 0.7 in.
+    (17.8mm)" is the bracket's.
+  thickness: >-
+    OCP NIC 3.0 Design Specification 1.6.0, Table 5, page 25: TSFF Z-height 14.20
+    (the SFF is 11.50), board 76.00 x 115.00. The component schema has no key for
+    the Z-height, so it is stated here; ocp3-tsff is the standards registry entry.
+    A TSFF card does not seat in an SFF slot, so no Dell R660 bay lists it.
+  face: >-
+    drawing - vent grid, window and lamp holes measured off the bracket drawing
+    on its printed 82.50 width (the measuring script is a staged input): six
+    columns of three rows at 5.0 pitch across and 4.7 down (the third row stops at
+    four columns, for the lamps), a column of three vents at the far end, and the
+    OSFP window 23.97 x 10.88 at x 39.12. Good to about half a millimetre: the
+    figure is a raster. The figure also draws a row of small teeth along each long
+    edge of the bracket; they are not drawn.
+  tab: >-
+    drawing - the thumbscrew tab is drawn beside the plate, from x 71.80 to the
+    printed 82.50, with a round knurled knob about 9.5 across centred at x 77.7.
+    Its housing outline is an estimate; the figure draws a curved web between the
+    plate and the knob.
+  port: >-
+    estimated - std/osfp@1 is a 23.1 x 13.5 aperture, placed on the centre of the drawn
+    window; the window itself reads 10.88 tall against it. The registry figure is
+    a vendor reading of another face and no document held gives the OSFP cage
+    opening.
+  lamps: >-
+    drawing - two round holes legended LINK and ACT, about 1.0 across, carried as
+    common/led-dot@1 (2.0). The figure on page 20 names the left hole LED0 and the
+    right LED1, and the text calls LED0 the bi-colour yellow/green lamp (green solid
+    at full speed, yellow solid below it, green blinking on activity, yellow 1 Hz
+    beacon, 4 Hz yellow blinking on an error) and the single green lamp "LED2"
+    (on at link up and on error, blinking on activity, off for beacon). The text's
+    LED2 and the figure's LED1 are taken as one lamp.
+  colour: >-
+    estimated - the manual's bracket figures are grey CAD renderings with a black
+    latch block at the left end; the card behind is not shown from its face. No
+    photograph is held, so the grey is a reading of a rendering, not a measured
+    colour.
+  power: >-
+    datasheet - the specifications table (page 79) gives "Typical power with
+    passive cables in PCIe Gen 5.0 x16" as 25.9 W (MCX75343AMC-NEAC) and 24.4 W
+    (MCX75343AMS-NEAC); the larger is carried. The manual gives no card maximum
+    (its only maximum is 17 W available through the port, "Not thermally
+    supported", and it refers to a separate electrical and thermal specification
+    that is not held), so power-draw-max-w is left out rather than estimated.
+body:
+  depth: 115.0
+  color: '#2a2d31'
+parts:
+  - ref: std/osfp@1
+    id: port-1
+    at: [39.55, 1.34]
+    group: osfp
+    attrs: {media: osfp, speed: 400g}
+  - ref: common/led-dot@1
+    id: led-port-1-1
+    at: [30.5, 12.8]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: link-up-reduced-speed, color: '#eab308'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: beacon, color: '#eab308', behavior: blinking}, {name: error, color: '#eab308', behavior: blinking}]}
+  - ref: common/led-dot@1
+    id: led-port-1-2
+    at: [34.4, 12.8]
+    group: port-leds
+    states: {lamp: ['off', {name: link-up, color: '#22c55e'}, {name: activity, color: '#22c55e', behavior: blinking}, {name: error, color: '#22c55e'}]}
+skins: [default]

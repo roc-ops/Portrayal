@@ -10,7 +10,10 @@
 // left-front, one from U20 and one from U22, both to U30, share the nodes and
 // segments from U22 to U30. Cutting at every U is the same as cutting at every
 // U where some member's run starts or stops: an interval is shared exactly
-// when each of its unit segments is shared by the same cables.
+// when each of its unit segments is shared by the same cables. A run that
+// starts or ends at a half unit is also cut there, and a half unit is shared
+// only with a run that ends at the same half unit: 15 to 16.5 and 15 to 17
+// share up to U16 and then part.
 
 import {isWaypoint, uLabel} from './model.js';
 
@@ -24,10 +27,27 @@ export const bundleDiameter = ds => Math.sqrt(ds.reduce((a, d) => a + d * d, 0) 
 const key = w => (w.lane ? `n|${w.lane}|${w.ru}` : `p|${w.item}|${w.via}`);
 export const waypointKey = w => (isWaypoint(w) ? key(w) : null);
 
+// A run is cut at its two ends and at every whole U between them, so a run
+// that starts or ends at a half unit (a half-unit panel's port) has a partial
+// first or last step. A step steps by whole units and ends at the run's end,
+// never compared with it for equality. An end that is not a number of a
+// sensible size is no run: it is a node of its own and nothing steps to it.
+const steppable = u => Number.isFinite(u) && Math.abs(u) <= 1e6;
+function cutsOf(from, to) {
+  const cuts = [from];
+  if (to > from) for (let u = Math.floor(from) + 1; u < to; u++) cuts.push(u);
+  else for (let u = Math.ceil(from) - 1; u > to; u--) cuts.push(u);
+  cuts.push(to);
+  return cuts;
+}
+
 // The elements of a list of waypoints, in order, each {key, kind, ...}: kind
 // 'p' (a pathway: item, via), 'n' (a lane node: lane, u) or 's' (a lane
-// segment between u and u + 1: lane, u). Consecutive lane waypoints on one
-// lane are a run; a lane waypoint after anything else is a node of its own.
+// segment between u and u + 1: lane, u; one that runs to or from a half unit
+// is shorter and also says where it ends: lane, u, hi, and its key says so
+// too, so it is never the whole segment that shares its lower end).
+// Consecutive lane waypoints on one lane are a run; a lane waypoint after
+// anything else is a node of its own.
 // Each element also says where it is on the list: `seg`, the waypoint it is at
 // or the one its run starts from, and `t`, how far along to the next (0 to 1).
 export function elementsOf(waypoints) {
@@ -36,13 +56,16 @@ export function elementsOf(waypoints) {
   waypoints.forEach((w, k) => {
     if (!w.lane) { push({key: key(w), kind: 'p', item: w.item, via: w.via, seg: k, t: 0}); return; }
     const prev = out.at(-1);
-    if (k > 0 && prev?.kind === 'n' && prev.lane === w.lane && prev.u !== w.ru) {
-      const from = prev.u, step = w.ru > from ? 1 : -1, span = Math.abs(w.ru - from);
-      for (let u = from; u !== w.ru; u += step) {
-        const lo = Math.min(u, u + step), done = Math.abs(u + step - from);
-        push({key: `s|${w.lane}|${lo}`, kind: 's', lane: w.lane, u: lo, seg: k - 1, t: (done - 0.5) / span});
-        if (u + step === w.ru) push({key: key(w), kind: 'n', lane: w.lane, u: w.ru, seg: k, t: 0});
-        else push({key: `n|${w.lane}|${u + step}`, kind: 'n', lane: w.lane, u: u + step, seg: k - 1, t: done / span});
+    if (k > 0 && prev?.kind === 'n' && prev.lane === w.lane && prev.u !== w.ru && steppable(prev.u) && steppable(w.ru)) {
+      const from = prev.u, span = Math.abs(w.ru - from);
+      const cuts = cutsOf(from, w.ru);
+      for (let i = 1; i < cuts.length; i++) {
+        const a = cuts[i - 1], b = cuts[i], lo = Math.min(a, b), hi = Math.max(a, b);
+        const whole = Number.isInteger(lo) && hi === lo + 1;
+        push({key: whole ? `s|${w.lane}|${lo}` : `s|${w.lane}|${lo}|${hi}`, kind: 's', lane: w.lane, u: lo, ...(whole ? {} : {hi}),
+          seg: k - 1, t: (Math.abs(a - from) + Math.abs(b - from)) / 2 / span});
+        if (i === cuts.length - 1) push({key: key(w), kind: 'n', lane: w.lane, u: w.ru, seg: k, t: 0});
+        else push({key: `n|${w.lane}|${b}`, kind: 'n', lane: w.lane, u: b, seg: k - 1, t: Math.abs(b - from) / span});
       }
     } else push({key: key(w), kind: 'n', lane: w.lane, u: w.ru, seg: k, t: 0});
   });
@@ -67,7 +90,7 @@ export function elementText(e, nameOf = id => id, frame = null) {
   const u = n => (frame ? uLabel(frame, n) : n);
   if (e.kind === 'p') return `${nameOf(e.item)} ${viaText(e.via)}`;
   if (e.kind === 'n') return `${e.lane} U${u(e.u)}`;
-  return `${e.lane} U${u(e.u)}-U${u(e.u + 1)}`;
+  return `${e.lane} U${u(e.u)}-U${u(e.hi ?? e.u + 1)}`;
 }
 // "c1", "c1 and c2", "c1, c2 and c3".
 export const andList = xs => (xs.length < 2 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}`);

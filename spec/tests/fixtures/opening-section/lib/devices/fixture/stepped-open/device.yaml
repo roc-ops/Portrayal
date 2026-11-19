@@ -1,0 +1,126 @@
+format: 1
+kind: device
+name: stepped-open
+version: 1.0.0
+maturity: draft
+manufacturer: Fixture
+model: STEPPED-OPEN
+description: >-
+  Test fixture: the finned stepped box (600 long, 288 high and 281 deep) that opens in two halves at
+  its flange. The base is the upper casting, the lid the lower one, hinged on the rear.
+profile: passive
+provenance:
+  method:
+    confidence: estimated
+    note: >-
+      a test fixture for a stepped housing that opens; every number is chosen for the tests.
+  chassis.section:
+    confidence: estimated
+    note: >-
+      a test fixture: twelve points, an upper casting from 14 to 250, a flange across the whole
+      depth and a lower casting from 28 to 253.
+  chassis.fins:
+    confidence: estimated
+    note: >-
+      a test fixture: 41 ribs on the top, 29 tall, and 41 on the bottom, 48 tall in the end thirds
+      and 32 tall in the middle one.
+  halves.base.stands:
+    confidence: estimated
+    note: >-
+      a test fixture: the seam is 144 down from the top, inside the flange (132 to 155).
+  halves.lid.stands:
+    confidence: estimated
+    note: >-
+      a test fixture: the lid stands 144 from the seam to its outer face, so the two sum to the 288 height.
+  halves.lid.angle:
+    confidence: estimated
+    note: >-
+      a test fixture: the lid opens to 180 degrees, laid flat.
+chassis:
+  width: 600.0
+  height: 288.0
+  depth: 281.0
+  mount: strand
+  color: "#4a5058"
+  section:
+  - [14.0, 0.0]
+  - [250.0, 0.0]
+  - [250.0, 132.0]
+  - [281.0, 132.0]
+  - [281.0, 155.0]
+  - [253.0, 155.0]
+  - [253.0, 288.0]
+  - [28.0, 288.0]
+  - [28.0, 155.0]
+  - [0.0, 155.0]
+  - [0.0, 132.0]
+  - [14.0, 132.0]
+  fins:
+  - 'on': top
+    span: [20.0, 587.0]
+    core: 29.0
+    rib: 7.0
+    gap: 7.0
+  - 'on': bottom
+    span: [20.0, 587.0]
+    core: 48.0
+    rib: 7.0
+    gap: 7.0
+    steps:
+    - {span: [20.0, 190.0], height: 48.0}
+    - {span: [190.0, 420.0], height: 32.0}
+    - {span: [420.0, 587.0], height: 48.0}
+  halves:
+    base: {outer: top, stands: 144.0}
+    lid: {hinge: rear, angle: 180.0, stands: 144.0}
+views:
+  front:
+    size: {w: 600.0, h: 288.0}
+    panel:
+      decor:
+      - {id: front-art, at: [0.0, 29.0], size: [600.0, 211.0], fill: "#7d858c"}
+  rear:
+    size: {w: 600.0, h: 288.0}
+    panel:
+      decor:
+      - {id: rear-art, at: [0.0, 29.0], size: [600.0, 211.0], fill: "#6f777e"}
+  right:
+    size: {w: 281.0, h: 288.0}
+    panel:
+      decor:
+      - {id: right-upper, at: [14.0, 0.0], size: [236.0, 132.0], fill: "#8a9299"}
+      - {id: right-flange, at: [0.0, 132.0], size: [281.0, 23.0], fill: "#9aa2a9"}
+      - {id: right-lower, at: [28.0, 155.0], size: [225.0, 133.0], fill: "#7a8289"}
+  left:
+    size: {w: 281.0, h: 288.0}
+    panel:
+      decor:
+      - {id: left-upper, at: [31.0, 0.0], size: [236.0, 132.0], fill: "#8a9299"}
+      - {id: left-flange, at: [0.0, 132.0], size: [281.0, 23.0], fill: "#9aa2a9"}
+      - {id: left-lower, at: [28.0, 155.0], size: [225.0, 133.0], fill: "#7a8289"}
+  top:
+    size: {w: 600.0, h: 281.0}
+    panel:
+      decor:
+      - {id: top-art, at: [0.0, 0.0], size: [600.0, 281.0], fill: "#939ba2"}
+  bottom:
+    size: {w: 600.0, h: 281.0}
+    panel:
+      decor:
+      - {id: bottom-art, at: [0.0, 0.0], size: [600.0, 281.0], fill: "#6a7279"}
+  lid-open:
+    size: {w: 600.0, h: 600.0}
+    components:
+      bays:
+      - {id: lid-bay, at: [40.0, 40.0], size: {w: 200.0, h: 150.0}, accepts: [fixture/clam-card@1]}
+      - {id: base-bay-a, at: [40.0, 340.0], size: {w: 200.0, h: 150.0}, accepts: [fixture/clam-card@1]}
+      - {id: base-bay-b, at: [340.0, 340.0], size: {w: 200.0, h: 150.0}, accepts: [fixture/clam-card@1]}
+    regions:
+    - {id: lid-half, half: lid, at: [0.0, 0.0], size: {w: 600.0, h: 290.0}}
+    - {id: base-half, half: base, at: [0.0, 310.0], size: {w: 600.0, h: 290.0}}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The box as drawn.

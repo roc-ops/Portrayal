@@ -10,10 +10,14 @@ description: >-
   module openings labelled M0 to M3, holding four 4400 W DC power modules. Like the AC
   tray it is the unit IOS XR inventories, as 0/PT0.
 unplaced: >-
-  no chassis in this library seats this part because no chassis has a tray-level power bay:
-  every modelled power bay takes a power module, not the tray or V3 PEM it sits in. The
-  asr-9922 gap power-shelves-are-not-modelled-between-the-chassis-and-the-supplies names the
-  missing level. Tracked in roc-ops/Portrayal#262.
+  no chassis in this library seats this version 3 DC tray because no chassis has a tray-level
+  power bay: every modelled power bay takes a power module and none takes the tray that holds
+  the modules. The missing level is recorded in the asr-9922 gap
+  power-shelves-are-not-modelled-between-the-chassis-and-the-supplies and in the
+  power-module-openings gap of the asr-9906 and asr-9910. The ASR 9000 Series data sheet
+  (c78-501767) lists A9K-DC-PEM-V3 in its ordering information without saying which chassis
+  take it. The version 3 power modules it holds wait for the lab measurement requested in
+  roc-ops/Portrayal#16. Tracked in roc-ops/Portrayal#262.
 size: {w: 468.12, h: 48.03}
 attrs:
   model: 'A9K-DC-PEM-V3'
