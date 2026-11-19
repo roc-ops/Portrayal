@@ -190,8 +190,7 @@ def drawing_key(key):
 
 def fitted(tmp, dist_comps, dist, vendor, name, config, bays, occupants, card_ref):
     src = LIB / "devices" / vendor / name
-    # one folder per row: a device carries several rows, told apart by the cards
-    # seated in its bays (two rows can share the card the kit seats on)
+    # One folder per row: two rows on one device differ by the cards in its bays.
     cards = dict.fromkeys([*bays.values(), card_ref])
     row = tmp / "--".join([name, *(c.replace("/", "-").replace("@", "-") for c in cards)])
     dev = row / "src" / "device.yaml"
