@@ -143,8 +143,8 @@ FS.com FHD-FAP12LCDXSMF). The run imported a copy with its model name changed
 instance. An instance of
 that new type got the same number of instance-level mappings. Importing the
 file again over an existing type, with or without an instance of it, was
-refused ("Module type with this Manufacturer and Model already exists"), and
-nothing was duplicated or changed. A type that already existed without mappings
+refused. The message was "Module type with this Manufacturer and Model already
+exists". Nothing was duplicated or changed. A type that already existed without mappings
 kept none after the refused import. Deleting a type and importing it again was
 not tried. A second run on NetBox 4.7.2, with a copy of the FS.com
 FHD-1MTP6LCDOM4U file, found three more things. Installing a module of a type
