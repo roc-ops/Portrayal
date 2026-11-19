@@ -1,0 +1,33 @@
+format: 1
+kind: component
+name: pro3x-breaker-handle
+version: 2.0.0
+class: breaker
+profile: power
+description: >-
+  A branch breaker of a Server Technology PRO3X Smart or Switched PDU whose plate shows a wide cell.
+  The cell holds a narrow bar with two dots and a framed square.
+  It is a two-pole breaker, fixed to the PDU, not a plug-in part.
+size: {w: 18.5, h: 29.9}
+size-confidence: {w: drawing, h: drawing}
+attrs: {poles: 2}
+provenance:
+  method: >-
+    drawing - the front view on page 5 of the Server Technology data sheet C3S36RL-EPJE2MT4 is a 300 ppi raster. The
+    cell was read on a 2400 ppi render at 8.252 pixels per mm, from the 1778.0 length that spans 14672 pixels there.
+    One pixel of the raster is about 1 mm, so each figure carries about 1 mm. The drawing lies the PDU down, cord
+    end left; this part is drawn as the PDU stands, cord end down.
+  size: >-
+    drawing - the cell is 18.5 across the strip by 29.9 along it, one to each of the two breaker plates. The earlier
+    major read 16.1 across from another sheet.
+  rating: >-
+    datasheet - the sheet says 2-pole, 20 A trip circuit breakers, rating up to 16 A. It gives 10 kAIC North America
+    and 5 kAIC rest of world. So none is stated on the part. The 20 A is the trip rating of the model, not a figure for each unit.
+  shapes: >-
+    drawing - the frame is 17.4 across and 17.4 along, with a line 0.8 wide and a notch 2.4 by 2.7 inside it. The bar is
+    a head 3.8 across and 6.7 along on a stem 2.8 along, with two dots 2.8 and 2.0 across. Each is read to about 1 mm.
+  handle: >-
+    not drawn - the legend inside the frame and the glyph on the bar are marks, and no document dimensions them.
+elements:
+  window: {at: [0, 0], size: [18.5, 29.9], class: breaker}
+skins: [default]
