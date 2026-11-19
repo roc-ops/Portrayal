@@ -1,0 +1,2204 @@
+format: 1
+kind: device
+name: ar7502
+version: 1.0.0
+maturity: modelled
+manufacturer: APC
+model: AR7502
+description: Rear cable channel for a 42U NetShelter SX cabinet, APC AR7502. It is a perforated black plate, 117 mm wide
+  and 1930 mm tall. It has large mesh windows, hanger marks and a column of rack-unit slots down each edge. It hangs on
+  the cabinet's rear side braces and takes no rack unit.
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: 'datasheet - `rack-side`: "Number of rack unit 0U" and "Mounting Location Rear". The installation sheet 990-2243C
+      says three hooks on its back hook onto the cabinet''s side braces.'
+  method:
+    confidence: datasheet
+    note: FIGURES FROM THE MAKER'S OWN DOCUMENTS, read as data. They are the AR7502 data sheet and the installation sheet
+      990-2243C. That sheet also names the AR7511, AR7552 and AR7572. Width, height, depth and weight are `datasheet`. The
+      perforations are read off the sheet's figure and estimated. No drawing or photograph is copied.
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 117 x 1930 x 13: "Width 4.6 in (117 mm)", "Height 76.0 in (1930 mm)", "Depth 0.5 in (13 mm)". The
+      data sheet''s title prints 130 mm, which 0.5 in does not support; 13 mm is drawn.'
+  depth:
+    confidence: datasheet
+    note: datasheet - "Depth 0.5 in (13 mm)"; the title says 130.
+  shell:
+    confidence: estimated
+    note: estimated - a flat plate; no view sections the channel.
+  thickness:
+    confidence: estimated
+    note: estimated - no document states a gauge.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Net Weight 5.004 lb(US) (2.27 kg)". The title says set of 2; the sheet does not say if the weight
+      is one channel or the set. Packed 7.57 kg.
+  front:
+    confidence: estimated
+    note: estimated - the face the installation sheet draws. It has 4 mesh windows, 3 hanger marks and 8 rectangular slots.
+      It has 6 pairs of keyholes with 3 hook slots under each, and a slot column down each edge. Positions are scaled off
+      the figure.
+  rear:
+    confidence: estimated
+    note: 'estimated - the back of the plate, plain: no held picture shows it or its three hooks.'
+  top:
+    confidence: estimated
+    note: estimated - the plate's edge.
+  bottom:
+    confidence: estimated
+    note: estimated - the plate's edge.
+  left:
+    confidence: estimated
+    note: estimated - the plate's edge down the part.
+  right:
+    confidence: estimated
+    note: estimated - the plate's edge down the part.
+  capacity:
+    confidence: datasheet
+    note: datasheet - no cable capacity is stated (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: 'datasheet - "Color: Black" and the provided equipment (installation guide, mounting hardware).'
+  color:
+    confidence: estimated
+    note: 'estimated - "Color: Black". The shade is the library''s render of black steel.'
+attrs:
+  physical:
+    weight-kg: 2.27
+    color: Black
+chassis:
+  width: 117.0
+  height: 1930.0
+  depth: 13.0
+  ru: 43
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 2.27
+  color: '#232527'
+gaps:
+- what: perforation-shapes
+  scope:
+  - front
+  reason: needs-drawing
+  note: The figure shows each opening without a dimension. Sizes and places are read off it at 600 dpi and estimated.
+  wanted: a dimensioned drawing of the channel
+- what: rear-hooks
+  scope:
+  - rear
+  reason: vendor-silent
+  note: The installation sheet says three hooks stand on the back. No held picture shows the back, so their size and places
+    are not drawn.
+  wanted: a picture of the back of the channel
+- what: set-or-single
+  scope:
+  - front
+  reason: vendor-silent
+  note: The data sheet's title says set of 2, but its figures describe one channel. The weight may be one channel or both.
+  wanted: the maker's statement of what a pack holds
+- what: cable-capacity
+  scope:
+  - front
+  reason: vendor-silent
+  note: The data sheet states no cable capacity, so none is recorded and none is estimated.
+  wanted: a capacity figure and the cable it is stated for
+- what: cabinet-fit
+  scope:
+  - rear
+  reason: vendor-silent
+  note: The data sheet is titled for the NetShelter SX 42U cabinet and lists no model number. The installation sheet is
+    shared with three other part numbers.
+  wanted: the maker's compatibility list
+views:
+  front:
+    size:
+      w: 117.0
+      h: 1930.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 117.0
+        - 1930.0
+        fill: '#232527'
+        kind: base
+      - id: tree-1
+        at:
+        - 50.5
+        - 21.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-2
+        at:
+        - 55.5
+        - 21.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-3
+        at:
+        - 60.5
+        - 21.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-4
+        at:
+        - 55.5
+        - 42.0
+        size:
+        - 3.0
+        - 31.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: tree-5
+        at:
+        - 33.0
+        - 73.0
+        size:
+        - 51.0
+        - 21.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: tree-6
+        at:
+        - 50.5
+        - 939.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-7
+        at:
+        - 55.5
+        - 939.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-8
+        at:
+        - 60.5
+        - 939.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-9
+        at:
+        - 55.5
+        - 960.0
+        size:
+        - 3.0
+        - 31.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: tree-10
+        at:
+        - 33.0
+        - 991.0
+        size:
+        - 51.0
+        - 21.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: tree-11
+        at:
+        - 50.5
+        - 1857.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-12
+        at:
+        - 55.5
+        - 1857.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-13
+        at:
+        - 60.5
+        - 1857.0
+        size:
+        - 3.0
+        - 3.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 1.5
+      - id: tree-14
+        at:
+        - 55.5
+        - 1878.0
+        size:
+        - 3.0
+        - 31.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: tree-15
+        at:
+        - 33.0
+        - 1909.0
+        size:
+        - 51.0
+        - 21.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-1
+        at:
+        - 42.0
+        - 100.0
+        size:
+        - 27.0
+        - 48.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-1
+        at:
+        - 22.0
+        - 124.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-2
+        at:
+        - 73.0
+        - 112.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-1
+        at:
+        - 25.0
+        - 170.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-2
+        at:
+        - 74.0
+        - 170.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-1
+        at:
+        - 18.0
+        - 190.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-2
+        at:
+        - 47.0
+        - 190.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-3
+        at:
+        - 77.0
+        - 190.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-2
+        at:
+        - 42.0
+        - 242.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-3
+        at:
+        - 22.0
+        - 266.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-4
+        at:
+        - 73.0
+        - 254.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-5
+        at:
+        - 22.0
+        - 305.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-6
+        at:
+        - 47.0
+        - 305.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-7
+        at:
+        - 68.0
+        - 305.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: win-1
+        at:
+        - 28.0
+        - 320.0
+        size:
+        - 52.0
+        - 132.0
+        fill: '#b7b6b5'
+        kind: mesh-window
+        confidence: estimated
+        rx: 6
+      - id: sq-8
+        at:
+        - 18.0
+        - 456.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-9
+        at:
+        - 38.0
+        - 456.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-10
+        at:
+        - 58.0
+        - 456.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-11
+        at:
+        - 78.0
+        - 456.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-3
+        at:
+        - 25.0
+        - 473.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-4
+        at:
+        - 74.0
+        - 473.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-4
+        at:
+        - 18.0
+        - 493.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-5
+        at:
+        - 47.0
+        - 493.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-6
+        at:
+        - 77.0
+        - 493.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-3
+        at:
+        - 42.0
+        - 545.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-12
+        at:
+        - 22.0
+        - 569.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-13
+        at:
+        - 73.0
+        - 557.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-14
+        at:
+        - 22.0
+        - 608.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-15
+        at:
+        - 47.0
+        - 608.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-16
+        at:
+        - 68.0
+        - 608.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: win-2
+        at:
+        - 28.0
+        - 623.0
+        size:
+        - 52.0
+        - 132.0
+        fill: '#b7b6b5'
+        kind: mesh-window
+        confidence: estimated
+        rx: 6
+      - id: sq-17
+        at:
+        - 18.0
+        - 759.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-18
+        at:
+        - 38.0
+        - 759.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-19
+        at:
+        - 58.0
+        - 759.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-20
+        at:
+        - 78.0
+        - 759.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-5
+        at:
+        - 25.0
+        - 776.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-6
+        at:
+        - 74.0
+        - 776.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-7
+        at:
+        - 18.0
+        - 796.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-8
+        at:
+        - 47.0
+        - 796.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-9
+        at:
+        - 77.0
+        - 796.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-4
+        at:
+        - 42.0
+        - 848.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-21
+        at:
+        - 22.0
+        - 872.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-22
+        at:
+        - 73.0
+        - 860.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-23
+        at:
+        - 22.0
+        - 911.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-24
+        at:
+        - 47.0
+        - 911.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-25
+        at:
+        - 68.0
+        - 911.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: rect-5
+        at:
+        - 42.0
+        - 1018.0
+        size:
+        - 27.0
+        - 48.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-26
+        at:
+        - 22.0
+        - 1042.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-27
+        at:
+        - 73.0
+        - 1030.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-7
+        at:
+        - 25.0
+        - 1088.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-8
+        at:
+        - 74.0
+        - 1088.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-10
+        at:
+        - 18.0
+        - 1108.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-11
+        at:
+        - 47.0
+        - 1108.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-12
+        at:
+        - 77.0
+        - 1108.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-6
+        at:
+        - 42.0
+        - 1160.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-28
+        at:
+        - 22.0
+        - 1184.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-29
+        at:
+        - 73.0
+        - 1172.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-30
+        at:
+        - 22.0
+        - 1223.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-31
+        at:
+        - 47.0
+        - 1223.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-32
+        at:
+        - 68.0
+        - 1223.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: win-3
+        at:
+        - 28.0
+        - 1238.0
+        size:
+        - 52.0
+        - 132.0
+        fill: '#b7b6b5'
+        kind: mesh-window
+        confidence: estimated
+        rx: 6
+      - id: sq-33
+        at:
+        - 18.0
+        - 1374.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-34
+        at:
+        - 38.0
+        - 1374.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-35
+        at:
+        - 58.0
+        - 1374.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-36
+        at:
+        - 78.0
+        - 1374.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-9
+        at:
+        - 25.0
+        - 1391.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-10
+        at:
+        - 74.0
+        - 1391.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-13
+        at:
+        - 18.0
+        - 1411.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-14
+        at:
+        - 47.0
+        - 1411.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-15
+        at:
+        - 77.0
+        - 1411.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-7
+        at:
+        - 42.0
+        - 1463.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-37
+        at:
+        - 22.0
+        - 1487.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-38
+        at:
+        - 73.0
+        - 1475.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-39
+        at:
+        - 22.0
+        - 1526.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-40
+        at:
+        - 47.0
+        - 1526.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-41
+        at:
+        - 68.0
+        - 1526.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: win-4
+        at:
+        - 28.0
+        - 1541.0
+        size:
+        - 52.0
+        - 132.0
+        fill: '#b7b6b5'
+        kind: mesh-window
+        confidence: estimated
+        rx: 6
+      - id: sq-42
+        at:
+        - 18.0
+        - 1677.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-43
+        at:
+        - 38.0
+        - 1677.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-44
+        at:
+        - 58.0
+        - 1677.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-45
+        at:
+        - 78.0
+        - 1677.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: keyhole-11
+        at:
+        - 25.0
+        - 1694.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: keyhole-12
+        at:
+        - 74.0
+        - 1694.0
+        size:
+        - 12.0
+        - 19.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 6
+      - id: hook-16
+        at:
+        - 18.0
+        - 1714.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-17
+        at:
+        - 47.0
+        - 1714.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: hook-18
+        at:
+        - 77.0
+        - 1714.0
+        size:
+        - 18.0
+        - 50.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 3
+      - id: rect-8
+        at:
+        - 42.0
+        - 1766.0
+        size:
+        - 27.0
+        - 51.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 2
+      - id: sq-46
+        at:
+        - 22.0
+        - 1790.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-47
+        at:
+        - 73.0
+        - 1778.0
+        size:
+        - 14.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-48
+        at:
+        - 22.0
+        - 1829.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-49
+        at:
+        - 47.0
+        - 1829.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: sq-50
+        at:
+        - 68.0
+        - 1829.0
+        size:
+        - 9.0
+        - 9.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-1
+        at:
+        - 3.0
+        - 12.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-2
+        at:
+        - 108.0
+        - 12.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-3
+        at:
+        - 3.0
+        - 56.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-4
+        at:
+        - 108.0
+        - 56.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-5
+        at:
+        - 3.0
+        - 100.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-6
+        at:
+        - 108.0
+        - 100.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-7
+        at:
+        - 3.0
+        - 145.35
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-8
+        at:
+        - 108.0
+        - 145.35
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-9
+        at:
+        - 3.0
+        - 189.8
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-10
+        at:
+        - 108.0
+        - 189.8
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-11
+        at:
+        - 3.0
+        - 234.25
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-12
+        at:
+        - 108.0
+        - 234.25
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-13
+        at:
+        - 3.0
+        - 278.7
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-14
+        at:
+        - 108.0
+        - 278.7
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-15
+        at:
+        - 3.0
+        - 323.15
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-16
+        at:
+        - 108.0
+        - 323.15
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-17
+        at:
+        - 3.0
+        - 367.6
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-18
+        at:
+        - 108.0
+        - 367.6
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-19
+        at:
+        - 3.0
+        - 412.05
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-20
+        at:
+        - 108.0
+        - 412.05
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-21
+        at:
+        - 3.0
+        - 456.5
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-22
+        at:
+        - 108.0
+        - 456.5
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-23
+        at:
+        - 3.0
+        - 500.95
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-24
+        at:
+        - 108.0
+        - 500.95
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-25
+        at:
+        - 3.0
+        - 545.4
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-26
+        at:
+        - 108.0
+        - 545.4
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-27
+        at:
+        - 3.0
+        - 589.85
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-28
+        at:
+        - 108.0
+        - 589.85
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-29
+        at:
+        - 3.0
+        - 634.3
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-30
+        at:
+        - 108.0
+        - 634.3
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-31
+        at:
+        - 3.0
+        - 678.75
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-32
+        at:
+        - 108.0
+        - 678.75
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-33
+        at:
+        - 3.0
+        - 723.2
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-34
+        at:
+        - 108.0
+        - 723.2
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-35
+        at:
+        - 3.0
+        - 767.65
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-36
+        at:
+        - 108.0
+        - 767.65
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-37
+        at:
+        - 3.0
+        - 812.1
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-38
+        at:
+        - 108.0
+        - 812.1
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-39
+        at:
+        - 3.0
+        - 856.55
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-40
+        at:
+        - 108.0
+        - 856.55
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-41
+        at:
+        - 3.0
+        - 901.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-42
+        at:
+        - 108.0
+        - 901.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-43
+        at:
+        - 3.0
+        - 945.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-44
+        at:
+        - 108.0
+        - 945.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-45
+        at:
+        - 3.0
+        - 989.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-46
+        at:
+        - 108.0
+        - 989.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-47
+        at:
+        - 3.0
+        - 1034.35
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-48
+        at:
+        - 108.0
+        - 1034.35
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-49
+        at:
+        - 3.0
+        - 1078.8
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-50
+        at:
+        - 108.0
+        - 1078.8
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-51
+        at:
+        - 3.0
+        - 1123.25
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-52
+        at:
+        - 108.0
+        - 1123.25
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-53
+        at:
+        - 3.0
+        - 1167.7
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-54
+        at:
+        - 108.0
+        - 1167.7
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-55
+        at:
+        - 3.0
+        - 1212.15
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-56
+        at:
+        - 108.0
+        - 1212.15
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-57
+        at:
+        - 3.0
+        - 1256.6
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-58
+        at:
+        - 108.0
+        - 1256.6
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-59
+        at:
+        - 3.0
+        - 1301.05
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-60
+        at:
+        - 108.0
+        - 1301.05
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-61
+        at:
+        - 3.0
+        - 1345.5
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-62
+        at:
+        - 108.0
+        - 1345.5
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-63
+        at:
+        - 3.0
+        - 1389.95
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-64
+        at:
+        - 108.0
+        - 1389.95
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-65
+        at:
+        - 3.0
+        - 1434.4
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-66
+        at:
+        - 108.0
+        - 1434.4
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-67
+        at:
+        - 3.0
+        - 1478.85
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-68
+        at:
+        - 108.0
+        - 1478.85
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-69
+        at:
+        - 3.0
+        - 1523.3
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-70
+        at:
+        - 108.0
+        - 1523.3
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-71
+        at:
+        - 3.0
+        - 1567.75
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-72
+        at:
+        - 108.0
+        - 1567.75
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-73
+        at:
+        - 3.0
+        - 1612.2
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-74
+        at:
+        - 108.0
+        - 1612.2
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-75
+        at:
+        - 3.0
+        - 1656.65
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-76
+        at:
+        - 108.0
+        - 1656.65
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-77
+        at:
+        - 3.0
+        - 1701.1
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-78
+        at:
+        - 108.0
+        - 1701.1
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-79
+        at:
+        - 3.0
+        - 1745.55
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-80
+        at:
+        - 108.0
+        - 1745.55
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-81
+        at:
+        - 3.0
+        - 1790.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-82
+        at:
+        - 108.0
+        - 1790.0
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-83
+        at:
+        - 3.0
+        - 1834.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-84
+        at:
+        - 108.0
+        - 1834.45
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-85
+        at:
+        - 3.0
+        - 1878.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: edge-86
+        at:
+        - 108.0
+        - 1878.9
+        size:
+        - 6.0
+        - 12.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+  rear:
+    size:
+      w: 117.0
+      h: 1930.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 117.0
+        - 1930.0
+        fill: '#232527'
+        kind: base
+  top:
+    size:
+      w: 117.0
+      h: 13.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 117.0
+        - 13.0
+        fill: '#232527'
+        kind: base
+  bottom:
+    size:
+      w: 117.0
+      h: 13.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 117.0
+        - 13.0
+        fill: '#232527'
+        kind: base
+  left:
+    size:
+      w: 13.0
+      h: 1930.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 13.0
+        - 1930.0
+        fill: '#232527'
+        kind: base
+  right:
+    size:
+      w: 13.0
+      h: 1930.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 13.0
+        - 1930.0
+        fill: '#232527'
+        kind: base
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The channel as APC ships AR7502.
+datasheet:
+  title: APC NetShelter Cable Management, Vertical Cable Manager, for NetShelter SX 42U, Set of 2, Black, 117 x 1930 x 130
+    mm (AR7502)
+  url: https://www.se.com/us/en/product/download-pdf/AR7502?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR7502.pdf
+  sha256: 94fde85ecd1a408c9ad64970f27685aae6e63c68481fcbcf52d4d2ca565c3d5d
+references:
+- title: NetShelter Enclosure Accessories, Rear Cable Channel Installation (AR7502, AR7511, AR7552, AR7572), instruction
+    sheet 990-2243C, 1/2016
+  url: https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=ASTE-6Z6K9A_R3_EN.pdf&p_Doc_Ref=SPD_ASTE-6Z6K9A_EN
+  sha256: 904d5762c298761280372d0895be27e2ae38884648e7df0509759fb92e2000dc

@@ -330,6 +330,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The PRO3X breaker handle. The merged 3A01 still places the @1. The three PRO3X intelligent devices
     # place the @2, whose window draws the sheet's bar and framed square. The @1 stays until the 3A01 moves.
     kept["servertech/pro3x-breaker-handle"] = [1, 2]
+    # The APC 20U length of the NetShelter vertical managers. The AR7721 places the @2, drawn from its data sheet's
+    # photographs. The AR7722 still places the @1, drawn as it was.
+    kept["apc/nsx-vcm-20u"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
