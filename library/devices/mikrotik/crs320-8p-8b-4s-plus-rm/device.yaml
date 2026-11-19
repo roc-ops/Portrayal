@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: crs320-8p-8b-4s-plus-rm
-version: 1.0.0
+version: 1.0.1
 maturity: modelled
 manufacturer: MikroTik
 model: CRS320-8P-8B-4S+RM
@@ -29,8 +29,13 @@ provenance:
       regulatory text in many languages, no figure and no LED table. Studio photographs 2355 (front, three-quarter
       from the right, showing the right wall), 2356 (rear, from above) and 2357 (front, from slightly
       above). The block diagram CRS320-8P-8B-4S_240753.png. NetBox's device type as a second opinion only.
-      MikroTik prints no figure numbers. The device name spells MikroTik's + as -plus because a directory
-      name cannot carry +; model: keeps the + as printed.
+      G1483-0600WNB product page, MikroTik (https://mikrotik.com/product/g1483_0600wnb, saved 2026-11-19):
+      the supply's name for the CRS320, and its 600 W, 54.5 V and 10.35 A ratings. It says "The switch
+      comes with a single 600W PSU". G1483-0600WNB brochure, MikroTik (file G1483-0600WNB_240656.pdf):
+      the same sentence about the single supply, with its picture. It reads "Hot-swap 54.5V 10.35A power
+      supply", without the 600W the page prints before "power supply". MikroTik prints no figure numbers.
+      The device name spells MikroTik's + as -plus because a directory name cannot carry +; model: keeps
+      the + as printed.
   datasheet:
     confidence: datasheet
     note: >-
@@ -143,8 +148,8 @@ provenance:
       chassis width at 5.355 px per mm and down at 4.775 px per mm (the photo looks down at the rear,
       so y is estimated, about 1.5 mm and x about 2 mm): slot 1 at 357.6 mm, slot 2 at 275.5 mm, each
       74.7 x 41.9 mm, the cover plate 272.6 to 352.4 mm. The printed rating is carried as printed; the
-      brochure's nominal 10.35 A and maximum 11 A are the box's whole figures, not the 9 A on each supply's
-      label.
+      brochure's nominal 10.35 A and maximum 11 A are carried as it prints them, without saying whose
+      current they are (gap `power-current-meaning`). They differ from the 9 A on each supply's label.
   rear-layout:
     confidence: photo-measured
     note: >-
@@ -225,12 +230,27 @@ gaps:
   - rear
   reason: vendor-silent
   note: >-
-    The brochure says the box "comes with a reliable 600 W power supply" and that the G1483-0600WNB, a
-    "hot-swap 600 W power supply", is "available for purchase separately". The photograph shows the shipped
-    supply as a hot-swap module in slot 1, but no held document says its part number, or that it is the
-    G1483-0600WNB. Slot 1 seats no part in the base configuration, so the box's own AC inlet exports through
-    the G1483-0600WNB module type and not through the device type.
-  wanted: MikroTik's part number for the supply shipped in the box.
+    The brochure says the box "comes with a reliable 600 W power supply". It calls the G1483-0600WNB "available
+    for purchase separately". MikroTik's G1483-0600WNB page (https://mikrotik.com/product/g1483_0600wnb,
+    saved 2026-11-19) names the part as the supply for the CRS320-8P-8B-4S+RM. It says "The switch comes
+    with a single 600W PSU". No held page says that the supply in the box carries that part number. Photograph
+    2356 shows a hot-swap module in slot 1 but not its part number. Slot 1 seats no part in the base configuration,
+    so the box's AC inlet exports through the G1483-0600WNB module type and not through the device type.
+  wanted: >-
+    A MikroTik statement that the supply in the box is the G1483-0600WNB, or the part number printed on
+    its label. Photograph 2356 does not show it.
+- what: power-current-meaning
+  scope:
+  - rear
+  reason: sources-disagree
+  note: >-
+    The brochure lists "Nominal current 10.35 A" and "Max current 11 A" under Powering and labels neither
+    an input nor an output. The manual page gives "11 A max" for each supply's AC input. The G1483 page
+    (https://mikrotik.com/product/g1483_0600wnb) reads "Hot-swap 54.5V 10.35A 600W power supply", which
+    gives 10.35 A beside the supply's 54.5 V and 600 W. The readings, an input current of the box and
+    an output current of the supply, may be one figure meaning two things. No held page says which, so
+    the device carries the brochure's figures as printed.
+  wanted: MikroTik's statement of what 10.35 A is.
 - what: slot-2-cover
   scope:
   - rear
