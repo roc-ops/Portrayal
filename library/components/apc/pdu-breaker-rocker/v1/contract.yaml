@@ -1,0 +1,31 @@
+format: 1
+kind: component
+name: pdu-breaker-rocker
+version: 1.0.0
+class: breaker
+profile: power
+description: >-
+  The rocker circuit breaker of an APC NetShelter basic rack PDU. It is a small dark block on the outlet face, in its
+  upper half. No held picture shows how far it stands from the face, and any height the drawing gives it is an estimate.
+  One stands before the first bank of outlets and one between the two banks. It stands for the class and no rating is
+  given. The data sheet states only that the unit has a circuit breaker.
+size: {w: 13.0, h: 18.0}
+size-confidence: {w: estimated, h: estimated}
+provenance:
+  size: >-
+    ESTIMATED. The AP9571A product photograph (369 px, angled) was enlarged 20 times. The second block reads 8 px wide and
+    11.5 px high. The scale is 0.62 px per mm along the face and 0.70 across it, so the block is 13 by 16 mm. The first
+    block reads 7.5 px wide and 11 px high. The scale is 0.41 along the face and 0.59 across it, so the block is 18 by
+    19 mm. So it is drawn 13.0 by 18.0. The height is good to about 3 mm. The width is good to about 5 mm, as the two
+    blocks read 13 and 18 mm. The first block's width is 18 mm read, 13 mm drawn, a 5 mm difference at the same limit.
+    The two x positions are at 66.5 and 262 mm, each good to about 10 mm. Each block is centred between marks that are
+    good to about 10 mm. needs-drawing: a straight-on photograph or a dimensioned drawing.
+  rating: >-
+    NOT STATED. The data sheet gives "Protection type Circuit breaker" and nothing of its rating, poles or number. The
+    contract carries no rating.
+  states: >-
+    ESTIMATED. The states `on` and `off` are the library's vocabulary for a breaker, not read from a picture. Nothing held
+    shows the I and O marks or which way the rocker tips, so both states draw alike.
+elements:
+  rocker: {at: [0, 0], size: [13.0, 18.0], class: breaker, states: ['on', 'off']}
+skins: [default]

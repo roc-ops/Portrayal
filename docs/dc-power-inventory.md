@@ -8,8 +8,8 @@ the part presents a registered interface a `port` part mates; `via-parts` a part
 composes does; `no` neither (the reason follows). **Polarity** is what a source states
 and the words that said it; `none stated` is not a guess withheld but a fact absent.
 
-Library: 1499 component contracts, 258 devices.
-**85 component contracts carry a DC end; 146 devices place, offer or are fed by one.**
+Library: 2823 component contracts, 763 devices.
+**229 component contracts carry a DC end; 307 devices place, offer or are fed by one.**
 
 ## Counts
 
@@ -20,47 +20,53 @@ Library: 1499 component contracts, 258 devices.
 | busbar | 2 |
 | connector-block | 1 |
 | dc-barrel | 1 |
-| lug-pair | 3 |
-| other | 1 |
+| lug-pair | 9 |
+| other | 44 |
 | p40-connector | 1 |
-| plug-fixed | 3 |
+| plug-fixed | 1 |
 | pluggable-header | 2 |
 | protector | 2 |
-| screw-terminal | 3 |
-| supply: DC end not drawn | 21 |
-| supply: DC inlet, connector unspecified | 6 |
-| supply: HVDC through the AC inlet | 9 |
-| supply: plug | 2 |
-| supply: terminal block | 22 |
-| terminal-block | 6 |
+| screw-terminal | 5 |
+| supply: DC end not drawn | 63 |
+| supply: DC inlet, connector unspecified | 13 |
+| supply: HVDC through the AC inlet | 11 |
+| supply: terminal block | 63 |
+| terminal-block | 11 |
 
 ### By vendor (the namespace of the part)
 
 | | parts |
 |---|---:|
 | amphenol-ns | 7 |
+| arista | 10 |
 | casa | 2 |
 | celestica | 1 |
-| cisco | 7 |
-| common | 10 |
+| cisco | 30 |
+| common | 13 |
 | commscope | 3 |
-| dell | 6 |
-| edgecore | 9 |
-| juniper | 6 |
+| dell | 9 |
+| digi | 1 |
+| edgecore | 23 |
+| juniper | 58 |
 | maiaedge | 1 |
-| nokia | 10 |
-| oscilloquartz | 2 |
-| smartoptics | 1 |
+| nokia | 15 |
+| nvidia | 16 |
+| oscilloquartz | 3 |
+| servertech | 2 |
+| smartoptics | 2 |
+| std | 4 |
 | supermicro | 1 |
 | telco-systems | 7 |
-| ufispace | 12 |
+| ubiquiti | 1 |
+| ufispace | 19 |
+| vecima | 1 |
 
 ### By direction
 
 | | parts |
 |---|---:|
-| input | 81 |
-| output | 2 |
+| input | 224 |
+| output | 3 |
 | protector | 2 |
 
 ### Is it a cable end today
@@ -68,81 +74,90 @@ Library: 1499 component contracts, 258 devices.
 | | parts |
 |---|---:|
 | n/a | 2 |
-| no | 63 |
-| via-parts | 12 |
-| yes | 8 |
+| no | 128 |
+| via-parts | 82 |
+| yes | 17 |
 
 ### Kind by cable end
 
 | | parts |
 |---|---:|
 | busbar / no | 2 |
-| connector-block / no | 1 |
+| connector-block / via-parts | 1 |
 | dc-barrel / yes | 1 |
-| lug-pair / no | 2 |
-| lug-pair / yes | 1 |
-| other / no | 1 |
+| lug-pair / via-parts | 1 |
+| lug-pair / yes | 8 |
+| other / no | 43 |
+| other / via-parts | 1 |
 | p40-connector / yes | 1 |
-| plug-fixed / no | 3 |
+| plug-fixed / no | 1 |
 | pluggable-header / yes | 2 |
 | protector / n/a | 2 |
-| screw-terminal / yes | 3 |
-| supply: DC end not drawn / no | 21 |
-| supply: DC inlet, connector unspecified / no | 6 |
-| supply: HVDC through the AC inlet / no | 1 |
-| supply: HVDC through the AC inlet / via-parts | 8 |
-| supply: plug / no | 2 |
-| supply: terminal block / no | 21 |
-| supply: terminal block / via-parts | 1 |
-| terminal-block / no | 3 |
-| terminal-block / via-parts | 3 |
+| screw-terminal / yes | 5 |
+| supply: DC end not drawn / no | 58 |
+| supply: DC end not drawn / via-parts | 5 |
+| supply: DC inlet, connector unspecified / no | 11 |
+| supply: DC inlet, connector unspecified / via-parts | 2 |
+| supply: HVDC through the AC inlet / via-parts | 11 |
+| supply: terminal block / no | 11 |
+| supply: terminal block / via-parts | 52 |
+| terminal-block / no | 2 |
+| terminal-block / via-parts | 9 |
 
-### Placements on a device face, by cable end (225 in all)
+### Placements on a device face, by cable end (312 in all)
 
 | | placements |
 |---|---:|
 | n/a | 0 |
-| no | 92 |
-| via-parts | 5 |
-| yes | 128 |
+| no | 19 |
+| via-parts | 99 |
+| yes | 194 |
 
 ### Is polarity stated
 
 | | parts |
 |---|---:|
-| none stated | 35 |
-| stated, prose only | 40 |
-| stated, structured | 10 |
+| none stated | 82 |
+| stated, prose only | 94 |
+| stated, structured | 53 |
 
 ### Devices by vendor
 
 | | devices |
 |---|---:|
 | amphenol-ns | 11 |
+| arista | 25 |
 | aurcore | 10 |
 | casa | 2 |
 | celestica | 3 |
-| cisco | 7 |
+| cisco | 35 |
 | commscope | 1 |
-| dell | 1 |
-| edgecore | 27 |
+| dell | 2 |
+| digi | 6 |
+| edgecore | 28 |
 | halny | 1 |
-| juniper | 8 |
-| nokia | 11 |
+| juniper | 79 |
+| mikrotik | 5 |
+| nokia | 12 |
+| opengear | 8 |
 | oscilloquartz | 4 |
-| readylinks | 1 |
+| readylinks | 10 |
+| servertech | 1 |
 | smartoptics | 2 |
 | supermicro | 1 |
 | telco-systems | 13 |
+| ubiquiti | 2 |
 | ufispace | 43 |
+| vecima | 2 |
+| vertiv | 1 |
 
 ### Devices: does any DC part they carry land a cable
 
 | | devices |
 |---|---:|
-| no | 103 |
-| no part | 16 |
-| yes | 27 |
+| no | 89 |
+| no part | 14 |
+| yes | 204 |
 
 ## Parts
 
@@ -151,33 +166,82 @@ Library: 1499 component contracts, 258 devices.
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
 | `amphenol-ns/input-feed-busbar@1` | inlet | input | - | no: presents no interface | BATT / RTN (prose) | - | 3 (6) |
-| `common/orv3-busbar-connector@1` | inlet | input | - | no: presents no interface | none stated | - | 1 (1) |
+| `common/orv3-busbar-connector@1` | inlet | input | - | no: interface orv3-busbar has no cable-end part (no class port part mates it) | none stated | - | 2 (2) |
 
 ### connector-block (1)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `nokia/lpwr-f@1` | power | input | connector-block | no: presents no interface | BAT / RET / -48V (prose) | connector-block | 1 (0) |
+| `nokia/lpwr-f@1` | power | input | connector-block, pole-batt=nokia/lpwr-f-dc-pole@1, pole-rtn=nokia/lpwr-f-dc-pole@1 | via pole-batt, pole-batt/1, pole-batt/2, pole-rtn ... | BATT / RTN (structured) | connector-block | 1 (0) |
 
 ### dc-barrel (1)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `common/dc-barrel@1` | inlet | input | - | yes: dc-barrel | none stated | - | 4 (4) |
+| `common/dc-barrel@1` | inlet | input | - | yes: dc-barrel | none stated | - | 24 (32) |
 
-### lug-pair (3)
+### lug-pair (9)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `amphenol-ns/input-feed-studs@1` | inlet | input | terminal-1=amphenol-ns/input-stud-pair@1, terminal-2=amphenol-ns/input-stud-pair@1 | no: presents no interface | RTN / BATT (prose) | - | 8 (16) |
-| `amphenol-ns/input-stud-pair@1` | inlet | input | stud-top, stud-bottom | no: presents no interface | none stated | - | 0 (0) |
+| `amphenol-ns/input-feed-studs@1` | inlet | input | terminal-1=amphenol-ns/input-stud-pair@1, terminal-2=amphenol-ns/input-stud-pair@1 | via terminal-1, terminal-1/1, terminal-1/2, terminal-2 ... | RTN / BATT (prose) | - | 8 (16) |
+| `amphenol-ns/input-stud-pair@1` | inlet | input | stud-top, stud-bottom, 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-1 | none stated | - | 0 (0) |
+| `common/hex-nut-stud-pair-5-8@1` | mechanical | input | 1=common/hex-nut-stud@1, 2=common/hex-nut-stud@1 | yes: stud-pair-5-8 | none stated | - | 0 (0) |
+| `juniper/mx240-dc-pole@1` | mechanical | input | 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-5-8 | -48V / RTN (prose) | - | 0 (0) |
+| `nokia/fx-16-dc-pole@1` | mechanical | input | 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-5-8 | none stated | - | 0 (0) |
+| `nokia/lpwr-f-dc-pole@1` | mechanical | input | 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-5-8 | BAT / RET (prose) | - | 0 (0) |
 | `nokia/sr-1-dc-pole@1` | inlet | input | 1=nokia/sr-1-dc-stud@1, 2=nokia/sr-1-dc-stud@1 | yes: stud-pair-5-8 | -48V / RTN (prose) | - | 0 (0) |
+| `nokia/sr-12-dc-pole@1` | mechanical | input | 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-3-4 | -48V / RTN (prose) | - | 0 (0) |
+| `nokia/sr-7-dc-pole@1` | mechanical | input | 1=common/terminal-screw-34@1, 2=common/terminal-screw-34@1 | yes: stud-pair-5-8 | RTN (prose) | - | 0 (0) |
 
-### other (1)
+### other (44)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `telco-systems/tm-7124s-dc-feed@1` | inlet | input | - | no: presents no interface | -48V (prose) | feeds | 1 (1) |
+| `cisco/a9k-dc-header@1` | inlet | input | - | no: interface cisco-dc-block-2 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `cisco/nc5k-pdc-930w-dc-header@1` | inlet | input | - | no: interface cisco-dc-block-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `cisco/nxa-pdc-930w-dc-header@1` | inlet | input | - | no: interface cisco-dc-block-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `common/pla03-receptacle@1` | inlet | input | - | no: interface positronic-pla03 has no cable-end part (no class port part mates it) | -48V (prose) | - | 0 (0) |
+| `edgecore/agr560-dc-header@1` | inlet | input | - | no: interface edgecore-agr-dc-block-2 has no cable-end part (no class port part mates it) | ground (prose) | - | 0 (0) |
+| `edgecore/ais800-64-dc-header@1` | inlet | input | - | no: interface edgecore-ais800-dc-block-6 has no cable-end part (no class port part mates it) | -48V (prose) | - | 0 (0) |
+| `edgecore/amx-3200-dc-header@1` | inlet | input | - | no: interface edgecore-amx-dc-block-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `edgecore/dcs201-dc-header@1` | inlet | input | - | no: interface edgecore-dcs-dc-block-3 has no cable-end part (no class port part mates it) | ground (prose) | - | 0 (0) |
+| `juniper/ex4100-h-psu-connector@1` | inlet | input | - | no: interface terminal-381-5 has no cable-end part (no class port part mates it) | none stated | sources | 1 (2) |
+| `juniper/ex4400-dc-header@1` | inlet | input | - | no: interface dc-connector-3w3 has no cable-end part (no class port part mates it) | -48V / RTN / ground (prose) | - | 0 (0) |
+| `juniper/jpsu-150-dc-header@1` | inlet | input | - | no: interface juniper-dc-block-3 has no cable-end part (no class port part mates it) | ground (prose) | - | 0 (0) |
+| `juniper/qfx10002-dc-header@1` | inlet | input | - | no: interface dc-connector-3w3 has no cable-end part (no class port part mates it) | -48V / RTN / ground (prose) | - | 0 (0) |
+| `juniper/qfx5200-48y-dc-header@1` | inlet | input | - | no: interface juniper-dc-header-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `juniper/qfx5210-dc-header@1` | inlet | input | - | no: interface juniper-qfx5210-dc-header-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `juniper/qfx524x-dc-header@1` | inlet | input | - | no: interface juniper-dc-header-6 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `nvidia/a10-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/a100-pcie-80gb-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/h100-nvl-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/h100-pcie-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/l40s-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/quadro-rtx-passive-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-4000-ada-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-4070-fe-top@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-4090-fe-top@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-4500-ada-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-6000-ada-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-a5000-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-a6000-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-pro-4000-blackwell-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/rtx-pro-5000-blackwell-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `nvidia/v100-pcie-tail@1` | mechanical | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `oscilloquartz/osa542x-dc-header@1` | inlet | input | - | no: interface latch-header-3 has no cable-end part (no class port part mates it) | -48V (prose) | - | 0 (0) |
+| `servertech/pro1-dc-input-block@1` | inlet | input | rtn=common/hex-nut-stud-pair-5-8@1, gnd=common/hex-nut-stud-pair-5-8@1, neg48=common/hex-nut-stud-pair-5-8@1 | via rtn, rtn/1, rtn/2, gnd ... | RTN (structured) | rows | 1 (2) |
+| `servertech/pro1-dc-output-block@1` | inlet | output | - | no: presents no interface | -48V (prose) | terminals | 1 (4) |
+| `smartoptics/dcp-2-dc-header@1` | inlet | input | - | no: interface smartoptics-dcp-dc-block-3 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `std/12v-2x6-header@1` | inlet | input | - | no: interface pcie-12v-2x6 has no cable-end part (no class port part mates it) | none stated | power | 0 (0) |
+| `std/12vhpwr-header@1` | inlet | input | - | no: interface pcie-12vhpwr has no cable-end part (no class port part mates it) | none stated | power | 0 (0) |
+| `std/eps12v-header@1` | inlet | input | - | no: interface eps12v-8pin has no cable-end part (no class port part mates it) | none stated | power | 0 (0) |
+| `std/pcie-8pin-header@1` | inlet | input | - | no: interface pcie-8pin has no cable-end part (no class port part mates it) | none stated | power | 0 (0) |
+| `telco-systems/tm-7124s-dc-feed@1` | inlet | input | - | no: interface screw-terminal-4 has no cable-end part (no class port part mates it) | -48V / RTN / BATT (prose) | feeds | 1 (1) |
+| `telco-systems/xm3352-dc-header@1` | inlet | input | - | no: interface telco-dc-block-3 has no cable-end part (no class port part mates it) | -48V (prose) | - | 0 (0) |
+| `telco-systems/xm8424-dc-header@1` | inlet | input | - | no: interface telco-dc-block-2 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
+| `ubiquiti/usp-rps-input@1` | inlet | input | - | no: interface ubiquiti-usp-rps has no cable-end part (no class port part mates it) | none stated | - | 2 (2) |
+| `ufispace/psu-242-dc-header@1` | inlet | input | - | no: interface ufispace-dc-block-6 has no cable-end part (no class port part mates it) | none stated | - | 0 (0) |
 
 ### p40-connector (1)
 
@@ -185,19 +249,17 @@ Library: 1499 component contracts, 258 devices.
 |---|---|---|---|---|---|---|---|
 | `amphenol-ns/output-p40@1` | inlet | output | batt, rtn | yes: p40 | BATT / RTN (structured) | - | 7 (112) |
 
-### plug-fixed (3)
+### plug-fixed (1)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `common/dc-terminal-plug-2@1` | inlet | input | - | no: presents no interface | -48V (prose) | - | 2 (2) |
-| `telco-systems/xm3352-dc-plug@1` | inlet | input | - | no: presents no interface | none stated | - | 0 (0) |
-| `telco-systems/xm8424-dc-plug@1` | inlet | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `common/dc-terminal-plug-2@1` | inlet | input | - | no: interface screw-terminal-2 has no cable-end part (no class port part mates it) | -48V / RTN / ground / BATT (prose) | - | 2 (2) |
 
 ### pluggable-header (2)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `common/dc-terminal-header-6@1` | inlet | input | - | yes: terminal-508-6 | none stated | - | 1 (2) |
+| `common/dc-terminal-header-6@1` | inlet | input | - | yes: terminal-508-6 | none stated | - | 8 (16) |
 | `common/terminal-header-508-5f@2` | inlet | input | - | yes: terminal-508-5 | ground (prose) | - | 10 (10) |
 
 ### protector (2)
@@ -207,125 +269,242 @@ Library: 1499 component contracts, 258 devices.
 | `amphenol-ns/breaker-1ru@1` | breaker | protector | - | no: a protector passes current between an input and an output and is no cable end | none stated | - | 0 (0) |
 | `amphenol-ns/tpa-fuse-holder-307492@1` | breaker | protector | - | no: a protector passes current between an input and an output and is no cable end | none stated | - | 0 (0) |
 
-### screw-terminal (3)
+### screw-terminal (5)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
+| `common/hex-nut-stud@1` | screw | input | - | yes: terminal-stud | none stated | - | 0 (0) |
 | `common/terminal-screw-34@1` | screw | input | - | yes: terminal-stud | none stated | - | 0 (0) |
 | `common/terminal-screw-38@1` | screw | input | - | yes: terminal-stud | none stated | - | 0 (0) |
+| `juniper/ex4100-h-terminal-pad@1` | inlet | input | - | yes: terminal-stud | none stated | sources | 2 (24) |
 | `nokia/sr-1-dc-stud@1` | screw | input | - | yes: terminal-stud | none stated | - | 0 (0) |
 
-### supply: DC end not drawn (21)
+### supply: DC end not drawn (63)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
 | `casa/c40g-pem@1` | power | input | - | no: presents no interface | -48V (prose) | power | 1 (0) |
-| `casa/pem@1` | power | input | - | no: presents no interface | -48V / RTN (prose) | terminals | 1 (0) |
-| `cisco/a9k-1600w-dc@1` | psu | input | - | no: presents no interface | none stated | input | 1 (0) |
+| `casa/pem@1` | power | input | - | no: presents no interface | RTN (structured) | terminals | 1 (0) |
+| `cisco/a9k-1600w-dc@1` | psu | input | dc-header=cisco/a9k-dc-header@1 | no: presents no interface | RTN (prose) | input | 1 (0) |
 | `cisco/a9k-750w-dc@1` | psu | input | - | no: presents no interface | -48V (prose) | inlet | 1 (0) |
 | `cisco/a9k-dc-pem-v3@1` | power | input | - | no: presents no interface | none stated | power | 0 (0) |
 | `cisco/a9k-pwr-1p5kw-dc@1` | psu | input | - | no: presents no interface | none stated | power | 2 (0) |
 | `cisco/a9k-pwr-2kw-dc@1` | psu | input | - | no: presents no interface | none stated | power | 2 (0) |
-| `cisco/pwr-1p6kw-dc@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 2 (0) |
+| `cisco/n9k-pdc-3000w-b@1` | psu | input | - | no: presents no interface | -48V / negative / positive (prose) | power | 3 (0) |
+| `cisco/n9k-puv-1200w@1` | psu | input | - | no: presents no interface | none stated | power | 3 (0) |
+| `cisco/n9k-puv-3000w-b@1` | psu | input | - | no: presents no interface | none stated | power | 3 (0) |
+| `cisco/n9k-puv2-3000w-b@1` | psu | input | - | no: presents no interface | none stated | power | 3 (0) |
+| `cisco/nc57-1600w-dcfw@1` | psu | input | dc-header=cisco/nxa-pdc-930w-dc-header@1 | no: presents no interface | -48V / ground (prose) | power | 2 (0) |
+| `cisco/nc5k-pdc-930w-bk@1` | psu | input | dc-header=cisco/nc5k-pdc-930w-dc-header@1 | no: presents no interface | ground (prose) | power | 3 (0) |
+| `cisco/nc5k-pdc-930w-fr@1` | psu | input | dc-header=cisco/nc5k-pdc-930w-dc-header@1 | no: presents no interface | ground (prose) | power | 3 (0) |
+| `cisco/nxa-pdc-1100w@1` | psu | input | - | no: presents no interface | -48V (prose) | power | 1 (0) |
+| `cisco/nxa-pdc-3200w@1` | psu | input | - | no: presents no interface | none stated | power | 2 (0) |
+| `cisco/nxa-pdc-440w@1` | psu | input | - | no: presents no interface | none stated | power | 3 (0) |
+| `cisco/nxa-pdc-715w@1` | psu | input | - | no: presents no interface | none stated | power | 2 (0) |
+| `cisco/nxa-pdc-930w@1` | psu | input | dc-header=cisco/nxa-pdc-930w-dc-header@1 | no: presents no interface | -48V / negative / positive / ground (prose) | power | 3 (0) |
+| `cisco/nxa-phv-350w@1` | psu | input | - | no: presents no interface | negative / positive / ground (prose) | power | 3 (0) |
+| `cisco/pwr-1p6kw-dc@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 0 (0) |
+| `cisco/pwr-1p6kw-dc@2` | psu | input | dc-header=cisco/a9k-dc-header@1 | no: presents no interface | -48V / RTN (prose) | input | 2 (0) |
 | `cisco/pwr-2kw-dc-v2@1` | psu | input | - | no: presents no interface | none stated | power | 1 (0) |
+| `cisco/pwr-4p4kw-dc-v3@1` | psu | input | - | no: presents no interface | -48V (prose) | power | 2 (0) |
+| `cisco/pwr-c1-1900whv-t@1` | psu | input | - | no: presents no interface | none stated | inlet | 7 (0) |
 | `commscope/ps3248d@1` | psu | input | - | no: presents no interface | -48V (prose) | inlet | 1 (0) |
 | `commscope/ps3248n@1` | psu | input | - | no: presents no interface | -48V (prose) | inlet | 1 (0) |
-| `edgecore/agr-psu-dc@1` | psu | input | - | no: presents no interface | -48V (prose) | terminal | 2 (0) |
-| `edgecore/amx-3200-48v-psu@1` | psu | input | - | no: presents no interface | RTN / ground / -48V (prose) | inlet | 1 (0) |
-| `edgecore/csr310-psu-dc@1` | psu | input | - | no: presents no interface | ground / -48V (prose) | power | 2 (0) |
+| `dell/r960-psu-2400w-ac@1` | psu | input | - | no: presents no interface | none stated | power | 1 (0) |
+| `dell/r960-psu-2800w-ac@1` | psu | input | - | no: presents no interface | none stated | inlet | 1 (0) |
+| `digi/ez-psu-dc@1` | psu | input | dc-terminal | no: presents no interface | none stated | input | 2 (0) |
+| `edgecore/amx-3200-48v-psu@1` | psu | input | dc-header=edgecore/amx-3200-dc-header@1 | no: presents no interface | RTN / ground / -48V (prose) | inlet | 1 (0) |
+| `juniper/ex3400-jpsu-150-dc-afo@1` | psu | input | dc-header=juniper/jpsu-150-dc-header@1 | no: presents no interface | -48V / ground / RTN / BATT (prose) | input | 2 (0) |
+| `juniper/ex4100-h-24f-dc-psu@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 1 (0) |
+| `juniper/ex4100-h-24mp-dc-psu@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 1 (0) |
+| `juniper/ex4100-jpsu-150-dc-afo@1` | psu | input | dc-header=juniper/jpsu-150-dc-header@1 | no: presents no interface | -48V / RTN / BATT / ground (prose) | input | 2 (0) |
+| `juniper/ex8200-pwr-ac2k@1` | psu | input | - | no: presents no interface | none stated | inlet | 2 (0) |
+| `juniper/ex8200-pwr-ac3k@1` | psu | input | - | no: presents no interface | none stated | inlet | 2 (0) |
+| `juniper/ex8200-pwr-dc2kr@1` | psu | input | - | no: presents no interface | -48V (prose) | sources | 1 (0) |
+| `juniper/ex8200-pwr-dc3kr@1` | psu | input | - | no: presents no interface | -48V (prose) | sources | 1 (0) |
+| `juniper/ex9200-pwr-mx480-2400-dc@1` | psu | input | - | no: presents no interface | -48V / RTN (prose) | power | 2 (0) |
+| `juniper/ex9200-pwr-mx480-2400-dc@2` | psu | input | pole-rtn=juniper/mx240-dc-pole@1, pole-batt=juniper/mx240-dc-pole@1 | via pole-rtn, pole-rtn/1, pole-rtn/2, pole-batt ... | RTN / BATT (structured) | power | 2 (0) |
+| `juniper/ex9214-pwr-mx960-4100-dc@1` | psu | input | - | no: presents no interface | none stated | power | 1 (0) |
+| `juniper/ex9214-pwr-mx960-4100-dc@2` | psu | input | pole-0-batt=juniper/mx240-dc-pole@1, pole-0-rtn=juniper/mx240-dc-pole@1, pole-1-rtn=juniper/mx240-dc-pole@1, pole-1-batt=juniper/mx240-dc-pole@1 | via pole-0-batt, pole-0-batt/1, pole-0-batt/2, pole-0-rtn ... | BATT / RTN (structured) | power | 1 (0) |
+| `juniper/jpsu-550-c-dc-afi@1` | psu | input | dc-header=juniper/ex4400-dc-header@1 | no: presents no interface | -48V / RTN / ground (prose) | input | 4 (0) |
+| `juniper/jpsu-550-c-dc-afo@1` | psu | input | dc-header=juniper/ex4400-dc-header@1 | no: presents no interface | -48V / RTN / ground / BATT (prose) | input | 4 (0) |
 | `juniper/mx2000-psm-dc-v@1` | psu | input | - | no: presents no interface | none stated | power | 3 (0) |
-| `nokia/ngfc-g@1` | power | input | - | no: presents no interface | BAT / RET / ground (structured) | power | 1 (0) |
-| `nokia/ngfc-h@1` | power | input | terminal-cover | no: presents no interface | BAT / RET / ground (structured) | terminals | 1 (0) |
+| `juniper/qfx10000-jnp10k-pwr-dc2@1` | psu | input | - | no: presents no interface | none stated | power | 2 (0) |
+| `juniper/qfx10000-pwr-dc@1` | psu | input | pole-1-rtn=juniper/mx240-dc-pole@1, pole-1-batt=juniper/mx240-dc-pole@1, pole-2-rtn=juniper/mx240-dc-pole@1, pole-2-batt=juniper/mx240-dc-pole@1 | via pole-1-rtn, pole-1-rtn/1, pole-1-rtn/2, pole-1-batt ... | RTN / BATT (structured) | power | 2 (0) |
+| `juniper/qfx10002-jpsu-1600w-dc-afo@1` | psu | input | dc-header=juniper/qfx10002-dc-header@1 | no: presents no interface | -48V / RTN / ground / BATT (prose) | power | 4 (0) |
+| `juniper/qfx5200-48y-dpsu-ai@1` | psu | input | dc-header=juniper/qfx5200-48y-dc-header@1 | no: presents no interface | RTN (prose) | - | 2 (0) |
+| `juniper/qfx5200-48y-dpsu-ao@1` | psu | input | dc-header=juniper/qfx5200-48y-dc-header@1 | no: presents no interface | RTN (prose) | - | 2 (0) |
+| `juniper/qfx5230-jnp-2400w-dc-afi@1` | psu | input | pole-rtn=juniper/mx240-dc-pole@1, pole-batt=juniper/mx240-dc-pole@1 | via pole-rtn, pole-rtn/1, pole-rtn/2, pole-batt ... | RTN / BATT (structured) | input | 1 (0) |
+| `juniper/qfx5230-jnp-3000w-dc-afo@1` | psu | input | pole-rtn=juniper/mx240-dc-pole@1, pole-batt=juniper/mx240-dc-pole@1 | via pole-rtn, pole-rtn/1, pole-rtn/2, pole-batt ... | RTN / BATT (structured) | input | 2 (0) |
+| `juniper/qfx524x-2ru-pwr-do@1` | psu | input | dc-header=juniper/qfx524x-dc-header@1 | no: presents no interface | -48V / negative / positive (prose) | input | 2 (0) |
+| `nokia/ngfc-g@1` | power | input | - | no: presents no interface | BAT / RET (structured) | power | 1 (0) |
+| `nokia/ngfc-h@1` | power | input | terminal-cover | no: presents no interface | BAT / RET (structured) | terminals | 1 (0) |
 | `nokia/sr-7-power-filter@1` | filter | input | - | no: presents no interface | none stated | power | 1 (0) |
-| `oscilloquartz/osa542x-psu-dc-40w@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 2 (0) |
-| `oscilloquartz/osa542x-psu-dc-90w@1` | psu | input | - | no: presents no interface | -48V (prose) | input | 2 (0) |
+| `oscilloquartz/osa542x-psu-dc-40w@1` | psu | input | dc-header=oscilloquartz/osa542x-dc-header@1 | no: presents no interface | -48V / RTN / BATT (prose) | input | 2 (0) |
+| `oscilloquartz/osa542x-psu-dc-90w@1` | psu | input | dc-header=oscilloquartz/osa542x-dc-header@1 | no: presents no interface | -48V / RTN / BATT (prose) | input | 2 (0) |
+| `telco-systems/xm3352-psu-dc@1` | psu | input | dc-in=telco-systems/xm3352-dc-header@1 | no: presents no interface | -48V (prose) | power | 1 (0) |
+| `telco-systems/xm8424-psu-dc@1` | psu | input | dc-in=telco-systems/xm8424-dc-header@1 | no: presents no interface | -48V (prose) | power | 1 (0) |
 | `ufispace/psu-102-dc@1` | psu | input | - | no: presents no interface | none stated | inlet | 1 (0) |
+| `vecima/en8100-psm@1` | psu | input | - | no: presents no interface | none stated | inlet | 2 (0) |
 
-### supply: DC inlet, connector unspecified (6)
+### supply: DC inlet, connector unspecified (13)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
 | `common/psu-dc-650@2` | psu | input | dc-inlet | no: presents no interface | -48V (prose) | inlet | 5 (0) |
-| `edgecore/dcs201-psu-dc@1` | psu | input | dc-inlet | no: presents no interface | -48V (prose) | input | 2 (0) |
+| `edgecore/as5912-54x-psu-dc@1` | psu | input | dc-inlet | no: presents no interface | RTN / ground / -48V (prose) | input | 1 (0) |
+| `edgecore/as7326-56x-psu-dc@1` | psu | input | dc-inlet | no: presents no interface | -48V / RTN / ground (prose) | input | 1 (0) |
+| `edgecore/dcs201-psu-dc@1` | psu | input | dc-inlet, dc-header=edgecore/dcs201-dc-header@1 | no: presents no interface | ground / -48V (prose) | input | 2 (0) |
 | `edgecore/dcs240-psu-dc@1` | psu | input | dc-inlet | no: presents no interface | -48V (prose) | input | 2 (0) |
+| `edgecore/psu-48v-650-b@1` | psu | input | dc-inlet | no: presents no interface | -48V / RTN / ground (prose) | input | 1 (0) |
+| `edgecore/psu-48v-650-f@1` | psu | input | dc-inlet | no: presents no interface | RTN / ground (prose) | input | 1 (0) |
+| `juniper/jpsu-2000-c-dc-afo@1` | psu | input | dc-input | no: presents no interface | -48V / RTN / ground (prose) | input | 4 (0) |
 | `ufispace/psu-132-crps-dc@1` | psu | input | dc-input | no: presents no interface | none stated | inlet | 1 (0) |
+| `ufispace/psu-132-crps-dc@2` | psu | input | dc-input, pole-rtn=juniper/mx240-dc-pole@1, pole-batt=juniper/mx240-dc-pole@1 | via pole-rtn, pole-rtn/1, pole-rtn/2, pole-batt ... | RTN / BATT (structured) | inlet | 1 (0) |
 | `ufispace/psu-162-dc@1` | psu | input | dc-input | no: presents no interface | -48V (prose) | inlet | 3 (0) |
-| `ufispace/psu-242-dc@1` | psu | input | dc-input | no: presents no interface | -48V (prose) | inlet | 1 (0) |
+| `ufispace/psu-162-dc@2` | psu | input | dc-input, plate-batt, plate-rtn, pole-batt=juniper/mx240-dc-pole@1, pole-rtn=juniper/mx240-dc-pole@1 | via pole-batt, pole-batt/1, pole-batt/2, pole-rtn ... | BATT / RTN (structured) | inlet | 3 (0) |
+| `ufispace/psu-242-dc@1` | psu | input | dc-input, dc-header=ufispace/psu-242-dc-header@1 | no: presents no interface | -48V / RTN / ground (prose) | inlet | 1 (0) |
 
-### supply: HVDC through the AC inlet (9)
+### supply: HVDC through the AC inlet (11)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
 | `celestica/psu-2000-ac@1` | psu | input | - | via inlet | ground (prose) | input | 0 (0) |
+| `cisco/nxa-pac-3200w@1` | psu | input | - | via inlet | none stated | inlet | 0 (0) |
 | `dell/psu-1100w-ac-60mm@1` | psu | input | - | via inlet | none stated | inlet | 0 (0) |
 | `dell/psu-1400w-ac-60mm@1` | psu | input | - | via inlet | none stated | inlet | 0 (0) |
+| `dell/psu-2400w-ac-86mm@1` | psu | input | - | via inlet | ground (prose) | inlet | 0 (0) |
 | `dell/psu-700w-ac-60mm@1` | psu | input | - | via inlet | none stated | inlet | 0 (0) |
 | `dell/psu-800w-ac-60mm@1` | psu | input | - | via inlet | none stated | inlet | 0 (0) |
 | `edgecore/dcs520-psu-ac@1` | psu | input | - | via inlet | none stated | power | 0 (0) |
-| `juniper/mx304-psu-hvacdc@1` | psu | input | - | no: presents no interface | none stated | - | 0 (0) |
+| `juniper/mx304-psu-hvacdc@1` | psu | input | - | via inlet | none stated | - | 0 (0) |
 | `maiaedge/psu-550w@1` | psu | input | - | via inlet | none stated | input | 0 (0) |
 | `telco-systems/xm8424-psu-ac@1` | psu | input | - | via inlet | ground (prose) | power | 0 (0) |
 
-### supply: plug (2)
+### supply: terminal block (63)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `telco-systems/xm3352-psu-dc@1` | psu | input | dc-in=telco-systems/xm3352-dc-plug@1 | no: presents no interface | -48V (prose) | power | 1 (0) |
-| `telco-systems/xm8424-psu-dc@1` | psu | input | dc-in=telco-systems/xm8424-dc-plug@1 | no: presents no interface | none stated | power | 1 (0) |
-
-### supply: terminal block (22)
-
-| part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
-|---|---|---|---|---|---|---|---|
+| `arista/7050x3-pwr-500-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 2 (0) |
+| `arista/7050x4-pwr-1500-dc-rev@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | none stated | input | 6 (0) |
+| `arista/7280cr3-pwr-1000-dc-rev@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 5 (0) |
+| `arista/7280cr3-pwr-1000-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 5 (0) |
+| `arista/7280dr3a-pwr-2400-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 2 (0) |
+| `arista/7280dr3a-pwr-3000-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 1 (0) |
+| `arista/7280r3-pwr-1500-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 8 (0) |
+| `arista/7280r3-pwr-500-dc-rev@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN / negative / positive / ground (prose) | input | 6 (0) |
+| `arista/7280r3-pwr-500-dc@1` | psu | input | pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / ground / RTN / negative / positive (prose) | input | 6 (0) |
+| `cisco/n9k-pdc-3000w-b@2` | psu | input | pole-1-neg=common/terminal-screw-34@1, pole-1-pos=common/terminal-screw-34@1, pole-2-pos=common/terminal-screw-34@1, pole-2-neg=common/terminal-screw-34@1 | via pole-1-neg, pole-1-pos, pole-2-pos, pole-2-neg | -48V / negative / positive / ground (prose) | power | 3 (0) |
+| `cisco/pwr-c1-715wdc@1` | psu | input | terminal-positive, terminal-negative, terminal-cover, pole-pos=common/terminal-screw-34@1, pole-neg=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-pos, pole-neg, pole-gnd | positive / negative / ground (structured) | terminals | 7 (0) |
+| `cisco/pwr-c2-640wdc@1` | psu | input | terminals, pole-a-pos=common/terminal-screw-34@1, pole-a-neg=common/terminal-screw-34@1, earth=common/ground-screw@1, pole-b-neg=common/terminal-screw-34@1, pole-b-pos=common/terminal-screw-34@1 | via pole-a-pos, pole-a-neg, pole-b-neg, pole-b-pos | ground (structured) | power | 1 (0) |
 | `dell/psu-1100w-dc-14g@1` | psu | input | terminal=dell/dc-terminal-6ryj9@1 | no: presents no interface | -48V (prose) | inlet | 1 (0) |
-| `edgecore/agr560-psu-dc@1` | psu | input | terminal, terminal-pocket, screw-1=common/screw-head@1, screw-2=common/screw-head@1 | no: presents no interface | -48V (prose) | power | 1 (0) |
-| `edgecore/ais800-64-psu-dc@1` | psu | input | terminal, terminal-pocket, screw-1=common/screw-head@1 | no: presents no interface | RTN (prose) | power | 2 (0) |
-| `edgecore/ais800-psu-dc@2` | psu | input | terminal | no: presents no interface | ground (structured) | power | 2 (0) |
-| `juniper/mx104-psu-dc@1` | psu | input | terminals | no: presents no interface | -48V (prose) | inlet | 1 (0) |
-| `juniper/mx204-psu-dc@1` | psu | input | terminals | no: presents no interface | -48V (prose) | inlet | 1 (0) |
-| `juniper/mx240-psu-dc@1` | psu | input | terminals | no: presents no interface | -48V / RTN (prose) | inlet | 2 (0) |
+| `edgecore/agr-psu-dc@1` | psu | input | pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, earth=common/ground-screw@1 | via pole-rtn, pole-batt | RTN / BATT / ground (structured) | terminal | 2 (0) |
+| `edgecore/agr110-psu-dc@1` | psu | input | dc-inlet, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | input | 2 (0) |
+| `edgecore/agr560-psu-dc@1` | psu | input | terminal, terminal-pocket, screw-1=common/screw-head@1, screw-2=common/screw-head@1, dc-header=edgecore/agr560-dc-header@1 | no: presents no interface | -48V (prose) | power | 1 (0) |
+| `edgecore/ais800-64-psu-dc@1` | psu | input | terminal, terminal-pocket, screw-1=common/screw-head@1, dc-header=edgecore/ais800-64-dc-header@1 | no: presents no interface | RTN (prose) | power | 2 (0) |
+| `edgecore/ais800-psu-dc@2` | psu | input | terminal, pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, earth=common/ground-screw@1 | via pole-batt, pole-rtn | ground / BATT / RTN (structured) | power | 2 (0) |
+| `edgecore/cor550-psu-dc@1` | psu | input | terminal, hex-stud-1=common/screw-head@1, hex-stud-2=common/screw-head@1, hex-stud-3=common/screw-head@1, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1 | via pole-rtn, pole-batt | RTN / BATT (structured) | input | 1 (0) |
+| `edgecore/csr310-psu-dc@1` | psu | input | pole-gnd=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1 | via pole-gnd, pole-batt, pole-rtn | BATT / RTN (structured) | power | 2 (0) |
+| `edgecore/csr440-psu-dc@1` | psu | input | terminal, pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, earth=common/ground-stud@1 | via pole-batt, pole-rtn | ground / BATT / RTN (structured) | input | 1 (0) |
+| `edgecore/dcs240-psu-dc@2` | psu | input | dc-inlet, pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, earth=common/ground-screw@1 | via pole-batt, pole-rtn | BATT / RTN / ground (structured) | input | 2 (0) |
+| `edgecore/dcs500-psu-dc@1` | psu | input | terminal, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | input | 1 (0) |
+| `edgecore/fsj033-610g@1` | psu | input | terminal, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, ground-stud=common/ground-screw@1 | via pole-rtn, pole-batt | RTN / BATT / ground (structured) | input | 1 (0) |
+| `juniper/ex4200-pwr-190-dc@1` | psu | input | pole-a-pos=common/terminal-screw-34@1, pole-b-pos=common/terminal-screw-34@1, pole-a-neg=common/terminal-screw-34@1, pole-b-neg=common/terminal-screw-34@1 | via pole-a-pos, pole-b-pos, pole-a-neg, pole-b-neg | -48V / RTN / negative / positive / BATT (prose) | terminals | 5 (0) |
+| `juniper/ex4300-jpsu-550-dc-afi@1` | psu | input | terminal-block, pole-a-pos=common/terminal-screw-34@1, pole-a-neg=common/terminal-screw-34@1, earth=common/ground-screw@1, pole-b-neg=common/terminal-screw-34@1, pole-b-pos=common/terminal-screw-34@1 | via pole-a-pos, pole-a-neg, pole-b-neg, pole-b-pos | ground (structured) | - | 5 (0) |
+| `juniper/ex4300-jpsu-550-dc-afo@1` | psu | input | terminal-block, pole-a-pos=common/terminal-screw-34@1, pole-a-neg=common/terminal-screw-34@1, earth=common/ground-screw@1, pole-b-neg=common/terminal-screw-34@1, pole-b-pos=common/terminal-screw-34@1 | via pole-a-pos, pole-a-neg, pole-b-neg, pole-b-pos | ground (structured) | - | 5 (0) |
+| `juniper/ex4500-psu-dc-fb@1` | psu | input | pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1 | via pole-batt, pole-rtn | BATT / RTN (structured) | power | 1 (0) |
+| `juniper/ex4600-jpsu-650-dc-afi@1` | psu | input | pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | terminals | 3 (0) |
+| `juniper/ex4600-jpsu-650-dc-afo@1` | psu | input | pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | terminals | 4 (0) |
+| `juniper/ex6200-pwr-dc2100@1` | psu | input | terminals, pole-pos=common/hex-nut-stud-pair-5-8@1, pole-neg=common/hex-nut-stud-pair-5-8@1 | via pole-pos, pole-pos/1, pole-pos/2, pole-neg ... | negative / positive / RTN / -48V (prose) | sources | 1 (0) |
+| `juniper/ex9253-jnp-pwr1100-dc@1` | psu | input | pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1 | via pole-rtn, pole-batt | RTN / BATT (structured) | sources | 1 (0) |
+| `juniper/mx104-psu-dc@1` | psu | input | terminals, pole-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1 | via pole-batt, pole-rtn | BATT / RTN (structured) | inlet | 1 (0) |
+| `juniper/mx204-psu-dc@1` | psu | input | terminals, pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | inlet | 1 (0) |
+| `juniper/mx240-psu-dc@1` | psu | input | terminals, pole-rtn=juniper/mx240-dc-pole@1, pole-batt=juniper/mx240-dc-pole@1 | via pole-rtn, pole-rtn/1, pole-rtn/2, pole-batt ... | RTN / BATT (structured) | inlet | 2 (0) |
 | `juniper/mx304-psu-dc@1` | psu | input | terminals | no: presents no interface | -48V / RTN (prose) | inlet | 1 (0) |
-| `nokia/sr-12-pem-3@1` | power | input | terminal-neg, terminal-rtn | no: presents no interface | RTN (structured) | terminals | 1 (0) |
-| `nokia/sr-7-pem-3@1` | power | input | terminal-cover, terminal-neg, terminal-rtn | no: presents no interface | RTN (structured) | terminals | 1 (0) |
-| `nokia/sr-e-psu-dc@1` | psu | input | dc-terminal | no: presents no interface | ground (structured) | terminals | 3 (0) |
-| `smartoptics/dcp-2-psu-dc@1` | psu | input | dc-terminal | no: presents no interface | -48V / ground (prose) | terminal | 2 (0) |
+| `juniper/mx304-psu-dc@2` | psu | input | terminals, pole-batt=juniper/mx240-dc-pole@1, pole-rtn=juniper/mx240-dc-pole@1 | via pole-batt, pole-batt/1, pole-batt/2, pole-rtn ... | BATT / RTN (structured) | - | 1 (0) |
+| `juniper/qfx5100-jpsu-650w-dc-afi@1` | psu | input | terminal-block, pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | input | 9 (0) |
+| `juniper/qfx5100-jpsu-650w-dc-afo@1` | psu | input | terminal-block, pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | input | 9 (0) |
+| `juniper/qfx5130-jpsu-1600-dc-afi@1` | psu | input | terminal-pos, terminal-neg, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1 | via pole-rtn, pole-batt | RTN / BATT (structured) | input | 3 (0) |
+| `juniper/qfx5130-jpsu-1600-dc-afo@1` | psu | input | terminal-pos, terminal-neg, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1 | via pole-rtn, pole-batt | RTN / BATT (structured) | input | 3 (0) |
+| `juniper/qfx5200-jpsu-850w-dc-afi@1` | psu | input | terminals, pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | - | 2 (0) |
+| `juniper/qfx5200-jpsu-850w-dc-afo@1` | psu | input | terminals, pole-batt=common/terminal-screw-34@1, shunt-batt=common/terminal-screw-34@1, pole-rtn=common/terminal-screw-34@1, shunt-rtn=common/terminal-screw-34@1 | via pole-batt, shunt-batt, pole-rtn, shunt-rtn | BATT / RTN (structured) | - | 2 (0) |
+| `juniper/qfx5210-jpsu-1100w-dc-afi@1` | psu | input | terminals, dc-header=juniper/qfx5210-dc-header@1 | no: presents no interface | RTN (prose) | - | 1 (0) |
+| `juniper/qfx5210-jpsu-1100w-dc-afo@1` | psu | input | terminals, dc-header=juniper/qfx5210-dc-header@1 | no: presents no interface | RTN (prose) | - | 1 (0) |
+| `nokia/sr-12-pem-3@1` | power | input | terminal-neg, terminal-rtn, pole-batt-a=nokia/sr-12-dc-pole@1, pole-batt-b=nokia/sr-12-dc-pole@1, pole-rtn-a=nokia/sr-12-dc-pole@1, pole-rtn-b=nokia/sr-12-dc-pole@1 | via pole-batt-a, pole-batt-a/1, pole-batt-a/2, pole-batt-b ... | RTN / BATT (structured) | terminals | 1 (0) |
+| `nokia/sr-7-pem-3@1` | power | input | terminal-cover, terminal-neg, terminal-rtn, pole-batt=nokia/sr-7-dc-pole@1, pole-rtn=nokia/sr-7-dc-pole@1 | via pole-batt, pole-batt/1, pole-batt/2, pole-rtn ... | RTN / BATT (structured) | terminals | 1 (0) |
+| `nokia/sr-e-psu-dc@1` | psu | input | dc-terminal, pole-rtn=common/terminal-screw-38@1, pole-batt=common/terminal-screw-38@1, earth=common/ground-screw-m4@1 | via pole-rtn, pole-batt | ground / RTN / BATT (structured) | terminals | 3 (0) |
+| `smartoptics/dcp-2-psu-dc@1` | psu | input | dc-terminal, dc-header=smartoptics/dcp-2-dc-header@1 | no: presents no interface | -48V / positive / ground (prose) | terminal | 2 (0) |
 | `supermicro/psu-pws-601s-1r@1` | psu | input | terminal-rtn, terminal-48v, ground=common/ground-screw-washer@1 | no: presents no interface | RTN / BATT / positive / -48V / negative / ground (structured) | terminals | 1 (0) |
 | `telco-systems/tm810x-psu-dc@1` | psu | input | terminal=common/dc-terminal-24@1 | via terminal/lug-1, terminal/lug-2, terminal/lug-3 | none stated | terminals | 2 (0) |
-| `ufispace/psu-120-dc@1` | psu | input | terminal-block | no: presents no interface | RTN / ground (prose) | inlet | 1 (2) |
-| `ufispace/psu-132-dc@1` | psu | input | terminal-block | no: presents no interface | -48V / RTN (prose) | inlet | 8 (0) |
+| `ufispace/psu-120-dc@1` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 2 (4) |
+| `ufispace/psu-132-dc@1` | psu | input | terminal-block, pole-neg=common/terminal-screw-34@1, pole-pos=common/terminal-screw-34@1 | via pole-neg, pole-pos | -48V / RTN (prose) | inlet | 8 (0) |
 | `ufispace/psu-151-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 1 (0) |
-| `ufispace/psu-201-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 4 (0) |
+| `ufispace/psu-151-dc@2` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 1 (0) |
+| `ufispace/psu-201-dc@1` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 4 (0) |
 | `ufispace/psu-202-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 6 (0) |
+| `ufispace/psu-202-dc@2` | psu | input | terminal-block, plate-batt, plate-rtn, pole-batt=juniper/mx240-dc-pole@1, pole-rtn=juniper/mx240-dc-pole@1 | via pole-batt, pole-batt/1, pole-batt/2, pole-rtn ... | BATT / RTN (structured) | inlet | 6 (0) |
 | `ufispace/psu-302-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 7 (0) |
-| `ufispace/psu-401-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 5 (0) |
-| `ufispace/psu-751-dc@1` | psu | input | terminal-block | no: presents no interface | none stated | inlet | 2 (0) |
+| `ufispace/psu-302-dc@2` | psu | input | terminal-block, pole-1=juniper/mx240-dc-pole@1, pole-2=juniper/mx240-dc-pole@1 | via pole-1, pole-1/1, pole-1/2, pole-2 ... | RTN (prose) | inlet | 7 (0) |
+| `ufispace/psu-401-dc@1` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 5 (0) |
+| `ufispace/psu-751-dc@1` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 2 (0) |
+| `ufispace/s9511-dc-input@1` | psu | input | terminal-block, pole-rtn=common/terminal-screw-34@1, pole-batt=common/terminal-screw-34@1, pole-gnd=common/terminal-screw-34@1 | via pole-rtn, pole-batt, pole-gnd | RTN / BATT (structured) | inlet | 1 (2) |
 
-### terminal-block (6)
+### terminal-block (11)
 
 | part | class | direction | drawn as | cable end | polarity (stated) | source | devices (placements) |
 |---|---|---|---|---|---|---|---|
-| `amphenol-ns/output-terminal@1` | inlet | output | batt, rtn | no: presents no interface | BATT / RTN (structured) | screws | 4 (64) |
-| `common/dc-terminal-24@1` | inlet | input | lug-1=common/terminal-screw-34@1, lug-2=common/terminal-screw-34@1, lug-3=common/terminal-screw-34@1 | via lug-1, lug-2, lug-3 | -48V (prose) | screws | 1 (2) |
-| `common/dc-terminal-27@1` | inlet | input | lug-1=common/terminal-screw-38@1, lug-2=common/terminal-screw-38@1, lug-3=common/terminal-screw-38@1 | via lug-1, lug-2, lug-3 | -48V (prose) | screws | 1 (2) |
+| `amphenol-ns/output-terminal@1` | inlet | output | batt, rtn, lug-batt=common/terminal-screw-34@1, lug-rtn=common/terminal-screw-34@1 | via lug-batt, lug-rtn | BATT / RTN (structured) | screws | 4 (64) |
+| `arista/7010tx-dc-terminal@1` | inlet | input | lug-1=common/terminal-screw-34@1, lug-2=common/terminal-screw-34@1 | via lug-1, lug-2 | -48V / RTN / negative / positive (prose) | screws | 1 (2) |
+| `common/dc-terminal-24@1` | inlet | input | lug-1=common/terminal-screw-34@1, lug-2=common/terminal-screw-34@1, lug-3=common/terminal-screw-34@1 | via lug-1, lug-2, lug-3 | RTN / ground / BATT / -48V (prose) | screws | 1 (2) |
+| `common/dc-terminal-27@1` | inlet | input | lug-1=common/terminal-screw-38@1, lug-2=common/terminal-screw-38@1, lug-3=common/terminal-screw-38@1 | via lug-1, lug-2, lug-3 | RTN / ground / BATT / -48V (prose) | screws | 1 (2) |
 | `commscope/bp-p2@1` | inlet | input | terminal-block | no: presents no interface | -48V (prose) | terminals | 1 (0) |
 | `dell/dc-terminal-6ryj9@1` | inlet | input | - | no: presents no interface | -48V (prose) | - | 0 (0) |
+| `juniper/ex2200-dc-terminal@1` | inlet | input | pole-b-neg=common/terminal-screw-34@1, pole-a-neg=common/terminal-screw-34@1, pole-b-pos=common/terminal-screw-34@1, pole-a-pos=common/terminal-screw-34@1 | via pole-b-neg, pole-a-neg, pole-b-pos, pole-a-pos | negative / positive / -48V / RTN / BATT (prose) | - | 1 (1) |
+| `juniper/ex2300-dc-terminal@1` | inlet | input | pole-1-pos=common/terminal-screw-34@1, pole-1-neg=common/terminal-screw-34@1, pole-2-pos=common/terminal-screw-34@1, pole-2-neg=common/terminal-screw-34@1 | via pole-1-pos, pole-1-neg, pole-2-pos, pole-2-neg | -48V / RTN / BATT / negative / positive (prose) | - | 1 (1) |
+| `juniper/ex3300-dc-terminal@1` | inlet | input | lug-1=common/terminal-screw-34@1, lug-2=common/terminal-screw-34@1, lug-3=common/terminal-screw-34@1, lug-4=common/terminal-screw-34@1 | via lug-1, lug-2, lug-3, lug-4 | none stated | - | 1 (1) |
+| `nokia/fx-16-dc-terminal-block@1` | inlet | input | tb1-1=nokia/fx-16-dc-pole@1, tb1-2=nokia/fx-16-dc-pole@1, tb1-3=nokia/fx-16-dc-pole@1, tb1-4=nokia/fx-16-dc-pole@1 | via tb1-1, tb1-1/1, tb1-1/2, tb1-2 ... | -48V / RTN / BATT / BAT / RET (prose) | sources | 1 (1) |
 | `nokia/sr-1-dc-terminal-block@1` | inlet | input | feed-a-rtn, feed-b-rtn, a-neg=nokia/sr-1-dc-pole@1, a-rtn=nokia/sr-1-dc-pole@1, b-neg=nokia/sr-1-dc-pole@1, b-rtn=nokia/sr-1-dc-pole@1 | via a-neg, a-neg/1, a-neg/2, a-rtn ... | RTN (structured) | power | 1 (1) |
 
 ## Devices
 
 | device | power | DC parts (how) | lands |
 |---|---|---|---|
-| `amphenol-ns/300cb08` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | no |
+| `amphenol-ns/300cb08` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | yes |
 | `amphenol-ns/300cb08-c` | - | `amphenol-ns/input-feed-busbar@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
 | `amphenol-ns/300cb08-sc` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
-| `amphenol-ns/nrg300cb08-ctrl` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | no |
+| `amphenol-ns/nrg300cb08-ctrl` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | yes |
 | `amphenol-ns/nrg300cb08-ctrl-c` | - | `amphenol-ns/input-feed-busbar@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
 | `amphenol-ns/nrg300cb08-ctrl-sc` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
-| `amphenol-ns/nrg300cb08-sens` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | no |
+| `amphenol-ns/nrg300cb08-sens` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | yes |
 | `amphenol-ns/nrg300cb08-sens-c` | - | `amphenol-ns/input-feed-busbar@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
 | `amphenol-ns/nrg300cb08-sens-sc` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
-| `amphenol-ns/nrgils300cb08` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | no |
+| `amphenol-ns/nrgils300cb08` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-terminal@1` (placed:rear) | yes |
 | `amphenol-ns/nrgils300cb08-sc` | - | `amphenol-ns/input-feed-studs@1` (placed:rear); `amphenol-ns/output-p40@1` (placed:rear) | yes |
+| `arista/7010tx-48` | ac, dc | `arista/7010tx-dc-terminal@1` (placed:rear-dc) | yes |
+| `arista/7050cx3-32s` | ac, dc | `arista/7050x3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050cx4-24d8` | ac, dc | `arista/7280cr3-pwr-1000-dc-rev@1` (bay:rear, config:dc-r); `arista/7280cr3-pwr-1000-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050cx4m-48d8` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050dx4-32s` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050px4-32s` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050sdx4-48d8` | ac, dc | `arista/7280cr3-pwr-1000-dc-rev@1` (bay:rear, config:dc-r); `arista/7280cr3-pwr-1000-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050sx3-48yc12` | ac, dc | `arista/7050x3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050sx3-48yc8` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050tx3-48c8` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7050x4-48y-4df` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3-32d4` | ac, dc | `arista/7280cr3-pwr-1000-dc-rev@1` (bay:rear, config:dc-r); `arista/7280cr3-pwr-1000-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3-32p4` | ac, dc | `arista/7280cr3-pwr-1000-dc-rev@1` (bay:rear, config:dc-r); `arista/7280cr3-pwr-1000-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3-36s` | ac, dc | `arista/7280cr3-pwr-1000-dc-rev@1` (bay:rear, config:dc-r); `arista/7280cr3-pwr-1000-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3-96` | ac, dc | `arista/7280dr3a-pwr-2400-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3a-24d12` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3a-48d6` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280cr3a-72` | ac, dc | `arista/7050x4-pwr-1500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280dr3-24` | ac, dc | `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280dr3a-36` | ac, dc | `arista/7280dr3a-pwr-2400-dc@1` (bay:rear, config:dc) | yes |
+| `arista/7280dr3a-54` | ac, dc | `arista/7280dr3a-pwr-3000-dc@1` (bay:rear, config:dc) | yes |
+| `arista/7280pr3-24` | ac, dc | `arista/7280r3-pwr-1500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280sr3-40yc6` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280sr3-48yc8` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
+| `arista/7280tr3-40c6` | ac, dc | `arista/7280r3-pwr-500-dc-rev@1` (bay:rear, config:dc-r); `arista/7280r3-pwr-500-dc@1` (bay:rear, config:dc-f) | yes |
 | `aurcore/ais2001` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
 | `aurcore/ais2001p` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
 | `aurcore/ais2002` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
@@ -336,8 +515,8 @@ Library: 1499 component contracts, 258 devices.
 | `aurcore/ais2004p` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
 | `aurcore/ais4001` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
 | `aurcore/ais4001p` | dc | `common/terminal-header-508-5f@2` (placed:top) | yes |
-| `casa/c100g` | - | `casa/pem@1` (bay:rear) | no |
-| `casa/c40g` | - | `casa/c40g-pem@1` (bay:rear, config:bdm-3plus1, config:docsis-classic, config:docsis-non-redundant) | no |
+| `casa/c100g` | dc | `casa/pem@1` (bay:rear) | no |
+| `casa/c40g` | ac, dc | `casa/c40g-pem@1` (bay:rear, config:bdm-3plus1, config:docsis-classic, config:docsis-non-redundant) | no |
 | `celestica/ds3001` | ac, dc | none found | no part |
 | `celestica/ds6000` | ac, dc | none found: The inlet is read as IEC C20 from the pin layout in ds6000-A-3; no document names it. | no part |
 | `celestica/ds6001` | dc | `common/orv3-busbar-connector@1` (placed:rear) | no |
@@ -345,65 +524,196 @@ Library: 1499 component contracts, 258 devices.
 | `cisco/asr-9006` | - | `cisco/a9k-pwr-1p5kw-dc@1` (bay:front); `cisco/a9k-pwr-2kw-dc@1` (bay:front, config:dc) | no |
 | `cisco/asr-9010` | - | `cisco/a9k-pwr-1p5kw-dc@1` (bay:front); `cisco/a9k-pwr-2kw-dc@1` (bay:front, config:dc) | no |
 | `cisco/asr-9901` | - | `cisco/a9k-1600w-dc@1` (bay:rear, config:dc) | no |
-| `cisco/asr-9902` | - | `cisco/pwr-1p6kw-dc@1` (bay:rear, config:dc) | no |
-| `cisco/asr-9903` | - | `cisco/pwr-1p6kw-dc@1` (bay:rear, config:dc) | no |
+| `cisco/asr-9902` | - | `cisco/pwr-1p6kw-dc@2` (bay:rear, config:dc) | no |
+| `cisco/asr-9903` | - | `cisco/pwr-1p6kw-dc@2` (bay:rear, config:dc) | no |
+| `cisco/asr-9906` | - | `cisco/pwr-4p4kw-dc-v3@1` (bay:front, config:dc) | no |
+| `cisco/asr-9910` | - | `cisco/pwr-4p4kw-dc-v3@1` (bay:front, config:dc) | no |
 | `cisco/asr-9922` | - | `cisco/pwr-2kw-dc-v2@1` (bay:front) | no |
+| `cisco/c9300-24p` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-24s` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-24u` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-48p` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-48s` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-48t` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/c9300-48u` | ac, dc | `cisco/pwr-c1-1900whv-t@1` (bay:rear, config:psu-1900whv-t); `cisco/pwr-c1-715wdc@1` (bay:rear, config:psu-715wdc) | yes |
+| `cisco/n9k-c92348gc-fx3` | ac, dc, hvdc | `cisco/nxa-pdc-440w@1` (bay:rear, config:dc-440w-port-side-exhaust, config:dc-440w-port-side-intake); `cisco/nxa-phv-350w@1` (bay:rear, config:hvac-hvdc-350w-port-side-exhaust, config:hvac-hvdc-350w-port-side-intake) | no |
+| `cisco/n9k-c93108tc-fx3` | ac, dc, hvdc | `cisco/n9k-puv-1200w@1` (bay:rear, config:hvac-hvdc-1200w-port-side-exhaust, config:hvac-hvdc-1200w-port-side-intake); `cisco/nxa-pdc-930w@1` (bay:rear, config:dc-930w-port-side-exhaust, config:dc-930w-port-side-intake) | no |
+| `cisco/n9k-c93108tc-fx3p` | ac, dc | `cisco/nxa-pdc-715w@1` (bay:rear, config:dc-715w-port-side-intake, config:fx3h-dc-715w-port-side-intake) | no |
+| `cisco/n9k-c93180yc-fx3` | ac, dc, hvdc | `cisco/n9k-puv-1200w@1` (bay:rear, config:fx3h-hvac-hvdc-1200w-port-side-exhaust, config:fx3h-hvac-hvdc-1200w-port-side-intake, config:hvac-hvdc-1200w-port-side-exhaust, config:hvac-hvdc-1200w-port-side-intake); `cisco/nxa-pdc-930w@1` (bay:rear, config:dc-930w-port-side-exhaust, config:dc-930w-port-side-intake, config:fx3h-dc-930w-port-side-exhaust, config:fx3h-dc-930w-port-side-intake) | no |
+| `cisco/n9k-c93180yc-fx3s` | ac, dc, hvdc | `cisco/n9k-puv-1200w@1` (bay:rear, config:hvac-hvdc-1200w-port-side-exhaust, config:hvac-hvdc-1200w-port-side-intake); `cisco/nxa-pdc-930w@1` (bay:rear, config:dc-930w-port-side-exhaust, config:dc-930w-port-side-intake) | no |
+| `cisco/n9k-c9336c-fx2-e` | ac, dc | `cisco/nxa-pdc-1100w@1` (bay:rear, config:dc-1100w-port-side-exhaust, config:dc-1100w-port-side-intake) | no |
+| `cisco/n9k-c9348d-gx2a` | ac, dc, hvdc | `cisco/nxa-pdc-3200w@1` (bay:rear, config:dc-3200w-port-side-intake) | no |
+| `cisco/n9k-c9348gc-fx3` | ac, dc, hvdc | `cisco/nxa-pdc-440w@1` (bay:rear, config:dc-440w-port-side-exhaust, config:dc-440w-port-side-intake); `cisco/nxa-pdc-715w@1` (bay:rear, config:dc-715w-port-side-intake); `cisco/nxa-phv-350w@1` (bay:rear, config:hvac-hvdc-350w-port-side-exhaust, config:hvac-hvdc-350w-port-side-intake) | no |
+| `cisco/n9k-c9348gc-fx3ph` | ac, dc, hvdc | `cisco/nxa-pdc-440w@1` (bay:rear, config:dc-440w-port-side-exhaust, config:dc-440w-port-side-intake); `cisco/nxa-phv-350w@1` (bay:rear, config:hvac-hvdc-350w-port-side-exhaust, config:hvac-hvdc-350w-port-side-intake) | no |
+| `cisco/n9k-c9364d-gx2a` | ac, dc, hvdc | `cisco/nxa-pdc-3200w@1` (bay:rear, config:dc-3200w-port-side-intake) | no |
+| `cisco/n9k-c9504` | ac, dc, hvdc | `cisco/n9k-pdc-3000w-b@1` (bay:front); `cisco/n9k-pdc-3000w-b@2` (bay:front, config:psu-dc); `cisco/n9k-puv-3000w-b@1` (bay:front, config:psu-universal); `cisco/n9k-puv2-3000w-b@1` (bay:front, config:psu-dual-input) | yes |
+| `cisco/n9k-c9508` | ac, dc, hvdc | `cisco/n9k-pdc-3000w-b@1` (bay:front); `cisco/n9k-pdc-3000w-b@2` (bay:front, config:psu-dc); `cisco/n9k-puv-3000w-b@1` (bay:front, config:psu-universal); `cisco/n9k-puv2-3000w-b@1` (bay:front, config:psu-dual-input) | yes |
+| `cisco/n9k-c9516` | ac, dc, hvdc | `cisco/n9k-pdc-3000w-b@1` (bay:front); `cisco/n9k-pdc-3000w-b@2` (bay:front, config:psu-dc); `cisco/n9k-puv-3000w-b@1` (bay:front, config:psu-universal); `cisco/n9k-puv2-3000w-b@1` (bay:front, config:psu-dual-input) | yes |
+| `cisco/ncs-5001` | ac, dc | `cisco/nc5k-pdc-930w-bk@1` (bay:rear, config:dc-port-side-exhaust); `cisco/nc5k-pdc-930w-fr@1` (bay:rear, config:dc-port-side-intake) | no |
+| `cisco/ncs-5002` | ac, dc | `cisco/nc5k-pdc-930w-bk@1` (bay:rear, config:dc-port-side-exhaust); `cisco/nc5k-pdc-930w-fr@1` (bay:rear, config:dc-port-side-intake) | no |
+| `cisco/ncs-5011` | ac, dc | `cisco/nc5k-pdc-930w-bk@1` (bay:rear, config:dc-port-side-exhaust); `cisco/nc5k-pdc-930w-fr@1` (bay:rear, config:dc-port-side-intake) | no |
+| `cisco/ncs-57c3-mod-hx` | ac, dc | `cisco/nc57-1600w-dcfw@1` (bay:front, config:dc-port-side-intake) | no |
+| `cisco/ncs-57c3-mod-s` | ac, dc | `cisco/nc57-1600w-dcfw@1` (bay:front, config:dc-port-side-intake) | no |
+| `cisco/ws-c3650-48pd` | ac | `cisco/pwr-c2-640wdc@1` (bay:rear, config:dc, config:dc-dual) | yes |
 | `commscope/ch3000` | - | `commscope/bp-p2@1` (bay:rear, config:dc-power); `commscope/ps3248d@1` (bay:front, config:dc-power); `commscope/ps3248n@1` (bay:front) | no |
-| `dell/r740xd` | - | `dell/psu-1100w-dc-14g@1` (bay:rear) | no |
-| `edgecore/agr110` | ac, dc | `common/psu-dc-650@2` (bay:rear, config:dc) | no |
-| `edgecore/agr130` | ac, dc | `common/psu-dc-650@2` (bay:rear, config:dc) | no |
+| `dell/r740xd` | ac | `dell/psu-1100w-dc-14g@1` (bay:rear) | no |
+| `dell/r960` | ac | `dell/r960-psu-2400w-ac@1` (bay:rear); `dell/r960-psu-2800w-ac@1` (bay:rear) | no |
+| `digi/connect-ez-16` | ac, dc | `digi/ez-psu-dc@1` (bay:rear, config:dual-dc) | no |
+| `digi/connect-ez-32` | ac, dc | `digi/ez-psu-dc@1` (bay:rear, config:dual-dc) | no |
+| `digi/connect-it-4` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `digi/portserver-ts-1` | dc | `common/dc-barrel@1` (placed:front) | yes |
+| `digi/portserver-ts-2` | dc | `common/dc-barrel@1` (placed:front) | yes |
+| `digi/portserver-ts-4` | dc | `common/dc-barrel@1` (placed:front) | yes |
+| `edgecore/agr110` | ac, dc | `common/psu-dc-650@2` (bay:rear); `edgecore/agr110-psu-dc@1` (bay:rear, config:dc) | yes |
+| `edgecore/agr130` | ac, dc | `common/psu-dc-650@2` (bay:rear); `edgecore/agr110-psu-dc@1` (bay:rear, config:dc) | yes |
 | `edgecore/agr560` | ac, dc | `edgecore/agr560-psu-dc@1` (bay:rear, config:dc-f2b) | no |
-| `edgecore/ais800-32d` | ac, dc | `edgecore/ais800-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
-| `edgecore/ais800-32o` | ac, dc | `edgecore/ais800-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
+| `edgecore/ais800-32d` | ac, dc | `edgecore/ais800-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | yes |
+| `edgecore/ais800-32o` | ac, dc | `edgecore/ais800-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | yes |
 | `edgecore/ais800-64d` | ac, dc | `edgecore/ais800-64-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
 | `edgecore/ais800-64o` | ac, dc | `edgecore/ais800-64-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
 | `edgecore/amx3200` | ac, dc | `edgecore/amx-3200-48v-psu@1` (bay:rear, config:dc-f2b) | no |
-| `edgecore/as5912-54x` | ac, dc | `common/psu-dc-650@2` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
-| `edgecore/as7326-56x` | ac, dc | `common/psu-dc-650@2` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
-| `edgecore/as7726-32x` | ac, dc | `common/psu-dc-650@2` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
-| `edgecore/as7946-30xb` | ac, dc | `edgecore/agr-psu-dc@1` (bay:rear) | no |
-| `edgecore/as7946-74xksb` | ac, dc | `edgecore/agr-psu-dc@1` (bay:rear) | no |
-| `edgecore/cor550` | ac, dc | none found | no part |
-| `edgecore/cor580` | ac, dc, hvdc | none found | no part |
+| `edgecore/as5912-54x` | ac, dc | `common/psu-dc-650@2` (bay:rear); `edgecore/as5912-54x-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
+| `edgecore/as7326-56x` | ac, dc | `common/psu-dc-650@2` (bay:rear); `edgecore/as7326-56x-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
+| `edgecore/as7726-32x` | ac, dc | `common/psu-dc-650@2` (bay:rear); `edgecore/psu-48v-650-b@1` (bay:rear, config:dc-b2f); `edgecore/psu-48v-650-f@1` (bay:rear, config:dc-f2b) | no |
+| `edgecore/as7946-30xb` | ac, dc | `edgecore/agr-psu-dc@1` (bay:rear) | yes |
+| `edgecore/as7946-74xksb` | ac, dc | `edgecore/agr-psu-dc@1` (bay:rear) | yes |
+| `edgecore/cor550` | ac, dc | `edgecore/cor550-psu-dc@1` (bay:rear, config:dc-f2b) | yes |
+| `edgecore/cor580` | ac, dc, hvdc | `edgecore/fsj033-610g@1` (bay:rear, config:dc48-f2b) | yes |
 | `edgecore/csr180` | dc | `common/dc-terminal-24@1` (placed:front) | yes |
 | `edgecore/csr200` | dc | `common/dc-terminal-27@1` (placed:front) | yes |
-| `edgecore/csr310` | ac, dc | `edgecore/csr310-psu-dc@1` (bay:front, config:dc) | no |
-| `edgecore/csr430` | ac, dc | `edgecore/csr310-psu-dc@1` (bay:front, config:dc) | no |
-| `edgecore/csr440` | ac, dc | none found | no part |
+| `edgecore/csr310` | ac, dc | `edgecore/csr310-psu-dc@1` (bay:front, config:dc) | yes |
+| `edgecore/csr430` | ac, dc | `edgecore/csr310-psu-dc@1` (bay:front, config:dc) | yes |
+| `edgecore/csr440` | ac, dc | `edgecore/csr440-psu-dc@1` (bay:front, config:dc) | yes |
 | `edgecore/dcs201` | ac, dc | `edgecore/dcs201-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
 | `edgecore/dcs202` | ac, dc | `edgecore/dcs201-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
-| `edgecore/dcs240` | ac, dc | `edgecore/dcs240-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
+| `edgecore/dcs240` | ac, dc | `edgecore/dcs240-psu-dc@1` (bay:rear); `edgecore/dcs240-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | yes |
+| `edgecore/dcs500` | ac, dc | `edgecore/dcs500-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | yes |
 | `edgecore/dcs510` | ac, hvdc | none found | no part |
-| `edgecore/dcs511` | ac, dc | `edgecore/dcs240-psu-dc@1` (bay:rear, config:dc-b2f, config:dc-f2b) | no |
+| `edgecore/dcs511` | ac, dc | `edgecore/dcs240-psu-dc@1` (bay:rear); `edgecore/dcs240-psu-dc@2` (bay:rear, config:dc-b2f, config:dc-f2b) | yes |
 | `edgecore/ecs4120-28fv2-i` | ac, dc | `common/dc-terminal-plug-2@1` (placed:front) | no |
 | `edgecore/ecs4530-54csfp-i` | dc | `common/dc-terminal-plug-2@1` (placed:front) | no |
 | `halny/hlx-tgv` | - | `common/dc-barrel@1` (placed:rear) | yes |
-| `juniper/mx104` | - | `juniper/mx104-psu-dc@1` (bay:front) | no |
+| `juniper/ex2200-24t` | ac, dc | `juniper/ex2200-dc-terminal@1` (placed:rear-dc) | yes |
+| `juniper/ex2300-24t` | ac, dc | `juniper/ex2300-dc-terminal@1` (placed:rear-dc) | yes |
+| `juniper/ex3200-24t` | ac, dc | `juniper/ex4200-pwr-190-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/ex3200-48t` | ac, dc | `juniper/ex4200-pwr-190-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/ex3300-24t` | ac, dc | `juniper/ex3300-dc-terminal@1` (placed:rear) | yes |
+| `juniper/ex3400-24t` | ac, dc | `juniper/ex3400-jpsu-150-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex3400-48t` | ac, dc | `juniper/ex3400-jpsu-150-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4100-24t` | ac, dc | `juniper/ex4100-jpsu-150-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4100-48t` | ac, dc | `juniper/ex4100-jpsu-150-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4100-h-12mp` | - | `juniper/ex4100-h-psu-connector@1` (placed:front) | no |
+| `juniper/ex4100-h-24f` | ac, dc | `juniper/ex4100-h-24f-dc-psu@1` (bay:rear, config:dc); `juniper/ex4100-h-terminal-pad@1` (placed:front) | yes |
+| `juniper/ex4100-h-24mp` | ac, dc | `juniper/ex4100-h-24mp-dc-psu@1` (bay:rear, config:dc); `juniper/ex4100-h-terminal-pad@1` (placed:front) | yes |
+| `juniper/ex4200-24f` | ac, dc | `juniper/ex4200-pwr-190-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/ex4200-24t` | ac, dc | `juniper/ex4200-pwr-190-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/ex4200-48t` | ac, dc | `juniper/ex4200-pwr-190-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/ex4300-24p` | ac | `juniper/ex4300-jpsu-550-dc-afi@1` (bay:rear); `juniper/ex4300-jpsu-550-dc-afo@1` (bay:rear) | yes |
+| `juniper/ex4300-24t` | ac | `juniper/ex4300-jpsu-550-dc-afi@1` (bay:rear); `juniper/ex4300-jpsu-550-dc-afo@1` (bay:rear) | yes |
+| `juniper/ex4300-32f` | ac, dc | `juniper/ex4300-jpsu-550-dc-afi@1` (bay:rear); `juniper/ex4300-jpsu-550-dc-afo@1` (bay:rear, config:dc) | yes |
+| `juniper/ex4300-48p` | ac | `juniper/ex4300-jpsu-550-dc-afi@1` (bay:rear); `juniper/ex4300-jpsu-550-dc-afo@1` (bay:rear) | yes |
+| `juniper/ex4300-48t` | ac, dc | `juniper/ex4300-jpsu-550-dc-afi@1` (bay:rear, config:dc-afi); `juniper/ex4300-jpsu-550-dc-afo@1` (bay:rear, config:dc) | yes |
+| `juniper/ex4400-24mp` | ac, dc | `juniper/jpsu-2000-c-dc-afo@1` (bay:rear) | no |
+| `juniper/ex4400-24p` | ac, dc | `juniper/jpsu-2000-c-dc-afo@1` (bay:rear) | no |
+| `juniper/ex4400-24t` | ac, dc | `juniper/jpsu-550-c-dc-afi@1` (bay:rear, config:dc-afi); `juniper/jpsu-550-c-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4400-24x` | ac, dc | `juniper/jpsu-550-c-dc-afi@1` (bay:rear, config:dc-afi); `juniper/jpsu-550-c-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4400-48f` | ac, dc | `juniper/jpsu-550-c-dc-afi@1` (bay:rear, config:dc-afi); `juniper/jpsu-550-c-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4400-48mp` | ac, dc | `juniper/jpsu-2000-c-dc-afo@1` (bay:rear) | no |
+| `juniper/ex4400-48p` | ac, dc | `juniper/jpsu-2000-c-dc-afo@1` (bay:rear) | no |
+| `juniper/ex4400-48t` | ac, dc | `juniper/jpsu-550-c-dc-afi@1` (bay:rear, config:dc-afi); `juniper/jpsu-550-c-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/ex4500-40f` | ac, dc | `juniper/ex4500-psu-dc-fb@1` (bay:rear, config:dc-c, config:vc1-dc) | yes |
+| `juniper/ex4550-32f` | ac, dc | `juniper/ex4600-jpsu-650-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/ex4600-jpsu-650-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/ex4550-32t` | ac, dc | `juniper/ex4600-jpsu-650-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/ex4600-jpsu-650-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/ex4600-40f` | ac, dc | `juniper/ex4600-jpsu-650-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/ex4600-jpsu-650-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/ex4650-48y` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/ex6210` | ac, dc | `juniper/ex6200-pwr-dc2100@1` (bay:front, config:dc-2100-t) | yes |
+| `juniper/ex8208` | ac, dc | `juniper/ex8200-pwr-ac2k@1` (bay:front); `juniper/ex8200-pwr-ac3k@1` (bay:front, config:base-ac3); `juniper/ex8200-pwr-dc2kr@1` (bay:front, config:redundant-dc) | no |
+| `juniper/ex8216` | ac, dc | `juniper/ex8200-pwr-ac2k@1` (bay:front, config:redundant-ac2); `juniper/ex8200-pwr-ac3k@1` (bay:front); `juniper/ex8200-pwr-dc3kr@1` (bay:front, config:redundant-dc) | no |
+| `juniper/ex9204` | ac, dc | `juniper/ex9200-pwr-mx480-2400-dc@1` (bay:rear); `juniper/ex9200-pwr-mx480-2400-dc@2` (bay:rear, config:red3b-dc, config:red3c-dc, config:redund-dc, config:redund3a-dc) | yes |
+| `juniper/ex9208` | ac, dc | `juniper/ex9200-pwr-mx480-2400-dc@1` (bay:rear); `juniper/ex9200-pwr-mx480-2400-dc@2` (bay:rear, config:red3b-dc, config:red3c-dc, config:redund-dc, config:redund3a-dc) | yes |
+| `juniper/ex9214` | ac, dc | `juniper/ex9214-pwr-mx960-4100-dc@1` (bay:rear); `juniper/ex9214-pwr-mx960-4100-dc@2` (bay:rear, config:red3b-dc, config:red3c-dc, config:redund3-dc, config:redund3a-dc) | yes |
+| `juniper/ex9251` | ac, dc | `juniper/ex4600-jpsu-650-dc-afo@1` (bay:rear, config:dc) | yes |
+| `juniper/ex9253` | ac, dc | `juniper/ex9253-jnp-pwr1100-dc@1` (bay:rear, config:base-dc, config:red-dc) | yes |
+| `juniper/mx10004` | ac, hvdc | none found | no part |
+| `juniper/mx10008` | ac, hvdc | none found | no part |
+| `juniper/mx10016` | ac, hvdc | none found | no part |
+| `juniper/mx104` | dc | `juniper/mx104-psu-dc@1` (bay:front) | yes |
 | `juniper/mx2008` | - | `juniper/mx2000-psm-dc-v@1` (bay:rear) | no |
 | `juniper/mx2010` | - | `juniper/mx2000-psm-dc-v@1` (bay:rear) | no |
 | `juniper/mx2020` | - | `juniper/mx2000-psm-dc-v@1` (bay:rear) | no |
-| `juniper/mx204` | - | `juniper/mx204-psu-dc@1` (bay:rear, config:dc) | no |
-| `juniper/mx240` | - | `juniper/mx240-psu-dc@1` (bay:rear) | no |
-| `juniper/mx304` | - | `juniper/mx304-psu-dc@1` (bay:rear, config:dc) | no |
-| `juniper/mx480` | - | `juniper/mx240-psu-dc@1` (bay:rear, config:dc) | no |
-| `nokia/lmfs-f` | dc | `nokia/lpwr-f@1` (bay:front) | no |
+| `juniper/mx204` | ac, dc | `juniper/mx204-psu-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/mx240` | ac, dc | `juniper/mx240-psu-dc@1` (bay:rear) | yes |
+| `juniper/mx304` | ac, dc, hvdc | `juniper/mx304-psu-dc@1` (bay:rear); `juniper/mx304-psu-dc@2` (bay:rear, config:dc) | yes |
+| `juniper/mx480` | ac, dc | `juniper/mx240-psu-dc@1` (bay:rear, config:dc) | yes |
+| `juniper/qfx10002-36q` | ac, dc | `juniper/qfx10002-jpsu-1600w-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/qfx10002-60c` | ac, dc | `juniper/qfx10002-jpsu-1600w-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/qfx10002-72q` | ac, dc | `juniper/qfx10002-jpsu-1600w-dc-afo@1` (bay:rear, config:dc) | no |
+| `juniper/qfx10008` | ac, dc, hvdc | `juniper/qfx10000-jnp10k-pwr-dc2@1` (bay:rear); `juniper/qfx10000-pwr-dc@1` (bay:rear, config:redund-dc) | yes |
+| `juniper/qfx10016` | ac, dc | `juniper/qfx10000-jnp10k-pwr-dc2@1` (bay:rear); `juniper/qfx10000-pwr-dc@1` (bay:rear, config:redund-dc) | yes |
+| `juniper/qfx3500-48s4q` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx3600-16q` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5100-24q` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, bay:rear-3mgmt, config:dc-3mgmt-b2f, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, bay:rear-3mgmt, config:dc-3mgmt-f2b, config:dc-f2b) | yes |
+| `juniper/qfx5100-48s` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, bay:rear-3mgmt, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, bay:rear-3mgmt, config:dc-f2b) | yes |
+| `juniper/qfx5100-48t` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5100-96s` | ac, dc | `juniper/qfx5200-jpsu-850w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5200-jpsu-850w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5110-32q` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5110-48s` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5120-32c` | ac, dc | `juniper/qfx5200-48y-dpsu-ai@1` (bay:rear, config:dc-b2f); `juniper/qfx5200-48y-dpsu-ao@1` (bay:rear, config:dc-f2b) | no |
+| `juniper/qfx5120-48t` | ac, dc | `juniper/qfx5100-jpsu-650w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5100-jpsu-650w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5130-32cd` | ac, dc | `juniper/qfx5130-jpsu-1600-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5130-jpsu-1600-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5130-48c` | ac, dc | `juniper/qfx5130-jpsu-1600-dc-afi@1` (bay:rear, config:cm-dc-b2f, config:dc-b2f); `juniper/qfx5130-jpsu-1600-dc-afo@1` (bay:rear, config:cm-dc-f2b, config:dc-f2b) | yes |
+| `juniper/qfx5200-32c` | ac, dc | `juniper/qfx5200-jpsu-850w-dc-afi@1` (bay:rear, config:dc-afi); `juniper/qfx5200-jpsu-850w-dc-afo@1` (bay:rear, config:dc-afo) | yes |
+| `juniper/qfx5200-48y` | ac, dc | `juniper/qfx5200-48y-dpsu-ai@1` (bay:rear, config:dc-afi); `juniper/qfx5200-48y-dpsu-ao@1` (bay:rear, config:dc-afo) | no |
+| `juniper/qfx5210-64c` | ac, dc | `juniper/qfx5210-jpsu-1100w-dc-afi@1` (bay:rear, config:dc-afi); `juniper/qfx5210-jpsu-1100w-dc-afo@1` (bay:rear, config:dc-afo) | no |
+| `juniper/qfx5220-128c` | ac, dc | `juniper/qfx10002-jpsu-1600w-dc-afo@1` (bay:rear, config:dc-f2b) | no |
+| `juniper/qfx5220-32cd` | ac, dc | `juniper/qfx5130-jpsu-1600-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5130-jpsu-1600-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5230-64cd` | ac, dc | `juniper/qfx5230-jnp-2400w-dc-afi@1` (bay:rear, config:dc-b2f); `juniper/qfx5230-jnp-3000w-dc-afo@1` (bay:rear, config:dc-f2b) | yes |
+| `juniper/qfx5241-64od` | ac, dc | `juniper/qfx524x-2ru-pwr-do@1` (bay:rear, config:dc-f2b) | no |
+| `juniper/qfx5241-64qd` | ac, dc | `juniper/qfx524x-2ru-pwr-do@1` (bay:rear, config:dc-f2b) | no |
+| `juniper/qfx5250-64oe-l` | dc | `common/orv3-busbar-connector@1` (placed:rear) | no |
+| `juniper/qfx5700` | ac, dc | `juniper/qfx5230-jnp-3000w-dc-afo@1` (bay:rear, config:dc, config:e-dc) | yes |
+| `mikrotik/crs309-1g-8s-plus-in` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `mikrotik/crs326-24g-2s-plus-rm` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `mikrotik/crs504-4xq-in` | ac | `common/dc-barrel@1` (placed:front) | yes |
+| `mikrotik/crs510-8xs-2xq-in` | ac | `common/dc-barrel@1` (placed:front) | yes |
+| `mikrotik/css326-24g-2s-plus-rm` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `nokia/lmfs-f` | dc | `nokia/lpwr-f@1` (bay:front) | yes |
+| `nokia/nfxs-d-ba` | - | `nokia/fx-16-dc-terminal-block@1` (placed:front) | yes |
 | `nokia/nfxs-e-bb` | - | `nokia/ngfc-h@1` (bay:front) | no |
 | `nokia/nfxs-f-bb` | - | `nokia/ngfc-g@1` (bay:front) | no |
 | `nokia/sr-1-dc` | - | `nokia/sr-1-dc-terminal-block@1` (placed:rear) | yes |
-| `nokia/sr-12` | dc | `nokia/sr-12-pem-3@1` (bay:rear) | no |
-| `nokia/sr-1e` | - | `nokia/sr-e-psu-dc@1` (bay:rear) | no |
-| `nokia/sr-2e` | - | `nokia/sr-e-psu-dc@1` (bay:rear) | no |
-| `nokia/sr-3e` | - | `nokia/sr-e-psu-dc@1` (bay:rear) | no |
-| `nokia/sr-7` | dc | `nokia/sr-7-pem-3@1` (bay:rear); `nokia/sr-7-power-filter@1` (bay:front) | no |
+| `nokia/sr-12` | dc | `nokia/sr-12-pem-3@1` (bay:rear) | yes |
+| `nokia/sr-1e` | ac, dc | `nokia/sr-e-psu-dc@1` (bay:rear) | yes |
+| `nokia/sr-2e` | ac, dc | `nokia/sr-e-psu-dc@1` (bay:rear) | yes |
+| `nokia/sr-3e` | ac, dc | `nokia/sr-e-psu-dc@1` (bay:rear) | yes |
+| `nokia/sr-7` | dc | `nokia/sr-7-pem-3@1` (bay:rear); `nokia/sr-7-power-filter@1` (bay:front) | yes |
 | `nokia/xs-010x-r` | dc | `common/dc-barrel@1` (placed:rear) | yes |
 | `nokia/xs-010xr-p` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/cm8004` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/cm8004-c` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/cm8008` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/cm8008-c` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/om1304-4e` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/om1304-4e-c` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/om1308-8e` | dc | `common/dc-barrel@1` (placed:rear) | yes |
+| `opengear/om1308-8e-c` | dc | `common/dc-barrel@1` (placed:rear) | yes |
 | `oscilloquartz/osa-5420-quartz` | - | `oscilloquartz/osa542x-psu-dc-40w@1` (bay:front, config:data-sheet-render, config:dc-power, config:manual-figure-3) | no |
 | `oscilloquartz/osa-5420-quartz-hq-plus` | - | `oscilloquartz/osa542x-psu-dc-40w@1` (bay:front, config:dc-power, config:manual-figure-4) | no |
 | `oscilloquartz/osa-5421-quartz-hq-plus-plus` | - | `oscilloquartz/osa542x-psu-dc-90w@1` (bay:front, config:dc-power, config:manual-figure-5) | no |
 | `oscilloquartz/osa-5421-rubidium` | - | `oscilloquartz/osa542x-psu-dc-90w@1` (bay:front, config:dc-power, config:manual-figure-6) | no |
 | `readylinks/gl-12xb-240d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
-| `smartoptics/dcp-2` | - | `smartoptics/dcp-2-psu-dc@1` (bay:rear, config:dc-f2b) | no |
-| `smartoptics/dcp-m32-cso-zr` | - | `smartoptics/dcp-2-psu-dc@1` (bay:rear) | no |
+| `readylinks/gl-12xb-p600d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-12xc-240d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-12xc-p600d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-24xb-240d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-24xb-p600d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-24xc-240d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/gl-24xc-p600d` | - | `common/dc-terminal-header-6@1` (placed:rear) | yes |
+| `readylinks/ipc-apwf6-poe-wp` | - | `common/dc-barrel@1` (placed:left) | yes |
+| `readylinks/ipc-apwf7-poe-cl` | - | `common/dc-barrel@1` (placed:rear) | yes |
+| `servertech/pro1-48dcwc-16-2x100-a0` | - | `servertech/pro1-dc-input-block@1` (placed:front); `servertech/pro1-dc-output-block@1` (placed:front) | yes |
+| `smartoptics/dcp-2` | ac, dc | `smartoptics/dcp-2-psu-dc@1` (bay:rear, config:dc-f2b) | no |
+| `smartoptics/dcp-m32-cso-zr` | ac, dc | `smartoptics/dcp-2-psu-dc@1` (bay:rear) | no |
 | `supermicro/sys-111e-fdwtr` | dc | `supermicro/psu-pws-601s-1r@1` (bay:front) | no |
 | `telco-systems/tm-280` | dc | `common/dc-barrel@1` (placed:front) | yes |
 | `telco-systems/tm-3308h` | ac, dc | none found: The internal supply's inlet (AC, or the DC build's dual feed) and the external redundant supply's connector are not on the front, so they are presumably at the  | no part |
@@ -418,49 +728,54 @@ Library: 1499 component contracts, 258 devices.
 | `telco-systems/xm-7380` | ac, dc | none found | no part |
 | `telco-systems/xm-8102` | ac, dc | none found | no part |
 | `telco-systems/xm-8424h` | ac, dc | `telco-systems/xm8424-psu-dc@1` (bay:front, config:ac-dc, config:dc, config:dual-dc) | no |
-| `ufispace/m3000-14xc` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | no |
-| `ufispace/s6301-56st` | ac, dc | `ufispace/psu-151-dc@1` (bay:rear) | no |
-| `ufispace/s7801-54xs` | ac, dc | `ufispace/psu-401-dc@1` (bay:rear) | no |
-| `ufispace/s8901-54xc` | ac, dc | `ufispace/psu-401-dc@1` (bay:rear) | no |
-| `ufispace/s9110-32x` | ac, dc | `ufispace/psu-751-dc@1` (bay:rear) | no |
-| `ufispace/s9300-32d` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | no |
-| `ufispace/s9301-32d` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | no |
-| `ufispace/s9301-32db` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | no |
+| `ubiquiti/udm-pro` | ac | `ubiquiti/usp-rps-input@1` (placed:rear) | no |
+| `ubiquiti/usw-pro-24-poe` | ac | `ubiquiti/usp-rps-input@1` (placed:rear) | no |
+| `ufispace/m3000-14xc` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | yes |
+| `ufispace/s6301-56st` | ac, dc | `ufispace/psu-151-dc@1` (bay:rear); `ufispace/psu-151-dc@2` (bay:rear, config:dc, config:dc-b2f) | yes |
+| `ufispace/s7801-54xs` | ac, dc | `ufispace/psu-401-dc@1` (bay:rear) | yes |
+| `ufispace/s8901-54xc` | ac, dc | `ufispace/psu-401-dc@1` (bay:rear) | yes |
+| `ufispace/s9110-32x` | ac, dc | `ufispace/psu-751-dc@1` (bay:rear) | yes |
+| `ufispace/s9300-32d` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | yes |
+| `ufispace/s9301-32d` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | yes |
+| `ufispace/s9301-32db` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc, config:dc-b2f) | yes |
 | `ufispace/s9311-64d` | ac, dc | `ufispace/psu-242-dc@1` (bay:rear, config:dc, config:dc-b2f) | no |
-| `ufispace/s9321-64e` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9321-64eo` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9500-22xst` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | no |
-| `ufispace/s9500-30xs` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | no |
-| `ufispace/s9501-18smt` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | no |
-| `ufispace/s9501-28smt` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | no |
-| `ufispace/s9502-12sm` | ac, dc | `ufispace/psu-120-dc@1` (placed:front) | no |
-| `ufispace/s9502-16smt` | ac, dc | none found: Both held elevations and all three photographs show the DC build: two three-post screw terminal blocks under RTN / -36 - -75V legends. The datasheet offers a '1 | no part |
-| `ufispace/s9510-28dc` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | no |
-| `ufispace/s9510-30xc` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | no |
-| `ufispace/s9511-20ct` | dc | none found: THE FRONT PHOTOGRAPH IS NOT THE DOCUMENTED BUILD, and the matched-scale comparison is what found it. Both text sources describe one fixed supply - the datasheet | no part |
-| `ufispace/s9600-102xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | no |
-| `ufispace/s9600-28dx` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | no |
-| `ufispace/s9600-30dx` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9600-32x` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9600-56dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9600-64x` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9600-72xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9601-102xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | no |
-| `ufispace/s9601-104bc` | ac, dc | `ufispace/psu-132-crps-dc@1` (bay:rear) | no |
-| `ufispace/s9610-36d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9610-46dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9610-48dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9611-36d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear) | no |
+| `ufispace/s9321-64e` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9321-64eo` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9500-22xst` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | yes |
+| `ufispace/s9500-30xs` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | yes |
+| `ufispace/s9501-18smt` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | yes |
+| `ufispace/s9501-28smt` | ac, dc | `ufispace/psu-201-dc@1` (bay:front) | yes |
+| `ufispace/s9502-12sm` | ac, dc | `ufispace/psu-120-dc@1` (placed:front) | yes |
+| `ufispace/s9502-16smt` | ac, dc | `ufispace/psu-120-dc@1` (placed:front) | yes |
+| `ufispace/s9510-28dc` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | yes |
+| `ufispace/s9510-30xc` | ac, dc | `ufispace/psu-401-dc@1` (bay:front) | yes |
+| `ufispace/s9511-20ct` | dc | `ufispace/s9511-dc-input@1` (placed:front) | yes |
+| `ufispace/s9600-102xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | yes |
+| `ufispace/s9600-28dx` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | yes |
+| `ufispace/s9600-30dx` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear); `ufispace/psu-162-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9600-32x` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear); `ufispace/psu-162-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9600-56dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9600-64x` | ac, dc | `ufispace/psu-162-dc@1` (bay:rear); `ufispace/psu-162-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9600-72xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc) | yes |
+| `ufispace/s9601-102xc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear) | yes |
+| `ufispace/s9601-104bc` | ac, dc | `ufispace/psu-132-crps-dc@1` (bay:rear); `ufispace/psu-132-crps-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9610-36d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:base, config:dc) | yes |
+| `ufispace/s9610-46dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9610-48dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9611-36d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:base, config:dc) | yes |
 | `ufispace/s9620-32e` | ac, dc | none found: the datasheet orders PSU-322-DEJR-NN (3200W DC, exhaust) beside the AC unit, and both embedded renders show the AC build with C20 inlets. Nothing held shows the | no part |
 | `ufispace/s9620-40dg` | ac, dc | `ufispace/psu-102-dc@1` (bay:front, config:dc) | no |
-| `ufispace/s9620-54dc` | ac, dc | `ufispace/psu-751-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9700-23d` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9700-53dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9701-82dc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9705-48d` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9710-76d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9720-56ed` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
-| `ufispace/s9725-64e` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear, config:dc) | no |
+| `ufispace/s9620-54dc` | ac, dc | `ufispace/psu-751-dc@1` (bay:rear, config:dc) | yes |
+| `ufispace/s9700-23d` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9700-53dx` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9701-82dc` | ac, dc | `ufispace/psu-132-dc@1` (bay:rear, config:dc) | yes |
+| `ufispace/s9705-48d` | ac, dc | `ufispace/psu-202-dc@1` (bay:rear); `ufispace/psu-202-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9710-76d` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9720-56ed` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:dc) | yes |
+| `ufispace/s9725-64e` | ac, dc | `ufispace/psu-302-dc@1` (bay:rear); `ufispace/psu-302-dc@2` (bay:rear, config:dc) | yes |
+| `vecima/en8100` | ac | `vecima/en8100-psm@1` (bay:lid-open) | no |
+| `vecima/en8400` | ac | `vecima/en8100-psm@1` (bay:lid-open) | no |
+| `vertiv/acs804meac-400` | - | `common/dc-barrel@1` (placed:rear) | yes |
 
 ## The cable-end parts that exist
 

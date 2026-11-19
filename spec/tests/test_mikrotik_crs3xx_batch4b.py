@@ -58,7 +58,7 @@ def test_the_device_is_named_as_the_maker_prints_it(name):
     assert d["model"] == model
     assert d["portfolio"] == {"line": "Switches", "family": "Cloud Router Switch", "series": series}
     assert "+" not in name
-    assert d["version"] == ("1.0.1" if name == CRS418 else "1.0.0")
+    assert d["version"] == "1.0.1"
     assert list(d["configurations"]["base"]["part-numbers"]) == [model]
 
 
@@ -151,6 +151,34 @@ def test_crs320_supplies_are_two_slots_that_take_the_hot_swap_g1483_and_seat_non
     assert p["power-without-attachments-w"] == 36
     assert d["attrs"]["thermal"]["cooling"].startswith("3 fans")
     assert "fan-redundancy" not in json.dumps(d["groups"])
+
+
+G1483_PAGE = "https://mikrotik.com/product/g1483_0600wnb"
+
+
+def test_crs320_sources_name_the_g1483_page_and_brochure():
+    note = load(CRS320)["provenance"]["sources"]["note"]
+    assert G1483_PAGE in note and "G1483-0600WNB_240656.pdf" in note
+    assert "The switch comes with a single 600W PSU" in note
+
+
+def test_crs320_shipped_supply_gap_cites_the_g1483_page_and_still_seats_nothing():
+    d = load(CRS320)
+    gap = {g["what"]: g for g in d["gaps"]}["shipped-supply-part"]
+    assert gap["reason"] == "vendor-silent" and gap["scope"] == ["rear"]
+    assert G1483_PAGE in gap["note"] and "The switch comes with a single 600W PSU" in gap["note"]
+    assert "G1483-0600WNB" in gap["wanted"]
+    assert d["configurations"]["base"]["bays"]["psu-1"] == ""
+    assert not [x for x in bays(d, "rear") if x["id"] == "psu-1" and x.get("default")]
+
+
+def test_crs320_current_meaning_is_a_gap_and_the_attribute_is_unchanged():
+    d = load(CRS320)
+    gap = {g["what"]: g for g in d["gaps"]}["power-current-meaning"]
+    assert gap["reason"] == "sources-disagree" and gap["scope"] == ["rear"]
+    assert "10.35 A" in gap["note"] and "Nominal current" in gap["note"] and "54.5V 10.35A 600W" in gap["note"]
+    assert "what 10.35 A is" in gap["wanted"]
+    assert d["attrs"]["power"]["power-current"] == "nominal 10.35 A, maximum 11 A (brochure)"
 
 
 def test_g1483_0600wnb_is_one_module_with_its_own_c14_inlet():
@@ -328,6 +356,6 @@ def test_the_lock_files_match_the_devices():
     known = devicelock.load_lock(lib)["devices"]
     for name in NAMES:
         entry = known[f"mikrotik/{name}"]
-        assert entry["version"] == load(name)["version"] == ("1.0.1" if name == CRS418 else "1.0.0")
+        assert entry["version"] == load(name)["version"] == "1.0.1"
         per_device = json.loads((DEVICES / name / "device.lock.json").read_text())
         assert per_device["gaps"] == entry["gaps"]
