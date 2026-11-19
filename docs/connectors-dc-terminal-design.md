@@ -138,8 +138,9 @@ is read again when one changes. No header's geometry is changed.
 - **The stub** is a rule, not a reading.
 - **The wire diameter** is one figure from a range, stated by its source to the whole
   millimetre; a placement sets its own.
-- **The wire points are not routed in 3D yet.** The viewer reads one cable end per plug,
-  the point named `cable`; reading `wire-1` to `wire-N` is #805.
+- **The wire points are not routed in 3D yet.** `cablePoints(svg)` reads one cable end per
+  plug, the point named `cable`; `cablePoints(svg, 'wire')` reads `wire-1` to `wire-N`, one
+  point per wire. Routing a wire from each pole is #805.
 - **Every pole is drawn wired, in one colour.** An unwired pole and a colour per pole are
   not expressible: a field per pole would be six fields on the longest plug here.
 - **The plug covers the header's legend where the real one does.** On the AurCore
