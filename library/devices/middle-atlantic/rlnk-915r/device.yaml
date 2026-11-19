@@ -1,0 +1,1583 @@
+format: 1
+kind: device
+name: rlnk-915r
+version: 0.1.0
+maturity: modelled
+manufacturer: Middle Atlantic
+model: RLNK-915R
+description: Middle Atlantic Select Series PDU with RackLink RLNK-915R, a 1U horizontal rack PDU in black steel. It is 441 mm wide between the ear folds,
+  44.1 mm high and 245.7 mm deep. A detachable cord takes IEC C14 input at 15 A. The rear holds eight controlled outlets in one row, an Ethernet jack and
+  a reset button. The front holds a convenience outlet that is not controlled, an alert lamp, eight outlet lamps and a power switch with circuit breaker.
+  Surge protection is MOV.
+profile: power
+provenance:
+  method:
+    confidence: estimated
+    note: 'Searched: specification sheet 96-01237 pp.1 to 5, all looked at at 100 dpi, p.5 also at 400 and 800 dpi. Also searched: user manual I-00768 pp.46
+      to 49 and quick start I-00785, brochure 230451 p.10. The size is printed. Every position inside it is read off the p.5 elevations at the scale of
+      the printed 483 mm over the ears. The maker''s 3D CAD zip is not opened.'
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - specification sheet 96-01237 p.5 prints 17.36 in [441] for the body and 19.00 in [482.6] over the ears. It prints 1.74 in [44.1]
+      high and 9.67 in [245.7] deep. P.2 says phosphate pre-treated steel with a black powder coat. The colour #2c2e30 is the library''s black. The brochure
+      photograph reads #081619 over 81 pixels.'
+  ears:
+    confidence: estimated
+    note: 'estimated - the generic ear stands in. The specification sheet 96-01237 p.5 shows each ear with two obround holes in both elevations. The ear
+      reaches 20.8 mm beyond the 441 mm body. The holes are not drawn (gaps: ear-holes).'
+  front:
+    confidence: estimated
+    note: 'estimated - specification sheet 96-01237 p.5 front elevation at 800 dpi, scale 4.01 px/mm. From the left stand the convenience outlet, a label
+      panel with the ALERT lamp and eight numbered lamps, and the power switch in a guard. The panel reads #d1d6dc over 81 pixels of the brochure photograph
+      and the switch rocker #630e1a over 81 pixels. The photograph shows the outlet face light grey and the library''s outlet part is dark.'
+  rear:
+    confidence: estimated
+    note: estimated - specification sheet 96-01237 p.5 rear elevation at 800 dpi, scale 3.835 px/mm, and user manual I-00768 p.49. From the left stand the
+      inlet with a cord retainer, eight outlets on a 40.7 mm pitch, the reset button and the Ethernet jack. The retainer's two screws sit where the sheet
+      draws two circles beside the inlet. The sheet's circles read about 7 mm and the library's head is 3.6 mm.
+  top:
+    confidence: estimated
+    note: estimated - the sheet's top view at 400 dpi, scale 2.168 px/mm, depth from the rear. It shows two round screw heads and eight outlet tops behind
+      the rear band. It shows a clip foot and a thumbscrew at the right, and nine lamp edges at the front. All are outlines or marks.
+  end:
+    confidence: estimated
+    note: estimated - the sheet shows two end views. The one beside the rear elevation runs from the front and is read as the right side. The one left of
+      the top view is the same drawing from the rear and is read as the left side. Each shows a bracket plate with two holes and one screw, a top rail,
+      a switch toe and a thumbscrew. The depth positions of the two views agree to 1 mm when one is turned.
+  other-sides:
+    confidence: estimated
+    note: estimated - built as the top view turned across, as no document shows the bottom. A bottom view mirrors left and right. The two screw heads repeat
+      the top view's, as their pattern is symmetric to within 1 mm.
+  legends:
+    confidence: estimated
+    note: estimated - the printed legends are read off the specification sheet 96-01237 p.1 photographs at 400 and 600 dpi. The scale is about 3 px per
+      mm, so each is placed to about 2 mm. The RLNK-915R rear photograph reads the inlet legend 120V 12A 60Hz, the model name and the maker's name. No held
+      picture shows the RLNK-920R legends. Its model name and its 16 A and 20 A are the manual's figures set in the same places.
+  top-labels:
+    confidence: estimated
+    note: estimated - the p.1 oblique photograph of the RLNK-915R shows two white labels on the top face. Their place is read from the photograph's perspective
+      and is good to about 25 mm. Their size is estimated at 46 by 22 mm. The wording is not legible, and the bottom is not shown.
+  left-out:
+    confidence: estimated
+    note: 'not drawn: the ear holes, two in each ear of both elevations (gaps: ear-holes). Not drawn: the cord retainer''s wire loop behind the printed
+      depth (gaps: cord-clip-past-depth). Not drawn: the second ground ring the user manual I-00768 p.49 figure draws at the right (gaps: ground-stud-position).
+      Not drawn: the amber and green lamps of the Ethernet jack, which the jack part carries.'
+  outlets:
+    confidence: datasheet
+    note: 'datasheet - specification sheet 96-01237 p.3 gives 9 total outlets, 8 controlled. The type is read from the user manual I-00768 p.48 and p.49
+      figures (gaps: outlet-type-name). Each is nema-5-15r@1.'
+  input:
+    confidence: datasheet
+    note: 'datasheet - specification sheet 96-01237 p.3 gives a 9 ft IEC cord at 15 A. The user manual I-00768 p.49 names the IEC C14 power input with a
+      cord retainer. The input current states the 12 A rated load, as the schema defines it: derated. The sheet prints 15 A as the maximum peak load.'
+  capability:
+    confidence: datasheet
+    note: datasheet - specification sheet 96-01237 p.2 gives individual IP control of eight outlets, sequencing and an integrated web server. So `outlet-switching`
+      is true.
+attrs:
+  physical:
+    construction: metal
+  power:
+    input-ac: 120 V, 12 A rated (15 A maximum), 60 Hz
+    input-cord: detachable
+    input-voltage-v: 120
+    input-current-a: 12
+    output-voltage: 120 V
+    frequency: 60 Hz
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    humidity: 0 to 95 %, non-condensing
+  management:
+    metering-scope: none
+    outlet-switching: true
+    network-interface: one Ethernet 10/100, integrated web server
+    outlet-count: 9
+  compliance:
+    certifications: cETLus UL 62368-1, CSA C22.2 No. 62368-1, FCC Part 15 Class B
+chassis:
+  width: 441
+  height: 44.1
+  depth: 245.7
+  ru: 1
+  color: '#2c2e30'
+  airflow: passive
+  ears:
+    color: '#2c2e30'
+    positions:
+    - name: flush
+      at: 0
+      default: true
+      label: ears at the front plane (specification sheet 96-01237 p.5)
+gaps:
+- what: weight
+  scope: []
+  reason: vendor-silent
+  note: The specification sheet 96-01237 pp.3 to 5, rendered and read, print no weight. The user manual I-00768 text layer has none either.
+  wanted: the maker's product weight.
+- what: face-positions
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: Every position is read off line drawings at a reduced scale and is good to about 2 mm. specification sheet 96-01237 p.5 is the only dimensioned
+    drawing held.
+  wanted: a dimensioned drawing, or the 3D CAD zip once its terms allow.
+- what: ground-stud-position
+  scope:
+  - rear
+  reason: sources-disagree
+  note: The specification sheet 96-01237 p.5 rear elevation and the p.1 photograph of the RLNK-915R rear put the ground stud left of the inlet. The user
+    manual I-00768 p.49 rear figure draws a ground ring at the right end, beside the Ethernet jack. The sheet and its photograph are followed.
+  wanted: the maker's word on where the ground stud stands.
+- what: front-outlet-control
+  scope:
+  - front
+  reason: sources-disagree
+  note: The specification sheet 96-01237 p.3 prints 9 total outlets, 8 controlled. The user manual I-00768 p.48 item A calls the front outlet a controlled
+    outlet, and item F counts eight controlled at the rear. The front outlet is drawn as not controlled.
+  wanted: the maker's word on whether the front outlet is switched by RackLink.
+- what: outlet-type-name
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  note: No held page prints a NEMA name for the outlets. The user manual I-00768 p.48 and p.49 figures label them 15A Outlet and 20A Outlet and draw a T
+    slot on the 20 A face.
+  wanted: the maker's printed outlet configuration.
+- what: breaker-rating
+  scope:
+  - front
+  reason: vendor-silent
+  note: The specification sheet 96-01237 and the user manual I-00768 name an integrated power switch and circuit breaker and give no breaker rating. The
+    rocker switch part is used for it.
+  wanted: the breaker's rating.
+- what: ear-holes
+  scope:
+  - front
+  - rear
+  reason: needs-drawing
+  note: The specification sheet 96-01237 p.5 shows two obround holes in each ear of its front and of its rear elevation. They stand outside the 441 mm face
+    and are not drawn, as on the Premium+ pair.
+  wanted: the maintainer's word on drawing the ears at 483 mm.
+- what: cord-clip-past-depth
+  scope:
+  - top
+  - left
+  - right
+  reason: needs-drawing
+  note: The specification sheet 96-01237 p.5 top and end views show the retainer's wire loop up to 19 mm behind the printed 245.7 mm depth. The kit has
+    no key for a part past the box.
+  wanted: the maintainer's word on a part that stands past the box.
+- what: lamp-colours
+  scope:
+  - front
+  reason: vendor-silent
+  note: The user manual I-00768 p.48 and quick start I-00785 p.7 name the lit colours in words only. The hex values are the library's, as on the Premium+
+    pair. The quick start's blinking green and red state is not drawn as a state.
+  wanted: a photograph of a lit unit.
+groups:
+  outlets:
+    term: Outlet
+    role: traffic
+    index-origin: 1
+    attrs:
+      outlet: nema-5-15r
+    description: outlets 1 to 8 on the rear, controlled; outlet 9 on the front, not controlled
+  lamps:
+    term: LED
+    role: indicator
+    index-origin: 1
+  grounding:
+    term: Ground
+    role: furniture
+    index-origin: 1
+  furniture:
+    term: Mark
+    role: furniture
+    index-origin: 1
+  screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+  buttons:
+    term: Button
+    role: service
+    index-origin: 1
+  eth-100m:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs:
+      media: rj45
+      speed: 100m
+  power-input:
+    term: Input
+    role: service
+    index-origin: 1
+views:
+  front:
+    size:
+      w: 441
+      h: 44.1
+    panel:
+      decor:
+      - id: top-lip
+        at:
+        - 0
+        - 0
+        size:
+        - 441
+        - 3.4
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: edge-lip
+        confidence: estimated
+      - id: bottom-lip
+        at:
+        - 0
+        - 40.7
+        size:
+        - 441
+        - 3.3
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: edge-lip
+        confidence: estimated
+      - id: outlet-bezel
+        at:
+        - 25.9
+        - 8.5
+        size:
+        - 27.5
+        - 27.7
+        rx: 1.0
+        fill: '#0a0c0e'
+        kind: outlet-surround
+        confidence: estimated
+      - id: label-panel
+        at:
+        - 142.9
+        - 15.5
+        size:
+        - 255.1
+        - 14.2
+        rx: 0.5
+        fill: '#d1d6dc'
+        kind: label-panel
+        confidence: estimated
+      - id: switch-guard
+        at:
+        - 406.5
+        - 6.2
+        size:
+        - 15.7
+        - 32.2
+        rx: 1.0
+        fill: '#0a0c0e'
+        kind: switch-guard
+        confidence: estimated
+      - id: switch-mark
+        at:
+        - 423.9
+        - 33.4
+        size:
+        - 2.0
+        - 2.0
+        rx: 1.0
+        fill: '#0a0a09'
+        kind: mark
+        confidence: estimated
+    silkscreen:
+    - at:
+      - 153.6
+      - 17.4
+      text: ALERT
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 178.8
+      - 18.9
+      text: '1'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 191.52
+      - 18.9
+      text: '2'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 204.24
+      - 18.9
+      text: '3'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 216.96
+      - 18.9
+      text: '4'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 229.68
+      - 18.9
+      text: '5'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 242.4
+      - 18.9
+      text: '6'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 255.12
+      - 18.9
+      text: '7'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 267.84
+      - 18.9
+      text: '8'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 226.9
+      - 27.6
+      text: OUTLET STATUS
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: chassis
+    - at:
+      - 381.1
+      - 21.4
+      text: MIDDLE
+      font-size: 1.6
+      anchor: middle
+      fill: '#1a1b1b'
+      for: chassis
+    - at:
+      - 381.1
+      - 24.0
+      text: ATLANTIC
+      font-size: 1.6
+      anchor: middle
+      fill: '#1a1b1b'
+      for: chassis
+    - at:
+      - 39.7
+      - 6.6
+      text: 120V 15A 60Hz
+      font-size: 1.4
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    - at:
+      - 414.6
+      - 5.2
+      text: POWER
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    - at:
+      - 414.6
+      - 8.6
+      text: RESET
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    - at:
+      - 414.6
+      - 41.9
+      text: 'OFF'
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    components:
+      placements:
+      - id: outlet-9
+        ref: std/nema-5-15r@1
+        at:
+        - 26.2
+        - 8.8
+        group: outlets
+        rel-pos: 9
+        rotate: 180
+        fed-by: input
+        description: 'the front convenience outlet, not RackLink controlled (specification sheet 96-01237 p.3: 9 total, 8 controlled; gaps: front-outlet-control)'
+      - id: alert-lamp
+        ref: common/led-indicator@1
+        at:
+        - 151.6
+        - 20.2
+        group: lamps
+        rel-pos: 1
+        for: chassis
+        states:
+        - 'off'
+        - name: normal-operation-ip-acquired
+          color: '#1fde2e'
+        - name: acquiring-ip-address
+          color: '#1fde2e'
+          behavior: blinking
+        - name: alarm-present
+          color: '#e5483b'
+        - name: lost-ip-connection
+          color: '#e5483b'
+          behavior: blinking
+        description: the ALERT lamp (user manual I-00768 p.46, p.48; quick start I-00785 p.7 table)
+      - id: lamp-1
+        ref: common/led-indicator@1
+        at:
+        - 176.8
+        - 20.2
+        group: lamps
+        rel-pos: 2
+        for: chassis
+        states: &id001
+        - 'off'
+        - name: outlet-energized
+          color: '#1fde2e'
+        description: outlet 1 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-2
+        ref: common/led-indicator@1
+        at:
+        - 189.52
+        - 20.2
+        group: lamps
+        rel-pos: 3
+        for: chassis
+        states: *id001
+        description: outlet 2 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-3
+        ref: common/led-indicator@1
+        at:
+        - 202.24
+        - 20.2
+        group: lamps
+        rel-pos: 4
+        for: chassis
+        states: *id001
+        description: outlet 3 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-4
+        ref: common/led-indicator@1
+        at:
+        - 214.96
+        - 20.2
+        group: lamps
+        rel-pos: 5
+        for: chassis
+        states: *id001
+        description: outlet 4 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-5
+        ref: common/led-indicator@1
+        at:
+        - 227.68
+        - 20.2
+        group: lamps
+        rel-pos: 6
+        for: chassis
+        states: *id001
+        description: outlet 5 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-6
+        ref: common/led-indicator@1
+        at:
+        - 240.4
+        - 20.2
+        group: lamps
+        rel-pos: 7
+        for: chassis
+        states: *id001
+        description: outlet 6 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-7
+        ref: common/led-indicator@1
+        at:
+        - 253.12
+        - 20.2
+        group: lamps
+        rel-pos: 8
+        for: chassis
+        states: *id001
+        description: outlet 7 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: lamp-8
+        ref: common/led-indicator@1
+        at:
+        - 265.84
+        - 20.2
+        group: lamps
+        rel-pos: 9
+        for: chassis
+        states: *id001
+        description: outlet 8 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+      - id: power-switch
+        ref: common/rocker-switch@1
+        at:
+        - 407.1
+        - 11.8
+        group: buttons
+        rel-pos: 1
+        rotate: 90
+        for: chassis
+        attrs:
+          rocker-color: '#630e1a'
+        description: the illuminated power switch and circuit breaker, rocker upright (user manual I-00768 p.48 item D; specification sheet 96-01237 p.5)
+  rear:
+    size:
+      w: 441
+      h: 44.1
+    panel:
+      decor:
+      - id: top-lip
+        at:
+        - 0
+        - 0
+        size:
+        - 441
+        - 3.4
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: edge-lip
+        confidence: estimated
+      - id: bottom-lip
+        at:
+        - 0
+        - 40.7
+        size:
+        - 441
+        - 3.3
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: edge-lip
+        confidence: estimated
+      - id: outlet-strip
+        at:
+        - 64.8
+        - 3.3
+        size:
+        - 321.7
+        - 36.7
+        rx: 0.8
+        fill: '#cfdcdf'
+        kind: outlet-strip
+        confidence: estimated
+      - id: cord-retainer-loop
+        at:
+        - 29.1
+        - 22.7
+        size:
+        - 21.1
+        - 16.4
+        rx: 7.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: cord-retainer
+        confidence: estimated
+    silkscreen:
+    - at:
+      - 83.3
+      - 39.2
+      text: '1'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-1
+    - at:
+      - 123.98
+      - 39.2
+      text: '2'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-2
+    - at:
+      - 164.66
+      - 39.2
+      text: '3'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-3
+    - at:
+      - 205.34
+      - 39.2
+      text: '4'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-4
+    - at:
+      - 246.02
+      - 39.2
+      text: '5'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-5
+    - at:
+      - 286.7
+      - 39.2
+      text: '6'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-6
+    - at:
+      - 327.38
+      - 39.2
+      text: '7'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-7
+    - at:
+      - 368.06
+      - 39.2
+      text: '8'
+      font-size: 1.2
+      anchor: middle
+      fill: '#2a2d30'
+      for: outlet-8
+    - at:
+      - 225.7
+      - 6.6
+      text: CONTROLLED
+      font-size: 1.2
+      anchor: middle
+      fill: '#5a5d60'
+      for: chassis
+    - at:
+      - 36.2
+      - 6.6
+      text: 120V 12A 60Hz
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: input
+    - at:
+      - 418.6
+      - 6.6
+      text: RLNK-915R
+      font-size: 1.4
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    - at:
+      - 418.6
+      - 9.4
+      text: Middle Atlantic Products
+      font-size: 1.0
+      anchor: middle
+      fill: '#d8dcdc'
+      for: chassis
+    - at:
+      - 395.4
+      - 31.4
+      text: RESET
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: reset
+    - at:
+      - 414.2
+      - 35.2
+      text: LINK | ACTIVITY
+      font-size: 1.2
+      anchor: middle
+      fill: '#d8dcdc'
+      for: eth
+    components:
+      placements:
+      - id: input
+        ref: std/c14-inlet@1
+        at:
+        - 25.9
+        - 12.2
+        group: power-input
+        rel-pos: 1
+        description: the IEC C14 inlet at the left of the rear, with a cord retainer (user manual I-00768 p.49 item E; specification sheet 96-01237 p.5)
+      - id: ground
+        ref: common/ground-stud@1
+        at:
+        - 6.75
+        - 30.85
+        group: grounding
+        rel-pos: 1
+        description: 'the round ground stud left of the inlet as the sheet draws it (gaps: ground-stud-position) (specification sheet 96-01237 p.5 rear
+          elevation)'
+      - id: ground-mark
+        ref: common/ground-symbol@1
+        at:
+        - 14.8
+        - 34.7
+        group: grounding
+        rel-pos: 2
+        for: ground
+        description: the ground symbol printed beside the stud (specification sheet 96-01237 p.1 photograph of the RLNK-915R rear)
+      - id: eth-mark
+        ref: common/nic-symbol@1
+        at:
+        - 423.0
+        - 22.6
+        group: furniture
+        rel-pos: 1
+        for: eth
+        description: the network symbol printed beside the jack (specification sheet 96-01237 p.1 photograph of the RLNK-915R rear)
+      - id: inlet-screw-1
+        ref: common/screw-head@1
+        at:
+        - 17.1
+        - 20.9
+        group: screws
+        rel-pos: 1
+        description: the retainer's screw left of the inlet (specification sheet 96-01237 p.5 rear elevation)
+      - id: inlet-screw-2
+        ref: common/screw-head@1
+        at:
+        - 58.3
+        - 20.9
+        group: screws
+        rel-pos: 2
+        description: the retainer's screw right of the inlet (specification sheet 96-01237 p.5 rear elevation)
+      - id: outlet-1
+        ref: std/nema-5-15r@1
+        at:
+        - 69.8
+        - 8.9
+        group: outlets
+        rel-pos: 1
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 1 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-2
+        ref: std/nema-5-15r@1
+        at:
+        - 110.48
+        - 8.9
+        group: outlets
+        rel-pos: 2
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 2 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-3
+        ref: std/nema-5-15r@1
+        at:
+        - 151.16
+        - 8.9
+        group: outlets
+        rel-pos: 3
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 3 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-4
+        ref: std/nema-5-15r@1
+        at:
+        - 191.84
+        - 8.9
+        group: outlets
+        rel-pos: 4
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 4 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-5
+        ref: std/nema-5-15r@1
+        at:
+        - 232.52
+        - 8.9
+        group: outlets
+        rel-pos: 5
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 5 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-6
+        ref: std/nema-5-15r@1
+        at:
+        - 273.2
+        - 8.9
+        group: outlets
+        rel-pos: 6
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 6 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-7
+        ref: std/nema-5-15r@1
+        at:
+        - 313.88
+        - 8.9
+        group: outlets
+        rel-pos: 7
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 7 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: outlet-8
+        ref: std/nema-5-15r@1
+        at:
+        - 354.56
+        - 8.9
+        group: outlets
+        rel-pos: 8
+        rotate: 180
+        fed-by: input
+        states:
+        - 'on'
+        - 'off'
+        description: controlled outlet 8 (user manual I-00768 p.49 item F; specification sheet 96-01237 p.5)
+      - id: reset
+        ref: common/reset-button@1
+        at:
+        - 393.4
+        - 25.6
+        group: buttons
+        rel-pos: 2
+        for: chassis
+        description: the factory reset button, left of the Ethernet jack (user manual I-00768 p.49 item G)
+      - id: eth
+        ref: common/rj45-eth@1
+        at:
+        - 402.0
+        - 18.3
+        group: eth-100m
+        rel-pos: 1
+        attrs:
+          media: rj45
+          speed: 100m
+          role: mgmt
+        description: Ethernet 10/100, the only network port (user manual I-00768 p.49 item H; specification sheet 96-01237 p.5)
+  top:
+    size:
+      w: 441
+      h: 245.7
+    panel:
+      decor:
+      - id: top-screw-1
+        at:
+        - 95.05
+        - 13.65
+        size: &id002
+        - 6.9
+        - 6.9
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-2
+        at:
+        - 338.05
+        - 13.65
+        size: &id003
+        - 6.9
+        - 6.9
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: rear-band
+        at:
+        - 0
+        - 10.1
+        size: &id004
+        - 440
+        - 25.4
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: cover-band
+        confidence: estimated
+      - id: front-band
+        at:
+        - 0
+        - 220.0
+        size: &id005
+        - 440
+        - 13.9
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: cover-band
+        confidence: estimated
+      - id: clip-foot
+        at:
+        - 384.4
+        - 0.0
+        size: &id006
+        - 41.5
+        - 10.1
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: clip-thumbscrew
+        at:
+        - 428.5
+        - 1.0
+        size: &id007
+        - 4.0
+        - 6.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: front-lip-left
+        at:
+        - 25.6
+        - 233.9
+        size: &id008
+        - 26.8
+        - 4.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: flange
+        confidence: estimated
+      - id: switch-lip
+        at:
+        - 399.0
+        - 235.3
+        size: &id009
+        - 26.8
+        - 10.4
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: flange
+        confidence: estimated
+      - id: rear-outlet-top-1
+        at:
+        - 59.3
+        - 4.6
+        size: &id010
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-2
+        at:
+        - 99.9
+        - 4.6
+        size: &id011
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-3
+        at:
+        - 140.5
+        - 4.6
+        size: &id012
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-4
+        at:
+        - 181.1
+        - 4.6
+        size: &id013
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-5
+        at:
+        - 221.7
+        - 4.6
+        size: &id014
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-6
+        at:
+        - 262.3
+        - 4.6
+        size: &id015
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-7
+        at:
+        - 302.9
+        - 4.6
+        size: &id016
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-8
+        at:
+        - 343.5
+        - 4.6
+        size: &id017
+        - 27.7
+        - 5.5
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: front-lamp-1
+        at:
+        - 152.6
+        - 234.0
+        size: &id018
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-2
+        at:
+        - 177.8
+        - 234.0
+        size: &id019
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-3
+        at:
+        - 190.52
+        - 234.0
+        size: &id020
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-4
+        at:
+        - 203.24
+        - 234.0
+        size: &id021
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-5
+        at:
+        - 215.96
+        - 234.0
+        size: &id022
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-6
+        at:
+        - 228.68
+        - 234.0
+        size: &id023
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-7
+        at:
+        - 241.4
+        - 234.0
+        size: &id024
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-8
+        at:
+        - 254.12
+        - 234.0
+        size: &id025
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-9
+        at:
+        - 266.84
+        - 234.0
+        size: &id026
+        - 2.0
+        - 1.5
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: compliance-label-1
+        at:
+        - 60.0
+        - 26.0
+        size:
+        - 46.0
+        - 22.0
+        fill: '#bcc9d0'
+        kind: label
+        confidence: estimated
+      - id: compliance-label-2
+        at:
+        - 156.0
+        - 26.0
+        size:
+        - 46.0
+        - 22.0
+        fill: '#bcc9d0'
+        kind: label
+        confidence: estimated
+  bottom:
+    size:
+      w: 441
+      h: 245.7
+    panel:
+      decor:
+      - id: top-screw-1
+        at:
+        - 339.05
+        - 13.65
+        size: *id002
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: top-screw-2
+        at:
+        - 96.05
+        - 13.65
+        size: *id003
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: rear-band
+        at:
+        - 1
+        - 10.1
+        size: *id004
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: cover-band
+        confidence: estimated
+      - id: front-band
+        at:
+        - 1
+        - 220.0
+        size: *id005
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: cover-band
+        confidence: estimated
+      - id: clip-foot
+        at:
+        - 15.1
+        - 0.0
+        size: *id006
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: clip-thumbscrew
+        at:
+        - 8.5
+        - 1.0
+        size: *id007
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: front-lip-left
+        at:
+        - 388.6
+        - 233.9
+        size: *id008
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: flange
+        confidence: estimated
+      - id: switch-lip
+        at:
+        - 15.2
+        - 235.3
+        size: *id009
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: flange
+        confidence: estimated
+      - id: rear-outlet-top-1
+        at:
+        - 354.0
+        - 4.6
+        size: *id010
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-2
+        at:
+        - 313.4
+        - 4.6
+        size: *id011
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-3
+        at:
+        - 272.8
+        - 4.6
+        size: *id012
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-4
+        at:
+        - 232.2
+        - 4.6
+        size: *id013
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-5
+        at:
+        - 191.6
+        - 4.6
+        size: *id014
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-6
+        at:
+        - 151.0
+        - 4.6
+        size: *id015
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-7
+        at:
+        - 110.4
+        - 4.6
+        size: *id016
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: rear-outlet-top-8
+        at:
+        - 69.8
+        - 4.6
+        size: *id017
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: outlet-top
+        confidence: estimated
+      - id: front-lamp-1
+        at:
+        - 286.4
+        - 234.0
+        size: *id018
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-2
+        at:
+        - 261.2
+        - 234.0
+        size: *id019
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-3
+        at:
+        - 248.48
+        - 234.0
+        size: *id020
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-4
+        at:
+        - 235.76
+        - 234.0
+        size: *id021
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-5
+        at:
+        - 223.04
+        - 234.0
+        size: *id022
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-6
+        at:
+        - 210.32
+        - 234.0
+        size: *id023
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-7
+        at:
+        - 197.6
+        - 234.0
+        size: *id024
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-8
+        at:
+        - 184.88
+        - 234.0
+        size: *id025
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+      - id: front-lamp-9
+        at:
+        - 172.16
+        - 234.0
+        size: *id026
+        fill: '#0a0a09'
+        kind: lamp-edge
+        confidence: estimated
+  right:
+    size:
+      w: 245.7
+      h: 44.1
+    panel:
+      decor:
+      - id: end-plate
+        at:
+        - 25.1
+        - 10.6
+        size:
+        - 86.1
+        - 24.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: bracket-plate
+        confidence: estimated
+      - id: end-rail
+        at:
+        - 26.5
+        - 0.2
+        size:
+        - 184.3
+        - 8.8
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rail
+        confidence: estimated
+      - id: switch-toe
+        at:
+        - 0.0
+        - 24.7
+        size:
+        - 12.5
+        - 5.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: front-part
+        confidence: estimated
+      - id: rear-thumbscrew
+        at:
+        - 239.6
+        - 29.7
+        size:
+        - 6.1
+        - 10.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: end-hole-1
+        at:
+        - 25.35
+        - 19.15
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: end-hole-2
+        at:
+        - 94.95
+        - 19.15
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: end-hole-3
+        at:
+        - 35.75
+        - 2.05
+        size:
+        - 6.9
+        - 6.9
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+  left:
+    size:
+      w: 245.7
+      h: 44.1
+    panel:
+      decor:
+      - id: end-plate
+        at:
+        - 134.5
+        - 10.6
+        size:
+        - 86.1
+        - 24.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: bracket-plate
+        confidence: estimated
+      - id: end-rail
+        at:
+        - 34.9
+        - 0.2
+        size:
+        - 184.3
+        - 8.8
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rail
+        confidence: estimated
+      - id: switch-toe
+        at:
+        - 233.2
+        - 24.7
+        size:
+        - 12.5
+        - 5.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: front-part
+        confidence: estimated
+      - id: rear-thumbscrew
+        at:
+        - -0.0
+        - 29.7
+        size:
+        - 6.1
+        - 10.0
+        stroke: '#4a4d50'
+        stroke-width: 0.8
+        kind: rear-part
+        confidence: estimated
+      - id: end-hole-1
+        at:
+        - 213.85
+        - 19.15
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: end-hole-2
+        at:
+        - 144.25
+        - 19.15
+        size:
+        - 6.5
+        - 6.5
+        rx: 3.25
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+      - id: end-hole-3
+        at:
+        - 203.05
+        - 2.05
+        size:
+        - 6.9
+        - 6.9
+        rx: 3.45
+        fill: '#0a0a09'
+        kind: screw
+        confidence: estimated
+interfaces:
+- physical: outlet-{n}
+  name: '{n}'
+  range: 1-9
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The PDU as it ships: the unit, a power cord and a ferrite. Only the unit is drawn.'
+    part-numbers:
+      RLNK-915R: {}
+datasheet:
+  title: Middle Atlantic Select Series Rack Mount PDU with RackLink A&E specification 96-01237 rev A
+  url: https://res.cloudinary.com/avd/image/upload/v134389368/Resources/Middle Atlantic/Power/Specifications/96_01237_RLSelect_RM.pdf
+  sha256: 49463ddd75a93edfc2afdf4e9e03147d581c21d9f782a321aa0a9491990a705f
