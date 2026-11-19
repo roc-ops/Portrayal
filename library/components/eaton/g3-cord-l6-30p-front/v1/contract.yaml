@@ -1,0 +1,38 @@
+format: 1
+kind: component
+name: g3-cord-l6-30p-front
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L6-30P locking plug. The plug is the cord's own end, so nothing plugs into the cord and no mate is offered for it
+description: >-
+  The fixed input cord of an Eaton ePDU G3 managed rack PDU, 2U, with a NEMA
+  L6-30P plug. It is 10 ft of 10 AWG three-conductor cord that ends in a NEMA
+  L6-30P locking plug. The cord leaves the front face at its left end through a
+  round gland in a plate. The part is drawn as the face shows it; the cord and
+  plug beyond it are not.
+size: {w: 27.2, h: 39.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-l6-30p, cord-length-ft: 10, cord-gauge: 10 AWG / 3C}
+provenance:
+  size: >-
+    drawing - Eaton EMAU07-10 technical drawing (9 Mar 2016), front view
+    read at 600 dpi against its own 482.7 overall (5.66 px per mm).
+    It shows a plate 27.2 by 39.1 with a round gland 16.5 across, centred 11.5
+    from the plate's left and 19.6 from its top. Nothing on the sheet dimensions
+    the gland, and the reading is good to about 0.5. It is not the hex gland of
+    eaton/g3-cord-l6-30p@1, which the EMIT04-10 sheet draws on the other end.
+  cord: >-
+    drawing - EMAU07-10, the INPUT cell: "NEMA L6-30 PLUG", "10FT 10AWG / 3C
+    POWERCORD". The plan view draws the cord leaving the front edge at the
+    left end, bent toward the plug.
+  plug: >-
+    drawing - the plug is drawn on the sheet as its face beside the cord end.
+    The plug has no part of its own, so nothing here draws it.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord
+    is not a part (docs/connectors-power-design.md section 7). This part stands
+    for the power input a DCIM records, a NEMA L6-30P power port.
+elements:
+  gland: {at: [0, 0], size: [27.2, 39.1], class: inlet}
+skins: [default]
