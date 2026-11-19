@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: dsx2-32
-version: 0.2.0
+version: 1.0.0
 maturity: modelled
 manufacturer: Raritan
 model: DSX2-32
@@ -52,12 +52,16 @@ provenance:
   rear-layout:
     confidence: estimated
     note: >-
-      From the data sheet photograph. From the left: the two AC inlets, each under its switch and numbered
-      1 and 2; the fan; the TERMINAL jack with the ADMIN mini-USB jack to its right and the MODEM position,
-      which is a blank square on this AC model; under them the DVI jack between two thumbscrews and the
-      RESET hole (the jack is std/dvi-d-jack@1, its size and its contact cells read off the same photograph
-      and estimated); a column of THREE USB ports; the two LAN jacks, LAN 2 over LAN 1; and the serial
-      ports, two banks of 16 in two rows each with its numerals above and below.
+      From the data sheet photograph. From the left come the two AC inlets, each under its switch and
+      numbered 1 and 2, and the fan. Next come the TERMINAL jack, the ADMIN mini-USB jack to its right
+      and the MODEM position, a blank square on this AC model. Under them sit the DVI jack between two
+      thumbscrews and the RESET hole. The jack is std/dvi-d-jack@2, drawn from the Digital Display Working
+      Group specification. Its two screws stand 32.51 apart as that specification prints. The screws'
+      size and place on the panel are read off the photograph and estimated. Each screw has a dark centre,
+      1.9 across, estimated from the photograph as about half the screw's width. Its colour #6f6459 lies
+      between the samples #675d54 and #776a61, each over 2250 pixels. Then come a column of THREE USB
+      ports and the two LAN jacks, LAN 2 over LAN 1. The serial ports follow, two banks of 16 in two rows
+      each with its numerals above and below.
   front-layout:
     confidence: estimated
     note: >-
@@ -379,8 +383,12 @@ views:
       - {id: fan-vent, kind: vent, at: [79.2, 8.2], size: [26.0, 26.0], rx: 13.0, fill: '#0b0c0f'}
       - {id: terminal-plate, kind: jack-plate, at: [118.9, 4.4], size: [17.2, 15.6], fill: '#625e5d'}
       - {id: modem-blank, kind: blank, at: [150.8, 4.6], size: [10.2, 14.6], fill: '#0e0f12'}
-      - {id: dvi-screw-left, kind: screw, at: [121.8, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
-      - {id: dvi-screw-right, kind: screw, at: [155.3, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
+      - {id: dvi-screw-left, kind: screw, at: [122.345, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
+      - {id: dvi-screw-right, kind: screw, at: [154.855, 29.6], size: [4.0, 4.0], rx: 2.0, fill: '#b9b9b6'}
+      - {id: dvi-screw-left-bore, kind: screw-bore, at: [123.395, 30.65], size: [1.9, 1.9], rx: 0.95,
+        fill: '#6f6459'}
+      - {id: dvi-screw-right-bore, kind: screw-bore, at: [155.905, 30.65], size: [1.9, 1.9], rx: 0.95,
+        fill: '#6f6459'}
       - {id: lan-plate, kind: jack-plate, at: [177.4, 7.4], size: [18.2, 29.4], fill: '#6d6b6b'}
       - {id: bank-1, kind: jack-plate, at: [196.1, 10.7], size: [113.9, 25.8], fill: '#7f7e7e'}
       - {id: bank-2, kind: jack-plate, at: [315.6, 10.7], size: [115.3, 25.8], fill: '#7f7e7e'}
@@ -448,7 +456,7 @@ views:
         group: admin-usb
         rel-pos: 1
         attrs: {role: console}
-      - {ref: std/dvi-d-jack@1, id: video, at: [127.2, 26.7], group: video, rel-pos: 1}
+      - {ref: std/dvi-d-jack@2, id: video, at: [128.585, 27.74], group: video, rel-pos: 1}
       - {ref: common/reset-button@1, id: reset, at: [166.9, 36.3], for: chassis, group: buttons, rel-pos: 1}
       - {ref: std/usb-a@1, id: usb-rear-1, at: [163.2, 13.05], skin: usb2, group: usb-rear, rel-pos: 1}
       - {ref: std/usb-a@1, id: usb-rear-2, at: [163.2, 21.65], skin: usb2, group: usb-rear, rel-pos: 2}
