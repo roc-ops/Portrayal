@@ -59,8 +59,9 @@ DEVICES = [
     # card in a component bay at rotate 90, so the cage's turn comes from a
     # nested bay, not the device's - at depth 2 (the MPC's own cages) and at
     # depth 3 (a MIC in the turned MPC). The MX2000's adapter also seats five
-    # queuing and P carriers. A MIC is seated in `mpc2e-3d-q@1` below; `mpc2e-3d-p@1`,
-    # `mpc1-3d-q@1`, `mpc2e-3d-ng-q@1` and `mpc3e-3d-ng-q@1` have no row yet.
+    # queuing and P carriers. Each has a row below with a MIC seated in it:
+    # `mpc2e-3d-q@1`, `mpc2e-3d-p@1`, `mpc1-3d-q@1`, `mpc2e-3d-ng-q@1`, `mpc3e-3d-ng-q@1`.
+    # None of the five is left without a row.
     ("juniper", "mx2010", "base",
      {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc4e-3d-32xge-sfpp@2"},
      {"fpc0/mpc/port-0-0": SFP, "fpc0/mpc/port-0-1": SFP}, "juniper/mpc4e-3d-32xge-sfpp@2"),
@@ -72,6 +73,24 @@ DEVICES = [
      {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d-q@1",
       "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@3"},
      {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-0-3": XFP}, "juniper/mic-3d-4xge-xfp@3"),
+    ("juniper", "mx2008", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d-p@1",
+      "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@3"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-0-3": XFP}, "juniper/mic-3d-4xge-xfp@3"),
+    # the MPC1-Q lists no 4-port XFP MIC, so it takes the 2-port one
+    ("juniper", "mx2008", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc1-3d-q@1",
+      "fpc0/mpc/mic0": "juniper/mic-3d-2xge-xfp@2"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-1-0": XFP}, "juniper/mic-3d-2xge-xfp@2"),
+    # the two NG-Q carriers list only version 4 of the 4-port MIC, whose ports are 0-0 to 1-1
+    ("juniper", "mx2008", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc2e-3d-ng-q@1",
+      "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@4"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-1-1": XFP}, "juniper/mic-3d-4xge-xfp@4"),
+    ("juniper", "mx2008", "base",
+     {"fpc0": "juniper/mx2000-lc-adapter@1", "fpc0/mpc": "juniper/mpc3e-3d-ng-q@1",
+      "fpc0/mpc/mic0": "juniper/mic-3d-4xge-xfp@4"},
+     {"fpc0/mpc/mic0/port-0-0": XFP, "fpc0/mpc/mic0/port-1-1": XFP}, "juniper/mic-3d-4xge-xfp@4"),
 ]
 
 needs_node = pytest.mark.skipif(shutil.which("node") is None, reason="node not installed")
@@ -171,7 +190,11 @@ def drawing_key(key):
 
 def fitted(tmp, dist_comps, dist, vendor, name, config, bays, occupants, card_ref):
     src = LIB / "devices" / vendor / name
-    dev = tmp / name / "src" / "device.yaml"
+    # one folder per row: a device carries several rows, told apart by the cards
+    # seated in its bays (two rows can share the card the kit seats on)
+    cards = dict.fromkeys([*bays.values(), card_ref])
+    row = tmp / "--".join([name, *(c.replace("/", "-").replace("@", "-") for c in cards)])
+    dev = row / "src" / "device.yaml"
     shutil.copytree(src, dev.parent)
     d = yaml.safe_load(dev.read_text())
     cfg = d["configurations"][config]
@@ -179,7 +202,7 @@ def fitted(tmp, dist_comps, dist, vendor, name, config, bays, occupants, card_re
         cfg["bays"] = {**(cfg.get("bays") or {}), **bays}
     cfg["occupants"] = occupants
     dev.write_text(yaml.safe_dump(d, sort_keys=False, allow_unicode=True))
-    out = tmp / name / "out"
+    out = row / "out"
     r = subprocess.run([sys.executable, str(RENDER), str(dev), "--library", str(LIB),
                         "--out", str(out)], capture_output=True, text=True)
     assert r.returncode == 0, r.stderr[-800:]
@@ -299,7 +322,8 @@ def test_the_kit_seats_an_optic_on_a_card_where_the_build_does(parity):
             assert want["children"], f"{where}: the build's optic has no children - vacuous"
             assert have["children"] == want["children"], f"{where}: children differ"
             n += 1
-    assert n == sum(len(c["built"]) for c in cases) == 12, n
+    # 12 before, plus 2 optics in each of the 4 rows added for the MX2000 carriers: 12 + 8
+    assert n == sum(len(c["built"]) for c in cases) == 20, n
     print(f"nested cage parity: {len(cases)} devices, {n} cages, max error {worst:.3g}")
 
 
