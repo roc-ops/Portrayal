@@ -41,9 +41,15 @@ def test_the_20u_length_version_2_is_20_crossbars_with_lips_on_a_plate():
     els = c["elements"]
     bars = sorted(v["at"][1] for k, v in els.items() if k.startswith("b"))
     assert len(bars) == 20 and all(close(b - a, RU) for a, b in zip(bars, bars[1:])), "a crossbar to each rack unit"
-    assert len([k for k in els if k.startswith("l")]) == 20, "a lip at the end of each crossbar"
+    lips = [v for k, v in els.items() if k.startswith("l")]
+    assert len(lips) == 20, "a lip at the end of each crossbar"
+    assert all(v["size"][1] >= 30.0 for v in lips), "the photograph shows lips about 36 mm tall, nearly continuous"
     assert len([k for k in els if k.startswith("m")]) == 2, "two round marks on the plate"
-    assert 35.0 <= els["plate"]["size"][0] <= 45.0, "the photograph shows the plate about 40 per cent of the width"
+    blocks = [v for k, v in els.items() if k.startswith("k")]
+    assert len(blocks) == 20, "a block to each crossbar on the grey strip"
+    # The strip reads 27 px at 2.41 px/mm, which is 11.2 mm.
+    assert close(els["strip"]["size"][0], 11.0), "the grey strip along the plate edge is about 11 mm wide"
+    assert 35.0 <= els["plate"]["size"][0] + els["strip"]["size"][0] <= 45.0, "plate and strip are about 40 per cent of the width"
     assert contract("nsx-vcm-20u", 1)["version"] == "1.0.0", "the first version stays for the AR7722"
 
 
@@ -74,6 +80,10 @@ def test_the_ar7721_rear_has_a_crossbar_to_every_rack_unit_and_three_screws_to_a
     assert len(bars) == 40 and len(with_prefix(rear, "lip-")) == 40
     assert all(close(b - a, RU) for a, b in zip(bars, bars[1:]))
     assert len(with_prefix(rear, "screw-")) == 6
+    lips = with_prefix(rear, "lip-")
+    assert all(d["size"][1] >= 30.0 for d in lips), "the lips are about 36 mm tall, as the photograph shows"
+    first = next(d for d in rear if d["id"] == "screw-1-1")
+    assert 125.0 <= first["at"][1] + first["size"][1] / 2 <= 140.0, "screw 1 lies about 133 mm from the plate top"
 
 
 def test_the_ar7721_left_shows_the_40_crossbar_ends_and_the_right_the_plate_edge():
@@ -98,12 +108,18 @@ def test_the_ar7502_envelope_is_the_data_sheets_with_the_depth_the_table_prints(
 
 def test_the_ar7502_front_draws_what_the_installation_sheets_figure_counts():
     front = decor(device("ar7502"), "front")
-    counts = {p: len(with_prefix(front, p)) for p in ("win-", "keyhole-", "hook-", "rect-", "edge-", "tree-", "sq-")}
+    counts = {p: len(with_prefix(front, p)) for p in ("win-", "keyhole-", "kstem-", "hook-", "leg-", "rect-", "edge-",
+                                                      "ledge-", "tree-", "sq-")}
     assert counts["win-"] == 4, "four large mesh windows"
-    assert counts["keyhole-"] == 12, "six pairs of keyholes"
-    assert counts["hook-"] == 18, "three hook slots under each pair"
+    assert counts["keyhole-"] == 12 and counts["kstem-"] == 12, "six pairs of keyholes, each a bulb with a stem"
+    bulbs = with_prefix(front, "keyhole-")
+    # A bulb reads 42 px across at 2.48 px/mm, which is 17 mm.
+    assert all(d["size"][0] >= 15.0 for d in bulbs), "the keyhole bulbs are about 17 mm across, not 12"
+    assert counts["hook-"] == 18, "three hook slots under each pair, each an inverted U with a head"
+    assert counts["leg-"] == 24, "the middle hook of a trio has two legs, the outer two one each"
     assert counts["rect-"] == 8, "eight rectangular slots"
-    assert counts["edge-"] == 86, "a rack-unit slot to each unit, down each edge"
+    assert counts["edge-"] == 43, "one short dash to a rack unit down the right edge"
+    assert counts["ledge-"] == 86, "a square and a long dash to a rack unit down the left edge"
     assert counts["tree-"] == 15, "three hanger marks of five parts"
     assert counts["sq-"] == 50, "the small square holes round the slots, windows and keyholes"
 

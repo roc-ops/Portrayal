@@ -4,18 +4,20 @@ name: nsx-vcm-20u
 version: 2.0.0
 class: mechanical
 description: The 20U length of the APC NetShelter vertical cable manager AR7721, seen from the crossbar side. Twenty crossbars,
-  one rack unit apart, reach out from a plate down the right edge. Each has a small lip at its outer end.
+  one rack unit apart, reach out from a plate down the right edge. Each has a lip at its outer end. A grey strip with a
+  block to each crossbar runs along the plate edge.
 provenance:
   size: 'datasheet - 107 mm wide, 45 mm deep and 889 mm long, 20 x 44.45: the AR7721 data sheet, page 1. The 20 crossbars
-    are COUNTED on its page 5 photographs, twice. The plate is 41 wide, read at 46 of 120 px of the width. The crossbars
-    are 7 thick and 66 long, with a 2.5 x 12 lip at the outer end. These are ESTIMATED from the photographs, which are not
-    dimensioned.'
+    are COUNTED on its page 5 photographs, twice. The plate and strip are 44 wide, read at 105 px of 2.41 px/mm; the dark
+    plate is 33 and the grey strip 11. The crossbars are 7 thick and 63 long. Each has a 2.5 x 36 lip at the outer end,
+    92 of 107 px tall on the photograph. The strip has a 7 mm block to each crossbar. The scale is the 44.45 mm crossbar
+    pitch. These are ESTIMATED from the photographs, which are not dimensioned, to within about 2 mm.'
   relief: estimated - every solid stands 45 deep, the data sheet's depth. No photograph sections a crossbar, so how deep
     each is, is a stand-in.
   marks: estimated - two round marks on the plate, near the 3rd and the 18th crossbar, read at 0.81 mm a pixel from the
     photograph. No document says what they are, so they are painted flat.
   color: 'datasheet - "Color: Black" on the data sheet. The shade is this library''s render of black plastic. The lit photograph
-    samples about #333334.'
+    samples the plate at #2a2a2a, the strip at #444444 and the blocks at #373738.'
 size:
   w: 107.0
   h: 889.0
@@ -25,18 +27,186 @@ size-confidence:
 elements:
   plate:
     at:
-    - 66.0
+    - 63.0
     - 0.0
     size:
-    - 41.0
+    - 33.0
     - 889.0
+    class: bezel
+  strip:
+    at:
+    - 96.0
+    - 0.0
+    size:
+    - 11.0
+    - 889.0
+    class: bezel
+  k1:
+    at:
+    - 96.0
+    - 12.7
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k2:
+    at:
+    - 96.0
+    - 57.15
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k3:
+    at:
+    - 96.0
+    - 101.6
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k4:
+    at:
+    - 96.0
+    - 146.05
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k5:
+    at:
+    - 96.0
+    - 190.5
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k6:
+    at:
+    - 96.0
+    - 234.95
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k7:
+    at:
+    - 96.0
+    - 279.4
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k8:
+    at:
+    - 96.0
+    - 323.85
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k9:
+    at:
+    - 96.0
+    - 368.3
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k10:
+    at:
+    - 96.0
+    - 412.75
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k11:
+    at:
+    - 96.0
+    - 457.2
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k12:
+    at:
+    - 96.0
+    - 501.65
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k13:
+    at:
+    - 96.0
+    - 546.1
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k14:
+    at:
+    - 96.0
+    - 590.55
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k15:
+    at:
+    - 96.0
+    - 635.0
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k16:
+    at:
+    - 96.0
+    - 679.45
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k17:
+    at:
+    - 96.0
+    - 723.9
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k18:
+    at:
+    - 96.0
+    - 768.35
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k19:
+    at:
+    - 96.0
+    - 812.8
+    size:
+    - 11.0
+    - 7.0
+    class: bezel
+  k20:
+    at:
+    - 96.0
+    - 857.25
+    size:
+    - 11.0
+    - 7.0
     class: bezel
   b1:
     at:
     - 0.0
     - 12.7
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b2:
@@ -44,7 +214,7 @@ elements:
     - 0.0
     - 57.15
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b3:
@@ -52,7 +222,7 @@ elements:
     - 0.0
     - 101.6
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b4:
@@ -60,7 +230,7 @@ elements:
     - 0.0
     - 146.05
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b5:
@@ -68,7 +238,7 @@ elements:
     - 0.0
     - 190.5
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b6:
@@ -76,7 +246,7 @@ elements:
     - 0.0
     - 234.95
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b7:
@@ -84,7 +254,7 @@ elements:
     - 0.0
     - 279.4
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b8:
@@ -92,7 +262,7 @@ elements:
     - 0.0
     - 323.85
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b9:
@@ -100,7 +270,7 @@ elements:
     - 0.0
     - 368.3
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b10:
@@ -108,7 +278,7 @@ elements:
     - 0.0
     - 412.75
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b11:
@@ -116,7 +286,7 @@ elements:
     - 0.0
     - 457.2
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b12:
@@ -124,7 +294,7 @@ elements:
     - 0.0
     - 501.65
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b13:
@@ -132,7 +302,7 @@ elements:
     - 0.0
     - 546.1
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b14:
@@ -140,7 +310,7 @@ elements:
     - 0.0
     - 590.55
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b15:
@@ -148,7 +318,7 @@ elements:
     - 0.0
     - 635.0
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b16:
@@ -156,7 +326,7 @@ elements:
     - 0.0
     - 679.45
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b17:
@@ -164,7 +334,7 @@ elements:
     - 0.0
     - 723.9
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b18:
@@ -172,7 +342,7 @@ elements:
     - 0.0
     - 768.35
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b19:
@@ -180,7 +350,7 @@ elements:
     - 0.0
     - 812.8
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   b20:
@@ -188,168 +358,168 @@ elements:
     - 0.0
     - 857.25
     size:
-    - 66.0
+    - 63.0
     - 7.0
     class: bezel
   l1:
     at:
     - 0.0
-    - 10.2
+    - 0.0
     size:
     - 2.5
-    - 12.0
+    - 34.2
     class: bezel
   l2:
     at:
     - 0.0
-    - 54.65
+    - 42.65
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l3:
     at:
     - 0.0
-    - 99.1
+    - 87.1
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l4:
     at:
     - 0.0
-    - 143.55
+    - 131.55
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l5:
     at:
     - 0.0
-    - 188.0
+    - 176.0
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l6:
     at:
     - 0.0
-    - 232.45
+    - 220.45
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l7:
     at:
     - 0.0
-    - 276.9
+    - 264.9
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l8:
     at:
     - 0.0
-    - 321.35
+    - 309.35
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l9:
     at:
     - 0.0
-    - 365.8
+    - 353.8
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l10:
     at:
     - 0.0
-    - 410.25
+    - 398.25
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l11:
     at:
     - 0.0
-    - 454.7
+    - 442.7
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l12:
     at:
     - 0.0
-    - 499.15
+    - 487.15
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l13:
     at:
     - 0.0
-    - 543.6
+    - 531.6
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l14:
     at:
     - 0.0
-    - 588.05
+    - 576.05
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l15:
     at:
     - 0.0
-    - 632.5
+    - 620.5
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l16:
     at:
     - 0.0
-    - 676.95
+    - 664.95
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l17:
     at:
     - 0.0
-    - 721.4
+    - 709.4
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l18:
     at:
     - 0.0
-    - 765.85
+    - 753.85
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l19:
     at:
     - 0.0
-    - 810.3
+    - 798.3
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   l20:
     at:
     - 0.0
-    - 854.75
+    - 842.75
     size:
     - 2.5
-    - 12.0
+    - 36.0
     class: bezel
   m1:
     at:
@@ -374,6 +544,132 @@ relief:
     color: '#232527'
     confidence: estimated
     source: 'the AR7721 data sheet photographs, page 5: the plate the crossbars stand on; its width is read, not dimensioned'
+  - node: strip
+    out: 45.0
+    color: '#444444'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the grey strip along the plate edge; its width and shade are read,
+      not dimensioned'
+  - node: k1
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k2
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k3
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k4
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k5
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k6
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k7
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k8
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k9
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k10
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k11
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k12
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k13
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k14
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k15
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k16
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k17
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k18
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k19
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
+  - node: k20
+    out: 45.0
+    color: '#373738'
+    confidence: estimated
+    source: 'the AR7721 data sheet photographs, page 5: the block at the right end of each crossbar on the strip; its size
+      is read, not dimensioned'
   - node: b1
     out: 45.0
     color: '#26282a'
@@ -478,121 +774,101 @@ relief:
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l2
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l3
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l4
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l5
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l6
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l7
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l8
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l9
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l10
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l11
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l12
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l13
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l14
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l15
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l16
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l17
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l18
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l19
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
   - node: l20
     out: 45.0
     color: '#2e3033'
     confidence: estimated
-    source: 'the AR7721 data sheet photographs, page 5: a small lip at the outer end of each crossbar; its size is read,
-      not dimensioned'
+    source: 'the AR7721 data sheet photographs, page 5: a lip at the outer end of each crossbar; its size is read, not dimensioned'
 skins:
 - default
