@@ -147,7 +147,7 @@ refused. The message was "Module type with this Manufacturer and Model already
 exists". Nothing was duplicated or changed. A type that already existed without mappings
 kept none after the refused import. Deleting a type and importing it again was
 not tried. A second run on NetBox 4.7.2, with a copy of the FS.com
-FHD-1MTP6LCDOM4U file, found three more things. Installing a module of a type
+FHD-1MTP6LCDOM4U file, gave these results. Installing a module of a type
 that carries the mappings creates its instance-level mappings by itself, one
 per row. Applying the fibre map to that module afterwards was refused row by
 row and created no duplicate. The message was "Port mapping with this Front
