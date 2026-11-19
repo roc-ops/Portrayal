@@ -327,6 +327,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # ASR 9906; the @1, drawn at the slot envelope that does not fit five slots, stays for a saved rack or a
     # manifest that names it, `superseded-by` the @2.
     kept["cisco/a99-sfc3-t"] = [1, 2]
+    # The PRO3X breaker handle. The merged 3A01 still places the @1. The three PRO3X intelligent devices
+    # place the @2, whose window draws the sheet's bar and framed square. The @1 stays until the 3A01 moves.
+    kept["servertech/pro3x-breaker-handle"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):

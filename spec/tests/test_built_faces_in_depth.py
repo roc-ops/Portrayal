@@ -70,6 +70,8 @@ PROUD = {
                        "frame, door or guide stood in front of the part. Whether the stated depth includes them is not checked"),
     "evmi2130x": (7.5, "the plates of its breakers stand 7.5 mm proud of the front face. They are controls on a face and not a "
                        "frame, door or guide stood in front of the part. Whether the stated depth includes them is not checked"),
+    **{n: (18.3, "the levers of its outlets stand 18.3 mm proud: the sheet's 81.8 reach less 63.5. The lever's across place and its 2.0 are photograph estimates.")
+       for n in ("pro3x-smart-3c01", "pro3x-switched-3f01", "pro3x-switched-pops-3g01")},
 }
 
 

@@ -212,7 +212,7 @@ def test_every_connector_presenting_part_is_a_connector_slot(comps):
     assert all(c["interface"] in {"lc", "lc-duplex", "sc", "mpo", "mpo16", "rj45",
                                    "f-type", "sma", "smb", "mcx", "bnc", "din-1-0-2-3",
                                    "iec-c13", "iec-c14", "iec-c20", "iec-c19", "saf-d-grid",
-                                   "usb-a", "micro-usb-b", "usb-c",
+                                   "usb-a", "usb-b", "micro-usb-b", "usb-c",
                                    "db9", "hd15", "da15", "db25",
                                    "terminal-508-2", "terminal-508-5", "terminal-508-6",
                                    "dc-barrel", "terminal-stud",
