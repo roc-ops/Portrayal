@@ -116,7 +116,8 @@ def test_the_ar7502_front_draws_what_the_installation_sheets_figure_counts():
     # A bulb reads 42 px across at 2.48 px/mm, which is 17 mm.
     assert all(d["size"][0] >= 15.0 for d in bulbs), "the keyhole bulbs are about 17 mm across, not 12"
     assert counts["hook-"] == 18, "three hook slots under each pair, each an inverted U with a head"
-    assert counts["leg-"] == 24, "the middle hook of a trio has two legs, the outer two one each"
+    # Every hook shows two legs in the photograph and the figure: 6 trios x 3 hooks x 2 legs.
+    assert counts["leg-"] == 36, "each hook of a trio has two legs"
     assert counts["rect-"] == 8, "eight rectangular slots"
     assert counts["edge-"] == 43, "one short dash to a rack unit down the right edge"
     assert counts["ledge-"] == 86, "a square and a long dash to a rack unit down the left edge"
