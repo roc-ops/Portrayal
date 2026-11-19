@@ -153,8 +153,8 @@ per row. Applying the fibre map to that module afterwards was refused row by
 row and created no duplicate. The message was "Port mapping with this Front
 port and Front port position already exists". On a type imported without
 mappings, applying the fibre map created the mappings at instance level, as
-before. A script that applies the fibre map to NetBox 4.6 or later should treat
-that refusal as already done. Nautobot 3.2.6 is unchanged: an install sets each
+before. A script that applies the fibre map to NetBox 4.7.2 should treat that
+refusal as already done. Nautobot 3.2.6 is unchanged: an install sets each
 front port's rear port and position from the type, and a repeated import is
 refused.
 
