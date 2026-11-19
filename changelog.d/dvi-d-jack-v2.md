@@ -9,4 +9,4 @@
 ### Changed
 - The Raritan DSX2-32 (0.2.0 to 1.0.0) seats the second version of the jack.
   Its two screws now stand 32.51 apart, the distance the specification prints, centred on the jack.
-  The jack's slot has a new size and place, so the version lock asks a major. The exported ports and interfaces do not move.
+  The jack's slot has a new size and place, so the version check asks a major. The exported ports and interfaces do not move.
