@@ -23,7 +23,10 @@ provenance:
       dimensions only the overall. It prints 482.7 [19.00] wide over the ears, 87.1 [3.43] high and 213.2 [8.39] deep.
       Every other figure was read off a 600 dpi render against the 482.7, 5.66 px per mm, good to about 0.5 mm.
       The sheet has four views: a rear plate, a plan, the front and a perspective. It has no side view.
-      No photograph of this model is held, so every colour other than the two section colours is unchecked.
+      The specifications page holds two product photographs, 500 px wide, a front view and a three-quarter view.
+      They agree on the black body and ears, the yellow and blue sections and the cord leaving the front at the left.
+      They show the display lit in blue and the left end perforated.
+      Their resolution is too low to take any size from them.
   chassis:
     confidence: drawing
     note: >-
@@ -63,7 +66,7 @@ provenance:
     confidence: drawing
     note: >-
       drawing - the rear plate, the first view of the sheet, is a plain plate.
-      It has a lip 4.2 high along its foot from 19.4 to 435.0 across. There are four marks about 1 mm across at 7.1 and 438.4 across, 14.5 and 68.2 down. Nothing else is drawn.
+      It has a lip 4.2 high along its foot from 19.4 to 435.0 across. There are four marks about 1 mm across at 5.8 and 438.7 across, 17.0 and 70.1 down. Nothing else is drawn.
   top:
     confidence: drawing
     note: >-
@@ -73,9 +76,11 @@ provenance:
   sides:
     confidence: estimated
     note: >-
-      the left, right and bottom faces are built as the documented side, as no document shows this one.
-      The sheet's perspective shows a plain left end with the ear flange at the front, and that is the documented side.
-      The right end and the underside are drawn as plain as it is, from the same source.
+      the left end is read from the sheet's perspective view, which shows four oval holes in two columns and two rows.
+      The rows are about 20.5 and 66.6 down, and the columns about 34.5 and 108.5 from the rear.
+      Each hole is about 12.0 by 9.6. Those figures are estimated from the edge lengths of the foreshortened view, good to about 5 mm.
+      The right end is built as the documented side, as no document shows this one, mirrored from the left end.
+      The underside is built plain, as no document shows it.
   outlets:
     confidence: drawing
     note: >-
@@ -168,23 +173,33 @@ gaps:
   scope: [front, rear, top]
   reason: needs-photo
   note: >-
-    no photograph of this model is held. The sheet says "BLACK CHASSIS".
-    The two section colours are sampled on the sheet's own fills (yellow 14988 px, blue 14529 px) and are not checked against a photograph.
+    the sheet says "BLACK CHASSIS". The two section colours are sampled on the sheet's own fills (yellow 14988 px, blue 14529 px).
+    The specifications page's two photographs agree with them, and show a black body, black ears and a blue lit display.
+    They are 500 px wide, so no colour value is sampled from them.
     The chassis hex, the unlit display and the breaker handles are stand-ins.
-  wanted: a photograph of the EMAU07-10.
+  wanted: a larger photograph of the EMAU07-10.
 - what: ear-slots
   scope: [front, rear]
   reason: needs-drawing
   note: >-
     the rear plate shows two slots in each ear and no figure dimensions them, so the generic ear stands for them.
   wanted: a dimensioned drawing of the ear.
+- what: end-holes
+  scope: [left, right]
+  reason: needs-drawing
+  note: >-
+    the sheet's perspective view shows four oval holes on the left end and no view dimensions them.
+    The figures drawn are estimated from that view. The photographs show a perforated end but too small to count.
+    The right end is built as the left, as no document shows it.
+  wanted: a side view of the EMAU07-10 with the end holes dimensioned.
 - what: cord-gland
   scope: [front]
   reason: vendor-silent
   note: >-
     the plan draws the cord leaving the front at the left end.
     The round gland read at that place is taken to be its gland. No figure names it. Its saw-toothed edge is drawn as the sheet draws it.
-  wanted: a photograph of the front's left end.
+    The specifications page's photographs show the cord leaving the front at that end.
+  wanted: a larger photograph of the front's left end.
 - what: lamp-function
   scope: [front]
   reason: vendor-silent
@@ -452,10 +467,10 @@ views:
     panel:
       decor:
       - {id: rear-lip, at: [19.4, 82.9], size: [415.6, 4.2], fill: '#26282b', kind: plate}
-      - {id: rear-mark-1, at: [6.6, 14], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
-      - {id: rear-mark-2, at: [437.9, 14], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
-      - {id: rear-mark-3, at: [6.6, 67.7], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
-      - {id: rear-mark-4, at: [437.9, 67.7], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-1, at: [5.3, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-2, at: [438.2, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-3, at: [5.3, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-4, at: [438.2, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
   top:
     size: {w: 444.5, h: 213.2}
     panel:
@@ -470,15 +485,23 @@ views:
   bottom:
     size: {w: 444.5, h: 213.2}
     empty: >-
-      the sheet draws no view of the underside. It is built as the documented side, as no document shows this one: plain, as the perspective shows the left end.
+      the sheet draws no view of the underside and no photograph shows it, so nothing on it can be measured.
   left:
     size: {w: 213.2, h: 87.1}
-    empty: >-
-      the sheet draws no side view. Its perspective shows this end plain, with the ear flange at the front, and nothing on it can be measured.
+    panel:
+      decor:
+      - {id: left-hole-1, at: [28.5, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-2, at: [102.5, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-3, at: [28.5, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-4, at: [102.5, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
   right:
     size: {w: 213.2, h: 87.1}
-    empty: >-
-      the sheet draws no side view. It is built as the documented side, as no document shows this one: plain, as the perspective shows the left end.
+    panel:
+      decor:
+      - {id: right-hole-1, at: [172.7, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-2, at: [98.7, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-3, at: [172.7, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-4, at: [98.7, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
 interfaces:
 - {physical: 'outlet-a{n}', name: 'A{n}', range: 1-8}
 - {physical: 'outlet-b{n}', name: 'B{n}', range: 1-8}

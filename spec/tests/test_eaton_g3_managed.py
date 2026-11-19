@@ -43,6 +43,12 @@ def test_the_module_has_its_ports_and_buttons():
     assert {"button-up", "button-down", "button-esc", "button-enter"} <= ids
 
 
+def test_each_end_carries_the_four_holes_the_perspective_shows():
+    for side in ("left", "right"):
+        holes = [d for d in DEVICE["views"][side]["panel"]["decor"] if d["kind"] == "hole"]
+        assert len(holes) == 4
+
+
 def test_sixteen_lamps_two_tiles_of_eight():
     lamps = [p for p in _placements("front") if p["ref"] == "common/led-dot@1"]
     assert len(lamps) == 16
