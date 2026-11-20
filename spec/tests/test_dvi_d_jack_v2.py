@@ -132,3 +132,26 @@ def test_each_screw_has_a_dark_centre_drawn_on_its_axis():
             screw_mid = screw["at"][axis] + screw["size"][axis] / 2
             assert bore["at"][axis] + bore["size"][axis] / 2 == pytest.approx(screw_mid, abs=TOL)
         assert 0 < bore["size"][0] < screw["size"][0]
+
+
+def test_the_shell_draws_the_two_inner_lines_the_figure_draws_and_a_dark_rim():
+    ids = skin()
+    assert {"inner-line-1", "inner-line-2"} <= set(ids)
+    assert ids["shell"].get("stroke") and 0.3 <= float(ids["shell"].get("stroke-width")) <= 0.5, "a dark rim round the shell"
+    assert "blade-line" in ids, "the inner line of the blade slot"
+
+
+def test_the_left_numerals_stand_clear_of_the_cells():
+    ids = skin()
+    first = min(float(e.get("x")) for i, e in ids.items() if i.startswith("cell-"))
+    for name in ("num-1", "num-9", "num-17"):
+        t = ids[name]
+        width = 0.55 * float(t.get("font-size")) * len(t.text)
+        assert float(t.get("font-size")) >= 0.35, name
+        assert t.get("text-anchor") == "start" and float(t.get("x")) + width <= first - 0.05, name
+
+
+def test_each_jackscrew_is_drawn_the_ring_size_the_figure_prints():
+    decor = {x["id"]: x for x in device()["views"]["rear"]["panel"]["decor"]}
+    for side in ("left", "right"):
+        assert decor[f"dvi-screw-{side}"]["size"][0] == pytest.approx(4.39, abs=0.1)
