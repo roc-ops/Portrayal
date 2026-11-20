@@ -86,3 +86,20 @@ def test_the_six_top_screws_are_six_millimetres_with_a_star_socket_each():
 def test_sixteen_lamps_two_tiles_of_eight():
     lamps = [p for p in _placements("front") if p["ref"] == "common/led-dot@1"]
     assert len(lamps) == 16
+
+
+def test_the_rear_draws_the_band_elbows_the_lip_tabs_and_the_foot_strip_and_the_plan_its_inner_line():
+    """The sheet's rear shows an elbow at each band end, a tab at each lip end and a foot strip outside the lip."""
+    rear = DEVICE["views"]["rear"]
+    width = rear["size"]["w"]
+    decor = {d["id"]: d for d in rear["panel"]["decor"]}
+    marks = {m["id"]: m for m in rear.get("silkscreen") or []}
+    assert {"elbow-left", "elbow-right"} <= set(marks)
+    assert marks["elbow-left"]["at"][0] < 6 and marks["elbow-right"]["at"][0] > width - 6
+    assert all(marks[i]["at"][1] < 4 for i in ("elbow-left", "elbow-right"))
+    tabs = [decor["rear-tab-left"], decor["rear-tab-right"]]
+    assert all(abs(t["size"][0] - 1.2) <= 0.4 and abs(t["size"][1] - 2.65) <= 0.6 for t in tabs)
+    assert abs(tabs[0]["at"][0] - (width - tabs[1]["at"][0] - tabs[1]["size"][0])) <= 1.0
+    right = decor["rear-foot-right"]
+    assert decor["rear-foot-left"]["at"][0] == 0 and abs(right["at"][0] + right["size"][0] - width) <= 0.1
+    assert {d["id"] for d in DEVICE["views"]["top"]["panel"]["decor"]} >= {"front-band", "front-band-line"}

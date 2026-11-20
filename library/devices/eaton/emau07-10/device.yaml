@@ -69,14 +69,16 @@ provenance:
       The band is 2.6 high and runs the full width.
       The lip along its foot is 3.7 high and runs from 19.4 to 425.1 across, as far from the right end as from the left.
       There are four marks about 1 mm across at 5.8 and 438.7 across, 17.0 and 70.1 down.
-      The band has a small elbow detail at each end, about 3 across. They are not drawn (gaps: rear-band-corners).
+      The band has a small elbow detail at each end, about 3 across, drawn as silkscreen lines in a stand-in colour.
+      The lip has a tab at each end, 1.2 wide and 2.65 high, and a foot strip 1.2 high runs outside it to each end.
+      A kit plate rounds every corner, so each tab is rounded at its foot as well as its top.
   top:
     confidence: drawing
     note: >-
       drawing - the plan, with the rear at the top as the library draws a top.
       Six screws are 6.0 across, each with a six-point star socket about 2.6 across.
       Their centres are at (112.4, 7.8), (332.5, 7.8), (7.8, 101.8), (436.9, 101.8), (105.0, 194.0) and (337.5, 194.0).
-      A band 12.7 deep runs along the front edge.
+      A band 12.7 deep runs along the front edge, with an inner edge line 3.1 from the front.
       The plan also shows eight grip scallops, two bulges over the module and the cord, standing about 5.8 past the front line. They are not drawn (gaps: plan-protrusions).
   sides:
     confidence: estimated
@@ -188,6 +190,7 @@ gaps:
     The specifications page's two photographs agree with them, and show a black body, black ears and a blue lit display.
     They are 500 px wide, so no colour value is sampled from them.
     The chassis hex, the unlit display and the breaker handles are stand-ins.
+    The sheet is line art, so the colour of the rear elbows and of the edge lines is a stand-in too.
   wanted: a larger photograph of the EMAU07-10.
 - what: ear-slots
   scope: [front, rear]
@@ -221,13 +224,6 @@ gaps:
     The library draws a decor shape only within its face, so none can be drawn on the top face.
     The grips and the cord are placed on the front face.
   wanted: the maintainer's word on a part that stands past the box.
-- what: rear-band-corners
-  scope: [rear]
-  reason: needs-drawing
-  note: >-
-    the sheet's rear view shows a small elbow with two nested squares, about 3 across, at each end of the top band.
-    The kit's decor shapes are a plate, a rectangle and a circle, and none draws an elbow, so the corners are not drawn.
-  wanted: the maintainer's word on how the band's corner details should be drawn.
 - what: cord-gland
   scope: [front]
   reason: vendor-silent
@@ -504,15 +500,23 @@ views:
       decor:
       - {id: rear-band, at: [0, 0], size: [444.5, 2.6], fill: '#26282b', kind: plate}
       - {id: rear-lip, at: [19.4, 83.4], size: [405.7, 3.7], fill: '#26282b', kind: plate}
+      - {id: rear-foot-left, at: [0, 85.9], size: [19.4, 1.2], fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-foot-right, at: [425.1, 85.9], size: [19.4, 1.2], fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-tab-left, at: [18.8, 83.25], size: [1.2, 2.65], rx: 0.6, fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-tab-right, at: [424.5, 83.25], size: [1.2, 2.65], rx: 0.6, fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
       - {id: rear-mark-1, at: [5.3, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
       - {id: rear-mark-2, at: [438.2, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
       - {id: rear-mark-3, at: [5.3, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
       - {id: rear-mark-4, at: [438.2, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+    silkscreen:
+      - {id: elbow-left, at: [1.52, 1.355], path: 'M -1.52 1.355 A 2.69 2.69 0 0 1 1.17 -1.355 M 1.17 -1.355 V -0.155 M -0.33 1.355 A 1.5 1.5 0 0 1 1.17 -0.145 H 1.52 M 1.52 -1.355 V 1.355 M -0.11 -0.125 H 1.52 M -0.11 -0.125 V 1.355 M -0.11 0.125 H 1.06 V 1.355', fill: '#4a4d51', stroke-width: 0.15, for: chassis}
+      - {id: elbow-right, at: [442.98, 1.355], path: 'M 1.52 1.355 A 2.69 2.69 0 0 0 -1.17 -1.355 M -1.17 -1.355 V -0.155 M 0.33 1.355 A 1.5 1.5 0 0 0 -1.17 -0.145 H -1.52 M -1.52 -1.355 V 1.355 M 0.11 -0.125 H -1.52 M 0.11 -0.125 V 1.355 M 0.11 0.125 H -1.06 V 1.355', fill: '#4a4d51', stroke-width: 0.15, for: chassis}
   top:
     size: {w: 444.5, h: 213.2}
     panel:
       decor:
       - {id: front-band, at: [0, 200.5], size: [444.5, 12.7], fill: '#26282b', kind: plate}
+      - {id: front-band-line, at: [0, 210.0], size: [444.5, 0.2], fill: '#4a4d51', kind: plate}
       - {id: screw-t1, at: [109.4, 4.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
       - {id: screw-t2, at: [329.5, 4.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
       - {id: screw-t3, at: [4.8, 98.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
