@@ -155,3 +155,15 @@ def test_each_jackscrew_is_drawn_the_ring_size_the_figure_prints():
     decor = {x["id"]: x for x in device()["views"]["rear"]["panel"]["decor"]}
     for side in ("left", "right"):
         assert decor[f"dvi-screw-{side}"]["size"][0] == pytest.approx(4.39, abs=0.1)
+
+
+def test_the_blade_is_drawn_as_the_figures_outline_with_two_inner_lines():
+    ids = skin()
+    blade = ids["blade"]
+    assert blade.get("fill") == ids["shell"].get("fill"), "the figure draws the blade unfilled, so it is the shell's colour"
+    assert blade.get("stroke") == "#5c5c5b" and 0.05 <= float(blade.get("stroke-width")) <= 0.15, "a thin dark outline"
+    d = ids["blade-line"].get("d")
+    assert d.count("M") == 2, "the two inner lines of the blade"
+    ys = sorted(float(part.split(",")[1].split()[0]) for part in d.split("M") if part)
+    by, bh = float(blade.get("y")), float(blade.get("height"))
+    assert ys[0] > by and ys[1] < by + bh and ys[1] - ys[0] > 0.3 * bh, "both inside the outline, apart"
