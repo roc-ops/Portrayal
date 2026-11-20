@@ -1,0 +1,1922 @@
+format: 1
+kind: device
+name: ema325-10
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: EMA325-10
+description: Eaton ePDU G3 managed rack PDU, 0U, three-phase. A 1689 mm black aluminium strip that hangs on two mounting buttons
+  beside a rack. It takes a 120/208 V three-phase feed through a fixed 10 ft cord that ends in a NEMA L21-20P (16 A, 5.76
+  kW). It feeds 18 IEC C13 and 6 IEC C19 outlets in three sections of eight. The sections are A (yellow), B (blue) and C (red),
+  each on its own 20 A two-pole breaker. Between sections A and B is the network module. It has a serial RJ-45, a network
+  RJ-45, a daisy chain RJ-45, a USB-A port, a display and four buttons. The PDU meters the input, each branch and each outlet,
+  and it switches the outlets.
+profile: power
+provenance:
+  method: {confidence: drawing, note: 'FIGURES FROM THE MAKER''S TECHNICAL DRAWING. Eaton, "EMA325-10 G3 MANAGED" (DWG EMA6PB15JGD88B1,
+      rev 001, 4 Aug 2014) is one A3 vector sheet. It dimensions the overall size and the two mounting buttons. Every other
+      figure was read off a 600 dpi render against the strip''s own 1689 and 52. That is 4.377 px per mm, good to about 0.5
+      mm. The sheet draws the strip lying with the cord end at the left. This model turns it a quarter turn so the cord end
+      is at the foot, as the library''s other zero-U strips stand. The sheet shows the front, one long side, the rear, the
+      cord end and a perspective. No photograph is held: the product page''s one picture is a person holding the strip. Every
+      colour is therefore checked against the drawing''s own fills only.'}
+  mount: {confidence: drawing, note: '`rack-side`, the library''s way to say a part stands beside an upright, with two mounting
+      buttons on its back. The drawing''s rear view dimensions them 1555.8 [61.25] apart. The first is 51.0 [2] from the cord
+      end and both are centred across the strip. The strip''s depth is 65, so `ru` is 0. The cord retention bracket above
+      the end view is outside the body and is not drawn.'}
+  chassis: {confidence: drawing, note: 'drawing - 66.50 in (1689 mm) long, 2.05 in (52 mm) wide and 2.56 in (65 mm) deep.
+      It draws an end view of a 52 by 65 box. The product page prints 66.5 in under length and depth. It prints 2.56 in under
+      height and 2.05 in under width, so its labels differ from the drawing''s (gaps: size-labels). The drawing governs. Weight
+      19.8 lb (8.98 kg) from the product page. Material aluminium and colour black are from the drawing ("ALUMINUM CHASSIS,
+      BLACK"). The hex is a stand-in.'}
+  front: {confidence: drawing, note: 'drawing - the front view is read from the cord end along the strip. It is turned to
+      y from the top, with y = 1689 minus the distance from the cord end. The cord plate runs to 108.5. It carries the wordmark,
+      a small screw and an earth screw on a washer. The breaker plate runs from 108.5 to 315.4 with three breakers 64.0 apart.
+      Section A''s outlets stand from 498.0 to 806.7 and the module plate from 810.3 to 993.1. Sections B and C are section
+      A moved 523.8 and 863.5 along the strip.'}
+  sections: {confidence: drawing, note: 'drawing - each section is four C13 on a 23.99 pitch, a gap, two C13, a gap and two
+      C19 on a 39.0 pitch. They are numbered 1 to 8 under the lamps. The C13 earth slot is on the side away from the cord
+      and the C19 earth slot the same. Each group has a coloured outline and a coloured strip runs under the groups, carrying
+      the section letter. Section colours were sampled on the sheet''s own fills at 300 dpi: yellow (248,232,64), blue (0,0,248)
+      and red (248,0,0).'}
+  pitch: {confidence: estimated, note: 'estimated - the sheet dimensions no outlet pitch. The 23.99 and 39.0 are measured
+      on the render and good to about 0.3. The three sections repeat to the pixel, so one measurement serves all three.'}
+  outlets: {confidence: drawing, note: 'drawing - OUTPUT "(18) IEC 60320 C13 GRIP", "(6) IEC 60320 C19 GRIP". Output rating
+      "200-240V~", "10A PER C13; 16A PER C19", "16A MAX PER SECTION". The drawn outlet faces are narrower than the C19 part,
+      which is placed on the drawn centre. The sheet prints the numbers 1 to 8 in each section and the section letter apart.
+      The outlets are named A1 to A8, B1 to B8 and C1 to C8.'}
+  grips: {confidence: estimated, note: 'estimated - the sheet draws a grip under each outlet: a black block, a cross, a triangle
+      and a small ring. The outlines were read from 400 dpi crops by eye, and no figure dimensions them.'}
+  lamps: {confidence: estimated, note: 'estimated - 24 lamps, one under each C13 and beside each pair of pictograms for outlets
+      7 and 8, with the outlet''s number beside it. The sheet draws each lamp as a plain white circle 5 across. The lamp part
+      is 2.0 across inside a 5.0 lens, drawn dark, so every lamp is off. No held document says what a lamp shows (gaps: lamp-meaning).'}
+  breakers: {confidence: drawing, note: 'drawing - CIRCUIT BREAKERS "(3) 20A 2-POLE LISTED". The one-line diagram puts section
+      A across L1 and L2, section B across L2 and L3 and section C across L3 and L1. Each has a round handle, a letter tile
+      and a left screw, with two screws above the plate. The tiles take the sampled section colours.'}
+  module: {confidence: drawing, note: 'drawing and datasheet - the network module plate between A and B has two ear screws
+      and a stacked pair of RJ-45 at the left. It has a third RJ-45, a USB-A port, a reset hole, a display and four buttons.
+      Port roles follow the marks the sheet prints beside them. They also follow a legend on page 2 of the Eaton ePDU G3 installation
+      and connectivity quick start (P-164000314_2). It names serial or EMP, Ethernet, USB, reset and daisy chain. That guide
+      is the generic G3 module, and its sample display reads EMA305-10, a different model. The stacked pair is serial above
+      and network below. That differs from the EMIT04-10''s reading and follows this sheet''s own marks. The sheet draws the
+      two arrow buttons as triangles pointing toward and away from the cord. Turned to the library''s form with the cord at
+      the foot, they point down and up.'}
+  rear: {confidence: drawing, note: 'drawing - the rear view shows two mounting buttons on the centre line and a vertical
+      line 127.2 from the cord end. It shows two small holes, at 106.7 and 1662.6. The button is drawn 14.8 across as three
+      rings. The library holds two button parts, 24.7 and 25.4 across. The Tripp Lite one is used because its three rings
+      are closest in proportion (gaps: button-size).'}
+  sides: {confidence: drawing, note: 'drawing - the long side view shows the 65 deep face with the front at the top. It draws
+      a line 14.7 from the front, the EATON ePDU wordmark, nine fixings and a vertical line 127.2 from the cord end. The sheet
+      places the view below the front view. In third-angle projection that is the view from below, so it is the right face
+      once the strip is turned. The left face is built as the documented side, as no document shows this one, mirrored in
+      depth.'}
+  ends: {confidence: drawing, note: 'drawing - the end view at the cord end draws a round gland 37.1 across with a serrated
+      disc. It is centred across and 24.3 from the front. The gland is the new cord part. The far end is built as the documented
+      side, as no document shows this one. It has no cord, so its face is plain.'}
+  input: {confidence: datasheet, note: 'datasheet and drawing - INPUT "NEMA L21-20P", "10FT 12AWG / 5C POWERCORD" and INPUT
+      RATING "120-208V~ WYE, 3W+N+PE", 16 A, 50/60 Hz. The product page adds 5.76 kW. The cord is fixed. No power port type
+      of the two export targets is held for an L21-20P. So `input-plug` is `other` and the export names the connector.'}
+  capability: {confidence: datasheet, note: 'drawing and datasheet - FUNCTIONALITY "CURRENT, POWER, AND ENERGY METERING FOR
+      INPUT, BRANCH AND OUTLET; OUTLET SWITCHING" and OUTLET CONTROL "Yes" on the product page. Serial interface RS-232 (product
+      page).'}
+  dcim: {confidence: datasheet, note: 'the input is one power port, other (NEMA L21-20P). Each outlet is a power outlet fed
+      by it, `iec-60320-c13` or `iec-60320-c19`, through its section''s breaker. Each is named as numbered in its section.'}
+attrs:
+  physical: {length-mm: 1689, weight-kg: 8.98, construction: aluminium}
+  power: {input-ac: '120/208 V three-phase WYE (3W+N+PE), 16 A, 50/60 Hz', input-plug: other, input-cord: fixed, input-phase: three,
+    input-wiring: wye, input-voltage-v: 208, input-current-a: 16, plug-rating-a: 20, capacity-kw: 5.76, capacity-scope: 'the
+      load the PDU can hand on (product page, "5.76kW max"); it is not what the PDU draws itself, which no document held states',
+    output-voltage: 200-240 V, output-rating: 10 A per C13; 16 A per C19; 16 A per section; 16 A per phase, breakers: 'three
+      20 A two-pole breakers, one per section', frequency: 50/60 Hz}
+  environmental: {operating-temp: 0 to 60 C (32 to 140 F)}
+  management: {metering-scope: outlet, outlet-switching: true, metering: 'current, power and energy for the input, each branch
+      and each outlet', network-interface: 'network module with an RJ-45 network port, an RJ-45 serial port, an RJ-45 daisy
+      chain port and USB-A'}
+  compliance: {certifications: UL listed (cULus)}
+chassis: {width: 52, height: 1689, depth: 65, ru: 0, mount: rack-side, color: '#1f2022', airflow: passive, weight-kg: 8.98}
+gaps:
+- what: size-labels
+  scope: [left, right, top, bottom]
+  reason: sources-disagree
+  note: the product page prints 66.5 in under length and depth, 2.56 in under height and 2.05 in under width. The drawing
+    prints 66.50 in long, 2.05 in wide and 2.56 in deep. The body takes the drawing's figures.
+  wanted: the maker's own statement of which dimension each label names.
+- what: outlet-pitch
+  scope: [front]
+  reason: needs-drawing
+  note: the sheet dimensions no pitch inside a section. The 23.99 between C13 and the 39.0 between C19 are measured on a 600
+    dpi render, and no dimension states them.
+  wanted: a dimension of the outlet pitch.
+- what: colours
+  scope: [front, rear, left, right, top, bottom]
+  reason: needs-photo
+  note: 'no photograph of this model is held, so no colour is checked against one. The strip is drawn black as the sheet says,
+    with the stand-in hex #1f2022. The section tints are the sheet''s own fills.'
+  wanted: a photograph of the strip.
+- what: lamp-meaning
+  scope: [front]
+  reason: vendor-silent
+  note: the 24 lamps under the outlets are drawn and numbered on the sheet. Neither the sheet, the product page nor the quick
+    start says what a lamp shows or in what colour, so none has states.
+  wanted: the G3 operation manual page on the outlet lamps.
+- what: lamp-size
+  scope: [front]
+  reason: needs-drawing
+  note: the sheet draws each lamp as a white circle 5 across and the lamp part is 2.0 across. The part sits in a 5.0 dark
+    lens.
+  wanted: a dimensioned detail of the lamp.
+- what: button-size
+  scope: [rear]
+  reason: needs-drawing
+  note: the sheet draws the mounting button 14.8 across as three rings, and head size and type are not stated. The library's
+    Tripp Lite button part is 24.7 across, so it is drawn larger than the sheet shows.
+  wanted: a dimensioned detail of the button.
+- what: module-quick-start
+  scope: [front]
+  reason: vendor-silent
+  note: the Double-wide G3 quick start named on the product page is not held. The generic G3 quick start that is held shows
+    a display reading EMA305-10. The module's ports are read from the sheet's marks and that legend.
+  wanted: the Double-wide G3 installation and connectivity quick start.
+- what: stand-in-fixings
+  scope: [front, right, left, rear]
+  reason: needs-drawing
+  note: the screws, holes and lines on the side and rear are read off the sheet by eye and no figure dimensions them. The
+    wordmarks are drawn as text.
+  wanted: a dimensioned detail of the side.
+- what: cord-beyond-gland
+  scope: [bottom]
+  reason: needs-drawing
+  note: the cord's loop, its break line and the plug lie outside the strip's footprint on the sheet and are not drawn. Nor
+    is the retention bracket above the end view. The kit draws nothing beyond a face.
+  wanted: nothing more, as the far end of a cord is not a part.
+groups:
+  body: {term: Well, role: furniture, index-origin: 1}
+  outlets-a: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s section A outlets: A1 to A6 IEC C13 and A7
+      and A8 IEC C19'}
+  outlets-b: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s section B outlets: B1 to B6 IEC C13 and B7
+      and B8 IEC C19'}
+  outlets-c: {term: Outlet, role: traffic, index-origin: 1, mixed: 'the PDU''s section C outlets: C1 to C6 IEC C13 and C7
+      and C8 IEC C19'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'three 20 A two-pole breakers, A, B and C, one per
+      section'}
+  lamps: {term: LED, role: indicator, index-origin: 1}
+  serial: {term: Port, role: management, index-origin: 1, description: the serial / environmental probe (EMP) RJ-45 port of
+      the network module}
+  chain: {term: Port, role: management, index-origin: 1, description: the daisy-chain RJ-45 port of the network module}
+  network: {term: Port, role: management, index-origin: 1}
+  usb: {term: Port, role: management, index-origin: 1}
+  reset: {term: Button, role: management, index-origin: 1}
+  display: {term: Display, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+  mounting: {term: Button, role: furniture, index-origin: 1}
+views:
+  front:
+    size: {w: 52, h: 1689}
+    panel:
+      decor:
+      - id: lip-left
+        at: [0.0, 0.0]
+        size: [1.8, 1689.0]
+        fill: '#2a2b2d'
+        kind: lip
+      - id: lip-right
+        at: [50.2, 0.0]
+        size: [1.8, 1689.0]
+        fill: '#2a2b2d'
+        kind: lip
+      - id: screw-cord-plate
+        at: [22.8, 1671.4]
+        size: [6.0, 6.0]
+        rx: 3.0
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: breaker-plate
+        at: [2.5, 1373.6]
+        size: [47.3, 206.9]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: module-plate
+        at: [2.5, 696.0]
+        size: [47.3, 182.8]
+        rx: 4.0
+        fill: '#121214'
+        kind: plate
+      - id: module-screw-1
+        at: [23.15, 867.45]
+        size: [5.7, 5.7]
+        rx: 2.85
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: module-screw-2
+        at: [23.15, 698.35]
+        size: [5.7, 5.7]
+        rx: 2.85
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-far-end
+        at: [23.05, 11.75]
+        size: [5.5, 5.5]
+        rx: 2.75
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: a-box-g1
+        at: [2.1, 1088.9]
+        size: [48.2, 102.1]
+        rx: 1.5
+        fill: '#f8e840'
+        kind: ring
+      - id: a-box-g2
+        at: [2.1, 1009.6]
+        size: [48.2, 53.9]
+        rx: 1.5
+        fill: '#f8e840'
+        kind: ring
+      - id: a-box-c19-7
+        at: [2.1, 922.3]
+        size: [48.2, 35.9]
+        rx: 1.5
+        fill: '#f8e840'
+        kind: ring
+      - id: a-box-c19-8
+        at: [2.1, 883.5]
+        size: [48.2, 35.6]
+        rx: 1.5
+        fill: '#f8e840'
+        kind: ring
+      - id: a-strip-s1
+        at: [33.8, 1063.5]
+        size: [16.5, 25.4]
+        fill: '#f8e840'
+        kind: strip
+      - id: a-strip-s2
+        at: [33.8, 958.2]
+        size: [16.5, 51.4]
+        fill: '#f8e840'
+        kind: strip
+      - id: a-strip-s3
+        at: [33.8, 919.1]
+        size: [16.5, 3.2]
+        fill: '#f8e840'
+        kind: strip
+      - id: a-plate-g1
+        at: [3.4, 1090.5]
+        size: [38.6, 98.9]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: a-plate-g2
+        at: [3.4, 1011.2]
+        size: [38.6, 50.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: a-plate-c19-7
+        at: [3.4, 923.9]
+        size: [45.5, 32.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: a-plate-c19-8
+        at: [3.4, 885.1]
+        size: [45.5, 32.4]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: lamp-lens-a1
+        at: [43.4, 1175.0]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a2
+        at: [43.4, 1151.01]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a3
+        at: [43.4, 1127.02]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a4
+        at: [43.4, 1103.03]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a5
+        at: [43.4, 1047.8]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a6
+        at: [43.4, 1023.81]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a7
+        at: [43.9, 998.6]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-a8
+        at: [43.9, 962.7]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: b-box-g1
+        at: [2.1, 565.1]
+        size: [48.2, 102.1]
+        rx: 1.5
+        fill: '#0000f8'
+        kind: ring
+      - id: b-box-g2
+        at: [2.1, 485.8]
+        size: [48.2, 53.9]
+        rx: 1.5
+        fill: '#0000f8'
+        kind: ring
+      - id: b-box-c19-7
+        at: [2.1, 398.5]
+        size: [48.2, 35.9]
+        rx: 1.5
+        fill: '#0000f8'
+        kind: ring
+      - id: b-box-c19-8
+        at: [2.1, 359.7]
+        size: [48.2, 35.6]
+        rx: 1.5
+        fill: '#0000f8'
+        kind: ring
+      - id: b-strip-s1
+        at: [33.8, 539.7]
+        size: [16.5, 25.4]
+        fill: '#0000f8'
+        kind: strip
+      - id: b-strip-s2
+        at: [33.8, 434.4]
+        size: [16.5, 51.4]
+        fill: '#0000f8'
+        kind: strip
+      - id: b-strip-s3
+        at: [33.8, 395.3]
+        size: [16.5, 3.2]
+        fill: '#0000f8'
+        kind: strip
+      - id: b-plate-g1
+        at: [3.4, 566.7]
+        size: [38.6, 98.9]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: b-plate-g2
+        at: [3.4, 487.4]
+        size: [38.6, 50.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: b-plate-c19-7
+        at: [3.4, 400.1]
+        size: [45.5, 32.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: b-plate-c19-8
+        at: [3.4, 361.3]
+        size: [45.5, 32.4]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: lamp-lens-b1
+        at: [43.4, 651.2]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b2
+        at: [43.4, 627.21]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b3
+        at: [43.4, 603.22]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b4
+        at: [43.4, 579.23]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b5
+        at: [43.4, 524.0]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b6
+        at: [43.4, 500.01]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b7
+        at: [43.9, 474.8]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-b8
+        at: [43.9, 438.9]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: c-box-g1
+        at: [2.1, 225.4]
+        size: [48.2, 102.1]
+        rx: 1.5
+        fill: '#f80000'
+        kind: ring
+      - id: c-box-g2
+        at: [2.1, 146.1]
+        size: [48.2, 53.9]
+        rx: 1.5
+        fill: '#f80000'
+        kind: ring
+      - id: c-box-c19-7
+        at: [2.1, 58.8]
+        size: [48.2, 35.9]
+        rx: 1.5
+        fill: '#f80000'
+        kind: ring
+      - id: c-box-c19-8
+        at: [2.1, 20.0]
+        size: [48.2, 35.6]
+        rx: 1.5
+        fill: '#f80000'
+        kind: ring
+      - id: c-strip-s1
+        at: [33.8, 200.0]
+        size: [16.5, 25.4]
+        fill: '#f80000'
+        kind: strip
+      - id: c-strip-s2
+        at: [33.8, 94.7]
+        size: [16.5, 51.4]
+        fill: '#f80000'
+        kind: strip
+      - id: c-strip-s3
+        at: [33.8, 55.6]
+        size: [16.5, 3.2]
+        fill: '#f80000'
+        kind: strip
+      - id: c-plate-g1
+        at: [3.4, 227.0]
+        size: [38.6, 98.9]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: c-plate-g2
+        at: [3.4, 147.7]
+        size: [38.6, 50.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: c-plate-c19-7
+        at: [3.4, 60.4]
+        size: [45.5, 32.7]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: c-plate-c19-8
+        at: [3.4, 21.6]
+        size: [45.5, 32.4]
+        rx: 1.0
+        fill: '#17181a'
+        kind: plate
+      - id: lamp-lens-c1
+        at: [43.4, 311.5]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c2
+        at: [43.4, 287.51]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c3
+        at: [43.4, 263.52]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c4
+        at: [43.4, 239.53]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c5
+        at: [43.4, 184.3]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c6
+        at: [43.4, 160.31]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c7
+        at: [43.9, 135.1]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+      - id: lamp-lens-c8
+        at: [43.9, 99.2]
+        size: [5.0, 5.0]
+        rx: 2.5
+        fill: '#3a3f44'
+        kind: lamp-bezel
+    silkscreen:
+    - at: [47.02, 1182.8]
+      text: '1'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a1
+    - id: grip-cross-a1
+      at: [40.2, 1169.1]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a1
+    - id: grip-mark-a1
+      at: [40.2, 1172.3]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a1
+    - id: grip-ring-a1
+      at: [40.0, 1186.7]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a1
+    - at: [47.02, 1158.81]
+      text: '2'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a2
+    - id: grip-cross-a2
+      at: [40.2, 1145.11]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a2
+    - id: grip-mark-a2
+      at: [40.2, 1148.31]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a2
+    - id: grip-ring-a2
+      at: [40.0, 1162.71]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a2
+    - at: [47.02, 1134.82]
+      text: '3'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a3
+    - id: grip-cross-a3
+      at: [40.2, 1121.12]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a3
+    - id: grip-mark-a3
+      at: [40.2, 1124.32]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a3
+    - id: grip-ring-a3
+      at: [40.0, 1138.72]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a3
+    - at: [47.02, 1110.83]
+      text: '4'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a4
+    - id: grip-cross-a4
+      at: [40.2, 1097.13]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a4
+    - id: grip-mark-a4
+      at: [40.2, 1100.33]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a4
+    - id: grip-ring-a4
+      at: [40.0, 1114.73]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a4
+    - at: [47.02, 1055.6]
+      text: '5'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a5
+    - id: grip-cross-a5
+      at: [40.2, 1041.9]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a5
+    - id: grip-mark-a5
+      at: [40.2, 1045.1]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a5
+    - id: grip-ring-a5
+      at: [40.0, 1059.5]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a5
+    - at: [47.02, 1031.61]
+      text: '6'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a6
+    - id: grip-cross-a6
+      at: [40.2, 1017.91]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a6
+    - id: grip-mark-a6
+      at: [40.2, 1021.11]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a6
+    - id: grip-ring-a6
+      at: [40.0, 1035.51]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a6
+    - at: [42.7, 1001.1]
+      text: '7'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a7
+    - id: grip-cross-a7
+      at: [45.0, 928.6]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a7
+    - id: grip-mark-a7
+      at: [45.0, 934.6]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a7
+    - id: grip-ring-a7
+      at: [44.8, 952.8]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a7
+    - at: [42.7, 965.2]
+      text: '8'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-a8
+    - id: grip-cross-a8
+      at: [45.0, 889.6]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-a8
+    - id: grip-mark-a8
+      at: [45.0, 895.6]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-a8
+    - id: grip-ring-a8
+      at: [44.8, 913.8]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-a8
+    - at: [47.05, 1076.2]
+      text: A
+      font-size: 11.8
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [6.5, 961.3]
+      text: '7'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#f8e840'
+      for: chassis
+    - at: [6.5, 880.2]
+      text: '8'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#f8e840'
+      for: chassis
+    - id: pictogram-a1
+      at: [39.8, 993.6]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - id: pictogram-a2
+      at: [39.8, 977.6]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [47.02, 659.0]
+      text: '1'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b1
+    - id: grip-cross-b1
+      at: [40.2, 645.3]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b1
+    - id: grip-mark-b1
+      at: [40.2, 648.5]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b1
+    - id: grip-ring-b1
+      at: [40.0, 662.9]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b1
+    - at: [47.02, 635.01]
+      text: '2'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b2
+    - id: grip-cross-b2
+      at: [40.2, 621.31]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b2
+    - id: grip-mark-b2
+      at: [40.2, 624.51]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b2
+    - id: grip-ring-b2
+      at: [40.0, 638.91]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b2
+    - at: [47.02, 611.02]
+      text: '3'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b3
+    - id: grip-cross-b3
+      at: [40.2, 597.32]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b3
+    - id: grip-mark-b3
+      at: [40.2, 600.52]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b3
+    - id: grip-ring-b3
+      at: [40.0, 614.92]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b3
+    - at: [47.02, 587.03]
+      text: '4'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b4
+    - id: grip-cross-b4
+      at: [40.2, 573.33]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b4
+    - id: grip-mark-b4
+      at: [40.2, 576.53]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b4
+    - id: grip-ring-b4
+      at: [40.0, 590.93]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b4
+    - at: [47.02, 531.8]
+      text: '5'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b5
+    - id: grip-cross-b5
+      at: [40.2, 518.1]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b5
+    - id: grip-mark-b5
+      at: [40.2, 521.3]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b5
+    - id: grip-ring-b5
+      at: [40.0, 535.7]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b5
+    - at: [47.02, 507.81]
+      text: '6'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b6
+    - id: grip-cross-b6
+      at: [40.2, 494.11]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b6
+    - id: grip-mark-b6
+      at: [40.2, 497.31]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b6
+    - id: grip-ring-b6
+      at: [40.0, 511.71]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b6
+    - at: [42.7, 477.3]
+      text: '7'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b7
+    - id: grip-cross-b7
+      at: [45.0, 404.8]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b7
+    - id: grip-mark-b7
+      at: [45.0, 410.8]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b7
+    - id: grip-ring-b7
+      at: [44.8, 429.0]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b7
+    - at: [42.7, 441.4]
+      text: '8'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-b8
+    - id: grip-cross-b8
+      at: [45.0, 365.8]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-b8
+    - id: grip-mark-b8
+      at: [45.0, 371.8]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-b8
+    - id: grip-ring-b8
+      at: [44.8, 390.0]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-b8
+    - at: [47.05, 552.4]
+      text: B
+      font-size: 11.8
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [6.5, 437.5]
+      text: '7'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#0000f8'
+      for: chassis
+    - at: [6.5, 356.4]
+      text: '8'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#0000f8'
+      for: chassis
+    - id: pictogram-b1
+      at: [39.8, 469.8]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - id: pictogram-b2
+      at: [39.8, 453.8]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [47.02, 319.3]
+      text: '1'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c1
+    - id: grip-cross-c1
+      at: [40.2, 305.6]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c1
+    - id: grip-mark-c1
+      at: [40.2, 308.8]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c1
+    - id: grip-ring-c1
+      at: [40.0, 323.2]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c1
+    - at: [47.02, 295.31]
+      text: '2'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c2
+    - id: grip-cross-c2
+      at: [40.2, 281.61]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c2
+    - id: grip-mark-c2
+      at: [40.2, 284.81]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c2
+    - id: grip-ring-c2
+      at: [40.0, 299.21]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c2
+    - at: [47.02, 271.32]
+      text: '3'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c3
+    - id: grip-cross-c3
+      at: [40.2, 257.62]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c3
+    - id: grip-mark-c3
+      at: [40.2, 260.82]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c3
+    - id: grip-ring-c3
+      at: [40.0, 275.22]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c3
+    - at: [47.02, 247.33]
+      text: '4'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c4
+    - id: grip-cross-c4
+      at: [40.2, 233.63]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c4
+    - id: grip-mark-c4
+      at: [40.2, 236.83]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c4
+    - id: grip-ring-c4
+      at: [40.0, 251.23]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c4
+    - at: [47.02, 192.1]
+      text: '5'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c5
+    - id: grip-cross-c5
+      at: [40.2, 178.4]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c5
+    - id: grip-mark-c5
+      at: [40.2, 181.6]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c5
+    - id: grip-ring-c5
+      at: [40.0, 196.0]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c5
+    - at: [47.02, 168.11]
+      text: '6'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c6
+    - id: grip-cross-c6
+      at: [40.2, 154.41]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c6
+    - id: grip-mark-c6
+      at: [40.2, 157.61]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c6
+    - id: grip-ring-c6
+      at: [40.0, 172.01]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c6
+    - at: [42.7, 137.6]
+      text: '7'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c7
+    - id: grip-cross-c7
+      at: [45.0, 65.1]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c7
+    - id: grip-mark-c7
+      at: [45.0, 71.1]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c7
+    - id: grip-ring-c7
+      at: [44.8, 89.3]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c7
+    - at: [42.7, 101.7]
+      text: '8'
+      font-size: 3.6
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: lamp-c8
+    - id: grip-cross-c8
+      at: [45.0, 26.1]
+      path: M -1.5 0 H 1.5 M 0 -1.5 V 1.5
+      stroke-width: 0.35
+      for: outlet-c8
+    - id: grip-mark-c8
+      at: [45.0, 32.1]
+      path: M -1.0 -1.0 V 1.0 L 1.0 0 Z
+      stroke-width: 0.3
+      for: outlet-c8
+    - id: grip-ring-c8
+      at: [44.8, 50.3]
+      path: M -1.3 0 A 1.3 1.3 0 1 0 1.3 0 A 1.3 1.3 0 1 0 -1.3 0 Z
+      stroke-width: 0.3
+      for: outlet-c8
+    - at: [47.05, 212.7]
+      text: C
+      font-size: 11.8
+      anchor: middle
+      rotate: -90
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [6.5, 97.8]
+      text: '7'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#f80000'
+      for: chassis
+    - at: [6.5, 16.7]
+      text: '8'
+      font-size: 3.8
+      anchor: middle
+      rotate: -90
+      fill: '#f80000'
+      for: chassis
+    - id: pictogram-c1
+      at: [39.8, 130.1]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - id: pictogram-c2
+      at: [39.8, 114.1]
+      path: M -3.2 -2.5 H 3.2 V 2.5 H -3.2 Z M -1.6 -1.6 V -0.4 M -1.6 0.4 V 1.6 M 1.6 -0.8 V 0.8
+      stroke-width: 0.3
+      fill: '#1a1a1a'
+      for: chassis
+    - at: [31.0, 1626.7]
+      text: EATON
+      font-size: 18.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+    - id: earth-symbol
+      at: [34.5, 1656.3]
+      path: M 0 0 L 2.0 0 M 2.0 -2.2 L 2.0 2.2 M 3.3 -1.5 L 3.3 1.5 M 4.6 -0.7 L 4.6 0.7
+      stroke-width: 0.35
+      for: ground
+    - at: [28.6, 795.5]
+      text: EATON
+      font-size: 5.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+    - at: [17.01, 858.1]
+      text: IOIOI
+      font-size: 2.6
+      anchor: middle
+      rotate: -90
+      fill: '#e8e8e6'
+      for: serial
+    - at: [26.93, 860.4]
+      text: R
+      font-size: 3.0
+      anchor: middle
+      rotate: -90
+      fill: '#e8e8e6'
+      for: reset
+    - id: network-mark
+      at: [34.6, 858.1]
+      path: M 0 -1.8 H 1.8 V 0 H 0 Z M 0.9 0 V 1.2 M -1.2 1.2 H 3.0 M -1.2 1.2 V 2.2 M 3.0 1.2 V 2.2 M -1.7 2.2 H -0.7 V 3.0
+        H -1.7 Z M 2.5 2.2 H 3.5 V 3.0 H 2.5 Z
+      stroke-width: 0.25
+      for: network
+    - id: chain-mark
+      at: [33.8, 829.8]
+      path: M -2.4 0 H -1.0 M 1.0 0 H 2.4 M -1.0 -1.0 H 1.0 V 1.0 H -1.0 Z M -2.4 0 V 1.8 M 2.4 0 V 1.8
+      stroke-width: 0.25
+      for: daisy-chain
+    - id: usb-mark
+      at: [12.8, 828.7]
+      path: M -2.0 0 H 2.0 M -2.0 0 L -1.0 -1.0 H 0 M 0.6 0 L 1.4 -0.8 H 2.4 M 1.0 0 L 1.6 0.8 H 2.4
+      stroke-width: 0.25
+      for: usb
+    components:
+      blocks:
+      - kind: outlet-run
+        id: outlets-a
+        group: outlets-a
+        id-format: outlet-a{n}
+        number-from: 1
+        fed-by: input
+        states: ['on', 'off']
+        moulding:
+          id-format: grip-a{m}
+          offset: [32.94, -0.2]
+          size: [22.4, 5.5]
+          rx: 0.6
+          fill: '#34363a'
+          kind: outlet-grip
+        banks:
+        - through: breaker-a
+          shift: [0.0, -0.0]
+        segments:
+        - ref: std/c13-outlet@1
+          count: 4
+          at: [4.56, 1164.8]
+          pitch: [0.0, -23.99]
+        - ref: std/c13-outlet@1
+          count: 2
+          at: [4.56, 1037.6]
+          pitch: [0.0, -23.99]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 926.15]
+          pitch: [0.0, 0.0]
+          moulding: &id001
+            offset: [36.8, 4.5]
+            size: [18.7, 4.8]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 887.15]
+          pitch: [0.0, 0.0]
+          moulding: *id001
+      - kind: outlet-run
+        id: outlets-b
+        group: outlets-b
+        id-format: outlet-b{n}
+        number-from: 1
+        fed-by: input
+        states: ['on', 'off']
+        moulding:
+          id-format: grip-b{m}
+          offset: [32.94, -0.2]
+          size: [22.4, 5.5]
+          rx: 0.6
+          fill: '#34363a'
+          kind: outlet-grip
+        banks:
+        - through: breaker-b
+          shift: [0.0, -523.8]
+        segments:
+        - ref: std/c13-outlet@1
+          count: 4
+          at: [4.56, 1164.8]
+          pitch: [0.0, -23.99]
+        - ref: std/c13-outlet@1
+          count: 2
+          at: [4.56, 1037.6]
+          pitch: [0.0, -23.99]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 926.15]
+          pitch: [0.0, 0.0]
+          moulding: &id002
+            offset: [36.8, 4.5]
+            size: [18.7, 4.8]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 887.15]
+          pitch: [0.0, 0.0]
+          moulding: *id002
+      - kind: outlet-run
+        id: outlets-c
+        group: outlets-c
+        id-format: outlet-c{n}
+        number-from: 1
+        fed-by: input
+        states: ['on', 'off']
+        moulding:
+          id-format: grip-c{m}
+          offset: [32.94, -0.2]
+          size: [22.4, 5.5]
+          rx: 0.6
+          fill: '#34363a'
+          kind: outlet-grip
+        banks:
+        - through: breaker-c
+          shift: [0.0, -863.5]
+        segments:
+        - ref: std/c13-outlet@1
+          count: 4
+          at: [4.56, 1164.8]
+          pitch: [0.0, -23.99]
+        - ref: std/c13-outlet@1
+          count: 2
+          at: [4.56, 1037.6]
+          pitch: [0.0, -23.99]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 926.15]
+          pitch: [0.0, 0.0]
+          moulding: &id003
+            offset: [36.8, 4.5]
+            size: [18.7, 4.8]
+        - ref: std/c19-outlet@1
+          count: 1
+          at: [5.7, 887.15]
+          pitch: [0.0, 0.0]
+          moulding: *id003
+      placements:
+      - id: base
+        ref: eaton/ema325-10-base@1
+        at: [0.0, 0.0]
+        group: body
+        rel-pos: 1
+        under: [outlet-a1, outlet-a2, outlet-a3, outlet-a4, outlet-a5, outlet-a6, outlet-a7, outlet-a8, outlet-b1, outlet-b2,
+          outlet-b3, outlet-b4, outlet-b5, outlet-b6, outlet-b7, outlet-b8, outlet-c1, outlet-c2, outlet-c3, outlet-c4, outlet-c5,
+          outlet-c6, outlet-c7, outlet-c8]
+      - id: breaker-a
+        ref: eaton/g3-breaker-20a-2p@1
+        at: [0.15, 1524.85]
+        rotate: 270
+        group: breakers
+        rel-pos: 1
+        lines: [L1, L2]
+        attrs: {section-color: '#f8e840', section: A}
+        description: 'Breaker A, 20 A two-pole: protects section A, outlets A1 to A8'
+        in: base
+      - id: breaker-b
+        ref: eaton/g3-breaker-20a-2p@1
+        at: [0.15, 1460.85]
+        rotate: 270
+        group: breakers
+        rel-pos: 2
+        lines: [L2, L3]
+        attrs: {section-color: '#0000f8', section: B}
+        description: 'Breaker B, 20 A two-pole: protects section B, outlets B1 to B8'
+        in: base
+      - id: breaker-c
+        ref: eaton/g3-breaker-20a-2p@1
+        at: [0.15, 1396.85]
+        rotate: 270
+        group: breakers
+        rel-pos: 3
+        lines: [L3, L1]
+        attrs: {section-color: '#f80000', section: C}
+        description: 'Breaker C, 20 A two-pole: protects section C, outlets C1 to C8'
+        in: base
+      - id: ground
+        ref: common/ground-screw-washer@1
+        at: [35.6, 1636.9]
+        group: grounding
+        rel-pos: 1
+        in: base
+      - id: serial
+        ref: std/rj45@2
+        at: [8.3, 839.1]
+        group: serial
+        rel-pos: 1
+        attrs: {role: console, media: rj45-serial}
+        description: the serial or environmental probe (EMP) RJ-45 port, the upper of the stacked pair, marked with the serial
+          symbol (quick start P-164000314_2, item 1)
+        in: base
+      - id: network
+        ref: common/rj45-eth@1
+        at: [28.0, 839.1]
+        group: network
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m, role: mgmt}
+        description: the network RJ-45 port, the lower of the stacked pair, marked with the network symbol (quick start P-164000314_2,
+          item 4)
+        in: base
+      - id: daisy-chain
+        ref: common/rj45-eth@1
+        at: [28.0, 809.7]
+        rotate: 180
+        group: chain
+        rel-pos: 1
+        attrs: {media: rj45, speed: 100m, role: daisy-chain}
+        description: the daisy chain RJ-45 port, under the chain symbol (quick start P-164000314_2, item 9)
+        in: base
+      - id: usb
+        ref: std/usb-a@1
+        at: [7.7, 812.75]
+        rotate: 270
+        group: usb
+        rel-pos: 1
+        description: the USB-A port, used for firmware upgrade (quick start P-164000314_2, item 8)
+        in: base
+      - id: reset
+        ref: common/reset-button@1
+        at: [24.0, 854.1]
+        group: reset
+        rel-pos: 1
+        for: network
+        description: the reset button of the network module. Press it with a probe for 3 seconds to restart the module. It
+          does not reset power to the outlets (quick start P-164000314_2, item 7)
+        in: base
+      - id: display
+        ref: eaton/g3-display@1
+        at: [10.5, 734.2]
+        rotate: 270
+        group: display
+        rel-pos: 1
+        for: chassis
+        in: base
+      - id: button-up
+        ref: eaton/g3-nav-button@1
+        at: [31.2, 774.3]
+        group: buttons
+        rel-pos: 1
+        for: chassis
+        in: base
+      - id: button-down
+        ref: eaton/g3-nav-button@1
+        skin: down
+        at: [7.9, 774.3]
+        group: buttons
+        rel-pos: 2
+        for: chassis
+        in: base
+      - id: button-esc
+        ref: eaton/g3-nav-button@1
+        skin: esc
+        at: [7.9, 718.3]
+        rotate: 270
+        group: buttons
+        rel-pos: 3
+        for: chassis
+        in: base
+      - id: button-enter
+        ref: eaton/g3-nav-button@1
+        skin: enter
+        at: [31.2, 718.3]
+        rotate: 270
+        group: buttons
+        rel-pos: 4
+        for: chassis
+        in: base
+      - {block: outlets-a}
+      - {block: outlets-b}
+      - {block: outlets-c}
+      - id: lamp-a1
+        ref: common/led-dot@1
+        at: [44.9, 1176.5]
+        group: lamps
+        rel-pos: 1
+        for: chassis
+        in: base
+      - id: lamp-a2
+        ref: common/led-dot@1
+        at: [44.9, 1152.51]
+        group: lamps
+        rel-pos: 2
+        for: chassis
+        in: base
+      - id: lamp-a3
+        ref: common/led-dot@1
+        at: [44.9, 1128.52]
+        group: lamps
+        rel-pos: 3
+        for: chassis
+        in: base
+      - id: lamp-a4
+        ref: common/led-dot@1
+        at: [44.9, 1104.53]
+        group: lamps
+        rel-pos: 4
+        for: chassis
+        in: base
+      - id: lamp-a5
+        ref: common/led-dot@1
+        at: [44.9, 1049.3]
+        group: lamps
+        rel-pos: 5
+        for: chassis
+        in: base
+      - id: lamp-a6
+        ref: common/led-dot@1
+        at: [44.9, 1025.31]
+        group: lamps
+        rel-pos: 6
+        for: chassis
+        in: base
+      - id: lamp-a7
+        ref: common/led-dot@1
+        at: [45.4, 1000.1]
+        group: lamps
+        rel-pos: 7
+        for: chassis
+        in: base
+      - id: lamp-a8
+        ref: common/led-dot@1
+        at: [45.4, 964.2]
+        group: lamps
+        rel-pos: 8
+        for: chassis
+        in: base
+      - id: lamp-b1
+        ref: common/led-dot@1
+        at: [44.9, 652.7]
+        group: lamps
+        rel-pos: 9
+        for: chassis
+        in: base
+      - id: lamp-b2
+        ref: common/led-dot@1
+        at: [44.9, 628.71]
+        group: lamps
+        rel-pos: 10
+        for: chassis
+        in: base
+      - id: lamp-b3
+        ref: common/led-dot@1
+        at: [44.9, 604.72]
+        group: lamps
+        rel-pos: 11
+        for: chassis
+        in: base
+      - id: lamp-b4
+        ref: common/led-dot@1
+        at: [44.9, 580.73]
+        group: lamps
+        rel-pos: 12
+        for: chassis
+        in: base
+      - id: lamp-b5
+        ref: common/led-dot@1
+        at: [44.9, 525.5]
+        group: lamps
+        rel-pos: 13
+        for: chassis
+        in: base
+      - id: lamp-b6
+        ref: common/led-dot@1
+        at: [44.9, 501.51]
+        group: lamps
+        rel-pos: 14
+        for: chassis
+        in: base
+      - id: lamp-b7
+        ref: common/led-dot@1
+        at: [45.4, 476.3]
+        group: lamps
+        rel-pos: 15
+        for: chassis
+        in: base
+      - id: lamp-b8
+        ref: common/led-dot@1
+        at: [45.4, 440.4]
+        group: lamps
+        rel-pos: 16
+        for: chassis
+        in: base
+      - id: lamp-c1
+        ref: common/led-dot@1
+        at: [44.9, 313.0]
+        group: lamps
+        rel-pos: 17
+        for: chassis
+        in: base
+      - id: lamp-c2
+        ref: common/led-dot@1
+        at: [44.9, 289.01]
+        group: lamps
+        rel-pos: 18
+        for: chassis
+        in: base
+      - id: lamp-c3
+        ref: common/led-dot@1
+        at: [44.9, 265.02]
+        group: lamps
+        rel-pos: 19
+        for: chassis
+        in: base
+      - id: lamp-c4
+        ref: common/led-dot@1
+        at: [44.9, 241.03]
+        group: lamps
+        rel-pos: 20
+        for: chassis
+        in: base
+      - id: lamp-c5
+        ref: common/led-dot@1
+        at: [44.9, 185.8]
+        group: lamps
+        rel-pos: 21
+        for: chassis
+        in: base
+      - id: lamp-c6
+        ref: common/led-dot@1
+        at: [44.9, 161.81]
+        group: lamps
+        rel-pos: 22
+        for: chassis
+        in: base
+      - id: lamp-c7
+        ref: common/led-dot@1
+        at: [45.4, 136.6]
+        group: lamps
+        rel-pos: 23
+        for: chassis
+        in: base
+      - id: lamp-c8
+        ref: common/led-dot@1
+        at: [45.4, 100.7]
+        group: lamps
+        rel-pos: 24
+        for: chassis
+        in: base
+    regions:
+    - id: section-a
+      label: 'Section A (yellow): outlets A1 to A8, on breaker A'
+      at: [2.1, 883.5]
+      size: {w: 48.2, h: 307.5}
+    - id: section-b
+      label: 'Section B (blue): outlets B1 to B8, on breaker B'
+      at: [2.1, 359.7]
+      size: {w: 48.2, h: 307.5}
+    - id: section-c
+      label: 'Section C (red): outlets C1 to C8, on breaker C'
+      at: [2.1, 20.0]
+      size: {w: 48.2, h: 307.5}
+  rear:
+    size: {w: 52, h: 1689}
+    panel:
+      decor:
+      - id: plate-line-rear
+        at: [0.0, 1561.7]
+        size: [52.0, 0.3]
+        fill: '#3a3b3e'
+        kind: line
+      - id: hole-rear-1
+        at: [24.3, 1580.6]
+        size: [3.4, 3.4]
+        rx: 1.7
+        fill: '#0e0f10'
+        kind: hole
+      - id: hole-rear-2
+        at: [24.3, 24.7]
+        size: [3.4, 3.4]
+        rx: 1.7
+        fill: '#0e0f10'
+        kind: hole
+      - id: end-lip
+        at: [0.0, 0.0]
+        size: [52.0, 1.8]
+        fill: '#2a2b2d'
+        kind: lip
+    components:
+      placements:
+      - id: button-1
+        ref: eaton/tripplite-mounting-button@1
+        at: [13.65, 1625.65]
+        group: mounting
+        rel-pos: 1
+      - id: button-2
+        ref: eaton/tripplite-mounting-button@1
+        at: [13.65, 69.85]
+        group: mounting
+        rel-pos: 2
+  top:
+    size: {w: 52, h: 65}
+    empty: built as the documented side, as no document shows this one. The end view draws the cord end only, with the cord
+      gland. This end carries no cord, so its face is plain.
+  bottom:
+    size: {w: 52, h: 65}
+    components:
+      placements:
+      - id: input
+        ref: eaton/g3-cord-l21-20p@1
+        at: [7.45, 22.15]
+        rotate: 180
+        group: power-input
+        rel-pos: 1
+        description: the fixed 10 ft input cord, ending in a NEMA L21-20P locking plug
+  right:
+    size: {w: 65, h: 1689}
+    panel:
+      decor:
+      - id: depth-line
+        at: [14.6, 0.0]
+        size: &id004 [0.3, 1689.0]
+        fill: '#3a3b3e'
+        kind: line
+      - id: rear-lip-1
+        at: [59.4, 0.0]
+        size: &id005 [0.3, 1689.0]
+        fill: '#3a3b3e'
+        kind: line
+      - id: rear-lip-2
+        at: [61.2, 0.0]
+        size: &id006 [0.3, 1689.0]
+        fill: '#3a3b3e'
+        kind: line
+      - id: plate-line
+        at: [14.6, 1561.7]
+        size: &id007 [50.4, 0.3]
+        fill: '#3a3b3e'
+        kind: line
+      - id: hole-1
+        at: [17.9, 1636.3]
+        size: &id008 [3.2, 3.2]
+        rx: 1.6
+        fill: '#0e0f10'
+        kind: hole
+      - id: hole-2
+        at: [17.9, 81.0]
+        size: &id009 [3.2, 3.2]
+        rx: 1.6
+        fill: '#0e0f10'
+        kind: hole
+      - id: screw-1
+        at: [16.05, 1613.35]
+        size: &id010 [6.9, 6.9]
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-2
+        at: [16.05, 1531.15]
+        size: &id011 [6.9, 6.9]
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-3
+        at: [16.05, 1159.15]
+        size: &id012 [6.9, 6.9]
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-4
+        at: [16.05, 636.95]
+        size: &id013 [6.9, 6.9]
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-5
+        at: [16.05, 168.95]
+        size: &id014 [6.9, 6.9]
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-end-1
+        at: [35.2, 1678.3]
+        size: &id015 [6.4, 6.4]
+        rx: 3.2
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-end-2
+        at: [35.4, 3.1]
+        size: &id016 [6.4, 6.4]
+        rx: 3.2
+        fill: '#2a2b2d'
+        kind: screw-head
+    silkscreen:
+    - at: [44.5, 804.5]
+      text: EATON
+      font-size: 21.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+    - at: [46.1, 743.5]
+      text: ePDU
+      font-size: 7.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+  left:
+    size: {w: 65, h: 1689}
+    panel:
+      decor:
+      - id: depth-line-m
+        at: [50.1, 0.0]
+        size: *id004
+        fill: '#3a3b3e'
+        kind: line
+      - id: rear-lip-1-m
+        at: [5.3, 0.0]
+        size: *id005
+        fill: '#3a3b3e'
+        kind: line
+      - id: rear-lip-2-m
+        at: [3.5, 0.0]
+        size: *id006
+        fill: '#3a3b3e'
+        kind: line
+      - id: plate-line-m
+        at: [0.0, 1561.7]
+        size: *id007
+        fill: '#3a3b3e'
+        kind: line
+      - id: hole-1-m
+        at: [43.9, 1636.3]
+        size: *id008
+        rx: 1.6
+        fill: '#0e0f10'
+        kind: hole
+      - id: hole-2-m
+        at: [43.9, 81.0]
+        size: *id009
+        rx: 1.6
+        fill: '#0e0f10'
+        kind: hole
+      - id: screw-1-m
+        at: [42.05, 1613.35]
+        size: *id010
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-2-m
+        at: [42.05, 1531.15]
+        size: *id011
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-3-m
+        at: [42.05, 1159.15]
+        size: *id012
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-4-m
+        at: [42.05, 636.95]
+        size: *id013
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-5-m
+        at: [42.05, 168.95]
+        size: *id014
+        rx: 3.45
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-end-1-m
+        at: [23.4, 1678.3]
+        size: *id015
+        rx: 3.2
+        fill: '#2a2b2d'
+        kind: screw-head
+      - id: screw-end-2-m
+        at: [23.2, 3.1]
+        size: *id016
+        rx: 3.2
+        fill: '#2a2b2d'
+        kind: screw-head
+    silkscreen:
+    - at: [35.7, 804.5]
+      text: EATON
+      font-size: 21.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+    - at: [23.9, 743.5]
+      text: ePDU
+      font-size: 7.0
+      anchor: middle
+      rotate: -90
+      fill: '#d6d6d2'
+      for: chassis
+interfaces:
+- {physical: 'outlet-a{n}', name: 'A{n}', range: 1-8}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: 1-8}
+- {physical: 'outlet-c{n}', name: 'C{n}', range: 1-8}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The PDU as it ships. The installation kit (SPK012) and the network kit (SPK013) are listed as included and
+      are not drawn. The environmental probe (EMP001) is optional and is not drawn.
+    part-numbers:
+      EMA325-10: {}
+datasheet: {title: Eaton EMA325-10 product specification page (skuPage.EMA325-10), url: 'https://www.eaton.com/ca/en-gb/skuPage.EMA325-10.pdf',
+  sha256: 3682ac2bd0b211dde0ff6e87c9b0b3e584eb5be1f038a7193178b1882ac6ad83}
+references:
+- {title: 'Eaton EMA325-10 G3 managed technical drawing, DWG EMA6PB15JGD88B1 rev 001, 4 Aug 2014', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-managed-pdu/eaton-pdu-managed-EMA325-10-techdrawing.pdf',
+  sha256: 22d2af4a4c7a3134896546ba0c60e8463cc8b9c64fc50d8e855c46e1efe2467e}
+- {title: 'Eaton ePDU G3 installation and connectivity quick start, P-164000314_2, July 2014', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-network-connectivity-quick-start-guide-p-164000314.pdf',
+  sha256: d5047a1ca87b0b56242fe8df1d31639d67c4a3999b1ca8eec30b72fbc5a53064}
