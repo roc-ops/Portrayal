@@ -49,6 +49,22 @@ def test_each_end_carries_the_four_holes_the_perspective_shows():
         assert len(holes) == 4
 
 
+def test_the_end_holes_stand_where_the_perspective_puts_them():
+    """The holes sit at about 20 and 66 mm from the rear and 22 and 66.8 mm down, each about 8 by 9 mm."""
+    depth = DEVICE["chassis"]["depth"]
+    for side in ("left", "right"):
+        holes = [d for d in DEVICE["views"][side]["panel"]["decor"] if d["kind"] == "hole"]
+        cols, rows = set(), set()
+        for d in holes:
+            cx = d["at"][0] + d["size"][0] / 2
+            cols.add(round(cx if side == "left" else depth - cx))
+            rows.add(round(d["at"][1] + d["size"][1] / 2, 1))
+            assert 6.0 <= d["size"][0] <= 10.0 and 7.0 <= d["size"][1] <= 11.0
+        assert len(cols) == 2 and len(rows) == 2
+        assert all(abs(c - t) <= 3 for c, t in zip(sorted(cols), (20, 66)))
+        assert all(abs(r - t) <= 3 for r, t in zip(sorted(rows), (22.0, 66.8)))
+
+
 def test_sixteen_lamps_two_tiles_of_eight():
     lamps = [p for p in _placements("front") if p["ref"] == "common/led-dot@1"]
     assert len(lamps) == 16

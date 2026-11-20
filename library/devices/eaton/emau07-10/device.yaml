@@ -77,8 +77,14 @@ provenance:
     confidence: estimated
     note: >-
       the left end is read from the sheet's perspective view, which shows four oval holes in two columns and two rows.
-      The rows are about 20.5 and 66.6 down, and the columns about 34.5 and 108.5 from the rear.
-      Each hole is about 12.0 by 9.6. Those figures are estimated from the edge lengths of the foreshortened view, good to about 5 mm.
+      The rows are about 22.0 and 66.8 down, and the columns about 20 and 66 from the rear.
+      Each hole is about 8 by 9.
+      The depths are calibrated against two things the plan fixes.
+      They are the top-left screw, 102 from the rear, and the step where the ear leg begins, about 130.
+      The specifications page's three-quarter photograph shows six small holes on this end: four on the panel and two on the ear leg.
+      The two on the ear leg belong to the rack ear. The modelling guide models the body between the ear folds, so the ear is not drawn on this face (gaps: ear-leg-holes).
+      The figures are estimated from the foreshortened view, good to about 5 mm.
+      The photograph agrees on the count and layout, and on the columns to about 7 mm.
       The right end is built as the documented side, as no document shows this one, mirrored from the left end.
       The underside is built plain, as no document shows it.
   outlets:
@@ -189,9 +195,19 @@ gaps:
   reason: needs-drawing
   note: >-
     the sheet's perspective view shows four oval holes on the left end and no view dimensions them.
-    The figures drawn are estimated from that view. The photographs show a perforated end but too small to count.
+    The figures drawn are estimated from that view, calibrated against the plan, and checked against the three-quarter photograph.
+    That photograph shows six holes on the end: four on the panel, drawn, and two on the ear leg, not drawn (gaps: ear-leg-holes).
     The right end is built as the left, as no document shows it.
   wanted: a side view of the EMAU07-10 with the end holes dimensioned.
+- what: ear-leg-holes
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    the sheet's perspective view shows one small hole on the ear leg, about 147 from the rear.
+    The specifications page's photograph shows two at that place.
+    The leg belongs to the rack ear, which the modelling guide leaves to the generic ear from chassis.ears, so neither is drawn.
+    The right end is built as the left.
+  wanted: a dimensioned drawing of the ear and its leg.
 - what: cord-gland
   scope: [front]
   reason: vendor-silent
@@ -490,18 +506,18 @@ views:
     size: {w: 213.2, h: 87.1}
     panel:
       decor:
-      - {id: left-hole-1, at: [28.5, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: left-hole-2, at: [102.5, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: left-hole-3, at: [28.5, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: left-hole-4, at: [102.5, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-1, at: [16.0, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-2, at: [62.0, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-3, at: [16.0, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-4, at: [62.0, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
   right:
     size: {w: 213.2, h: 87.1}
     panel:
       decor:
-      - {id: right-hole-1, at: [172.7, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: right-hole-2, at: [98.7, 15.7], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: right-hole-3, at: [172.7, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
-      - {id: right-hole-4, at: [98.7, 61.8], size: [12.0, 9.6], rx: 4.8, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-1, at: [189.2, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-2, at: [143.2, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-3, at: [189.2, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-4, at: [143.2, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
 interfaces:
 - {physical: 'outlet-a{n}', name: 'A{n}', range: 1-8}
 - {physical: 'outlet-b{n}', name: 'B{n}', range: 1-8}
