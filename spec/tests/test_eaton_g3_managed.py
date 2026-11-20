@@ -65,6 +65,24 @@ def test_the_end_holes_stand_where_the_perspective_puts_them():
         assert all(abs(r - t) <= 3 for r, t in zip(sorted(rows), (22.0, 66.8)))
 
 
+def test_the_rear_lip_is_as_far_from_the_right_end_as_from_the_left_and_a_band_runs_along_the_top():
+    """The sheet's rear lip is symmetric, 3.7 mm high, and a band 2.6 mm high runs the full width above."""
+    decor = {d["id"]: d for d in DEVICE["views"]["rear"]["panel"]["decor"]}
+    width = DEVICE["views"]["rear"]["size"]["w"]
+    lip, band = decor["rear-lip"], decor["rear-band"]
+    assert abs(lip["at"][0] - (width - lip["at"][0] - lip["size"][0])) <= 1.0
+    assert abs(lip["size"][1] - 3.7) <= 0.5 and abs(lip["at"][1] + lip["size"][1] - DEVICE["views"]["rear"]["size"]["h"]) <= 0.5
+    assert band["at"] == [0, 0] and abs(band["size"][0] - width) <= 0.1 and abs(band["size"][1] - 2.6) <= 0.5
+
+
+def test_the_six_top_screws_are_six_millimetres_with_a_star_socket_each():
+    """The plan's screws are about 6.0 mm across with a six-point star socket, as the sheet draws them."""
+    top = DEVICE["views"]["top"]
+    screws = [d for d in top["panel"]["decor"] if d["kind"] == "screw-head"]
+    assert len(screws) == 6 and all(abs(d["size"][0] - 6.0) <= 0.4 for d in screws)
+    assert len([m for m in top.get("silkscreen") or [] if m["id"].startswith("socket-")]) == 6
+
+
 def test_sixteen_lamps_two_tiles_of_eight():
     lamps = [p for p in _placements("front") if p["ref"] == "common/led-dot@1"]
     assert len(lamps) == 16
