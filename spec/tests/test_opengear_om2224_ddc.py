@@ -102,3 +102,11 @@ def test_all_six_faces_are_present(name):
 def test_the_exports_list_each_serial_line_as_a_console_server_port(name, target):
     doc = yaml.safe_load((EXPORTS / target / "device-types" / "Opengear" / f"{SKUS[name][0]}.yaml").read_text())
     assert [r["name"] for r in doc["console-server-ports"]] == [f"serial-{i}" for i in range(1, 25)]
+
+
+@pytest.mark.parametrize("name", SKUS)
+def test_the_console_usb_group_and_jack_carry_the_librarys_micro_usb_b_media(name):
+    """A micro-USB console jack is micro-usb-b everywhere in the library, so the pluggable-cage test can read it."""
+    assert device(name)["groups"]["console-usb"]["attrs"]["media"] == "micro-usb-b"
+    jack = [p for p in placements(name, "front") if p["id"] == "console-micro"]
+    assert [p["attrs"]["media"] for p in jack] == ["micro-usb-b"]
