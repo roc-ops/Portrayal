@@ -153,3 +153,13 @@ def test_the_front_draws_the_I_above_and_the_o_below_the_switch_bar(slug):
     centre_i = mark_i["at"][0] + mark_i["size"][0] / 2
     centre_o = mark_o["at"][0] + mark_o["size"][0] / 2
     assert abs(centre_i - centre_o) <= 6, "both stand to the right of the switch, in one column"
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_I_mark_is_drawn_in_the_light_shade_the_front_legends_use(slug):
+    front = device(slug)["views"]["front"]
+    mark_i = next(d for d in front["panel"]["decor"] if d["id"] == "switch-mark-i")
+    power = next(s for s in front["silkscreen"] if s["text"] == "POWER")
+    assert mark_i["fill"] == power["fill"], "the I is as light as the POWER legend beside it"
+    red, green, blue = (int(mark_i["fill"][i:i + 2], 16) for i in (1, 3, 5))
+    assert (red + green + blue) / 3 >= 160, "light on the dark steel"
