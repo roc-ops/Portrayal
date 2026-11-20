@@ -63,7 +63,8 @@ def test_the_ar7721_is_two_20u_lengths_of_the_data_sheets_width_and_depth():
     assert doc["manufacturer"] == "APC" and doc["model"] == "AR7721"
     assert close(c["width"], 107.0) and close(c["depth"], 45.0) and close(c["height"], 2 * 20 * RU, 0.5)
     assert c["mount"] == "rack-side" and c["ru"] == 40 and close(c["weight-kg"], 2.18, 0.0005)
-    placed = doc["views"]["front"]["components"]["placements"]
+    every = doc["views"]["front"]["components"]["placements"]
+    placed = [p for p in every if p["id"] != "base"]
     assert [p["ref"] for p in placed] == ["apc/nsx-vcm-20u@2"] * 2
     length = contract("nsx-vcm-20u", 2)
     assert close(length["size"]["h"], 889.0, 0.5), "the data sheet's 889 mm is one length"
@@ -133,3 +134,13 @@ def test_the_ar7502_has_no_connector_and_states_no_capacity():
     doc = device("ar7502")
     assert not doc.get("ports") and "capacity" in doc["provenance"]
     assert any(g["what"] == "cable-capacity" for g in doc["gaps"])
+
+
+def test_both_ar7721_lengths_stand_in_a_base_well_as_deep_as_the_part():
+    doc = device("ar7721")
+    placed = {p["id"]: p for p in doc["views"]["front"]["components"]["placements"]}
+    well = contract("nsx-vcm-ar7721-base", 1)
+    c = doc["chassis"]
+    assert placed["base"]["ref"] == "apc/nsx-vcm-ar7721-base@1" and placed["base"]["at"] == [0.0, 0.0]
+    assert placed["length-1"]["in"] == placed["length-2"]["in"] == "base"
+    assert close(well["size"]["w"], c["width"]) and close(well["size"]["h"], c["height"]) and close(well["size"]["d"], c["depth"])

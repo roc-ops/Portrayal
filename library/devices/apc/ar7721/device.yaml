@@ -122,9 +122,14 @@ gaps:
   - rear
   reason: vendor-silent
   note: The two lengths are drawn end to end and the joint is not dimensioned. The installation sheet shows them one above
-    the other.
+    the other. Both stand in one well 45 deep, the depth of the part.
   wanted: a drawing of the two lengths fitted to one side
 groups:
+  body:
+    term: Well
+    role: furniture
+    index-origin: 1
+    description: the well the two lengths stand in
   lengths:
     term: Length
     role: furniture
@@ -137,6 +142,13 @@ views:
       h: 1778.0
     components:
       placements:
+      - ref: apc/nsx-vcm-ar7721-base@1
+        id: base
+        at:
+        - 0.0
+        - 0.0
+        group: body
+        rel-pos: 1
       - ref: apc/nsx-vcm-20u@2
         id: length-1
         at:
@@ -144,6 +156,7 @@ views:
         - 0.0
         group: lengths
         rel-pos: 1
+        in: base
       - ref: apc/nsx-vcm-20u@2
         id: length-2
         at:
@@ -151,6 +164,7 @@ views:
         - 889.0
         group: lengths
         rel-pos: 2
+        in: base
     guides:
     - id: duct
       kind: duct
