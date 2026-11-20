@@ -103,3 +103,13 @@ def test_the_rear_draws_the_band_elbows_the_lip_tabs_and_the_foot_strip_and_the_
     right = decor["rear-foot-right"]
     assert decor["rear-foot-left"]["at"][0] == 0 and abs(right["at"][0] + right["size"][0] - width) <= 0.1
     assert {d["id"] for d in DEVICE["views"]["top"]["panel"]["decor"]} >= {"front-band", "front-band-line"}
+
+
+def test_each_lip_tab_carries_its_crossbar_line_about_a_millimetre_below_its_top():
+    """The sheet's rear shows a thin band across each lip tab, about 1 mm below the tab's top."""
+    decor = {d["id"]: d for d in DEVICE["views"]["rear"]["panel"]["decor"]}
+    for side in ("left", "right"):
+        tab, bar = decor[f"rear-tab-{side}"], decor[f"rear-tab-bar-{side}"]
+        assert tab["at"][0] <= bar["at"][0] and bar["at"][0] + bar["size"][0] <= tab["at"][0] + tab["size"][0] + 0.01
+        assert 0.5 <= bar["at"][1] + bar["size"][1] / 2 - tab["at"][1] <= 1.5
+        assert bar["size"][1] <= 0.4
