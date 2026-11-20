@@ -141,3 +141,15 @@ def test_the_sheet_is_the_datasheet_and_its_hash_is_given(slug):
     sheet = device(slug)["datasheet"]
     assert "96-01237" in sheet["title"]
     assert len(sheet["sha256"]) == 64
+
+
+@pytest.mark.parametrize("slug", MODELS)
+def test_the_front_draws_the_I_above_and_the_o_below_the_switch_bar(slug):
+    front = {d["id"]: d for d in decor(device(slug), "front")}
+    mark_i, mark_o, bar = front["switch-mark-i"], front["switch-mark"], front["switch-bar"]
+    assert mark_i["kind"] == mark_o["kind"] == "mark"
+    assert mark_i["at"][1] + mark_i["size"][1] <= bar["at"][1], "the I stands above the bar"
+    assert mark_o["at"][1] >= bar["at"][1] + bar["size"][1], "the o stands below the bar"
+    centre_i = mark_i["at"][0] + mark_i["size"][0] / 2
+    centre_o = mark_o["at"][0] + mark_o["size"][0] / 2
+    assert abs(centre_i - centre_o) <= 6, "both stand to the right of the switch, in one column"
