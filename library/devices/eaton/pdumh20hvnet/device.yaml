@@ -43,30 +43,30 @@ provenance:
   ears:
     confidence: photo-measured
     note: >-
-      photo-measured and estimated - PDUMH20HVNET_C and _DT02 show an ear at each end of the
-      front, a flat plate in the plane of the face. Each has a column of four slotted holes,
-      two large ovals at the ends and two small ones between. The owner's manual (Installation, 1-1)
-      has the longer brackets screwed to the sides. Its Features page draws the shorter bracket
-      with the same column of four slots. The left ear reads 16.4 mm wide in the fitted map and
-      the right ear 12.4. The right ear's edge is cut at the picture's crop and its plane is not
-      the face's, so both are drawn 16.4. The holes are read on the nearer left ear and mirrored.
-      The ears are drawn at the face's own height, 43.7 mm. Two positions are named and none is
-      dimensioned: flush (the photograph) and recessed (the manual's 1-1 text).
+      NOT DRAWN: THE EARS ARE SEPARATE BRACKETS, so the face is the 440.2 mm body and the generic ear
+      stands for them (`chassis.ears`). PDUMH20HVNET_C and _DT02 show an ear at each end of the front,
+      a flat plate in the plane of the face. Each has a column of four slotted holes, two large ovals
+      at the ends and two small ones between. The owner's manual (Installation, 1-1) has the longer
+      brackets screwed to the sides. Its Features page draws the shorter bracket with the same column
+      of four slots. The library reads a face wider than the body as a rack face only when a part is
+      seated in an ear. None is, so the ears and their slots are not drawn (gaps: ear-holes). Two
+      positions are named and none is dimensioned: flush (the photograph) and recessed (the manual's
+      1-1 text).
   front:
     confidence: estimated
     note: >-
-      estimated by the fitted map in `method`, mm from the front view's left, which is the left
-      ear's outer edge. The body starts 16.4 mm in. Eight C13 outlets are numbered 8 to 1 left to
-      right as printed. They are centred every 35.65 from 38.65 (outlet 8). The well's chamfered
-      end is up, as the photograph and the owner's manual figure draw it. Each sits in a square moulding about
-      35 by 27 and has a round lamp 35.3 down with its numeral 5.2 to the right. A small square
-      hole at 27.7 across and 38 down, and a pinhole at 356.4 across and 38 down under the card.
-      The WEBCARDLX plate from 303.7 to 389.5 across and 4.6 to 33.7 down. The meter bezel from
-      389.5 to 414.8 across and 18.5 to 37.1 down with LOAD (AMPS) centred under it. The fit
-      puts the card at 306.5 and the meter at 386.7. The bay's envelope takes in the card's
-      upper right tab, which stands over the meter's column. To clear lint L13 the card is moved
-      2.8 left and the meter 2.85 right. That is a little over the fit's error of 1 to 2 mm. The C20
-      inlet in a moulding 414.8 to 451.0 across, its opening 32.4 by 24.4 centred at (432.9, 20.0).
+      estimated by the fitted map in `method`, mm from the front view's left, which is the body's left
+      end. Eight C13 outlets are numbered 8 to 1 left to right as printed. They are centred every
+      35.65 from 22.25 (outlet 8). The well's chamfered end is up, as the photograph and the owner's
+      manual figure draw it. Each sits in a square moulding about 35 by 27 and has a round lamp 35.3
+      down with its numeral 5.2 to the right. A small square hole at 11.3 across and 38 down, and a
+      pinhole at 340.0 across and 38 down under the card. The WEBCARDLX plate from 287.3 to 373.1
+      across and 4.6 to 33.7 down. The meter bezel from 373.1 to 398.4 across and 18.5 to 37.1 down
+      with LOAD (AMPS) centred under it. The fit puts the card at 290.1 and the meter at 370.3. The
+      bay's envelope takes in the card's upper right tab, which stands over the meter's column. To
+      clear lint L13 the card is moved 2.8 left and the meter 2.85 right. That is a little over the
+      fit's error of 1 to 2 mm. The C20 inlet in a moulding 398.4 to 434.6 across, its opening 32.4 by
+      24.4 centred at (416.5, 20.0).
   rear:
     confidence: photo-measured
     note: >-
@@ -219,6 +219,15 @@ gaps:
     (std/db9@1, composed by common/db9-receptacle@1), so it is drawn male. Its place and size are
     right and its gender is not.
   wanted: a female DE-9 receptacle part, to replace the male one here.
+- what: ear-holes
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    each ear carries a column of four slotted holes in PDUMH20HVNET_C and _DT02: two large ovals at the ends and two small ones between.
+    The ears are separate brackets, so the face is the 440.2 mm body and the generic ear stands for them.
+    The library reads a face wider than the body as a rack face only when a part is seated in an ear.
+    None is, so the slots are not drawn.
+  wanted: the maintainer's word on drawing the ears at 482.6 mm, and a dimensioned drawing of the ear.
 - what: outlet-lamp-colour
   scope: [outlet-leds]
   reason: vendor-silent
@@ -280,62 +289,52 @@ groups:
   power-input: {term: Input, role: service, index-origin: 1}
 views:
   front:
-    size: {w: 473.0, h: 43.7}
+    size: {w: 440.2, h: 43.7}
     panel:
       decor:
-      - {id: ear-left, at: [0.0, 0.0], size: [16.4, 43.7], fill: '#292a2a', kind: ear}
-      - {id: ear-right, at: [456.6, 0.0], size: [16.4, 43.7], fill: '#292a2a', kind: ear}
-      - {id: ear-left-slot-1, at: [3.55, 1.5], size: [9.3, 7.4], rx: 3.7, fill: '#0a0a09', kind: hole}
-      - {id: ear-left-slot-2, at: [5.15, 11.5], size: [6.1, 4.2], rx: 2.1, fill: '#0a0a09', kind: hole}
-      - {id: ear-left-slot-3, at: [5.15, 28.0], size: [6.1, 4.2], rx: 2.1, fill: '#0a0a09', kind: hole}
-      - {id: ear-left-slot-4, at: [3.55, 34.8], size: [9.3, 7.4], rx: 3.7, fill: '#0a0a09', kind: hole}
-      - {id: ear-right-slot-1, at: [460.15, 1.5], size: [9.3, 7.4], rx: 3.7, fill: '#0a0a09', kind: hole}
-      - {id: ear-right-slot-2, at: [461.75, 11.5], size: [6.1, 4.2], rx: 2.1, fill: '#0a0a09', kind: hole}
-      - {id: ear-right-slot-3, at: [461.75, 28.0], size: [6.1, 4.2], rx: 2.1, fill: '#0a0a09', kind: hole}
-      - {id: ear-right-slot-4, at: [460.15, 34.8], size: [9.3, 7.4], rx: 3.7, fill: '#0a0a09', kind: hole}
-      - {id: moulding-8, at: [21.15, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-7, at: [56.8, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-6, at: [92.45, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-5, at: [128.1, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-4, at: [163.75, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-3, at: [199.4, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-2, at: [235.05, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: moulding-1, at: [270.7, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
-      - {id: inlet-moulding, at: [414.8, 4.8], size: [36.2, 29.7], rx: 1.5, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: inlet-moulding}
-      - {id: hole-front, at: [26.7, 37.0], size: [2.0, 2.0], rx: 0.4, fill: '#0a0a09', kind: hole}
-      - {id: hole-card, at: [355.6, 37.2], size: [1.6, 1.6], rx: 0.8, fill: '#0a0a09', kind: hole}
+      - {id: moulding-8, at: [4.75, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-7, at: [40.4, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-6, at: [76.05, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-5, at: [111.7, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-4, at: [147.35, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-3, at: [183.0, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-2, at: [218.65, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-1, at: [254.3, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: inlet-moulding, at: [398.4, 4.8], size: [36.2, 29.7], rx: 1.5, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: inlet-moulding}
+      - {id: hole-front, at: [10.3, 37.0], size: [2.0, 2.0], rx: 0.4, fill: '#0a0a09', kind: hole}
+      - {id: hole-card, at: [339.2, 37.2], size: [1.6, 1.6], rx: 0.8, fill: '#0a0a09', kind: hole}
     silkscreen:
-      - {at: [43.85, 37.0], text: '8', font-size: 4.3, anchor: middle, for: outlet-8}
-      - {at: [79.5, 37.0], text: '7', font-size: 4.3, anchor: middle, for: outlet-7}
-      - {at: [115.15, 37.0], text: '6', font-size: 4.3, anchor: middle, for: outlet-6}
-      - {at: [150.8, 37.0], text: '5', font-size: 4.3, anchor: middle, for: outlet-5}
-      - {at: [186.45, 37.0], text: '4', font-size: 4.3, anchor: middle, for: outlet-4}
-      - {at: [222.1, 37.0], text: '3', font-size: 4.3, anchor: middle, for: outlet-3}
-      - {at: [257.75, 37.0], text: '2', font-size: 4.3, anchor: middle, for: outlet-2}
-      - {at: [293.4, 37.0], text: '1', font-size: 4.3, anchor: middle, for: outlet-1}
-      - {at: [402.15, 40.0], text: 'LOAD (AMPS)', font-size: 2.4, anchor: middle, for: meter}
+      - {at: [27.45, 37.0], text: '8', font-size: 4.3, anchor: middle, for: outlet-8}
+      - {at: [63.1, 37.0], text: '7', font-size: 4.3, anchor: middle, for: outlet-7}
+      - {at: [98.75, 37.0], text: '6', font-size: 4.3, anchor: middle, for: outlet-6}
+      - {at: [134.4, 37.0], text: '5', font-size: 4.3, anchor: middle, for: outlet-5}
+      - {at: [170.05, 37.0], text: '4', font-size: 4.3, anchor: middle, for: outlet-4}
+      - {at: [205.7, 37.0], text: '3', font-size: 4.3, anchor: middle, for: outlet-3}
+      - {at: [241.35, 37.0], text: '2', font-size: 4.3, anchor: middle, for: outlet-2}
+      - {at: [277.0, 37.0], text: '1', font-size: 4.3, anchor: middle, for: outlet-1}
+      - {at: [385.75, 40.0], text: 'LOAD (AMPS)', font-size: 2.4, anchor: middle, for: meter}
     components:
       bays:
-        - {id: card, at: [303.7, 4.6], size: {w: 85.8, h: 29.1}, opening: {w: 67.3, h: 29.1}, accepts: [eaton/webcardlx@1], default: eaton/webcardlx@1, group: network, rel-pos: 1}
+        - {id: card, at: [287.3, 4.6], size: {w: 85.8, h: 29.1}, opening: {w: 67.3, h: 29.1}, accepts: [eaton/webcardlx@1], default: eaton/webcardlx@1, group: network, rel-pos: 1}
       placements:
-        - {id: outlet-8, ref: std/c13-outlet@1, at: [23.45, 5.6], group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-7, ref: std/c13-outlet@1, at: [59.1, 5.6], group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-6, ref: std/c13-outlet@1, at: [94.75, 5.6], group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-5, ref: std/c13-outlet@1, at: [130.4, 5.6], group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-4, ref: std/c13-outlet@1, at: [166.05, 5.6], group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-3, ref: std/c13-outlet@1, at: [201.7, 5.6], group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-2, ref: std/c13-outlet@1, at: [237.35, 5.6], group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
-        - {id: outlet-1, ref: std/c13-outlet@1, at: [273.0, 5.6], group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
-        - {id: led-8, ref: common/led-dot@1, at: [37.65, 34.3], group: outlet-leds, rel-pos: 8, for: outlet-8}
-        - {id: led-7, ref: common/led-dot@1, at: [73.3, 34.3], group: outlet-leds, rel-pos: 7, for: outlet-7}
-        - {id: led-6, ref: common/led-dot@1, at: [108.95, 34.3], group: outlet-leds, rel-pos: 6, for: outlet-6}
-        - {id: led-5, ref: common/led-dot@1, at: [144.6, 34.3], group: outlet-leds, rel-pos: 5, for: outlet-5}
-        - {id: led-4, ref: common/led-dot@1, at: [180.25, 34.3], group: outlet-leds, rel-pos: 4, for: outlet-4}
-        - {id: led-3, ref: common/led-dot@1, at: [215.9, 34.3], group: outlet-leds, rel-pos: 3, for: outlet-3}
-        - {id: led-2, ref: common/led-dot@1, at: [251.55, 34.3], group: outlet-leds, rel-pos: 2, for: outlet-2}
-        - {id: led-1, ref: common/led-dot@1, at: [287.2, 34.3], group: outlet-leds, rel-pos: 1, for: outlet-1}
-        - {id: meter, ref: eaton/tripplite-ammeter@1, at: [389.5, 18.5], group: meter, rel-pos: 1, for: chassis}
-        - {id: input, ref: std/c20-inlet@1, at: [416.7, 7.8], group: power-input, rel-pos: 1, description: 'the IEC C20 power inlet at the right end; the detachable 8 ft cord in the box, a C19 to C20 set, plugs into it'}
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [7.05, 5.6], group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [42.7, 5.6], group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [78.35, 5.6], group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [114.0, 5.6], group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [149.65, 5.6], group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [185.3, 5.6], group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [220.95, 5.6], group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [256.6, 5.6], group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: led-8, ref: common/led-dot@1, at: [21.25, 34.3], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-7, ref: common/led-dot@1, at: [56.9, 34.3], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-6, ref: common/led-dot@1, at: [92.55, 34.3], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-5, ref: common/led-dot@1, at: [128.2, 34.3], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-4, ref: common/led-dot@1, at: [163.85, 34.3], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-3, ref: common/led-dot@1, at: [199.5, 34.3], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-2, ref: common/led-dot@1, at: [235.15, 34.3], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-1, ref: common/led-dot@1, at: [270.8, 34.3], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: meter, ref: eaton/tripplite-ammeter@1, at: [373.1, 18.5], group: meter, rel-pos: 1, for: chassis}
+        - {id: input, ref: std/c20-inlet@1, at: [400.3, 7.8], group: power-input, rel-pos: 1, description: 'the IEC C20 power inlet at the right end; the detachable 8 ft cord in the box, a C19 to C20 set, plugs into it'}
   rear:
     size: {w: 440.2, h: 43.7}
     panel:

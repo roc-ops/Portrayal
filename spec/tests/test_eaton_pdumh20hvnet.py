@@ -2,8 +2,8 @@
 
 What is true of the 1U horizontal unit. Its size follows the rear photograph's proportion.
 Its eight C13 outlets stand on one pitch and each has a lamp drawn off. Its input is a C20
-inlet for a detachable cord. Its front carries the network card, the meter and the ears with
-their slots. Its rear carries the ground screw and the factory port and no outlet. Read from
+inlet for a detachable cord. Its front carries the network card, the meter and no ear: the ears are
+separate brackets. Its rear carries the ground screw and the factory port and no outlet. Read from
 the real library, no build.
 """
 from pathlib import Path
@@ -76,15 +76,15 @@ def test_the_input_is_a_detachable_c20_inlet():
     assert dev["attrs"]["power"]["input-cord"] == "detachable"
 
 
-def test_the_front_carries_the_card_the_meter_and_the_ears_with_their_slots():
+def test_the_front_is_the_body_wide_with_the_card_the_meter_and_no_ear():
     dev = device()
+    assert dev["views"]["front"]["size"]["w"] == dev["chassis"]["width"] == 440.2
     bays = dev["views"]["front"]["components"]["bays"]
     assert [(b["id"], b["default"]) for b in bays] == [("card", "eaton/webcardlx@1")]
     assert "eaton/tripplite-ammeter@1" in {p["ref"] for p in placements("front")}
     decor = {d["id"] for d in dev["views"]["front"]["panel"]["decor"]}
-    for side in ("left", "right"):
-        assert f"ear-{side}" in decor
-        assert sorted(i for i in decor if i.startswith(f"ear-{side}-slot-")) == [f"ear-{side}-slot-{n}" for n in range(1, 5)]
+    assert not [i for i in decor if i.startswith("ear-")], "the ears are separate brackets, drawn by the generic ear"
+    assert any(g["what"] == "ear-holes" for g in dev["gaps"])
 
 
 def test_the_rear_carries_the_ground_screw_and_the_factory_port():
