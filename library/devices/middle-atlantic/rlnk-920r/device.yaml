@@ -75,8 +75,7 @@ provenance:
       cord retainer. The input current states the 16 A rated load, as the schema defines it: derated. The sheet prints 20 A as the maximum peak load.'
   capability:
     confidence: datasheet
-    note: datasheet - specification sheet 96-01237 p.2 gives individual IP control of eight outlets, sequencing and an integrated web server. So `outlet-switching`
-      is true.
+    note: datasheet - specification sheet 96-01237 p.3 gives 9 total outlets, 8 of them controlled. So `outlet-switching` is true.
 attrs:
   physical:
     construction: metal
@@ -122,7 +121,7 @@ gaps:
   - front
   - rear
   reason: needs-drawing
-  note: Every position is read off line drawings at a reduced scale and is good to about 2 mm. specification sheet 96-01237 p.5 is the only dimensioned
+  note: Every position is read off line drawings at a reduced scale and is good to about 2 mm. The specification sheet 96-01237 p.5 is the only dimensioned
     drawing held.
   wanted: a dimensioned drawing, or the 3D CAD zip once its terms allow.
 - what: ground-stud-position
@@ -132,13 +131,6 @@ gaps:
   note: The specification sheet 96-01237 p.5 rear elevation and the p.1 photograph of the RLNK-915R rear put the ground stud left of the inlet. The user
     manual I-00768 p.49 rear figure draws a ground ring at the right end, beside the Ethernet jack. The sheet and its photograph are followed.
   wanted: the maker's word on where the ground stud stands.
-- what: front-outlet-control
-  scope:
-  - front
-  reason: sources-disagree
-  note: The specification sheet 96-01237 p.3 prints 9 total outlets, 8 controlled. The user manual I-00768 p.48 item A calls the front outlet a controlled
-    outlet, and item F counts eight controlled at the rear. The front outlet is drawn as not controlled.
-  wanted: the maker's word on whether the front outlet is switched by RackLink.
 - what: outlet-type-name
   scope:
   - front
@@ -176,8 +168,8 @@ gaps:
   scope:
   - front
   reason: vendor-silent
-  note: The user manual I-00768 p.48 and quick start I-00785 p.2 (printed page 7) name the lit colours in words only. The hex values are the library's,
-    as on the Premium+ pair. The quick start's blinking green and red state is not drawn as a state.
+  note: The user manual I-00768 p.49 items B and C and quick start I-00785 p.2 (printed page 7) name the lit colours in words only. The hex values are the
+    library's, as on the Premium+ pair. The quick start's blinking green and red state is not drawn as a state.
   wanted: a photograph of a lit unit.
 groups:
   outlets:
@@ -475,7 +467,8 @@ views:
         rel-pos: 9
         rotate: 180
         fed-by: input
-        description: 'the front convenience outlet, not RackLink controlled (specification sheet 96-01237 p.3: 9 total, 8 controlled; gaps: front-outlet-control)'
+        description: the front outlet, switched by the main power switch, not one of the eight controlled (specification sheet 96-01237 p.3; user manual
+          I-00768 p.49 item A)
       - id: alert-lamp
         ref: common/led-indicator@1
         at:
@@ -496,7 +489,7 @@ views:
         - name: lost-ip-connection
           color: '#e5483b'
           behavior: blinking
-        description: the ALERT lamp (user manual I-00768 p.46, p.48; quick start I-00785 p.2, printed page 7, table)
+        description: the ALERT lamp (user manual I-00768 p.49 item B; quick start I-00785 p.2, printed page 7, table)
       - id: lamp-1
         ref: common/led-indicator@1
         at:
@@ -509,7 +502,7 @@ views:
         - 'off'
         - name: outlet-energized
           color: '#1fde2e'
-        description: outlet 1 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 1 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-2
         ref: common/led-indicator@1
         at:
@@ -519,7 +512,7 @@ views:
         rel-pos: 3
         for: chassis
         states: *id001
-        description: outlet 2 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 2 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-3
         ref: common/led-indicator@1
         at:
@@ -529,7 +522,7 @@ views:
         rel-pos: 4
         for: chassis
         states: *id001
-        description: outlet 3 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 3 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-4
         ref: common/led-indicator@1
         at:
@@ -539,7 +532,7 @@ views:
         rel-pos: 5
         for: chassis
         states: *id001
-        description: outlet 4 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 4 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-5
         ref: common/led-indicator@1
         at:
@@ -549,7 +542,7 @@ views:
         rel-pos: 6
         for: chassis
         states: *id001
-        description: outlet 5 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 5 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-6
         ref: common/led-indicator@1
         at:
@@ -559,7 +552,7 @@ views:
         rel-pos: 7
         for: chassis
         states: *id001
-        description: outlet 6 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 6 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-7
         ref: common/led-indicator@1
         at:
@@ -569,7 +562,7 @@ views:
         rel-pos: 8
         for: chassis
         states: *id001
-        description: outlet 7 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 7 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: lamp-8
         ref: common/led-indicator@1
         at:
@@ -579,7 +572,7 @@ views:
         rel-pos: 9
         for: chassis
         states: *id001
-        description: outlet 8 ON/OFF lamp, numbered (user manual I-00768 p.48 item C)
+        description: outlet 8 ON/OFF lamp, numbered (user manual I-00768 p.49 item C)
       - id: power-switch
         ref: common/rocker-switch@1
         at:
@@ -591,7 +584,7 @@ views:
         for: chassis
         attrs:
           rocker-color: '#630e1a'
-        description: the illuminated power switch and circuit breaker, rocker upright (user manual I-00768 p.48 item D; specification sheet 96-01237 p.5)
+        description: the illuminated power switch and circuit breaker, rocker upright (user manual I-00768 p.49 item D; specification sheet 96-01237 p.5)
   rear:
     size:
       w: 441

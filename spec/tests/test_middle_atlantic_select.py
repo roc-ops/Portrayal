@@ -129,11 +129,13 @@ def gaps(slug):
 @pytest.mark.parametrize("slug", MODELS)
 def test_what_no_page_gives_is_a_named_gap(slug):
     found = gaps(slug)
-    for what in ("weight", "ground-stud-position", "front-outlet-control", "ear-holes", "cord-clip-past-depth"):
+    for what in ("weight", "ground-stud-position", "ear-holes", "cord-clip-past-depth"):
         assert what in found, what
     assert found["ear-holes"]["scope"] == ["front", "rear"]
     assert found["ground-stud-position"]["reason"] == "sources-disagree"
-    assert found["front-outlet-control"]["reason"] == "sources-disagree"
+    assert "front-outlet-control" not in found, "the manual and the sheet agree on the front outlet"
+    front = {p["id"]: p for p in device(slug)["views"]["front"]["components"]["placements"]}
+    assert "main power switch" in front["outlet-9"]["description"]
 
 
 @pytest.mark.parametrize("slug", MODELS)
