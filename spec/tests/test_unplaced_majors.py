@@ -330,6 +330,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The PRO3X breaker handle. The merged 3A01 still places the @1. The three PRO3X intelligent devices
     # place the @2, whose window draws the sheet's bar and framed square. The @1 stays until the 3A01 moves.
     kept["servertech/pro3x-breaker-handle"] = [1, 2]
+    # The DVI-D jack: the DSX2-32 seats the @2, drawn from the DVI 1.0 specification. The @1, drawn as it was from one
+    # photograph, stays for a saved rack or a manifest that names it, `superseded-by` the @2.
+    kept["std/dvi-d-jack"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
