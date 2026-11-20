@@ -49,6 +49,8 @@ def test_the_20u_length_version_2_is_20_crossbars_with_lips_on_a_plate():
     assert len(blocks) == 20, "a block to each crossbar on the grey strip"
     # The held page shows each block 37 to 44 px tall at 2.42 px/mm, which is 15 to 18 mm.
     assert all(15.0 <= v["size"][1] <= 20.0 for v in blocks), "each block is about 17.5 mm tall, centred on its crossbar"
+    centres = lambda prefix: sorted(v["at"][1] + v["size"][1] / 2 for k, v in els.items() if k.startswith(prefix) and k[1:].isdigit())
+    assert all(close(a, b, 0.5) for a, b in zip(centres("k"), centres("b"))), "each block is centred on its crossbar"
     # The strip reads 27 px at 2.41 px/mm, which is 11.2 mm.
     assert close(els["strip"]["size"][0], 11.0), "the grey strip along the plate edge is about 11 mm wide"
     assert 35.0 <= els["plate"]["size"][0] + els["strip"]["size"][0] <= 45.0, "plate and strip are about 40 per cent of the width"
