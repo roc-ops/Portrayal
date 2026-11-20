@@ -51,17 +51,18 @@ provenance:
   legends:
     confidence: estimated
     note: estimated - the printed legends are read off the specification sheet 96-01237 p.1 photographs at 400 and 600 dpi. The scale is about 3 px per
-      mm, so each is placed to about 2 mm. The RLNK-915R rear photograph reads the inlet legend 120V 12A 60Hz, the model name and the maker's name. No held
-      picture shows the RLNK-920R legends. Its model name and its 16 A and 20 A are the manual's figures set in the same places.
+      mm, so each is placed to about 2 mm. The RLNK-915R rear photograph reads the inlet legend 120V 12A 60Hz, the model name and the maker's name. The
+      RLNK-920R photographs on the same page read 120V~16A 60Hz at the inlet and the front outlet, and its model name. They are set in the same places.
   top-labels:
     confidence: estimated
-    note: estimated - the p.1 oblique photograph of the RLNK-915R shows two white labels on the top face. Their place is read from the photograph's perspective
-      and is good to about 25 mm. Their size is estimated at 46 by 22 mm. The wording is not legible, and the bottom is not shown.
+    note: 'estimated - the p.1 oblique photograph of the RLNK-915R shows three top labels: two dark-printed at the left and one bright at the right. Their
+      place is read from the photograph''s perspective and is good to about 25 mm. Their sizes are estimated at about 90 by 30 mm each. The wording is not
+      legible, and the bottom is not shown. The RLNK-920R photographs show a plain lid, so its labels follow the RLNK-915R.'
   left-out:
     confidence: estimated
     note: 'not drawn: the ear holes, two in each ear of both elevations (gaps: ear-holes). Not drawn: the cord retainer''s wire loop behind the printed
-      depth (gaps: cord-clip-past-depth). Not drawn: the second ground ring the user manual I-00768 p.49 figure draws at the right (gaps: ground-stud-position).
-      Not drawn: the amber and green lamps of the Ethernet jack, which the jack part carries.'
+      depth and below the front face in the manual''s figure (gaps: cord-clip-past-depth). Not drawn: the second ground ring the user manual I-00768 p.49
+      figure draws at the right (gaps: ground-stud-position). Not drawn: the amber and green lamps of the Ethernet jack, which the jack part carries.'
   outlets:
     confidence: datasheet
     note: 'datasheet - specification sheet 96-01237 p.3 gives 9 total outlets, 8 controlled. The type is read from the user manual I-00768 p.48 and p.49
@@ -161,19 +162,20 @@ gaps:
   wanted: the maintainer's word on drawing the ears at 483 mm.
 - what: cord-clip-past-depth
   scope:
+  - front
   - top
   - left
   - right
   reason: needs-drawing
-  note: The specification sheet 96-01237 p.5 top and end views show the retainer's wire loop up to 19 mm behind the printed 245.7 mm depth. The kit has
-    no key for a part past the box.
+  note: The specification sheet 96-01237 p.5 top and end views show the retainer's wire loop up to 19 mm behind the printed 245.7 mm depth. The user manual
+    I-00768 p.48 front figure draws the loop below the front face. The kit has no key for a part past the box.
   wanted: the maintainer's word on a part that stands past the box.
 - what: lamp-colours
   scope:
   - front
   reason: vendor-silent
-  note: The user manual I-00768 p.48 and quick start I-00785 p.7 name the lit colours in words only. The hex values are the library's, as on the Premium+
-    pair. The quick start's blinking green and red state is not drawn as a state.
+  note: The user manual I-00768 p.48 and quick start I-00785 p.2 (printed page 7) name the lit colours in words only. The hex values are the library's,
+    as on the Premium+ pair. The quick start's blinking green and red state is not drawn as a state.
   wanted: a photograph of a lit unit.
 groups:
   outlets:
@@ -448,7 +450,7 @@ views:
         - name: lost-ip-connection
           color: '#e5483b'
           behavior: blinking
-        description: the ALERT lamp (user manual I-00768 p.46, p.48; quick start I-00785 p.7 table)
+        description: the ALERT lamp (user manual I-00768 p.46, p.48; quick start I-00785 p.2, printed page 7, table)
       - id: lamp-1
         ref: common/led-indicator@1
         at:
@@ -1160,22 +1162,32 @@ views:
         confidence: estimated
       - id: compliance-label-1
         at:
-        - 60.0
-        - 26.0
+        - 61.0
+        - 21.0
         size:
-        - 46.0
-        - 22.0
-        fill: '#bcc9d0'
+        - 96.0
+        - 30.0
+        fill: '#9eacb2'
         kind: label
         confidence: estimated
       - id: compliance-label-2
         at:
-        - 156.0
-        - 26.0
+        - 184.0
+        - 21.0
         size:
-        - 46.0
-        - 22.0
-        fill: '#bcc9d0'
+        - 90.0
+        - 30.0
+        fill: '#9eacb2'
+        kind: label
+        confidence: estimated
+      - id: compliance-label-3
+        at:
+        - 306.0
+        - 21.0
+        size:
+        - 86.0
+        - 30.0
+        fill: '#e5e9eb'
         kind: label
         confidence: estimated
   bottom:

@@ -94,8 +94,8 @@ def test_the_top_view_draws_its_counted_features(slug):
     assert kinds.count("screw") == 2
     assert kinds.count("outlet-top") == 8
     assert kinds.count("lamp-edge") == 9
-    assert kinds.count("label") == 2
-    assert len(decor(dev, "bottom")) == len(top) - 2
+    assert kinds.count("label") == 3, "three labels on the lid: two at the left, one at the right"
+    assert len(decor(dev, "bottom")) == len(top) - 3
     rear = decor(dev, "rear")
     assert [d["kind"] for d in rear].count("outlet-strip") == 1
 
