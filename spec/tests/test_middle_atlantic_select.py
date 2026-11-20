@@ -79,6 +79,18 @@ def test_the_front_holds_an_alert_lamp_eight_outlet_lamps_and_the_switch(slug):
 
 
 @pytest.mark.parametrize("slug", MODELS)
+def test_the_front_draws_the_bar_across_the_switch_and_the_printed_legend(slug):
+    dev = device(slug)
+    front = decor(dev, "front")
+    kinds = [d["kind"] for d in front]
+    assert kinds.count("switch-bar") == 1
+    assert [d["id"] for d in front].count("switch-bar-screw-1") == 1
+    assert [d["id"] for d in front].count("switch-bar-screw-2") == 1
+    legends = [t["text"] for t in dev["views"]["front"]["silkscreen"] if t["text"].startswith("120V")]
+    assert legends == ["120V 15A 60Hz" if slug == "rlnk-915r" else "120V 16A 60Hz"]
+
+
+@pytest.mark.parametrize("slug", MODELS)
 def test_all_six_sides_are_drawn_none_is_declared_empty(slug):
     views = device(slug)["views"]
     assert sorted(views) == ["bottom", "front", "left", "rear", "right", "top"]
