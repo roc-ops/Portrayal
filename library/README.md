@@ -136,6 +136,28 @@ The mappings are the rows of the type's fibre map in `library/exports/fibre-maps
 one for one. On a NetBox older than 4.6 that file is what binds the front ports
 to the rear ports. Nautobot types do not carry the key and are not affected.
 
+Tried on a running NetBox 4.7. A module-type file that carries `port-mappings`
+imported as a new type and created one template mapping per row (24 for the
+FS.com FHD-FAP12LCDXSMF). The run imported a copy with its model name changed
+(to FHD-FAP12LCDXSMF-p856), because the file's own type already existed on that
+instance. An instance of
+that new type got the same number of instance-level mappings. Importing the
+file again over an existing type, with or without an instance of it, was
+refused. The message was "Module type with this Manufacturer and Model already
+exists". Nothing was duplicated or changed. A type that already existed without mappings
+kept none after the refused import. Deleting a type and importing it again was
+not tried. A second run on NetBox 4.7.2, with a copy of the FS.com
+FHD-1MTP6LCDOM4U file, gave these results. Installing a module of a type
+that carries the mappings creates its instance-level mappings by itself, one
+per row. Applying the fibre map to that module afterwards was refused row by
+row and created no duplicate. The message was "Port mapping with this Front
+port and Front port position already exists". On a type imported without
+mappings, applying the fibre map created the mappings at instance level, as
+before. A script that applies the fibre map to NetBox 4.7.2 should treat that
+refusal as already done. Nautobot 3.2.6 is unchanged: an install sets each
+front port's rear port and position from the type, and a repeated import is
+refused.
+
 The rack kit has one other feature that needs NetBox 4.6 or later: its export
 option "NetBox 4.6 or later" writes NetBox's own cable bundles
 (`kit/rack/dcim-rules.js`). It is off unless the option is set, and it is a
