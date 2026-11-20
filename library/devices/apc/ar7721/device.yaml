@@ -1,0 +1,2077 @@
+format: 1
+kind: device
+name: ar7721
+version: 1.0.0
+maturity: modelled
+manufacturer: APC
+model: AR7721
+description: Vertical cable manager for a 600 mm wide, 42U NetShelter SX cabinet, APC AR7721. It is two 20U lengths, each
+  a plate with a plastic crossbar to every rack unit, stood end to end. They stand in the cabinet's zero-U space and take
+  no rack unit.
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: 'datasheet - `rack-side`: "Number of rack unit 0U" and "Mounting Location Side". The installation sheet (990-5121A,
+      page 1) shows the two lengths one above the other on one side of the cabinet. `ru: 40` is the two 20U lengths.'
+  method:
+    confidence: datasheet
+    note: 'FIGURES FROM THE MAKER''S OWN DOCUMENTS, read as data: the AR7721 data sheet and the installation sheet 990-5121A.
+      Width, depth and weight are `datasheet`. The data sheet''s 889 mm is one length, as the 20 loops counted on page 5
+      show. The device is the set of two, 1778 mm. No drawing or photograph is copied.'
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 107 x 889 x 45 for one length: "Width 4.2 in (107 mm)", "Height 35 in (889 mm)", "Depth 1.8 in (45
+      mm)". The set is drawn 1778, two lengths of 20 x 44.45 end to end.'
+  depth:
+    confidence: datasheet
+    note: datasheet - "Depth 1.8 in (45 mm)".
+  shell:
+    confidence: estimated
+    note: estimated - the crossbars are drawn as solids the depth of the part; no view sections one.
+  thickness:
+    confidence: estimated
+    note: estimated - no document states a gauge; the parts carry their own depths.
+  weight:
+    confidence: datasheet
+    note: datasheet - "Net Weight 4.81 lb(US) (2.18 kg)" for the set of two; packed 2.59 kg.
+  front:
+    confidence: estimated
+    note: estimated - the face the installation sheet and the photographs show. A rail and a loop to each rack unit, in
+      two lengths of 20. Lips, grey strip and blocks are read on data sheet page 5 at 2.41 px/mm, to within about 2 mm.
+  rear:
+    confidence: estimated
+    note: estimated - the back of the same crossbars, with the plate on the left. Three screw heads to a length stand on
+      the plate, as the second photograph on data sheet page 5 shows. The first is about 133 mm from the plate top, to within
+      about 3 mm.
+  top:
+    confidence: estimated
+    note: 'estimated - the plan: the plate and the top crossbar.'
+  bottom:
+    confidence: estimated
+    note: estimated - the plan again; the two ends are alike.
+  left:
+    confidence: estimated
+    note: estimated - the outer ends of the 40 crossbars, each with its lip.
+  right:
+    confidence: estimated
+    note: estimated - the plate's edge down the part. It carries 8 hook windows, 4 slots and 2 tabs to a length, as the
+      edge photograph on data sheet page 5 shows.
+  guides:
+    confidence: estimated
+    note: estimated - the duct is the run down the crossbars, at one rack unit pitch, the gap the pitch less the 7 mm crossbar.
+  capacity:
+    confidence: datasheet
+    note: datasheet - no cable capacity is stated (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: 'datasheet - "Color: Black" and the provided equipment (2 x vertical cable organizers, installation guide).'
+  color:
+    confidence: estimated
+    note: 'estimated - "Color: Black". The shade is the library''s render of black plastic.'
+attrs:
+  physical:
+    weight-kg: 2.18
+    color: Black
+chassis:
+  width: 107.0
+  height: 1778.0
+  depth: 45.0
+  ru: 40
+  mount: rack-side
+  shell: sheet
+  thickness: 1.5
+  weight-kg: 2.18
+  color: '#232527'
+gaps:
+- what: set-length
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  note: The data sheet prints 889 mm for "Height" and 2.18 kg for the set of two. Its carton is 848 mm long, shorter than
+    one 889 mm length. No page says how the lengths lie in the carton.
+  wanted: the maker's statement of the length of each piece and of the set
+- what: finger-shape
+  scope:
+  - front
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  note: The photographs show each finger without a dimension. Its height, length and the shape of its tip are read off the
+    figure and estimated.
+  wanted: a section through a finger and the rail
+- what: cable-capacity
+  scope:
+  - front
+  reason: vendor-silent
+  note: The data sheet states no cable capacity, so none is recorded and none is estimated.
+  wanted: a capacity figure and the cable it is stated for
+- what: cabinet-fit
+  scope:
+  - rear
+  reason: vendor-silent
+  note: The installation sheet is titled for the NetShelter SX 600 mm 42U cabinet and lists no model number. No page lists
+    which cabinet models take it.
+  wanted: the maker's compatibility list
+- what: length-seam
+  scope:
+  - front
+  - rear
+  reason: vendor-silent
+  note: The two lengths are drawn end to end and the joint is not dimensioned. The installation sheet shows them one above
+    the other.
+  wanted: a drawing of the two lengths fitted to one side
+groups:
+  lengths:
+    term: Length
+    role: furniture
+    index-origin: 1
+    description: the two 20U lengths, top to bottom
+views:
+  front:
+    size:
+      w: 107.0
+      h: 1778.0
+    components:
+      placements:
+      - ref: apc/nsx-vcm-20u@2
+        id: length-1
+        at:
+        - 0.0
+        - 0.0
+        group: lengths
+        rel-pos: 1
+      - ref: apc/nsx-vcm-20u@2
+        id: length-2
+        at:
+        - 0.0
+        - 889.0
+        group: lengths
+        rel-pos: 2
+    guides:
+    - id: duct
+      kind: duct
+      at:
+      - 0.0
+      - 0
+      size:
+      - 63.0
+      - 1778.0
+      run: y
+      finger-pitch: 44.45
+      finger-gap: 37.45
+      confidence: estimated
+      source: installation sheet 990-5121A, page 1, and data sheet page 5 show a crossbar to each rack unit down each length.
+        The gap is the pitch less the crossbar drawn 7 thick.
+  rear:
+    size:
+      w: 107.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 41.0
+        - 1778.0
+        fill: '#232527'
+        kind: base
+      - id: bar-1
+        at:
+        - 41.0
+        - 12.7
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-1
+        at:
+        - 104.5
+        - 0.0
+        size:
+        - 2.5
+        - 34.2
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-2
+        at:
+        - 41.0
+        - 57.15
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-2
+        at:
+        - 104.5
+        - 42.65
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-3
+        at:
+        - 41.0
+        - 101.6
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-3
+        at:
+        - 104.5
+        - 87.1
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-4
+        at:
+        - 41.0
+        - 146.05
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-4
+        at:
+        - 104.5
+        - 131.55
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-5
+        at:
+        - 41.0
+        - 190.5
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-5
+        at:
+        - 104.5
+        - 176.0
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-6
+        at:
+        - 41.0
+        - 234.95
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-6
+        at:
+        - 104.5
+        - 220.45
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-7
+        at:
+        - 41.0
+        - 279.4
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-7
+        at:
+        - 104.5
+        - 264.9
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-8
+        at:
+        - 41.0
+        - 323.85
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-8
+        at:
+        - 104.5
+        - 309.35
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-9
+        at:
+        - 41.0
+        - 368.3
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-9
+        at:
+        - 104.5
+        - 353.8
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-10
+        at:
+        - 41.0
+        - 412.75
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-10
+        at:
+        - 104.5
+        - 398.25
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-11
+        at:
+        - 41.0
+        - 457.2
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-11
+        at:
+        - 104.5
+        - 442.7
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-12
+        at:
+        - 41.0
+        - 501.65
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-12
+        at:
+        - 104.5
+        - 487.15
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-13
+        at:
+        - 41.0
+        - 546.1
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-13
+        at:
+        - 104.5
+        - 531.6
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-14
+        at:
+        - 41.0
+        - 590.55
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-14
+        at:
+        - 104.5
+        - 576.05
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-15
+        at:
+        - 41.0
+        - 635.0
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-15
+        at:
+        - 104.5
+        - 620.5
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-16
+        at:
+        - 41.0
+        - 679.45
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-16
+        at:
+        - 104.5
+        - 664.95
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-17
+        at:
+        - 41.0
+        - 723.9
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-17
+        at:
+        - 104.5
+        - 709.4
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-18
+        at:
+        - 41.0
+        - 768.35
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-18
+        at:
+        - 104.5
+        - 753.85
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-19
+        at:
+        - 41.0
+        - 812.8
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-19
+        at:
+        - 104.5
+        - 798.3
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-20
+        at:
+        - 41.0
+        - 857.25
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-20
+        at:
+        - 104.5
+        - 842.75
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-21
+        at:
+        - 41.0
+        - 901.7
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-21
+        at:
+        - 104.5
+        - 889.0
+        size:
+        - 2.5
+        - 34.2
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-22
+        at:
+        - 41.0
+        - 946.15
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-22
+        at:
+        - 104.5
+        - 931.65
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-23
+        at:
+        - 41.0
+        - 990.6
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-23
+        at:
+        - 104.5
+        - 976.1
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-24
+        at:
+        - 41.0
+        - 1035.05
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-24
+        at:
+        - 104.5
+        - 1020.55
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-25
+        at:
+        - 41.0
+        - 1079.5
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-25
+        at:
+        - 104.5
+        - 1065.0
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-26
+        at:
+        - 41.0
+        - 1123.95
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-26
+        at:
+        - 104.5
+        - 1109.45
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-27
+        at:
+        - 41.0
+        - 1168.4
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-27
+        at:
+        - 104.5
+        - 1153.9
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-28
+        at:
+        - 41.0
+        - 1212.85
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-28
+        at:
+        - 104.5
+        - 1198.35
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-29
+        at:
+        - 41.0
+        - 1257.3
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-29
+        at:
+        - 104.5
+        - 1242.8
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-30
+        at:
+        - 41.0
+        - 1301.75
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-30
+        at:
+        - 104.5
+        - 1287.25
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-31
+        at:
+        - 41.0
+        - 1346.2
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-31
+        at:
+        - 104.5
+        - 1331.7
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-32
+        at:
+        - 41.0
+        - 1390.65
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-32
+        at:
+        - 104.5
+        - 1376.15
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-33
+        at:
+        - 41.0
+        - 1435.1
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-33
+        at:
+        - 104.5
+        - 1420.6
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-34
+        at:
+        - 41.0
+        - 1479.55
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-34
+        at:
+        - 104.5
+        - 1465.05
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-35
+        at:
+        - 41.0
+        - 1524.0
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-35
+        at:
+        - 104.5
+        - 1509.5
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-36
+        at:
+        - 41.0
+        - 1568.45
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-36
+        at:
+        - 104.5
+        - 1553.95
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-37
+        at:
+        - 41.0
+        - 1612.9
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-37
+        at:
+        - 104.5
+        - 1598.4
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-38
+        at:
+        - 41.0
+        - 1657.35
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-38
+        at:
+        - 104.5
+        - 1642.85
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-39
+        at:
+        - 41.0
+        - 1701.8
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-39
+        at:
+        - 104.5
+        - 1687.3
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: bar-40
+        at:
+        - 41.0
+        - 1746.25
+        size:
+        - 66.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: lip-40
+        at:
+        - 104.5
+        - 1731.75
+        size:
+        - 2.5
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+      - id: screw-1-1
+        at:
+        - 25.7
+        - 130.35
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+      - id: screw-1-2
+        at:
+        - 25.29
+        - 752.65
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+      - id: screw-1-3
+        at:
+        - 18.32
+        - 872.665
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+      - id: screw-2-1
+        at:
+        - 25.7
+        - 1019.35
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+      - id: screw-2-2
+        at:
+        - 25.29
+        - 1641.65
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+      - id: screw-2-3
+        at:
+        - 18.32
+        - 1761.665
+        size:
+        - 6.0
+        - 6.0
+        fill: '#3a3d40'
+        kind: screw
+        rx: 3
+  top:
+    size:
+      w: 107.0
+      h: 45.0
+    panel:
+      decor: &id001
+      - id: plate
+        at:
+        - 66.0
+        - 0.0
+        size:
+        - 41.0
+        - 45.0
+        fill: '#232527'
+        kind: base
+      - id: bar
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 66.0
+        - 45.0
+        fill: '#26282a'
+        kind: finger-wall
+  bottom:
+    size:
+      w: 107.0
+      h: 45.0
+    panel:
+      decor: *id001
+  left:
+    size:
+      w: 45.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: ends
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 45.0
+        - 1778.0
+        fill: '#232527'
+        kind: base
+      - id: end-1
+        at:
+        - 0.0
+        - 12.7
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-1
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 45.0
+        - 34.2
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-2
+        at:
+        - 0.0
+        - 57.15
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-2
+        at:
+        - 0.0
+        - 42.65
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-3
+        at:
+        - 0.0
+        - 101.6
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-3
+        at:
+        - 0.0
+        - 87.1
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-4
+        at:
+        - 0.0
+        - 146.05
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-4
+        at:
+        - 0.0
+        - 131.55
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-5
+        at:
+        - 0.0
+        - 190.5
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-5
+        at:
+        - 0.0
+        - 176.0
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-6
+        at:
+        - 0.0
+        - 234.95
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-6
+        at:
+        - 0.0
+        - 220.45
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-7
+        at:
+        - 0.0
+        - 279.4
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-7
+        at:
+        - 0.0
+        - 264.9
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-8
+        at:
+        - 0.0
+        - 323.85
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-8
+        at:
+        - 0.0
+        - 309.35
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-9
+        at:
+        - 0.0
+        - 368.3
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-9
+        at:
+        - 0.0
+        - 353.8
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-10
+        at:
+        - 0.0
+        - 412.75
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-10
+        at:
+        - 0.0
+        - 398.25
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-11
+        at:
+        - 0.0
+        - 457.2
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-11
+        at:
+        - 0.0
+        - 442.7
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-12
+        at:
+        - 0.0
+        - 501.65
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-12
+        at:
+        - 0.0
+        - 487.15
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-13
+        at:
+        - 0.0
+        - 546.1
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-13
+        at:
+        - 0.0
+        - 531.6
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-14
+        at:
+        - 0.0
+        - 590.55
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-14
+        at:
+        - 0.0
+        - 576.05
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-15
+        at:
+        - 0.0
+        - 635.0
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-15
+        at:
+        - 0.0
+        - 620.5
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-16
+        at:
+        - 0.0
+        - 679.45
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-16
+        at:
+        - 0.0
+        - 664.95
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-17
+        at:
+        - 0.0
+        - 723.9
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-17
+        at:
+        - 0.0
+        - 709.4
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-18
+        at:
+        - 0.0
+        - 768.35
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-18
+        at:
+        - 0.0
+        - 753.85
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-19
+        at:
+        - 0.0
+        - 812.8
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-19
+        at:
+        - 0.0
+        - 798.3
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-20
+        at:
+        - 0.0
+        - 857.25
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-20
+        at:
+        - 0.0
+        - 842.75
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-21
+        at:
+        - 0.0
+        - 901.7
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-21
+        at:
+        - 0.0
+        - 889.0
+        size:
+        - 45.0
+        - 34.2
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-22
+        at:
+        - 0.0
+        - 946.15
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-22
+        at:
+        - 0.0
+        - 931.65
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-23
+        at:
+        - 0.0
+        - 990.6
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-23
+        at:
+        - 0.0
+        - 976.1
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-24
+        at:
+        - 0.0
+        - 1035.05
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-24
+        at:
+        - 0.0
+        - 1020.55
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-25
+        at:
+        - 0.0
+        - 1079.5
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-25
+        at:
+        - 0.0
+        - 1065.0
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-26
+        at:
+        - 0.0
+        - 1123.95
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-26
+        at:
+        - 0.0
+        - 1109.45
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-27
+        at:
+        - 0.0
+        - 1168.4
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-27
+        at:
+        - 0.0
+        - 1153.9
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-28
+        at:
+        - 0.0
+        - 1212.85
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-28
+        at:
+        - 0.0
+        - 1198.35
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-29
+        at:
+        - 0.0
+        - 1257.3
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-29
+        at:
+        - 0.0
+        - 1242.8
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-30
+        at:
+        - 0.0
+        - 1301.75
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-30
+        at:
+        - 0.0
+        - 1287.25
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-31
+        at:
+        - 0.0
+        - 1346.2
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-31
+        at:
+        - 0.0
+        - 1331.7
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-32
+        at:
+        - 0.0
+        - 1390.65
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-32
+        at:
+        - 0.0
+        - 1376.15
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-33
+        at:
+        - 0.0
+        - 1435.1
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-33
+        at:
+        - 0.0
+        - 1420.6
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-34
+        at:
+        - 0.0
+        - 1479.55
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-34
+        at:
+        - 0.0
+        - 1465.05
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-35
+        at:
+        - 0.0
+        - 1524.0
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-35
+        at:
+        - 0.0
+        - 1509.5
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-36
+        at:
+        - 0.0
+        - 1568.45
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-36
+        at:
+        - 0.0
+        - 1553.95
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-37
+        at:
+        - 0.0
+        - 1612.9
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-37
+        at:
+        - 0.0
+        - 1598.4
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-38
+        at:
+        - 0.0
+        - 1657.35
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-38
+        at:
+        - 0.0
+        - 1642.85
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-39
+        at:
+        - 0.0
+        - 1701.8
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-39
+        at:
+        - 0.0
+        - 1687.3
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+      - id: end-40
+        at:
+        - 0.0
+        - 1746.25
+        size:
+        - 45.0
+        - 7.0
+        fill: '#26282a'
+        kind: finger-wall
+      - id: end-lip-40
+        at:
+        - 0.0
+        - 1731.75
+        size:
+        - 45.0
+        - 36.0
+        fill: '#2e3033'
+        kind: finger-wall
+        confidence: estimated
+  right:
+    size:
+      w: 45.0
+      h: 1778.0
+    panel:
+      decor:
+      - id: plate-edge
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 45.0
+        - 1778.0
+        fill: '#232527'
+        kind: base
+      - id: hook-window-1-1
+        at:
+        - 14.0
+        - 14.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-2
+        at:
+        - 14.0
+        - 103.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-3
+        at:
+        - 14.0
+        - 277.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-4
+        at:
+        - 14.0
+        - 370.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-5
+        at:
+        - 14.0
+        - 459.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-6
+        at:
+        - 14.0
+        - 548.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-7
+        at:
+        - 14.0
+        - 725.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-1-8
+        at:
+        - 14.0
+        - 814.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-1-1
+        at:
+        - 14.0
+        - 193.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-1-2
+        at:
+        - 14.0
+        - 237.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-1-3
+        at:
+        - 14.0
+        - 641.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-1-4
+        at:
+        - 14.0
+        - 685.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: tab-1-1
+        at:
+        - 41.0
+        - 125.0
+        size:
+        - 4.0
+        - 8.0
+        fill: '#3a3d40'
+        kind: tab
+        confidence: estimated
+      - id: tab-1-2
+        at:
+        - 41.0
+        - 747.0
+        size:
+        - 4.0
+        - 8.0
+        fill: '#3a3d40'
+        kind: tab
+        confidence: estimated
+      - id: hook-window-2-1
+        at:
+        - 14.0
+        - 903.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-2
+        at:
+        - 14.0
+        - 992.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-3
+        at:
+        - 14.0
+        - 1166.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-4
+        at:
+        - 14.0
+        - 1259.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-5
+        at:
+        - 14.0
+        - 1348.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-6
+        at:
+        - 14.0
+        - 1437.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-7
+        at:
+        - 14.0
+        - 1614.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-window-2-8
+        at:
+        - 14.0
+        - 1703.0
+        size:
+        - 16.0
+        - 44.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-2-1
+        at:
+        - 14.0
+        - 1082.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-2-2
+        at:
+        - 14.0
+        - 1126.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-2-3
+        at:
+        - 14.0
+        - 1530.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-slot-2-4
+        at:
+        - 14.0
+        - 1574.0
+        size:
+        - 16.0
+        - 6.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: tab-2-1
+        at:
+        - 41.0
+        - 1014.0
+        size:
+        - 4.0
+        - 8.0
+        fill: '#3a3d40'
+        kind: tab
+        confidence: estimated
+      - id: tab-2-2
+        at:
+        - 41.0
+        - 1636.0
+        size:
+        - 4.0
+        - 8.0
+        fill: '#3a3d40'
+        kind: tab
+        confidence: estimated
+configurations:
+  base:
+    kind: base
+    default: true
+    description: 'The set as APC ships AR7721: two 20U lengths.'
+datasheet:
+  title: APC NetShelter Cable Management, Vertical Cable Manager, for NetShelter SX 600mm Wide 42U, Set of 2, 107 x 889
+    x 45 mm (AR7721)
+  url: https://www.se.com/us/en/product/download-pdf/AR7721?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR7721.pdf
+  sha256: c5387061e1d0da1d0736e6f9c954fa460fd15fb21694b24d86c212be7b2d7b2d
+references:
+- title: Vertical Cable Manager for NetShelter SX 600 mm 42U Cabinet (AR7721), installation sheet 990-5121A, 1/2016
+  url: https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=MLAN-967N8J_R1_EN.pdf&p_Doc_Ref=SPD_MLAN-967N8J_EN
+  sha256: 6019107bba383501880f4e7cab346ae4000688ab925ce38b2e0d8daf5374ce45
