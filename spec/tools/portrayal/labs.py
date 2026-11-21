@@ -94,9 +94,17 @@ def _width(dev):
 
 
 def _sided(dev):
-    """True for a rack-face part narrower than the rack opening."""
+    """True for a part that can stand on one rail of a unit.
+
+    That is a rack-face part narrower than the rack opening. It is also a rack
+    device of half the opening or less, since two of them fill it.
+    """
     w = _width(dev)
-    return _mount(dev) == RACK_FACE and w is not None and w < RACK_OPENING_MM
+    if w is None:
+        return False
+    if _mount(dev) == RACK_FACE:
+        return w < RACK_OPENING_MM
+    return _mount(dev) == "rack" and 2 * w <= RACK_OPENING_MM
 
 
 def _int(v):
@@ -179,8 +187,9 @@ def check(lab, roots):
             elif mount == "rack" and "ru" not in p:
                 error("L140", f"{pid}: a rack device is placed by `ru`, its lowest rack unit")
 
-    # L153 - `side` belongs to rack-side parts, which state it, and to rack-face
-    # parts narrower than the opening; a rack-side part has no host
+    # L153 - `side` belongs to rack-side parts, which state it. It also belongs
+    # to rack-face parts narrower than the opening, and to rack devices of half
+    # the opening or less. A rack-side part has no host.
     for p in raw:
         pid, dev = p.get("id"), devs.get(p.get("id"))
         if dev is None:
@@ -208,9 +217,12 @@ def check(lab, roots):
                       f"{_width(dev):g} wide: it lies across the opening and takes the "
                       "whole unit on its face. Drop `side`")
             else:
-                error("L153", f"{pid}: `side` is for a rack-side part or a rack-face part "
-                      f"narrower than the opening, and {p.get('ref')} mounts `{mount}`. "
-                      "Drop it")
+                wide = (f", {_width(dev):g} wide" if _width(dev) is not None
+                        and mount == "rack" else "")
+                error("L153", f"{pid}: `side` is for a rack-side part, a rack-face part "
+                      "narrower than the opening, or a rack device of "
+                      f"{RACK_OPENING_MM / 2:g} mm or less. {p.get('ref')} mounts "
+                      f"`{mount}`{wide}. Drop it")
 
     # resolve: rack devices first, then rack-face parts onto them
     out = []
@@ -256,8 +268,12 @@ def check(lab, roots):
     # L142 - everything fits in the rack, and nothing claims a unit twice. A
     # rack-face part claims its unit on its face per SIDE of the opening: one
     # narrower than the opening placed at a `side` takes that side only, so a
-    # bracket on each rail shares the unit; anything else takes both.
+    # bracket on each rail shares the unit; anything else takes both. A rack
+    # device claims its units per rail alike: one of half the opening or less
+    # at a `side` takes that rail only. `rack_units` keeps the first claimer of
+    # each unit, which L143 reads for the host behind a rack-face part.
     rack_units, face_units = {}, {}
+    rail_units = {s: {} for s in SIDES}
     for q in out:
         dev = devs.get(q.get("id"))
         if dev is None or q["ru"] is None or q["mount"] == RACK_SIDE:
@@ -268,7 +284,8 @@ def check(lab, roots):
             error("L142", f"{q.get('id')}: {q.get('ref')} at rack unit {lo} takes "
                   f"{lo}-{hi}, outside the {rack_h}U rack")
         if q["mount"] == "rack":
-            claims = [rack_units]
+            sides = [q["side"]] if q["side"] and _sided(dev) else list(SIDES)
+            claims = [rail_units[s] for s in sides]
         elif q["mount"] == RACK_FACE:
             sides = [q["side"]] if q["side"] and _sided(dev) else list(SIDES)
             claims = [face_units.setdefault((q["face"], s), {}) for s in sides]
@@ -282,7 +299,8 @@ def check(lab, roots):
         if clash:
             u, other = clash
             if q["mount"] == "rack":
-                error("L142", f"{q.get('id')}: rack unit {u} is already {other}'s. Two rack "
+                where = f" on the {q['side']} rail" if len(claims) == 1 else ""
+                error("L142", f"{q.get('id')}: rack unit {u}{where} is already {other}'s. Two rack "
                       "devices cannot share a rack unit")
             else:
                 where = f" on the {q['face']} face" + (
@@ -293,6 +311,8 @@ def check(lab, roots):
         for u in range(lo, hi + 1):
             for c in claims:
                 c[u] = q.get("id")
+            if q["mount"] == "rack":
+                rack_units.setdefault(u, q.get("id"))
 
     # L154 - a rack-side part fits the rack's height, and two at one attachment
     # point do not overlap: each runs beside the units from its `ru` up. The
