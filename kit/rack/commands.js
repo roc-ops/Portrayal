@@ -369,8 +369,8 @@ function field(rack, {id, path, key, value}, ctx) {
 }
 
 // ── one rail (#926) ─────────────────────────────────────────────────────
-// A narrow rack-face part (fit.js isNarrow: a finger bracket) on one rail
-// takes its units on that face and rail only. It stands alone: bolting onto a
+// A narrow part (fit.js isNarrow: a finger bracket, or a rack device of half
+// the opening or less) on one rail takes its units on that face and rail only. It stands alone: bolting onto a
 // device behind it (`on`) is what a part across both rails does.
 const railText = (it, chassisOf) => { const rail = railOf(it, chassisOf); return rail ? `, on the ${rail} rail` : ''; };
 const wide = (c, ref) => ({error: `${c?.model ?? ref} spans the opening, so it has no side.`});
@@ -396,8 +396,10 @@ function sideSet(rack, {id, side}, {chassisOf}) {
   if ((it.side ?? null) === want) return unchanged(rack);
   if (want && !isNarrow(chassisOf(it.ref))) return wide(chassisOf(it.ref), it.ref);
   const {side: _was, ...rest} = detached(it);
-  // across both rails it is placed as any rack-face part, onto a device behind it
-  const next = want ? {...rest, side: want} : {...rest, ...placement(rack, rest, chassisOf, {ignoreId: id})};
+  // across both rails a rack-face part is placed onto a device behind it; a rack
+  // device has no such placement, so it only loses its side
+  const next = want ? {...rest, side: want}
+    : isRackFace(chassisOf(it.ref)) ? {...rest, ...placement(rack, rest, chassisOf, {ignoreId: id})} : rest;
   const f = fits(rack, next, chassisOf, {ignoreId: id});
   if (!f.ok) return {error: f.reason};
   return done({...rack, items: rack.items.map(i => (i.id === id ? next : i))},
@@ -1494,12 +1496,12 @@ export const COMMANDS = {
       path: {type: 'string', minLength: 1, description: 'The part, as inspecting the device lists its fields (e.g. bay-1/module, port-1-occupant).'},
       key: {type: 'string', minLength: 1, description: "The setting, as the part's fields list it (e.g. latch-color)."},
       value: {type: ['string', 'number', 'null'], description: 'The new value; null for the default.'}})},
-  'side.place': {run: sidePlace, description: 'Put a narrow rail part (a finger bracket narrower than the opening) on one rail, its bottom at a U. It takes that rail only, so another can stand on the other rail at the same U.',
+  'side.place': {run: sidePlace, description: 'Put a narrow rail part (a finger bracket, or a rack device of 225 mm or less) on one rail, its bottom at a U. It takes that rail only, so another can stand on the other rail at the same U.',
     args: args(['ref', 'face', 'ru', 'side'], {ref: {type: 'string', minLength: 1, description: 'The part, as the catalogue lists it (its ref).'},
       cfg: {type: 'string', description: "Which of the part's configurations; its default when left out."},
       face: FACE, ru: WHOLE_RU, side: {enum: ['left', 'right'], description: 'Which rail it is on, as seen from its face: left or right.'},
       label: {type: 'string', description: 'The name shown on the drawing; its model when left out.'}, as: AS})},
-  'side.set': {run: sideSet, description: 'Put a narrow rail part on the left or right rail, or (side null) across both, where it bolts onto a device behind it.',
+  'side.set': {run: sideSet, description: 'Put a narrow rail part (a finger bracket, or a rack device of 225 mm or less) on the left or right rail. With side null it goes across both. A bracket then bolts onto a device behind it.',
     args: args(['id', 'side'], {id: ID('rail part'), side: {enum: ['left', 'right', null], description: 'left, right, or null for across both rails.'}})},
   'zerou.place': {run: zeroUPlace, description: 'Stand a zero-U part (a vertical cable manager, or a zero-U PDU) beside the rack at an upright, its bottom level with a U. It takes no rack unit; the lane beside that upright runs through a duct. Refused, with the reason, when it does not fit.',
     args: args(['ref', 'at', 'ru'], {ref: {type: 'string', minLength: 1, description: 'The part, as the catalogue lists it (its ref); it stands beside the rack.'},
