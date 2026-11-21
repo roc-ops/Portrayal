@@ -6,13 +6,14 @@ maturity: modelled
 manufacturer: APC
 model: AR7710
 description: Cable containment bracket for NetShelter SX, SV and VX racks, APC AR7710. It is a black sheet-steel cup, 80 mm
-  wide, 112 mm tall and 45 mm deep, open at both ends. A keyhole opens in each of its three faces. It takes no rack unit.
+  wide, 112 mm tall and 45 mm deep, open at both ends. The documents draw three keyholes, two in the long face and one in an end face.
+  The bottom face has a fourth keyhole, the top one mirrored. It takes no rack unit.
 profile: passive
 provenance:
   mount:
     confidence: datasheet
     note: 'datasheet - `rack-side`: "Number of rack unit 0U", "Mounting Location Side" and "Mounting Mode Rack-mounted". The
-      installation sheet 990-3113A hangs it on a plate screwed to the rack frame.'
+      installation sheet 990-3113A shows the bracket''s own two screws entering rack-frame keyholes (insets ns1141a and ns1149a).'
   method:
     confidence: datasheet
     note: FIGURES FROM THE MAKER'S OWN DOCUMENTS, read as data. They are the AR7710 data sheet and the installation sheet
@@ -44,8 +45,9 @@ provenance:
       Positions are read off the figure at 800 dpi, fitting the face to the printed 112 x 80 mm.
   rear:
     confidence: estimated
-    note: estimated - the plate the data sheet shows on page 4, six times. It has two screws and one small pale stud. It is turned
-      the same quarter turn. No page says how the plate joins the cup (see the `plate-joint` gap). One screw shank and one
+    note: estimated - the plate the data sheet shows on page 4, six times. It has two screws, each with a dark recess, one small pale stud above the
+      left screw, and a lighter fold down each end. It is turned the same quarter turn, and its 80 mm side runs mirrored,
+      x = 80 - v * 80. Positions are fractions of the photographed plate, measured against its own 112 and 80 mm. No page says how the plate joins the cup (see the `plate-joint` gap). One screw shank and one
       small pin are raised from it, read off the page 1 photograph (see the `screw-shanks` and `shank-length` gaps).
   top:
     confidence: estimated
@@ -107,8 +109,8 @@ gaps:
   scope:
   - rear
   reason: needs-drawing
-  note: The data sheet shows six plates, each with two screws and a small pale stud. The installation sheet shows a plate with
-    two screws on the rack frame. No page says how a plate joins a cup, or whether the plate is sold with the bracket.
+  note: The data sheet shows six plates, each with two screws and a small pale stud. The installation sheet shows the bracket's own
+    two screws entering rack-frame keyholes. No page says how a plate joins a cup, or whether the plate is sold with the bracket.
   wanted: a dimensioned drawing of the plate and of the bracket fitted to it
 - what: screw-shanks
   scope:
@@ -130,8 +132,9 @@ gaps:
   - top
   - bottom
   reason: vendor-silent
-  note: The sheets draw a keyhole in each face. No page says what lands in a keyhole or gives its size. The keyholes are drawn
-    as openings and carry no connector.
+  note: The sheets draw three keyholes, and the bottom face has a fourth, the top one mirrored. The keyholes are openings with no
+    connector and no mate in this device. The installation sheet (p.2, ns1151a) and the data sheet (p.3) show a screw head seated in the left keyhole.
+    It belongs to the part the bracket hangs on, and it is not drawn. No page gives a keyhole's size.
   wanted: the maker's statement of what the keyholes take, with their sizes
 - what: perforation-shapes
   scope:
@@ -143,7 +146,7 @@ gaps:
   - right
   reason: needs-drawing
   note: No page dimensions the cup, its keyholes, the joint slot, the hook, the plate or the wall. Sizes and places are read off
-    the figures and estimated. The corners are drawn rounded 3 mm all round. The figure rounds only the end corners.
+    the figures and estimated. The corners are drawn rounded 3 mm all round. The figure rounds only the end corners. The small notches at the corners of the plate's folds are not drawn.
   wanted: a dimensioned drawing of the bracket and the plate
 - what: hollow-body
   scope:
@@ -163,7 +166,7 @@ gaps:
   scope:
   - rear
   reason: vendor-silent
-  note: The data sheet is titled for NetShelter SX, SV and VX racks and the installation sheet shows an SX frame. No page
+  note: The data sheet is titled for NetShelter SX, SV and VX racks and the installation sheet shows a rack frame. No page
     lists a cabinet model number.
   wanted: the maker's compatibility list
 groups:
@@ -274,54 +277,96 @@ views:
         fill: '#232527'
         kind: base
         rx: 3
+      - id: fold-1
+        at:
+        - 3.0
+        - 1.0
+        size:
+        - 74.0
+        - 2.0
+        fill: '#4b4e52'
+        kind: fold
+        confidence: estimated
+      - id: fold-2
+        at:
+        - 3.0
+        - 109.0
+        size:
+        - 74.0
+        - 2.0
+        fill: '#4b4e52'
+        kind: fold
+        confidence: estimated
       - id: screw-1
         at:
-        - 44.8
-        - 76.0
+        - 18.6
+        - 73.0
+        size:
+        - 24.0
+        - 24.0
+        fill: '#2b2d30'
+        kind: screw-head
+        rx: 12.0
+        confidence: estimated
+      - id: recess-1
+        at:
+        - 22.6
+        - 77.0
         size:
         - 16.0
         - 16.0
-        fill: '#3a3d40'
-        kind: screw-head
+        fill: '#0d0e0f'
+        kind: recess
         rx: 8.0
         confidence: estimated
       - id: core-1
         at:
-        - 49.8
-        - 81.0
+        - 27.1
+        - 81.5
         size:
-        - 6.0
-        - 6.0
+        - 7.0
+        - 7.0
         fill: '#d4d5d8'
         kind: screw-core
-        rx: 3.0
+        rx: 3.5
         confidence: estimated
       - id: screw-2
         at:
-        - 44.8
-        - 25.6
+        - 18.6
+        - 16.8
+        size:
+        - 24.0
+        - 24.0
+        fill: '#2b2d30'
+        kind: screw-head
+        rx: 12.0
+        confidence: estimated
+      - id: recess-2
+        at:
+        - 22.6
+        - 20.8
         size:
         - 16.0
         - 16.0
-        fill: '#3a3d40'
-        kind: screw-head
+        fill: '#0d0e0f'
+        kind: recess
         rx: 8.0
         confidence: estimated
       - id: core-2
         at:
-        - 49.8
-        - 30.6
+        - 27.1
+        - 25.3
         size:
-        - 6.0
-        - 6.0
+        - 7.0
+        - 7.0
         fill: '#d4d5d8'
         kind: screw-core
-        rx: 3.0
+        rx: 3.5
         confidence: estimated
       - id: pin-1
         at:
-        - 24.2
-        - 86.6
+        - 50.9
+        - 82.0
         size:
         - 6.0
         - 6.0

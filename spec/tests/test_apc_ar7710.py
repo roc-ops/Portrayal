@@ -104,6 +104,109 @@ def test_each_end_face_has_one_keyhole_and_the_open_ends_show_the_wall():
     assert not with_prefix(decor(doc, "left"), "notch"), "the other end is closed by the tab"
 
 
+def centre(item):
+    return (item["at"][0] + item["size"][0] / 2, item["at"][1] + item["size"][1] / 2)
+
+
+def luminance(colour):
+    h = colour.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def by_id(items):
+    return {d["id"]: d for d in items}
+
+
+# The plate photograph on data sheet page 4, as fractions of the plate. Here u runs along its 112 mm side as it lies.
+# And v runs along its 80 mm side. The rear is drawn standing: x = 80 - v * 80 and y = 112 * (1 - u).
+U_LEFT, U_RIGHT, V_SCREWS, V_STUD = 0.241, 0.743, 0.617, 0.326
+
+
+def rear_xy(u, v):
+    return 80.0 - v * 80.0, 112.0 * (1.0 - u)
+
+
+def test_the_rear_plate_is_mirrored_across_the_80_side_as_the_photograph_lies():
+    rear = by_id(decor(device(), "rear"))
+    for ident, u, v in (("screw-1", U_LEFT, V_SCREWS), ("screw-2", U_RIGHT, V_SCREWS), ("pin-1", U_LEFT, V_STUD)):
+        x, y = rear_xy(u, v)
+        cx, cy = centre(rear[ident])
+        assert abs(cx - x) <= 0.8, f"{ident} stands at x {cx}, the photograph puts it at {x}"
+        assert abs(cy - y) <= 1.1, f"{ident} stands at y {cy}, the photograph puts it at {y}"
+    assert centre(rear["screw-1"])[0] < centre(rear["pin-1"])[0], "the stud is on the other side of the screws from x = 0"
+
+
+def test_the_stud_is_directly_above_the_left_screw_and_the_screws_are_56_mm_apart():
+    rear = by_id(decor(device(), "rear"))
+    assert abs(centre(rear["pin-1"])[1] - centre(rear["screw-1"])[1]) <= 0.5
+    spacing = abs(centre(rear["screw-1"])[1] - centre(rear["screw-2"])[1])
+    assert abs(spacing - 56.2) <= 1.5, f"the screws are {spacing} mm apart"
+    assert abs(centre(rear["screw-1"])[0] - centre(rear["screw-2"])[0]) <= 0.3
+
+
+def test_the_shank_and_the_pin_stand_on_the_screw_centres():
+    doc = device()
+    rear = by_id(decor(doc, "rear"))
+    placed = {p["id"]: p for p in doc["views"]["rear"]["components"]["placements"]}
+    screws = component(placed["screws"]["ref"])["elements"]
+    shank, peg = centre(screws["shank"]), centre(screws["peg"])
+    assert abs(shank[0] - centre(rear["screw-2"])[0]) <= 0.2 and abs(shank[1] - centre(rear["screw-2"])[1]) <= 0.2
+    assert abs(peg[0] - centre(rear["screw-1"])[0]) <= 0.2 and abs(peg[1] - centre(rear["screw-1"])[1]) <= 0.2
+
+
+def test_the_plate_has_a_lighter_side_fold_down_each_end():
+    rear = decor(device(), "rear")
+    plate = by_id(rear)["plate"]
+    folds = with_prefix(rear, "fold-")
+    assert len(folds) == 2, "one strip at each end of the plate"
+    ends = sorted(round(centre(f)[1]) for f in folds)
+    assert ends[0] < 10 and ends[1] > 102, "one at each end of the 112 mm side"
+    for f in folds:
+        assert f["size"][1] <= 3.0 and f["size"][0] >= 60.0, "a thin strip down the whole end"
+        assert luminance(f["fill"]) > luminance(plate["fill"]), "lighter than the plate"
+        assert f["confidence"] == "estimated"
+
+
+def test_each_plate_screw_has_a_dark_recess_between_its_ring_and_its_pale_centre():
+    rear = decor(device(), "rear")
+    plate = by_id(rear)["plate"]
+    recesses = by_id(with_prefix(rear, "recess-"))
+    assert len(recesses) == 2
+    for n in (1, 2):
+        ring, recess, core = (by_id(rear)[f"{k}-{n}"] for k in ("screw", "recess", "core"))
+        assert recess["size"][0] < ring["size"][0] and recess["size"][0] > core["size"][0]
+        assert all(abs(a - b) <= 0.1 for a, b in zip(centre(recess), centre(ring)))
+        assert all(abs(a - b) <= 0.1 for a, b in zip(centre(core), centre(ring)))
+        assert luminance(recess["fill"]) < luminance(plate["fill"]), "dark against the plate"
+        assert luminance(core["fill"]) > luminance(ring["fill"])
+        assert recess["confidence"] == "estimated"
+
+
+def test_three_keyholes_are_documented_and_the_fourth_is_the_top_mirrored():
+    doc = device()
+    documented = len(with_prefix(decor(doc, "front"), "keyhole-")) + len(with_prefix(decor(doc, "top"), "keyhole-"))
+    assert documented == 3, "two on the long face and one in the end face the sheets draw"
+    top, bottom = by_id(decor(doc, "top")), by_id(decor(doc, "bottom"))
+    for ident in ("keyhole-1", "kstem-1"):
+        mirrored_left_edge = 80.0 - (top[ident]["at"][0] + top[ident]["size"][0])
+        assert close(bottom[ident]["at"][0], mirrored_left_edge) and close(bottom[ident]["at"][1], top[ident]["at"][1])
+    assert "three" in doc["description"] and "fourth" in doc["description"]
+    assert "its three faces" not in doc["description"]
+
+
+def test_the_notes_say_what_the_pages_show_and_no_more():
+    doc = device()
+    mount = doc["provenance"]["mount"]["note"]
+    assert "own two screws" in mount and "rack-frame keyholes" in mount and "screwed to the rack frame" not in mount
+    gaps = {g["what"]: g for g in doc["gaps"]}
+    assert "SX frame" not in gaps["cabinet-fit"]["note"] and "rack frame" in gaps["cabinet-fit"]["note"]
+    keyhole = gaps["keyhole-function"]["note"]
+    assert "screw head" in keyhole and "not drawn" in keyhole and "No page says what lands" not in keyhole
+    shapes = gaps["perforation-shapes"]["note"]
+    assert "notches" in shapes, "the corner notches of the plate folds are named as not drawn"
+
+
 def test_it_has_no_connector_and_names_what_the_pages_leave_open():
     doc = device()
     assert not doc.get("ports") and "capacity" in doc["provenance"]
