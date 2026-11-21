@@ -111,8 +111,8 @@ function itemPlacer(rack, it, c) {
   const mirror = outward === -1;
   // a narrow rack-face part on one rail stands over its hole line, and on the
   // right rail is turned end over end (railOf, as the elevation and the 3D
-  // scene place it)
-  const rail = q ? null : railOf(it, () => c);
+  // scene place it). A rack device is centred across the opening and upright.
+  const rail = q || !rackFace ? null : railOf(it, () => c);
   const left = rail ? (rail === 'left') === !rear : null;
   const cx = rail ? (left ? SIDES[0] : SIDES[1]).hole : 0;
   // ... and so is any part rolled 180 degrees, so one that is both is upright again

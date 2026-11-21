@@ -26,7 +26,8 @@ DIST = LIB / "dist"
 # sha256 of spec/schemas/rack.schema.json, the Rack Builder's file, version 3.
 # It moved when the cable media description gained `stack`, `usb` and `console`
 # (a description only; the site takes the new schema when it re-vendors the kit).
-RACK_FILE_SCHEMA_SHA256 = "91212329da56d966431af2b534e2d032fb6505855aeaca94cfe7116c12d2784c"
+# It moved again when the item `side` description named a rack device of 225 mm or less.
+RACK_FILE_SCHEMA_SHA256 = "8af73ce98bf2bc22a76844e45987029b3ef20ac1843967e7b56832458dbfd575"
 
 
 def sha(path):

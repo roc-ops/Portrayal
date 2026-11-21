@@ -59,10 +59,11 @@ export function itemBox(rack, item, chassisOf) {
   return {y0, y1: y0 + h, h, lo, hi, ...(q ? {w: Number(c?.h) > 0 ? Number(c.h) : RU} : {})};
 }
 // THE LINE AN ITEM IS CENTRED ON ACROSS THE RACK, in mm from the centre line
-// of the rack, right as seen from the front: 0 for anything across the
-// opening, and the hole line of its rail for a narrow part on one rail.
+// of the rack, right as seen from the front. It is 0 for any part across the
+// opening, and the hole line of its rail for a narrow rack-face part on one
+// rail. A narrow rack device is centred across the opening, as it is drawn.
 export function centreX(item, chassisOf) {
-  const rail = railOf(item, chassisOf);
+  const rail = isRackFace(chassisOf(item.ref)) ? railOf(item, chassisOf) : null;
   if (!rail) return 0;
   return ((rail === 'left') === (item.face !== 'rear') ? RAILS[0] : RAILS[1]).hole;
 }
@@ -165,10 +166,17 @@ export const isRackFace = c => c?.mount === 'rack-face';
 // 19-inch rack, such as a finger bracket. Placed with `side` it claims its
 // units on that face and that rail only, so one can stand on each rail at the
 // same U; any other rack-face part, and a narrow one with no side, claims both.
+//
+// A RACK DEVICE OF HALF THE OPENING OR LESS (#1274) is narrow too. Twice its
+// stated width fits the opening: 225 mm or less. Two of them then fill it.
+// The width the device states decides; no key on a device says it. A wider
+// device spans the opening.
 export const NARROW_MM = 450;
-export const isNarrow = c => isRackFace(c) && Number(c?.w) > 0 && Number(c.w) < NARROW_MM;
+export const isNarrow = c => Number(c?.w) > 0
+  && (isRackFace(c) ? Number(c.w) < NARROW_MM : isRackMount(c) && 2 * Number(c.w) <= NARROW_MM);
 // The rail an item is on: its `side` when its part is narrow, else null (both).
-export const railOf = (item, chassisOf) => (SIDES.includes(item?.side) && isNarrow(chassisOf(item.ref)) ? item.side : null);
+// An item rolled a quarter turn stands across the unit, so it has no rail.
+export const railOf = (item, chassisOf) => (!isQuarter(item) && SIDES.includes(item?.side) && isNarrow(chassisOf(item.ref)) ? item.side : null);
 
 // A ZERO-U PART (#926) stands beside the rack at an attachment point and takes
 // no rack unit (model.js zeroUOf). The mounts that are zero-U parts, in one
@@ -261,6 +269,12 @@ export function frameNotices(rack, chassisOf) {
   for (const it of rack.items)
     if (isQuarter(it) && chassisOf(it.ref))
       out.push(`${it.label} is rolled a quarter turn: it is fitted by its rolled box and drawn turned in the elevation; its 3D solid and its cables are an outline, since how it mounts that way is not described yet.`);
+  // a rack device on a rail is fitted by it; the readers that draw do not stand it there yet
+  for (const it of rack.items) {
+    const c = chassisOf(it.ref), rail = c && isRackMount(c) ? railOf(it, chassisOf) : null;
+    if (rail)
+      out.push(`${it.label} is on the ${rail} rail and fitted by it. Its elevation, 3D view, routes and DCIM files do not stand it there yet.`);
+  }
   for (const it of rack.items) {
     const id = holderOf(it);
     if (id == null) continue;
@@ -378,7 +392,12 @@ export function fits(rack, cand, chassisOf, {ignoreId = null} = {}) {
         return {ok: false, reason: `${deep(c, s)}; it would reach past the ${o.face} rail into ${o.label}.`};
       continue;
     }
-    if (o.face === cand.face) return {ok: false, reason: `Taken by ${o.label} on the ${o.face}.`};
+    if (o.face === cand.face) {
+      // two narrow devices on different rails of one face share the unit
+      const taken = railOf(o, chassisOf), mine = railOf(cand, () => c);
+      if (taken && mine && taken !== mine) continue;
+      return {ok: false, reason: `Taken by ${o.label} on the ${o.face}${taken ? `, ${taken} rail` : ''}.`};
+    }
     if (f.kind === 'two-post')
       return {ok: false, reason: `Taken by ${o.label}; two-post rails are shared by front and rear.`};
     const other = reachOf(rack, o, chassisOf);

@@ -1,0 +1,397 @@
+format: 1
+kind: device
+name: pdumh20hvnet
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: PDUMH20HVNET
+description: >-
+  Eaton Tripp Lite series switched PDU, 1U horizontal, a 440 mm black metal box.
+  It hands a single-phase 208/230 V feed on to eight individually switched IEC
+  C13 outlets, each with a lamp, all on the front. The input is a C20 inlet at
+  the right end of the front. It takes the detachable 8 ft cord in the box, which
+  comes with a C19-to-L6-20P adapter. Beside it are a pre-installed WEBCARDLX
+  network card and a two-digit meter of the total load in amps. The card has
+  10/100 Ethernet, a micro-USB console, USB-A for sensors, a reset button and a
+  status lamp. The rear has a ground screw and a DE-9 port reserved for the
+  factory.
+profile: power
+provenance:
+  method:
+    confidence: photo-measured
+    note: >-
+      NO DRAWING EXISTS. The rear is read off a straight-on photograph. The front is read off
+      a three-quarter photograph, so its positions are estimates. Searched: the spec sheet and
+      the owner's manual (933681 rev D) dimension nothing on the faces. REAR - PDUMH20HVNET_BK
+      spans the body in 838 px, so 1.904 px per mm at 440.2 mm. Its face is 82 px high, 43.1 mm,
+      against the spec sheet's 43.7 mm. FRONT - PDUMH20HVNET_C looks at the face from the left
+      at an angle. A one-dimensional projective map along the face was fitted to the eight outlet
+      lamps and the two ends of the body (0 and 440.2 mm). The lamp pitch was left free. The
+      lamps sit 35.65 apart and the fit's rms is 0.25 px, about 0.15 mm. Every other front
+      feature is read in pixels and put through the same map. The error is about 1 mm along the
+      face. It grows to about 2 mm at the right end, where the scale is smallest. Heights are
+      read as a fraction of the local face height, good to about 1 mm.
+  chassis:
+    confidence: datasheet
+    note: >-
+      datasheet - spec sheet LENGTH/DEPTH 17.33 in, HEIGHT 1.72 in, WIDTH 14.77 in, weight 9 lb,
+      1U, minimum rack depth 17.1 in, material metal. The spec sheet does not say which of 17.33
+      and 14.77 is the width. The rear photograph's face is 838 by 82 px, a ratio of 10.2.
+      17.33 over 1.72 is 10.07 and 14.77 over 1.72 is 8.6. So 17.33 in (440.2 mm) is the
+      width and 14.77 in (375.2 mm) the depth. The height is 43.7 mm. Colour photo-measured, the rear
+      face's median is #292a2a over 22400 px.
+  ears:
+    confidence: photo-measured
+    note: >-
+      NOT DRAWN: THE EARS ARE SEPARATE BRACKETS, so the face is the 440.2 mm body and the generic ear
+      stands for them (`chassis.ears`). PDUMH20HVNET_C and _DT02 show an ear at each end of the front,
+      a flat plate in the plane of the face. Each has a column of four slotted holes, two large ovals
+      at the ends and two small ones between. The owner's manual (Installation, 1-1) has the longer
+      brackets screwed to the sides. Its Features page draws the shorter bracket with the same column
+      of four slots. The library reads a face wider than the body as a rack face only when a part is
+      seated in an ear. None is, so the ears and their slots are not drawn (gaps: ear-holes). Two
+      positions are named and none is dimensioned: flush (the photograph) and recessed (the manual's
+      1-1 text).
+  front:
+    confidence: estimated
+    note: >-
+      estimated by the fitted map in `method`, mm from the front view's left, which is the body's left
+      end. Eight C13 outlets are numbered 8 to 1 left to right as printed. They are centred every
+      35.65 from 22.25 (outlet 8). The well's chamfered end is up, as the photograph and the owner's
+      manual figure draw it. Each sits in a square moulding about 35 by 27 and has a round lamp 35.3
+      down with its numeral 5.2 to the right. A small square hole at 11.3 across and 38 down, and a
+      pinhole at 340.0 across and 38 down under the card. The WEBCARDLX plate from 287.3 to 373.1
+      across and 4.6 to 33.7 down. The meter bezel from 373.1 to 398.4 across and 18.5 to 37.1 down
+      with LOAD (AMPS) centred under it. The fit puts the card at 290.1 and the meter at 370.3. The
+      bay's envelope takes in the card's upper right tab, which stands over the meter's column. To
+      clear lint L13 the card is moved 2.8 left and the meter 2.85 right. That is a little over the
+      fit's error of 1 to 2 mm. The C20 inlet in a moulding 398.4 to 434.6 across, its opening 32.4 by
+      24.4 centred at (416.5, 20.0).
+  rear:
+    confidence: photo-measured
+    note: >-
+      photo-measured - BK, mm from the rear face's left, which is the PDU's right end seen from
+      behind, and from its top. The ground screw on a toothed washer about 10.5 across, centred
+      (13.8, 17.7), with an earth symbol printed right of it. The DE-9 with its two jackscrew
+      standoffs centred (138.5, 27.6), its wide row up, and "Config. Port" centred under it at
+      136.9, baseline 40.0. The Eaton wordmark from 193.0 to 240.2 across and 15.8 to 28.9
+      down. Three short flanges stand on the bottom edge, 30 across, centred 95, 235 and 375.
+      No outlet and no lamp is on the rear.
+  outlets:
+    confidence: datasheet
+    note: >-
+      datasheet - spec sheet "8 individually switched output receptacles", C13, "12A (10A CE)
+      max per C13 outlet", 16 A total. Each is std/c13-outlet@1. The owner's manual (Features)
+      draws a C13 with the earth pin at the top and a small round screw below it. Numbered as
+      printed, 8 on the left to 1 on the right.
+  lamps:
+    confidence: datasheet
+    note: >-
+      datasheet and photo - spec sheet "8 LEDs display power on-off status for each output
+      receptacle". Owner's manual (2-3) "The LED near each output receptacle illuminates when the
+      receptacle is ready to distribute live AC power". Each is common/led-dot@1, placed with
+      `for:` naming its outlet. The `outlet-leds` group declares `on` lit and `off` unlit and no
+      colour, because no held source states one (gaps: outlet-lamp-colour). Every photograph
+      shows them unlit, a dim brown that reads #333332 over 196 px at outlet 8.
+  meter:
+    confidence: photo-measured
+    note: >-
+      photo and datasheet - eaton/tripplite-ammeter@1. Spec sheet "Digital display reports total
+      PDU output current in amps". The photograph shows it lit green, "20", which reads #198952
+      over 418 px. It is the part's own colour.
+  config-port:
+    confidence: known-wrong
+    note: >-
+      KNOWN WRONG IN ONE RESPECT: THE PORT IS A FEMALE DE-9 AND IS DRAWN MALE. The owner's manual
+      (Features) draws nine sockets, five over four, and BK shows the same. The library's only DE-9
+      (common/db9-receptacle@1 over std/db9@1) draws the male half (gaps: female-de9). The place
+      and size are measured. The rear prints "Config. Port" and the manual calls it the Factory
+      Port, "reserved for configuration by factory authorized personnel only". It is not exported
+      as a console.
+  ground:
+    confidence: photo-measured
+    note: >-
+      photo-measured and datasheet - BK shows a Phillips screw on a toothed washer with an earth
+      symbol beside it. common/ground-screw-washer@1 is the library's part of that kind. The
+      symbol is printed without a circle, so it is silkscreen and not common/ground-symbol@1.
+  logo:
+    confidence: estimated
+    note: >-
+      the rear prints Eaton's stylised wordmark, 47.2 mm wide and 13.1 mm high in BK. It is drawn
+      as plain white silkscreen text, a stand-in for the logo's shape. The text is sized to the
+      wordmark's width, so its letters are about 10 mm high. The front prints no wordmark.
+  card:
+    confidence: datasheet
+    note: >-
+      datasheet - the WEBCARDLX is eaton/webcardlx@1 in a bay, as on the PDUMH20NET. Spec sheet
+      "Pre-installed LX platform interface". The owner's manual (Features) draws the same card
+      with STATUS, CONFIG and RESET legends, and the photograph shows the plate the part draws.
+      The bay is the plate's envelope, 85.8 by 29.1. The hole behind it is not seen (gaps:
+      card-opening).
+  inlet:
+    confidence: photo-measured
+    note: >-
+      photo-measured and datasheet - spec sheet "C20 inlet", "IEC-320 C20 input". The owner's
+      manual (Features) says "The IEC 60320 C20 inlet connects to the detachable AC Input Power
+      Cord". It draws the earth pin up and two blades below, the way std/c20-inlet@1 does. The
+      photograph shows it empty. The 8 ft cord, its C19 and C20 ends and the L6-20P adapter are
+      loose parts and are not drawn.
+  dcim:
+    confidence: datasheet
+    note: >-
+      the input is the inlet, one `iec-60320-c20` power port, and each outlet an `iec-60320-c13`
+      power outlet fed by it. The outlets are named as the unit prints them, 1 to 8. No source
+      names a breaker, so no outlet runs `through` one. No feed_leg is written. The card's ports
+      export on its module type. The factory DE-9 is not a console and exports nothing.
+  input:
+    confidence: datasheet
+    note: >-
+      datasheet - spec sheet single-phase, 208/230 V, 16 A, "Agency de-rated to 16A continuous".
+      It gives 3.68 kW at 230 V and 3.33 kW at 208 V, recommended service single-phase 16/20 A. The cord is
+      detachable (owner's manual, Features), so `input-cord` is detachable and `input-plug` is the
+      inlet's `iec-60320-c20`. The cord in the box ends in C19 and C20 connectors and a C19 to
+      L6-20P adapter.
+  capability:
+    confidence: datasheet
+    note: >-
+      datasheet - spec sheet "PDU Type: Switched", "8 individually switched output receptacles",
+      "Digital display reports total PDU output current in amps". Only the total is metered, so
+      `metering-scope` is input and `outlet-switching` is true. Every outlet declares on and off
+      on its own placement.
+  lifecycle:
+    confidence: datasheet
+    note: >-
+      the spec sheet printed 2026 and the owner's manual of 2023 name no end of life. The product
+      page is live. Nothing announces one.
+attrs:
+  physical:
+    weight-kg: 4.08
+    construction: metal
+  power:
+    input-ac: 208/230 V single-phase, 16 A continuous (agency de-rated), 50/60 Hz
+    input-plug: iec-60320-c20
+    input-cord: detachable
+    input-phase: single
+    input-voltage-v: 230
+    input-current-a: 16
+    capacity-kw: 3.68
+    capacity-scope: >-
+      the load the PDU can hand on, 3.68 kW at 230 V and 3.33 kW at 208 V, 16 A in all (spec sheet).
+      It is not what the PDU draws itself, which no document held states
+    output-voltage: 208/230 V
+    output-rating: 16 A total; 12 A (10 A CE) max per C13
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 40 C (32 to 104 F)
+    storage-temp: -30 to 50 C (-22 to 122 F)
+    humidity: 5 to 95 % non-condensing
+    altitude: 0 to 3000 m (0 to 10000 ft)
+  management:
+    metering-scope: input
+    outlet-switching: true
+    metering: total output load in amps on the front display
+    network-interface: pre-installed WEBCARDLX (PowerAlert Device Manager), 10/100 Mbps
+  compliance:
+    certifications: UL 60950-1; IEC 60950-1; NOM
+    product-compliance: RoHS; CE; FCC Part 15 Class A (USA); Trade Agreements Act (TAA)
+  lifecycle:
+    eol: none-announced
+chassis:
+  width: 440.2
+  height: 43.7
+  depth: 375.2
+  ru: 1
+  color: '#292a2a'
+  airflow: passive
+  weight-kg: 4.08
+  ears:
+    color: '#292a2a'
+    positions:
+      - {name: flush, label: 'mounting brackets flush with the front, as the photographs show', default: true}
+      - {name: recessed, label: 'longer mounting brackets extending beyond the front panel (owner''s manual 1-1)'}
+gaps:
+- what: female-de9
+  scope: [config-port]
+  reason: vendor-silent
+  note: >-
+    THE SOURCE IS CLEAR AND THE LIBRARY IS SHORT. The owner's manual and BK show the Config. Port
+    as a female DE-9, nine sockets in a grey insert. The library has only the male half
+    (std/db9@1, composed by common/db9-receptacle@1), so it is drawn male. Its place and size are
+    right and its gender is not.
+  wanted: a female DE-9 receptacle part, to replace the male one here.
+- what: ear-holes
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    each ear carries a column of four slotted holes in PDUMH20HVNET_C and _DT02: two large ovals at the ends and two small ones between.
+    The ears are separate brackets, so the face is the 440.2 mm body and the generic ear stands for them.
+    The library reads a face wider than the body as a rack face only when a part is seated in an ear.
+    None is, so the slots are not drawn.
+  wanted: the maintainer's word on drawing the ears at 482.6 mm, and a dimensioned drawing of the ear.
+- what: outlet-lamp-colour
+  scope: [outlet-leds]
+  reason: vendor-silent
+  note: >-
+    the owner's manual says each outlet LED illuminates when its outlet is live and names no
+    colour. The spec sheet names none. Every photograph shows the lamps unlit. The `on` state is
+    declared with no colour, so the kit paints its default lit colour.
+  wanted: a photograph of a powered PDUMH20HVNET, or the maker's word on the lamp colour.
+- what: card-opening
+  scope: [card]
+  reason: needs-photo
+  note: >-
+    no photograph or drawing shows the PDU with the WEBCARDLX out, so the slot's hole is not
+    measured. The bay states the plate's main body, 67.3 by 29.1, as its opening. That is the
+    largest hole the plate covers, an upper bound.
+  wanted: a photograph of the PDU with the card removed, or the slot's dimensions from the maker.
+- what: card-depth
+  scope: [card]
+  reason: vendor-silent
+  note: >-
+    no held source dimensions the WEBCARDLX behind its faceplate or the slot it sits in, so the
+    card states no depth.
+  wanted: the WEBCARDLX's dimensions from the maker.
+- what: bracket-holes
+  scope: [left, right]
+  reason: needs-drawing
+  note: >-
+    the sides carry the tapped holes the mounting brackets screw to, three #6-32 screws a bracket
+    (owner's manual 1-1 to 1-5). PDUMH20HVNET_C and _DT02 see a side only at a steep angle. No
+    straight view or drawing of a side exists, so the sides are drawn bare.
+  wanted: a straight-on photograph of a side with a scale, or a dimensioned drawing.
+- what: lid-screws
+  scope: [top]
+  reason: needs-photo
+  note: >-
+    the lid shows about six small dark dots near its edges in PDUMH20HVNET_C and _DT02. They are
+    a pixel or two across at a steep angle, too small to place. A small grey label sits near the
+    front right edge and is also too small to place or read. Nothing else is on the lid.
+  wanted: a straight-on photograph of the top with a scale.
+- what: bottom-not-shown
+  scope: [bottom]
+  reason: needs-photo
+  note: >-
+    no held picture shows the bottom. It is built as the documented side, the top, as no
+    document shows this one.
+  wanted: a straight-on photograph of the bottom with a scale.
+groups:
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the PDU''s eight IEC C13 outlets, numbered 8 to 1 left to right as printed; each switchable'}
+  outlet-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+    description: 'one lamp per outlet, lit while the outlet is live (owner''s manual 933681 rev D, 2-3); its colour is not stated'
+    states: ['on', 'off']
+  meter: {term: Display, role: indicator, index-origin: 1}
+  network: {term: Slot, role: management, index-origin: 1}
+  config: {term: Port, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 440.2, h: 43.7}
+    panel:
+      decor:
+      - {id: moulding-8, at: [4.75, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-7, at: [40.4, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-6, at: [76.05, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-5, at: [111.7, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-4, at: [147.35, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-3, at: [183.0, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-2, at: [218.65, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: moulding-1, at: [254.3, 2.6], size: [35.1, 27.1], rx: 1.0, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: outlet-moulding}
+      - {id: inlet-moulding, at: [398.4, 4.8], size: [36.2, 29.7], rx: 1.5, fill: '#1c1c1b', stroke: '#0e0e0d', stroke-width: 0.3, kind: inlet-moulding}
+      - {id: hole-front, at: [10.3, 37.0], size: [2.0, 2.0], rx: 0.4, fill: '#0a0a09', kind: hole}
+      - {id: hole-card, at: [339.2, 37.2], size: [1.6, 1.6], rx: 0.8, fill: '#0a0a09', kind: hole}
+    silkscreen:
+      - {at: [27.45, 37.0], text: '8', font-size: 4.3, anchor: middle, for: outlet-8}
+      - {at: [63.1, 37.0], text: '7', font-size: 4.3, anchor: middle, for: outlet-7}
+      - {at: [98.75, 37.0], text: '6', font-size: 4.3, anchor: middle, for: outlet-6}
+      - {at: [134.4, 37.0], text: '5', font-size: 4.3, anchor: middle, for: outlet-5}
+      - {at: [170.05, 37.0], text: '4', font-size: 4.3, anchor: middle, for: outlet-4}
+      - {at: [205.7, 37.0], text: '3', font-size: 4.3, anchor: middle, for: outlet-3}
+      - {at: [241.35, 37.0], text: '2', font-size: 4.3, anchor: middle, for: outlet-2}
+      - {at: [277.0, 37.0], text: '1', font-size: 4.3, anchor: middle, for: outlet-1}
+      - {at: [385.75, 40.0], text: 'LOAD (AMPS)', font-size: 2.4, anchor: middle, for: meter}
+    components:
+      bays:
+        - {id: card, at: [287.3, 4.6], size: {w: 85.8, h: 29.1}, opening: {w: 67.3, h: 29.1}, accepts: [eaton/webcardlx@1], default: eaton/webcardlx@1, group: network, rel-pos: 1}
+      placements:
+        - {id: outlet-8, ref: std/c13-outlet@1, at: [7.05, 5.6], group: outlets, rel-pos: 8, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-7, ref: std/c13-outlet@1, at: [42.7, 5.6], group: outlets, rel-pos: 7, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-6, ref: std/c13-outlet@1, at: [78.35, 5.6], group: outlets, rel-pos: 6, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-5, ref: std/c13-outlet@1, at: [114.0, 5.6], group: outlets, rel-pos: 5, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-4, ref: std/c13-outlet@1, at: [149.65, 5.6], group: outlets, rel-pos: 4, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-3, ref: std/c13-outlet@1, at: [185.3, 5.6], group: outlets, rel-pos: 3, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-2, ref: std/c13-outlet@1, at: [220.95, 5.6], group: outlets, rel-pos: 2, fed-by: input, states: ['on', 'off']}
+        - {id: outlet-1, ref: std/c13-outlet@1, at: [256.6, 5.6], group: outlets, rel-pos: 1, fed-by: input, states: ['on', 'off']}
+        - {id: led-8, ref: common/led-dot@1, at: [21.25, 34.3], group: outlet-leds, rel-pos: 8, for: outlet-8}
+        - {id: led-7, ref: common/led-dot@1, at: [56.9, 34.3], group: outlet-leds, rel-pos: 7, for: outlet-7}
+        - {id: led-6, ref: common/led-dot@1, at: [92.55, 34.3], group: outlet-leds, rel-pos: 6, for: outlet-6}
+        - {id: led-5, ref: common/led-dot@1, at: [128.2, 34.3], group: outlet-leds, rel-pos: 5, for: outlet-5}
+        - {id: led-4, ref: common/led-dot@1, at: [163.85, 34.3], group: outlet-leds, rel-pos: 4, for: outlet-4}
+        - {id: led-3, ref: common/led-dot@1, at: [199.5, 34.3], group: outlet-leds, rel-pos: 3, for: outlet-3}
+        - {id: led-2, ref: common/led-dot@1, at: [235.15, 34.3], group: outlet-leds, rel-pos: 2, for: outlet-2}
+        - {id: led-1, ref: common/led-dot@1, at: [270.8, 34.3], group: outlet-leds, rel-pos: 1, for: outlet-1}
+        - {id: meter, ref: eaton/tripplite-ammeter@1, at: [373.1, 18.5], group: meter, rel-pos: 1, for: chassis}
+        - {id: input, ref: std/c20-inlet@1, at: [400.3, 7.8], group: power-input, rel-pos: 1, description: 'the IEC C20 power inlet at the right end; the detachable 8 ft cord in the box, a C19 to C20 set, plugs into it'}
+  rear:
+    size: {w: 440.2, h: 43.7}
+    panel:
+      decor:
+      - {id: flange-1, at: [80.0, 42.2], size: [30.0, 1.5], fill: '#141413', kind: flange}
+      - {id: flange-2, at: [220.0, 42.2], size: [30.0, 1.5], fill: '#141413', kind: flange}
+      - {id: flange-3, at: [360.0, 42.2], size: [30.0, 1.5], fill: '#141413', kind: flange}
+    silkscreen:
+      - {id: earth-symbol, at: [22.9, 15.5], path: 'M 0 0 L 0 2.0 M -2.0 2.0 L 2.0 2.0 M -1.3 3.2 L 1.3 3.2 M -0.6 4.4 L 0.6 4.4', stroke-width: 0.35, for: ground}
+      - {at: [138.5, 40.0], text: 'Config. Port', font-size: 3.6, anchor: middle, for: config-port}
+      - {at: [193.0, 28.9], text: 'EATON', font-size: 14.0, anchor: start, fill: '#fefefe', for: chassis}
+    components:
+      placements:
+        - {id: ground, ref: common/ground-screw-washer@1, at: [8.3, 12.2], group: grounding, rel-pos: 1}
+        - {id: config-port, ref: common/db9-receptacle@1, at: [123.1, 21.35], group: config, rel-pos: 1, attrs: {media: db9, function: factory configuration}, description: 'Config. Port, the Factory Port of the owner''s manual: reserved for factory authorised personnel; connect nothing to it'}
+  top:
+    size: {w: 440.2, h: 375.2}
+    empty: >-
+      no source shows the top straight on. PDUMH20HVNET_C and _DT02 see a plain black lid at a
+      steep angle. It shows about six small dark dots near its edges and a small grey label near
+      the front right edge (gaps: lid-screws). Nothing else is on it.
+  bottom:
+    size: {w: 440.2, h: 375.2}
+    empty: >-
+      built as the documented side, the top, as no document shows this one. No held picture looks
+      at the underside (gaps: bottom-not-shown).
+  left:
+    size: {w: 375.2, h: 43.7}
+    empty: >-
+      no source shows the left side straight on. PDUMH20HVNET_C sees it at a steep angle, a plain
+      panel with the ear bracket at its front edge (gaps: bracket-holes). Searched: the spec sheet,
+      the owner's manual's mounting figures and the four photographs.
+  right:
+    size: {w: 375.2, h: 43.7}
+    empty: >-
+      built as the documented side, the left, as no document shows this one straight on.
+      PDUMH20HVNET_DT02 sees it at a steep angle (gaps: bracket-holes).
+interfaces:
+- {physical: 'outlet-{n}', name: '{n}', range: '1-8'}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships, the WEBCARDLX in its slot. The mounting brackets, the cord retainer,
+      the 8 ft input cord, the C19 to L6-20P adapter and the configuration cable are in the
+      box. They are not drawn.
+    bays:
+      card: eaton/webcardlx@1
+    part-numbers:
+      PDUMH20HVNET: {}
+datasheet:
+  title: 'Eaton PDUMH20HVNET SKU specifications (skuPage.PDUMH20HVNET.pdf)'
+  url: https://www.eaton.com/us/en-us/skuPage.PDUMH20HVNET.pdf
+  sha256: 27fea23a83592900abbc04c453d92d4bca15db8d04f679838b1fd736be5aa52b
+references:
+  - {title: 'Tripp Lite owner''s manual, Switched Rack PDU PDUMH20HVNET, 23-08-083 933681 rev D', url: 'https://assets.tripplite.com/owners-manual/23-08-083-933681_revd.pdf', sha256: ef33891047942606803965081388603093703723391af72d5868b2d55e9f6811}
+  - {title: 'Eaton PDUMH20HVNET photograph, rear (PDUMH20HVNET_BK)', url: 'https://www.eaton.com/mdmfiles/PDM95816521/PDUMH20HVNET_BK/1000x1000_300dpi', sha256: 2ea39da6b855c1d13d269a85f40fdcf280460f782466f74184f43160545c6590}
+  - {title: 'Eaton PDUMH20HVNET photograph, front three-quarter (PDUMH20HVNET_C)', url: 'https://www.eaton.com/mdmfiles/PDM94229980/PDUMH20HVNET_C/1000x1000_300dpi', sha256: c4be5cdbc26a71cfb4e310818e93c3f009dbceb15697ca532ea8eab4b20c3367}
+  - {title: 'Eaton PDUMH20HVNET photograph, unit with accessories (PDUMH20HVNET_DT02)', url: 'https://www.eaton.com/mdmfiles/PDM95816524/PDUMH20HVNET_DT02/1000x1000_300dpi', sha256: 6f4b061f83a288486dbaa15d47721debe9768e117d9fc3985f3af6fe57f4248a}
