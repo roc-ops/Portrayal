@@ -146,7 +146,9 @@ CENSUS = {
     # (38, 28) -> (42, 32) with the four Moxa CN2600 16-port terminal servers' ground screw
     "common/ground-screw@1": (42, 32),   # the Enlogic EB0952's, EN2333's and EN6324's one each (35, 25 before); the Panduit P42G20G's and P24B32M's one each (33, 23 before); the Moxa NPort 5610-16's and 5630-16's one each (31, 21 before); (27, 17), the Enlogic EN2951's and EN6952's one each, and the Panduit P36G18M's and P42G20M's cord-end screw each
     # (18, 18) -> (20, 20) with the one stud each of the two Middle Atlantic Select RLNK rackmount PDUs
-    "common/ground-stud@1": (20, 20),  # (14, 14), and the one stud each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
+
+    # (20, 20) -> (22, 22) with the one stud each of the two Middle Atlantic Select half-width RLNK rackmount PDUs
+    "common/ground-stud@1": (22, 22),  # (14, 14), and the one stud each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
     CASA: (1, 1),
 }
 # juniper/mx-ground-stud@1 IS PLACED BY NO DEVICE SINCE #828: the five MX
@@ -477,7 +479,9 @@ def placed(walked):
 # 83 -> 87 with the four Moxa CN2600 16-port terminal servers' ground screw
 # 87 -> 91 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
 # 91 -> 93 with the ground stud of each of the two Middle Atlantic Select RLNK rackmount PDUs
-GROUND_SCREW_COUNT = 93  # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one ground screw each
+
+# 93 -> 95 with the ground stud of each of the two Middle Atlantic Select half-width RLNK rackmount PDUs
+GROUND_SCREW_COUNT = 95  # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one ground screw each
 # 42 -> 44 with the Cisco C9300-24S and C9300-48S
 # 44 -> 46 with the Digi Connect EZ 16 and 32, 46 -> 47 with the Eaton EPBZ77
 # 47 -> 49 with the Panduit P24B14M and P32E06M
@@ -493,7 +497,9 @@ GROUND_SCREW_COUNT = 93  # 80 -> 83: the Enlogic EB0952, EN2333 and EN6324, one 
 # 64 -> 68 with the four Moxa CN2600 16-port terminal servers' ground screw
 # 68 -> 72 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
 # 72 -> 74 with the ground stud of each of the two Middle Atlantic Select RLNK rackmount PDUs
-GROUND_SCREW_LOCATIONS = 74  # 61 -> 64: the Enlogic EB0952, EN2333 and EN6324
+
+# 74 -> 76 with the ground stud of each of the two Middle Atlantic Select half-width RLNK rackmount PDUs
+GROUND_SCREW_LOCATIONS = 76  # 61 -> 64: the Enlogic EB0952, EN2333 and EN6324
 
 
 @pytest.mark.heavy
@@ -552,7 +558,9 @@ def slots(placed):
 # 82 -> 86 with the four Moxa CN2600 16-port terminal servers' ground screw
 # 86 -> 90 with the ground stud of each of the four Middle Atlantic Premium+ RLNK rackmount PDUs
 # 90 -> 92 with the ground stud of each of the two Middle Atlantic Select RLNK rackmount PDUs
-STUD_SEATS_SEEN = 92  # 79 -> 82: the Enlogic EB0952, EN2333 and EN6324
+
+# 92 -> 94 with the ground stud of each of the two Middle Atlantic Select half-width RLNK rackmount PDUs
+STUD_SEATS_SEEN = 94  # 79 -> 82: the Enlogic EB0952, EN2333 and EN6324
 
 
 @pytest.mark.heavy
