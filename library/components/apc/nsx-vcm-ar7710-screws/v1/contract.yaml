@@ -1,0 +1,51 @@
+format: 1
+kind: component
+name: nsx-vcm-ar7710-screws
+version: 1.0.0
+class: mechanical
+description: This is the screw shank and the small pin of the APC NetShelter containment bracket AR7710, seen from the rear. The
+  shank stands at the right-hand piece and the pin at the left-hand piece. The data sheet photograph shows more screws than these two.
+provenance:
+  size: 'datasheet - the AR7710 data sheet: 80 mm wide and 112 mm tall as stood on a rack.'
+  relief: 'estimated - the data sheet page 1 photograph shows a threaded shank at the right-hand piece of three brackets.
+    It shows a small pin at each piece of the other three. The shank is 2.8 mm thick and 15 mm long, the pin 3 mm thick and 4 mm long.
+    The photograph is a perspective view, so the shank length holds within about 10 to 35 mm and the pin length is a guess.'
+  color: 'estimated - the pale metal of the screws in the photograph.'
+size:
+  w: 80
+  h: 112
+size-confidence:
+  w: datasheet
+  h: datasheet
+elements:
+  shank:
+    at:
+    - 51.4
+    - 32.2
+    size:
+    - 2.8
+    - 2.8
+    class: bezel
+  peg:
+    at:
+    - 51.3
+    - 82.5
+    size:
+    - 3.0
+    - 3.0
+    class: bezel
+relief:
+  features:
+  - node: shank
+    out: 15
+    color: '#c9cacd'
+    confidence: estimated
+    source: 'data sheet page 1 photograph, the lower row of brackets. The across place, thickness and length are read off
+      the photograph against the cup''s 112 and 80 mm'
+  - node: peg
+    out: 4
+    color: '#c9cacd'
+    confidence: estimated
+    source: 'data sheet page 1 photograph, the upper row of brackets: the pin is seen nearly end on, so its length is a guess'
+skins:
+- default
