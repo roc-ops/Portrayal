@@ -6,6 +6,9 @@
   No key is added to a device: the width it already states decides.
   Lab checks L142 and L153 read the same width.
   A wider device, and a device with no `side`, take the whole unit as before.
-  The elevation, the 3D view and the DCIM files do not stand such a device on its rail yet, and a frame notice says so.
+  Such a device on a rail is judged by its rail.
+  The elevation, the 3D view and the cable guides draw it upright and centred across the opening, not on the rail.
+  Its port points are placed the same way, and the DCIM files state no rail.
+  Nothing is turned, and a frame notice says it does not stand on its rail yet.
   A tray with bays is not part of this change, and `heldBy` still takes only null.
   This is one-way: a saved rack and a lab can now name `side` on a rack device.

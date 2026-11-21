@@ -707,8 +707,11 @@ refuses that, so the second device no longer fits its unit. The schema
 descriptions of rack and lab `side` say so. A later change to the limit
 re-reads every saved rack, and a lab publishes `side` as written.
 
-A rack device on a rail is fitted by it. The elevation, the 3D view and the
-DCIM files do not stand it there yet, and the page's frame notices say so.
+A narrow rack device on a rail is judged by its rail. The elevation, the 3D
+view and the cable guides draw it upright and centred across the opening, not
+on the rail. Its port points are placed the same way. The DCIM files state no
+rail. Nothing is turned, and the page's frame notices say it does not stand on
+its rail yet.
 
 ## The rack file: bundles, version 3
 

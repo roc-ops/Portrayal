@@ -3,9 +3,10 @@
 Status: **proposed, 2026-11-11. One part is built: the width reading (build order 1).** A
 `mount: rack` device that states 225 mm or less is narrow. Fit, `side.place`, `side.set`
 and lab checks L142 and L153 let one stand on each rail. No bay, no tray, no
-`heldBy` placing and no key on a device is built. The elevation, the 3D view and the DCIM
-files do not stand such a device on its rail yet. Every other choice that would be one-way
-when built says so.
+`heldBy` placing and no key on a device is built. Such a device on a rail is judged by its rail.
+The elevation, the 3D view and the cable guides draw it upright and centred across the
+opening, not on the rail. Its port points are placed the same way. The DCIM files state no rail.
+Nothing is turned. Every other choice that would be one-way when built says so.
 
 [#1274](https://github.com/roc-ops/Portrayal/issues/1274) asks that a rack place two (or
 four) compact switches or routers side by side in one rack unit, on the tray or shelf they
@@ -145,7 +146,7 @@ section and is not proposed. A NetBox or Nautobot width position is not claimed.
 
 ## 7. Build order
 
-1. Measure fit on a 200 mm `mount: rack` device (question 3). **Built:** the width reading.
+1. Measure fit on a 200 mm `mount: rack` device (question 3). **Built:** the width reading. A narrow rack device is judged by its rail and drawn upright and centred across the opening, not on the rail. The DCIM files state no rail.
 2. Hold the kit drawings (question 4); model one MikroTik 200 mm device. The RMK-2/10 as a kit
    waits for question 7.
 3. Kit schema bays and `heldBy` placing (one-way, after question 1).
