@@ -694,6 +694,22 @@ file rather than draw a manager as a device over its host. Here it was decided
 release older than these keys was ever published: the one reader that existed,
 portrayal-site's, already kept both.
 
+### `side` on an item of a `mount: rack` device
+
+The meaning of `side` widened, and no key or type changed. A `mount: rack`
+device that states a width of 225 mm or less may now say `left` or `right`.
+Twice that width fits the 450 mm opening, so two of them fill it. The limit
+comes from the width a device already states, and no device key says it.
+
+This is one-way. A reader older than the change drops `side` from a rack
+device on its next save and puts both devices back across both rails. Fit
+refuses that, so the second device no longer fits its unit. The schema
+descriptions of rack and lab `side` say so. A later change to the limit
+re-reads every saved rack, and a lab publishes `side` as written.
+
+A rack device on a rail is fitted by it. The elevation, the 3D view and the
+DCIM files do not stand it there yet, and the page's frame notices say so.
+
 ## The rack file: bundles, version 3
 
 Cable bundles (#921, [`cable-bundles-design.md`](cable-bundles-design.md))
