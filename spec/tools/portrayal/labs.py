@@ -96,8 +96,8 @@ def _width(dev):
 def _sided(dev):
     """True for a part that can stand on one rail of a unit.
 
-    That is a rack-face part narrower than the rack opening, or a rack device
-    of half the opening or less, so that two of them fill it.
+    That is a rack-face part narrower than the rack opening. It is also a rack
+    device of half the opening or less, since two of them fill it.
     """
     w = _width(dev)
     if w is None:
@@ -187,9 +187,9 @@ def check(lab, roots):
             elif mount == "rack" and "ru" not in p:
                 error("L140", f"{pid}: a rack device is placed by `ru`, its lowest rack unit")
 
-    # L153 - `side` belongs to rack-side parts, which state it, to rack-face
-    # parts narrower than the opening, and to rack devices of half the opening
-    # or less; a rack-side part has no host
+    # L153 - `side` belongs to rack-side parts, which state it. It also belongs
+    # to rack-face parts narrower than the opening, and to rack devices of half
+    # the opening or less. A rack-side part has no host.
     for p in raw:
         pid, dev = p.get("id"), devs.get(p.get("id"))
         if dev is None:
@@ -217,11 +217,12 @@ def check(lab, roots):
                       f"{_width(dev):g} wide: it lies across the opening and takes the "
                       "whole unit on its face. Drop `side`")
             else:
+                wide = (f", {_width(dev):g} wide" if _width(dev) is not None
+                        and mount == "rack" else "")
                 error("L153", f"{pid}: `side` is for a rack-side part, a rack-face part "
                       "narrower than the opening, or a rack device of "
-                      f"{RACK_OPENING_MM / 2:g} mm or less, and {p.get('ref')} mounts "
-                      f"`{mount}`" + (f" and is {_width(dev):g} wide" if _width(dev) is not None
-                                      and mount == "rack" else "") + ". Drop it")
+                      f"{RACK_OPENING_MM / 2:g} mm or less. {p.get('ref')} mounts "
+                      f"`{mount}`{wide}. Drop it")
 
     # resolve: rack devices first, then rack-face parts onto them
     out = []

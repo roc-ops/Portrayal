@@ -370,8 +370,9 @@ function field(rack, {id, path, key, value}, ctx) {
 
 // ── one rail (#926) ─────────────────────────────────────────────────────
 // A narrow part (fit.js isNarrow: a finger bracket, or a rack device of half
-// the opening or less) on one rail takes its units on that face and rail only. It stands alone: bolting onto a
-// device behind it (`on`) is what a part across both rails does.
+// the opening or less) on one rail takes its units on that face and rail only.
+// It stands alone. Bolting onto a device behind it (`on`) is what a part across
+// both rails does.
 const railText = (it, chassisOf) => { const rail = railOf(it, chassisOf); return rail ? `, on the ${rail} rail` : ''; };
 const wide = (c, ref) => ({error: `${c?.model ?? ref} spans the opening, so it has no side.`});
 
@@ -396,8 +397,8 @@ function sideSet(rack, {id, side}, {chassisOf}) {
   if ((it.side ?? null) === want) return unchanged(rack);
   if (want && !isNarrow(chassisOf(it.ref))) return wide(chassisOf(it.ref), it.ref);
   const {side: _was, ...rest} = detached(it);
-  // across both rails a rack-face part is placed onto a device behind it; a rack
-  // device has no such placement, so it only loses its side
+  // across both rails a rack-face part is placed onto a device behind it.
+  // A rack device has no such placement, so it only loses its side.
   const next = want ? {...rest, side: want}
     : isRackFace(chassisOf(it.ref)) ? {...rest, ...placement(rack, rest, chassisOf, {ignoreId: id})} : rest;
   const f = fits(rack, next, chassisOf, {ignoreId: id});
