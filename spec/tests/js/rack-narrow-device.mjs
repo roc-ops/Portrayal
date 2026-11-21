@@ -112,8 +112,8 @@ test('a rack device on a rail is named in the frame notices, because its drawing
   assert.deepEqual(F.frameNotices(bracket, chassisOf), [], 'a rack-face part on a rail is drawn and says nothing');
 });
 
-// A narrow rack device is drawn upright and centred across the opening by the
-// 3D solid, the cable guides and the port points, as the elevation draws it.
+// A narrow rack device is drawn upright and centred across the opening.
+// The 3D solid, the cable guides and the port points do so, as the elevation does.
 // A narrow rack-face part still stands over the hole line of its rail.
 const DRAWN = {
   ...SIZES,
