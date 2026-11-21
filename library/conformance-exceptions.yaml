@@ -30,7 +30,7 @@
 # The shape of this file, a sentence beside a mate, and a registry sentence under 40 characters fail
 # whatever the switches say.
 format: 1
-cap: 24
+cap: 26
 rows:
   # Closed by #1354: Earth studs on Cisco, Nokia, MikroTik, Casa, Edgecore and Eaton devices
   - part: edgecore/agr-ground-plate@1
@@ -176,3 +176,15 @@ rows:
     why: "the six keystone slots accept a blank and a jack, which mate the interface and are of class mechanical, and the runner counts only a part of class port or transceiver as a mate"
     order: "#1069"
     since: 2026-11-05
+
+  # Opened by #1485: the two Opengear OM2224 DC connectors are drawn art with no registered connector key. Closes when a DC connector and its mating plug are registered for these two devices.
+  - part: om2224-24e-ddc
+    code: C19
+    why: "a configuration says the device is powered (dc) and no power end is offered"
+    order: "#1485"
+    since: 2026-11-21
+  - part: om2224-24e-10g-ddc
+    code: C19
+    why: "a configuration says the device is powered (dc) and no power end is offered"
+    order: "#1485"
+    since: 2026-11-21
