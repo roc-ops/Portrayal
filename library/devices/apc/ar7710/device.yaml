@@ -1,0 +1,543 @@
+format: 1
+kind: device
+name: ar7710
+version: 1.0.0
+maturity: modelled
+manufacturer: APC
+model: AR7710
+description: Cable containment bracket for NetShelter SX, SV and VX racks, APC AR7710. It is a black sheet-steel cup, 80 mm
+  wide, 112 mm tall and 45 mm deep, open at both ends. The documents draw three keyholes, two in the long face and one in an end face.
+  The bottom face has a fourth keyhole, the top one mirrored. It takes no rack unit.
+profile: passive
+provenance:
+  mount:
+    confidence: datasheet
+    note: 'datasheet - `rack-side`: "Number of rack unit 0U", "Mounting Location Side" and "Mounting Mode Rack-mounted". The
+      installation sheet 990-3113A shows the bracket''s own two screws entering rack-frame keyholes (insets ns1141a and ns1149a).'
+  method:
+    confidence: datasheet
+    note: FIGURES FROM THE MAKER'S OWN DOCUMENTS, read as data. They are the AR7710 data sheet and the installation sheet
+      990-3113A. Width, height, depth and weight are `datasheet`. Every drawn feature is read off the sheets' pictures and
+      estimated. No drawing or photograph is copied.
+  chassis:
+    confidence: datasheet
+    note: 'datasheet - 80 x 112 x 45 mm: "Width 3.1 in (80 mm)", "Height 4.4 in (112 mm)", "Depth 1.8 in (45 mm)". Every held
+      picture shows the part lying with its 112 mm side across. It is drawn standing, 112 mm tall, as the data sheet labels it
+      and as a rack-side part is drawn (see the `installed-orientation` gap).'
+  ru:
+    confidence: estimated
+    note: estimated - 112 mm is 2.52 rack units of 44.45 mm, so the part runs beside three. The data sheet prints "0U".
+  depth:
+    confidence: datasheet
+    note: datasheet - "Depth 1.8 in (45 mm)".
+  shell:
+    confidence: estimated
+    note: estimated - a solid box in 3D. The part is a hollow cup open at both ends. Its open ends are drawn on the left and
+      right faces only.
+  weight:
+    confidence: datasheet
+    note: 'datasheet - "Net Weight 0.99 lb(US) (0.45 kg)". The sheet does not say whether this is one bracket or the six in the
+      pack. The packed weight is 2.27 kg, and six brackets of 0.45 kg would weigh more than that.'
+  front:
+    confidence: estimated
+    note: estimated - the long face of the cup as the installation sheet draws it, turned a quarter turn to stand 112 mm tall.
+      It has two keyholes, one in each piece, and the open slot between the pieces with the hook of one piece in it.
+      Positions are read off the figure at 800 dpi, fitting the face to the printed 112 x 80 mm.
+  rear:
+    confidence: estimated
+    note: estimated - the plate the data sheet shows on page 4, six times. It has two screws, each with a dark recess, one small pale stud above the
+      left screw, and a lighter fold down each end. It is turned the same quarter turn, and its 80 mm side runs mirrored,
+      x = 80 - v * 80. Positions are fractions of the photographed plate, measured against its own 112 and 80 mm. No page says how the plate joins the cup (see the `plate-joint` gap). One screw shank and one
+      small pin are raised from it, read off the page 1 photograph (see the `screw-shanks` and `shank-length` gaps).
+  top:
+    confidence: estimated
+    note: estimated - the end face the installation sheet draws at the right of the cup, with one keyhole, turned the same
+      quarter turn.
+  bottom:
+    confidence: estimated
+    note: built as the documented side, as no document shows this one. It is the top face seen from below, with its keyhole
+      mirrored left to right. The installation sheet's cable figure shows cables leaving the cup at this end.
+  left:
+    confidence: estimated
+    note: estimated - the open end of the cup. The wall is 1.5 mm, which no page states. The tab of the left piece closes the
+      joint slot at this end.
+  right:
+    confidence: estimated
+    note: estimated - the other open end of the cup. The joint slot cuts the front wall here, 1.5 mm deep. x = 0 is the front.
+  capacity:
+    confidence: datasheet
+    note: datasheet - no cable capacity is stated (see `gaps`).
+  attrs:
+    confidence: datasheet
+    note: 'datasheet - "Color: Black" and the provided equipment (installation guide).'
+  color:
+    confidence: estimated
+    note: 'estimated - "Color: Black". The shade is the library''s render of black steel. The photographs are lit and read
+      lighter, from #15161a in place to #383a47 on the white page.'
+attrs:
+  physical:
+    weight-kg: 0.45
+    color: Black
+chassis:
+  width: 80.0
+  height: 112.0
+  depth: 45.0
+  ru: 3
+  mount: rack-side
+  weight-kg: 0.45
+  color: '#232527'
+gaps:
+- what: set-or-single
+  scope:
+  - front
+  reason: vendor-silent
+  note: The installation sheet is titled "Wire Management Bracket (6)" and the data sheet's photograph shows six. The data
+    sheet prints one size and one weight and counts one piece in the package. One bracket is drawn.
+  wanted: the maker's statement of what the pack holds and what the weight covers
+- what: installed-orientation
+  scope:
+  - front
+  - rear
+  - top
+  - bottom
+  reason: needs-photo
+  note: Every held picture shows the cup with its 112 mm side across and its keyholes upright. The part is drawn standing
+    112 mm tall, as the data sheet labels it, so each keyhole lies on its side. L152 asks a rack-side front to be taller
+    than wide.
+  wanted: a photograph or drawing that shows how the bracket stands on the rack frame
+- what: plate-joint
+  scope:
+  - rear
+  reason: needs-drawing
+  note: The data sheet shows six plates, each with two screws and a small pale stud. The installation sheet shows the bracket's own
+    two screws entering rack-frame keyholes. No page says how a plate joins a cup, or whether the plate is sold with the bracket.
+  wanted: a dimensioned drawing of the plate and of the bracket fitted to it
+- what: screw-shanks
+  scope:
+  - rear
+  reason: needs-photo
+  note: The data sheet photograph shows one threaded shank at the right-hand piece of each of three brackets. It shows a small
+    pin at each piece of the other three. One shank and one pin are drawn. The left-hand piece of the lower three shows no shank.
+  wanted: a photograph of the open end of one bracket that shows every screw
+- what: shank-length
+  scope:
+  - rear
+  reason: needs-photo
+  note: The photograph is a perspective view and no page gives a shank length. The drawn 15 mm is read off it within a range
+    of about 10 to 35 mm.
+  wanted: the maker's drawing of the plate and its screws
+- what: keyhole-function
+  scope:
+  - front
+  - top
+  - bottom
+  reason: vendor-silent
+  note: The sheets draw three keyholes, and the bottom face has a fourth, the top one mirrored. The keyholes are openings with no
+    connector and no mate in this device. The installation sheet (p.2, ns1151a) and the data sheet (p.3) show a screw head seated in the left keyhole.
+    It belongs to the part the bracket hangs on, and it is not drawn. No page gives a keyhole's size.
+  wanted: the maker's statement of what the keyholes take, with their sizes
+- what: perforation-shapes
+  scope:
+  - front
+  - rear
+  - top
+  - bottom
+  - left
+  - right
+  reason: needs-drawing
+  note: No page dimensions the cup, its keyholes, the joint slot, the hook, the plate or the wall. Sizes and places are read off
+    the figures and estimated. The corners are drawn rounded 3 mm all round. The figure rounds only the end corners. The small notches at the corners of the plate's folds are not drawn.
+  wanted: a dimensioned drawing of the bracket and the plate
+- what: hollow-body
+  scope:
+  - top
+  - bottom
+  reason: needs-drawing
+  note: The cup is hollow and open at both ends. The body is a solid box in 3D, and the open ends are drawn on the left and
+    right faces only.
+  wanted: a section drawing of the bracket
+- what: cable-capacity
+  scope:
+  - front
+  reason: vendor-silent
+  note: The data sheet states no cable capacity, so none is recorded and none is estimated.
+  wanted: a capacity figure and the cable it is stated for
+- what: cabinet-fit
+  scope:
+  - rear
+  reason: vendor-silent
+  note: The data sheet is titled for NetShelter SX, SV and VX racks and the installation sheet shows a rack frame. No page
+    lists a cabinet model number.
+  wanted: the maker's compatibility list
+groups:
+  body:
+    term: Well
+    role: furniture
+    index-origin: 1
+    description: the well the screw shank and the small pin stand in
+  screws:
+    term: Screw
+    role: furniture
+    index-origin: 1
+    description: the screw shank at the right-hand piece and the small pin at the left-hand piece
+views:
+  front:
+    size:
+      w: 80.0
+      h: 112.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 80.0
+        - 112.0
+        fill: '#232527'
+        kind: base
+        rx: 3
+      - id: joint-1
+        at:
+        - 14.0
+        - 41.6
+        size:
+        - 66.0
+        - 23.7
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+      - id: hook-1
+        at:
+        - 60.0
+        - 41.6
+        size:
+        - 20.0
+        - 13.7
+        fill: '#2e3033'
+        kind: tongue
+        confidence: estimated
+      - id: keyhole-1
+        at:
+        - 23.2
+        - 71.1
+        size:
+        - 21.0
+        - 22.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 10.5
+      - id: kstem-1
+        at:
+        - 42.5
+        - 76.6
+        size:
+        - 15.5
+        - 11.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 5.5
+      - id: keyhole-2
+        at:
+        - 24.0
+        - 16.3
+        size:
+        - 21.0
+        - 22.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 10.5
+      - id: kstem-2
+        at:
+        - 43.3
+        - 21.8
+        size:
+        - 15.5
+        - 11.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 5.5
+  rear:
+    size:
+      w: 80.0
+      h: 112.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 80.0
+        - 112.0
+        fill: '#232527'
+        kind: base
+        rx: 3
+      - id: fold-1
+        at:
+        - 3.0
+        - 1.0
+        size:
+        - 74.0
+        - 2.0
+        fill: '#4b4e52'
+        kind: fold
+        confidence: estimated
+      - id: fold-2
+        at:
+        - 3.0
+        - 109.0
+        size:
+        - 74.0
+        - 2.0
+        fill: '#4b4e52'
+        kind: fold
+        confidence: estimated
+      - id: screw-1
+        at:
+        - 18.6
+        - 73.0
+        size:
+        - 24.0
+        - 24.0
+        fill: '#2b2d30'
+        kind: screw-head
+        rx: 12.0
+        confidence: estimated
+      - id: recess-1
+        at:
+        - 22.6
+        - 77.0
+        size:
+        - 16.0
+        - 16.0
+        fill: '#0d0e0f'
+        kind: recess
+        rx: 8.0
+        confidence: estimated
+      - id: core-1
+        at:
+        - 27.1
+        - 81.5
+        size:
+        - 7.0
+        - 7.0
+        fill: '#d4d5d8'
+        kind: screw-core
+        rx: 3.5
+        confidence: estimated
+      - id: screw-2
+        at:
+        - 18.6
+        - 16.8
+        size:
+        - 24.0
+        - 24.0
+        fill: '#2b2d30'
+        kind: screw-head
+        rx: 12.0
+        confidence: estimated
+      - id: recess-2
+        at:
+        - 22.6
+        - 20.8
+        size:
+        - 16.0
+        - 16.0
+        fill: '#0d0e0f'
+        kind: recess
+        rx: 8.0
+        confidence: estimated
+      - id: core-2
+        at:
+        - 27.1
+        - 25.3
+        size:
+        - 7.0
+        - 7.0
+        fill: '#d4d5d8'
+        kind: screw-core
+        rx: 3.5
+        confidence: estimated
+      - id: pin-1
+        at:
+        - 50.9
+        - 82.0
+        size:
+        - 6.0
+        - 6.0
+        fill: '#c9cacd'
+        kind: rivet
+        confidence: estimated
+        rx: 3.0
+    components:
+      placements:
+      - ref: apc/nsx-vcm-ar7710-base@1
+        id: base
+        at:
+        - 0.0
+        - 0.0
+        group: body
+        rel-pos: 1
+      - ref: apc/nsx-vcm-ar7710-screws@1
+        id: screws
+        at:
+        - 0.0
+        - 0.0
+        group: screws
+        rel-pos: 1
+        in: base
+  top:
+    size:
+      w: 80.0
+      h: 45.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 80.0
+        - 45.0
+        fill: '#232527'
+        kind: base
+        rx: 3
+      - id: keyhole-1
+        at:
+        - 23.5
+        - 11.5
+        size:
+        - 21.0
+        - 22.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 10.5
+      - id: kstem-1
+        at:
+        - 42.8
+        - 17.0
+        size:
+        - 15.5
+        - 11.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 5.5
+  bottom:
+    size:
+      w: 80.0
+      h: 45.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 80.0
+        - 45.0
+        fill: '#232527'
+        kind: base
+        rx: 3
+      - id: keyhole-1
+        at:
+        - 35.5
+        - 11.5
+        size:
+        - 21.0
+        - 22.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 10.5
+      - id: kstem-1
+        at:
+        - 21.7
+        - 17.0
+        size:
+        - 15.5
+        - 11.0
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+        rx: 5.5
+  left:
+    size:
+      w: 45.0
+      h: 112.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 45.0
+        - 112.0
+        fill: '#232527'
+        kind: base
+      - id: mouth
+        at:
+        - 1.5
+        - 1.5
+        size:
+        - 42.0
+        - 109.0
+        fill: '#0d0e0f'
+        kind: opening
+        confidence: estimated
+  right:
+    size:
+      w: 45.0
+      h: 112.0
+    panel:
+      decor:
+      - id: plate
+        at:
+        - 0.0
+        - 0.0
+        size:
+        - 45.0
+        - 112.0
+        fill: '#232527'
+        kind: base
+      - id: mouth
+        at:
+        - 1.5
+        - 1.5
+        size:
+        - 42.0
+        - 109.0
+        fill: '#0d0e0f'
+        kind: opening
+        confidence: estimated
+      - id: notch
+        at:
+        - 0.0
+        - 41.6
+        size:
+        - 1.5
+        - 23.7
+        fill: '#0d0e0f'
+        kind: slot
+        confidence: estimated
+configurations:
+  base:
+    kind: base
+    default: true
+    description: The bracket as APC ships AR7710.
+datasheet:
+  title: APC NetShelter Cable Management, Vertical Cable Manager, Containment Brackets, for NetShelter SX, SV, and VX Racks,
+    80 x 112 x 45 mm (AR7710)
+  url: https://www.se.com/us/en/product/download-pdf/AR7710?filename=Schneider+Electric_APC-NetShelter-Cable-Management_AR7710.pdf
+  sha256: ab59f24fca67b0e50518f0fa9fd8dc6222a1401a3426714617e7a14b6c5e5fb1
+references:
+- title: Cable Containment Bracket for Rack Power Distribution Unit (AR7710), instruction sheet 990-3113A, 4/2016
+  url: https://download.se.com/files?p_enDocType=Instruction+sheet&p_File_Name=ASTE-6Z6KB6_R1_EN.pdf&p_Doc_Ref=SPD_ASTE-6Z6KB6_EN
+  sha256: 6569db347a00e43590e6a4f4b2ee726f9b64f602f71a722554287872673df16b
