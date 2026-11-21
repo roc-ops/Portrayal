@@ -1,0 +1,11 @@
+### Added
+- **Two rack devices of half the opening or less can stand side by side in one rack unit** (#1274, part 1).
+  A `mount: rack` device that states a width of 225 mm or less may now say `side: left` or `side: right`.
+  225 mm is half the 450 mm opening, so two of them fit. A finger bracket already worked this way.
+  Fit lets one device stand on each rail at the same unit, and `side.place` and `side.set` take it.
+  No key is added to a device: the width it already states decides.
+  Lab checks L142 and L153 read the same width.
+  A wider device, and a device with no `side`, take the whole unit as before.
+  The elevation, the 3D view and the DCIM files do not stand such a device on its rail yet, and a frame notice says so.
+  A tray with bays is not part of this change, and `heldBy` still takes only null.
+  This is one-way: a saved rack and a lab can now name `side` on a rack device.
