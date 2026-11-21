@@ -1,7 +1,7 @@
 format: 1
 kind: device
 name: ws-c2960s-48lpd
-version: 1.0.3
+version: 1.0.4
 maturity: modelled
 manufacturer: Cisco
 model: WS-C2960S-48LPD-L
@@ -202,6 +202,30 @@ provenance:
       They stay drawn as marks. The openings' colour, #141414, is a stand-in dark; the figure's grey is shading.
       The wall keeps the device's colour.
       Figure 1-10 shows each of the 17 slots with a waist. The drawn outlines have none; the waists are a later part of their own.
+  side-right:
+    confidence: estimated
+    note: >-
+      The right wall is drawn from Figure 1-12 (PDF p36, printed 1-12) of the Catalyst 2960-S Switch Hardware Installation Guide, OL-19732-04.
+      The figure's first drawing shows a PoE model's right wall isometrically, with the rack bracket over the middle.
+      Each opening was read on a 600 dpi render of the page and mapped to millimetres.
+      The map uses the wall's 386 mm length and its 44.45 mm height, which removes the drawing's foreshortening.
+      A place along the wall is good to about 8 mm, the accuracy of the figure.
+      A place down the wall is good to about 3 mm.
+      The figure shows 23 slots, 4 round holes and 4 rectangles.
+      Two of the slots show only in part.
+      One shows only its right end beside the bracket.
+      The other shows as dark shapes through the openings of the bracket, and its place is read from them.
+      The figure's second drawing, with the bracket in the mid position, shows the same wall with fewer slots.
+      The first drawing is followed.
+      The 386 mm depth is Table 1-2 (PDF p63).
+      The rack bracket covers the wall from 92 to 229 mm, except a strip along the top.
+      No held picture shows that stretch whole.
+      It is built as the photographed pattern of the 299 mm models (Table 1-3, PDF p65): a round hole and two slots.
+      The figure draws no light tab.
+      The tab in the rear rectangle is placed as photographed on the 299 mm models.
+      The right wall is not a copy of the left wall.
+      The openings are drawn as marks in a stand-in dark, and the wall keeps the device's colour.
+      The guide does not say what the openings are for.
   airflow:
     confidence: estimated
     note: >-
@@ -257,12 +281,31 @@ chassis:
     - {name: rear, label: 'rear-mounting position'}
 gaps:
 - what: the-undrawn-faces
-  scope: [top, bottom, right]
+  scope: [top, bottom]
   reason: needs-drawing
   wanted: >-
-    The top, the bottom and the right wall. The guide's figures show the lid plain and no underside.
-    Figure 1-12 (PDF p36, printed 1-12) shows the right wall only in part, behind the rack bracket.
-    No held picture shows the part it hides. The right wall is left as a later part of its own.
+    The top and the bottom. The guide's figures show the lid plain and no underside.
+    The labels on the lid are printed marks, left to a later touch of their own.
+- what: right-wall-behind-the-bracket
+  scope: [right]
+  reason: needs-photo
+  wanted: >-
+    The stretch of the right wall from 92 to 229 mm from the front, below the strip along the top.
+    The rack bracket in Figure 1-12 (PDF p36, printed 1-12) covers it, and no other held picture shows a PoE model's wall.
+    A round hole and two slots there are the photographed pattern of the 299 mm models.
+    The slot that shows only its right end beside the bracket is placed from that end.
+    The slot that shows as dark shapes through the openings of the bracket is placed from them.
+    More slots may stand behind the bracket than the figure lets us place.
+    Every opening is read from an isometric drawing and is good to about 8 mm along the wall.
+- what: right-wall-rims-and-waists
+  scope: [right]
+  reason: needs-drawing
+  wanted: >-
+    The figure and the photographs show a lit rim on each opening.
+    The drawn outlines have no rim.
+    The slots take the outline of the figure's slots, and the finer waist the photographs show is not drawn.
+    The openings are drawn in a stand-in dark, and the wall keeps the device's colour.
+    The rims and the colours are left to a later touch of their own.
 - what: left-wall-between-the-groups
   scope: [left]
   reason: needs-photo
@@ -856,9 +899,42 @@ views:
     - {id: side-opening-29, at: [365.3, 4.4], path: 'M 0 0 L 0.7 -1.2 L 4.2 -1.1 L 4.4 1.5 L 2.9 3.2 L 1.5 3.0 L 0.2 1.5 Z', filled: true, fill: '#141414', for: chassis}
   right:
     size: {w: 386.0, h: 44.45}
-    empty: >-
-      Not drawn flat by any held source. The guide's figures show one side wall isometrically; none can be
-      measured.
+    silkscreen:
+    - {id: side-right-opening-01, at: [33.7, 3.4], path: 'M 1.7 0 a 1.7 1.7 0 1 0 -3.4 0 a 1.7 1.7 0 1 0 3.4 0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-02, at: [38.5, 3.7], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-03, at: [38.8, 27.8], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-04, at: [40.0, 20.5], path: 'M 0 0 L 14.8 0 L 14.8 2.9 L 0 2.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-05, at: [60.4, 3.7], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-06, at: [60.8, 18.5], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-07, at: [72.0, 11.3], path: 'M 3.4 0.0 L 0.0 1.6 L 0.0 4.4 L 1.0 5.3 L 6.4 7.3 L 8.4 10.4 L 9.8 11.3 L 14.1 11.1 L 15.8 9.6 L 15.8 7.9 L 14.5 6.2 L 8.7 4.1 L 7.4 1.2 L 5.4 0.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-08, at: [82.5, 3.7], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-09, at: [82.5, 18.5], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-10, at: [105.5, 3.7], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-11, at: [115.1, 34.6], path: 'M 2.2 0 a 2.2 2.2 0 1 0 -4.4 0 a 2.2 2.2 0 1 0 4.4 0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-12, at: [129.7, 14.0], path: 'M 0 0 L 0.5 -1.0 L 2.2 -1.9 L 4.6 -1.5 L 10.7 3.7 L 11.4 4.8 L 11.4 6.2 L 10.5 7.8 L 8.8 8.2 L 7.0 7.9 L 0.7 2.5 L 0.0 1.1 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-13, at: [137.7, 4.7], path: 'M 1.7 0 a 1.7 1.7 0 1 0 -3.4 0 a 1.7 1.7 0 1 0 3.4 0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-14, at: [139.4, 26.9], path: 'M 0 0 L 0.5 -1.3 L 7.3 -7.1 L 9.7 -7.2 L 11.4 -5.3 L 11.4 -4.1 L 10.9 -3.1 L 3.9 3.0 L 1.4 2.7 L 0.3 1.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-15, at: [147.1, 4.0], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-16, at: [169.3, 3.9], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-17, at: [191.5, 4.2], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-18, at: [200.9, 14.8], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-19, at: [214.3, 4.2], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-20, at: [214.5, 20.4], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-21, at: [226.6, 11.5], path: 'M 3.4 0.0 L 0.0 1.6 L 0.0 4.4 L 1.0 5.3 L 6.4 7.3 L 8.4 10.4 L 9.8 11.3 L 14.1 11.1 L 15.8 9.6 L 15.8 7.9 L 14.5 6.2 L 8.7 4.1 L 7.4 1.2 L 5.4 0.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-22, at: [237.2, 3.8], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-23, at: [254.5, 22.2], path: 'M 0 0 L 15.2 0 L 15.2 2.9 L 0 2.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-24, at: [265.4, 41.6], path: 'M 1.7 0 a 1.7 1.7 0 1 0 -3.4 0 a 1.7 1.7 0 1 0 3.4 0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-25, at: [258.1, 3.4], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-26, at: [269.3, 11.2], path: 'M 3.4 0.0 L 0.0 1.6 L 0.0 4.4 L 1.0 5.3 L 6.4 7.3 L 8.4 10.4 L 9.8 11.3 L 14.1 11.1 L 15.8 9.6 L 15.8 7.9 L 14.5 6.2 L 8.7 4.1 L 7.4 1.2 L 5.4 0.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-27, at: [279.9, 18.9], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-28, at: [280.1, 3.4], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-29, at: [292.2, 11.2], path: 'M 3.4 0.0 L 0.0 1.6 L 0.0 4.4 L 1.0 5.3 L 6.4 7.3 L 8.4 10.4 L 9.8 11.3 L 14.1 11.1 L 15.8 9.6 L 15.8 7.9 L 14.5 6.2 L 8.7 4.1 L 7.4 1.2 L 5.4 0.2 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-30, at: [302.8, 3.4], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-31, at: [304.8, 19.1], path: 'M 11.4 0.0 L 9.4 0.7 L 6.7 4.5 L 0.7 7.1 L 0.0 8.5 L 0.3 9.7 L 2.7 11.1 L 5.0 11.3 L 7.1 10.6 L 8.4 8.2 L 10.1 6.7 L 15.1 4.9 L 16.1 3.9 L 16.1 2.0 L 14.5 0.3 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-32, at: [326.1, 22.3], path: 'M 0 0 L 15.2 0 L 15.2 2.9 L 0 2.9 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-33, at: [343.6, 16.5], path: 'M 0 0 L 6.4 0 L 6.4 6.7 L 0 6.7 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-opening-34, at: [352.3, 4.9], path: 'M 1.7 0 a 1.7 1.7 0 1 0 -3.4 0 a 1.7 1.7 0 1 0 3.4 0 Z', filled: true, fill: '#141414', for: chassis}
+    - {id: side-right-tab-01, at: [343.6, 16.9], path: 'M 0 0 L 4.0 0 L 4.0 5.9 L 0 5.9 Z', filled: true, fill: '#7a7c7c', for: chassis}
 interfaces:
 - {physical: 'port-{n}', name: 'GigabitEthernet1/0/{n}', range: '1-48'}
 - {physical: port-49, name: TenGigabitEthernet1/0/1}
