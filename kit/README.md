@@ -1863,7 +1863,12 @@ A rack-face part narrower than the 450 mm opening (a finger bracket) may be on
 one rail: `side.place { ref, face, ru, side }` puts it there, and
 `side.set { id, side }` moves it to the other rail or, with `null`, across
 both. On one rail it takes its units on that face and rail only, so a bracket
-can stand on each rail at one U. Every rack-face part is now judged on every
+can stand on each rail at one U. A `mount: rack` device that states 225 mm or
+less is narrow too, since two fill the opening, and takes the same commands. It is
+judged by its rail. The elevation, the 3D view and the cable guides draw it
+upright and centred across the opening, not on the rail. Its port points are
+placed the same way. The DCIM files state no rail. Nothing is turned, and
+`frameNotices` says it does not stand on its rail yet. Every rack-face part is now judged on every
 unit it spans, not only its bottom one. `describe` lists the parts beside the
 rack and each part's rail, `inspect` reads one (`kind: 'zeroU'`), and the
 export data says where each stands (`zeroUNotes`, `zeroUImportItems` for the
