@@ -1,0 +1,436 @@
+format: 1
+kind: device
+name: om2224-24e-ddc
+version: 0.1.0
+maturity: modelled
+manufacturer: Opengear
+model: OM2224-24E-DDC
+description: >-
+  Opengear OM2224-24E-DDC Operations Manager, a 1RU rack appliance with dual DC power. It has 24 RJ45 RS-232 serial ports
+  and a 24-port managed Ethernet switch on the front. Two 1G combination ports NET1 and NET2 take an RJ45 or an SFP.
+  Two USB 3.0 ports, an RJ45 console and a micro-USB console are on the front. Eight USB 2.0 ports and two DC power
+  connectors are on the rear.
+profile: networking
+provenance:
+  sources:
+    confidence: datasheet
+    note: >-
+      Opengear OM2200 Operations Manager datasheet (September 22, 2026), pages 1 to 4: interfaces, power,
+      dimensions and model table. Opengear OM2200 Quick Start Guide v1 (October 2026) is the other source. Its page 5
+      holds the "In the Box" figures. Page 6 shows the dual DC variation. Page 9 holds the LED table. The OM2224-24E-DDC
+      front photograph and the OM2200 DC rear photograph are published with the family.
+  chassis:
+    confidence: datasheet
+    note: >-
+      Data sheet, page 2, Physical Dimensions: "17.25 x 10.25 x 1.75 in, 44 x 26 x 4.5 cm", 3.5 kg, 1RU. The metric
+      figures 440 x 260 mm are used for width and depth, as for the CM8100 family. The height is the 1RU 44 mm of the
+      sibling devices. The data sheet does not say whether the width includes ears. Rack mount kit 590037 ships in the
+      box and no held document dimensions it, so the body is drawn alone.
+  front-layout:
+    confidence: estimated
+    note: >-
+      Method: the OM2224-24E-DDC front photograph is measured against the data sheet envelope by its transparent
+      background. It is 2560 px wide and shows the top plate at a slight angle. The face is 2138 px wide from 440 mm, 200 px high from 44 mm, so
+      4.859 px/mm across, 4.55 px/mm down. Every position on the front is read off that photograph and is good to about 1.5 mm across and
+      2 mm down. Jack centres are read from crops at 4 times. The two blocks of 12 columns are read on this face only.
+  rear-layout:
+    confidence: estimated
+    note: >-
+      Method as the front: the OM2200 DC rear photograph (2560 x 1707) is 2250 px wide for 440 mm. That is 5.114
+      px/mm across and about 5.2 px/mm down. The eight USB-A jacks, the two DC connectors and the printing are read off it,
+      good to about 1.5 mm. The photograph carries no model name. It is used for this model because the quick start
+      shows the 10G variation as a change of the front only.
+  top-layout:
+    confidence: estimated
+    note: >-
+      Method: the front and rear photographs show the top plate at a slight angle. Seven screw heads are counted:
+      three along the rear lip and two on each side. Their positions are read by interpolating along the plate's
+      edges, good to about 10 mm. The seam along the front lip is a thin line in both photographs. In this view
+      y = 0 is the rear of the chassis.
+  serial:
+    confidence: datasheet
+    note: >-
+      Data sheet: OM2224-24E has 24 RJ45 RS-232 ports with a software selectable straight or rollover pinout, 50 to
+      230,400 bps. The photograph numbers them 1 to 24 in two rows of 12 columns.
+  serial-role:
+    confidence: datasheet
+    note: >-
+      The serial ports are console server ports. Quick Start Guide, "Configure Serial Ports": the default mode is
+      Console Server. The data sheet calls them "Managed Serial Ports".
+  switch:
+    confidence: datasheet
+    note: >-
+      Data sheet: 24 managed 10/100/1000 Base-T switched Ethernet ports. Quick Start Guide, page 14: the switch ports
+      are bridged by default in an interface called "Switch". The 1G photograph prints NET3 over this block and the
+      10G photograph prints SWITCH.
+  network:
+    confidence: datasheet
+    note: >-
+      Data sheet: 2 x 10/100/1000 Ethernet/SFP Fiber auto-media ports (1 GbE chassis).
+      Quick Start Guide, page 5: NET1 and NET2 are combination interfaces, either SFP or copper.
+  usb:
+    confidence: datasheet
+    note: >-
+      Data sheet: 2 USB 3.0 host ports and 8 USB 2.0 ports for device console management. The front photograph prints
+      the SuperSpeed mark under the two blue jacks. The rear photograph labels the eight jacks A to H.
+  console:
+    confidence: datasheet
+    note: >-
+      Data sheet: one RJ45 serial (straight pinout) and one micro USB 2.0 console port. The photograph prints
+      CONSOLE under the micro-USB jack.
+  lamps:
+    confidence: datasheet
+    note: >-
+      Quick Start Guide, page 9, LED Panel: six lamps, each green, amber or off with the stated flashing states.
+      The photograph shows all six dark, so no lit colour is sampled. The lit colours are the library's lamp colours.
+  power:
+    confidence: datasheet
+    note: >-
+      Data sheet: dual DC power inputs, "+/- 40V to 72V DC, 1.5A-0.75A (x2), 48V Nominal". The rear prints
+      "36VDC 1.5A~72VDC 0.75A" and the labels Ea, -Va, +Va and Eb, -Vb, +Vb. Quick Start Guide, page 6: "DDC models
+      have a dual DC power supply" and shows a green three-way plug beside each socket.
+  livery:
+    confidence: estimated
+    note: >-
+      The red field, the dark panel, its stripes, the label strips and the wordmark are painted livery, not parts.
+      They are read off the photographs. Colours are medians of sampled pixels: front red
+      #da212a, rear red #ec252d, dark panel #252528, top plate #939597. The logo mark is a simplified outline.
+      The silver plate round the console jack and the two USB ports is a rounded rectangle behind the three jacks.
+      Its colour #d4cec2 is the median of 1456 pixels from the strip left of the console jack.
+      Its edges are found by pixel scan of the same photograph, against the USB jack positions, and are good to about 1 mm.
+      The black pull tab under the vents is a decor tab at the bottom edge, 29.8 mm wide, read from the photograph.
+      In the photograph it hangs below the chassis edge, and the drawing keeps it inside the 44 mm height.
+  sides:
+    confidence: estimated
+    note: >-
+      The data sheet prints "Passive Cooling - can be forward or reverse mounted". No held picture shows a side or the
+      bottom straight on. The vent slots are read off the front and rear photographs.
+attrs:
+  power:
+    power-input: >-
+      two three-position DC connectors, 40 to 72 V DC, 1.5 A to 0.75 A each, 48 V nominal
+    power-max-a: 1.6
+  features:
+    optics-sfp: >-
+      1G SFP in the NET1 and NET2 combination ports; no document held names an optic type or reach
+  thermal: {cooling: passive; forward or reverse mounted}
+  environmental: {operating-temp-c: 5 to 50, humidity-pct: 5 to 90}
+  platform:
+    cpu: AMD GX-412TC 1.4 GHz 4-core x86
+    memory: 8 GB DDR3
+    storage: 64 GB M.2 SATA SSD
+    tpm: TPM 2.0
+  lifecycle: {eol: none-announced}
+chassis:
+  width: 440.0
+  height: 44.0
+  depth: 260.0
+  ru: 1
+  color: '#939597'
+  power: dc
+gaps:
+- what: rack-kit
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    The data sheet and quick start list Rack Mount Kit 590037, ears and screws. No held document dimensions the ears
+    or says where they sit, and the photographs show the chassis without ears, so no ear is modelled.
+  wanted: The installation guide for rack mount kit 590037.
+- what: dc-connector-part
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    Each DC connector is a black shroud with three cells, two screws and two threaded inserts. A green
+    three-way plug sits beside it (quick start, page 6). No registered connector key or mating part fits it, and no
+    document gives its pitch or part number. It is drawn as estimated art, so the device exports no DC power port.
+  wanted: A connector key and a header and plug part for the OM2200 DC connector, with its pitch.
+- what: rear-model
+  scope: [rear]
+  reason: vendor-silent
+  note: >-
+    The rear photograph is named for the OM2200 DDC family and carries no model name. It is used as the rear of this
+    model. A rear photograph of this exact model would confirm it.
+  wanted: A rear photograph of the OM2224-24E-DDC.
+- what: usb2-jack-colour
+  scope: [rear]
+  reason: needs-drawing
+  note: >-
+    The rear photograph shows eight black jacks and the data sheet calls them USB 2.0. The library part
+    std/usb-a@1 draws a blue USB 3.0 jack, so the rear jacks are the wrong colour.
+  wanted: A black USB 2.0 type-A jack part.
+- what: jack-lamp-meaning
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The photograph shows a green window at each RJ45 jack corner. No held document says what a jack lamp shows, so no
+    state is written for one.
+  wanted: The hardware guide with its jack lamp table.
+- what: power-draw
+  scope: [front, rear]
+  reason: vendor-silent
+  note: >-
+    The data sheet gives 1.6 A maximum for the mixed port models and no figure for one port or lamp.
+  wanted: A per-port power table.
+- what: serial-pinout-switch
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    The data sheet says each pinout is software selectable. No held document says how it is set, so the ports carry
+    no pinout attribute.
+  wanted: The user guide section that sets the port pinout.
+groups:
+  serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console-server}
+    description: twenty-four RJ45 RS-232 serial ports with a software selectable pinout.
+  switch:
+    term: Port
+    role: traffic
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the twenty-four managed switch ports, 10/100/1000 Base-T.
+  net-sfp:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: sfp, speed: 1g}
+    description: the SFP halves of the two combination ports NET1 and NET2.
+  net-rj45:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45, speed: 1g}
+    description: the RJ45 halves of the two combination ports NET1 and NET2.
+  usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: two USB 3.0 host ports on the front.
+  usb-serial:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: usb-a}
+    description: eight USB 2.0 ports on the rear, A to H, for device console management.
+  console:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: rj45-serial, role: console}
+    description: the RJ45 local console port.
+  console-usb:
+    term: Port
+    role: management
+    index-origin: 1
+    attrs: {media: micro-usb-b, role: console}
+    description: the micro-USB local console port.
+  controls:
+    term: Control
+    role: management
+    index-origin: 1
+    description: the config erase pinhole.
+  status-leds:
+    term: LED
+    role: indicator
+    index-origin: 1
+  top-screws:
+    term: Screw
+    role: service
+    index-origin: 1
+    description: the seven screws that hold the top plate, counted on the photographs.
+views:
+  front:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face-base, kind: livery, at: [0, 0], size: [440.0, 44.0], fill: '#242426'}
+      - {id: face, kind: livery, at: [1.0, 0.8], size: [329.4, 37.4], fill: '#da212a'}
+      - {id: vents, kind: vent-row, at: [4.3, 39.8], size: [352.5, 3.2], pattern: motif, pattern-offset: [4.3, 39.8], pattern-pitch: [4.7, 3.2], pattern-cells: [[[1.41, 0.1], [3.06, 0.1], [2.59, 3.10], [0.94, 3.10]]], vent: 1.0}
+      - {id: livery-dark, kind: livery, at: [309.0, 0.8], size: [130.1, 37.4], pattern: motif, pattern-offset: [309.0, 0.8], pattern-pitch: [130.1, 37.4], pattern-cells: [[[0, 0], [130.1, 0], [130.1, 37.4], [42.7, 37.4]]]}
+      - {id: livery-stripes, kind: livery, at: [309.0, 0.8], size: [50.5, 37.4], fill: '#26181a', pattern: motif, pattern-offset: [309.0, 0.8], pattern-pitch: [50.5, 37.4], pattern-cells: [[[0, 0], [0.9, 0], [36.0, 37.4], [35.1, 37.4]], [[5.0, 0], [5.9, 0], [41.0, 37.4], [40.1, 37.4]]]}
+      - {id: pull-tab, kind: label-tab, at: [368.6, 40.2], size: [29.8, 3.6], rx: 0.8, fill: '#151517'}
+      - {id: port-shield, kind: label-tab, at: [357.5, 6.2], size: [18.9, 30.8], rx: 0.8, fill: '#d4cec2'}
+    silkscreen:
+    - {at: [426.4, 7.7], path: 'M -2.4 -1.8 L 0.1 -2.9 L 2.4 0.8 L 0.1 2.9 Z', filled: true, fill: '#e8e8e8', for: chassis}
+    - {at: [12.00, 5.0], text: '1▲ ▼2', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-1}
+    - {at: [184.80, 5.0], text: '1▲ ▼2', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-1}
+    - {at: [25.70, 5.0], text: '3▲ ▼4', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-3}
+    - {at: [199.00, 5.0], text: '3▲ ▼4', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-3}
+    - {at: [39.40, 5.0], text: '5▲ ▼6', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-5}
+    - {at: [213.20, 5.0], text: '5▲ ▼6', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-5}
+    - {at: [53.10, 5.0], text: '7▲ ▼8', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-7}
+    - {at: [227.40, 5.0], text: '7▲ ▼8', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-7}
+    - {at: [66.80, 5.0], text: '9▲ ▼10', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-9}
+    - {at: [241.60, 5.0], text: '9▲ ▼10', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-9}
+    - {at: [80.50, 5.0], text: '11▲ ▼12', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-11}
+    - {at: [255.80, 5.0], text: '11▲ ▼12', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-11}
+    - {at: [98.10, 5.0], text: '13▲ ▼14', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-13}
+    - {at: [273.20, 5.0], text: '13▲ ▼14', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-13}
+    - {at: [111.80, 5.0], text: '15▲ ▼16', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-15}
+    - {at: [287.40, 5.0], text: '15▲ ▼16', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-15}
+    - {at: [125.50, 5.0], text: '17▲ ▼18', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-17}
+    - {at: [301.60, 5.0], text: '17▲ ▼18', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-17}
+    - {at: [139.20, 5.0], text: '19▲ ▼20', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-19}
+    - {at: [315.80, 5.0], text: '19▲ ▼20', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-19}
+    - {at: [152.90, 5.0], text: '21▲ ▼22', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-21}
+    - {at: [330.00, 5.0], text: '21▲ ▼22', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-21}
+    - {at: [166.60, 5.0], text: '23▲ ▼24', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: serial-23}
+    - {at: [344.20, 5.0], text: '23▲ ▼24', font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: switch-23}
+    - {at: [92.0, 3.0], text: SERIAL, font-size: 1.4, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [262.0, 3.0], text: NET3, font-size: 1.4, anchor: middle, fill: '#f0f0f0', for: chassis}
+    - {at: [352.9, 5.6], text: RJ45, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [366.9, 2.6], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console}
+    - {at: [379.9, 5.6], text: USB, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: usb-a}
+    - {at: [366.9, 39.0], text: SS, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-b}
+    - {at: [386.9, 7.9], text: NET1(S), font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net1-sfp}
+    - {at: [386.9, 39.0], text: NET2(S), font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net2-sfp}
+    - {at: [405.0, 7.9], text: NET1(C), font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net1-rj45}
+    - {at: [405.0, 39.0], text: NET2(C), font-size: 1.5, anchor: middle, fill: '#f0f0f0', for: net2-rj45}
+    - {at: [421.1, 15.9], path: 'M -0.5 -0.4 A 0.6 0.6 0 1 0 0.5 -0.4 M 0 -0.9 L 0 -0.1', stroke-width: 0.2, fill: '#f0f0f0', for: led-power}
+    - {at: [426.3, 15.9], path: 'M -1.1 0.1 L -0.5 0.1 L -0.2 -0.8 L 0.1 0.8 L 0.4 0.1 L 1.1 0.1', stroke-width: 0.2, fill: '#f0f0f0', for: led-heartbeat}
+    - {at: [431.4, 15.9], path: 'M 0 -0.9 V -0.2 M -0.9 -0.2 H 0.9 M -0.9 -0.2 V 0.4 M 0 -0.2 V 0.4 M 0.9 -0.2 V 0.4', stroke-width: 0.2, fill: '#f0f0f0', for: led-network}
+    - {at: [421.1, 28.5], text: IOIO, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: led-ioio}
+    - {at: [426.3, 28.5], path: 'M 0 0.9 V -0.6 M -0.9 -0.9 L 0 0.3 L 0.9 -0.9', stroke-width: 0.2, fill: '#f0f0f0', for: led-cellular}
+    - {at: [431.4, 28.5], path: 'M -1.0 0.5 H 0.9 M -0.9 0.5 A 0.7 0.7 0 0 1 -0.5 -0.5 A 0.9 0.9 0 0 1 0.8 -0.1 A 0.5 0.5 0 0 1 0.9 0.5', stroke-width: 0.2, fill: '#f0f0f0', for: led-cloud}
+    - {at: [423.00, 38.2], text: CONSOLE, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: console-micro}
+    - {at: [431.5, 38.2], text: ERASE, font-size: 1.1, anchor: middle, fill: '#f0f0f0', for: erase}
+    components:
+      placements:
+      - {block: serial}
+      - {block: switch}
+      - {ref: std/rj45@2, id: console, at: [359.0, 6.0], rotate: 180, group: console, rel-pos: 1, attrs: {media: rj45-serial, role: console}, description: 'the RJ45 local console, straight pinout'}
+      - {ref: std/micro-usb@1, id: console-micro, at: [419.25, 33.3], group: console-usb, rel-pos: 1, attrs: {media: micro-usb-b, role: console}}
+      - {ref: std/usb-a@1, id: usb-a, at: [360.9, 21.35], group: usb, rel-pos: 1, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-b, at: [360.9, 30.15], group: usb, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: std/sfp@1, id: net1-sfp, at: [379.65, 10.9], group: net-sfp, rel-pos: 1}
+      - {ref: std/sfp@1, id: net2-sfp, at: [379.65, 25.8], rotate: 180, group: net-sfp, rel-pos: 2}
+      - {ref: common/rj45-eth@1, id: net1-rj45, at: [397.1, 9.3], rotate: 180, group: net-rj45, rel-pos: 1}
+      - {ref: common/rj45-eth@1, id: net2-rj45, at: [397.1, 24.2], group: net-rj45, rel-pos: 2}
+      - {ref: common/reset-button@1, id: erase, at: [429.5, 32.3], group: controls, rel-pos: 1, for: chassis}
+      - {ref: common/led-dot@1, id: led-power, at: [420.1, 19.3], group: status-leds, rel-pos: 1, for: chassis, states: {lamp: ['off', {name: green, color: '#22c55e'}, {name: amber, color: '#f59e0b'}]}}
+      - {ref: common/led-dot@1, id: led-heartbeat, at: [425.3, 19.3], group: status-leds, rel-pos: 2, for: chassis, states: {lamp: ['off', {name: amber-flashing, color: '#f59e0b', behavior: blinking}, {name: green-flashing, color: '#22c55e', behavior: blinking}, {name: green, color: '#22c55e'}]}}
+      - {ref: common/led-dot@1, id: led-network, at: [430.4, 19.3], group: status-leds, rel-pos: 3, for: chassis, states: {lamp: ['off', {name: amber-flashing, color: '#f59e0b', behavior: blinking}, {name: green-flashing, color: '#22c55e', behavior: blinking}, {name: amber, color: '#f59e0b'}, {name: green, color: '#22c55e'}]}}
+      - {ref: common/led-dot@1, id: led-ioio, at: [420.1, 24.3], group: status-leds, rel-pos: 4, for: chassis, states: {lamp: ['off', {name: green-flashing, color: '#22c55e', behavior: blinking}]}}
+      - {ref: common/led-dot@1, id: led-cellular, at: [425.3, 24.3], group: status-leds, rel-pos: 5, for: chassis, states: {lamp: ['off', {name: amber-flashing, color: '#f59e0b', behavior: blinking}, {name: green-flashing, color: '#22c55e', behavior: blinking}, {name: amber, color: '#f59e0b'}, {name: green, color: '#22c55e'}]}}
+      - {ref: common/led-dot@1, id: led-cloud, at: [430.4, 24.3], group: status-leds, rel-pos: 6, for: chassis, states: {lamp: ['off', {name: amber-flashing, color: '#f59e0b', behavior: blinking}, {name: green-flashing, color: '#22c55e', behavior: blinking}, {name: amber, color: '#f59e0b'}, {name: green, color: '#22c55e'}]}}
+      blocks:
+      - id: serial
+        ref: std/rj45-ganged@2
+        at: [5.65, 10.8]
+        count: 24
+        rows: 2
+        pitch: 13.7
+        row-pitch: 14.2
+        gang: 6
+        gutter: 3.9
+        number-from: 1
+        id-format: serial-{n}
+        rotate: {top: 180}
+        attrs: {media: rj45-serial}
+      - id: switch
+        ref: common/rj45-ganged-eth@1
+        at: [178.45, 10.8]
+        count: 24
+        rows: 2
+        pitch: 14.2
+        row-pitch: 14.2
+        gang: 6
+        gutter: 3.2
+        number-from: 1
+        id-format: switch-{n}
+        rotate: {top: 180}
+  rear:
+    size: {w: 440.0, h: 44.0}
+    panel:
+      decor:
+      - {id: face-base, kind: livery, at: [0, 0], size: [440.0, 44.0], fill: '#252528'}
+      - {id: face, kind: livery, at: [1.0, 9.9], size: [320.0, 34.0], fill: '#ec252d'}
+      - {id: vents, kind: vent-row, at: [4.5, 1.8], size: [363.5, 4.6], pattern: motif, pattern-offset: [4.5, 1.8], pattern-pitch: [4.1, 4.6], pattern-cells: [[[1.23, 0.1], [2.67, 0.1], [2.25, 4.50], [0.82, 4.50]]], vent: 1.0}
+      - {id: livery-dark, kind: livery, at: [296.0, 9.9], size: [143.1, 34.0], pattern: motif, pattern-offset: [296.0, 9.9], pattern-pitch: [143.1, 34.0], pattern-cells: [[[0, 0], [143.1, 0], [143.1, 34.0], [26.0, 34.0]]]}
+      - {id: livery-stripes, kind: livery, at: [281.8, 9.9], size: [40.5, 34.0], fill: '#26181a', pattern: motif, pattern-offset: [281.8, 9.9], pattern-pitch: [40.5, 34.0], pattern-cells: [[[0, 0], [0.9, 0], [26.9, 34.0], [26.0, 34.0]], [[5.4, 0], [6.3, 0], [32.3, 34.0], [31.4, 34.0]]]}
+      - {id: dc-shroud-a, kind: label-tab, at: [394.0, 14.2], size: [18.4, 26.0], rx: 1.6, fill: '#1a191b'}
+      - {id: dc-cell-a1, kind: label-tab, at: [402.6, 23.55], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-cell-a2, kind: label-tab, at: [402.6, 27.15], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-cell-a3, kind: label-tab, at: [402.6, 30.95], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-screw-a-top, kind: label-tab, at: [398.4, 18.6], size: [2.0, 2.0], rx: 1.0, fill: '#3d3d40'}
+      - {id: dc-screw-a-bottom, kind: label-tab, at: [397.4, 35.4], size: [2.0, 2.0], rx: 1.0, fill: '#3d3d40'}
+      - {id: dc-insert-a-top, kind: label-tab, at: [405.4, 19.8], size: [2.0, 2.0], rx: 1.0, fill: '#b08a5a'}
+      - {id: dc-insert-a-bottom, kind: label-tab, at: [404.0, 35.2], size: [2.0, 2.0], rx: 1.0, fill: '#b08a5a'}
+      - {id: dc-shroud-b, kind: label-tab, at: [413.6, 14.2], size: [18.4, 26.0], rx: 1.6, fill: '#1a191b'}
+      - {id: dc-cell-b1, kind: label-tab, at: [422.2, 23.55], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-cell-b2, kind: label-tab, at: [422.2, 27.15], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-cell-b3, kind: label-tab, at: [422.2, 30.95], size: [3.2, 2.3], fill: '#050505'}
+      - {id: dc-screw-b-top, kind: label-tab, at: [418.0, 18.6], size: [2.0, 2.0], rx: 1.0, fill: '#3d3d40'}
+      - {id: dc-screw-b-bottom, kind: label-tab, at: [417.0, 35.4], size: [2.0, 2.0], rx: 1.0, fill: '#3d3d40'}
+      - {id: dc-insert-b-top, kind: label-tab, at: [425.0, 19.8], size: [2.0, 2.0], rx: 1.0, fill: '#b08a5a'}
+      - {id: dc-insert-b-bottom, kind: label-tab, at: [423.6, 35.2], size: [2.0, 2.0], rx: 1.0, fill: '#b08a5a'}
+    silkscreen:
+    - {at: [328.0, 16.5], path: 'M -6.5 -6.0 L 1.0 -8.5 L 6.5 3.0 L 1.0 8.5 Z', filled: true, fill: '#e8e8e8', for: chassis}
+    - {at: [382.6, 20.4], text: opengear, font-size: 9.0, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [367.0, 34.2], text: OPERATIONS, font-size: 1.8, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [367.0, 36.4], text: MANAGER, font-size: 1.8, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [382.6, 37.0], text: '2200', font-size: 5.4, anchor: end, fill: '#e4e4e6', for: chassis}
+    - {at: [413.1, 12.6], text: '36VDC 1.5A~72VDC 0.75A', font-size: 1.8, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [391.4, 20.2], text: 'Ea', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [391.4, 27.8], text: '-Va', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [391.4, 35.4], text: '+Va', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [435.0, 20.2], text: 'Eb', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [435.0, 27.8], text: '-Vb', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [435.0, 35.4], text: '+Vb', font-size: 1.7, anchor: middle, fill: '#e4e4e6', for: chassis}
+    - {at: [186.0, 23.5], text: A, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-a}
+    - {at: [186.0, 31.4], text: B, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-b}
+    - {at: [194.2, 36.2], path: 'M -2.4 0 H 2.4 M -0.2 0 L 0.8 -0.9 M -0.2 0 L 0.8 0.9 M -2.4 -0.5 A 0.5 0.5 0 1 0 -2.4 0.5 A 0.5 0.5 0 1 0 -2.4 -0.5 Z', stroke-width: 0.25, fill: '#f0f0f0', for: usb-b}
+    - {at: [206.1, 23.5], text: C, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-c}
+    - {at: [206.1, 31.4], text: D, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-d}
+    - {at: [214.2, 36.2], path: 'M -2.4 0 H 2.4 M -0.2 0 L 0.8 -0.9 M -0.2 0 L 0.8 0.9 M -2.4 -0.5 A 0.5 0.5 0 1 0 -2.4 0.5 A 0.5 0.5 0 1 0 -2.4 -0.5 Z', stroke-width: 0.25, fill: '#f0f0f0', for: usb-d}
+    - {at: [226.1, 23.5], text: E, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-e}
+    - {at: [226.1, 31.4], text: F, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-f}
+    - {at: [234.3, 36.2], path: 'M -2.4 0 H 2.4 M -0.2 0 L 0.8 -0.9 M -0.2 0 L 0.8 0.9 M -2.4 -0.5 A 0.5 0.5 0 1 0 -2.4 0.5 A 0.5 0.5 0 1 0 -2.4 -0.5 Z', stroke-width: 0.25, fill: '#f0f0f0', for: usb-f}
+    - {at: [246.2, 23.5], text: G, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-g}
+    - {at: [246.2, 31.4], text: H, font-size: 1.6, anchor: middle, fill: '#f0f0f0', for: usb-h}
+    - {at: [254.3, 36.2], path: 'M -2.4 0 H 2.4 M -0.2 0 L 0.8 -0.9 M -0.2 0 L 0.8 0.9 M -2.4 -0.5 A 0.5 0.5 0 1 0 -2.4 0.5 A 0.5 0.5 0 1 0 -2.4 -0.5 Z', stroke-width: 0.25, fill: '#f0f0f0', for: usb-h}
+    components:
+      placements:
+      - {ref: std/usb-a@1, id: usb-a, at: [188.20, 20.75], group: usb-serial, rel-pos: 1, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-b, at: [188.20, 28.65], group: usb-serial, rel-pos: 2, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-c, at: [208.25, 20.75], group: usb-serial, rel-pos: 3, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-d, at: [208.25, 28.65], group: usb-serial, rel-pos: 4, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-e, at: [228.30, 20.75], group: usb-serial, rel-pos: 5, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-f, at: [228.30, 28.65], group: usb-serial, rel-pos: 6, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-g, at: [248.35, 20.75], group: usb-serial, rel-pos: 7, attrs: {media: usb-a}}
+      - {ref: std/usb-a@1, id: usb-h, at: [248.35, 28.65], group: usb-serial, rel-pos: 8, attrs: {media: usb-a}}
+  top:
+    size: {w: 440.0, h: 260.0}
+    panel:
+      decor:
+      - {id: plate, kind: livery, at: [0, 0], size: [440.0, 260.0], fill: '#939597'}
+      - {id: seam, kind: label-tab, at: [0, 252.5], size: [440.0, 0.5], fill: '#7a7c7e'}
+    components:
+      placements:
+      - {ref: common/screw-head@1, id: top-screw-1, at: [101.0, 5.0], group: top-screws, rel-pos: 1, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-2, at: [220.0, 5.0], group: top-screws, rel-pos: 2, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-3, at: [339.0, 5.0], group: top-screws, rel-pos: 3, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-4, at: [13.0, 44.0], group: top-screws, rel-pos: 4, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-5, at: [427.0, 44.0], group: top-screws, rel-pos: 5, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-6, at: [13.0, 187.0], group: top-screws, rel-pos: 6, for: chassis}
+      - {ref: common/screw-head@1, id: top-screw-7, at: [427.0, 187.0], group: top-screws, rel-pos: 7, for: chassis}
+  bottom:
+    size: {w: 440.0, h: 260.0}
+    empty: >-
+      No held source shows the bottom face: the photographs show the front or the rear, with the top plate at an angle.
+  left:
+    size: {w: 260.0, h: 44.0}
+    empty: >-
+      No held source shows the left side: the photographs show the front or the rear only.
+  right:
+    size: {w: 260.0, h: 44.0}
+    empty: >-
+      No held source shows the right side: the photographs show the front or the rear only.
+datasheet:
+  title: OM2200 Operations Manager with Smart Out-of-Band Management
+  sha256: da0d9d2f36f5c5fc3145a76be2e8cca3bacc72bd8d51d243f8dd8c0d32dc20b7
+references:
+  - {title: 'Opengear OM2200 Quick Start Guide v1 (October 2026)', sha256: e3931df827473c5c7b5d815b60cfd39c7f8758002d17a448b1de5976e2e5bdcf}
