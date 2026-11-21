@@ -5,7 +5,7 @@
   The figure is an isometric drawing of a PoE model.
   Each place is mapped to millimetres by the wall's 386 mm length and 44.45 mm height.
   A place along the wall is good to about 8 mm.
-- The rack bracket in the figure covers the wall from 92 to 229 mm.
+- The rack bracket as drawn in the figure hides the wall from 92 to 229 mm.
   A round hole and two slots there are the pattern photographed on the 299 mm models.
   A gap on each device says so.
 - The openings stay drawn as marks in a stand-in dark, and the wall keeps the device's colour.
