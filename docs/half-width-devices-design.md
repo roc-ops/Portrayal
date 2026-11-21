@@ -1,8 +1,12 @@
 # Half-width and quarter-width devices in one rack unit
 
-Status: **proposed, 2026-11-11. Nothing here is built.** A design note only: no code, no
-library part, no schema and no export changes with it. Every choice that would be one-way
-when built says so, and none is built here.
+Status: **proposed, 2026-11-11. One part is built: the width reading (build order 1).** A
+`mount: rack` device that states 225 mm or less is narrow. Fit, `side.place`, `side.set`
+and lab checks L142 and L153 let one stand on each rail. No bay, no tray, no
+`heldBy` placing and no key on a device is built. Such a device on a rail is judged by its rail.
+The elevation, the 3D view and the cable guides draw it upright and centred across the
+opening, not on the rail. Its port points are placed the same way. The DCIM files state no rail.
+Nothing is turned. Every other choice that would be one-way when built says so.
 
 [#1274](https://github.com/roc-ops/Portrayal/issues/1274) asks that a rack place two (or
 four) compact switches or routers side by side in one rack unit, on the tray or shelf they
@@ -29,9 +33,15 @@ shared tray. It is not a case for this issue.
 
 - **`side` on a rack item** (`left` or `right`): the rail a part narrower than the rack
   opening is on. Fit lets one part stand on each rail at the same unit (`fit.js`
-  `NARROW_MM = 450`). It is read only for `mount: rack-face`; a rack device (`mount: rack`)
-  with a width under 450 mm was **not measured** here, and the first slice measures it
-  before any key is added.
+  `NARROW_MM = 450`). Measured on `main` before the width reading was built, it was read
+  only for `mount: rack-face`. A 200 mm `mount: rack` device was refused a `side`, and a
+  second device at its unit was refused with "Taken by".
+- **The width limit for a rack device.** Two devices stand side by side only if each is at
+  most half the opening, so `2 x width <= 450`: 225 mm or less. 530 of the library's 565
+  `mount: rack` devices state a width under 450 mm, but only 15 state 225 mm or less. The
+  next width is 250.2 mm. Fit and the lab checks now read this limit from the stated width.
+- **Labs.** L142 gave each rack device its own unit and a lab could not say `heldBy`. A
+  rack device of 225 mm or less may now say `side`, and claims that rail only.
 - **Two positions only.** `left` and `right` cannot name four.
 - **`heldBy: {item, at, x}`** on an item, for a device on a shelf, drawer or rail of another
   item (rack-products-design.md section 7.2). The kit keeps and refuses it; placing a new one
@@ -120,6 +130,8 @@ section and is not proposed. A NetBox or Nautobot width position is not claimed.
 1. **Is the tray a kit with bays (4.2)?** Changes the kit schema and the lock of every kit.
 2. **Is a derived fraction (4.1) accepted?** Spares a device key.
 3. **Which unit measures first:** a `mount: rack` device of 200 mm in fit (section 2).
+   **Answered:** fit did not read the width of a rack device. Section 2 gives the
+   measurement and the limit it led to.
 4. **Which documents:** the RMK-2/10 and ER-RMKIT drawings (section 3) are needed before a
    bay can be stated; a lab measurement of the RMK-2/10 would also do.
 5. **DCIM:** what NetBox and Nautobot store for a width position, cited by commit.
@@ -129,10 +141,12 @@ section and is not proposed. A NetBox or Nautobot width position is not claimed.
    needed before a form is chosen.
 8. **Which rule gives two 200 mm devices one unit?** Section 4.3: section 7.3 of the
    rack-products note and lint L142 give each `mount: rack` device its own unit.
+   **Answered:** a device with a `side` that its stated width allows claims that rail only.
+   Any other rack device claims both rails. Fit and L142 apply the same rule.
 
 ## 7. Build order
 
-1. Measure fit on a 200 mm `mount: rack` device (question 3). No change.
+1. Measure fit on a 200 mm `mount: rack` device (question 3). **Built:** the width reading. A narrow rack device is judged by its rail and drawn upright and centred across the opening, not on the rail. The DCIM files state no rail.
 2. Hold the kit drawings (question 4); model one MikroTik 200 mm device. The RMK-2/10 as a kit
    waits for question 7.
 3. Kit schema bays and `heldBy` placing (one-way, after question 1).
