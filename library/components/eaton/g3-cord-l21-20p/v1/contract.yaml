@@ -1,0 +1,39 @@
+format: 1
+kind: component
+name: g3-cord-l21-20p
+version: 1.0.0
+class: inlet
+profile: power
+unmated: the fixed input cord of the PDU, ending in a NEMA L21-20P locking plug. The plug is the cord's own end. Nothing plugs into the cord and no mate is offered for it.
+description: >-
+  The fixed input cord of an Eaton ePDU G3 managed three-phase rack PDU with a NEMA
+  L21-20P plug. It is 10 ft of 12 AWG five-conductor cord that ends in a NEMA
+  L21-20P locking plug. The cord leaves the cord end of the PDU through a round
+  gland. The part is drawn as the end face shows it; the cord and plug beyond it
+  are not.
+size: {w: 37.1, h: 37.1}
+size-confidence: {w: drawing, h: drawing}
+attrs: {plug: nema-l21-20p, cord-length-ft: 10, cord-gauge: 12 AWG / 5C}
+provenance:
+  size: >-
+    drawing - Eaton EMA325-10 technical drawing (DWG EMA6PB15JGD88B1, rev 001,
+    sheet 1). The end view is read at 400 dpi against its own box of 52 by 65.
+    It draws a round gland 37.1 across, its ring and a serrated inner disc 30.5
+    across. The sheet dimensions none of it and the reading is good to about 0.5.
+  cord: >-
+    drawing - EMA325-10, the INPUT cell: "NEMA L21-20P", "10FT 12AWG / 5C
+    POWERCORD", and the input rating "120-208V~ WYE, 3W+N+PE". The front view
+    draws the cord leaving the cord end with a break line.
+  plug: >-
+    drawing - the plug is drawn on the sheet as its own end beside the cord end.
+    The plug has no part of its own, so nothing here draws it.
+  not-drawn: >-
+    THE CORD BEYOND THE GLAND AND THE PLUG ARE NOT DRAWN: the far end of a cord
+    is not a part (docs/connectors-power-design.md section 7). This part stands
+    for the power input a DCIM records, a NEMA L21-20P power port.
+  inner-details: >-
+    drawing - the four small rectangles, the foot notch and the serrated top
+    edge are read off the end view by eye. They are estimates.
+elements:
+  gland: {at: [0, 0], size: [37.1, 37.1], class: inlet}
+skins: [default]

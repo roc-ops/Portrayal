@@ -774,6 +774,10 @@ PART_POWER = {
     "eaton/g3-cord-l6-30p": "nema-l6-30p",
     # The EMAU07-10's fixed 10 ft cord also ends in a NEMA L6-30P and leaves the front through a round gland.
     "eaton/g3-cord-l6-30p-front": "nema-l6-30p",
+    # THE ePDU G3 MANAGED EMA325-10's FIXED 10 ft CORD ENDS IN A NEMA L21-20P: `other`, as the L5-30P cord above, for
+    # the same reason. No `nema-l21-20p` key is registered in spec/schemas/connectors.yaml or read from a target's
+    # source file, so none is written, and POWER_LABEL says which connector.
+    "eaton/g3-cord-l21-20p": "other",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
