@@ -333,6 +333,9 @@ def test_the_live_library_keeps_no_retired_major(tmp_path):
     # The DVI-D jack: the DSX2-32 seats the @2, drawn from the DVI 1.0 specification. The @1, drawn as it was from one
     # photograph, stays for a saved rack or a manifest that names it, `superseded-by` the @2.
     kept["std/dvi-d-jack"] = [1, 2]
+    # The APC 20U length of the NetShelter vertical managers. The AR7721 places the @2, drawn from its data sheet's
+    # photographs. The AR7722 still places the @1, drawn as it was.
+    kept["apc/nsx-vcm-20u"] = [1, 2]
     assert multi == kept, multi
     for name, majors in kept.items():
         if name.startswith(("juniper/", "cisco/")):
