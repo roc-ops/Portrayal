@@ -19,6 +19,7 @@ SVG = "{http://www.w3.org/2000/svg}"
 
 KEY = "dvi-d"
 REF = "std/dvi-d-jack@1"
+REF_NOW = "std/dvi-d-jack@2"
 DEVICE = LIB / "devices/raritan/dsx2-32"
 
 
@@ -80,14 +81,14 @@ def test_the_dsx2_32_places_the_jack_once_on_the_rear_between_its_two_screws():
     d = device()
     rear = {p["id"]: p for p in d["views"]["rear"]["components"]["placements"]}
     jack = rear["video"]
-    assert jack["ref"] == REF and jack["group"] == "video"
+    assert jack["ref"] == REF_NOW and jack["group"] == "video"
     decor = {x["id"]: x for x in d["views"]["rear"]["panel"]["decor"]}
     left, right = decor["dvi-screw-left"], decor["dvi-screw-right"]
-    width = contract()["size"]["w"]
+    width = yaml.safe_load((LIB / "components/std/dvi-d-jack/v2/contract.yaml").read_text())["size"]["w"]
     assert left["at"][0] + left["size"][0] <= jack["at"][0]
     assert jack["at"][0] + width <= right["at"][0]
     placed = [p for v in d["views"].values() for p in (v.get("components") or {}).get("placements", [])
-              if p["ref"] == REF]
+              if p["ref"] == REF_NOW]
     assert len(placed) == 1
     assert d["groups"]["video"]["attrs"] == {"media": KEY}
 

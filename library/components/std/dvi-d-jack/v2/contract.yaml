@@ -1,0 +1,72 @@
+format: 1
+kind: component
+name: dvi-d-jack
+version: 2.0.0
+class: port
+profile: networking
+interface: dvi-d
+description: >-
+  DVI-D video receptacle drawn from the Digital Display Working Group specification. A light D-shaped shell holds three
+  rows of eight contact cells. The numerals 1, 8, 9, 16, 17 and 24 stand beside them. To their right is the flat blade
+  slot. It has no group of four analogue pins around the blade, which is what a DVI-D jack lacks. A cable plug enters it.
+size: {w: 24.03, h: 7.72}
+size-confidence: {w: drawing, h: drawing}
+size-notes: the shell width is printed in the specification's receptacle mating interface drawing and its height in the side view of the same figure
+attrs: {media: dvi-d}
+provenance:
+  size: >-
+    drawing - Digital Display Working Group, Digital Visual Interface DVI, Revision 1.0 (2 April 1999). Figure 5-1 on
+    PDF page 45, Digital-only Receptacle Connector Mating Interface Dimensions, prints the shell 24.03 across.
+    Its side view prints the shell 7.72 high. The first version of this part took 26.8 by 9.8 from a photograph, good
+    to about 1 mm, and never checked it against the specification. Figure 5-7 on page 48 prints a recommended panel
+    cutout, 27.43 by 9.14. That is the hole in a panel and not the shell, so it is not drawn here.
+  shell: >-
+    drawing and estimated - the D outline is drawn from Figure 5-1. Its corners are ESTIMATED from pixels. The scale is
+    41.9 pixels per millimetre, from the printed 32.51 between the jackscrews on the page rendered at 600 dpi. The top
+    corners are drawn with a 0.8 radius. The two lower sides slant in 2.0 over the lower 2.8 of the height. The figure
+    draws two inner outline lines, about 0.60 and 0.70 inside the shell, and both are drawn, ESTIMATED. The Raritan
+    photograph shows a dark rim round the shell, drawn as a stroke 0.4 wide, ESTIMATED. None of these is dimensioned.
+  contacts: >-
+    drawing and estimated - Figure 5-1 prints 24 contacts in three rows of eight at a pitch of 1.905 along and between
+    the rows. It prints 13.335 between the first and the eighth in a row. Pin 1 is the upper left, as the figure draws
+    the receptacle from the mating side. The rows read 1 to 8, 9 to 16 and 17 to 24 from the top. The middle row is
+    level with the shell's middle and with the jackscrews. The figure prints no offset and no cell size. The first
+    column's centre is ESTIMATED at 2.49 from the shell's left edge. Each cell is ESTIMATED at 1.65 by 1.65, as the
+    figure draws it. The photograph reads the cells about 1.1. The figure governs, as it does for the shell.
+    The six numerals the figure prints are drawn, ESTIMATED in size and place, and none touches a line or a cell.
+    No lamp or other state belongs to this part.
+  blade: >-
+    estimated - Figure 5-1 draws one flat rectangular blade slot right of the contact field, level with the middle
+    row. It prints no dimension for it. It reads about 2.75 long and 0.8 high on the page at 600 dpi, from 18.9 across
+    the shell. The figure draws it as an unfilled outline with two inner lines, each about 0.11 in from the long
+    edges. The part draws the same: a light fill, a dark outline 0.08 wide and the two inner lines, ESTIMATED. The
+    photograph in the Raritan data sheet shows the same slot as one longer thin dark line in the same place. The
+    figure governs, as it does for the shell and the cells. No analogue cross and no C1 to C5 contacts are drawn,
+    because this is the digital-only receptacle.
+  jackscrews: >-
+    drawing - Figure 5-1 prints the two jackscrew axes 32.51 apart, level with the middle row and centred on the shell.
+    They are not part of this face. A device draws them where it places the jack, at that pitch. The figure also draws
+    a ring 4.39 across round each jackscrew. That ring stands outside the shell, so the device draws each screw at
+    that size. The flange 36.96 wide lies behind a panel, so it is not drawn.
+  depth: >-
+    not stated - Figure 5-1 prints a 10.04 and an 18.28 maximum for the whole board-mount connector. That includes
+    the flange, the right-angle body and the contact tails, so it is not the depth of the shell. The part is a flat
+    face and has no `size.d`.
+  colour: >-
+    photo-measured, with the page rendered at 1200 dpi - Raritan, Dominion SX II data sheet V1209R3 (2021), page 4,
+    the rear photograph of the DSX2-32. The shell and insulator read #f5f5fa over 3825 pixels, #f3eee9 over 1260 and
+    #ede6e4 over 3510, so #f2eeed is drawn. The cells read #342c29, #352c2d and #38332f over 324, 324 and 396 pixels,
+    so #352c2d is drawn. The blade's line in the photograph reads #5c5c5b over 510 pixels, and the blade outline is drawn in it. The dark rim reads #706a68 over 5960 pixels, a band 8 pixels thick at
+    20.3 pixels per millimetre. The thin outline lines are #9a9794, a stand-in.
+  interface: >-
+    `dvi-d` in spec/schemas/connectors.yaml. The Raritan data sheet labels the jack "DVI-D Video" (page 4). The User
+    Guide v2.6.0 lists "DVI-D port" in the appliance diagram key (printed page 12). `generic/dvi-d-plug@1` is the
+    cable plug that enters it. This version declares no `conforms`. The `dvi-d` entry of standards.yaml is the
+    photograph's 26.8 by 9.8, and the first version still conforms to it.
+  mate: >-
+    estimated - (12.015, 3.86): the centre of the shell, level with the middle row of contacts and the jackscrew axes.
+    The specification prints neither how far a plug enters nor where its centre seats.
+elements: {}
+connection-points:
+  mate: {at: [12.015, 3.86], direction: front}
+skins: [default]
