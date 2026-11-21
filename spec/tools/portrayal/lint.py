@@ -526,7 +526,7 @@ RULES = {
     "L141": ("lab",        "a rack-face part's host is a `rack` device, and `unit` is within the host's height, 1 to its `chassis.ru` (error)", "put the part `on` the rack device behind it; count `unit` from 1 at the host's bottom unit",
              "A cable manager or lacer bar hung on something that is not a rack device, or on a unit its host does not have, would be drawn floating where nothing holds it.",
              ERROR),
-    "L142": ("lab",        "every placement fits inside the rack's `height-ru`, no two rack devices share a rack unit, and no two parts claim one rack unit on one face and side - a rack-face part narrower than the rack opening, or a rack device of 225 mm or less, placed at a `side` claims that side, any other claims both (error)", "move one of the two, or put one part on the other face or side",
+    "L142": ("lab",        "every placement fits inside the rack's `height-ru`. No two rack devices share a rack unit. No two parts claim one rack unit on one face and side. A rack-face part narrower than the rack opening, or a rack device of 225 mm or less, placed at a `side` claims that side. Any other claims both (error)", "move one of the two, or put one part on the other face or side",
              "Two pieces of equipment drawn in one rack unit, or a device past the top of the rack, would show someone building the rack a layout that cannot be built.",
              ERROR),
     "L143": ("lab",        "a rack-face part placed by `ru` over a rack device is reported with that host (warning)", "place it `on` the host with its `unit` so it moves with the host, or leave it by `ru` if it belongs to the rack rather than the device",
@@ -559,7 +559,7 @@ RULES = {
     "L152": ("device",     "a `rack-side` part's front view is taller than it is wide - it is drawn as it stands beside the rack (warning)", "draw it standing: the front's `w` is the width across the rack's face direction and `h` the height it runs; swap them if the spec line printed them the other way",
              "A vertical cable manager drawn landscape has its width and height swapped, so it would be drawn lying down beside the rack instead of standing.",
              WARNING),
-    "L153": ("lab",        "`side` appears only on a `rack-side` part, which states it as an attachment point (`left`, `right`, `left-front`, `left-rear`, `right-front`, `right-rear`), on a `rack-face` part narrower than the rack opening, and on a `rack` device of 225 mm or less, as `left` or `right`; a rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`; drop `side` from a wider part; a rack-face part's or narrow device's side is a rail, left or right",
+    "L153": ("lab",        "`side` appears only on three kinds of part. A `rack-side` part states it as an attachment point (`left`, `right`, `left-front`, `left-rear`, `right-front`, `right-rear`). A `rack-face` part narrower than the rack opening, and a `rack` device of 225 mm or less, state it as `left` or `right`. A rack-side part takes no `on` or `unit` (error)", "give a rack-side part its `side` and place it by `ru`. Drop `side` from a wider part. A rack-face part's or narrow device's side is a rail, left or right",
              "A side position on a part that does not attach at the side, or a rack-side part given a host, has no meaning in the rack, so the part could not be placed where it really goes.",
              ERROR),
     "L154": ("lab",        "a rack-side part fits the rack's `height-ru`; no two rack-side parts at one attachment point overlap in height; and one side of the rack does not mix the two-post name (`left`) with a four-post name (`left-front`, `left-rear`) (error)", "move one of the two up, or stand it at another attachment point; name every part on a side with the same rack's points",
@@ -8492,11 +8492,11 @@ def lint_lab(path, data, roots):
     report, not a fault: a rack-face part placed by `ru` in front of a device
     is legal, and the warning names the host it would move with. A `rack-side`
     part (a full-height vertical manager beside the rack) is placed by `side`
-    and `ru` (docs/vertical-cable-managers-design.md section 3.5): L153 holds
-    which placements may say `side` - it, a rack-face part narrower than the
-    opening and a rack device of half the opening or less, which then claim
-    their unit per rail under L142 - and
-    L154 that it fits the rack and overlaps nothing on its side.
+    and `ru` (docs/vertical-cable-managers-design.md section 3.5). L153 holds
+    which placements may say `side`. A rack-face part narrower than the
+    opening may, and so may a rack device of half the opening or less. Each
+    then claims its unit per rail under L142. L154 holds that a rack-side
+    part fits the rack and overlaps nothing on its side.
     """
     found, _placed = labs.check(data, roots)
     for code, sev, msg in found:
