@@ -1,0 +1,576 @@
+format: 1
+kind: device
+name: emau07-10
+version: 0.1.0
+maturity: modelled
+manufacturer: Eaton
+model: EMAU07-10
+description: >-
+  Eaton ePDU G3 managed rack PDU, 2U horizontal, 200 to 240 V. A 19 in black metal box, 213.2 mm deep.
+  It takes a single-phase feed through a fixed 10 ft cord ending in a NEMA L6-30P, 24 A.
+  It hands the feed on to 16 IEC C13 outlets in two colour-coded sections of eight.
+  A is yellow on the upper row and B blue on the lower, each on its own 20 A two-pole breaker.
+  Every outlet is switched and metered. The left of the front carries the cord gland and the network module.
+  The module has two stacked RJ-45 ports, a network RJ-45, a USB-A port, a reset button, a display and four buttons.
+  Beside it are the two breakers and a lamp tile for each section.
+profile: power
+provenance:
+  method:
+    confidence: drawing
+    note: >-
+      FIGURES FROM THE MAKER'S TECHNICAL DRAWING, MEASURED, NOT DIMENSIONED. The Eaton ePDU Managed EMAU07-10 technical
+      drawing (EMAU07-10 G3 MANAGED, 9 Mar 2016, revision 00, configuration EMA6MT15JDC23AC, one D-size sheet)
+      dimensions only the overall. It prints 482.7 [19.00] wide over the ears, 87.1 [3.43] high and 213.2 [8.39] deep.
+      Every other figure was read off a 600 dpi render against the 482.7, 5.66 px per mm, good to about 0.5 mm.
+      The sheet has four views: a rear plate, a plan, the front and a perspective. It has no side view.
+      The specifications page holds two product photographs, 500 px wide, a front view and a three-quarter view.
+      They agree on the black body and ears, the yellow and blue sections and the cord leaving the front at the left.
+      They show the display lit in blue and the left end perforated.
+      Their resolution is too low to take any size from them.
+  chassis:
+    confidence: drawing
+    note: >-
+      drawing - 87.1 high, 213.2 deep, 482.7 over the ears. The body reads 444.5 between the ears, so each ear is
+      19.1. The datasheet page gives other figures for the same box (19 in, 5 in and 3.4 in on its length, height and
+      width lines). The drawing governs (gaps: size-disagreement). "BLACK CHASSIS"; the hex is a stand-in.
+      The datasheet page gives 13.3 lb (6.03 kg) and the drawing no weight.
+  ears:
+    confidence: drawing
+    note: >-
+      drawing - an L flange at each end of the front with two slots each (rear view). The library's generic ear
+      stands for them (`chassis.ears`). The slots' pitch is not dimensioned (gaps: ear-slots).
+  front:
+    confidence: drawing
+    note: >-
+      drawing - mm from the body's left and top, front view. Cord plate 9.5 to 36.7 across and 4.7 to 43.8 down.
+      Earth screw centred (10.8, 59.7), 13.1 across over its washer, its symbol from 70.3 down.
+      Network module plate 18.9 to 164.3 across and 45.8 to 83.6 down, the same module as the EMIT04-10's.
+      The ports, buttons and display sit where that sheet puts them, shifted by (-3.0, +44.1), and each checks against this sheet within 1 mm.
+      Breaker A's plate stands at 44.8 across and 23.1 down, breaker B's at 105.1, each 59.2 by 19.4 with two screws above it.
+      Lamp tiles are 17.0 wide at 174.2 across, A from 6.9 to 41.9 down and B from 45.4 to 80.3.
+      Each tile has eight lamps in two columns at 180.7 and 185.8.
+      The 16 C13 outlets are centred 24.0 apart in two groups of four, the upper row 25.3 down and the lower 67.0.
+      A1 to A4 are at 226.8 to 298.8, A5 to A8 at 334.6 to 406.6, and B1 to B8 the same.
+      The drawing's section strips run 2 mm wide along the outer edge of each group of four.
+      Each has a tab 5 mm wide labelled with the outlet's name and an arrow.
+  grips:
+    confidence: estimated
+    note: >-
+      drawing, read by eye - above each outlet the sheet draws a grip plate 20.6 by 4.7.
+      It has a black block 3.1 by 3.8 at its left, and a small triangle, a cross and a ring beside it.
+      They are drawn here as a plate, a block, a cross, a triangle and a ring, each placed from the sheet at the plate's offsets.
+      No figure dimensions them.
+      No document names them beyond the datasheet page's outlet grip line on the drawing's output cell ("(16) IEC 60320 C13 GRIP").
+      Every size is estimated.
+  rear:
+    confidence: drawing
+    note: >-
+      drawing - the rear plate, the first view of the sheet, is a plain plate with a band along its top.
+      The band is 2.6 high and runs the full width.
+      The lip along its foot is 3.7 high and runs from 19.4 to 425.1 across, as far from the right end as from the left.
+      There are four marks about 1 mm across at 5.8 and 438.7 across, 17.0 and 70.1 down.
+      The band has a small elbow detail at each end, about 3 across, drawn as silkscreen lines in a stand-in colour.
+      The lip has a tab at each end, 1.2 wide and 2.65 high.
+      Each tab carries a thin crossbar about 0.3 thick and 1 below its top, drawn in a stand-in colour.
+      A foot strip 1.2 high runs outside the lip to each end.
+      A kit plate rounds every corner, so each tab is rounded at its foot as well as its top.
+  top:
+    confidence: drawing
+    note: >-
+      drawing - the plan, with the rear at the top as the library draws a top.
+      Six screws are 6.0 across, each with a six-point star socket about 2.6 across.
+      Their centres are at (112.4, 7.8), (332.5, 7.8), (7.8, 101.8), (436.9, 101.8), (105.0, 194.0) and (337.5, 194.0).
+      A band 12.7 deep runs along the front edge, with an inner edge line 3.1 from the front.
+      The plan also shows eight grip scallops, two bulges over the module and the cord, standing about 5.8 past the front line. They are not drawn (gaps: plan-protrusions).
+  sides:
+    confidence: estimated
+    note: >-
+      the left end is read from the sheet's perspective view, which shows four oval holes in two columns and two rows.
+      The rows are about 22.0 and 66.8 down, and the columns about 20 and 66 from the rear.
+      Each hole is about 8 by 9.
+      The depths are calibrated against two things the plan fixes.
+      They are the left-middle screw, 102 from the rear, and the step where the ear leg begins, about 130.
+      The specifications page's three-quarter photograph shows six small holes on this end: four on the panel and two on the ear leg.
+      The two on the ear leg belong to the rack ear. The modelling guide models the body between the ear folds, so the ear is not drawn on this face (gaps: ear-leg-holes).
+      The figures are estimated from the foreshortened view, good to about 5 mm.
+      The photograph agrees on the count and layout, and on the columns to about 7 mm.
+      The right end is built as the documented side, as no document shows this one, mirrored from the left end.
+      The underside is built plain, as no document shows it.
+  outlets:
+    confidence: drawing
+    note: >-
+      drawing - "OUTPUT (16) IEC 60320 C13 GRIP", OUTPUT RATING "200-240V~; 10A PER C13; 16A MAX PER SECTION; 24A MAX TOTAL".
+      A1 to A8 are the upper row and B1 to B8 the lower.
+      Each is printed on a tab at the end of its group of four. That puts A1 and A4, A5 and A8, B1 and B4, B5 and B8 on tabs.
+      The C13s between take their numbers from the run (gaps: outlet-numbers).
+      Each is drawn with its earth slot to the left, as the sheet draws it.
+  breakers:
+    confidence: drawing
+    note: >-
+      drawing - "CIRCUIT BREAKERS (2) 20A 2-POLE LISTED". The one-line diagram puts each of A and B across L1 and L2
+      with a meter in each line. Each is eaton/g3-breaker-20a-2p@1 with its tile in the section's colour.
+  lamps:
+    confidence: drawing
+    note: >-
+      drawing - each tile prints eight numbered circles. No held document says what they show or what colour they are.
+      Each is drawn off as a lamp of the tile, declaring `on` and `off` and no colour.
+      It is bound to the chassis and not to an outlet (gaps: lamp-function). The sheet's circles are 3.0 across and the part is 2.0.
+  cord:
+    confidence: drawing
+    note: >-
+      drawing - INPUT "NEMA L6-30 PLUG", "10FT 10AWG / 3C POWERCORD"; INPUT RATING "200-240V~", "2W+PE", "24A", "50/60HZ".
+      The plan draws the cord leaving the front edge at the left end.
+      It leaves through the round gland of the plate at the left of the front (eaton/g3-cord-l6-30p-front@1). The cord is fixed. `input-plug` is the slug the cord exports,
+      `nema-l6-30p`.
+  module:
+    confidence: drawing
+    note: >-
+      drawing - the network module of the EMIT04-10.
+      It has two stacked RJ-45 ports, read from shape as the serial and daisy-chain ports, the order assumed as there.
+      It also has the network RJ-45 over a USB-A port, the reset hole labelled R, the display and four buttons.
+      It is not modelled as a bay (gaps: meter-module-bay).
+  capability:
+    confidence: drawing
+    note: >-
+      drawing and datasheet - "CURRENT, POWER, AND ENERGY METERING FOR INPUT, BRANCH AND OUTLET; OUTLET SWITCHING";
+      datasheet "OUTLET CONTROL Yes": `metering-scope: outlet`, `outlet-switching: true`.
+  dcim:
+    confidence: drawing
+    note: >-
+      the input is one `nema-l6-30p` power port (eaton/g3-cord-l6-30p-front@1). Each C13 outlet is an `iec-60320-c13`
+      power outlet fed by it, named as printed, A1 to A8 and B1 to B8.
+attrs:
+  physical:
+    weight-kg: 6.03
+  power:
+    input-ac: 200-240 V single-phase (2W+PE), 24 A, 50/60 Hz
+    input-plug: nema-l6-30p
+    input-cord: fixed
+    input-phase: single
+    input-current-a: 24
+    plug-rating-a: 30
+    capacity-kw: 5.76
+    output-voltage: 200-240 V
+    output-rating: 10 A per C13; 16 A per section; 24 A total
+    breakers: two 20 A two-pole breakers, one per section
+    frequency: 50/60 Hz
+  environmental:
+    operating-temp: 0 to 60 C (32 to 140 F)
+  management:
+    metering-scope: outlet
+    outlet-switching: true
+    metering: current, power and energy for the input, each section and each outlet
+    network-interface: network module, RJ-45 network port, two RJ-45 serial and daisy-chain ports, USB-A
+  compliance:
+    certifications: UL listed (cULus)
+chassis:
+  width: 444.5
+  height: 87.1
+  depth: 213.2
+  ru: 2
+  color: '#1f2022'
+  airflow: passive
+  weight-kg: 6.03
+  ears:
+    color: '#1f2022'
+    positions:
+      - {name: flush, label: 'ears flush with the front, as the technical drawing draws them', default: true}
+gaps:
+- what: size-disagreement
+  scope: [front, top]
+  reason: vendor-silent
+  note: >-
+    the datasheet page prints 19 in on its length or depth line, 5 in on its height line and 3.4 in on its width line.
+    The drawing prints 19.00 in wide, 3.43 in high and 8.39 in deep.
+    The 19 and the 3.4 agree with the drawing under other names and the 5 matches no figure on it. The drawing governs.
+  wanted: the maker's specification sheet for the EMAU07-10, which the datasheet page lists and is not held.
+- what: colours
+  scope: [front, rear, top]
+  reason: needs-photo
+  note: >-
+    the sheet says "BLACK CHASSIS". The two section colours are sampled on the sheet's own fills (yellow 14988 px, blue 14529 px).
+    The specifications page's two photographs agree with them, and show a black body, black ears and a blue lit display.
+    They are 500 px wide, so no colour value is sampled from them.
+    The chassis hex, the unlit display and the breaker handles are stand-ins.
+    The sheet is line art, so the colour of the rear elbows and of the edge lines is a stand-in too.
+  wanted: a larger photograph of the EMAU07-10.
+- what: ear-slots
+  scope: [front, rear]
+  reason: needs-drawing
+  note: >-
+    the rear plate shows two slots in each ear and no figure dimensions them, so the generic ear stands for them.
+  wanted: a dimensioned drawing of the ear.
+- what: end-holes
+  scope: [left, right]
+  reason: needs-drawing
+  note: >-
+    the sheet's perspective view shows four oval holes on the left end and no view dimensions them.
+    The figures drawn are estimated from that view, calibrated against the plan, and checked against the three-quarter photograph.
+    That photograph shows six holes on the end: four on the panel, drawn, and two on the ear leg, not drawn (gaps: ear-leg-holes).
+    The right end is built as the left, as no document shows it.
+  wanted: a side view of the EMAU07-10 with the end holes dimensioned.
+- what: ear-leg-holes
+  scope: [left]
+  reason: needs-drawing
+  note: >-
+    the sheet's perspective view shows one small hole on the ear leg, about 147 from the rear.
+    The specifications page's photograph shows two at that place.
+    The leg belongs to the rack ear, which the modelling guide leaves to the generic ear from chassis.ears, so neither is drawn.
+    The right end is built as the left.
+  wanted: a dimensioned drawing of the ear and its leg.
+- what: plan-protrusions
+  scope: [top]
+  reason: needs-drawing
+  note: >-
+    the sheet's plan shows eight grip scallops, two bulges over the module and the cord leaving at the left. All stand about 5.8 past the 213.2 front line.
+    The library draws a decor shape only within its face, so none can be drawn on the top face.
+    The grips and the cord are placed on the front face.
+  wanted: the maintainer's word on a part that stands past the box.
+- what: cord-gland
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the plan draws the cord leaving the front at the left end.
+    The round gland read at that place is taken to be its gland. No figure names it. Its saw-toothed edge is drawn as the sheet draws it.
+    The specifications page's photographs show the cord leaving the front at that end.
+  wanted: a larger photograph of the front's left end.
+- what: lamp-function
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    each tile prints eight numbered circles and no held document says what they are.
+    They may be outlet status lamps, since the outlets are switched and the numbers run one to eight, but nothing says so.
+    So no lamp is bound to an outlet. No colour is stated.
+  wanted: the maker's specification sheet or a photograph of a powered unit.
+- what: meter-module-bay
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the module is replaceable (the datasheet page lists a replace-and-configure document).
+    No held document draws it apart from its faceplate, so no bay stands for it. The ports, display and buttons are placed on the face.
+  wanted: a drawing or photograph of the module and its slot.
+- what: module-port-order
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the quick start (P-164000314_2, July 2014, page 2) names five items.
+    They are a serial or EMP port, an Ethernet port, a USB port, a reset button and a daisy chain port.
+    Its drawing is too small to tell which of the sheet's stacked pair of RJ-45 sockets is which.
+    The upper is drawn as the serial port and the lower as the daisy chain. The order is an assumption.
+  wanted: a photograph of the module with its labels.
+- what: outlet-numbers
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet prints the names of the first and last outlet of each group of four only.
+    The outlets between take their names from the run.
+  wanted: a photograph of the front.
+- what: legends
+  scope: [front]
+  reason: needs-drawing
+  note: >-
+    the sheet prints small symbols beside the network, USB and serial ports and a row of five marks above the network port.
+    They are drawn as estimated silkscreen strokes and text, read by eye.
+    The wordmark is plain text in place of the maker's outline letters.
+  wanted: a photograph of the module.
+- what: ground-point
+  scope: [front]
+  reason: vendor-silent
+  note: >-
+    the sheet draws a cross-head screw on a washer, 13.1 across, with the earth symbol below it, and names no part or
+    thread. It is placed as common/ground-screw-washer@1 (11.0). The thread and the washer's size are not stated.
+  wanted: a dimensioned detail of the earth point.
+groups:
+
+  outlets: {term: Outlet, role: traffic, index-origin: 1, attrs: {outlet: iec-60320-c13}, description: 'the PDU''s 16 IEC C13 outlets, A1 to A8 and B1 to B8 as printed; each switched and metered'}
+  breakers: {term: Breaker, role: service, index-origin: 1, description: 'two 20 A two-pole breakers, A and B, one per section'}
+  outlet-leds: {term: LED, role: indicator, index-origin: 1, description: 'the numbered lamps of each section tile, read as one per outlet; colour not stated', states: ['on', 'off']}
+  serial: {term: Port, role: management, index-origin: 1, description: 'the serial / environmental probe (EMP) RJ-45 port of the network module'}
+  chain: {term: Port, role: management, index-origin: 1, description: 'the daisy-chain RJ-45 port of the network module'}
+  reset: {term: Button, role: management, index-origin: 1}
+  network: {term: Port, role: management, index-origin: 1}
+  usb: {term: Port, role: management, index-origin: 1}
+  display: {term: Display, role: indicator, index-origin: 1}
+  buttons: {term: Button, role: management, index-origin: 1}
+  grounding: {term: Ground, role: furniture, index-origin: 1}
+  power-input: {term: Input, role: service, index-origin: 1}
+views:
+  front:
+    size: {w: 444.5, h: 87.1}
+    panel:
+      decor:
+      - {id: module-plate, at: [18.9, 45.8], size: [145.4, 37.8], rx: 0.5, fill: '#121214', kind: plate}
+      - {id: tile-a, at: [174.2, 6.9], size: [17.0, 35.0], rx: 1.0, fill: '#f8f030', kind: plate}
+      - {id: tile-b, at: [174.2, 45.4], size: [17.0, 34.9], rx: 1.0, fill: '#2878c8', kind: plate}
+      - {id: strip-a1, at: [211.4, 4.3], size: [2, 36.9], rx: 0.6, fill: '#f8f030', kind: plate}
+      - {id: tab-a1, at: [208.2, 4.3], size: [5.2, 13.3], rx: 1.2, fill: '#f8f030', kind: plate}
+      - {id: strip-a4, at: [311.9, 4.3], size: [1.9, 36.9], rx: 0.6, fill: '#f8f030', kind: plate}
+      - {id: tab-a4, at: [312.3, 4.3], size: [4.9, 13.3], rx: 1.2, fill: '#f8f030', kind: plate}
+      - {id: strip-a5, at: [319.1, 4.3], size: [2, 36.9], rx: 0.6, fill: '#f8f030', kind: plate}
+      - {id: tab-a5, at: [316.1, 27.9], size: [5, 13.3], rx: 1.2, fill: '#f8f030', kind: plate}
+      - {id: strip-a8, at: [420.1, 4.3], size: [2.2, 36.9], rx: 0.6, fill: '#f8f030', kind: plate}
+      - {id: tab-a8, at: [420.1, 27.9], size: [4.9, 13.3], rx: 1.2, fill: '#f8f030', kind: plate}
+      - {id: strip-b1, at: [211.4, 45.6], size: [2, 37.1], rx: 0.6, fill: '#2878c8', kind: plate}
+      - {id: tab-b1, at: [208.2, 45.6], size: [5.2, 13.3], rx: 1.2, fill: '#2878c8', kind: plate}
+      - {id: strip-b4, at: [311.9, 45.6], size: [1.9, 37.1], rx: 0.6, fill: '#2878c8', kind: plate}
+      - {id: tab-b4, at: [312.3, 45.6], size: [4.9, 13.3], rx: 1.2, fill: '#2878c8', kind: plate}
+      - {id: strip-b5, at: [319.1, 45.6], size: [2, 37.1], rx: 0.6, fill: '#2878c8', kind: plate}
+      - {id: tab-b5, at: [316.1, 69.4], size: [5, 13.3], rx: 1.2, fill: '#2878c8', kind: plate}
+      - {id: strip-b8, at: [420.1, 45.6], size: [2.2, 37.1], rx: 0.6, fill: '#2878c8', kind: plate}
+      - {id: tab-b8, at: [420.1, 69.4], size: [4.9, 13.3], rx: 1.2, fill: '#2878c8', kind: plate}
+      - {id: grip-a1, at: [215.9, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a1-block, at: [218.1, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a1-ring, at: [236.4, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a2, at: [239.9, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a2-block, at: [242.1, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a2-ring, at: [260.4, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a3, at: [263.9, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a3-block, at: [266.1, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a3-ring, at: [284.4, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a4, at: [287.9, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a4-block, at: [290.1, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a4-ring, at: [308.4, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a5, at: [323.7, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a5-block, at: [325.9, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a5-ring, at: [344.2, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a6, at: [347.7, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a6-block, at: [349.9, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a6-ring, at: [368.2, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a7, at: [371.7, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a7-block, at: [373.9, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a7-ring, at: [392.2, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-a8, at: [395.7, 2.9], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-a8-block, at: [397.9, 3.4], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-a8-ring, at: [416.2, 7.5], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b1, at: [215.9, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b1-block, at: [218.1, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b1-ring, at: [236.4, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b2, at: [239.9, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b2-block, at: [242.1, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b2-ring, at: [260.4, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b3, at: [263.9, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b3-block, at: [266.1, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b3-ring, at: [284.4, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b4, at: [287.9, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b4-block, at: [290.1, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b4-ring, at: [308.4, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b5, at: [323.7, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b5-block, at: [325.9, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b5-ring, at: [344.2, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b6, at: [347.7, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b6-block, at: [349.9, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b6-ring, at: [368.2, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b7, at: [371.7, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b7-block, at: [373.9, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b7-ring, at: [392.2, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+      - {id: grip-b8, at: [395.7, 44.6], size: [20.6, 4.7], rx: 0.6, fill: '#26282b', kind: plate}
+      - {id: grip-b8-block, at: [397.9, 45.1], size: [3.1, 3.8], fill: '#0b0b0c', kind: plate}
+      - {id: grip-b8-ring, at: [416.2, 49.2], size: [3.3, 3.3], rx: 1.65, fill: '#0a0a09', kind: hole}
+    silkscreen:
+      - {at: [210.8, 7.9], text: 'A', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [210.8, 11.5], text: '1', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-a1}
+      - {at: [210.8, 15.3], text: '→', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [314.8, 7.9], text: 'A', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [314.8, 11.5], text: '4', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-a4}
+      - {at: [314.8, 15.3], text: '←', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [318.6, 31.5], text: 'A', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [318.6, 35.1], text: '5', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-a5}
+      - {at: [318.6, 38.9], text: '→', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [422.6, 31.5], text: 'A', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [422.6, 35.1], text: '8', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-a8}
+      - {at: [422.6, 38.9], text: '←', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [210.8, 49.2], text: 'B', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [210.8, 52.8], text: '1', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-b1}
+      - {at: [210.8, 56.6], text: '→', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [314.8, 49.2], text: 'B', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [314.8, 52.8], text: '4', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-b4}
+      - {at: [314.8, 56.6], text: '←', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [318.6, 73], text: 'B', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [318.6, 76.6], text: '5', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-b5}
+      - {at: [318.6, 80.4], text: '→', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [422.6, 73], text: 'B', font-size: 3.8, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [422.6, 76.6], text: '8', font-size: 3.8, anchor: middle, fill: '#101010', for: outlet-b8}
+      - {at: [422.6, 80.4], text: '←', font-size: 3.4, anchor: middle, fill: '#101010', for: chassis}
+      - {id: grip-a1-cross, at: [215.4, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a1-triangle, at: [219.9, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a2-cross, at: [239.4, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a2-triangle, at: [243.9, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a3-cross, at: [263.4, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a3-triangle, at: [267.9, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a4-cross, at: [287.4, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a4-triangle, at: [291.9, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a5-cross, at: [323.2, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a5-triangle, at: [327.7, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a6-cross, at: [347.2, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a6-triangle, at: [351.7, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a7-cross, at: [371.2, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a7-triangle, at: [375.7, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-a8-cross, at: [395.2, 8.6], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-a8-triangle, at: [399.7, 8.9], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b1-cross, at: [215.4, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b1-triangle, at: [219.9, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b2-cross, at: [239.4, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b2-triangle, at: [243.9, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b3-cross, at: [263.4, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b3-triangle, at: [267.9, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b4-cross, at: [287.4, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b4-triangle, at: [291.9, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b5-cross, at: [323.2, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b5-triangle, at: [327.7, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b6-cross, at: [347.2, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b6-triangle, at: [351.7, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b7-cross, at: [371.2, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b7-triangle, at: [375.7, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {id: grip-b8-cross, at: [395.2, 50.3], path: 'M -1.1 0 H 1.1 M 0 -1.1 V 1.1', stroke-width: 0.35, for: chassis}
+      - {id: grip-b8-triangle, at: [399.7, 50.6], path: 'M 0 -0.8 L 0.9 0.8 H -0.9 Z', stroke-width: 0.25, for: chassis}
+      - {at: [182.7, 40.3], text: 'A', font-size: 14.4, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [182.7, 78.7], text: 'B', font-size: 12.5, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 12.7], text: '1', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 12.7], text: '5', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 17.8], text: '2', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 17.8], text: '6', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 22.9], text: '3', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 22.9], text: '7', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 28], text: '4', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 28], text: '8', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 51.3], text: '1', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 51.3], text: '5', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 56.4], text: '2', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 56.4], text: '6', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 61.5], text: '3', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 61.5], text: '7', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [178.1, 66.6], text: '4', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {at: [183.5, 66.6], text: '8', font-size: 3.0, anchor: middle, fill: '#101010', for: chassis}
+      - {id: earth-symbol, at: [10.8, 70.3], path: 'M 0 0 L 0 3.3 M -3.6 3.3 L 3.6 3.3 M -2.5 5.3 L 2.5 5.3 M -1.2 7.2 L 1.2 7.2', stroke-width: 0.45, for: ground}
+      - {at: [83.8, 66.8], text: 'EATON', font-size: 5.6, anchor: middle, fill: '#e8e8e6', for: chassis}
+      - {at: [65.2, 69.74], text: 'R', font-size: 2.4, anchor: middle, fill: '#e8e8e6', for: reset}
+      - {at: [45.5, 48.9], text: 'IOIOI', font-size: 2.2, anchor: middle, fill: '#e8e8e6', for: chassis}
+      - {id: net-symbol, at: [68.0, 52.2], path: 'M 0 0 V 1.4 M -1.8 1.4 H 1.8 M -1.8 1.4 V 2.6 M 1.8 1.4 V 2.6 M -2.6 2.6 H -1.0 V 3.8 H -2.6 Z M 1.0 2.6 H 2.6 V 3.8 H 1.0 Z', stroke-width: 0.3, for: network}
+      - {id: usb-symbol, at: [54.5, 75.9], path: 'M -2.8 0 H 2.2 M -0.8 0 L 0.4 -1.3 H 1.4 M -0.8 0 L 0.4 1.3 H 1.4 M 2.2 -0.9 V 0.9', stroke-width: 0.3, for: usb}
+      - {id: chain-symbol, at: [30.5, 79.7], path: 'M -4.0 0 V 1.8 H -1.5 M 4.0 0 V 1.8 H 1.5 M -3.4 1.2 L -4.0 2.2 L -4.6 1.2 M 3.4 1.2 L 4.0 2.2 L 4.6 1.2', stroke-width: 0.3, for: daisy-chain}
+    components:
+      placements:
+        - {id: input, ref: eaton/g3-cord-l6-30p-front@1, at: [9.5, 4.7], group: power-input, rel-pos: 1, description: 'the fixed 10 ft input cord, ending in a NEMA L6-30P locking plug, leaving the front through a round gland'}
+        - {id: outlet-a1, ref: std/c13-outlet@1, at: [211.6, 14.3], rotate: 270, group: outlets, rel-pos: 1, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a2, ref: std/c13-outlet@1, at: [235.6, 14.3], rotate: 270, group: outlets, rel-pos: 2, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a3, ref: std/c13-outlet@1, at: [259.6, 14.3], rotate: 270, group: outlets, rel-pos: 3, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a4, ref: std/c13-outlet@1, at: [283.6, 14.3], rotate: 270, group: outlets, rel-pos: 4, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a5, ref: std/c13-outlet@1, at: [319.4, 14.3], rotate: 270, group: outlets, rel-pos: 5, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a6, ref: std/c13-outlet@1, at: [343.4, 14.3], rotate: 270, group: outlets, rel-pos: 6, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a7, ref: std/c13-outlet@1, at: [367.4, 14.3], rotate: 270, group: outlets, rel-pos: 7, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-a8, ref: std/c13-outlet@1, at: [391.4, 14.3], rotate: 270, group: outlets, rel-pos: 8, fed-by: input, through: breaker-a, states: ['on', 'off']}
+        - {id: outlet-b1, ref: std/c13-outlet@1, at: [211.6, 56], rotate: 270, group: outlets, rel-pos: 9, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b2, ref: std/c13-outlet@1, at: [235.6, 56], rotate: 270, group: outlets, rel-pos: 10, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b3, ref: std/c13-outlet@1, at: [259.6, 56], rotate: 270, group: outlets, rel-pos: 11, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b4, ref: std/c13-outlet@1, at: [283.6, 56], rotate: 270, group: outlets, rel-pos: 12, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b5, ref: std/c13-outlet@1, at: [319.4, 56], rotate: 270, group: outlets, rel-pos: 13, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b6, ref: std/c13-outlet@1, at: [343.4, 56], rotate: 270, group: outlets, rel-pos: 14, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b7, ref: std/c13-outlet@1, at: [367.4, 56], rotate: 270, group: outlets, rel-pos: 15, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: outlet-b8, ref: std/c13-outlet@1, at: [391.4, 56], rotate: 270, group: outlets, rel-pos: 16, fed-by: input, through: breaker-b, states: ['on', 'off']}
+        - {id: breaker-a, ref: eaton/g3-breaker-20a-2p@1, at: [44.8, 11.4], group: breakers, rel-pos: 1, lines: [L1, L2], attrs: {section-color: '#f8f030', section: A}, description: 'Breaker A, 20 A two-pole: protects section A, outlets A1 to A8'}
+        - {id: breaker-b, ref: eaton/g3-breaker-20a-2p@1, at: [105.1, 11.4], group: breakers, rel-pos: 2, lines: [L1, L2], attrs: {section-color: '#2878c8', section: B}, description: 'Breaker B, 20 A two-pole: protects section B, outlets B1 to B8'}
+        - {id: led-a1, ref: common/led-dot@1, at: [179.7, 10.6], group: outlet-leds, rel-pos: 1, for: chassis}
+        - {id: led-a2, ref: common/led-dot@1, at: [179.7, 15.7], group: outlet-leds, rel-pos: 2, for: chassis}
+        - {id: led-a3, ref: common/led-dot@1, at: [179.7, 20.8], group: outlet-leds, rel-pos: 3, for: chassis}
+        - {id: led-a4, ref: common/led-dot@1, at: [179.7, 25.9], group: outlet-leds, rel-pos: 4, for: chassis}
+        - {id: led-a5, ref: common/led-dot@1, at: [184.8, 10.6], group: outlet-leds, rel-pos: 5, for: chassis}
+        - {id: led-a6, ref: common/led-dot@1, at: [184.8, 15.7], group: outlet-leds, rel-pos: 6, for: chassis}
+        - {id: led-a7, ref: common/led-dot@1, at: [184.8, 20.8], group: outlet-leds, rel-pos: 7, for: chassis}
+        - {id: led-a8, ref: common/led-dot@1, at: [184.8, 25.9], group: outlet-leds, rel-pos: 8, for: chassis}
+        - {id: led-b1, ref: common/led-dot@1, at: [179.7, 49.2], group: outlet-leds, rel-pos: 9, for: chassis}
+        - {id: led-b2, ref: common/led-dot@1, at: [179.7, 54.3], group: outlet-leds, rel-pos: 10, for: chassis}
+        - {id: led-b3, ref: common/led-dot@1, at: [179.7, 59.4], group: outlet-leds, rel-pos: 11, for: chassis}
+        - {id: led-b4, ref: common/led-dot@1, at: [179.7, 64.5], group: outlet-leds, rel-pos: 12, for: chassis}
+        - {id: led-b5, ref: common/led-dot@1, at: [184.8, 49.2], group: outlet-leds, rel-pos: 13, for: chassis}
+        - {id: led-b6, ref: common/led-dot@1, at: [184.8, 54.3], group: outlet-leds, rel-pos: 14, for: chassis}
+        - {id: led-b7, ref: common/led-dot@1, at: [184.8, 59.4], group: outlet-leds, rel-pos: 15, for: chassis}
+        - {id: led-b8, ref: common/led-dot@1, at: [184.8, 64.5], group: outlet-leds, rel-pos: 16, for: chassis}
+        - {id: serial, ref: std/rj45@2, at: [22.7, 48.4], rotate: 180, group: serial, rel-pos: 1, attrs: {role: console, media: rj45-serial}, description: 'the serial or environmental probe (EMP) RJ-45 port (quick start P-164000314_2, item 1); the upper of the stacked pair is an assumption (gaps: module-port-order)'}
+        - {id: daisy-chain, ref: common/rj45-eth@1, at: [22.7, 64.9], group: chain, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: daisy-chain}, description: 'the daisy chain RJ-45 port (quick start P-164000314_2, item 9); the lower of the stacked pair is an assumption (gaps: module-port-order)'}
+        - {id: network, ref: common/rj45-eth@1, at: [46.3, 50.9], rotate: 180, group: network, rel-pos: 1, attrs: {media: rj45, speed: 100m, role: mgmt}, description: 'the network RJ-45 port (the sheet prints a network symbol beside it)'}
+        - {id: usb, ref: std/usb-a@1, at: [48.2, 66.95], group: usb, rel-pos: 1, description: 'the USB port under the network port, used for firmware upgrade (quick start P-164000314_2, item 8)'}
+        - {id: reset, ref: common/reset-button@1, at: [65.9, 67.0], group: reset, rel-pos: 1, for: network, description: 'the reset button of the network module: press it with a probe for 3 seconds to restart the module. It does not reset power to the outlets (quick start P-164000314_2, item 7)'}
+        - {id: display, ref: eaton/g3-display@1, at: [107.2, 48.3], group: display, rel-pos: 1, for: chassis}
+        - {id: button-up, ref: eaton/g3-nav-button@1, at: [87.8, 47.0], group: buttons, rel-pos: 1, for: chassis}
+        - {id: button-down, ref: eaton/g3-nav-button@1, skin: down, at: [87.8, 70.8], group: buttons, rel-pos: 2, for: chassis}
+        - {id: button-esc, ref: eaton/g3-nav-button@1, skin: esc, at: [144.8, 47.0], group: buttons, rel-pos: 3, for: chassis}
+        - {id: button-enter, ref: eaton/g3-nav-button@1, skin: enter, at: [144.8, 70.8], group: buttons, rel-pos: 4, for: chassis}
+        - {id: ground, ref: common/ground-screw-washer@1, at: [5.3, 54.2], group: grounding, rel-pos: 1}
+  rear:
+    size: {w: 444.5, h: 87.1}
+    panel:
+      decor:
+      - {id: rear-band, at: [0, 0], size: [444.5, 2.6], fill: '#26282b', kind: plate}
+      - {id: rear-lip, at: [19.4, 83.4], size: [405.7, 3.7], fill: '#26282b', kind: plate}
+      - {id: rear-foot-left, at: [0, 85.9], size: [19.4, 1.2], fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-foot-right, at: [425.1, 85.9], size: [19.4, 1.2], fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-tab-left, at: [18.8, 83.25], size: [1.2, 2.65], rx: 0.6, fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-tab-right, at: [424.5, 83.25], size: [1.2, 2.65], rx: 0.6, fill: '#26282b', stroke: '#4a4d51', stroke-width: 0.15, kind: plate}
+      - {id: rear-tab-bar-left, at: [18.8, 84.13], size: [1.2, 0.31], fill: '#4a4d51', kind: plate}
+      - {id: rear-tab-bar-right, at: [424.5, 84.13], size: [1.2, 0.31], fill: '#4a4d51', kind: plate}
+      - {id: rear-mark-1, at: [5.3, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-2, at: [438.2, 16.5], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-3, at: [5.3, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+      - {id: rear-mark-4, at: [438.2, 69.6], size: [1.0, 1.0], rx: 0.5, fill: '#2a2b2d', kind: screw-head}
+    silkscreen:
+      - {id: elbow-left, at: [1.52, 1.355], path: 'M -1.52 1.355 A 2.69 2.69 0 0 1 1.17 -1.355 M 1.17 -1.355 V -0.155 M -0.33 1.355 A 1.5 1.5 0 0 1 1.17 -0.145 H 1.52 M 1.52 -1.355 V 1.355 M -0.11 -0.125 H 1.52 M -0.11 -0.125 V 1.355 M -0.11 0.125 H 1.06 V 1.355', fill: '#4a4d51', stroke-width: 0.15, for: chassis}
+      - {id: elbow-right, at: [442.98, 1.355], path: 'M 1.52 1.355 A 2.69 2.69 0 0 0 -1.17 -1.355 M -1.17 -1.355 V -0.155 M 0.33 1.355 A 1.5 1.5 0 0 0 -1.17 -0.145 H -1.52 M -1.52 -1.355 V 1.355 M 0.11 -0.125 H -1.52 M 0.11 -0.125 V 1.355 M 0.11 0.125 H -1.06 V 1.355', fill: '#4a4d51', stroke-width: 0.15, for: chassis}
+  top:
+    size: {w: 444.5, h: 213.2}
+    panel:
+      decor:
+      - {id: front-band, at: [0, 200.5], size: [444.5, 12.7], fill: '#26282b', kind: plate}
+      - {id: front-band-line, at: [0, 210.0], size: [444.5, 0.2], fill: '#4a4d51', kind: plate}
+      - {id: screw-t1, at: [109.4, 4.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t2, at: [329.5, 4.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t3, at: [4.8, 98.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t4, at: [433.9, 98.8], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t5, at: [102, 191], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+      - {id: screw-t6, at: [334.5, 191], size: [6.0, 6.0], rx: 3.0, fill: '#2a2b2d', kind: screw-head}
+    silkscreen:
+      - {id: socket-t1, at: [112.4, 7.8], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+      - {id: socket-t2, at: [332.5, 7.8], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+      - {id: socket-t3, at: [7.8, 101.8], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+      - {id: socket-t4, at: [436.9, 101.8], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+      - {id: socket-t5, at: [105, 194], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+      - {id: socket-t6, at: [337.5, 194], path: 'M 1.30 0.00 L 0.61 0.35 L 0.65 1.13 L 0.00 0.70 L -0.65 1.13 L -0.61 0.35 L -1.30 0.00 L -0.61 -0.35 L -0.65 -1.13 L -0.00 -0.70 L 0.65 -1.13 L 0.61 -0.35 Z', fill: '#171819', stroke-width: 0.1, for: chassis}
+  bottom:
+    size: {w: 444.5, h: 213.2}
+    empty: >-
+      the sheet draws no view of the underside and no photograph shows it, so nothing on it can be measured.
+  left:
+    size: {w: 213.2, h: 87.1}
+    panel:
+      decor:
+      - {id: left-hole-1, at: [16.0, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-2, at: [62.0, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-3, at: [16.0, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: left-hole-4, at: [62.0, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+  right:
+    size: {w: 213.2, h: 87.1}
+    panel:
+      decor:
+      - {id: right-hole-1, at: [189.2, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-2, at: [143.2, 17.5], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-3, at: [189.2, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+      - {id: right-hole-4, at: [143.2, 62.3], size: [8.0, 9.0], rx: 4.0, fill: '#0a0a09', kind: hole}
+interfaces:
+- {physical: 'outlet-a{n}', name: 'A{n}', range: 1-8}
+- {physical: 'outlet-b{n}', name: 'B{n}', range: 1-8}
+configurations:
+  base:
+    kind: base
+    default: true
+    description: >-
+      The PDU as it ships. The installation kit (SPK021) and the network kit (SPK013) are listed as included.
+      Neither is drawn, and the optional environmental probe (EMP001) is not drawn.
+    part-numbers:
+      EMAU07-10: {}
+datasheet:
+  title: 'Eaton ePDU Managed EMAU07-10 technical drawing (EMAU07-10 G3 MANAGED, 9 Mar 2016)'
+  url: https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-managed-pdu/eaton-pdu-managed-EMAU07-10-techdrawing.pdf
+  sha256: ec19d050a2c05ba1d3958414e1ce7b2946b266b7989ec550fc5b069c05425b58
+references:
+  - {title: 'Eaton EMAU07-10 product specifications page', url: 'https://www.eaton.com/us/en-us/skuPage.EMAU07-10.pdf', sha256: b7a2f2f633230c91d7ef5c59ba56a0807d49d95d0bae687be5414f38b1d1ed58}
+  - {title: 'Eaton ePDU G3 installation and connectivity quick start, P-164000314_2, July 2014', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-network-connectivity-quick-start-guide-p-164000314.pdf', sha256: d5047a1ca87b0b56242fe8df1d31639d67c4a3999b1ca8eec30b72fbc5a53064}
+  - {title: 'Eaton ePDU G3 1U and 2U rackmount installation addendum, SB155038EN, 10 February 2016', url: 'https://www.eaton.com/content/dam/eaton/products/backup-power-ups-surge-it-power-distribution/power-distribution-for-it-equipment/eaton-basic-rack-pdu/eaton-pdu-g3-1u-2u-installation-addendum-sb155038en.pdf', sha256: ba7a164af034e9a7b3859a52d33ebed33105b58d782f2141f64aef15621cfbb6}
