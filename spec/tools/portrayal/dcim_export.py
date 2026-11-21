@@ -772,6 +772,8 @@ PART_POWER = {
     # not checked against a target's source file here).
     "eaton/g3-cord-l5-30p": "other",
     "eaton/g3-cord-l6-30p": "nema-l6-30p",
+    # The EMAU07-10's fixed 10 ft cord also ends in a NEMA L6-30P and leaves the front through a round gland.
+    "eaton/g3-cord-l6-30p-front": "nema-l6-30p",
     # THE GENERIC INPUT PLUGS (#933): the face of the plug at the end of a PDU's
     # fixed cord, for a device that draws its plug rather than its cord. A device
     # draws one or the other, never both, or one input exports as two ports. Every
