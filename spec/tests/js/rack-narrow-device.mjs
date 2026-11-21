@@ -1,14 +1,16 @@
 // spec/tests/js/rack-narrow-device.mjs
 // A RACK DEVICE OF HALF THE OPENING OR LESS (docs/half-width-devices-design.md
-// sections 2 and 4.1): a `mount: rack` device whose stated width is at most half
-// the 450 mm opening is narrow, as a finger bracket is, so one can stand on each
-// rail at the same unit. The fraction is derived from the width the device
-// already states; no key is added to a device.
+// sections 2 and 4.1) is narrow, as a finger bracket is. Its stated width is at
+// most half the 450 mm opening. One can then stand on each rail at the same
+// unit. The width the device already states decides; no key is added.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as M from '../../../kit/rack/model.js';
 import * as F from '../../../kit/rack/fit.js';
 import {COMMANDS} from '../../../kit/rack/commands.js';
+import * as S from '../../../kit/rack/solids.js';
+import * as R from '../../../kit/rack/route.js';
+import {SIDES} from '../../../kit/rack/rails.js';
 
 // A device states `mount` only when it is not "rack" (fit.js isRackMount).
 const SIZES = {
@@ -102,10 +104,55 @@ test('the rail of a rack device is read as a rail, and a side on a wide one is d
 test('a rack device on a rail is named in the frame notices, because its drawing does not follow yet', () => {
   const on = side => ({...empty(), items: [{id: 'i1', ref: 'half', cfg: '', ru: 5, face: 'front', label: 'left-box', side}]});
   assert.deepEqual(F.frameNotices(on('left'), chassisOf),
-    ['left-box is on the left rail and fitted by it. Its elevation, 3D view and DCIM files do not stand it there yet.']);
+    ['left-box is on the left rail and fitted by it. Its elevation, 3D view, routes and DCIM files do not stand it there yet.']);
   assert.deepEqual(F.frameNotices(on('right'), chassisOf),
-    ['left-box is on the right rail and fitted by it. Its elevation, 3D view and DCIM files do not stand it there yet.']);
+    ['left-box is on the right rail and fitted by it. Its elevation, 3D view, routes and DCIM files do not stand it there yet.']);
   assert.deepEqual(F.frameNotices(on(undefined), chassisOf), [], 'a device with no side says nothing');
   const bracket = {...empty(), items: [{id: 'i1', ref: 'bracket', cfg: '', ru: 5, face: 'front', label: 'br', side: 'left'}]};
   assert.deepEqual(F.frameNotices(bracket, chassisOf), [], 'a rack-face part on a rail is drawn and says nothing');
+});
+
+// A narrow rack device is drawn upright and centred across the opening by the
+// 3D solid, the cable guides and the port points, as the elevation draws it.
+// A narrow rack-face part still stands over the hole line of its rail.
+const DRAWN = {
+  ...SIZES,
+  half: {...SIZES.half, solids: [
+    {part: 'body', box: {x: 0, y: 0, z: 0, w: 200, h: 44, d: 120}},
+    {part: 'tab', box: {x: 10, y: 5, z: 0, w: 20, h: 10, d: 20}}]},
+  bracket: {...SIZES.bracket, solids: [
+    {part: 'body', box: {x: 0, y: 0, z: 0, w: 60, h: 44, d: 20}},
+    {part: 'tab', box: {x: 5, y: 5, z: 0, w: 10, h: 10, d: 10}}]},
+};
+const drawnOf = ref => DRAWN[ref] || null;
+const placed = (ref, side) => ({...empty(), items: [{id: 'i1', ref, cfg: '', ru: 5, face: 'front', label: 'a', ...(side ? {side} : {})}]});
+// each call gets a context of its own: solidsOf keeps what it read per context
+const dctx = () => ({chassisOf: drawnOf, guidesOf: () => [{via: 'g1', kind: 'ring', face: 'front', x: 60}]});
+const solid = (ref, side, part) => S.solidsOf(placed(ref, side), dctx()).find(s => s.part === part).box;
+const guideX = (ref, side) => R.pointOf(placed(ref, side), {item: 'i1', via: 'g1'}, dctx()).x;
+const hole = side => SIDES.find(s => s.side === side).hole;
+const middle = b => (b.x0 + b.x1) / 2;
+
+test('a 200 mm rack device on either rail is centred and upright, and its guide is not mirrored', () => {
+  for (const side of ['left', 'right']) {
+    assert.equal(F.centreX(placed('half', side).items[0], drawnOf), 0, `${side}: its port points are centred`);
+    assert.deepEqual(solid('half', side, 'body'), solid('half', undefined, 'body'), `${side}: the body stands where one with no side stands`);
+    assert.deepEqual(solid('half', side, 'tab'), solid('half', undefined, 'tab'), `${side}: the solid is not flipped`);
+    assert.equal(guideX('half', side), guideX('half', undefined), `${side}: the guide is where one with no side puts it`);
+    assert.equal(guideX('half', side), 60, `${side}: the guide is not mirrored`);
+  }
+  assert.equal(middle(solid('half', 'right', 'body')), 0, 'centred across the opening, not on a hole line');
+});
+
+test('a narrow rack-face part is still over the hole line of its rail, and turned on the right rail', () => {
+  for (const side of ['left', 'right']) {
+    assert.equal(F.centreX(placed('bracket', side).items[0], drawnOf), hole(side));
+    assert.equal(middle(solid('bracket', side, 'body')), hole(side), `${side}: over its hole line`);
+  }
+  const lowL = solid('bracket', 'left', 'tab').y0 - solid('bracket', 'left', 'body').y0;
+  const lowR = solid('bracket', 'right', 'tab').y0 - solid('bracket', 'right', 'body').y0;
+  assert.equal(lowL, 5, 'upright on the left rail');
+  assert.equal(lowR, 29, 'turned end over end on the right rail');
+  assert.equal(guideX('bracket', 'left'), hole('left') + 60);
+  assert.equal(guideX('bracket', 'right'), hole('right') - 60, 'the guide of the right rail is mirrored');
 });

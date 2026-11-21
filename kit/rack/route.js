@@ -934,7 +934,8 @@ export function pointOf(rack, w, ctx) {
   // A narrow rack-face part on a rail stands over its hole line, as solids.js
   // itemPlacer places its body: its guide's x is from the part's centre, and a
   // part on the right rail is turned end over end there, so its x is mirrored.
-  const turned = railOf(it, ctx.chassisOf) === 'right' ? -1 : 1;
+  // A rack device is upright and centred, so its x is never mirrored.
+  const turned = c.mount === 'rack-face' && railOf(it, ctx.chassisOf) === 'right' ? -1 : 1;
   return {...rollPoint(rack, it, {x: centreX(it, ctx.chassisOf) + turned * g.x, y: anchorY(rack, it, ctx.chassisOf)}, ctx.chassisOf), z};
 }
 
