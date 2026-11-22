@@ -624,6 +624,18 @@ def _part_lift(device, view_name, placement_id):
     return float(next(p for p in host["parts"] if p["id"] == part).get("lift") or 0.0)
 
 
+def _well_depth(device, view_name, placement_id):
+    """How deep the well is that the seat's placement sits `in:`; 0 for a placement in none.
+    A seat in a well is published at the well's floor, as far below the face as the well is deep."""
+    head = placement_id.partition("/")[0]
+    placed = {p["id"]: p for p in render_mod.view_parts(device["views"][view_name] or {})["placements"]
+              if p.get("id")}
+    well = placed.get(placed[head].get("in"))
+    if well is None:
+        return 0.0
+    return float(render_mod.Library([str(LIB)]).resolve(well["ref"])[0]["size"]["d"])
+
+
 @pytest.mark.heavy
 def test_the_lift_census():
     """RECORDS the published lift across every slot in the library, computed
@@ -701,6 +713,8 @@ def test_the_lift_census():
                         doc = lib.resolve(_ref(d, v, c["id"]))[0]
                         want = manifest.presented_interface(
                             doc, lambda r: lib.resolve(r)[0])[2] + _part_lift(d, v, c["id"])
+                        # a seat of a part placed in a well is read at the well's floor
+                        want -= _well_depth(d, v, c["id"])
                         assert c["lift"] == pytest.approx(want), (c["id"], c["lift"], want)
                         continue
                     if c["interface"] == "pdu-button":
@@ -713,11 +727,15 @@ def test_the_lift_census():
                         host = placed[placed[c["id"]]["in"]]
                         assert c["lift"] == -lib.resolve(host["ref"])[0]["size"]["d"], (c["id"], c["lift"])
                         continue
-                    assert c["interface"] == "lc-duplex", (c["id"], c["lift"])
+                    well = _well_depth(d, v, c["id"])
+                    if c["interface"] != "lc-duplex":
+                        # a jack with no raised feature stands at its face, so only the well lifts it
+                        assert well and c["lift"] == -well, (c["id"], c["lift"], well)
+                        continue
                     bezel = {f["node"]: f.get("out") for f in
                              (lib.resolve(_ref(d, v, c["id"]))[0].get("relief")
                               or {}).get("features") or []}
-                    assert c["lift"] == bezel["bezel"], (c["id"], c["lift"])
+                    assert c["lift"] == bezel["bezel"] - well, (c["id"], c["lift"])
                 mirrored += c["mirror"]
                 stated += c["group-states"]
     assert total >= 3000, total
